@@ -51,3 +51,7 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 ## q547 の具体手順
 
 最大60分。既存CIへ2 distro matrix追加、両指定target/nativeQEMU手順、artifact distinct names、missing/checksum/runtime fail gate、release needs/download/添付を実装。GitHub公式matrix/download-artifact v4仕様確認済み。remote Actions/push/publish未実行、q546の同driver actual guest成果とlocal YAML/shell/release input検証を用い、最終committed両targetはp004。TCG選択をrelease driverの普通の実行設定として明示可能にし、CIと同じ非KVM手順をp004で実行。既存build jobを構造比較。
+
+2026-10-02 / ws108-q547-ci-checkpoint: source 3a5b5b16 WIP。CI2distro matrix/TCG/make、missing inputs・hash・smoke package identity・clean source fail gates、distinct upload、release needs両job/merge download/4種類添付。PyYAML6.0.2構造・embedded bash -n PASS、既存build job deep equality PASS。missing package/corrupt metadataの拒否を確認。両committed source makeをTCGで実行中、remote Actions未実行。
+
+2026-10-02 / ws108-q547-tcg-input: 3a5b5b16の両TCG native build/19ELF/clean source metadata生成済み。Debian fresh Vulkan/reinstall/upgrade PASS後、Terminal commandのfile確認が失敗しmake exit2。証拠はfailed-tcg-debian/へ保存。TCG software compositionはframe約1.4秒、1秒のpointer-focus待機＋短いkeypress列では入力完了を保証できなかったため、明示click/TCG待機/keypress間隔/実fileの最大30秒観測と失敗PNG/journalを追加。Debian root systemd serviceのHOME欠落によるdesktop Files ENOENTは通常HOME/WAYLAND_DISPLAYをfixtureへ明示し修正。production source/guest build.pyは不変、失敗をclear扱いせずnative候補で再現確認と最終両makeを続ける。

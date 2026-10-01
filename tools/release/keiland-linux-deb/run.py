@@ -104,7 +104,7 @@ class Guest:
         codes = {' ': 'spc', '\n': 'ret', '-': 'minus', '/': 'slash', '.': 'dot'}
         for character in text:
             self.key(codes.get(character, character))
-            time.sleep(0.04)
+            time.sleep(0.15 if self.acceleration == 'tcg' else 0.04)
 
     def __enter__(self):
         try:
@@ -252,7 +252,7 @@ def smoke(guest, package, client, output, distro):
         dpkg-query -W -f='${Version}' keiland | grep -q '+smoke1$'
         grep -q 'package smoke edit' /opt/keiland/etc/keiland/apps.conf
     '''), timeout=180)
-    guest.ssh('sudo systemd-run --unit=keiland-deb-smoke --setenv=XDG_RUNTIME_DIR=/tmp/keiland-runtime --setenv=KEILAND_SEAT=direct /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm', timeout=30)
+    guest.ssh('sudo systemd-run --unit=keiland-deb-smoke --setenv=HOME=/root --setenv=WAYLAND_DISPLAY=wayland-keiland --setenv=XDG_RUNTIME_DIR=/tmp/keiland-runtime --setenv=KEILAND_SEAT=direct /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm', timeout=30)
     deadline = time.monotonic() + 60
     while time.monotonic() < deadline:
         try:
@@ -266,7 +266,7 @@ def smoke(guest, package, client, output, distro):
         (output / (distro + '-failed-desktop.log')).write_text(diagnostic)
         guest.screenshot(output / (distro + '-failed-desktop.png'))
         raise RuntimeError('installed compositor failed to create its socket')
-    guest.ssh('sudo systemd-run --unit=keiland-deb-terminal --setenv=XDG_RUNTIME_DIR=/tmp/keiland-runtime --setenv=WAYLAND_DISPLAY=wayland-keiland /opt/keiland/bin/terminal', timeout=30)
+    guest.ssh('sudo systemd-run --unit=keiland-deb-terminal --setenv=HOME=/root --setenv=XDG_RUNTIME_DIR=/tmp/keiland-runtime --setenv=WAYLAND_DISPLAY=wayland-keiland /opt/keiland/bin/terminal', timeout=30)
     time.sleep(4)
     # App evidence is journal output via SSH, never the guest console or serial log.
     events = guest.ssh('sudo journalctl -u keiland-deb-smoke --no-pager -o cat', capture_output=True, text=True).stdout
@@ -285,10 +285,25 @@ def smoke(guest, package, client, output, distro):
     guest.qmp('input-send-event', {'device': 'video0', 'head': 0, 'events': [
         {'type': 'abs', 'data': {'axis': 'x', 'value': (x + 200) * 32767 // (width - 1)}},
         {'type': 'abs', 'data': {'axis': 'y', 'value': (y + 200) * 32767 // (height - 1)}}]})
-    time.sleep(1)
+    for down in (True, False):
+        guest.qmp('input-send-event', {'device': 'video0', 'head': 0, 'events': [
+            {'type': 'btn', 'data': {'down': down, 'button': 'left'}}]})
+    # TCG software composition can take seconds; allow focus to reach the client
+    # before sending keyboard events, then observe the command's actual effect.
+    time.sleep(5 if guest.acceleration == 'tcg' else 1)
     guest.type('echo package-smoke\ntouch /tmp/package-smoke\n')
-    time.sleep(2)
-    guest.ssh('sudo test -f /tmp/package-smoke')
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:
+        try:
+            guest.ssh('sudo test -f /tmp/package-smoke', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            break
+        except subprocess.CalledProcessError:
+            time.sleep(1)
+    else:
+        diagnostic = guest.ssh('sudo journalctl -u keiland-deb-terminal -u keiland-deb-smoke --no-pager -o cat', capture_output=True, text=True).stdout
+        (output / (distro + '-failed-input.log')).write_text(diagnostic)
+        guest.screenshot(output / (distro + '-failed-input.png'))
+        raise RuntimeError('terminal input did not create the expected file within 30 seconds')
     guest.screenshot(output / (distro + '-terminal.png'))
     guest.ssh('sudo systemctl is-active --quiet keiland-deb-smoke && sudo systemctl is-active --quiet keiland-deb-terminal')
     guest.ssh('sudo systemctl stop keiland-deb-terminal keiland-deb-smoke')

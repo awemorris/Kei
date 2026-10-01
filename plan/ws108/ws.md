@@ -86,3 +86,5 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01T16:17:58.918952+00:00 / ws108-q545-cleared: p001 cleared。P1 manifest/version/license/dependency/2OS native guest手順/CI release設計を固定。公式pinned image checksum両方一致、actual QEMU10.0.11/KVM cloud-init/SSH/QMP PNGでDebian13/Ubuntu26.04 amd64確認、自分のguest停止。plan/ws108/design.mdとinputs.json。
 
 2026-10-01T16:52:23.158073+00:00 / ws108-q546-cleared: p002 cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。
+
+2026-10-02 / ws108-q547-ci-checkpoint: p003がCI/TCG/release verifierを実装、p004の最終scopeをcommitted同source両target＋全差分full reviewへ具体化。dependency/外部契約/acceptance不変、remote未実行のlocal同手順代替はq545設計とp003のP4契約通り。foreign p004 delivery/WS deliveryをlocal outbox保持。

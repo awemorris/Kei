@@ -47,3 +47,7 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 旧container案をQEMU nativeへ置換、旧release対象外をrelease filesへ置換。既存/opt layoutとWS105のLinux対応済production内容を維持、test appはruntime package外。amd64は既存対象の具体化。実release publication/pushはこのsessionでは行わずCI定義を作成・local同手順検証、remote runは未実施と分ける。
 
 2026-10-02 / ws108-q545-design: [確定設計](../design.md)へ具体化、p001 inputs/manifest/readiness→p002指定targets/2OS native guest/deb/runtime→p003既存CI/release→p004full conformance。各Phase自身の内容/verify/time boundsは設計該当節。container/release除外の旧案はユーザー指示で置換。dependency順は維持、WS106未確定ime-probeは対象外で待たない。GitHub Phase/WS delivery pending。
+
+## 最終検証の具体化（q547設計）
+
+p003のcommitted最終source3a5b5b16からの両make target/TCG native build＋fresh install/session結果をp004でcode hashを照合して最終証拠として再確認。コードが変わればaffected build/runtimeを再実行。全WS108 Python/JSON/Makefile/YAML/規則差分を全文/manual review、元production C/reused fixtureは変更無し。remote CI未実行はp003の承認されたlocal同driver/ゲスト手順の実証と区別。CI定義とlocal fail gatesがP4、remote Actions/release実行をしたとは言わない。最終guestはMaster通り8GiB。shell/YAML/byte compile/diff-check、payload hashes/modes/19ELF/control/root-owner/session/conffile/md5sum/licenses/ユーザーデータを照合。zedBSD production/APIは不変で既存CI build構造を比較、WS107の最新boot証拠を参考contextにし新boot試験を主張しない。
