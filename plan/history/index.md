@@ -2,10 +2,27 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q522](queue-q522.md)（ws104-p008 cleared、WS104 completed）
+Last finished Queue: [q523](queue-q523.md)（ws105-p001 cleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q523 / ws105-p001
+
+Debian 13 の base guest と操作の道具を作成。`guest.sh` は小さな sh 入口から Python の controller を呼ぶ（QMP JSON と座標変換を shell escaping 無しで扱う）。依存 package は既存 host にあり、host package 追加なし。
+
+- `timeout 600 sh .../build-guest.sh`: exit 0。mmdebstrap 121.9975 秒、raw ext4 8 GiB。mesa-vulkan-drivers 25.0.7-2+deb13u1 / libvulkan1 1.4.309.0-1 / weston 14.0.2-1 / linux-image-amd64 6.12.107-1。guest kernel 6.12.107+deb13-amd64。
+- `timeout 200 .../guest.sh start`: 180 秒以内に `guest: ready`。root と kei の loopback SSH 成功。kei の audio/video/input/kvm/render/netdev、`/run/user/1000` を確認。
+- DRM card0 / ALSA controlC0 / event0〜5、Vulkan llvmpipe、mac80211_hwsim wlan0/wlan1、ALSA `'Master'` を確認。
+- QMP PNG の login prompt を目視・ユーザーに提示。png-probe の size `1280 800`、2 点の色 `#000000`。key / click / type が QMP error 無し。
+- run2 / port2226 の同時起動・SSH・停止 PASS。両 guest 停止後 overlay 無し、base image の size / mtime は一致。build の再実行は既存 image を保持。
+- 追加の file 転送 / install 確認: 専用 stage の probe.txt を guest に install し、get 後 cmp 一致。guest 停止済み。host の `/opt` は変更していない。
+- sh syntax、Python compile、`git diff --check` PASS。Master Tools 登録済み。共通 product code の変更無し、zedBSD 回帰対象無し。
+
+証拠: `build/ws105-p001/`（build.log、start.log、verify.log、devices.txt、user.txt、image-before/after.txt、received.txt）。永続 PNG・版・試験 summary は `plan/history/ws105/q523/`。gdm variant の実行は p009、compositor / app の動作は後続 Phase。console / serial log は読んでいない。
+
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `39a0941c272ae3da5091efcba14907610ba5683b`、GitHub 未公開・push なし。[q523](queue-q523.md)。
 
 ## 最新: 2026-10-01 q522 / WS104 完了
 
@@ -51,5 +68,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q520](queue-q520.md) | compositor の session と OS の hook を zedBSD の module に |
 | [q521](queue-q521.md) | install の path を `userland/desktop/paths.h` の macro に |
 | [q522](queue-q522.md) | 規約の全文の見直し、境界の確かめの script、回帰 |
+| [q523](queue-q523.md) | ws105-p001 cleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。

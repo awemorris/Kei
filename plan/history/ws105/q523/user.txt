@@ -1,0 +1,2 @@
+uid=1000(kei) gid=1000(kei) groups=1000(kei),29(audio),44(video),102(netdev),991(render),992(kvm),995(input)
+runtime=/run/user/1000

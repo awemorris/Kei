@@ -2,10 +2,10 @@
 
 # ws105-p001: Linux の試験の guest（QEMU の Debian 13）と操作の道具
 
-Status: cleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q523 / q523-i01
+Queue: なし
 依存: なし
 実行者: phase-runner（high）か phase-runner-mid。道具は `plan/tools/keiland-linux/`（main の範囲。subagent は自分の worktree で作り、main が merge して Tools 節に登録する）
 
@@ -105,17 +105,4 @@ sh plan/tools/keiland-linux/guest.sh stop
 
 ## 結果
 
-Debian 13 の base guest と操作の道具を作成。`guest.sh` は小さな sh 入口から Python の controller を呼ぶ（QMP JSON と座標変換を shell escaping 無しで扱う）。依存 package は既存 host にあり、host package 追加なし。
-
-- `timeout 600 sh .../build-guest.sh`: exit 0。mmdebstrap 121.9975 秒、raw ext4 8 GiB。mesa-vulkan-drivers 25.0.7-2+deb13u1 / libvulkan1 1.4.309.0-1 / weston 14.0.2-1 / linux-image-amd64 6.12.107-1。guest kernel 6.12.107+deb13-amd64。
-- `timeout 200 .../guest.sh start`: 180 秒以内に `guest: ready`。root と kei の loopback SSH 成功。kei の audio/video/input/kvm/render/netdev、`/run/user/1000` を確認。
-- DRM card0 / ALSA controlC0 / event0〜5、Vulkan llvmpipe、mac80211_hwsim wlan0/wlan1、ALSA `'Master'` を確認。
-- QMP PNG の login prompt を目視・ユーザーに提示。png-probe の size `1280 800`、2 点の色 `#000000`。key / click / type が QMP error 無し。
-- run2 / port2226 の同時起動・SSH・停止 PASS。両 guest 停止後 overlay 無し、base image の size / mtime は一致。build の再実行は既存 image を保持。
-- 追加の file 転送 / install 確認: 専用 stage の probe.txt を guest に install し、get 後 cmp 一致。guest 停止済み。host の `/opt` は変更していない。
-- sh syntax、Python compile、`git diff --check` PASS。Master Tools 登録済み。共通 product code の変更無し、zedBSD 回帰対象無し。
-
-証拠: `build/ws105-p001/`（build.log、start.log、verify.log、devices.txt、user.txt、image-before/after.txt、received.txt）。永続 PNG・版・試験 summary は `plan/history/ws105/q523/`。gdm variant の実行は p009、compositor / app の動作は後続 Phase。console / serial log は読んでいない。
-
-
-実装 commit: `39a0941c272ae3da5091efcba14907610ba5683b`（WIP）。終了 UTC: 2026-10-01T06:04:15.180248+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）

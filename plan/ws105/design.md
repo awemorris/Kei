@@ -286,7 +286,7 @@ $(eval $(call KEILAND_LINUX_LIBRARY,keiland,libkeiland.so,$(LIBKEILAND_LINUX_SOU
 | --- | --- | --- |
 | `src/libc/openbsd-digest.c` が `sha1.h` を要る | `sha1.h` も複写する（上の雛形に入れた） | p002 |
 | `mview/renderer.c:2461-2469` が `printf`・`fflush`・`stdout` を `<stdio.h>` 無しで使う（zedBSD では他の header から来る） | `#include <stdio.h>` を足す（共通の file、振る舞いは変わらない） | p007 |
-| compositor の `zwl-gpu.h` の `<vulkan/vulkan_external.h>`（zedBSD だけの header） | WS104 p004 で消す（[edits-compositor.md](../ws104/edits-compositor.md)） | WS104 p004 |
+| compositor の `zwl-gpu.h` の `<vulkan/vulkan_external.h>`（zedBSD だけの header） | WS104 p004 で消す（[edits-compositor.md](../history/ws104/design/edits-compositor.md)） | WS104 p004 |
 | compositor の `zwl.h` の `<uapi/input.h>` | WS104 p005 の `zwl-evdev.h` | WS104 p005 |
 | compositor の `compose.c:1949` が `vkGetFenceFdKHR` を直接呼ぶ（Linux の loader は拡張の関数を export しないので link できない） | WS104 p004 で `vkGetDeviceProcAddr` から得る形にする | WS104 p004 |
 | gcc だけの `-Wformat-truncation`（10 箇所） | `-Wno-format-truncation`（D24） | p002 |

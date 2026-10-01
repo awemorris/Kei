@@ -3,13 +3,13 @@
 # WS105: Keiland を Linux で動かす（`/opt/keiland`）
 
 <!-- awesome-plan-current:start -->
-Status: planned
+Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: なし
-Resume point: 計画済み（2026-10-01）。p001（Linux の試験の guest）は今すぐ始められる。p002 以降は WS104 の p001・p003・p007 の後（各 Phase の依存）
+Queue: q523 finished
+Resume point: p001 cleared（q523）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -104,7 +104,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 
 | Phase | 目的 | 状態 | 依存 |
 | --- | --- | --- | --- |
-| [ws105-p001](phase001/phase.md) | Linux の試験の guest（QEMU の Debian 13）と操作の道具 | planned | なし |
+| [ws105-p001](phase001/phase.md) | Linux の試験の guest（QEMU の Debian 13）と操作の道具 | cleared | なし |
 | [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | planned | WS104 の p001・p003 |
 | [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | planned | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | planned | p003 |
@@ -130,3 +130,24 @@ WS104 p001・p003 → p002 → p003 → p004 → p005 → p006（WS104 の完了
 - libvulkan-compat（p003〜p005）と compositor（p006〜p007）、logind（p009）は phase-runner（high）。app の build（p008）と libkeiland の backend（p010）は
   phase-runner（high）か phase-runner-mid。
 - 各 Phase の agent は、始める前に「決定と理由」・design.md の §0〜§3 と、その Phase が名指す節を読む。
+
+## 自律実行の承認（2026-10-01）
+
+current user, 2026-10-01「ws105の完了をゴールにして、自走をお願いします。」。既存 WS105 p001〜p011 の範囲を依存順の 1 Phase Queue で実装・検証・記録する。commit は WIP、push / GitHub 公開は行わない。
+
+### q523 / ws105-p001（2026-10-01T06:04:15.180248+00:00）
+
+cleared。Debian 13 の base guest と操作の道具を作成。`guest.sh` は小さな sh 入口から Python の controller を呼ぶ（QMP JSON と座標変換を shell escaping 無しで扱う）。依存 package は既存 host にあり、host package 追加なし。
+
+- `timeout 600 sh .../build-guest.sh`: exit 0。mmdebstrap 121.9975 秒、raw ext4 8 GiB。mesa-vulkan-drivers 25.0.7-2+deb13u1 / libvulkan1 1.4.309.0-1 / weston 14.0.2-1 / linux-image-amd64 6.12.107-1。guest kernel 6.12.107+deb13-amd64。
+- `timeout 200 .../guest.sh start`: 180 秒以内に `guest: ready`。root と kei の loopback SSH 成功。kei の audio/video/input/kvm/render/netdev、`/run/user/1000` を確認。
+- DRM card0 / ALSA controlC0 / event0〜5、Vulkan llvmpipe、mac80211_hwsim wlan0/wlan1、ALSA `'Master'` を確認。
+- QMP PNG の login prompt を目視・ユーザーに提示。png-probe の size `1280 800`、2 点の色 `#000000`。key / click / type が QMP error 無し。
+- run2 / port2226 の同時起動・SSH・停止 PASS。両 guest 停止後 overlay 無し、base image の size / mtime は一致。build の再実行は既存 image を保持。
+- 追加の file 転送 / install 確認: 専用 stage の probe.txt を guest に install し、get 後 cmp 一致。guest 停止済み。host の `/opt` は変更していない。
+- sh syntax、Python compile、`git diff --check` PASS。Master Tools 登録済み。共通 product code の変更無し、zedBSD 回帰対象無し。
+
+証拠: `build/ws105-p001/`（build.log、start.log、verify.log、devices.txt、user.txt、image-before/after.txt、received.txt）。永続 PNG・版・試験 summary は `plan/history/ws105/q523/`。gdm variant の実行は p009、compositor / app の動作は後続 Phase。console / serial log は読んでいない。
+
+
+[Phase の結果](phase001/phase.md)、[Queue history](../history/queue-q523.md)。WS105 の受け入れは残りの Phase の確認を要する。
