@@ -1296,7 +1296,7 @@ shell_draw_button(
 {
 	static const float accent[4] = { 0.18f, 0.49f, 0.96f, 1.0f };
 	float ground[4];
-	float colour[4];
+	float colour[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	unsigned icon;
 	unsigned enabled;
 	unsigned checked;

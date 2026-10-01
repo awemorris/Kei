@@ -14,7 +14,7 @@ cd "$(dirname -- "$0")/../../.."
 build=${1:-build/amd64}
 dir=userland/desktop/wayland
 backend=$dir/zedbsd/gpu-zedbsd.c
-files=$(find "$dir" -name "*.[ch]" | sort)
+files=$(find "$dir" -path "$dir/linux" -prune -o -name "*.[ch]" -print | sort)
 failures=0
 fail() { echo "v1-check: FAIL $*"; failures=$((failures + 1)); }
 
@@ -40,7 +40,7 @@ print:
 	@echo $(KEILAND_SOURCES)
 EOF
 )
-[ -n "$sources" ] || sources=$(find "$dir" -name "*.c" | sort)
+[ -n "$sources" ] || sources=$(find "$dir" -path "$dir/linux" -prune -o -name "*.c" -print | sort)
 compiled=0
 for source in $sources; do
 	[ "$source" = "$backend" ] && continue
@@ -58,7 +58,7 @@ echo "v1-check: $compiled sources compiled with the GPU UAPI headers poisoned"
 # 3. No GPU node and no --gpu option.
 nodes=$(grep -n '"/dev/gpu' $files)
 [ -z "$nodes" ] || fail "GPU node: $nodes"
-option=$(grep -n '"--gpu' $(find "$dir" -name "*.c"))
+option=$(grep -n '"--gpu' $(find "$dir" -path "$dir/linux" -prune -o -name "*.c" -print))
 [ -z "$option" ] || fail "--gpu option: $option"
 
 [ $failures = 0 ] || exit 1

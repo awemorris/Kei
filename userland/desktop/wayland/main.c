@@ -261,6 +261,7 @@ parse_options(
 
 			/* Absolute paths make socket-generation ownership explicit. */
 			strcpy(server->socket_path, text);
+			server->socket_given = 1;
 			continue;
 		}
 

@@ -596,6 +596,8 @@ struct zwl_server {
 	struct zwl_perf perf;
 	int listener;
 	char socket_path[108];
+	/* An explicit socket overrides the OS module's runtime-directory default. */
+	unsigned socket_given;
 	dev_t socket_device;
 	ino_t socket_inode;
 	unsigned socket_owned;

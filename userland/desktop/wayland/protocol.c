@@ -432,6 +432,8 @@ registry_events(
 
 		/* Resolve the OS-owned GPU global before encoding its registry event. */
 		global_identity(&globals[index], &interface, &version);
+		if (interface == NULL)
+			continue;
 
 		/* Encode this advertised interface as one canonical registry global event. */
 		memset(payload, 0, sizeof(payload));
@@ -595,6 +597,8 @@ bind_global(
 
 		/* Names, interface strings and negotiated versions are checked together. */
 		global_identity(&globals[index], &offered, &offered_version);
+		if (offered == NULL)
+			return EPROTO;
 		same = strcmp(interface, offered);
 		if (same != 0 ||
 		    version == 0 ||

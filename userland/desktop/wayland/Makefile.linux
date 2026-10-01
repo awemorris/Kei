@@ -1,0 +1,82 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The independent Linux compositor list; target-only device modules and X11 helper are excluded.
+# keiland-linux-sync: skip userland/desktop/wayland/zedbsd/* target-only modules
+WAYLAND_LINUX_SOURCES := userland/desktop/wayland/main.c \
+	userland/desktop/wayland/wire.c \
+	userland/desktop/wayland/objects.c \
+	userland/desktop/wayland/protocol.c \
+	userland/desktop/wayland/display.c \
+	userland/desktop/wayland/seat.c \
+	userland/desktop/wayland/input.c \
+	userland/desktop/wayland/tablet.c \
+	userland/desktop/wayland/touch.c \
+	userland/desktop/wayland/compose.c \
+	userland/desktop/wayland/import.c \
+	userland/desktop/wayland/shm.c \
+	userland/desktop/wayland/glass.c \
+	userland/desktop/wayland/shell.c \
+	userland/desktop/wayland/home.c \
+	userland/desktop/wayland/corner.c \
+	userland/desktop/wayland/keyboard.c \
+	userland/desktop/wayland/keyboard-layout.c \
+	userland/desktop/wayland/keyboard-hand.c \
+	userland/desktop/wayland/menu.c \
+	userland/desktop/wayland/menu-shell.c \
+	userland/desktop/wayland/titlebar.c \
+	userland/desktop/wayland/popup.c \
+	userland/desktop/wayland/toplevel.c \
+	userland/desktop/wayland/sheet.c \
+	userland/desktop/wayland/subsurface.c \
+	userland/desktop/wayland/keymap.c \
+	userland/desktop/wayland/data.c \
+	userland/desktop/wayland/icons.c \
+	userland/desktop/wayland/titlebar-shell.c \
+	userland/desktop/wayland/decoration.c \
+	userland/desktop/wayland/cursor.c \
+	userland/desktop/wayland/viewport.c \
+	userland/desktop/wayland/panels.c \
+	userland/desktop/wayland/backdrop.c \
+	userland/desktop/wayland/damage.c \
+	userland/desktop/wayland/greeter.c \
+	userland/desktop/wayland/primary.c \
+	userland/desktop/wayland/network.c \
+	userland/desktop/wayland/preferences.c \
+	userland/desktop/wayland/volume.c \
+	userland/desktop/wayland/text-input.c \
+	userland/desktop/wayland/input-method.c \
+	userland/desktop/wayland/desktop.c \
+	userland/desktop/wayland/inset.c \
+	userland/desktop/wayland/edit.c \
+	userland/desktop/wayland/clipboard.c \
+	userland/desktop/vkdemo/display.c \
+	userland/desktop/artwork/mark.c \
+	userland/desktop/picture/color-glyph.c \
+	userland/desktop/wayland/linux/os-linux.c \
+	userland/desktop/wayland/linux/seat-direct-linux.c \
+	userland/desktop/wayland/linux/input-linux.c \
+	userland/desktop/wayland/linux/handoff-linux.c \
+	userland/desktop/wayland/linux/gpu-linux.c
+$(eval $(call KEILAND_LINUX_PROGRAM,wayland,bin,$(WAYLAND_LINUX_SOURCES),libkeiland.so libtruetype.so libpng-compat.so libz-compat.so libvulkan.so.1,-lm))
+
+$(eval $(call KEILAND_LINUX_DATA,share/fonts/keiland.ttf,userland/desktop/fonts/Inter.ttf))
+$(eval $(call KEILAND_LINUX_DATA,share/fonts/keiland-mono.ttf,userland/desktop/fonts/JetBrainsMono-Regular.ttf))
+$(eval $(call KEILAND_LINUX_DATA,share/fonts/keiland-fallback.ttf,userland/desktop/fonts/DroidSansFallbackFull.ttf))
+$(eval $(call KEILAND_LINUX_DATA,share/licenses/keiland-fonts/Inter-OFL.txt,userland/desktop/fonts/Inter-OFL.txt))
+$(eval $(call KEILAND_LINUX_DATA,share/licenses/keiland-fonts/JetBrainsMono-OFL.txt,userland/desktop/fonts/JetBrainsMono-OFL.txt))
+$(eval $(call KEILAND_LINUX_DATA,share/licenses/keiland-fonts/DroidSansFallback-LICENSE.txt,userland/desktop/fonts/DroidSansFallback-LICENSE.txt))
+$(eval $(call KEILAND_LINUX_DATA,share/licenses/keiland-fonts/Apache-2.0.txt,userland/desktop/fonts/Apache-2.0.txt))
+
+# Reuses the pinned, independently hash-verified external font without importing target build rules.
+KEILAND_LINUX_EMOJI := build/distfiles/NotoColorEmoji-2.047.ttf
+$(KEILAND_LINUX_EMOJI):
+	@mkdir -p $(dir $@)
+	curl -fL --max-time 180 -o $@.tmp https://github.com/googlefonts/noto-emoji/raw/v2.047/fonts/NotoColorEmoji.ttf
+	@printf '%s  %s\n' 39ee3c587e10e89669b9ff32703261d10d5f9c4dd5ad147b6b5a1c5200591817 $@.tmp | sha256sum -c -
+	mv $@.tmp $@
+$(KEILAND_LINUX_BUILD)/share/fonts/keiland-emoji.ttf: $(KEILAND_LINUX_EMOJI)
+	@printf '%s  %s\n' 39ee3c587e10e89669b9ff32703261d10d5f9c4dd5ad147b6b5a1c5200591817 $< | sha256sum -c -
+	@mkdir -p $(dir $@)
+	cp $< $@
+KEILAND_LINUX_ALL += $(KEILAND_LINUX_BUILD)/share/fonts/keiland-emoji.ttf
+KEILAND_LINUX_INSTALL += share/fonts/keiland-emoji.ttf
+$(eval $(call KEILAND_LINUX_DATA,share/licenses/noto-color-emoji/OFL-1.1.txt,userland/packages/fonts/noto-color-emoji/OFL-1.1.txt))

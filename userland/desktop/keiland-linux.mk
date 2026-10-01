@@ -97,7 +97,9 @@ KEILAND_LINUX_PACKAGES ?= userland/base/libz-compat/Makefile.linux \
 	userland/desktop/libwayland/Makefile.linux \
 	userland/desktop/libtruetype/Makefile.linux \
 	userland/desktop/libvulkan-compat/Makefile.linux \
-	userland/desktop/libkeiland/Makefile.linux
+	userland/desktop/libkeiland/Makefile.linux \
+	userland/desktop/wayland/Makefile.linux \
+	userland/desktop/wlshm/Makefile.linux
 include $(KEILAND_LINUX_PACKAGES)
 
 include userland/desktop/vkdemo/Makefile.linux
