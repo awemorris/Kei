@@ -78,3 +78,23 @@ timeout 120 sh plan/tools/keiland-linux/header-check.sh
 `makefile-sync.sh` は package ごとの source token を双方向に比較し、zedbsd / linux / wpa と説明付き skip / only を扱う。
 `header-check.sh` は system header も含む `-M` を全 source に行い、system の Wayland / EGL / GLES の混入を検出する。`CC` と `KEILAND_LINUX_BUILD` を export して別 build を指定できる。
 `lib-smoke.c` は p002 の仮 backend と version 21 の確認用。p010 で本物の service backend を入れた後の動作は各 service の試験で確認する。
+
+## Vulkan chain の確認
+
+`vk-chain-test.c` を staged libvulkan.so.1 に DT_NEEDED で link し、空の XDG_RUNTIME_DIR で走らせる。
+Vulkan 1.0 + KHR_get_physical_device_properties2 の instance から device / queue を作り、1 MiB の fill / copy / fence / 全 word 一致と、WSI の禁止名を確認する。
+`interpose-check.sh` は `LD_DEBUG=bindings` の既定の backend → compat binding が0件であることと、NO_DEEPBIND opt-out でも command が通ることを確認する。
+
+```sh
+mkdir -p build/keiland-linux/test/empty-xdg
+chmod 700 build/keiland-linux/test/empty-xdg
+timeout 30 cc -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/test/vk-chain-test plan/tools/keiland-linux/vk-chain-test.c -ldl \
+  -Wl,--no-as-needed -Lbuild/keiland-linux/lib -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
+timeout 60 env -u WAYLAND_DISPLAY -u DISPLAY KEILAND_DRM_DEVICE=none XDG_RUNTIME_DIR="$PWD/build/keiland-linux/test/empty-xdg" \
+  LD_LIBRARY_PATH="$PWD/build/keiland-linux/stage/opt/keiland/lib" build/keiland-linux/test/vk-chain-test
+timeout 150 sh plan/tools/keiland-linux/interpose-check.sh
+```
+
+再入の試験は `fake-backend.c` を gcc `-fPIC -shared` で build する（Bsymbolic・fno-semantic-interposition は付けない）。
+直接の再帰 C call は gcc が local alias に結び付けることがあるため、fake は同じ `vkCreateInstance` assembler symbol への extern alias から PLT を呼ぶ。
+`VK_CHAIN_REENTER=1` は試験の program にだけある入口。NO_DEEPBIND と fake の absolute backend path で実行すると、production の再入検出が診断して exit134 を返す。
