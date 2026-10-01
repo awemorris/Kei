@@ -1024,9 +1024,17 @@ main_menu_state(
 	const struct main_run *run,
 	struct terminal_menu_state *state)
 {
-	/* The selection, the clipboard, the font's size, and fullscreen. */
+	/* Disables menu actions until their initial state is supplied. */
 	memset(state, 0, sizeof(*state));
-	state->selection = main_screen->selected || main_screen->range;
+
+	/* The first menu exists before the first tab has a screen to select from. */
+	if (main_screen != NULL) {
+		/* A selected cell or range enables actions on the terminal's text. */
+		if (main_screen->selected || main_screen->range)
+			state->selection = 1;
+	}
+
+	/* Clipboard, type size and fullscreen do not depend on a tab. */
 	state->clipboard = terminal_clipboard_has_text(&main_window);
 	state->pixels = run->pixels;
 	state->fullscreen = main_window.fullscreen;
@@ -2081,6 +2089,8 @@ main_touch_round(void)
 				kinds[2] = TERMINAL_POINTER_PRESS;
 				kind_count = 3U;
 			}
+
+			/* Records which held selection supplied the pointer press. */
 			printf("ZTERM TOUCH hold on-selection=%d\n", inside);
 			fflush(stdout);
 		}
