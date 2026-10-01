@@ -40,3 +40,9 @@ zedBSD の起動は boot-test.sh の PNG。Linux の既存検証は WS105 の手
 
 2026-10-01 / review-20261001-planning: 新設した Phase 案。親 WS の目標への寄与と依存を記録。実装の選定は未実施。
 GitHub の Phase 作成/comment/Project の projection は公開保留、local outbox に保持する。
+
+## 2026-10-02 / ws107-q541-design
+
+[確定設計](../design.md)と[179file台帳](../inventory.json)を採用。viewの入力/描画境界とnavigationの失敗時transaction/async history、14style候補を修正。callbackは同じview mutation/destroyを外側call後へ延期するユーザー決定を公開仕様へ反映。public ABI v2保持、標準Vulkan動的第2clientでB3/B4を検証。依存p002。
+
+callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。

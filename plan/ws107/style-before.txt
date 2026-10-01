@@ -1,0 +1,3 @@
+userland/desktop/browser/bind/handler.c blank-after-brace=3 call-in-condition=1
+userland/desktop/browser/net/loader.c paragraph-comment=10
+total 14

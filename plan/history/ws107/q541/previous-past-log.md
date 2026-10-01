@@ -2,15 +2,9 @@
 
 # Past Log
 
-Last finished Queue: [q541](queue-q541.md)（WS107 p001 cleared）
+Last finished Queue: [q540](queue-q540.md)（ws106p002 partial item cleared / whole Phase uncleared、2026-10-01）
 
-## 最新: q541 / WS107 p001
-
-cleared。179file移動台帳（engine165/133C、残す14）、API v2/標準Vulkan/Wayland無し境界と有限quality修正、target/host/client検証を確定。callbackの同一view変更・破棄をcall後へ延期するユーザー判断を保存。style14候補はp003で全文適合。plan/ws107/design.mdとinventory.json、全変更Phase/WSイベント。
-
-GitHub publication/outbox pending、commit WIP / pushなし。
-
-## 前回: q540 / WS106 p002 partial
+## 最新: q540 / WS106 p002 partial
 
 29 package＋追加13filesの承認partial scopeはcleared。164filesのhash/mode/参照・registry保存、Linux GCC/Clang clean build/install warning0（ELF24/source331各）、zedBSD28app/POSIX/loader/image warning0、boot-test.sh login PNG確認。ime-probe2filesは非競合回答待ちで未変更。whole p002はuncleared、p003は未実行、WS106はincomplete。
 
@@ -43,6 +37,7 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 
 | Queue | Scope/outcome |
 | --- | --- |
+| [q511](queue-q511.md) | WS103 の p004（compositor を dedicated の import に切り替え、`GPU_RESOURCE_IMPORT`・`GPU_RESOURCE_DESTROY` を… |
 | [q512](queue-q512.md) | WS103 の p005（libvulkan の WSI が、Wayland の target の present ごとに新しい fence を作って送る）。 |
 | [q513](queue-q513.md) | WS103 の p006（compositor の fence を poll だけに、`/dev/gpu0` と `--gpu` の削除、GPU の UAPI を `gpu-zedbsd.c` … |
 | [q514](queue-q514.md) | WS103 の p007（規約の全文で WS の全 source の変更を見直す、回帰、5330、V4 の性能の計測）。WS103 の最後の Phase。 |
@@ -76,7 +71,5 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 
 
 退避した履歴行: [WS106更新前のindex行](ws106/prior-queue-index-rows.md)。
-| [q541](queue-q541.md) | WS107 p001 cleared |
-
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。

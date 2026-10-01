@@ -40,3 +40,9 @@ zedBSD の起動は boot-test.sh の PNG。Linux の既存検証は WS105 の手
 
 2026-10-01 / review-20261001-planning: 新設した Phase 案。親 WS の目標への寄与と依存を記録。実装の選定は未実施。
 GitHub の Phase 作成/comment/Project の projection は公開保留、local outbox に保持する。
+
+## 2026-10-02 / ws107-q541-design
+
+[確定設計](../design.md)と[179file台帳](../inventory.json)を採用。全165engine/14appと全変更consumerを全文reviewし、B1〜B5/ELF/header/client/build/関係回帰/boot PNGを確認。後日の意味変更があれば再検証、CPUをGPUの代用にしない。依存p003。
+
+callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。

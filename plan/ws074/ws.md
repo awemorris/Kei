@@ -241,3 +241,5 @@ WS074 は incomplete のまま。p099 の既存証拠/clearance、p100→p101 �
 engine の new source は libbrowser が所有する設計で生成し、Wayland は shell の abstract input adapter に閉じる。
 p100/p101 の個別 Phase record は現在未作成（WS 表の予定行）。新しい implementation Queue や clearance はこの方針記録から発生しない。
 2026-10-01 / review-20261001-policy-ws074: 新設 WS107 と policy 改訂/影響をこの WS に保存。GitHub の WS comment は公開保留。
+
+2026-10-02 / ws107-q541-design: [WS107](../ws107/ws.md)の165engine file移行で現役host/guest/list-sources runnerを新rootへ更新する。独立componentの有限quality修正はWS107、p100→p101の既存互換性scope/順/acceptanceは保持。今後はlibbrowserrootの実sourceを使い、移行と同時編集しない。詳細[設計](../ws107/design.md)。公開outbox pending。

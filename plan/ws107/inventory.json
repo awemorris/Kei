@@ -1,0 +1,1437 @@
+{
+  "source_commit": "6071c459a897e752e67e8905ead5e32526ba641f",
+  "files": [
+    {
+      "before": "userland/desktop/browser/Makefile",
+      "after": "userland/desktop/browser/Makefile",
+      "sha256": "ba1737f7a25d6a2588e9de7dbdf744cbb26c9c99b9f97479e8e07d48f6d8f666",
+      "mode": "0o664",
+      "bytes": 1599,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/base/arena.c",
+      "after": "userland/desktop/libbrowser/base/arena.c",
+      "sha256": "0dc39f372aa17108b38a574f6e4d1b9af3427d30c247ddbb74ae670946086039",
+      "mode": "0o664",
+      "bytes": 4126,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/base.h",
+      "after": "userland/desktop/libbrowser/base/base.h",
+      "sha256": "49d2ffd4a7a2a4f830b49a43b8d1b467112d47b6422fd36dd2ce19e7819bf499",
+      "mode": "0o664",
+      "bytes": 4871,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/buffer.c",
+      "after": "userland/desktop/libbrowser/base/buffer.c",
+      "sha256": "308b3652cc970d179929c4ce31257e8c72d7b8d7604c8f9b60e79fb66d9f3320",
+      "mode": "0o664",
+      "bytes": 7279,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/file.c",
+      "after": "userland/desktop/libbrowser/base/file.c",
+      "sha256": "5aeaed697ea2b8cf7c577e6ae6825ffa656bef0e7a92dacb1d3c134880ac058f",
+      "mode": "0o664",
+      "bytes": 2760,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/hash.c",
+      "after": "userland/desktop/libbrowser/base/hash.c",
+      "sha256": "4742aff1c5874dcc66eccd6f9e000e1c5feb2fccef647f3e88a2600434db8b6d",
+      "mode": "0o664",
+      "bytes": 1514,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/unicode-case-table.c",
+      "after": "userland/desktop/libbrowser/base/unicode-case-table.c",
+      "sha256": "373324512ce18bb2ce37ef2e327b1fdf56f30544e11ed92ce5f7bd3f03ea2b97",
+      "mode": "0o664",
+      "bytes": 89042,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/unicode.c",
+      "after": "userland/desktop/libbrowser/base/unicode.c",
+      "sha256": "7ce3b275bbad6c539ea6dc977ee4eb7d948169cd16ceda6af293b90e328f6ca4",
+      "mode": "0o664",
+      "bytes": 4183,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/unicode.h",
+      "after": "userland/desktop/libbrowser/base/unicode.h",
+      "sha256": "281e255316f6a3c7aeb8c43432792328dfb440b905b9056c4255622e8bb2d87b",
+      "mode": "0o664",
+      "bytes": 1830,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/utf.c",
+      "after": "userland/desktop/libbrowser/base/utf.c",
+      "sha256": "4dc9547b5a48c58b549da006c15ce38a8b70c474187d6e426ad089f5a604151b",
+      "mode": "0o664",
+      "bytes": 7503,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/base/vector.c",
+      "after": "userland/desktop/libbrowser/base/vector.c",
+      "sha256": "22a58f6d5ab6af6fa1c704d99607bce03ac793a279d0a7fbd5bf9f83f6f794be",
+      "mode": "0o664",
+      "bytes": 2379,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/bind.h",
+      "after": "userland/desktop/libbrowser/bind/bind.h",
+      "sha256": "fe7f4e874c96fb0d3625afc906914b12f0f5affa79854df17d761dfdd8c8c92e",
+      "mode": "0o664",
+      "bytes": 9167,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/computed.c",
+      "after": "userland/desktop/libbrowser/bind/computed.c",
+      "sha256": "ce94794ab3eb0928d7f9c5b2ab70efe5aa82e91fbffabd052f06bfc27f79eece",
+      "mode": "0o664",
+      "bytes": 36099,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/document.c",
+      "after": "userland/desktop/libbrowser/bind/document.c",
+      "sha256": "fe35e43ad31f68cd255710fee2c6d718be6e338d775f515683887ab137735edd",
+      "mode": "0o664",
+      "bytes": 29942,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/element.c",
+      "after": "userland/desktop/libbrowser/bind/element.c",
+      "sha256": "49b83b07613f7c2f0dff533c0f2edd932b62d388cce63005d4f006cd600ca302",
+      "mode": "0o664",
+      "bytes": 34678,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/encoding.c",
+      "after": "userland/desktop/libbrowser/bind/encoding.c",
+      "sha256": "723da4e5add8e4de65588a9c8aae931314a29cf80d46d067d077b880fe4f6d61",
+      "mode": "0o664",
+      "bytes": 27541,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/environment.c",
+      "after": "userland/desktop/libbrowser/bind/environment.c",
+      "sha256": "060abf60efec8994b97323abf6b36f4bd4695121f75b9837bcbc8e33ffcbaf7b",
+      "mode": "0o664",
+      "bytes": 89842,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/event.c",
+      "after": "userland/desktop/libbrowser/bind/event.c",
+      "sha256": "289b975098a759a1b855438d7ac1b62ec5edc57731bacd1cb6986c36a46a8f24",
+      "mode": "0o664",
+      "bytes": 54662,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/exception.c",
+      "after": "userland/desktop/libbrowser/bind/exception.c",
+      "sha256": "60fa9db6cc327bf7e63d2a59ea621e5f93182397c8902e84a5908b55aaf4b090",
+      "mode": "0o664",
+      "bytes": 10930,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/geometry.c",
+      "after": "userland/desktop/libbrowser/bind/geometry.c",
+      "sha256": "cc2d1511345e93e4d1b7337bad1d13e6fb426f87b7ebead24d132ec7b642ea70",
+      "mode": "0o664",
+      "bytes": 42722,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/handler.c",
+      "after": "userland/desktop/libbrowser/bind/handler.c",
+      "sha256": "05350d78ec9058b07dc40d38de3d509b00716a3a6d6b606e4ba2cf0d1eadea75",
+      "mode": "0o664",
+      "bytes": 13984,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/input.c",
+      "after": "userland/desktop/libbrowser/bind/input.c",
+      "sha256": "c0405f03becb556963049e495e1b736a9d561d7c550e2f7456063de360871047",
+      "mode": "0o664",
+      "bytes": 23754,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/internal.h",
+      "after": "userland/desktop/libbrowser/bind/internal.h",
+      "sha256": "96097cc5934a10db32540666b8dce66285f2f8daa2109a75ef5fa3444e5882f0",
+      "mode": "0o664",
+      "bytes": 21394,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/markup.c",
+      "after": "userland/desktop/libbrowser/bind/markup.c",
+      "sha256": "d2606c372c48488534599c170c5c9100b04075cb2a1e72b5b6ba8f1354730eaf",
+      "mode": "0o664",
+      "bytes": 19134,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/mixin.c",
+      "after": "userland/desktop/libbrowser/bind/mixin.c",
+      "sha256": "5d2feaa2010286473f20621abda18fe8823fff980848a1b51a0f66a1df2902c1",
+      "mode": "0o664",
+      "bytes": 14709,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/node.c",
+      "after": "userland/desktop/libbrowser/bind/node.c",
+      "sha256": "787f573b7d8d6a441d384d5729db70ecd80919d6918c1ab0ff42ceab2fc9f9d8",
+      "mode": "0o664",
+      "bytes": 38016,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/query.c",
+      "after": "userland/desktop/libbrowser/bind/query.c",
+      "sha256": "9380463f9bfe4c15953e8af4c48422106fb63abe482b522b6fb91f682cf4e643",
+      "mode": "0o664",
+      "bytes": 39519,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/storage.c",
+      "after": "userland/desktop/libbrowser/bind/storage.c",
+      "sha256": "d390c3c35104713b9663a2c400d9924a137214efe5a13d5091d59e49f74c0f40",
+      "mode": "0o664",
+      "bytes": 11556,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/style.c",
+      "after": "userland/desktop/libbrowser/bind/style.c",
+      "sha256": "aa215213f95d0cb350cca4a82141249924fc1332716b8e6797c22e9675d27d6f",
+      "mode": "0o664",
+      "bytes": 41435,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/text.c",
+      "after": "userland/desktop/libbrowser/bind/text.c",
+      "sha256": "0ae323d6222a53e8b65e5655a16f034d5348b8bad34bddfe7a8d428f0d4887a3",
+      "mode": "0o664",
+      "bytes": 13196,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/timer.c",
+      "after": "userland/desktop/libbrowser/bind/timer.c",
+      "sha256": "1e81c8dfc1a827a840d7a6a5ca353a2c562b149099b8c4fc588054d3716d2fb3",
+      "mode": "0o664",
+      "bytes": 10973,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/bind/window.c",
+      "after": "userland/desktop/libbrowser/bind/window.c",
+      "sha256": "5dd8a9bb45e67139232e8fc173aa4d50769351f06127175d18498dab1082311c",
+      "mode": "0o664",
+      "bytes": 32962,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/cascade.c",
+      "after": "userland/desktop/libbrowser/css/cascade.c",
+      "sha256": "11ffcc6bcf5d0ecdfdf6c0ff27791599bcd2d874519f50802e0cff90aebbbf6c",
+      "mode": "0o664",
+      "bytes": 124563,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/css.h",
+      "after": "userland/desktop/libbrowser/css/css.h",
+      "sha256": "93352abd916f8adb8261e3ef252288a35d3318730fc4da900b73e0fd546ede14",
+      "mode": "0o664",
+      "bytes": 17478,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/index.c",
+      "after": "userland/desktop/libbrowser/css/index.c",
+      "sha256": "7b418d0f4815b57648be7341cafc5c8acea749da04bdfb7c4804e73121ba8251",
+      "mode": "0o664",
+      "bytes": 10889,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/internal.h",
+      "after": "userland/desktop/libbrowser/css/internal.h",
+      "sha256": "27cf671a555c7b5fa90540ac544a87e71f517cdaae5bde1e5e9a6290ecb9aa33",
+      "mode": "0o664",
+      "bytes": 15898,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/media.c",
+      "after": "userland/desktop/libbrowser/css/media.c",
+      "sha256": "3dbc3b0810802dc97c37b164fc743bd3e33e026c86de662e67fbcfa4cb6fd7ff",
+      "mode": "0o664",
+      "bytes": 23963,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/parser.c",
+      "after": "userland/desktop/libbrowser/css/parser.c",
+      "sha256": "7a672a5cfc7db5267bae796f20e1e9648e5b01e9ba50092632b405519e087073",
+      "mode": "0o664",
+      "bytes": 68384,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/tokenizer.c",
+      "after": "userland/desktop/libbrowser/css/tokenizer.c",
+      "sha256": "d71faf8fb0ea316f8a02ea7659c0e7c30f0269c30f87b6e19d00e4dac170a95e",
+      "mode": "0o664",
+      "bytes": 24897,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/ua.c",
+      "after": "userland/desktop/libbrowser/css/ua.c",
+      "sha256": "7bb223d44277ab9574db20cecb8bc05f6024eb540ca3e40d50d2c4d47c5b412a",
+      "mode": "0o664",
+      "bytes": 5090,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/css/values.c",
+      "after": "userland/desktop/libbrowser/css/values.c",
+      "sha256": "6e3e092fb096ddab6ef7eb4c933043a932f59472e712cb321b178dce5cf6047b",
+      "mode": "0o664",
+      "bytes": 127096,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/data/about.html",
+      "after": "userland/desktop/browser/data/about.html",
+      "sha256": "5851dfbf2abc59eb42f72e1338f5d361eb47ae93b0850029034ca9565c5b4656",
+      "mode": "0o664",
+      "bytes": 1786,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/data/start.html",
+      "after": "userland/desktop/browser/data/start.html",
+      "sha256": "cb38717a82bce22f20d77253c77ffd0791a4ae083a0c2e377a0661738143d22b",
+      "mode": "0o664",
+      "bytes": 2706,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/data/text.html",
+      "after": "userland/desktop/browser/data/text.html",
+      "sha256": "141e5b2a7089c1b993311d2bc785ba54276f289021738ff67feac38400d2d40b",
+      "mode": "0o664",
+      "bytes": 1584,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/dom/control.c",
+      "after": "userland/desktop/libbrowser/dom/control.c",
+      "sha256": "eab8ff68bfd8b84f634dd6b633f5e28b9cfe7de0262d573f0a73f3a6ec9ae8d6",
+      "mode": "0o664",
+      "bytes": 13126,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/dom/dom.h",
+      "after": "userland/desktop/libbrowser/dom/dom.h",
+      "sha256": "ca4e79c2da1658c6a677c1a2a8d2d20eaeaf2091964ce36960169dfccd081988",
+      "mode": "0o664",
+      "bytes": 11070,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/dom/names.c",
+      "after": "userland/desktop/libbrowser/dom/names.c",
+      "sha256": "cc0a2fcb3d7553af57b8974592b5e269e6dc10d4401f6851fe4d7bb2a1e9f245",
+      "mode": "0o664",
+      "bytes": 3431,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/dom/node.c",
+      "after": "userland/desktop/libbrowser/dom/node.c",
+      "sha256": "fd8d6c5cca8ab3402da7690702436bfe13b19dc780901fad9b5338a2e47c8ca3",
+      "mode": "0o664",
+      "bytes": 17558,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/dom/serialize.c",
+      "after": "userland/desktop/libbrowser/dom/serialize.c",
+      "sha256": "b6d8eb86d6d55ced7c34a963f8b58bee44d002241c005cd1a5a851e5275bb54d",
+      "mode": "0o664",
+      "bytes": 13314,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/body.c",
+      "after": "userland/desktop/libbrowser/html/body.c",
+      "sha256": "ee66abcd323194facf878543c4b849a05d64b158e4d725e578758bcf0912c24b",
+      "mode": "0o664",
+      "bytes": 25103,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/entities-table.c",
+      "after": "userland/desktop/libbrowser/html/entities-table.c",
+      "sha256": "653c80db7c52fa58ca24f773940309772ead2951bce536baad079e078e431997",
+      "mode": "0o664",
+      "bytes": 70645,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/entities.h",
+      "after": "userland/desktop/libbrowser/html/entities.h",
+      "sha256": "741d8a7abfbe2a30e55ef1aaf27a4bc2f374a165ec0b94d86d32cb8e67ed114b",
+      "mode": "0o664",
+      "bytes": 873,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/foreign.c",
+      "after": "userland/desktop/libbrowser/html/foreign.c",
+      "sha256": "05e31af65adf6f44741150aeb6ebbe8648b00eaef03486db2eb9320ad412749a",
+      "mode": "0o664",
+      "bytes": 19102,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/html.h",
+      "after": "userland/desktop/libbrowser/html/html.h",
+      "sha256": "9dfe2dd2e086d2b665befbd272097e4e3a318106b4a7feb4bca96a23a2f97c56",
+      "mode": "0o664",
+      "bytes": 5919,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/input.c",
+      "after": "userland/desktop/libbrowser/html/input.c",
+      "sha256": "87dea9c133b12c77f01ad1ccf88b7ee4decdece73321dba18354a035f6f672ac",
+      "mode": "0o664",
+      "bytes": 2106,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/modes.c",
+      "after": "userland/desktop/libbrowser/html/modes.c",
+      "sha256": "a7f2a231978c2474d0e8cb06a5e11a1a5ba31e99fc03c335cca60eb91f5bb5a1",
+      "mode": "0o664",
+      "bytes": 48226,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/parser.c",
+      "after": "userland/desktop/libbrowser/html/parser.c",
+      "sha256": "86bc345364679b31a1dbad982478c80dbbd9138823825952f90651d8edc2cfa0",
+      "mode": "0o664",
+      "bytes": 57103,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/parser.h",
+      "after": "userland/desktop/libbrowser/html/parser.h",
+      "sha256": "0e6fc97b1e36a38300e22bdd8f4a80d290ccde212354db9605e84cde52f77c54",
+      "mode": "0o664",
+      "bytes": 9285,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/html/tokenizer.c",
+      "after": "userland/desktop/libbrowser/html/tokenizer.c",
+      "sha256": "72f1967dfc6da963774e423a8ed9ec9e1376a00bec20cc16ec78c0641ba6c30b",
+      "mode": "0o664",
+      "bytes": 69687,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/image/decode.c",
+      "after": "userland/desktop/libbrowser/image/decode.c",
+      "sha256": "04da2f866c26bba35f4e655b38484520d8dda3545b0edc454a7db096251bb33a",
+      "mode": "0o664",
+      "bytes": 3355,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/image/gif.c",
+      "after": "userland/desktop/libbrowser/image/gif.c",
+      "sha256": "a36f256588f38b1eb607442bd5b062b0268296167d0fa4c505f3db7da8612420",
+      "mode": "0o664",
+      "bytes": 4600,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/image/image.h",
+      "after": "userland/desktop/libbrowser/image/image.h",
+      "sha256": "8a2d520e86d0b3ac8e2036b29ded389c9673ba32fdfb4b9cc20b6c64afc74fd9",
+      "mode": "0o664",
+      "bytes": 1794,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/image/jpeg.c",
+      "after": "userland/desktop/libbrowser/image/jpeg.c",
+      "sha256": "0e408ce1e823e7bfeb9249e76abfb856c645cbc695ac288beb81aa2e3acd7995",
+      "mode": "0o664",
+      "bytes": 5166,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/image/png.c",
+      "after": "userland/desktop/libbrowser/image/png.c",
+      "sha256": "51cdd1f6d9d7e345713f4e9b24ce9a575f29fbd5ed9df0664cc8158b8680cf5b",
+      "mode": "0o664",
+      "bytes": 1916,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin.c",
+      "after": "userland/desktop/libbrowser/js/builtin.c",
+      "sha256": "f316aaa40b23be9ca5506fea95246123ee2da0cfdec6465c9f8fc15f4d78b4a8",
+      "mode": "0o664",
+      "bytes": 8970,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin.h",
+      "after": "userland/desktop/libbrowser/js/builtin.h",
+      "sha256": "e0985734c4290a53f7fdc1c5365de0be6b07d4eede445e6c96370b49fb66a51d",
+      "mode": "0o664",
+      "bytes": 3951,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_array.c",
+      "after": "userland/desktop/libbrowser/js/builtin_array.c",
+      "sha256": "95f7b45d8b5253f5cf560ae659a219889d6707a757ef7b6b57c710c57e532026",
+      "mode": "0o664",
+      "bytes": 64779,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_collection.c",
+      "after": "userland/desktop/libbrowser/js/builtin_collection.c",
+      "sha256": "d7d3d3263cffb026ae8a76bb3d9c638b8b249fbeffcd839f8c99c0bebc1725a1",
+      "mode": "0o664",
+      "bytes": 33716,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_date.c",
+      "after": "userland/desktop/libbrowser/js/builtin_date.c",
+      "sha256": "2bbd8b0e8d7a81e9b7277d056cf715fd56e1704f3ddec9593d0cceff0a0f6efa",
+      "mode": "0o664",
+      "bytes": 63647,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_error.c",
+      "after": "userland/desktop/libbrowser/js/builtin_error.c",
+      "sha256": "bbb05739566571a8d9dde8f3be86347f2f804a779b82fdd3626a54340bfabafc",
+      "mode": "0o664",
+      "bytes": 10176,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_function.c",
+      "after": "userland/desktop/libbrowser/js/builtin_function.c",
+      "sha256": "73be94b03c235fc792519c151e75e1add4426aba4d1fbe54451bb69de2050ba6",
+      "mode": "0o664",
+      "bytes": 18408,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_generator.c",
+      "after": "userland/desktop/libbrowser/js/builtin_generator.c",
+      "sha256": "b24509193a07079e5e943bcda56475adb1b372b40df9aceb5ffa91f1509c8df8",
+      "mode": "0o664",
+      "bytes": 5545,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_global.c",
+      "after": "userland/desktop/libbrowser/js/builtin_global.c",
+      "sha256": "fb6baaeba6bc924459c2aa167b6be8ee5f3916762227b5753251170b1d6c273e",
+      "mode": "0o664",
+      "bytes": 12619,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_iterator.c",
+      "after": "userland/desktop/libbrowser/js/builtin_iterator.c",
+      "sha256": "3d71f4a05da1546f2914e2a6a71bc59b29d1326c582eb867c8ff976b1f14d583",
+      "mode": "0o664",
+      "bytes": 18545,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_json.c",
+      "after": "userland/desktop/libbrowser/js/builtin_json.c",
+      "sha256": "96a080dd5c71ddfb3ae7248953061786644dcb1c92e34dd5a5f4c19bf0557bba",
+      "mode": "0o664",
+      "bytes": 35119,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_math.c",
+      "after": "userland/desktop/libbrowser/js/builtin_math.c",
+      "sha256": "2624d8872659f58e9ef752fe84098276c7963512a874c7de17e727a124291856",
+      "mode": "0o664",
+      "bytes": 16237,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_number.c",
+      "after": "userland/desktop/libbrowser/js/builtin_number.c",
+      "sha256": "15db3a4b410dfe4e38004bfc90947744e1dfdfccadfe2cc48e714c7bf71456f2",
+      "mode": "0o664",
+      "bytes": 21238,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_object.c",
+      "after": "userland/desktop/libbrowser/js/builtin_object.c",
+      "sha256": "f7a99e46d412bef4511e316d2ea7a7baa21c9fe3a7f09cfaeef49b8274878499",
+      "mode": "0o664",
+      "bytes": 55732,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_promise.c",
+      "after": "userland/desktop/libbrowser/js/builtin_promise.c",
+      "sha256": "341a1d9a0d3917016e2617bd56e8609e4a28f47baf76af35109e27c8a920d0a6",
+      "mode": "0o664",
+      "bytes": 42824,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_regexp.c",
+      "after": "userland/desktop/libbrowser/js/builtin_regexp.c",
+      "sha256": "d417366e74f69b0d925a31885c6c04f02f366a17283a17f7fe5d1a9cb0acca14",
+      "mode": "0o664",
+      "bytes": 67412,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_string.c",
+      "after": "userland/desktop/libbrowser/js/builtin_string.c",
+      "sha256": "3421be21004b8f395e3747c539d074c7016ea38dba983cef52aed71288cd2b8e",
+      "mode": "0o664",
+      "bytes": 62411,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_symbol.c",
+      "after": "userland/desktop/libbrowser/js/builtin_symbol.c",
+      "sha256": "5d1ecc42c5e0e15d9ee05475fac26ded54cc14c425ca05f5bfb77230f0e35d65",
+      "mode": "0o664",
+      "bytes": 15087,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/builtin_uri.c",
+      "after": "userland/desktop/libbrowser/js/builtin_uri.c",
+      "sha256": "ca48c30e6737ae4aa91a0d7514d5735435e674b1bca1d3d45245af9dde811890",
+      "mode": "0o664",
+      "bytes": 17580,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/compile.c",
+      "after": "userland/desktop/libbrowser/js/compile.c",
+      "sha256": "fd3b778c514a4f02b7a3fffa492e9a098d46eaa5bb78a65e9cc344b14da366ea",
+      "mode": "0o664",
+      "bytes": 57145,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/compile.h",
+      "after": "userland/desktop/libbrowser/js/compile.h",
+      "sha256": "10c2633d8d6aac326ae003261767590ca0e869ed85341871e34049ccdd52c037",
+      "mode": "0o664",
+      "bytes": 13411,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/compile_expr.c",
+      "after": "userland/desktop/libbrowser/js/compile_expr.c",
+      "sha256": "e2ea1ffdbc01c1166e7f2837f06a3ac80c04aa59d1ac158acdddcd5890eef4d0",
+      "mode": "0o664",
+      "bytes": 75416,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/dump.c",
+      "after": "userland/desktop/libbrowser/js/dump.c",
+      "sha256": "b48eae1c92be69cfe118fcd869c3ca4f07dca579a7eeff9efb37d2a56a0bce6d",
+      "mode": "0o664",
+      "bytes": 7271,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/emit.c",
+      "after": "userland/desktop/libbrowser/js/emit.c",
+      "sha256": "81ac5a40a5d49ba1463f27a0a0bcc43c1a4adc3b425b6e4d9f1e1e6e851db897",
+      "mode": "0o664",
+      "bytes": 18932,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/internal.h",
+      "after": "userland/desktop/libbrowser/js/internal.h",
+      "sha256": "addd2033408933a21a9910863567162ca383fdd8512f322704d28b27087a6cb7",
+      "mode": "0o664",
+      "bytes": 9166,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/js.h",
+      "after": "userland/desktop/libbrowser/js/js.h",
+      "sha256": "d18b55c0c1506af7a6faef060cf6cdd36b91da10e186a35920f648caa6335db1",
+      "mode": "0o664",
+      "bytes": 10583,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/lexer.c",
+      "after": "userland/desktop/libbrowser/js/lexer.c",
+      "sha256": "b0a551e761ba02f40ec2519cf6f68fcf33eb2130f672955504db83d96c761adb",
+      "mode": "0o664",
+      "bytes": 38701,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/parse_expr.c",
+      "after": "userland/desktop/libbrowser/js/parse_expr.c",
+      "sha256": "6bf42303472a853dd90f6e4f3ca57aefec450010135afc534e8e449eed81c870",
+      "mode": "0o664",
+      "bytes": 67552,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/parse_stmt.c",
+      "after": "userland/desktop/libbrowser/js/parse_stmt.c",
+      "sha256": "3f937482ac736f3f1154ec6194d731239fe1b829c3f4345336819d4d670aab82",
+      "mode": "0o664",
+      "bytes": 52247,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/parser.c",
+      "after": "userland/desktop/libbrowser/js/parser.c",
+      "sha256": "9360d2ba21f59db4ebc8b0daa9a1ccefc83b3898b8eb7e4a14e8bd2159f40303",
+      "mode": "0o664",
+      "bytes": 9360,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/regexp.c",
+      "after": "userland/desktop/libbrowser/js/regexp.c",
+      "sha256": "aa4c04d641b46999db0eb5fc5baac8f0666fb17f7d94969ab0c5c64241d5bb7a",
+      "mode": "0o664",
+      "bytes": 96597,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/regexp.h",
+      "after": "userland/desktop/libbrowser/js/regexp.h",
+      "sha256": "3fff531740e7b8911d209bf1c3d9126d4b81e1cc6240587c38eea503c2845ccd",
+      "mode": "0o664",
+      "bytes": 2185,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/scope.c",
+      "after": "userland/desktop/libbrowser/js/scope.c",
+      "sha256": "e69a40228dd94b6304c2a8ebf0b9dc04d5105b6ddff9b6d6db9f5b2343498c4c",
+      "mode": "0o664",
+      "bytes": 51575,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/script.c",
+      "after": "userland/desktop/libbrowser/js/script.c",
+      "sha256": "3e1796780478df057fa16de9861957030a7c9dd0e7b54fba570e7a4f21a3ff0f",
+      "mode": "0o664",
+      "bytes": 3274,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/js/tool.c",
+      "after": "userland/desktop/libbrowser/js/tool.c",
+      "sha256": "6834c4c602c41efdee8d47392f3718cca34d58fe529c23b2017c7e163781a660",
+      "mode": "0o664",
+      "bytes": 10608,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/block.c",
+      "after": "userland/desktop/libbrowser/layout/block.c",
+      "sha256": "279e791354c0d5e39291da8053fda839c0e0c5f9c5c01fd229e08a4149013983",
+      "mode": "0o664",
+      "bytes": 23773,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/bounds.c",
+      "after": "userland/desktop/libbrowser/layout/bounds.c",
+      "sha256": "3c62eb7fcc270bb63529106f6690f33c081d6b2ef2174938c41072ecde791b12",
+      "mode": "0o664",
+      "bytes": 6781,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/box.c",
+      "after": "userland/desktop/libbrowser/layout/box.c",
+      "sha256": "3f7065747cd521db0965e74bd589f22315eeac6c7b7bf2ff757131f7c05cc871",
+      "mode": "0o664",
+      "bytes": 39360,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/control.c",
+      "after": "userland/desktop/libbrowser/layout/control.c",
+      "sha256": "6f8e14a4293c3bc14016f3ecea5dffc196c3250e194c55a1741cbc4e59b61d2e",
+      "mode": "0o664",
+      "bytes": 10063,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/dump.c",
+      "after": "userland/desktop/libbrowser/layout/dump.c",
+      "sha256": "8f3757937efda8e3bd4aa9307486ba7c3f151bf5e5216ba9216ae3de059b93fd",
+      "mode": "0o664",
+      "bytes": 7831,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/flex.c",
+      "after": "userland/desktop/libbrowser/layout/flex.c",
+      "sha256": "ca80820946fa7a3dfd462791ee0c9ad71bd8ed8e9b1056728241491d657465dd",
+      "mode": "0o664",
+      "bytes": 35854,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/float.c",
+      "after": "userland/desktop/libbrowser/layout/float.c",
+      "sha256": "02520b7b7b572bc50bad8cb47fd7f2c661f5eac31b698254e78eb50f41d4fa20",
+      "mode": "0o664",
+      "bytes": 9161,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/grid.c",
+      "after": "userland/desktop/libbrowser/layout/grid.c",
+      "sha256": "6a0e172f0e62bf38b498ee13fbffeba39faf2034cdb49334daab286f970194d2",
+      "mode": "0o664",
+      "bytes": 32528,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/hit.c",
+      "after": "userland/desktop/libbrowser/layout/hit.c",
+      "sha256": "9a606c579ca67ceea1677544c075034e981395b4a73982b41ceaaf6f1a652e4f",
+      "mode": "0o664",
+      "bytes": 10002,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/inline.c",
+      "after": "userland/desktop/libbrowser/layout/inline.c",
+      "sha256": "e1d5452a9e2bd39e604753d97930c5e6ac578b29f2888900f0095b723e174082",
+      "mode": "0o664",
+      "bytes": 40115,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/layout.h",
+      "after": "userland/desktop/libbrowser/layout/layout.h",
+      "sha256": "cb8b6fcdf296d125a11fcbd281016fae5d0c25f831f155e02ac32fb16a3ae855",
+      "mode": "0o664",
+      "bytes": 11259,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/position.c",
+      "after": "userland/desktop/libbrowser/layout/position.c",
+      "sha256": "8cebb7b2df215480ac494d92eb146b13d2092b30d5269bf8dab6c3fc527c9f09",
+      "mode": "0o664",
+      "bytes": 21950,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/replaced.c",
+      "after": "userland/desktop/libbrowser/layout/replaced.c",
+      "sha256": "a9f64f17f53b61010eadcd4277d214abefa6fb6fd4926fb1e6c40846057b6ecf",
+      "mode": "0o664",
+      "bytes": 7137,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/layout/table.c",
+      "after": "userland/desktop/libbrowser/layout/table.c",
+      "sha256": "05044a375df3ccded0740ae6e5fb0e3caec6ce8841af7416b75c844c781596f9",
+      "mode": "0o664",
+      "bytes": 32499,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/main.c",
+      "after": "userland/desktop/browser/main.c",
+      "sha256": "f9bfecf7fc1b926347103bcd05fe5a9c8384347167276728f9c3b1e6ffc3b7af",
+      "mode": "0o664",
+      "bytes": 24374,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/net/cookie.c",
+      "after": "userland/desktop/libbrowser/net/cookie.c",
+      "sha256": "0a5d418a8ef1529a193329218d5f94f49b1e5eb0beaa7d82007214967073ce40",
+      "mode": "0o664",
+      "bytes": 15123,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/data.c",
+      "after": "userland/desktop/libbrowser/net/data.c",
+      "sha256": "e080db453a81f676e55e444e88708e5f9ef1184bdd0b2daaa68aefdcef4b1ff2",
+      "mode": "0o664",
+      "bytes": 17544,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/host.c",
+      "after": "userland/desktop/libbrowser/net/host.c",
+      "sha256": "0ac5aa05b02a0f988b32ee0209d6bdad4614113592e50aa6b5ead08787f648a3",
+      "mode": "0o664",
+      "bytes": 27960,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/http.c",
+      "after": "userland/desktop/libbrowser/net/http.c",
+      "sha256": "0ee4d501afceed61f97481fb314fec5bf72fde9a3882020e9d2e13574aaf42ce",
+      "mode": "0o664",
+      "bytes": 27719,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/loader.c",
+      "after": "userland/desktop/libbrowser/net/loader.c",
+      "sha256": "a35e17653cec862d73fff8faaab974c0aa19780f237dcef05715475b97d8e3da",
+      "mode": "0o664",
+      "bytes": 45612,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/net.h",
+      "after": "userland/desktop/libbrowser/net/net.h",
+      "sha256": "5faa02864b01067d73a0620b9965ed1f896d4509893a1715fe847609dbaf4dbc",
+      "mode": "0o664",
+      "bytes": 6970,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/tls.c",
+      "after": "userland/desktop/libbrowser/net/tls.c",
+      "sha256": "01119176cd67c559963ddf7d9f8e4445b5f30e11b7bb1fed9dcfa57ae7083731",
+      "mode": "0o664",
+      "bytes": 22595,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/net/url.c",
+      "after": "userland/desktop/libbrowser/net/url.c",
+      "sha256": "34a9c2bd7f4840ff9f521a27b8673aaeaf1ad06c3c4cf77ed8ca8f2bbeaa803f",
+      "mode": "0o664",
+      "bytes": 50437,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/fonts.c",
+      "after": "userland/desktop/libbrowser/page/fonts.c",
+      "sha256": "18e0939572128a3e3706d46a377b59e9d6f24f64308ca7a11f8e47e516d9964b",
+      "mode": "0o664",
+      "bytes": 10649,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/form.c",
+      "after": "userland/desktop/libbrowser/page/form.c",
+      "sha256": "428ae44f3c7585bfaa757dba8ae8f75a6c757de0dc860ebabfa3e898bc0f1249",
+      "mode": "0o664",
+      "bytes": 42022,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/geometry.c",
+      "after": "userland/desktop/libbrowser/page/geometry.c",
+      "sha256": "8b50f09ba7989896cf79289903561ac399dc00fe41cb077d02d657d536c946be",
+      "mode": "0o664",
+      "bytes": 15224,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/images.c",
+      "after": "userland/desktop/libbrowser/page/images.c",
+      "sha256": "d5ba6623cda83636ed0d2e4d143ffe2668833a1f39f8c770cd6521027d44a14e",
+      "mode": "0o664",
+      "bytes": 12181,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/input.c",
+      "after": "userland/desktop/libbrowser/page/input.c",
+      "sha256": "7f9a105cd5d4ad9884b8438b5d5d41ae37deb381915637bad415c5bc9ceefcae",
+      "mode": "0o664",
+      "bytes": 29484,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/link.c",
+      "after": "userland/desktop/libbrowser/page/link.c",
+      "sha256": "88e81220de36ac0dfb0ba4e5a8decf1ebc58f18c1fa985cbe2ef673fbede013e",
+      "mode": "0o664",
+      "bytes": 7276,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/network.c",
+      "after": "userland/desktop/libbrowser/page/network.c",
+      "sha256": "6bb85a585a1981a861fa5ba872bf92f85d33d87683b3d93221d579c45a62119e",
+      "mode": "0o664",
+      "bytes": 3906,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/page.c",
+      "after": "userland/desktop/libbrowser/page/page.c",
+      "sha256": "9d4a449f378dd9e0c5defa415a37272b46e1badc9ef4d137060c3d01703ffb0a",
+      "mode": "0o664",
+      "bytes": 26579,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/page.h",
+      "after": "userland/desktop/libbrowser/page/page.h",
+      "sha256": "9bc2f71e7bae13b3f49a03a013ffda73c474a25915b69cb94246631ed8c3981c",
+      "mode": "0o664",
+      "bytes": 10981,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/script.c",
+      "after": "userland/desktop/libbrowser/page/script.c",
+      "sha256": "51a5d19d4a9550717278ca87c2902e995da75ef1a75578aa2e466c4431b31bb1",
+      "mode": "0o664",
+      "bytes": 31950,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/sheets.c",
+      "after": "userland/desktop/libbrowser/page/sheets.c",
+      "sha256": "5af04096b898a38cca352e5994ed75ef01535025b39b3ab576666ed4c0802060",
+      "mode": "0o664",
+      "bytes": 23273,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/page/storage.c",
+      "after": "userland/desktop/libbrowser/page/storage.c",
+      "sha256": "6c4fcea77f0f78716b196d1b05086bbbc13ab70e6173efc449d75e9f724aeaaf",
+      "mode": "0o664",
+      "bytes": 24419,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/gpu.h",
+      "after": "userland/desktop/libbrowser/paint/gpu.h",
+      "sha256": "d27b7512f58bab8ea546d1151a0f86f15e341f8b6b2a96a93af4c43279a00baa",
+      "mode": "0o664",
+      "bytes": 5104,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/list.c",
+      "after": "userland/desktop/libbrowser/paint/list.c",
+      "sha256": "09b34c99bbd1d340c17299a2e390f84cbf06d92537255da3b11396c2a9f8c8e9",
+      "mode": "0o664",
+      "bytes": 86434,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/paint.h",
+      "after": "userland/desktop/libbrowser/paint/paint.h",
+      "sha256": "29c723f1c5bebf79edaecdb74ba0accfdb8bc69d9ffae1518dbb24864e32cbbf",
+      "mode": "0o664",
+      "bytes": 4624,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/shaders.h",
+      "after": "userland/desktop/libbrowser/paint/shaders.h",
+      "sha256": "5a150e9387b3c4f0244fd0343599386f69b67fb181556eabe4e8e73c340f4a3e",
+      "mode": "0o664",
+      "bytes": 14576,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/shaders/display.frag",
+      "after": "userland/desktop/libbrowser/paint/shaders/display.frag",
+      "sha256": "51e4956428ce367a872c290dde60f5ec5fc1591d684a2b671c51f0ec92868750",
+      "mode": "0o664",
+      "bytes": 2154,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/shaders/display.vert",
+      "after": "userland/desktop/libbrowser/paint/shaders/display.vert",
+      "sha256": "58a67d37949c646ddff9ce1d06f3e6672d66f5b496e561140caa8d0d437ca200",
+      "mode": "0o664",
+      "bytes": 1671,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/shaders/regenerate.py",
+      "after": "userland/desktop/libbrowser/paint/shaders/regenerate.py",
+      "sha256": "94ead47e6bdee1227143d248bfca86515c083ef48f4570136000b6dc597d9380",
+      "mode": "0o664",
+      "bytes": 2049,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/software.c",
+      "after": "userland/desktop/libbrowser/paint/software.c",
+      "sha256": "0719e77dd8f185b3b36872312325ab7bb1ff94d9fb92dd97db619d89da30ce96",
+      "mode": "0o664",
+      "bytes": 13213,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/paint/vulkan.c",
+      "after": "userland/desktop/libbrowser/paint/vulkan.c",
+      "sha256": "52dbf1bb3f724611254a0aa06b8c5b70d5866defe351ad7062ea0db26c328b95",
+      "mode": "0o664",
+      "bytes": 67472,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/shell/internal.h",
+      "after": "userland/desktop/browser/shell/internal.h",
+      "sha256": "acd6dae6b1f370b789cac00696a53595dd1059afc8549c91b0086e30bb1bb6a1",
+      "mode": "0o664",
+      "bytes": 8441,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/keys.c",
+      "after": "userland/desktop/browser/shell/keys.c",
+      "sha256": "db36813619bea98eb547bdaa6e693ff0a6b7b26e7ab262583a8d7f562f2442e6",
+      "mode": "0o664",
+      "bytes": 6711,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/present.c",
+      "after": "userland/desktop/browser/shell/present.c",
+      "sha256": "c7310ab3faf92e7136e171d9dae8550ba8cc16090a4f0e670033014951ee41c5",
+      "mode": "0o664",
+      "bytes": 22104,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/shell.c",
+      "after": "userland/desktop/browser/shell/shell.c",
+      "sha256": "5045b19954d9d37cf35ab4e9efc36495b980f542210952a11418a32b0653931c",
+      "mode": "0o664",
+      "bytes": 23960,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/shell.h",
+      "after": "userland/desktop/browser/shell/shell.h",
+      "sha256": "acc2e454708961d277d697c6b1d86911c51e9a65152ceea46b12a2e54f96cce9",
+      "mode": "0o664",
+      "bytes": 1035,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/titlebar.c",
+      "after": "userland/desktop/browser/shell/titlebar.c",
+      "sha256": "a3ab50e9aa567274a5dff5bde6e8d602a06c988acf99e5f7796adf34d3d563fa",
+      "mode": "0o664",
+      "bytes": 9546,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/touch.c",
+      "after": "userland/desktop/browser/shell/touch.c",
+      "sha256": "76256c34f641bbd1b5247c1bc0d0ebc91beb3d9b6e3a391356a7e45af615f62d",
+      "mode": "0o664",
+      "bytes": 15806,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/touch.h",
+      "after": "userland/desktop/browser/shell/touch.h",
+      "sha256": "f37570763c11e410f5d62d2140ef251a3aaf1c0299e91ac046914deb6b97c6e7",
+      "mode": "0o664",
+      "bytes": 4755,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/shell/window.c",
+      "after": "userland/desktop/browser/shell/window.c",
+      "sha256": "9a83d2056c1eb5adef8c8ded3ac161953be39d62fe2427a443fa09621f02e6d1",
+      "mode": "0o664",
+      "bytes": 32912,
+      "move": false
+    },
+    {
+      "before": "userland/desktop/browser/text/font.c",
+      "after": "userland/desktop/libbrowser/text/font.c",
+      "sha256": "8ee0e69d49ec48ad5c787a2a11a780ccac3f7b557510d49fd798977d2cc2b410",
+      "mode": "0o664",
+      "bytes": 20121,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/text/linebreak.c",
+      "after": "userland/desktop/libbrowser/text/linebreak.c",
+      "sha256": "f02b0aee895b50e8cc9290231cd6f9bda60af066d49d22d39584fe44253ba507",
+      "mode": "0o664",
+      "bytes": 3695,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/text/text.h",
+      "after": "userland/desktop/libbrowser/text/text.h",
+      "sha256": "a47289ddd240f7d37df72b5296c3f78d0e1b0ccc326cf1ba4511ba6a48b70143",
+      "mode": "0o664",
+      "bytes": 4632,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/text/woff.c",
+      "after": "userland/desktop/libbrowser/text/woff.c",
+      "sha256": "a06698cd0678272206337339ebf5f95ba9c1f92733ca70ad74ca9614a0d4241f",
+      "mode": "0o664",
+      "bytes": 6194,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/tools/gen-entities.py",
+      "after": "userland/desktop/libbrowser/tools/gen-entities.py",
+      "sha256": "071407cc97a8ee32e9f02f9c90e09de12e2cdcec223a65fe8cc4382c42a45fd5",
+      "mode": "0o664",
+      "bytes": 3031,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/tools/gen-unicode-case.py",
+      "after": "userland/desktop/libbrowser/tools/gen-unicode-case.py",
+      "sha256": "8eecf1ef00b36938a598fcacbbb9f61fac80dd7b1b5e401a293ff116a169775c",
+      "mode": "0o664",
+      "bytes": 6165,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/tools/regenerate.sh",
+      "after": "userland/desktop/libbrowser/tools/regenerate.sh",
+      "sha256": "d74a7351d7592f977f1552af3eded3ff908dbcc67d1dd5b02a32f2c2dd3546b7",
+      "mode": "0o664",
+      "bytes": 2204,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/view/view.c",
+      "after": "userland/desktop/libbrowser/view/view.c",
+      "sha256": "7ffca34c4354b58c488e5b36929e8c468ce68e389ad13c0eae481813cc3bca55",
+      "mode": "0o664",
+      "bytes": 69608,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/access.c",
+      "after": "userland/desktop/libbrowser/vm/access.c",
+      "sha256": "8ae6472123401bc04b6728505a70d02b8e42574ce2ece7e84e60ece43b304902",
+      "mode": "0o664",
+      "bytes": 46560,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/atom.c",
+      "after": "userland/desktop/libbrowser/vm/atom.c",
+      "sha256": "c45c98dbaf3ef5726b686186e5c9de5249c5b3f76148cb9652c583f410a5dd63",
+      "mode": "0o664",
+      "bytes": 7850,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/bytecode.h",
+      "after": "userland/desktop/libbrowser/vm/bytecode.h",
+      "sha256": "90a7b064a055b5c7880874624f4fd37095117d4e424489b079dceaf6f6124e4a",
+      "mode": "0o664",
+      "bytes": 13079,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/class.c",
+      "after": "userland/desktop/libbrowser/vm/class.c",
+      "sha256": "22a63814cf4b2fa47ece70833f00d270c4fe58aac5613cde1da98af1b93272a3",
+      "mode": "0o664",
+      "bytes": 13870,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/code.c",
+      "after": "userland/desktop/libbrowser/vm/code.c",
+      "sha256": "39311b09fbc73e18108f361ccd1373eaff30a224cbdd530e1c5779633b621e2c",
+      "mode": "0o664",
+      "bytes": 21849,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/function.c",
+      "after": "userland/desktop/libbrowser/vm/function.c",
+      "sha256": "222544850e10b851b99c4de36751b2790aa6059489861874c0f6a6ceb1a8797b",
+      "mode": "0o664",
+      "bytes": 17359,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/generator.c",
+      "after": "userland/desktop/libbrowser/vm/generator.c",
+      "sha256": "14b3b2692d190c9e52b33b7877460c2ec164f4c4efee4064dda7a0dc1863a017",
+      "mode": "0o664",
+      "bytes": 12769,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/heap.c",
+      "after": "userland/desktop/libbrowser/vm/heap.c",
+      "sha256": "a6819b047d3c698c8317e4784e3bf55c6efddf0d3e37800e302b6558e7cadb0d",
+      "mode": "0o664",
+      "bytes": 30150,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/internal.h",
+      "after": "userland/desktop/libbrowser/vm/internal.h",
+      "sha256": "7423d719db23c28dbfc8710d3dc756b62301515337decf5e8516ac2d760e4750",
+      "mode": "0o664",
+      "bytes": 7626,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/interpreter.c",
+      "after": "userland/desktop/libbrowser/vm/interpreter.c",
+      "sha256": "ea00a9f34f9c92bf181e0d565d288d3a9262a728b41b9da57db1f60ee1d98693",
+      "mode": "0o664",
+      "bytes": 60627,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/number.c",
+      "after": "userland/desktop/libbrowser/vm/number.c",
+      "sha256": "51031970ec4cdf10a8804930ac864528429e658654ba55b43ee9d727b929e6a8",
+      "mode": "0o664",
+      "bytes": 39438,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/object.c",
+      "after": "userland/desktop/libbrowser/vm/object.c",
+      "sha256": "b8a55e57f95795d34219ca78d56d9d4a21aa4b2cca6a1566da577774d328de99",
+      "mode": "0o664",
+      "bytes": 28690,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/operation.c",
+      "after": "userland/desktop/libbrowser/vm/operation.c",
+      "sha256": "14a9a6f763f2a13e492d42d3e8661487684d2aa98b41deeaf619d3a32c337bb8",
+      "mode": "0o664",
+      "bytes": 36962,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/promise.c",
+      "after": "userland/desktop/libbrowser/vm/promise.c",
+      "sha256": "34e3ccf8a6b0cf2bfd4b9220a1b8389c0eb1c19d58d4fe4bbcd9467c7cc32f1c",
+      "mode": "0o664",
+      "bytes": 23071,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/realm.c",
+      "after": "userland/desktop/libbrowser/vm/realm.c",
+      "sha256": "5f355bb9ee30ba4278b1f511023069dc3ae78b5c1ce807793aa659ee3ef5de58",
+      "mode": "0o664",
+      "bytes": 12667,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/shape.c",
+      "after": "userland/desktop/libbrowser/vm/shape.c",
+      "sha256": "ea4d6943523f1bca5035df09f837d49dbd034ac5f8954f29ea718c8ed6a845f8",
+      "mode": "0o664",
+      "bytes": 6382,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/spread.c",
+      "after": "userland/desktop/libbrowser/vm/spread.c",
+      "sha256": "295026293e3505ff5577430632a924cc7ebb9bf3163ecc260a0d284f7a8cda06",
+      "mode": "0o664",
+      "bytes": 20362,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/string.c",
+      "after": "userland/desktop/libbrowser/vm/string.c",
+      "sha256": "31bddf509981be0d38b282d21ed25b04ee15fbd94cf09921c0202eb1603ea131",
+      "mode": "0o664",
+      "bytes": 11934,
+      "move": true
+    },
+    {
+      "before": "userland/desktop/browser/vm/vm.h",
+      "after": "userland/desktop/libbrowser/vm/vm.h",
+      "sha256": "0864cadfa8dd7cff2295e5cdb949f3f769d4925d1bf5ffeab9bc22c154cd16bd",
+      "mode": "0o664",
+      "bytes": 32564,
+      "move": true
+    }
+  ]
+}

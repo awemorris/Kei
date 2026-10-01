@@ -1,6 +1,6 @@
-<!-- awesome-plan project=zedbsd record=ws107p002 -->
+<!-- awesome-plan project=zedbsd record=ws107p001 -->
 
-# ws107p002: エンジンの所属と build/test の参照を移す
+# ws107p001: engine/shell・API・品質の点検と設計
 
 Status: planning
 Disposition: normal
@@ -9,15 +9,15 @@ Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
-p001 の engine source/assets を libbrowser へ移し、Makefile/依存/生成器/現役 runner の経路を更新。main と shell は library の public API を使う。
+tracked engine ファイルと参照を列挙し、現 public API v2、描画と view の所有、入力 adapter、callback と複数 view の契約を実装と突き合わせる。
 
 ## 完了条件
 
-B1/B2 を満たし、semantic-preserving 部分の clean build が warning 0。
+移動表・残す表・問題一覧・修正範囲と独立 client の検証手順を固定。public ABI の変更が必要なら影響と version 方針を示す。
 
 ## 前提・未決・実行手順
 
-依存: p001。WS の scope と acceptance、設計の未決を確認する。
+依存: WS074 の source（context）。WS の scope と acceptance、設計の未決を確認する。
 技術的な細部は委任範囲で決める。対象/受け入れ/外部契約を変える結果は実装前に計画と承認範囲へ反映する。
 調査→変更表と手順の確定→有限 Queue の承認→実装→指定検証→結果・WS・Master・Queue の照合。
 最初の p001 は調査の案（1 session / 最大60分、満たせない点と再開条件を残す）。後続の timebox/command は設計後に選定する。
@@ -40,9 +40,3 @@ zedBSD の起動は boot-test.sh の PNG。Linux の既存検証は WS105 の手
 
 2026-10-01 / review-20261001-planning: 新設した Phase 案。親 WS の目標への寄与と依存を記録。実装の選定は未実施。
 GitHub の Phase 作成/comment/Project の projection は公開保留、local outbox に保持する。
-
-## 2026-10-02 / ws107-q541-design
-
-[確定設計](../design.md)と[179file台帳](../inventory.json)を採用。165 engine filesとbuild/runner/生成器locatorだけをsemantic-preserving移動。private/app変数を分離、B1/B2とfresh engine/forced shell buildを確認。依存p001の台帳と設計。
-
-callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。

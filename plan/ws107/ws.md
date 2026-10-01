@@ -3,12 +3,12 @@
 # WS107: libbrowser の source 所有と独立コンポーネントの整備
 
 <!-- awesome-plan-current:start -->
-Status: planning
+Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG002
 Parent: [Master](../master.md)
-Queue: なし（新規実装未承認）
-Resume point: p001 の調査・設計を選定する前に scope と検証環境を確定。
+Queue: なし（q541 finished）
+Resume point: p001 cleared、p002の既存承認scopeと実outputを確認。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -45,7 +45,7 @@ WS074 の現行 engine を引き継ぐ。p100→p101 の順・目標を保つ。
 
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
-| [ws107p001](phase001/phase.md) | engine/shell・API・品質の点検と設計 | 移動表・残す表・問題一覧・修正範囲と独立 client の検証手順を固定。public ABI の変更が必要なら影響と version 方針を示す。 | planning | WS074 の source（context） |
+| [ws107p001](phase001/phase.md) | engine/shell・API・品質の点検と設計 | 移動表・残す表・問題一覧・修正範囲と独立 client の検証手順を固定。public ABI の変更が必要なら影響と version 方針を示す。 | cleared | WS074 の source（context） |
 | [ws107p002](phase002/phase.md) | エンジンの所属と build/test の参照を移す | B1/B2 を満たし、semantic-preserving 部分の clean build が warning 0。 | planning | p001 |
 | [ws107p003](phase003/phase.md) | 独立 API と component 実装の不備を直す | B3/B4。未発見の欠陥を推測して大規模 rewrite しない。重大な契約変更は実行前に計画へ反映する。 | planning | p002 |
 | [ws107p004](phase004/phase.md) | 全文規約と shell/engine の最終回帰 | B1〜B5 を満たす。CPU の成功を Vulkan の検証に代用しない。 | planning | p003 |
@@ -75,3 +75,7 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01 / review-20261001-planning: ユーザーのレビューコメントから WS を新設。
 範囲・受け入れ・Phase 案を保存、Master / Outlook と照合した。新規実装の Queue 承認は未取得。
 [決定の出典と関連 WS](../reviews/2026-10-01-review.md)。公開時にはこのイベントを WS に届ける（現在 outbox 保留）。
+
+2026-10-02 / ws107-q541-design: p001〜p004を[確定設計](design.md)へ詳細化、engine165/残す14file、有限のquality修正/第2client/回帰を固定。callbackはユーザーの同一view変更/破棄を外側call後へ延期する判断を採用。API v2/既存B1〜B5/依存順を保持、WS074の互換性目標を追加しない。
+
+2026-10-01T15:09:38.139159+00:00 / ws107-q541-cleared: p001 cleared。179file移動台帳（engine165/133C、残す14）、API v2/標準Vulkan/Wayland無し境界と有限quality修正、target/host/client検証を確定。callbackの同一view変更・破棄をcall後へ延期するユーザー判断を保存。style14候補はp003で全文適合。plan/ws107/design.mdとinventory.json、全変更Phase/WSイベント。
