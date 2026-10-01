@@ -1,0 +1,21 @@
+PASS source membership169/unique168/native objects/header closure/private ldd/PIE/RUNPATH/seat header/license
+/root/keiland-stage-compositor/opt/keiland/bin/wayland:
+	libkeiland.so => /root/keiland-stage-compositor/opt/keiland/lib/libkeiland.so (0x34e7462ac000)
+	libtruetype.so => /root/keiland-stage-compositor/opt/keiland/lib/libtruetype.so (0x34e7470a0000)
+	libpng-compat.so => /root/keiland-stage-compositor/opt/keiland/lib/libpng-compat.so (0x34e7471ed000)
+	libz-compat.so => /root/keiland-stage-compositor/opt/keiland/lib/libz-compat.so (0x34e745467000)
+	libvulkan.so.1 => /root/keiland-stage-compositor/opt/keiland/lib/libvulkan.so.1 (0x34e748fff000)
+	libseat.so.1 => /root/keiland-stage-compositor/opt/keiland/lib/libseat.so.1 (0x34e7477d7000)
+	libm.so.5 => /lib/libm.so.5 (0x34e74977d000)
+	libthr.so.3 => /lib/libthr.so.3 (0x34e74a12a000)
+	libc.so.7 => /lib/libc.so.7 (0x34e74a44f000)
+	libwayland-client.so => /root/keiland-stage-compositor/opt/keiland/lib/libwayland-client.so (0x34e74b54e000)
+	libsys.so.7 => /lib/libsys.so.7 (0x34e748018000)
+	[vdso] (0x34e743eeb000)
+
+{
+  "source_memberships": 169,
+  "unique_own_sources": 168,
+  "headers": 231,
+  "forbidden_headers": []
+}

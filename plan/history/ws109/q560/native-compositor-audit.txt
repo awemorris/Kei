@@ -1,0 +1,239 @@
+gmake: Nothing to be done for 'header-dependencies'.
+install -m 0644 build/native-ui/include/libseat.h "/root/keiland-stage-compositor/opt/keiland/include/libseat.h"
+install -m 0644 include/libc/pdf.h "/root/keiland-stage-compositor/opt/keiland/include/pdf.h"
+/root/keiland-stage-compositor/opt/keiland/bin/wayland:
+	libkeiland.so => /root/keiland-stage-compositor/opt/keiland/lib/libkeiland.so (0x3948a329e000)
+	libtruetype.so => /root/keiland-stage-compositor/opt/keiland/lib/libtruetype.so (0x3948a2f1b000)
+	libpng-compat.so => /root/keiland-stage-compositor/opt/keiland/lib/libpng-compat.so (0x3948a2c47000)
+	libz-compat.so => /root/keiland-stage-compositor/opt/keiland/lib/libz-compat.so (0x3948a3d34000)
+	libvulkan.so.1 => /root/keiland-stage-compositor/opt/keiland/lib/libvulkan.so.1 (0x3948a3fe4000)
+	libseat.so.1 => /root/keiland-stage-compositor/opt/keiland/lib/libseat.so.1 (0x3948a4eb3000)
+	libm.so.5 => /lib/libm.so.5 (0x3948a2286000)
+	libthr.so.3 => /lib/libthr.so.3 (0x3948a50b4000)
+	libc.so.7 => /lib/libc.so.7 (0x3948a6304000)
+	libwayland-client.so => /root/keiland-stage-compositor/opt/keiland/lib/libwayland-client.so (0x3948a6d9a000)
+	libsys.so.7 => /lib/libsys.so.7 (0x3948a543c000)
+	[vdso] (0x3948a0d3a000)
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 09 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - FreeBSD
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x20F20
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          3065800 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         11
+  Size of section headers:           64 (bytes)
+  Number of section headers:         38
+  Section header string table index: 36
+Dynamic section at offset 0x70f10 contains 32 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libkeiland.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libtruetype.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libpng-compat.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libz-compat.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libvulkan.so.1]
+  0x0000000000000001 (NEEDED)     Shared library: [libseat.so.1]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libthr.so.3]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000006ffffffb (FLAGS_1)    PIE 
+  0x0000000000000015 (DEBUG)      0x0
+  0x0000000000000007 (RELA)       0x30b8
+  0x0000000000000008 (RELASZ)     17592 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  730
+  0x0000000000000017 (JMPREL)     0x7570
+  0x0000000000000002 (PLTRELSZ)   5304 (bytes)
+  0x0000000000000003 (PLTGOT)     0x74168
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x308
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x21dc
+  0x000000000000000a (STRSZ)      3799 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x1aa0
+  0x0000000000000004 (HASH)       0x1ac4
+  0x000000000000000c (INIT)       0x6ea0c
+  0x000000000000000d (FINI)       0x6ea18
+  0x000000006ffffff0 (VERSYM)     0x1838
+  0x000000006ffffffe (VERNEED)    0x19fc
+  0x000000006fffffff (VERNEEDNUM) 3
+  0x0000000000000000 (NULL)       0x0
+userland/base/libz-compat/inflate.c
+userland/base/libz-compat/checksum.c
+userland/base/libpng-compat/read.c
+userland/base/libjpeg-compat/error.c
+userland/base/libjpeg-compat/memory.c
+userland/base/libjpeg-compat/source.c
+userland/base/libjpeg-compat/marker.c
+userland/base/libjpeg-compat/huffman.c
+userland/base/libjpeg-compat/idct.c
+userland/base/libjpeg-compat/decompress.c
+userland/base/libgif-compat/decode.c
+userland/base/libgif-compat/lzw.c
+src/libc/openbsd-sha2.c
+src/libc/openbsd-digest.c
+userland/desktop/libwayland/client.c
+userland/desktop/libwayland/proxy.c
+userland/desktop/libwayland/wire.c
+userland/desktop/libwayland/event.c
+userland/desktop/libwayland/protocol.c
+userland/desktop/libwayland/utility.c
+userland/desktop/libwayland/menu-protocol.c
+userland/desktop/libwayland/titlebar-protocol.c
+userland/desktop/libwayland/glass-protocol.c
+userland/desktop/libwayland/subsurface-protocol.c
+userland/desktop/libwayland/data-device-protocol.c
+userland/desktop/libwayland/primary-selection-protocol.c
+userland/desktop/libwayland/tablet-protocol.c
+userland/desktop/libwayland/touch-protocol.c
+userland/desktop/libwayland/text-input-protocol.c
+userland/desktop/libwayland/input-method-protocol.c
+userland/desktop/libwayland/virtual-keyboard-protocol.c
+userland/desktop/libwayland/ime-status-protocol.c
+userland/desktop/libwayland/keyboard-inset-protocol.c
+userland/desktop/libwayland/edit-protocol.c
+userland/desktop/libtruetype/face.c
+userland/desktop/libtruetype/cmap.c
+userland/desktop/libtruetype/outline.c
+userland/desktop/libtruetype/render.c
+userland/desktop/libtruetype/glyph.c
+userland/desktop/libtruetype/design.c
+userland/desktop/libtruetype/contour.c
+userland/desktop/libtruetype/color.c
+userland/desktop/libvulkan-compat/backend.c
+userland/desktop/libvulkan-compat/dispatch.c
+userland/desktop/libvulkan-compat/instance.c
+userland/desktop/libvulkan-compat/device.c
+userland/desktop/libvulkan-compat/wsi-wayland.c
+userland/desktop/libvulkan-compat/wsi-swapchain.c
+userland/desktop/libvulkan-compat/linux-dmabuf-v1-protocol.c
+userland/desktop/libvulkan-compat/kms.c
+userland/desktop/libvulkan-compat/wsi-display.c
+userland/desktop/libvulkan-compat/freebsd/sync-freebsd.c
+userland/desktop/libkeiland/version.c
+userland/desktop/libkeiland/menu.c
+userland/desktop/libkeiland/recent.c
+userland/desktop/libkeiland/titlebar.c
+userland/desktop/libkeiland/glass.c
+userland/desktop/libkeiland/motion.c
+userland/desktop/libkeiland/scroll.c
+userland/desktop/libkeiland/gesture.c
+userland/desktop/libkeiland/preferences.c
+userland/desktop/libkeiland/desktop.c
+userland/desktop/libkeiland/keyboard-inset.c
+userland/desktop/libkeiland/edit.c
+userland/desktop/libkeiland/wpa/network-wpa.c
+userland/desktop/libkeiland/wpa/network-config-wpa.c
+userland/desktop/libkeiland/freebsd/network-link-freebsd.c
+userland/desktop/libkeiland/freebsd/audio-freebsd.c
+userland/desktop/libkeiui/version.c
+userland/desktop/libkeiui/canvas.c
+userland/desktop/libkeiui/text.c
+userland/desktop/libkeiui/icons.c
+userland/desktop/libkeiui/icons-line.c
+userland/desktop/libkeiui/theme.c
+userland/desktop/libkeiui/input.c
+userland/desktop/libkeiui/scroll.c
+userland/desktop/libkeiui/text-touch.c
+userland/desktop/libkeiui/ui.c
+userland/desktop/libkeiui/window.c
+userland/desktop/libkeiui/present.c
+userland/desktop/libkeiui/present-shm.c
+userland/desktop/libkeiui/clipboard.c
+userland/desktop/libkeiui/primary.c
+userland/desktop/libkeiui/text-input.c
+userland/desktop/libkeiui/edit.c
+userland/desktop/libkeiui/widgets.c
+userland/desktop/libkeiui/field.c
+userland/desktop/libkeiui/list.c
+userland/desktop/libkeiui/cards.c
+userland/desktop/libkeiui/chooser.c
+userland/desktop/libkeiui/chooser-model.c
+userland/desktop/libkeiui/chooser-view.c
+userland/desktop/picture/color-glyph.c
+userland/base/libpdf/writer.c
+userland/base/libpdf/update.c
+userland/base/libpdf/outline.c
+userland/base/libpdf/object.c
+userland/base/libpdf/reader.c
+userland/base/libpdf/filter.c
+userland/base/libpdf/ccitt.c
+userland/base/libpdf/image.c
+userland/base/libpdf/display.c
+userland/base/libpdf/content.c
+userland/base/libpdf/stroke.c
+userland/base/libpdf/raster.c
+userland/base/libpdf/font.c
+userland/base/libpdf/encoding.c
+userland/base/libpdf/shading.c
+userland/base/libpdf/charstrings.c
+userland/base/libpdf/type1.c
+userland/base/libpdf/cff.c
+userland/base/libpdf/cffdata.c
+userland/base/libpdf/crypt.c
+userland/desktop/wayland/main.c
+userland/desktop/wayland/wire.c
+userland/desktop/wayland/objects.c
+userland/desktop/wayland/protocol.c
+userland/desktop/wayland/display.c
+userland/desktop/wayland/seat.c
+userland/desktop/wayland/input.c
+userland/desktop/wayland/tablet.c
+userland/desktop/wayland/touch.c
+userland/desktop/wayland/compose.c
+userland/desktop/wayland/import.c
+userland/desktop/wayland/shm.c
+userland/desktop/wayland/glass.c
+userland/desktop/wayland/shell.c
+userland/desktop/wayland/home.c
+userland/desktop/wayland/corner.c
+userland/desktop/wayland/keyboard.c
+userland/desktop/wayland/keyboard-layout.c
+userland/desktop/wayland/keyboard-hand.c
+userland/desktop/wayland/menu.c
+userland/desktop/wayland/menu-shell.c
+userland/desktop/wayland/titlebar.c
+userland/desktop/wayland/popup.c
+userland/desktop/wayland/toplevel.c
+userland/desktop/wayland/sheet.c
+userland/desktop/wayland/subsurface.c
+userland/desktop/wayland/keymap.c
+userland/desktop/wayland/data.c
+userland/desktop/wayland/icons.c
+userland/desktop/wayland/titlebar-shell.c
+userland/desktop/wayland/decoration.c
+userland/desktop/wayland/cursor.c
+userland/desktop/wayland/viewport.c
+userland/desktop/wayland/panels.c
+userland/desktop/wayland/backdrop.c
+userland/desktop/wayland/damage.c
+userland/desktop/wayland/greeter.c
+userland/desktop/wayland/primary.c
+userland/desktop/wayland/network.c
+userland/desktop/wayland/preferences.c
+userland/desktop/wayland/volume.c
+userland/desktop/wayland/text-input.c
+userland/desktop/wayland/input-method.c
+userland/desktop/wayland/desktop.c
+userland/desktop/wayland/inset.c
+userland/desktop/wayland/edit.c
+userland/desktop/wayland/clipboard.c
+userland/tests/vkdemo/display.c
+userland/desktop/artwork/mark.c
+userland/desktop/picture/color-glyph.c
+userland/desktop/wayland/freebsd/os-freebsd.c
+userland/desktop/wayland/freebsd/seat-freebsd.c
+userland/desktop/wayland/evdev/input-evdev.c
+userland/desktop/wayland/session/handoff-session.c
+userland/desktop/wayland/dmabuf/gpu-dmabuf.c
+userland/desktop/wayland/freebsd/sync-freebsd.c

@@ -1,0 +1,6 @@
+ZWL PREFERENCES open
+ZWL OS unavailable errno=2
+ZWL EXIT frames=0 error=2 cleanup_failed=0 pid=2656 input_events=0 seat_events=0 at_ms=1332716
+ 
+PASS real native compositor absent primary refusal/cleanup; authority remains live
+owned seatd exit 0

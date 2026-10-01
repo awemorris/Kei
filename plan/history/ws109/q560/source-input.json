@@ -1,0 +1,14 @@
+[
+  {
+    "path": "userland/desktop/keiland-freebsd.mk",
+    "sha256": "0e14aed9ce9745fad6dddb557ff6ee18654a31b9548271f0221d337c45639cba"
+  },
+  {
+    "path": "userland/desktop/wayland/Makefile.freebsd",
+    "sha256": "6ab5040d2484e9ddbd7880c0d4ec1148228385c439685346b2378514d785d1a2"
+  },
+  {
+    "path": "plan/ws109/tests/compositor-refusal-freebsd.py",
+    "sha256": "8a57155f2c5618f7f37322f3a00a50aa5fb03d39ae3abfd85aebf5f73184d6ef"
+  }
+]

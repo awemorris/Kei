@@ -3,7 +3,7 @@
 Run from the source root on FreeBSD15 with the selected native dependency packages.
 `gmake -j16 -f userland/desktop/keiland-freebsd.mk libraries` builds the L1 foundation;
 `gmake -f userland/desktop/keiland-freebsd.mk install DESTDIR=/tmp/keiland-stage` stages it.
-Real libkeiland/libkeiui/libpdf are also built; compositor/apps need later backend integration.
+Real libkeiland/libkeiui/libpdf are also built; the real compositor is included; apps need later native integration.
 
 - public-libraries.c: compile with `-I/tmp/keiland-stage/opt/keiland/include -I/usr/local/include`,
   link staged libwayland-client.so/libtruetype.so/libvulkan.so.1. Use `-fPIE -pie` for native clients.
@@ -82,3 +82,11 @@ console-abi-freebsd.c supplies native ioctlconstants to seat-backend-fixture-fre
 its daemon, requires prepared VT1 and absent defaultseat socket, captures/restores nativeconsole
 state and checks inputpermissions. Runs /tmp/ws109-seat-backend with private libs in /tmp/ws109-seat-lib.
 Actual physical machine display/VT/GPU/fences must still be tested with real compositor collaborators.
+
+## Real native compositor refusal
+
+compositor-refusal-freebsd.py takes the staged /opt/keiland prefix, copies actual installed libraries/
+program into its owned traversable /tmpdir, runs real compositor as uid/gid65534/nogroups with real
+seatd on its absent/default endpoint and no native DRMcard0. Requires OS ENOENT/refusal/frames0/
+cleanup_failed0/no publishedWaylandsocket, then cleans only its own peer/socket/files. No renderer
+or protocol collaborator substitution; absence proof is not a GUI/display acceptance result.

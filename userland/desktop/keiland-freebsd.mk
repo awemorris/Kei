@@ -1,6 +1,6 @@
 # Native FreeBSD Keiland build, independent of the Linux and zedBSD rules.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
-# Builds foundation and real native service/UI/PDF libraries; compositor/apps follow in WS109 L2.
+# Builds real native libraries and the compositor with FreeBSD seat authority.
 .DEFAULT_GOAL := all
 
 KEILAND_FREEBSD_BUILD ?= build/keiland-freebsd
@@ -54,6 +54,27 @@ KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/lib/$(2)
 KEILAND_FREEBSD_INSTALL += lib/$(2)
 endef
 
+# $(1) name, $(2) bin or libexec, $(3) sources, $(4) own libraries, $(5) system libraries
+define KEILAND_FREEBSD_PROGRAM
+KEILAND_FREEBSD_SOURCES += $(3)
+KEILAND_FREEBSD_PROGRAM_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_FREEBSD_BUILD)/obj/%.o,$(3))
+-include $$(KEILAND_FREEBSD_PROGRAM_OBJS_$(1):.o=.d)
+$(KEILAND_FREEBSD_BUILD)/$(2)/$(1): $$(KEILAND_FREEBSD_PROGRAM_OBJS_$(1)) $$(addprefix $(KEILAND_FREEBSD_BUILD)/lib/,$(4))
+	@mkdir -p $$(dir $$@)
+	$$(CC) -pie $$(KEILAND_FREEBSD_LDFLAGS) $$(KEILAND_FREEBSD_PROGRAM_OBJS_$(1)) $$(addprefix -l:,$(4)) $(5) -o $$@
+KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/$(2)/$(1)
+KEILAND_FREEBSD_INSTALL += $(2)/$(1)
+endef
+
+# $(1) path under the prefix, $(2) source file
+define KEILAND_FREEBSD_DATA
+$(KEILAND_FREEBSD_BUILD)/$(1): $(2)
+	@mkdir -p $$(dir $$@)
+	cp $$< $$@
+KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/$(1)
+KEILAND_FREEBSD_INSTALL += $(1)
+endef
+
 # $(1) name, $(2) the archive's file name, $(3) sources
 define KEILAND_FREEBSD_STATIC
 KEILAND_FREEBSD_SOURCES += $(3)
@@ -79,11 +100,13 @@ KEILAND_FREEBSD_PACKAGES ?= userland/base/libz-compat/Makefile.freebsd \
 	userland/desktop/libkeiland/Makefile.freebsd \
 	userland/desktop/libkeiui/Makefile.freebsd \
 	userland/base/libpdf/Makefile.freebsd \
-	userland/packages/libseat/Makefile.freebsd
+	userland/packages/libseat/Makefile.freebsd \
+	userland/desktop/wayland/Makefile.freebsd
 include $(KEILAND_FREEBSD_PACKAGES)
 
 .PHONY: all libraries install install-headers print-sources header-dependencies
-all libraries: $(KEILAND_FREEBSD_ALL)
+all: $(KEILAND_FREEBSD_ALL)
+libraries: $(filter %.a %.so %.so.1,$(KEILAND_FREEBSD_ALL))
 
 # FreeBSD install has no GNU -D; create each destination directory explicitly.
 install: all install-headers

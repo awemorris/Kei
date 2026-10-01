@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q560 / q560-i01
+Queue / Attempt: q556 / q556-i01
 
 ## 目的・範囲
 
@@ -114,9 +114,3 @@ installation follow after actual integration output; F2/physicaldisplay/runtime 
 threeOSbuild/boot retained. Unexpected commonC/nativeportability prerequisite endsattemptuncleared
 with durablefailure and revised laterPhase scope; no unplanned semantic fix in this attempt.
 Makefile/manualmembership/diffcheck, no make check/push/publication/hosttoolchain or input changes.
-
-## Result / q560-i01 / 2026-10-01T23:17:08.180723+00:00
-
-Queue item cleared /whole Phase uncleared。native compositor本体/shared renderer＋realFreeBSDseatをlink/DESTDIR、168uniqueC/nativeheaders/privateELF/実起動拒否cleanup PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q560/result.md)。apps/data/nativeGUI/actualdisplay/全F2/threeOS・p005は保持。
-
-Event ws109-q560-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.
