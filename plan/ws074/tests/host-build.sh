@@ -76,7 +76,7 @@ done
 
 for file in $sources; do
 	object=$out/obj/$(printf '%s' "${file#userland/desktop/}" | tr '/' '_' | sed 's/\.c$/.o/')
-	if [ ! -f "$object" ] || [ "$file" -nt "$object" ] || [ "$out/flags" -nt "$object" ] || [ -n "$(find "$src" "$app" -name '*.h' -newer "$object" | head -1)" ]; then
+	if [ ! -f "$object" ] || [ "$file" -nt "$object" ] || [ "$out/flags" -nt "$object" ] || [ -n "$(find "$src" "$app" userland/desktop/keiland -name '*.h' -newer "$object" | head -1)" ]; then
 		"$cc" $flags -c "$file" -o "$object"
 	fi
 	objects="$objects $object"

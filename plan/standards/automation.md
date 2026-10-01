@@ -58,3 +58,5 @@ WS105 の Linux checks の合格を新 target の合格に転用しない。各 
 ## WS106 relocation coverage (2026-10-01)
 
 [User-authorized scoped exception](ws106-relocation.md): preserve existing implementation style for path-only relocation. Validate all move hashes/modes and allowed include/path diffs; compare normalized style-check baseline (59 C,1300 candidates). New C/semantic changes remain subject to the full standard. Review all WS source/config/runner diffs, registry/default/dependency/install contracts and final build/boot. No mass formatting.
+
+WS107: [限定例外](ws107-relocation.md)の不変moveをhash/mode/path-only diffでreview。変更componentと新試験はC全文/edited-range clang-format/manual review、既知14候補を修正し全133C style-checkを比較。

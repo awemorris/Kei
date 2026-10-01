@@ -46,3 +46,5 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 [確定設計](../design.md)と[179file台帳](../inventory.json)を採用。全165engine/14appと全変更consumerを全文reviewし、B1〜B5/ELF/header/client/build/関係回帰/boot PNGを確認。後日の意味変更があれば再検証、CPUをGPUの代用にしない。依存p003。
 
 callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。
+
+2026-10-02 / ws107-style-decision: ユーザー「移動部分の既存スタイル維持を認める」。[限定例外](../../standards/ws107-relocation.md)で不変moveのstyleを維持、品質修正/新試験/14候補をC全文で確認。受け入れと依存は保持、全hash/diff/boundary reviewは省略しない。

@@ -20,3 +20,7 @@ engine dirs の include/name 走査で Wayland/shell/uapi/vkZed の直接参照�
 WS107 p001 で exact source/link closure を固定し、p004 で public-header standalone compile、ELF DT_NEEDED/undefined/export、include dependency、独立 client の実描画を確認。
 runtime の隠れた依存・所有・callback/再入・tab 状態・Vulkan の仕様遵守は全文/manual review が要る。新しい checker の実装は WS107 の承認済み Phase 内だけ。
 簡約版は無し。全文を直接読む。source 移動は WS107 未実施なので、現 source が配置規則を満たしたとは記録しない。
+
+## Callback / ownership 契約の確定（2026-10-02）
+
+ユーザー回答「同じ view の変更・破棄は callback 後に行う契約にする」。callbackは外側engine call内で同期実行。pure queryと別viewの操作は許可、同じviewのmutation/draw/layout/process/destroyは外側callが戻った後。layoutを誘発するdocument_height/scroll_rangeも再入対象。query/callbackのstringは借用、後まで保つならcopyする。options/callback構造体はcopy、font文字列とstack_baseはview lifetimeを超える。API v2のstruct/exports/SONAMEは維持する。public headerに具体的query一覧、寸法/stride/target入力契約とcaller fence/target/deviceの所有を明記する。

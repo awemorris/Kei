@@ -40,6 +40,7 @@
 
 #include <errno.h>
 #include <math.h>
+#include <limits.h>
 #include <poll.h>
 #include <stdlib.h>
 #include <string.h>
@@ -173,6 +174,8 @@ struct browser_view {
 	struct net_request *pending;
 	char *pending_path;
 	int pending_step;
+	/* The history destination is published only when this pending page commits. */
+	size_t pending_index;
 	struct wb_buffer title;
 	struct browser_callbacks callbacks;
 	struct browser_gpu device;
@@ -220,12 +223,15 @@ static const struct view_key_name view_key_names[] = {
 	{ NULL, VIEW_KEY_OTHER }
 };
 
+static int view_dimensions(unsigned width, unsigned height);
+static int view_pixels(const uint32_t *pixels, unsigned width, unsigned height, size_t stride);
+static int view_target(const struct browser_target *target);
 static uint64_t view_clock(void);
-static int view_navigate(struct browser_view *view, const char *path, int step);
+static int view_navigate(struct browser_view *view, const char *path, int step, size_t history_index);
 static int view_make_page(struct browser_view *view, struct page **page);
 static int view_open_page(struct browser_view *view, const char *path, struct page **page);
-static int view_show_page(struct browser_view *view, struct page *page, const char *path, int step);
-static int view_start_load(struct browser_view *view, const char *path, int step);
+static int view_show_page(struct browser_view *view, struct page *page, const char *path, int step, size_t history_index);
+static int view_start_load(struct browser_view *view, const char *path, int step, size_t history_index);
 static void view_document_arrived(void *context, struct net_request *request);
 static void view_stop_load(struct browser_view *view, int report);
 static int view_update(struct browser_view *view);
@@ -254,7 +260,9 @@ static void view_scroll_pages(struct browser_view *view, int pages);
 static void view_scroll_to(struct browser_view *view, int place);
 static layout_unit view_drawn_scroll(const struct browser_view *view);
 
-/* Makes a view with its loader and no page. */
+/*
+ * Makes a view with its loader and no page.
+ */
 int
 browser_view_create(
 	const struct browser_view_options *options,
@@ -263,10 +271,27 @@ browser_view_create(
 	struct browser_view *made;
 	int error;
 
-	/* A program built for another version of the interface lays its options out otherwise. */
+	/* Refuses a missing output slot before trying to publish into it. */
+	if (view == NULL)
+		return EINVAL;
+
+	/* A refused creation leaves the caller without a partially owned view. */
 	*view = NULL;
+	if (options == NULL)
+		return EINVAL;
+
+	/* A program built for another version lays its options out otherwise. */
 	if (options->version != BROWSER_API_VERSION)
 		return ENOTSUP;
+
+	/* Rejects dimensions that cannot be represented by the layout engine. */
+	error = view_dimensions(options->width, options->height);
+	if (error != 0)
+		return error;
+
+	/* Rejects unknown fetching policies rather than silently treating them as defaults. */
+	if (options->fetch < BROWSER_FETCH_DEFAULT || options->fetch > BROWSER_FETCH_BACKGROUND)
+		return EINVAL;
 
 	/* The view, empty. */
 	made = calloc(1, sizeof(*made));
@@ -376,7 +401,7 @@ browser_view_load(
 	wb_buffer_init(&path);
 	error = page_resolve_location(directory, location, &path);
 	if (error == 0)
-		error = view_navigate(view, wb_buffer_string(&path), VIEW_STEP_NEW);
+		error = view_navigate(view, wb_buffer_string(&path), VIEW_STEP_NEW, view->history_index);
 	wb_buffer_release(&path);
 	if (error != 0)
 		return error;
@@ -403,7 +428,7 @@ browser_view_follow(
 	}
 
 	/* Its page, as a new step of the history. */
-	error = view_navigate(view, wb_buffer_string(&path), VIEW_STEP_NEW);
+	error = view_navigate(view, wb_buffer_string(&path), VIEW_STEP_NEW, view->history_index);
 	wb_buffer_release(&path);
 	if (error != 0)
 		return error;
@@ -412,22 +437,38 @@ browser_view_follow(
 	return 0;
 }
 
-/* Tells whether the history has a step that far from the one shown (0 is the page shown, which can be reloaded). */
+/*
+ * Tells whether the history has a step that far from the one shown (0 is the page shown, which can be reloaded).
+ */
 int
 browser_view_can_go(
 	const struct browser_view *view,
 	int steps)
 {
-	/* Back, as far as the first step. */
-	if (steps < 0)
-		return view->history_index >= (size_t)-steps;
+	/* Widens before negation so INT_MIN remains a defined history query. */
+	if (steps < 0) {
+		if (view->history_index < (size_t)-(int64_t)steps)
+			return 0;
 
-	/* Forward, as far as the last step. */
-	if (steps > 0)
-		return view->history_index + (size_t)steps < view->history_count;
+		/* Succeeded: the requested older step exists. */
+		return 1;
+	}
 
-	/* The page shown. */
-	return view->history_count != 0;
+	/* A forward step must stay within the committed history. */
+	if (steps > 0) {
+		if (view->history_index + (size_t)steps >= view->history_count)
+			return 0;
+
+		/* Succeeded: the requested newer step exists. */
+		return 1;
+	}
+
+	/* A reload requires a committed page. */
+	if (view->history_count == 0)
+		return 0;
+
+	/* Succeeded: the current step can be reloaded. */
+	return 1;
 }
 
 /*
@@ -451,16 +492,14 @@ browser_view_go(
 	/* The step to show. */
 	index = view->history_index;
 	if (steps < 0)
-		view->history_index -= (size_t)-steps;
+		index -= (size_t)-(int64_t)steps;
 	else
-		view->history_index += (size_t)steps;
+		index += (size_t)steps;
 
-	/* Its page, loaded again; a page that does not open leaves the history where it was. */
-	error = view_navigate(view, view->history[view->history_index], VIEW_STEP_KEEP);
-	if (error != 0) {
-		view->history_index = index;
+	/* Loads the destination without publishing its history index before success. */
+	error = view_navigate(view, view->history[index], VIEW_STEP_KEEP, index);
+	if (error != 0)
 		return error;
-	}
 
 	/* Succeeded: the page is shown, or loading. */
 	return 0;
@@ -475,13 +514,22 @@ browser_view_stop(
 	view_stop_load(view, 1);
 }
 
-/* Gives the view a new size: the page is laid out at it again. */
+/*
+ * Gives the view a new size: the page is laid out at it again.
+ */
 int
 browser_view_resize(
 	struct browser_view *view,
 	unsigned width,
 	unsigned height)
 {
+	int error;
+
+	/* A refused resize leaves both the view and its page at the previous size. */
+	error = view_dimensions(width, height);
+	if (error != 0)
+		return error;
+
 	/* The size, and the page's scripts see it. */
 	view->width = width;
 	view->height = height;
@@ -1106,6 +1154,11 @@ browser_view_draw_pixels(
 	unsigned row;
 	int error;
 
+	/* Refuses an output whose rows overlap or wrap the address space. */
+	error = view_pixels(pixels, width, height, stride);
+	if (error != 0)
+		return error;
+
 	/* No page has nothing to draw. */
 	if (view->page == NULL)
 		return ENOENT;
@@ -1287,6 +1340,11 @@ browser_view_draw(
 	VkResult result;
 	int error;
 
+	/* Refuses an absent or empty target before issuing any Vulkan command. */
+	error = view_target(target);
+	if (error != 0)
+		return error;
+
 	/* No page has nothing to draw. */
 	if (view->page == NULL)
 		return ENOENT;
@@ -1332,6 +1390,11 @@ browser_view_record(
 	VkExtent2D extent;
 	VkResult result;
 	int error;
+
+	/* Refuses an absent or empty target before issuing any Vulkan command. */
+	error = view_target(target);
+	if (error != 0)
+		return error;
 
 	/* No page has nothing to draw. */
 	if (view->page == NULL)
@@ -1389,11 +1452,23 @@ browser_offscreen_create(
 {
 	struct browser_offscreen *made;
 	VkResult result;
+	int error;
 
-	/* The holder. */
+	/* Refuses missing result slots without dereferencing them. */
+	if (offscreen == NULL || failure == NULL)
+		return EINVAL;
+
+	/* A refused creation leaves no owned image and no stale Vulkan error. */
 	*offscreen = NULL;
 	failure->operation = NULL;
 	failure->result = VK_SUCCESS;
+
+	/* Rejects empty images before the driver can receive invalid dimensions. */
+	error = view_dimensions(width, height);
+	if (error != 0)
+		return error;
+
+	/* Allocates the holder of the device and image. */
 	made = calloc(1, sizeof(*made));
 	if (made == NULL)
 		return ENOMEM;
@@ -1435,7 +1510,9 @@ browser_offscreen_target(
 	target->height = offscreen->offscreen.extent.height;
 }
 
-/* Reads the offscreen image, drawn by a view, into 0xAARRGGBB pixels whose rows are stride bytes apart. */
+/*
+ * Reads the offscreen image, drawn by a view, into 0xAARRGGBB pixels whose rows are stride bytes apart.
+ */
 int
 browser_offscreen_read(
 	struct browser_offscreen *offscreen,
@@ -1444,6 +1521,20 @@ browser_offscreen_read(
 	struct browser_gpu_failure *failure)
 {
 	VkResult result;
+	int error;
+
+	/* Refuses missing objects and result storage before accessing their fields. */
+	if (offscreen == NULL || failure == NULL)
+		return EINVAL;
+
+	/* Starts this read without a stale driver failure from an earlier operation. */
+	failure->operation = NULL;
+	failure->result = VK_SUCCESS;
+
+	/* Refuses an output span that cannot hold the complete image. */
+	error = view_pixels(pixels, offscreen->offscreen.extent.width, offscreen->offscreen.extent.height, stride);
+	if (error != 0)
+		return error;
 
 	/* The copy out of the image. */
 	failure->operation = NULL;
@@ -1514,9 +1605,10 @@ view_clock(void)
  */
 static int
 view_navigate(
-	struct browser_view *view,
-	const char *path,
-	int step)
+    struct browser_view *view,
+    const char *path,
+    int step,
+    size_t history_index)
 {
 	struct page *page;
 	int background;
@@ -1533,8 +1625,12 @@ view_navigate(
 
 	/* Such a page is fetched; the page shown stays until it arrives. */
 	if (background) {
-		error = view_start_load(view, path, step);
-		return error;
+		error = view_start_load(view, path, step, history_index);
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the destination is pending and the current page remains shown. */
+		return 0;
 	}
 
 	/* Any other page is read at once, and shown. */
@@ -1542,9 +1638,11 @@ view_navigate(
 	error = view_open_page(view, path, &page);
 	if (error != 0)
 		return error;
-	error = view_show_page(view, page, path, step);
-	if (error != 0)
+	error = view_show_page(view, page, path, step, history_index);
+	if (error != 0) {
+		view_failed(view, path, error, "");
 		return error;
+	}
 
 	/* Succeeded: the page is the one shown. */
 	return 0;
@@ -1620,12 +1718,14 @@ view_open_page(
  */
 static int
 view_show_page(
-	struct browser_view *view,
-	struct page *page,
-	const char *path,
-	int step)
+    struct browser_view *view,
+    struct page *page,
+    const char *path,
+    int step,
+    size_t history_index)
 {
 	char *copy;
+	char *history_copy;
 	size_t index;
 
 	/* The page's own location (a URL's after its redirects) is kept for the history and for resolving links. */
@@ -1635,6 +1735,17 @@ view_show_page(
 	if (copy == NULL) {
 		page_destroy(page);
 		return ENOMEM;
+	}
+
+	/* Reserves the new history entry while every old page and forward step is still owned. */
+	history_copy = NULL;
+	if (step == VIEW_STEP_NEW) {
+		history_copy = strdup(path);
+		if (history_copy == NULL) {
+			free(copy);
+			page_destroy(page);
+			return ENOMEM;
+		}
 	}
 
 	/*
@@ -1669,11 +1780,12 @@ view_show_page(
 		}
 
 		/* Records the new step. */
-		view->history[view->history_count] = strdup(path);
-		if (view->history[view->history_count] == NULL)
-			return ENOMEM;
+		view->history[view->history_count] = history_copy;
 		view->history_index = view->history_count;
 		view->history_count++;
+	} else {
+		/* Publishes the destination only after its page has replaced the old one. */
+		view->history_index = history_index;
 	}
 
 	/* Its title (it is laid out at the view's size when it is drawn). */
@@ -1692,9 +1804,10 @@ view_show_page(
 /* Starts fetching an http or https page (any load under way is stopped); the page shown stays until it arrives. */
 static int
 view_start_load(
-	struct browser_view *view,
-	const char *path,
-	int step)
+    struct browser_view *view,
+    const char *path,
+    int step,
+    size_t history_index)
 {
 	char *copy;
 	int error;
@@ -1718,6 +1831,7 @@ view_start_load(
 	/* Succeeded: the page is loading. */
 	view->pending_path = copy;
 	view->pending_step = step;
+	view->pending_index = history_index;
 	if (view->callbacks.load != NULL)
 		view->callbacks.load(view->callbacks.context, view, BROWSER_LOAD_STARTED, path, 0, "");
 	return 0;
@@ -1739,6 +1853,7 @@ view_document_arrived(
 	struct page *page;
 	char *path;
 	size_t length;
+	size_t history_index;
 	int step;
 	int error;
 
@@ -1746,6 +1861,7 @@ view_document_arrived(
 	view = context;
 	path = view->pending_path;
 	step = view->pending_step;
+	history_index = view->pending_index;
 	view->pending = NULL;
 	view->pending_path = NULL;
 
@@ -1767,8 +1883,10 @@ view_document_arrived(
 
 	/* The new page is shown; a page that could not be made is reported. */
 	if (error == 0)
-		(void)view_show_page(view, page, url, step);
-	else
+		error = view_show_page(view, page, url, step, history_index);
+
+	/* Allocation failures during commit also reach the caller's failure callback. */
+	if (error != 0)
 		view_failed(view, url, error, "");
 	free(path);
 }
@@ -2602,4 +2720,89 @@ view_drawn_scroll(
 {
 	/* The scroll with the shift. */
 	return view->scroll_y - view->overscroll_y;
+}
+
+/* Rejects sizes the signed layout coordinates cannot represent. */
+static int
+view_dimensions(
+    unsigned width,
+    unsigned height)
+{
+	/* Both axes must contain pixels and fit the layout's signed dimensions. */
+	if (width == 0 || width > INT_MAX)
+		return EINVAL;
+
+	/* The height has the same representation as the width. */
+	if (height == 0 || height > INT_MAX)
+		return EINVAL;
+
+	/* Succeeded: both dimensions are usable by the layout engine. */
+	return 0;
+}
+
+/* Validates the complete byte span before a renderer writes the caller's rows. */
+static int
+view_pixels(
+    const uint32_t *pixels,
+    unsigned width,
+    unsigned height,
+    size_t stride)
+{
+	size_t row_bytes;
+	int error;
+
+	/* Refuses an absent output before any renderer can write through it. */
+	if (pixels == NULL)
+		return EINVAL;
+
+	/* Rejects empty or unrepresentable dimensions before calculating byte counts. */
+	error = view_dimensions(width, height);
+	if (error != 0)
+		return error;
+
+	/* Detects packed-row multiplication wrap on either client word size. */
+	row_bytes = (size_t)width * sizeof(uint32_t);
+	if (row_bytes / sizeof(uint32_t) != (size_t)width)
+		return EINVAL;
+
+	/* Every row needs its complete pixels, even when there is padding after it. */
+	if (stride < row_bytes)
+		return EINVAL;
+
+	/* The last row's start and complete contents must not wrap the byte span. */
+	if (height > 1U) {
+		if (stride > (SIZE_MAX - row_bytes) / (size_t)(height - 1U))
+			return EINVAL;
+	}
+
+	/* Succeeded: each output row has a distinct, representable byte span. */
+	return 0;
+}
+
+/* Refuses targets that cannot name a nonempty Vulkan color attachment. */
+static int
+view_target(
+    const struct browser_target *target)
+{
+	int error;
+
+	/* The caller must supply a target before its fields can be inspected. */
+	if (target == NULL)
+		return EINVAL;
+
+	/* Both handles belong to the caller and must survive the submitted drawing. */
+	if (target->image == VK_NULL_HANDLE || target->view == VK_NULL_HANDLE)
+		return EINVAL;
+
+	/* The target must have a usable color format. */
+	if (target->format == VK_FORMAT_UNDEFINED)
+		return EINVAL;
+
+	/* Validates dimensions before framebuffer creation or viewport recording. */
+	error = view_dimensions(target->width, target->height);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the target describes a complete attachment. */
+	return 0;
 }

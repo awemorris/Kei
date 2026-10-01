@@ -25,14 +25,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static int handler_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int handler_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int handler_define(struct bind_window *window, struct vm_object *prototype, const char *type);
-static int handler_is_window_event(const struct vm_string *type);
-static struct dom_element *handler_body(const struct bind_window *window);
-static int handler_attribute_name(struct vm_realm *realm, const struct vm_string *type, struct vm_string **name);
-static int handler_compile(struct bind_window *window, const struct vm_string *source, vm_value *handler);
-
 /*
  * The event types whose handlers the interfaces have (the common part of
  * GlobalEventHandlers and WindowEventHandlers).  The table is constant for
@@ -55,6 +47,14 @@ static const char *const handler_window_types[] = {
 	"popstate", "resize", "scroll", "storage", "unload",
 	NULL
 };
+
+static int handler_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int handler_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int handler_define(struct bind_window *window, struct vm_object *prototype, const char *type);
+static int handler_is_window_event(const struct vm_string *type);
+static struct dom_element *handler_body(const struct bind_window *window);
+static int handler_attribute_name(struct vm_realm *realm, const struct vm_string *type, struct vm_string **name);
+static int handler_compile(struct bind_window *window, const struct vm_string *source, vm_value *handler);
 
 /*
  * Defines the event handler attributes (onclick and the like) on an
@@ -94,6 +94,7 @@ bind_handler_prepare(
 	struct bind_listener listener;
 	struct dom_node *node;
 	struct dom_element *element;
+	struct dom_element *body;
 	struct dom_attribute *attribute;
 	struct vm_string *name;
 	vm_value global;
@@ -114,8 +115,16 @@ bind_handler_prepare(
 	}
 
 	/* The body's attributes of the window's events are not the body's own. */
-	if (element != NULL && current != global && window_event && element == handler_body(window))
-		element = NULL;
+	if (element != NULL &&
+	    current != global &&
+	    window_event) {
+		/* Resolves the body only when this target could supply the window's handler. */
+		body = handler_body(window);
+		if (element == body)
+			element = NULL;
+	}
+
+	/* A missing target has no content attribute to compile. */
 	if (element == NULL)
 		return 0;
 
@@ -155,6 +164,8 @@ bind_handler_prepare(
 		if (listeners->items[index].generation > element->created)
 			break;
 	}
+
+	/* Publishes the compiled handler at its original listener position. */
 	status = bind_listeners_add(listeners, &listener, index);
 	if (status != 0)
 		return status;
@@ -204,6 +215,8 @@ handler_get(
 	} else if (status != 0 || listeners == NULL) {
 		return status;
 	}
+
+	/* Finds the handler callback in this target's listener list. */
 	found = bind_listeners_find_handler(listeners, type, &index);
 	if (found)
 		*result = listeners->items[index].callback;
@@ -366,6 +379,8 @@ handler_body(
 		if (root->type == DOM_ELEMENT)
 			break;
 	}
+
+	/* Rejects a document whose first element cannot contain the HTML body. */
 	is_html = dom_element_is(root, DOM_NS_HTML, DOM_TAG_HTML);
 	if (!is_html)
 		return NULL;

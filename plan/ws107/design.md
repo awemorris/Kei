@@ -26,3 +26,5 @@ p003 最大120分: public-only動的clientの2view/入力/callback/query/deferre
 p004 最大120分: C全文とbrowser-component全文で全WSsource/hash/diffをreview、style補助、target build/image warning0、host-view入力/Acid2/CLI/golden等関係する既存回帰、最終boot-test.sh PNG。GPU/CPU証拠と実機未実施を分離。source移動とcomponent品質以外の互換性修正へ拡張しない。
 
 Event: ws107-q541-design。ユーザーcallback判断を記録し、全変更Phase/WS/WS074へlocal eventを届ける。GitHub publicationはdeferred。
+
+2026-10-02 / ws107-q543-style-review: 14候補を全文で点検、handler4＋loader loop1を修正、残9は既存critical section空行のscanner false positive（C全文§5）。同期挙動を変えず根拠をcomponent-resultへ。移動限定例外とは別の実rule判定であり、違反を免除しない。

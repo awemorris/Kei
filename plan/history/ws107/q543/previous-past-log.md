@@ -2,15 +2,9 @@
 
 # Past Log
 
-Last finished Queue: [q543](queue-q543.md)（WS107 p003 cleared）
+Last finished Queue: [q542](queue-q542.md)（WS107 p002 cleared）
 
-## 最新: q543 / WS107 p003
-
-cleared。有限component修正/API v2のcallback・借用契約、2view/入力/timer/所有/async history/late allocation rollback/実標準Vulkan/caller record-fence-releaseを検証。最終ASan/UBSan client83checks PASS、target/host warning0、既存host-view59/0。14style候補を全文判定（5修正、9critical section false positive）。plan/ws107/component-result.md。
-
-GitHub publication/outbox pending、commit WIP / pushなし。
-
-## 前回: q542 / WS107 p002
+## 最新: q542 / WS107 p002
 
 cleared。engine165files（133C）のmove/hash/mode確認、うち生成器4filesだけlocator更新、表/shader binary未再生成。libbrowser/appのsource変数とprivate includeを分離、registry/exports/API v2/install保存。target libbrowser133fresh source＋browser7forced source/probe build exit0/warning0。host clean build exit0/warning0、public-only browser-probeのDT_NEEDEDはlibbrowser.so/libcのみ、libraryはhost標準Vulkan/libm/libcのみ（targetもWayland無し）。list-sources140C、runner syntax/diff-check PASS。
 
@@ -55,6 +49,7 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 
 | Queue | Scope/outcome |
 | --- | --- |
+| [q513](queue-q513.md) | WS103 の p006（compositor の fence を poll だけに、`/dev/gpu0` と `--gpu` の削除、GPU の UAPI を `gpu-zedbsd.c` … |
 | [q514](queue-q514.md) | WS103 の p007（規約の全文で WS の全 source の変更を見直す、回帰、5330、V4 の性能の計測）。WS103 の最後の Phase。 |
 | [q515](queue-q515.md) | desktop の公開ヘッダーを libc から分離し、WS104 と WS105 の開始条件を整える。 |
 | [q516](queue-q516.md) | audio の漏れを libkeiland へ（`keiland_audio_available`） |
@@ -89,8 +84,6 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 | [q541](queue-q541.md) | WS107 p001 cleared |
 
 | [q542](queue-q542.md) | WS107 p002 cleared |
-
-| [q543](queue-q543.md) | WS107 p003 cleared |
 
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。

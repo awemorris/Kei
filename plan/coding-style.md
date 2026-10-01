@@ -874,3 +874,7 @@ Before finishing a C-source change, verify that:
 ## WS106 relocation exception (2026-10-01)
 
 The user explicitly authorized preserving existing C implementation style during WS106 file relocation and path-only reference edits. [Full scoped exception](standards/ws106-relocation.md) records the exact scope, evidence and expiry. This does not change the rules for new implementations or semantic refactoring. Full review of the WS changes remains required.
+
+## WS107 relocation exception (2026-10-02)
+
+The user authorizes preserving existing implementation style for unchanged WS107 relocation only. [Full scoped exception](standards/ws107-relocation.md) retains full C requirements for changed component functions, new tests and the 14 known findings; full relocation/boundary review remains required.

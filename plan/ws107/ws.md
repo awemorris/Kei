@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG002
 Parent: [Master](../master.md)
-Queue: なし（q542 finished）
-Resume point: p002 cleared、p003の既存承認scopeと実outputを確認。
+Queue: なし（q543 finished）
+Resume point: p003 cleared、p004の既存承認scopeと実outputを確認。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -47,7 +47,7 @@ WS074 の現行 engine を引き継ぐ。p100→p101 の順・目標を保つ。
 | --- | --- | --- | --- | --- |
 | [ws107p001](phase001/phase.md) | engine/shell・API・品質の点検と設計 | 移動表・残す表・問題一覧・修正範囲と独立 client の検証手順を固定。public ABI の変更が必要なら影響と version 方針を示す。 | cleared | WS074 の source（context） |
 | [ws107p002](phase002/phase.md) | エンジンの所属と build/test の参照を移す | B1/B2 を満たし、semantic-preserving 部分の clean build が warning 0。 | cleared | p001 |
-| [ws107p003](phase003/phase.md) | 独立 API と component 実装の不備を直す | B3/B4。未発見の欠陥を推測して大規模 rewrite しない。重大な契約変更は実行前に計画へ反映する。 | planning | p002 |
+| [ws107p003](phase003/phase.md) | 独立 API と component 実装の不備を直す | B3/B4。未発見の欠陥を推測して大規模 rewrite しない。重大な契約変更は実行前に計画へ反映する。 | cleared | p002 |
 | [ws107p004](phase004/phase.md) | 全文規約と shell/engine の最終回帰 | B1〜B5 を満たす。CPU の成功を Vulkan の検証に代用しない。 | planning | p003 |
 
 
@@ -81,3 +81,7 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01T15:09:38.139159+00:00 / ws107-q541-cleared: p001 cleared。179file移動台帳（engine165/133C、残す14）、API v2/標準Vulkan/Wayland無し境界と有限quality修正、target/host/client検証を確定。callbackの同一view変更・破棄をcall後へ延期するユーザー判断を保存。style14候補はp003で全文適合。plan/ws107/design.mdとinventory.json、全変更Phase/WSイベント。
 
 2026-10-01T15:14:46.946786+00:00 / ws107-q542-cleared: p002 cleared。engine165files（133C）のmove/hash/mode確認、うち生成器4filesだけlocator更新、表/shader binary未再生成。libbrowser/appのsource変数とprivate includeを分離、registry/exports/API v2/install保存。target libbrowser133fresh source＋browser7forced source/probe build exit0/warning0。host clean build exit0/warning0、public-only browser-probeのDT_NEEDEDはlibbrowser.so/libcのみ、libraryはhost標準Vulkan/libm/libcのみ（targetもWayland無し）。list-sources140C、runner syntax/diff-check PASS。
+
+2026-10-02 / ws107-style-decision: ユーザー「移動部分の既存スタイル維持を認める」。[限定例外](../standards/ws107-relocation.md)で不変moveのstyleを維持、品質修正/新試験/14候補をC全文で確認。受け入れと依存は保持、全hash/diff/boundary reviewは省略しない。
+
+2026-10-01T15:46:35.290409+00:00 / ws107-q543-cleared: p003 cleared。有限component修正/API v2のcallback・借用契約、2view/入力/timer/所有/async history/late allocation rollback/実標準Vulkan/caller record-fence-releaseを検証。最終ASan/UBSan client83checks PASS、target/host warning0、既存host-view59/0。14style候補を全文判定（5修正、9critical section false positive）。plan/ws107/component-result.md。

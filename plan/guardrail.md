@@ -98,3 +98,5 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
 更新する。合意した構造や範囲を黙って置き換えない。
 
 - WS106 の純粋なsource移動には [既存style維持の限定例外](standards/ws106-relocation.md)を適用（2026-10-01 ユーザー回答）。新実装/意味変更は対象外、全文reviewとhash/diff/build/install/bootは必要。WS106完了時に適用を終了。
+
+WS107 の限定例外（2026-10-02ユーザー承認）: [全文](standards/ws107-relocation.md)。内容不変の移動styleのみ保持、component品質修正/新試験/既知14候補はC全文適用、完了時失効。

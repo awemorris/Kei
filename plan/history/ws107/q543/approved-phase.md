@@ -2,10 +2,10 @@
 
 # ws107p003: 独立 API と component 実装の不備を直す
 
-Status: cleared
+Status: planning
 Disposition: normal
 Parent: [WS107](../ws.md)
-Queue / Attempt: q543 / q543-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -48,11 +48,3 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。
 
 2026-10-02 / ws107-style-decision: ユーザー「移動部分の既存スタイル維持を認める」。[限定例外](../../standards/ws107-relocation.md)で不変moveのstyleを維持、品質修正/新試験/14候補をC全文で確認。受け入れと依存は保持、全hash/diff/boundary reviewは省略しない。
-
-2026-10-02 / ws107-q543-style-review: 14候補を全文で点検、handler4＋loader loop1を修正、残9は既存critical section空行のscanner false positive（C全文§5）。同期挙動を変えず根拠をcomponent-resultへ。移動限定例外とは別の実rule判定であり、違反を免除しない。
-
-## 結果 / q543-i01 / 2026-10-01T15:46:35.289346+00:00
-
-cleared。有限component修正/API v2のcallback・借用契約、2view/入力/timer/所有/async history/late allocation rollback/実標準Vulkan/caller record-fence-releaseを検証。最終ASan/UBSan client83checks PASS、target/host warning0、既存host-view59/0。14style候補を全文判定（5修正、9critical section false positive）。plan/ws107/component-result.md。
-
-Event: ws107-q543-cleared。Phase結果とclosure意図をlocal保存、GitHub comment/closeはdeferred、remote close未確認。

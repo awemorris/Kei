@@ -630,6 +630,7 @@ loader_resolver(
 		/* The next job, waited for. */
 		pthread_mutex_lock(&loader->lock);
 
+		/* Waits until a lookup job arrives or shutdown releases the resolver. */
 		while (loader->jobs == NULL && !loader->stopping)
 			pthread_cond_wait(&loader->wake, &loader->lock);
 		job = loader->jobs;

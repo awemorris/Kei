@@ -51,7 +51,27 @@
  * Alt+Right (and the back and forward keys and buttons) step through the
  * history, F5 and Ctrl+R reload, and Escape stops a load.
  *
- * A view is used from the thread that made it.  Every call that can fail
+ * A view is used from the thread that made it.  Callbacks run synchronously
+ * inside the call that caused them.  A callback may inspect browser_view_url,
+ * browser_view_title, browser_view_can_go, browser_view_scroll_y,
+ * browser_view_gpu_failure, browser_view_poll_fds and browser_view_timeout.
+ * It may operate on another view.  Changing, drawing, laying out, processing
+ * or destroying the same view must wait until the outer call has returned;
+ * browser_view_document_height and browser_view_scroll_range may lay it out.
+ * Callback strings and query strings are borrowed: copy them before keeping
+ * them beyond the callback or a later state-changing call.  Fonts' paths and
+ * stack_base outlive the view; callback/options structures are copied.
+ *
+ * Dimensions must be nonzero and fit INT_MAX.  Creation refuses missing
+ * output/options or an unknown fetch policy with EINVAL and leaves a valid
+ * output slot NULL.  Pixel drawing/readback require non-NULL storage, a stride
+ * large enough for a full row and a representable complete row span (EINVAL
+ * otherwise); the caller owns enough bytes for that span.  GPU targets require
+ * non-NULL image/image-view handles, a defined format and valid dimensions.
+ * Complete recorded GPU work before changing pages, releasing targets or
+ * reusing a view's renderer.  Destroy/set_gpu wait for the old device's work.
+ *
+ * Every call that can fail
  * reports 0 or an errno value.
  */
 
