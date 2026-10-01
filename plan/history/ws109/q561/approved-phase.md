@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q561 / q561-i01
+Queue / Attempt: q560 / q560-i01
 
 ## 目的・範囲
 
@@ -144,9 +144,3 @@ inquiries, permission behavior; real native PTY forkpty/controllingterminal chil
 no fakebackend. Native -j16selectedlibraries warning0, Linux/zedBSD source/build selection unchanged.
 Applicationfullbuild/nativeGUI/finalthreeOS/fullWS and physical gates retained; no pthread/toolchain
 or unrelatedcommonsource change. Unexpectednew prerequisites enduncleared; WIPcommit/no push/publication.
-
-## Result / q561-i01 / 2026-10-01T23:30:23.234443+00:00
-
-Queue item cleared /whole Phase uncleared。native PTY header/libutil・extattr adapter、実UFSのfd/path/link/コピー/権限/ERANGEと実PTY child入出力PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q561/result.md)。fullapps/nativeGUI/F2・threeOS/p005/physical gatesは保持。
-
-Event ws109-q561-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

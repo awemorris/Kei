@@ -1,0 +1,4 @@
+PASS native attributes attributes
+PASS native attributes permission
+owned native attribute source/destination/link removed
+PASS native forkpty controlling terminal/input/output/close/wait

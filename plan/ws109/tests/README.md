@@ -90,3 +90,11 @@ program into its owned traversable /tmpdir, runs real compositor as uid/gid65534
 seatd on its absent/default endpoint and no native DRMcard0. Requires OS ENOENT/refusal/frames0/
 cleanup_failed0/no publishedWaylandsocket, then cleans only its own peer/socket/files. No renderer
 or protocol collaborator substitution; absence proof is not a GUI/display acceptance result.
+
+## Native application compatibility
+
+attributes-freebsd.c links build-native libkeiland-compat.a and private build include/sys/xattr.h;
+attributes-fixture-freebsd.py takes its traversable executable path, creates/removes exclusively
+owned UFS source/destination/link, verifies native root and uid/gid65534/nogroups namespacepermissions.
+pty-freebsd.c uses private pty.h/base -lutil and checks actualforkpty session/canonical stream/childwait.
+Use -std=gnu17 -Wall -Wextra -Werror; no hostfixtures or fabricated syscall providers.

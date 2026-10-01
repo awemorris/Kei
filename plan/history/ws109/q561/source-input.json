@@ -1,0 +1,34 @@
+[
+  {
+    "path": "userland/desktop/keiland-freebsd.mk",
+    "sha256": "e18ba20182b7292a09de0e8ca62bf62d9c5a996180b97ce1a167e6c7f091a17f"
+  },
+  {
+    "path": "userland/desktop/freebsd-compat/Makefile.freebsd",
+    "sha256": "ebd3e9031bd0cd8d80cb7ec769fd80fdaf43086fd9cb8ece8bef568e70ac2818"
+  },
+  {
+    "path": "userland/desktop/freebsd-compat/freebsd/pty-freebsd.h",
+    "sha256": "e210662973adc8664d649f4922bd8e04ae8753fe55e27d6fc0d5262464a10172"
+  },
+  {
+    "path": "userland/desktop/freebsd-compat/freebsd/xattr-freebsd.h",
+    "sha256": "31af248b738cba60cd66d80b9fa25b80ef8a53a19fe72360ceb2b15eca2a7dba"
+  },
+  {
+    "path": "userland/desktop/freebsd-compat/freebsd/xattr-freebsd.c",
+    "sha256": "861ce59a39d940959859bf9bc5350cbe1d4dc0c86d64ca0a821cd90b2cd0534c"
+  },
+  {
+    "path": "plan/ws109/tests/attributes-freebsd.c",
+    "sha256": "e97e6a279872d2477e9cc09fbb0696b7a194b6a597af7662ea6278134e5c5bda"
+  },
+  {
+    "path": "plan/ws109/tests/pty-freebsd.c",
+    "sha256": "de6041a7fa5a53488de9c2304b8c9f1ba3861a7e80c9f75f777342883ffb48c5"
+  },
+  {
+    "path": "plan/ws109/tests/attributes-fixture-freebsd.py",
+    "sha256": "3ee4cc929c0795374bd7f1130ba8aa0b7af84bccc40808bd7e8f33d18f56badc"
+  }
+]

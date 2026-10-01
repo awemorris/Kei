@@ -22,6 +22,7 @@ KEILAND_FREEBSD_LDFLAGS := -Wl,-rpath,$(KEILAND_PREFIX)/lib -Wl,--enable-new-dta
 KEILAND_FREEBSD_HEADERS := $(shell find include/libc/compat -type f -name '*.h') \
 	include/libc/pdf.h include/libc/sha2.h include/libc/md5.h include/libc/sha1.h
 KEILAND_FREEBSD_HEADER_COPIES := $(patsubst include/libc/%,$(KEILAND_FREEBSD_BUILD)/include/%,$(KEILAND_FREEBSD_HEADERS))
+KEILAND_FREEBSD_NATIVE_HEADERS := $(KEILAND_FREEBSD_BUILD)/include/pty.h $(KEILAND_FREEBSD_BUILD)/include/sys/xattr.h
 $(KEILAND_FREEBSD_BUILD)/include/%: include/libc/%
 	@mkdir -p $(dir $@)
 	cp $< $@
@@ -32,7 +33,7 @@ $(KEILAND_FREEBSD_BUILD)/include/drm:
 	test -f $(KEILAND_FREEBSD_LOCALBASE)/include/libdrm/drm.h
 	ln -s $(KEILAND_FREEBSD_LOCALBASE)/include/libdrm $@
 
-$(KEILAND_FREEBSD_BUILD)/obj/%.o: %.c | $(KEILAND_FREEBSD_HEADER_COPIES) $(KEILAND_FREEBSD_BUILD)/include/drm
+$(KEILAND_FREEBSD_BUILD)/obj/%.o: %.c | $(KEILAND_FREEBSD_HEADER_COPIES) $(KEILAND_FREEBSD_NATIVE_HEADERS) $(KEILAND_FREEBSD_BUILD)/include/drm
 	@mkdir -p $(dir $@)
 	$(CC) $(KEILAND_FREEBSD_CFLAGS) $(KEILAND_FREEBSD_CPPFLAGS) $(KEILAND_FREEBSD_CPPFLAGS_$(subst /,_,$(dir $<))) -MMD -MP -c $< -o $@
 
@@ -135,6 +136,6 @@ print-sources:
 # Include native system headers in audit output, unlike ordinary -MMD dependency files.
 KEILAND_FREEBSD_HEADER_DEPS := $(patsubst %.c,$(KEILAND_FREEBSD_BUILD)/header-check/%.d,$(KEILAND_FREEBSD_SOURCES))
 header-dependencies: $(KEILAND_FREEBSD_HEADER_DEPS)
-$(KEILAND_FREEBSD_BUILD)/header-check/%.d: %.c | $(KEILAND_FREEBSD_HEADER_COPIES) $(KEILAND_FREEBSD_BUILD)/include/drm
+$(KEILAND_FREEBSD_BUILD)/header-check/%.d: %.c | $(KEILAND_FREEBSD_HEADER_COPIES) $(KEILAND_FREEBSD_NATIVE_HEADERS) $(KEILAND_FREEBSD_BUILD)/include/drm
 	@mkdir -p $(dir $@)
 	$(CC) $(KEILAND_FREEBSD_CFLAGS) $(KEILAND_FREEBSD_CPPFLAGS) $(KEILAND_FREEBSD_CPPFLAGS_$(subst /,_,$(dir $<))) -M $< -o $@

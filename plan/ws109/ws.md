@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q560 finished）
-Resume point: p002 uncleared; native compositor本体/shared renderer＋realFreeBSDseatをlink/DESTDIR、168uniqueC/nativeheaders/privateELF/実起動拒否cleanup PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q560/result.md)。apps/data/nativeGUI/actualdisplay/全F2/threeOS・p005は保持。
+Queue: なし（q561 finished）
+Resume point: p002 uncleared; native PTY header/libutil・extattr adapter、実UFSのfd/path/link/コピー/権限/ERANGEと実PTY child入出力PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q561/result.md)。fullapps/nativeGUI/F2・threeOS/p005/physical gatesは保持。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -47,7 +47,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
 | [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
-| [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | uncleared / q560 | p001 |
+| [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | uncleared / q561 | p001 |
 | [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q559 | p002 L1 verified output |
 | [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
 | [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | planning | p002 L2、p003、p004 + hardware gates |
@@ -123,3 +123,5 @@ ws109-q558-permissive-seat-client: existing p001 MITclient option concretized wi
 2026-10-01T23:11:23.569523+00:00 / ws109-q559-cleared: p003 uncleared。FreeBSD seatd/OS backend実装、nativeobject warning0、実VT通知/input fd停止・再取得・daemon切断/partialcleanup PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q559/result.md)。描画/通知collaboratorは順序観測のみ、fullnativecompositor/実GPU/physicalVT/F3は保持。
 
 2026-10-01T23:17:08.182550+00:00 / ws109-q560-cleared: p002 uncleared。native compositor本体/shared renderer＋realFreeBSDseatをlink/DESTDIR、168uniqueC/nativeheaders/privateELF/実起動拒否cleanup PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q560/result.md)。apps/data/nativeGUI/actualdisplay/全F2/threeOS・p005は保持。
+
+2026-10-01T23:30:23.236432+00:00 / ws109-q561-cleared: p002 uncleared。native PTY header/libutil・extattr adapter、実UFSのfd/path/link/コピー/権限/ERANGEと実PTY child入出力PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q561/result.md)。fullapps/nativeGUI/F2・threeOS/p005/physical gatesは保持。
