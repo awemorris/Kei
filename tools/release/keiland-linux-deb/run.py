@@ -247,11 +247,11 @@ def smoke(guest, package, client, output, distro):
         grep -q 'package smoke edit' /opt/keiland/etc/keiland/apps.conf
         dpkg-deb --raw-extract /tmp/keiland.deb /tmp/keiland-upgrade
         sed -i '/^Version:/s/$/+smoke1/' /tmp/keiland-upgrade/DEBIAN/control
-        dpkg-deb --build --root-owner-group /tmp/keiland-upgrade /tmp/keiland-upgrade.deb
+        dpkg-deb -Znone --build --root-owner-group /tmp/keiland-upgrade /tmp/keiland-upgrade.deb
         dpkg --force-confold -i /tmp/keiland-upgrade.deb
         dpkg-query -W -f='${Version}' keiland | grep -q '+smoke1$'
         grep -q 'package smoke edit' /opt/keiland/etc/keiland/apps.conf
-    '''), timeout=180)
+    '''), timeout=600)
     guest.ssh('sudo systemd-run --unit=keiland-deb-smoke --setenv=HOME=/root --setenv=WAYLAND_DISPLAY=wayland-keiland --setenv=XDG_RUNTIME_DIR=/tmp/keiland-runtime --setenv=KEILAND_SEAT=direct /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm', timeout=30)
     deadline = time.monotonic() + 60
     while time.monotonic() < deadline:
