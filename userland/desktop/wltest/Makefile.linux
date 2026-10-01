@@ -1,0 +1,5 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The standard Vulkan presentation client links only our Wayland and Vulkan frontends.
+KEILAND_WLTEST_SOURCES := userland/desktop/wltest/main.c userland/desktop/wltest/window.c \
+	userland/desktop/wltest/renderer.c
+$(eval $(call KEILAND_LINUX_PROGRAM,wltest,bin,$(KEILAND_WLTEST_SOURCES),libwayland-client.so libvulkan.so.1,-lm))

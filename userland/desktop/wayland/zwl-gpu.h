@@ -37,6 +37,10 @@ const char *zwl_gpu_global_interface(void);
 uint32_t zwl_gpu_global_version(void);
 /* Handles a GPU request: 0, EAGAIN for a pending fd, or a client-ending errno. */
 int zwl_gpu_request(struct zwl_object *factory, uint32_t opcode, const unsigned char *bytes, size_t size);
+/* Sends the OS-owned factory binding its initial format snapshot. */
+int zwl_gpu_bind(struct zwl_object *factory);
+/* Retires any OS-owned params or retained buffer descriptors. */
+void zwl_gpu_object_free(struct zwl_object *object);
 /* Takes any buffer-owned fence before a surface's commit moves its fences. */
 void zwl_gpu_commit(struct zwl_object *surface, struct zwl_object *buffer);
 /*

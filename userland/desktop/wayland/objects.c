@@ -559,6 +559,11 @@ object_free(
 	/* Window mode's Vulkan image goes with the buffer; a wl_shm buffer or pool drops its pool's memory. */
 	client = object->client;
 	zwl_import_destroy(object);
+
+	/* OS buffer descriptors remain alive until the final Vulkan image use has retired. */
+	zwl_gpu_object_free(object);
+
+	/* Shared-memory buffer storage returns its separate pool reference. */
 	if (object->shm != NULL) {
 		zwl_pool_put(object->shm->pool);
 		free(object->shm);

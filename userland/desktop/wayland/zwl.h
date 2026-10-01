@@ -108,6 +108,7 @@ enum zwl_kind {
 	ZWL_XDG_SURFACE,
 	ZWL_TOPLEVEL,
 	ZWL_FACTORY,
+	ZWL_GPU_OBJECT,
 	ZWL_SEAT,
 	ZWL_POINTER,
 	ZWL_KEYBOARD,
@@ -312,6 +313,8 @@ struct zwl_object {
 	uint64_t commit_order;
 	/* A buffer's Vulkan image for window mode. */
 	struct zwl_import *import;
+	/* The OS module retains buffer descriptors or protocol params until final object retirement. */
+	void *gpu_private;
 	/* A surface's window: place, stacking (map order, lowest at the bottom), virtual desktop and fullscreen state. */
 	unsigned mapped;
 	uint64_t map_order;

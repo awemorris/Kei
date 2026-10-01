@@ -66,6 +66,10 @@ zwl_gpu_request(
 	int descriptor;
 	int error;
 
+	/* zedBSD has no GPU protocol objects beyond the factory and ordinary buffers. */
+	if (factory->kind == ZWL_GPU_OBJECT)
+		return EPROTO;
+
 	/* Destroying a binding does not destroy buffers it previously created. */
 	if (opcode == 0 && size == 0) {
 		zwl_object_destroy(factory);
@@ -200,6 +204,34 @@ zwl_gpu_frame_fence_type(
 {
 	/* Succeeded: an OPAQUE_FD fence can be polled without resetting it. */
 	return VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT;
+}
+
+/*
+ * Preserves zedBSD's factory protocol without initial format events.
+ */
+int
+zwl_gpu_bind(
+	struct zwl_object *factory)
+{
+	/* zedBSD clients know the kernel image description without a format snapshot. */
+	(void)factory;
+
+	/* Succeeded: this factory needs no bind event. */
+	return 0;
+}
+
+/*
+ * Preserves zedBSD buffer retirement without Linux descriptor records.
+ */
+void
+zwl_gpu_object_free(
+	struct zwl_object *object)
+{
+	/* zedBSD imports retain their resources through common Vulkan image ownership. */
+	(void)object;
+
+	/* Succeeded: no additional OS-owned record needs retirement. */
+	return;
 }
 
 /* Takes a surface's next acquire fence and its nonzero generation. */

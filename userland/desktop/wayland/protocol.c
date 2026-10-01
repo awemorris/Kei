@@ -182,6 +182,7 @@ zwl_dispatch(
 		}
 
 		break;
+	case ZWL_GPU_OBJECT:
 	case ZWL_FACTORY:
 		error = zwl_gpu_request(object, opcode, bytes, size);
 		break;
@@ -619,6 +620,13 @@ bind_global(
 		if (object->kind == ZWL_OUTPUT) {
 			/* Publish the newly bound output's complete initial property snapshot. */
 			error = output_events(object);
+			if (error != 0)
+				return error;
+		}
+
+		/* GPU bindings receive the OS module's sampled buffer format snapshot. */
+		if (object->kind == ZWL_FACTORY) {
+			error = zwl_gpu_bind(object);
 			if (error != 0)
 				return error;
 		}
