@@ -28,6 +28,20 @@ Dependency graph: Phase の依存（context）→ q538-i01/ws105-p011。必要�
 
 WS105の既存Phaseは全てcleared、L1〜L9を照合してWS completed。Linux残りの実装なし。次の候補はMasterの既存fg010/デモ優先順、BUG-125/127のbounded window調査、F-065のFreeBSD/design§8（指定時）。予測のみ、次Queueは未選定・未承認で開始しない。GitHub publication/Issue close/Projectはdeferred、outboxに保持。
 
+### 2026-10-01 レビュー後の Outlook 追記
+
+予測のみ。新しい Queue は無し、q538 の承認/結果は保持。
+
+| 候補 | 理由 | readiness / 依存 |
+| --- | --- | --- |
+| [WS106 p001](ws106/phase001/phase.md) | test/probe/demo の配置を整理 | 対象30件、ime-probe所有/参照/契約の確定が必要 |
+| [WS107 p001](ws107/phase001/phase.md) | engine の source 所有と component 品質 | 新境界全文あり、配置/API/lifetime点検から |
+| [WS108 p001](ws108/phase001/phase.md) | Debian13/Ubuntu26.04 deb/CI | WS105 completed出力を利用、manifest/環境設計から |
+| [WS109 p001](ws109/phase001/phase.md) | Linux版の native FreeBSD15 移植 | F-065 FreeBSDをpromote、graphics/seat/ABI/license/環境調査から |
+
+相対順位は未指定。既存デモの priority を保持。F-065 の FreeBSD は新 WS へ、その他 design§8 の未指定分は deferred。
+Source/decision: [レビュー記録](reviews/2026-10-01-review.md)。GitHub/Project の反映は outbox pending。
+
 ## Outcome
 
 ws105-p011 **cleared**。

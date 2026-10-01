@@ -94,3 +94,13 @@ Future Work の詳細。実行の許可ではない。着手するときは新�
 [WS104](../ws104/ws.md) A1〜A6と[WS105](../ws105/ws.md) L1〜L9/最終conformanceを確認してcompleted。独立build/install、Vulkan backend/WSI、compositor、主なapp、gdm/logind、WiFi/WPA/ALSAをhostとown Debian13 QEMU guestで検証。[最終証拠](../history/ws105/q538/evidence/SHA256SUMS)。BUG-125/127はユーザー許可で未修正tracking、実機やMG006全体の完了とはしない。
 
 Linux分のpromotionは結果を保持して終了。FreeBSDはdeferredのまま、互換Qt6/GTK4・EGL/GLES/browser・ARM/musl/実機・PCM・explicit syncなどdesign§8は本WSの未達作業として増やさない。再考triggerはユーザーがFreeBSDまたは当該追加scopeへの着手を指定したとき。新しいWS/有限Queueの選定・承認が要る。
+
+
+## FreeBSD 分の promotion（2026-10-01 レビュー後）
+
+ユーザーが Linux版Keiland の FreeBSD15 移植を指定。FreeBSD 分を [WS109](../ws109/ws.md) へ promote（planning、Queue無し）。
+共通描画を再利用、audio/network/WiFi に FreeBSD backend。Linux 固有の dma-buf/sync ioctl、seat/VT/input、loader と license は先に点検する。
+上の Linux・FreeBSD の buffer/fence 表は当初の設計意図。FreeBSD15 の実 ABI/能力が同じと確認済みではない（WS109 p001）。
+Linux の completed と既知 bug の扱いを保持。互換 Qt/GTK、EGL/GLES、ARM/musl/PCM 等の未指定 design§8 は deferred のまま。
+以前の FreeBSD deferred は当時の判断として保持し、この日付の promotion を現在の行き先とする。
+[レビューの出典](../reviews/2026-10-01-review.md)。implementation は有限 Queue の選定/承認後。

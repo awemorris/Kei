@@ -33,10 +33,17 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
   libvulkan）へ移す。移せない物は zedBSD の時だけ build される macro で囲む（Linux・FreeBSD の build では入らない）。evdev の ioctl は今は変えない。
 - **Keiland の OS の境界（2026-10-01 ユーザー「Linux移植を進めます」、[WS104](ws104/ws.md)・[WS105](ws105/ws.md)。WS104 の完了から効く）**:
   desktop（libkeiland・compositor）の OS に固有の code は OS ごとの C の source に分け、`<package>/zedbsd/<役割>-zedbsd.c`・`<package>/linux/<役割>-linux.c`、
-  Linux と FreeBSD で共有する仕組みは `<package>/<仕組み>/<役割>-<仕組み>.c` に置く。共通の source は `<uapi/...>`・`"userland/base/..."` を include せず、
+  Linux と FreeBSD で共有する仕組みは `<package>/<仕組み>/<役割>-<仕組み>.c` に置く。FreeBSD15 の新しい backend は `<package>/freebsd/<役割>-freebsd.c` に置く（WS109 の計画、未実装）。共通の source は `<uapi/...>`・`"userland/base/..."` を include せず、
   OS の macro の block は非常に細かい所だけ（今は `wayland/zwl-evdev.h` の 1 つ、ユーザー「非常に細かい部分ではマクロブロックで分けてよい」）。
   desktop の公開の header は `userland/desktop/keiland/`（`vulkan/`・EGL・GLES は OS の API として `include/libc/`）。install の path は `userland/desktop/paths.h` の macro。
   Linux の build は package ごとの `Makefile.linux`（zedBSD の build と完全に別、`make keiland-linux`）。確かめは `plan/tools/keiland-os-boundary/check.sh`（WS104 p008 で作る）。
+- **browser / libbrowser（2026-10-01 ユーザーレビュー）**: engine の source/private header/table/shader/生成器は `userland/desktop/libbrowser/` が所有し、
+  `userland/desktop/browser/` は libbrowser.so のコンポーネントを window/tab に包む main/shell/app data を所有する。
+  libbrowser は標準 Vulkan を使用可、Wayland の header/API/protocol と直接の link は public/private とも使用不可。
+  shell が Wayland events を抽象化した public input interface に変換する。全文の正本は [browser component](standards/browser-component.md)。
+  新しい mandatory rule と配置の置換であり、C coding-style の例外ではない。[WS107](ws107/ws.md) で移行予定、現配置の適合は未確認。
+- **test app の配置（2026-10-01 ユーザーレビュー）**: base/desktop の対象30件（mview/gpudemo を含む）を `userland/tests/` へ移す計画は [WS106](ws106/ws.md)。
+  対象表と package/config/install の契約を確定してから移動する。POSIX test utility は base に残す。
 - kernel の実装を userland の build の依存へ写さない。`mkfs` などの tool は単独で使える形を保つ。
 - base system の実装とライセンスの境界: [設計方針](master-design-policy.md)。
 - 外部 package（`userland/packages/`）はソースツリーへ取り込まず、tarball を取得・検証して patch する。ライセンスは

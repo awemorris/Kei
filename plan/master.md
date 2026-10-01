@@ -3,7 +3,7 @@
 <!-- awesome-plan-current:start -->
 Active Queue: なし（q538 finished、WS105 completed）
 Current Focused Goal: fg010 — デモ。fg012はWS104/WS105の受け入れを確認して達成（2026-10-01）。
-Next（2026-10-01 に更新）: WS104 completed（q515〜q522）、WS105 completed（q523〜q538、L1〜L9/最終conformance verified）。BUG-125/127は未修正tracking、GitHub公開/close/Projectはoutbox保留。次のQueueは未選定。既存のfg010/デモ優先順を保持、実機とQEMUの証拠を分ける。サブエージェントN=0。
+Next（2026-10-01 に更新）: WS104 completed（q515〜q522）、WS105 completed（q523〜q538、L1〜L9/最終conformance verified）。BUG-125/127は未修正tracking、GitHub公開/close/Projectはoutbox保留。次のQueueは未選定。レビューのWS106〜WS109をplanningで新設（実装未承認）。既存のfg010/デモ優先順を保持、実機とQEMUの証拠を分ける。サブエージェントN=0。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -37,13 +37,13 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 
 | Milestone | Objective | 受け入れの核 | 進捗 | Primary WS |
 | --- | --- | --- | --- | --- |
-| **MG001** 継続開発できる基盤 | O4, O5 | 文書化した環境で build でき、設計境界・規約・試験・制限を追跡できる | toolchain（WS021）・build tool（WS010）・x86 HAL の規約（WS023）は完了。文書（WS009）と試験資産の整理（WS026）が残る。vmunix の LTO（WS053）は完了 | WS009, WS010, WS021, WS023, WS026, WS047, WS053 |
+| **MG001** 継続開発できる基盤 | O4, O5 | 文書化した環境で build でき、設計境界・規約・試験・制限を追跡できる | toolchain（WS021）・build tool（WS010）・x86 HAL の規約（WS023）は完了。文書（WS009）と試験資産の整理（WS026）が残る。テスト配置の整理はWS106で計画。vmunix の LTO（WS053）は完了 | WS009, WS010, WS021, WS023, WS026, WS047, WS053, WS106 |
 | **MG002** UNIX アプリケーションの実行基盤 | O1 | process・memory・libc・loader/TLS の対応範囲を互換性台帳と代表アプリで確認できる | TLS（WS022）と外部 package の導入（WS032）は完了。base の utility の POSIX 化（WS043）は完了。POSIX 台帳（WS001）、アプリ導入（WS034）、sh（WS042）が進行中 | WS001, WS022, WS032, WS034, WS042, WS043, WS045, WS046, WS061 |
 | **MG003** 対象機へ導入して単独起動 | O2, O4 | 合意した機種・媒体でインストール後の単独起動と login を確認できる。実機と QEMU の証拠を分ける | インストーラ（WS019）と Intel Mac（WS020）は完了。4 機種の実機受け入れ（WS028）が残る | WS003, WS004, WS019, WS020, WS028 |
 | **MG004** データの保持とメモリ/ストレージの実用 | O1, O2 | 永続化、低メモリ時の進行、媒体世代、既定構成の性能を確認できる | swap（WS016）、UFS（WS024）、I/O・cache（WS025）は完了。実機の性能の一部は未測定。UFS の directory は 12 block まで育つ（WS054、完了） | WS016, WS024, WS025, WS054, WS057, WS058, WS059, WS060 |
 | **MG005** 一貫したネットワーク/サービス管理 | O1, O2, O3 | networkd・netconf・service の責務・設定・操作が一貫し、永続化と失敗後の復旧を確認できる | サービス（WS002）、net console（WS011）、service console（WS012）は完了。有線 LAN の常駐管理（WS005・WS033）が残る | WS002, WS005, WS011, WS012, WS033 |
-| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105 |
-| **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。WS105の独立/opt build・installはSupporting出力としてverified、MG007全体は未充足 | WS013, WS015 |
+| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105, WS107, WS109 |
+| **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。WS105の独立/opt build・installはSupporting出力としてverified、MG007全体は未充足 | WS013, WS015, WS108 |
 | **MG008** 最小 HAL の移植契約と異種機での実証 | O4 | HAL 契約・移植手順と異種/レトロ機での実証を公開する | source の所有の整理（WS018）と時間の単位（WS040）は完了。他 platform への反映（WS036、aarch64 を含む）と PowerPC（WS027）、rpi4 の開発環境（WS044）が残る | WS018, WS027, WS036, WS040, WS044 |
 | **MG009** AI 活用 OSS 開発の知見の公開 | O5 | 設計権限・レビュー・変更追跡・失敗からの回復の事例と根拠を公開する | 担う作業が未定義 | なし |
 
@@ -209,6 +209,10 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS103](ws103/ws.md) | MG006 | compositor を libvulkan だけにする（GPU の UAPI の直の ioctl を無くす）（2026-09-30 ユーザー「規則にして今移す」、規則は Guardrail） | completed | 2026-10-01 完了（p001〜p007、q508〜q514）: V1〜V4 を満たす（QEMU の Venus と 5330 の passthrough、単独の実機の起動は未実施）。Linux・FreeBSD の backend は F-065。試験は plan/tools/gpu-boundary |
 | [WS104](ws104/ws.md) | MG006 | Keiland の OS の境界の整理: desktop の公開の header を `userland/desktop/keiland/` へ、libkeiland と compositor の OS の部分を `zedbsd/` の module へ、install の path を macro に。zedBSD の振る舞いは変えない（2026-10-01 ユーザー「Linux移植を進めます」、WS105 の準備） | completed | q515〜q522 / A1〜A6 verified。全文規約と全必須回帰 PASS、Linux は WS105 へ |
 | [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | completed | L1〜L9/最終source conformance verified、q538 finished。Linux host/ownDebian13guest・zedBSD回帰、BUG-125/127は未修正trackingのユーザー許可。GitHub publication pending、次の実装なし |
+| [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | planning | p001 対象/参照/契約の確定、mview/gpudemo追加指定を反映。ime-probeは人間作業の調整。Queue無し |
+| [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | planning | p001 配置/API/品質の点検。既存.so linkを確認、新境界全文を登録。WS074の互換性目標/順は保持。Queue無し |
+| [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | planning | p001 manifest/architecture/環境/依存の設計（amd64案）。WS105出力を利用、WS106配置を反映。Queue無し |
+| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | planning | p001 graphics/ABI/seat/loader/licenseと検証環境の調査。F-065 FreeBSD分をpromote。Queue無し |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
@@ -258,6 +262,13 @@ N=0 になったら実装をまとめて計画（master・ws.md・Future Work・
 
 上に無い未完了の WS（WS004・005・007・009・014・017・026〜029・031・033・034・045〜047・061・082・083・088・096・097、予約の WS037〜039、保留の WS013・015）は順位を定めていない。
 
+### 新しいレビュー対象（2026-10-01）
+
+[WS106](ws106/ws.md)・[WS107](ws107/ws.md)・[WS108](ws108/ws.md)・[WS109](ws109/ws.md)を未順位の計画候補として追加。
+既存 fg010 と WS の相対順位を保持。レビューの列挙順を実行優先順位/Queue 許可に読み替えない。
+source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p101 を保持し、移行と同じ source/runner を並行編集しない。
+[出典・決定・未決](reviews/2026-10-01-review.md)。新 target と package manifest は p001 の設計で具体化する。
+
 ## Upcoming Work Outlook
 
 見込みであって、約束や実行許可ではない（2026-09-30 に整理）。
@@ -274,6 +285,10 @@ N=0 になったら実装をまとめて計画（master・ws.md・Future Work・
 | WS095（IME）p005〜: **一時的に人間が作業中** | — | ユーザーが戻すと言うまで |
 | WS098（IME のニューラル化）: 学習の corpus と license の判断から | IME の最後の仕上げ | WS095 の辞書の後 |
 | WS080: p001（ld.coff の設計） | デモ critical の後 | spec.md |
+| WS106 p001 | tests/ の対象30件と移動契約の確定 | 対象案とmview/gpudemo指定あり、ime-probe所有調整、Queue無し |
+| WS107 p001 | libbrowser/source所有・品質の整理 | 新境界規則、API v2/実sourceの点検から、Queue無し |
+| WS108 p001 | 2 distro の .deb/CI | Linuxbuild出力あり、manifest/環境/architectureの設計、Queue無し |
+| WS109 p001 | native FreeBSD15 | F-065をpromote、Linux固有ABI/seatと環境/licenseの調査から、Queue無し |
 
 ## Tools
 

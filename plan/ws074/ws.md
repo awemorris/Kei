@@ -230,3 +230,14 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | 部品としての browser（2026-09-28） | ユーザー:「…libbrowser.soというファイルに将来的に分割できるようにして、コンポーネントにしましょう。ブラウザの構造体へのポインタをハンドルにして、Vulkanレンダリングターゲットを指定してイベントも送ってやるとと描画してくれて、Wayland依存はない、みたいなのがいいと思います！これはいきなり実現しなくても、徐々にそういう設計に変えていきましょう。」→ [WS074 design §19](ws074/design.md)（engine と shell の分離、不透明な handle、Vulkan の描画の先、将来の libbrowser.so） |
 | ブラウザのデモの目標と touch（2026-09-28） | ユーザー:「Googleの検索トップページと検索が、レイアウトを崩さずに表示できたら、ゴールにしましょう！限定的なCSSと、基本的なJS、WebGLなし、ビデオなしです。インタラクションはそれでいいです。」→ WS074 のデモの目標。「タッチについては…スクロールの操作みたいに余韻のあるやつとかも実装が必要で…HIDドライバ、Waylandコンポジタ、ブラウザの3つに渡る…計画は1カ所で…タッチのfpsが低い廉価な機種でも、ある程度数式で補間して利用できるようにすることを目標に」→ [WS081](ws081/ws.md) |
 | ブラウザのデモの目標の変更（2026-09-28） | Google の検索の結果の page のボットの判定（/sorry）の件でユーザー:「それはuser agentを正直に回答したせいであって、Chromeのものを使えばまず問題ないと思うのですが、amazon.co.jpに変更しましょう。」→ WS074 のデモの目標を **amazon.co.jp** に変更（Google は目標から外す）。p059 の Google の調査と form 等の Phase は流用 |
+
+
+## 2026-10-01 レビュー: libbrowser の source 所有
+
+ユーザーが engine source の libbrowser への移動、browser の window/tab shell、標準 Vulkan を使える Wayland無しの library、抽象入力 interface を指示。
+[WS107](../ws107/ws.md) と [境界全文](../standards/browser-component.md)へ反映。配置の旧設計を置き換える。
+WS074 は incomplete のまま。p099 の既存証拠/clearance、p100→p101 の順と互換性目標は保持する。
+次の WS074 の Queue は新規則と実 source locator/WS107 の移動状況を確認し、同じ source/runner の移行と並行しない。
+engine の new source は libbrowser が所有する設計で生成し、Wayland は shell の abstract input adapter に閉じる。
+p100/p101 の個別 Phase record は現在未作成（WS 表の予定行）。新しい implementation Queue や clearance はこの方針記録から発生しない。
+2026-10-01 / review-20261001-policy-ws074: 新設 WS107 と policy 改訂/影響をこの WS に保存。GitHub の WS comment は公開保留。

@@ -547,3 +547,15 @@ Vulkanレンダリングターゲットを指定してイベントも送って�
   `userland/desktop/browser/` の module の directory に残し、試験の path を変えない）。`/bin/browser` は `main.c` と `shell/` だけで、
   `<browser.h>` だけを使う（`--js`・`--dump=ast`・`--dump=code` は library の `browser_script_tool`）。2 つ目の使い手は
   `userland/base/tests/browser-probe`（`<browser.h>` と libc だけ、Wayland なしで page を CPU か engine の offscreen の GPU で PPM に描く）。
+
+
+## 20. source 所有の改訂（2026-10-01 ユーザーレビュー）
+
+§2 と §19 の engine source を browser に残す配置方針は [WS107](../ws107/ws.md) の新設により置換。
+engine の全 module/private header/table/shader/生成器は desktop/libbrowser、main/shell/app data は desktop/browser。
+public header の現所在は desktop/keiland/browser.h（WS104 の境界整理後）。
+実 source はまだ移動前。移動する scope と reference の台帳は WS107 p001、source 移動は承認後 p002。
+Wayland は library で利用不可、標準 Vulkan は利用可、shell が events を抽象 public API へ変換。
+[全文の追加規則](../standards/browser-component.md)を今後の WS074 の設計/生成/検証にも適用する。
+以前の p054〜p057 の結果は当時の成果として保存。WS074 の機能目標と p100→p101 は変更しない。
+2026-10-01 / review-20261001-policy-ws074: 配置の設計改訂、理由と新規則/WS107 の引渡しを記録。未実装。

@@ -14,6 +14,13 @@ zedBSD build/boot/GPU/forge/fence/glass/Settings/音量PASS。C1/C2/C9は元11PA
 
 GitHub body/comment/Issue close/Projectはoutbox pending、remote close/read-back未実施。commit WIP、pushなし。次Queue未選定。元harness失敗/補正と未実施のhardware/cooperative pause等はconformance/Phaseに記録。source変更後は影響範囲を再検証する。
 
+## 2026-10-01 レビュー後の planning follow-up
+
+q538 の承認/結果/WS105完了は変わらない。ユーザーの新しいレビューから [WS106](../ws106/ws.md)〜[WS109](../ws109/ws.md) を planning で新設。
+対象 test/demo は30件（mview/gpudemo追加）、browser の新 source 所有/Wayland無し規則を WS074 に反映、2 distro の deb/CI と native FreeBSD15 を計画。
+F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは deferred。既存 fg010/priority を保持、実装と Queue 開始は未実施。
+[決定・関連記録](../reviews/2026-10-01-review.md)。GitHub publication/outbox pending、commit WIP、push無し。
+
 ## Queue history（直近30、古い順）
 
 | Queue | Scope/outcome |

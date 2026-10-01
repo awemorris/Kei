@@ -39,3 +39,18 @@ A formatter or build never supplies that approval.
 | Network / audio public contracts | guest `network-probe.c`, `audio-probe.c`, Settings / bar UI | Simulated radios and HDA, real services; IP/DHCP outside Keiland, PCM feedback silent |
 
 These implement existing WS105 decisions, not additional project-wide style policy. The full C standard and formatter configuration remain unchanged.
+
+
+## Browser / libbrowser 境界の追加（2026-10-01）
+
+Authoritative full rule: [browser-component.md](browser-component.md)。ユーザー指示により WS074/WS107 に適用。
+簡約版無し、既存 C 全文/formatter の規則は変わらない。
+
+| 規則 | 検証の計画 | 現在の coverage / 限界 |
+| --- | --- | --- |
+| engine/source 所有と shell のみの app | tracked inventory、expanded Makefile source、private include の dependency | 現 engine source は browser に残る。WS107 p001/p002 で台帳/移動、p004 で最終確認。新 checker は未実装 |
+| libbrowser の Wayland 使用禁止 | public header standalone compile、include/link closure、ELF NEEDED/undefined/export | public header と直接名の走査だけ調査済み。完全な依存/実行検証は未実施 |
+| 標準 Vulkan と抽象入力 | Wayland 無しの第2 client の Vulkan 描画、shell adapter/複数 view の契約検証 | API v2 に既存の抽象がある。lifetime/failure/callback/reentrancy は full/manual review と実 behavior の確認が要る |
+
+WS106 では source 移動後の既存 Makefile/source checker の locator を更新する。WS108/109 の distro/FreeBSD checks は設計中、
+WS105 の Linux checks の合格を新 target の合格に転用しない。各 WS の near-final Phase で全文規約/実環境/tool version と限界を記録する。
