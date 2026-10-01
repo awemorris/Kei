@@ -69,3 +69,5 @@ ws108-q547-cessation: Ubuntu実行workerをSIGTERMで終了（Guest contextがow
 ## q547 uncleared 後の再設計 / ws108-q548-redesign
 
 upgrade fixtureのみdpkg-deb -Znoneで正規debを再構築し、変更Version/conffileを実update。配布debの圧縮は不変。ldd/public client/reinstall/raw extract/upgradeのSSH blockを600秒へ明示し、全CI45分は維持。最終両makeを既定auto/KVMで実行しexit0を確認、その最終debをfresh TCG guest両方で全smoke再実行。TCG内のnative buildはq547で2OS成功しており、guest build.py/production Cの不変hashとnative TCG/KVMの全payload40file SHA/mode一致を確認する。これにより未知の圧縮性能を反復測定せず、変えたruntime/upgrade checksを実証。remote jobは未実行、加速器差と実行分割を明記。最大60分、scope/P4/CI default TCG/2OS/prerequisiteは不変。再開: oldworker停止、修正source固定、両make/TCG runtime/positive release gatesが成功。
+
+ws108-q548-stage-race: Ubuntu KVM nativecompile成功後、並列install/install-sessionのmkdir失敗（cannot create directory）でexit2。staging親を先に作り両goalsを直列にするguest build.py修正。runtime内容/compiler/production sourceは不変、必要な2OS再実行を続ける。sourceのworkflow以外の重大判断無し、p004はfinal build.pyも全文確認する。

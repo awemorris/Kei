@@ -36,7 +36,10 @@ def main():
     env = dict(os.environ, LC_ALL='C.UTF-8')
     make = ['make', '-j4', '-f', 'userland/desktop/keiland-linux.mk', 'KEILAND_LINUX_BUILD=build/deb-native']
     run([*make, 'all'], timeout=1200, env=env)
-    run([*make, 'install', 'install-session', 'DESTDIR=' + str(stage)], env=env)
+    # Install goals share staging parents; serialize them even with -j4.
+    stage.mkdir(parents=True)
+    run([*make, 'install', 'DESTDIR=' + str(stage)], env=env)
+    run([*make, 'install-session', 'DESTDIR=' + str(stage)], env=env)
     prefix = stage / 'opt/keiland'
     for name in ('wlshm', 'wltest', 'vkdemo', 'mview', 'kuidemo'):
         (prefix / 'bin' / name).unlink()
