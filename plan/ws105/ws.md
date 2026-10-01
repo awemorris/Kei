@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q534 finished
-Resume point: p009 uncleared（q534）。次は依存を満たす既存 Phase。
+Queue: q535 finished
+Resume point: p005 cleared（q535）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -108,7 +108,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | cleared | WS104 の p001・p003 |
 | [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | cleared | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | cleared | p003 |
-| [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | uncleared | p004、p001 |
+| [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | cleared | p004、p001 |
 | [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | cleared | p005、WS104 完了 |
 | [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | cleared | p006 |
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | cleared | p007 |
@@ -360,3 +360,15 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
 
 [origin p009](phase009/phase.md) / [changed p005](phase005/phase.md)。依存 graphの追加edgeはp005修復→p009 retry。
+
+### q535 / ws105-p005（2026-10-01T10:49:48.408582+00:00）
+
+cleared。cleared（q535-i01、p005のlogind fd ownership修復）。sourceは今回のKMS WIP commit。caller supplied master fdはAUTH_MAGIC magic0でcurrent-masterを確かめ、SET_MASTER不要。非masterは拒否。libraryのdirect取得だけmaster_owned=1とし、release時のDROP_MASTERもその経路だけ。borrowed seat fdのdupはcloseし、callerのfd/master権限は保つ。compositorへのDRM ioctl追加なし、public API不変。
+
+- gcc14.2 / clang19.1.7 warning0、26ELF（24production+2fixture）/ source-sync / 331header PASS。clangformat19 / kms.cと新fixture style-check0、changed KMS ownership scopeを全文規約でreview。host DRMnone chain1MiB・interpose0 / optout・Wayland FIFO/fallback/resize/MAILBOX360frame PASS。
+- guestの既存display-probeはseat fd/directの両経路で赤・緑・青全6PNGの4点一致、oldSwapchainの置換と破棄後も表示、各exit0/PASS。gdm停止直後のtty1にはgettyが無くBIOS画面を復元したので、そのPNGも残し、getty@tty1を起動後に両経路を再確認、Linux login prompt復元PNGを目視。guest-only新fixture seat-fdはnonmaster拒否、両callerfileがlive、release後のcaller master維持PASS。
+- source3400a098のlogind seatを既存contextとしてgdm自動loginのuser keiでKeiland wallpaper / system barを表示、PNGを目視・提示。q534のSET_MASTER EACCES / frames0から回復した。LD_PRELOAD observerはstaged installで除去、production経路。p009のapp/VT/LogOutはこれから同じ条件で再検証する。
+- [証拠](../../history/ws105/q535/evidence/SHA256SUMS)。元build/ws105-p005-logind/とbuild/ws105-p009/kms-*を保持。実機未実施、host package追加0、toolchain / target source変更0。guestはp009再開のため稼働、gdm停止。q528/q530当時の結果とq534失敗は保持。GitHub未公開、pushなし。
+
+
+[Phase の結果](phase005/phase.md)、[Queue history](../history/queue-q535.md)。WS105 の受け入れは残りの Phase の確認を要する。

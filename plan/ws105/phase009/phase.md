@@ -102,3 +102,7 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 ## 再開の結果
 
 （実行の後に書く）
+
+## p005修復の依存確認（2026-10-01）
+
+q535 / source5012d324でKMS借用fdをSET_MASTERなしで扱い、gdm user keiの表示、root両経路の全3色 / console復元とnonmaster拒否 / callerfd維持をPASS。再開の前提を満たす。[p005](../phase005/phase.md)、[q535証拠](../../history/ws105/q535/evidence/SHA256SUMS)。p009は全7基準を変更せず再実行。q534は当時のunclearedを保持。

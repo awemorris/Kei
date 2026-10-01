@@ -1,0 +1,14 @@
+USER         PID COMMAND
+kei         5434 /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL CORNER zone x=1252 y=0 width=28 height=28
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL OSK zone kind=flick x=1252 y=772 size=28
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL OSK zone kind=qwerty x=0 y=772 size=28
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL DESKTOP start pid=5247 command=/opt/keiland/bin/files --desktop at_ms=188952
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL STARTUP step=output-display ms=0
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL STARTUP step=output-pipelines ms=5
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL VULKAN_ERROR operation=display-acquire result=-3
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL MODE_ERROR errno=5
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL IME lost pid=5246
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL CLEANUP client=1 objects=2 unread_fds=0
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: DRMOBS fd=18 request=641e result=-1 errno=13
+Oct 01 10:41:20 keiland-guest /usr/libexec/gdm-wayland-session[5232]: ZWL EXIT frames=0 error=5 cleanup_failed=1 pid=5232 input_events=0 seat_events=0 at_ms=188973

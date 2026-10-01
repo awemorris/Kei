@@ -1,0 +1,7 @@
+SETUP instance result=0
+DISPLAY name=Virtual-1 width=1280 height=800 refresh_mhz=74994
+SETUP device result=0
+DISPLAY color=ff0000
+DISPLAY color=00ff00
+DISPLAY color=0000ff
+display-probe: PASS

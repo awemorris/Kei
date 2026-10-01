@@ -2,10 +2,22 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q534](queue-q534.md)（ws105-p009 uncleared）
+Last finished Queue: [q535](queue-q535.md)（ws105-p005 cleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q535 / ws105-p005
+
+cleared（q535-i01、p005のlogind fd ownership修復）。sourceは今回のKMS WIP commit。caller supplied master fdはAUTH_MAGIC magic0でcurrent-masterを確かめ、SET_MASTER不要。非masterは拒否。libraryのdirect取得だけmaster_owned=1とし、release時のDROP_MASTERもその経路だけ。borrowed seat fdのdupはcloseし、callerのfd/master権限は保つ。compositorへのDRM ioctl追加なし、public API不変。
+
+- gcc14.2 / clang19.1.7 warning0、26ELF（24production+2fixture）/ source-sync / 331header PASS。clangformat19 / kms.cと新fixture style-check0、changed KMS ownership scopeを全文規約でreview。host DRMnone chain1MiB・interpose0 / optout・Wayland FIFO/fallback/resize/MAILBOX360frame PASS。
+- guestの既存display-probeはseat fd/directの両経路で赤・緑・青全6PNGの4点一致、oldSwapchainの置換と破棄後も表示、各exit0/PASS。gdm停止直後のtty1にはgettyが無くBIOS画面を復元したので、そのPNGも残し、getty@tty1を起動後に両経路を再確認、Linux login prompt復元PNGを目視。guest-only新fixture seat-fdはnonmaster拒否、両callerfileがlive、release後のcaller master維持PASS。
+- source3400a098のlogind seatを既存contextとしてgdm自動loginのuser keiでKeiland wallpaper / system barを表示、PNGを目視・提示。q534のSET_MASTER EACCES / frames0から回復した。LD_PRELOAD observerはstaged installで除去、production経路。p009のapp/VT/LogOutはこれから同じ条件で再検証する。
+- [証拠](../../history/ws105/q535/evidence/SHA256SUMS)。元build/ws105-p005-logind/とbuild/ws105-p009/kms-*を保持。実機未実施、host package追加0、toolchain / target source変更0。guestはp009再開のため稼働、gdm停止。q528/q530当時の結果とq534失敗は保持。GitHub未公開、pushなし。
+
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `5012d324296ed75de618a7975321e1dddaa9f14b`、GitHub 未公開・push なし。[q535](queue-q535.md)。
 
 ## 最新: 2026-10-01 q534 / ws105-p009
 
@@ -231,5 +243,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q532](queue-q532.md) | ws105-p007 cleared |
 | [q533](queue-q533.md) | ws105-p008 cleared |
 | [q534](queue-q534.md) | ws105-p009 uncleared |
+| [q535](queue-q535.md) | ws105-p005 cleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。
