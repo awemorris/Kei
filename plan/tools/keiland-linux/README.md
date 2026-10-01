@@ -62,3 +62,19 @@ timeout 180 sh plan/tools/keiland-linux/install-guest.sh build/keiland-linux/sta
 
 [zedBSD の検証手順](zedbsd-commands.md)（WS104 から移した）を参照する。Linux guest の boot 確認は SSH と PNG、zedBSD は `plan/tools/boot-test.sh`。
 QEMU serial / console log を受け入れ判定に使わない。
+
+## Linux build の確認
+
+```sh
+timeout 180 make -j64 keiland-linux
+timeout 180 make -j64 keiland-linux CC=clang KEILAND_LINUX_BUILD=build/keiland-linux-clang
+timeout 60 make keiland-linux-install DESTDIR="$PWD/build/keiland-linux/stage"
+timeout 30 sh plan/tools/keiland-linux/elf-check.sh build/keiland-linux/stage
+timeout 30 sh plan/tools/keiland-linux/makefile-sync.sh
+timeout 120 sh plan/tools/keiland-linux/header-check.sh
+```
+
+`elf-check.sh` は全 ELF の RUNPATH、library の SONAME、我々の NEEDED の存在を確認する。`KEILAND_PREFIX` を変えた build では同じ変数を export して確認する。
+`makefile-sync.sh` は package ごとの source token を双方向に比較し、zedbsd / linux / wpa と説明付き skip / only を扱う。
+`header-check.sh` は system header も含む `-M` を全 source に行い、system の Wayland / EGL / GLES の混入を検出する。`CC` と `KEILAND_LINUX_BUILD` を export して別 build を指定できる。
+`lib-smoke.c` は p002 の仮 backend と version 21 の確認用。p010 で本物の service backend を入れた後の動作は各 service の試験で確認する。

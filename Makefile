@@ -42,6 +42,7 @@ ZEDBSD_CONFIG ?= config.mk
 # menuconfig and help remain available before the first configuration is
 # saved. Every build target requires the target information from config.mk.
 ZEDBSD_CONFIG_OPTIONAL_GOALS := menuconfig help list-user-programs \
+	keiland-linux keiland-linux-install keiland-linux-install-session keiland-linux-clean \
 	menuconfig-host-test rtl8822b-firmware-fixture-cache \
 	intelax211-firmware-fixture-cache i915-firmware-fixture-cache \
 	download toolchain \
@@ -432,6 +433,17 @@ managed-lan-host-test:
 	 -o $(BUILD)/host-tests/managed-lan
 	@$(BUILD)/host-tests/managed-lan
 
+# The Linux desktop has independent rules and uses only the host compiler and headers.
+.PHONY: keiland-linux keiland-linux-install keiland-linux-install-session keiland-linux-clean
+keiland-linux:
+	$(MAKE) -f userland/desktop/keiland-linux.mk all
+keiland-linux-install:
+	$(MAKE) -f userland/desktop/keiland-linux.mk install
+keiland-linux-install-session:
+	$(MAKE) -f userland/desktop/keiland-linux.mk install-session
+keiland-linux-clean:
+	$(MAKE) -f userland/desktop/keiland-linux.mk clean
+
 .PHONY: validate-image-config
 validate-image-config:
 	@:
@@ -452,6 +464,10 @@ help:
  ' make patch Extract and patch every declared external input' \
  ' make toolchain-cache Install the pinned rev-0 LLVM cache (x86_64 Linux)' \
  ' make toolchain Build the toolchain' \
+ ' make keiland-linux Build Keiland for Linux with the host compiler' \
+ ' make keiland-linux-install Install Keiland under DESTDIR/opt/keiland' \
+ ' make keiland-linux-install-session Install the gdm session file' \
+ ' make keiland-linux-clean Remove Linux build outputs, retaining guest images' \
  ' make help Show this summary'
 
 list-targets:
