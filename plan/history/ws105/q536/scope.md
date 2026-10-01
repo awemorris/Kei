@@ -2,10 +2,10 @@
 
 # ws105-p009: gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`）
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q536 / q536-i01
+Queue: q534 / q534-i01
 依存: p008、p005（logind fdの修復）
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §5.1・§5.5・§5.6・§7.2（gdm）を読む**。`plan/tools/keiland-linux/` の変更は main が merge
 
@@ -101,31 +101,8 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 
 ## 再開の結果
 
-cleared（q536-i01）。p005のlogind fd修復5012d324を前提に、p009 source3400a098と入力lease補正8b0c6ee4で全7基準を検証。gcc14.2 / clang19.1.7 build warning0、26ELF（24本体+2fixture）、makefile-sync、331source header-check、変更Linux C / DBus fixture style-check0 PASS。公開keiland/OS API不変、compositor DRM ioctl0、toolchain変更なし。
-
-Linux QEMU Debian13 gdm専用guest: 自動loginはuser kei、XDG_SESSION_TYPE=wayland / ID171 / RUNTIME/run/user/1000、escaped logind session path、wallpaper / systembarをPNGで確認。HomeからTerminal起動とecho入力PASS。SwitchTo・chvtの両方で同一PID7648を維持、DRMと4evdevの5leaseすべてのPauseDevice/ResumeDevice、復帰画面 / pointer / echo switch-ok・chvt-ok PASS。kernel revokeがD-Bus通知より先に届く入力ENODEVはleaseを保持しEAGAINとする補正、後のResumeDevice fdへ交換を実測。途中の補正前検証は原ログに保持。
-
-V11の実観測: このsystemd257の両コマンドはtype=force（SwitchToをcooperative pauseと捏造しない）。DRM revocation後のCRTC restoreにPermissionDeniedが記録されるが、quiesce/output閉鎖→resume/swapchain再生成はPASS。pause-type ACK分岐はsource確認のみ、実guest通知未実施。外部deviceの実機hotplug / systemd再起動は未実施。
-
-自動loginを切り、QMPでkei/passwordを入力→Keiland userkei PID8493→Home LogOut→gdm greeterへ戻るPNG PASS。最初のpassword入力はUI遷移待ち不足で拒否、focus後同じpasswordで成功（元PNGとlogを保持）。gdm guest停止、overlay破棄。baseguestも最新版stageをinstallし、root KEILAND_SEAT=direct / --session --glassを起動、wallpaper / systembar、Home Terminal echo keiland-direct-ok PASS。SIGTERM frames62/error0/cleanup_failed0、console復元、guest停止。
-
-D-Bus実production clientの独立wire fixture: byte分割、call中2signal queue、各frameのSCM_RIGHTS分離/CLOEXEC/payload、返信serial、fd所有移管、missing right / 64KiB超過 / partialheader+right EOF / ancillary17fd truncationの拒否と全fd回収 PASS。同じ5caseのASan/UBSanも全PASS。
-
-zedBSD: disk-image warning0、OS boundary / GPU V1、dedicated-host / gpu-zedbsd-host ordinary+sanitize、boot-test loginPNG PASS。C1/C2/C9は全13PASS。forge-guest PASS（3imports / 120frame）、fence-guest PASS（600fences / 600frame / generation1）。全target-regression PASS。
-
-証拠 [q536 manifest](../../history/ws105/q536/evidence/SHA256SUMS)。PNG目視済み、代表画面は当チャットに表示。host追加package0、host画面/入力を使用せず、host /opt installなし。QEMUと実機を区別、実機未実施。BUG-125 / BUG-127は未修正tracking、前のq532 FAILを維持。GitHub publication / close はoutbox pending、pushなし。次は既存p010 network/ALSA、その後p011全文規約とWS最終受け入れ。
-
-
-実装 commit: `8b0c6ee4c6a26445503b67310d1bdc9f21fefe0b`（WIP）。終了 UTC: 2026-10-01T11:23:22.269889+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）
 
 ## p005修復の依存確認（2026-10-01）
 
 q535 / source5012d324でKMS借用fdをSET_MASTERなしで扱い、gdm user keiの表示、root両経路の全3色 / console復元とnonmaster拒否 / callerfd維持をPASS。再開の前提を満たす。[p005](../phase005/phase.md)、[q535証拠](../../history/ws105/q535/evidence/SHA256SUMS)。p009は全7基準を変更せず再実行。q534は当時のunclearedを保持。
-
-## q536 内部補正: revoke通知より先に届くread（2026-10-01）
-
-SwitchToの最初の検証は画面復帰PASSだが、kernel EVIOCREVOKEのENODEVがD-Bus PauseDeviceより先にreadへ届き、common入力recordがclose / ReleaseDeviceしていた。既存「pause中はleaseを保持しresumeのfdへ交換」の基準を満たすため、Linux入力moduleは既知logind所有fdのENODEVをprivate seat helperへ渡し、入力record fd=-1 / pausedを先に記録しEAGAINとしてreadを止める。後のPauseDevice/ResumeDevice/goneが同じleaseを扱う。directのENODEVは従来どおりclose。private helperはLinux内だけ、publicOS境界・common source・受け入れ・Queue scopeは不変。再検証は同じSwitchTo/chvt、各inputのpause/resume行、KEY/POINTER、PID継続。DRMのSwitchTo通知がforceという実観測を保持し、pause扱いを捏造しない。
-
-## q536 checkpoint（2026-10-01）
-
-source `8b0c6ee4 WIP`、gcc/clang warning0 / 26ELF / source-sync / 331header / changedC style0 PASS。D-Bus wire fixture普通+ASan/UBSan全5case PASS。gdm自動と手動userkei login、HomeTerminal、SwitchTo/chvtの5lease pause/resume / PID維持 / 復帰入力、LogOut→greeter、baseguest rootdirect / Terminal / SIGTERMerror0cleanup0とconsole復元PASS、両guest停止済み。PNG目視し当チャットへ表示。共通変更のtarget回帰は現在8/13PASS、forge/fence後にterminal判定。q536はactive、未だclearを記録しない。実SwitchTo/chvtはいずれもforce、cooperative ACKは実guest未観測。証拠 [manifest](../../history/ws105/q536/evidence/SHA256SUMS)。

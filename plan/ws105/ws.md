@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q535 finished
-Resume point: p005 cleared（q535）。次は依存を満たす既存 Phase。
+Queue: q536 finished
+Resume point: p009 cleared（q536）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -112,7 +112,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | cleared | p005、WS104 完了 |
 | [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | cleared | p006 |
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | cleared | p007 |
-| [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | uncleared | p008、p005修復 |
+| [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | cleared | p008、p005修復 |
 | [ws105-p010](phase010/phase.md) | libkeiland の Linux の backend（wpa_supplicant・Linux の interface・ALSA） | planned | p008 |
 | [ws105-p011](phase011/phase.md) | 規約の全文の見直し、境界の確かめの拡張、回帰（Linux と zedBSD）、install の文書 | planned | p001〜p010 |
 
@@ -372,3 +372,22 @@ cleared。cleared（q535-i01、p005のlogind fd ownership修復）。sourceは�
 
 
 [Phase の結果](phase005/phase.md)、[Queue history](../history/queue-q535.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### q536 / ws105-p009（2026-10-01T11:23:22.269889+00:00）
+
+cleared。cleared（q536-i01）。p005のlogind fd修復5012d324を前提に、p009 source3400a098と入力lease補正8b0c6ee4で全7基準を検証。gcc14.2 / clang19.1.7 build warning0、26ELF（24本体+2fixture）、makefile-sync、331source header-check、変更Linux C / DBus fixture style-check0 PASS。公開keiland/OS API不変、compositor DRM ioctl0、toolchain変更なし。
+
+Linux QEMU Debian13 gdm専用guest: 自動loginはuser kei、XDG_SESSION_TYPE=wayland / ID171 / RUNTIME/run/user/1000、escaped logind session path、wallpaper / systembarをPNGで確認。HomeからTerminal起動とecho入力PASS。SwitchTo・chvtの両方で同一PID7648を維持、DRMと4evdevの5leaseすべてのPauseDevice/ResumeDevice、復帰画面 / pointer / echo switch-ok・chvt-ok PASS。kernel revokeがD-Bus通知より先に届く入力ENODEVはleaseを保持しEAGAINとする補正、後のResumeDevice fdへ交換を実測。途中の補正前検証は原ログに保持。
+
+V11の実観測: このsystemd257の両コマンドはtype=force（SwitchToをcooperative pauseと捏造しない）。DRM revocation後のCRTC restoreにPermissionDeniedが記録されるが、quiesce/output閉鎖→resume/swapchain再生成はPASS。pause-type ACK分岐はsource確認のみ、実guest通知未実施。外部deviceの実機hotplug / systemd再起動は未実施。
+
+自動loginを切り、QMPでkei/passwordを入力→Keiland userkei PID8493→Home LogOut→gdm greeterへ戻るPNG PASS。最初のpassword入力はUI遷移待ち不足で拒否、focus後同じpasswordで成功（元PNGとlogを保持）。gdm guest停止、overlay破棄。baseguestも最新版stageをinstallし、root KEILAND_SEAT=direct / --session --glassを起動、wallpaper / systembar、Home Terminal echo keiland-direct-ok PASS。SIGTERM frames62/error0/cleanup_failed0、console復元、guest停止。
+
+D-Bus実production clientの独立wire fixture: byte分割、call中2signal queue、各frameのSCM_RIGHTS分離/CLOEXEC/payload、返信serial、fd所有移管、missing right / 64KiB超過 / partialheader+right EOF / ancillary17fd truncationの拒否と全fd回収 PASS。同じ5caseのASan/UBSanも全PASS。
+
+zedBSD: disk-image warning0、OS boundary / GPU V1、dedicated-host / gpu-zedbsd-host ordinary+sanitize、boot-test loginPNG PASS。C1/C2/C9は全13PASS。forge-guest PASS（3imports / 120frame）、fence-guest PASS（600fences / 600frame / generation1）。全target-regression PASS。
+
+証拠 [q536 manifest](../../history/ws105/q536/evidence/SHA256SUMS)。PNG目視済み、代表画面は当チャットに表示。host追加package0、host画面/入力を使用せず、host /opt installなし。QEMUと実機を区別、実機未実施。BUG-125 / BUG-127は未修正tracking、前のq532 FAILを維持。GitHub publication / close はoutbox pending、pushなし。次は既存p010 network/ALSA、その後p011全文規約とWS最終受け入れ。
+
+
+[Phase の結果](phase009/phase.md)、[Queue history](../history/queue-q536.md)。WS105 の受け入れは残りの Phase の確認を要する。

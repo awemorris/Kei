@@ -1,0 +1,64 @@
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: ZWL POPUP grab popup= ok
+log: ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1 ok
+log: ZWL PING pong client=1  ok
+log: POPUPPROBE ping serial=[0-9]+ answered ok
+log: POPUPPROBE configure menu x=60 y=60 width=360 height=180 ok
+log: POPUPPROBE focus menu ok
+check: (600,398) want 4a90e2 got 4a90e2 ok
+check: build/ws105-p009/criteria/c9-p076/menu.png 1280x800 PASS
+log: POPUPPROBE button menu state=1 x=100 y=130 ok
+log: POPUPPROBE configure submenu x=360 y=120 width=360 height=120 ok
+log: POPUPPROBE focus submenu ok
+check: (960,518) want e2a04a got e2a04a ok
+check: build/ws105-p009/criteria/c9-p076/submenu.png 1280x800 PASS
+log: POPUPPROBE choose submenu row=1 ok
+log: POPUPPROBE close menu ok
+log: POPUPPROBE focus window ok
+check: (600,398) want 2b3444 got 2b3444 ok
+check: build/ws105-p009/criteria/c9-p076/chosen.png 1280x800 PASS
+log: POPUPPROBE configure submenu x=-360 y=120 width=360 height=120 ok
+check: (540,518) want e2a04a got e2a04a ok
+check: build/ws105-p009/criteria/c9-p076/flipped.png 1280x800 PASS
+log: ZWL POPUP dismiss client= ok
+log: POPUPPROBE done submenu ok
+log: POPUPPROBE close menu ok
+check: (820,493) want 2b3444 got 2b3444 ok
+check: build/ws105-p009/criteria/c9-p076/dismissed.png 1280x800 PASS
+log: POPUPPROBE repositioned token=1 ok
+log: POPUPPROBE configure menu x=10 y=40 width=360 height=180 ok
+check: (470,343) want 4a90e2 got 4a90e2 ok
+check: build/ws105-p009/criteria/c9-p076/repositioned.png 1280x800 PASS
+log: POPUPPROBE close menu ok
+log: POPUPPROBE move ok
+log: ZWL GLASS request move surface= ok
+log: ZWL GLASS moved surface=[0-9]+ x=540 y=393 ok
+check: (740,548) want 2b3444 got 2b3444 ok
+check: build/ws105-p009/criteria/c9-p076/moved.png 1280x800 PASS
+log: POPUPPROBE resize bottom-right ok
+log: ZWL RESIZE start surface=[0-9]+ edges=10 width=400 height=300 ok
+log: POPUPPROBE configure window width=[0-9]+ height=[0-9]+ states=2 resizing=1 ok
+log: ZWL RESIZE end surface=[0-9]+ width=550 height=400 ok
+log: POPUPPROBE configure window width=550 height=400 states=1 resizing=0 ok
+check: (1080,778) want 2b3444 got 2b3444 ok
+check: build/ws105-p009/criteria/c9-p076/resized.png 1280x800 PASS
+log: POPUPPROBE resize left ok
+log: ZWL RESIZE end surface=[0-9]+ width=200 height=400 ok
+log: ZWL RESIZE settled surface=[0-9]+ x=890 y=393 width=200 height=400 ok
+check: (990,778) want 2b3444 got 2b3444 ok
+check: build/ws105-p009/criteria/c9-p076/narrowed.png 1280x800 PASS
+log: ZWL RESIZE end surface=[0-9]+ width=800 height=400 ok
+log: ZWL RESIZE settled surface=[0-9]+ x=290 y=393 width=800 height=400 ok
+check: (320,778) want 2b3444 got 2b3444 ok
+check: build/ws105-p009/criteria/c9-p076/widened.png 1280x800 PASS
+log: POPUPPROBE pong off ok
+log: POPUPPROBE window-menu ok
+log: POPUPPROBE ping serial=[0-9]+ ignored ok
+log: ZWL PING unresponsive client=1 ok
+log: POPUPPROBE pong on answered=[1-9] ok
+log: ZWL PING responsive client=1 ok
+log: ZWL GLASS dock surface=[0-9]+ via=request ok
+log: ZWL GLASS undock surface=[0-9]+ via=request ok
+log: ZWL GLASS minimize surface= ok
+p076: PASS

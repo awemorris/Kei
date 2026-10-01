@@ -104,3 +104,11 @@ app での確かめ（compositor の上、p006 の起動の手順。PNG をユ�
 ## 結果
 
 （実行の後に書く）
+
+## 実装前の接続の具体化（2026-10-01、Q1）
+
+公開keiland.hはrequest/updateがcallerを待たせない契約である。design §6の制御socket応答2秒上限は、watchのcommandをnonblocking送信しupdateでreplyを進めるdeadlineとして実装する。ATTACH用event socketは別に持つ。STATUS/SCAN_RESULTSとJOINのLIST→ENABLE→SELECTを小さな状態遷移で進め、1request / CHANGED_DONEを維持する。save_key/get_savedはdesign §6.2の独立socketでbounded同期requestを行う。サービス消失は所有socket/pathを片付けて1秒後に再試行。4096byte超のdatagramや不正responseは切り、古いreplyと次commandを混ぜない。
+
+`libkeiland/wpa/network-wpa.h`をprivate共有helperに追加する（Unix datagram所有、SSIDescape decode、profile照合）。linux/network-link-linux.cからも同じboundedclientを利用する。公開exports / keiland.h / appは変更しない。Linux stateのwired/WiFiを分類するprivatehelperはnetwork-link-linux.c内、/sysの無線識別とgetifaddrsを使う。public linkに新fieldを足さない。ALSAはcontrolC*をnonblock/CLOEXECで開き、infoの実min/max/channelを使ってvolumeとswitchを写し、eventをboundedでdrainしてstateを再読する。feedbackはconnectedなら0で無音、deviceの再接続は1秒間隔。
+
+追加fileは既存scopeのOS内接続を具体化し、product / publicAPI / 受け入れ条件は不変。新Cは全文規約・formatter19・style-checkとmanualreview、実hwsim/wpa/HDA userkei試験・Settings/volume操作PNG・gcc/clang warning0・ELF/header/sourceとtargetbuildで確認する。共通sourceを変えない予定。

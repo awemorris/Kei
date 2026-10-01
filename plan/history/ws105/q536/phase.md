@@ -4,10 +4,10 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q536 / q536-i01
 依存: p008、p005（logind fdの修復）
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §5.1・§5.5・§5.6・§7.2（gdm）を読む**。`plan/tools/keiland-linux/` の変更は main が merge
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §5.1・§5.5・§5.6・§7.2（gdm）を読む**。`plan/tools/keiland-linux/` の変更は main が merge
 
 ## 目的
 
@@ -68,7 +68,7 @@ sh $G ssh 'chvt 3'; sleep 5; sh $G ssh "chvt $VT"; sleep 5; sh $G screenshot $PW
 5. VT の切り替え: `SwitchTo`（pause）と `chvt`（force）の両方で、戻った後に Keiland の画面が戻り（`p009-back.png`・`p009-back2.png`）、pointer と key が届く。compositor の log に pause と resume の行。
    design §10 の V11 の結果（pause で何が起きたか）を記録。
 6. text console から root での起動（p006 の `seat-direct`、`KEILAND_SEAT=direct`）が今も動く（base の guest で）。
-7. 共通の file を変えたので zedBSD の回帰（design §9.2、[WS104 の commands.md](../../ws104/commands.md) の §1・§4・§5）。
+7. 共通の file を変えたので zedBSD の回帰（design §9.2、[WS104 の commands.md](../../../ws104/commands.md) の §1・§4・§5）。
 
 ## 結果
 
@@ -97,7 +97,7 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 
 再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
 
-[changed p005](../phase005/phase.md)。既存実装を保持、検証fixtureのLD_PRELOADを外して再開する。
+[changed p005](../../../ws105/phase005/phase.md)。既存実装を保持、検証fixtureのLD_PRELOADを外して再開する。
 
 ## 再開の結果
 
@@ -113,14 +113,14 @@ D-Bus実production clientの独立wire fixture: byte分割、call中2signal queu
 
 zedBSD: disk-image warning0、OS boundary / GPU V1、dedicated-host / gpu-zedbsd-host ordinary+sanitize、boot-test loginPNG PASS。C1/C2/C9は全13PASS。forge-guest PASS（3imports / 120frame）、fence-guest PASS（600fences / 600frame / generation1）。全target-regression PASS。
 
-証拠 [q536 manifest](../../history/ws105/q536/evidence/SHA256SUMS)。PNG目視済み、代表画面は当チャットに表示。host追加package0、host画面/入力を使用せず、host /opt installなし。QEMUと実機を区別、実機未実施。BUG-125 / BUG-127は未修正tracking、前のq532 FAILを維持。GitHub publication / close はoutbox pending、pushなし。次は既存p010 network/ALSA、その後p011全文規約とWS最終受け入れ。
+証拠 [q536 manifest](evidence/SHA256SUMS)。PNG目視済み、代表画面は当チャットに表示。host追加package0、host画面/入力を使用せず、host /opt installなし。QEMUと実機を区別、実機未実施。BUG-125 / BUG-127は未修正tracking、前のq532 FAILを維持。GitHub publication / close はoutbox pending、pushなし。次は既存p010 network/ALSA、その後p011全文規約とWS最終受け入れ。
 
 
 実装 commit: `8b0c6ee4c6a26445503b67310d1bdc9f21fefe0b`（WIP）。終了 UTC: 2026-10-01T11:23:22.269889+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
 
 ## p005修復の依存確認（2026-10-01）
 
-q535 / source5012d324でKMS借用fdをSET_MASTERなしで扱い、gdm user keiの表示、root両経路の全3色 / console復元とnonmaster拒否 / callerfd維持をPASS。再開の前提を満たす。[p005](../phase005/phase.md)、[q535証拠](../../history/ws105/q535/evidence/SHA256SUMS)。p009は全7基準を変更せず再実行。q534は当時のunclearedを保持。
+q535 / source5012d324でKMS借用fdをSET_MASTERなしで扱い、gdm user keiの表示、root両経路の全3色 / console復元とnonmaster拒否 / callerfd維持をPASS。再開の前提を満たす。[p005](../../../ws105/phase005/phase.md)、[q535証拠](../q535/evidence/SHA256SUMS)。p009は全7基準を変更せず再実行。q534は当時のunclearedを保持。
 
 ## q536 内部補正: revoke通知より先に届くread（2026-10-01）
 
@@ -128,4 +128,4 @@ SwitchToの最初の検証は画面復帰PASSだが、kernel EVIOCREVOKEのENODE
 
 ## q536 checkpoint（2026-10-01）
 
-source `8b0c6ee4 WIP`、gcc/clang warning0 / 26ELF / source-sync / 331header / changedC style0 PASS。D-Bus wire fixture普通+ASan/UBSan全5case PASS。gdm自動と手動userkei login、HomeTerminal、SwitchTo/chvtの5lease pause/resume / PID維持 / 復帰入力、LogOut→greeter、baseguest rootdirect / Terminal / SIGTERMerror0cleanup0とconsole復元PASS、両guest停止済み。PNG目視し当チャットへ表示。共通変更のtarget回帰は現在8/13PASS、forge/fence後にterminal判定。q536はactive、未だclearを記録しない。実SwitchTo/chvtはいずれもforce、cooperative ACKは実guest未観測。証拠 [manifest](../../history/ws105/q536/evidence/SHA256SUMS)。
+source `8b0c6ee4 WIP`、gcc/clang warning0 / 26ELF / source-sync / 331header / changedC style0 PASS。D-Bus wire fixture普通+ASan/UBSan全5case PASS。gdm自動と手動userkei login、HomeTerminal、SwitchTo/chvtの5lease pause/resume / PID維持 / 復帰入力、LogOut→greeter、baseguest rootdirect / Terminal / SIGTERMerror0cleanup0とconsole復元PASS、両guest停止済み。PNG目視し当チャットへ表示。共通変更のtarget回帰は現在8/13PASS、forge/fence後にterminal判定。q536はactive、未だclearを記録しない。実SwitchTo/chvtはいずれもforce、cooperative ACKは実guest未観測。証拠 [manifest](evidence/SHA256SUMS)。

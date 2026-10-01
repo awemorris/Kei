@@ -1,0 +1,8 @@
+USER         PID COMMAND
+SESSION UID USER       SEAT  LEADER CLASS         TTY  IDLE SINCE
+    194 102 Debian-gdm -     7985   manager-early -    no   -
+    195   0 root       -     8386   user          -    no   -
+    196   0 root       -     8391   manager-early -    no   -
+     c1 102 Debian-gdm seat0 7977   greeter       tty1 no   -
+
+4 sessions listed.

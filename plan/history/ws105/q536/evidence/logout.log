@@ -1,0 +1,37 @@
+USER         PID COMMAND
+Debian-+    8858 /usr/bin/gnome-shell
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL HOME close via=launch at_ms=1681964
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL FIRST_FRAME what=home-close frame=18 request_ms=1681964 ms=32
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL CLEANUP client=2 objects=19 unread_fds=0
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL DESKTOP gone client=2
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL IME lost pid=8540
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL CLEANUP client=1 objects=10 unread_fds=0
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8541]: ZFILES DONE reason=disconnected
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8540]: KEI-IME DONE
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: libvulkan-compat: restore CRTC failed: No such file or directory
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL OUTPUT closed
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL EXIT frames=18 error=0 cleanup_failed=0 pid=8493 input_events=8 seat_events=2 at_ms=1682021
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=102 pid=8835 comm="/usr/libexec/gnome-session-binary --autostart /usr")
+Oct 01 11:06:13 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.gnome.Shell.Screencast' requested by ':1.3' (uid=102 pid=8858 comm="/usr/bin/gnome-shell")
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.3' (uid=102 pid=8858 comm="/usr/bin/gnome-shell")
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.gnome.Shell.Notifications' requested by ':1.3' (uid=102 pid=8858 comm="/usr/bin/gnome-shell")
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.gnome.Shell.Notifications'
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.15' (uid=102 pid=8960 comm="/usr/libexec/gsd-housekeeping")
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.21' (uid=102 pid=9007 comm="/usr/libexec/gsd-sharing")
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Oct 01 11:06:14 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.gnome.Shell.Screencast'
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.gnome.ScreenSaver' requested by ':1.14' (uid=102 pid=8929 comm="/usr/libexec/gsd-power")
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.27' (uid=102 pid=9050 comm="/usr/libexec/mutter-x11-frames")
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.gnome.ScreenSaver'
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.31' (uid=102 pid=9082 comm="/usr/libexec/xdg-desktop-portal")
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.31' (uid=102 pid=9082 comm="/usr/libexec/xdg-desktop-portal")
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.gnome.Settings.GlobalShortcutsProvider' requested by ':1.33' (uid=102 pid=9106 comm="/usr/libexec/xdg-desktop-portal-gnome")
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.gnome.Settings.GlobalShortcutsProvider'
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.31' (uid=102 pid=9082 comm="/usr/libexec/xdg-desktop-portal")
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+Oct 01 11:06:15 keiland-guest /usr/libexec/gdm-wayland-session[8834]: dbus-daemon[8834]: [session uid=102 pid=8834 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'

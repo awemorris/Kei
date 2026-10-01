@@ -1,0 +1,36 @@
+USER         PID COMMAND
+kei         8493 /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
+SESSION  UID USER       SEAT  LEADER CLASS         TTY  IDLE SINCE
+    194  102 Debian-gdm -     7985   manager-early -    no   -
+    197 1000 kei        seat0 8425   user          tty2 no   -
+    198 1000 kei        -     8451   manager       -    no   -
+    199    0 root       -     8452   user          -    no   -
+    200    0 root       -     8467   manager-early -    no   -
+     c1  102 Debian-gdm seat0 7977   greeter       tty1 no   -
+
+6 sessions listed.
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8541]: ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8541]: ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=1613737 newest_age_ms=-1
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8541]: ZFILES MENU context-only
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8541]: ZFILES DESKTOP startup entered_ms=1613622 fonts=12 instance=35 window=22 present=43 app=1 canvas=0 draw=2 shown=30 menus=1
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8541]: ZFILES READY width=1280 height=766 token=-
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8540]: KEI-IME LANGUAGE id=direct
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL STARTUP step=output-pipelines ms=13
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL STARTUP step=output-swapchain ms=10
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL STARTUP step=output-targets ms=0
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL OUTPUT open width=1280 height=800 images=3 format=44
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL MODE window switch_ms=23 at_ms=1613636
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL GLASS desktops x=821 step=46 width=40
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL NETWORK icon x=1065 y=3 width=30 height=28
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL VOLUME icon x=1032 y=3 width=30 height=28
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL CLIENT client=2 fd=21
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL IME language=direct
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8540]: KEI-IME READY languages=2
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL DESKTOP role client=2 surface=8 x=0 y=34 width=1280 height=766
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL DESKTOP ack serial=2
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+Oct 01 11:05:05 keiland-guest /usr/libexec/gdm-wayland-session[8493]: ZWL DESKTOP drawn at_ms=1613768

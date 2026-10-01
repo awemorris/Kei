@@ -1,0 +1,123 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=365
+ZWL STARTUP step=vulkan-objects-arrow ms=40
+ZWL STARTUP step=wallpaper-picture ms=46
+ZWL STARTUP step=wallpaper ms=76
+ZWL STARTUP step=glyphs-text ms=12
+ZWL STARTUP step=glyphs-icons ms=3
+ZWL STARTUP step=glyphs-mark ms=20
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=35
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=517 at_ms=9923
+ZWL INPUT device=/dev/input/event5 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL STARTUP step=input ms=53 at_ms=9976
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=9976
+ZWL STARTUP step=socket ms=0 at_ms=9976
+ZWL CLIENT client=1 fd=17 ime=1
+ZWL IME started pid=645 client=1
+ZWL READY socket=/run/user/0/wayland-keiland width=1280 height=800 timeout_ms=18446744073709551615 pid=619
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL DESKTOP start pid=647 command=/opt/keiland/bin/files --desktop at_ms=9987
+ZWL STARTUP step=output-display ms=0
+KEI-IME LANGUAGE id=direct
+ZWL STARTUP step=output-pipelines ms=33
+ZWL STARTUP step=output-swapchain ms=5
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=38 at_ms=10026
+ZWL GLASS desktops x=821 step=46 width=40
+ZWL NETWORK icon x=1065 y=3 width=30 height=28
+ZWL VOLUME icon x=1032 y=3 width=30 height=28
+ZWL CLIENT client=2 fd=21
+ZWL IME language=direct
+KEI-IME READY languages=2
+ZWL DESKTOP role client=2 surface=8 x=0 y=34 width=1280 height=766
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZFILES DESKTOP configure x=0 y=34 width=1280 height=766
+ZWL DESKTOP ack serial=2
+ZFILES LOCATION kind=folder path=/root/Desktop items=0 error=0
+ZFILES DESKTOP layout saved=0 error=0
+ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=10354 newest_age_ms=-1
+ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+ZWL DESKTOP drawn at_ms=10427
+ZFILES MENU context-only
+ZFILES DESKTOP startup entered_ms=9997 fonts=11 instance=148 window=120 present=72 app=1 canvas=0 draw=5 shown=73 menus=16
+ZFILES READY width=1280 height=766 token=-
+ZWL HOME open via=launcher at_ms=13559
+ZWL FIRST_FRAME what=home-open frame=5 request_ms=13559 ms=17
+ZWL HOME opened apps=10 pages=1 page=1 at_ms=13840
+ZWL HOME icon name="Files" x=280 y=274
+ZWL HOME icon name="Notes" x=424 y=274
+ZWL HOME icon name="Settings" x=568 y=274
+ZWL HOME icon name="Terminal" x=712 y=274
+ZWL HOME icon name="PDF Viewer" x=856 y=274
+ZWL HOME icon name="Image Viewer" x=1000 y=274
+ZWL HOME icon name="Text Editor" x=280 y=426
+ZWL HOME icon name="Model viewer" x=424 y=426
+ZWL HOME icon name="Widget Demo" x=568 y=426
+ZWL HOME icon name="Log Out" x=712 y=426
+ZWL PERF 5001ms: passes=437 timeouts=419 | poll 89.0% work 14.4%
+ZWL PERF compose frames=15 draw_ms=44.33 (acquire 0.01 submit+present 43.97) frame_ms=45.98
+ZWL HOME launch name=Terminal pid=670
+ZWL HOME close via=launch at_ms=16169
+ZWL FIRST_FRAME what=home-close frame=17 request_ms=16169 ms=55
+ZWL CLIENT client=3 fd=22
+ZWL INSET create client=3 inset=20 toplevel=16
+ZWL EDIT create client=3 edit=24 toplevel=16
+ZWL BOUNDS client=3 surface=14 width=1256 height=690
+ZWL CONFIGURE client=3 surface=14 serial=3 width=0 height=0 fullscreen=0
+ZWL SEAT client=3 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=3 pointer=1 keyboard=1 touch=0
+ZWL HOME closed at_ms=16469
+ZWL IMPORT client=3 buffer=39 width=916 height=632 bytes=2347008
+ZWL IMPORT client=3 buffer=41 width=916 height=632 bytes=2347008
+ZWL IMPORT client=3 buffer=43 width=916 height=632 bytes=2347008
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZWL MENU commit client=3 menu=47 serial=1 items=30 generation=1
+ZWL MENU set client=3 place=48 menu=47
+ZWL MENU commit client=3 menu=47 serial=2 items=30 generation=2
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZWL TITLEBAR create client=3 titlebar=52 toplevel=16
+ZWL EDIT state client=3 edit=24 actions=0xff flags=0xd
+ZWL TITLEBAR commit client=3 titlebar=52 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL MAP client=3 surface=14 x=182 y=127
+ZWL HOME launched waited_ms=613 at_ms=16782
+ZWL GLASS launch surface=14 from=676,238 to=182,127 size=916x632
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZWL MENU bar client=3 surface=14 where=floating item=1 offset=127 top=75 width=55 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=2 offset=184 top=75 width=47 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=3 offset=233 top=75 width=55 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=4 offset=290 top=75 width=76 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=5 offset=368 top=75 width=53 height=44
+ZWL PERF 5018ms: passes=445 timeouts=424 | poll 84.9% work 11.9%
+ZWL PERF compose frames=21 draw_ms=27.43 (acquire 0.01 submit+present 26.99) frame_ms=28.58
+ZWL PING pong client=3 serial=8
+ZWL CLEANUP client=3 objects=37 unread_fds=0
+ZWL CLEANUP client=2 objects=19 unread_fds=0
+ZWL DESKTOP gone client=2
+ZTERM FAILED run=term operation=terminal_window_dispatch result=0 errno=32
+ZWL IME lost pid=645
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+ZFILES DONE reason=disconnected
+ZTERM TAB closed run=term id=1 count=0
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=62 error=0 cleanup_failed=0 pid=619 input_events=58 seat_events=60 at_ms=24741

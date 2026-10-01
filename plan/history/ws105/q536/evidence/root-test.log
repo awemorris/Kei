@@ -1,0 +1,6 @@
+Formatting '/home/awe/zedBSD-claude1/build/keiland-linux/run/overlay.qcow2', fmt=qcow2 cluster_size=65536 extended_l2=off compression_type=zlib size=8589934592 backing_file=/home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img backing_fmt=raw lazy_refcounts=off refcount_bits=16
+guest: ready
+USER         PID COMMAND
+root         619 /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
+root         671 /opt/keiland/bin/terminal
+guest: stopped
