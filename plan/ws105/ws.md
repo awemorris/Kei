@@ -410,3 +410,8 @@ zedBSD: Linuxだけの変更なのでPhase指定どおりdisk-image build warnin
 
 
 [Phase の結果](phase010/phase.md)、[Queue history](../history/queue-q537.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+
+### p011 の検証 tool 整理（2026-10-01）
+
+p005 の seat-fd と p009 の独立 D-Bus wire fixture を [Linux tools](../tools/keiland-linux/README.md) へ移した。両 Phase / archive に dated follow-up を追記、scope・内容・依存・過去の outcome は不変。最終 regression と全文 conformance は q538 で行う。window 操作の BUG-125 / BUG-127 はユーザーの既存 clear 許可で未修正 tracking、他の基準は保持。

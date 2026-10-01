@@ -129,3 +129,8 @@ SwitchToの最初の検証は画面復帰PASSだが、kernel EVIOCREVOKEのENODE
 ## q536 checkpoint（2026-10-01）
 
 source `8b0c6ee4 WIP`、gcc/clang warning0 / 26ELF / source-sync / 331header / changedC style0 PASS。D-Bus wire fixture普通+ASan/UBSan全5case PASS。gdm自動と手動userkei login、HomeTerminal、SwitchTo/chvtの5lease pause/resume / PID維持 / 復帰入力、LogOut→greeter、baseguest rootdirect / Terminal / SIGTERMerror0cleanup0とconsole復元PASS、両guest停止済み。PNG目視し当チャットへ表示。共通変更のtarget回帰は現在8/13PASS、forge/fence後にterminal判定。q536はactive、未だclearを記録しない。実SwitchTo/chvtはいずれもforce、cooperative ACKは実guest未観測。証拠 [manifest](evidence/SHA256SUMS)。
+
+
+## 2026-10-01 p011 の記録整理による検証 tool の移動
+
+継続利用する `dbus-wire.c / dbus-wire.py` を `plan/tools/keiland-linux/` へ移した。内容は同一、公開 API・依存・受け入れ・過去の Queue outcome は不変。最終 source の再検証は [p011](../q538/phase.md) / [q538](../../queue-q538.md) に記録する。WS105 完了後はこの Phase の archive と [Linux tools](../../../tools/keiland-linux/README.md) が再開・参照先。

@@ -10,6 +10,7 @@
  * implicit acquire fences to the compositor's common ownership machinery.
  */
 #include "../compose.h"
+#include <inttypes.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <linux/dma-buf.h>
@@ -256,7 +257,7 @@ zwl_gpu_commit(
 			return;
 
 		/* A failed reservation inquiry ends this client before further GPU work. */
-		printf("ZWL IMPORT_ERROR client=%llu errno=%d\n", (unsigned long long)surface->client->number, saved_error);
+		printf("ZWL IMPORT_ERROR client=%" PRIu64 " errno=%d\n", (uint64_t)surface->client->number, saved_error);
 		(void)zwl_error(surface->client, surface->id, "cannot export acquire fence");
 		return;
 	}
@@ -276,7 +277,7 @@ zwl_gpu_commit(
 
 	/* Per-frame diagnostics expose the fence transfer without changing default behavior. */
 	if (surface->client->server->log_frames)
-		printf("ZWL ACQUIRE_FENCE client=%llu surface=%u generation=1\n", (unsigned long long)surface->client->number, surface->id);
+		printf("ZWL ACQUIRE_FENCE client=%" PRIu64 " surface=%u generation=1\n", (uint64_t)surface->client->number, surface->id);
 
 	/* Succeeded: common commit polling now owns the client's acquire fence. */
 	return;
@@ -845,7 +846,7 @@ gpu_protocol_error(
 	int error;
 
 	/* The common diagnostic prefix also counts pre-import validation failures. */
-	printf("ZWL IMPORT_ERROR client=%llu errno=%d\n", (unsigned long long)params->client->number, EINVAL);
+	printf("ZWL IMPORT_ERROR client=%" PRIu64 " errno=%d\n", (uint64_t)params->client->number, EINVAL);
 	error = zwl_error_code(params->client, params->id, code, reason);
 	if (error != 0)
 		return error;
@@ -904,7 +905,7 @@ gpu_create_buffer(
 	status = gpu_image(buffer, plane, width, height);
 	if (status != VK_SUCCESS) {
 		/* A failed import retires its independently created buffer and all partial resources. */
-		printf("ZWL IMPORT_ERROR client=%llu errno=%d\n", (unsigned long long)params->client->number, EIO);
+		printf("ZWL IMPORT_ERROR client=%" PRIu64 " errno=%d\n", (uint64_t)params->client->number, EIO);
 		zwl_object_destroy(buffer);
 
 		/* Immediate creation cannot return an invalid wl_buffer to the client. */
@@ -927,7 +928,7 @@ gpu_create_buffer(
 		zwl_import_set_alpha(buffer, 1U);
 
 	/* The imported resource and actual kernel allocation size share the target's diagnostic shape. */
-	printf("ZWL IMPORT client=%llu buffer=%u width=%u height=%u bytes=%llu\n", (unsigned long long)params->client->number, buffer->id, width, height, (unsigned long long)allocation_bytes);
+	printf("ZWL IMPORT client=%" PRIu64 " buffer=%u width=%u height=%u bytes=%" PRIu64 "\n", (uint64_t)params->client->number, buffer->id, width, height, (uint64_t)allocation_bytes);
 
 	/* Asynchronous construction announces its server-allocated new identity. */
 	if (opcode == 2U) {

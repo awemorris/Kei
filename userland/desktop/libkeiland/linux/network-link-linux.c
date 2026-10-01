@@ -10,6 +10,7 @@
  * Address acquisition remains the system's responsibility.
  */
 #include "../wpa/network-wpa.h"
+#include <inttypes.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <ifaddrs.h>
@@ -468,7 +469,7 @@ link_counter(
 	const char *field)
 {
 	char path[256];
-	unsigned long long bytes;
+	uint64_t bytes;
 	FILE *file;
 	int parsed;
 
@@ -477,7 +478,7 @@ link_counter(
 	file = fopen(path, "r");
 	if (file == NULL)
 		return 0;
-	parsed = fscanf(file, "%llu", &bytes);
+	parsed = fscanf(file, "%" SCNu64, &bytes);
 	(void)fclose(file);
 	if (parsed != 1)
 		return 0;

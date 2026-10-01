@@ -18,6 +18,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+/* Bounds each protocol or device wait with the same monotonic time units. */
+#define KMS_FLIP_TIMEOUT_NS UINT64_C(5000000000)
+
 /* The inquiry descriptor never owns master; initialized once and retained with process-lifetime mode handles. */
 static int kms_query_fd = -1;
 
@@ -881,11 +884,11 @@ kms_flip_wait(
 	for (;;) {
 		/* Preserves a finite completion deadline while bounding each nonblocking poll interval. */
 		elapsed = compat_time() - start;
-		if (elapsed >= 5000000000ULL)
+		if (elapsed >= KMS_FLIP_TIMEOUT_NS)
 			return VK_ERROR_SURFACE_LOST_KHR;
 
 		/* Rounds the remaining finite interval and caps each poll at the agreed 100 milliseconds. */
-		milliseconds = (int)((5000000000ULL - elapsed + 999999) / 1000000);
+		milliseconds = (int)((KMS_FLIP_TIMEOUT_NS - elapsed + 999999) / 1000000);
 		if (milliseconds > 100)
 			milliseconds = 100;
 

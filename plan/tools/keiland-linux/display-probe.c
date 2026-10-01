@@ -442,12 +442,12 @@ client_frame(
 	uint32_t index;
 
 	/* Reuses the rendering command buffer only after its prior frame completes. */
-	error = vkWaitForFences(probe->device, 1, &probe->fence, VK_TRUE, 5000000000ULL);
+	error = vkWaitForFences(probe->device, 1, &probe->fence, VK_TRUE, UINT64_C(5000000000));
 	if (error != VK_SUCCESS)
 		return error;
 
 	/* A finite acquire deadline exercises the private event queue's bounded release wait. */
-	error = vkAcquireNextImageKHR(probe->device, probe->swapchain, 5000000000ULL, probe->available, VK_NULL_HANDLE, &index);
+	error = vkAcquireNextImageKHR(probe->device, probe->swapchain, UINT64_C(5000000000), probe->available, VK_NULL_HANDLE, &index);
 	if (error != VK_SUCCESS)
 		return error;
 

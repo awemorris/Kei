@@ -15,6 +15,10 @@
 #include <string.h>
 #include <time.h>
 
+/* Bounds each protocol or device wait with the same monotonic time units. */
+#define SURFACE_POLL_SLICE_NS UINT64_C(100000000)
+#define SURFACE_INITIALIZE_TIMEOUT_NS UINT64_C(5000000000)
+
 static void surface_global(void *data, struct wl_registry *registry, uint32_t name, const char *interface, uint32_t version);
 static void surface_global_remove(void *data, struct wl_registry *registry, uint32_t name);
 static void surface_format(void *data, struct zwp_linux_dmabuf_v1 *object, uint32_t format);
@@ -530,7 +534,7 @@ compat_time(
 		return 0;
 
 	/* Returns one integer timebase for all private-queue deadlines. */
-	return (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
+	return (uint64_t)now.tv_sec * UINT64_C(1000000000) + (uint64_t)now.tv_nsec;
 }
 
 /*
@@ -559,7 +563,7 @@ compat_surface_progress(
 
 		/* An externally synchronized caller can release an image between finite ownership polls. */
 		milliseconds = 100;
-		if (timeout < 100000000ULL)
+		if (timeout < SURFACE_POLL_SLICE_NS)
 			milliseconds = (int)((timeout + 999999) / 1000000);
 
 		/* Never reads a host DRM descriptor on this path. */
@@ -1004,13 +1008,13 @@ surface_roundtrip(
 	while (surface->sync_done == 0) {
 		/* Preserves the original five-second deadline across unrelated protocol events. */
 		elapsed = compat_time() - start;
-		if (elapsed >= 5000000000ULL) {
+		if (elapsed >= SURFACE_INITIALIZE_TIMEOUT_NS) {
 			wl_callback_destroy(callback);
 			return -1;
 		}
 
 		/* Progresses only the private queue for the remaining bounded interval. */
-		error = compat_surface_progress(surface, 5000000000ULL - elapsed);
+		error = compat_surface_progress(surface, SURFACE_INITIALIZE_TIMEOUT_NS - elapsed);
 		if (error < 0) {
 			/* Only a still-pending sync callback remains owned by this wait. */
 			if (surface->sync_done == 0)

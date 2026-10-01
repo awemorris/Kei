@@ -16,6 +16,9 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+/* Bounds each protocol or device wait with the same monotonic time units. */
+#define CHAIN_RELEASE_TIMEOUT_NS UINT64_C(100000000)
+
 static VkResult chain_image_create(struct compat_swapchain *chain, uint32_t index, const VkSwapchainCreateInfoKHR *create);
 static void chain_free(struct compat_swapchain *chain);
 static void chain_gpu_free(struct compat_swapchain *chain);
@@ -1513,11 +1516,11 @@ chain_present(
 		while (surface->frame != NULL) {
 			/* The original callback deadline is never extended by unrelated events. */
 			elapsed = compat_time() - start;
-			if (elapsed >= 100000000ULL)
+			if (elapsed >= CHAIN_RELEASE_TIMEOUT_NS)
 				break;
 
 			/* Receives only WSI callbacks during the remaining pacing interval. */
-			progress = compat_surface_progress(surface, 100000000ULL - elapsed);
+			progress = compat_surface_progress(surface, CHAIN_RELEASE_TIMEOUT_NS - elapsed);
 			if (progress < 0)
 				return VK_ERROR_SURFACE_LOST_KHR;
 		}

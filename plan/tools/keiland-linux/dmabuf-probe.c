@@ -8,6 +8,7 @@
 /* A bounded test compositor that observes writer fences and actual DMA-BUF pixels. */
 #define _GNU_SOURCE
 #include <errno.h>
+#include <inttypes.h>
 #include <linux/dma-buf.h>
 #include <linux/sync_file.h>
 #include <poll.h>
@@ -380,7 +381,7 @@ probe_buffer_create(
 	wl_resource_set_implementation(created, &probe_buffer_impl, buffer, probe_buffer_free);
 
 	/* Reports the actual layout as durable V3 acceptance evidence. */
-	printf("IMPORT width=%u height=%u modifier=0x%llx offset=%u stride=%u\n", buffer->width, buffer->height, (unsigned long long)buffer->modifier, buffer->offset, buffer->stride);
+	printf("IMPORT width=%u height=%u modifier=0x%" PRIx64 " offset=%u stride=%u\n", buffer->width, buffer->height, (uint64_t)buffer->modifier, buffer->offset, buffer->stride);
 
 	/* Succeeded: the resource owns the imported image descriptor. */
 	return created;
@@ -933,7 +934,7 @@ probe_observe(
 		return -1;
 
 	/* Frame numbering starts at zero so the deterministic color pattern is N modulo three. */
-	printf("PROBE frame=%u pixel=0x%08x fences=%u waited_ms=%llu", probe_count, pixel, information.num_fences, (unsigned long long)waited);
+	printf("PROBE frame=%u pixel=0x%08x fences=%u waited_ms=%" PRIu64 "", probe_count, pixel, information.num_fences, (uint64_t)waited);
 	if (probe_size_log != 0)
 		printf(" width=%u height=%u", buffer->width, buffer->height);
 
@@ -959,7 +960,7 @@ probe_time(
 		return 0;
 
 	/* Returns nanoseconds without wall-clock adjustments. */
-	return (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
+	return (uint64_t)now.tv_sec * UINT64_C(1000000000) + (uint64_t)now.tv_nsec;
 }
 
 /* Retires the test display after any partial global or socket setup failure. */

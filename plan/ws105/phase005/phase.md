@@ -137,3 +137,8 @@ cleared（q535-i01、p005のlogind fd ownership修復）。sourceは今回のKMS
 
 
 実装 commit: `5012d324296ed75de618a7975321e1dddaa9f14b`（WIP）。終了 UTC: 2026-10-01T10:49:48.408582+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+
+## 2026-10-01 p011 の記録整理による検証 tool の移動
+
+継続利用する `seat-fd.c` を `plan/tools/keiland-linux/` へ移した。内容は同一、公開 API・依存・受け入れ・過去の Queue outcome は不変。最終 source の再検証は [p011](../phase011/phase.md) / [q538](../../history/queue-q538.md) に記録する。WS105 完了後はこの Phase の archive と [Linux tools](../../tools/keiland-linux/README.md) が再開・参照先。

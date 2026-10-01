@@ -359,7 +359,7 @@ chain_copy(
 		return error;
 
 	/* Bounds the real completion wait independently of the outer command timeout. */
-	error = vkWaitForFences(device, 1, &fence, VK_TRUE, 10000000000ULL);
+	error = vkWaitForFences(device, 1, &fence, VK_TRUE, UINT64_C(10000000000));
 	if (error != VK_SUCCESS)
 		return error;
 

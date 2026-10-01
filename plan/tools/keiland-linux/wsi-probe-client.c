@@ -15,6 +15,9 @@
 #include <vulkan/vulkan_wayland.h>
 #include <wayland-client.h>
 
+/* Bounds each protocol or device wait with the same monotonic time units. */
+#define CLIENT_NANOSECONDS_PER_SECOND UINT64_C(1000000000)
+
 /* One finite probe workload; all Vulkan and Wayland handles retire before the process succeeds. */
 struct client_probe {
 	struct wl_display *display;
@@ -145,7 +148,7 @@ main(
 	for (frame = 0; frame < frames; frame++) {
 		/* Enforces the one original deadline across resize and rendering. */
 		measured_time = client_time();
-		if (measured_time - start >= (uint64_t)timeout * 1000000000ULL) {
+		if (measured_time - start >= (uint64_t)timeout * CLIENT_NANOSECONDS_PER_SECOND) {
 			error = VK_TIMEOUT;
 			exit_status = client_failed(&probe, error);
 
@@ -511,12 +514,12 @@ client_frame(
 	uint32_t index;
 
 	/* Reuses the rendering command buffer only after its prior frame completes. */
-	error = vkWaitForFences(probe->device, 1, &probe->fence, VK_TRUE, 5000000000ULL);
+	error = vkWaitForFences(probe->device, 1, &probe->fence, VK_TRUE, UINT64_C(5000000000));
 	if (error != VK_SUCCESS)
 		return error;
 
 	/* A finite acquire deadline exercises the private event queue's bounded release wait. */
-	error = vkAcquireNextImageKHR(probe->device, probe->swapchain, 5000000000ULL, probe->available, VK_NULL_HANDLE, &index);
+	error = vkAcquireNextImageKHR(probe->device, probe->swapchain, UINT64_C(5000000000), probe->available, VK_NULL_HANDLE, &index);
 	if (error != VK_SUCCESS)
 		return error;
 
@@ -684,7 +687,7 @@ client_time(
 		return 0;
 
 	/* Uses a wall-clock-independent timebase shared across all frames. */
-	return (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
+	return (uint64_t)now.tv_sec * CLIENT_NANOSECONDS_PER_SECOND + (uint64_t)now.tv_nsec;
 }
 
 /* Reports a failed frame or setup and retires every partially initialized application resource. */

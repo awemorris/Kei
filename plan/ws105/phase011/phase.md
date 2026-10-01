@@ -56,3 +56,10 @@ clean gcc build で libwayland と compositor の同名 `wayland` が `KEILAND_L
 全文規約 §3/§11 の公開関数コメントと直接 call return を補完し、§6 の Boolean expression を分解する。評価順、short circuit、error convention、所有権は保持する。errno は libc macro の `__errno_location()` 展開であり、値の取得として手動分類する。機械 AST は semantic review の補助で、代替ではない。
 
 継続利用する `dbus-wire.c` / `.py` と `seat-fd.c` を `plan/tools/keiland-linux/` に移した。試験内容は保持、README と Master に所在地を記録する。Phase archive の過去結果を改変しない。
+
+
+## q538 の window 操作の結果の扱い
+
+ユーザーの当チャットの move/resize の未修正 tracking と clear 許可を p011 の最終回帰にも適用する。C2 geometry と C9 p076 の resize 失敗は元の FAIL を保持して BUG-125 に追加し、原因や Linux 移植との因果を断定しない。BUG-127 は tracking を保持。これら以外の必須条件は通常どおり検証し、全13件PASSや修復済みとは記録しない。長い resize 調査はしない。
+
+[p005](../phase005/phase.md) と [p009](../phase009/phase.md) へ再利用 fixture の移動の記録と参照先を配布した。内容と過去の結果は不変。origin / foreign Phase / WS の event はそれぞれ outbox で保留する。

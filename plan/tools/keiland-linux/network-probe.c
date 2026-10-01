@@ -9,6 +9,7 @@
  * Checks the production network backend against the isolated simulated AP.
  */
 #include <keiland.h>
+#include <inttypes.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -147,7 +148,7 @@ probe(
 	wifi = 0;
 	wired = 0;
 	for (index = 0; index < count; index++) {
-		printf("network-probe: link %s up=%u running=%u ip=%s mtu=%u rx=%llu tx=%llu\n", links[index].name, links[index].up, links[index].running, links[index].address, links[index].mtu, (unsigned long long)links[index].received_bytes, (unsigned long long)links[index].sent_bytes);
+		printf("network-probe: link %s up=%u running=%u ip=%s mtu=%u rx=%" PRIu64 " tx=%" PRIu64 "\n", links[index].name, links[index].up, links[index].running, links[index].address, links[index].mtu, (uint64_t)links[index].received_bytes, (uint64_t)links[index].sent_bytes);
 		same = strcmp(links[index].name, "wlan0");
 		if (same == 0)
 			wifi = 1;
