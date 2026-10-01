@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q549 finished、WS108 p004 cleared）
-Current Focused Goal: fg015達成（WS108/P1〜P5）、fg010/fg013の未達を保持。
-Next（2026-10-02 に更新）: active Queueなし。WS106 ime-probeは所有回答待ち、次Queueは未選定。
+Active Queue: なし（q550 finished、WS109 p001 uncleared）
+Current Focused Goal: fg016 — WS109 FreeBSD15 native Keiland移植。fg015達成、fg010/fg013の未達を保持。
+Next（2026-10-02 に更新）: WS109 p001のD1driver license/D2FreeBSD起動方法/D3realgraphics・WiFi検証環境の回答後に再選定。WS106回答待ち保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -52,6 +52,8 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
 | **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新 |
+
+| **fg016** | Linux共通描画を再利用しFreeBSD15 native compositor/主要appとaudio/network/WiFi backendを実検証する（WS109 F1〜F5） | MG006 | [WS109](ws109/ws.md) | 2026-10-02 user「WS108の完了後、WS109の実行をお願いします。」。WS109自身の既存目標をfocusとする |
 
 デモの platform は amd64 の実機（Dell Latitude 5330、HDMI + USB、2026-09-28 ユーザーの回答）。開発の試験は QEMU（amd64）で行い、実機の証拠と分けて書く。以前の focus（fg004 インストーラの実機、
 fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残すが、現在は優先しない。
@@ -215,11 +217,16 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | q540 partial cleared、p002 uncleared（ime-probe回答待ち）、p003未実行。 |
 | [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | completed | B1〜B5 verified / q544、API v2/public Vulkan client/最終boot。GitHub deferred |
 | [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | completed | P1〜P5 / q549、2OS native deb＋QEMU runtime、CI/release定義。remote未実施 |
-| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | planning | p001 graphics/ABI/seat/loader/licenseと検証環境の調査。F-065 FreeBSD分をpromote。Queue無し |
+| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | incomplete | p001 uncleared/q550、D1〜D3回答待ち、image/guest準備・ABI調査済み |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
 ## WS の優先順位
+
+### WS109 の実行優先（2026-10-02）
+
+ユーザーのWS108後の実行指示をfg016と最優先へ同時反映。WS108 completedを確認、WS109の既存F1〜F5を対象とする。他WSの相対順位とWS106保留を維持。未知の前提/人間の判断を解消してからdependent Queueを選定。
+
 
 ### WS108 の実行優先（2026-10-02）
 
@@ -307,7 +314,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS106 p002 → p003 | 残るime-probe移動 → 全文規約・最終build/boot | p001 cleared、29件＋13files移動済み。ime-probe非競合回答が再開条件、次Queue未選定 |
 | WS107 | libbrowser/source所有・品質 | completed、q544/B1〜B5 verified |
 | WS108 | 2 distro native .deb/QEMU/CI release | completed / q549、remote未実行 |
-| WS109 p001 | native FreeBSD15 | F-065をpromote、Linux固有ABI/seatと環境/licenseの調査から、Queue無し |
+| WS109 p001 | native FreeBSD15 | q550 uncleared、license/起動方法/realdevice回答後のre-attempt候補。Queue無し |
 
 ## Tools
 

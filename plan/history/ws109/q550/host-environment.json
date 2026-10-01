@@ -1,0 +1,11 @@
+{
+  "qemu": "QEMU emulator version 10.0.11 (Debian 1:10.0.11+ds-0+deb13u1)",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "guest_state": "prepared; not launched",
+  "image_checksum": "PASS",
+  "memory_mib": 8192,
+  "ssh": "127.0.0.1 / disposable guest / public-key only",
+  "serial": "null; no log interpretation",
+  "gpu": "virtio-vga for console; not established as DRM/Vulkan display",
+  "wifi": "no real device provided; user question pending"
+}

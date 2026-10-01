@@ -36,3 +36,7 @@ system driver の GPL/LinuxKPI と Keiland 自身の source の license を区�
 - [FreeBSD handbook Wayland](https://docs.freebsd.org/en/books/handbook/wayland/): drm-kmod、非 root の seatd と runtime の配置。Keiland への互換性そのものは証明しない。
 
 source/header/ABI の固定版への突合せと device 検証は p001 未実行。ports/upstream source の license と interface を参照できても、外部 implementation を我々の source へ取り込まない。
+
+## 2026-10-02 q550の調査結果 / design候補の更新
+
+[対応表・取得の証拠・D1〜D3](../history/ws109/q550/survey.md)。初期15.xは15.1-RELEASE amd64 UFSに具体化（image hash verified）、native loaderにもRTLD_DEEPBINDがある。drm-kmod fixedBSDUAPIにはsync-file import/exportがあるがGPLv2を含み、systemstackの採用はユーザー判断待ち。QEMU virtioのconsole framebufferは実DRM/Vulkan表示の証明にならない。OSS mixerのみ（既存F4範囲、PCM追加なし）、AF_LINK/net80211/WPApath/Unixaddress、PTYlibutil、Filesextattrをnative境界で扱う候補。F1 environment/license未確定のため設計の確定とはしない。後続Phase scope/criteria変更は回答/実環境の証拠に基づき保存してからコメントする。

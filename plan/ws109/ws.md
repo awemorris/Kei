@@ -3,12 +3,12 @@
 # WS109: Linux 版 Keiland を FreeBSD 15 へ移植
 
 <!-- awesome-plan-current:start -->
-Status: planning
+Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（新規実装未承認）
-Resume point: p001 の調査・設計を選定する前に scope と検証環境を確定。
+Queue: なし（q550 finished / p001 uncleared）
+Resume point: p001/q550 uncleared、D1driver license/D2FreeBSD起動方法/D3realgraphics・WiFi環境の回答待ち。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -46,7 +46,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
-| [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | planning | WS105 output（context） |
+| [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | uncleared / q550 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | planning | p001 |
 | [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | planning | p002 |
 | [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | planning | p002 |
@@ -77,3 +77,9 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01 / review-20261001-planning: ユーザーのレビューコメントから WS を新設。
 範囲・受け入れ・Phase 案を保存、Master / Outlook と照合した。新規実装の Queue 承認は未取得。
 [決定の出典と関連 WS](../reviews/2026-10-01-review.md)。公開時にはこのイベントを WS に届ける（現在 outbox 保留）。
+
+2026-10-02 / ws109-q550-start: 上記ユーザー指示を受け、WS108完了後のq550でp001調査を開始。後続はdraftのまま、未決の製品/ライセンス/検証判断を黙って変えない。PhaseとWSのremote event publication pending。
+
+2026-10-02 / ws109-q550-survey: p001の[実source/公式ABI調査](../history/ws109/q550/survey.md)を保存。fixed15.1amd64 image/hashと未起動guest準備済み。D1drm GPLv2 /D2FreeBSD起動方法 /D3realWiFi・graphicsdeviceの判断待ち。F1未充足、p002〜p005はplanningを保つ。Linux描画のcopy実装、productionstub、WiFimockによる受け入れ置換は行わない。
+
+2026-10-01T18:41:24.330785+00:00 / ws109-q550-uncleared: p001は調査/準備を実施したがF1環境・license未確定でuncleared。WSはincomplete、p002〜p005はplanning。321 unique source/公式native ABIの対応表、FreeBSD15.1amd64 image/hash検証と未起動8GiB guest準備を保存。F1はdriver GPLv2利用・FreeBSD起動SSH/QMP例外・real graphics/WiFi検証環境が未確定。3質問への回答待ち、production実装/native build/runtime未実施。 [履歴](../history/queue-q550.md)・[調査](../history/ws109/q550/survey.md)。GitHub Phase/WS event publication pending。

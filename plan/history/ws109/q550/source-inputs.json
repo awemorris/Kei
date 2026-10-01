@@ -1,0 +1,50 @@
+{
+  "freebsd_src_commit": "e38a7085f3a8ecd317c947591fe42b5ca9ab317b",
+  "headers": {
+    "soundcard.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/sys/soundcard.h",
+      "sha256": "28b43cc344fef9cc4d39de451dcb108aa9219b8326f46b39d8a027190645ed00"
+    },
+    "mixer.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/lib/libmixer/mixer.h",
+      "sha256": "644bd41178e643af634af8304c25f38d7b2e6d4a0a7292f8858771b1579213b3"
+    },
+    "if_dl.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/net/if_dl.h",
+      "sha256": "892bc2dbb8c7e723ad56e551c738b60a4c3dce78704d7d8073bb713d06706ebc"
+    },
+    "if.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/net/if.h",
+      "sha256": "a3581df3e2fc5d9ae9b1f4f5b1479b158e5ffdb6f66c1573ef7d90352381cf97"
+    },
+    "event.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/sys/event.h",
+      "sha256": "861419ae0dfecfe838dca83469ea1df6a35d8fa4b0356842fd24dc1c2214aeb7"
+    },
+    "input.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/dev/evdev/input.h",
+      "sha256": "cd30f12e285f849dbff83f097118b5f3ab9cd3cc2f26d303ede0a4cfcf623a9b"
+    },
+    "vt.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/sys/consio.h",
+      "sha256": "ff3a73c9edc0ef19d3c4b971b8bda5461000546fcee63ed1321e6be29883c927"
+    },
+    "sockio.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/sys/sockio.h",
+      "sha256": "87357bc35eb60e3e81cea00d2b1b1c5b77b420960977604539fceef251b6f13b"
+    },
+    "un.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/sys/un.h",
+      "sha256": "c668b6bc3172d1be86f6d1a75306be422455dbb29f6355bc6a8155b30488bd6c"
+    },
+    "stat.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/sys/sys/stat.h",
+      "sha256": "c820822b30813cd3d21a3a3dda9d290c9f212f9ceccae7e4b12fa5ba3c38d96b"
+    },
+    "dlfcn.h": {
+      "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/e38a7085f3a8ecd317c947591fe42b5ca9ab317b/include/dlfcn.h",
+      "sha256": "5cabe1a56d2e2f711703ca35fce2a42dd6dd6d33c0dbd47b6024678d623c51d2"
+    }
+  },
+  "drm_kmod_commit": "11252e8b9074218848abe3195601acad655a2e26"
+}

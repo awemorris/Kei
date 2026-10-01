@@ -1,0 +1,30 @@
+{
+  "drm-66-kmod.Makefile": {
+    "url": "https://raw.githubusercontent.com/freebsd/freebsd-ports/main/graphics/drm-66-kmod/Makefile",
+    "sha256": "43b307442cc5f5da3090754e4ed9ea4780aced34960319515c7037aae41b466d"
+  },
+  "dma-buf.h": {
+    "url": "https://raw.githubusercontent.com/freebsd/drm-kmod/11252e8b9074218848abe3195601acad655a2e26/linuxkpi/bsd/include/uapi/linux/dma-buf.h",
+    "sha256": "cf57daf3eba9bdef3efbe31f0aa969c478839a39d5bd7b4fedc00090d6725d78"
+  },
+  "dma-buf.c": {
+    "url": "https://raw.githubusercontent.com/freebsd/drm-kmod/11252e8b9074218848abe3195601acad655a2e26/drivers/dma-buf/dma-buf.c",
+    "sha256": "90f07be02e02fc6120b06ff09b0943bf33f8f96574f099703fcc172546b44a4d"
+  },
+  "virtio_gpu.c": {
+    "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/releng/15.1/sys/dev/virtio/gpu/virtio_gpu.c",
+    "sha256": "98b77fff611e63b9012d41a2a19eea9d05838e01b3a38f0f6732e8e118425b55"
+  },
+  "dlfcn.h": {
+    "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/releng/15.1/include/dlfcn.h",
+    "sha256": "5cabe1a56d2e2f711703ca35fce2a42dd6dd6d33c0dbd47b6024678d623c51d2"
+  },
+  "nuageinit.lua": {
+    "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/releng/15.1/libexec/nuageinit/nuageinit",
+    "sha256": "78200b1c1dc9726b72596bb9990b8daa0740a83e3283a9fecf1680152b58ad5b"
+  },
+  "nuageinit.7": {
+    "url": "https://raw.githubusercontent.com/freebsd/freebsd-src/releng/15.1/libexec/nuageinit/nuageinit.7",
+    "sha256": "ce000d0270c07fcb95312fe9d1bc9d722b52c38b201b8fe45b73fad37e6924ac"
+  }
+}

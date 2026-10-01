@@ -1,0 +1,9 @@
+{
+  "release": "15.1-RELEASE",
+  "architecture": "amd64",
+  "filesystem": "ufs",
+  "url": "https://download.freebsd.org/releases/VM-IMAGES/15.1-RELEASE/amd64/Latest/FreeBSD-15.1-RELEASE-amd64-BASIC-CLOUDINIT-ufs.qcow2.xz",
+  "sha256": "e4ca4db889f8559c9b9dfcacc70405c038476f4b6d41649b152d3809a2ed9e1f",
+  "checked_at": "2026-10-02 JST",
+  "checksum_source": "https://download.freebsd.org/releases/VM-IMAGES/15.1-RELEASE/amd64/Latest/CHECKSUM.SHA256"
+}
