@@ -36,6 +36,8 @@ static pthread_key_t compat_thread_key;
 
 static const struct compat_name *compat_find_name(const char *name);
 static int compat_global_name(const char *name);
+static int compat_own_instance(VkInstance instance, const char *name);
+static int compat_own_device(const char *name);
 static void compat_thread_open(void);
 static struct compat_thread *compat_thread_get(void);
 
@@ -78,7 +80,11 @@ vkGetInstanceProcAddr(
 
 	/* Resolves our interceptors directly and forwards all other procedure queries. */
 	address = NULL;
-	if (entry != NULL && entry->kind == 'I') {
+	if (entry != NULL && entry->kind == 'O') {
+		/* Instance-extension procedures require the application's enabled bit. */
+		if (compat_own_instance(instance, pName) != 0)
+			address = entry->address;
+	} else if (entry != NULL && entry->kind == 'I') {
 		address = entry->address;
 	} else if (compat_backend.get_instance_proc != NULL) {
 		/* Obtains the backend's dispatch entry for an unmodified procedure. */
@@ -103,6 +109,7 @@ vkGetDeviceProcAddr(
 	const struct compat_name *entry;
 	PFN_vkVoidFunction address;
 	int differs;
+	struct compat_device *owner;
 
 	/* A device procedure requires a device and a name. */
 	if (device == VK_NULL_HANDLE || pName == NULL)
@@ -117,6 +124,23 @@ vkGetDeviceProcAddr(
 		/* Leaves the refused WSI query. */
 		compat_leave();
 		return NULL;
+	}
+
+	/* Own WSI names never reach backend dispatch, including instance-only names. */
+	if (entry != NULL && entry->kind == 'O') {
+		address = NULL;
+		owner = compat_device_get(device);
+		if (owner != NULL) {
+			/* Device procedures require a swapchain-enabled parent device. */
+			if (owner->swapchain != 0) {
+				if (compat_own_device(pName) != 0)
+					address = entry->address;
+			}
+		}
+
+		/* Leaves the completed WSI lookup without asking the backend about our handles. */
+		compat_leave();
+		return address;
 	}
 
 	/* Distinguishes the four device-level interceptors from instance procedures. */
@@ -379,4 +403,80 @@ compat_thread_get(
 
 	/* Succeeded: the calling thread owns its bounded backend call stack. */
 	return thread;
+}
+
+/* Classifies device-only WSI entry points for both procedure-query boundaries. */
+static int
+compat_own_device(
+	const char *name)
+{
+	/* Device-level swapchain procedures share one enabled extension. */
+	if (strcmp(name, "vkCreateSwapchainKHR") == 0)
+		return 1;
+
+	/* Device destruction retires only our own swapchain objects. */
+	if (strcmp(name, "vkDestroySwapchainKHR") == 0)
+		return 1;
+
+	/* Image enumeration belongs to the device-level swapchain extension. */
+	if (strcmp(name, "vkGetSwapchainImagesKHR") == 0)
+		return 1;
+
+	/* Both acquisition spellings share device swapchain enablement. */
+	if (strcmp(name, "vkAcquireNextImageKHR") == 0)
+		return 1;
+
+	/* Vulkan 1.1 acquisition remains owned by the same extension. */
+	if (strcmp(name, "vkAcquireNextImage2KHR") == 0)
+		return 1;
+
+	/* Queue presentation operates on device swapchain handles. */
+	if (strcmp(name, "vkQueuePresentKHR") == 0)
+		return 1;
+
+	/* Single-device group capabilities belong to the device-level extension. */
+	if (strcmp(name, "vkGetDeviceGroupPresentCapabilitiesKHR") == 0)
+		return 1;
+
+	/* Group surface modes are likewise queried on an enabled device. */
+	if (strcmp(name, "vkGetDeviceGroupSurfacePresentModesKHR") == 0)
+		return 1;
+
+	/* All other owned names require an instance-level enabled extension. */
+	return 0;
+}
+
+/* Applies instance-extension enablement without denying device extensions before device creation. */
+static int
+compat_own_instance(
+	VkInstance instance,
+	const char *name)
+{
+	struct compat_instance *owner;
+	unsigned bit;
+
+	/* Instance queries may expose device-extension procedures before device creation. */
+	if (compat_own_device(name) != 0)
+		return 1;
+
+	/* The physical rectangle query is part of the same device-extension contract. */
+	if (strcmp(name, "vkGetPhysicalDevicePresentRectanglesKHR") == 0)
+		return 1;
+
+	/* Other surface queries require the instance's surface enablement. */
+	bit = COMPAT_INSTANCE_SURFACE;
+	if (strcmp(name, "vkCreateWaylandSurfaceKHR") == 0)
+		bit = COMPAT_INSTANCE_WAYLAND;
+
+	/* Presentation support belongs to the Wayland-specific instance extension. */
+	if (strcmp(name, "vkGetPhysicalDeviceWaylandPresentationSupportKHR") == 0)
+		bit = COMPAT_INSTANCE_WAYLAND;
+
+	/* Requires the still-live instance and its application enablement bits. */
+	owner = compat_instance_get(instance);
+	if (owner == NULL)
+		return 0;
+
+	/* Returns whether this application requested the owning instance extension. */
+	return (owner->enabled & bit) != 0;
 }

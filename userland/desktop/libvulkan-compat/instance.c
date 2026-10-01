@@ -10,6 +10,7 @@
  */
 
 #include "compat.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -17,6 +18,8 @@
 static struct compat_instance *compat_instances;
 
 static VkResult instance_physicals(struct compat_instance *instance);
+static VkResult instance_prepare(const VkInstanceCreateInfo *create, VkInstanceCreateInfo *rewritten, const char ***names, unsigned *enabled);
+static void instance_functions(struct compat_instance *instance);
 
 /*
  * Creates a backend instance and retains its physical-device ownership.
@@ -28,21 +31,14 @@ vkCreateInstance(
 	VkInstance *pInstance)
 {
 	struct compat_instance *instance;
-	uint32_t index;
+	VkInstanceCreateInfo rewritten;
+	const char **names;
+	unsigned enabled;
 	VkResult error;
-	int wsi;
 
 	/* Requires the public creation inputs before using the backend. */
 	if (pCreateInfo == NULL || pInstance == NULL)
 		return VK_ERROR_INITIALIZATION_FAILED;
-
-	/* The chain-only phase does not offer WSI extensions. */
-	for (index = 0; index < pCreateInfo->enabledExtensionCount; index++) {
-		/* Rejects extensions whose handles would belong to the backend WSI. */
-		wsi = compat_wsi_extension(pCreateInfo->ppEnabledExtensionNames[index]);
-		if (wsi != 0)
-			return VK_ERROR_EXTENSION_NOT_PRESENT;
-	}
 
 	/* Enters the creation boundary and initializes the process-wide backend. */
 	compat_enter("vkCreateInstance");
@@ -52,16 +48,30 @@ vkCreateInstance(
 		return VK_ERROR_INCOMPATIBLE_DRIVER;
 	}
 
+	/* Removes our WSI requests and adds supported backend query extensions. */
+	names = NULL;
+	enabled = 0;
+	error = instance_prepare(pCreateInfo, &rewritten, &names, &enabled);
+	if (error != VK_SUCCESS) {
+		/* Leaves a refused extension request before allocating an instance owner. */
+		compat_leave();
+		return error;
+	}
+
 	/* Allocates the ownership record before creating the backend resource. */
 	instance = calloc(1, sizeof(*instance));
 	if (instance == NULL) {
 		/* Leaves a refused allocation without invoking the backend. */
+		free(names);
 		compat_leave();
 		return VK_ERROR_OUT_OF_HOST_MEMORY;
 	}
 
 	/* Creates the instance through the directly resolved backend entry point. */
-	error = compat_backend.create_instance(pCreateInfo, pAllocator, pInstance);
+	error = compat_backend.create_instance(&rewritten, pAllocator, pInstance);
+
+	/* Releases the request list after the backend has consumed it. */
+	free(names);
 	if (error != VK_SUCCESS) {
 		/* Releases the unused record and the call boundary on failure. */
 		free(instance);
@@ -72,8 +82,12 @@ vkCreateInstance(
 	/* Remembers the API version without changing the caller's backend handle. */
 	instance->handle = *pInstance;
 	instance->api_version = VK_API_VERSION_1_0;
+	instance->enabled = enabled;
 	if (pCreateInfo->pApplicationInfo != NULL && pCreateInfo->pApplicationInfo->apiVersion != 0)
 		instance->api_version = pCreateInfo->pApplicationInfo->apiVersion;
+
+	/* Resolves the unmodified instance procedures used by our WSI. */
+	instance_functions(instance);
 
 	/* Records which physical devices belong to this backend instance. */
 	error = instance_physicals(instance);
@@ -343,74 +357,71 @@ compat_extensions(
 	VkExtensionProperties *properties)
 {
 	VkExtensionProperties *available;
+	VkExtensionProperties owned[2];
+	struct compat_capabilities capabilities;
 	uint32_t total;
 	uint32_t index;
 	uint32_t kept;
 	uint32_t capacity;
+	uint32_t own_count;
 	VkResult error;
 	int wsi;
 
-	/* Missing global enumeration functions provide an empty successful list. */
-	if (physical == VK_NULL_HANDLE && compat_backend.instance_extensions == NULL) {
+	/* A missing backend offers no WSI or driver extensions. */
+	if (compat_backend.handle == NULL) {
 		*count = 0;
 		return VK_SUCCESS;
 	}
 
-	/* A physical-device query requires the backend's device enumeration function. */
-	if (physical != VK_NULL_HANDLE && compat_backend.device_extensions == NULL)
-		return VK_ERROR_INITIALIZATION_FAILED;
-
-	/* Named layer extension lists are not filtered or rewritten. */
+	/* Named layers retain their exact backend enumeration contract. */
 	if (layer != NULL) {
-		/* Selects the matching backend enumeration entry point. */
+		/* Selects the matching backend layer extension query. */
 		if (physical == VK_NULL_HANDLE) {
 			error = compat_backend.instance_extensions(layer, count, properties);
 		} else {
 			error = compat_backend.device_extensions(physical, layer, count, properties);
 		}
 
-		/* Preserves a backend error or an incomplete caller array. */
+		/* Preserves the backend's layer query status. */
 		if (error != VK_SUCCESS)
 			return error;
 
-		/* Succeeded: the caller has the layer's unchanged extension list. */
+		/* Succeeded: the named layer's extension list is unchanged. */
 		return VK_SUCCESS;
 	}
 
-	/* Measures the backend list before allocating its temporary storage. */
-	total = 0;
-	if (physical == VK_NULL_HANDLE) {
-		error = compat_backend.instance_extensions(NULL, &total, NULL);
-	} else {
-		error = compat_backend.device_extensions(physical, NULL, &total, NULL);
-	}
-
-	/* Does not expose an unmeasured extension list on failure. */
+	/* Obtains a complete temporary backend list before filtering its WSI. */
+	error = compat_backend_extensions(physical, NULL, &total, &available);
 	if (error != VK_SUCCESS)
 		return error;
 
-	/* Allocates one temporary list, including the valid empty-list case. */
-	available = calloc((size_t)total + 1, sizeof(*available));
-	if (available == NULL)
-		return VK_ERROR_OUT_OF_HOST_MEMORY;
-
-	/* Retrieves the actual backend properties. */
+	/* Initializes our small appended list independently of backend storage. */
+	memset(owned, 0, sizeof(owned));
+	own_count = 0;
 	if (physical == VK_NULL_HANDLE) {
-		error = compat_backend.instance_extensions(NULL, &total, available);
+		/* Advertises our own instance surface responsibilities. */
+		(void)snprintf(owned[0].extensionName, sizeof(owned[0].extensionName), "%s", VK_KHR_SURFACE_EXTENSION_NAME);
+		owned[0].specVersion = VK_KHR_SURFACE_SPEC_VERSION;
+		(void)snprintf(owned[1].extensionName, sizeof(owned[1].extensionName), "%s", VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
+		owned[1].specVersion = VK_KHR_WAYLAND_SURFACE_SPEC_VERSION;
+		own_count = 2;
 	} else {
-		error = compat_backend.device_extensions(physical, NULL, &total, available);
+		/* Offers a swapchain only for a physical device with actual image export capability. */
+		compat_physical_capabilities(physical, &capabilities);
+		if (capabilities.path != COMPAT_WSI_NONE) {
+			/* Advertises the swapchain implemented by this library. */
+			(void)snprintf(owned[0].extensionName, sizeof(owned[0].extensionName), "%s", VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+			owned[0].specVersion = VK_KHR_SWAPCHAIN_SPEC_VERSION;
+			own_count = 1;
+		}
 	}
 
-	/* Releases temporary storage on failed or unstable backend enumeration. */
-	if (error != VK_SUCCESS) {
-		free(available);
-		return error;
-	}
-
-	/* Keeps non-WSI entries in backend order within the caller's capacity. */
+	/* Keeps backend order and bounds each copied property by the caller's capacity. */
 	capacity = 0;
 	if (properties != NULL)
 		capacity = *count;
+
+	/* Copies only extensions whose handles do not belong to the backend's WSI. */
 	kept = 0;
 	for (index = 0; index < total; index++) {
 		/* Excludes backend surface, display and presentation ownership. */
@@ -418,7 +429,7 @@ compat_extensions(
 		if (wsi != 0)
 			continue;
 
-		/* Writes only slots the caller supplied. */
+		/* Writes only caller-owned slots. */
 		if (properties != NULL && kept < capacity)
 			properties[kept] = available[index];
 
@@ -426,24 +437,145 @@ compat_extensions(
 		kept++;
 	}
 
-	/* Releases the backend list after filtering. */
+	/* Appends each supported WSI extension after the non-WSI backend list. */
+	for (index = 0; index < own_count; index++) {
+		/* Writes an owned extension when the caller provided enough space. */
+		if (properties != NULL && kept < capacity)
+			properties[kept] = owned[index];
+
+		/* Counts the appended WSI extension in the public enumeration. */
+		kept++;
+	}
+
+	/* Releases the temporary backend list after both passes. */
 	free(available);
 
-	/* Reports the complete count without an output array. */
+	/* Reports the full count when the caller asked only for a measurement. */
 	if (properties == NULL) {
 		*count = kept;
 		return VK_SUCCESS;
 	}
 
-	/* Reports the number actually written when the caller supplied too few slots. */
+	/* Reports the number written when the caller's array was too small. */
 	if (kept > capacity) {
 		*count = capacity;
 		return VK_INCOMPLETE;
 	}
 
-	/* Succeeded: all retained extension properties fit the caller's array. */
+	/* Succeeded: every retained driver and owned WSI property fits. */
 	*count = kept;
 	return VK_SUCCESS;
+}
+
+/*
+ * Retrieves a complete backend extension list without applying public WSI filtering.
+ */
+VkResult
+compat_backend_extensions(
+	VkPhysicalDevice physical,
+	const char *layer,
+	uint32_t *count,
+	VkExtensionProperties **properties)
+{
+	VkExtensionProperties *available;
+	uint32_t total;
+	VkResult error;
+
+	/* Initializes failure outputs before selecting the direct backend query. */
+	*properties = NULL;
+	*count = 0;
+	total = 0;
+	if (physical == VK_NULL_HANDLE) {
+		/* A missing global enumerator has a valid empty list. */
+		if (compat_backend.instance_extensions == NULL)
+			return VK_SUCCESS;
+
+		/* Measures instance-level backend extensions. */
+		error = compat_backend.instance_extensions(layer, &total, NULL);
+	} else {
+		/* Requires a physical-device enumerator for a device query. */
+		if (compat_backend.device_extensions == NULL)
+			return VK_ERROR_INITIALIZATION_FAILED;
+
+		/* Measures physical-device backend extensions. */
+		error = compat_backend.device_extensions(physical, layer, &total, NULL);
+	}
+
+	/* Does not allocate an unmeasured backend list. */
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Allocates independent temporary storage including the empty-list case. */
+	available = calloc((size_t)total + 1, sizeof(*available));
+	if (available == NULL)
+		return VK_ERROR_OUT_OF_HOST_MEMORY;
+
+	/* Fills the selected backend's measured list. */
+	if (physical == VK_NULL_HANDLE) {
+		error = compat_backend.instance_extensions(layer, &total, available);
+	} else {
+		error = compat_backend.device_extensions(physical, layer, &total, available);
+	}
+
+	/* Releases a failed or unstable enumeration before returning its status. */
+	if (error != VK_SUCCESS) {
+		free(available);
+		return error;
+	}
+
+	/* Transfers ownership of the unfiltered list to the caller. */
+	*properties = available;
+	*count = total;
+
+	/* Succeeded: the caller owns all measured backend properties. */
+	return VK_SUCCESS;
+}
+
+/*
+ * Finds one exact extension name in a measured backend list.
+ */
+int
+compat_extension_has(
+	const VkExtensionProperties *properties,
+	uint32_t count,
+	const char *name)
+{
+	uint32_t index;
+	int differs;
+
+	/* Looks for the requested extension without treating a substring as support. */
+	for (index = 0; index < count; index++) {
+		/* Compares this measured backend extension's complete name. */
+		differs = strcmp(properties[index].extensionName, name);
+		if (differs == 0)
+			return 1;
+	}
+
+	/* Reports that this exact extension is absent. */
+	return 0;
+}
+
+/*
+ * Identifies the instance WSI extensions implemented by this library.
+ */
+unsigned
+compat_instance_extension(
+	const char *name)
+{
+	int differs;
+
+	/* Owns the generic surface interface. */
+	differs = strcmp(name, VK_KHR_SURFACE_EXTENSION_NAME);
+	if (differs == 0)
+		return COMPAT_INSTANCE_SURFACE;
+
+	/* Owns the Keiland Wayland surface interface. */
+	differs = strcmp(name, VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
+	if (differs == 0)
+		return COMPAT_INSTANCE_WAYLAND;
+
+	/* Reports that this extension is not part of our current WSI. */
+	return 0;
 }
 
 /* Populates immutable physical-device membership after successful instance creation. */
@@ -475,5 +607,162 @@ instance_physicals(
 		return error;
 
 	/* Succeeded: physical-device handles retain their instance owner. */
+	return VK_SUCCESS;
+}
+
+/* Resolves instance queries using the enabled API version's core or extension spelling. */
+static void
+instance_functions(
+	struct compat_instance *instance)
+{
+	/* Resolves the backend vkGetPhysicalDeviceProperties query. */
+	instance->properties = (PFN_vkGetPhysicalDeviceProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceProperties");
+
+	/* Chooses the enabled version of vkGetPhysicalDeviceFormatProperties2 rather than an unavailable promoted core entry. */
+	if (instance->api_version < VK_API_VERSION_1_1) {
+		instance->format_properties = (PFN_vkGetPhysicalDeviceFormatProperties2)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceFormatProperties2KHR");
+	} else {
+		instance->format_properties = (PFN_vkGetPhysicalDeviceFormatProperties2)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceFormatProperties2");
+	}
+
+	/* Chooses the enabled version of vkGetPhysicalDeviceImageFormatProperties2 rather than an unavailable promoted core entry. */
+	if (instance->api_version < VK_API_VERSION_1_1) {
+		instance->image_properties = (PFN_vkGetPhysicalDeviceImageFormatProperties2)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceImageFormatProperties2KHR");
+	} else {
+		instance->image_properties = (PFN_vkGetPhysicalDeviceImageFormatProperties2)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceImageFormatProperties2");
+	}
+
+	/* Resolves the backend vkGetPhysicalDeviceMemoryProperties query. */
+	instance->memory_properties = (PFN_vkGetPhysicalDeviceMemoryProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceMemoryProperties");
+
+	/* Resolves the backend vkGetPhysicalDeviceQueueFamilyProperties query. */
+	instance->queue_properties = (PFN_vkGetPhysicalDeviceQueueFamilyProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceQueueFamilyProperties");
+
+	/* Chooses the enabled version of vkGetPhysicalDeviceExternalSemaphoreProperties rather than an unavailable promoted core entry. */
+	if (instance->api_version < VK_API_VERSION_1_1) {
+		instance->semaphore_properties = (PFN_vkGetPhysicalDeviceExternalSemaphoreProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceExternalSemaphorePropertiesKHR");
+	} else {
+		instance->semaphore_properties = (PFN_vkGetPhysicalDeviceExternalSemaphoreProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceExternalSemaphoreProperties");
+	}
+
+	/* Chooses the enabled version of vkGetPhysicalDeviceExternalFenceProperties rather than an unavailable promoted core entry. */
+	if (instance->api_version < VK_API_VERSION_1_1) {
+		instance->fence_properties = (PFN_vkGetPhysicalDeviceExternalFenceProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceExternalFencePropertiesKHR");
+	} else {
+		instance->fence_properties = (PFN_vkGetPhysicalDeviceExternalFenceProperties)compat_backend.get_instance_proc(instance->handle, "vkGetPhysicalDeviceExternalFenceProperties");
+	}
+
+	/* Succeeded: the instance owns its backend query table. */
+	return;
+}
+
+/* Prepares a copied instance request without exposing our WSI to the backend. */
+static VkResult
+instance_prepare(
+	const VkInstanceCreateInfo *create,
+	VkInstanceCreateInfo *rewritten,
+	const char ***names,
+	unsigned *enabled)
+{
+	VkExtensionProperties *available;
+	const char **selected;
+	const char *name;
+	const char *internal[4] = {
+	    "VK_KHR_get_physical_device_properties2",
+	    "VK_KHR_external_memory_capabilities",
+	    "VK_KHR_external_semaphore_capabilities",
+	    "VK_KHR_external_fence_capabilities"};
+	uint32_t available_count;
+	uint32_t count;
+	uint32_t index;
+	uint32_t check;
+	uint32_t version;
+	unsigned own;
+	VkResult error;
+	int wsi;
+	int supported;
+	int differs;
+	int duplicate;
+
+	/* Measures supported backend queries independently of the rewritten public list. */
+	error = compat_backend_extensions(VK_NULL_HANDLE, NULL, &available_count, &available);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Allocates a request list with space for each internal Vulkan 1.0 query dependency. */
+	selected = calloc((size_t)create->enabledExtensionCount + 4, sizeof(*selected));
+	if (selected == NULL) {
+		/* Releases the capability list after a failed request allocation. */
+		free(available);
+		return VK_ERROR_OUT_OF_HOST_MEMORY;
+	}
+
+	/* Retains ordinary backend requests and records our own enabled WSI extensions. */
+	count = 0;
+	for (index = 0; index < create->enabledExtensionCount; index++) {
+		/* Classifies the requested instance extension by ownership. */
+		name = create->ppEnabledExtensionNames[index];
+		own = compat_instance_extension(name);
+		if (own != 0) {
+			*enabled |= own;
+			continue;
+		}
+
+		/* Refuses a backend WSI extension we do not implement. */
+		wsi = compat_wsi_extension(name);
+		if (wsi != 0) {
+			free(selected);
+			free(available);
+			return VK_ERROR_EXTENSION_NOT_PRESENT;
+		}
+
+		/* Retains the caller's unrelated backend extension request. */
+		selected[count] = name;
+		count++;
+	}
+
+	/* Selects the app's requested core version before adding promoted query extensions. */
+	version = VK_API_VERSION_1_0;
+	if (create->pApplicationInfo != NULL && create->pApplicationInfo->apiVersion != 0)
+		version = create->pApplicationInfo->apiVersion;
+
+	/* Enables supported Vulkan 1.1 queries as extensions for a Vulkan 1.0 app. */
+	if (version < VK_API_VERSION_1_1) {
+		/* Adds supported internal instance queries once each. */
+		for (index = 0; index < 4; index++) {
+			/* Skips a query extension absent from this backend. */
+			supported = compat_extension_has(available, available_count, internal[index]);
+			if (supported == 0)
+				continue;
+
+			/* Avoids duplicating an explicit app request for the same query. */
+			duplicate = 0;
+			for (check = 0; check < count; check++) {
+				/* Records an already selected query dependency. */
+				differs = strcmp(selected[check], internal[index]);
+				if (differs == 0) {
+					duplicate = 1;
+					break;
+				}
+			}
+
+			/* Appends the supported dependency only when it was not requested already. */
+			if (duplicate == 0) {
+				selected[count] = internal[index];
+				count++;
+			}
+		}
+	}
+
+	/* Releases measured capabilities after selecting the request's dependencies. */
+	free(available);
+
+	/* Copies the public creation request and changes only its extension list. */
+	*rewritten = *create;
+	rewritten->enabledExtensionCount = count;
+	rewritten->ppEnabledExtensionNames = selected;
+	*names = selected;
+
+	/* Succeeded: the caller owns the temporary backend request list. */
 	return VK_SUCCESS;
 }
