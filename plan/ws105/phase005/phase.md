@@ -2,7 +2,7 @@
 
 # ws105-p005: libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display）
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS105](../ws.md)
 Queue: q530 / q530-i01
@@ -117,3 +117,15 @@ cleared（q530-i01）。KMS completionのpollを各100ms以下、総期限5秒�
 
 
 実装 commit: `753b45a0fae9ba22d0ef6d0a7fa0f8a4698b951d`（WIP）。終了 UTC: 2026-10-01T08:31:05.223429+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+## q534 後の bounded 修復設計
+
+q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errno13 を返した。p005の「seatが渡すmaster fd」という出力を未達と判断してcurrent clearanceをinvalidated / uncleared（q528/q530は当時の結果を保持）。Q1のWS105完了までの委任された技術判断で、caller supplied fdはAUTH_MAGIC magic0の非破壊probe（current masterだけEINVAL）で検証し、SET_MASTER/DROP_MASTERはlibrary自身のdirect master取得だけに限定する。libraryはsupplied fdのdupとCRTCの復元だけを所有し、masterの制御はseat/logindへ返す。compositorにDRM ioctlは追加しない。影響はkms.cとprivate compat_displayのownership field。product/API/受け入れ目標は不変。
+
+再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
+
+[origin p009](../phase009/phase.md)、[q534](../../history/queue-q534.md)。
+
+## q535 修復の結果
+
+（実行の後に書く）

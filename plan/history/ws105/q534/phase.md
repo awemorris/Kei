@@ -4,10 +4,10 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q534 / q534-i01
-依存: p008、p005（logind fdの修復）
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §5.1・§5.5・§5.6・§7.2（gdm）を読む**。`plan/tools/keiland-linux/` の変更は main が merge
+依存: p008
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §5.1・§5.5・§5.6・§7.2（gdm）を読む**。`plan/tools/keiland-linux/` の変更は main が merge
 
 ## 目的
 
@@ -68,7 +68,7 @@ sh $G ssh 'chvt 3'; sleep 5; sh $G ssh "chvt $VT"; sleep 5; sh $G screenshot $PW
 5. VT の切り替え: `SwitchTo`（pause）と `chvt`（force）の両方で、戻った後に Keiland の画面が戻り（`p009-back.png`・`p009-back2.png`）、pointer と key が届く。compositor の log に pause と resume の行。
    design §10 の V11 の結果（pause で何が起きたか）を記録。
 6. text console から root での起動（p006 の `seat-direct`、`KEILAND_SEAT=direct`）が今も動く（base の guest で）。
-7. 共通の file を変えたので zedBSD の回帰（design §9.2、[WS104 の commands.md](../../ws104/commands.md) の §1・§4・§5）。
+7. 共通の file を変えたので zedBSD の回帰（design §9.2、[WS104 の commands.md](../../../ws104/commands.md) の §1・§4・§5）。
 
 ## 結果
 
@@ -90,15 +90,3 @@ PauseDeviceの処理をevdevの読みより先に行うようmainのOS poll done
 D-Busは64KiB message / 16FD / bounded signal queue、readableになってからでもMSG_DONTWAITで読む。recvmsgは固定header16bytesとそのmessageの残りだけを読み、次のmessageのfdを混ぜない。同期callは5秒、signalを保持し、壊れたmessageとoverflowでは所有fdを閉じて失敗。device fdはCLOEXEC。Linux新moduleは全文規約で作り、実gdmのuid/VT pause/force/resume/LogOutとrootdirectの回帰で確認。
 
 Pause の実装は既存 `zwl_compose_quiesce(server)` で in-flight frame の buffer / callback の保持を終えてから `zwl_compose_output_close` を呼ぶ。古い poll snapshot の frame event は complete 済みの状態で処理し、destroyしたswapchainの保持を残さない（既存APIの利用）。
-
-## q534 後の再開設計
-
-q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errno13 を返した。p005の「seatが渡すmaster fd」という出力を未達と判断してcurrent clearanceをinvalidated / uncleared（q528/q530は当時の結果を保持）。Q1のWS105完了までの委任された技術判断で、caller supplied fdはAUTH_MAGIC magic0の非破壊probe（current masterだけEINVAL）で検証し、SET_MASTER/DROP_MASTERはlibrary自身のdirect master取得だけに限定する。libraryはsupplied fdのdupとCRTCの復元だけを所有し、masterの制御はseat/logindへ返す。compositorにDRM ioctlは追加しない。影響はkms.cとprivate compat_displayのownership field。product/API/受け入れ目標は不変。
-
-再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
-
-[changed p005](../phase005/phase.md)。既存実装を保持、検証fixtureのLD_PRELOADを外して再開する。
-
-## 再開の結果
-
-（実行の後に書く）

@@ -1,0 +1,54 @@
+USER         PID COMMAND
+kei         2115 /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
+SESSION  UID USER SEAT  LEADER CLASS         TTY  IDLE SINCE
+      2 1000 kei  -     583    manager       -    no   -
+     37 1000 kei  seat0 2095   user          tty2 no   -
+     38    0 root -     2101   user          -    no   -
+      6    0 root -     1046   manager-early -    no   -
+
+4 sessions listed.
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL STARTUP step=output-display ms=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL STARTUP step=output-pipelines ms=13
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL VULKAN_ERROR operation=display-acquire result=-3
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL MODE_ERROR errno=5
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL IME lost pid=2048
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL CLEANUP client=1 objects=2 unread_fds=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2034]: ZWL EXIT frames=0 error=5 cleanup_failed=1 pid=2034 input_events=0 seat_events=0 at_ms=56766
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL PREFERENCES open
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL SEAT logind session=/org/freedesktop/login1/session/_336
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=vulkan-device ms=94
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=vulkan-objects-arrow ms=3
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=wallpaper-picture ms=9
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=wallpaper ms=37
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=glyphs-text ms=8
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=glyphs-icons ms=3
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=glyphs-mark ms=17
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL GLASS atlas cache-top=380 cells=273 faces=1
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=glyphs ms=29
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL GLASS ready text=1
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=compose ms=163 at_ms=57203
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL INPUT device=/dev/input/event5 kind=pointer abs=1
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=input ms=8 at_ms=57211
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL KEYMAP format=xkb_v1 errno=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=keymap ms=0 at_ms=57211
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=socket ms=0 at_ms=57211
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL CLIENT client=1 fd=17 ime=1
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL IME started pid=2085 client=1
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL READY socket=/run/user/1000/wayland-keiland width=1280 height=800 timeout_ms=18446744073709551615 pid=2071
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL CORNER zone x=1252 y=0 width=28 height=28
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL OSK zone kind=flick x=1252 y=772 size=28
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL OSK zone kind=qwerty x=0 y=772 size=28
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL DESKTOP start pid=2086 command=/opt/keiland/bin/files --desktop at_ms=57223
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=output-display ms=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL STARTUP step=output-pipelines ms=12
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL VULKAN_ERROR operation=display-acquire result=-3
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL MODE_ERROR errno=5
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL IME lost pid=2085
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL CLEANUP client=1 objects=2 unread_fds=0
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2071]: ZWL EXIT frames=0 error=5 cleanup_failed=1 pid=2071 input_events=0 seat_events=0 at_ms=57255
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2115]: ZWL PREFERENCES open
+Oct 01 10:39:08 keiland-guest /usr/libexec/gdm-wayland-session[2115]: ZWL SEAT logind session=/org/freedesktop/login1/session/_337
