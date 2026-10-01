@@ -1,0 +1,9 @@
+link lo up=1 running=1 loopback=1 ip=127.0.0.1 mask=255.0.0.0 mtu=65536 rx=7442031149 tx=7442031149 mac=00:00:00:00:00:00
+link eno1 up=1 running=0 loopback=0 ip= mask= mtu=1500 rx=0 tx=0 mac=90:1b:0e:ea:da:04
+link eno2 up=1 running=0 loopback=0 ip= mask= mtu=1500 rx=0 tx=0 mac=90:1b:0e:ea:da:05
+link enp94s0f0 up=1 running=1 loopback=0 ip=10.0.10.2 mask=255.255.0.0 mtu=1500 rx=94478246588 tx=882878131760 mac=6c:92:bf:40:7e:61
+link enp94s0f1 up=1 running=0 loopback=0 ip= mask= mtu=1500 rx=0 tx=0 mac=6c:92:bf:40:7e:62
+link tailscale0 up=1 running=1 loopback=0 ip=100.118.92.15 mask=255.255.255.255 mtu=1280 rx=55310934 tx=335534297 mac=00:00:00:00:00:00
+dns 1.1.1.1
+missing interface errno=19
+PASS actual native wired state, DNS, MAC, MTU, counters, no supplicant

@@ -23,7 +23,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#define WPA_CONTROL_DIRECTORY "/run/wpa_supplicant"
 #define WPA_DEADLINE_MS 2000U
 #define WPA_RETRY_MS 1000U
 
@@ -333,6 +332,8 @@ kwpa_open(
 	struct stat status;
 	char peer[108];
 	char selected[KEILAND_NETWORK_NAME_MAX];
+	const char *control_directory;
+	socklen_t address_length;
 	char *temporary;
 	size_t length;
 	int error;
@@ -345,9 +346,12 @@ kwpa_open(
 	connection->fd = -1;
 	selected[0] = '\0';
 
+	/* Uses the selected operating system's native control socket directory. */
+	control_directory = kwpa_control_directory();
+
 	/* Without an explicit interface, choose the first non-P2P control socket. */
 	if (interface == NULL) {
-		directory = opendir(WPA_CONTROL_DIRECTORY);
+		directory = opendir(control_directory);
 		if (directory == NULL)
 			return errno;
 		for (;;) {
@@ -361,7 +365,7 @@ kwpa_open(
 			length = strlen(entry->d_name);
 			if (length >= sizeof(selected))
 				continue;
-			(void)snprintf(peer, sizeof(peer), "%s/%s", WPA_CONTROL_DIRECTORY, entry->d_name);
+			(void)snprintf(peer, sizeof(peer), "%s/%s", control_directory, entry->d_name);
 			error = stat(peer, &status);
 			if (error != 0)
 				continue;
@@ -407,10 +411,14 @@ kwpa_open(
 
 	/* The local pathname stays owned until close, including failed connect. */
 	(void)snprintf(connection->path, sizeof(connection->path), "%s/socket", connection->directory);
-	memset(&address, 0, sizeof(address));
-	address.sun_family = AF_UNIX;
-	(void)snprintf(address.sun_path, sizeof(address.sun_path), "%s", connection->path);
-	error = bind(connection->fd, (struct sockaddr *)&address, sizeof(address));
+	error = kwpa_socket_address(&address, connection->path, &address_length);
+	if (error != 0) {
+		kwpa_close(connection);
+		return error;
+	}
+
+	/* Binds the private endpoint with its native address extent. */
+	error = bind(connection->fd, (struct sockaddr *)&address, address_length);
 	if (error != 0) {
 		error = errno;
 		kwpa_close(connection);
@@ -418,15 +426,21 @@ kwpa_open(
 	}
 
 	/* The selected daemon socket is the sole peer of this connection. */
-	written = snprintf(peer, sizeof(peer), "%s/%s", WPA_CONTROL_DIRECTORY, interface);
+	written = snprintf(peer, sizeof(peer), "%s/%s", control_directory, interface);
 	if (written < 0 || (size_t)written >= sizeof(peer)) {
 		kwpa_close(connection);
 		return EOVERFLOW;
 	}
 
 	/* Connecting a datagram socket does not wait for a daemon response. */
-	(void)snprintf(address.sun_path, sizeof(address.sun_path), "%s", peer);
-	error = connect(connection->fd, (struct sockaddr *)&address, sizeof(address));
+	error = kwpa_socket_address(&address, peer, &address_length);
+	if (error != 0) {
+		kwpa_close(connection);
+		return error;
+	}
+
+	/* Selects the native datagram peer without waiting for daemon replies. */
+	error = connect(connection->fd, (struct sockaddr *)&address, address_length);
 	if (error != 0) {
 		error = errno;
 		kwpa_close(connection);

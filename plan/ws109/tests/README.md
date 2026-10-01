@@ -28,3 +28,20 @@ Compile audio-retry-freebsd.c with the same production module; run as root throu
 The controller restores original /dev/mixer* permissions on all exits; child drops all privilege,
 verifies denial, then reconnects the same subscription through normal production retry logic.
 This test proves permission arrival on the QEMU HDA mixer, not physical device removal or WiFi.
+
+## Native network and WPA wire probes
+
+Compile network-native.c/network-carrier.c/network-radio-freebsd.c/network-wpa-contract.c with
+actual libkeiland/freebsd/network-link-freebsd.c and wpa/network-{wpa,config-wpa}.c,
+`-I. -Iuserland/desktop/keiland -std=gnu17 -Wall -Wextra -Werror`.
+network-native selected-interface absent reads real metadata; selected-interface denied must run
+already unprivileged (no supplementary groups/gid/uid65534). network-radio-freebsd runs in the
+owned guest only, requests already-UP vtnet0 state and compares both flag halves independently.
+network-carrier must start before an owned QMP net0 down/up; eight-second native sampling requires
+actual loss then recovery. Restore the virtual link even on controller error.
+network-wpa-contract.py requires root in the owned guest and an existing empty native control
+directory. Run with the absolute C probe path. It owns one socket, observes exact production
+commands, removes its own endpoint/config, and bounds client/server lifetime. All mock evidence
+is wire-only; actual WiFi scan/connect/disconnect/storage is retained for the user's real machine.
+network-address.c links the selected OS link module alone; actual private datagram round trip
+checks native address extent on Linux and FreeBSD without touching host supplicant directories.

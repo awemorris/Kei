@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q554 finished）
-Resume point: p004 uncleared; FreeBSDOSS audio実装/nativeHDA volume/mute/independent libmixer/外部変更refresh、unprivileged同一subscription再接続を実検証。音量86/86/offとdevice権限を復元。[result](../../history/ws109/q554/result.md)。network/WPA/actualWiFi・全F4/GUI統合は後続、WS incomplete。
+Queue: なし（q555 finished）
+Resume point: p004 uncleared; nativeAF_LINK/net80211/共有WPA実装、realvtnet/DNS/権限/flag保持/carrierdown→up、nativeUnix/mockWPAwire/期限とLinuxlibrary/link契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q555/result.md)。actualWiFi/fullF4・mainGUI/全source規約/3OS/実GPUは保持、WS incomplete。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -49,7 +49,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | uncleared / q553 | p001 |
 | [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | planning | p002 L1 verified output |
-| [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q554 | p002 L1 verified output |
+| [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
 | [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | planning | p002 L2、p003、p004 + hardware gates |
 
 
@@ -92,14 +92,18 @@ p001の環境/ABI調査を再attempt。実機の詳細確定/実表示/実WiFi�
 
 ws109-q551-native-environment: p001 native design saved; p002 L1/L2 scoped outputs clarify p003/p004 prerequisites and p005 final integration/physical gate. Every affected Phase own structural event saved; remote delivery pending.
 
-2026-10-01T19:21:04.454764+00:00 / ws109-q551-cleared: p001 cleared。FreeBSD15.1-p4 amd64 nativeClang19/headers/OSS/evdev/vtnet/pkg/licenseと後続native手順を確認。[environment](../../history/ws109/q551/environment.md)。実GPU/seat/fence/WiFiの実機関門はp003/p004/p005に保持、WS incomplete。
+2026-10-01T19:21:04.454764+00:00 / ws109-q551-cleared: p001 cleared。FreeBSD15.1-p4 amd64 nativeClang19/headers/OSS/evdev/vtnet/pkg/licenseと後続native手順を確認。[environment](../history/ws109/q551/environment.md)。実GPU/seat/fence/WiFiの実機関門はp003/p004/p005に保持、WS incomplete。
 
-2026-10-01T19:26:37.868096+00:00 / ws109-q552-uncleared: p002 uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](../../history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
+2026-10-01T19:26:37.868096+00:00 / ws109-q552-uncleared: p002 uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](../history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
 
 ws109-q553-redesign: same p002 L1 retry adds wire.c standard CMSG correction and real native/Linux fd contract checks; public interfaces/dependencies/WS acceptance unchanged. q552 failure preserved.
 
-2026-10-01T19:40:30.365350+00:00 / ws109-q553-cleared: p002 uncleared。L1 native52sources/sevenELF＋DESTDIR/publicheaders/nativeVulkan1MiBchain、actualfd/CLOEXEC/truncation/errno所有を検証。Linux library/chain/fullWaylandsuite回帰PASS。[result](../../history/ws109/q553/result.md)。fullF2のlibkeiland/compositor/apps統合はp003/p004後のL2、全source規約/zedBSD/physical gatesはp005に保持。
+2026-10-01T19:40:30.365350+00:00 / ws109-q553-cleared: p002 uncleared。L1 native52sources/sevenELF＋DESTDIR/publicheaders/nativeVulkan1MiBchain、actualfd/CLOEXEC/truncation/errno所有を検証。Linux library/chain/fullWaylandsuite回帰PASS。[result](../history/ws109/q553/result.md)。fullF2のlibkeiland/compositor/apps統合はp003/p004後のL2、全source規約/zedBSD/physical gatesはp005に保持。
 
 ws109-q554-detail: p004 audio-only nativeOSS implementation/probe selected from verified q553 L1 output; fullF4 network/WiFi and p002 L2 remain. No dependency/scope change to other Phases.
 
-2026-10-01T19:52:10.087368+00:00 / ws109-q554-cleared: p004 uncleared。FreeBSDOSS audio実装/nativeHDA volume/mute/independent libmixer/外部変更refresh、unprivileged同一subscription再接続を実検証。音量86/86/offとdevice権限を復元。[result](../../history/ws109/q554/result.md)。network/WPA/actualWiFi・全F4/GUI統合は後続、WS incomplete。
+2026-10-01T19:52:10.087368+00:00 / ws109-q554-cleared: p004 uncleared。FreeBSDOSS audio実装/nativeHDA volume/mute/independent libmixer/外部変更refresh、unprivileged同一subscription再接続を実検証。音量86/86/offとdevice権限を復元。[result](../history/ws109/q554/result.md)。network/WPA/actualWiFi・全F4/GUI統合は後続、WS incomplete。
+
+ws109-q555-detail: p004 nativeAF_LINK/net80211/WPA socket/DNS/credential shared mechanism selected from q553/q554 verified outputs. fullF4 actualWiFi and p002L2/p003/p005 acceptance preserved. Internal backend/private boundary changes; no changed foreign Phase criteria.
+
+2026-10-01T20:19:34.541983+00:00 / ws109-q555-cleared: p004 uncleared。nativeAF_LINK/net80211/共有WPA実装、realvtnet/DNS/権限/flag保持/carrierdown→up、nativeUnix/mockWPAwire/期限とLinuxlibrary/link契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q555/result.md)。actualWiFi/fullF4・mainGUI/全source規約/3OS/実GPUは保持、WS incomplete。

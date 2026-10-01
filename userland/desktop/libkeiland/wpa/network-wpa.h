@@ -12,6 +12,8 @@
 #define KEILAND_NETWORK_WPA_H
 #include <keiland.h>
 #include <stdint.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #define KWPA_REPLY_MAX 4096U
 
@@ -34,4 +36,8 @@ int kwpa_profile(char *reply, const char *ssid, unsigned *id);
 uint64_t kwpa_milliseconds(void);
 int kwpa_radio(const char *interface, unsigned enabled);
 void kwpa_links(struct keiland_network_state *state);
+const char *kwpa_control_directory(void);
+int kwpa_socket_address(struct sockaddr_un *address, const char *path, socklen_t *length);
+int kwpa_wireless(const char *interface);
+int kwpa_link_usable(const struct keiland_network_link *link);
 #endif

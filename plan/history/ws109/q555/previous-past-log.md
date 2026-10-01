@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q555](queue-q555.md)（WS109 p004 uncleared）
+Last finished Queue: [q554](queue-q554.md)（WS109 p004 uncleared）
 
-## 最新: q555 /WS109 p004
+## 最新: q554 /WS109 p004
 
-item cleared /Phase uncleared。nativeAF_LINK/net80211/共有WPA実装、realvtnet/DNS/権限/flag保持/carrierdown→up、nativeUnix/mockWPAwire/期限とLinuxlibrary/link契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q555/result.md)。actualWiFi/fullF4・mainGUI/全source規約/3OS/実GPUは保持、WS incomplete。
+item cleared /Phase uncleared。FreeBSDOSS audio実装/nativeHDA volume/mute/independent libmixer/外部変更refresh、unprivileged同一subscription再接続を実検証。音量86/86/offとdevice権限を復元。[result](../../history/ws109/q554/result.md)。network/WPA/actualWiFi・全F4/GUI統合は後続、WS incomplete。
 
 WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | Queue | Outcome |
 | --- | --- |
+| [q525](queue-q525.md) | ws105-p003 cleared |
 | [q526](queue-q526.md) | ws105-p004 uncleared |
 | [q527](queue-q527.md) | ws105-p004 cleared |
 | [q528](queue-q528.md) | ws105-p005 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 | [q552](queue-q552.md) | WS109 p002 item uncleared /Phase uncleared |
 | [q553](queue-q553.md) | WS109 p002 item cleared /Phase uncleared |
 | [q554](queue-q554.md) | WS109 p004 item cleared /Phase uncleared |
-| [q555](queue-q555.md) | WS109 p004 item cleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

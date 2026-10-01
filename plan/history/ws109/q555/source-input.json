@@ -1,0 +1,50 @@
+[
+  {
+    "path": "userland/desktop/libkeiland/freebsd/network-link-freebsd.c",
+    "sha256": "5b355def27df66d651b4c4bd3a58f1972955ea05d80bea7f977f15728c5bcb2f"
+  },
+  {
+    "path": "userland/desktop/libkeiland/linux/network-link-linux.c",
+    "sha256": "1e103276af959ee977ed3e3b81daf3107e717dfec0559ee2c568a9a8e365d292"
+  },
+  {
+    "path": "userland/desktop/libkeiland/wpa/network-config-wpa.c",
+    "sha256": "a3d4755daefdb6e7ebc7eba7a9eaef87048492a38e811639e7fe942aab92eb51"
+  },
+  {
+    "path": "userland/desktop/libkeiland/wpa/network-wpa.c",
+    "sha256": "b827f02986b9a023f2abb3019299f22104b6bbb5da793ce96d0d8fe67fe4088e"
+  },
+  {
+    "path": "userland/desktop/libkeiland/wpa/network-wpa.h",
+    "sha256": "573c7382a990aae366193922b7678b279140fff3ee7f861702f1db9af37eca9f"
+  },
+  {
+    "path": "userland/desktop/libkeiland/Makefile.linux",
+    "sha256": "059d1d17ee7a97d13b1e2e7b31e4694a9448c3d3523ba3e404765f1efbdd428c"
+  },
+  {
+    "path": "plan/ws109/tests/network-carrier.c",
+    "sha256": "62baca08838852478444431a4ab24aebbbb5d29acba5c8cb33b42a57aa10af4d"
+  },
+  {
+    "path": "plan/ws109/tests/network-radio-freebsd.c",
+    "sha256": "b20dc8cb8f31350b28cbd0ad0dd371647f6179297f0505beb91ecce0a91f72e4"
+  },
+  {
+    "path": "plan/ws109/tests/network-wpa-contract.py",
+    "sha256": "06e1d5180b2bcee681662948ec8dab4942eeabd0a716f431d45d2f47052c2228"
+  },
+  {
+    "path": "plan/ws109/tests/network-native.c",
+    "sha256": "cf9cb9b09cd5d7286d3740628d158c9a03d3680aba6a76f4afa5379e93d67c06"
+  },
+  {
+    "path": "plan/ws109/tests/network-address.c",
+    "sha256": "6655314890570444841918fcd398061bb04fd41b07acc115fee3e6dccc305939"
+  },
+  {
+    "path": "plan/ws109/tests/network-wpa-contract.c",
+    "sha256": "d40af2a7fd305c7418d5e258fe006fc7ae2f7174464ebf6ceb307b144c0bc72d"
+  }
+]

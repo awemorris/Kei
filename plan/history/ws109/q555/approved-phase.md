@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q555 / q555-i01
+Queue / Attempt: q554 / q554-i01
 
 ## 目的・範囲
 
@@ -72,9 +72,3 @@ Verified prerequisite q553 L1 native headers/libraries and q554 OSS source outpu
 Move shared DNS/credential/connection selection from Linux network-link into wpa/network-config-wpa.c; both native/Linux builds reuse it. Existing Linux radio/sysfs behavior preserved via small private kwpa_link_usable/kwpa_wireless functions. Common WPA uses selected OS control-directory and native sockaddr packing helper: Linux /run/wpa_supplicant, FreeBSD /var/run/wpa_supplicant/native sun_len/actualextent, no large OS macro. Source boundaries/private headers/package Linux selections updated; unchanged public ABI and no Linuxulator. Full C standard applies to moved/changed source, no relocation exception.
 
 Files: libkeiland/freebsd/network-link-freebsd.c, linux/network-link-linux.c, wpa/{network-config-wpa.c,network-wpa.c,network-wpa.h}, Makefile.linux; WS109 native wired and mock-WPA contract probes/evidence. Native direct link of actual network sources (no fake libkeiland provider). Verify native cc warning0, actual vtnet0 addresses/MAC/MTU/counters/carrier and no-supplicant state, real kernel radio flag permission/invalidinterface failures, actual native Unix datagrams vs independent bounded mock peer for scan/profiles/credential escaping/persistence/join/disconnect/timeout. Mock work is wire contract only, actual WiFi/physical device remains F4 gate. Linux affected module/library rebuild/contracts regressions and full Cformatter/style/manual. Actual p002 L2 linking and main GUI apps, p003graphics/seat and p005final3OS remain separate. No hostnetwork mutations/credentials/targettoolchain, WIP commit/pushなし/publicationdeferred.
-
-## Result / q555-i01 / 2026-10-01T20:19:34.540261+00:00
-
-Queue item cleared /whole Phase uncleared。nativeAF_LINK/net80211/共有WPA実装、realvtnet/DNS/権限/flag保持/carrierdown→up、nativeUnix/mockWPAwire/期限とLinuxlibrary/link契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q555/result.md)。actualWiFi/fullF4・mainGUI/全source規約/3OS/実GPUは保持、WS incomplete。
-
-Event ws109-q555-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.
