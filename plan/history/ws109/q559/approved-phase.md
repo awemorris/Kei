@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q559 / q559-i01
+Queue / Attempt: q558 / q558-i01
 
 ## 目的・範囲
 
@@ -145,9 +145,3 @@ limits; actual kernel/service operations remain real, not GPU/display acceptance
 functions/threeOS/fullcompositor integration and physicalVT/input/display/fences remain later gates.
 An unexpected missing prerequisite ends attemptuncleared; revise separately. WIPcommit/no push/
 publication/host changes. WholeF3 and p005 acceptance retained.
-
-## Result / q559-i01 / 2026-10-01T23:11:23.567679+00:00
-
-Queue item cleared /whole Phase uncleared。FreeBSD seatd/OS backend実装、nativeobject warning0、実VT通知/input fd停止・再取得・daemon切断/partialcleanup PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q559/result.md)。描画/通知collaboratorは順序観測のみ、fullnativecompositor/実GPU/physicalVT/F3は保持。
-
-Event ws109-q559-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

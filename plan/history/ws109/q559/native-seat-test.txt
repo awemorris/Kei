@@ -1,0 +1,13 @@
+PASS native backend refusal
+ 
+daemon exit 0 diagnostics: 00:00:00.006 [ERROR] [seatd/seat.c:342] Could not canonicalize path /dev/dri/card0: No such file or directory
+00:00:00.006 [ERROR] [seatd/client.c:229] Could not open device: No such file or directory
+
+client: READY_PAUSE
+client: PAUSED_RETIRED
+client: READY_DISCONNECT
+PASS native backend lifetime
+ 
+daemon exit 0 diagnostics: 
+VT before 00001e001f001700 after 00001e001f001700
+PASS original native VT/mode/keyboard/drawing/termios/input permissions restored

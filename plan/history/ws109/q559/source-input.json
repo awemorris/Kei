@@ -1,0 +1,26 @@
+[
+  {
+    "path": "userland/desktop/wayland/freebsd/seat-freebsd.c",
+    "sha256": "85ccff8290725c9934cc8e45f4bffce37b03adf806344c3faf3d9eceb01d298f"
+  },
+  {
+    "path": "userland/desktop/wayland/freebsd/seat-freebsd.h",
+    "sha256": "c643e8c838b43f430f07c7d4d1020592451cdb23a74f8083f732c46c09594fd4"
+  },
+  {
+    "path": "userland/desktop/wayland/freebsd/os-freebsd.c",
+    "sha256": "0282ba869cde55a33f1f59b6fc071776ed4a25ba04419c076278500f28c5a081"
+  },
+  {
+    "path": "plan/ws109/tests/seat-backend-freebsd.c",
+    "sha256": "542f1cedecc3fb911cd45ba8becee62172f4d7c65a6ce4fbc0d0bdd5f5836df3"
+  },
+  {
+    "path": "plan/ws109/tests/console-abi-freebsd.c",
+    "sha256": "5bdef57a80d7b2eb824b309938b490641e128848894d8ab87821b6e3c304aff4"
+  },
+  {
+    "path": "plan/ws109/tests/seat-backend-fixture-freebsd.py",
+    "sha256": "acbb3cca48321661f063e72182c9b6e7edbd9b396235d960884d8602182d44bb"
+  }
+]

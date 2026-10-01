@@ -72,3 +72,13 @@ starts real seatd in normal SEATD_VTBOUND=0 headless configuration, runs /tmp/ws
 with private runtime in /tmp/ws109-seat-lib as uid/gid65534/nogroups, retires only its own process/
 socket. DirectEACCES/nativeevdev metadata/fd and lease releases must pass. This does not verify
 VT/display; do not run on an existing seat service or someone else's physical session.
+
+## Native seat backend lifecycle
+
+seat-backend-freebsd.c links real freebsd/seat-freebsd.c and os-freebsd.c, private libseat.so.1/
+libvulkan.so.1; same native flags as q559 result. Its renderer/input collaborators are orderrecorders,
+not realframes/protocolnotification proof. Realfd/seatd/nativeVT/poll/syscall operations are exercised.
+console-abi-freebsd.c supplies native ioctlconstants to seat-backend-fixture-freebsd.py, which owns
+its daemon, requires prepared VT1 and absent defaultseat socket, captures/restores nativeconsole
+state and checks inputpermissions. Runs /tmp/ws109-seat-backend with private libs in /tmp/ws109-seat-lib.
+Actual physical machine display/VT/GPU/fences must still be tested with real compositor collaborators.

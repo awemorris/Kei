@@ -1,0 +1,2 @@
+cc -I. -Iuserland/desktop/keiland -Ibuild/native-ui/include -I/usr/local/include -O2 -g -std=gnu17 -Wall -Wextra -Werror -fPIC -c userland/desktop/wayland/freebsd/seat-freebsd.c -o build/native-seat/seat.o
+cc -I. -Iuserland/desktop/keiland -Ibuild/native-ui/include -I/usr/local/include -O2 -g -std=gnu17 -Wall -Wextra -Werror -fPIC -c userland/desktop/wayland/freebsd/os-freebsd.c -o build/native-seat/os.o
