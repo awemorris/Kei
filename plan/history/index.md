@@ -2,10 +2,23 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q529](queue-q529.md)（ws105-p006 uncleared）
+Last finished Queue: [q530](queue-q530.md)（ws105-p005 cleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q530 / ws105-p005
+
+cleared（q530-i01）。KMS completionのpollを各100ms以下、総期限5秒にした。単発timeout/EINTRはretry、総期限未完了はSURFACE_LOST、EACCES/EPERMとrevoked fdはOUT_OF_DATEを維持した。productionの試験用switchは無し。
+
+- 旧staged implementationにtest-only flip-delay.soで1回250ms遅延＋poll result0を与え、赤→緑の後にFAIL result=-1000001004を再現した。修正後のseat fd/direct両経路は同じinjection (`requested_ms=100 delayed_ms=250 result=0`) 後に青を表示しPASS/exit0。全6色PNG各4点一致、oldSwapchain破棄後も表示、console復元、guest stop。
+- gcc14.2/clang19.1.7 build exit0 warning0、12ELF/source-sync/126header PASS（p006の既存Linuxprogramを含む）。style-check0、clangformat19、変更KMS節の全文規約を点検。全WSの最終規約はp011で実施。
+- host DRM=none: chain1MiB/PASS、interposebindings0/optoutPASS、Wayland FIFO/fallback/resize/MAILBOX360frameの画素/extent/import/privatewait PASS。
+- q528のvkdemoとrootVT切替の結果は保持。今回変更はその単発SETCRTCの経路に影響しない。logind/revoked fdの実動作は既存p009で確認。実機GPU/物理monitor/Valgrind未実施。
+- [新旧ログ・PNG・manifest](../../history/ws105/q530/evidence/)。p005のclearanceを復旧し、p006の同じ受け入れを次のQueueで再開する。q529のunclearedは履歴として保持。
+
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `753b45a0fae9ba22d0ef6d0a7fa0f8a4698b951d`、GitHub 未公開・push なし。[q530](queue-q530.md)。
 
 ## 最新: 2026-10-01 q529 / ws105-p006
 
@@ -168,5 +181,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q527](queue-q527.md) | ws105-p004 cleared |
 | [q528](queue-q528.md) | ws105-p005 cleared |
 | [q529](queue-q529.md) | ws105-p006 uncleared |
+| [q530](queue-q530.md) | ws105-p005 cleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。

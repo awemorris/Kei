@@ -1,4 +1,4 @@
-<!-- awesome-plan project=zedbsd record=queue -->
+<!-- awesome-plan project=zedbsd record=q530 -->
 
 # Queue
 
@@ -12,7 +12,7 @@ Last finished Queue: q530
 - Focus: fg012 / WS105 の既存 Linux の受け入れを満たす。
 - Timebox: 60 分。既知の build・必須検証は最大 150 分、未知の問題の調査は 30 分で結果と再開条件を記録する。
 - Approval: current user, 2026-10-01「ws105の完了をゴールにして、自走をお願いします。」。既存 WS105 p001〜p011 の範囲を依存順の 1 Phase Queue で実装・検証・記録する。commit は WIP、push / GitHub 公開は行わない。
-- Exact approved scope: [ws105-p005](ws105/phase005/phase.md) 全範囲、開始前 [snapshot](history/ws105/q530/scope.md) SHA256 `ec79189842a5e81bdd82c924691b6c53433814cf3432cd3c47c68d045dfeeeba`。
+- Exact approved scope: [ws105-p005](ws105/q530/phase.md) 全範囲、開始前 [snapshot](ws105/q530/scope.md) SHA256 `ec79189842a5e81bdd82c924691b6c53433814cf3432cd3c47c68d045dfeeeba`。
 - Executor: Codex Q1。前 Queue finished、並行 executor なしを確認。
 - Applicable rules: AGENTS.md、Guardrail、coding-style.md 全文、WS105 D1〜D25、design.md の指定節。
 - Prerequisites: Phase の依存と既存出力を実装・証拠で確認。material scope / criteria の変更・取消なし。
@@ -20,7 +20,7 @@ Last finished Queue: q530
 
 | Attempt | Phase | Status | Dependency | Selection reason |
 | --- | --- | --- | --- | --- |
-| q530-i01 | [ws105-p005](ws105/phase005/phase.md) | cleared | p004、p001（guest）（context） | WS105 の既存依存順 |
+| q530-i01 | [ws105-p005](ws105/q530/phase.md) | cleared | p004、p001（guest）（context） | WS105 の既存依存順 |
 
 Dependency graph: Phase の依存（context）→ q530-i01/ws105-p005。他の Phase は次の Queue で選定する。
 

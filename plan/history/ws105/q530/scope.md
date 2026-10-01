@@ -2,10 +2,10 @@
 
 # ws105-p005: libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display）
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q530 / q530-i01
+Queue: q528 / q528-i01
 依存: p004、p001（guest）
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4.9 と §7.2 を読む**
 
@@ -107,13 +107,4 @@ main（Q1）が既存WS105完了の委任された技術判断で次を修正す
 
 ## 今回の結果
 
-cleared（q530-i01）。KMS completionのpollを各100ms以下、総期限5秒にした。単発timeout/EINTRはretry、総期限未完了はSURFACE_LOST、EACCES/EPERMとrevoked fdはOUT_OF_DATEを維持した。productionの試験用switchは無し。
-
-- 旧staged implementationにtest-only flip-delay.soで1回250ms遅延＋poll result0を与え、赤→緑の後にFAIL result=-1000001004を再現した。修正後のseat fd/direct両経路は同じinjection (`requested_ms=100 delayed_ms=250 result=0`) 後に青を表示しPASS/exit0。全6色PNG各4点一致、oldSwapchain破棄後も表示、console復元、guest stop。
-- gcc14.2/clang19.1.7 build exit0 warning0、12ELF/source-sync/126header PASS（p006の既存Linuxprogramを含む）。style-check0、clangformat19、変更KMS節の全文規約を点検。全WSの最終規約はp011で実施。
-- host DRM=none: chain1MiB/PASS、interposebindings0/optoutPASS、Wayland FIFO/fallback/resize/MAILBOX360frameの画素/extent/import/privatewait PASS。
-- q528のvkdemoとrootVT切替の結果は保持。今回変更はその単発SETCRTCの経路に影響しない。logind/revoked fdの実動作は既存p009で確認。実機GPU/物理monitor/Valgrind未実施。
-- [新旧ログ・PNG・manifest](../../history/ws105/q530/evidence/)。p005のclearanceを復旧し、p006の同じ受け入れを次のQueueで再開する。q529のunclearedは履歴として保持。
-
-
-実装 commit: `753b45a0fae9ba22d0ef6d0a7fa0f8a4698b951d`（WIP）。終了 UTC: 2026-10-01T08:31:05.223429+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）

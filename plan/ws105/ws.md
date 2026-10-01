@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q529 finished
-Resume point: p006 uncleared（q529）。次は依存を満たす既存 Phase。
+Queue: q530 finished
+Resume point: p005 cleared（q530）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -108,7 +108,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | cleared | WS104 の p001・p003 |
 | [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | cleared | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | cleared | p003 |
-| [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | uncleared | p004、p001 |
+| [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | cleared | p004、p001 |
 | [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | uncleared | p005、WS104 完了 |
 | [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | planned | p006 |
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | planned | p007 |
@@ -256,3 +256,16 @@ uncleared。uncleared（q529-i01）。Linux compositor/direct seat/evdev/VT/hand
 ### q529後のKMS待機の再設計
 
 p006はuncleared、p005のclearanceをinvalidated。100ms総期限の誤りをkms.cで修正し、test-only遅延observerで再検証後にp006を再開する。[p005](phase005/phase.md)・[origin p006](phase006/phase.md)。WS105の目的・受け入れは同じ。既存の実装とq528/q529 historyを保持する。
+
+### q530 / ws105-p005（2026-10-01T08:31:05.223429+00:00）
+
+cleared。cleared（q530-i01）。KMS completionのpollを各100ms以下、総期限5秒にした。単発timeout/EINTRはretry、総期限未完了はSURFACE_LOST、EACCES/EPERMとrevoked fdはOUT_OF_DATEを維持した。productionの試験用switchは無し。
+
+- 旧staged implementationにtest-only flip-delay.soで1回250ms遅延＋poll result0を与え、赤→緑の後にFAIL result=-1000001004を再現した。修正後のseat fd/direct両経路は同じinjection (`requested_ms=100 delayed_ms=250 result=0`) 後に青を表示しPASS/exit0。全6色PNG各4点一致、oldSwapchain破棄後も表示、console復元、guest stop。
+- gcc14.2/clang19.1.7 build exit0 warning0、12ELF/source-sync/126header PASS（p006の既存Linuxprogramを含む）。style-check0、clangformat19、変更KMS節の全文規約を点検。全WSの最終規約はp011で実施。
+- host DRM=none: chain1MiB/PASS、interposebindings0/optoutPASS、Wayland FIFO/fallback/resize/MAILBOX360frameの画素/extent/import/privatewait PASS。
+- q528のvkdemoとrootVT切替の結果は保持。今回変更はその単発SETCRTCの経路に影響しない。logind/revoked fdの実動作は既存p009で確認。実機GPU/物理monitor/Valgrind未実施。
+- [新旧ログ・PNG・manifest](../../history/ws105/q530/evidence/)。p005のclearanceを復旧し、p006の同じ受け入れを次のQueueで再開する。q529のunclearedは履歴として保持。
+
+
+[Phase の結果](phase005/phase.md)、[Queue history](../history/queue-q530.md)。WS105 の受け入れは残りの Phase の確認を要する。

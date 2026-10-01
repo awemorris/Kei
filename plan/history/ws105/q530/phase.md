@@ -4,10 +4,10 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q530 / q530-i01
 依存: p004、p001（guest）
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4.9 と §7.2 を読む**
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §4.9 と §7.2 を読む**
 
 ## 目的
 
@@ -90,7 +90,7 @@ cleared。VK_KHR_display・direct-mode・DRM acquisition の O 10 entry、KMS in
 - vkdemo --time-ms=1000 --hold=10: 320×240、中心 #20c5b0、描画PNGを表示、VKDEMO DONE frames=1。各経路の終了後と最終chvt1はconsole文字のPNGを確認・表示。
 - 途中chvt1→5秒→chvt7: direct/root はmasterを失わず、3色を完走してPASS。実際のlogind revoke/OUT_OF_DATE はp009で確認する。ioctlのEACCES/EPERM→OUT_OF_DATEと100ms上限はsourceで確認。
 - 完了後 guest stop、overlay廃棄。host package追加0、target toolchain/common zedBSD source変更0。実機GPU・物理monitorのcustom mode・Valgrindは未実施。問合せ/display/mode handleはprocess-lifetime、実機hotplugの動的再列挙は範囲外。
-- [ログ・PNG・sha256 manifest](../../history/ws105/q528/evidence/)。不具合残件なし。次はp006（root compositor・wl_shm・入力・VT）、前提WS104とp005を確認。
+- [ログ・PNG・sha256 manifest](../q528/evidence)。不具合残件なし。次はp006（root compositor・wl_shm・入力・VT）、前提WS104とp005を確認。
 
 
 実装 commit: `18a983dd30b2586f56700113f2a82add518652a5`（WIP）。終了 UTC: 2026-10-01T08:13:06.450181+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
@@ -103,7 +103,7 @@ main（Q1）が既存WS105完了の委任された技術判断で次を修正す
 
 検証: gcc/clang・ELF/source/header・host chain/Wayland 回帰、guestのfd/direct 3色。test-only preload observerがpollを1回だけ250ms遅らせて0を返し、2回目から実際のpollへ渡す。両経路で実frame完了/3色とoldSwapchainがPASSすること。sourceの各poll上限100msと総期限5sも点検する。このfixtureは試験の共有ライブラリのみで既定production codeを試す。p006の再開はこの修正・検証のclearanceが前提。
 
-[origin p006](../phase006/phase.md)、[q529 history](../../history/queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
+[origin p006](../../../ws105/phase006/phase.md)、[q529 history](../../queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
 
 ## 今回の結果
 
@@ -113,7 +113,7 @@ cleared（q530-i01）。KMS completionのpollを各100ms以下、総期限5秒�
 - gcc14.2/clang19.1.7 build exit0 warning0、12ELF/source-sync/126header PASS（p006の既存Linuxprogramを含む）。style-check0、clangformat19、変更KMS節の全文規約を点検。全WSの最終規約はp011で実施。
 - host DRM=none: chain1MiB/PASS、interposebindings0/optoutPASS、Wayland FIFO/fallback/resize/MAILBOX360frameの画素/extent/import/privatewait PASS。
 - q528のvkdemoとrootVT切替の結果は保持。今回変更はその単発SETCRTCの経路に影響しない。logind/revoked fdの実動作は既存p009で確認。実機GPU/物理monitor/Valgrind未実施。
-- [新旧ログ・PNG・manifest](../../history/ws105/q530/evidence/)。p005のclearanceを復旧し、p006の同じ受け入れを次のQueueで再開する。q529のunclearedは履歴として保持。
+- [新旧ログ・PNG・manifest](evidence)。p005のclearanceを復旧し、p006の同じ受け入れを次のQueueで再開する。q529のunclearedは履歴として保持。
 
 
 実装 commit: `753b45a0fae9ba22d0ef6d0a7fa0f8a4698b951d`（WIP）。終了 UTC: 2026-10-01T08:31:05.223429+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
