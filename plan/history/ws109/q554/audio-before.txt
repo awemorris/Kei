@@ -1,0 +1,5 @@
+vol.volume=0.86:0.86
+vol.mute=off
+hw.snd.default_unit: 0
+crw-rw-rw-  1 root wheel 0x5a Oct  1 19:09 /dev/mixer
+crw-rw-rw-  1 root wheel 0x5a Oct  1 19:09 /dev/mixer0

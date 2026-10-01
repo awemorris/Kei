@@ -1,0 +1,12 @@
+audio-freebsd: PASS volume/mute/external refresh; restored 86/86 mute=0
+audio-retry: DENIED
+audio-retry: PASS same subscription reconnected after native permission restoration
+audio-retry fixture: PASS original native device permissions restored
+vol.volume=0.86:0.86
+vol.mute=off
+crw-rw-rw-  1 root wheel 0x5a Oct  1 19:09 /dev/mixer0
+/root/audio-probe:
+	libmixer.so.5 => /usr/lib/libmixer.so.5 (0x380e00392000)
+	libc.so.7 => /lib/libc.so.7 (0x380e01ddd000)
+	libsys.so.7 => /lib/libsys.so.7 (0x380e017d1000)
+	[vdso] (0x380dff7bc000)

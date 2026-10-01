@@ -1214,7 +1214,8 @@ struct keiland_audio *keiland_audio_open(void);
 void keiland_audio_close(struct keiland_audio *audio);
 
 /*
- * The descriptor to poll for audiod's messages, or -1 while not connected.
+ * The descriptor to poll for audio events, or -1 when no event source exists.
+ * Native OSS mixers use periodic keiland_audio_update calls without an event fd.
  */
 int keiland_audio_fd(const struct keiland_audio *audio);
 

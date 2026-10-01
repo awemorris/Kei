@@ -17,3 +17,14 @@ The existing plan/tools/keiland-linux/vk-chain-test.c runs natively with system 
 staged own library and VK_DRIVER_FILES=/usr/local/share/vulkan/icd.d/lvp_icd.x86_64.json,
 DISPLAY/WAYLAND_DISPLAY unset and KEILAND_DRM_DEVICE=none. It checks a real headless1MiB workload.
 Never label that result physical GPU/display acceptance. Exact environment/results: q553 history.
+
+## Native OSS probes
+
+Inside an owned FreeBSD fixture only: compile audio-freebsd.c probe with the production
+libkeiland/freebsd/audio-freebsd.c and `-Iuserland/desktop/keiland -lmixer`.
+It changes actual mixer values, checks independent readback and restores its original settings.
+Compile audio-retry-freebsd.c with the same production module; run as root through
+`python3.11 audio-retry-freebsd.py /absolute/probe` only in the owned guest.
+The controller restores original /dev/mixer* permissions on all exits; child drops all privilege,
+verifies denial, then reconnects the same subscription through normal production retry logic.
+This test proves permission arrival on the QEMU HDA mixer, not physical device removal or WiFi.

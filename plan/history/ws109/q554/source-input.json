@@ -1,0 +1,22 @@
+[
+  {
+    "path": "userland/desktop/libkeiland/freebsd/audio-freebsd.c",
+    "sha256": "56ece05cbc6f647a1213b7be91f383ce4ea7b5f8c1a2a9ba60c954e1463bd162"
+  },
+  {
+    "path": "userland/desktop/keiland/keiland.h",
+    "sha256": "cb3942d6009fddc680421176dd721a669120c33d87f62df2c6e36fb1a21ac5c8"
+  },
+  {
+    "path": "plan/ws109/tests/audio-freebsd.c",
+    "sha256": "3d53fba304c76a2bf6df1fdc339ae6db39ab0567d43e1a09a95aeee0e0b0cffa"
+  },
+  {
+    "path": "plan/ws109/tests/audio-retry-freebsd.c",
+    "sha256": "951b2a34560d6c0f54a8bef2bff25fffefc7c4be003a55aaf4e040e2e161a4ec"
+  },
+  {
+    "path": "plan/ws109/tests/audio-retry-freebsd.py",
+    "sha256": "0d1148ce9177fc5af0553d58d2b5a618a2b7d7a2bbccff3970ca9b988b681a3b"
+  }
+]

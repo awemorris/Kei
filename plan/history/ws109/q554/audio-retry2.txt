@@ -1,0 +1,6 @@
+audio-retry: DENIED
+audio-retry: PASS same subscription reconnected after native permission restoration
+audio-retry fixture: PASS original native device permissions restored
+vol.volume=0.86:0.86
+vol.mute=off
+crw-rw-rw-  1 root wheel 0x5a Oct  1 19:09 /dev/mixer0

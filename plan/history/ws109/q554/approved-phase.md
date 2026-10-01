@@ -2,10 +2,10 @@
 
 # ws109p004: audio・network・WiFi の FreeBSD backend
 
-Status: uncleared
+Status: planned
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q554 / q554-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -58,9 +58,3 @@ Prerequisite: p002 L1 verified native52source foundation/public headers/library 
 Implement libkeiland/freebsd/audio-freebsd.c as real OSS native mixer backend with existing public keiland_audio_* contracts. Native hw.snd.default_unit preference and accessible /dev/mixerN enumeration, real channel volume/mute masks, initial readback, periodic metadata/state refresh and retry after device loss. No PCM addition or stub success. Event descriptor is -1 because native mixer has no event-read/poll ABI; existing periodic keiland_audio_update must keep UI state fresh. Clarify public event-fd comment only if needed; no public ABI changes. Check native volume/master orPCM selection, stereo/mono channels and mute capability, errno and ownership. Tests directly link this production module (no fake libkeiland.so). Actual QEMU HDA/kernel ioctl read/set/independent native mixer command/readback/external change and settings restoration; invalid ranges/nulls and unavailable device behavior. Full Cstandard/clang-format19/stylecheck/manual for new module/probe. Affected Linux/zedBSD audio backends remain separate; final integration/UI/3OS gates in p005. No network implementation in this attempt. Real WiFi/GPU gates unchanged; WIP commit, no push/publication.
 
 Scope: new libkeiland/freebsd/audio-freebsd.c, audio event-fd documentation in keiland/keiland.h, WS109 audio probe/recipes/evidence. Subsequent p004 network/WPA source and p002 libkeiland real link will consume this verified module; no fake provider while network absent. Whole Phase remains uncleared after this partial audio output.
-
-## Result / q554-i01 / 2026-10-01T19:52:10.085559+00:00
-
-Queue item cleared /whole Phase uncleared。FreeBSDOSS audio実装/nativeHDA volume/mute/independent libmixer/外部変更refresh、unprivileged同一subscription再接続を実検証。音量86/86/offとdevice権限を復元。[result](../../history/ws109/q554/result.md)。network/WPA/actualWiFi・全F4/GUI統合は後続、WS incomplete。
-
-Event ws109-q554-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

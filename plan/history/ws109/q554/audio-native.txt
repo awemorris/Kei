@@ -1,0 +1,3 @@
+audio-freebsd: PASS volume/mute/external refresh; restored 86/86 mute=0
+vol.volume=0.86:0.86
+vol.mute=off
