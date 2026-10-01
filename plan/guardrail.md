@@ -102,3 +102,5 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
 WS107 の限定例外（2026-10-02ユーザー承認）: [全文](standards/ws107-relocation.md)。内容不変の移動styleのみ保持、component品質修正/新試験/既知14候補はC全文適用、完了時失効。
 
 WS108（2026-10-02 user）：Debian13/Ubuntu26.04のQEMU guest作成・native build/dpkg導入/GUI検証、loopback SSH/QMP PNGで起動確認を許可。WS105の既存SSH/PNG方式をこの2OSへ適用、serial/console log判定禁止、host画面/入力/optを変更しない。CIのmake targets/release filesを作成、pushと実remote publishは行わない。
+
+WS108 release/native検証の再利用tool: [driver/inputs/手順](../tools/release/keiland-linux-deb/README.md)、[検証coverage](standards/automation.md#ws108-packaging-coverage-2026-10-02)。2026-10-02指示を実装・検証、C標準/既存OS/ABI方針は不変。

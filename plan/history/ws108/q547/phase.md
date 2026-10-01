@@ -4,7 +4,7 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS108](../ws.md)
+Parent: [WS108](/home/awe/zedBSD-claude1/plan/ws108/ws.md)
 Queue / Attempt: q547 / q547-i01
 
 ## 目的・範囲
@@ -24,8 +24,8 @@ P4。実 job の結果または同じ環境/手順の検証を記録し、remote
 
 ## 適用規則・影響する部品・検証
 
-[WS の制約/部品/受け入れ](../ws.md)、[Guardrail](../../guardrail.md)、
-[C 規約全文](../../coding-style.md)、[自動化](../../standards/automation.md)を適用。
+[WS の制約/部品/受け入れ](/home/awe/zedBSD-claude1/plan/ws108/ws.md)、[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、
+[C 規約全文](/home/awe/zedBSD-claude1/plan/coding-style.md)、[自動化](/home/awe/zedBSD-claude1/plan/standards/automation.md)を適用。
 新規/変更 C は全文該当節を読み、clang-format-19 と style-check の限界を補う。
 最終 conformance は全 WS の source を全文で review。build warning 0、必要な契約検証、diff-check を記録する。
 具体的な build/config/tool version と script は p001 の結果で固定する。`make check` は禁止。
@@ -46,7 +46,7 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 ユーザー（このchat）: make keiland-linux-debianでDebian13のdpkg、make keiland-linux-ubuntu2604でUbuntu26.04のdpkg。ビルド自体もそれぞれQEMU guest内、dpkgを各guestへ導入して動作試験、既存CIに組込みnightly release filesにする。「現在のQueueを完了したら、WS108を実行してください。」をp001〜p004 finite1Phase Queueの実行承認として保存。
 旧container案をQEMU nativeへ置換、旧release対象外をrelease filesへ置換。既存/opt layoutとWS105のLinux対応済production内容を維持、test appはruntime package外。amd64は既存対象の具体化。実release publication/pushはこのsessionでは行わずCI定義を作成・local同手順検証、remote runは未実施と分ける。
 
-2026-10-02 / ws108-q545-design: [確定設計](../design.md)へ具体化、p001 inputs/manifest/readiness→p002指定targets/2OS native guest/deb/runtime→p003既存CI/release→p004full conformance。各Phase自身の内容/verify/time boundsは設計該当節。container/release除外の旧案はユーザー指示で置換。dependency順は維持、WS106未確定ime-probeは対象外で待たない。GitHub Phase/WS delivery pending。
+2026-10-02 / ws108-q545-design: [確定設計](/home/awe/zedBSD-claude1/plan/ws108/design.md)へ具体化、p001 inputs/manifest/readiness→p002指定targets/2OS native guest/deb/runtime→p003既存CI/release→p004full conformance。各Phase自身の内容/verify/time boundsは設計該当節。container/release除外の旧案はユーザー指示で置換。dependency順は維持、WS106未確定ime-probeは対象外で待たない。GitHub Phase/WS delivery pending。
 
 ## q547 の具体手順
 

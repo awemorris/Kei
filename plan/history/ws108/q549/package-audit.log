@@ -1,0 +1,2 @@
+debian13 keiland_0~git20261001.b0e1eaf972e1-1+debian13_amd64.deb PASS: exact 40-file manifest/hash/mode/root ownership, 19 ELF, control/conffile/md5, session/font notices, runtime filters
+ubuntu2604 keiland_0~git20261001.b0e1eaf972e1-1+ubuntu2604_amd64.deb PASS: exact 40-file manifest/hash/mode/root ownership, 19 ELF, control/conffile/md5, session/font notices, runtime filters

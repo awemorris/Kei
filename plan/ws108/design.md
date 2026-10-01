@@ -15,7 +15,7 @@ project Zlibとfont OFL/Apache notices、既存dictionaryのWS095 relicensing/ve
 公式cloud images固定URL+checksum。Debian13 generic amd64 20260914-2601 SHA512 a733e7d4...、Ubuntu26.04 resolute release-20260927 SHA256 88006518...。完整hashはinputs.jsonへ。read-only cacheと各run専用qcow2 overlay、cloud-init seedと試験専用key、SSHは127.0.0.1ランダムforward port、QMP PNG。serial/console logs判定禁止。OS ID/version/archとSSHを必ず検証。
 build guestとinstall test guestは同じpinned baseから別overlay。build guest apt署名検証を保ちnative gcc/dpkg-dev/libvulkan-dev/libdrm-dev等をinstallし、同一source snapshotから既存keiland-linux.mkをbuild/stage、runtime-filter/deb control・manifest・licenses・dependencies、dpkg-deb --root-owner-group。
 source archiveはtracked Linux必要roots＋release tools（未commit自分の実装を含む）のallowlist、.internal/toolchain/buildを含めない。external dictionary/emojiは既存pin/hash検証で取得。source archive hashとcommit/dirty/tool/compiler/installedpackages/distro/guest hashを`.buildinfo.json`へ記録（Debian standard .buildinfoと混同しない）。
-install guestはbuild tools無しfresh overlayにruntime依存とdebだけ導入。全NEEDED/lddとsession/conffileを確認、productionのdirect KMS compositor/app/Terminal入力、SSH/QMP screenshot、public client（build guestでcompile）を検証。upgrade/reinstallとremove/purgeでuser data/編集済configの保持を確認。両OSで同じ手順。time bounds: boot240s、apt1200s、build1200s、runtime各60s、全driver40min。失敗を記録し残りscopeを独立実行、endless retryしない。
+install guestはbuild tools無しfresh overlayにruntime依存とdebだけ導入。全NEEDED/lddとsession/conffileを確認、productionのdirect KMS compositor/app/Terminal入力、SSH/QMP screenshot、public client（build guestでcompile）を検証。upgrade/reinstallとremove/purgeでuser data/編集済configの保持を確認。両OSで同じ手順。time bounds: boot240s、apt1200s、build1200s、GUI ready60s/input30s、dpkg/公開client block600s、CI job45min、localは各Phaseのtimebox。失敗を記録し残りscopeを独立実行、endless retryしない。
 
 ## CI / release
 
@@ -32,3 +32,5 @@ P1 manifest、P2各guest native build/ELF/deb、P3各freshguest導入/GUI/sessio
 [Ubuntu26.04](https://releases.ubuntu.com/26.04/)、[official Ubuntu image](https://cloud-images.ubuntu.com/releases/resolute/release-20260927/)、[Debian image](https://cloud.debian.org/images/cloud/trixie/20260914-2601/)、[dpkg-shlibdeps](https://manpages.debian.org/trixie/dpkg-dev/dpkg-shlibdeps.1.en.html)。full hashesを公式checksumから確認、host QEMU10.0.11/xorriso1.5.6/KVM。image hash mismatchは実行前拒否。
 
 Event ws108-q545-design: ユーザーの具体化を全4Phase/WS/Master/Guardrailに反映、GitHub delivery pending。旧release/container案はこの設計で置換。
+
+Final implementation b0e1eaf9: staging親mkdir＋install/install-session直列、upgrade fixture -Znone、通常HOME/WAYLAND_DISPLAY、click/TCG入力待機。配布debの圧縮/production内容不変。結果は[conformance](../history/ws108/conformance.md)。

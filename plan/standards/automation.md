@@ -52,7 +52,7 @@ Authoritative full rule: [browser-component.md](browser-component.md)。ユー�
 | libbrowser の Wayland 使用禁止 | public header standalone compile、include/link closure、ELF NEEDED/undefined/export | WS107: C89/C++11 header、全133include closure340、ELF39exports/NEEDED/undefined、実public client verified |
 | 標準 Vulkan と抽象入力 | Wayland 無しの第2 client の Vulkan 描画、shell adapter/複数 view の契約検証 | WS107: full/manual reviewとpublic client plain/ASan各83、actual lavapipe/caller record-fence。same-view callback mutationは外側call後の契約 |
 
-WS106 では source 移動後の既存 Makefile/source checker の locator を更新する。WS108/109 の distro/FreeBSD checks は設計中、
+WS106 では source 移動後の既存 Makefile/source checker の locator を更新する。WS108 の distro checks はnative/QEMU/runtime/CI gateを検証済み、WS109 の FreeBSD checks は設計中、
 WS105 の Linux checks の合格を新 target の合格に転用しない。各 WS の near-final Phase で全文規約/実環境/tool version と限界を記録する。
 
 ## WS106 relocation coverage (2026-10-01)
@@ -60,3 +60,12 @@ WS105 の Linux checks の合格を新 target の合格に転用しない。各 
 [User-authorized scoped exception](ws106-relocation.md): preserve existing implementation style for path-only relocation. Validate all move hashes/modes and allowed include/path diffs; compare normalized style-check baseline (59 C,1300 candidates). New C/semantic changes remain subject to the full standard. Review all WS source/config/runner diffs, registry/default/dependency/install contracts and final build/boot. No mass formatting.
 
 WS107: [限定例外](ws107-relocation.md)の不変moveをhash/mode/path-only diffでreview。変更componentと新試験はC全文/edited-range clang-format/manual review、既知14候補を修正し全133C style-checkを比較。
+
+## WS108 packaging coverage (2026-10-02)
+
+| Existing rule/contract | Actual check | Limit |
+| --- | --- | --- |
+| Native distribution/isolated roots | pinned inputs hashes + OS/arch, QEMU separate8GiB overlays, source allowlist, both requested make | actual KVM full targets; TCG native build/runtime separately verified; no host install |
+| Runtime/private ABI/licenses/user data | elf-check19, independent40 payload/control/md5 audit, fresh install/upgrade/remove, public Vulkan/direct GUI/real input | physical/display-manager startup not re-certified |
+| CI/release fail gates | verify-artifacts.py, YAML/bash/deep-equal original build, actual merged artifacts and rejection of corrupt/missing input | remote Actions/release unexecuted |
+| Final full standards | all8 source files manual full review + Python byte compile/git diff-check; no new C | [full evidence](../history/ws108/conformance.md); no new Python-wide formatter policy |
