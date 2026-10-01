@@ -46,6 +46,7 @@ enum network_command {
  * Closed sockets are -1; pending commands retain their deadline until reply.
  */
 struct keiland_network {
+	struct keiland_network *next;
 	struct kwpa_socket command;
 	struct kwpa_socket events;
 	struct keiland_network_state state;
@@ -65,6 +66,13 @@ struct keiland_network {
 	char joining[KEILAND_NETWORK_SSID_MAX];
 };
 
+/*
+ * Live watches belong to the desktop's single event-loop thread.
+ * Explicit close removes them; process/library retirement closes the remainder.
+ */
+static struct keiland_network *network_watches;
+
+static void network_cleanup(void) __attribute__((destructor));
 static int network_connect(struct keiland_network *network);
 static void network_drop(struct keiland_network *network, unsigned *changed, int error);
 static void network_finish(struct keiland_network *network, unsigned *changed, int error);
@@ -94,6 +102,8 @@ keiland_network_open(
 	/* Closed descriptors distinguish absent service from an owned socket. */
 	network->command.fd = -1;
 	network->events.fd = -1;
+	network->next = network_watches;
+	network_watches = network;
 	(void)network_connect(network);
 
 	/* Succeeded: later updates acquire state and reconnect as needed. */
@@ -107,9 +117,19 @@ void
 keiland_network_close(
 	struct keiland_network *network)
 {
+	struct keiland_network **link;
+
 	/* An absent allocation owns no socket path. */
 	if (network == NULL)
 		return;
+
+	/* Remove the explicit close from the process's fallback cleanup ownership. */
+	for (link = &network_watches; *link != NULL; link = &(*link)->next) {
+		if (*link == network) {
+			*link = network->next;
+			break;
+		}
+	}
 
 	/* DETACH is best effort; closing also removes the daemon's subscriber. */
 	if (network->attached != 0)
@@ -1232,4 +1252,17 @@ wpa_hex(
 
 	/* A non-hexadecimal byte cannot decode an escape. */
 	return -1;
+}
+
+/* Retires watches that a desktop process leaves to library or process teardown. */
+static void
+network_cleanup(
+	void)
+{
+	/* Explicit close also advances the registry before freeing each allocation. */
+	while (network_watches != NULL)
+		keiland_network_close(network_watches);
+
+	/* Succeeded: ordinary process/library retirement leaves no owned Unix paths. */
+	return;
 }
