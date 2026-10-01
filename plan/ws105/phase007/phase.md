@@ -17,9 +17,9 @@ compositor が Linux の GPU の client（libvulkan-compat の WSI を使う app
 
 | file | 中身 |
 | --- | --- |
-| `wayland/linux/gpu-linux.c` | design §5.2 の全部: global `zwp_linux_dmabuf_v1` v3、bind の時の `format`・`modifier` の event、`create_params`、params の `add`・`create`（`created` は `zwl_create_server` で id を作る）・`create_immed`・`destroy`、検査と error、dma-buf の import（`zwl_import_adopt`）、log の行（zedBSD と同じ形）、`zwl_gpu_commit` の `DMA_BUF_IOCTL_EXPORT_SYNC_FILE(READ)` と `--log-frames` の `ZWL ACQUIRE_FENCE`、拡張の一覧（physical device にある物だけ）、`zwl_gpu_object_free`（buffer に残した fd を閉じる、params の記録を消す） |
-| 共通: `zwl.h`・`protocol.c`・`objects.c` | design §5.6 の p007 の行: object の kind `ZWL_GPU_OBJECT`（`zwl_dispatch` で `zwl_gpu_request` へ）、`struct zwl_object` の `void *gpu_private`、`object_free` の中で `zwl_gpu_object_free(object)` を呼ぶ |
-| `wayland/zedbsd/gpu-buffer-zedbsd.c` | `zwl_gpu_object_free` の zedBSD の実装（何もしない）。`zwl_gpu_request` が `ZWL_GPU_OBJECT` を受けたら `EPROTO`（zedBSD では来ない） |
+| `wayland/linux/gpu-linux.c` | design §5.2 の全部: global `zwp_linux_dmabuf_v1` v3、bind の時の `format`・`modifier` の event、`create_params`、params の `add`・`create`（`created` は `zwl_create_server` で id を作る）・`create_immed`・`destroy`、検査と error、dma-buf の import（`zwl_import_adopt`）、log の行（zedBSD と同じ形）、`zwl_gpu_commit` の `DMA_BUF_IOCTL_EXPORT_SYNC_FILE(READ)` と `--log-frames` の `ZWL ACQUIRE_FENCE`、拡張の一覧（physical device にある物だけ）、`zwl_gpu_object_free`（buffer に残した fd を閉じる、params の記録を消す）、`zwl_gpu_bind`（bind の直後の format / modifier） |
+| 共通: `zwl.h`・`protocol.c`・`objects.c` | design §5.6 の p007 の行: object の kind `ZWL_GPU_OBJECT`（`zwl_dispatch` で `zwl_gpu_request` へ）、`struct zwl_object` の `void *gpu_private`、`object_free` の中で `zwl_gpu_object_free(object)` を呼ぶ。`zwl-gpu.h` に両 hook と `zwl_gpu_bind` を宣言し、`bind_global` の factory 分岐で `zwl_gpu_bind(object)` を呼ぶ |
+| `wayland/zedbsd/gpu-buffer-zedbsd.c` | `zwl_gpu_object_free` と `zwl_gpu_bind` の zedBSD の実装（何もしない）。`zwl_gpu_request` が `ZWL_GPU_OBJECT` を受けたら `EPROTO`（zedBSD では来ない） |
 | 共通: `userland/desktop/mview/renderer.c` | `#include <stdio.h>`（design §5.6） |
 | `userland/desktop/wltest/Makefile.linux` | Vulkan の WSI の試験の client（依存 `libwayland-client.so libvulkan.so.1`、`-lm`） |
 | `userland/desktop/mview/Makefile.linux` | Model viewer（依存 `libwayland-client.so libvulkan.so.1`、`-lm`）と model の data（zedBSD の `mview/Makefile` の 13 番目の引数の `/usr/share/mview/...` を `share/mview/...` に、`KEILAND_LINUX_DATA`） |
@@ -71,3 +71,7 @@ params に `add(fd, 0, 0, stride, 0, 0)` → `create_immed(64, 4096, ARGB8888, 0
 ## 結果
 
 （実行の後に書く）
+
+## 開始前の設計補完（2026-10-01、Q1）
+
+現行 `bind_global` は GPU factory の bind event を呼ぶ hook を持たない。D6 の v3 format / modifier 通知を実現するため、既存の OS 境界と同じ `int zwl_gpu_bind(struct zwl_object *)` を追加する。common は factory の bind 直後に呼び、Linux が event を送る。zedBSD は 0 を返す空実装。`zwl_gpu_object_free` の宣言も `zwl-gpu.h` に置く。技術上の欠落の補完で、product・受け入れ・依存・他 Phase は変えない。p007 の Queue 選定前に scope に反映。

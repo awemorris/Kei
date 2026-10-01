@@ -1,0 +1,8 @@
+bar (235, 249, 236) wallpaper (197, 221, 230) window (0, 0, 255)
+cursor (195, 195, 225, 230) (4, 4, 16, 23)
+cursor (895, 595, 925, 630) (4, 4, 16, 23)
+home visible
+wiseview visible
+wayland-logout.log clean exit
+wayland-term.log clean exit
+p006-linux: PASS

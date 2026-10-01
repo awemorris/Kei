@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q530 finished
-Resume point: p005 cleared（q530）。次は依存を満たす既存 Phase。
+Queue: q531 finished
+Resume point: p006 cleared（q531）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -109,7 +109,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | cleared | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | cleared | p003 |
 | [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | cleared | p004、p001 |
-| [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | uncleared | p005、WS104 完了 |
+| [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | cleared | p005、WS104 完了 |
 | [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | planned | p006 |
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | planned | p007 |
 | [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | planned | p008 |
@@ -269,3 +269,21 @@ cleared。cleared（q530-i01）。KMS completionのpollを各100ms以下、総�
 
 
 [Phase の結果](phase005/phase.md)、[Queue history](../history/queue-q530.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### p007 開始前の OS 境界補完（2026-10-01、Q1）
+
+`bind_global` の GPU factory の event hook が現行 code にないため、`zwl_gpu_bind` を Linux / zedBSD の module に追加する設計を補完。common は hook を呼ぶだけ、zedBSD は空実装。既存 D6 の通知を実現し、受け入れと依存を維持。[p007](phase007/phase.md)、[design §5.2 / §5.6](design.md)。
+
+### q531 / ws105-p006（2026-10-01T08:50:34.308158+00:00）
+
+cleared。cleared（q531-i01）。Linux の seat-direct・入力・session・wl_shm の compositor を実装・検証した。p006 source は `80eea509`、依存 KMS repair は `753b45a0`（いずれも WIP）。q529 の uncleared は元の履歴として保持する。
+
+- gcc14.2 / clang19.1.7 build exit0 warning0、12ELF / source-sync / 126header PASS。Linux の OS module は `linux/` に分離し、compositor は表示を Vulkan だけで扱う。evdev は monotonic clock、KD/keyboard mode は個別保存・復元。全文規約と style-check を点検した（最終 WS conformance は p011）。
+- Linux guest: desktop / wlshm / Home / Esc / Wiseview と pointer 2 地点の PNG を確認。bar、wallpaper、青い window の画素、cursor の差分を確認。launcher は実際の top-left click を使い、Super+Tab は Wiseview（検証手順の補正、product code は不変）。
+- Home の Log Out: `ZWL SESSION logout`、`ZWL EXIT frames=1081 error=0 cleanup_failed=0`。コンソールで `kei` が入力される PNG を確認。再起動は KEILAND_SEAT 未指定・XDG_RUNTIME_DIR=/run・--socket 未指定で `/run/wayland-keiland` に READY、SIGTERM は `frames=1 error=0 cleanup_failed=0`。PNG はユーザーに表示、guest は停止し overlay を破棄。
+- zedBSD: REQUIRED_TARGET_RESULT
+- [ログ・PNG・SHA256 manifest](../../history/ws105/q531/evidence/)。Target 回帰は q529 で開始した同一 source の直列実行を q531 へ引き継いだ。q530 は Linux KMS module のみの修正で、target source / toolchain はその間変更していない。
+- 実機 GPU / 物理モニタ未実施。Linux GPU client は次 p007、logind は p009、app/data は p008、network/audio は p010 の既存範囲。GitHub 未公開、outbox に証拠・event と intended close を保持、push なし。
+
+
+[Phase の結果](phase006/phase.md)、[Queue history](../history/queue-q531.md)。WS105 の受け入れは残りの Phase の確認を要する。

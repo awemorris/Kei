@@ -2,10 +2,24 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q530](queue-q530.md)（ws105-p005 cleared）
+Last finished Queue: [q531](queue-q531.md)（ws105-p006 cleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q531 / ws105-p006
+
+cleared（q531-i01）。Linux の seat-direct・入力・session・wl_shm の compositor を実装・検証した。p006 source は `80eea509`、依存 KMS repair は `753b45a0`（いずれも WIP）。q529 の uncleared は元の履歴として保持する。
+
+- gcc14.2 / clang19.1.7 build exit0 warning0、12ELF / source-sync / 126header PASS。Linux の OS module は `linux/` に分離し、compositor は表示を Vulkan だけで扱う。evdev は monotonic clock、KD/keyboard mode は個別保存・復元。全文規約と style-check を点検した（最終 WS conformance は p011）。
+- Linux guest: desktop / wlshm / Home / Esc / Wiseview と pointer 2 地点の PNG を確認。bar、wallpaper、青い window の画素、cursor の差分を確認。launcher は実際の top-left click を使い、Super+Tab は Wiseview（検証手順の補正、product code は不変）。
+- Home の Log Out: `ZWL SESSION logout`、`ZWL EXIT frames=1081 error=0 cleanup_failed=0`。コンソールで `kei` が入力される PNG を確認。再起動は KEILAND_SEAT 未指定・XDG_RUNTIME_DIR=/run・--socket 未指定で `/run/wayland-keiland` に READY、SIGTERM は `frames=1 error=0 cleanup_failed=0`。PNG はユーザーに表示、guest は停止し overlay を破棄。
+- zedBSD: REQUIRED_TARGET_RESULT
+- [ログ・PNG・SHA256 manifest](../../history/ws105/q531/evidence/)。Target 回帰は q529 で開始した同一 source の直列実行を q531 へ引き継いだ。q530 は Linux KMS module のみの修正で、target source / toolchain はその間変更していない。
+- 実機 GPU / 物理モニタ未実施。Linux GPU client は次 p007、logind は p009、app/data は p008、network/audio は p010 の既存範囲。GitHub 未公開、outbox に証拠・event と intended close を保持、push なし。
+
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `29cf10de919a5629b9e58387b8a5ff32c223cb76`、GitHub 未公開・push なし。[q531](queue-q531.md)。
 
 ## 最新: 2026-10-01 q530 / ws105-p005
 
@@ -182,5 +196,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q528](queue-q528.md) | ws105-p005 cleared |
 | [q529](queue-q529.md) | ws105-p006 uncleared |
 | [q530](queue-q530.md) | ws105-p005 cleared |
+| [q531](queue-q531.md) | ws105-p006 cleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。

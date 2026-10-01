@@ -1,0 +1,85 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=682
+ZWL STARTUP step=vulkan-objects-arrow ms=36
+ZWL STARTUP step=wallpaper-picture ms=291
+ZWL STARTUP step=wallpaper ms=322
+ZWL STARTUP step=glyphs-text ms=13
+ZWL STARTUP step=glyphs-icons ms=3
+ZWL STARTUP step=glyphs-mark ms=18
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=34
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=1075 at_ms=8837
+ZWL INPUT device=/dev/input/event4 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event2 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL STARTUP step=input ms=55 at_ms=8892
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=8892
+ZWL STARTUP step=socket ms=0 at_ms=8892
+ZWL IME none program=/opt/keiland/libexec/keiland-ime errno=2
+ZWL READY socket=/run/keiland-0 width=1280 height=800 timeout_ms=18446744073709551615 pid=600
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL STARTUP step=output-display ms=0
+ZWL STARTUP step=output-pipelines ms=76
+ZWL STARTUP step=output-swapchain ms=5
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=81 at_ms=8983
+ZWL GLASS desktops x=815 step=46 width=40
+ZWL NETWORK icon x=1059 y=3 width=30 height=28
+ZWL VOLUME icon x=1026 y=3 width=30 height=28
+ZWL HOME skip name=Terminal missing=/opt/keiland/bin/terminal
+ZWL HOME skip name=Model viewer missing=/opt/keiland/bin/mview
+ZWL HOME skip name=Vulkan test missing=/opt/keiland/bin/wltest
+ZWL HOME skip name=X terminal missing=/opt/keiland/libexec/keiland-x11
+ZWL HOME skip name=Gears missing=/opt/keiland/libexec/keiland-x11
+ZWL HOME skip name=Files missing=/opt/keiland/bin/files
+ZWL HOME skip name=Notes missing=/opt/keiland/bin/notes
+ZWL HOME skip name=PDF Viewer missing=/opt/keiland/bin/pdfviewer
+ZWL HOME skip name=Image Viewer missing=/opt/keiland/bin/imageview
+ZWL HOME skip name=Text Editor missing=/opt/keiland/bin/textedit
+ZWL HOME skip name=Browser missing=/opt/keiland/bin/browser
+ZWL CLIENT client=1 fd=20
+ZWL CONFIGURE client=1 surface=8 serial=1 width=0 height=0 fullscreen=0
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL MAP client=1 surface=8 x=400 y=283
+ZWL PERF 5004ms: passes=678 timeouts=373 | poll 32.6% work 69.6%
+ZWL PERF compose frames=299 draw_ms=11.10 (acquire 0.01 submit+present 10.94) frame_ms=13.83
+ZWL PERF shm copies=296 copy_ms=0.142
+ZWL HOME open via=launcher at_ms=17188
+ZWL FIRST_FRAME what=home-open frame=593 request_ms=17188 ms=14
+ZWL HOME opened apps=2 pages=1 page=1 at_ms=17486
+ZWL HOME icon name="Shared memory" x=568 y=335
+ZWL HOME icon name="Log Out" x=712 y=335
+ZWL HOME close via=escape at_ms=18267
+ZWL FIRST_FRAME what=home-close frame=646 request_ms=18267 ms=16
+ZWL HOME closed at_ms=18530
+ZWL PERF 5001ms: passes=771 timeouts=379 | poll 19.4% work 78.2%
+ZWL PERF compose frames=389 draw_ms=9.82 (acquire 0.01 submit+present 9.65) frame_ms=11.90
+ZWL PERF shm copies=385 copy_ms=0.132
+ZWL WISEVIEW opening key at_ms=19412
+ZWL FIRST_FRAME what=wiseview-open frame=719 request_ms=19412 ms=18
+ZWL WISEVIEW open windows=1 at_ms=19612
+ZWL WISEVIEW tile client=1 surface=8 x=415 y=236 width=449 height=299
+ZWL WISEVIEW close key at_ms=20524
+ZWL FIRST_FRAME what=wiseview-close frame=764 request_ms=20524 ms=18
+ZWL WISEVIEW closed at_ms=20738
+ZWL HOME open via=launcher at_ms=23076
+ZWL FIRST_FRAME what=home-open frame=967 request_ms=23076 ms=19
+ZWL HOME opened apps=2 pages=1 page=1 at_ms=23360
+ZWL HOME icon name="Shared memory" x=568 y=335
+ZWL HOME icon name="Log Out" x=712 y=335
+ZWL PERF 5009ms: passes=631 timeouts=308 | poll 15.6% work 81.4%
+ZWL PERF compose frames=317 draw_ms=12.60 (acquire 0.01 submit+present 12.41) frame_ms=14.83
+ZWL PERF shm copies=314 copy_ms=0.158
+ZWL SESSION logout
+ZWL HOME close via=launch at_ms=25630
+ZWL FIRST_FRAME what=home-close frame=1081 request_ms=25630 ms=12
+ZWL CLEANUP client=1 objects=12 unread_fds=0
+ZWL OUTPUT closed
+ZWL EXIT frames=1081 error=0 cleanup_failed=0 pid=600 input_events=22 seat_events=15 at_ms=25774

@@ -747,6 +747,7 @@ WS104 の後、compositor の OS の部分は `wayland/zedbsd/` の file と、�
 | `zwp_linux_buffer_params_v1`（新しい kind `ZWL_GPU_OBJECT`、§5.6） | 0 `destroy`、1 `add(fd, uint plane_idx, uint offset, uint stride, uint modifier_hi, uint modifier_lo)`、2 `create(int width, int height, uint format, uint flags)`、3 `create_immed(new_id wl_buffer, int width, int height, uint format, uint flags)` | 0 `created(new_id wl_buffer)`、1 `failed` |
 
 - error の値（params）: `already_used` 0、`plane_idx` 1、`plane_set` 2、`incomplete` 3、`invalid_format` 4、`invalid_dimensions` 5、`out_of_bounds` 6、`invalid_wl_buffer` 7。flags: `y_invert` 1、`interlaced` 2、`bottom_first` 4（我々はどれも受けず、0 以外は `create` で `failed`、`create_immed` で `invalid_format`）。
+- bind の入口: `zwl-gpu.h` の `int zwl_gpu_bind(struct zwl_object *factory)` を `bind_global` が factory の生成後に呼ぶ。Linux が format / modifier を送る。zedBSD は 0 の空実装。
 - bind の時: 受け付ける format ごとに `format` の event を 1 回、(format, modifier) の組ごとに `modifier` の event を 1 回送る（v3 では両方を送ってよい。我々の client は `modifier` だけを読む）。
 - 受け付ける format: `DRM_FORMAT_ARGB8888`（`0x34325241`）→ `VK_FORMAT_B8G8R8A8_UNORM`・合成は alpha、`DRM_FORMAT_XRGB8888`（`0x34325258`）→ 同じ VkFormat・合成は opaque。
 - 受け付ける modifier: 後段の `vkGetPhysicalDeviceFormatProperties2(B8G8R8A8_UNORM)` + `VkDrmFormatModifierPropertiesListEXT`（v1 の struct）のうち、plane が 1 つで
@@ -887,6 +888,7 @@ header の field の配列 `a(yv)`（1 PATH `o`、2 INTERFACE `s`、3 MEMBER `s`
 | `main.c`: `--socket` が与えられたかの flag | 既定の socket を OS が決める | p006 |
 | `userland/desktop/wayland/titlebar-shell.c:1299`: `float colour[4] = { 0.0f, 0.0f, 0.0f, 0.0f };` | gcc の `-Wmaybe-uninitialized`（誤検出。振る舞いは変わらない） | p006 |
 | `zwl.h`・`protocol.c`: object の kind `ZWL_GPU_OBJECT`（OS の GPU の protocol の factory 以外の object）を足し、`zwl_dispatch` で `zwl_gpu_request` に送る | linux-dmabuf の params の object | p007 |
+| `zwl-gpu.h` に `zwl_gpu_bind` と `zwl_gpu_object_free` の宣言、`protocol.c:bind_global` で GPU factory の bind hook 呼び出し、zedBSD の空実装 | v3 の bind 時 format / modifier event。現行境界には入口がないため Q1 が選定前に補完 | p007 |
 | `struct zwl_object` に OS の module の記録の pointer（`void *gpu_private`）と、`object_free` の中で OS の module を呼ぶ `zwl_gpu_object_free(object)`（zedBSD の module は何もしない） | dma-buf の fd を buffer に残すため | p007 |
 | `userland/desktop/mview/renderer.c`: `#include <stdio.h>` | glibc では他の header から来ない | p007 |
 | `userland/base/libpdf/font.c` の `convert_contours()`: `control[0] = 0.0; control[1] = 0.0;` を loop の前に | gcc の `-Wmaybe-uninitialized`（誤検出） | p008 |
