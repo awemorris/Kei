@@ -2,15 +2,9 @@
 
 # Past Log
 
-Last finished Queue: [q545](queue-q545.md)（WS108 p001 cleared）
+Last finished Queue: [q544](queue-q544.md)（WS107 p004 cleared）
 
-## 最新: q545 / WS108 p001
-
-cleared。P1 manifest/version/license/dependency/2OS native guest手順/CI release設計を固定。公式pinned image checksum両方一致、actual QEMU10.0.11/KVM cloud-init/SSH/QMP PNGでDebian13/Ubuntu26.04 amd64確認、自分のguest停止。plan/ws108/design.mdとinputs.json。
-
-GitHub publication/outbox pending、commit WIP / pushなし。
-
-## 前回: q544 / WS107 p004
+## 最新: q544 / WS107 p004
 
 cleared。B1〜B5 verified。全179file/165move、engine133C/app7C、39exports/C89+C++11 header/include closure340、Wayland無し。public client plain/ASan83各PASS、host-view59/0、Acid2完全一致/goldens81/81、native Venus shell status0、最終boot login PNG。C全文/限定move例外/全diff review。WS107 builds warning0; full image外部既知warnings343行は明記。plan/history/ws107/conformance.md。
 
@@ -104,8 +98,6 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 | [q543](queue-q543.md) | WS107 p003 cleared |
 
 | [q544](queue-q544.md) | WS107 p004 cleared |
-
-| [q545](queue-q545.md) | WS108 p001 cleared |
 
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。

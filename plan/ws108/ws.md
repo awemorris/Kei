@@ -3,17 +3,17 @@
 # WS108: Debian 13・Ubuntu 26.04 の Keiland deb を CI で作成
 
 <!-- awesome-plan-current:start -->
-Status: planning
+Status: incomplete
 Primary Milestone: MG007
 Related Milestones: MG001, MG006
 Parent: [Master](../master.md)
-Queue: なし（新規実装未承認）
-Resume point: p001 の調査・設計を選定する前に scope と検証環境を確定。
+Queue: なし（q545 finished）
+Resume point: p001 cleared、p002の承認scope/実outputを確認。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
 
-CI が Debian 13 と Ubuntu 26.04 向けの install 可能な Linux Keiland の .deb をそれぞれ作成し、artifact として保存する。
+各OSのQEMU guest内でnative buildしたKeiland .debを各guestへ導入して動作を確認し、既存CI/nightly release filesへ組み込む。
 
 2026-10-01 ユーザーの [レビューコメント](../reviews/2026-10-01-review.md)を根拠に計画。
 Primary MG007 にこの目標の成果を提供。Related MG001, MG006 は技術/配布/検証の supporting 出力。
@@ -23,7 +23,7 @@ WS completion と milestone 全体の acceptance は別に確認する。
 
 [パッケージ設計案](design.md)。初期の architecture は WS105 と同じ amd64 の案（未確定）。
 target distro の固定された環境ごとに native build し、DESTDIR staging から dpkg/debhelper で package を作る。
-既存 zedBSD image/nightly CI は保つ。Debian package の自動 repository/release 公開はこの範囲に含めない。
+既存 zedBSD image/nightly CI は保つ。自動APT repository公開は含めない。2026-10-02ユーザー指定により既存nightly releaseへのdeb/checksum/buildinfo添付を含める。
 `/opt/keiland`、system Vulkan の動的後段、gdm/direct の既存の意味を保つ。
 最初の runtime package は WS105 で Linux 対応済みの library/compositor/app/data を基準にする。
 test app の runtime への混入を避ける。test/devel の分割、browser/EGL/GLES 等の追加は p001 の package manifest で明記して合意する。
@@ -45,10 +45,10 @@ WS105 の build/install/ELF と session 契約は completed context。WS106 の 
 
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
-| [ws108p001](phase001/phase.md) | package manifest・環境・依存を設計 | P1 と p002〜p004 の実 command/環境を定義。container では DRM/session の実 GUI が確認できない限界を残す。 | planning | WS105 output（context）、WS106 の対象表（context） |
+| [ws108p001](phase001/phase.md) | package manifest・環境・依存を設計 | P1 と p002〜p004 の実 command/環境を定義。両OSのQEMU guest内native build、dpkg導入/GUI動作とCI/releaseを設計。 | cleared | WS105 output（context）、WS106 の対象表（context） |
 | [ws108p002](phase002/phase.md) | deb packaging と install 検証 | P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。 | planning | p001 |
 | [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | planning | p002 |
-| [ws108p004](phase004/phase.md) | 全文規約・両 distro の最終 install/session 回帰 | P1〜P5。CI の未実行・GPU/session 未検証が残れば必要な acceptance を満たしたとはしない。 | planning | p003、WS106 の確定配置（scoped output） |
+| [ws108p004](phase004/phase.md) | 全文規約・両 distro の最終 install/session 回帰 | P1〜P5。CI の未実行・GPU/session 未検証が残れば必要な acceptance を満たしたとはしない。 | planning | p003、WS106の確定済み対象配置（scoped output、ime-probe対象外） |
 
 
 依存は表の prerequisite → dependent。context は選定された作業ではない。
@@ -75,3 +75,12 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01 / review-20261001-planning: ユーザーのレビューコメントから WS を新設。
 範囲・受け入れ・Phase 案を保存、Master / Outlook と照合した。新規実装の Queue 承認は未取得。
 [決定の出典と関連 WS](../reviews/2026-10-01-review.md)。公開時にはこのイベントを WS に届ける（現在 outbox 保留）。
+
+## 2026-10-02 / ws108-user-targets
+
+ユーザー（このchat）: make keiland-linux-debianでDebian13のdpkg、make keiland-linux-ubuntu2604でUbuntu26.04のdpkg。ビルド自体もそれぞれQEMU guest内、dpkgを各guestへ導入して動作試験、既存CIに組込みnightly release filesにする。「現在のQueueを完了したら、WS108を実行してください。」をp001〜p004 finite1Phase Queueの実行承認として保存。
+旧container案をQEMU nativeへ置換、旧release対象外をrelease filesへ置換。既存/opt layoutとWS105のLinux対応済production内容を維持、test appはruntime package外。amd64は既存対象の具体化。実release publication/pushはこのsessionでは行わずCI定義を作成・local同手順検証、remote runは未実施と分ける。
+
+2026-10-02 / ws108-q545-design: 全Phaseを[確定設計](design.md)へ具体化。QEMU guest build/test、指定targets、runtimeだけのmanifest、既存CI/nightly release files。移動済対象のscoped outputを使用、ime-probe編集/確定を待たない。GitHub delivery pending。
+
+2026-10-01T16:17:58.918952+00:00 / ws108-q545-cleared: p001 cleared。P1 manifest/version/license/dependency/2OS native guest手順/CI release設計を固定。公式pinned image checksum両方一致、actual QEMU10.0.11/KVM cloud-init/SSH/QMP PNGでDebian13/Ubuntu26.04 amd64確認、自分のguest停止。plan/ws108/design.mdとinputs.json。

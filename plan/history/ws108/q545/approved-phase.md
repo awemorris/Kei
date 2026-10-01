@@ -1,6 +1,6 @@
-<!-- awesome-plan project=zedbsd record=ws108p002 -->
+<!-- awesome-plan project=zedbsd record=ws108p001 -->
 
-# ws108p002: deb packaging と install 検証
+# ws108p001: package manifest・環境・依存を設計
 
 Status: planning
 Disposition: normal
@@ -9,15 +9,15 @@ Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
-p001 の選択だけを debian/ または合意した packaging root に実装。build/install manifest、依存、upgrade/remove の安全な動作を作る。
+Debian13/Ubuntu26.04 amd64 案、runtime/test/devel の内容、version、license、system 後段、session registration、CI環境と検証方法を確定する。
 
 ## 完了条件
 
-P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。
+P1 と p002〜p004 の実 command/環境を定義。container では DRM/session の実 GUI が確認できない限界を残す。
 
 ## 前提・未決・実行手順
 
-依存: p001。WS の scope と acceptance、設計の未決を確認する。
+依存: WS105 output（context）、WS106 の対象表（context）。WS の scope と acceptance、設計の未決を確認する。
 技術的な細部は委任範囲で決める。対象/受け入れ/外部契約を変える結果は実装前に計画と承認範囲へ反映する。
 調査→変更表と手順の確定→有限 Queue の承認→実装→指定検証→結果・WS・Master・Queue の照合。
 最初の p001 は調査の案（1 session / 最大60分、満たせない点と再開条件を残す）。後続の timebox/command は設計後に選定する。
@@ -45,5 +45,3 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 
 ユーザー（このchat）: make keiland-linux-debianでDebian13のdpkg、make keiland-linux-ubuntu2604でUbuntu26.04のdpkg。ビルド自体もそれぞれQEMU guest内、dpkgを各guestへ導入して動作試験、既存CIに組込みnightly release filesにする。「現在のQueueを完了したら、WS108を実行してください。」をp001〜p004 finite1Phase Queueの実行承認として保存。
 旧container案をQEMU nativeへ置換、旧release対象外をrelease filesへ置換。既存/opt layoutとWS105のLinux対応済production内容を維持、test appはruntime package外。amd64は既存対象の具体化。実release publication/pushはこのsessionでは行わずCI定義を作成・local同手順検証、remote runは未実施と分ける。
-
-2026-10-02 / ws108-q545-design: [確定設計](../design.md)へ具体化、p001 inputs/manifest/readiness→p002指定targets/2OS native guest/deb/runtime→p003既存CI/release→p004full conformance。各Phase自身の内容/verify/time boundsは設計該当節。container/release除外の旧案はユーザー指示で置換。dependency順は維持、WS106未確定ime-probeは対象外で待たない。GitHub Phase/WS delivery pending。
