@@ -9,6 +9,7 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-129](bugs/BUG-129.md) | package menu に Fonts 分類が無い | reproduced / tracking | WS106 q540、移動前rowsでもMAC-T001 noto-color-emojiでFAIL | package/menu整備時。今回未修正、BUG-080は関連する別条件 |
 | [BUG-128](bugs/BUG-128.md) | Terminal menu初期化でNULL screenを読む | reproduced / resolved（WS105 p008） | source 7dd3ad9e、Linux / zedBSDで起動・文字・終了PASS | startup再発時にreopen、実機未実施 |
 | [BUG-127](bugs/BUG-127.md) | zedBSD window最小化直後の画像 | reproduced / tracking | q532 C9 p072、minimize log後に青い窓が残る。復元・desktop移動はPASS。ユーザーがtrackingでclearを許可 | window操作のQueueでframe待ちを含むbounded調査。修正未実施 |
 | [BUG-023](bugs/BUG-023.md) | PC98 QEMUで /sbin が空 | reproduced（ユーザー報告） / tracking | 2026-09-27: 最近の PC-98 の staging の /sbin は 26 個（静的）。起動した guest での確認は amd64 だけの方針で未実施 | ws003-p026（削除済み。git の履歴にある）で生成・配置・mountを切り分け。 |

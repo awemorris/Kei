@@ -1,0 +1,306 @@
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/gpu-admission/main.c -o build/amd64/dynamic/obj/userland/tests/gpu-admission/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/gpu-fence/main.c -o build/amd64/dynamic/obj/userland/tests/gpu-fence/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/gpu-forge/main.c -o build/amd64/dynamic/obj/userland/tests/gpu-forge/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/gpu-i915/main.c -o build/amd64/dynamic/obj/userland/tests/gpu-i915/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/gpu-recovery/main.c -o build/amd64/dynamic/obj/userland/tests/gpu-recovery/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -Iuserland/desktop/libvulkan -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/gpu-share/main.c -o build/amd64/dynamic/obj/userland/tests/gpu-share/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/greeter-probe/main.c -o build/amd64/dynamic/obj/userland/tests/greeter-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/kuidemo/main.c -o build/amd64/dynamic/obj/userland/tests/kuidemo/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/menu-probe/main.c -o build/amd64/dynamic/obj/userland/tests/menu-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/mview/main.c -o build/amd64/dynamic/obj/userland/tests/mview/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/mview/window.c -o build/amd64/dynamic/obj/userland/tests/mview/window.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/mview/renderer.c -o build/amd64/dynamic/obj/userland/tests/mview/renderer.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/mview/model.c -o build/amd64/dynamic/obj/userland/tests/mview/model.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/mview/camera.c -o build/amd64/dynamic/obj/userland/tests/mview/camera.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/mview/input.c -o build/amd64/dynamic/obj/userland/tests/mview/input.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/network-probe/main.c -o build/amd64/dynamic/obj/userland/tests/network-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/peninject/main.c -o build/amd64/dynamic/obj/userland/tests/peninject/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/popup-probe/main.c -o build/amd64/dynamic/obj/userland/tests/popup-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/seat-probe/main.c -o build/amd64/dynamic/obj/userland/tests/seat-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/subsurface-probe/main.c -o build/amd64/dynamic/obj/userland/tests/subsurface-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/tablet-probe/main.c -o build/amd64/dynamic/obj/userland/tests/tablet-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/titlebar-probe/main.c -o build/amd64/dynamic/obj/userland/tests/titlebar-probe/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/touchinject/main.c -o build/amd64/dynamic/obj/userland/tests/touchinject/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/vkdemo/main.c -o build/amd64/dynamic/obj/userland/tests/vkdemo/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/vkdemo/renderer.c -o build/amd64/dynamic/obj/userland/tests/vkdemo/renderer.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/vkdemo/display.c -o build/amd64/dynamic/obj/userland/tests/vkdemo/display.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/wakebench/main.c -o build/amd64/dynamic/obj/userland/tests/wakebench/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/wlshm/main.c -o build/amd64/dynamic/obj/userland/tests/wlshm/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/wltest/main.c -o build/amd64/dynamic/obj/userland/tests/wltest/main.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -Iinclude -Isrc -I. -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -m64 -march=x86-64 -mno-red-zone -ffreestanding -fno-pic -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-builtin -fno-common -ffunction-sections -fdata-sections -Os -Wall -Wextra -Werror \
+ -fno-strict-aliasing -MMD -MP -c userland/tests/syscall-smoke.c -o build/amd64/user64/userland/tests/syscall-smoke.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -Iinclude -Isrc -I. -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -m64 -march=x86-64 -mno-red-zone -ffreestanding -fno-pic -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-builtin -fno-common -ffunction-sections -fdata-sections -Os -Wall -Wextra -Werror \
+ -fno-strict-aliasing -MMD -MP -c userland/tests/posix-r2.c -o build/amd64/user64/userland/tests/posix-r2.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -Iinclude -Isrc -I. -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -m64 -march=x86-64 -mno-red-zone -ffreestanding -fno-pic -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-builtin -fno-common -ffunction-sections -fdata-sections -Os -Wall -Wextra -Werror \
+ -fno-strict-aliasing -MMD -MP -c userland/tests/posix-r2-remaining.c -o build/amd64/user64/userland/tests/posix-r2-remaining.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -Iinclude -Isrc -I. -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -m64 -march=x86-64 -mno-red-zone -ffreestanding -fno-pic -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-builtin -fno-common -ffunction-sections -fdata-sections -Os -Wall -Wextra -Werror \
+ -fno-strict-aliasing -MMD -MP -c userland/tests/susv4-xsi.c -o build/amd64/user64/userland/tests/susv4-xsi.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -Iinclude -Isrc -I. -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -m64 -march=x86-64 -mno-red-zone -ffreestanding -fno-pic -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-builtin -fno-common -ffunction-sections -fdata-sections -Os -Wall -Wextra -Werror \
+ -fno-strict-aliasing -MMD -MP -c userland/tests/smp-resource-stress.c -o build/amd64/user64/userland/tests/smp-resource-stress.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -Iinclude -Isrc -I. -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -m64 -march=x86-64 -mno-red-zone -ffreestanding -fno-pic -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-builtin -fno-common -ffunction-sections -fdata-sections -Os -Wall -Wextra -Werror \
+ -fno-strict-aliasing -MMD -MP -c userland/tests/posix-phase5-helper.c -o build/amd64/user64/userland/tests/posix-phase5-helper.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/dyntest.c -o build/amd64/dynamic/obj/userland/tests/dyntest.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -mtls-dialect=gnu2 -MMD -MP -c userland/tests/tlstest.c -o build/amd64/dynamic/obj/userland/tests/tlstest.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/rpathdep.c -o build/amd64/dynamic/obj/userland/tests/rpathdep.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/versionuse.c -o build/amd64/dynamic/obj/userland/tests/versionuse.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/versiontest.c -o build/amd64/dynamic/obj/userland/tests/versiontest.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/tests/rpathtest.c -o build/amd64/dynamic/obj/userland/tests/rpathtest.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/acquire-fence/main.o build/amd64/dynamic/obj/userland/tests/wltest/window.o build/amd64/dynamic/obj/userland/tests/wltest/renderer.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libc.so -o build/amd64/bin/acquire-fence-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/browser-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libbrowser.so -l:libc.so -o build/amd64/bin/browser-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/data-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/data-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/egltest/main.o build/amd64/dynamic/obj/userland/tests/egltest/scene.o build/amd64/dynamic/obj/userland/tests/egltest/cube.o build/amd64/dynamic/obj/userland/tests/egltest/es3.o build/amd64/dynamic/obj/userland/tests/egltest/formats.o build/amd64/dynamic/obj/userland/tests/egltest/volumes.o build/amd64/dynamic/obj/userland/tests/egltest/targets.o build/amd64/dynamic/obj/userland/tests/egltest/blits.o build/amd64/dynamic/obj/userland/tests/egltest/queries.o build/amd64/dynamic/obj/userland/tests/egltest/feedback.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libEGL.so -l:libGLESv2.so -l:libwayland-egl.so -l:libwayland-client.so -l:libc.so -o build/amd64/bin/egltest
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/extras-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/extras-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/glescompute/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libEGL.so -l:libGLESv2.so -l:libc.so -o build/amd64/bin/glescompute
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libc.so build/amd64/bin/acquire-fence-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/gpu-admission/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/gpu-admission-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o \
+ build/amd64/dynamic/obj/userland/tests/gpu-fence/main.o \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libc.so -o build/amd64/bin/gpu-fence-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/gpu-forge/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libc.so -o build/amd64/bin/gpu-forge-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/gpu-i915/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/gpu-i915-test
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libbrowser.so --needed libc.so build/amd64/bin/browser-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/data-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/extras-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/gpu-recovery/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/gpu-recovery-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o \
+ build/amd64/dynamic/obj/userland/tests/gpu-share/main.o build/amd64/dynamic/obj/userland/desktop/libvulkan/objects.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wire.o build/amd64/dynamic/obj/userland/desktop/libvulkan/context.o build/amd64/dynamic/obj/userland/desktop/libvulkan/codec.o build/amd64/dynamic/obj/userland/desktop/libvulkan/dispatch.o build/amd64/dynamic/obj/userland/desktop/libvulkan/instance.o build/amd64/dynamic/obj/userland/desktop/libvulkan/device.o build/amd64/dynamic/obj/userland/desktop/libvulkan/external-properties.o build/amd64/dynamic/obj/userland/desktop/libvulkan/external-fence.o build/amd64/dynamic/obj/userland/desktop/libvulkan/resources.o build/amd64/dynamic/obj/userland/desktop/libvulkan/pipeline.o build/amd64/dynamic/obj/userland/desktop/libvulkan/descriptors.o build/amd64/dynamic/obj/userland/desktop/libvulkan/commands.o build/amd64/dynamic/obj/userland/desktop/libvulkan/memory.o build/amd64/dynamic/obj/userland/desktop/libvulkan/dedicated.o build/amd64/dynamic/obj/userland/desktop/libvulkan/sync.o build/amd64/dynamic/obj/userland/desktop/libvulkan/queue.o build/amd64/dynamic/obj/userland/desktop/libvulkan/query.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wsi.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wsi-display.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wsi-swapchain.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wsi-wayland.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wsi-image.o build/amd64/dynamic/obj/userland/desktop/libvulkan/wsi-display-nodes.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/gpu-share-test
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libc.so build/amd64/bin/gpu-fence-test
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/gpu-admission-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/greeter-probe/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/greeter-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/kuidemo/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libkeiland.so -l:libkeiui.so -l:libtruetype.so -l:libc.so -o build/amd64/bin/kuidemo
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/menu-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libkeiland.so -l:libc.so -o build/amd64/bin/menu-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libc.so build/amd64/bin/gpu-forge-test
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/gpu-i915-test
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/gpu-recovery-test
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/gpu-share-test
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/mview/main.o build/amd64/dynamic/obj/userland/tests/mview/window.o build/amd64/dynamic/obj/userland/tests/mview/renderer.o build/amd64/dynamic/obj/userland/tests/mview/model.o build/amd64/dynamic/obj/userland/tests/mview/camera.o build/amd64/dynamic/obj/userland/tests/mview/input.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libc.so -o build/amd64/bin/mview
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/peninject/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/peninject
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/network-probe/main.o build/amd64/dynamic/obj/userland/base/net/protocol.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/network-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/greeter-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/popup-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/popup-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libkeiland.so --needed libkeiui.so --needed libtruetype.so \
+ --needed libc.so build/amd64/bin/kuidemo
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/seat-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/seat-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libkeiland.so --needed libc.so build/amd64/bin/menu-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/tablet-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/tablet-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/subsurface-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/subsurface-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/titlebar-probe/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libkeiland.so -l:libc.so -o build/amd64/bin/titlebar-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/network-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libc.so build/amd64/bin/mview
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/peninject
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/touchinject/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/touchinject
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/popup-probe
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/seat-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/vkdemo/main.o build/amd64/dynamic/obj/userland/tests/vkdemo/renderer.o build/amd64/dynamic/obj/userland/tests/vkdemo/display.o build/amd64/dynamic/obj/userland/base/common/sha256.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libc.so -o build/amd64/bin/vkdemo
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax -Wl,--gc-sections -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code -Wl,-z,stack-size=0x100000,--allow-shlib-undefined -Wl,--dynamic-linker=/lib/ld.so /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/base/common/command.o build/amd64/dynamic/obj/userland/base/common/pager.o build/amd64/dynamic/obj/userland/tests/wakebench/main.o  -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic -l:libc.so -o build/amd64/bin/wakebench
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/wlshm/main.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libwayland-client.so -l:libc.so -o build/amd64/bin/wlshm
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libkeiland.so --needed libc.so build/amd64/bin/titlebar-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/tests/wltest/main.o build/amd64/dynamic/obj/userland/tests/wltest/window.o build/amd64/dynamic/obj/userland/tests/wltest/renderer.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libc.so -o build/amd64/bin/wltest
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 --gc-sections -nostdlib -static \
+ -z max-page-size=4096 -z stack-size=0x100000 \
+ -T platform/amd64/user.ld \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt0.o /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/libc.o \
+ build/amd64/user64/userland/tests/syscall-smoke.o -o build/amd64/POSIX-R1.ELF
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/subsurface-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 --gc-sections -nostdlib -static \
+ -z max-page-size=4096 -z stack-size=0x100000 \
+ -T platform/amd64/user.ld /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt0.o /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/libc.o \
+ build/amd64/user64/userland/tests/posix-r2.o -o build/amd64/POSIX-R2.ELF
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/tablet-probe
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 --gc-sections -nostdlib -static \
+ -z max-page-size=4096 -z stack-size=0x100000 \
+ -T platform/amd64/user.ld /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt0.o /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/libc.o \
+ build/amd64/user64/userland/tests/posix-r2-remaining.o -o build/amd64/POSIX-R2-REMAINING.ELF
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build tools/build/check-user-elf.noct --machine amd64 build/amd64/POSIX-R1.ELF
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/touchinject
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libc.so build/amd64/bin/wltest
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 --gc-sections -nostdlib -static \
+ -z max-page-size=4096 -z stack-size=0x100000 \
+ -T platform/amd64/user.ld /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt0.o /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/libc.o \
+ build/amd64/user64/userland/tests/susv4-xsi.o -o build/amd64/SUSV4-XSI.ELF
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build tools/build/check-user-elf.noct --machine amd64 build/amd64/POSIX-R2.ELF
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 --gc-sections -nostdlib -static \
+ -z max-page-size=4096 -z stack-size=0x100000 \
+ -T platform/amd64/user.ld /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt0.o /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/libc.o \
+ build/amd64/user64/userland/tests/smp-resource-stress.o -o build/amd64/SMP-STRESS.ELF
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libc.so build/amd64/bin/vkdemo
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libwayland-client.so --needed libc.so build/amd64/bin/wlshm
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build tools/build/check-user-elf.noct --machine amd64 build/amd64/POSIX-R2-REMAINING.ELF
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application --needed libc.so build/amd64/bin/wakebench
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 --gc-sections -nostdlib -static \
+ -z max-page-size=4096 -z stack-size=0x100000 \
+ -T platform/amd64/user.ld /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt0.o /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/libc.o \
+ build/amd64/user64/userland/tests/posix-phase5-helper.o -o build/amd64/bin/posix-phase5-helper
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname rpathdep.so --hash-style=gnu \
+ -z now -z relro -z separate-code build/amd64/dynamic/obj/userland/tests/rpathdep.o -o build/amd64/dynamic/alt/rpathdep.so
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname verstest.so --hash-style=gnu \
+ -z now -z relro -z separate-code \
+ --version-script=userland/tests/versiontest.map build/amd64/dynamic/obj/userland/tests/versiontest.o -o build/amd64/dynamic/verstest.so
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname versuse.so --hash-style=gnu \
+ -z now -z relro -z separate-code build/amd64/dynamic/obj/userland/tests/versionuse.o -Lbuild/amd64/dynamic \
+ -l:verstest.so -o build/amd64/dynamic/versuse.so
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build tools/build/check-user-elf.noct --machine amd64 build/amd64/SUSV4-XSI.ELF
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname tlstest.so --hash-style=gnu \
+ -z now -z relro -z separate-code --enable-new-dtags \
+ -rpath '$ORIGIN/alt' \
+ build/amd64/dynamic/obj/userland/tests/tlstest.o \
+ -Lbuild/amd64/dynamic/alt -l:rpathdep.so -o build/amd64/dynamic/tlstest.so
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build tools/build/check-user-elf.noct --machine amd64 build/amd64/SMP-STRESS.ELF
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname rpthtest.so --hash-style=gnu \
+ -z now -z relro -z separate-code --disable-new-dtags \
+ -rpath '$ORIGIN/alt' build/amd64/dynamic/obj/userland/tests/rpathtest.o -Lbuild/amd64/dynamic/alt \
+ -l:rpathdep.so -o build/amd64/dynamic/rpathtest.so
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build tools/build/check-user-elf.noct --machine amd64 build/amd64/bin/posix-phase5-helper
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o \
+ build/amd64/dynamic/obj/userland/tests/dyntest.o \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libc.so -o build/amd64/dynamic/dyntest
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role interpreter build/amd64/dynamic/ld.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role libc build/amd64/dynamic/libc.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role module build/amd64/dynamic/tlstest.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role rpath-module build/amd64/dynamic/rpathtest.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role version-definition build/amd64/dynamic/verstest.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role version-consumer build/amd64/dynamic/versuse.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role program build/amd64/dynamic/dyntest
+zedBSD amd64 dynamic userland artifacts: PASS

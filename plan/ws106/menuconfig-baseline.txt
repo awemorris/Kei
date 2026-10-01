@@ -1,0 +1,1 @@
+MAC-T001: noto-color-emoji is filed under packages/fonts, which the menu omits

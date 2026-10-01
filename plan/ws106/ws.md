@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG001
 Related Milestones: MG006
 Parent: [Master](../master.md)
-Queue: q540
-Resume point: p002 / q540-i01 を実行中。
+Queue: なし（q540 finished、partial scope cleared）
+Resume point: ime-probe の非競合回答後、p002残り2filesを選定。p003は全移動後。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -45,7 +45,7 @@ WS105 の既存 Linux 出力を利用。WS095 の ime-probe は人間の作業�
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
 | [ws106p001](phase001/phase.md) | 対象・参照・build 契約を確定 | 台帳と移動手順、実際の build/config/check command を固定。所有が未調整なら ime-probe の実行を選定しない。 | cleared | なし |
-| [ws106p002](phase002/phase.md) | source・データと参照を移動 | T1/T2 を満たす。source とデータの move 前後の hash と差分を記録する。 | in-progress | p001 |
+| [ws106p002](phase002/phase.md) | source・データと参照を移動 | T1/T2 を満たす。source とデータの move 前後の hash と差分を記録する。 | uncleared | p001 |
 | [ws106p003](phase003/phase.md) | 全文規約・build/install・最終 boot | T1〜T4 と全 Phase の成果を照合。未実施の機種・アプリ実行は区別して記録する。 | planning | p002 |
 
 
@@ -64,9 +64,8 @@ commit は `WIP`、push なし。GitHub 公開・Issue/Project 更新は現在 d
 
 ## 現状・再開
 
-2026-10-01、source `01c754a0` を調査して計画を新設。実装・移動・CI job 追加は未実施。
-Queue は無し。p001 の計画を確認して有限 Queue を選定する。後続 Phase は案で、調査結果によって詳細化する。
-既存 q538 は finished、WS105 の完了範囲を拡張しない。
+29 package＋追加13filesの承認partial scopeはcleared。164filesのhash/mode/参照・registry保存、Linux GCC/Clang clean build/install warning0（ELF24/source331各）、zedBSD28app/POSIX/loader/image warning0、boot-test.sh login PNG確認。ime-probe2filesは非競合回答待ちで未変更。whole p002はuncleared、p003は未実行、WS106はincomplete。
+[検証checkpoint](verification-checkpoint.md)。残りime-probeと最終conformance/bootを再開する。WS105の完了範囲は変わらない。
 
 ## イベント
 
@@ -88,3 +87,7 @@ GitHubの各Phase/WS event deliveryはoutbox pending。ime-probe所有確認と�
 2026-10-01 / ws106-q539-style-decision: ユーザー「WS106 は移動に限定し、既存スタイルの維持を認める」。[全文の限定例外](../standards/ws106-relocation.md)を適用。新実装なし、move/hashとpath-only diffを全文review。
 
 2026-10-01 / ws106-q539-cleared: p001 cleared。30 package＋承認追加13files、全166 tracked fileのhash/mode/source→destinationと参照217fileを棚卸し。menu/package/config/install互換とbuild/boot手順をdesign.mdへ確定。既存styleはユーザーの限定例外を記録。ime-probeは人間作業との非競合回答まで選定から外す条件で、他29件と13filesは実行可能。証拠: plan/ws106/survey.json、programs-before.txt、style-before.txt、design.md。
+
+2026-10-01 / ws106-fonts-tracking: 追加した既存menuconfig fixtureは移動前からのFonts分類欠落でFAIL。別条件の[BUG-129](../bugs/BUG-129.md)へ記録。移動固有のregistry比較PASS、全fixture PASSは未主張、修正はWS106の移動scope外。
+
+2026-10-01 / ws106-q540-partial-cleared: 29 package＋追加13filesの承認partial scopeはcleared。164filesのhash/mode/参照・registry保存、Linux GCC/Clang clean build/install warning0（ELF24/source331各）、zedBSD28app/POSIX/loader/image warning0、boot-test.sh login PNG確認。ime-probe2filesは非競合回答待ちで未変更。whole p002はuncleared、p003は未実行、WS106はincomplete。 所有質問は未回答、経過時間を確認済みとは解釈しない。p003のwhole p002依存は保持する。

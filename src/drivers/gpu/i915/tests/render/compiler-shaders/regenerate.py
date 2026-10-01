@@ -336,7 +336,7 @@ def main():
         lines.extend(['', f'/* {source} (sha256 {hashlib.sha256(path.read_bytes()).hexdigest()}), {len(words)} words. */'])
         c_words(lines, symbol, words)
 
-    shipped = directory.parents[6] / 'userland' / 'base' / 'mview' / 'shaders'
+    shipped = directory.parents[6] / 'userland' / 'tests' / 'mview' / 'shaders'
     for source, symbol in SHIPPED:
         binary = (shipped / source).read_bytes()
         words = struct.unpack(f'<{len(binary) // 4}I', binary)

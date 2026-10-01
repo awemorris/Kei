@@ -1607,5 +1607,7 @@
       "after": "userland/retro/glxtest/main.c"
     }
   ],
-  "excluded": "ime-probe ownership answer pending"
+  "excluded": "ime-probe ownership answer pending",
+  "record_kind": "initial relocation attempt, before review restoration",
+  "correction": "Historical/generated/retired changes were restored before 771469b0. Initial edited array contains transient attempted replacements; final source diff is commits 771469b0 / 313ec26f plus shader locator supplement; unrelated human README c38be46b excluded."
 }

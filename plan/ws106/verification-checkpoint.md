@@ -21,3 +21,11 @@
 過去のログ/patch/ledgerへの自動locator変更はreviewで除外し、元hashと完全一致するよう復元。実際の差分は現役runner/source/buildのみ。
 既存styleはユーザーが認めたWS106限定例外。new implementation無し、GPU/実機/機能回帰はpure relocationなので未実施。
 最終boot/full acceptanceはp003で記録。ime-probe所有未確認のままwhole WSをcompletedにしない。
+
+## q540 の終了checkpoint
+
+29 package＋追加13filesの承認partial scopeはcleared。164filesのhash/mode/参照・registry保存、Linux GCC/Clang clean build/install warning0（ELF24/source331各）、zedBSD28app/POSIX/loader/image warning0、boot-test.sh login PNG確認。ime-probe2filesは非競合回答待ちで未変更。whole p002はuncleared、p003は未実行、WS106はincomplete。
+
+既存menuconfig host fixtureは移動前と同じFonts分類欠落でFAIL、[BUG-129](../bugs/BUG-129.md)へtracking、今回未修正。
+[ビルド記録とPNG](../history/ws106/q540/evidence/SHA256SUMS)をSHA256照合して保存。bootは移動済み範囲の中間確認であり、残りime-probe移動後の最終p003 bootは未実施。
+source commits: 771469b0 / 313ec26f、shader-generatorの実path補完をこのcheckpointとcommit。並行するc38be46b README変更は人間の変更として保持、WS106のsource差分に含めない。

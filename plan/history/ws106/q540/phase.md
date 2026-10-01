@@ -4,7 +4,7 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS106](../ws.md)
+Parent: [WS106](/home/awe/zedBSD-claude1/plan/ws106/ws.md)
 Queue / Attempt: q540 / q540-i01
 
 ## 目的・範囲
@@ -24,8 +24,8 @@ T1/T2 を満たす。source とデータの move 前後の hash と差分を記�
 
 ## 適用規則・影響する部品・検証
 
-[WS の制約/部品/受け入れ](../ws.md)、[Guardrail](../../guardrail.md)、
-[C 規約全文](../../coding-style.md)、[自動化](../../standards/automation.md)を適用。
+[WS の制約/部品/受け入れ](/home/awe/zedBSD-claude1/plan/ws106/ws.md)、[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、
+[C 規約全文](/home/awe/zedBSD-claude1/plan/coding-style.md)、[自動化](/home/awe/zedBSD-claude1/plan/standards/automation.md)を適用。
 新規/変更 C は全文該当節を読み、clang-format-19 と style-check の限界を補う。
 最終 conformance は全 WS の source を全文で review。build warning 0、必要な契約検証、diff-check を記録する。
 具体的な build/config/tool version と script は p001 の結果で固定する。`make check` は禁止。
@@ -48,11 +48,11 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 susv4-xsi.c、posix-phase5-helper.c、smp-resource-stress.c、dyntest.c、tlstest.c、rpathdep.c、rpathtest.c、versiontest.c、versionuse.c、versiontest.map を userland/tests/ 直下へ。
 これに付く grouping Makefile と platform の source/object/map/runner参照も更新する。
 対象30 package は保持。T1/T2 の移動/参照台帳は追加13filesを含む。T3/T4もこの追加範囲のbuild/hash/規約reviewへ適用。
-[移動手順と検証](../design.md)、[台帳](../survey.json)。p001→p002→p003の依存は変更しない。
+[移動手順と検証](/home/awe/zedBSD-claude1/plan/ws106/design.md)、[台帳](/home/awe/zedBSD-claude1/plan/ws106/survey.json)。p001→p002→p003の依存は変更しない。
 Event ws106-q539-scope-update: 調査で初期inventoryの漏れを発見し、ユーザーの具体的追加指示と全変更Phase/WSへの影響を記録。
 GitHubの各Phase/WS event deliveryはoutbox pending。ime-probe所有確認と既存style扱いの回答を待つ。
 
-2026-10-01 / ws106-q539-design-revision: root13fileとgrouping/menu/referenceを含む[移動手順](../design.md)へ詳細化。既存styleは[限定例外](../../standards/ws106-relocation.md)で保持。ime-probeの所有未確認なら、その1件を選定から外したpartial Queueで他29件＋13fileを先に移す。Phase全体のclearanceには残り1件の移動も要る。
+2026-10-01 / ws106-q539-design-revision: root13fileとgrouping/menu/referenceを含む[移動手順](/home/awe/zedBSD-claude1/plan/ws106/design.md)へ詳細化。既存styleは[限定例外](/home/awe/zedBSD-claude1/plan/standards/ws106-relocation.md)で保持。ime-probeの所有未確認なら、その1件を選定から外したpartial Queueで他29件＋13fileを先に移す。Phase全体のclearanceには残り1件の移動も要る。
 
 ## q540 checkpoint（partial scope、ime-probe回答待ち）
 
@@ -62,12 +62,12 @@ Linux gcc/clang clean build/install exit0、ELF24各/header331各/source同期PA
 既存style候補は1300−ime-probe28=1272でnormalize完全一致、新指摘なし。実機/GPUの機能回帰はpure moveの規則に従い未実施。
 ime-probeは未変更で人間作業の非競合回答待ち、whole Phaseはまだclearedでない。scope補完/続行の条件を保持。
 
-2026-10-01 / ws106-fonts-tracking: 追加した既存menuconfig fixtureは移動前からのFonts分類欠落でFAIL。別条件の[BUG-129](../../bugs/BUG-129.md)へ記録。移動固有のregistry比較PASS、全fixture PASSは未主張、修正はWS106の移動scope外。
+2026-10-01 / ws106-fonts-tracking: 追加した既存menuconfig fixtureは移動前からのFonts分類欠落でFAIL。別条件の[BUG-129](/home/awe/zedBSD-claude1/plan/bugs/BUG-129.md)へ記録。移動固有のregistry比較PASS、全fixture PASSは未主張、修正はWS106の移動scope外。
 
 ## q540-i01 終了 / 2026-10-01T14:50:18.951054+00:00
 
 29 package＋追加13filesの承認partial scopeはcleared。164filesのhash/mode/参照・registry保存、Linux GCC/Clang clean build/install warning0（ELF24/source331各）、zedBSD28app/POSIX/loader/image warning0、boot-test.sh login PNG確認。ime-probe2filesは非競合回答待ちで未変更。whole p002はuncleared、p003は未実行、WS106はincomplete。
 
 限定されたQueue itemのclearanceとwhole Phaseの未達を分ける。T1/T2全30件は未達（ime-probe1件のみ）。所有確認後に同じPhaseの残り2filesを新attemptで選定し、全30件のregistry/style/hashを再照合する。
-[検証checkpoint](../verification-checkpoint.md)、[BUG-129](../../bugs/BUG-129.md)、[boot PNG](../../history/ws106/q540/evidence/login.png)。
+[検証checkpoint](/home/awe/zedBSD-claude1/plan/ws106/verification-checkpoint.md)、[BUG-129](/home/awe/zedBSD-claude1/plan/bugs/BUG-129.md)、[boot PNG](/home/awe/zedBSD-claude1/plan/history/ws106/q540/evidence/login.png)。
 Phaseはremote closeしない。Event: ws106-q540-partial-cleared、Phase/WS/Queue/Board delivery outbox pending。

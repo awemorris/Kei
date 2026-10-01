@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: q540（WS106 p002 in-progress）
+Active Queue: なし（q540 finished、partial scope cleared / WS106 p002 uncleared）
 Current Focused Goal: fg013 — WS106のテスト配置整理（2026-10-01実行指示）。fg010デモを保持、fg012は達成済み。
-Next（2026-10-01 に更新）: WS104 completed（q515〜q522）、WS105 completed（q523〜q538、L1〜L9/最終conformance verified）。BUG-125/127は未修正tracking、GitHub公開/close/Projectはoutbox保留。次のQueueは未選定。レビューのWS106〜WS109をplanningで新設（実装未承認）。既存のfg010/デモ優先順を保持、実機とQEMUの証拠を分ける。サブエージェントN=0。
+Next（2026-10-01 に更新）: WS106の29件＋追加13filesを移動済み、ime-probe非競合回答待ち。回答後p002残りとp003最終レビューを既存承認scopeで選定する。WS104/105 completedを保持、WS107〜109はplanning、GitHub公開はdeferred。Q1/N=0。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -210,7 +210,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS103](ws103/ws.md) | MG006 | compositor を libvulkan だけにする（GPU の UAPI の直の ioctl を無くす）（2026-09-30 ユーザー「規則にして今移す」、規則は Guardrail） | completed | 2026-10-01 完了（p001〜p007、q508〜q514）: V1〜V4 を満たす（QEMU の Venus と 5330 の passthrough、単独の実機の起動は未実施）。Linux・FreeBSD の backend は F-065。試験は plan/tools/gpu-boundary |
 | [WS104](ws104/ws.md) | MG006 | Keiland の OS の境界の整理: desktop の公開の header を `userland/desktop/keiland/` へ、libkeiland と compositor の OS の部分を `zedbsd/` の module へ、install の path を macro に。zedBSD の振る舞いは変えない（2026-10-01 ユーザー「Linux移植を進めます」、WS105 の準備） | completed | q515〜q522 / A1〜A6 verified。全文規約と全必須回帰 PASS、Linux は WS105 へ |
 | [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | completed | L1〜L9/最終source conformance verified、q538 finished。Linux host/ownDebian13guest・zedBSD回帰、BUG-125/127は未修正trackingのユーザー許可。GitHub publication pending、次の実装なし |
-| [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | p001 cleared / q539、後続は既存承認scopeのみ。 |
+| [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | q540 partial cleared、p002 uncleared（ime-probe回答待ち）、p003未実行。 |
 | [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | planning | p001 配置/API/品質の点検。既存.so linkを確認、新境界全文を登録。WS074の互換性目標/順は保持。Queue無し |
 | [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | planning | p001 manifest/architecture/環境/依存の設計（amd64案）。WS105出力を利用、WS106配置を反映。Queue無し |
 | [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | planning | p001 graphics/ABI/seat/loader/licenseと検証環境の調査。F-065 FreeBSD分をpromote。Queue無し |
@@ -292,7 +292,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS095（IME）p005〜: **一時的に人間が作業中** | — | ユーザーが戻すと言うまで |
 | WS098（IME のニューラル化）: 学習の corpus と license の判断から | IME の最後の仕上げ | WS095 の辞書の後 |
 | WS080: p001（ld.coff の設計） | デモ critical の後 | spec.md |
-| WS106 p001 | tests/ の対象30件と移動契約の確定 | 対象案とmview/gpudemo指定あり、ime-probe所有調整、Queue無し |
+| WS106 p002 → p003 | 残るime-probe移動 → 全文規約・最終build/boot | p001 cleared、29件＋13files移動済み。ime-probe非競合回答が再開条件、次Queue未選定 |
 | WS107 p001 | libbrowser/source所有・品質の整理 | 新境界規則、API v2/実sourceの点検から、Queue無し |
 | WS108 p001 | 2 distro の .deb/CI | Linuxbuild出力あり、manifest/環境/architectureの設計、Queue無し |
 | WS109 p001 | native FreeBSD15 | F-065をpromote、Linux固有ABI/seatと環境/licenseの調査から、Queue無し |
