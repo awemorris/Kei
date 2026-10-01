@@ -1,0 +1,24 @@
+log: ZWL HANDOFF go=1 ok
+log: ZWL GLASS launch surface= ok
+Files: surface 8, 1120 x 720 at 400,271 (title bar top) to 1520,1043
+log: ZWL CURSOR frame edges=10$ ok
+log: ZWL RESIZE start surface=8 edges=10  ok
+log: ZWL RESIZE settled surface=8  ok
+bottom-right: 1120 x 720 at 400,271 -> 1160 x 760 at 400,271
+log: ZWL CURSOR frame edges=5$ ok
+log: ZWL RESIZE start surface=8 edges=5  ok
+log: ZWL RESIZE settled surface=8  ok
+top-left: 1160 x 760 at 400,271 -> 1200 x 800 at 360,231
+log: ZWL CURSOR frame edges=9$ ok
+log: ZWL RESIZE start surface=8 edges=9  ok
+log: ZWL RESIZE settled surface=8  ok
+top-right: 1200 x 800 at 360,231 -> 1240 x 840 at 360,191
+log: ZWL CURSOR frame edges=6$ ok
+log: ZWL RESIZE start surface=8 edges=6  ok
+log: ZWL RESIZE settled surface=8  ok
+bottom-left: 1240 x 840 at 360,191 -> 1280 x 880 at 320,191
+log: ZWL CURSOR frame edges=8$ ok
+log: ZWL RESIZE start surface=8 edges=8  ok
+log: ZWL RESIZE settled surface=8  ok
+right: 1280 x 880 at 320,191 -> 1320 x 880 at 320,191
+zdesktop-p128: status=0

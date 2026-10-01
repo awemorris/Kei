@@ -1,0 +1,12 @@
+venus: lease released; holding the last picture
+venus: the next lease's first frame after holding the last picture for 1776 ms
+venus: lease released; holding the last picture
+venus: the next lease's first frame after holding the last picture for 1135 ms
+venus: lease released; holding the last picture
+venus: the next lease's first frame after holding the last picture for 1878 ms
+venus: lease released; holding the last picture
+venus: the next lease's first frame after holding the last picture for 1071 ms
+venus: lease released; holding the last picture
+venus: the next lease's first frame after holding the last picture for 1587 ms
+venus: lease released; holding the last picture
+venus: the next lease's first frame after holding the last picture for 1114 ms

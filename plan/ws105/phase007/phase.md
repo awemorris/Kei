@@ -2,7 +2,7 @@
 
 # ws105-p007: compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync
 
-Status: in-progress
+Status: cleared
 Disposition: normal
 Parent: [WS105](../ws.md)
 Queue: q532 / q532-i01
@@ -38,7 +38,7 @@ compositor が Linux の GPU の client（libvulkan-compat の WSI を使う app
 make -j64 keiland-linux && make keiland-linux-install DESTDIR=$PWD/build/keiland-linux/stage
 make -j64 keiland-linux CC=clang KEILAND_LINUX_BUILD=build/keiland-linux-clang
 sh plan/tools/keiland-linux/elf-check.sh build/keiland-linux/stage && sh plan/tools/keiland-linux/makefile-sync.sh && sh plan/tools/keiland-linux/header-check.sh
-cc -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/stage/opt/keiland/bin/dmabuf-forge plan/tools/keiland-linux/dmabuf-forge.c -Iuserland/desktop/keiland \
+cc -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/stage/opt/keiland/bin/dmabuf-forge plan/tools/keiland-linux/dmabuf-forge.c -I. -Iuserland/desktop/keiland \
    -Lbuild/keiland-linux/lib -l:libwayland-client.so -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
 G=plan/tools/keiland-linux/guest.sh
 sh $G start && sh plan/tools/keiland-linux/install-guest.sh
@@ -70,8 +70,28 @@ params に `add(fd, 0, 0, stride, 0, 0)` → `create_immed(64, 4096, ARGB8888, 0
 
 ## 結果
 
-（実行の後に書く）
+cleared（q532）。source `2d4abde1`（WIP）。Linuxのstandard zwp_linux_dmabuf_v1 v3 server / 1-plane validation / SCM_RIGHTSの所有 / Vulkan import / commitごとのimplicit acquire syncを実装。bind・object-free hookを既存OS境界へ追加、zedBSDは空実装。wltestとmviewの独立Linux buildとmodel data、test-only dmabuf-forgeを追加。gcc14.2 / clang19.1.7 exit0・warning0、15ELF / source-sync / 135headers PASS。formatter19・新moduleのstyle-check0、該当全文規約のmanual review。Linux guest: wltest600frame exit0・3import・600acquirefence、窓内部RGB(32,96,208)、mview model（25861vertex / 37000triangle / 13texture）描画。両PNGを目視・ユーザーに提示。forge out_of_bounds6 / IMPORT_ERROR / compositor継続 PASS、5窓fd20→20、SIGTERM error0 / cleanup_failed0、guest停止済み。V5の別process dma-buf importを確認。
+
+zedBSD: disk-image exit0・自前warning0、OS境界C1〜C5 / V1（54source）、dedicated18 / decoder17 ×ordinary/sanitize、login PNG、forge拒否後の120frame / 3import、fence600（generation1全600、62秒）PASS。C1/C2/C9の元13件は10PASS・3FAILを保持。p076のresize416（期待200）は既存[BUG-125](../../bugs/BUG-125.md)、p072の最小化直後PNGは[BUG-127](../../bugs/BUG-127.md)へ未修正trackingとして移管。ユーザーは当チャットで「move/resizeは、Linux移植と関係ないバグの可能性があるので、いったんバグリストに記載するか、既存バグチケットに追記して、先に進みましょう。clear判定に進んでいいです。また、直せそうなら直してもいいですが、時間がかかりそうなら直さなくていいです。」と具体的なclear判断を許可。両件の長い追加調査は実施しない。修理・13/13PASSとは主張しない。cursor-ownerはtitle画像だけFAIL、同じsource・imageの単独1回で全条件PASS（title57 / desktop118 / body0 / body-again0）。[BUG-118](../../bugs/BUG-118.md)に元と追試の証拠を追記、原因と発生率は未調査で、既存修正の無効化は未証明。
+
+[証拠とSHA256manifest](../../history/ws105/q532/evidence/SHA256SUMS)。未実施:実機GPU、非同期hardware wait / FOREIGN queue ownership（design既存V3/V8/V9の制限）、tracked2件の修正。その他のp007必須条件は確認済み。GitHub publication / closeは未実施、eventはoutboxに保持。WS105はincomplete、次はp008。
+
+実装 commit: `2d4abde19fa2837bb9b7014d1bf931542d557c21`（WIP）。終了 UTC: 2026-10-01T09:45:04.063506+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
 
 ## 開始前の設計補完（2026-10-01、Q1）
 
 現行 `bind_global` は GPU factory の bind event を呼ぶ hook を持たない。D6 の v3 format / modifier 通知を実現するため、既存の OS 境界と同じ `int zwl_gpu_bind(struct zwl_object *)` を追加する。common は factory の bind 直後に呼び、Linux が event を送る。zedBSD は 0 を返す空実装。`zwl_gpu_object_free` の宣言も `zwl-gpu.h` に置く。技術上の欠落の補完で、product・受け入れ・依存・他 Phase は変えない。p007 の Queue 選定前に scope に反映。
+
+## 実行 checkpoint（2026-10-01）
+
+q532 / source `2d4abde1`（WIP）。Linux gcc14.2 / clang19.1.7 warning0、15ELF / source-sync / 135header PASS、new Linux GPU module / forge fixture の formatter19・style-check0・全文規約の manual review。guest wltest600frame exit0、3import / 600acquirefence。別processのimportされた窓のPNGは内部2点でRGB(32,96,208)、mviewの25861vertex / 37000triangle / 13texture model表示。forgeはparamsのout_of_bounds6を受信、compositor継続。5窓の開閉でfd20→20。SIGTERMはerror0 / cleanup_failed0、guest停止。Linux PNGはユーザーに表示済み。zedBSD必須回帰は直列実行中（未完了）。実機GPUの非同期wait / FOREIGN queue ownershipは既存designの制限を維持。
+
+## Target 回帰の調査 checkpoint（2026-10-01）
+
+q532 の C9 で p072 と p076 が FAIL。p072 は最小化ログあり、最初のPNGだけ青い窓とminimize位置のcursorが残り、復元とdesktop移動はPASS。p076 はleft resizeのendが416（期待200）、後続800も未到達。既存BUG-125の症状に近いが原因を断定しない。独立項目は続行、Phaseはin-progressを維持。未知調査上限30分で、元の失敗を保持し、同一imageの対象2試験を1回だけdiagnostic trace付きで再実行して切り分ける。production source / criteriaは変更しない。追加のretryや既知bugの修理へ拡張するときは結果と設計を再評価する。
+
+### 2026-10-01 window操作のユーザー判断
+
+ユーザー（当チャット）: 「move/resizeは、Linux移植と関係ないバグの可能性があるので、いったんバグリストに記載するか、既存バグチケットに追記して、先に進みましょう。clear判定に進んでいいです。また、直せそうなら直してもいいですが、時間がかかりそうなら直さなくていいです。」
+
+p076はBUG-125へ追加、p072はBUG-127へ移管。両方のFAILは保持し、修正済みとはしない。準備した追加diagnosticは未実施。その他の必須確認と新しいcursor-ownerの失敗は別途確認する。全13件PASSとは記録しない。GitHub公開は保留。

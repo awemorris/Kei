@@ -118,3 +118,19 @@ cc -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/stage/opt/keiland/bin
 ```
 
 `flip-delay.c` は guest専用のtest-only preload。1回だけDRM pollを250ms遅らせてtimeout0を返す。旧100ms総期限ではOUT_OF_DATE、修正後は次のreal pollで実際のeventを読んで3色PASS。productionの設定を追加せず、poll≤100ms/総期限5sの道を確かめる。
+
+## Linux compositor の dma-buf bounds probe
+
+`dmabuf-forge.c` は我々の Vulkan frontend で本当の64×64のdma-bufをexportし、同じfdの高さだけ4096と偽る。compositorからparamsの`out_of_bounds`（6）を受けた時だけPASS。productionの試験用switchは使わない。
+
+```sh
+cc -std=gnu17 -Wall -Wextra -Werror -I. -Iuserland/desktop/keiland \
+  -o build/keiland-linux/stage/opt/keiland/bin/dmabuf-forge \
+  plan/tools/keiland-linux/dmabuf-forge.c -Lbuild/keiland-linux/lib \
+  -l:libwayland-client.so -l:libvulkan.so.1 \
+  -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
+sh plan/tools/keiland-linux/install-guest.sh
+sh plan/tools/keiland-linux/guest.sh ssh 'XDG_RUNTIME_DIR=/run WAYLAND_DISPLAY=keiland-0 KEILAND_DRM_DEVICE=none timeout 30 /opt/keiland/bin/dmabuf-forge'
+```
+
+guestにdirect compositorを起動した後に使う。確認はclientの終了0 / PASSとcompositorのIMPORT_ERROR増加・process継続。実機GPUの非同期waitはこのprobeの検証対象ではない。

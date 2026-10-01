@@ -1,0 +1,12 @@
+boot: 27 moments; after the first picture: black 0, text 0; before it (firmware): black 5, text 0
+C1-boot: PASS
+shutdown: the machine went down (SSH no longer answers): 1
+shutdown: 14 moments in 40 s; black 0, text 0 before the end, black at the end 0
+C1-shutdown: PASS
+shutdown: the last picture (seen-010.png) against the greeter: card 14% changed, power buttons 11% changed
+C1-shutdown-picture: PASS
+kex_exchange_identification: read: Connection reset by peer
+C1-shutdown-order: WARN (the greeter's log was not read before the machine went down)
+C1-shutdown-qemu: PASS (QEMU ended)
+C1 RESULT boot_black=0 boot_text=0 shutdown_black=0 shutdown_text=0 shutdown_down=1 card_changed=14 buttons_changed=11 qemu_gone=1
+C1: PASS

@@ -1,0 +1,10 @@
+window at 440,293
+log: ZWL CURSOR client=[0-9]+ shown=1 (1) ok
+log: ZWL CURSOR client=[0-9]+ shown=0 (1) ok
+log: ZWL CURSOR client=[0-9]+ shown=1 (2) ok
+desktop: the arrow at the pointer (118 pixels) ok
+title bar: no arrow at the pointer (0 pixels) FAIL
+body: nothing drawn at the pointer (0 pixels) ok
+body again: nothing drawn at the pointer (0 pixels) ok
+wlshm pointer leaves: 0
+cursor-owner: FAIL

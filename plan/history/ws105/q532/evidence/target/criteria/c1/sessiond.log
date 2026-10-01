@@ -1,0 +1,59 @@
+1790845672 SESSIOND START greeter=/bin/wayland session=/etc/keiland/session pid=14
+1790845672 SESSIOND AUTOLOGIN user=kei
+1790845672 SESSIOND SEAT path=/dev/gpu0 uid=1000 mode=0600
+1790845672 SESSIOND SEAT path=/dev/input/event0 uid=1000 mode=0600
+1790845672 SESSIOND SEAT path=/dev/input/event1 uid=1000 mode=0600
+1790845672 SESSIOND SEAT path=/dev/input/event2 uid=1000 mode=0600
+1790845672 SESSIOND SEAT path=/dev/input/event3 uid=1000 mode=0600
+1790845672 SESSIOND SESSION home=/home/kei made uid=1000
+1790845672 SESSIOND SESSION start user=kei uid=1000 pid=16 runtime=/run/user/1000
+1790845677 SESSIOND HANDOFF session ready=1 waited_ms=5230
+1790845677 SESSIOND HANDOFF go written=3 at_ms=13984
+1790845710 SESSIOND HANDOFF logout at_ms=46722
+1790845710 SESSIOND SEAT path=/dev/gpu0 uid=78 mode=0600
+1790845710 SESSIOND SEAT path=/dev/input/event0 uid=78 mode=0600
+1790845710 SESSIOND SEAT path=/dev/input/event1 uid=78 mode=0600
+1790845710 SESSIOND SEAT path=/dev/input/event2 uid=78 mode=0600
+1790845710 SESSIOND SEAT path=/dev/input/event3 uid=78 mode=0600
+1790845710 SESSIOND GREETER start pid=36 uid=78
+1790845711 SESSIOND HANDOFF greeter ready: waits at_ms=47853
+1790845712 SESSIOND HANDOFF session released=1 at_ms=48535
+1790845712 SESSIOND HANDOFF greeter go written=3 at_ms=48537
+1790845714 SESSIOND SESSION end user=kei pid=16 status=0
+1790845716 SESSIOND GREETER adopt pid=36
+1790845726 SESSIOND AUTH ok user=kei uid=1000
+1790845726 SESSIOND GREETER stays pid=36
+1790845726 SESSIOND SEAT path=/dev/gpu0 uid=1000 mode=0600
+1790845726 SESSIOND SEAT path=/dev/input/event0 uid=1000 mode=0600
+1790845726 SESSIOND SEAT path=/dev/input/event1 uid=1000 mode=0600
+1790845726 SESSIOND SEAT path=/dev/input/event2 uid=1000 mode=0600
+1790845726 SESSIOND SEAT path=/dev/input/event3 uid=1000 mode=0600
+1790845726 SESSIOND SESSION start user=kei uid=1000 pid=43 runtime=/run/user/1000
+1790845727 SESSIOND HANDOFF session ready=1 waited_ms=1121
+1790845728 SESSIOND HANDOFF greeter released=1 at_ms=64452
+1790845728 SESSIOND HANDOFF go written=3 at_ms=64453
+1790845729 SESSIOND GREETER end pid=36 status=0
+1790845745 SESSIOND HANDOFF logout at_ms=81563
+1790845745 SESSIOND SEAT path=/dev/gpu0 uid=78 mode=0600
+1790845745 SESSIOND SEAT path=/dev/input/event0 uid=78 mode=0600
+1790845745 SESSIOND SEAT path=/dev/input/event1 uid=78 mode=0600
+1790845745 SESSIOND SEAT path=/dev/input/event2 uid=78 mode=0600
+1790845745 SESSIOND SEAT path=/dev/input/event3 uid=78 mode=0600
+1790845745 SESSIOND GREETER start pid=65 uid=78
+1790845747 SESSIOND HANDOFF greeter ready: waits at_ms=83931
+1790845748 SESSIOND HANDOFF session released=1 at_ms=84606
+1790845748 SESSIOND HANDOFF greeter go written=3 at_ms=84606
+1790845750 SESSIOND SESSION end user=kei pid=43 status=0
+1790845753 SESSIOND GREETER adopt pid=65
+1790845759 SESSIOND AUTH ok user=kei uid=1000
+1790845759 SESSIOND GREETER stays pid=65
+1790845759 SESSIOND SEAT path=/dev/gpu0 uid=1000 mode=0600
+1790845759 SESSIOND SEAT path=/dev/input/event0 uid=1000 mode=0600
+1790845759 SESSIOND SEAT path=/dev/input/event1 uid=1000 mode=0600
+1790845759 SESSIOND SEAT path=/dev/input/event2 uid=1000 mode=0600
+1790845759 SESSIOND SEAT path=/dev/input/event3 uid=1000 mode=0600
+1790845759 SESSIOND SESSION start user=kei uid=1000 pid=72 runtime=/run/user/1000
+1790845760 SESSIOND HANDOFF session ready=1 waited_ms=1141
+1790845761 SESSIOND HANDOFF greeter released=1 at_ms=97422
+1790845761 SESSIOND HANDOFF go written=3 at_ms=97422
+1790845762 SESSIOND GREETER end pid=65 status=0

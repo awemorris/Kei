@@ -1,0 +1,30 @@
+copies: 32
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=0-300 sum=07b08977
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=0-300 sum=205c1877
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=80-110 sum=585b9ecd
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=90-120 sum=585b9ecd
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=100-130 sum=585b9ecd
+check: (10,10) want 203040 got 203040 ok
+check: (450,260) want ff0000 got ff0000 ok
+check: (530,340) want 7f8000 got 7f8000 ok
+check: (810,340) want 7f8000 got 7f8000 ok
+check: (700,450) want 0000ff got 0000ff ok
+check: (100,100) want 000000 got 000000 ok
+check: (101,102) want ffffff got ffffff ok
+check: (99,110) want 203040 got 203040 ok
+check: build/ws105-p007/criteria/c9-p053/shm.png 1280x800 PASS
+check: (636,396) want ffff00 got ffff00 ok
+check: (643,403) want ffff00 got ffff00 ok
+check: (646,406) want ff0000 got ff0000 ok
+check: (634,394) want ff0000 got ff0000 ok
+check: build/ws105-p007/criteria/c9-p053/cursor.png 1280x800 PASS
+check: (640,400) want ff0000 got ff0000 ok
+check: (641,402) want ff0000 got ff0000 ok
+check: build/ws105-p007/criteria/c9-p053/hidden.png 1280x800 PASS
+check: (100,700) want 000000 got 000000 ok
+check: (101,702) want ffffff got ffffff ok
+check: (110,720) want 0000ff got 0000ff ok
+check: (640,200) want 00ff00 got 00ff00 ok
+check: build/ws105-p007/criteria/c9-p053/fullscreen.png 1280x800 PASS
+ZWL MODE window switch_ms=635 at_ms=93916
+p053: PASS

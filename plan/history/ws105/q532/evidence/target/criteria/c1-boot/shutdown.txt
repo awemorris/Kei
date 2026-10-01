@@ -1,0 +1,17 @@
+     0 ms  vga=picture venus=picture seen=picture
+   492 ms  vga=picture venus=picture seen=picture
+   943 ms  vga=picture venus=picture seen=picture
+  1387 ms  vga=picture venus=picture seen=picture
+  1836 ms  vga=picture venus=picture seen=picture
+  2298 ms  vga=picture venus=picture seen=picture
+  2747 ms  vga=picture venus=picture seen=picture
+  3198 ms  vga=picture venus=picture seen=picture
+  3656 ms  vga=picture venus=picture seen=picture
+  4108 ms  vga=picture venus=picture seen=picture
+  4560 ms  vga=picture venus=picture seen=picture
+  5055 ms  vga=picture venus=picture seen=picture
+  5503 ms  vga=picture venus=picture seen=picture
+  5950 ms  vga=picture venus=picture seen=picture
+  6396 ms  none
+  6659 ms  none
+  6909 ms  none

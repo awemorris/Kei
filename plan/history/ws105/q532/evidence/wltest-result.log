@@ -1,0 +1,7 @@
+ZWL READY socket=/run/keiland-0 width=1280 height=800 timeout_ms=18446744073709551615 pid=601
+wltest exit=0
+WLTEST FRAME run=manual frame=600 width=640 height=420 mode=fifo
+WLTEST PRESENT run=manual frames=600 total_us=1112432 max_us=60272
+WLTEST DONE run=manual frames=600
+3
+600

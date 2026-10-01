@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+AssertionError: C1 p126 PASS seconds=75 zdesktop-p126: status=0 
+C1 c1-boot-shutdown PASS seconds=71 C1 RESULT boot_black=0 boot_text=0 shutdown_black=0 shutdown_text=0 shutdown_down=1 card_changed=14 buttons_changed=11 qemu_gone=1
+C2 c2-geometry PASS seconds=83 C2 RESULT pass=14 fail=0 C2: PASS 
+C9 p052 PASS seconds=34 p052: PASS 
+C9 p053 PASS seconds=69 p053: PASS 
+C9 p072 FAIL seconds=46 zdesktop-p072: FAIL 
+C9 p076 FAIL seconds=100 p076: FAIL 
+C9 p126 PASS seconds=106 zdesktop-p126: status=0 
+C9 p128 PASS seconds=47 zdesktop-p128: status=0 
+C9 p134 PASS seconds=60 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p137 PASS seconds=51 p137: PASS 
+C9 p138 PASS seconds=39 p138: PASS 
+C9 cursor-owner FAIL seconds=32 cursor-owner: FAIL 
+

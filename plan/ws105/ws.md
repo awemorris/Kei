@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q532
-Resume point: q532 / p007 を実行中。WS104 の全 prerequisite verified。
+Queue: q532 finished
+Resume point: p007 cleared（q532）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -110,7 +110,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | cleared | p003 |
 | [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | cleared | p004、p001 |
 | [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | cleared | p005、WS104 完了 |
-| [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | in-progress | p006 |
+| [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | cleared | p006 |
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | planned | p007 |
 | [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | planned | p008 |
 | [ws105-p010](phase010/phase.md) | libkeiland の Linux の backend（wpa_supplicant・Linux の interface・ALSA） | planned | p008 |
@@ -287,3 +287,27 @@ cleared。cleared（q531-i01）。Linux の seat-direct・入力・session・wl_
 
 
 [Phase の結果](phase006/phase.md)、[Queue history](../history/queue-q531.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### q532 / p007 checkpoint・p008 の検証手順補正（2026-10-01）
+
+p007 の Linux 検証は PASS、source `2d4abde1`（WIP）。zedBSD の回帰は実行中なので Phase は in-progress。p008 の App Home 手順は実装に合う launcher click に補正（受け入れと依存は不変）。[p007](phase007/phase.md)、[p008](phase008/phase.md)。
+
+### p008 選定前の install data 具体化（2026-10-01、Q1）
+
+既存 Home の apps.conf 入口で Settings・kuidemo を含む D21 の app を提供する。ユーザー wallpaper は WS035 の git 外の決定を維持し、既存元を install、cache のない環境は既存 Aurora の fallback / 明示元指定。Image Viewer は既存対応形式の PNG fixture で検証（PPM reader 追加なし）。受け入れと依存は不変。[p008](phase008/phase.md)、[design §3.3](design.md)。
+
+### 2026-10-01 window操作のユーザー判断
+
+ユーザー（当チャット）: 「move/resizeは、Linux移植と関係ないバグの可能性があるので、いったんバグリストに記載するか、既存バグチケットに追記して、先に進みましょう。clear判定に進んでいいです。また、直せそうなら直してもいいですが、時間がかかりそうなら直さなくていいです。」
+
+p076はBUG-125へ追加、p072はBUG-127へ移管。両方のFAILは保持し、修正済みとはしない。準備した追加diagnosticは未実施。その他の必須確認と新しいcursor-ownerの失敗は別途確認する。全13件PASSとは記録しない。GitHub公開は保留。
+
+### q532 / ws105-p007（2026-10-01T09:45:04.063506+00:00）
+
+cleared。cleared（q532）。source `2d4abde1`（WIP）。Linuxのstandard zwp_linux_dmabuf_v1 v3 server / 1-plane validation / SCM_RIGHTSの所有 / Vulkan import / commitごとのimplicit acquire syncを実装。bind・object-free hookを既存OS境界へ追加、zedBSDは空実装。wltestとmviewの独立Linux buildとmodel data、test-only dmabuf-forgeを追加。gcc14.2 / clang19.1.7 exit0・warning0、15ELF / source-sync / 135headers PASS。formatter19・新moduleのstyle-check0、該当全文規約のmanual review。Linux guest: wltest600frame exit0・3import・600acquirefence、窓内部RGB(32,96,208)、mview model（25861vertex / 37000triangle / 13texture）描画。両PNGを目視・ユーザーに提示。forge out_of_bounds6 / IMPORT_ERROR / compositor継続 PASS、5窓fd20→20、SIGTERM error0 / cleanup_failed0、guest停止済み。V5の別process dma-buf importを確認。
+
+zedBSD: disk-image exit0・自前warning0、OS境界C1〜C5 / V1（54source）、dedicated18 / decoder17 ×ordinary/sanitize、login PNG、forge拒否後の120frame / 3import、fence600（generation1全600、62秒）PASS。C1/C2/C9の元13件は10PASS・3FAILを保持。p076のresize416（期待200）は既存[BUG-125](../../bugs/BUG-125.md)、p072の最小化直後PNGは[BUG-127](../../bugs/BUG-127.md)へ未修正trackingとして移管。ユーザーは当チャットで「move/resizeは、Linux移植と関係ないバグの可能性があるので、いったんバグリストに記載するか、既存バグチケットに追記して、先に進みましょう。clear判定に進んでいいです。また、直せそうなら直してもいいですが、時間がかかりそうなら直さなくていいです。」と具体的なclear判断を許可。両件の長い追加調査は実施しない。修理・13/13PASSとは主張しない。cursor-ownerはtitle画像だけFAIL、同じsource・imageの単独1回で全条件PASS（title57 / desktop118 / body0 / body-again0）。[BUG-118](../../bugs/BUG-118.md)に元と追試の証拠を追記、原因と発生率は未調査で、既存修正の無効化は未証明。
+
+[証拠とSHA256manifest](../../history/ws105/q532/evidence/SHA256SUMS)。未実施:実機GPU、非同期hardware wait / FOREIGN queue ownership（design既存V3/V8/V9の制限）、tracked2件の修正。その他のp007必須条件は確認済み。GitHub publication / closeは未実施、eventはoutboxに保持。WS105はincomplete、次はp008。
+
+[Phase の結果](phase007/phase.md)、[Queue history](../history/queue-q532.md)。WS105 の受け入れは残りの Phase の確認を要する。

@@ -38,6 +38,7 @@ Queue: なし
 
 install の data（`KEILAND_LINUX_DATA` か、生成する物は `keiland-linux.mk` の規則）:
 
+- App Home の一覧: `wayland/linux/apps.conf.in` と `keiland-linux.mk` の生成規則を追加。既存 demo の `plan/ws035/demo/apps.conf` と同じ wire/config 書式で D21 の利用者向け app と試験の window client を載せ、command の prefix を build 時の `KEILAND_PREFIX` に置換。Settings・kuidemo は共通の built-in 一覧にないため、この既存 config の入口で提供する（common home.c は不変）。`etc/keiland/apps.conf` に install。
 - wallpaper: zedBSD の image の作り方（`plan/ws099/tests/build-criteria-image.sh` の wallpaper の行）と同じ: `python3 userland/desktop/wallpapers/generate.py <dir>` で `share/keiland/wallpapers/`、
   既定の `share/keiland/wallpaper.ppm`（criteria の image が入れる物と同じ元）。script の引数は `generate.py` の先頭の注釈を読む。
 - IME の辞書（`share/kei/ime/ja/`）: `SKK-JISYO.kei` は `userland/desktop/ime/dict/SKK-JISYO.kei` を写す。`SKK-JISYO.X` は外部の取得物:
@@ -45,7 +46,7 @@ install の data（`KEILAND_LINUX_DATA` か、生成する物は `keiland-linux.
   `curl -L -o build/distfiles/remacs-1a724393053e.tar.gz https://github.com/awemorris/remacs/archive/1a724393053e18c4e1f502ecc5ca8ce07d99287a.tar.gz`。
   archive の SHA-256 が `419d03a195e18875e4761f4d81992905d4130697b72a5fc87849f0228a2f1507`（`userland/desktop/ime/dict/Makefile` の値）であることを確かめ、
   `REmacs-1a724393053e18c4e1f502ecc5ca8ce07d99287a/dict/SKK-JISYO.X` を取り出し、その SHA-256 が `73819384159330a0c822915d0fd211c3e21dea77f2cfd2083273ac1ffd121ab9` であることを確かめる
-  （値は Makefile から読む規則にする。直書きしない）。license の file も zedBSD の image と同じく入れる（`ime/dict/Makefile` を見る）。
+  （値は Makefile から読む規則にする。直書きしない）。license は zedBSD と同じく WS095 D1 の著作権者による zlib 再許諾と project の license の範囲（`ime/dict/Makefile`）。別の license file は不要。
 - 各 app の data: 各 package の zedBSD の `Makefile` の 13 番目の引数（`DEST=SRC`）を見て、`/usr/share/X` → `share/X`、`/etc/X` → `etc/X`、`/bin/X` → `bin/X`、
   `/usr/libexec/X` → `libexec/X` に写す。
 - `keiland.desktop` の `Exec`（p009）に `--wallpaper=/opt/keiland/share/keiland/wallpaper.ppm` を足す（zedBSD の `sessiond/session.sh` と同じ）。
@@ -65,7 +66,7 @@ G=plan/tools/keiland-linux/guest.sh
 sh $G start && sh plan/tools/keiland-linux/install-guest.sh
 sh $G ssh 'openvt -c 7 -s -- sh -c "KEILAND_SEAT=direct /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm --socket=/run/keiland-0 > /tmp/wayland.log 2>&1"'
 sh $G ssh 'for i in $(seq 30); do grep -q "ZWL READY" /tmp/wayland.log && break; sleep 1; done'
-sh $G key meta_l; sleep 2; sh $G screenshot $PWD/build/keiland-linux/p008-home.png
+sh $G click 23 17; sleep 2; sh $G screenshot $PWD/build/keiland-linux/p008-home.png
 # App Home の tile の位置を p008-home.png で読み、app ごとに: click → 10 秒 → screenshot → pidof → esc か窓を閉じる
 ```
 
@@ -92,3 +93,13 @@ app ごとの確かめ（screenshot は `build/keiland-linux/p008-<app>.png`、P
 ## 結果
 
 （実行の後に書く）
+
+## 開始前の検証手順補正（2026-10-01、Q1）
+
+p006 / p007 の実際の共通 shell を確認し、App Home は top-left launcher の click（23,17）で開くよう手順を修正。Super+Tab は Wiseview。既存 app の受け入れ・依存・実装範囲は不変。
+
+## 開始前の data / 検証設計補完（2026-10-01、Q1）
+
+- 現行 Home の built-in list に Settings・kuidemo がない。既存 apps.conf の config 入口を Linux の install data として使い、既存 D21 の app を Home から起動可能にする（product の追加なし、common source の変更なし）。design §2 の config 配置を具体化。
+- ユーザーの default wallpaper は WS035 p061 の決定どおり git 外に保持する。現在の `build/ws035-wallpaper/wallpaper.ppm` を、zedBSD criteria と同じ元として install。cache のない checkout でも build できるよう、既存 generator の Aurora を fallback とし、`KEILAND_LINUX_WALLPAPER` で元の画像を指定できるようにする。画像を git に取り込まない。
+- Image Viewer は既存 PNG / JPEG / GIF の reader で PPM reader を持たない。wallpapers directory の検証には同じ wallpaper の既存 PNG を guest の試験用 file として配置し、対応形式の画像表示を確認する。PPM 対応の追加はこの Phase の product scope に含めない。

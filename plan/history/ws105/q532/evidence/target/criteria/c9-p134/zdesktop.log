@@ -1,0 +1,10 @@
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL MAP client=1 surface=14 x=182 y=127
+ZWL MAP client=2 surface=8 x=440 y=293
+ZWL WISEVIEW opening key at_ms=69560
+ZWL WISEVIEW close key at_ms=72449
+ZWL WISEVIEW closed at_ms=72703
+ZWL GLASS dock waiting surface=14
+ZWL GLASS dock surface=14 via=double-click buttons=764,718,672 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=14 via=double-click x=182 y=127
+ZWL MAP client=3 surface=8 x=440 y=293

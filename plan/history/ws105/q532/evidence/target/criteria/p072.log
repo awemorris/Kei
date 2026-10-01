@@ -1,0 +1,17 @@
+a: surface 8 at 380,273; b: surface 8 at 428,321
+check: (528,421) want d04040 got 4060d0 DIFFERS
+check: build/ws105-p007/criteria/c9-p072/minimized.png 1280x800 FAIL
+log: GLASS minimize surface=8 ok
+check: (528,421) want 4060d0 got 4060d0 ok
+check: build/ws105-p007/criteria/c9-p072/restored.png 1280x800 PASS
+log: WISEVIEW select surface=8 ok
+log: WISEVIEW drag surface=8 ok
+log: GLASS move-desktop surface=8 desktop=2 via=wiseview ok
+check: (480,373) want d04040 got d04040 ok
+check: build/ws105-p007/criteria/c9-p072/desk2.png 1280x800 PASS
+log: GLASS desktop=2 via=wiseview ok
+check: (390,283) want d04040 got cf4040 ok
+check: build/ws105-p007/criteria/c9-p072/desk1.png 1280x800 PASS
+log: GLASS move-desktop surface=8 desktop=1 via=key ok
+log: GLASS desktop settled desktop=1 windows=2 ok
+zdesktop-p072: FAIL

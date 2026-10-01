@@ -1,6 +1,6 @@
 # zedBSD known bugs
 
-Last updated: 2026-09-30
+Last updated: 2026-10-01
 
 This ledger records observed defects and their explicit active or deferred
 owner. A listed item is not silently treated as a failure of an unrelated
@@ -9,6 +9,7 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-127](bugs/BUG-127.md) | zedBSD window最小化直後の画像 | reproduced / tracking | q532 C9 p072、minimize log後に青い窓が残る。復元・desktop移動はPASS。ユーザーがtrackingでclearを許可 | window操作のQueueでframe待ちを含むbounded調査。修正未実施 |
 | [BUG-023](bugs/BUG-023.md) | PC98 QEMUで /sbin が空 | reproduced（ユーザー報告） / tracking | 2026-09-27: 最近の PC-98 の staging の /sbin は 26 個（静的）。起動した guest での確認は amd64 だけの方針で未実施 | ws003-p026（削除済み。git の履歴にある）で生成・配置・mountを切り分け。 |
 | [BUG-024](bugs/BUG-024.md) | PC98 menuconfigでPCI/USBを選択できない（PC-98 の kernel に PCI の backend・USB の host が無い） | reproduced（静的） / scheduled（WS077） | ユーザー報告、WS073 の調査 | 2026-09-28 ユーザー: PCI を有効に（WS077） |
 | [BUG-025](bugs/BUG-025.md) | LX6 USB起動でbootパーティションを判別できない | reproduced（ユーザー報告） / scheduled | init未到達。起動モード/識別子/log未取得。 | ws003-p028（削除済み。git の履歴にある）。BUG-017との同一原因は未証明。 |
@@ -110,7 +111,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-122](bugs/BUG-122.md) | compositor が落ちた後、greeter が 3 回失敗して文字の console に落ちる | reproduced（passthrough・QEMU） / resolved（ws099-p010、QEMU） | ws075-p025 | 5330 で再び起きたら sessiond の log の `SESSIOND GREETER failed reason=` を読む（WS099 の L2） |
 | [BUG-123](bugs/BUG-123.md) | desktop-probe が `--timeout-s=3` の後に終わらないことがある（5 回中 2 回） | reproduced（QEMU） / resolved（ws073-p044: libwayland-client の wl_display_dispatch_queue が event を待ち続けた。標準と同じ 1 回の読みに） | ws094-p006 | 5330 の実機での確認 |
 | [BUG-124](bugs/BUG-124.md) | QEMU の Venus で Model viewer を大きくすると vkCreateSwapchainKHR が DEVICE_LOST で失敗し app が終わる（40 回中 5〜6 回） | reproduced（QEMU） / tracking | ws099-p011 | 未定（libvulkan・Venus）。Windows の QEMU のデモで起きたら優先を上げる |
-| [BUG-125](bugs/BUG-125.md) | C9 の p076（窓の move と resize）が全体の実行の中で時々 FAIL（画面が resize の途中） | reproduced（QEMU） / tracking | ws102-p016 ほか | 試験で resize の後の frame を待つ。20 回の単独と 5 回の C9 で確かめる |
+| [BUG-125](bugs/BUG-125.md) | C9 の p076（窓の move と resize）が全体の実行の中で時々 FAIL（画面が resize の途中） | reproduced（QEMU） / tracking | ws102-p016 ほか | 試験で resize の後の frame を待つ。20 回の単独と 5 回の C9 で確かめる WS105 q532でもleft resize416（期待200）、ユーザーが未修正trackingでclearを許可（2026-10-01）。 |
 | [BUG-126](bugs/BUG-126.md) | toolchain の lock の中で libcxx の source の複写に patch が当たらない | reproduced / resolved | 2026-09-30: `cp -al` が読み取り専用の LLVM の source の directory の権限を写し、patch が一時 file を作れない | 2026-10-01 修正: `ZEDBSD_EXTERNAL_LLVM_COPY` が複写の directory を書けるようにする。lock のままで再現と修正を確かめた |
 | [BUG-064](bugs/BUG-064.md) | libwayland の client が flush の EPIPE を致命的にし、直前の protocol error を失う | reproduced / resolved | ws070-p005 | 修正済み（EPIPE を無視して残りの event を読む） |
 | `BUG-022` | High-Speed UAS formatter completion stall | Fixed for observed path; WS025-p029 q229 | q228-mounted-high1 times out during mkfs before media exchange. CPU0 is in drv_usb_urb_wait; UAS trace ends after WRITE(16) tag 0xfa data-out completion, without the next status request. | Pending URB wait now yields to HCD retirement workers. Focused normal/sanitized wait tests, three builds and two full High-Speed mounted-medium scenarios pass. Preserve original image/trace/registers; re-open on recurrence. Evidence（削除済み。git の履歴にある）. |

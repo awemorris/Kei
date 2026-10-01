@@ -1,0 +1,9 @@
+direct presents: 0
+vulkan imports: 12
+compose frames: 252
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=638 at_ms=46846
+ZWL PERF compose frames=28 draw_ms=108.84 (acquire 24.48 submit+present 64.41) frame_ms=117.81
+ZWL PERF compose frames=65 draw_ms=60.27 (acquire 17.27 submit+present 32.34) frame_ms=63.61
+ZWL PERF compose frames=76 draw_ms=55.46 (acquire 17.43 submit+present 28.34) frame_ms=61.49
+ZWL PERF compose frames=64 draw_ms=57.16 (acquire 13.75 submit+present 32.53) frame_ms=62.49

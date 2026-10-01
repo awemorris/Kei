@@ -268,6 +268,8 @@ $(eval $(call KEILAND_LINUX_LIBRARY,keiland,libkeiland.so,$(LIBKEILAND_LINUX_SOU
 
   （program の依存は余分でもよい: Debian の gcc は `--as-needed` が既定で、使わない物は NEEDED に入らない。足りないと link が失敗するので分かる。）
 
+p008 の install data の具体化（2026-10-01、Q1）: Linux の `apps.conf.in` を既存 Home の config 形式で置き、prefix を生成時に置換して `etc/keiland/apps.conf` に install する。Settings・kuidemo を含む D21 の利用者向け app が Home から起動できる。default wallpaper は既存ユーザー画像を git 外のまま使い、`KEILAND_LINUX_WALLPAPER` で指定できる。既定は既存 WS035 の画像 cache、無い環境は既存 generator の Aurora。Image Viewer の検証用 PNG は guest fixture とし、PPM reader は追加しない。
+
 ### 3.4 Linux だけの小さな部品
 
 - `userland/desktop/linux-compat/`（Linux の build だけ）: glibc に無い OpenBSD の digest（`sha2.h`・`md5.h`・`sha1.h`）を、zedBSD の libc の source

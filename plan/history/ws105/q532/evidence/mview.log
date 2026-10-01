@@ -1,0 +1,3 @@
+MVIEW START run=manual model=/opt/keiland/share/mview/qs40 vertices=25861 triangles=37000 materials=16 textures=13
+MVIEW WINDOW run=manual width=960 height=640 bounds=1256x690
+MVIEW FRAME run=manual frame=1 yaw=0.00 pitch=0.00 distance=2.9480 pan=0.0000,0.0000

@@ -1,0 +1,25 @@
+POPUPPROBE configure window width=0 height=0 states=1 resizing=0
+POPUPPROBE ready run=a
+POPUPPROBE focus window
+POPUPPROBE enter window x=-435 y=497
+POPUPPROBE unfocus window
+POPUPPROBE leave window
+POPUPPROBE focus window
+POPUPPROBE enter window x=-435 y=497
+POPUPPROBE key 45 state=1
+POPUPPROBE key 45 state=0
+POPUPPROBE unfocus window
+POPUPPROBE leave window
+POPUPPROBE focus window
+POPUPPROBE enter window x=422 y=18
+POPUPPROBE button window state=0 x=422 y=18
+POPUPPROBE key 45 state=1
+POPUPPROBE key 45 state=0
+POPUPPROBE key 29 state=1
+POPUPPROBE key 56 state=1
+POPUPPROBE unfocus window
+POPUPPROBE leave window
+POPUPPROBE focus window
+POPUPPROBE enter window x=-435 y=497
+POPUPPROBE key 56 state=0
+POPUPPROBE key 29 state=0
