@@ -38,7 +38,9 @@ static VkResult kms_ioctl_result(int error);
 static VkResult kms_flip_wait(struct compat_display *display, uint64_t token);
 static void kms_records_free(void);
 
-/* Publishes a stable connector/mode list without ever acquiring display ownership during inquiry. */
+/*
+ * Publishes a stable connector/mode list without ever acquiring display ownership during inquiry.
+ */
 VkResult
 compat_kms_displays(
 	struct compat_display **displays,
@@ -67,7 +69,9 @@ compat_kms_displays(
 	return result;
 }
 
-/* Checks card identity without changing master or descriptor ownership. */
+/*
+ * Checks card identity without changing master or descriptor ownership.
+ */
 VkResult
 compat_kms_card_matches(
 	int fd)
@@ -94,7 +98,9 @@ compat_kms_card_matches(
 	return VK_SUCCESS;
 }
 
-/* Acquires a duplicated caller descriptor, or acquires master on our inquiry file for direct root applications. */
+/*
+ * Acquires a duplicated caller descriptor, or acquires master on our inquiry file for direct root applications.
+ */
 VkResult
 compat_kms_acquire(
 	struct compat_display *display,
@@ -151,7 +157,9 @@ compat_kms_acquire(
 	return VK_SUCCESS;
 }
 
-/* Restores the acquired CRTC state before any framebuffer backing memory is destroyed. */
+/*
+ * Restores the acquired CRTC state before any framebuffer backing memory is destroyed.
+ */
 void
 compat_kms_restore(
 	struct compat_display *display)
@@ -188,7 +196,9 @@ compat_kms_restore(
 	display->scanout_chain = NULL;
 }
 
-/* Ends explicit display ownership while preserving the caller's independent descriptor lifetime. */
+/*
+ * Ends explicit display ownership while preserving the caller's independent descriptor lifetime.
+ */
 void
 compat_kms_release(
 	struct compat_display *display)
@@ -205,7 +215,9 @@ compat_kms_release(
 	display->saved_valid = 0;
 }
 
-/* Allocates one mapped XRGB scanout buffer without requiring any rendering-driver import extension. */
+/*
+ * Allocates one mapped XRGB scanout buffer without requiring any rendering-driver import extension.
+ */
 VkResult
 compat_kms_dumb_create(
 	struct compat_display *display,
@@ -270,7 +282,9 @@ compat_kms_dumb_create(
 	return VK_SUCCESS;
 }
 
-/* Removes a dumb framebuffer only after the chain has restored the prior CRTC. */
+/*
+ * Removes a dumb framebuffer only after the chain has restored the prior CRTC.
+ */
 void
 compat_kms_dumb_destroy(
 	struct compat_display *display,
@@ -308,7 +322,9 @@ compat_kms_dumb_destroy(
 	}
 }
 
-/* Copies completed Vulkan readback rows to the back buffer and performs one bounded FIFO flip. */
+/*
+ * Copies completed Vulkan readback rows to the back buffer and performs one bounded FIFO flip.
+ */
 VkResult
 compat_kms_present(
 	struct compat_swapchain *chain)
@@ -801,19 +817,23 @@ kms_flip_wait(
 	/* All events are read only after poll, including on logind's nonblocking file. */
 	start = compat_time();
 	for (;;) {
-		/* Preserves one 100-ms deadline across EINTR and unrelated DRM events. */
+		/* Preserves a finite completion deadline while bounding each nonblocking poll interval. */
 		elapsed = compat_time() - start;
-		if (elapsed >= 100000000ULL)
-			return VK_ERROR_OUT_OF_DATE_KHR;
+		if (elapsed >= 5000000000ULL)
+			return VK_ERROR_SURFACE_LOST_KHR;
 
-		/* Rounds the positive remaining interval up to a poll millisecond. */
-		milliseconds = (int)((100000000ULL - elapsed + 999999) / 1000000);
+		/* Rounds the remaining finite interval and caps each poll at the agreed 100 milliseconds. */
+		milliseconds = (int)((5000000000ULL - elapsed + 999999) / 1000000);
+		if (milliseconds > 100)
+			milliseconds = 100;
+
+		/* Polls before reading the seat service's potentially nonblocking file. */
 		descriptor.fd = display->master_fd;
 		descriptor.events = POLLIN;
 		descriptor.revents = 0;
 		error = poll(&descriptor, 1, milliseconds);
 		if (error == 0)
-			return VK_ERROR_OUT_OF_DATE_KHR;
+			continue;
 
 		/* An interrupted wait retains the original deadline. */
 		if (error < 0) {

@@ -116,3 +116,5 @@ log は build/test/client-*.out / probe-*.out。X/WAYLAND の host 接続は使�
 cc -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/stage/opt/keiland/bin/display-probe plan/tools/keiland-linux/display-probe.c \
   -Lbuild/keiland-linux/lib -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
 ```
+
+`flip-delay.c` は guest専用のtest-only preload。1回だけDRM pollを250ms遅らせてtimeout0を返す。旧100ms総期限ではOUT_OF_DATE、修正後は次のreal pollで実際のeventを読んで3色PASS。productionの設定を追加せず、poll≤100ms/総期限5sの道を確かめる。
