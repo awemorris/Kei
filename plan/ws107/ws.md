@@ -2,86 +2,39 @@
 
 # WS107: libbrowser の source 所有と独立コンポーネントの整備
 
-<!-- awesome-plan-current:start -->
-Status: incomplete
+Status: completed
 Primary Milestone: MG006
 Related Milestones: MG002
 Parent: [Master](../master.md)
-Queue: なし（q543 finished）
-Resume point: p003 cleared、p004の既存承認scopeと実outputを確認。
-<!-- awesome-plan-current:end -->
+Queue: q544 finished
+Resume point: B1〜B5 verified（2026-10-02 JST）。GitHub publication/Issue close/Projectはdeferred。
 
-## 目標・決定の出典
+## 目標と結果
 
-HTML/JS/描画の実装を libbrowser に所有させ、browser を library のコンポーネントを窓とタブに包むアプリにする。
+ユーザーの2026-10-01レビュー第2項と2026-10-02「WS107を実行してください。」を実行。
+engine165filesをdesktop/libbrowserへ移し、browserはmain/shell/app data14filesを所有。browserと独立clientは公開browser.h経由でlibbrowser.soへ動的link。
+libbrowserは標準Vulkanを使い、Wayland public/private source/include/link/APIを持たない。shellがwindow/inputを公開抽象入力へ渡す。
+API v2を維持し、寸法/stride/target入力、navigation allocation rollback、async history commit/失敗・cancel、INT_MINを修正。
+callback中の同じview変更/破棄を外側call後に行うユーザー契約を文書化。
 
-2026-10-01 ユーザーの [レビューコメント](../reviews/2026-10-01-review.md)を根拠に計画。
-Primary MG006 にこの目標の成果を提供。Related MG002 は技術/配布/検証の supporting 出力。
-WS completion と milestone 全体の acceptance は別に確認する。
+## WS acceptance / 制限
 
-## 範囲
+B1 source ownership、B2 dynamic component、B3 Wayland-free/public-only client、B4 view/input/callback/GPU/failure ownership、B5必要回帰/全文規約/bootを[最終conformance](../history/ws107/conformance.md)で照合。
+plain/ASan+UBSan各83、host-view59、goldens81、Acid2 pixel差0、native Venus shell status0、boot login PNG。WS107 build warning0。full imageの既存外部warning343行は記録、toolchain/無関係packageを変更せず。
 
-[設計・現状対比](design.md)、[browser の境界の全文規則](../standards/browser-component.md)に従う。
-エンジンの source/header/表/shader/生成器を `userland/desktop/browser/` から `userland/desktop/libbrowser/` に移す。
-`main.c` と `shell/`、開始頁等のアプリデータは browser に残す。ユーザーの「source を移す」はこの責務分離として記録する。
-browser は既に libbrowser.so に link している。source の所属と API/所有/失敗処理の品質を直す必要がある。
-libbrowser は標準 Vulkan を使えるが Wayland を使用しない。shell が入力を抽象化して public API に渡す。
-品質点検は view の lifecycle、描画先/fence の所有、複数 view の独立、入力/callback/reentrancy の契約を対象にする。
-Acid3/CSS2 の網羅的な互換性向上は WS074 の別の目標。全面的な engine 書換えや Qt/GTK への組込みは加えない。
+実機/production Linux browser/Qt/GTK/Acid3/CSS2/amazon改善は範囲外・未実施。WS074 p100→p101を保持し、今後は新rootを使う。WS106のime-probe所有回答待ちは別の未達で保存。
+Primary MG006へ独立componentの成果、Related MG002へ検証出力を提供。milestone全体完了の証拠ではない。
+内容不変moveの既存style維持はユーザーの[今回限りの例外](../standards/ws107-relocation.md)、今回の適用終了。quality/new clientはC全文。
 
-## WS 自身の完了条件
+## Phase / Queue
 
-- B1: engine の全 tracked source/asset が libbrowser に属し、browser には app shell とそのデータが残る。
-- B2: browser が libbrowser.so に動的 link し、engine の再コンパイル/内部 header への依存が無い。
-- B3: libbrowser の公開/内部 source・link が Wayland に依存せず、標準 Vulkan と抽象入力だけで独立した第2の client が利用できる。
-- B4: 2 view の独立・入力・callback・create/destroy・resize・描画先解放/失敗時の所有を検証し、点検で見つけた in-scope の不備を修正。
-- B5: 既存 Acid2/headless/CLI/shell の必要な回帰、warning 0 の build、最終 boot と全文規約を確認。
+| ID | Result | Goal / evidence |
+| --- | --- | --- |
+| [ws107p001](../history/ws107/q541/phase.md) | cleared / q541 | 所有台帳、有限quality、callback契約と設計。commit efcc8d6f |
+| [ws107p002](../history/ws107/q542/phase.md) | cleared / q542 | engine165 move/build/runner references。commit2770e481 |
+| [ws107p003](../history/ws107/q543/phase.md) | cleared / q543 | API v2/component品質/独立動的client。commit0283edb0 |
+| [ws107p004](../history/ws107/q544/phase.md) | cleared / q544 | 全文規約/B1〜B5/回帰/最終boot。final WIP commitの親0283edb0 |
 
-## 依存・所有
+[設計](design.md)、[移動台帳](../history/ws107/inventory.json)、[結果・判断履歴](../history/ws107/ws-at-acceptance.md)、[boot PNG](../history/ws107/q544/evidence/login.png)。再利用試験は[plan/tools/browser-component](../tools/browser-component/README.md)。
 
-WS074 の現行 engine を引き継ぐ。p100→p101 の順・目標を保つ。WS074 の今後の source 編集は新しい境界規則を適用し、同一 tree の移行と並行しない。WS106 の browser-probe 移動は実際の locator を解決して試験に用いる。
-
-## Phase 表（後続は設計案）
-
-| ID / Phase | 目的 | Goal | Status | 依存 |
-| --- | --- | --- | --- | --- |
-| [ws107p001](phase001/phase.md) | engine/shell・API・品質の点検と設計 | 移動表・残す表・問題一覧・修正範囲と独立 client の検証手順を固定。public ABI の変更が必要なら影響と version 方針を示す。 | cleared | WS074 の source（context） |
-| [ws107p002](phase002/phase.md) | エンジンの所属と build/test の参照を移す | B1/B2 を満たし、semantic-preserving 部分の clean build が warning 0。 | cleared | p001 |
-| [ws107p003](phase003/phase.md) | 独立 API と component 実装の不備を直す | B3/B4。未発見の欠陥を推測して大規模 rewrite しない。重大な契約変更は実行前に計画へ反映する。 | cleared | p002 |
-| [ws107p004](phase004/phase.md) | 全文規約と shell/engine の最終回帰 | B1〜B5 を満たす。CPU の成功を Vulkan の検証に代用しない。 | planning | p003 |
-
-
-依存は表の prerequisite → dependent。context は選定された作業ではない。
-後続 Phase の detail は p001 の確定設計から作る。表/実 record/Queue を一緒に整える。
-
-## 制約・標準・検証の扱い
-
-[Guardrail](../guardrail.md)、[AGENTS.md](../../AGENTS.md)、[C 規約全文](../coding-style.md)、
-[自動化の対応](../standards/automation.md)を適用する。簡約版は無い。コード生成前に全文の該当節を読み、
-最後の conformance Phase では本 WS の全 source 変更を全文でレビューする。
-clang-format 19 / style-check は補助。無関係な一括整形、`make check`、`.internal/` の参照は行わない。
-意味を変えない移動は warning 0 の build と最後の boot を関門にする。API・platform・packaging の変更には意味のある契約検証を追加する。
-image build は直列。zedBSD の起動は boot-test.sh と PNG、console/serial log を起動の証拠にしない。
-commit は `WIP`、push なし。GitHub 公開・Issue/Project 更新は現在 deferred、local cache/outbox に記録する。
-
-## 現状・再開
-
-2026-10-01、source `01c754a0` を調査して計画を新設。実装・移動・CI job 追加は未実施。
-Queue は無し。p001 の計画を確認して有限 Queue を選定する。後続 Phase は案で、調査結果によって詳細化する。
-既存 q538 は finished、WS105 の完了範囲を拡張しない。
-
-## イベント
-
-2026-10-01 / review-20261001-planning: ユーザーのレビューコメントから WS を新設。
-範囲・受け入れ・Phase 案を保存、Master / Outlook と照合した。新規実装の Queue 承認は未取得。
-[決定の出典と関連 WS](../reviews/2026-10-01-review.md)。公開時にはこのイベントを WS に届ける（現在 outbox 保留）。
-
-2026-10-02 / ws107-q541-design: p001〜p004を[確定設計](design.md)へ詳細化、engine165/残す14file、有限のquality修正/第2client/回帰を固定。callbackはユーザーの同一view変更/破棄を外側call後へ延期する判断を採用。API v2/既存B1〜B5/依存順を保持、WS074の互換性目標を追加しない。
-
-2026-10-01T15:09:38.139159+00:00 / ws107-q541-cleared: p001 cleared。179file移動台帳（engine165/133C、残す14）、API v2/標準Vulkan/Wayland無し境界と有限quality修正、target/host/client検証を確定。callbackの同一view変更・破棄をcall後へ延期するユーザー判断を保存。style14候補はp003で全文適合。plan/ws107/design.mdとinventory.json、全変更Phase/WSイベント。
-
-2026-10-01T15:14:46.946786+00:00 / ws107-q542-cleared: p002 cleared。engine165files（133C）のmove/hash/mode確認、うち生成器4filesだけlocator更新、表/shader binary未再生成。libbrowser/appのsource変数とprivate includeを分離、registry/exports/API v2/install保存。target libbrowser133fresh source＋browser7forced source/probe build exit0/warning0。host clean build exit0/warning0、public-only browser-probeのDT_NEEDEDはlibbrowser.so/libcのみ、libraryはhost標準Vulkan/libm/libcのみ（targetもWayland無し）。list-sources140C、runner syntax/diff-check PASS。
-
-2026-10-02 / ws107-style-decision: ユーザー「移動部分の既存スタイル維持を認める」。[限定例外](../standards/ws107-relocation.md)で不変moveのstyleを維持、品質修正/新試験/14候補をC全文で確認。受け入れと依存は保持、全hash/diff/boundary reviewは省略しない。
-
-2026-10-01T15:46:35.290409+00:00 / ws107-q543-cleared: p003 cleared。有限component修正/API v2のcallback・借用契約、2view/入力/timer/所有/async history/late allocation rollback/実標準Vulkan/caller record-fence-releaseを検証。最終ASan/UBSan client83checks PASS、target/host warning0、既存host-view59/0。14style候補を全文判定（5修正、9critical section false positive）。plan/ws107/component-result.md。
+Event ws107-completed-20261002: 全Phase clearedに加えWS自身のB1〜B5を検証してcompleted。Phase directoriesを証拠archive照合後に削除、GitHubのcomment/close deliveryは未実施。ユーザーの後続WS108実行指示へ移る。

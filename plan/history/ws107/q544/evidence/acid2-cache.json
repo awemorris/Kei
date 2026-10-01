@@ -1,0 +1,12 @@
+{
+  "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+  "files": {
+    "LICENSE.md": "39c46d03ac2988226f949ee7ab3c7347d5481bd8",
+    "acid/acid2/test.html": "0407bac5dc45a406f4e38612521f671e8d136d47",
+    "acid/acid2/404.html": "a17f4ecb85ab33ffce52d20e9cc8b1c7c109b0af",
+    "acid/acid2/reference.html": "66eed5ae3553c879af28cf8d4b479dac7adfd0f3",
+    "acid/acid2/px-reference.html": "5a350033e3c974c08f58db8c444ff9e2953de480",
+    "acid/acid2/reference.png": "7aee7609d6ade6e39ad53b04a9f61e55f3b00c76",
+    "acid/acid2/reftest.html": "80220cee7699343206378306a9e4c3fc0d048093"
+  }
+}

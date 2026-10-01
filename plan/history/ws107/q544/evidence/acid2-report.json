@@ -1,0 +1,13 @@
+{
+  "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+  "acid2": {
+    "pass": true,
+    "max_difference": 0,
+    "different_pixels": 0,
+    "total_pixels": 120000,
+    "agreement": 100.0,
+    "test_image": "test.png",
+    "reference_image": "reference.png",
+    "side_image": "side.png"
+  }
+}

@@ -1,0 +1,9 @@
+userland/desktop/libbrowser/net/loader.c:310: paragraph-comment: loader->stopping = 1;
+userland/desktop/libbrowser/net/loader.c:313: paragraph-comment: pthread_mutex_unlock(&loader->lock);
+userland/desktop/libbrowser/net/loader.c:640: paragraph-comment: pthread_mutex_unlock(&loader->lock);
+userland/desktop/libbrowser/net/loader.c:656: paragraph-comment: job->next = loader->answers;
+userland/desktop/libbrowser/net/loader.c:659: paragraph-comment: pthread_mutex_unlock(&loader->lock);
+userland/desktop/libbrowser/net/loader.c:792: paragraph-comment: job->next = loader->jobs;
+userland/desktop/libbrowser/net/loader.c:796: paragraph-comment: pthread_mutex_unlock(&loader->lock);
+userland/desktop/libbrowser/net/loader.c:822: paragraph-comment: answers = loader->answers;
+userland/desktop/libbrowser/net/loader.c:825: paragraph-comment: pthread_mutex_unlock(&loader->lock);

@@ -1,0 +1,30 @@
+link: at 63 106 in the page
+browser: window at 190,123
+log: ZBROWSER READY width=900 height=640 ok
+log: ZBROWSER CONSOLE level=0 keydown key=x code=KeyX keyCode=88 shift=false ctrl=false alt=false repeat=false ok
+log: ZBROWSER CONSOLE level=0 keypress key=x ok
+log: ZBROWSER CONSOLE level=0 keyup key=x code=KeyX ok
+log: ZBROWSER CONSOLE level=0 focusin three ok
+log: ZBROWSER CONSOLE level=0 focusin two ok
+log: ZBROWSER CONSOLE level=0 focusin one ok
+log: ZBROWSER CONSOLE level=0 focusin four ok
+log: ZBROWSER CONSOLE level=0 focusin last ok
+focus: the last link scrolled the page to 1252
+focus: scrolled into view ok
+log: ZBROWSER CONSOLE level=0 click target=last ok
+log: ZBROWSER LINK href=blocks.html ok
+log: ZBROWSER NAVIGATE path=/usr/share/browser-tests/blocks.html ok
+history: Alt+Left ok
+scroll: ArrowDown ok
+log: ZBROWSER CONSOLE level=0 keydown key=ArrowDown code=ArrowDown keyCode=40 shift=true ok
+scroll: the canceled key ok
+log: ZBROWSER CONSOLE level=0 wheel deltaY= ok
+log: ZBROWSER CONSOLE level=0 mousedown button=0 target=one ok
+log: ZBROWSER CONSOLE level=0 click target=one ok
+log: ZBROWSER LINK href=first.html ok
+log: ZBROWSER NAVIGATE path=/usr/share/browser-tests/first.html ok
+history: back from the click ok
+close: ok
+zdesktop: no ERROR
+browser: no ERROR
+browser-p056: status 0 (pictures in build/ws107-p004/shell)

@@ -36,8 +36,10 @@ static int failures;
 /* Every public or Vulkan result checked by this single-threaded client. */
 static int checks;
 
-/* The matching navigation allocations and the one refused, zero for none. */
+/* The number of matching navigation allocations since the test armed a failure. */
 static int copies;
+
+/* The matching allocation to refuse, zero when navigation uses ordinary copies. */
 static int refuse_copy;
 
 /* The next framebuffer creation fails when this one-shot interposition is armed. */
@@ -145,17 +147,25 @@ main(
 	int point;
 	int commits;
 
-	/* Keeps callback state and borrowed font paths alive for both views. */
+	/* Keeps the first view's callback state alive for the complete run. */
 	memset(&a, 0, sizeof(a));
+
+	/* Keeps the second view's callback state independent of the first. */
 	memset(&b, 0, sizeof(b));
+
+	/* Keeps borrowed font paths alive for both views. */
 	fonts.sans = "build/ws035-fonts/Inter.ttf";
 	fonts.mono = "build/ws035-fonts/JetBrainsMono-Regular.ttf";
 	fonts.fallback = "build/ws035-fonts/DroidSansFallbackFull.ttf";
+
+	/* Gives the first view its observer before the callback structure is copied. */
 	memset(&callbacks, 0, sizeof(callbacks));
 	callbacks.committed = committed;
 	callbacks.console = console;
 	callbacks.load = load;
 	callbacks.context = &a;
+
+	/* Supplies dimensions, lifetime and fetching policy through the public options. */
 	memset(&options, 0, sizeof(options));
 	options.version = BROWSER_API_VERSION;
 	options.fonts = &fonts;
@@ -512,7 +522,6 @@ record(
 		return;
 	}
 
-
 	/* The client's fence owns completion of the recorded work. */
 	memset(&fence_info, 0, sizeof(fence_info));
 	fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -588,9 +597,13 @@ asynchronous(
 
 	/* This view owns a background loader and a separate callback context. */
 	memset(&observation, 0, sizeof(observation));
+
+	/* Reports transport failures to this background view's own observer. */
 	memset(&callbacks, 0, sizeof(callbacks));
 	callbacks.load = load;
 	callbacks.context = &observation;
+
+	/* Keeps the background loader inside the same public lifetime contract. */
 	memset(&options, 0, sizeof(options));
 	options.version = BROWSER_API_VERSION;
 	options.width = 32;

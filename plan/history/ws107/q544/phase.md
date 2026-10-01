@@ -1,23 +1,23 @@
-<!-- awesome-plan project=zedbsd record=ws107p001 -->
+<!-- awesome-plan project=zedbsd record=ws107p004 -->
 
-# ws107p001: engine/shell・API・品質の点検と設計
+# ws107p004: 全文規約と shell/engine の最終回帰
 
 Status: cleared
 Disposition: normal
 Parent: [WS107](/home/awe/zedBSD-claude1/plan/ws107/ws.md)
-Queue / Attempt: q541 / q541-i01
+Queue / Attempt: q544 / q544-i01
 
 ## 目的・範囲
 
-tracked engine ファイルと参照を列挙し、現 public API v2、描画と view の所有、入力 adapter、callback と複数 view の契約を実装と突き合わせる。
+全 WS source を C 全文と browser 境界全文でレビュー。ELF/public header/standalone client、関係する pinned regression と最後の boot を照合。
 
 ## 完了条件
 
-移動表・残す表・問題一覧・修正範囲と独立 client の検証手順を固定。public ABI の変更が必要なら影響と version 方針を示す。
+B1〜B5 を満たす。CPU の成功を Vulkan の検証に代用しない。
 
 ## 前提・未決・実行手順
 
-依存: WS074 の source（context）。WS の scope と acceptance、設計の未決を確認する。
+依存: p003。WS の scope と acceptance、設計の未決を確認する。
 技術的な細部は委任範囲で決める。対象/受け入れ/外部契約を変える結果は実装前に計画と承認範囲へ反映する。
 調査→変更表と手順の確定→有限 Queue の承認→実装→指定検証→結果・WS・Master・Queue の照合。
 最初の p001 は調査の案（1 session / 最大60分、満たせない点と再開条件を残す）。後続の timebox/command は設計後に選定する。
@@ -43,12 +43,14 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 
 ## 2026-10-02 / ws107-q541-design
 
-[確定設計](/home/awe/zedBSD-claude1/plan/ws107/design.md)と[179file台帳](/home/awe/zedBSD-claude1/plan/history/ws107/inventory.json)を採用。q541調査: engine165file/133C、残す14file、現source/link閉包、viewの有限修正6項とhost/target検証を固定。public ABI v2の変更不要。
+[確定設計](/home/awe/zedBSD-claude1/plan/ws107/design.md)と[179file台帳](/home/awe/zedBSD-claude1/plan/history/ws107/inventory.json)を採用。全165engine/14appと全変更consumerを全文reviewし、B1〜B5/ELF/header/client/build/関係回帰/boot PNGを確認。後日の意味変更があれば再検証、CPUをGPUの代用にしない。依存p003。
 
 callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。
 
-## 結果 / q541-i01 / 2026-10-01T15:09:38.137819+00:00
+2026-10-02 / ws107-style-decision: ユーザー「移動部分の既存スタイル維持を認める」。[限定例外](/home/awe/zedBSD-claude1/plan/standards/ws107-relocation.md)で不変moveのstyleを維持、品質修正/新試験/14候補をC全文で確認。受け入れと依存は保持、全hash/diff/boundary reviewは省略しない。
 
-cleared。179file移動台帳（engine165/133C、残す14）、API v2/標準Vulkan/Wayland無し境界と有限quality修正、target/host/client検証を確定。callbackの同一view変更・破棄をcall後へ延期するユーザー判断を保存。style14候補はp003で全文適合。plan/ws107/design.mdとinventory.json、全変更Phase/WSイベント。
+## 結果 / q544-i01 / 2026-10-01T16:07:18.872737+00:00
 
-Event: ws107-q541-cleared。Phase結果とclosure意図をlocal保存、GitHub comment/closeはdeferred、remote close未確認。
+cleared。B1〜B5 verified。全179file/165move、engine133C/app7C、39exports/C89+C++11 header/include closure340、Wayland無し。public client plain/ASan83各PASS、host-view59/0、Acid2完全一致/goldens81/81、native Venus shell status0、最終boot login PNG。C全文/限定move例外/全diff review。WS107 builds warning0; full image外部既知warnings343行は明記。plan/history/ws107/conformance.md。
+
+Event: ws107-q544-cleared。Phase結果とclosure意図をlocal保存、GitHub comment/closeはdeferred、remote close未確認。

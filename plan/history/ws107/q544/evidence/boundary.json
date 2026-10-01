@@ -1,0 +1,55 @@
+{
+  "files": 179,
+  "moved": 165,
+  "content_changed": [
+    "userland/desktop/browser/Makefile",
+    "userland/desktop/libbrowser/bind/handler.c",
+    "userland/desktop/libbrowser/net/loader.c",
+    "userland/desktop/libbrowser/paint/shaders/regenerate.py",
+    "userland/desktop/libbrowser/tools/gen-entities.py",
+    "userland/desktop/libbrowser/tools/gen-unicode-case.py",
+    "userland/desktop/libbrowser/tools/regenerate.sh",
+    "userland/desktop/libbrowser/view/view.c"
+  ],
+  "elf": {
+    "build/amd64/dynamic/libbrowser.so": {
+      "exports": 39,
+      "needed": [
+        "libvulkan.so",
+        "libtruetype.so",
+        "libjpeg-compat.so",
+        "libpng-compat.so",
+        "libz-compat.so",
+        "libgif-compat.so",
+        "libc.so"
+      ]
+    },
+    "build/ws107-host/plain/libbrowser.so": {
+      "exports": 39,
+      "needed": [
+        "libvulkan.so.1",
+        "libm.so.6",
+        "libc.so.6"
+      ]
+    },
+    "build/ws107-host/asan/libbrowser.so": {
+      "exports": 39,
+      "needed": [
+        "libasan.so.8",
+        "libvulkan.so.1",
+        "libm.so.6",
+        "libubsan.so.1",
+        "libc.so.6"
+      ]
+    }
+  },
+  "engine_sources": 133,
+  "app_sources": 7,
+  "include_dependencies": 340,
+  "wayland_shell_project_uapi": false,
+  "public_header": [
+    "C89",
+    "C++11"
+  ],
+  "system_socket_uapi": "indirect Linux libc socket headers permitted"
+}

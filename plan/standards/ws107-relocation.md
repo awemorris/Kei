@@ -8,4 +8,6 @@ Authority: 2026-10-02 current user「移動部分の既存スタイル維持を�
 - 例外を使って別の実装/semantic rewriteを追加しない。未変更関数の一括reformatはしない。
 - Expiry: WS107完了時に今回の適用終了。次のWS/後のrefactorへの恒久例外ではない。
 
-[移動台帳](../ws107/inventory.json)、[既存style14候補](../ws107/style-before.txt)、[設計と有限修正](../ws107/design.md)。
+[移動台帳](../history/ws107/inventory.json)、[既存style14候補](../history/ws107/style-before.txt)、[設計と有限修正](../ws107/design.md)。
+
+2026-10-02 / ws107-completed: 今回の適用終了。結果は[conformance](../history/ws107/conformance.md)。今後のsemantic編集を免除しない。

@@ -55,6 +55,7 @@ div { margin: 4px 0; }
 @supports not (display: flex) { .supports { background: #f00; } }
 @supports (unknown-property: 1) { .supports { background: #f00; } }
 @supports (display: grid) or (display: flex) { .supports { padding: 6px; } }
+@supports (--css: variables) { .supports { color: #135; } }
 .important { color: #393 !important; }
 .important { color: #f00; }
 .logical { margin-inline-start: 40px; padding-block: 6px 12px; padding-inline: 10px; background: #eee; }

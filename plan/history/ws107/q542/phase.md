@@ -4,7 +4,7 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS107](../ws.md)
+Parent: [WS107](/home/awe/zedBSD-claude1/plan/ws107/ws.md)
 Queue / Attempt: q542 / q542-i01
 
 ## 目的・範囲
@@ -24,8 +24,8 @@ B1/B2 を満たし、semantic-preserving 部分の clean build が warning 0。
 
 ## 適用規則・影響する部品・検証
 
-[WS の制約/部品/受け入れ](../ws.md)、[Guardrail](../../guardrail.md)、
-[C 規約全文](../../coding-style.md)、[自動化](../../standards/automation.md)を適用。
+[WS の制約/部品/受け入れ](/home/awe/zedBSD-claude1/plan/ws107/ws.md)、[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、
+[C 規約全文](/home/awe/zedBSD-claude1/plan/coding-style.md)、[自動化](/home/awe/zedBSD-claude1/plan/standards/automation.md)を適用。
 新規/変更 C は全文該当節を読み、clang-format-19 と style-check の限界を補う。
 最終 conformance は全 WS の source を全文で review。build warning 0、必要な契約検証、diff-check を記録する。
 具体的な build/config/tool version と script は p001 の結果で固定する。`make check` は禁止。
@@ -43,7 +43,7 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 
 ## 2026-10-02 / ws107-q541-design
 
-[確定設計](../design.md)と[179file台帳](../inventory.json)を採用。165 engine filesとbuild/runner/生成器locatorだけをsemantic-preserving移動。private/app変数を分離、B1/B2とfresh engine/forced shell buildを確認。依存p001の台帳と設計。
+[確定設計](/home/awe/zedBSD-claude1/plan/ws107/design.md)と[179file台帳](/home/awe/zedBSD-claude1/plan/history/ws107/inventory.json)を採用。165 engine filesとbuild/runner/生成器locatorだけをsemantic-preserving移動。private/app変数を分離、B1/B2とfresh engine/forced shell buildを確認。依存p001の台帳と設計。
 
 callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。
 

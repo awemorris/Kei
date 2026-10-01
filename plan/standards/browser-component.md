@@ -19,7 +19,7 @@ C 全文 coding-style.md は変更しない。この全文規則は browser/libb
 engine dirs の include/name 走査で Wayland/shell/uapi/vkZed の直接参照は見つからなかった（2026-10-01 source01c754a0、これは全依存の証明ではない）。
 WS107 p001 で exact source/link closure を固定し、p004 で public-header standalone compile、ELF DT_NEEDED/undefined/export、include dependency、独立 client の実描画を確認。
 runtime の隠れた依存・所有・callback/再入・tab 状態・Vulkan の仕様遵守は全文/manual review が要る。新しい checker の実装は WS107 の承認済み Phase 内だけ。
-簡約版は無し。全文を直接読む。source 移動は WS107 未実施なので、現 source が配置規則を満たしたとは記録しない。
+簡約版は無し。全文を直接読む。WS107でengine165filesを移動し、最終source/include/ELF/public clientを検証済み。
 
 ## Callback / ownership 契約の確定（2026-10-02）
 

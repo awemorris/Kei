@@ -1,0 +1,20 @@
+built build/ws107-host/asan/browser
+built build/ws107-host/asan/browser-probe
+built build/ws107-host/asan/host-base
+built build/ws107-host/asan/host-form
+built build/ws107-host/asan/host-heap
+built build/ws107-host/asan/host-interp
+built build/ws107-host/asan/host-js
+built build/ws107-host/asan/host-link
+built build/ws107-host/asan/host-loader
+built build/ws107-host/asan/host-number
+built build/ws107-host/asan/host-object
+built build/ws107-host/asan/host-parse
+built build/ws107-host/asan/host-position
+built build/ws107-host/asan/host-relayout
+built build/ws107-host/asan/host-text
+built build/ws107-host/asan/host-tokenizer
+built build/ws107-host/asan/host-tree
+built build/ws107-host/asan/host-url
+built build/ws107-host/asan/host-view
+component: 83 checks, PASS two views, input/timers, callback, allocation rollback, async history, Vulkan draw/record, resize/release

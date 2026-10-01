@@ -243,3 +243,5 @@ p100/p101 の個別 Phase record は現在未作成（WS 表の予定行）。�
 2026-10-01 / review-20261001-policy-ws074: 新設 WS107 と policy 改訂/影響をこの WS に保存。GitHub の WS comment は公開保留。
 
 2026-10-02 / ws107-q541-design: [WS107](../ws107/ws.md)の165engine file移行で現役host/guest/list-sources runnerを新rootへ更新する。独立componentの有限quality修正はWS107、p100→p101の既存互換性scope/順/acceptanceは保持。今後はlibbrowserrootの実sourceを使い、移行と同時編集しない。詳細[設計](../ws107/design.md)。公開outbox pending。
+
+2026-10-02 / ws107-completed: engine165の新root/Makefile/header/ELF/clientをverified、host-view59/Acid2差0/goldens81/native shell PASS。DOM golden position/valuesのfixture追記漏れ2件のみ修正、旧build/newbuild出力一致。WS074のp100→p101/互換性scopeと順は不変。[WS107結果](../history/ws107/conformance.md)。GitHub comment deferred。

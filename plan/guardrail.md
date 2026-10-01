@@ -41,7 +41,7 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
   `userland/desktop/browser/` は libbrowser.so のコンポーネントを window/tab に包む main/shell/app data を所有する。
   libbrowser は標準 Vulkan を使用可、Wayland の header/API/protocol と直接の link は public/private とも使用不可。
   shell が Wayland events を抽象化した public input interface に変換する。全文の正本は [browser component](standards/browser-component.md)。
-  新しい mandatory rule と配置の置換であり、C coding-style の例外ではない。[WS107](ws107/ws.md) で移行予定、現配置の適合は未確認。
+  新しい mandatory rule と配置の置換であり、C coding-style の例外ではない。[WS107](ws107/ws.md) で移行し、最終source/header/include/link/実clientを検証済み（2026-10-02）。
 - **test app の配置（2026-10-01 ユーザーレビュー）**: base/desktop の対象30件（mview/gpudemo を含む）を `userland/tests/` へ移す計画は [WS106](ws106/ws.md)。
   対象表と package/config/install の契約を確定してから移動する。POSIX test utility は base に残す。
 - kernel の実装を userland の build の依存へ写さない。`mkfs` などの tool は単独で使える形を保つ。

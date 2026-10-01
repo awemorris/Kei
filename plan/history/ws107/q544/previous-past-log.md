@@ -2,15 +2,9 @@
 
 # Past Log
 
-Last finished Queue: [q544](queue-q544.md)（WS107 p004 cleared）
+Last finished Queue: [q543](queue-q543.md)（WS107 p003 cleared）
 
-## 最新: q544 / WS107 p004
-
-cleared。B1〜B5 verified。全179file/165move、engine133C/app7C、39exports/C89+C++11 header/include closure340、Wayland無し。public client plain/ASan83各PASS、host-view59/0、Acid2完全一致/goldens81/81、native Venus shell status0、最終boot login PNG。C全文/限定move例外/全diff review。WS107 builds warning0; full image外部既知warnings343行は明記。plan/history/ws107/conformance.md。
-
-GitHub publication/outbox pending、commit WIP / pushなし。
-
-## 前回: q543 / WS107 p003
+## 最新: q543 / WS107 p003
 
 cleared。有限component修正/API v2のcallback・借用契約、2view/入力/timer/所有/async history/late allocation rollback/実標準Vulkan/caller record-fence-releaseを検証。最終ASan/UBSan client83checks PASS、target/host warning0、既存host-view59/0。14style候補を全文判定（5修正、9critical section false positive）。plan/ws107/component-result.md。
 
@@ -61,6 +55,7 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 
 | Queue | Scope/outcome |
 | --- | --- |
+| [q514](queue-q514.md) | WS103 の p007（規約の全文で WS の全 source の変更を見直す、回帰、5330、V4 の性能の計測）。WS103 の最後の Phase。 |
 | [q515](queue-q515.md) | desktop の公開ヘッダーを libc から分離し、WS104 と WS105 の開始条件を整える。 |
 | [q516](queue-q516.md) | audio の漏れを libkeiland へ（`keiland_audio_available`） |
 | [q517](queue-q517.md) | libkeiland の OS の 3 file を `libkeiland/zedbsd/` へ |
@@ -96,8 +91,6 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 | [q542](queue-q542.md) | WS107 p002 cleared |
 
 | [q543](queue-q543.md) | WS107 p003 cleared |
-
-| [q544](queue-q544.md) | WS107 p004 cleared |
 
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。

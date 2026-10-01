@@ -1,6 +1,6 @@
 # WS107 確定設計 / q541
 
-Source: 6071c459。[全179ファイルのhash/mode/移動表](inventory.json)。165 engine files（133 C）をlibbrowserへ、main/shell/data/Makefileの14 filesをbrowserに保持。tracked distfiles無し。生成表/シェーダーは再生成せず、既存provenanceコメントを保存。
+Source: 6071c459。[全179ファイルのhash/mode/移動表](../history/ws107/inventory.json)。165 engine files（133 C）をlibbrowserへ、main/shell/data/Makefileの14 filesをbrowserに保持。tracked distfiles無し。生成表/シェーダーは再生成せず、既存provenanceコメントを保存。
 
 ## 依存とbuild
 
@@ -27,4 +27,4 @@ p004 最大120分: C全文とbrowser-component全文で全WSsource/hash/diffをr
 
 Event: ws107-q541-design。ユーザーcallback判断を記録し、全変更Phase/WS/WS074へlocal eventを届ける。GitHub publicationはdeferred。
 
-2026-10-02 / ws107-q543-style-review: 14候補を全文で点検、handler4＋loader loop1を修正、残9は既存critical section空行のscanner false positive（C全文§5）。同期挙動を変えず根拠をcomponent-resultへ。移動限定例外とは別の実rule判定であり、違反を免除しない。
+2026-10-02 / ws107-q543-style-review: 14候補を全文で点検、handler4＋loader loop1を修正、残9は既存critical section空行のscanner false positive（C全文§5）。同期挙動を変えず根拠を../history/ws107/component-result.mdへ。移動限定例外とは別の実rule判定であり、違反を免除しない。

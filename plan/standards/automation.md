@@ -48,9 +48,9 @@ Authoritative full rule: [browser-component.md](browser-component.md)。ユー�
 
 | 規則 | 検証の計画 | 現在の coverage / 限界 |
 | --- | --- | --- |
-| engine/source 所有と shell のみの app | tracked inventory、expanded Makefile source、private include の dependency | 現 engine source は browser に残る。WS107 p001/p002 で台帳/移動、p004 で最終確認。新 checker は未実装 |
-| libbrowser の Wayland 使用禁止 | public header standalone compile、include/link closure、ELF NEEDED/undefined/export | public header と直接名の走査だけ調査済み。完全な依存/実行検証は未実施 |
-| 標準 Vulkan と抽象入力 | Wayland 無しの第2 client の Vulkan 描画、shell adapter/複数 view の契約検証 | API v2 に既存の抽象がある。lifetime/failure/callback/reentrancy は full/manual review と実 behavior の確認が要る |
+| engine/source 所有と shell のみの app | tracked inventory、expanded Makefile source、private include の dependency | WS107: 全179台帳/165move、engine133/app7、全hash/mode/Makefile/includeを照合。新checkerは未実装 |
+| libbrowser の Wayland 使用禁止 | public header standalone compile、include/link closure、ELF NEEDED/undefined/export | WS107: C89/C++11 header、全133include closure340、ELF39exports/NEEDED/undefined、実public client verified |
+| 標準 Vulkan と抽象入力 | Wayland 無しの第2 client の Vulkan 描画、shell adapter/複数 view の契約検証 | WS107: full/manual reviewとpublic client plain/ASan各83、actual lavapipe/caller record-fence。same-view callback mutationは外側call後の契約 |
 
 WS106 では source 移動後の既存 Makefile/source checker の locator を更新する。WS108/109 の distro/FreeBSD checks は設計中、
 WS105 の Linux checks の合格を新 target の合格に転用しない。各 WS の near-final Phase で全文規約/実環境/tool version と限界を記録する。

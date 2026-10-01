@@ -1,0 +1,20 @@
+built build/ws107-host/plain/browser
+built build/ws107-host/plain/browser-probe
+built build/ws107-host/plain/host-base
+built build/ws107-host/plain/host-form
+built build/ws107-host/plain/host-heap
+built build/ws107-host/plain/host-interp
+built build/ws107-host/plain/host-js
+built build/ws107-host/plain/host-link
+built build/ws107-host/plain/host-loader
+built build/ws107-host/plain/host-number
+built build/ws107-host/plain/host-object
+built build/ws107-host/plain/host-parse
+built build/ws107-host/plain/host-position
+built build/ws107-host/plain/host-relayout
+built build/ws107-host/plain/host-text
+built build/ws107-host/plain/host-tokenizer
+built build/ws107-host/plain/host-tree
+built build/ws107-host/plain/host-url
+built build/ws107-host/plain/host-view
+component: 83 checks, PASS two views, input/timers, callback, allocation rollback, async history, Vulkan draw/record, resize/release
