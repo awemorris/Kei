@@ -2,10 +2,10 @@
 
 # ws105-p002: build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`）
 
-Status: cleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q524 / q524-i01
+Queue: なし
 依存: WS104 の p001（header が `userland/desktop/keiland/`）・p003（libkeiland の `zedbsd/`）
 実行者: phase-runner（high）。`plan/tools/keiland-linux/` の script は main が merge する
 
@@ -92,17 +92,4 @@ make -j64 disk-image > build/ws105-p002-zedbsd.log 2>&1; echo "zedbsd make exit=
 
 ## 結果
 
-Linux の独立 build の土台と、8 package の `Makefile.linux`（7 shared library と install しない digest archive）を実装。仮 network / audio backend は公開 API の署名を保持し、service 不在を返す。DNS は実際の `/etc/resolv.conf` の dotted IPv4 を読む。
-
-- gcc / clang の最終 build exit 0、`-Werror`・warning 0。host gcc 14.2.0 / clang 19.1.7、GNU Make 4.4.1。target toolchain 変更無し、host package 追加無し。
-- install した 7 ELF の `RUNPATH [/opt/keiland/lib]` と SONAME / NEEDED を確認、`elf-check: PASS (7 ELF)`。digest archive は stage に無い。
-- source token の比較 `makefile-sync: PASS`、system-inclusive dependency の確認 `header-check: PASS (57 sources)`。system の Wayland / EGL / GLES header 混入無し。
-- `lib-smoke: PASS`（version 21、network record / unreachable state、audio unavailable、resolver reader）。
-- `make keiland-linux-clean` exit 0。Linux の lib / obj / stage を消し、p001 の guest.img は保持。
-- `timeout 600 make -j64 disk-image`: exit 0、warning 0。Linux Makefile は target build に include されず、zedBSD source / toolchain に変更無し。共通 C source を直していないため runtime 回帰対象無し。
-- 新規 4 C file は clang-format19（ColumnLimit 0）後、定義引数・3 条件の行を全文規約に従い復元。style-check total 0、手動全文レビュー、sh syntax、`git diff --check` PASS。仮 backend の常に拒む API の最終 return は規定の errno を保持。
-
-証拠: `build/ws105-p002/` の gcc/clang（初回・最終）log、install/clean/zedbsd log、verify.log。永続の試験 summary と source manifest は `plan/history/ws105/q524/`。libvulkan と compositor / app は後続 Phase。host の `/opt/keiland` に install していない。host 試験は `KEILAND_DRM_DEVICE=none`、Wayland/X 環境を外し、timeout 付きで実施。
-
-
-実装 commit: `c1c9e48ea7ed636d62f3fb20e0c4179423d5a614`（WIP）。終了 UTC: 2026-10-01T06:10:50.723980+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）

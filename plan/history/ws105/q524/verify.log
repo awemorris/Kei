@@ -1,0 +1,5 @@
+elf-check: PASS (7 ELF)
+makefile-sync: PASS
+header-check: PASS (57 sources)
+lib-smoke: PASS
+p002 Linux: PASS

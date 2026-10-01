@@ -9,7 +9,7 @@ Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
 Queue: q523 finished
-Resume point: p001 cleared（q523）。次は依存を満たす既存 Phase。
+Resume point: p002 cleared（q524）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -105,7 +105,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | Phase | 目的 | 状態 | 依存 |
 | --- | --- | --- | --- |
 | [ws105-p001](phase001/phase.md) | Linux の試験の guest（QEMU の Debian 13）と操作の道具 | cleared | なし |
-| [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | planned | WS104 の p001・p003 |
+| [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | cleared | WS104 の p001・p003 |
 | [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | planned | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | planned | p003 |
 | [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | planned | p004、p001 |
@@ -151,3 +151,20 @@ cleared。Debian 13 の base guest と操作の道具を作成。`guest.sh` は�
 
 
 [Phase の結果](phase001/phase.md)、[Queue history](../history/queue-q523.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### q524 / ws105-p002（2026-10-01T06:10:50.723980+00:00）
+
+cleared。Linux の独立 build の土台と、8 package の `Makefile.linux`（7 shared library と install しない digest archive）を実装。仮 network / audio backend は公開 API の署名を保持し、service 不在を返す。DNS は実際の `/etc/resolv.conf` の dotted IPv4 を読む。
+
+- gcc / clang の最終 build exit 0、`-Werror`・warning 0。host gcc 14.2.0 / clang 19.1.7、GNU Make 4.4.1。target toolchain 変更無し、host package 追加無し。
+- install した 7 ELF の `RUNPATH [/opt/keiland/lib]` と SONAME / NEEDED を確認、`elf-check: PASS (7 ELF)`。digest archive は stage に無い。
+- source token の比較 `makefile-sync: PASS`、system-inclusive dependency の確認 `header-check: PASS (57 sources)`。system の Wayland / EGL / GLES header 混入無し。
+- `lib-smoke: PASS`（version 21、network record / unreachable state、audio unavailable、resolver reader）。
+- `make keiland-linux-clean` exit 0。Linux の lib / obj / stage を消し、p001 の guest.img は保持。
+- `timeout 600 make -j64 disk-image`: exit 0、warning 0。Linux Makefile は target build に include されず、zedBSD source / toolchain に変更無し。共通 C source を直していないため runtime 回帰対象無し。
+- 新規 4 C file は clang-format19（ColumnLimit 0）後、定義引数・3 条件の行を全文規約に従い復元。style-check total 0、手動全文レビュー、sh syntax、`git diff --check` PASS。仮 backend の常に拒む API の最終 return は規定の errno を保持。
+
+証拠: `build/ws105-p002/` の gcc/clang（初回・最終）log、install/clean/zedbsd log、verify.log。永続の試験 summary と source manifest は `plan/history/ws105/q524/`。libvulkan と compositor / app は後続 Phase。host の `/opt/keiland` に install していない。host 試験は `KEILAND_DRM_DEVICE=none`、Wayland/X 環境を外し、timeout 付きで実施。
+
+
+[Phase の結果](phase002/phase.md)、[Queue history](../history/queue-q524.md)。WS105 の受け入れは残りの Phase の確認を要する。
