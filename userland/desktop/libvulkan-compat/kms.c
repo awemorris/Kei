@@ -107,12 +107,17 @@ compat_kms_acquire(
 	int fd)
 {
 	struct drm_mode_crtc saved;
+	struct drm_auth authentication;
+	unsigned owned_master;
 	int owned;
 	int error;
 
 	/* Direct applications acquire master only when beginning an actual display session. */
-	if (fd < 0)
+	owned_master = 0;
+	if (fd < 0) {
 		fd = kms_query_fd;
+		owned_master = 1;
+	}
 
 	/* Requires the descriptor to identify the card whose connector handles were enumerated. */
 	error = compat_kms_card_matches(fd);
@@ -124,11 +129,21 @@ compat_kms_acquire(
 	if (owned < 0)
 		return VK_ERROR_OUT_OF_HOST_MEMORY;
 
-	/* A seat's fd is already master; a direct root application's fd becomes master here. */
-	error = ioctl(owned, DRM_IOCTL_SET_MASTER, NULL);
-	if (error != 0) {
-		(void)close(owned);
-		return VK_ERROR_INITIALIZATION_FAILED;
+	/* Only an independent direct application asks this library to take master. */
+	if (owned_master != 0) {
+		error = ioctl(owned, DRM_IOCTL_SET_MASTER, NULL);
+		if (error != 0) {
+			(void)close(owned);
+			return VK_ERROR_INITIALIZATION_FAILED;
+		}
+	} else {
+		/* AUTH_MAGIC requires current master; nonexistent magic zero returns EINVAL without changing authority. */
+		memset(&authentication, 0, sizeof(authentication));
+		error = ioctl(owned, DRM_IOCTL_AUTH_MAGIC, &authentication);
+		if (error != 0 && errno != EINVAL) {
+			(void)close(owned);
+			return VK_ERROR_INITIALIZATION_FAILED;
+		}
 	}
 
 	/* Saves the CRTC before any scanout change so destruction restores the console. */
@@ -152,6 +167,8 @@ compat_kms_acquire(
 
 	/* The acquired descriptor remains owned until explicit release or session retirement. */
 	display->master_fd = owned;
+	/* Borrowed seat authority stays with logind even when our duplicate retires. */
+	display->master_owned = owned_master;
 
 	/* Succeeded: KMS submissions use our duplicate and never the caller's descriptor directly. */
 	return VK_SUCCESS;
@@ -209,9 +226,11 @@ compat_kms_release(
 
 	/* Returns scanout to the pre-acquisition CRTC before dropping master. */
 	compat_kms_restore(display);
-	(void)ioctl(display->master_fd, DRM_IOCTL_DROP_MASTER, NULL);
+	if (display->master_owned != 0)
+		(void)ioctl(display->master_fd, DRM_IOCTL_DROP_MASTER, NULL);
 	(void)close(display->master_fd);
 	display->master_fd = -1;
+	display->master_owned = 0;
 	display->saved_valid = 0;
 }
 

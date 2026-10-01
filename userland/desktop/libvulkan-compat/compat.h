@@ -144,6 +144,8 @@ struct compat_display {
 	struct compat_display_mode *modes;
 	struct compat_display_mode *preferred;
 	int master_fd;
+	/* Only a direct application lets this library change master authority. */
+	unsigned master_owned;
 	struct drm_mode_crtc saved;
 	unsigned saved_valid;
 	unsigned active;
