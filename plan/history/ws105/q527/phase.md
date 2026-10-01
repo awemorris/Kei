@@ -4,10 +4,10 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q527 / q527-i01
 依存: p003
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4（特に §4.4〜§4.8・§4.11）を読む**
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §4（特に §4.4〜§4.8・§4.11）を読む**
 
 ## 目的
 
@@ -15,7 +15,7 @@ libvulkan-compat に Wayland の WSI を足す（決定 D6）: `VK_KHR_surface`�
 `zwp_linux_dmabuf_v1`（version 3）で compositor に送る。fence は implicit sync（dma-buf に sync_file を付ける）。この Phase の試験の相手は host の上の試験用の Wayland server
 （`dmabuf-probe`）で、我々の compositor（p007）より先に WSI を確かめる。
 
-## 手本（[survey/](../survey/README.md)）
+## 手本（[survey/](../../../ws105/survey/README.md)）
 
 - `survey/vkexp.c`: lavapipe での modifier の image の作成・dma-buf の export・`vkGetImageSubresourceLayout(MEMORY_PLANE_0)`・mmap・別の device での import（全て通った）。
 - `survey/vksync.c`: SYNC_FD の semaphore の export・import、`DMA_BUF_IOCTL_IMPORT_SYNC_FILE`・`EXPORT_SYNC_FILE`（全て通った）。
@@ -76,7 +76,7 @@ raw fence 数を正規化しない。試験生成 server protocol は build/test
 - **uncleared**: 4 種の client/server がともに exit 0、各 90 frame。FIFO・resize・MAILBOX の全画素/サイズ一致。fallback の画素/サイズは一致したが、承認済み `fences=0` は不成立。
 - host kernel `6.12.101+deb13-amd64`、lavapipe。全 run の raw fences=1、driver/timeline=`stub`、status=1、waited_ms=0。既に完了した writer と空の reservation をこの観測だけでは区別できない。fences≥1 だけによる通常経路の受け入れも根拠が不足する。
 - Linux 6.12 の一次資料: [dma-buf.c](https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/dma-buf/dma-buf.c) の dma_buf_export_sync_file は空の reservation に dma_fence_get_stub を補う。[dma-fence.c](https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/dma-buf/dma-fence.c) の stub は既に signal 済み。
-- gcc の Linux WSI build warning 0。4 run の [観測](../../history/ws105/q526/evidence/) を保存。clang/全規約/chain 回帰はこの試行では未実施。既存コードの partial resource cleanup と通常 acquire の初期 queue 記録を次試行で見直す。
+- gcc の Linux WSI build warning 0。4 run の [観測](../q526/evidence) を保存。clang/全規約/chain 回帰はこの試行では未実施。既存コードの partial resource cleanup と通常 acquire の初期 queue 記録を次試行で見直す。
 - 再開条件: 試験だけの ioctl observer で通常 IMPORT_SYNC_FILE の成功/flags=WRITE、fallback ENOTTY 1 回・以後成功 import 0 回、CPU fence 待ち・90 frame 全画素を実測する。raw fence/timeline は加工せず残す。D6 の production 同期方式、L3 の画素/安全性、他 Phase の出力は変更しない。main の委任済み技術判断で検証の観測方法を改訂し、新 Queue snapshot に残す。
 - valgrind は host に無く未実施。実機 GPU の非同期 fence 待ちは未実施、lavapipe のみ。push/GitHub 公開なし。
 
@@ -103,7 +103,7 @@ main が全文規約 §12 と手順を照合し、未実装の試験専用 produ
 - `vk-chain-test: PASS`: staged SONAME、surface/wayland拡張有り、XCB/Xlib無し、未enableのWayland procedure=NULL、API1.0、llvmpipe、1MiB fill/copy一致。`interpose-check: PASS`、default backend-to-compat bindings=0、NO_DEEPBIND optoutもPASS。
 - `make -j4 disk-image` exit0、warning0。Linux固有library/testだけの変更のためzedBSD runtime回帰はp011の全体回帰で実施。host package追加・target toolchain変更・host /opt install無し。
 - swapchain destroy時にGPU資源を先に退役し、未releaseのWayland callback storageだけをsurfaceで保持する。deviceが先に破棄されてもcallback dataが残る。初回acquireより前のapplication queue retrievalを必須にしない。
-- [raw evidence](../../history/ws105/q527/evidence/) と [ELF manifest](../../history/ws105/q527/manifest.sha256)を保存。valgrindはhostに無く未実施。実機GPUの非同期待ちは未実施、host lavapipeのみ。GitHub publication/remote closeはdeferred、outboxで保持。commit WIP、push無し。
+- [raw evidence](evidence) と [ELF manifest](manifest.sha256)を保存。valgrindはhostに無く未実施。実機GPUの非同期待ちは未実施、host lavapipeのみ。GitHub publication/remote closeはdeferred、outboxで保持。commit WIP、push無し。
 
 
 実装 commit: `cb6a9eacf1dac1a1f6381809ba102558ffc41467`（WIP）。終了 UTC: 2026-10-01T07:35:44.278649+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。

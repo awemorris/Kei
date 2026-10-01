@@ -1,0 +1,9 @@
+fifo client/probe exit=0
+fallback client/probe exit=0
+resize client/probe exit=0
+mailbox client/probe exit=0
+fifo: PASS 90 frames; every color/extent, kernel import and private wait verified; raw fences retained
+fallback: PASS 90 frames; every color/extent, kernel import and private wait verified; raw fences retained
+resize: PASS 90 frames; every color/extent, kernel import and private wait verified; raw fences retained
+mailbox: PASS 90 frames; every color/extent, kernel import and private wait verified; raw fences retained
+wsi-check: PASS

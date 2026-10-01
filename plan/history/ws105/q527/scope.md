@@ -2,10 +2,10 @@
 
 # ws105-p004: libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync）
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q527 / q527-i01
+Queue: なし
 依存: p003
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4（特に §4.4〜§4.8・§4.11）を読む**
 
@@ -51,13 +51,38 @@ libvulkan-compat に Wayland の WSI を足す（決定 D6）: `VK_KHR_surface`�
 | `dmabuf-probe.c` | design §7.3（`survey/dmabuf-probe.c` から）。`PROBE frame=N pixel=0xAARRGGBB fences=F waited_ms=M` と `PROBE RESULT frames=N`、`--frames N`・`--socket PATH`・`--timeout S`・`--size-log`（frame の幅・高さも出す） |
 | `wsi-probe-client.c` | 我々の libwayland-client と libvulkan-compat で、`--frames N` 回 clear して present する client。色は frame の番号で `0xffff0000`・`0xff00ff00`・`0xff0000ff` を巡る（B8G8R8A8 の memory の並びで正しく）。`--resize`（30 frame ごとに 320×240 と 400×300 を替えて swapchain を作り直す）、`--mailbox`、`--timeout S`。終わりに `wsi-probe-client: PASS` |
 
-## 手順
+## 手順（host、repo の root で）
 
-host の独立試験。build / install と `elf-check.sh`・`makefile-sync.sh`・`header-check.sh`、`vk-chain-test`・`interpose-check.sh` に加え、
-`timeout 120 bash plan/tools/keiland-linux/wsi-check.sh`。この reusable script が test server/client と observer の 2 版を build し、FIFO/fallback/resize/MAILBOX を各90 frame実行する。
-通常 run は sync-observe.so、fallback は compile 時 ENOTTY 指定の sync-unavailable.so を client だけに preload。kernel import flags/result と backend private wait result を全 frame分 assert。
-通常の private wait は acquire/reuse の180回、fallback は加えて CPU-before-commit の90回、合計270回。後段の DEEPBIND は維持。
-raw fence 数を正規化しない。試験生成 server protocol は build/test/gen のみ、production は自前の手書き stub。各 process90秒、内部deadline60秒。
+```
+make -j64 keiland-linux && make keiland-linux-install DESTDIR=$PWD/build/keiland-linux/stage
+make -j64 keiland-linux CC=clang KEILAND_LINUX_BUILD=build/keiland-linux-clang
+sh plan/tools/keiland-linux/elf-check.sh build/keiland-linux/stage && sh plan/tools/keiland-linux/makefile-sync.sh && sh plan/tools/keiland-linux/header-check.sh
+STAGE=build/keiland-linux/stage/opt/keiland/lib
+T=build/keiland-linux/test; mkdir -p $T/gen
+X=$(pkg-config --variable=pkgdatadir wayland-protocols)/stable/linux-dmabuf/linux-dmabuf-v1.xml
+SC=$(pkg-config --variable=wayland_scanner wayland-scanner)
+$SC server-header $X $T/gen/linux-dmabuf-v1-server-protocol.h && $SC private-code $X $T/gen/linux-dmabuf-v1-protocol.c
+cc -std=c11 -Wall -Wextra -Werror -O2 -I$T/gen $(pkg-config --cflags wayland-server) -o $T/dmabuf-probe \
+   plan/tools/keiland-linux/dmabuf-probe.c $T/gen/linux-dmabuf-v1-protocol.c $(pkg-config --libs wayland-server)
+cc -std=gnu17 -Wall -Wextra -Werror -o $T/wsi-probe-client plan/tools/keiland-linux/wsi-probe-client.c -Iuserland/desktop/keiland \
+   -Lbuild/keiland-linux/lib -l:libwayland-client.so -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
+export XDG_RUNTIME_DIR=$PWD/$T/xdg; mkdir -p -m 0700 $XDG_RUNTIME_DIR
+SAFE="env -u DISPLAY KEILAND_DRM_DEVICE=none"
+run() {   # $1: name, $2...: client options
+  timeout 90 $T/dmabuf-probe --socket $XDG_RUNTIME_DIR/probe-0 --frames 90 --timeout 60 --size-log > $T/probe-$1.out & P=$!
+  sleep 1
+  timeout 90 $SAFE WAYLAND_DISPLAY=probe-0 LD_LIBRARY_PATH=$STAGE $T/wsi-probe-client --frames 90 --timeout 60 "$@" > $T/client-$1.out 2>&1; echo "client $1 exit=$?"
+  wait $P; echo "probe $1 exit=$?"; grep -c '^PROBE frame=' $T/probe-$1.out
+}
+run fifo
+export LD_PRELOAD=$PWD/$T/libsync-unavailable.so; run fallback; unset LD_PRELOAD
+run resize --resize
+run mailbox --mailbox
+timeout 60 $SAFE LD_LIBRARY_PATH=$STAGE build/keiland-linux/test/vk-chain-test
+timeout 120 sh plan/tools/keiland-linux/interpose-check.sh
+```
+
+（この block は bash で、1 つの shell で順に走らせる。`run` は shell の関数。）
 
 ## 完了の条件
 
@@ -95,15 +120,4 @@ main が全文規約 §12 と手順を照合し、未実装の試験専用 produ
 
 ## q527 結果
 
-- **cleared**。q526 の旧条件が不成立だった履歴を保持し、kernel の stub に依存しない改訂検証を実施した。product API / D6 の implicit sync と CPU fallback は同じ。
-- gcc 14.2.0 / clang 19.1.7 の最終 source build warning 0。`elf-check: PASS`（8 ELF）、`makefile-sync: PASS`、`header-check: PASS`（64 source）。`git diff --check` PASS。libvulkan-compat 全 C/header、変更した試験 C と generated forward.inc の style-check 合計0、ANSI 宣言・public/static順・callback storage寿命・fd ownership・error unwindを全文規約で照合。
-- `timeout 120 bash plan/tools/keiland-linux/wsi-check.sh`: FIFO/fallback/resize/MAILBOX は各90 frame、client/server exit0。全360 frame の実画素がN%3の赤/緑/青と一致。resizeは320×240→400×300→320×240、MAILBOXも90frame。
-- 通常3 run: IMPORT_SYNC_FILE flags=WRITE(2) がそれぞれ90回成功。private waitは各180回（acquire/reuse）、全て成功。fallback: ENOTTY(25)は最初の1回のみ、以後import試行無し。private waitは270回、CPU-before-commitが全90frameに加わり全て成功。observerは試験専用、backend DEEPBINDとproduction引数/戻り値を維持。
-- raw SYNC_IOC_FILE_INFO は全runでfences=1、driver/timeline=stub、status=1、waited_ms=0。値を加工して0にせず保存。この値だけをimplicit sync成功の根拠にしない。V3: lavapipeの実際のcreated modifier=0x0、single plane、stride=1280/1600、offset=0を確認。V9はkernel importの成功と実画素で検証。
-- `vk-chain-test: PASS`: staged SONAME、surface/wayland拡張有り、XCB/Xlib無し、未enableのWayland procedure=NULL、API1.0、llvmpipe、1MiB fill/copy一致。`interpose-check: PASS`、default backend-to-compat bindings=0、NO_DEEPBIND optoutもPASS。
-- `make -j4 disk-image` exit0、warning0。Linux固有library/testだけの変更のためzedBSD runtime回帰はp011の全体回帰で実施。host package追加・target toolchain変更・host /opt install無し。
-- swapchain destroy時にGPU資源を先に退役し、未releaseのWayland callback storageだけをsurfaceで保持する。deviceが先に破棄されてもcallback dataが残る。初回acquireより前のapplication queue retrievalを必須にしない。
-- [raw evidence](../../history/ws105/q527/evidence/) と [ELF manifest](../../history/ws105/q527/manifest.sha256)を保存。valgrindはhostに無く未実施。実機GPUの非同期待ちは未実施、host lavapipeのみ。GitHub publication/remote closeはdeferred、outboxで保持。commit WIP、push無し。
-
-
-実装 commit: `cb6a9eacf1dac1a1f6381809ba102558ffc41467`（WIP）。終了 UTC: 2026-10-01T07:35:44.278649+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）

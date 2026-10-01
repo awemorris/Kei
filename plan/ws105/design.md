@@ -588,7 +588,7 @@ libvulkan-compat の**内部**に置く（F-065 の決定 3 と同じ扱い。li
 
 **試験で確かめられないこと（§10 V3・V9）**: host と guest の lavapipe は CPU で描き、submit の時点で完了まで待つので、compositor の側の implicit sync の待ちは常に 0 ms になる。
 implicit sync の受け渡しが正しいこと（fence が dma-buf に付いていること）は、`dmabuf-probe` が export した sync_file を `SYNC_IOC_FILE_INFO`（`<linux/sync_file.h>`）で
-読み、`num_fences ≥ 1` であることで確かめる（予備の道では 0）。実際に待つことの確かめは GPU の後段（実機）が要り、WS105 では未実施になる。
+読み raw fence 数/driver/timeline を記録する。空/完了時も kernel が stub=1 を返すため、受け渡しは試験 observer の IMPORT_SYNC_FILE flags=WRITE 成功で確かめ、fallback は ENOTTY 後の再試行無しと CPU wait の成功を全 frame で確かめる。実際に待つことの確かめは GPU の後段（実機）が要り、WS105 では未実施になる。
 
 ### 4.9 画面の WSI（VK_KHR_display と VK_EXT_acquire_drm_display、`wsi-display.c`・`kms.c`）
 
@@ -1131,10 +1131,14 @@ WS105 は共通の source（compositor の `protocol.c`・`main.c`・`display.c`
 | V6 | gdm（Debian 13、gdm3 48）が `keiland.desktop` の session を logind の session として起動し、`XDG_SESSION_ID`・`XDG_SESSION_TYPE=wayland` が届き、`TakeControl` が通る | p009 | gdm の版の差を調べて main に報告 |
 | V7 | `mac80211_hwsim` と hostapd で guest の中に WiFi の AP と client ができ、wpa_supplicant の制御 socket で scan・接続できる（`mac80211_hwsim` の module は確かめ済み） | p010 | network の試験を「wpa_supplicant の制御 socket の偽物の server」で行う形に落とす |
 | V8 | 我々の compositor・client が `PRESENT_SRC_KHR` と所有の移り（FOREIGN）を後段の都合どおりに扱わなくても、LINEAR の image では正しく表示される | p007 | tiled の modifier の GPU（実機）では要る。§8 |
-| V9 | implicit sync の fence が dma-buf に付く（`dmabuf-probe` の `fences ≥ 1`）。lavapipe は CPU で完了まで待つので、実際に待つことは見えない | p004 | fence が 0 なら、IMPORT_SYNC_FILE の戻り値と kernel の版を記録して main に報告 |
+| V9 | implicit sync の fence が dma-buf に付く（IMPORT_SYNC_FILE flags=WRITE の成功を試験 observer で記録、実画素と照合。raw `fences` は空/完了時も kernel stub=1 になる）。lavapipe は CPU で完了まで待つので、実際に待つことは見えない | p004 | IMPORT_SYNC_FILE の失敗・CPU fallback の実行と kernel の版を記録。raw fence 数だけを成功の根拠にしない |
 | V10 | 我々の compat の library（`libz-compat.so` など）が版無しで export する名前（`crc32` など）に、`KEILAND_VULKAN_NO_DEEPBIND=1` の時に Mesa・LLVM が結び付いても壊れない（zlib と ABI が同じ） | p008（Image Viewer などで compat の library と Vulkan が同じ process に居る状態で app が動くこと） | DEEPBIND の既定のままなら起きない。外す場合の注意として記録 |
 | V11 | `logind` の pause で DRM の master が外され evdev が revoke され、resume で新しい fd が来る（systemd の source の知識。未確かめ） | p009 | 実際の動きに合わせて §5.5 を直す（main に報告） |
 
 ### p003 の実装時の確認（q525）
 
 V1・V2 verified: 既定の backend → compat binding 0、opt-out の chain も PASS、同じ SONAME の別 backend で 1 MiB fill / copy / fence と全 word 一致。明示した backend の壊れた指定は authoritative として診断・失敗し、既定候補で隠さない（Phase の自己参照 / missing-backend の検証を保持）。pthread key の thread-local record によって必要な lifetime / 再入検出を保ち、NEEDED は glibc runtime の libc.so.6 だけ。fake backend の直接再帰は gcc が local alias にしたため、extern assembler alias から vkCreateInstance@PLT を呼ぶ試験に直し、診断と exit134 を確認。詳細は [p003](phase003/phase.md)。
+
+### p004 検証の改訂（q526 後、2026-10-01）
+
+[Phase 改訂](phase004/phase.md): kernel 6.12 の export は空の reservation に stub を補い、lavapipe の完了済み payload も stub と観測された。raw fences≥1 / fallback=0 の区別は成立しない。raw 値を保持し、試験 observer の IMPORT_SYNC_FILE の成功/ENOTTY と CPU fence wait、全 frame 実画素を受け入れの根拠とする。D6 の production API/同期方式に変更無し。実機 GPU の非同期待ちは従来通り未実施。

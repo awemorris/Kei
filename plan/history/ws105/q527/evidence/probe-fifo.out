@@ -1,0 +1,184 @@
+IMPORT width=320 height=240 modifier=0x0 offset=0 stride=1280
+IMPORT width=320 height=240 modifier=0x0 offset=0 stride=1280
+IMPORT width=320 height=240 modifier=0x0 offset=0 stride=1280
+FENCE frame=0 driver=stub timeline=stub status=1
+PROBE frame=0 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=1 driver=stub timeline=stub status=1
+PROBE frame=1 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=2 driver=stub timeline=stub status=1
+PROBE frame=2 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=3 driver=stub timeline=stub status=1
+PROBE frame=3 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=4 driver=stub timeline=stub status=1
+PROBE frame=4 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=5 driver=stub timeline=stub status=1
+PROBE frame=5 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=6 driver=stub timeline=stub status=1
+PROBE frame=6 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=7 driver=stub timeline=stub status=1
+PROBE frame=7 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=8 driver=stub timeline=stub status=1
+PROBE frame=8 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=9 driver=stub timeline=stub status=1
+PROBE frame=9 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=10 driver=stub timeline=stub status=1
+PROBE frame=10 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=11 driver=stub timeline=stub status=1
+PROBE frame=11 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=12 driver=stub timeline=stub status=1
+PROBE frame=12 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=13 driver=stub timeline=stub status=1
+PROBE frame=13 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=14 driver=stub timeline=stub status=1
+PROBE frame=14 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=15 driver=stub timeline=stub status=1
+PROBE frame=15 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=16 driver=stub timeline=stub status=1
+PROBE frame=16 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=17 driver=stub timeline=stub status=1
+PROBE frame=17 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=18 driver=stub timeline=stub status=1
+PROBE frame=18 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=19 driver=stub timeline=stub status=1
+PROBE frame=19 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=20 driver=stub timeline=stub status=1
+PROBE frame=20 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=21 driver=stub timeline=stub status=1
+PROBE frame=21 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=22 driver=stub timeline=stub status=1
+PROBE frame=22 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=23 driver=stub timeline=stub status=1
+PROBE frame=23 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=24 driver=stub timeline=stub status=1
+PROBE frame=24 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=25 driver=stub timeline=stub status=1
+PROBE frame=25 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=26 driver=stub timeline=stub status=1
+PROBE frame=26 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=27 driver=stub timeline=stub status=1
+PROBE frame=27 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=28 driver=stub timeline=stub status=1
+PROBE frame=28 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=29 driver=stub timeline=stub status=1
+PROBE frame=29 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=30 driver=stub timeline=stub status=1
+PROBE frame=30 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=31 driver=stub timeline=stub status=1
+PROBE frame=31 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=32 driver=stub timeline=stub status=1
+PROBE frame=32 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=33 driver=stub timeline=stub status=1
+PROBE frame=33 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=34 driver=stub timeline=stub status=1
+PROBE frame=34 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=35 driver=stub timeline=stub status=1
+PROBE frame=35 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=36 driver=stub timeline=stub status=1
+PROBE frame=36 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=37 driver=stub timeline=stub status=1
+PROBE frame=37 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=38 driver=stub timeline=stub status=1
+PROBE frame=38 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=39 driver=stub timeline=stub status=1
+PROBE frame=39 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=40 driver=stub timeline=stub status=1
+PROBE frame=40 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=41 driver=stub timeline=stub status=1
+PROBE frame=41 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=42 driver=stub timeline=stub status=1
+PROBE frame=42 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=43 driver=stub timeline=stub status=1
+PROBE frame=43 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=44 driver=stub timeline=stub status=1
+PROBE frame=44 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=45 driver=stub timeline=stub status=1
+PROBE frame=45 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=46 driver=stub timeline=stub status=1
+PROBE frame=46 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=47 driver=stub timeline=stub status=1
+PROBE frame=47 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=48 driver=stub timeline=stub status=1
+PROBE frame=48 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=49 driver=stub timeline=stub status=1
+PROBE frame=49 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=50 driver=stub timeline=stub status=1
+PROBE frame=50 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=51 driver=stub timeline=stub status=1
+PROBE frame=51 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=52 driver=stub timeline=stub status=1
+PROBE frame=52 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=53 driver=stub timeline=stub status=1
+PROBE frame=53 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=54 driver=stub timeline=stub status=1
+PROBE frame=54 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=55 driver=stub timeline=stub status=1
+PROBE frame=55 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=56 driver=stub timeline=stub status=1
+PROBE frame=56 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=57 driver=stub timeline=stub status=1
+PROBE frame=57 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=58 driver=stub timeline=stub status=1
+PROBE frame=58 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=59 driver=stub timeline=stub status=1
+PROBE frame=59 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=60 driver=stub timeline=stub status=1
+PROBE frame=60 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=61 driver=stub timeline=stub status=1
+PROBE frame=61 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=62 driver=stub timeline=stub status=1
+PROBE frame=62 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=63 driver=stub timeline=stub status=1
+PROBE frame=63 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=64 driver=stub timeline=stub status=1
+PROBE frame=64 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=65 driver=stub timeline=stub status=1
+PROBE frame=65 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=66 driver=stub timeline=stub status=1
+PROBE frame=66 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=67 driver=stub timeline=stub status=1
+PROBE frame=67 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=68 driver=stub timeline=stub status=1
+PROBE frame=68 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=69 driver=stub timeline=stub status=1
+PROBE frame=69 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=70 driver=stub timeline=stub status=1
+PROBE frame=70 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=71 driver=stub timeline=stub status=1
+PROBE frame=71 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=72 driver=stub timeline=stub status=1
+PROBE frame=72 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=73 driver=stub timeline=stub status=1
+PROBE frame=73 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=74 driver=stub timeline=stub status=1
+PROBE frame=74 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=75 driver=stub timeline=stub status=1
+PROBE frame=75 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=76 driver=stub timeline=stub status=1
+PROBE frame=76 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=77 driver=stub timeline=stub status=1
+PROBE frame=77 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=78 driver=stub timeline=stub status=1
+PROBE frame=78 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=79 driver=stub timeline=stub status=1
+PROBE frame=79 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=80 driver=stub timeline=stub status=1
+PROBE frame=80 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=81 driver=stub timeline=stub status=1
+PROBE frame=81 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=82 driver=stub timeline=stub status=1
+PROBE frame=82 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=83 driver=stub timeline=stub status=1
+PROBE frame=83 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=84 driver=stub timeline=stub status=1
+PROBE frame=84 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=85 driver=stub timeline=stub status=1
+PROBE frame=85 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=86 driver=stub timeline=stub status=1
+PROBE frame=86 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+FENCE frame=87 driver=stub timeline=stub status=1
+PROBE frame=87 pixel=0xffff0000 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=88 driver=stub timeline=stub status=1
+PROBE frame=88 pixel=0xff00ff00 fences=1 waited_ms=0 width=320 height=240
+FENCE frame=89 driver=stub timeline=stub status=1
+PROBE frame=89 pixel=0xff0000ff fences=1 waited_ms=0 width=320 height=240
+RESULT frames=90 failed=0

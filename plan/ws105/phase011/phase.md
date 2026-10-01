@@ -27,7 +27,7 @@ WS105 の完了の前の、規約の全文による見直し（Awesome Plan の 
 3. **install の文書** `userland/desktop/LINUX.md`: 要る host の package（Debian 13 の名前: `build-essential`・`clang`（任意）・`libvulkan-dev`・`linux-libc-dev`・`python3`・`curl`、
    試験には `libwayland-dev`・`libwayland-bin`・`wayland-protocols`・`mesa-vulkan-drivers`・`vulkan-tools`・`qemu-system-x86`・`qemu-utils`・`mmdebstrap`・`e2fsprogs`）、
    build（`make keiland-linux`）、install（`sudo make keiland-linux-install`、`sudo make keiland-linux-install-session`）、起動（text console から root で
-   `KEILAND_SEAT=direct /opt/keiland/bin/wayland --session --glass --wallpaper=...`、gdm）、環境変数（`KEILAND_VULKAN_BACKEND`・`KEILAND_VULKAN_NO_DEEPBIND`・`KEILAND_VULKAN_NO_IMPLICIT_SYNC`・
+   `KEILAND_SEAT=direct /opt/keiland/bin/wayland --session --glass --wallpaper=...`、gdm）、環境変数（`KEILAND_VULKAN_BACKEND`・`KEILAND_VULKAN_NO_DEEPBIND`・
    `KEILAND_DRM_DEVICE`・`KEILAND_SEAT`）、利用者の group（`video`・`input`・`render`・`kvm`（lavapipe の時）・`netdev`・`audio`）、範囲の外（design §8）、仕組みへの link（`plan/ws105/design.md`）。
 4. **回帰（Linux）**: `make keiland-linux-clean` の後に gcc と clang で build、`elf-check.sh`・`makefile-sync.sh`・`header-check.sh`、host の p003・p004 の試験、guest の p005〜p010 の確かめを
    **自分の新しい guest の image で通しで**: `sh plan/tools/keiland-linux/build-guest.sh $PWD/build/ws105-p011/guest` と `GUEST_DIR=$PWD/build/ws105-p011/guest`
@@ -43,3 +43,7 @@ WS105 の完了の前の、規約の全文による見直し（Awesome Plan の 
 ## 結果
 
 （実行の後に書く）
+
+## 文書の参照修正（2026-10-01、p004 の規約照合）
+
+全文規約 §12 により production の試験専用 NO_IMPLICIT_SYNC は実装しないため、install 文書の環境変数一覧から除いた。CPU fallback は能力不足/ioctl の実際の失敗で選ぶ。p011 はこの production の規則と p004 の改訂した検証をそのまま確認する。
