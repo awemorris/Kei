@@ -1,0 +1,85 @@
+Started keiland-deb-smoke.service - [systemd-run] /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm.
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=535
+ZWL STARTUP step=vulkan-objects-arrow ms=878
+ZWL STARTUP step=wallpaper-picture ms=78
+ZWL STARTUP step=wallpaper ms=313
+ZWL STARTUP step=glyphs-text ms=99
+ZWL STARTUP step=glyphs-icons ms=72
+ZWL STARTUP step=glyphs-mark ms=462
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=641
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=2375 at_ms=296947
+ZWL INPUT device=/dev/input/event4 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL STARTUP step=input ms=22 at_ms=296969
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=1 at_ms=296970
+ZWL STARTUP step=socket ms=1 at_ms=296971
+ZWL CLIENT client=1 fd=16 ime=1
+ZWL IME started pid=2381 client=1
+ZWL READY socket=/tmp/keiland-runtime/wayland-keiland width=1280 height=800 timeout_ms=18446744073709551615 pid=2353
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL NETWORK state reachable=0 connected=1 kind=wired interface=enp0s4 wifi=absent ssid=
+ZWL VOLUME reachable=0 device=0
+ZWL DESKTOP start pid=2382 command=/opt/keiland/bin/files --desktop at_ms=297022
+ZWL STARTUP step=output-display ms=2
+ZWL STARTUP step=output-pipelines ms=193
+ZWL STARTUP step=output-swapchain ms=55
+ZWL STARTUP step=output-targets ms=1
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=253 at_ms=297276
+ZWL GLASS desktops x=821 step=46 width=40
+ZWL NETWORK icon x=1065 y=3 width=30 height=28
+ZWL VOLUME icon x=1032 y=3 width=30 height=28
+ZWL CLIENT client=2 fd=20
+ZWL CLIENT client=3 fd=21
+ZWL DESKTOP role client=2 surface=8 x=0 y=34 width=1280 height=766
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZFILES DESKTOP configure x=0 y=34 width=1280 height=766
+KEI-IME LANGUAGE id=direct
+ZWL INSET create client=3 inset=20 toplevel=16
+ZWL DESKTOP ack serial=1
+ZWL IME language=direct
+ZWL EDIT create client=3 edit=24 toplevel=16
+ZWL BOUNDS client=3 surface=14 width=1256 height=690
+ZWL CONFIGURE client=3 surface=14 serial=3 width=0 height=0 fullscreen=0
+KEI-IME READY languages=2
+ZWL SEAT client=3 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=3 pointer=1 keyboard=1 touch=0
+ZFILES LOCATION kind=folder path=/root/Desktop items=0 error=0
+ZFILES DESKTOP layout saved=0 error=0
+ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=300062 newest_age_ms=-1
+ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=3 buffer=39 width=916 height=632 bytes=2347008
+ZWL IMPORT client=3 buffer=41 width=916 height=632 bytes=2347008
+ZWL IMPORT client=3 buffer=43 width=916 height=632 bytes=2347008
+ZWL MENU commit client=3 menu=47 serial=1 items=30 generation=1
+ZWL MENU set client=3 place=48 menu=47
+ZWL MENU commit client=3 menu=47 serial=2 items=30 generation=2
+ZWL TITLEBAR create client=3 titlebar=52 toplevel=16
+ZWL EDIT state client=3 edit=24 actions=0xff flags=0xd
+ZWL TITLEBAR commit client=3 titlebar=52 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZFILES SLOW-FRAME draw=18 present=920 copy=32 acquire=1 queue=885 wait=0
+ZWL DESKTOP drawn at_ms=301170
+ZFILES MENU context-only
+ZFILES DESKTOP startup entered_ms=297055 fonts=55 instance=271 window=2100 present=551 app=11 canvas=1 draw=18 shown=920 menus=188
+ZFILES READY width=1280 height=766 token=-
+ZWL MAP client=3 surface=14 x=182 y=127
+ZWL MENU bar client=3 surface=14 where=floating item=1 offset=127 top=75 width=55 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=2 offset=184 top=75 width=47 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=3 offset=233 top=75 width=55 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=4 offset=290 top=75 width=76 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=5 offset=368 top=75 width=53 height=44
+ZWL PERF 5587ms: passes=84 timeouts=61 | poll 20.7% work 155.6%
+ZWL PERF compose frames=6 draw_ms=1333.58 (acquire 0.59 submit+present 1324.18) frame_ms=1346.72

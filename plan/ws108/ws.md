@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG007
 Related Milestones: MG001, MG006
 Parent: [Master](../master.md)
-Queue: q548
-Resume point: p003/q548-i01実行中。
+Queue: なし（q548 finished）
+Resume point: p003 cleared、p004の承認scope/実outputを確認。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -47,7 +47,7 @@ WS105 の build/install/ELF と session 契約は completed context。WS106 の 
 | --- | --- | --- | --- | --- |
 | [ws108p001](phase001/phase.md) | package manifest・環境・依存を設計 | P1 と p002〜p004 の実 command/環境を定義。両OSのQEMU guest内native build、dpkg導入/GUI動作とCI/releaseを設計。 | cleared | WS105 output（context）、WS106 の対象表（context） |
 | [ws108p002](phase002/phase.md) | deb packaging と install 検証 | P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。 | cleared | p001 |
-| [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | in-progress | p002 |
+| [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | cleared | p002 |
 | [ws108p004](phase004/phase.md) | 全文規約・両 distro の最終 install/session 回帰 | P1〜P5。CI の未実行・GPU/session 未検証が残れば必要な acceptance を満たしたとはしない。 | planning | p003、WS106の確定済み対象配置（scoped output、ime-probe対象外） |
 
 
@@ -94,3 +94,5 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01T17:46:28.530941+00:00 / ws108-q547-uncleared: p003 uncleared。CI定義/構造/negative gates実装済み、2OS native TCG build/19ELF/clean metadata成功。旧両TCG input失敗を修正しfocused Debian runtime PASS。10362bd3最終Debianはupgrade用deb再圧縮を含む180秒blockでtimeout/exit2、CI検証要件未clear。Ubuntuの同時試験は終了待ち、p004開始不可。次attemptはupgrade圧縮とboundsを修正、2OS actual make＋affected TCG試験へ。
 
 ws108-q548-redesign: p003のupgrade fixture圧縮/boundsを改訂、q547uncleared保持、q548で同Phase再試行。p004依存/最終verifyも改訂、Phase/WS delivery pending。scope/P1〜P5不変。
+
+2026-10-01T18:13:59.373954+00:00 / ws108-q548-cleared: p003 cleared。最終b0e1eaf9の両make exit0、両fresh TCG全smoke PASS、native TCG/KVM payload40全一致、19ELF/manifest/md5/control/root/session audit PASS。CI構造/negative/positive gates、既存build job維持。q547uncleared保持、remote Actions/publish未実行。plan/history/ws108/q548/result.md。

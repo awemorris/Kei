@@ -1,0 +1,16 @@
+{
+  "distro": "ubuntu2604",
+  "package_sha256": "49fba44e702d28885d9b007e88fc3e34fc4112f6fcd715f7f6c4f9a028978cd6",
+  "fresh_overlay": true,
+  "install": true,
+  "reinstall": true,
+  "upgrade": true,
+  "elf_dependencies": true,
+  "public_vulkan_client": true,
+  "direct_session": true,
+  "terminal_map_and_input": true,
+  "remove": true,
+  "purge_keeps_user_data": true,
+  "display_manager_registration": true,
+  "acceleration": "tcg"
+}
