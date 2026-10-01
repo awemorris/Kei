@@ -2,10 +2,10 @@
 
 # ws107p002: エンジンの所属と build/test の参照を移す
 
-Status: cleared
+Status: planning
 Disposition: normal
 Parent: [WS107](../ws.md)
-Queue / Attempt: q542 / q542-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -46,9 +46,3 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 [確定設計](../design.md)と[179file台帳](../inventory.json)を採用。165 engine filesとbuild/runner/生成器locatorだけをsemantic-preserving移動。private/app変数を分離、B1/B2とfresh engine/forced shell buildを確認。依存p001の台帳と設計。
 
 callback判断の出典: このchat、2026-10-02回答「同じ view の変更・破棄は callback 後に行う契約にする」。scope/修正項目は設計に限定。GitHub Phase/WS delivery outbox pending。
-
-## 結果 / q542-i01 / 2026-10-01T15:14:46.945762+00:00
-
-cleared。engine165files（133C）のmove/hash/mode確認、うち生成器4filesだけlocator更新、表/shader binary未再生成。libbrowser/appのsource変数とprivate includeを分離、registry/exports/API v2/install保存。target libbrowser133fresh source＋browser7forced source/probe build exit0/warning0。host clean build exit0/warning0、public-only browser-probeのDT_NEEDEDはlibbrowser.so/libcのみ、libraryはhost標準Vulkan/libm/libcのみ（targetもWayland無し）。list-sources140C、runner syntax/diff-check PASS。
-
-Event: ws107-q542-cleared。Phase結果とclosure意図をlocal保存、GitHub comment/closeはdeferred、remote close未確認。

@@ -1,5 +1,5 @@
 browser's table of HTML named character references
-(userland/desktop/browser/html/entities-table.c) is converted from the list
+(userland/desktop/libbrowser/html/entities-table.c) is converted from the list
 of the WHATWG HTML Living Standard, https://html.spec.whatwg.org/entities.json.
 
 Copyright © WHATWG (Apple, Google, Mozilla, Microsoft).

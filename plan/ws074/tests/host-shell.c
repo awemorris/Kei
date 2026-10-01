@@ -10,7 +10,6 @@
  * headless modes only.
  */
 
-#include "base/base.h"
 #include "shell/shell.h"
 
 #include <stdio.h>
@@ -22,7 +21,7 @@ int
 shell_run(
 	const struct shell_options *options)
 {
-	UNUSED_PARAMETER(options);
+	(void)options;
 
 	/* Says why nothing opened. */
 	fprintf(stderr, "browser: the host build has no window mode\n");

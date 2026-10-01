@@ -5,5 +5,5 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
-sed -n 's/^[^#]*\$(KEILAND_BROWSER_DIR)\/\([^ \\]*\.c\).*/userland\/desktop\/browser\/\1/p' \
-	userland/desktop/libbrowser/Makefile userland/desktop/browser/Makefile
+sed -n 's/^[^#]*\$(LIBBROWSER_DIR)\/\([^ \\]*\.c\).*/userland\/desktop\/libbrowser\/\1/p' userland/desktop/libbrowser/Makefile
+sed -n 's/^[^#]*\$(KEILAND_BROWSER_DIR)\/\([^ \\]*\.c\).*/userland\/desktop\/browser\/\1/p' userland/desktop/browser/Makefile

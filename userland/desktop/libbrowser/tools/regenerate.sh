@@ -10,11 +10,11 @@
 # The notices of both licences are installed with the program (userland/base/licenses/browser/).
 # Changing a list means changing its URL and SHA-256 here and committing the regenerated table.
 #
-#   sh userland/desktop/browser/tools/regenerate.sh
+#   sh userland/desktop/libbrowser/tools/regenerate.sh
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../../.."
-src=userland/desktop/browser
+src=userland/desktop/libbrowser
 lists=build/browser-lists
 mkdir -p "$lists"
 

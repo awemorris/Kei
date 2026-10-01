@@ -1480,11 +1480,11 @@ $(BUILD)/bin/kuidemo: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
  --needed libc.so $@
 
 # The Web browser engine (WS074, libbrowser since ws074-p057) keeps its modules in subdirectories of
-# userland/desktop/browser and includes their headers from that root; it imports standard Vulkan for its
+# userland/desktop/libbrowser and includes their private headers from that root; it imports standard Vulkan for its
 # GPU renderer (ws074-p014), libtruetype for its text, and libjpeg-compat, libpng-compat (with
 # libz-compat) and libgif-compat for its images (ws074-p021).  Only the calls of <browser.h> leave it.
 DYNAMIC_BROWSER_LIBRARY_OBJS := $(call ZEDBSD_USERLAND_OBJECTS,$(DYNAMIC_DIR)/obj,libbrowser)
-$(DYNAMIC_BROWSER_LIBRARY_OBJS): DYNAMIC_CPPFLAGS += -Iuserland/desktop/browser
+$(DYNAMIC_BROWSER_LIBRARY_OBJS): DYNAMIC_CPPFLAGS += -Iuserland/desktop/libbrowser
 
 $(DYNAMIC_DIR)/libbrowser.so: $(DYNAMIC_BROWSER_LIBRARY_OBJS) $(DYNAMIC_DIR)/libvulkan.so $(DYNAMIC_DIR)/libtruetype.so \
 	$(DYNAMIC_DIR)/libjpeg-compat.so $(DYNAMIC_DIR)/libpng-compat.so $(DYNAMIC_DIR)/libz-compat.so \

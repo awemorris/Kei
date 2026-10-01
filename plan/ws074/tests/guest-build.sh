@@ -11,13 +11,13 @@
 set -eu
 cd "$(dirname -- "$0")/../../.."
 root=$(pwd)
-src=userland/desktop/browser
+src=userland/desktop/libbrowser
 sysroot=$root/build/amd64/sysroot
 objdir=build/amd64/dynamic/obj/$src
 out=build/ws074-guest
 cc="$root/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=$sysroot"
 cflags="-nostdinc -I. -Iinclude -isystem $sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC
-	-I$src -Iplan/ws074/tests -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin
+	-I$src -Iuserland/desktop/browser -Iplan/ws074/tests -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin
 	-fno-stack-protector -Wall -Wextra -Werror"
 mkdir -p "$out"
 

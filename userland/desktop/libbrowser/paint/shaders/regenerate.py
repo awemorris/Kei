@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compiles browser's shaders and writes userland/desktop/browser/paint/shaders.h.
+"""Compiles browser's shaders and writes userland/desktop/libbrowser/paint/shaders.h.
 
 The build uses the checked-in header, so no shader compiler is needed to
 build browser; run this (with glslc and spirv-val on PATH) after
