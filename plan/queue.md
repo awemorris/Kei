@@ -2,25 +2,22 @@
 
 # Queue
 
-Active Queue: なし
+Active Queue: q547
 Last finished Queue: q546
-Status: finished
-Cycle: q546
+Status: active
+Cycle: q547
 Approval: current user（2026-10-02 JST、このchat）「現在のQueueを完了したら、WS108を実行してください。」。Debian13/Ubuntu26.04の指定make targets、両OSのQEMU guest内でnative build/.deb導入/動作確認、既存CI/nightly release files組込み。p001〜p004のfinite1Phase Queueで実行。
-Timebox: 最大120分
+Timebox: 最大60分、1Phase
 Focus: fg015 / WS108、Q1/N=0。commit WIP / pushなし、remote CI/GitHub publication deferred。
-Snapshot: [approved Phase](/home/awe/zedBSD-claude1/plan/history/ws108/q546/approved-phase.md)、SHA256 389bb3497e1e464fb9d3b4e35a49687afdfa69c17e53415a33d7fc32972d3b4e
+Snapshot: [approved Phase](/home/awe/zedBSD-claude1/plan/history/ws108/q547/approved-phase.md)、SHA256 cae4dbfe6c9c754f430ba5048f136a53bf49d3cbee4847379a6179f06674da21
 
 | Attempt | Phase | Exact scope | Status | Dependencies |
 | --- | --- | --- | --- | --- |
-| q546-i01 | ws108p002 | 指定make targets/QEMU driver/native runtime deb packaging、両OSの実guest clean build/fresh install/ELF/public client/session/upgrade/removeと成果物を検証。CI組込みはp003。 | cleared | ws108p001 cleared と実output（context） |
+| q547-i01 | ws108p003 | 既存CIの2 distro QEMU make matrix、artifact/checksum fail gate、nightly release needs/添付。既存zedBSD image/zipを維持、local同手順/構造検証。 | in-progress | ws108p002 cleared と実output（context） |
 
-Dependency graph: ws108p001 → q546-i01。contextは実装許可ではない。
-Started UTC: 2026-10-01T16:17:59.090129+00:00
+Dependency graph: ws108p002 → q547-i01。contextは実装許可ではない。
+Started UTC: 2026-10-01T16:53:35.269410+00:00
 
 ## Upcoming Work Outlook
 
 WS108の既存範囲を依存順で進める。WS106 ime-probe回答待ちは保ち、browser追加/FreeBSD対応を本Queueへ加えない。
-
-Outcome: q546-i01 cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。
-Finished UTC: 2026-10-01T16:52:23.158596+00:00

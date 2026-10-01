@@ -132,7 +132,13 @@ class Guest:
         with socket.socket() as listener:
             listener.bind(('127.0.0.1', 0))
             self.port = listener.getsockname()[1]
-        kvm = os.access('/dev/kvm', os.R_OK | os.W_OK)
+        selected = os.environ.get('KEILAND_DEB_ACCEL', 'auto')
+        if selected not in ('auto', 'kvm', 'tcg'):
+            raise RuntimeError('KEILAND_DEB_ACCEL must be auto, kvm or tcg')
+        available = os.access('/dev/kvm', os.R_OK | os.W_OK)
+        if selected == 'kvm' and not available:
+            raise RuntimeError('requested KVM is unavailable')
+        kvm = available and selected != 'tcg'
         self.acceleration = 'kvm' if kvm else 'tcg'
         errors = (self.directory / 'qemu-errors.log').open('wb')
         try:
@@ -296,7 +302,7 @@ def smoke(guest, package, client, output, distro):
         test "$(cat /root/.config/keiland/deb-smoke)" = preserved
     '''))
     (output / (distro + '.smoke.json')).write_text(json.dumps({
-        'distro': distro, 'fresh_overlay': True, 'install': True, 'reinstall': True, 'upgrade': True,
+        'distro': distro, 'package_sha256': digest(package), 'fresh_overlay': True, 'install': True, 'reinstall': True, 'upgrade': True,
         'elf_dependencies': True, 'public_vulkan_client': True, 'direct_session': True,
         'terminal_map_and_input': True, 'remove': True, 'purge_keeps_user_data': True,
         'display_manager_registration': True, 'acceleration': guest.acceleration}, indent=2) + '\n')

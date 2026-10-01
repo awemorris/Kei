@@ -12,7 +12,9 @@ keyboard input, reinstall, upgrade, removal and preservation of user data.
 
 The host needs Python 3.12+, Git, curl, OpenSSH, QEMU (`qemu-system-x86_64` and
 `qemu-img`), and xorriso. KVM is used when accessible; otherwise QEMU uses TCG.
-The host's desktop, input devices and `/opt/keiland` are untouched. Connections
+`KEILAND_DEB_ACCEL=auto|kvm|tcg` explicitly selects emulator acceleration;
+`auto` is the default. CI uses TCG so it also runs without nested virtualization.
+The amd64 guests use 8 GiB of RAM. The host's desktop, input devices and `/opt/keiland` are untouched. Connections
 use a temporary key and a randomly assigned **127.0.0.1** SSH forwarding port.
 The base images are verified against [inputs.json](inputs.json) on every run.
 Each emulator writes into its own overlay. SSH and QMP screenshots verify

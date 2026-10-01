@@ -2,10 +2,10 @@
 
 # ws108p003: CI の2 distro job と artifact
 
-Status: in-progress
+Status: planning
 Disposition: normal
 Parent: [WS108](../ws.md)
-Queue / Attempt: q547 / q547-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 

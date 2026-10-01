@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG007
 Related Milestones: MG001, MG006
 Parent: [Master](../master.md)
-Queue: なし（q546 finished）
-Resume point: p002 cleared、p003の承認scope/実outputを確認。
+Queue: q547
+Resume point: p003/q547-i01実行中。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -47,7 +47,7 @@ WS105 の build/install/ELF と session 契約は completed context。WS106 の 
 | --- | --- | --- | --- | --- |
 | [ws108p001](phase001/phase.md) | package manifest・環境・依存を設計 | P1 と p002〜p004 の実 command/環境を定義。両OSのQEMU guest内native build、dpkg導入/GUI動作とCI/releaseを設計。 | cleared | WS105 output（context）、WS106 の対象表（context） |
 | [ws108p002](phase002/phase.md) | deb packaging と install 検証 | P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。 | cleared | p001 |
-| [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | planning | p002 |
+| [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | in-progress | p002 |
 | [ws108p004](phase004/phase.md) | 全文規約・両 distro の最終 install/session 回帰 | P1〜P5。CI の未実行・GPU/session 未検証が残れば必要な acceptance を満たしたとはしない。 | planning | p003、WS106の確定済み対象配置（scoped output、ime-probe対象外） |
 
 
