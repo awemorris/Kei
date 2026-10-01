@@ -1,0 +1,202 @@
+[
+  {
+    "path": "/opt/keiland/bin/files",
+    "sha256": "0f3682befbbd977cbb96b1f1265880ffbc3ce11c3c01bad57c606b1662f7cfeb",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/imageview",
+    "sha256": "dba44d3904da298e1b41adeffd1ed46ffe5ef04fab193154d6c30af6861c1683",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/notes",
+    "sha256": "df5e84d1cfa4aa3c32286d09109a043f21fea0ff2042c1674bfb64e9aef7289c",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/pdfviewer",
+    "sha256": "b156dd05cb35298d388715e6255fee69707469d1894a7607fc81919428b1df6c",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/settings",
+    "sha256": "6942cf440b1f86b7904ca1e8f0c9f463503d138ea833194c018820330717b0fd",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/terminal",
+    "sha256": "930ad47329132383be6920ae0c71b3a1f1dce7ac5f4d88b4e065b3462ee253da",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/textedit",
+    "sha256": "cacdc3d707d4e8e57509994443e27fb4117454da8e369b694dfa536dc60fddbc",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/bin/wayland",
+    "sha256": "f11d8ff644d5bbca54fa3b9c1f8715520c9ca45a78d6f50c6722766a155e1957",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/etc/keiland/apps.conf",
+    "sha256": "36b90cb5b5ec2e7b88f6ae68a7461ccdc2b30f24c251be41ae60cc0371dd4b48",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/lib/libgif-compat.so",
+    "sha256": "a158f9ce030fca905b7f0198b8c33e952ac03e682d017e5a95ce37802733e241",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libjpeg-compat.so",
+    "sha256": "5e73ccac3b081a4fe5df1c39b7f4f13cbfc9a1944d714d854d3c12e5b2660bce",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libkeiland.so",
+    "sha256": "c688ac2356f42c3f71bc0fba8e3dde93af21ce4e28f08d55e70a12031f98aae8",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libkeiui.so",
+    "sha256": "639755786a4e2fc6ed08b89ee9c989b4a7b8cce042fe622f259eee1e37ccf83a",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libpdf.so",
+    "sha256": "96d5fc3ee64aa97f20221292811f59282cd955c0bc788a346b99167f26c67c61",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libpng-compat.so",
+    "sha256": "56966a3942b0293ad01b0e3af0d7d0ff89947422cfef2e5b822c5cf6f6cf7383",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libtruetype.so",
+    "sha256": "d27461dd65adcd0eae4ddd4e6c3b16065c9f81f609ca81d65331490173edcaa2",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libvulkan.so.1",
+    "sha256": "790305e48c66bcc3c7f09dd20b3b0c1154b4e00408686d6fe3e65abdc01082f3",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libwayland-client.so",
+    "sha256": "9c20a375c8060d31a13955fe10b01eeaadd0ab8e98faa1af6c971b29b078c26e",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/lib/libz-compat.so",
+    "sha256": "9ebcf5d6c1cdaa4d16bd75a1e382545ed4208ac51bee2fff8de56376c4297105",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/libexec/keiland-ime",
+    "sha256": "96de901fae233466c030a9f29398c63c7feea203fef40d4c1e8016204ac2d15c",
+    "mode": "0o755"
+  },
+  {
+    "path": "/opt/keiland/share/doc/keiland/README",
+    "sha256": "a48bbc48721aa5ecd69de076904e1a0b28e3f04313e2d704ee907f7db351fe42",
+    "mode": "0o664"
+  },
+  {
+    "path": "/opt/keiland/share/doc/keiland/copyright",
+    "sha256": "f72dd514bc26ff710d05548f95c5489d8c15636a3d18858b2b403a957dc294b4",
+    "mode": "0o664"
+  },
+  {
+    "path": "/opt/keiland/share/fonts/keiland-emoji.ttf",
+    "sha256": "39ee3c587e10e89669b9ff32703261d10d5f9c4dd5ad147b6b5a1c5200591817",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/fonts/keiland-fallback.ttf",
+    "sha256": "acb6440a713d880a13a21b468ba7cd43f5a2b2934972e51be791c880730777b8",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/fonts/keiland-mono.ttf",
+    "sha256": "e6fd0d7e91550b3ed2b735d4312474362c4716edc4fc0577a0f61ed782d5aed1",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/fonts/keiland.ttf",
+    "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/kei/ime/ja/SKK-JISYO.X",
+    "sha256": "73819384159330a0c822915d0fd211c3e21dea77f2cfd2083273ac1ffd121ab9",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/kei/ime/ja/SKK-JISYO.kei",
+    "sha256": "4f19f489c1523bbeea27cf4effaa867de87acbd78507a88b01031d7fc8d0cac2",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/keiland/wallpaper.ppm",
+    "sha256": "8265dd35bb9adea73d57f0f3806fb40da5c4710c37fba3f7d3157e83ee97c1f2",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/keiland/wallpapers/Aurora.ppm",
+    "sha256": "8265dd35bb9adea73d57f0f3806fb40da5c4710c37fba3f7d3157e83ee97c1f2",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/keiland/wallpapers/Dawn.ppm",
+    "sha256": "39c867c4e74b69cc86d4f3ec1f0c8aa095e3a8d97b1870131cf185f64ac23ba8",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/keiland/wallpapers/Lagoon.ppm",
+    "sha256": "e924bc695b16ebf09a890f027b40316e2f51758bb75d37ed67976d59213491ea",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/keiland/wallpapers/Meadow.ppm",
+    "sha256": "e8f4e8c60350ef6f31d2f12c5a74c60eb2ac95d9c2bf7cdb0ff9f0e2094a22d9",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/keiland/wallpapers/Twilight.ppm",
+    "sha256": "6862dbfb67f7ee91849f04b26a3eae95effed0a22d578b872d0e768e13a5021c",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/licenses/keiland-fonts/Apache-2.0.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/licenses/keiland-fonts/DroidSansFallback-LICENSE.txt",
+    "sha256": "a7a0cd6423d60c5d4895f1e5ab48dfd2f4dab6f8b20d9da6eced31e17c9774f6",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/licenses/keiland-fonts/Inter-OFL.txt",
+    "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/licenses/keiland-fonts/JetBrainsMono-OFL.txt",
+    "sha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697",
+    "mode": "0o644"
+  },
+  {
+    "path": "/opt/keiland/share/licenses/noto-color-emoji/OFL-1.1.txt",
+    "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+    "mode": "0o644"
+  },
+  {
+    "path": "/usr/share/wayland-sessions/keiland.desktop",
+    "sha256": "50e478a98e32bfef888fa928ed4ffa2c19e31ddb4b0b3f439a83f1cbfc222bb8",
+    "mode": "0o644"
+  }
+]

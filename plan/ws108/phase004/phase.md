@@ -51,3 +51,5 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 ## 最終検証の具体化（q547設計）
 
 p003のcommitted最終source3a5b5b16からの両make target/TCG native build＋fresh install/session結果をp004でcode hashを照合して最終証拠として再確認。コードが変わればaffected build/runtimeを再実行。全WS108 Python/JSON/Makefile/YAML/規則差分を全文/manual review、元production C/reused fixtureは変更無し。remote CI未実行はp003の承認されたlocal同driver/ゲスト手順の実証と区別。CI定義とlocal fail gatesがP4、remote Actions/release実行をしたとは言わない。最終guestはMaster通り8GiB。shell/YAML/byte compile/diff-check、payload hashes/modes/19ELF/control/root-owner/session/conffile/md5sum/licenses/ユーザーデータを照合。zedBSD production/APIは不変で既存CI build構造を比較、WS107の最新boot証拠を参考contextにし新boot試験を主張しない。
+
+2026-10-02 / ws108-q547-final-source: p003のTCG input失敗による検証runner修正を10362bd3で固定。最終native/runtime証拠はこのcommitの両make exit0を用いる。旧3a5b5b16のsource hashを最終sourceとはせず、失敗ログを保存。p004のfinal-code再照合・affected checks義務を維持。

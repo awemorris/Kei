@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG007
 Related Milestones: MG001, MG006
 Parent: [Master](../master.md)
-Queue: q547
-Resume point: p003/q547-i01実行中。
+Queue: なし（q547 finished）
+Resume point: p003 uncleared、p004の承認scope/実outputを確認。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -47,7 +47,7 @@ WS105 の build/install/ELF と session 契約は completed context。WS106 の 
 | --- | --- | --- | --- | --- |
 | [ws108p001](phase001/phase.md) | package manifest・環境・依存を設計 | P1 と p002〜p004 の実 command/環境を定義。両OSのQEMU guest内native build、dpkg導入/GUI動作とCI/releaseを設計。 | cleared | WS105 output（context）、WS106 の対象表（context） |
 | [ws108p002](phase002/phase.md) | deb packaging と install 検証 | P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。 | cleared | p001 |
-| [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | in-progress | p002 |
+| [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | uncleared | p002 |
 | [ws108p004](phase004/phase.md) | 全文規約・両 distro の最終 install/session 回帰 | P1〜P5。CI の未実行・GPU/session 未検証が残れば必要な acceptance を満たしたとはしない。 | planning | p003、WS106の確定済み対象配置（scoped output、ime-probe対象外） |
 
 
@@ -88,3 +88,7 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-01T16:52:23.158073+00:00 / ws108-q546-cleared: p002 cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。
 
 2026-10-02 / ws108-q547-ci-checkpoint: p003がCI/TCG/release verifierを実装、p004の最終scopeをcommitted同source両target＋全差分full reviewへ具体化。dependency/外部契約/acceptance不変、remote未実行のlocal同手順代替はq545設計とp003のP4契約通り。foreign p004 delivery/WS deliveryをlocal outbox保持。
+
+2026-10-02 / ws108-q547-final-source: p003 runnerのTCG input/session envを修正、最終両makeを10362bd3で再実行しp004へ渡す。p004記録にも最終source修正を反映、foreign Phase/WS delivery pending。
+
+2026-10-01T17:46:28.530941+00:00 / ws108-q547-uncleared: p003 uncleared。CI定義/構造/negative gates実装済み、2OS native TCG build/19ELF/clean metadata成功。旧両TCG input失敗を修正しfocused Debian runtime PASS。10362bd3最終Debianはupgrade用deb再圧縮を含む180秒blockでtimeout/exit2、CI検証要件未clear。Ubuntuの同時試験は終了待ち、p004開始不可。次attemptはupgrade圧縮とboundsを修正、2OS actual make＋affected TCG試験へ。

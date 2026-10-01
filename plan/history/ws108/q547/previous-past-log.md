@@ -2,15 +2,9 @@
 
 # Past Log
 
-Last finished Queue: [q547](queue-q547.md)（WS108 p003 uncleared）
+Last finished Queue: [q546](queue-q546.md)（WS108 p002 cleared）
 
-## 最新: q547 / WS108 p003
-
-uncleared。CI定義/構造/negative gates実装済み、2OS native TCG build/19ELF/clean metadata成功。旧両TCG input失敗を修正しfocused Debian runtime PASS。10362bd3最終Debianはupgrade用deb再圧縮を含む180秒blockでtimeout/exit2、CI検証要件未clear。Ubuntuの同時試験は終了待ち、p004開始不可。次attemptはupgrade圧縮とboundsを修正、2OS actual make＋affected TCG試験へ。
-
-GitHub publication/outbox pending、commit WIP / pushなし。
-
-## 前回: q546 / WS108 p002
+## 最新: q546 / WS108 p002
 
 cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。
 
@@ -120,8 +114,6 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 | [q545](queue-q545.md) | WS108 p001 cleared |
 
 | [q546](queue-q546.md) | WS108 p002 cleared |
-
-| [q547](queue-q547.md) | WS108 p003 uncleared |
 
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。
