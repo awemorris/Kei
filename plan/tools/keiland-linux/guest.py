@@ -138,6 +138,16 @@ def main():
 		start()
 	elif command == 'stop':
 		stop()
+	elif command == 'gdm-setup':
+		# AccountsService selects the existing session for the isolated guest user.
+		ssh(['busctl call org.freedesktop.Accounts /org/freedesktop/Accounts org.freedesktop.Accounts FindUserByName s kei'], stdout=subprocess.PIPE, text=True)
+		identity = ssh(['id -u kei'], stdout=subprocess.PIPE, text=True).stdout.strip()
+		if not identity.isdecimal():
+			raise RuntimeError('guest user has no numeric uid')
+		path = '/org/freedesktop/Accounts/User' + identity
+		ssh(['busctl call org.freedesktop.Accounts ' + path + ' org.freedesktop.Accounts.User SetSession s keiland'])
+		ssh(['busctl call org.freedesktop.Accounts ' + path + ' org.freedesktop.Accounts.User SetSessionType s wayland'])
+		ssh(['systemctl restart gdm'])
 	elif command == 'ssh':
 		ssh(arguments, timeout=int(os.environ.get('GUEST_COMMAND_TIMEOUT', '120')))
 	elif command in ('put', 'get'):

@@ -112,6 +112,10 @@ zwl_schedule(
 	int ready;
 	int error;
 
+	/* An OS-paused display cannot compose or present until authority returns. */
+	if (server->os_paused != 0)
+		return;
+
 	/* The glass look's clock turns over. */
 	if (server->glass)
 		zwl_glass_tick(server);

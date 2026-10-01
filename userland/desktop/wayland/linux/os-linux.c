@@ -19,6 +19,9 @@
 
 /* The saved console modes remain valid only after their corresponding inquiry succeeded. */
 static int console_mode;
+
+/* Explicit selection is fixed before any device lease and retained until seat cleanup. */
+static unsigned seat_logind;
 static int keyboard_mode;
 
 /* Each successfully changed console property is restored independently on partial startup failure. */
@@ -55,20 +58,20 @@ zwl_os_open(
 		}
 	}
 
-	/* The later logind module has an explicit failure until it is available. */
+	/* Unknown seat names cannot silently fall back to root device access. */
 	same = strcmp(seat, "logind");
 	if (same == 0) {
-		fprintf(stderr, "seat logind is not built yet\n");
-		return ENOTSUP;
+		seat_logind = 1;
+	} else {
+		same = strcmp(seat, "direct");
+		if (same != 0)
+			return EINVAL;
+		seat_logind = 0;
 	}
-
-	/* Unknown seat names cannot silently fall back to root device access. */
-	same = strcmp(seat, "direct");
-	if (same != 0)
-		return EINVAL;
 
 	/* Opens master before the compatibility library's inquiry file and uses the same exact path. */
 	error = zwl_linux_seat_open(server);
+	/* A backend refusal cannot supply seat authority. */
 	if (error != 0)
 		return error;
 
@@ -150,10 +153,12 @@ size_t
 zwl_os_poll_count(
 	const struct zwl_server *server)
 {
-	/* A direct seat needs no service socket in the poll snapshot. */
+	/* Only the service seat contributes a bus descriptor to the snapshot. */
 	(void)server;
+	if (seat_logind != 0)
+		return 1;
 
-	/* Succeeded: no OS descriptor needs polling. */
+	/* Succeeded: the root seat contributes no service descriptor. */
 	return 0;
 }
 
@@ -165,11 +170,14 @@ zwl_os_poll_fill(
 	struct zwl_server *server,
 	struct pollfd *descriptors)
 {
-	/* The direct seat's zero-sized range contains no entries. */
+	/* The service socket remains readable while display and input are paused. */
 	(void)server;
-	(void)descriptors;
+	if (seat_logind != 0) {
+		descriptors[0].fd = zwl_linux_logind_poll_fd();
+		descriptors[0].events = POLLIN;
+	}
 
-	/* Succeeded: the caller's remaining poll entries are unchanged. */
+	/* Succeeded: the selected seat's entire OS poll range is populated. */
 	return;
 }
 
@@ -181,11 +189,23 @@ zwl_os_poll_done(
 	struct zwl_server *server,
 	const struct pollfd *descriptors)
 {
-	/* A direct seat has no service event to dispatch. */
-	(void)server;
-	(void)descriptors;
+	int error;
 
-	/* Succeeded: common input processing may continue. */
+	/* Queued signals need dispatch even when the current socket readiness is zero. */
+	if (seat_logind == 0)
+		return;
+	error = zwl_linux_logind_dispatch(server);
+	if (error != 0) {
+		printf("ZWL SEAT error errno=%d\n", error);
+		server->failed = 1;
+		return;
+	}
+
+	/* A disconnected authority stops the compositor through ordinary cleanup. */
+	if ((descriptors[0].revents & (POLLERR | POLLHUP | POLLNVAL)) != 0)
+		server->failed = 1;
+
+	/* Succeeded: the common loop observes the newest device generation. */
 	return;
 }
 
@@ -241,4 +261,150 @@ zwl_os_display_release(
 
 	/* Succeeded: ordinary shutdown can restore the VT and close the seat. */
 	return;
+}
+
+/*
+ * Opens the selected Linux seat before Vulkan startup.
+ */
+int
+zwl_linux_seat_open(
+	struct zwl_server *server)
+{
+	int error;
+
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		error = zwl_linux_logind_seat_open(server);
+	} else {
+		error = zwl_linux_direct_seat_open(server);
+	}
+
+	/* A backend refusal cannot supply seat authority. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the selected backend owns the process seat. */
+	return 0;
+}
+
+/*
+ * Returns the selected backend seat and all remaining device leases.
+ */
+void
+zwl_linux_seat_close(
+	struct zwl_server *server)
+{
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		zwl_linux_logind_seat_close(server);
+	} else {
+		zwl_linux_direct_seat_close(server);
+	}
+
+	/* Succeeded: this resource no longer retains seat authority. */
+	return;
+}
+
+/*
+ * Opens an input file through the selected seat authority.
+ */
+int
+zwl_linux_device_open(
+	struct zwl_server *server,
+	const char *path)
+{
+	int descriptor;
+
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		descriptor = zwl_linux_logind_device_open(server, path);
+	} else {
+		descriptor = zwl_linux_direct_device_open(server, path);
+	}
+
+	/* No input descriptor exists when its backend refused the device. */
+	if (descriptor < 0)
+		return -1;
+
+	/* Succeeded: the selected backend owns this input descriptor. */
+	return descriptor;
+}
+
+/*
+ * Returns one input descriptor to its selected seat owner.
+ */
+void
+zwl_linux_device_close(
+	struct zwl_server *server,
+	int descriptor)
+{
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		zwl_linux_logind_device_close(server, descriptor);
+	} else {
+		zwl_linux_direct_device_close(server, descriptor);
+	}
+
+	/* Succeeded: this resource no longer retains seat authority. */
+	return;
+}
+
+/*
+ * Supplies the selected backend primary node for Vulkan acquisition.
+ */
+int
+zwl_linux_drm_fd(
+	void)
+{
+	int descriptor;
+
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		descriptor = zwl_linux_logind_drm_fd();
+	} else {
+		descriptor = zwl_linux_direct_drm_fd();
+	}
+
+	/* Succeeded: the selected backend supplies this seat property. */
+	return descriptor;
+}
+
+/*
+ * Supplies the exact primary path owned by the selected seat.
+ */
+const char *
+zwl_linux_drm_path(
+	void)
+{
+	const char *path;
+
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		path = zwl_linux_logind_drm_path();
+	} else {
+		path = zwl_linux_direct_drm_path();
+	}
+
+	/* Succeeded: the selected backend supplies this seat property. */
+	return path;
+}
+
+/*
+ * Reports whether the selected seat has withdrawn device authority.
+ */
+int
+zwl_linux_seat_paused(
+	void)
+{
+	int paused;
+
+	/* Selection remains stable throughout this compositor lifetime. */
+	if (seat_logind != 0) {
+		paused = zwl_linux_logind_seat_paused();
+	} else {
+		paused = zwl_linux_direct_seat_paused();
+	}
+
+	/* Succeeded: the selected backend supplies this seat property. */
+	return paused;
 }

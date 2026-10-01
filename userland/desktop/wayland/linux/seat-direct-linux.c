@@ -24,7 +24,7 @@ static char seat_path[4096];
  * Opens the root seat's selected primary node.
  */
 int
-zwl_linux_seat_open(
+zwl_linux_direct_seat_open(
 	struct zwl_server *server)
 {
 	const char *requested;
@@ -55,7 +55,7 @@ zwl_linux_seat_open(
  * Returns the root seat's primary descriptor.
  */
 void
-zwl_linux_seat_close(
+zwl_linux_direct_seat_close(
 	struct zwl_server *server)
 {
 	/* A failed startup may never have opened a primary node. */
@@ -73,7 +73,7 @@ zwl_linux_seat_close(
  * Opens one nonblocking evdev descriptor.
  */
 int
-zwl_linux_device_open(
+zwl_linux_direct_device_open(
 	struct zwl_server *server,
 	const char *path)
 {
@@ -93,7 +93,7 @@ zwl_linux_device_open(
  * Releases one input descriptor.
  */
 void
-zwl_linux_device_close(
+zwl_linux_direct_device_close(
 	struct zwl_server *server,
 	int descriptor)
 {
@@ -109,7 +109,7 @@ zwl_linux_device_close(
  * Supplies the live primary-node descriptor.
  */
 int
-zwl_linux_drm_fd(
+zwl_linux_direct_drm_fd(
 	void)
 {
 	/* Succeeded: an invalid descriptor explicitly denotes absent seat ownership. */
@@ -120,7 +120,7 @@ zwl_linux_drm_fd(
  * Supplies the selected primary-node pathname.
  */
 const char *
-zwl_linux_drm_path(
+zwl_linux_direct_drm_path(
 	void)
 {
 	/* Succeeded: the process owns this stable pathname until shutdown. */
@@ -131,7 +131,7 @@ zwl_linux_drm_path(
  * Reports direct-seat device availability.
  */
 int
-zwl_linux_seat_paused(
+zwl_linux_direct_seat_paused(
 	void)
 {
 	/* Succeeded: a direct seat has no service-driven pause state. */

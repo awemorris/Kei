@@ -26,4 +26,22 @@ const char *zwl_linux_drm_path(void);
 /* Reports whether device access is paused by the seat service. */
 int zwl_linux_seat_paused(void);
 
+/* Private backends keep device ownership inside the Linux OS boundary. */
+int zwl_linux_direct_seat_open(struct zwl_server *server);
+void zwl_linux_direct_seat_close(struct zwl_server *server);
+int zwl_linux_direct_device_open(struct zwl_server *server, const char *path);
+void zwl_linux_direct_device_close(struct zwl_server *server, int descriptor);
+int zwl_linux_direct_drm_fd(void);
+const char *zwl_linux_direct_drm_path(void);
+int zwl_linux_direct_seat_paused(void);
+int zwl_linux_logind_seat_open(struct zwl_server *server);
+void zwl_linux_logind_seat_close(struct zwl_server *server);
+int zwl_linux_logind_device_open(struct zwl_server *server, const char *path);
+void zwl_linux_logind_device_close(struct zwl_server *server, int descriptor);
+int zwl_linux_logind_drm_fd(void);
+const char *zwl_linux_logind_drm_path(void);
+int zwl_linux_logind_seat_paused(void);
+int zwl_linux_logind_poll_fd(void);
+int zwl_linux_logind_dispatch(struct zwl_server *server);
+
 #endif

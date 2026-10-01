@@ -53,6 +53,8 @@ WAYLAND_LINUX_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/picture/color-glyph.c \
 	userland/desktop/wayland/linux/os-linux.c \
 	userland/desktop/wayland/linux/seat-direct-linux.c \
+	userland/desktop/wayland/linux/dbus-linux.c \
+	userland/desktop/wayland/linux/seat-logind-linux.c \
 	userland/desktop/wayland/linux/input-linux.c \
 	userland/desktop/wayland/linux/handoff-linux.c \
 	userland/desktop/wayland/linux/gpu-linux.c

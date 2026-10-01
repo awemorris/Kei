@@ -651,7 +651,7 @@ event_loop(
 			break;
 
 		/* Evdev nodes that appeared since the last scan join the seat. */
-		if (now - server->input_scan_time >= ZWL_INPUT_SCAN_MS)
+		if (server->os_paused == 0 && now - server->input_scan_time >= ZWL_INPUT_SCAN_MS)
 			zwl_input_scan(server);
 
 		/* A client that has left a ping unanswered too long is not responding (toplevel.c). */
@@ -819,6 +819,9 @@ event_loop(
 		if ((descriptors[0].revents & (POLLERR | POLLHUP | POLLNVAL)) != 0)
 			error = EIO;
 
+		/* Device authority changes before the old snapshot can read revoked input or complete a frame. */
+		zwl_os_poll_done(server, descriptors + first_os);
+
 		/* A finished frame releases its buffers and sends its callbacks; a fence without an fd is asked. */
 		if (frame_slot != 0 && descriptors[frame_slot].revents != 0)
 			zwl_frame_done(server);
@@ -827,12 +830,9 @@ event_loop(
 		/* Device events are applied before clients are flushed, so they leave in this pass. */
 		for (index = first_input; index < last_input; index++) {
 			/* A readable, failed or vanished device is read; a read failure closes it. */
-			if (descriptors[index].revents != 0)
+			if (descriptors[index].revents != 0 && devices[index - first_input]->fd >= 0)
 				zwl_input_read(server, devices[index - first_input]);
 		}
-
-		/* Applies the OS events before flushing the client connections. */
-		zwl_os_poll_done(server, descriptors + first_os);
 
 		/* Process only the clients captured by this poll snapshot. */
 		for (index = 1; index < first_input; index++) {

@@ -174,8 +174,12 @@ clean:
 		$(KEILAND_LINUX_BUILD)/stage
 
 .PHONY: install-session print-sources header-dependencies
-install-session:
-	@:
+$(KEILAND_LINUX_BUILD)/share/wayland-sessions/keiland.desktop: userland/desktop/wayland/linux/keiland.desktop
+	@mkdir -p $(dir $@)
+	sed 's|/opt/keiland|$(KEILAND_PREFIX)|g' $< > $@.tmp
+	mv $@.tmp $@
+install-session: $(KEILAND_LINUX_BUILD)/share/wayland-sessions/keiland.desktop
+	install -D -m 0644 $< $(DESTDIR)/usr/share/wayland-sessions/keiland.desktop
 print-sources:
 	@printf '%s\n' $(KEILAND_LINUX_SOURCES)
 

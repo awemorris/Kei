@@ -661,6 +661,8 @@ struct zwl_server {
 	uint32_t locked_modifiers;
 	/* Window mode: the Vulkan output, whether a frame is due, and the fence fd of the frame in flight. */
 	struct zwl_compose *compose;
+	/* OS device authority can pause composition; zedBSD always leaves this zero. */
+	unsigned os_paused;
 	unsigned windowed;
 	unsigned dirty;
 	/*
