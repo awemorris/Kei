@@ -62,3 +62,13 @@ dmabuf-export-rejected.c links the selected wayland/{linux,freebsd}/sync module;
 EBADF/ENOTTY without publishing an output or consuming a borrowed descriptor. No positiveDMA
 claim. q557 compiles sharedgpu/evdev/session as actual nativeobjects; native seat/backend and
 fullcompositor are still needed before runtime/physical display or input acceptance.
+
+## Actual FreeBSD seatd authorization
+
+seat-client-freebsd.c links verified private libseat.so.1/staged libseat.h; compile with
+`cc -std=gnu17 -Wall -Wextra -Werror -I<stage>/include <probe> -L<stage>/lib -l:libseat.so.1`.
+Owned fixture seat-fixture-freebsd.py requires uid0/defaultsocketabsent/actual event1 root-only,
+starts real seatd in normal SEATD_VTBOUND=0 headless configuration, runs /tmp/ws109-seat-client
+with private runtime in /tmp/ws109-seat-lib as uid/gid65534/nogroups, retires only its own process/
+socket. DirectEACCES/nativeevdev metadata/fd and lease releases must pass. This does not verify
+VT/display; do not run on an existing seat service or someone else's physical session.

@@ -78,7 +78,8 @@ KEILAND_FREEBSD_PACKAGES ?= userland/base/libz-compat/Makefile.freebsd \
 	userland/desktop/libvulkan-compat/Makefile.freebsd \
 	userland/desktop/libkeiland/Makefile.freebsd \
 	userland/desktop/libkeiui/Makefile.freebsd \
-	userland/base/libpdf/Makefile.freebsd
+	userland/base/libpdf/Makefile.freebsd \
+	userland/packages/libseat/Makefile.freebsd
 include $(KEILAND_FREEBSD_PACKAGES)
 
 .PHONY: all libraries install install-headers print-sources header-dependencies
@@ -87,8 +88,9 @@ all libraries: $(KEILAND_FREEBSD_ALL)
 # FreeBSD install has no GNU -D; create each destination directory explicitly.
 install: all install-headers
 	@set -e; for f in $(KEILAND_FREEBSD_INSTALL); do \
+		mode=0644; case $$f in lib/*|bin/*|libexec/*) mode=0755 ;; esac; \
 		mkdir -p "$(DESTDIR)$(KEILAND_PREFIX)/$$(dirname "$$f")"; \
-		install -m 0755 "$(KEILAND_FREEBSD_BUILD)/$$f" "$(DESTDIR)$(KEILAND_PREFIX)/$$f"; \
+		install -m $$mode "$(KEILAND_FREEBSD_BUILD)/$$f" "$(DESTDIR)$(KEILAND_PREFIX)/$$f"; \
 	done
 
 KEILAND_FREEBSD_PUBLIC_HEADERS := $(shell find userland/desktop/keiland/wayland -type f -name '*.h') \

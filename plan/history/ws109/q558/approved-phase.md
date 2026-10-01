@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q558 / q558-i01
+Queue / Attempt: q557 / q557-i01
 
 ## 目的・範囲
 
@@ -114,9 +114,3 @@ OS/seat callbacks and physicalVT/display lifecycle are nextscope; no successfuls
 Files: independent native externalclient package/build/install rules, native makefile selection,
 provenance/sourcehash/recipe/probe/evidence. Unexpected nativebuild/service prerequisite failure
 ends this attempt uncleared with evidence and explicit resumecondition. WIPcommit/no push/publication.
-
-## Result / q558-i01 / 2026-10-01T22:56:18.384491+00:00
-
-Queue item cleared /whole Phase uncleared。MIT seatd-only libseat nativebuild/privateinstall・実seatdで非特権evdev fd/capability/release PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q558/result.md)。native compositor callbacks・VT/display/actualGPU/F3は保持。
-
-Event ws109-q558-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

@@ -1,0 +1,99 @@
+test "$(sha256 -q build/distfiles/seatd-0.9.3.tar.gz)" = "302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96"
+tar -xf build/distfiles/seatd-0.9.3.tar.gz -C build/native-ui/external/libseat/src
+The Meson build system
+Version: 1.10.2
+Source dir: /root/keiland-src/build/native-ui/external/libseat/src/seatd-0.9.3
+Build dir: /root/keiland-src/build/native-ui/external/libseat/build
+Build type: native build
+Project name: seatd
+Project version: 0.9.3
+C compiler for the host machine: cc (clang 19.1.7 "FreeBSD clang version 19.1.7 (https://github.com/llvm/llvm-project.git llvmorg-19.1.7-0-gcd708029e0b2)")
+C linker for the host machine: cc ld.lld 19.1.7
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Compiler for C supports arguments -Wundef: YES 
+Compiler for C supports arguments -Wunused: YES 
+Compiler for C supports arguments -Wlogical-op: NO 
+Compiler for C supports arguments -Wmissing-include-dirs: YES 
+Compiler for C supports arguments -Wold-style-definition: YES 
+Compiler for C supports arguments -Wpointer-arith: YES 
+Compiler for C supports arguments -Wstrict-aliasing: YES 
+Compiler for C supports arguments -Wstrict-prototypes: YES 
+Compiler for C supports arguments -Wimplicit-fallthrough: YES 
+Compiler for C supports arguments -Wmissing-prototypes: YES 
+Compiler for C supports arguments -Wno-unknown-warning-option: YES 
+Compiler for C supports arguments -Wno-unused-command-line-argument: YES 
+Compiler for C supports arguments -Wvla: YES 
+Compiler for C supports arguments -Wno-hardened: NO 
+Compiler for C supports arguments -fhardened: NO 
+Compiler for C supports link arguments -Wl,--exclude-libs=ALL: YES 
+Library rt found: YES
+Found pkg-config: YES (/usr/local/bin/pkg-config) 2.4.3
+Build targets in project: 5
+
+seatd 0.9.3
+
+    libseat-seatd  : YES
+    libseat-builtin: NO
+    libseat-systemd: NO
+    libseat-elogind: NO
+    server         : NO
+    man-pages      : NO
+
+  User defined options
+    default_library: shared
+    defaultpath    : /var/run/seatd.sock
+    examples       : disabled
+    libdir         : lib
+    libseat-builtin: disabled
+    libseat-logind : disabled
+    libseat-seatd  : enabled
+    man-pages      : disabled
+    prefix         : /opt/keiland
+    server         : disabled
+    werror         : true
+
+Found ninja-1.13.2 at /usr/local/bin/ninja
+meson compile -C build/native-ui/external/libseat/build seat
+ninja: Entering directory `/root/keiland-src/build/native-ui/external/libseat/build'
+ninja: Jobserver mode detected:  -j16 --jobserver-auth=fifo:/tmp//GMfifo6125 -- CC=cc KEILAND_FREEBSD_BUILD=build/native-ui
+[1/8] Compiling C object libseat-private.a.p/common_linked_list.c.o
+[2/8] Compiling C object libseat-private.a.p/common_log.c.o
+[3/8] Compiling C object libseat.so.1.p/libseat_backend_noop.c.o
+[4/8] Compiling C object libseat-private.a.p/common_connection.c.o
+[5/8] Compiling C object libseat.so.1.p/libseat_libseat.c.o
+[6/8] Compiling C object libseat-private.a.p/libseat_backend_seatd.c.o
+[7/8] Linking static target libseat-private.a
+[8/8] Linking target libseat.so.1
+INFO: autodetecting backend as ninja
+INFO: calculating backend command to run: /usr/local/bin/ninja -C /root/keiland-src/build/native-ui/external/libseat/build libseat.so.1
+install -m 0755 build/native-ui/external/libseat/build/libseat.so.1 build/native-ui/lib/libseat.so.1
+install -m 0644 build/native-ui/external/libseat/src/seatd-0.9.3/include/libseat.h build/native-ui/include/libseat.h
+install -m 0644 build/native-ui/external/libseat/src/seatd-0.9.3/LICENSE build/native-ui/share/licenses/libseat/LICENSE
+install -m 0644 include/libc/pdf.h "/root/keiland-stage-seat/opt/keiland/include/pdf.h"
+/root/keiland-stage-seat/opt/keiland/lib/libseat.so.1:
+	libc.so.7 => /lib/libc.so.7 (0x386e3e71f000)
+Dynamic section at offset 0x5e40 contains 22 entries:
+  Tag                Type         Name/Value
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libseat.so.1]
+  0x0000000000000007 (RELA)       0xa60
+  0x0000000000000008 (RELASZ)     816 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  32
+  0x0000000000000017 (JMPREL)     0xd90
+  0x0000000000000002 (PLTRELSZ)   648 (bytes)
+  0x0000000000000003 (PLTGOT)     0x9040
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x874
+  0x000000000000000a (STRSZ)      485 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x6c8
+  0x0000000000000004 (HASH)       0x72c
+  0x000000000000000c (INIT)       0x6b7c
+  0x000000000000000d (FINI)       0x6b88
+  0x000000006ffffff0 (VERSYM)     0x648
+  0x000000006ffffffe (VERNEED)    0x698
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0

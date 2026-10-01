@@ -1,0 +1,73 @@
+test "$(sha256 -q build/distfiles/seatd-0.9.3.tar.gz)" = "302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96"
+tar -xf build/distfiles/seatd-0.9.3.tar.gz -C build/native-ui/external/libseat/src
+Cleaning... 0 files.
+The Meson build system
+Version: 1.10.2
+Source dir: /root/keiland-src/build/native-ui/external/libseat/src/seatd-0.9.3
+Build dir: /root/keiland-src/build/native-ui/external/libseat/build
+Build type: native build
+Project name: seatd
+Project version: 0.9.3
+C compiler for the host machine: cc (clang 19.1.7 "FreeBSD clang version 19.1.7 (https://github.com/llvm/llvm-project.git llvmorg-19.1.7-0-gcd708029e0b2)")
+C linker for the host machine: cc ld.lld 19.1.7
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Compiler for C supports arguments -Wundef: YES (cached)
+Compiler for C supports arguments -Wunused: YES (cached)
+Compiler for C supports arguments -Wlogical-op: NO (cached)
+Compiler for C supports arguments -Wmissing-include-dirs: YES (cached)
+Compiler for C supports arguments -Wold-style-definition: YES (cached)
+Compiler for C supports arguments -Wpointer-arith: YES (cached)
+Compiler for C supports arguments -Wstrict-aliasing: YES (cached)
+Compiler for C supports arguments -Wstrict-prototypes: YES (cached)
+Compiler for C supports arguments -Wimplicit-fallthrough: YES (cached)
+Compiler for C supports arguments -Wmissing-prototypes: YES (cached)
+Compiler for C supports arguments -Wno-unknown-warning-option: YES (cached)
+Compiler for C supports arguments -Wno-unused-command-line-argument: YES (cached)
+Compiler for C supports arguments -Wvla: YES (cached)
+Compiler for C supports arguments -Wno-hardened: NO (cached)
+Compiler for C supports arguments -fhardened: NO (cached)
+Compiler for C supports link arguments -Wl,--exclude-libs=ALL: YES (cached)
+Library rt found: YES
+Found pkg-config: YES (/usr/local/bin/pkg-config) 2.4.3
+Build targets in project: 5
+
+seatd 0.9.3
+
+    libseat-seatd  : YES
+    libseat-builtin: NO
+    libseat-systemd: NO
+    libseat-elogind: NO
+    server         : NO
+    man-pages      : NO
+
+  User defined options
+    default_library: shared
+    defaultpath    : /var/run/seatd.sock
+    examples       : disabled
+    libdir         : lib
+    libseat-builtin: disabled
+    libseat-logind : disabled
+    libseat-seatd  : enabled
+    man-pages      : disabled
+    prefix         : /opt/keiland
+    server         : disabled
+    werror         : true
+
+Found ninja-1.13.2 at /usr/local/bin/ninja
+meson compile -C build/native-ui/external/libseat/build seat
+ninja: Entering directory `/root/keiland-src/build/native-ui/external/libseat/build'
+ninja: no work to do.
+INFO: autodetecting backend as ninja
+INFO: calculating backend command to run: /usr/local/bin/ninja -C /root/keiland-src/build/native-ui/external/libseat/build libseat.so.1
+install -m 0755 build/native-ui/external/libseat/build/libseat.so.1 build/native-ui/lib/libseat.so.1
+install -m 0644 build/native-ui/external/libseat/src/seatd-0.9.3/include/libseat.h build/native-ui/include/libseat.h
+install -m 0644 build/native-ui/external/libseat/src/seatd-0.9.3/LICENSE build/native-ui/share/licenses/libseat/LICENSE
+install -m 0644 build/native-ui/include/libseat.h "/root/keiland-stage-seat/opt/keiland/include/libseat.h"
+install -m 0644 include/libc/pdf.h "/root/keiland-stage-seat/opt/keiland/include/pdf.h"
+configuration SEATD_VTBOUND=0 LIBSEAT_BACKEND=seatd
+native device=System mouse bus=6 vendor=0 product=0 events=07
+PASS native seatd uid=65534 groups=0 direct=EACCES actual evdev lease/release
+
+owned daemon exit 0 diagnostics 
+owned socket cleaned; native input permissions unchanged

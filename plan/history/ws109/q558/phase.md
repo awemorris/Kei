@@ -4,7 +4,7 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS109](../ws.md)
+Parent: [WS109](/home/awe/zedBSD-claude1/plan/ws109/ws.md)
 Queue / Attempt: q558 / q558-i01
 
 ## 目的・範囲
@@ -24,8 +24,8 @@ F3。Linux source を丸ごと複製した renderer を作らない。device rel
 
 ## 適用規則・影響する部品・検証
 
-[WS の制約/部品/受け入れ](../ws.md)、[Guardrail](../../guardrail.md)、
-[C 規約全文](../../coding-style.md)、[自動化](../../standards/automation.md)を適用。
+[WS の制約/部品/受け入れ](/home/awe/zedBSD-claude1/plan/ws109/ws.md)、[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、
+[C 規約全文](/home/awe/zedBSD-claude1/plan/coding-style.md)、[自動化](/home/awe/zedBSD-claude1/plan/standards/automation.md)を適用。
 新規/変更 C は全文該当節を読み、clang-format-19 と style-check の限界を補う。
 最終 conformance は全 WS の source を全文で review。build warning 0、必要な契約検証、diff-check を記録する。
 具体的な build/config/tool version と script は p001 の結果で固定する。`make check` は禁止。
@@ -45,11 +45,11 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 
 ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
 
-shared graphics +FreeBSD OS/seat/input/backend実装を先行可。QEMUにはDRM実表示の証拠無し、realGPU/fences/device releaseのcriteriaは実機到着後にverify。partial実装Queueと全F3のclearanceを分ける。 [origin](../phase001/phase.md)・[WS summary](../ws.md)・[scope](../../standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
+shared graphics +FreeBSD OS/seat/input/backend実装を先行可。QEMUにはDRM実表示の証拠無し、realGPU/fences/device releaseのcriteriaは実機到着後にverify。partial実装Queueと全F3のclearanceを分ける。 [origin](/home/awe/zedBSD-claude1/plan/ws109/phase001/phase.md)・[WS summary](/home/awe/zedBSD-claude1/plan/ws109/ws.md)・[scope](/home/awe/zedBSD-claude1/plan/standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
 
 ## q551 design reconciliation / ws109-q551-native-environment
 
-Prerequisite is verified p002 L1 library/header output, not full F2 integration. Implement shared renderer/OS sync and native seat/evdev modules; seatd-only permissive path avoids installed libseat LGPLbasu dependency. GPU/fence/seat actual acceptance retained for physical machine. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](../phase001/phase.md), [WS](../ws.md), [native design](../../history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.
+Prerequisite is verified p002 L1 library/header output, not full F2 integration. Implement shared renderer/OS sync and native seat/evdev modules; seatd-only permissive path avoids installed libseat LGPLbasu dependency. GPU/fence/seat actual acceptance retained for physical machine. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](/home/awe/zedBSD-claude1/plan/ws109/phase001/phase.md), [WS](/home/awe/zedBSD-claude1/plan/ws109/ws.md), [native design](/home/awe/zedBSD-claude1/plan/history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.
 
 ## q557 shared dma-buf/evdev/session mechanism / exact partial scope
 

@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q557 finished）
-Resume point: p003 uncleared; Linux共有dma-buf/evdev/sessionを再利用、FreeBSDsync/nativeinput header境界を実装。native4objects/exportownershipとLinuxfullcompositor/境界契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q557/result.md)。FreeBSDseat/fullcompositor/actualGPU・positiveDMA/全F3は保持。
+Queue: なし（q558 finished）
+Resume point: p003 uncleared; MIT seatd-only libseat nativebuild/privateinstall・実seatdで非特権evdev fd/capability/release PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q558/result.md)。native compositor callbacks・VT/display/actualGPU/F3は保持。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -48,7 +48,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | --- | --- | --- | --- | --- |
 | [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | uncleared / q556 | p001 |
-| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q557 | p002 L1 verified output |
+| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q558 | p002 L1 verified output |
 | [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
 | [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | planning | p002 L2、p003、p004 + hardware gates |
 
@@ -115,3 +115,7 @@ ws109-q556-ui-libraries: p002 L2 library subset consumes verified p004 q554/q555
 ws109-q557-shared-devices: p003 shared mechanism/native sync/header subset selected; native seat and fullF3 retained, unchanged p002L2 integration/p005 acceptance.
 
 2026-10-01T20:40:05.932372+00:00 / ws109-q557-cleared: p003 uncleared。Linux共有dma-buf/evdev/sessionを再利用、FreeBSDsync/nativeinput header境界を実装。native4objects/exportownershipとLinuxfullcompositor/境界契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q557/result.md)。FreeBSDseat/fullcompositor/actualGPU・positiveDMA/全F3は保持。
+
+ws109-q558-permissive-seat-client: existing p001 MITclient option concretized with pinnedarchive/license; p003 native seat/module consumes verified client output next. No changed foreignPhase acceptance or new GPLexception.
+
+2026-10-01T22:56:18.386314+00:00 / ws109-q558-cleared: p003 uncleared。MIT seatd-only libseat nativebuild/privateinstall・実seatdで非特権evdev fd/capability/release PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q558/result.md)。native compositor callbacks・VT/display/actualGPU/F3は保持。

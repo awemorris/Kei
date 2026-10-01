@@ -1,0 +1,8 @@
+fetch -o build/distfiles/seatd-0.9.3-native-fetch.tar.gz.tmp https://git.sr.ht/~kennylevinsen/seatd/archive/0.9.3.tar.gz
+test "$(sha256 -q build/distfiles/seatd-0.9.3-native-fetch.tar.gz.tmp)" = "302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96"
+mv build/distfiles/seatd-0.9.3-native-fetch.tar.gz.tmp build/distfiles/seatd-0.9.3-native-fetch.tar.gz
+SHA256 (build/native-ui/lib/libseat.so.1) = 56070a03d7c4df1c358ed541db01a3681724de41b89cdbba025dfbfb415cf2c8
+SHA256 (build/native-ui/include/libseat.h) = 6dfc615506433098879ec8a9d730cedd95b061fa1f1abb402a2abac19b931411
+SHA256 (build/native-ui/share/licenses/libseat/LICENSE) = 282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3
+build/native-ui/lib/libseat.so.1:
+	libc.so.7 => /lib/libc.so.7 (0x3bf0b4706000)

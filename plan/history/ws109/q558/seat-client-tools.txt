@@ -1,0 +1,24 @@
+Updating FreeBSD-ports repository catalogue...
+FreeBSD-ports repository is up to date.
+Updating FreeBSD-ports-kmods repository catalogue...
+FreeBSD-ports-kmods repository is up to date.
+Updating FreeBSD-base repository catalogue...
+FreeBSD-base repository is up to date.
+All repositories are up to date.
+The following 2 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	meson: 1.10.2_1,1 [FreeBSD-ports]
+	ninja: 1.13.2,4 [FreeBSD-ports]
+
+Number of packages to be installed: 2
+
+The process will require 14 MiB more space.
+2 MiB to be downloaded.
+[1/2] Fetching ninja-1.13.2,4: .......... done
+[2/2] Fetching meson-1.10.2_1,1: .......... done
+Checking integrity... done (0 conflicting)
+[1/2] Installing ninja-1.13.2,4...
+[1/2] Extracting ninja-1.13.2,4: ........ done
+[2/2] Installing meson-1.10.2_1,1...
+[2/2] Extracting meson-1.10.2_1,1: .......... done

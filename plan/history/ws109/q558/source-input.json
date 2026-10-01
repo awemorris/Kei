@@ -1,0 +1,18 @@
+[
+  {
+    "path": "userland/packages/libseat/Makefile.freebsd",
+    "sha256": "478ae876e8bbccfb2903129ba72c95bbe17f9f3720e35c9d4a7cfd8af0384fc2"
+  },
+  {
+    "path": "userland/desktop/keiland-freebsd.mk",
+    "sha256": "5a164bbb3b06ab3c18d820f99c8a0a1e798dd3beeaa9aa3037c747cafde8007f"
+  },
+  {
+    "path": "plan/ws109/tests/seat-client-freebsd.c",
+    "sha256": "029ef6e1c796f4ef52319de1612b5622f560427794daf4537f551bbc5612ff6b"
+  },
+  {
+    "path": "plan/ws109/tests/seat-fixture-freebsd.py",
+    "sha256": "bd71beaad78777d61b50fbfbc25ff64e3bf585438b750850b48e24e30ea72d18"
+  }
+]
