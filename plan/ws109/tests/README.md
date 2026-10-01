@@ -98,3 +98,13 @@ attributes-fixture-freebsd.py takes its traversable executable path, creates/rem
 owned UFS source/destination/link, verifies native root and uid/gid65534/nogroups namespacepermissions.
 pty-freebsd.c uses private pty.h/base -lutil and checks actualforkpty session/canonical stream/childwait.
 Use -std=gnu17 -Wall -Wextra -Werror; no hostfixtures or fabricated syscall providers.
+
+## Native application/data integration and mounts
+
+apps-freebsd.py STAGED_PREFIX temporarily owns /opt/keiland only when absent, audits actual
+native ELF dependencies/private RUNPATH/data and normal connection refusals, removes the installation.
+No live display/input or existing installation is replaced. GUI success remains the physical gate.
+mounts-freebsd.c compares the actual adapter snapshot with independent kernel getmntinfo;
+mounts-mntent.c compares the shared adapter with a second actual mount-table stream, copying
+borrowed strings before libc's shared parser record changes. Compile the corresponding production
+module with -I. -std=gnu17 -Wall -Wextra -Werror.

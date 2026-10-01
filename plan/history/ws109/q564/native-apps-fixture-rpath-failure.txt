@@ -1,0 +1,253 @@
+PASS native attributes attributes
+PASS native attributes permission
+owned native attribute source/destination/link removed
+ELF files
+/opt/keiland/bin/files:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x10ce4494000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x10ce5ab8000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x10ce696a000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x10ce7d17000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x10ce80ae000)
+	libgif-compat.so => /opt/keiland/lib/libgif-compat.so (0x10ce7924000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x10ce8da5000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x10ce9f6f000)
+	libm.so.5 => /lib/libm.so.5 (0x10cea58d000)
+	libc.so.7 => /lib/libc.so.7 (0x10cea782000)
+	libthr.so.3 => /lib/libthr.so.3 (0x10ceaf36000)
+	libsys.so.7 => /lib/libsys.so.7 (0x10ceb119000)
+	[vdso] (0x10ce3ad2000)
+ELF imageview
+/opt/keiland/bin/imageview:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x333aab726000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x333aad97c000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x333aadbda000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x333aae7a7000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x333aaf6ef000)
+	libgif-compat.so => /opt/keiland/lib/libgif-compat.so (0x333aaf925000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x333ab013c000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x333ab0317000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x333aad500000)
+	libm.so.5 => /lib/libm.so.5 (0x333ab0d7e000)
+	libc.so.7 => /lib/libc.so.7 (0x333ab14e7000)
+	libthr.so.3 => /lib/libthr.so.3 (0x333ab2678000)
+	libsys.so.7 => /lib/libsys.so.7 (0x333ab32e2000)
+	[vdso] (0x333aaaeeb000)
+ELF kuidemo
+/opt/keiland/bin/kuidemo:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x19be1b0c000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x19be2bb9000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x19be3989000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x19be47e3000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x19be5b03000)
+	libm.so.5 => /lib/libm.so.5 (0x19be6138000)
+	libc.so.7 => /lib/libc.so.7 (0x19be63bf000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x19be6f77000)
+	libthr.so.3 => /lib/libthr.so.3 (0x19be76b0000)
+	libsys.so.7 => /lib/libsys.so.7 (0x19be778d000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x19be7b18000)
+	[vdso] (0x19be13be000)
+ELF mview
+/opt/keiland/bin/mview:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2f4ce6f23000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2f4ce7783000)
+	libm.so.5 => /lib/libm.so.5 (0x2f4ce8099000)
+	libc.so.7 => /lib/libc.so.7 (0x2f4ce8bd3000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2f4ce4fc6000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2f4ce9432000)
+	[vdso] (0x2f4ce4b0d000)
+ELF notes
+/opt/keiland/bin/notes:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x34800b2af000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x34800baa3000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x34800bc64000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x34800c820000)
+	libpdf.so => /opt/keiland/lib/libpdf.so (0x348009bf2000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x34800d575000)
+	libm.so.5 => /lib/libm.so.5 (0x34800e39e000)
+	libc.so.7 => /lib/libc.so.7 (0x34800ed1f000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x34800f333000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x34800fe8f000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x34801073a000)
+	libthr.so.3 => /lib/libthr.so.3 (0x34801141a000)
+	libsys.so.7 => /lib/libsys.so.7 (0x348011b7d000)
+	[vdso] (0x34800973c000)
+ELF pdfviewer
+/opt/keiland/bin/pdfviewer:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x1b7ebed10000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x1b7ebf477000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x1b7ec08ef000)
+	libpdf.so => /opt/keiland/lib/libpdf.so (0x1b7ec02e2000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1b7ec1c8d000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x1b7ec1ddf000)
+	libm.so.5 => /lib/libm.so.5 (0x1b7ec1e9e000)
+	libc.so.7 => /lib/libc.so.7 (0x1b7ec2b43000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x1b7ec348d000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x1b7ec3c1e000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x1b7ec41b6000)
+	libthr.so.3 => /lib/libthr.so.3 (0x1b7ec49a9000)
+	libsys.so.7 => /lib/libsys.so.7 (0x1b7ec58ef000)
+	[vdso] (0x1b7ebd2f7000)
+ELF settings
+/opt/keiland/bin/settings:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x8ec4e3e0000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x8ec4d988000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x8ec4f34e000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x8ec4fee2000)
+	libm.so.5 => /lib/libm.so.5 (0x8ec5070b000)
+	libc.so.7 => /lib/libc.so.7 (0x8ec50a2d000)
+	libthr.so.3 => /lib/libthr.so.3 (0x8ec519a4000)
+	libsys.so.7 => /lib/libsys.so.7 (0x8ec522df000)
+	[vdso] (0x8ec4b95a000)
+ELF terminal
+/opt/keiland/bin/terminal:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x175c40207000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x175c40287000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x175c4057f000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x175c41123000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x175c418ad000)
+	libm.so.5 => /lib/libm.so.5 (0x175c42606000)
+	libutil.so.10 => /lib/libutil.so.10 (0x175c43619000)
+	libc.so.7 => /lib/libc.so.7 (0x175c43920000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x175c44693000)
+	libthr.so.3 => /lib/libthr.so.3 (0x175c44e3d000)
+	libsys.so.7 => /lib/libsys.so.7 (0x175c45d37000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x175c461ad000)
+	[vdso] (0x175c3e24a000)
+ELF textedit
+/opt/keiland/bin/textedit:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x3b50e84000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x3b509d8000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x3b51a7b000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x3b52be8000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x3b52f72000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x3b53588000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x3b5435c000)
+	libm.so.5 => /lib/libm.so.5 (0x3b54a70000)
+	libc.so.7 => /lib/libc.so.7 (0x3b553e6000)
+	libthr.so.3 => /lib/libthr.so.3 (0x3b56288000)
+	libsys.so.7 => /lib/libsys.so.7 (0x3b57112000)
+	[vdso] (0x3b4f360000)
+ELF vkdemo
+/opt/keiland/bin/vkdemo:
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x133667a48000)
+	libm.so.5 => /lib/libm.so.5 (0x13366855e000)
+	libc.so.7 => /lib/libc.so.7 (0x133668c8b000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1336696b2000)
+	libthr.so.3 => /lib/libthr.so.3 (0x13366a336000)
+	libsys.so.7 => /lib/libsys.so.7 (0x13366aa5f000)
+	[vdso] (0x1336662d3000)
+ELF wayland
+/opt/keiland/bin/wayland:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x334c457d1000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x334c46b5b000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x334c46009000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x334c47dca000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x334c48ab7000)
+	libseat.so.1 => /opt/keiland/lib/libseat.so.1 (0x334c490a9000)
+	libm.so.5 => /lib/libm.so.5 (0x334c49173000)
+	libthr.so.3 => /lib/libthr.so.3 (0x334c496eb000)
+	libc.so.7 => /lib/libc.so.7 (0x334c49e6e000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x334c4a7b6000)
+	libsys.so.7 => /lib/libsys.so.7 (0x334c4b214000)
+	[vdso] (0x334c444cf000)
+ELF wlshm
+/opt/keiland/bin/wlshm:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x252b2458d000)
+	libc.so.7 => /lib/libc.so.7 (0x252b24f7e000)
+	libsys.so.7 => /lib/libsys.so.7 (0x252b26111000)
+	[vdso] (0x252b22caf000)
+ELF wltest
+/opt/keiland/bin/wltest:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1f2cce1d1000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x1f2ccea13000)
+	libm.so.5 => /lib/libm.so.5 (0x1f2ccf4b0000)
+	libc.so.7 => /lib/libc.so.7 (0x1f2cd0107000)
+	libthr.so.3 => /lib/libthr.so.3 (0x1f2cd130c000)
+	libsys.so.7 => /lib/libsys.so.7 (0x1f2cd174f000)
+	[vdso] (0x1f2cccac3000)
+ELF libgif-compat.so
+/opt/keiland/lib/libgif-compat.so:
+	libm.so.5 => /lib/libm.so.5 (0x35139e071000)
+	libc.so.7 => /lib/libc.so.7 (0x35139abd4000)
+ELF libjpeg-compat.so
+/opt/keiland/lib/libjpeg-compat.so:
+	libm.so.5 => /lib/libm.so.5 (0x2d60713cf000)
+	libc.so.7 => /lib/libc.so.7 (0x2d606eca0000)
+ELF libkeiland.so
+/opt/keiland/lib/libkeiland.so:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1c4f3a5b8000)
+	libm.so.5 => /lib/libm.so.5 (0x1c4f38b35000)
+	libc.so.7 => /lib/libc.so.7 (0x1c4f37f99000)
+ELF libkeiui.so
+/opt/keiland/lib/libkeiui.so:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x1e9b2da7a000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1e9b2e5f4000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x1e9b2f2ca000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x1e9b2f7ac000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x1e9b3016f000)
+	libm.so.5 => /lib/libm.so.5 (0x1e9b30ce7000)
+	libc.so.7 => /lib/libc.so.7 (0x1e9b2c2b2000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x1e9b30d91000)
+	libthr.so.3 => /lib/libthr.so.3 (0x1e9b313e1000)
+	libsys.so.7 => /lib/libsys.so.7 (0x1e9b2c862000)
+ELF libpdf.so
+/opt/keiland/lib/libpdf.so:
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x14debc06d000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x14debc7ee000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x14debcda2000)
+	libm.so.5 => /lib/libm.so.5 (0x14deb9526000)
+	libc.so.7 => /lib/libc.so.7 (0x14deba9de000)
+ELF libpng-compat.so
+/opt/keiland/lib/libpng-compat.so:
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0xed95d89a000)
+	libm.so.5 => /lib/libm.so.5 (0xed95db99000)
+	libc.so.7 => /lib/libc.so.7 (0xed95aa66000)
+Traceback (most recent call last):
+  File "/root/keiland-src/plan/ws109/tests/apps-freebsd.py", line 30, in <module>
+    assert '/opt/keiland/lib' in header.stdout, header.stdout
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 09 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - FreeBSD
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          58368 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         10
+  Size of section headers:           64 (bytes)
+  Number of section headers:         37
+  Section header string table index: 35
+Dynamic section at offset 0x5e40 contains 22 entries:
+  Tag                Type         Name/Value
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libseat.so.1]
+  0x0000000000000007 (RELA)       0xa60
+  0x0000000000000008 (RELASZ)     816 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  32
+  0x0000000000000017 (JMPREL)     0xd90
+  0x0000000000000002 (PLTRELSZ)   648 (bytes)
+  0x0000000000000003 (PLTGOT)     0x9040
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x874
+  0x000000000000000a (STRSZ)      485 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x6c8
+  0x0000000000000004 (HASH)       0x72c
+  0x000000000000000c (INIT)       0x6b7c
+  0x000000000000000d (FINI)       0x6b88
+  0x000000006ffffff0 (VERSYM)     0x648
+  0x000000006ffffffe (VERNEED)    0x698
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0
+

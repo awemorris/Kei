@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q564](queue-q564.md)（WS109 p002 uncleared）
+Last finished Queue: [q563](queue-q563.md)（WS109 p002 uncleared）
 
-## 最新: q564 /WS109 p002
+## 最新: q563 /WS109 p002
 
-item cleared /Phase uncleared。13apps/compositor/nativeall warning0、25ELF/private install/data/refusal・native辞書150tests PASS。実mount contracts/LinuxFiles回帰PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q564/result.md)。F2最終一式audit・p005全文規約/threeOSと実GPU/WiFi関門は保持。
+item uncleared /Phase uncleared。native mount iterator/sharedPlacesを実装・nativecompile。fullappsはfiles/tags.cの未計画ENODATA宣言差で停止。[failure](/home/awe/zedBSD-claude1/plan/history/ws109/q563/result.md)。native ENOATTR互換名を追加し、mount/Linux契約と残りapps/data検証を次attemptで再開。
 
 WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | Queue | Outcome |
 | --- | --- |
+| [q534](queue-q534.md) | ws105-p009 uncleared |
 | [q535](queue-q535.md) | ws105-p005 cleared |
 | [q536](queue-q536.md) | ws105-p009 cleared |
 | [q537](queue-q537.md) | ws105-p010 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 | [q561](queue-q561.md) | WS109 p002 item cleared /Phase uncleared |
 | [q562](queue-q562.md) | WS109 p002 item uncleared /Phase uncleared |
 | [q563](queue-q563.md) | WS109 p002 item uncleared /Phase uncleared |
-| [q564](queue-q564.md) | WS109 p002 item cleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

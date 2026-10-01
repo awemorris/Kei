@@ -11,6 +11,10 @@
 
 #include <sys/types.h>
 #include <stddef.h>
+#include <errno.h>
+
+/* The shared tag caller's no-data spelling denotes FreeBSD's actual missing-attribute errno. */
+#define ENODATA ENOATTR
 
 /* Native namespaces appear as user.NAME/system.NAME; get/list size zero performs a size inquiry. */
 ssize_t getxattr(const char *path, const char *name, void *value, size_t capacity);

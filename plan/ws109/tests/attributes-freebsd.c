@@ -273,9 +273,9 @@ probe_attributes(
 		goto cleanup;
 	}
 
-	/* Missing native values must be failures rather than empty successful values. */
+	/* Native missing values must follow the ENODATA branch used by common Files tags. */
 	size = getxattr(source, "user.keiland.tags", NULL, 0);
-	if (size != -1 || errno != ENOATTR) {
+	if (size != -1 || errno != ENODATA) {
 		error = EPROTO;
 		goto cleanup;
 	}

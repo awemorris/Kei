@@ -1,0 +1,409 @@
+PASS native attributes attributes
+PASS native attributes permission
+owned native attribute source/destination/link removed
+ELF files
+/opt/keiland/bin/files:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0xb16cb0a6000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0xb16cb505000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0xb16cc1aa000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0xb16cce43000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0xb16cdd67000)
+	libgif-compat.so => /opt/keiland/lib/libgif-compat.so (0xb16ca66f000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0xb16cfb4f000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0xb16ceb8f000)
+	libm.so.5 => /lib/libm.so.5 (0xb16d07fd000)
+	libc.so.7 => /lib/libc.so.7 (0xb16d1c2f000)
+	libthr.so.3 => /lib/libthr.so.3 (0xb16d2820000)
+	libsys.so.7 => /lib/libsys.so.7 (0xb16d33b7000)
+	[vdso] (0xb16c8e5f000)
+ELF imageview
+/opt/keiland/bin/imageview:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x33dd039e3000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x33dd03a27000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x33dd029d1000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x33dd04594000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x33dd05237000)
+	libgif-compat.so => /opt/keiland/lib/libgif-compat.so (0x33dd05e6f000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x33dd06cbe000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x33dd0746c000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x33dd082a1000)
+	libm.so.5 => /lib/libm.so.5 (0x33dd0864c000)
+	libc.so.7 => /lib/libc.so.7 (0x33dd08d3a000)
+	libthr.so.3 => /lib/libthr.so.3 (0x33dd09b8b000)
+	libsys.so.7 => /lib/libsys.so.7 (0x33dd09bbc000)
+	[vdso] (0x33dd01c87000)
+ELF kuidemo
+/opt/keiland/bin/kuidemo:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x13b37ba6000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x13b36e2e000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x13b37daf000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x13b398a2000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x13b39c76000)
+	libm.so.5 => /lib/libm.so.5 (0x13b38be4000)
+	libc.so.7 => /lib/libc.so.7 (0x13b3aca3000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x13b3b2bd000)
+	libthr.so.3 => /lib/libthr.so.3 (0x13b3c26b000)
+	libsys.so.7 => /lib/libsys.so.7 (0x13b3cf8f000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x13b3d7ea000)
+	[vdso] (0x13b356ed000)
+ELF mview
+/opt/keiland/bin/mview:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x6089396a000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x60894825000)
+	libm.so.5 => /lib/libm.so.5 (0x60895394000)
+	libc.so.7 => /lib/libc.so.7 (0x60896154000)
+	libthr.so.3 => /lib/libthr.so.3 (0x60896b9e000)
+	libsys.so.7 => /lib/libsys.so.7 (0x60897286000)
+	[vdso] (0x608927b1000)
+ELF notes
+/opt/keiland/bin/notes:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x2c64313be000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x2c6431d63000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2c643322e000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x2c643375c000)
+	libpdf.so => /opt/keiland/lib/libpdf.so (0x2c643384d000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2c64339de000)
+	libm.so.5 => /lib/libm.so.5 (0x2c6433a73000)
+	libc.so.7 => /lib/libc.so.7 (0x2c6434a2e000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x2c6435422000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x2c643629c000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x2c6436b46000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2c6432b31000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2c6437c9f000)
+	[vdso] (0x2c642fc72000)
+ELF pdfviewer
+/opt/keiland/bin/pdfviewer:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x3d4a98a84000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x3d4a996b7000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x3d4a99a3d000)
+	libpdf.so => /opt/keiland/lib/libpdf.so (0x3d4a99dec000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x3d4a9ad2c000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x3d4a9bc86000)
+	libm.so.5 => /lib/libm.so.5 (0x3d4a9c275000)
+	libc.so.7 => /lib/libc.so.7 (0x3d4a9c763000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x3d4a9d5f6000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x3d4a97c4c000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x3d4a9f3ca000)
+	libthr.so.3 => /lib/libthr.so.3 (0x3d4a9e812000)
+	libsys.so.7 => /lib/libsys.so.7 (0x3d4a9f617000)
+	[vdso] (0x3d4a9715f000)
+ELF settings
+/opt/keiland/bin/settings:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x30072e435000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x30072ee6a000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x30072fce6000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x300730055000)
+	libm.so.5 => /lib/libm.so.5 (0x300730caf000)
+	libc.so.7 => /lib/libc.so.7 (0x300731cc2000)
+	libthr.so.3 => /lib/libthr.so.3 (0x3007324c6000)
+	libsys.so.7 => /lib/libsys.so.7 (0x30073307d000)
+	[vdso] (0x30072cde6000)
+ELF terminal
+/opt/keiland/bin/terminal:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x7e6f5692000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x7e6f6240000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x7e6f627f000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x7e6f716f000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x7e6f4f88000)
+	libm.so.5 => /lib/libm.so.5 (0x7e6f3fd1000)
+	libutil.so.10 => /lib/libutil.so.10 (0x7e6f890c000)
+	libc.so.7 => /lib/libc.so.7 (0x7e6f9803000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x7e6f8100000)
+	libthr.so.3 => /lib/libthr.so.3 (0x7e6fadc5000)
+	libsys.so.7 => /lib/libsys.so.7 (0x7e6fbaa2000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x7e6fa9a6000)
+	[vdso] (0x7e6f2b5e000)
+ELF textedit
+/opt/keiland/bin/textedit:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0xc7cd75b1000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0xc7cd949c000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0xc7cd90e8000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0xc7cda9cc000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0xc7cdb804000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0xc7cd9b8b000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0xc7cdbf92000)
+	libm.so.5 => /lib/libm.so.5 (0xc7cdcc4d000)
+	libc.so.7 => /lib/libc.so.7 (0xc7cde4bb000)
+	libthr.so.3 => /lib/libthr.so.3 (0xc7cdd7a8000)
+	libsys.so.7 => /lib/libsys.so.7 (0xc7cdfc6c000)
+	[vdso] (0xc7cd67bf000)
+ELF vkdemo
+/opt/keiland/bin/vkdemo:
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x35cb0d14f000)
+	libm.so.5 => /lib/libm.so.5 (0x35cb0de91000)
+	libc.so.7 => /lib/libc.so.7 (0x35cb0e90d000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x35cb0f62b000)
+	libthr.so.3 => /lib/libthr.so.3 (0x35cb0fccd000)
+	libsys.so.7 => /lib/libsys.so.7 (0x35cb1021f000)
+	[vdso] (0x35cb0bfe5000)
+ELF wayland
+/opt/keiland/bin/wayland:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x1ec455348000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x1ec45599d000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x1ec4565e0000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x1ec456733000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x1ec4543a7000)
+	libseat.so.1 => /opt/keiland/lib/libseat.so.1 (0x1ec457886000)
+	libm.so.5 => /lib/libm.so.5 (0x1ec458245000)
+	libthr.so.3 => /lib/libthr.so.3 (0x1ec45911c000)
+	libc.so.7 => /lib/libc.so.7 (0x1ec459ebf000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1ec45a33a000)
+	libsys.so.7 => /lib/libsys.so.7 (0x1ec45b06c000)
+	[vdso] (0x1ec4533b9000)
+ELF wlshm
+/opt/keiland/bin/wlshm:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x292c5565c000)
+	libc.so.7 => /lib/libc.so.7 (0x292c54141000)
+	libsys.so.7 => /lib/libsys.so.7 (0x292c564a9000)
+	[vdso] (0x292c5330b000)
+ELF wltest
+/opt/keiland/bin/wltest:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x8d43950f000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x8d438289000)
+	libm.so.5 => /lib/libm.so.5 (0x8d4399ee000)
+	libc.so.7 => /lib/libc.so.7 (0x8d43a41e000)
+	libthr.so.3 => /lib/libthr.so.3 (0x8d43af35000)
+	libsys.so.7 => /lib/libsys.so.7 (0x8d43c0a1000)
+	[vdso] (0x8d437696000)
+ELF libgif-compat.so
+/opt/keiland/lib/libgif-compat.so:
+	libm.so.5 => /lib/libm.so.5 (0x695dc83d000)
+	libc.so.7 => /lib/libc.so.7 (0x695da60a000)
+ELF libjpeg-compat.so
+/opt/keiland/lib/libjpeg-compat.so:
+	libm.so.5 => /lib/libm.so.5 (0x2b90efea3000)
+	libc.so.7 => /lib/libc.so.7 (0x2b90edc8c000)
+ELF libkeiland.so
+/opt/keiland/lib/libkeiland.so:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2d5542b2d000)
+	libm.so.5 => /lib/libm.so.5 (0x2d5543af7000)
+	libc.so.7 => /lib/libc.so.7 (0x2d554139f000)
+ELF libkeiui.so
+/opt/keiland/lib/libkeiui.so:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x249ac9afe000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x249accf9a000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x249acdde6000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x249ace67e000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x249acf53e000)
+	libm.so.5 => /lib/libm.so.5 (0x249acc200000)
+	libc.so.7 => /lib/libc.so.7 (0x249acafab000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x249ad043f000)
+	libthr.so.3 => /lib/libthr.so.3 (0x249ad1135000)
+	libsys.so.7 => /lib/libsys.so.7 (0x249acb7f9000)
+ELF libpdf.so
+/opt/keiland/lib/libpdf.so:
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x4ddbc5d7000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x4ddbd595000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x4ddbdd87000)
+	libm.so.5 => /lib/libm.so.5 (0x4ddbe7a1000)
+	libc.so.7 => /lib/libc.so.7 (0x4ddbab81000)
+ELF libpng-compat.so
+/opt/keiland/lib/libpng-compat.so:
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x37be3f271000)
+	libm.so.5 => /lib/libm.so.5 (0x37be3fcd9000)
+	libc.so.7 => /lib/libc.so.7 (0x37be3cf5c000)
+ELF libseat.so.1
+/opt/keiland/lib/libseat.so.1:
+	libc.so.7 => /lib/libc.so.7 (0xc4db88dc000)
+ELF libtruetype.so
+/opt/keiland/lib/libtruetype.so:
+	libm.so.5 => /lib/libm.so.5 (0x2b3e65cc6000)
+	libc.so.7 => /lib/libc.so.7 (0x2b3e645b7000)
+ELF libvulkan.so.1
+/opt/keiland/lib/libvulkan.so.1:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x127c038b5000)
+	libthr.so.3 => /lib/libthr.so.3 (0x127c03a14000)
+	libc.so.7 => /lib/libc.so.7 (0x127c0260d000)
+	libsys.so.7 => /lib/libsys.so.7 (0x127c029f8000)
+ELF libwayland-client.so
+/opt/keiland/lib/libwayland-client.so:
+	libc.so.7 => /lib/libc.so.7 (0x2f5573e12000)
+ELF libz-compat.so
+/opt/keiland/lib/libz-compat.so:
+	libc.so.7 => /lib/libc.so.7 (0x2c8ae4153000)
+ELF keiland-ime
+/opt/keiland/libexec/keiland-ime:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1dd60fd16000)
+	libc.so.7 => /lib/libc.so.7 (0x1dd610377000)
+	libsys.so.7 => /lib/libsys.so.7 (0x1dd610ddb000)
+	[vdso] (0x1dd60df07000)
+PASS App Home/data/model/textures/font/private-header boundaries
+REFUSAL terminal exit 1 ZTERM FAILED run=term operation=terminal_window_open result=0 errno=2
+ 
+REFUSAL files exit 1  ZFILES FAILED operation=window error=2
+
+REFUSAL settings exit 1  ZSETTINGS FAILED operation=window error=2
+
+REFUSAL notes exit 1  notes: cannot open a window: No such file or directory
+
+REFUSAL textedit exit 1  TEXTEDIT FAILED operation=window error=2
+
+REFUSAL imageview exit 1  IMAGEVIEW FAILED operation=window error=2
+
+REFUSAL pdfviewer exit 1  PDFVIEWER FAILED operation=window error=2
+
+REFUSAL wlshm exit 1 WLSHM FAILED run=manual setup errno=5
+ 
+REFUSAL wltest exit 1 WLTEST START run=manual mode=fifo frames=60
+ WLTEST FAILED run=manual api=wltest_window_open result=0 cleanup=0 errno=2 frames=0
+
+REFUSAL mview exit 1 MVIEW START run=manual model=/opt/keiland/share/mview/qs40 vertices=25861 triangles=37000 materials=16 textures=13
+ MVIEW FAILED run=manual api=mview_window_open result=0 cleanup=0 errno=2 frames=0
+
+REFUSAL kuidemo exit 1  KUIDEMO FAILED operation=window error=2
+
+REFUSAL keiland-ime exit 1 KEI-IME FAILED step=connect errno=2
+ 
+PASS actual application refusal/CLI entry (GUI operation not exercised)
+PASS owned installation/runtime fixtures removed
+ok   romaji kanji -> かんじ (got かんじ)
+ok   romaji konnnichiha -> こんにちは (got こんにちは)
+ok   romaji konnichiha -> こんいちは (got こんいちは)
+ok   romaji kitte -> きって (got きって)
+ok   romaji matcha -> まっちゃ (got まっちゃ)
+ok   romaji kan'i -> かんい (got かんい)
+ok   romaji shinbun -> しんぶn (got しんぶn)
+ok   romaji shinbunn -> しんぶん (got しんぶん)
+ok   romaji ca -> か (got か)
+ok   romaji xtu -> っ (got っ)
+ok   romaji ltsu -> っ (got っ)
+ok   romaji kyakka -> きゃっか (got きゃっか)
+ok   romaji thi -> てぃ (got てぃ)
+ok   romaji fa -> ふぁ (got ふぁ)
+ok   romaji k -> k (got k)
+ok   romaji q1 -> q1 (got q1)
+ok   romaji ko-hi- -> こーひー (got こーひー)
+ok   romaji a,b. -> あ、b。 (got あ、b。)
+ok   romaji [a]/ -> 「あ」・ (got 「あ」・)
+ok   romaji n -> n (got n)
+ok   romaji nn -> ん (got ん)
+ok   romaji x -> x (got x)
+ok   romaji 123 -> 123 (got 123)
+ok   dict: the fixed dictionary loads (error 0)
+ok   dict: 34 headwords (got 34)
+ok   dict: 3 malformed lines skipped (got 3)
+ok   dict: かk found
+ok   dict: かk's first candidate is 書
+ok   dict: とうきょう found
+ok   dict: the annotation is left out
+ok   dict: ひづけ found
+ok   dict: a Lisp candidate is skipped
+ok   dict: no candidate after the last
+ok   dict: a reading not in it is not found
+ok   dict: a missing file is ENOENT (got 2)
+ok   dict: a file over the limit is EFBIG (got 27)
+ok   dict X: loads (error 0)
+ok   dict X: no malformed line (got 0)
+ok   dict X: 16412 headwords, one per line (got 16412)
+ok   inflect よんだ (stem 1, m) ends at 3
+ok   inflect よみます (stem 1, m) ends at 4
+ok   inflect よまない (stem 1, m) ends at 4
+ok   inflect よめば (stem 1, m) ends at 3
+ok   inflect よもう (stem 1, m) ends at 3
+ok   inflect たべています (stem 1, b) ends at 6
+ok   inflect たべた (stem 1, b) ends at 3
+ok   inflect たべられない (stem 1, b) ends at 6
+ok   inflect みます (stem 1, r) ends at 3
+ok   inflect みた (stem 1, r) ends at 2
+ok   inflect かった (stem 1, w) ends at 3
+ok   inflect かわない (stem 1, w) ends at 4
+ok   inflect かいた (stem 1, k) ends at 3
+ok   inflect かきました (stem 1, k) ends at 5
+ok   inflect かけば (stem 1, k) ends at 3
+ok   inflect かこう (stem 1, k) ends at 3
+ok   inflect いった (stem 1, k) ends at 3
+ok   inflect かった (stem 1, k) does not end at 3
+ok   inflect はなした (stem 2, s) ends at 4
+ok   inflect たかかった (stem 2, k) ends at 5
+ok   inflect たかい (stem 2, i) ends at 3
+ok   inflect たかくない (stem 2, k) ends at 5
+ok   inflect むずかしい (stem 3, s) ends at 5
+ok   inflect あがった (stem 1, g) ends at 4
+ok   inflect あがります (stem 1, g) ends at 5
+ok   inflect かんがえます (stem 3, e) ends at 6
+ok   inflect とった (stem 1, r) ends at 3
+ok   inflect よ (stem 1, m) does not end at 1
+ok   inflect よまないで (stem 1, m) ends at 5
+ok   inflect たべないでください (stem 1, b) ends at 9
+ok   split: the engine opens with the fixed dictionary
+ok   split ほんをよんだ -> 本を|読んだ (got 本を|読んだ)
+ok   split たべています -> 食べています (got 食べています)
+ok   split きょうはいいてんきです -> 今日は|いい|天気です (got 今日は|いい|天気です)
+ok   split べんきょうします -> 勉強します (got 勉強します)
+ok   split わたしはにほんごをはなします -> 私は|日本語を|話します (got 私は|日本語を|話します)
+ok   split かいしゃにいきます -> 会社に|行きます (got 会社に|行きます)
+ok   split みます -> 見ます (got 見ます)
+ok   split たかかった -> 高かった (got 高かった)
+ok   split むずかしい -> 難しい (got 難しい)
+ok   split かんがえています -> 考えています (got 考えています)
+ok   split ものをかった -> 物を|変った (got 物を|変った)
+ok   split でんしゃにのって -> 電車に|乗って (got 電車に|乗って)
+ok   split きょうはいいてんきですね -> 今日は|いい|天気ですね (got 今日は|いい|天気ですね)
+ok   split どこからきましたか -> どこから|来ましたか (got どこから|来ましたか)
+ok   split たかくない -> 高くない (got 高くない)
+ok   split わたしはいます -> 私は|います (got 私は|います)
+ok   split ほんですね -> 本ですね (got 本ですね)
+ok   split こーひー -> コーヒー (got コーヒー)
+ok   split こーひーを -> コーヒーを (got コーヒーを)
+ok   split ぱそこんを -> ぱそこんを (got ぱそこんを)
+ok   split: ぱそこんを offers パソコンを
+ok   user: opens with no file (error 0)
+ok   user: learns 私
+ok   user: learns 渡し
+ok   user: learns 私 again
+ok   user: learns 今日
+ok   user: a reading with a slash is refused
+ok   user: saves (error 0)
+ok   user: the file is the user's alone (mode 600)
+ok   user: reopens
+ok   user: わたし has two candidates
+ok   user: the last choice 私 is first
+ok   user: 渡し is second
+ok   user: きょう is kept
+ok   user: the damaged file is written
+ok   user: a damaged file gives its 2 good lines (2, 2 malformed)
+ok   user: an oversized file is not read (0 entries)
+ok   keys: the engine is made
+ok   keys: id ja, label あ
+ok   keys: an idle space passes
+ok   keys: an idle Enter passes
+ok   keys: watasi shows わたし
+ok   keys: the cursor is after the kana
+ok   keys: Space converts to 私 (got 私)
+ok   keys: the segment in focus is the cursor range
+ok   keys: a second Space gives 渡し, no window yet
+ok   keys: a third Space gives 渡 and opens the window
+ok   keys: the window lists the candidates
+ok   keys: 2 chooses the second candidate
+ok   keys: Enter commits 渡し
+ok   keys: the learned 渡し comes first (got 渡し)
+ok   keys: Escape goes back to the kana
+ok   keys: a second Escape drops the composition
+ok   keys: the sentence converts (got 今日はいい天気です)
+ok   keys: the focus is on 今日は
+ok   keys: Right moves the focus to いい
+ok   keys: Shift+Left leaves 今日 and は (got 今日はいい天気です, 6)
+ok   keys: Shift+Right takes the は back
+ok   keys: Enter commits the sentence
+ok   keys: typing commits 本 and starts w
+ok   keys: Backspace takes the pending w back
+ok   keys: F7 gives パソコン (got パソコン)
+ok   keys: F8 gives ﾊﾟｿｺﾝ (got ﾊﾟｿｺﾝ)
+ok   keys: F9 gives ｐａｓｏｋｏｎ (got ｐａｓｏｋｏｎ)
+ok   keys: F10 gives pasokon (got pasokon)
+ok   keys: F6 gives ぱそこん (got ぱそこん)
+ok   keys: Enter commits the form
+ok   keys: Linux stays in letters (got Linux)
+ok   keys: Enter commits Linux
+ok   keys: kana again after the commit
+ok   keys: Ctrl commits か and passes the key
+ok   keys: 3ko shows 3こ (got 3こ)
+ok   keys: reset commits 3こ
+ok   keys: reset without commit drops the composition
+ok   keys: a long composition stops at its limit (579 bytes)
+ok   keys: 渡 is chosen in a sensitive field (got 渡)
+ok   keys: the choice in the sensitive field was not learned (got 渡し)
+ok   keys: Left while composing is swallowed
+ok   direct: made
+ok   direct: a passes
+host-engine: 150 passed, 0 failed

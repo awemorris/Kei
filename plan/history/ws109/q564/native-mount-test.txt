@@ -1,0 +1,2 @@
+native mount count=3 root=ufs devices=devfs
+PASS native mounts/kernel count/path/type/end/refusal/snapshot ownership

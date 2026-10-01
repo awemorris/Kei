@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q564 / q564-i01
+Queue / Attempt: q563 / q563-i01
 
 ## 目的・範囲
 
@@ -224,9 +224,3 @@ membership/data Makefile fixes within intended integration, meaningful probes/re
 Unexpectedfurther nativeportability prerequisite endsuncleared and revise separately. Retain all
 priorfailedattempts and fullF2/nativeGUI/physical/threeOS/fullWS gates. WIPcommit/no push/publication/
 make check/hostmount/input/display/toolchain or sharedbuild mutation. Samep002 internal redesign.
-
-## Result / q564-i01 / 2026-10-01T23:49:51.389102+00:00
-
-Queue item cleared /whole Phase uncleared。13apps/compositor/nativeall warning0、25ELF/private install/data/refusal・native辞書150tests PASS。実mount contracts/LinuxFiles回帰PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q564/result.md)。F2最終一式audit・p005全文規約/threeOSと実GPU/WiFi関門は保持。
-
-Event ws109-q564-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.
