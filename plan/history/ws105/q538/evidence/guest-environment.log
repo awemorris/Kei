@@ -1,0 +1,5 @@
+6.12.107+deb13-amd64
+uid=1000(kei) gid=1000(kei) groups=1000(kei),29(audio),44(video),995(input),992(kvm),991(render),103(netdev)
+660 root:kvm /dev/udmabuf
+660 root:video /dev/dri/card0
+660 root:audio /dev/snd/controlC0

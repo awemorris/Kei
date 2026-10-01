@@ -1,0 +1,15 @@
+ok: open without audiod
+ok: no descriptor without audiod
+ok: not reachable without audiod
+ok: set refused without audiod
+ok: an out-of-range volume is refused
+ok: reachable with the device after connecting
+ok: the volume as it stands
+ok: a descriptor while connected
+ok: set sent
+ok: the new volume reported
+ok: feedback sent
+ok: still connected after an ERROR
+ok: not reachable after audiod went
+ok: connected again, no device
+host-audio: 14/14 passed

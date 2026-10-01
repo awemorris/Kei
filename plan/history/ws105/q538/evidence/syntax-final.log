@@ -1,0 +1,14 @@
+sh plan/tools/keiland-linux/build-guest.sh PASS
+sh plan/tools/keiland-linux/elf-check.sh PASS
+python plan/tools/keiland-linux/guest.py PASS
+sh plan/tools/keiland-linux/guest.sh PASS
+sh plan/tools/keiland-linux/header-check.sh PASS
+sh plan/tools/keiland-linux/install-guest.sh PASS
+sh plan/tools/keiland-linux/interpose-check.sh PASS
+sh plan/tools/keiland-linux/makefile-sync.sh PASS
+python plan/tools/keiland-linux/png-probe.py PASS
+sh plan/tools/keiland-linux/wifi-setup.sh PASS
+bash plan/tools/keiland-linux/wsi-check.sh PASS
+sh userland/desktop/libvulkan-compat/gen-forward.sh PASS
+python plan/tools/keiland-linux/dbus-wire.py PASS
+syntax: PASS (declared interpreters; the first sh-only check of bash wsi-check.sh was invalid)

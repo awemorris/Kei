@@ -1,0 +1,30 @@
+settings: window at 50,98
+log: ZSETTINGS READY width=[0-9]+ height=[0-9]+ glass=1 page=home ok
+log: ZSETTINGS TITLEBAR ready controls=6 ok
+log: ZSETTINGS MENU ready ok
+log: ZSETTINGS GLASS panels count=2 ok
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS READY width=1180 height=690 glass=1 page=home
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/home.png
+log: ZSETTINGS PAGE network$ ok
+log: ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Network ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/network.png
+log: ZSETTINGS PAGE home back ok
+log: ZSETTINGS PAGE network forward ok
+log: ZSETTINGS PAGE about$ ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/about.png
+log: ZSETTINGS SIDEBAR shown=0 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/nosidebar.png
+log: ZSETTINGS SIDEBAR shown=1 ok
+log: ZSETTINGS TITLEBAR activated id=4 detail=0 ok
+log: ZSETTINGS TITLEBAR state back=1 forward=0 parts=1 last=Settings ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/home-again.png
+log: ZSETTINGS PAGE wifi$ ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/wifi.png
+log: ZWL HOME icon name="Settings" ok
+Settings icon at 424,274
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p002/apphome-settings.png
+log: ZWL HOME launch name=Settings pid= ok
+log: ZWL TITLEBAR control client=1 .* where=floating id=1 .* shown=1 ok
+zdesktop: no ERROR
+settings-p002: PASS

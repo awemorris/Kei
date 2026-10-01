@@ -15,7 +15,7 @@ libvulkan-compat に Wayland の WSI を足す（決定 D6）: `VK_KHR_surface`�
 `zwp_linux_dmabuf_v1`（version 3）で compositor に送る。fence は implicit sync（dma-buf に sync_file を付ける）。この Phase の試験の相手は host の上の試験用の Wayland server
 （`dmabuf-probe`）で、我々の compositor（p007）より先に WSI を確かめる。
 
-## 手本（[survey/](../../../ws105/survey/README.md)）
+## 手本（[survey/](../q538/survey/README.md)）
 
 - `survey/vkexp.c`: lavapipe での modifier の image の作成・dma-buf の export・`vkGetImageSubresourceLayout(MEMORY_PLANE_0)`・mmap・別の device での import（全て通った）。
 - `survey/vksync.c`: SYNC_FD の semaphore の export・import、`DMA_BUF_IOCTL_IMPORT_SYNC_FILE`・`EXPORT_SYNC_FILE`（全て通った）。
@@ -107,3 +107,6 @@ main が全文規約 §12 と手順を照合し、未実装の試験専用 produ
 
 
 実装 commit: `cb6a9eacf1dac1a1f6381809ba102558ffc41467`（WIP）。終了 UTC: 2026-10-01T07:35:44.278649+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+
+2026-10-01 WS105完了時の所在地更新: 元attemptのStatus/結果/承認は不変。現在のPhase所在地は[WS105履歴索引](../index.md)。approved scope snapshotは改変していない。

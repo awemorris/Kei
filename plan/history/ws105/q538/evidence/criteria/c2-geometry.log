@@ -1,0 +1,24 @@
+Files: surface 8, 1120x720 at 400,271 (title bar top) to 1520,1043
+bottom-right: 1120x720 at 400,271 -> 1160x760 at 400,271
+resize bottom-right (edges=10) ok
+top-left: 1160x760 at 400,271 -> 1200x800 at 360,231
+resize top-left (edges=5) ok
+top-right: 1200x800 at 360,231 -> 1220x820 at 360,211
+resize top-right (edges=9) FAIL
+bottom-left: 1220x820 at 360,211 -> 1260x860 at 340,211
+resize bottom-left (edges=6) FAIL
+log: ZWL RESIZE settled surface=8  FAIL
+left: 1260x860 at 340,211 -> 1320x880 at 300,211
+resize left (edges=4) FAIL
+bottom: 1320x880 at 300,211 -> 1320x920 at 300,211
+resize bottom (edges=2) ok
+top: 1320x920 at 300,211 -> 1320x960 at 300,171
+resize top (edges=1) ok
+move title-bar by 60,40 (300,223 -> 360,263) ok
+maximize: docked 1920x1242 at 0,38 ok
+unmaximize: back to 360,263 1320x960 (was 360,263 1320x960) ok
+minimize ok
+unminimize from Wiseview ok
+move after unminimize (from its place) by 10,0 (360,263 -> 370,263) ok
+C2 RESULT pass=10 fail=4
+C2: FAIL

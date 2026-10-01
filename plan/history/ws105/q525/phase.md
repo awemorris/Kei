@@ -4,10 +4,10 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q525 / q525-i01
 依存: p002
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4 を全部読む**（特に §4.3・§4.4 の「I・O の関数の中から後段を呼ぶ規則」・§4.11）
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §4 を全部読む**（特に §4.3・§4.4 の「I・O の関数の中から後段を呼ぶ規則」・§4.11）
 
 ## 目的
 
@@ -18,7 +18,7 @@ WSI（surface・swapchain・display）は p004・p005 で足す。この Phase �
 後段が export している `vkCmdDraw` を `dlsym` で得た pointer で呼ぶだけ。後段の export の関数が handle から正しい driver を選ぶ。
 **後段は `RTLD_DEEPBIND` で開く**（Debian の loader は、そうしないと我々の関数を自分の物として使ってしまう。2026-10-01 に確かめた、design §4.11）。
 
-## 手本（[survey/](../survey/README.md)、2026-10-01 に host で通した物）
+## 手本（[survey/](../q538/survey/README.md)、2026-10-01 に host で通した物）
 
 - `survey/vkprotos.sh`: `vulkan_core.h` から core の prototype を抜き出す（1.0=137・1.1=28・1.2=13・1.3=37・1.4=19、計 234）。
 - `survey/gen-forward.sh`: TSV から F の関数の定義と dlsym の表を作る awk。
@@ -113,3 +113,6 @@ make -j64 disk-image > build/ws105-p003-zedbsd.log 2>&1; echo "zedbsd make exit=
 ## 結果
 
 （実行の後に書く。V1・V2 の結果を design §10 の表にも追記する）
+
+
+2026-10-01 archive locator correction: 初期archiveが保持していた元Phase基準の相対リンクを現在のWS/design/survey archiveへ補正。元のscope/outcome/日時は不変。

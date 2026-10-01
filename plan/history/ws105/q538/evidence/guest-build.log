@@ -1,0 +1,44 @@
+I: chroot architecture amd64 is equal to the host's architecture
+I: finding correct signed-by value...
+I: automatically chosen format: tar
+I: using /tmp/mmdebstrap.LNdf_MT2Az as tempdir
+I: running apt-get update...
+I: downloading packages with apt...
+I: extracting archives...
+I: installing essential packages...
+I: installing remaining packages inside the chroot...
+I: running --customize-hook in shell: sh -c 'echo keiland-guest > "$1/etc/hostname"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'printf "127.0.0.1\tlocalhost\n127.0.1.1\tkeiland-guest\n" > "$1/etc/hosts"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'rm -f "$1/etc/resolv.conf"; echo "nameserver 10.0.2.3" > "$1/etc/resolv.conf"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'echo "/dev/vda / ext4 defaults 0 1" > "$1/etc/fstab"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'mkdir -p "$1/etc/systemd/network" && printf "[Match]\nName=en*\n\n[Network]\nDHCP=yes\n" > "$1/etc/systemd/network/20-wired.network"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'chroot "$1" systemctl enable systemd-networkd.service' exec /tmp/mmdebstrap.LNdf_MT2Az
+Created symlink '/etc/systemd/system/dbus-org.freedesktop.network1.service' → '/usr/lib/systemd/system/systemd-networkd.service'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/systemd-networkd.service' → '/usr/lib/systemd/system/systemd-networkd.service'.
+Created symlink '/etc/systemd/system/sockets.target.wants/systemd-networkd.socket' → '/usr/lib/systemd/system/systemd-networkd.socket'.
+Created symlink '/etc/systemd/system/sysinit.target.wants/systemd-network-generator.service' → '/usr/lib/systemd/system/systemd-network-generator.service'.
+Created symlink '/etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service' → '/usr/lib/systemd/system/systemd-networkd-wait-online.service'.
+I: running --customize-hook in shell: sh -c 'if [ -e "$1/usr/lib/systemd/system/wpa_supplicant.service" ]; then chroot "$1" systemctl disable wpa_supplicant.service; fi' exec /tmp/mmdebstrap.LNdf_MT2Az
+Removed '/etc/systemd/system/dbus-fi.w1.wpa_supplicant1.service'.
+Removed '/etc/systemd/system/multi-user.target.wants/wpa_supplicant.service'.
+I: running --customize-hook in shell: sh -c 'chroot "$1" passwd --delete root' exec /tmp/mmdebstrap.LNdf_MT2Az
+passwd: password changed.
+I: running --customize-hook in shell: sh -c 'chroot "$1" sh -c "getent group netdev >/dev/null || groupadd --system netdev"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'chroot "$1" useradd --create-home --uid 1000 --user-group --groups video,input,audio,render,netdev,kvm --shell /bin/bash kei' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'echo kei:kei | chroot "$1" chpasswd' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'mkdir -p "$1/root/.ssh" "$1/home/kei/.ssh"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running special hook: upload /home/awe/zedBSD-claude1/build/ws105-p011/guest/id_ed25519.pub /root/.ssh/authorized_keys
+I: running special hook: upload /home/awe/zedBSD-claude1/build/ws105-p011/guest/id_ed25519.pub /home/kei/.ssh/authorized_keys
+I: running --customize-hook in shell: sh -c 'chmod 700 "$1/root/.ssh" "$1/home/kei/.ssh"; chmod 600 "$1/root/.ssh/authorized_keys" "$1/home/kei/.ssh/authorized_keys"; chroot "$1" chown -R kei:kei /home/kei/.ssh' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'mkdir -p "$1/etc/ssh/sshd_config.d" && echo "PermitRootLogin prohibit-password" > "$1/etc/ssh/sshd_config.d/keiland.conf"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running --customize-hook in shell: sh -c 'chroot "$1" dpkg-query -W > "$1/tmp/keiland-packages.txt"' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running special hook: download /tmp/keiland-packages.txt /home/awe/zedBSD-claude1/build/ws105-p011/guest/packages.txt
+I: running --customize-hook in shell: sh -c 'if [ 'gdm' = gdm ]; then printf '[daemon]\nAutomaticLoginEnable=true\nAutomaticLogin=kei\n' > "$1/etc/gdm3/daemon.conf"; fi' exec /tmp/mmdebstrap.LNdf_MT2Az
+I: running special hook: download /vmlinuz /home/awe/zedBSD-claude1/build/ws105-p011/guest/vmlinuz
+I: running special hook: download /initrd.img /home/awe/zedBSD-claude1/build/ws105-p011/guest/initrd.img
+I: cleaning package lists and apt cache...
+I: creating tarball...
+I: done
+I: removing tempdir /tmp/mmdebstrap.LNdf_MT2Az...
+I: success in 308.1288 seconds
+build-guest.sh: /home/awe/zedBSD-claude1/build/ws105-p011/guest/guest.img

@@ -1,0 +1,28 @@
+guest: up
+zdesktop: ready
+settings: window at 50,98
+log: ZSETTINGS LOOK pictures count=6 ok
+log: ZSETTINGS CONTROL index=102  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/wallpaper.png
+log: ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Aurora.ppm error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Aurora.ppm ok
+wallpaper=/usr/share/keiland/wallpapers/Aurora.ppm
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/wallpaper-aurora.png
+log: ZSETTINGS LOOK set key=wallpaper value= error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpaper.ppm ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/wallpaper-default.png
+settings: window at 50,98
+log: ZSETTINGS CONTROL index=1  ok
+log: ZSETTINGS LOOK set key=window.opacity value=85 error=0 ok
+log: ZWL PREFERENCES key=window.opacity applied value=85 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/appearance-85.png
+log: ZSETTINGS LOOK set key=window.opacity value=100 error=0 ok
+log: ZWL PREFERENCES key=window.opacity applied value=100 ok
+settings: window at 50,98
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/display.png
+settings: window at 50,98
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/storage.png
+settings: window at 50,98
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p004/home.png
+zdesktop: no ERROR
+settings-p004: PASS

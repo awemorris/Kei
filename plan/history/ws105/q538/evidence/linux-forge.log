@@ -1,0 +1,2 @@
+dmabuf-forge: error=out_of_bounds code=6 object=6 stride=256
+dmabuf-forge: PASS

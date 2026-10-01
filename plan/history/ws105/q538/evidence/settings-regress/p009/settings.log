@@ -1,0 +1,34 @@
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS PAGE wallpaper
+ZSETTINGS NETWORK open links=2 dns=1 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=wallpaper
+ZSETTINGS MENU ready items=20
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=2 last=Wallpaper sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpaper.ppm error=0 ms=9
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Aurora.ppm error=0 ms=15
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Dawn.ppm error=0 ms=25
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Lagoon.ppm error=0 ms=12
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Meadow.ppm error=0 ms=11
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Twilight.ppm error=0 ms=11
+ZSETTINGS LOOK pictures count=6
+ZSETTINGS LAYOUT page=wallpaper controls=6
+ZSETTINGS CONTROL index=100 x=288 y=107 width=203 height=156
+ZSETTINGS CONTROL index=101 x=507 y=107 width=203 height=156
+ZSETTINGS CONTROL index=102 x=726 y=107 width=203 height=156
+ZSETTINGS CONTROL index=103 x=945 y=107 width=203 height=156
+ZSETTINGS CONTROL index=104 x=288 y=279 width=203 height=156
+ZSETTINGS CONTROL index=105 x=507 y=279 width=203 height=156
+ZSETTINGS GLASS panels count=2
+ZSETTINGS READY width=1180 height=690 glass=1 page=wallpaper
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=ue0 wifi=0 ssid=
+ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Aurora.ppm error=0
+ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Dawn.ppm error=0
+ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Lagoon.ppm error=0
+ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Meadow.ppm error=0
+ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Twilight.ppm error=0
+ZSETTINGS LOOK set key=wallpaper value= error=0

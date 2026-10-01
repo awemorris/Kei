@@ -54,7 +54,7 @@ Future Work の詳細。実行の許可ではない。着手するときは新�
 ## Linux への着手（2026-10-01）
 
 ユーザー「Linux移植を進めます」。**Linux の分は [WS104](../ws104/ws.md)（zedBSD の上での OS の境界の整理）と [WS105](../ws105/ws.md)（Linux への移植）に promote した。**
-決定と理由は WS105 の ws.md の「決定と理由」（D1〜D23）、仕組みは [WS105 の design.md](../ws105/design.md)。FreeBSD はこの file に残る（deferred）。
+決定と理由は WS105 の ws.md の「決定と理由」（D1〜D25）、仕組みは [WS105 の design.md](../ws105/design.md)。FreeBSD はこの file に残る（deferred）。
 下の未決の行き先: 1 → WS105 の D10 と p003 の確かめ、2 → (a)（WS105 の D8）、3 → WS105 の design §4.6・§10 の V3、4 → WS105 の D15、5・6 → まだ未決（WS105 の範囲の外）。
 
 ## 未決（着手のときに決める）
@@ -87,3 +87,10 @@ Future Work の詳細。実行の許可ではない。着手するときは新�
 
 - [WS103](../ws103/ws.md): compositor の GPU の直の ioctl を無くし、buffer・fence の受け側を backend の境界の後ろに置く。その境界がこの構成の Linux・FreeBSD の backend の入口になる。
 - 2026-09-30 の対話（Q1 の説明）: libwayland-client に Keiland の protocol の stub がある事、OPAQUE_FD と dma-buf の違い、`set_acquire_fence` が libvulkan の WSI の中で送られる事。
+
+
+## Linuxの合意範囲の完了（2026-10-01）
+
+[WS104](../ws104/ws.md) A1〜A6と[WS105](../ws105/ws.md) L1〜L9/最終conformanceを確認してcompleted。独立build/install、Vulkan backend/WSI、compositor、主なapp、gdm/logind、WiFi/WPA/ALSAをhostとown Debian13 QEMU guestで検証。[最終証拠](../history/ws105/q538/evidence/SHA256SUMS)。BUG-125/127はユーザー許可で未修正tracking、実機やMG006全体の完了とはしない。
+
+Linux分のpromotionは結果を保持して終了。FreeBSDはdeferredのまま、互換Qt6/GTK4・EGL/GLES/browser・ARM/musl/実機・PCM・explicit syncなどdesign§8は本WSの未達作業として増やさない。再考triggerはユーザーがFreeBSDまたは当該追加scopeへの着手を指定したとき。新しいWS/有限Queueの選定・承認が要る。

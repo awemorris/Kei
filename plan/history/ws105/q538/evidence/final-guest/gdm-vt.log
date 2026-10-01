@@ -1,0 +1,2 @@
+VT pause 10 resume 10
+gdm-VT: PASS same compositor PID / SwitchTo+chvt / 5 leases x2; input screenshots retained

@@ -1,0 +1,6 @@
+VKDEMO START run=manual width=320 height=240
+VKDEMO VULKAN device=llvmpipe (LLVM 19.1.7, 256 bits) api=1.0 family=0 offscreen=0
+VKDEMO STORAGE upload=20480 readback=0 access=vkMapMemory
+VKDEMO READY vertices=36 texture=64x64 shaders=vertex,fragment
+VKDEMO SUBMITTED run=manual mode=fixed frame=1 time_ms=1000 readback=disabled width=320 height=240
+VKDEMO DONE run=manual frames=1

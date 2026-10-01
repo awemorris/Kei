@@ -1,0 +1,29 @@
+log: ZWL HANDOFF go=1 ok
+log: ZWL VOLUME icon x= ok
+log: ZWL VOLUME reachable=1 device=1 ok
+icon at 1047,17
+log: ZWL VOLUME popup open ok
+log: ZWL VOLUME set value=7[4-6] muted=0 via=slider final=1 ok
+slider: audiod at 75 ok
+mute on: audiod muted ok
+mute off: audiod unmuted ok
+log: ZWL VOLUME popup close via=outside ok
+log: ZWL VOLUME popup close via=key ok
+wheel: 75 -> 70
+wheel: five percent a notch (-15 +10) ok
+wheel: five changes logged ok
+kept: sound.volume=70 sound.muted=0 
+kept in desktop.conf ok
+log: SESSIOND GREETER adopt pid= ok
+log: SESSIOND HANDOFF go written=3 ok
+a new session: audiod 100 at the greeter -> 70
+a new session applies the kept volume ok
+sounds (quarter second: peak): 132:6022 166:6022 205:5576 211:4811 214:5257 217:5576
+feedback sounds recorded (6) ok
+no sound louder than one feedback sound (6022) ok
+log: ZWL VOLUME reachable=1 device=0 ok
+log: ZWL VOLUME popup open .* sound=0 ok
+log: ZWL VOLUME reachable=0 ok
+zdesktop runs without audiod ok
+no ZWL ERROR ok
+volume-p004: PASS

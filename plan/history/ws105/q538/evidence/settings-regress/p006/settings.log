@@ -1,0 +1,151 @@
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS PAGE home
+ZSETTINGS NETWORK open links=2 dns=1 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=home
+ZSETTINGS MENU ready items=20
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=1 last=Settings sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS GLASS panels count=2
+ZSETTINGS READY width=1180 height=690 glass=1 page=home
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=ue0 wifi=0 ssid=
+ZSETTINGS PAGE wifi
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wi-Fi sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=wifi
+ZSETTINGS PAGE ethernet
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Ethernet sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=ethernet
+ZSETTINGS PAGE bluetooth
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Bluetooth sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=bluetooth
+ZSETTINGS PAGE vpn
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=VPN sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=vpn
+ZSETTINGS PAGE network
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Network sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=network
+ZSETTINGS LAYOUT page=network controls=1
+ZSETTINGS CONTROL index=7 x=1042 y=341 width=88 height=32
+ZSETTINGS PAGE appearance
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Appearance sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=appearance
+ZSETTINGS LAYOUT page=appearance controls=1
+ZSETTINGS CONTROL index=1 x=308 y=202 width=820 height=28
+ZSETTINGS PAGE wallpaper
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wallpaper sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=wallpaper
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpaper.ppm error=0 ms=10
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Aurora.ppm error=0 ms=121
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Dawn.ppm error=0 ms=115
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Lagoon.ppm error=0 ms=115
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Meadow.ppm error=0 ms=112
+ZSETTINGS LOOK picture path=/usr/share/keiland/wallpapers/Twilight.ppm error=0 ms=114
+ZSETTINGS LOOK pictures count=6
+ZSETTINGS LAYOUT page=wallpaper controls=6
+ZSETTINGS CONTROL index=100 x=288 y=107 width=203 height=156
+ZSETTINGS CONTROL index=101 x=507 y=107 width=203 height=156
+ZSETTINGS CONTROL index=102 x=726 y=107 width=203 height=156
+ZSETTINGS CONTROL index=103 x=945 y=107 width=203 height=156
+ZSETTINGS CONTROL index=104 x=288 y=279 width=203 height=156
+ZSETTINGS CONTROL index=105 x=507 y=279 width=203 height=156
+ZSETTINGS SLOW-FRAME draw=624 present=85 copy=1 acquire=1 queue=41 wait=10
+ZSETTINGS PAGE notifications
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Notifications sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=notifications
+ZSETTINGS LAYOUT page=notifications controls=0
+ZSETTINGS PAGE sound
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Sound sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=sound
+ZSETTINGS PAGE display
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Display sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=display
+ZSETTINGS PAGE storage
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Storage sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=storage
+ZSETTINGS SLOW-FRAME draw=1862 present=108 copy=4 acquire=2 queue=50 wait=10
+ZSETTINGS PAGE battery
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Battery sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=battery
+ZSETTINGS PAGE keyboard
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Keyboard sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=keyboard
+ZSETTINGS LAYOUT page=keyboard controls=2
+ZSETTINGS CONTROL index=4 x=308 y=177 width=820 height=28
+ZSETTINGS CONTROL index=5 x=308 y=261 width=820 height=28
+ZSETTINGS PAGE mouse
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Mouse sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=mouse
+ZSETTINGS LAYOUT page=mouse controls=2
+ZSETTINGS CONTROL index=2 x=308 y=177 width=820 height=28
+ZSETTINGS CONTROL index=3 x=1082 y=249 width=52 height=32
+ZSETTINGS PAGE touchpad
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Touchpad sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=touchpad
+ZSETTINGS LAYOUT page=touchpad controls=0
+ZSETTINGS PAGE printers
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Printers sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=printers
+ZSETTINGS PAGE sharing
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Sharing sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=sharing
+ZSETTINGS PAGE users
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Users sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=users
+ZSETTINGS PAGE privacy
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Privacy sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=privacy
+ZSETTINGS PAGE security
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Security sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=security
+ZSETTINGS SLOW-FRAME draw=33 present=687 copy=2 acquire=0 queue=50 wait=10
+ZSETTINGS PAGE accessibility
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Accessibility sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=accessibility
+ZSETTINGS PAGE updates
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Updates sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=updates
+ZSETTINGS PAGE about
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=About sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=about
+ZSETTINGS MENU item=1010 action=10 serial=59
+ZSETTINGS SEARCH focus
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=About sidebar=1 query= focus=1
+ZSETTINGS SEARCH query=w results=9
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=w focus=0
+ZSETTINGS LAYOUT page=about controls=9
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS RESULT index=2 x=296 y=229 width=844 height=52
+ZSETTINGS RESULT index=3 x=296 y=281 width=844 height=52
+ZSETTINGS RESULT index=4 x=296 y=333 width=844 height=52
+ZSETTINGS RESULT index=5 x=296 y=385 width=844 height=52
+ZSETTINGS RESULT index=6 x=296 y=437 width=844 height=52
+ZSETTINGS RESULT index=7 x=296 y=489 width=844 height=52
+ZSETTINGS RESULT index=8 x=296 y=541 width=844 height=52
+ZSETTINGS SEARCH query=wa results=2
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=wa focus=0
+ZSETTINGS LAYOUT page=about controls=2
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS SEARCH query=wall results=2
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=wall focus=0
+ZSETTINGS SEARCH open page=wallpaper
+ZSETTINGS SEARCH end page=about
+ZSETTINGS PAGE wallpaper
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wallpaper sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=wallpaper
+ZSETTINGS LAYOUT page=wallpaper controls=6
+ZSETTINGS CONTROL index=100 x=288 y=107 width=203 height=156
+ZSETTINGS CONTROL index=101 x=507 y=107 width=203 height=156
+ZSETTINGS CONTROL index=102 x=726 y=107 width=203 height=156
+ZSETTINGS CONTROL index=103 x=945 y=107 width=203 height=156
+ZSETTINGS CONTROL index=104 x=288 y=279 width=203 height=156
+ZSETTINGS CONTROL index=105 x=507 y=279 width=203 height=156
+ZSETTINGS MENU item=1003 action=3 serial=64
+ZSETTINGS PAGE about back
+ZSETTINGS TITLEBAR state back=1 forward=1 parts=2 last=About sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=1 sidebar=1 page=about
+ZSETTINGS LAYOUT page=about controls=0

@@ -1,0 +1,39 @@
+settings: window at 50,98
+log: ZSETTINGS NETWORK open links=[1-9] ok
+log: ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=[a-z]+[0-9]+ wifi=0 ok
+ZSETTINGS NETWORK open links=2 dns=1 saved=0
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=ue0 wifi=0 ssid=
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/network-real.png
+log: ZSETTINGS PAGE ethernet$ ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/ethernet.png
+settings: window at 50,98
+log: ZSETTINGS PAGE wifi ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/wifi-absent.png
+log: NETPROBE listening ok
+settings: window at 50,98
+log: ZSETTINGS NETWORK scan count=3 ok
+log: ZSETTINGS CONTROL index=102  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/wifi-list.png
+log: NETPROBE request op=35 ssid=Kei Lab ok
+log: ZSETTINGS NETWORK state .*wifi=4 ssid=Kei Lab ok
+log: ZSETTINGS NETWORK message bad=0 text=Connected to Kei Lab. ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/wifi-joined.png
+log: ZSETTINGS NETWORK key-form ssid=Neighbor 5G ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/wifi-key.png
+log: ZSETTINGS NETWORK save-key ok ok
+log: NETPROBE request op=37 ok
+log: NETPROBE request op=35 ssid=Neighbor 5G ok
+log: ZSETTINGS NETWORK message bad=0 text=Connected to Neighbor 5G. ok
+store: Neighbor 5G saved ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/wifi-key-joined.png
+log: NETPROBE request op=36 ok
+log: NETPROBE request op=33 ok
+log: ZSETTINGS NETWORK state .*wifi=1  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/wifi-off.png
+log: NETPROBE request op=32 ok
+settings: window at 50,98
+log: ZSETTINGS NETWORK scan count=3 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p003/network-probe.png
+zdesktop: no ERROR
+networkd: back
+settings-p003: PASS

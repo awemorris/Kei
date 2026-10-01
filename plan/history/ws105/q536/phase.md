@@ -97,7 +97,7 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 
 再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
 
-[changed p005](../../../ws105/phase005/phase.md)。既存実装を保持、検証fixtureのLD_PRELOADを外して再開する。
+[changed p005](../q535/phase.md)。既存実装を保持、検証fixtureのLD_PRELOADを外して再開する。
 
 ## 再開の結果
 
@@ -120,7 +120,7 @@ zedBSD: disk-image warning0、OS boundary / GPU V1、dedicated-host / gpu-zedbsd
 
 ## p005修復の依存確認（2026-10-01）
 
-q535 / source5012d324でKMS借用fdをSET_MASTERなしで扱い、gdm user keiの表示、root両経路の全3色 / console復元とnonmaster拒否 / callerfd維持をPASS。再開の前提を満たす。[p005](../../../ws105/phase005/phase.md)、[q535証拠](../q535/evidence/SHA256SUMS)。p009は全7基準を変更せず再実行。q534は当時のunclearedを保持。
+q535 / source5012d324でKMS借用fdをSET_MASTERなしで扱い、gdm user keiの表示、root両経路の全3色 / console復元とnonmaster拒否 / callerfd維持をPASS。再開の前提を満たす。[p005](../q535/phase.md)、[q535証拠](../q535/evidence/SHA256SUMS)。p009は全7基準を変更せず再実行。q534は当時のunclearedを保持。
 
 ## q536 内部補正: revoke通知より先に届くread（2026-10-01）
 
@@ -134,3 +134,6 @@ source `8b0c6ee4 WIP`、gcc/clang warning0 / 26ELF / source-sync / 331header / c
 ## 2026-10-01 p011 の記録整理による検証 tool の移動
 
 継続利用する `dbus-wire.c / dbus-wire.py` を `plan/tools/keiland-linux/` へ移した。内容は同一、公開 API・依存・受け入れ・過去の Queue outcome は不変。最終 source の再検証は [p011](../q538/phase.md) / [q538](../../queue-q538.md) に記録する。WS105 完了後はこの Phase の archive と [Linux tools](../../../tools/keiland-linux/README.md) が再開・参照先。
+
+
+2026-10-01 WS105完了時の所在地更新: 元attemptのStatus/結果/承認は不変。現在のPhase所在地は[WS105履歴索引](../index.md)。approved scope snapshotは改変していない。

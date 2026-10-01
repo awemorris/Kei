@@ -4,10 +4,10 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q526 / q526-i01
 依存: p003
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4（特に §4.4〜§4.8・§4.11）を読む**
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §4（特に §4.4〜§4.8・§4.11）を読む**
 
 ## 目的
 
@@ -15,7 +15,7 @@ libvulkan-compat に Wayland の WSI を足す（決定 D6）: `VK_KHR_surface`�
 `zwp_linux_dmabuf_v1`（version 3）で compositor に送る。fence は implicit sync（dma-buf に sync_file を付ける）。この Phase の試験の相手は host の上の試験用の Wayland server
 （`dmabuf-probe`）で、我々の compositor（p007）より先に WSI を確かめる。
 
-## 手本（[survey/](../survey/README.md)）
+## 手本（[survey/](../q538/survey/README.md)）
 
 - `survey/vkexp.c`: lavapipe での modifier の image の作成・dma-buf の export・`vkGetImageSubresourceLayout(MEMORY_PLANE_0)`・mmap・別の device での import（全て通った）。
 - `survey/vksync.c`: SYNC_FD の semaphore の export・import、`DMA_BUF_IOCTL_IMPORT_SYNC_FILE`・`EXPORT_SYNC_FILE`（全て通った）。
@@ -112,3 +112,6 @@ timeout 120 sh plan/tools/keiland-linux/interpose-check.sh
 ## 検証手順の補い（2026-10-01、q526 の選定前）
 
 main が全文規約 §12 と手順を照合し、未実装の試験専用 production switch を、試験専用 syscall shim の ENOTTY に置き換えた。D6 の implicit sync / CPU fallback と、90 frame・pixel 一致・fallback fences=0 の受け入れは同じ。外部の product 機能・他の Phase の約束・依存に変更無し。試験の shim は plan/tools/keiland-linux/ に置く。
+
+
+2026-10-01 archive locator correction: 初期archiveが保持していた元Phase基準の相対リンクを現在のWS/design/survey archiveへ補正。元のscope/outcome/日時は不変。

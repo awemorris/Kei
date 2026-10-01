@@ -103,7 +103,7 @@ main（Q1）が既存WS105完了の委任された技術判断で次を修正す
 
 検証: gcc/clang・ELF/source/header・host chain/Wayland 回帰、guestのfd/direct 3色。test-only preload observerがpollを1回だけ250ms遅らせて0を返し、2回目から実際のpollへ渡す。両経路で実frame完了/3色とoldSwapchainがPASSすること。sourceの各poll上限100msと総期限5sも点検する。このfixtureは試験の共有ライブラリのみで既定production codeを試す。p006の再開はこの修正・検証のclearanceが前提。
 
-[origin p006](../../../ws105/phase006/phase.md)、[q529 history](../../queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
+[origin p006](../q531/phase.md)、[q529 history](../../queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
 
 ## 今回の結果
 
@@ -124,7 +124,7 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 
 再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
 
-[origin p009](../../../ws105/phase009/phase.md)、[q534](../../queue-q534.md)。
+[origin p009](../q536/phase.md)、[q534](../../queue-q534.md)。
 
 ## q535 修復の結果
 
@@ -142,3 +142,6 @@ cleared（q535-i01、p005のlogind fd ownership修復）。sourceは今回のKMS
 ## 2026-10-01 p011 の記録整理による検証 tool の移動
 
 継続利用する `seat-fd.c` を `plan/tools/keiland-linux/` へ移した。内容は同一、公開 API・依存・受け入れ・過去の Queue outcome は不変。最終 source の再検証は [p011](../q538/phase.md) / [q538](../../queue-q538.md) に記録する。WS105 完了後はこの Phase の archive と [Linux tools](../../../tools/keiland-linux/README.md) が再開・参照先。
+
+
+2026-10-01 WS105完了時の所在地更新: 元attemptのStatus/結果/承認は不変。現在のPhase所在地は[WS105履歴索引](../index.md)。approved scope snapshotは改変していない。

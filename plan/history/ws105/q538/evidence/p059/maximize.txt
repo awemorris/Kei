@@ -1,0 +1,5 @@
+ZWL CONFIGURE client=1 surface=6 serial=1 width=0 height=0 fullscreen=0
+ZWL CONFIGURE client=1 surface=6 serial=13 width=1280 height=762 fullscreen=0
+ZWL CONFIGURE client=1 surface=6 serial=15 width=420 height=300 fullscreen=0
+WLTEST RESIZE run=a width=1280 height=762
+WLTEST RESIZE run=a width=420 height=300

@@ -1,0 +1,9 @@
+make -f userland/desktop/keiland-linux.mk install
+make[1]: Entering directory '/home/awe/zedBSD-claude1'
+make[1]: Leaving directory '/home/awe/zedBSD-claude1'
+make -f userland/desktop/keiland-linux.mk install-session
+make[1]: Entering directory '/home/awe/zedBSD-claude1'
+sed 's|/opt/keiland|/opt/keiland|g' userland/desktop/wayland/linux/keiland.desktop > build/keiland-linux/share/wayland-sessions/keiland.desktop.tmp
+mv build/keiland-linux/share/wayland-sessions/keiland.desktop.tmp build/keiland-linux/share/wayland-sessions/keiland.desktop
+install -D -m 0644 build/keiland-linux/share/wayland-sessions/keiland.desktop /home/awe/zedBSD-claude1/build/keiland-linux/stage/usr/share/wayland-sessions/keiland.desktop
+make[1]: Leaving directory '/home/awe/zedBSD-claude1'

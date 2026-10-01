@@ -1,0 +1,29 @@
+guest: up
+zdesktop: ready
+settings: window at 50,98
+log: ZSETTINGS CONTROL index=3  ok
+log: ZSETTINGS LOOK set key=pointer.speed value=300 error=0 ok
+log: ZWL PREFERENCES key=pointer.speed applied value=300 ok
+log: ZSETTINGS LOOK set key=pointer.natural value=1 error=0 ok
+log: ZWL PREFERENCES key=pointer.natural applied value=1 ok
+pointer.speed=300
+pointer.natural=1
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p005/mouse.png
+log: ZSETTINGS LOOK set key=pointer.speed value=100 error=0 ok
+log: ZWL PREFERENCES key=pointer.speed applied value=100 ok
+log: ZSETTINGS LOOK set key=pointer.natural value=0 error=0 ok
+log: ZWL PREFERENCES key=pointer.natural applied value=0 ok
+settings: window at 50,98
+log: ZSETTINGS CONTROL index=5  ok
+log: ZSETTINGS LOOK set key=keyboard.repeat.rate value=60 error=0 ok
+log: ZWL PREFERENCES key=keyboard.repeat.rate applied value=60 ok
+log: ZSETTINGS LOOK set key=keyboard.repeat.delay value=150 error=0 ok
+log: ZWL PREFERENCES key=keyboard.repeat.delay applied value=150 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p005/keyboard.png
+audiod socket: 0
+settings: window at 50,98
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p005/sound.png
+settings: window at 50,98
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p005/home.png
+zdesktop: no ERROR
+settings-p005: PASS

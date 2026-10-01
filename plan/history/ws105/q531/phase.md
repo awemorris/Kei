@@ -86,7 +86,7 @@ uncleared（q529-i01）。Linux compositor/direct seat/evdev/VT/handoff/GPUな�
 
 ## q529 後の再開条件
 
-p005のKMS待機を再設計してclearanceを再確認する（[変更](../../../ws105/phase005/phase.md)）。既存Linux sourceを保持し、再開QueueでLog Outと長い描画・入力・VTの全条件を再検証する。承認済みzedBSD回帰process52085は進行中、最終結果を再開Queueに記録する。
+p005のKMS待機を再設計してclearanceを再確認する（[変更](../q535/phase.md)）。既存Linux sourceを保持し、再開QueueでLog Outと長い描画・入力・VTの全条件を再検証する。承認済みzedBSD回帰process52085は進行中、最終結果を再開Queueに記録する。
 
 ## 今回の結果
 
@@ -101,3 +101,6 @@ cleared（q531-i01）。Linux の seat-direct・入力・session・wl_shm の co
 
 
 実装 commit: `29cf10de919a5629b9e58387b8a5ff32c223cb76`（WIP）。終了 UTC: 2026-10-01T08:50:34.308158+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+
+2026-10-01 WS105完了時の所在地更新: 元attemptのStatus/結果/承認は不変。現在のPhase所在地は[WS105履歴索引](../index.md)。approved scope snapshotは改変していない。

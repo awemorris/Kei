@@ -1,0 +1,13 @@
+C1 p126 PASS seconds=75 zdesktop-p126: status=0 
+C1 c1-boot-shutdown PASS seconds=120 C1 RESULT boot_black=0 boot_text=0 shutdown_black=0 shutdown_text=0 shutdown_down=1 card_changed=14 buttons_changed=11 qemu_gone=1
+C2 c2-geometry FAIL seconds=132 C2 RESULT pass=10 fail=4 C2: FAIL 
+C9 p052 PASS seconds=33 p052: PASS 
+C9 p053 PASS seconds=68 p053: PASS 
+C9 p072 PASS seconds=42 zdesktop-p072: PASS (and judge the screens) 
+C9 p076 FAIL seconds=118 p076: FAIL 
+C9 p126 PASS seconds=106 zdesktop-p126: status=0 
+C9 p128 PASS seconds=47 zdesktop-p128: status=0 
+C9 p134 PASS seconds=60 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p137 PASS seconds=50 p137: PASS 
+C9 p138 PASS seconds=37 p138: PASS 
+C9 cursor-owner PASS seconds=23 cursor-owner: PASS 

@@ -1,0 +1,116 @@
+WLTEST START run=manual mode=fifo frames=20
+WLTEST FRAME run=manual frame=1 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=2 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=3 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=4 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=5 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=6 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=7 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=8 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=9 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=10 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=11 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=12 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=13 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=14 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=15 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=16 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=17 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=18 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=19 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=20 width=1280 height=800 mode=fifo
+WLTEST PRESENT run=manual frames=20 total_us=85849 max_us=11007
+WLTEST DONE run=manual frames=20
+WLTEST START run=manual mode=fifo frames=20
+WLTEST FRAME run=manual frame=1 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=2 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=3 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=4 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=5 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=6 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=7 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=8 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=9 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=10 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=11 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=12 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=13 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=14 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=15 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=16 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=17 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=18 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=19 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=20 width=1280 height=800 mode=fifo
+WLTEST PRESENT run=manual frames=20 total_us=130189 max_us=58941
+WLTEST DONE run=manual frames=20
+WLTEST START run=manual mode=fifo frames=20
+WLTEST FRAME run=manual frame=1 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=2 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=3 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=4 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=5 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=6 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=7 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=8 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=9 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=10 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=11 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=12 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=13 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=14 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=15 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=16 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=17 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=18 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=19 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=20 width=1280 height=800 mode=fifo
+WLTEST PRESENT run=manual frames=20 total_us=83714 max_us=12474
+WLTEST DONE run=manual frames=20
+WLTEST START run=manual mode=fifo frames=20
+WLTEST FRAME run=manual frame=1 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=2 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=3 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=4 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=5 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=6 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=7 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=8 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=9 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=10 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=11 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=12 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=13 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=14 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=15 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=16 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=17 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=18 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=19 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=20 width=1280 height=800 mode=fifo
+WLTEST PRESENT run=manual frames=20 total_us=87932 max_us=23613
+WLTEST DONE run=manual frames=20
+WLTEST START run=manual mode=fifo frames=20
+WLTEST FRAME run=manual frame=1 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=2 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=3 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=4 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=5 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=6 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=7 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=8 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=9 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=10 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=11 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=12 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=13 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=14 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=15 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=16 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=17 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=18 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=19 width=1280 height=800 mode=fifo
+WLTEST FRAME run=manual frame=20 width=1280 height=800 mode=fifo
+WLTEST PRESENT run=manual frames=20 total_us=90684 max_us=11201
+WLTEST DONE run=manual frames=20
+29

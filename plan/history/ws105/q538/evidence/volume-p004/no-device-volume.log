@@ -1,0 +1,7 @@
+ZWL VOLUME reachable=1 device=0
+ZWL VOLUME icon x=1032 y=3 width=30 height=28
+ZWL VOLUME popup open x=917 y=40 width=260 height=142 slider=81 mute=115 sound=0
+ZWL VOLUME popup close via=key
+ZWL VOLUME reachable=0 device=0
+ZWL VOLUME popup open x=917 y=40 width=260 height=142 slider=81 mute=115 sound=0
+ZWL VOLUME popup close via=key

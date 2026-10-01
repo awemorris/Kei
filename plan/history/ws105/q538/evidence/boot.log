@@ -1,0 +1,2 @@
+boot-test: saw '^(?:\\S+ )?login: ?'
+boot-test: PASS build/ws105-p011/boot/login.png

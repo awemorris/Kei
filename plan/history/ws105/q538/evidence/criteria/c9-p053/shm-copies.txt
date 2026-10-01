@@ -1,0 +1,6 @@
+copies: 33
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=0-300 sum=07b08977
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=0-300 sum=205c1877
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=80-110 sum=585b9ecd
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=90-120 sum=585b9ecd
+ZWL SHM_COPY client=1 surface=8 buffer=14 rows=100-130 sum=585b9ecd

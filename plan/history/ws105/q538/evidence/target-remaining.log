@@ -1,0 +1,2 @@
+criteria: 11/13 PASS; original C2/p076 resize FAIL retained, BUG-125 user non-blocking decision applied
+target-extra: PASS glass / Settings / host audio / volume p004+p005

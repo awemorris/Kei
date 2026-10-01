@@ -1,0 +1,2 @@
+Oct 01 12:52:18 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL EXIT frames=112 error=0 cleanup_failed=0 pid=3137 input_events=124 seat_events=129 at_ms=2164434
+Oct 01 13:08:13 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL EXIT frames=101 error=0 cleanup_failed=0 pid=5733 input_events=124 seat_events=129 at_ms=3120284

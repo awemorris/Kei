@@ -1,0 +1,46 @@
+XDG_SESSION_TYPE=wayland
+XDG_SESSION_ID=118
+XDG_RUNTIME_DIR=/run/user/1000
+SESSION  UID USER SEAT  LEADER CLASS         TTY  IDLE SINCE
+    118 1000 kei  seat0 3086   user          tty2 no   -
+    119 1000 kei  -     3097   manager       -    no   -
+    121    0 root -     3351   user          -    no   -
+      8    0 root -     967    manager-early -    no   -
+     89    0 root -     2610   user          -    no   -
+
+5 sessions listed.
+Oct 01 12:43:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=483 timeouts=483 | poll 98.6% work 0.6%
+Oct 01 12:43:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5047ms: passes=479 timeouts=479 | poll 96.8% work 0.6%
+Oct 01 12:43:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=486 timeouts=486 | poll 99.0% work 0.6%
+Oct 01 12:43:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=476 timeouts=476 | poll 97.2% work 0.6%
+Oct 01 12:43:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:44:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=480 timeouts=480 | poll 97.7% work 1.1%
+Oct 01 12:44:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=22.39 (acquire 0.02 submit+present 22.22) frame_ms=24.56
+Oct 01 12:44:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=486 timeouts=486 | poll 99.0% work 0.6%
+Oct 01 12:44:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=478 timeouts=478 | poll 97.5% work 0.6%
+Oct 01 12:44:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=483 timeouts=483 | poll 98.5% work 0.6%
+Oct 01 12:44:21 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5001ms: passes=485 timeouts=485 | poll 99.0% work 0.6%
+Oct 01 12:44:26 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=484 timeouts=484 | poll 98.6% work 0.6%
+Oct 01 12:44:31 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5045ms: passes=485 timeouts=485 | poll 98.1% work 0.6%
+Oct 01 12:44:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:44:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=486 timeouts=486 | poll 99.0% work 0.6%
+Oct 01 12:44:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=483 timeouts=483 | poll 98.5% work 0.6%
+Oct 01 12:44:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=479 timeouts=479 | poll 97.6% work 0.6%
+Oct 01 12:44:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:45:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=480 timeouts=480 | poll 97.7% work 1.1%
+Oct 01 12:45:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=22.59 (acquire 0.02 submit+present 22.41) frame_ms=24.71
+Oct 01 12:45:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=483 timeouts=483 | poll 98.7% work 0.6%
+Oct 01 12:45:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:45:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5001ms: passes=485 timeouts=485 | poll 99.0% work 0.6%
+Oct 01 12:45:21 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:45:26 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5001ms: passes=485 timeouts=485 | poll 99.0% work 0.6%
+Oct 01 12:45:31 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=482 timeouts=482 | poll 98.4% work 0.6%
+Oct 01 12:45:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=486 timeouts=486 | poll 99.0% work 0.6%
+Oct 01 12:45:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:45:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=485 timeouts=485 | poll 98.9% work 0.6%
+Oct 01 12:45:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 12:45:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=484 timeouts=484 | poll 98.6% work 0.6%
+Oct 01 12:46:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=485 timeouts=485 | poll 98.6% work 1.1%
+Oct 01 12:46:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=22.68 (acquire 0.02 submit+present 22.51) frame_ms=24.90
+Oct 01 12:46:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=484 timeouts=484 | poll 98.7% work 0.6%
+Oct 01 12:46:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=486 timeouts=486 | poll 99.1% work 0.6%

@@ -1,0 +1,15 @@
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS PAGE home
+ZSETTINGS NETWORK open links=2 dns=1 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=home
+ZSETTINGS MENU ready items=20
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=1 last=Settings sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS GLASS panels count=2
+ZSETTINGS SLOW-FRAME draw=2084 present=75 copy=8 acquire=0 queue=23 wait=11
+ZSETTINGS READY width=1180 height=690 glass=1 page=home
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=ue0 wifi=0 ssid=

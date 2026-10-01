@@ -1,0 +1,15 @@
+ZWL VOLUME icon x=1032 y=3 width=30 height=28
+ZWL VOLUME reachable=1 device=1
+ZWL VOLUME popup open x=916 y=40 width=260 height=116 slider=81 mute=115 sound=1
+ZWL VOLUME popup close via=key
+ZWL VOLUME popup open x=916 y=40 width=260 height=116 slider=81 mute=115 sound=1
+ZWL VOLUME popup close via=key
+ZWL VOLUME set value=25 muted=0 via=wheel final=1 at_ms=62292
+ZWL VOLUME feedback at_ms=62292 via=wheel
+ZWL VOLUME set value=20 muted=0 via=wheel final=1 at_ms=62997
+ZWL VOLUME feedback at_ms=62997 via=wheel
+ZWL VOLUME saved value=20 muted=0 error=25
+ZWL VOLUME popup open x=916 y=40 width=260 height=116 slider=81 mute=115 sound=1
+ZWL VOLUME set value=20 muted=1 via=mute final=1 at_ms=67225
+ZWL VOLUME popup close via=key
+ZWL VOLUME saved value=20 muted=1 error=25

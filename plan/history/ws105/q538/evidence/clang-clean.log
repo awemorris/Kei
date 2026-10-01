@@ -1,0 +1,6 @@
+make -f userland/desktop/keiland-linux.mk clean
+make[1]: Entering directory '/home/awe/zedBSD-claude1'
+rm -rf build/keiland-linux-clang/obj build/keiland-linux-clang/lib build/keiland-linux-clang/bin build/keiland-linux-clang/libexec \
+	build/keiland-linux-clang/include build/keiland-linux-clang/share build/keiland-linux-clang/etc build/keiland-linux-clang/gen \
+	build/keiland-linux-clang/stage
+make[1]: Leaving directory '/home/awe/zedBSD-claude1'

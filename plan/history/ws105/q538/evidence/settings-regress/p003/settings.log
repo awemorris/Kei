@@ -1,0 +1,30 @@
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS PAGE network
+ZSETTINGS NETWORK open links=2 dns=1 saved=2
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=network
+ZSETTINGS MENU ready items=20
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=2 last=Network sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS LAYOUT page=network controls=1
+ZSETTINGS CONTROL index=7 x=1042 y=341 width=88 height=32
+ZSETTINGS GLASS panels count=2
+ZSETTINGS READY width=1180 height=690 glass=1 page=network
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=em9 wifi=2 ssid=
+ZSETTINGS NETWORK request=1 sent
+ZSETTINGS LAYOUT page=network controls=3
+ZSETTINGS CONTROL index=1 x=686 y=281 width=52 height=32
+ZSETTINGS CONTROL index=8 x=298 y=367 width=444 height=36
+ZSETTINGS CONTROL index=7 x=1042 y=341 width=88 height=32
+ZSETTINGS NETWORK scan count=3
+ZSETTINGS NETWORK done request=1 errno=0
+ZSETTINGS LAYOUT page=network controls=6
+ZSETTINGS CONTROL index=1 x=686 y=281 width=52 height=32
+ZSETTINGS CONTROL index=100 x=298 y=331 width=444 height=46
+ZSETTINGS CONTROL index=101 x=298 y=381 width=444 height=46
+ZSETTINGS CONTROL index=102 x=298 y=431 width=444 height=46
+ZSETTINGS CONTROL index=8 x=298 y=481 width=444 height=36
+ZSETTINGS CONTROL index=7 x=1042 y=341 width=88 height=32

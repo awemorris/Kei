@@ -1,11 +1,11 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: q538（ws105-p011）
-Current Focused Goal: fg012 — Keiland の OS の境界を整理して Linux で動かす（WS104 → WS105）。fg010 のデモの目標も保持する。
-Next（2026-10-01 に更新）: WS104 completed（q515〜q522）。後続 WS105 は incomplete、WS104 の prerequisite は満たした。WS105 p001〜p008 cleared（p005 q530・p006 q531・p007 q532・p008 q533）、p005のlogind fd修復 q535 cleared、p009 q536 / p010 q537 cleared、次はp011（ユーザーの WS105 完了までの自走指示）。D25 の localhost SSH / QMP は許可済み。WS103（compositor を libvulkan だけに）は 2026-10-01 に完了（q508〜q514、ユーザーの自走の指示）。デモの優先 WS（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102・WS084・WS075・WS081・WS085・WS068・WS101）は 2026-10-01 に作業の手引き（各 `guide.md`）と実機の手引き（`tools/hw5330/README.md`）を整えた。候補: デモ critical の上位（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102）、5330 の実機の新しい demo の image とユーザーの実機の確認。サブエージェントは N=0。
+Active Queue: なし（q538 finished、WS105 completed）
+Current Focused Goal: fg010 — デモ。fg012はWS104/WS105の受け入れを確認して達成（2026-10-01）。
+Next（2026-10-01 に更新）: WS104 completed（q515〜q522）、WS105 completed（q523〜q538、L1〜L9/最終conformance verified）。BUG-125/127は未修正tracking、GitHub公開/close/Projectはoutbox保留。次のQueueは未選定。既存のfg010/デモ優先順を保持、実機とQEMUの証拠を分ける。サブエージェントN=0。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
-優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にした。その後は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
+優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
 
 # zedBSD Master
@@ -42,8 +42,8 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | **MG003** 対象機へ導入して単独起動 | O2, O4 | 合意した機種・媒体でインストール後の単独起動と login を確認できる。実機と QEMU の証拠を分ける | インストーラ（WS019）と Intel Mac（WS020）は完了。4 機種の実機受け入れ（WS028）が残る | WS003, WS004, WS019, WS020, WS028 |
 | **MG004** データの保持とメモリ/ストレージの実用 | O1, O2 | 永続化、低メモリ時の進行、媒体世代、既定構成の性能を確認できる | swap（WS016）、UFS（WS024）、I/O・cache（WS025）は完了。実機の性能の一部は未測定。UFS の directory は 12 block まで育つ（WS054、完了） | WS016, WS024, WS025, WS054, WS057, WS058, WS059, WS060 |
 | **MG005** 一貫したネットワーク/サービス管理 | O1, O2, O3 | networkd・netconf・service の責務・設定・操作が一貫し、永続化と失敗後の復旧を確認できる | サービス（WS002）、net console（WS011）、service console（WS012）は完了。有線 LAN の常駐管理（WS005・WS033）が残る | WS002, WS005, WS011, WS012, WS033 |
-| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、Linux の WS105 は incomplete（fg012） | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105 |
-| **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。未充足 | WS013, WS015 |
+| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105 |
+| **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。WS105の独立/opt build・installはSupporting出力としてverified、MG007全体は未充足 | WS013, WS015 |
 | **MG008** 最小 HAL の移植契約と異種機での実証 | O4 | HAL 契約・移植手順と異種/レトロ機での実証を公開する | source の所有の整理（WS018）と時間の単位（WS040）は完了。他 platform への反映（WS036、aarch64 を含む）と PowerPC（WS027）、rpi4 の開発環境（WS044）が残る | WS018, WS027, WS036, WS040, WS044 |
 | **MG009** AI 活用 OSS 開発の知見の公開 | O5 | 設計権限・レビュー・変更追跡・失敗からの回復の事例と根拠を公開する | 担う作業が未定義 | なし |
 
@@ -51,11 +51,16 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
-| **fg012** | Keiland の OS の境界を zedBSD の上で整理し、既存の振る舞いを保ってから Linux の build と OS module を実装する。達成は WS104 の A1〜A6、WS105 の既存の受け入れ条件による | MG006 | [WS104](ws104/ws.md) → [WS105](ws105/ws.md) | 2026-10-01 ユーザー「WS104とWS105が、次のあなたの目標です」。同日の WS104 完了までの自律実行指示。WS104 は完了、WS105 は incomplete。優先順位と同じ指示から反映、fg010 は保持 |
 | **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新 |
 
 デモの platform は amd64 の実機（Dell Latitude 5330、HDMI + USB、2026-09-28 ユーザーの回答）。開発の試験は QEMU（amd64）で行い、実機の証拠と分けて書く。以前の focus（fg004 インストーラの実機、
 fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残すが、現在は優先しない。
+
+### 達成した Focused Goal（2026-10-01）
+
+| Goal | 成果 | Milestone | 担当 | 出典/結果 |
+| --- | --- | --- | --- | --- |
+| **fg012** | Keiland の OS の境界を zedBSD の上で整理し、既存の振る舞いを保ってから Linux の build と OS module を実装する。達成は WS104 の A1〜A6、WS105 の既存の受け入れ条件による | MG006 | [WS104](ws104/ws.md) → [WS105](ws105/ws.md) | 2026-10-01 ユーザー「WS104とWS105が、次のあなたの目標です」。同日の WS104 完了までの自律実行指示。WS104 A1〜A6とWS105 L1〜L9/最終conformance verified、2026-10-01達成（q538）。優先順位と同じ指示から反映、fg010 は保持 |
 
 ### fg010 の達成基準: デモの台本（2026-09-30 ユーザー「WS099のゴールも、明確な達成基準がないような気がします。それはFGに入れて、WSでは、このソフトがこういう基準を満たす、という明確なゴールを設定したいです。ソフトごとにそれをWSで作りましょう」）
 
@@ -203,7 +208,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS102](ws102/ws.md) | MG006 | スクリーンキーボード: 右下の角の swipe で右側に flick の panel（英字・記号・日本語）、左下の角の swipe で下側に QWERTY と手書き（認識は stub）。compositor に直接（2026-09-30 ユーザー） | incomplete | 2026-09-30: L1 を満たした。L2: p006・p007・p008・p009・p015・p016（右の列の道具の面）・p017・p018・p020・p021・p023・p024（履歴の tab。受け入れの手順だけ PASS、全手順の回帰・C9・boot test は未実施）、L3 の p019（色付きの絵文字）cleared（QEMU）。ユーザーの指示で優先を下げてラップアップ（2026-09-30 夕）。保留: p022（絵文字の tab）・BUG-125・p010・p011（速さ）・p012（IME、人間） |
 | [WS103](ws103/ws.md) | MG006 | compositor を libvulkan だけにする（GPU の UAPI の直の ioctl を無くす）（2026-09-30 ユーザー「規則にして今移す」、規則は Guardrail） | completed | 2026-10-01 完了（p001〜p007、q508〜q514）: V1〜V4 を満たす（QEMU の Venus と 5330 の passthrough、単独の実機の起動は未実施）。Linux・FreeBSD の backend は F-065。試験は plan/tools/gpu-boundary |
 | [WS104](ws104/ws.md) | MG006 | Keiland の OS の境界の整理: desktop の公開の header を `userland/desktop/keiland/` へ、libkeiland と compositor の OS の部分を `zedbsd/` の module へ、install の path を macro に。zedBSD の振る舞いは変えない（2026-10-01 ユーザー「Linux移植を進めます」、WS105 の準備） | completed | q515〜q522 / A1〜A6 verified。全文規約と全必須回帰 PASS、Linux は WS105 へ |
-| [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | incomplete | p001〜p008 cleared（p005 q530 KMS repair、p006 q531、p007 q532、p008 q533。window操作はBUG-125 / BUG-127でtracking）。q529 uncleared は履歴に保持。p007 q532 cleared（Linux / GPU回帰PASS、window操作BUG-125 / BUG-127はユーザー許可でtracking）。p008 q533 cleared（Linux apps / IMEと必須target回帰PASS、BUG-128 resolved）、p005のlogind fd修復 q535 cleared、p009 q536 / p010 q537 cleared、次はp011。WS104 の全前提 verified、D25 許可済み |
+| [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | completed | L1〜L9/最終source conformance verified、q538 finished。Linux host/ownDebian13guest・zedBSD回帰、BUG-125/127は未修正trackingのユーザー許可。GitHub publication pending、次の実装なし |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
@@ -238,20 +243,18 @@ WS074 はデモ critical の中位。WS035（完了）の名指しは後継の W
 **運用（ユーザー、2026-09-27〜30）**: 作業用のサブエージェントを N=0〜9（2026-09-29 は N=9、1 時間に 5 時間の枠の約 25%）。5 時間の枠を 1 周期とし、枠の終わりに N を減らし、
 N=0 になったら実装をまとめて計画（master・ws.md・Future Work・Bug Board）を整理する。試験は amd64 だけ、Phase の終わりに。effort は判断の表の「サブエージェントの effort」。
 
-1. **Linux への移植: WS105**（2026-10-01 ユーザー「WS104とWS105が、次のあなたの目標です」、fg012）。前提の WS104 は q515〜q522 で completed。
-   2026-10-01 ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存 p001〜p011 を依存順の 1 Phase Queue で自律実行する。WS104 の実装は verified。
-   （前の最優先の WS103 は 2026-10-01 に完了。）
-2. **デモ critical の上位**（この順、2026-09-30 夜 ユーザー）: WS099（Keiland の compositor、WS035 の後継）、WS079（Notes・PDF Viewer）、WS090（libkeiui）、
+2026-10-01: 最優先のWS104→WS105/fg012を完了。根拠はWS105 L1〜L9とq538全文規約・回帰。元のユーザー指示と完了履歴を保存し、未完了WSの相対順は変えない。以下は候補の優先順で、実行許可ではない。
+1. **デモ critical の上位**（この順、2026-09-30 夜 ユーザー）: WS099（Keiland の compositor、WS035 の後継）、WS079（Notes・PDF Viewer）、WS090（libkeiui）、
    WS089（Settings）、WS094（デスクトップの icon）、WS100（音量）、WS078（Kei への改名）、WS102（スクリーンキーボード）。
-3. **デモ critical の中位**: WS074（ブラウザ。ある程度動く。p100 Acid3 が次の候補）。
-4. **デモ critical の残り**（ユーザーの順位の指定は無く、Q1 が中位の後に置いた）: WS084（i915 の画面の引き継ぎ）、WS075（i915。描画の高速化は止めたまま）、
+2. **デモ critical の中位**: WS074（ブラウザ。ある程度動く。p100 Acid3 が次の候補）。
+3. **デモ critical の残り**（ユーザーの順位の指定は無く、Q1 が中位の後に置いた）: WS084（i915 の画面の引き継ぎ）、WS075（i915。描画の高速化は止めたまま）、
    WS081（touch の質。L3 は後ろ）、WS085（Windows の QEMU の Venus。デモの touch の土台）、WS068（GL 3.2 まで。3.3 以降は保留）、
    WS101（GPU の compute。S13 は通った。最適化は「今のまま」で止め、デモ critical の中で一番低い）。
-5. **WS080（ld.coff）**: デモ critical の後に loader（p001〜p008）を早めに仕上げる。互換の DLL（kernel32 以降）は下位のモデルの subagent に継続して実装させる。
-6. **bug**: WS073（BUG-030・BUG-039・BUG-031・BUG-107、BUG-093 は toolchain の許可待ち）。BUG-027・033 は低い優先度（計測して閉じる）。
-7. **ACPI（WS049〜WS052）と Arm64（WS044・WS048）**: デスクトップが片付くか limit が余るとき。
-8. **WS001** はユーザーが指示したときだけ。WS077（PC-98 の PCI）・WS066（ld.so の最適化）は低い優先度。
-9. **時期がユーザー次第**: WS095（人間が作業中）、WS098（WS095 の後）。
+4. **WS080（ld.coff）**: デモ critical の後に loader（p001〜p008）を早めに仕上げる。互換の DLL（kernel32 以降）は下位のモデルの subagent に継続して実装させる。
+5. **bug**: WS073（BUG-030・BUG-039・BUG-031・BUG-107、BUG-093 は toolchain の許可待ち）。BUG-027・033 は低い優先度（計測して閉じる）。
+6. **ACPI（WS049〜WS052）と Arm64（WS044・WS048）**: デスクトップが片付くか limit が余るとき。
+7. **WS001** はユーザーが指示したときだけ。WS077（PC-98 の PCI）・WS066（ld.so の最適化）は低い優先度。
+8. **時期がユーザー次第**: WS095（人間が作業中）、WS098（WS095 の後）。
 
 上に無い未完了の WS（WS004・005・007・009・014・017・026〜029・031・033・034・045〜047・061・082・083・088・096・097、予約の WS037〜039、保留の WS013・015）は順位を定めていない。
 
@@ -280,7 +283,7 @@ N=0 になったら実装をまとめて計画（master・ws.md・Future Work・
 | --- | --- | --- |
 | `plan/tools/toolchain-lock.sh` | 共有の toolchain の tree（`build/llvm`・`llvm-source`・`llvm-build`・`NoctLang`）の directory を読み取り専用にして、許可の無い変更を防ぐ（BUG-096） | `lock`・`unlock`（main が許可した toolchain の変更の間だけ）・`status` |
 | [boot-test.sh](tools/boot-test.sh)（`boot-test.py`） | 起動の確認。OVMF の USB（amd64）か BIOS の IDE（i386）で起動し、画面を QMP で撮って login prompt を読む | `plan/tools/boot-test.sh [IMAGE]`。`OUTPUT`（既定 `build/boot-test`）、`BOOT_TIMEOUT`、`BOOT_MODE=uefi-usb` か `bios-ide` |
-| [Keiland の OS 境界 checker](tools/keiland-os-boundary/check.sh)（WS104） | 共通 source の OS include / ioctl、GPU layout の所有、install literal、libc に残る desktop header を C1〜C5 で確認。evdev の 1 行だけを例外とする | `sh plan/tools/keiland-os-boundary/check.sh`。PASS は exit 0、違反は各項目の file:line と exit 1 |
+| [Keiland の OS 境界 checker](tools/keiland-os-boundary/check.sh)（WS104） | 共通 source の OS include / ioctl、GPU layout の所有、install literal、libc に残る desktop header を C1〜C5、Linux/zedBSD moduleと実build membershipをL1〜L5で確認。evdev の 1 行だけを例外とする | `sh plan/tools/keiland-os-boundary/check.sh`。PASS は exit 0、違反は各項目の file:line と exit 1 |
 | [Linux の試験 guest と操作の道具](tools/keiland-linux/README.md)（WS105） | Debian 13 の image / overlay・loopback SSH・QMP screenshot / 入力・install・PNG の画素。host の画面を使わない | `build-guest.sh` / `guest.sh` / `install-guest.sh` / `png-probe.py`、build/ELF/header/source の checks、Vulkan chain/interpose と `wsi-check.sh`（90 frame ×4）。README の timeout 付き command |
 | [Keiland の zedBSD の検証手順](tools/keiland-linux/zedbsd-commands.md)（WS104 から移した） | build / warning・sysroot・boot・C1/C2/C9・GPU・glass / pen・Settings / 音量の既存回帰。image build は直列、BUILD と OUTPUT を個別指定 | 各節 §0〜§9 |
 | Dell Latitude 5330 の実機の操作とデモの image（[tools/hw5330](tools/hw5330/README.md)、2026-10-01） | 実機の構成（5330 自身が host の passthrough、ssh `solaris10-man`）、`/tmp/i915-hw.lock`、画面・入力・結果の読み戻し、USB の単独の起動（ユーザー）、`build-demo-image.sh` と boot の行の落とし穴、実機の試験の script の一覧と PASS の印、よくある失敗。デモの優先 WS の作業の手引きは各 `plan/wsNNN/guide.md` | README.md |

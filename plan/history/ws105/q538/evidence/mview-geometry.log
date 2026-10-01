@@ -1,0 +1,4 @@
+ZWL MAP client=14 surface=7 x=286 y=132
+ZWL IMPORT client=14 buffer=18 width=960 height=640 bytes=2457600
+ZWL IMPORT client=14 buffer=20 width=960 height=640 bytes=2457600
+ZWL IMPORT client=14 buffer=22 width=960 height=640 bytes=2457600

@@ -1,0 +1,10 @@
+guest: up
+p006: settings-p006: PASS
+p002: settings-p002: PASS
+p003: settings-p003: PASS
+p004: settings-p004: PASS
+p005: settings-p005: PASS
+p007: settings-p007: PASS
+p008: settings-p008: PASS
+p009: settings-p009: PASS
+settings-regress: PASS

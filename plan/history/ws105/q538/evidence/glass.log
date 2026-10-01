@@ -1,0 +1,29 @@
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL GLASS ready text=1
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL GLASS desktops x=819 step=46 width=40
+ZWL MAP client=1 surface=6 x=430 y=293
+ZWL MAP client=2 surface=9 x=478 y=341
+check: (450,443) want f4f7fc got f4f7fc ok
+check: (658,461) want e8eef8 got e8eef8 ok
+check: /home/awe/zedBSD-claude1/build/ws105-p011/p059/desktop.png 1280x800 PASS
+ZWL GLASS moved surface=9 x=178 y=241
+check: (358,361) want e8eef8 got e8eef8 ok
+check: (830,573) want f4f7fc got f4f7fc ok
+check: /home/awe/zedBSD-claude1/build/ws105-p011/p059/moved.png 1280x800 PASS
+check: (640,500) want f4f7fc got f4f7fc ok
+check: (20,120) want f4f7fc got f4f7fc ok
+check: (1260,780) want f4f7fc got f4f7fc ok
+check: /home/awe/zedBSD-claude1/build/ws105-p011/p059/maximized.png 1280x800 PASS
+check: (450,443) want f4f7fc got f4f7fc ok
+check: /home/awe/zedBSD-claude1/build/ws105-p011/p059/restored.png 1280x800 PASS
+ZWL CONFIGURE client=1 surface=6 serial=1 width=0 height=0 fullscreen=0
+ZWL CONFIGURE client=1 surface=6 serial=13 width=1280 height=762 fullscreen=0
+ZWL CONFIGURE client=1 surface=6 serial=15 width=420 height=300 fullscreen=0
+WLTEST RESIZE run=a width=1280 height=762
+WLTEST RESIZE run=a width=420 height=300
+ZWL GLASS close surface=9
+WLSHM ENTER run=b x=334 y=-30
+WLSHM DONE run=b frames=144
+0
+p059: PASS

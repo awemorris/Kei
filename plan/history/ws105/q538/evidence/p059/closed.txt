@@ -1,0 +1,4 @@
+ZWL GLASS close surface=9
+WLSHM ENTER run=b x=334 y=-30
+WLSHM DONE run=b frames=144
+0

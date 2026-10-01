@@ -1,0 +1,26 @@
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS SOUND report reachable=1 device=1 value=60 muted=0
+ZSETTINGS SOUND set value=50 muted=0 final=0
+ZSETTINGS SOUND feedback error=0
+ZSETTINGS SOUND set value=40 muted=0 final=0
+ZSETTINGS SOUND report reachable=1 device=1 value=50 muted=0
+ZSETTINGS SOUND report reachable=1 device=1 value=40 muted=0
+ZSETTINGS SOUND feedback error=0
+ZSETTINGS SOUND set value=30 muted=0 final=0
+ZSETTINGS SOUND set value=30 muted=0 final=1
+ZSETTINGS SOUND feedback error=0
+ZSETTINGS LOOK set key=sound.volume value=30 error=0
+ZSETTINGS LOOK set key=sound.muted value=0 error=0
+ZSETTINGS SOUND report reachable=1 device=1 value=30 muted=0
+ZSETTINGS SOUND set value=30 muted=1 final=1
+ZSETTINGS LOOK set key=sound.volume value=30 error=0
+ZSETTINGS LOOK set key=sound.muted value=1 error=0
+ZSETTINGS SOUND report reachable=1 device=1 value=30 muted=1
+ZSETTINGS SOUND set value=30 muted=0 final=1
+ZSETTINGS SOUND feedback error=0
+ZSETTINGS LOOK set key=sound.volume value=30 error=0
+ZSETTINGS LOOK set key=sound.muted value=0 error=0
+ZSETTINGS SOUND report reachable=1 device=1 value=30 muted=0
+ZSETTINGS SOUND report reachable=1 device=1 value=25 muted=0
+ZSETTINGS SOUND report reachable=1 device=1 value=20 muted=0
+ZSETTINGS SOUND report reachable=1 device=1 value=20 muted=1

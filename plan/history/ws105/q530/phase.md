@@ -103,7 +103,7 @@ main（Q1）が既存WS105完了の委任された技術判断で次を修正す
 
 検証: gcc/clang・ELF/source/header・host chain/Wayland 回帰、guestのfd/direct 3色。test-only preload observerがpollを1回だけ250ms遅らせて0を返し、2回目から実際のpollへ渡す。両経路で実frame完了/3色とoldSwapchainがPASSすること。sourceの各poll上限100msと総期限5sも点検する。このfixtureは試験の共有ライブラリのみで既定production codeを試す。p006の再開はこの修正・検証のclearanceが前提。
 
-[origin p006](../../../ws105/phase006/phase.md)、[q529 history](../../queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
+[origin p006](../q531/phase.md)、[q529 history](../../queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
 
 ## 今回の結果
 
@@ -117,3 +117,6 @@ cleared（q530-i01）。KMS completionのpollを各100ms以下、総期限5秒�
 
 
 実装 commit: `753b45a0fae9ba22d0ef6d0a7fa0f8a4698b951d`（WIP）。終了 UTC: 2026-10-01T08:31:05.223429+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+
+2026-10-01 WS105完了時の所在地更新: 元attemptのStatus/結果/承認は不変。現在のPhase所在地は[WS105履歴索引](../index.md)。approved scope snapshotは改変していない。

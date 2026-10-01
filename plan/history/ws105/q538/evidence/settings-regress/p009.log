@@ -1,0 +1,36 @@
+guest: up
+zdesktop: ready
+total 30440
+-rw-rw-r-- 1 root wheel 6220817 Jan  1  1970 Aurora.ppm
+-rw-rw-r-- 1 root wheel 6220817 Jan  1  1970 Dawn.ppm
+-rw-rw-r-- 1 root wheel 6220817 Jan  1  1970 Lagoon.ppm
+-rw-rw-r-- 1 root wheel 6220817 Jan  1  1970 Meadow.ppm
+-rw-rw-r-- 1 root wheel 6220817 Jan  1  1970 Twilight.ppm
+settings: window at 50,98
+log: ZSETTINGS LOOK pictures count=6 ok
+log: ZSETTINGS CONTROL index=105  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p009/page.png
+log: ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Aurora.ppm error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Aurora.ppm ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p009/Aurora.png
+log: ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Dawn.ppm error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Dawn.ppm ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p009/Dawn.png
+log: ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Lagoon.ppm error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Lagoon.ppm ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p009/Lagoon.png
+log: ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Meadow.ppm error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Meadow.ppm ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p009/Meadow.png
+log: ZSETTINGS LOOK set key=wallpaper value=/usr/share/keiland/wallpapers/Twilight.ppm error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Twilight.ppm ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p009/Twilight.png
+ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Aurora.ppm ms=96
+ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Dawn.ppm ms=114
+ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Lagoon.ppm ms=135
+ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Meadow.ppm ms=109
+ZWL GLASS wallpaper path=/usr/share/keiland/wallpapers/Twilight.ppm ms=108
+log: ZSETTINGS LOOK set key=wallpaper value= error=0 ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpaper.ppm ok
+zdesktop: no ERROR
+settings-p009: PASS

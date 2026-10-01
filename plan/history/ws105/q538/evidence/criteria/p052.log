@@ -1,0 +1,31 @@
+check: (10,10) want 203040 got 203040 ok
+check: (1270,790) want 203040 got 203040 ok
+check: (450,260) want ff0000 got ff0000 ok
+check: (460,540) want ff0000 got ff0000 ok
+check: (830,260) want ff0000 got ff0000 ok
+check: (530,340) want 00ff00 got 00ff00 ok
+check: (810,520) want 00ff00 got 00ff00 ok
+check: (830,545) want ff0000 got ff0000 ok
+check: (850,540) want 203040 got 203040 ok
+check: build/ws105-p011/criteria/c9-p052/windows.png 1280x800 PASS
+check: (10,10) want 00ff00 got 00ff00 ok
+check: (640,400) want 00ff00 got 00ff00 ok
+check: (1270,790) want 00ff00 got 00ff00 ok
+check: (450,260) want 00ff00 got 00ff00 ok
+check: build/ws105-p011/criteria/c9-p052/fullscreen.png 1280x800 PASS
+check: (10,10) want 203040 got 203040 ok
+check: (450,260) want ff0000 got ff0000 ok
+check: (530,340) want 00ff00 got 00ff00 ok
+check: (810,520) want 00ff00 got 00ff00 ok
+check: (850,540) want 203040 got 203040 ok
+check: build/ws105-p011/criteria/c9-p052/back.png 1280x800 PASS
+direct presents: 0
+vulkan imports: 12
+compose frames: 220
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=638 at_ms=45823
+ZWL PERF compose frames=30 draw_ms=105.01 (acquire 23.01 submit+present 64.66) frame_ms=115.43
+ZWL PERF compose frames=67 draw_ms=57.37 (acquire 12.63 submit+present 33.32) frame_ms=58.08
+ZWL PERF compose frames=46 draw_ms=61.94 (acquire 18.72 submit+present 32.93) frame_ms=107.21
+ZWL PERF compose frames=60 draw_ms=61.72 (acquire 19.53 submit+present 32.75) frame_ms=72.30
+p052: PASS

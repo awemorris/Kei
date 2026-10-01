@@ -1,0 +1,5 @@
+plan/tools/keiland-linux/vk-chain-test.c:12:9: error: "_GNU_SOURCE" redefined [-Werror]
+   12 | #define _GNU_SOURCE
+      |         ^~~~~~~~~~~
+<command-line>: note: this is the location of the previous definition
+cc1: all warnings being treated as errors

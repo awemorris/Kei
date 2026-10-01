@@ -1,0 +1,68 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=94
+ZWL STARTUP step=vulkan-objects-arrow ms=3
+ZWL STARTUP step=wallpaper-picture ms=8
+ZWL STARTUP step=wallpaper ms=36
+ZWL STARTUP step=glyphs-text ms=9
+ZWL STARTUP step=glyphs-icons ms=2
+ZWL STARTUP step=glyphs-mark ms=18
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=30
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=164 at_ms=1549646
+ZWL INPUT device=/dev/input/event3 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event2 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL STARTUP step=input ms=66 at_ms=1549712
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=1549712
+ZWL STARTUP step=socket ms=0 at_ms=1549712
+ZWL CLIENT client=1 fd=17 ime=1
+ZWL IME started pid=2964 client=1
+ZWL READY socket=/run/wayland-keiland width=1280 height=800 timeout_ms=18446744073709551615 pid=2949
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL NETWORK state reachable=0 connected=1 kind=wired interface=enp0s5 wifi=absent ssid=
+ZWL VOLUME reachable=1 device=1
+ZWL DESKTOP start pid=2965 command=/opt/keiland/bin/files --desktop at_ms=1549726
+ZWL STARTUP step=output-display ms=1
+KEI-IME LANGUAGE id=direct
+ZWL STARTUP step=output-pipelines ms=15
+ZWL STARTUP step=output-swapchain ms=6
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=22 at_ms=1549748
+ZWL GLASS desktops x=817 step=46 width=40
+ZWL NETWORK icon x=1061 y=3 width=30 height=28
+ZWL VOLUME icon x=1028 y=3 width=30 height=28
+ZWL CLIENT client=2 fd=24
+ZWL IME language=direct
+ZWL NETWORK state reachable=1 connected=1 kind=wifi interface=wlan0 wifi=connected ssid=keiland-test
+KEI-IME READY languages=2
+ZWL DESKTOP role client=2 surface=8 x=0 y=34 width=1280 height=766
+ZFILES DESKTOP configure x=0 y=34 width=1280 height=766
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZWL DESKTOP ack serial=2
+ZFILES LOCATION kind=folder path=/root/Desktop items=0 error=0
+ZFILES DESKTOP layout saved=0 error=0
+ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=1549852 newest_age_ms=-1
+ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+ZWL DESKTOP drawn at_ms=1549886
+ZFILES MENU context-only
+ZFILES DESKTOP startup entered_ms=1549736 fonts=13 instance=41 window=25 present=31 app=1 canvas=0 draw=5 shown=34 menus=14
+ZFILES READY width=1280 height=766 token=-
+ZWL CLEANUP client=2 objects=19 unread_fds=0
+ZWL DESKTOP gone client=2
+ZWL IME lost pid=2964
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+ZFILES DONE reason=disconnected
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=4 error=0 cleanup_failed=0 pid=2949 input_events=0 seat_events=2 at_ms=1550278

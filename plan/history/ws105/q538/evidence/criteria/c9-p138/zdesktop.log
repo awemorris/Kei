@@ -1,0 +1,20 @@
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL CORNER press source=pointer x=1272 y=6
+ZWL CORNER armed ms=33
+ZWL CORNER commit via=distance progress=200
+ZWL CORNER notes launch pid=51
+NOTES START width=1280 height=800 fullscreen=1 pages=1 strokes=0 path=/root/Documents/Notes/note-20261001-123916.pdf
+NOTES LAYOUT window=1280x800 page=392,84,494,700 scale=0.8315
+ZWL MAP client=1 surface=14 x=0 y=0
+ZWL CORNER launch expired
+ZWL WINDOW unfullscreen surface=14 x=12 y=98 placed=0
+NOTES LAYOUT window=1024x690 page=303,84,417,590 scale=0.7008
+ZWL WINDOW centred surface=14 x=128 y=98 width=1024 height=690
+ZWL GLASS moved surface=14 x=228 y=158
+ZWL CORNER press source=pointer x=1272 y=6
+ZWL CORNER armed ms=33
+ZWL CORNER commit via=distance progress=200
+ZWL CORNER notes surface=14 raise fullscreen
+NOTES LAYOUT window=1280x800 page=392,84,494,700 scale=0.8315
+ZWL WINDOW unfullscreen surface=14 x=228 y=98 placed=1
+NOTES LAYOUT window=1024x690 page=303,84,417,590 scale=0.7008

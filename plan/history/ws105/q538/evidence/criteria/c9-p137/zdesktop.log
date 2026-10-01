@@ -1,0 +1,10 @@
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL GLASS desktops x=819 step=46 width=40
+ZWL MAP client=1 surface=8 x=440 y=293
+ZWL MAP client=2 surface=8 x=488 y=341
+ZWL MAP client=3 surface=8 x=488 y=341
+ZWL GLASS desktop=2 via=key
+ZWL GLASS desktop settled desktop=2 windows=0
+ZWL MAP client=4 surface=8 x=440 y=293
+ZWL GLASS desktop=1 via=key
+ZWL GLASS desktop settled desktop=1 windows=1

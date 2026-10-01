@@ -1,0 +1,6 @@
+fragmented/interleaved/fd-boundaries dbus-wire: PASS expected=0 signals=2 fd_before=5 fd_after=4 
+undeclared-missing-right dbus-wire: PASS expected=71 signals=0 fd_before=5 fd_after=4 
+oversized-body dbus-wire: PASS expected=75 signals=0 fd_before=5 fd_after=4 
+partial-frame-right/EOF dbus-wire: PASS expected=32 signals=0 fd_before=5 fd_after=4 
+ancillary-overflow dbus-wire: PASS expected=71 signals=0 fd_before=5 fd_after=4 
+dbus-wire: ALL PASS

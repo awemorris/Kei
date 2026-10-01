@@ -1,0 +1,1 @@
+8589934592 1790856307 /home/awe/zedBSD-claude1/build/ws105-p011/guest/guest.img

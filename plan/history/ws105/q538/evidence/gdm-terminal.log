@@ -1,0 +1,3 @@
+USER         PID COMMAND
+kei         3137 /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
+kei         3447 /opt/keiland/bin/terminal

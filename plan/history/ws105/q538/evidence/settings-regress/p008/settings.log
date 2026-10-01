@@ -1,0 +1,88 @@
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS PAGE home
+ZSETTINGS NETWORK open links=2 dns=1 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=home
+ZSETTINGS MENU ready items=20
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=1 last=Settings sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS GLASS panels count=2
+ZSETTINGS READY width=1180 height=690 glass=1 page=home
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=ue0 wifi=0 ssid=
+ZSETTINGS MENU item=1010 action=10 serial=7
+ZSETTINGS SEARCH focus
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=1 last=Settings sidebar=1 query= focus=1
+ZSETTINGS SEARCH query=w results=9
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=w focus=0
+ZSETTINGS LAYOUT page=home controls=9
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS RESULT index=2 x=296 y=229 width=844 height=52
+ZSETTINGS RESULT index=3 x=296 y=281 width=844 height=52
+ZSETTINGS RESULT index=4 x=296 y=333 width=844 height=52
+ZSETTINGS RESULT index=5 x=296 y=385 width=844 height=52
+ZSETTINGS RESULT index=6 x=296 y=437 width=844 height=52
+ZSETTINGS RESULT index=7 x=296 y=489 width=844 height=52
+ZSETTINGS RESULT index=8 x=296 y=541 width=844 height=52
+ZSETTINGS SEARCH query=wi results=4
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=wi focus=0
+ZSETTINGS LAYOUT page=home controls=4
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS RESULT index=2 x=296 y=229 width=844 height=52
+ZSETTINGS RESULT index=3 x=296 y=281 width=844 height=52
+ZSETTINGS SEARCH open page=wifi
+ZSETTINGS SEARCH end page=home
+ZSETTINGS PAGE wifi
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wi-Fi sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=wifi
+ZSETTINGS LAYOUT page=wifi controls=0
+ZSETTINGS MENU item=1010 action=10 serial=12
+ZSETTINGS SEARCH focus
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wi-Fi sidebar=1 query= focus=1
+ZSETTINGS SEARCH query=d results=12
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=d focus=0
+ZSETTINGS LAYOUT page=wifi controls=12
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS RESULT index=2 x=296 y=229 width=844 height=52
+ZSETTINGS RESULT index=3 x=296 y=281 width=844 height=52
+ZSETTINGS RESULT index=4 x=296 y=333 width=844 height=52
+ZSETTINGS RESULT index=5 x=296 y=385 width=844 height=52
+ZSETTINGS RESULT index=6 x=296 y=437 width=844 height=52
+ZSETTINGS RESULT index=7 x=296 y=489 width=844 height=52
+ZSETTINGS RESULT index=8 x=296 y=541 width=844 height=52
+ZSETTINGS RESULT index=9 x=296 y=593 width=844 height=52
+ZSETTINGS RESULT index=10 x=296 y=645 width=844 height=52
+ZSETTINGS RESULT index=11 x=296 y=697 width=844 height=52
+ZSETTINGS SEARCH query=dns results=2
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=dns focus=0
+ZSETTINGS LAYOUT page=wifi controls=2
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS SEARCH open page=network
+ZSETTINGS SEARCH end page=wifi
+ZSETTINGS PAGE network
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Network sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=network
+ZSETTINGS LAYOUT page=network controls=1
+ZSETTINGS CONTROL index=7 x=1042 y=341 width=88 height=32
+ZSETTINGS MENU item=1010 action=10 serial=20
+ZSETTINGS SEARCH focus
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Network sidebar=1 query= focus=1
+ZSETTINGS SEARCH query=z results=3
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=z focus=0
+ZSETTINGS LAYOUT page=network controls=3
+ZSETTINGS RESULT index=0 x=296 y=125 width=844 height=52
+ZSETTINGS RESULT index=1 x=296 y=177 width=844 height=52
+ZSETTINGS RESULT index=2 x=296 y=229 width=844 height=52
+ZSETTINGS SEARCH query=zzz results=0
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Search sidebar=1 query=zzz focus=0
+ZSETTINGS LAYOUT page=network controls=0
+ZSETTINGS SEARCH end page=network
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Network sidebar=1 query= focus=0
+ZSETTINGS LAYOUT page=network controls=1
+ZSETTINGS CONTROL index=7 x=1042 y=341 width=88 height=32

@@ -1,0 +1,140 @@
+Oct 01 12:47:37 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PING pong client=3 serial=53
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT input_revoked device=13:67 lease=retained
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT input_revoked device=13:66 lease=retained
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT input_revoked device=13:65 lease=retained
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT input_revoked device=13:64 lease=retained
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT pause device=13:67 type=force display=0
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT pause device=13:66 type=force display=0
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT pause device=13:64 type=force display=0
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: libvulkan-compat: restore CRTC failed: Permission denied
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL OUTPUT closed
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT pause device=226:0 type=force display=1
+Oct 01 12:47:40 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT pause device=13:65 type=force display=0
+Oct 01 12:47:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5001ms: passes=489 timeouts=436 | poll 91.5% work 7.2%
+Oct 01 12:47:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=17 draw_ms=19.21 (acquire 0.01 submit+present 18.93) frame_ms=21.10
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT resume device=13:67 display=0
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT resume device=13:66 display=0
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT resume device=13:64 display=0
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT resume device=226:0 display=1
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SEAT resume device=13:65 display=0
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL STARTUP step=output-display ms=1
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL STARTUP step=output-pipelines ms=0
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL STARTUP step=output-swapchain ms=7
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL STARTUP step=output-targets ms=0
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL OUTPUT open width=1280 height=800 images=3 format=44
+Oct 01 12:47:43 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL MODE window switch_ms=8 at_ms=1889956
+Oct 01 12:47:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=470 timeouts=469 | poll 95.5% work 3.1%
+Oct 01 12:47:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=37.51 (acquire 0.04 submit+present 37.24) frame_ms=65.99
+Oct 01 12:47:47 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PING pong client=3 serial=86
+Oct 01 12:47:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=493 timeouts=449 | poll 92.9% work 6.7%
+Oct 01 12:47:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=15 draw_ms=20.03 (acquire 0.01 submit+present 19.76) frame_ms=22.11
+Oct 01 12:47:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=482 timeouts=482 | poll 98.1% work 0.7%
+Oct 01 12:48:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=484 timeouts=484 | poll 98.3% work 1.3%
+Oct 01 12:48:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=30.64 (acquire 0.02 submit+present 30.35) frame_ms=32.75
+Oct 01 12:48:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=481 timeouts=481 | poll 97.9% work 0.7%
+Oct 01 12:48:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=487 timeouts=487 | poll 99.0% work 0.7%
+Oct 01 12:48:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=486 timeouts=486 | poll 98.9% work 0.6%
+Oct 01 12:48:21 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=482 timeouts=482 | poll 98.1% work 0.7%
+Oct 01 12:48:26 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=485 timeouts=485 | poll 98.8% work 0.7%
+Oct 01 12:48:31 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=484 timeouts=484 | poll 98.6% work 0.7%
+Oct 01 12:48:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=470 timeouts=470 | poll 95.9% work 0.7%
+Oct 01 12:48:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=479 timeouts=479 | poll 97.8% work 0.7%
+Oct 01 12:48:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=485 timeouts=485 | poll 98.8% work 0.7%
+Oct 01 12:48:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:48:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=482 timeouts=482 | poll 98.2% work 0.7%
+Oct 01 12:49:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=480 timeouts=480 | poll 97.7% work 1.2%
+Oct 01 12:49:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=27.28 (acquire 0.02 submit+present 26.99) frame_ms=29.50
+Oct 01 12:49:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=485 timeouts=485 | poll 98.9% work 0.7%
+Oct 01 12:49:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:49:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=485 timeouts=485 | poll 98.9% work 0.7%
+Oct 01 12:49:21 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:49:26 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=485 timeouts=485 | poll 98.8% work 0.7%
+Oct 01 12:49:31 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=487 timeouts=487 | poll 99.0% work 0.6%
+Oct 01 12:49:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=484 timeouts=484 | poll 98.5% work 0.6%
+Oct 01 12:49:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:49:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=486 timeouts=486 | poll 98.9% work 0.7%
+Oct 01 12:49:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:49:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=484 timeouts=484 | poll 98.5% work 0.6%
+Oct 01 12:50:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=479 timeouts=479 | poll 97.5% work 1.2%
+Oct 01 12:50:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=29.17 (acquire 0.02 submit+present 28.89) frame_ms=31.33
+Oct 01 12:50:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=485 timeouts=485 | poll 98.9% work 0.7%
+Oct 01 12:50:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5006ms: passes=482 timeouts=482 | poll 98.3% work 0.7%
+Oct 01 12:50:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=477 timeouts=477 | poll 97.2% work 0.7%
+Oct 01 12:50:21 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=477 timeouts=477 | poll 97.4% work 0.7%
+Oct 01 12:50:26 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=481 timeouts=481 | poll 98.1% work 0.7%
+Oct 01 12:50:31 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=482 timeouts=482 | poll 98.3% work 0.7%
+Oct 01 12:50:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=483 timeouts=483 | poll 98.5% work 0.7%
+Oct 01 12:50:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5005ms: passes=483 timeouts=483 | poll 98.5% work 0.7%
+Oct 01 12:50:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=475 timeouts=475 | poll 96.9% work 0.7%
+Oct 01 12:50:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=484 timeouts=484 | poll 98.5% work 0.7%
+Oct 01 12:50:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=485 timeouts=485 | poll 98.9% work 0.7%
+Oct 01 12:51:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=478 timeouts=478 | poll 97.4% work 1.3%
+Oct 01 12:51:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=29.52 (acquire 0.02 submit+present 29.24) frame_ms=31.65
+Oct 01 12:51:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=477 timeouts=477 | poll 97.1% work 0.7%
+Oct 01 12:51:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=486 timeouts=486 | poll 99.0% work 0.6%
+Oct 01 12:51:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5003ms: passes=485 timeouts=485 | poll 98.9% work 0.7%
+Oct 01 12:51:21 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:51:26 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=484 timeouts=484 | poll 98.6% work 0.7%
+Oct 01 12:51:31 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=481 timeouts=481 | poll 98.1% work 0.7%
+Oct 01 12:51:36 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5004ms: passes=485 timeouts=485 | poll 98.9% work 0.7%
+Oct 01 12:51:41 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=486 timeouts=486 | poll 99.0% work 0.7%
+Oct 01 12:51:46 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5008ms: passes=482 timeouts=482 | poll 98.2% work 0.7%
+Oct 01 12:51:51 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=479 timeouts=479 | poll 97.6% work 0.7%
+Oct 01 12:51:56 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5000ms: passes=483 timeouts=483 | poll 98.6% work 0.7%
+Oct 01 12:52:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5009ms: passes=484 timeouts=484 | poll 98.4% work 1.2%
+Oct 01 12:52:01 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=1 draw_ms=29.80 (acquire 0.02 submit+present 29.40) frame_ms=31.91
+Oct 01 12:52:06 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5010ms: passes=484 timeouts=484 | poll 98.6% work 0.7%
+Oct 01 12:52:11 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5007ms: passes=482 timeouts=482 | poll 98.2% work 0.7%
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME open via=launcher at_ms=2161771
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL FIRST_FRAME what=home-open frame=105 request_ms=2161771 ms=30
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME opened apps=10 pages=1 page=1 at_ms=2162081
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Files" x=280 y=274
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Notes" x=424 y=274
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Settings" x=568 y=274
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Terminal" x=712 y=274
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="PDF Viewer" x=856 y=274
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Image Viewer" x=1000 y=274
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Text Editor" x=280 y=426
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Model viewer" x=424 y=426
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Widget Demo" x=568 y=426
+Oct 01 12:52:15 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME icon name="Log Out" x=712 y=426
+Oct 01 12:52:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF 5002ms: passes=466 timeouts=463 | poll 93.6% work 6.0%
+Oct 01 12:52:16 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL PERF compose frames=7 draw_ms=38.17 (acquire 0.02 submit+present 37.54) frame_ms=40.32
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL SESSION logout
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL HOME close via=launch at_ms=2164237
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL FIRST_FRAME what=home-close frame=112 request_ms=2164237 ms=32
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL CLEANUP client=3 objects=37 unread_fds=0
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL CLEANUP client=2 objects=19 unread_fds=0
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL DESKTOP gone client=2
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3447]: ZTERM FAILED run=term operation=terminal_window_dispatch result=0 errno=32
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL IME lost pid=3165
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL CLEANUP client=1 objects=10 unread_fds=0
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3166]: ZFILES DONE reason=disconnected
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3165]: KEI-IME DONE
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3447]: ZTERM TAB closed run=term id=1 count=0
+Oct 01 12:52:17 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL OUTPUT closed
+Oct 01 12:52:18 keiland-guest /usr/libexec/gdm-wayland-session[3137]: ZWL EXIT frames=112 error=0 cleanup_failed=0 pid=3137 input_events=124 seat_events=129 at_ms=2164434
+Oct 01 12:52:18 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=102 pid=3974 comm="/usr/libexec/gnome-session-binary --autostart /usr")
+Oct 01 12:52:18 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.gnome.Shell.Screencast' requested by ':1.3' (uid=102 pid=3996 comm="/usr/bin/gnome-shell")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.3' (uid=102 pid=3996 comm="/usr/bin/gnome-shell")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.gnome.Shell.Notifications' requested by ':1.3' (uid=102 pid=3996 comm="/usr/bin/gnome-shell")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.gnome.Shell.Notifications'
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.11' (uid=102 pid=4095 comm="/usr/libexec/gsd-housekeeping")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.20' (uid=102 pid=4135 comm="/usr/libexec/gsd-sharing")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.gnome.Shell.Screencast'
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.24' (uid=102 pid=4190 comm="/usr/libexec/mutter-x11-frames")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.30' (uid=102 pid=4210 comm="/usr/libexec/xdg-desktop-portal")
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+Oct 01 12:52:19 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.30' (uid=102 pid=4210 comm="/usr/libexec/xdg-desktop-portal")
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.gnome.ScreenSaver' requested by ':1.10' (uid=102 pid=4069 comm="/usr/libexec/gsd-power")
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.gnome.ScreenSaver'
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.gnome.Settings.GlobalShortcutsProvider' requested by ':1.32' (uid=102 pid=4236 comm="/usr/libexec/xdg-desktop-portal-gnome")
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.gnome.Settings.GlobalShortcutsProvider'
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.30' (uid=102 pid=4210 comm="/usr/libexec/xdg-desktop-portal")
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+Oct 01 12:52:20 keiland-guest /usr/libexec/gdm-wayland-session[3971]: dbus-daemon[3971]: [session uid=102 pid=3971 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'

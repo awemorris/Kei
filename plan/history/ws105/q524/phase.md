@@ -4,14 +4,14 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q524 / q524-i01
 依存: WS104 の p001（header が `userland/desktop/keiland/`）・p003（libkeiland の `zedbsd/`）
 実行者: phase-runner（high）。`plan/tools/keiland-linux/` の script は main が merge する
 
 ## 目的
 
-決定 D1・D2。Linux の build を、zedBSD の build と完全に別の GNU make の file で作る（[design.md](../design.md) §2・§3）。この Phase では library と小さな部品だけを
+決定 D1・D2。Linux の build を、zedBSD の build と完全に別の GNU make の file で作る（[design.md](../../../ws105/design.md) §2・§3）。この Phase では library と小さな部品だけを
 build・install し、program（compositor・app）は後の Phase で足す。**`keiland-linux.mk` の検証済みの雛形が design §3.2 にある。** そのまま置く。
 
 ## 作る・変える file
@@ -106,3 +106,6 @@ Linux の独立 build の土台と、8 package の `Makefile.linux`（7 shared l
 
 
 実装 commit: `c1c9e48ea7ed636d62f3fb20e0c4179423d5a614`（WIP）。終了 UTC: 2026-10-01T06:10:50.723980+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+
+2026-10-01 archive locator correction: 初期archiveが保持していた元Phase基準の相対リンクを現在のWS/design/survey archiveへ補正。元のscope/outcome/日時は不変。

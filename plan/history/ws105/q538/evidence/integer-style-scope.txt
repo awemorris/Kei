@@ -1,0 +1,10 @@
+plan/tools/keiland-linux/display-probe.c
+plan/tools/keiland-linux/dmabuf-probe.c
+plan/tools/keiland-linux/network-probe.c
+plan/tools/keiland-linux/vk-chain-test.c
+plan/tools/keiland-linux/wsi-probe-client.c
+userland/desktop/libkeiland/linux/network-link-linux.c
+userland/desktop/libvulkan-compat/kms.c
+userland/desktop/libvulkan-compat/wsi-swapchain.c
+userland/desktop/libvulkan-compat/wsi-wayland.c
+userland/desktop/wayland/linux/gpu-linux.c

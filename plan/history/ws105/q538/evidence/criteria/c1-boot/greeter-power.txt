@@ -1,0 +1,2 @@
+33:ZWL GREETER powering=poweroff frame=4
+34:ZWL GREETER power=poweroff frames=2 ms=259

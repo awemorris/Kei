@@ -1,0 +1,13 @@
+boot: 46 moments; after the first picture: black 0, text 0; before it (firmware): black 6, text 0
+C1-boot: PASS
+shutdown: the machine went down (SSH no longer answers): 1
+shutdown: 30 moments in 40 s; black 0, text 0 before the end, black at the end 0
+C1-shutdown: PASS
+shutdown: the last picture (seen-020.png) against the greeter: card 14% changed, power buttons 11% changed
+C1-shutdown-picture: PASS
+33:ZWL GREETER powering=poweroff frame=4
+34:ZWL GREETER power=poweroff frames=2 ms=259
+C1-shutdown-order: PASS (the request went after the picture)
+C1-shutdown-qemu: PASS (QEMU ended)
+C1 RESULT boot_black=0 boot_text=0 shutdown_black=0 shutdown_text=0 shutdown_down=1 card_changed=14 buttons_changed=11 qemu_gone=1
+C1: PASS

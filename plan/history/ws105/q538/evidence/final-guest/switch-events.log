@@ -1,0 +1,120 @@
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-display ms=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5755]: KEI-IME LANGUAGE id=direct
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES DESKTOP configure x=0 y=34 width=1280 height=766
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES LOCATION kind=folder path=/home/kei/Desktop items=0 error=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES DESKTOP layout saved=0 error=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=2993086 newest_age_ms=-1
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES MENU context-only
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES DESKTOP startup entered_ms=2992996 fonts=3 instance=41 window=1 present=43 app=0 canvas=0 draw=2 shown=34 menus=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5756]: ZFILES READY width=1280 height=766 token=-
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-pipelines ms=6
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-swapchain ms=4
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-targets ms=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL OUTPUT open width=1280 height=800 images=3 format=44
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MODE window switch_ms=10 at_ms=2993001
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL GLASS desktops x=818 step=46 width=40
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL NETWORK icon x=1062 y=3 width=30 height=28
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL VOLUME icon x=1029 y=3 width=30 height=28
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IME language=direct
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5755]: KEI-IME READY languages=2
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL NETWORK state reachable=1 connected=1 kind=wired interface=enp0s5 wifi=disconnected ssid=
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL CLIENT client=2 fd=24
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL DESKTOP role client=2 surface=8 x=0 y=34 width=1280 height=766
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL DESKTOP ack serial=2
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+Oct 01 13:06:09 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL DESKTOP drawn at_ms=2993120
+Oct 01 13:06:11 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5004ms: passes=486 timeouts=471 | poll 97.1% work 2.2%
+Oct 01 13:06:11 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF compose frames=4 draw_ms=16.23 (acquire 0.02 submit+present 16.13) frame_ms=16.27
+Oct 01 13:06:16 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5007ms: passes=452 timeouts=452 | poll 97.3% work 0.6%
+Oct 01 13:06:21 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5003ms: passes=486 timeouts=486 | poll 99.1% work 0.7%
+Oct 01 13:06:26 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5003ms: passes=486 timeouts=486 | poll 99.1% work 0.6%
+Oct 01 13:06:31 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5009ms: passes=468 timeouts=468 | poll 98.0% work 0.6%
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME open via=launcher at_ms=3019581
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL FIRST_FRAME what=home-open frame=6 request_ms=3019581 ms=19
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME opened apps=10 pages=1 page=1 at_ms=3019862
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Files" x=280 y=274
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Notes" x=424 y=274
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Settings" x=568 y=274
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Terminal" x=712 y=274
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="PDF Viewer" x=856 y=274
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Image Viewer" x=1000 y=274
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Text Editor" x=280 y=426
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Model viewer" x=424 y=426
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Widget Demo" x=568 y=426
+Oct 01 13:06:33 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME icon name="Log Out" x=712 y=426
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5009ms: passes=464 timeouts=459 | poll 91.9% work 7.8%
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF compose frames=12 draw_ms=30.24 (acquire 0.01 submit+present 29.75) frame_ms=32.38
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME launch name=Terminal pid=5864
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME close via=launch at_ms=3023046
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL FIRST_FRAME what=home-close frame=17 request_ms=3023046 ms=43
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL CLIENT client=3 fd=25
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL INSET create client=3 inset=20 toplevel=16
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL EDIT create client=3 edit=24 toplevel=16
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL BOUNDS client=3 surface=14 width=1256 height=690
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL CONFIGURE client=3 surface=14 serial=3 width=0 height=0 fullscreen=0
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT client=3 pointer=1 keyboard=0 touch=0
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT client=3 pointer=1 keyboard=1 touch=0
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME closed at_ms=3023302
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IMPORT client=3 buffer=39 width=916 height=632 bytes=2347008
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IMPORT client=3 buffer=41 width=916 height=632 bytes=2347008
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL IMPORT client=3 buffer=43 width=916 height=632 bytes=2347008
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU commit client=3 menu=47 serial=1 items=30 generation=1
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU set client=3 place=48 menu=47
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU commit client=3 menu=47 serial=2 items=30 generation=2
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM MENU ready items=30
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM TAB active id=1
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM TAB new run=term id=1 count=1
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM TABS count=1 active=1 mode=0
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM TITLE tab=1 title=Terminal
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL TITLEBAR create client=3 titlebar=52 toplevel=16
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL EDIT state client=3 edit=24 actions=0xff flags=0xd
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL TITLEBAR commit client=3 titlebar=52 serial=1 mode=0 controls=0 tabs=1 generation=1
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MAP client=3 surface=14 x=182 y=127
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL HOME launched waited_ms=344 at_ms=3023390
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL GLASS launch surface=14 from=676,238 to=182,127 size=916x632
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM CLIPBOARD selection text=0
+Oct 01 13:06:36 keiland-guest /usr/libexec/gdm-wayland-session[5865]: ZTERM PRIMARY offer text=0
+Oct 01 13:06:37 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU bar client=3 surface=14 where=floating item=1 offset=127 top=75 width=55 height=44
+Oct 01 13:06:37 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU bar client=3 surface=14 where=floating item=2 offset=184 top=75 width=47 height=44
+Oct 01 13:06:37 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU bar client=3 surface=14 where=floating item=3 offset=233 top=75 width=55 height=44
+Oct 01 13:06:37 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU bar client=3 surface=14 where=floating item=4 offset=290 top=75 width=76 height=44
+Oct 01 13:06:37 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MENU bar client=3 surface=14 where=floating item=5 offset=368 top=75 width=53 height=44
+Oct 01 13:06:41 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PING pong client=3 serial=8
+Oct 01 13:06:41 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5017ms: passes=456 timeouts=429 | poll 88.6% work 11.0%
+Oct 01 13:06:41 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF compose frames=22 draw_ms=23.53 (acquire 0.01 submit+present 23.25) frame_ms=25.00
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT input_revoked device=13:67 lease=retained
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT input_revoked device=13:66 lease=retained
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT input_revoked device=13:65 lease=retained
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT input_revoked device=13:64 lease=retained
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT pause device=13:67 type=force display=0
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL OUTPUT closed
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT pause device=226:0 type=force display=1
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT pause device=13:66 type=force display=0
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT pause device=13:65 type=force display=0
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT pause device=13:64 type=force display=0
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: libvulkan-compat: restore CRTC failed: Permission denied
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5009ms: passes=493 timeouts=432 | poll 90.5% work 8.2%
+Oct 01 13:06:46 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF compose frames=20 draw_ms=18.64 (acquire 0.01 submit+present 18.43) frame_ms=20.48
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT resume device=13:67 display=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT resume device=226:0 display=1
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT resume device=13:66 display=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT resume device=13:65 display=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL SEAT resume device=13:64 display=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-display ms=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-pipelines ms=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-swapchain ms=7
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL STARTUP step=output-targets ms=0
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL OUTPUT open width=1280 height=800 images=3 format=44
+Oct 01 13:06:49 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL MODE window switch_ms=7 at_ms=3035764
+Oct 01 13:06:51 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5002ms: passes=475 timeouts=474 | poll 96.6% work 3.2%
+Oct 01 13:06:51 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF compose frames=1 draw_ms=35.34 (acquire 0.04 submit+present 35.11) frame_ms=40.07
+Oct 01 13:06:54 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PING pong client=3 serial=53
+Oct 01 13:06:56 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF 5006ms: passes=452 timeouts=401 | poll 92.4% work 7.3%
+Oct 01 13:06:56 keiland-guest /usr/libexec/gdm-wayland-session[5733]: ZWL PERF compose frames=18 draw_ms=18.35 (acquire 0.01 submit+present 18.12) frame_ms=20.15

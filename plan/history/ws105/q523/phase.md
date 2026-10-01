@@ -4,19 +4,19 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q523 / q523-i01
 依存: なし
 実行者: phase-runner（high）か phase-runner-mid。道具は `plan/tools/keiland-linux/`（main の範囲。subagent は自分の worktree で作り、main が merge して Tools 節に登録する）
 
 ## 判断（2026-10-01）
 
-ユーザーは Linux guest の起動を SSH の疎通と QMP の `screendump` の PNG で確認する方法（[WS105 D25](../ws.md)）を許可した。接続はホストの `127.0.0.1:2225` から QEMU の host forwarding を経て、この Phase で作る Debian 13 guest の port 22 に届く。外部の SSH server は使わない。AGENTS.md と Guardrail に WS105 限定の例外を記録した。Queue は未設定。
+ユーザーは Linux guest の起動を SSH の疎通と QMP の `screendump` の PNG で確認する方法（[WS105 D25](../../../ws105/ws.md)）を許可した。接続はホストの `127.0.0.1:2225` から QEMU の host forwarding を経て、この Phase で作る Debian 13 guest の port 22 に届く。外部の SSH server は使わない。AGENTS.md と Guardrail に WS105 限定の例外を記録した。Queue は未設定。
 
 ## 目的
 
-Keiland の Linux の compositor・app・gdm・WiFi・音を試す場所を作る（決定 D23・D25、[design.md](../design.md) §7）。host（この開発機）の画面と入力は使わない。
-この Phase は Keiland の code を書かない。**手本は [survey/build-guest.sh](../survey/build-guest.sh)**（2026-10-01 に通った物。減らした package の組で 60 秒、KVM で起動し 9 秒で SSH）。
+Keiland の Linux の compositor・app・gdm・WiFi・音を試す場所を作る（決定 D23・D25、[design.md](../../../ws105/design.md) §7）。host（この開発機）の画面と入力は使わない。
+この Phase は Keiland の code を書かない。**手本は [survey/build-guest.sh](../q538/survey/build-guest.sh)**（2026-10-01 に通った物。減らした package の組で 60 秒、KVM で起動し 9 秒で SSH）。
 
 ## 作る物（`plan/tools/keiland-linux/`）
 
@@ -119,3 +119,6 @@ Debian 13 の base guest と操作の道具を作成。`guest.sh` は小さな s
 
 
 実装 commit: `39a0941c272ae3da5091efcba14907610ba5683b`（WIP）。終了 UTC: 2026-10-01T06:04:15.180248+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+
+2026-10-01 archive locator correction: 初期archiveが保持していた元Phase基準の相対リンクを現在のWS/design/survey archiveへ補正。元のscope/outcome/日時は不変。

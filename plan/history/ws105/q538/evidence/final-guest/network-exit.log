@@ -1,0 +1,10 @@
+state reachable=1 wifi=4 ssid=keiland-test
+network-probe: FAIL errno=110 Connection timed out
+ZWL CLEANUP client=2 objects=19 unread_fds=0
+ZWL DESKTOP gone client=2
+ZWL IME lost pid=5130
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+ZFILES DONE reason=disconnected
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=1078 error=0 cleanup_failed=0 pid=5112 input_events=4 seat_events=8 at_ms=2838970

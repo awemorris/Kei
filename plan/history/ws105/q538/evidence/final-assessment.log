@@ -1,0 +1,10 @@
+Linux GPU per-client {'2': 1, '3': 600, '4': 20, '5': 20, '6': 20, '7': 20, '8': 20} {'2': 3, '3': 3, '4': 3, '5': 3, '6': 3, '7': 3, '8': 3} pixels PASS; initial aggregate701/21 included desktop Files and was not a production failure
+linux-build-host.log PASS
+dbus-wire-ordinary.log PASS
+dbus-wire-sanitize.log PASS
+target-remaining.log PASS
+guest-final.log PASS
+gpu-window-final.log PASS
+final-guest/network-probe.log PASS
+final-guest/cleanup.log PASS
+q538 mandatory gates satisfied; C2/p076 original FAIL accepted only by explicit BUG-125 tracking decision; own Linux overlay/QEMU stopped

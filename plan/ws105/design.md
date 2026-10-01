@@ -2,7 +2,7 @@
 
 2026-10-01 に Q1 が、ユーザーとの検討（[ws.md](ws.md) の「決定と理由」D1〜D25）と code の調査から書いた。**決定の理由は ws.md に、仕組みはこの文書にある。**
 **改訂 2（2026-10-01）**: 6 つの survey（zedBSD の command、WS104 の編集、compositor の編集、host の試しの compile、host の Vulkan・dma-buf・ELF の実験、Linux の guest・protocol）と
-design-reviewer の敵対的な見直し（blocker 3・major 15）の結果を入れた。実験の code は [survey/](survey/README.md)。
+design-reviewer の敵対的な見直し（blocker 3・major 15）の結果を入れた。実験の code は [survey/](../history/ws105/q538/survey/README.md)。
 code の行番号は 2026-10-01 の main（`0eb5e118`）の物で、WS104 の後は変わっている。WS104 が作る境界（`zwl-gpu.h`・`zwl-input.h`・`zwl-os.h`・
 `libkeiland/zedbsd/`・`userland/desktop/paths.h`・`userland/desktop/keiland/`）を前提にする。
 
@@ -301,7 +301,7 @@ clang 19 は、上の error（header・`stdio.h`）の他に警告を 1 つも�
 ## 4. libvulkan-compat（Linux の app が使う libvulkan）
 
 **この節が WS105 で一番わかりにくい仕組みである。** 実装する前に全部を読むこと。迷ったら §4.2 の図に戻る。
-2026-10-01 の改訂 2: design-reviewer と host の実験（[survey/](survey/README.md)）の結果で、§4.3・§4.6〜§4.11 を直した。特に「後段を `RTLD_DEEPBIND` で開く」（§4.11、D10 の改訂）。
+2026-10-01 の改訂 2: design-reviewer と host の実験（[survey/](../history/ws105/q538/survey/README.md)）の結果で、§4.3・§4.6〜§4.11 を直した。特に「後段を `RTLD_DEEPBIND` で開く」（§4.11、D10 の改訂）。
 
 ### 4.1 一言で
 
@@ -641,8 +641,8 @@ compositor の seat（§5.1）は、自分が開いた DRM の device の path �
 | --- | --- |
 | `Makefile.linux` | Linux の build だけ（zedBSD の `Makefile` は**作らない**。zedBSD では build しない、D4） |
 | `README.md` | この節の要約と、§4.2 の図 |
-| `functions.tsv` | 全ての関数の名前と種類（F・I・O・N）、export するか。`plan/ws105/survey/vkprotos.sh` の出力（host の `/usr/include/vulkan/vulkan_core.h` の `VK_VERSION_1_0`〜`VK_VERSION_1_4`、1.4.309 で 137・28・13・37・19 個）に種類の列を足した物。**生成した後に手で直す file** として source に入れる（header の版が変わったら作り直して差を見る） |
-| `gen-forward.sh` | `functions.tsv` と host の `vulkan_core.h` から `forward.inc`（F の関数の定義と dlsym の表）と `exports.map` を作る sh の script。build の時に走らせる（生成物は `$(KEILAND_LINUX_BUILD)/gen/libvulkan-compat/` に置き、source に入れない）。手本: `plan/ws105/survey/gen-forward.sh` |
+| `functions.tsv` | 全ての関数の名前と種類（F・I・O・N）、export するか。`plan/history/ws105/q538/survey/vkprotos.sh` の出力（host の `/usr/include/vulkan/vulkan_core.h` の `VK_VERSION_1_0`〜`VK_VERSION_1_4`、1.4.309 で 137・28・13・37・19 個）に種類の列を足した物。**生成した後に手で直す file** として source に入れる（header の版が変わったら作り直して差を見る） |
+| `gen-forward.sh` | `functions.tsv` と host の `vulkan_core.h` から `forward.inc`（F の関数の定義と dlsym の表）と `exports.map` を作る sh の script。build の時に走らせる（生成物は `$(KEILAND_LINUX_BUILD)/gen/libvulkan-compat/` に置き、source に入れない）。手本: `plan/history/ws105/q538/survey/gen-forward.sh` |
 | `backend.c` | §4.3（後段を開く、確かめ） |
 | `dispatch.c` | F の表の初期化、`vkGetInstanceProcAddr`・`vkGetDeviceProcAddr`（§4.7）、再入の検出（§4.11） |
 | `instance.c` | `vkCreateInstance`・`vkDestroyInstance`・instance の拡張の一覧（§4.6）、instance の記録 |
@@ -812,7 +812,7 @@ WS104 の後、compositor の OS の部分は `wayland/zedbsd/` の file と、�
 
 ### 5.5 logind と pause・resume（p009）
 
-**D-Bus**（`dbus-linux.c`。手本は `plan/ws105/survey/dbusprobe.py`、host の system bus で通った物）:
+**D-Bus**（`dbus-linux.c`。手本は `plan/history/ws105/q538/survey/dbusprobe.py`、host の system bus で通った物）:
 
 1. `socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC)` で `/run/dbus/system_bus_socket` に接続。
 2. **NUL の 1 byte を送る**（無いと dbus-daemon は切る）。
@@ -967,7 +967,7 @@ WS104 の p003 で、libkeiland の OS の部分は `libkeiland/zedbsd/` に移�
   `Master Playback Volume`・`Master Playback Switch`・`Capture Volume`・`Capture Switch` を持ち、範囲は 0〜74 と推定、2026-10-01 の survey）。`keiland_audio_state` の音量（0〜100）に線形で写す。
 - struct の大きさ（amd64、`<sound/asound.h>` 6.12）: `snd_ctl_elem_id` 64・`snd_ctl_elem_list` 80・`snd_ctl_elem_info` 272・`snd_ctl_elem_value` 1224（整数の値は `long`）・
   `snd_ctl_event` 72 byte。event は `read()` で `struct snd_ctl_event{int type; data.elem{unsigned mask; struct snd_ctl_elem_id id;}}`、mask は VALUE 1・INFO 2・ADD 4・TLV 8・REMOVE ~0。
-  `SNDRV_CTL_IOCTL_SUBSCRIBE_EVENTS` の引数は int（1 で購読）。手本: `plan/ws105/survey/asnd.c`。
+  `SNDRV_CTL_IOCTL_SUBSCRIBE_EVENTS` の引数は int（1 で購読）。手本: `plan/history/ws105/q538/survey/asnd.c`。
 - `keiland_audio_fd`: control の fd（event が来ると readable）。
 - `keiland_audio_feedback`（確かめの音）: PCM の再生が要る（`/dev/snd/pcmC<N>D<M>p`、`SNDRV_PCM_IOCTL_*`）。**WS105 では作らず、0 を返して鳴らさない**
   （`keiland.h` の約束「an audiod without it stays silent」の範囲。§8）。
@@ -990,7 +990,7 @@ WS104 の p003 で、libkeiland の OS の部分は `libkeiland/zedbsd/` に移�
   SSH が通ることと QMP の `screendump` の PNG で行う（D25。boot-test.sh は zedBSD の image の UEFI の起動の物で、Linux の guest には使えない）。
   guest の serial の console の log は残すが判定に使わない。
 
-### 7.2 Linux の guest（p001 で作る。手本は `plan/ws105/survey/build-guest.sh`、2026-10-01 に通った物）
+### 7.2 Linux の guest（p001 で作る。手本は `plan/history/ws105/q538/survey/build-guest.sh`、2026-10-01 に通った物）
 
 **image の作り方**（root は要らない。host の `/etc/subuid` に `awe:100000:65536` がある）:
 
@@ -1061,7 +1061,7 @@ process は SSH が切れても残る。`chvt N` で VT を切り替える。
      -Wl,--no-as-needed -Lbuild/keiland-linux/lib -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
   env -u WAYLAND_DISPLAY -u DISPLAY KEILAND_DRM_DEVICE=none LD_LIBRARY_PATH=build/keiland-linux/stage/opt/keiland/lib build/keiland-linux/test/vk-chain-test
   ```
-- `dmabuf-probe`（試験用の Wayland server、**host の libwayland-server と wayland-scanner を使う。試験の道具だけで、出荷しない**。手本 `plan/ws105/survey/dmabuf-probe.c`）:
+- `dmabuf-probe`（試験用の Wayland server、**host の libwayland-server と wayland-scanner を使う。試験の道具だけで、出荷しない**。手本 `plan/history/ws105/q538/survey/dmabuf-probe.c`）:
   - global: `wl_compositor`（v4）、`zwp_linux_dmabuf_v1`（v3。`format` と `modifier` の event で `ARGB8888`・`XRGB8888` の `LINEAR` を告げる）。
   - commit された dma-buf の buffer ごとに: plane の fd に `DMA_BUF_IOCTL_EXPORT_SYNC_FILE(READ)` をかけ、得た sync_file を `SYNC_IOC_FILE_INFO`（`<linux/sync_file.h>`）で読んで
     fence の数を数え、`poll` で待ち、`mmap`（LINEAR だけ）して中央の画素を読み、`PROBE frame=N pixel=0xAARRGGBB fences=F waited_ms=M` を stdout に出し、`wl_buffer.release` を送る。
@@ -1143,11 +1143,11 @@ WS105 は共通の source（compositor の `protocol.c`・`main.c`・`display.c`
 
 ### p003 の実装時の確認（q525）
 
-V1・V2 verified: 既定の backend → compat binding 0、opt-out の chain も PASS、同じ SONAME の別 backend で 1 MiB fill / copy / fence と全 word 一致。明示した backend の壊れた指定は authoritative として診断・失敗し、既定候補で隠さない（Phase の自己参照 / missing-backend の検証を保持）。pthread key の thread-local record によって必要な lifetime / 再入検出を保ち、NEEDED は glibc runtime の libc.so.6 だけ。fake backend の直接再帰は gcc が local alias にしたため、extern assembler alias から vkCreateInstance@PLT を呼ぶ試験に直し、診断と exit134 を確認。詳細は [p003](phase003/phase.md)。
+V1・V2 verified: 既定の backend → compat binding 0、opt-out の chain も PASS、同じ SONAME の別 backend で 1 MiB fill / copy / fence と全 word 一致。明示した backend の壊れた指定は authoritative として診断・失敗し、既定候補で隠さない（Phase の自己参照 / missing-backend の検証を保持）。pthread key の thread-local record によって必要な lifetime / 再入検出を保ち、NEEDED は glibc runtime の libc.so.6 だけ。fake backend の直接再帰は gcc が local alias にしたため、extern assembler alias から vkCreateInstance@PLT を呼ぶ試験に直し、診断と exit134 を確認。詳細は [p003](../history/ws105/q525/phase.md)。
 
 ### p004 検証の改訂（q526 後、2026-10-01）
 
-[Phase 改訂](phase004/phase.md): kernel 6.12 の export は空の reservation に stub を補い、lavapipe の完了済み payload も stub と観測された。raw fences≥1 / fallback=0 の区別は成立しない。raw 値を保持し、試験 observer の IMPORT_SYNC_FILE の成功/ENOTTY と CPU fence wait、全 frame 実画素を受け入れの根拠とする。D6 の production API/同期方式に変更無し。実機 GPU の非同期待ちは従来通り未実施。
+[Phase 改訂](../history/ws105/q527/phase.md): kernel 6.12 の export は空の reservation に stub を補い、lavapipe の完了済み payload も stub と観測された。raw fences≥1 / fallback=0 の区別は成立しない。raw 値を保持し、試験 observer の IMPORT_SYNC_FILE の成功/ENOTTY と CPU fence wait、全 frame 実画素を受け入れの根拠とする。D6 の production API/同期方式に変更無し。実機 GPU の非同期待ちは従来通り未実施。
 
 ## Terminal 起動の bounded 補完（2026-10-01、Q1）
 
@@ -1168,3 +1168,8 @@ q534 の gdm 起動で kms.c の無条件 SET_MASTER が logind 共有fdに errn
 再検証: gcc/clang warning0・ELF/source/header・host chain/interpose/Wayland。guest rootのseat fd/direct 3色、oldSwapchain・console復元。q534のLinux logind sourceをfixture contextとして一般user gdm起動が表示できることを確認（p009のapp/VT/LogOut受け入れは次attempt）。偽の非masterfdはacquireで拒否し、callerfdはcloseされない。p009はp008と修復p005を依存として、同じ全基準で再実行。p006〜p008のroot経路で検証した受け入れは維持し、p011でfinalsourceを再確認。
 
 仕様の根拠: [Linux drm_auth.c](https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/gpu/drm/drm_auth.c) / [drm_ioctl.c](https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/gpu/drm/drm_ioctl.c)。AUTH_MAGICはcurrent masterを要求し、存在しないmagic0はEINVAL。SET_MASTERは共有fdのPID/CAP_SYS_ADMIN条件によりEACCES。read-only masterprobeはlibdrmをlinkせず同じkernel ABIで行う。
+
+
+## WS105完了時の所在地（2026-10-01）
+
+既存D1〜D25の設計を実装・検証し、WS105はcompleted。全文規約と最終sourceの証拠・制限は[q538 conformance](../history/ws105/q538/conformance.md)、各Phase/過去のuncleared結果は[履歴索引](../history/ws105/index.md)。surveyは検討時の実験としてarchiveへ移動し、継続する試験はplan/tools/keiland-linuxへ移した。旧scope snapshotと設計の判断を保存し、実装していない§8の範囲を完了とはしない。

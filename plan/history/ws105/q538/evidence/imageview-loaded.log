@@ -1,0 +1,10 @@
+IMAGEVIEW PRESENT smooth=1 max-dimension=16384
+IMAGEVIEW GLASS on
+IMAGEVIEW IMAGE path=/tmp/p011-picture.png format=PNG width=1280 height=800 file=1280x800 levels=4 frames=0 ms=62
+IMAGEVIEW SHOW path=/tmp/p011-picture.png index=0 count=1 width=1280 height=800 frames=0 error=0
+IMAGEVIEW MENU ready items=24
+IMAGEVIEW TITLEBAR ready controls=8
+IMAGEVIEW GLASS panels count=2
+IMAGEVIEW READY width=1000 height=690 glass=1 images=1
+IMAGEVIEW GLASS panels count=1
+2371

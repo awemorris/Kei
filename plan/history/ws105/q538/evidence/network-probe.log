@@ -1,0 +1,8 @@
+network-probe: scan secured AP PASS
+network-probe: join wifi=4 kind=2 ssid=keiland-test PASS
+network-probe: link lo up=1 running=1 ip=127.0.0.1 mtu=65536 rx=0 tx=0
+network-probe: link enp0s5 up=1 running=1 ip=10.0.2.15 mtu=1500 rx=102039102 tx=1493832
+network-probe: link wlan0 up=1 running=1 ip=192.0.2.2 mtu=1500 rx=282 tx=392
+network-probe: link wlan1 up=1 running=1 ip= mtu=1500 rx=338 tx=1138
+network-probe: link hwsim0 up=0 running=0 ip= mtu=1500 rx=0 tx=0
+network-probe: PASS

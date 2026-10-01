@@ -1,0 +1,23 @@
+log: ZWL PREFERENCES open ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p007/start.png
+log: ZWL PREFERENCES key=wallpaper applied ok
+log: ZWL GLASS wallpaper path=/usr/share/keiland/wallpaper.ppm ms=[0-9]+ ok
+ZWL GLASS wallpaper path=/usr/share/keiland/wallpaper.ppm ms=106
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p007/wallpaper.png
+log: ZWL PREFERENCES key=window.opacity applied value=85 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p007/opacity.png
+log: ZWL PREFERENCES key=pointer.speed applied value=200 ok
+log: ZWL PREFERENCES key=pointer.natural applied value=1 ok
+log: ZWL PREFERENCES key=keyboard.repeat.rate applied value=40 ok
+log: ZWL PREFERENCES key=keyboard.repeat.delay applied value=250 ok
+log: ZWL GLASS wallpaper path=- ms= ok
+log: ZWL PREFERENCES key=window.opacity applied value=100 ok
+log: ZWL PREFERENCES key=pointer.speed applied value=100 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p007/removed.png
+log: ZWL PREFERENCES key=wallpaper applied ok
+log: ZWL PREFERENCES open ok
+log: no ZWL GLASS wallpaper path= ok
+log: no ZWL GLASS no wallpaper ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p007/restart.png
+zdesktop: no ERROR
+settings-p007: PASS

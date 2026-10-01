@@ -1,0 +1,31 @@
+ZWL VOLUME icon x=1032 y=3 width=30 height=28
+ZWL VOLUME reachable=1 device=1
+ZWL VOLUME popup open x=920 y=40 width=260 height=116 slider=81 mute=115 sound=1
+ZWL VOLUME set value=25 muted=0 via=slider final=0 at_ms=39966
+ZWL VOLUME feedback at_ms=39966 via=slider
+ZWL VOLUME set value=41 muted=0 via=slider final=0 at_ms=40207
+ZWL VOLUME set value=58 muted=0 via=slider final=0 at_ms=40337
+ZWL VOLUME feedback at_ms=40337 via=slider
+ZWL VOLUME set value=75 muted=0 via=slider final=0 at_ms=40604
+ZWL VOLUME feedback at_ms=40604 via=slider
+ZWL VOLUME set value=75 muted=0 via=slider final=1 at_ms=40870
+ZWL VOLUME feedback at_ms=40870 via=slider
+ZWL VOLUME saved value=75 muted=0 error=0
+ZWL VOLUME set value=75 muted=1 via=mute final=1 at_ms=46739
+ZWL VOLUME set value=75 muted=0 via=mute final=1 at_ms=47638
+ZWL VOLUME feedback at_ms=47638 via=mute
+ZWL VOLUME saved value=75 muted=0 error=0
+ZWL VOLUME popup close via=outside
+ZWL VOLUME popup open x=920 y=40 width=260 height=116 slider=81 mute=115 sound=1
+ZWL VOLUME popup close via=key
+ZWL VOLUME set value=70 muted=0 via=wheel final=1 at_ms=57447
+ZWL VOLUME feedback at_ms=57447 via=wheel
+ZWL VOLUME set value=65 muted=0 via=wheel final=1 at_ms=58135
+ZWL VOLUME feedback at_ms=58135 via=wheel
+ZWL VOLUME set value=60 muted=0 via=wheel final=1 at_ms=58829
+ZWL VOLUME feedback at_ms=58829 via=wheel
+ZWL VOLUME set value=65 muted=0 via=wheel final=1 at_ms=59530
+ZWL VOLUME feedback at_ms=59530 via=wheel
+ZWL VOLUME set value=70 muted=0 via=wheel final=1 at_ms=60226
+ZWL VOLUME feedback at_ms=60226 via=wheel
+ZWL VOLUME saved value=70 muted=0 error=0

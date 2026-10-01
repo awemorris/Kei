@@ -1,0 +1,19 @@
+NETPROBE listening
+NETPROBE request op=64 ssid=
+NETPROBE request op=64 ssid=
+NETPROBE request op=34 ssid=
+NETPROBE request op=35 ssid=Kei Lab
+NETPROBE notify wifi=connected ssid=Kei Lab
+NETPROBE request op=37 ssid=
+NETPROBE request op=35 ssid=Neighbor 5G
+NETPROBE notify wifi=connected ssid=Neighbor 5G
+NETPROBE request op=36 ssid=
+NETPROBE notify wifi=manual-disconnected ssid=
+NETPROBE request op=33 ssid=
+NETPROBE notify wifi=disabled ssid=
+NETPROBE request op=32 ssid=
+NETPROBE notify wifi=auto-searching ssid=
+NETPROBE request op=34 ssid=
+NETPROBE watcher gone
+NETPROBE request op=64 ssid=
+NETPROBE request op=34 ssid=

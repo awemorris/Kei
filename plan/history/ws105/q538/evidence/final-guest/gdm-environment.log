@@ -1,0 +1,5 @@
+XDG_SESSION_TYPE=wayland
+XDG_SESSION_ID=178
+XDG_RUNTIME_DIR=/run/user/1000
+USER         PID COMMAND
+kei         5733 /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm

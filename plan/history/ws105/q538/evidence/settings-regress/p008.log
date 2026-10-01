@@ -1,0 +1,22 @@
+settings: window at 50,98
+log: ZSETTINGS PAGE home ok
+log: ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p008/home.png
+log: ZSETTINGS SEARCH focus ok
+log: ZSETTINGS TITLEBAR state .*focus=1 ok
+log: ZSETTINGS SEARCH query=wi results=4 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p008/search-wi.png
+log: ZSETTINGS SEARCH open page=wifi ok
+log: ZSETTINGS PAGE wifi ok
+log: ZSETTINGS SEARCH query=dns results=2 ok
+log: ZSETTINGS RESULT index=1  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p008/search-dns.png
+log: ZSETTINGS SEARCH open page=network ok
+log: ZSETTINGS PAGE network ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p008/search-dns-open.png
+log: ZSETTINGS SEARCH query=zzz results=0 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p008/search-none.png
+log: ZSETTINGS SEARCH end page=network ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p008/search-ended.png
+zdesktop: no ERROR
+settings-p008: PASS

@@ -1,0 +1,6 @@
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL GLASS ready text=1
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL GLASS desktops x=819 step=46 width=40
+ZWL MAP client=1 surface=6 x=430 y=293
+ZWL MAP client=2 surface=9 x=478 y=341

@@ -1,0 +1,27 @@
+log: ZWL HANDOFF go=1 ok
+log: ZWL VOLUME reachable=1 device=1 ok
+log: ZWL MAP client= ok
+settings: window at 50,98
+log: SOUND report reachable=1 device=1 value=60 ok
+log: ZSETTINGS CONTROL index=6  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/volume-p005/sound.png
+log: SOUND set value=(29|30|31) muted=0 final=1 ok
+settings slider: audiod at 30 ok
+kept: sound.volume=30 sound.muted=0 
+settings slider: kept in desktop.conf ok
+settings slider: feedback sound at the release ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/volume-p005/bar-30.png
+settings mute on: audiod muted ok
+settings mute on: no feedback sound ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/volume-p005/page-muted-here.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/volume-p005/bar-muted.png
+settings mute off: audiod unmuted ok
+settings mute off: feedback sound ok
+log: SOUND report reachable=1 device=1 value=20 muted=0 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/volume-p005/page-20.png
+log: SOUND report reachable=1 device=1 value=20 muted=1 ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/volume-p005/page-muted.png
+settings runs ok
+sounds (quarter second: peak): 160:4047 219:2390 230:1976 233:1530
+feedback sounds recorded (4) ok
+volume-p005: PASS

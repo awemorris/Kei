@@ -1,0 +1,9 @@
+PDFVIEWER OPEN path=/tmp/p011-document.pdf pages=2
+PDFVIEWER MENU ready items=24
+PDFVIEWER TITLEBAR ready controls=11
+PDFVIEWER PAGE index=0 items=3 flags=0 ms=1
+PDFVIEWER RASTER index=0 size=968x1370 ms=1
+PDFVIEWER READY width=1000 height=690 pages=2
+PDFVIEWER PAGE index=1 items=3 flags=0 ms=0
+PDFVIEWER RASTER index=1 size=968x1370 ms=11
+2417

@@ -1,0 +1,42 @@
+guest: up
+zdesktop: ready
+log: ZWL HOME icon name="Settings" ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/apphome.png
+log: ZWL HOME launch name=Settings pid=[0-9]+ ok
+log: ZWL MAP client=[0-9]+  ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/launched.png
+settings: window at 50,98
+log: ZSETTINGS PAGE home ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/00-home.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/01-wifi.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/02-ethernet.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/03-bluetooth.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/04-vpn.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/05-network.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/06-appearance.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/07-wallpaper.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/08-notifications.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/09-sound.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/10-display.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/11-storage.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/12-battery.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/13-keyboard.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/14-mouse.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/15-touchpad.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/16-printers.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/17-sharing.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/18-users.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/19-privacy.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/20-security.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/21-accessibility.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/22-updates.png
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/23-about.png
+log: ZSETTINGS PAGE about ok
+pages shown: 24
+log: ZSETTINGS SEARCH query=wall results=[1-9] ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/search-wall.png
+log: ZSETTINGS SEARCH open page=wallpaper ok
+log: ZSETTINGS PAGE about back ok
+shot: /home/awe/zedBSD-claude1/build/ws105-p011/settings-regress/p006/back.png
+zdesktop: no ERROR
+settings-p006: PASS
