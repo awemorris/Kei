@@ -1,0 +1,407 @@
+{
+  "status": "PASS",
+  "source_memberships": 334,
+  "unique_sources": 324,
+  "header_count": 628,
+  "libraries": [
+    {
+      "file": "libgif-compat.so",
+      "soname": [
+        "libgif-compat.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "d163e5b11682f9715bcdc2d6dd118409e6a7fe545f605af745e22f64d9914681"
+    },
+    {
+      "file": "libjpeg-compat.so",
+      "soname": [
+        "libjpeg-compat.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "b14ece2989bd35f060d11bcc4e4567891298bdc50f39b1c9c13c4859654c5a94"
+    },
+    {
+      "file": "libkeiland.so",
+      "soname": [
+        "libkeiland.so"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "8285663440e8fda076a7cb690f4e39385c70c5c67d4c2ce7f6fb1cccb06d0278"
+    },
+    {
+      "file": "libkeiui.so",
+      "soname": [
+        "libkeiui.so"
+      ],
+      "needed": [
+        "libkeiland.so",
+        "libwayland-client.so",
+        "libtruetype.so",
+        "libpng-compat.so",
+        "libvulkan.so.1",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "44d531b47a6033e0f2b567abacf3c7692606ad3e1b83b24ee2d0dc562be04e7b"
+    },
+    {
+      "file": "libpdf.so",
+      "soname": [
+        "libpdf.so"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libjpeg-compat.so",
+        "libtruetype.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "1a6f006235cec2ceebde8df2091120f61488ba47ed24a1ea765cf6a9f8858600"
+    },
+    {
+      "file": "libpng-compat.so",
+      "soname": [
+        "libpng-compat.so"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "54e80b723c8bfbd3d8be3a8da09569810079f695e6faa34d9951f299036c01d9"
+    },
+    {
+      "file": "libseat.so.1",
+      "soname": [
+        "libseat.so.1"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "4066d135dc7d9b9640887aa6062312a35be7d5318937be0a1930b419aaecd0be"
+    },
+    {
+      "file": "libtruetype.so",
+      "soname": [
+        "libtruetype.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "4b92fb9ef31795fa199c79d3f1559022f9724c57e12e14330302477ced3d6486"
+    },
+    {
+      "file": "libvulkan.so.1",
+      "soname": [
+        "libvulkan.so.1"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libthr.so.3",
+        "libc.so.7"
+      ],
+      "sha256": "732e94e869a3e20c235b3ef9fb31b1063eb0fb1574589000206dc42c7c40af87"
+    },
+    {
+      "file": "libwayland-client.so",
+      "soname": [
+        "libwayland-client.so"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "b0225f94730ce1d505c1bc5eed1135f672245abe7eb07a91efc6d1b0d9f9bead"
+    },
+    {
+      "file": "libz-compat.so",
+      "soname": [
+        "libz-compat.so"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "017e6259714b912dc4ab6f887b4b1f8306dcd061047ba9f8662496cb8ca1a17b"
+    }
+  ]
+}
+public-libraries: PASS installed Wayland/TrueType/standard Vulkan ABI
+native OSS 86/86 muted=0; wired vtnet0
+PASS native public libkeiland/OSS/network/libkeiui pixels/libpdf round trip
+chain deviceName=llvmpipe (LLVM 19.1.7, 128 bits)
+chain driverName=llvmpipe
+vk-chain-test: PASS
+chain deviceName=llvmpipe (LLVM 19.1.7, 128 bits)
+chain driverName=llvmpipe
+vk-chain-test: PASS
+ELF files
+/opt/keiland/bin/files:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x2f82b91bc000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2f82b99ed000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x2f82b7861000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x2f82ba2c7000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x2f82bc030000)
+	libgif-compat.so => /opt/keiland/lib/libgif-compat.so (0x2f82ba5d1000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x2f82bcc77000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2f82bade1000)
+	libm.so.5 => /lib/libm.so.5 (0x2f82bbb8f000)
+	libc.so.7 => /lib/libc.so.7 (0x2f82bd59e000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2f82be660000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2f82bf69d000)
+	[vdso] (0x2f82b7478000)
+ELF imageview
+/opt/keiland/bin/imageview:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x188c5ecce000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x188c5f2a8000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x188c5f55b000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x188c5fd2e000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x188c60c00000)
+	libgif-compat.so => /opt/keiland/lib/libgif-compat.so (0x188c6176a000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x188c62191000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x188c622c6000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x188c62ce6000)
+	libm.so.5 => /lib/libm.so.5 (0x188c6382a000)
+	libc.so.7 => /lib/libc.so.7 (0x188c63c2a000)
+	libthr.so.3 => /lib/libthr.so.3 (0x188c64ec5000)
+	libsys.so.7 => /lib/libsys.so.7 (0x188c5da96000)
+	[vdso] (0x188c5d3ce000)
+ELF kuidemo
+/opt/keiland/bin/kuidemo:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x2add67114000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x2add66e28000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2add67a97000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x2add67d27000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2add685b3000)
+	libm.so.5 => /lib/libm.so.5 (0x2add68ff2000)
+	libc.so.7 => /lib/libc.so.7 (0x2add69550000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x2add6a3d3000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2add6ac07000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2add6b40b000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x2add6bde4000)
+	[vdso] (0x2add650f2000)
+ELF mview
+/opt/keiland/bin/mview:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2e7c18bef000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2e7c19936000)
+	libm.so.5 => /lib/libm.so.5 (0x2e7c1a647000)
+	libc.so.7 => /lib/libc.so.7 (0x2e7c1adc4000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2e7c1bd30000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2e7c1c92f000)
+	[vdso] (0x2e7c171cb000)
+ELF notes
+/opt/keiland/bin/notes:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x217f19f7000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x217f0908000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x217f0511000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x217f288d000)
+	libpdf.so => /opt/keiland/lib/libpdf.so (0x217f31eb000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x217f3b7d000)
+	libm.so.5 => /lib/libm.so.5 (0x217f4089000)
+	libc.so.7 => /lib/libc.so.7 (0x217f4592000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x217f5527000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x217f5b75000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x217f5e6d000)
+	libthr.so.3 => /lib/libthr.so.3 (0x217f6abc000)
+	libsys.so.7 => /lib/libsys.so.7 (0x217f6e40000)
+	[vdso] (0x217ef40e000)
+ELF pdfviewer
+/opt/keiland/bin/pdfviewer:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x33ed817a1000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x33ed827c8000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x33ed83a54000)
+	libpdf.so => /opt/keiland/lib/libpdf.so (0x33ed83c75000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x33ed84138000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x33ed83430000)
+	libm.so.5 => /lib/libm.so.5 (0x33ed84cd4000)
+	libc.so.7 => /lib/libc.so.7 (0x33ed85dc5000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x33ed86b0e000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x33ed86f6e000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x33ed85411000)
+	libthr.so.3 => /lib/libthr.so.3 (0x33ed87a12000)
+	libsys.so.7 => /lib/libsys.so.7 (0x33ed89142000)
+	[vdso] (0x33ed7f8c4000)
+ELF settings
+/opt/keiland/bin/settings:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x35b3d60cb000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x35b3d3da8000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x35b3d6ad9000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x35b3d5313000)
+	libm.so.5 => /lib/libm.so.5 (0x35b3d50b0000)
+	libc.so.7 => /lib/libc.so.7 (0x35b3d732c000)
+	libthr.so.3 => /lib/libthr.so.3 (0x35b3d7900000)
+	libsys.so.7 => /lib/libsys.so.7 (0x35b3d7a7a000)
+	[vdso] (0x35b3d3a73000)
+ELF terminal
+/opt/keiland/bin/terminal:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x6c7be92b000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x6c7bf0bf000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x6c7c04df000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x6c7c05bc000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x6c7c1425000)
+	libm.so.5 => /lib/libm.so.5 (0x6c7c168a000)
+	libutil.so.10 => /lib/libutil.so.10 (0x6c7bf993000)
+	libc.so.7 => /lib/libc.so.7 (0x6c7c2945000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x6c7c34fd000)
+	libthr.so.3 => /lib/libthr.so.3 (0x6c7c38bc000)
+	libsys.so.7 => /lib/libsys.so.7 (0x6c7c1bf6000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x6c7c43fe000)
+	[vdso] (0x6c7bcf79000)
+ELF textedit
+/opt/keiland/bin/textedit:
+	libkeiui.so => /opt/keiland/lib/libkeiui.so (0x12e8319dc000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x12e831c86000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x12e8329a8000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x12e830e08000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x12e833f7d000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x12e832c30000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x12e834f54000)
+	libm.so.5 => /lib/libm.so.5 (0x12e835cd8000)
+	libc.so.7 => /lib/libc.so.7 (0x12e836932000)
+	libthr.so.3 => /lib/libthr.so.3 (0x12e836d90000)
+	libsys.so.7 => /lib/libsys.so.7 (0x12e8376dd000)
+	[vdso] (0x12e82f8a7000)
+ELF vkdemo
+/opt/keiland/bin/vkdemo:
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x19550bb3e000)
+	libm.so.5 => /lib/libm.so.5 (0x19550c57f000)
+	libc.so.7 => /lib/libc.so.7 (0x19550cfe5000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x19550e19c000)
+	libthr.so.3 => /lib/libthr.so.3 (0x19550ad79000)
+	libsys.so.7 => /lib/libsys.so.7 (0x19550f970000)
+	[vdso] (0x19550a590000)
+ELF wayland
+/opt/keiland/bin/wayland:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x2910dfeda000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x2910df005000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x2910e1183000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x2910e02c0000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2910e2aa2000)
+	libseat.so.1 => /opt/keiland/lib/libseat.so.1 (0x2910e33e3000)
+	libm.so.5 => /lib/libm.so.5 (0x2910e2187000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2910e4755000)
+	libc.so.7 => /lib/libc.so.7 (0x2910e51f9000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2910e42fa000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2910e6959000)
+	[vdso] (0x2910dd740000)
+ELF wlshm
+/opt/keiland/bin/wlshm:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x29196a54f000)
+	libc.so.7 => /lib/libc.so.7 (0x2919696d0000)
+	libsys.so.7 => /lib/libsys.so.7 (0x29196baf3000)
+	[vdso] (0x291968533000)
+ELF wltest
+/opt/keiland/bin/wltest:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x396de6cb6000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x396de60c8000)
+	libm.so.5 => /lib/libm.so.5 (0x396de6e6a000)
+	libc.so.7 => /lib/libc.so.7 (0x396de8421000)
+	libthr.so.3 => /lib/libthr.so.3 (0x396de8a50000)
+	libsys.so.7 => /lib/libsys.so.7 (0x396de9684000)
+	[vdso] (0x396de517d000)
+ELF libgif-compat.so
+/opt/keiland/lib/libgif-compat.so:
+	libm.so.5 => /lib/libm.so.5 (0x374bb2ab0000)
+	libc.so.7 => /lib/libc.so.7 (0x374bb446a000)
+ELF libjpeg-compat.so
+/opt/keiland/lib/libjpeg-compat.so:
+	libm.so.5 => /lib/libm.so.5 (0x24b8d87bb000)
+	libc.so.7 => /lib/libc.so.7 (0x24b8d6d9e000)
+ELF libkeiland.so
+/opt/keiland/lib/libkeiland.so:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x3215c830b000)
+	libm.so.5 => /lib/libm.so.5 (0x3215ca905000)
+	libc.so.7 => /lib/libc.so.7 (0x3215c8c2c000)
+ELF libkeiui.so
+/opt/keiland/lib/libkeiui.so:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x2e89c61f0000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x2e89c6b44000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x2e89c6d63000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x2e89c79aa000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x2e89c7cfe000)
+	libm.so.5 => /lib/libm.so.5 (0x2e89c846b000)
+	libc.so.7 => /lib/libc.so.7 (0x2e89c3a45000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x2e89c8bc0000)
+	libthr.so.3 => /lib/libthr.so.3 (0x2e89c9336000)
+	libsys.so.7 => /lib/libsys.so.7 (0x2e89c4571000)
+ELF libpdf.so
+/opt/keiland/lib/libpdf.so:
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x374002641000)
+	libjpeg-compat.so => /opt/keiland/lib/libjpeg-compat.so (0x374002b5e000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x374003fc4000)
+	libm.so.5 => /lib/libm.so.5 (0x374004c17000)
+	libc.so.7 => /lib/libc.so.7 (0x373ffff0e000)
+ELF libpng-compat.so
+/opt/keiland/lib/libpng-compat.so:
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x2e3bd13bf000)
+	libm.so.5 => /lib/libm.so.5 (0x2e3bd164c000)
+	libc.so.7 => /lib/libc.so.7 (0x2e3bcee2d000)
+ELF libseat.so.1
+/opt/keiland/lib/libseat.so.1:
+	libc.so.7 => /lib/libc.so.7 (0x3912a002a000)
+ELF libtruetype.so
+/opt/keiland/lib/libtruetype.so:
+	libm.so.5 => /lib/libm.so.5 (0x31d88f7a5000)
+	libc.so.7 => /lib/libc.so.7 (0x31d88dea9000)
+ELF libvulkan.so.1
+/opt/keiland/lib/libvulkan.so.1:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x251b0b4000)
+	libthr.so.3 => /lib/libthr.so.3 (0x251d964000)
+	libc.so.7 => /lib/libc.so.7 (0x251c19b000)
+	libsys.so.7 => /lib/libsys.so.7 (0x251c749000)
+ELF libwayland-client.so
+/opt/keiland/lib/libwayland-client.so:
+	libc.so.7 => /lib/libc.so.7 (0xd89d7fbd000)
+ELF libz-compat.so
+/opt/keiland/lib/libz-compat.so:
+	libc.so.7 => /lib/libc.so.7 (0xcaacc0bb000)
+ELF keiland-ime
+/opt/keiland/libexec/keiland-ime:
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0xf0f446d8000)
+	libc.so.7 => /lib/libc.so.7 (0xf0f44979000)
+	libsys.so.7 => /lib/libsys.so.7 (0xf0f45a46000)
+	[vdso] (0xf0f42238000)
+PASS App Home/data/model/textures/font/private-header boundaries
+REFUSAL terminal exit 1 ZTERM FAILED run=term operation=terminal_window_open result=0 errno=2
+ 
+REFUSAL files exit 1  ZFILES FAILED operation=window error=2
+
+REFUSAL settings exit 1  ZSETTINGS FAILED operation=window error=2
+
+REFUSAL notes exit 1  notes: cannot open a window: No such file or directory
+
+REFUSAL textedit exit 1  TEXTEDIT FAILED operation=window error=2
+
+REFUSAL imageview exit 1  IMAGEVIEW FAILED operation=window error=2
+
+REFUSAL pdfviewer exit 1  PDFVIEWER FAILED operation=window error=2
+
+REFUSAL wlshm exit 1 WLSHM FAILED run=manual setup errno=5
+ 
+REFUSAL wltest exit 1 WLTEST START run=manual mode=fifo frames=60
+ WLTEST FAILED run=manual api=wltest_window_open result=0 cleanup=0 errno=2 frames=0
+
+REFUSAL mview exit 1 MVIEW START run=manual model=/opt/keiland/share/mview/qs40 vertices=25861 triangles=37000 materials=16 textures=13
+ MVIEW FAILED run=manual api=mview_window_open result=0 cleanup=0 errno=2 frames=0
+
+REFUSAL kuidemo exit 1  KUIDEMO FAILED operation=window error=2
+
+REFUSAL keiland-ime exit 1 KEI-IME FAILED step=connect errno=2
+ 
+PASS actual application refusal/CLI entry (GUI operation not exercised)
+PASS owned installation/runtime fixtures removed
+ZWL PREFERENCES open
+ZWL OS unavailable errno=2
+ZWL EXIT frames=0 error=2 cleanup_failed=0 pid=6594 input_events=0 seat_events=0 at_ms=3595621
+ 
+PASS real native compositor absent primary refusal/cleanup; authority remains live
+owned seatd exit 0

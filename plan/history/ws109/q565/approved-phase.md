@@ -2,10 +2,10 @@
 
 # ws109p002: native build・library と system Vulkan chain
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q565 / q565-i01
+Queue / Attempt: q564 / q564-i01
 
 ## 目的・範囲
 
@@ -244,9 +244,3 @@ older partial result wording 'GUI/F2' did not add GUI to F2's acceptance. Actual
 app/display/input/fence/physical gates belong to unchanged F3/F4/F5/p003/p004/p005. Full source
 conformance/threeOS regression remain p005; all prior failures preserved. Whole p002 may clear
 only when its own full F2 is verified. External dependencies/WS acceptance unchanged.
-
-## Result / q565-i01 / 2026-10-01T23:53:09.698212+00:00
-
-Queue item cleared /whole Phase cleared。F2一式fresh native322unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
-
-Event ws109-q565-cleared: local evidence/outcome saved; remote comment and close intent pending.
