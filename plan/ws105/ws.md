@@ -9,7 +9,7 @@ Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
 Queue: q523 finished
-Resume point: p002 cleared（q524）。次は依存を満たす既存 Phase。
+Resume point: p003 cleared（q525）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -106,7 +106,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | --- | --- | --- | --- |
 | [ws105-p001](phase001/phase.md) | Linux の試験の guest（QEMU の Debian 13）と操作の道具 | cleared | なし |
 | [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | cleared | WS104 の p001・p003 |
-| [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | planned | p002 |
+| [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | cleared | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | planned | p003 |
 | [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | planned | p004、p001 |
 | [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | planned | p005、WS104 完了 |
@@ -168,3 +168,23 @@ cleared。Linux の独立 build の土台と、8 package の `Makefile.linux`（
 
 
 [Phase の結果](phase002/phase.md)、[Queue history](../history/queue-q524.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### q525 / ws105-p003（2026-10-01T06:35:02.871528+00:00）
+
+cleared。Linux 専用 libvulkan-compat を実装。後段への F 222 関数、I 12 関数、禁止する WSI N 51 関数を maintained TSV から生成。dispatchable handle を包まず、後段の dlsym の trampoline を使い、instance / physical-device / device / queue の ownership を保持する。mutex・pthread_once・pthread の thread-local record で publication / 再入 / lifetime を扱う。
+
+- gcc / clang の最終 build exit 0、warning 0。8 ELF の RUNPATH / SONAME / NEEDED が PASS。libvulkan.so.1 の NEEDED は glibc の libc.so.6 だけ（libdl / pthread は glibc 2.34 以降 libc に統合）。初版の __thread の dynamic TLS による ld-linux 直接依存を pthread key に替えて、計画の依存条件を満たした。
+- `vk-chain-test: PASS`: staged library の dladdr、Vulkan 1.0 instance、llvmpipe device / driver、1 MiB の fill → copy → fence、262144 word 全一致、GetProcAddr と禁止した X11 surface 名の NULL。
+- 我々の library で `vulkaninfo --summary` が llvmpipe を表示。空 XDG_RUNTIME_DIR、Wayland/X を外し、host の DRM は none。
+- `interpose-check: PASS`: 既定の backend → compat vk binding 0、NO_DEEPBIND opt-out の command も PASS（V1・V2 verified）。同じ SONAME の別 backend を同 process で利用できた。
+- 自分自身の backend 指定と /nonexistent は両方、no backend libvulkan の診断で exit 1、timeout 124 ではない。明示した backend 選択は失敗を既定候補で隠さず、その指定を authoritative とする。
+- fake backend の PLT 再入は指定の診断と exit 134。初回 fake は gcc が直接の再帰を local alias にしたため SIGSEGV、試験の extern assembler alias で PLT call を確認して直した。production の再入検出を既定のまま検証した。
+- `elf-check: PASS (8 ELF)`、`makefile-sync: PASS`、`header-check: PASS (61 sources)`。system loader が export する WSI 名と TSV を照合し、未分類名 0。
+- 新規 source と generated forward.inc の style-check total 0。clang-format19 後、定義引数と3条件を復元、全文を手動レビュー。sh syntax / git diff --check PASS。
+- `timeout 600 make -j64 disk-image` exit 0、warning 0。zedBSD の source / toolchain の変更無し、共通 C source の runtime 回帰対象無し。host package 追加無し。
+
+設計上の実装の補い: Layer / version の enumeration は、Phase 本文が要求する「後段が無い場合」の fallback を作るため I の表にも入れた（当初の I 10 個に2個追加）。外部の約束・依存・受け入れは変更無し。
+証拠は `build/ws105-p003/`、永続の summary / manifest は `plan/history/ws105/q525/`。WSI の実装はまだ無く、Linux compositor / app / gdm / network / audio は後続。実機 GPU、古い backend の全ての組合せ、musl は未実施。push / GitHub publication は未実施。
+
+
+[Phase の結果](phase003/phase.md)、[Queue history](../history/queue-q525.md)。WS105 の受け入れは残りの Phase の確認を要する。

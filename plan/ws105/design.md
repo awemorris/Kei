@@ -364,7 +364,7 @@ Vulkan の関数は全て、次のどれかに入る。**どれに入るかの�
 | 種類 | 何をするか | 例 |
 | --- | --- | --- |
 | **F: 素通し（forward）** | 我々の export した関数は、後段の同じ名前の関数の pointer を呼ぶだけ。引数も戻り値も触らない | `vkCmdDraw`・`vkQueueSubmit`・`vkCreateImage`・`vkAllocateMemory` などほぼ全部（Vulkan 1.0〜1.4 の core の 234 個のうち I・O でない物） |
-| **I: 横取り（intercept）** | 後段に渡す前後で手を入れる | `vkCreateInstance`・`vkDestroyInstance`・`vkEnumerateInstanceExtensionProperties`・`vkEnumerateDeviceExtensionProperties`・`vkCreateDevice`・`vkDestroyDevice`・`vkGetInstanceProcAddr`・`vkGetDeviceProcAddr`・`vkGetDeviceQueue`・`vkGetDeviceQueue2` |
+| **I: 横取り（intercept）** | 後段に渡す前後で手を入れる | `vkCreateInstance`・`vkDestroyInstance`・`vkEnumerateInstanceExtensionProperties`・`vkEnumerateDeviceExtensionProperties`・`vkCreateDevice`・`vkDestroyDevice`・`vkGetInstanceProcAddr`・`vkGetDeviceProcAddr`・`vkGetDeviceQueue`・`vkGetDeviceQueue2`（p003 の missing-backend fallback に `vkEnumerateInstanceLayerProperties`・`vkEnumerateInstanceVersion` も I として入れる） |
 | **O: 自前（own）** | 後段に渡さず、我々が全部実装する（WSI） | 下の表 |
 
 O の関数（我々が実装し、export する物）:
@@ -1134,3 +1134,7 @@ WS105 は共通の source（compositor の `protocol.c`・`main.c`・`display.c`
 | V9 | implicit sync の fence が dma-buf に付く（`dmabuf-probe` の `fences ≥ 1`）。lavapipe は CPU で完了まで待つので、実際に待つことは見えない | p004 | fence が 0 なら、IMPORT_SYNC_FILE の戻り値と kernel の版を記録して main に報告 |
 | V10 | 我々の compat の library（`libz-compat.so` など）が版無しで export する名前（`crc32` など）に、`KEILAND_VULKAN_NO_DEEPBIND=1` の時に Mesa・LLVM が結び付いても壊れない（zlib と ABI が同じ） | p008（Image Viewer などで compat の library と Vulkan が同じ process に居る状態で app が動くこと） | DEEPBIND の既定のままなら起きない。外す場合の注意として記録 |
 | V11 | `logind` の pause で DRM の master が外され evdev が revoke され、resume で新しい fd が来る（systemd の source の知識。未確かめ） | p009 | 実際の動きに合わせて §5.5 を直す（main に報告） |
+
+### p003 の実装時の確認（q525）
+
+V1・V2 verified: 既定の backend → compat binding 0、opt-out の chain も PASS、同じ SONAME の別 backend で 1 MiB fill / copy / fence と全 word 一致。明示した backend の壊れた指定は authoritative として診断・失敗し、既定候補で隠さない（Phase の自己参照 / missing-backend の検証を保持）。pthread key の thread-local record によって必要な lifetime / 再入検出を保ち、NEEDED は glibc runtime の libc.so.6 だけ。fake backend の直接再帰は gcc が local alias にしたため、extern assembler alias から vkCreateInstance@PLT を呼ぶ試験に直し、診断と exit134 を確認。詳細は [p003](phase003/phase.md)。

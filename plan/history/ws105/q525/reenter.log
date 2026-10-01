@@ -1,0 +1,2 @@
+libvulkan-compat: the backend called back into vkCreateInstance (symbol interposition); unset KEILAND_VULKAN_NO_DEEPBIND
+timeout: the monitored command dumped core

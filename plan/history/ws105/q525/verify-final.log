@@ -1,0 +1,10 @@
+interpose: backend-to-compat bindings=0
+interpose-check: PASS
+invalid backend: exit=1
+invalid backend: exit=1
+build/ws105-p003/verify.sh: line 24: 3406536 Aborted                 timeout 10 env VK_CHAIN_REENTER=1 KEILAND_VULKAN_NO_DEEPBIND=1 KEILAND_VULKAN_BACKEND="$PWD/build/keiland-linux/test/libfake-vulkan.so" build/keiland-linux/test/vk-chain-test > build/ws105-p003/reenter.log 2>&1
+reentry detected: exit=134
+elf-check: PASS (8 ELF)
+makefile-sync: PASS
+header-check: PASS (61 sources)
+p003 runtime: PASS

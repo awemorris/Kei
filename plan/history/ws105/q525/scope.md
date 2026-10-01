@@ -2,10 +2,10 @@
 
 # ws105-p003: libvulkan-compat (1): 後段への chain（WSI 無し）
 
-Status: cleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q525 / q525-i01
+Queue: なし
 依存: p002
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4 を全部読む**（特に §4.3・§4.4 の「I・O の関数の中から後段を呼ぶ規則」・§4.11）
 
