@@ -1,0 +1,78 @@
+Started keiland-deb-smoke.service - [systemd-run] /opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm.
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 21.1.8, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=82
+ZWL STARTUP step=vulkan-objects-arrow ms=10
+ZWL STARTUP step=wallpaper-picture ms=6
+ZWL STARTUP step=wallpaper ms=35
+ZWL STARTUP step=glyphs-text ms=8
+ZWL STARTUP step=glyphs-icons ms=3
+ZWL STARTUP step=glyphs-mark ms=18
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=30
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=157 at_ms=169153
+ZWL INPUT device=/dev/input/event4 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event1 kind=keyboard abs=0
+ZWL STARTUP step=input ms=8 at_ms=169161
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=169161
+ZWL STARTUP step=socket ms=0 at_ms=169161
+ZWL CLIENT client=1 fd=16 ime=1
+ZWL IME started pid=2541 client=1
+ZWL READY socket=/tmp/keiland-runtime/wayland-keiland width=1280 height=800 timeout_ms=18446744073709551615 pid=2525
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL NETWORK state reachable=0 connected=1 kind=wired interface=enp0s4 wifi=absent ssid=
+ZWL VOLUME reachable=0 device=0
+ZWL DESKTOP start pid=2542 command=/opt/keiland/bin/files --desktop at_ms=169167
+ZWL STARTUP step=output-display ms=0
+KEI-IME LANGUAGE id=direct
+ZFILES FAILED operation=desktop error=2
+ZWL STARTUP step=output-pipelines ms=12
+ZWL STARTUP step=output-swapchain ms=4
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=16 at_ms=169183
+ZWL GLASS desktops x=818 step=46 width=40
+ZWL NETWORK icon x=1062 y=3 width=30 height=28
+ZWL VOLUME icon x=1029 y=3 width=30 height=28
+ZWL IME language=direct
+ZWL HOME ended pid=2542 status=256
+ZWL DESKTOP exited pid=2542
+KEI-IME READY languages=2
+ZWL CLIENT client=2 fd=20
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZWL INSET create client=2 inset=22 toplevel=18
+ZWL EDIT create client=2 edit=26 toplevel=18
+ZWL BOUNDS client=2 surface=16 width=1256 height=690
+ZWL CONFIGURE client=2 surface=16 serial=2 width=0 height=0 fullscreen=0
+ZWL IMPORT client=2 buffer=39 width=916 height=632 bytes=2347008
+ZWL IMPORT client=2 buffer=41 width=916 height=632 bytes=2347008
+ZWL IMPORT client=2 buffer=43 width=916 height=632 bytes=2347008
+ZWL MENU commit client=2 menu=47 serial=1 items=30 generation=1
+ZWL MENU set client=2 place=48 menu=47
+ZWL MENU commit client=2 menu=47 serial=2 items=30 generation=2
+ZWL TITLEBAR create client=2 titlebar=52 toplevel=18
+ZWL EDIT state client=2 edit=26 actions=0xff flags=0xd
+ZWL TITLEBAR commit client=2 titlebar=52 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL MAP client=2 surface=16 x=182 y=127
+ZWL MENU bar client=2 surface=16 where=floating item=1 offset=127 top=75 width=55 height=44
+ZWL MENU bar client=2 surface=16 where=floating item=2 offset=184 top=75 width=47 height=44
+ZWL MENU bar client=2 surface=16 where=floating item=3 offset=233 top=75 width=55 height=44
+ZWL MENU bar client=2 surface=16 where=floating item=4 offset=290 top=75 width=76 height=44
+ZWL MENU bar client=2 surface=16 where=floating item=5 offset=368 top=75 width=53 height=44
+ZWL DESKTOP start pid=2662 command=/opt/keiland/bin/files --desktop at_ms=171340
+ZFILES FAILED operation=desktop error=2
+ZWL HOME ended pid=2662 status=256
+ZWL DESKTOP exited pid=2662
+ZWL DESKTOP start pid=2663 command=/opt/keiland/bin/files --desktop at_ms=173374
+ZFILES FAILED operation=desktop error=2
+ZWL HOME ended pid=2663 status=256
+ZWL DESKTOP exited pid=2663
+ZWL PERF 5006ms: passes=482 timeouts=461 | poll 96.8% work 6.3%
+ZWL PERF compose frames=6 draw_ms=45.65 (acquire 0.01 submit+present 45.44) frame_ms=46.79

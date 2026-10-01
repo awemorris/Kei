@@ -1,0 +1,15 @@
+{
+  "distro": "ubuntu2604",
+  "fresh_overlay": true,
+  "install": true,
+  "reinstall": true,
+  "upgrade": true,
+  "elf_dependencies": true,
+  "public_vulkan_client": true,
+  "direct_session": true,
+  "terminal_map_and_input": true,
+  "remove": true,
+  "purge_keeps_user_data": true,
+  "display_manager_registration": true,
+  "acceleration": "kvm"
+}

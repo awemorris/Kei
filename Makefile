@@ -444,6 +444,13 @@ keiland-linux-install-session:
 keiland-linux-clean:
 	$(MAKE) -f userland/desktop/keiland-linux.mk clean
 
+# Distribution packages are built and installed in isolated native QEMU guests.
+.PHONY: keiland-linux-debian keiland-linux-ubuntu2604
+keiland-linux-debian:
+	$(PYTHON) tools/release/keiland-linux-deb/run.py debian13
+keiland-linux-ubuntu2604:
+	$(PYTHON) tools/release/keiland-linux-deb/run.py ubuntu2604
+
 .PHONY: validate-image-config
 validate-image-config:
 	@:
@@ -468,6 +475,8 @@ help:
  ' make keiland-linux-install Install Keiland under DESTDIR/opt/keiland' \
  ' make keiland-linux-install-session Install the gdm session file' \
  ' make keiland-linux-clean Remove Linux build outputs, retaining guest images' \
+ ' make keiland-linux-debian Build and verify a Debian 13 deb in QEMU' \
+ ' make keiland-linux-ubuntu2604 Build and verify an Ubuntu 26.04 deb in QEMU' \
  ' make help Show this summary'
 
 list-targets:

@@ -660,7 +660,7 @@ primary docs for operational syntax:
 ## 検証
 
 - 起動の確認は `plan/tools/boot-test.sh` だけを使う（画面を撮って login prompt を読む）。撮れた PNG はユーザーに見せる。
-- WS105 の Debian 13 Linux guest は例外（2026-10-01 ユーザー許可）。ホストの `127.0.0.1` から QEMU の転送ポートを通して guest の SSH に接続し、SSH の疎通と QMP の `screendump` の PNG で起動を確認する。zedBSD の image には引き続き `boot-test.sh` を使う。
+- WS105 の Debian 13 Linux guest（2026-10-01 ユーザー許可）と、WS108 の Debian 13・Ubuntu 26.04 QEMU guest（2026-10-02 ユーザーの build・dpkg 導入/動作確認指示）は例外。ホストの `127.0.0.1` から QEMU の転送ポートを通して guest の SSH に接続し、SSH の疎通と QMP の `screendump` の PNG で起動を確認する。zedBSD の image には引き続き `boot-test.sh` を使う。
 - QEMU の console log・serial log を読んで判定しない（解析・回帰・受け入れのどれでも）。guest の操作はシリアル
   （`plan/tools/guest/serial.py`）か SSH（`plan/tools/guest/guest.sh`）で対話し、不具合は gdbstub・monitor・QMP で解析する。
 - 回帰の範囲は Phase の性質で決める。コードの意味を変えない refactor は build（warning 0）と最後の boot test だけ。

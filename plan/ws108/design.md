@@ -11,7 +11,7 @@ project Zlibとfont OFL/Apache notices、既存dictionaryのWS095 relicensing/ve
 
 ## QEMU native procedure
 
-`make keiland-linux-debian` / `make keiland-linux-ubuntu2604`は独立release driverを呼ぶ。host requires Python3/curl/ssh/tar/QEMU/xorriso。KVM availableなら利用、CI KVMなしはTCG、amd64 targetを偽装しない。
+`make keiland-linux-debian` / `make keiland-linux-ubuntu2604`は独立release driverを呼ぶ。host requires Python3/curl/ssh/tar/QEMU/xorriso。KVM availableなら利用、CI KVMなしはTCG、amd64 targetを偽装しない。amd64 guest memoryはMasterの2026-09-24決定に合わせ8GiB。
 公式cloud images固定URL+checksum。Debian13 generic amd64 20260914-2601 SHA512 a733e7d4...、Ubuntu26.04 resolute release-20260927 SHA256 88006518...。完整hashはinputs.jsonへ。read-only cacheと各run専用qcow2 overlay、cloud-init seedと試験専用key、SSHは127.0.0.1ランダムforward port、QMP PNG。serial/console logs判定禁止。OS ID/version/archとSSHを必ず検証。
 build guestとinstall test guestは同じpinned baseから別overlay。build guest apt署名検証を保ちnative gcc/dpkg-dev/libvulkan-dev/libdrm-dev等をinstallし、同一source snapshotから既存keiland-linux.mkをbuild/stage、runtime-filter/deb control・manifest・licenses・dependencies、dpkg-deb --root-owner-group。
 source archiveはtracked Linux必要roots＋release tools（未commit自分の実装を含む）のallowlist、.internal/toolchain/buildを含めない。external dictionary/emojiは既存pin/hash検証で取得。source archive hashとcommit/dirty/tool/compiler/installedpackages/distro/guest hashを`.buildinfo.json`へ記録（Debian standard .buildinfoと混同しない）。

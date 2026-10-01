@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q545 finished、WS108 p001 cleared）
+Active Queue: なし（q546 finished、WS108 p002 cleared）
 Current Focused Goal: fg015 — 2 distro QEMU native package/build/test、CI/nightly release。fg014達成、fg010/fg013保持。
-Next（2026-10-02 に更新）: WS108 p001を実行、WS106は回答待ち。
+Next（2026-10-02 に更新）: WS108 p002を実行、WS106は回答待ち。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -214,7 +214,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | completed | L1〜L9/最終source conformance verified、q538 finished。Linux host/ownDebian13guest・zedBSD回帰、BUG-125/127は未修正trackingのユーザー許可。GitHub publication pending、次の実装なし |
 | [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | q540 partial cleared、p002 uncleared（ime-probe回答待ち）、p003未実行。 |
 | [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | completed | B1〜B5 verified / q544、API v2/public Vulkan client/最終boot。GitHub deferred |
-| [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | incomplete | p001 cleared/q545 |
+| [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | incomplete | p002 cleared/q546 |
 | [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | planning | p001 graphics/ABI/seat/loader/licenseと検証環境の調査。F-065 FreeBSD分をpromote。Queue無し |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
@@ -367,6 +367,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | libm の試験（[tools/libm](tools/libm/)、WS076） | libc の libm（`src/libc/math/`）を MPFR（gmpy2）の参照値と比べ、関数ごとの最大・平均の ulp 誤差、正確であるべき結果の不一致、C11 Annex F の特殊な値・errno・例外を出す。host（host の clang、libm を link しない）と guest（amd64、image の libc.so、serial で実行） | `plan/tools/libm/host-test.sh [--count N] [NAME...]`、`plan/tools/libm/guest-test.sh [--count N] [NAME...]`（`BUILD` 既定 `build/ws076-amd64`）。参照の生成は `gen-reference.py OUT.bin`。ブラウザの JS（ws074 の試験と `js/libm.js`）を guest で Chromium と比べる `browser-js.sh`（`js-reference.py --reference` で期待値） |
 | 規約の検査（[style-check.py](tools/style-check.py)） | `plan/coding-style.md` のうち機械的に確かめられる規則（条件の中の呼び出し、閉じ括弧の後の空行、段落の comment、入れ子の宣言、条件演算子、goto、前方宣言、comment の形、名前、複数行の本体の括弧） | `python3 plan/tools/style-check.py FILE... [--summary] [--rule NAME]` |
 | Browser component（[tools/browser-component](tools/browser-component/README.md)、WS107） | Wayland無し/public headerのみの動的第2client、2view/抽象入力/callback、allocation rollback・async history、標準Vulkan/lavapipeのdraw/record/readback/caller fence/resize/target解放、plain＋ASan/UBSan | `sh plan/tools/browser-component/run.sh [plain|asan]` |
+| Keiland native deb（[release driver](../tools/release/keiland-linux-deb/README.md)、WS108） | pinned Debian13/Ubuntu26.04 QEMU native build、fresh guest導入/GUI/input/public Vulkan/upgrade/remove、manifest/buildinfo/checksum | `make keiland-linux-debian` / `make keiland-linux-ubuntu2604` |
 
 QEMU の不具合は log を読まずに、QEMU のデバッグ機能で解析する:
 

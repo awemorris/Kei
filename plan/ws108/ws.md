@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG007
 Related Milestones: MG001, MG006
 Parent: [Master](../master.md)
-Queue: なし（q545 finished）
-Resume point: p001 cleared、p002の承認scope/実outputを確認。
+Queue: なし（q546 finished）
+Resume point: p002 cleared、p003の承認scope/実outputを確認。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -21,12 +21,12 @@ WS completion と milestone 全体の acceptance は別に確認する。
 
 ## 範囲
 
-[パッケージ設計案](design.md)。初期の architecture は WS105 と同じ amd64 の案（未確定）。
-target distro の固定された環境ごとに native build し、DESTDIR staging から dpkg/debhelper で package を作る。
+[パッケージ設計案](design.md)。architecture は WS105 と同じ amd64。q545で両OSの実guest identity/checksum/readinessを確認。
+target distro の固定QEMU guestごとにnative buildし、DESTDIR private stagingからdpkg-debでruntime packageを作る。
 既存 zedBSD image/nightly CI は保つ。自動APT repository公開は含めない。2026-10-02ユーザー指定により既存nightly releaseへのdeb/checksum/buildinfo添付を含める。
 `/opt/keiland`、system Vulkan の動的後段、gdm/direct の既存の意味を保つ。
 最初の runtime package は WS105 で Linux 対応済みの library/compositor/app/data を基準にする。
-test app の runtime への混入を避ける。test/devel の分割、browser/EGL/GLES 等の追加は p001 の package manifest で明記して合意する。
+test app の runtime への混入を避ける。q545でruntimeだけを固定、test/devel packageやbrowser/EGL/GLESの追加は今回の範囲外。
 CI job の distro は ubuntu-latest の名前から推測しない。tool/image/action の利用可能な version と digest を実装時に確定する。
 
 ## WS 自身の完了条件
@@ -46,7 +46,7 @@ WS105 の build/install/ELF と session 契約は completed context。WS106 の 
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
 | [ws108p001](phase001/phase.md) | package manifest・環境・依存を設計 | P1 と p002〜p004 の実 command/環境を定義。両OSのQEMU guest内native build、dpkg導入/GUI動作とCI/releaseを設計。 | cleared | WS105 output（context）、WS106 の対象表（context） |
-| [ws108p002](phase002/phase.md) | deb packaging と install 検証 | P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。 | planning | p001 |
+| [ws108p002](phase002/phase.md) | deb packaging と install 検証 | P2/P3 の package/CLI 部分。GUI/session の必要な guest 証拠は最後の Phase までに満たす。 | cleared | p001 |
 | [ws108p003](phase003/phase.md) | CI の2 distro job と artifact | P4。実 job の結果または同じ環境/手順の検証を記録し、remote CI 未実行は区別する。 | planning | p002 |
 | [ws108p004](phase004/phase.md) | 全文規約・両 distro の最終 install/session 回帰 | P1〜P5。CI の未実行・GPU/session 未検証が残れば必要な acceptance を満たしたとはしない。 | planning | p003、WS106の確定済み対象配置（scoped output、ime-probe対象外） |
 
@@ -84,3 +84,5 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-02 / ws108-q545-design: 全Phaseを[確定設計](design.md)へ具体化。QEMU guest build/test、指定targets、runtimeだけのmanifest、既存CI/nightly release files。移動済対象のscoped outputを使用、ime-probe編集/確定を待たない。GitHub delivery pending。
 
 2026-10-01T16:17:58.918952+00:00 / ws108-q545-cleared: p001 cleared。P1 manifest/version/license/dependency/2OS native guest手順/CI release設計を固定。公式pinned image checksum両方一致、actual QEMU10.0.11/KVM cloud-init/SSH/QMP PNGでDebian13/Ubuntu26.04 amd64確認、自分のguest停止。plan/ws108/design.mdとinputs.json。
+
+2026-10-01T16:52:23.158073+00:00 / ws108-q546-cleared: p002 cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。

@@ -2,10 +2,10 @@
 
 # ws108p002: deb packaging と install 検証
 
-Status: cleared
+Status: planning
 Disposition: normal
 Parent: [WS108](../ws.md)
-Queue / Attempt: q546 / q546-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -47,13 +47,3 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 旧container案をQEMU nativeへ置換、旧release対象外をrelease filesへ置換。既存/opt layoutとWS105のLinux対応済production内容を維持、test appはruntime package外。amd64は既存対象の具体化。実release publication/pushはこのsessionでは行わずCI定義を作成・local同手順検証、remote runは未実施と分ける。
 
 2026-10-02 / ws108-q545-design: [確定設計](../design.md)へ具体化、p001 inputs/manifest/readiness→p002指定targets/2OS native guest/deb/runtime→p003既存CI/release→p004full conformance。各Phase自身の内容/verify/time boundsは設計該当節。container/release除外の旧案はユーザー指示で置換。dependency順は維持、WS106未確定ime-probeは対象外で待たない。GitHub Phase/WS delivery pending。
-
-2026-10-02 / ws108-q546-checkpoint: 初回native snapshotはtest/demoが使うbase/common SHA helperを欠き、両OSでmissing sourceとして失敗。host header closureとcompile結果で必要rootを追加、production/toolchain変更無し。guest driver内の普通の実装修正としてbounded再検証中。runtime config/test除外、公開Vulkan client、actualTerminal入力ファイル、genuine+smoke1 upgradeをchecksへ具体化、P2/P3 scope維持。
-
-2026-10-02 / ws108-q546-runtime-checkpoint: 両native guest compile/deb/control生成成功、native gcc14.2/15.2でsource warning0。fresh install/ELF/public vk-chain/reinstall/real+smoke1 upgrade PASS。最初のGUI waitはrunnerがzedBSDのwayland-0名を仮定して失敗。Ubuntu application journalではactual compositor READY/llvmpipe正常、Linuxのwayland-keiland名とTerminalのWAYLAND_DISPLAYをsource/WS105契約へ合わせてrunnerを修正。production不具合と扱わず両fresh候補を再検証。検証をまだclearとはしない。
-
-## 結果 / q546-i01 / 2026-10-01T16:52:23.157209+00:00
-
-cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。
-
-Event ws108-q546-cleared: Phase結果/closure意図をlocal保存、remote comment/closeはdeferred。

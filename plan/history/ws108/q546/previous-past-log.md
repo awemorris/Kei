@@ -2,15 +2,9 @@
 
 # Past Log
 
-Last finished Queue: [q546](queue-q546.md)（WS108 p002 cleared）
+Last finished Queue: [q545](queue-q545.md)（WS108 p001 cleared）
 
-## 最新: q546 / WS108 p002
-
-cleared。2OS native package＋fresh overlay install/reinstall/real upgrade/conffile/remove/purge/public Vulkan/actual compositor/Terminal入力 PASS。compiler warning0、private shlibsの27警告を分類。証拠 plan/history/ws108/q546/result.md。p004はcommitted最終sourceの両make/8GiB guestを再検証。
-
-GitHub publication/outbox pending、commit WIP / pushなし。
-
-## 前回: q545 / WS108 p001
+## 最新: q545 / WS108 p001
 
 cleared。P1 manifest/version/license/dependency/2OS native guest手順/CI release設計を固定。公式pinned image checksum両方一致、actual QEMU10.0.11/KVM cloud-init/SSH/QMP PNGでDebian13/Ubuntu26.04 amd64確認、自分のguest停止。plan/ws108/design.mdとinputs.json。
 
@@ -112,8 +106,6 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 | [q544](queue-q544.md) | WS107 p004 cleared |
 
 | [q545](queue-q545.md) | WS108 p001 cleared |
-
-| [q546](queue-q546.md) | WS108 p002 cleared |
 
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。
