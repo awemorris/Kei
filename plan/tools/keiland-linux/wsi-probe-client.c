@@ -48,12 +48,15 @@ static void client_cleanup(struct client_probe *probe);
 static uint64_t client_time(void);
 static int client_failed(struct client_probe *probe, VkResult error);
 
-/* Runs the finite public WSI workload and reports PASS only after checked GPU and protocol operations. */
+/*
+ * Runs the finite public WSI workload and reports PASS only after checked GPU and protocol operations.
+ */
 int
 main(
 	int argc,
 	char **argv)
 {
+	int exit_status;
 	struct client_probe probe;
 	unsigned frames;
 	unsigned timeout;
@@ -122,13 +125,21 @@ main(
 	/* Checks setup through the same API version and extension rewrite used by ordinary applications. */
 	start = client_time();
 	error = client_setup(&probe);
-	if (error != VK_SUCCESS)
-		return client_failed(&probe, error);
+	if (error != VK_SUCCESS) {
+		exit_status = client_failed(&probe, error);
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Builds the initial client-selected extent. */
 	error = client_swapchain(&probe, 320, 240);
-	if (error != VK_SUCCESS)
-		return client_failed(&probe, error);
+	if (error != VK_SUCCESS) {
+		exit_status = client_failed(&probe, error);
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Every frame renders to the actual exported Vulkan image. */
 	for (frame = 0; frame < frames; frame++) {
@@ -136,7 +147,10 @@ main(
 		measured_time = client_time();
 		if (measured_time - start >= (uint64_t)timeout * 1000000000ULL) {
 			error = VK_TIMEOUT;
-			return client_failed(&probe, error);
+			exit_status = client_failed(&probe, error);
+
+			/* Preserves the reported failure after its cleanup. */
+			return exit_status;
 		}
 
 		/* Alternates client-selected extents without waiting for compositor configure events. */
@@ -150,22 +164,34 @@ main(
 						error = client_swapchain(&probe, 320, 240);
 
 					/* Resize failure ends acceptance without rewriting the expected color sequence. */
-					if (error != VK_SUCCESS)
-						return client_failed(&probe, error);
+					if (error != VK_SUCCESS) {
+						exit_status = client_failed(&probe, error);
+
+						/* Preserves the reported failure after its cleanup. */
+						return exit_status;
+					}
 				}
 			}
 		}
 
 		/* Checks acquire, clear, submission and per-swapchain presentation result. */
 		error = client_frame(&probe, frame);
-		if (error != VK_SUCCESS)
-			return client_failed(&probe, error);
+		if (error != VK_SUCCESS) {
+			exit_status = client_failed(&probe, error);
+
+			/* Preserves the reported failure after its cleanup. */
+			return exit_status;
+		}
 	}
 
 	/* Waits for the last GPU submission before reporting the finite workload complete. */
 	error = vkDeviceWaitIdle(probe.device);
-	if (error != VK_SUCCESS)
-		return client_failed(&probe, error);
+	if (error != VK_SUCCESS) {
+		exit_status = client_failed(&probe, error);
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Retires all application resources before claiming success. */
 	client_cleanup(&probe);
@@ -199,6 +225,9 @@ client_global(
 
 	/* Binds exactly the core request version understood by the independent test server. */
 	probe->compositor = wl_registry_bind(registry, name, &wl_compositor_interface, 4);
+
+	/* Succeeded: the client retained any supported advertised interface. */
+	return;
 }
 
 /* Bound globals remain usable until the test connection ends. */
@@ -212,6 +241,9 @@ client_remove(
 	(void)data;
 	(void)registry;
 	(void)name;
+
+	/* Succeeded: the fixture retains no per-global removal state. */
+	return;
 }
 
 /* Creates an API-1.0 graphics device and ordinary reusable rendering synchronization. */
@@ -219,6 +251,8 @@ static VkResult
 client_setup(
 	struct client_probe *probe)
 {
+	VkResult submission;
+
 	/* Registry callbacks construct only the application's own core compositor object. */
 	static const struct wl_registry_listener client_registry_listener = {
 	    client_global, client_remove};
@@ -391,7 +425,12 @@ client_setup(
 	fence.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
 	/* Returns the last resource allocation outcome. */
-	return vkCreateFence(probe->device, &fence, NULL, &probe->fence);
+	submission = vkCreateFence(probe->device, &fence, NULL, &probe->fence);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the client owns its reusable rendering synchronization. */
+	return VK_SUCCESS;
 }
 
 /* Replaces a chain while keeping the old handle alive until successful new creation. */
@@ -401,6 +440,7 @@ client_swapchain(
 	uint32_t width,
 	uint32_t height)
 {
+	VkResult submission;
 	VkSwapchainCreateInfoKHR create;
 	VkSwapchainKHR next;
 	VkResult error;
@@ -445,7 +485,12 @@ client_swapchain(
 	probe->image_count = 8;
 
 	/* Returns the public enumeration result for the newly selected extent. */
-	return vkGetSwapchainImagesKHR(probe->device, next, &probe->image_count, probe->images);
+	submission = vkGetSwapchainImagesKHR(probe->device, next, &probe->image_count, probe->images);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the client retained the new swapchain image handles. */
+	return VK_SUCCESS;
 }
 
 /* Clears one acquired image to the deterministic N-modulo-three color and presents it. */

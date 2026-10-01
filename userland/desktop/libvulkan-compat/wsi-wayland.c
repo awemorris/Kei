@@ -25,7 +25,9 @@ static int surface_initialize(struct compat_surface *surface, struct wl_surface 
 static int surface_lost(struct compat_surface *surface);
 static VkBool32 surface_support(VkPhysicalDevice physical, uint32_t family, unsigned external);
 
-/* Creates a private surface record while leaving application Wayland objects owned by the application. */
+/*
+ * Creates a private surface record while leaving application Wayland objects owned by the application.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkCreateWaylandSurfaceKHR(
 	VkInstance instance,
@@ -90,7 +92,9 @@ vkCreateWaylandSurfaceKHR(
 	return VK_SUCCESS;
 }
 
-/* Retires only our private protocol proxies, after Vulkan callers have destroyed their swapchains. */
+/*
+ * Retires only our private protocol proxies, after Vulkan callers have destroyed their swapchains.
+ */
 VKAPI_ATTR void VKAPI_CALL
 vkDestroySurfaceKHR(
 	VkInstance instance,
@@ -134,24 +138,36 @@ vkDestroySurfaceKHR(
 	/* Releases advertised layouts and the Vulkan object with its matching allocator. */
 	free(surface->modifiers);
 	compat_object_free(surface, surface->allocated, &surface->allocator);
+
+	/* Succeeded: only private surface and callback storage has retired. */
+	return;
 }
 
-/* Reports support only for graphics queues with an actual DMA-BUF image export path. */
+/*
+ * Reports support only for graphics queues with an actual DMA-BUF image export path.
+ */
 VKAPI_ATTR VkBool32 VKAPI_CALL
 vkGetPhysicalDeviceWaylandPresentationSupportKHR(
 	VkPhysicalDevice physicalDevice,
 	uint32_t queueFamilyIndex,
 	struct wl_display *display)
 {
+	VkBool32 supported;
+
 	/* Connection errors cannot support presentation. */
 	if (display == NULL)
 		return VK_FALSE;
 
 	/* Returns the physical device and queue's verified export capability. */
-	return surface_support(physicalDevice, queueFamilyIndex, 1);
+	supported = surface_support(physicalDevice, queueFamilyIndex, 1);
+
+	/* Succeeded: reports the queried queue support. */
+	return supported;
 }
 
-/* Reports graphics/export support and the still-live compositor connection. */
+/*
+ * Reports graphics/export support and the still-live compositor connection.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDeviceSurfaceSupportKHR(
 	VkPhysicalDevice physicalDevice,
@@ -183,13 +199,15 @@ vkGetPhysicalDeviceSurfaceSupportKHR(
 		return VK_ERROR_SURFACE_LOST_KHR;
 
 	/* Returns queue and export support; formats supply the compositor intersection. */
-	*pSupported = surface_support(physicalDevice, queueFamilyIndex, surface->kms == NULL);
+	*pSupported = surface_support(physicalDevice, queueFamilyIndex, 1);
 
 	/* Succeeded: the support destination contains the physical queue's answer. */
 	return VK_SUCCESS;
 }
 
-/* Describes client-selected extents and the bounded image count supported by this WSI. */
+/*
+ * Describes client-selected extents and the bounded image count supported by this WSI.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -243,7 +261,9 @@ vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
 	return VK_SUCCESS;
 }
 
-/* Enumerates only formats whose compositor modifier also permits backend image export. */
+/*
+ * Enumerates only formats whose compositor modifier also permits backend image export.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDeviceSurfaceFormatsKHR(
 	VkPhysicalDevice physicalDevice,
@@ -345,7 +365,9 @@ vkGetPhysicalDeviceSurfaceFormatsKHR(
 	return VK_SUCCESS;
 }
 
-/* Enumerates FIFO and MAILBOX without permitting unimplemented presentation semantics. */
+/*
+ * Enumerates FIFO and MAILBOX without permitting unimplemented presentation semantics.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDeviceSurfacePresentModesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -396,7 +418,9 @@ vkGetPhysicalDeviceSurfacePresentModesKHR(
 	return VK_SUCCESS;
 }
 
-/* Reports the single physical device's full current swapchain rectangle. */
+/*
+ * Reports the single physical device's full current swapchain rectangle.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDevicePresentRectanglesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -436,7 +460,9 @@ vkGetPhysicalDevicePresentRectanglesKHR(
 	return VK_SUCCESS;
 }
 
-/* Allocates and zeros a Vulkan WSI object with the matching application allocator. */
+/*
+ * Allocates and zeros a Vulkan WSI object with the matching application allocator.
+ */
 void *
 compat_object_allocate(
 	size_t size,
@@ -445,8 +471,14 @@ compat_object_allocate(
 	void *object;
 
 	/* Ordinary allocations use the process C runtime. */
-	if (allocator == NULL)
-		return calloc(1, size);
+	if (allocator == NULL) {
+		object = calloc(1, size);
+		if (object == NULL)
+			return NULL;
+
+		/* Succeeded: the caller owns zeroed C-runtime storage. */
+		return object;
+	}
 
 	/* Application allocation callbacks own Vulkan-object storage until destruction. */
 	object = allocator->pfnAllocation(allocator->pUserData, size, sizeof(void *) * 2, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT);
@@ -460,7 +492,9 @@ compat_object_allocate(
 	return object;
 }
 
-/* Frees a WSI object's storage using the allocator that created it. */
+/*
+ * Frees a WSI object's storage using the allocator that created it.
+ */
 void
 compat_object_free(
 	void *object,
@@ -475,9 +509,14 @@ compat_object_free(
 
 	/* Returns ordinary object storage to the process allocator. */
 	free(object);
+
+	/* Succeeded: the matching allocator reclaimed the object. */
+	return;
 }
 
-/* Returns monotonic nanoseconds for deadline arithmetic independent of wall-clock adjustments. */
+/*
+ * Returns monotonic nanoseconds for deadline arithmetic independent of wall-clock adjustments.
+ */
 uint64_t
 compat_time(
 	void)
@@ -494,12 +533,16 @@ compat_time(
 	return (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
 }
 
-/* Dispatches private events with a bounded socket wait; application callbacks remain queued. */
+/*
+ * Dispatches private events with a bounded socket wait; application callbacks remain queued.
+ */
 int
 compat_surface_progress(
 	struct compat_surface *surface,
 	uint64_t timeout)
 {
+	int progress;
+
 	struct pollfd descriptor;
 	uint64_t start;
 	uint64_t now;
@@ -526,16 +569,24 @@ compat_surface_progress(
 
 	/* Processes already queued private events before reserving a socket read. */
 	error = wl_display_dispatch_queue_pending(surface->display, surface->queue);
-	if (error < 0)
-		return surface_lost(surface);
+	if (error < 0) {
+		progress = surface_lost(surface);
+
+		/* Preserves the reported failure after its cleanup. */
+		return progress;
+	}
 
 	/* Reserves a read only after all private pending events have been consumed. */
 	error = wl_display_prepare_read_queue(surface->display, surface->queue);
 	if (error != 0) {
 		/* A newly queued callback is dispatched without a blocking socket read. */
 		error = wl_display_dispatch_queue_pending(surface->display, surface->queue);
-		if (error < 0)
-			return surface_lost(surface);
+		if (error < 0) {
+			progress = surface_lost(surface);
+
+			/* Preserves the reported failure after its cleanup. */
+			return progress;
+		}
 
 		/* Progress can be retried after the queued callbacks have run. */
 		return 1;
@@ -547,7 +598,10 @@ compat_surface_progress(
 		/* Unexpected transport failure ends the reserved read. */
 		if (errno != EAGAIN) {
 			wl_display_cancel_read(surface->display);
-			return surface_lost(surface);
+			progress = surface_lost(surface);
+
+			/* Preserves the reported failure after its cleanup. */
+			return progress;
 		}
 	}
 
@@ -578,25 +632,39 @@ compat_surface_progress(
 		if (error < 0) {
 			if (errno != EINTR) {
 				wl_display_cancel_read(surface->display);
-				return surface_lost(surface);
+				progress = surface_lost(surface);
+
+				/* Preserves the reported failure after its cleanup. */
+				return progress;
 			}
 		} else {
 			/* Transport hangup invalidates the surface regardless of pending callbacks. */
 			if ((descriptor.revents & (POLLERR | POLLHUP | POLLNVAL)) != 0) {
 				wl_display_cancel_read(surface->display);
-				return surface_lost(surface);
+				progress = surface_lost(surface);
+
+				/* Preserves the reported failure after its cleanup. */
+				return progress;
 			}
 
 			/* A readable socket completes the reserved read. */
 			if ((descriptor.revents & POLLIN) != 0) {
 				error = wl_display_read_events(surface->display);
-				if (error < 0)
-					return surface_lost(surface);
+				if (error < 0) {
+					progress = surface_lost(surface);
+
+					/* Preserves the reported failure after its cleanup. */
+					return progress;
+				}
 
 				/* Invokes only WSI callbacks, preserving queued application events. */
 				error = wl_display_dispatch_queue_pending(surface->display, surface->queue);
-				if (error < 0)
-					return surface_lost(surface);
+				if (error < 0) {
+					progress = surface_lost(surface);
+
+					/* Preserves the reported failure after its cleanup. */
+					return progress;
+				}
 
 				/* Succeeded: at least one socket batch was processed. */
 				return 1;
@@ -608,7 +676,10 @@ compat_surface_progress(
 				if (flushed < 0) {
 					if (errno != EAGAIN) {
 						wl_display_cancel_read(surface->display);
-						return surface_lost(surface);
+						progress = surface_lost(surface);
+
+						/* Preserves the reported failure after its cleanup. */
+						return progress;
 					}
 				}
 			}
@@ -630,7 +701,9 @@ compat_surface_progress(
 	}
 }
 
-/* Selects an advertised single-plane layout whose image can actually be exported. */
+/*
+ * Selects an advertised single-plane layout whose image can actually be exported.
+ */
 int
 compat_surface_modifier(
 	struct compat_surface *surface,
@@ -823,6 +896,9 @@ surface_global_remove(
 	(void)data;
 	(void)registry;
 	(void)name;
+
+	/* Succeeded: a removed factory cannot accept new swapchains. */
+	return;
 }
 
 /* Version-three format-only events are insufficient to select an image layout. */
@@ -836,6 +912,9 @@ surface_format(
 	(void)data;
 	(void)object;
 	(void)format;
+
+	/* Succeeded: the advertised format is retained with an implicit modifier. */
+	return;
 }
 
 /* Retains each advertised pair until the private surface record is destroyed. */
@@ -870,6 +949,9 @@ surface_modifier(
 	grown[surface->modifier_count].format = format;
 	grown[surface->modifier_count].modifier = ((uint64_t)high << 32) | low;
 	surface->modifier_count++;
+
+	/* Succeeded: the advertised format/modifier pair is retained. */
+	return;
 }
 
 /* Completes one bounded initialization sync and retires its callback proxy. */
@@ -886,6 +968,9 @@ surface_sync(
 	surface = data;
 	surface->sync_done = 1;
 	wl_callback_destroy(callback);
+
+	/* Succeeded: private initialization can finish after this barrier. */
+	return;
 }
 
 /* Receives registry or modifier announcements within one finite initialization deadline. */

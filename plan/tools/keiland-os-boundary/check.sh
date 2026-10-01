@@ -65,8 +65,59 @@ find include/libc \( -name 'keiland.h' -o -name 'keiui.h' -o -name 'truetype.h' 
     -o -name 'browser.h' -o -name 'wayland*' -o -name 'xdg-shell*' \
     -o -name 'primary-selection*' -o -name 'tablet-unstable*' \) -print > "$work/C5"
 
+# Linux selection belongs to the OS modules; the evdev header bridges constants.
+find userland/desktop \
+    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/wpa' \) -prune \
+    -o -name '*.[ch]' -print |
+while IFS= read -r file; do
+    [ "$file" != userland/desktop/wayland/zwl-evdev.h ] || continue
+    awk '/^[[:space:]]*#[[:space:]]*(if|ifdef|elif).*__linux__/ {print FILENAME ":" FNR ": " $0}' "$file"
+done > "$work/L1"
+
+# Each OS module consumes only its own kernel and service interfaces.
+find userland/desktop/libkeiland/linux userland/desktop/libkeiland/wpa userland/desktop/wayland/linux -name '*.[ch]' -print |
+while IFS= read -r file; do
+    awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"](uapi\/|userland\/base\/(net|audiod)\/)/ {print FILENAME ":" FNR ": " $0}' "$file"
+done > "$work/L2"
+find userland/desktop/libkeiland/zedbsd userland/desktop/wayland/zedbsd -name '*.[ch]' -print |
+while IFS= read -r file; do
+    awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"](linux\/|drm\/|sound\/)/ {print FILENAME ":" FNR ": " $0}' "$file"
+done > "$work/L3"
+
+# The Linux Vulkan frontend never includes or compiles zedBSD Vulkan sources.
+find userland/desktop/libvulkan-compat -type f \
+    \( -name '*.[ch]' -o -name 'Makefile.linux' \) -print |
+while IFS= read -r file; do
+    awk '/^[[:space:]]*#[[:space:]]*include.*(userland\/desktop\/libvulkan\/|\.\.\/libvulkan\/)/ ||
+         /^[^#]*userland\/desktop\/libvulkan\/.*\.c/ {print FILENAME ":" FNR ": " $0}' "$file"
+done > "$work/L4"
+make -s -f userland/desktop/keiland-linux.mk print-sources > "$work/linux-sources"
+awk '/^userland\/desktop\/libvulkan\// {print "compiled Linux source: " $0}' "$work/linux-sources" >> "$work/L4"
+
+# Inspect the actual target package membership and wildcard filename boundary.
+make -pn disk-image > "$work/make-database"
+python3 - "$work/make-database" > "$work/L5" <<'PY'
+from pathlib import Path
+import fnmatch
+import re
+import sys
+text = Path('Makefile').read_text()
+patterns = re.findall(r'\$\(wildcard ([^)]+)\)', text)
+for path in Path('userland').rglob('Makefile.linux'):
+    for pattern in patterns:
+        if fnmatch.fnmatchcase(str(path), pattern):
+            print(f'{path}: matches top-level wildcard {pattern}')
+for line in Path(sys.argv[1]).read_text().splitlines():
+    if line.startswith('USERLAND_PACKAGE_MAKEFILES :=') and 'Makefile.linux' in line:
+        print(line)
+    if line.startswith('MAKEFILE_LIST :='):
+        for name in line.split()[2:]:
+            if name.endswith('Makefile.linux'):
+                print(f'target includes Linux rules: {name}')
+PY
+
 # Report every violated condition before returning the aggregate outcome.
-for check in C1 C2 C3 C4 C5; do
+for check in C1 C2 C3 C4 C5 L1 L2 L3 L4 L5; do
     if [ -s "$work/$check" ]; then
         while IFS= read -r detail; do
             printf 'check: %s FAIL %s\n' "$check" "$detail"

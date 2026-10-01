@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q537 finished
-Resume point: p010 cleared（q537）。次は依存を満たす既存 Phase。
+Queue: q538
+Resume point: q538 / p011 を実行中。WS104 の全 prerequisite verified。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -114,7 +114,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | cleared | p007 |
 | [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | cleared | p008、p005修復 |
 | [ws105-p010](phase010/phase.md) | libkeiland の Linux の backend（wpa_supplicant・Linux の interface・ALSA） | cleared | p008 |
-| [ws105-p011](phase011/phase.md) | 規約の全文の見直し、境界の確かめの拡張、回帰（Linux と zedBSD）、install の文書 | planned | p001〜p010 |
+| [ws105-p011](phase011/phase.md) | 規約の全文の見直し、境界の確かめの拡張、回帰（Linux と zedBSD）、install の文書 | in-progress | p001〜p010 |
 
 依存の図（矢印は「前提 → 後」）:
 

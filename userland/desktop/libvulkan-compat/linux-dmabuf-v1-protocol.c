@@ -50,16 +50,23 @@ static const struct wl_message params_events[] = {
 const struct wl_interface zwp_linux_buffer_params_v1_interface = {
     "zwp_linux_buffer_params_v1", 3, 4, params_requests, 2, params_events};
 
-/* Sends the global destructor and retires its proxy. */
+/*
+ * Sends the global destructor and retires its proxy.
+ */
 void
 compat_dmabuf_destroy(
 	struct zwp_linux_dmabuf_v1 *object)
 {
 	/* Queues the wire destructor before removing the local object. */
 	wl_proxy_marshal_array_flags((struct wl_proxy *)object, 0, NULL, 0, WL_MARSHAL_FLAG_DESTROY, NULL);
+
+	/* Succeeded: the local factory proxy has retired. */
+	return;
 }
 
-/* Allocates the protocol object describing one image's planes. */
+/*
+ * Allocates the protocol object describing one image's planes.
+ */
 struct zwp_linux_buffer_params_v1 *
 compat_dmabuf_params(
 	struct zwp_linux_dmabuf_v1 *object)
@@ -75,16 +82,23 @@ compat_dmabuf_params(
 	return (struct zwp_linux_buffer_params_v1 *)created;
 }
 
-/* Retires the plane parameter object after buffer creation. */
+/*
+ * Retires the plane parameter object after buffer creation.
+ */
 void
 compat_params_destroy(
 	struct zwp_linux_buffer_params_v1 *object)
 {
 	/* Queues the wire destructor before removing the local object. */
 	wl_proxy_marshal_array_flags((struct wl_proxy *)object, 0, NULL, 0, WL_MARSHAL_FLAG_DESTROY, NULL);
+
+	/* Succeeded: the local parameter proxy has retired. */
+	return;
 }
 
-/* Sends the exported file descriptor for the single supported image plane. */
+/*
+ * Sends the exported file descriptor for the single supported image plane.
+ */
 void
 compat_params_add(
 	struct zwp_linux_buffer_params_v1 *object,
@@ -103,9 +117,14 @@ compat_params_add(
 	arguments[4].u = (uint32_t)(modifier >> 32);
 	arguments[5].u = (uint32_t)modifier;
 	wl_proxy_marshal_array_flags((struct wl_proxy *)object, 1, NULL, 0, 0, arguments);
+
+	/* Succeeded: the requested plane description has been sent. */
+	return;
 }
 
-/* Creates the wl_buffer immediately, as required by the version-three WSI path. */
+/*
+ * Creates the wl_buffer immediately, as required by the version-three WSI path.
+ */
 struct wl_buffer *
 compat_params_buffer(
 	struct zwp_linux_buffer_params_v1 *object,

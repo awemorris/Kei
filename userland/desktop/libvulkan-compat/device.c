@@ -357,7 +357,9 @@ compat_queue_get(
 	return queue;
 }
 
-/* Returns an already retrieved queue belonging to this still-live device. */
+/*
+ * Returns an already retrieved queue belonging to this still-live device.
+ */
 struct compat_queue *
 compat_device_queue(
 	struct compat_device *device)
@@ -569,7 +571,9 @@ compat_image_supported(
 	return VK_TRUE;
 }
 
-/* Offers swapchains when either exported Wayland images or a portable KMS copy path is available. */
+/*
+ * Offers swapchains when either exported Wayland images or a portable KMS copy path is available.
+ */
 int
 compat_swapchain_available(
 	VkPhysicalDevice physical)
@@ -994,4 +998,7 @@ device_functions(
 
 	/* Resolves the backend vkUnmapMemory operation without interposition. */
 	device->unmap_memory = (PFN_vkUnmapMemory)compat_backend.get_device_proc(device->handle, "vkUnmapMemory");
+
+	/* Succeeded: the device owns its resolved backend procedures. */
+	return;
 }

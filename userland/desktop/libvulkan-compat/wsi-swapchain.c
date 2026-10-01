@@ -28,7 +28,9 @@ static VkResult chain_record(struct compat_swapchain *chain, uint32_t index, uns
 static VkResult chain_display_image(struct compat_swapchain *chain, uint32_t index, const VkSwapchainCreateInfoKHR *create);
 static VkResult chain_display_readback(struct compat_swapchain *chain);
 
-/* Creates exportable images and their compositor buffers without using backend WSI. */
+/*
+ * Creates exportable images and their compositor buffers without using backend WSI.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkCreateSwapchainKHR(
 	VkDevice device,
@@ -36,6 +38,7 @@ vkCreateSwapchainKHR(
 	const VkAllocationCallbacks *pAllocator,
 	VkSwapchainKHR *pSwapchain)
 {
+	VkResult submission;
 	struct compat_device *owner;
 	struct compat_surface *surface;
 	struct compat_swapchain *chain;
@@ -67,8 +70,14 @@ vkCreateSwapchainKHR(
 		return VK_ERROR_SURFACE_LOST_KHR;
 
 	/* KMS surfaces allocate ordinary optimal images and portable CPU scanout storage. */
-	if (surface->kms != NULL)
-		return compat_display_swapchain_create(owner, pCreateInfo, pAllocator, pSwapchain);
+	if (surface->kms != NULL) {
+		submission = compat_display_swapchain_create(owner, pCreateInfo, pAllocator, pSwapchain);
+		if (submission != VK_SUCCESS)
+			return submission;
+
+		/* Succeeded: the application owns its display swapchain. */
+		return VK_SUCCESS;
+	}
 
 	/* An older or absent protocol is diagnosed once per failed creation. */
 	if (surface->dmabuf == NULL) {
@@ -112,7 +121,9 @@ vkCreateSwapchainKHR(
 	chain->extent = pCreateInfo->imageExtent;
 	chain->mode = pCreateInfo->presentMode;
 	chain->path = owner->path;
-	chain->fallback = owner->implicit_sync == 0;
+	chain->fallback = 0;
+	if (owner->implicit_sync == 0)
+		chain->fallback = 1;
 	if (pCreateInfo->imageSharingMode == VK_SHARING_MODE_EXCLUSIVE)
 		chain->foreign = owner->foreign;
 	if (pAllocator != NULL) {
@@ -160,7 +171,9 @@ vkCreateSwapchainKHR(
 	return VK_SUCCESS;
 }
 
-/* Defers busy compositor buffers while immediately retiring an idle swapchain. */
+/*
+ * Defers busy compositor buffers while immediately retiring an idle swapchain.
+ */
 VKAPI_ATTR void VKAPI_CALL
 vkDestroySwapchainKHR(
 	VkDevice device,
@@ -191,9 +204,14 @@ vkDestroySwapchainKHR(
 	/* Receives already available release events without waiting on the compositor. */
 	(void)compat_surface_progress(chain->surface, 0);
 	compat_swapchain_collect(chain->surface, 0);
+
+	/* Succeeded: GPU ownership retired and callbacks remain on the surface retirement list. */
+	return;
 }
 
-/* Enumerates the unchanged backend image handles allocated for the private swapchain. */
+/*
+ * Enumerates the unchanged backend image handles allocated for the private swapchain.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetSwapchainImagesKHR(
 	VkDevice device,
@@ -239,11 +257,17 @@ vkGetSwapchainImagesKHR(
 	/* Returns the number actually written, rather than the total available. */
 	*pSwapchainImageCount = count;
 
-	/* Succeeded or incomplete according to the caller's supplied capacity. */
-	return result;
+	/* Reports an incomplete image enumeration when the array is too small. */
+	if (result != VK_SUCCESS)
+		return result;
+
+	/* Succeeded: the caller received every swapchain image. */
+	return VK_SUCCESS;
 }
 
-/* Acquires only an unused or compositor-released image and honors the caller's exact deadline. */
+/*
+ * Acquires only an unused or compositor-released image and honors the caller's exact deadline.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkAcquireNextImageKHR(
 	VkDevice device,
@@ -333,13 +357,17 @@ vkAcquireNextImageKHR(
 	}
 }
 
-/* Uses the single-device acquire contract while rejecting unsupported device masks. */
+/*
+ * Uses the single-device acquire contract while rejecting unsupported device masks.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkAcquireNextImage2KHR(
 	VkDevice device,
 	const VkAcquireNextImageInfoKHR *pAcquireInfo,
 	uint32_t *pImageIndex)
 {
+	VkResult submission;
+
 	/* The supported device group contains only physical device zero. */
 	if (pAcquireInfo == NULL)
 		return VK_ERROR_INITIALIZATION_FAILED;
@@ -349,10 +377,17 @@ vkAcquireNextImage2KHR(
 		return VK_ERROR_FEATURE_NOT_PRESENT;
 
 	/* Returns the same bounded acquire and synchronization result. */
-	return vkAcquireNextImageKHR(device, pAcquireInfo->swapchain, pAcquireInfo->timeout, pAcquireInfo->semaphore, pAcquireInfo->fence, pImageIndex);
+	submission = vkAcquireNextImageKHR(device, pAcquireInfo->swapchain, pAcquireInfo->timeout, pAcquireInfo->semaphore, pAcquireInfo->fence, pImageIndex);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the acquired image and its requested synchronization are ready. */
+	return VK_SUCCESS;
 }
 
-/* Presents each private chain and reports its individual result as well as the aggregate result. */
+/*
+ * Presents each private chain and reports its individual result as well as the aggregate result.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkQueuePresentKHR(
 	VkQueue queue,
@@ -400,11 +435,17 @@ vkQueuePresentKHR(
 			result = error;
 	}
 
-	/* Returns the aggregate while leaving individual outcomes in pResults. */
-	return result;
+	/* Reports the first failed presentation; per-chain results remain available. */
+	if (result != VK_SUCCESS)
+		return result;
+
+	/* Succeeded: every requested swapchain was presented. */
+	return VK_SUCCESS;
 }
 
-/* Reports a group containing exactly one local physical device. */
+/*
+ * Reports a group containing exactly one local physical device.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetDeviceGroupPresentCapabilitiesKHR(
 	VkDevice device,
@@ -430,7 +471,9 @@ vkGetDeviceGroupPresentCapabilitiesKHR(
 	return VK_SUCCESS;
 }
 
-/* Reports the same local-only group contract for one surface. */
+/*
+ * Reports the same local-only group contract for one surface.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetDeviceGroupSurfacePresentModesKHR(
 	VkDevice device,
@@ -459,7 +502,9 @@ vkGetDeviceGroupSurfacePresentModesKHR(
 	return VK_SUCCESS;
 }
 
-/* Frees retired callback records only after every compositor buffer has released, or surface destruction. */
+/*
+ * Frees retired callback records only after every compositor buffer has released, or surface destruction.
+ */
 void
 compat_swapchain_collect(
 	struct compat_surface *surface,
@@ -498,7 +543,9 @@ compat_swapchain_collect(
 	}
 }
 
-/* Creates a display copy swapchain whose rendering images need no external-memory extension. */
+/*
+ * Creates a display copy swapchain whose rendering images need no external-memory extension.
+ */
 VkResult
 compat_display_swapchain_create(
 	struct compat_device *device,
@@ -624,7 +671,9 @@ compat_display_swapchain_create(
 	return VK_SUCCESS;
 }
 
-/* Restores scanout before removing dumb buffers, then retires the coherent copy allocation. */
+/*
+ * Restores scanout before removing dumb buffers, then retires the coherent copy allocation.
+ */
 void
 compat_display_chain_free(
 	struct compat_swapchain *chain)
@@ -883,6 +932,9 @@ chain_free(
 
 	/* Returns Vulkan-object storage to its creating allocator. */
 	compat_object_free(chain, chain->allocated, &chain->allocator);
+
+	/* Succeeded: all swapchain allocations and descriptors have retired. */
+	return;
 }
 
 /* A compositor release transfers this image from display ownership to reusable idle storage. */
@@ -897,6 +949,9 @@ chain_release(
 	(void)buffer;
 	image = data;
 	image->busy = 0;
+
+	/* Succeeded: the released image is available for acquisition. */
+	return;
 }
 
 /* Completes and retires the current FIFO pacing callback. */
@@ -913,6 +968,9 @@ chain_frame(
 	surface = data;
 	surface->frame = NULL;
 	wl_callback_destroy(callback);
+
+	/* Succeeded: the completed frame no longer blocks FIFO presentation. */
+	return;
 }
 
 /* Creates private command buffers and reusable completion objects for one presentation queue family. */
@@ -1019,6 +1077,7 @@ chain_record(
 	unsigned acquire,
 	VkCommandBuffer command)
 {
+	VkResult submission;
 	VkCommandBufferBeginInfo begin;
 	VkImageMemoryBarrier barrier;
 	VkBufferMemoryBarrier visible;
@@ -1108,7 +1167,12 @@ chain_record(
 	}
 
 	/* Returns command recording's final backend status. */
-	return chain->device->end_command(command);
+	submission = chain->device->end_command(command);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the ownership-transfer command buffer is recorded. */
+	return VK_SUCCESS;
 }
 
 /* Signals acquire outputs only after the compositor's read completion and optional foreign ownership transfer. */
@@ -1554,6 +1618,9 @@ chain_gpu_free(
 
 	/* Deferred protocol records retain no backend device dependency. */
 	chain->device = NULL;
+
+	/* Succeeded: no private GPU operation can retain image or readback storage. */
+	return;
 }
 
 /* Creates one ordinary optimal-tiled image with transfer-source usage for portable KMS copying. */
@@ -1563,6 +1630,7 @@ chain_display_image(
 	uint32_t index,
 	const VkSwapchainCreateInfoKHR *create)
 {
+	VkResult submission;
 	struct compat_device *device;
 	struct compat_image *image;
 	VkImageCreateInfo info;
@@ -1618,7 +1686,12 @@ chain_display_image(
 		return error;
 
 	/* Returns the final backend bind result without wrapping either handle. */
-	return device->bind_image(device->handle, image->image, image->memory, 0);
+	submission = device->bind_image(device->handle, image->image, image->memory, 0);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the display image is bound to its allocated memory. */
+	return VK_SUCCESS;
 }
 
 /* Allocates tightly packed coherent host-visible storage for the completed image copy. */
@@ -1626,6 +1699,7 @@ static VkResult
 chain_display_readback(
 	struct compat_swapchain *chain)
 {
+	VkResult submission;
 	struct compat_device *device;
 	VkBufferCreateInfo info;
 	VkMemoryRequirements requirements;
@@ -1681,5 +1755,10 @@ chain_display_readback(
 		return error;
 
 	/* Returns the actual host mapping result, retained until chain retirement. */
-	return device->map_memory(device->handle, chain->readback_memory, 0, bytes, 0, &chain->readback_mapping);
+	submission = device->map_memory(device->handle, chain->readback_memory, 0, bytes, 0, &chain->readback_mapping);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the chain owns mapped CPU readback storage. */
+	return VK_SUCCESS;
 }

@@ -13,7 +13,9 @@
 static uint32_t display_refresh(const struct drm_mode_modeinfo *mode);
 static VkResult display_list(uint32_t *count, VkDisplayKHR *output);
 
-/* Enumerates connected KMS outputs independently of the backend rendering physical device. */
+/*
+ * Enumerates connected KMS outputs independently of the backend rendering physical device.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDeviceDisplayPropertiesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -73,7 +75,9 @@ vkGetPhysicalDeviceDisplayPropertiesKHR(
 	return VK_SUCCESS;
 }
 
-/* Exposes one primary display plane when at least one connected output exists. */
+/*
+ * Exposes one primary display plane when at least one connected output exists.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetPhysicalDeviceDisplayPlanePropertiesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -96,7 +100,9 @@ vkGetPhysicalDeviceDisplayPlanePropertiesKHR(
 
 	/* Measurement reports a single plane only for a connected display card. */
 	if (pProperties == NULL) {
-		*pPropertyCount = count != 0;
+		*pPropertyCount = 0;
+		if (count != 0)
+			*pPropertyCount = 1;
 		return VK_SUCCESS;
 	}
 
@@ -119,7 +125,9 @@ vkGetPhysicalDeviceDisplayPlanePropertiesKHR(
 	return VK_SUCCESS;
 }
 
-/* Enumerates connectors usable by the one primary plane. */
+/*
+ * Enumerates connectors usable by the one primary plane.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetDisplayPlaneSupportedDisplaysKHR(
 	VkPhysicalDevice physicalDevice,
@@ -127,16 +135,25 @@ vkGetDisplayPlaneSupportedDisplaysKHR(
 	uint32_t *pDisplayCount,
 	VkDisplayKHR *pDisplays)
 {
+	VkResult submission;
+
 	/* The display backend implements only primary plane index zero. */
 	(void)physicalDevice;
 	if (planeIndex != 0)
 		return VK_ERROR_INITIALIZATION_FAILED;
 
 	/* Returns the shared stable connected-display enumeration. */
-	return display_list(pDisplayCount, pDisplays);
+	submission = display_list(pDisplayCount, pDisplays);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the caller received the connected display handles. */
+	return VK_SUCCESS;
 }
 
-/* Enumerates stable connector timing handles with refresh rates expressed in millihertz. */
+/*
+ * Enumerates stable connector timing handles with refresh rates expressed in millihertz.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetDisplayModePropertiesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -198,7 +215,9 @@ vkGetDisplayModePropertiesKHR(
 	return VK_SUCCESS;
 }
 
-/* Reuses a matching connector timing or records a bounded custom timing for a later kernel-validated modeset. */
+/*
+ * Reuses a matching connector timing or records a bounded custom timing for a later kernel-validated modeset.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkCreateDisplayModeKHR(
 	VkPhysicalDevice physicalDevice,
@@ -305,7 +324,9 @@ vkCreateDisplayModeKHR(
 	return VK_SUCCESS;
 }
 
-/* Describes full-plane identity scanout at the selected timing's exact visible dimensions. */
+/*
+ * Describes full-plane identity scanout at the selected timing's exact visible dimensions.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetDisplayPlaneCapabilitiesKHR(
 	VkPhysicalDevice physicalDevice,
@@ -344,7 +365,9 @@ vkGetDisplayPlaneCapabilitiesKHR(
 	return VK_SUCCESS;
 }
 
-/* Creates our own display surface while retaining its stable KMS timing record. */
+/*
+ * Creates our own display surface while retaining its stable KMS timing record.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkCreateDisplayPlaneSurfaceKHR(
 	VkInstance instance,
@@ -424,13 +447,16 @@ vkCreateDisplayPlaneSurfaceKHR(
 	return VK_SUCCESS;
 }
 
-/* Takes the seat's already acquired master file by duplicate, leaving the caller free to close its copy. */
+/*
+ * Takes the seat's already acquired master file by duplicate, leaving the caller free to close its copy.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkAcquireDrmDisplayEXT(
 	VkPhysicalDevice physicalDevice,
 	int32_t drmFd,
 	VkDisplayKHR handle)
 {
+	VkResult submission;
 	struct compat_display *display;
 
 	/* Rendering physical devices share the same portable display copy path. */
@@ -444,10 +470,17 @@ vkAcquireDrmDisplayEXT(
 		return VK_ERROR_INITIALIZATION_FAILED;
 
 	/* Returns the exact master acquisition and saved-CRTC result. */
-	return compat_kms_acquire(display, drmFd);
+	submission = compat_kms_acquire(display, drmFd);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the display owns a duplicate of the caller master file. */
+	return VK_SUCCESS;
 }
 
-/* Maps a card's connector identity to the same stable Vulkan display handle used in enumeration. */
+/*
+ * Maps a card's connector identity to the same stable Vulkan display handle used in enumeration.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkGetDrmDisplayEXT(
 	VkPhysicalDevice physicalDevice,
@@ -479,20 +512,27 @@ vkGetDrmDisplayEXT(
 	if (error != VK_SUCCESS)
 		return error;
 
-	/* Finds the actual connector object identity rather than its enumeration index. */
+	/* Finds the actual connector identity rather than its enumeration index. */
 	for (display = displays; display != NULL; display = display->next) {
-		/* Returns the handle associated with this connector on the selected card. */
-		if (display->connector == connectorId) {
-			*pDisplay = (VkDisplayKHR)(uintptr_t)display;
-			return VK_SUCCESS;
-		}
+		/* The matched record remains stable for the process lifetime. */
+		if (display->connector == connectorId)
+			break;
 	}
 
-	/* The requested connector is not a connected output of the selected display card. */
-	return VK_ERROR_INITIALIZATION_FAILED;
+	/* An unknown connector is not a connected output of the selected card. */
+	if (display == NULL)
+		return VK_ERROR_INITIALIZATION_FAILED;
+
+	/* Publishes the connector handle without acquiring display authority. */
+	*pDisplay = (VkDisplayKHR)(uintptr_t)display;
+
+	/* Succeeded: the caller received the selected card's stable connector handle. */
+	return VK_SUCCESS;
 }
 
-/* Releases explicit master ownership after the application has retired its display swapchains. */
+/*
+ * Releases explicit master ownership after the application has retired its display swapchains.
+ */
 VKAPI_ATTR VkResult VKAPI_CALL
 vkReleaseDisplayEXT(
 	VkPhysicalDevice physicalDevice,

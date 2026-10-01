@@ -153,3 +153,21 @@ timeout 80 env SSH_USER=kei sh plan/tools/keiland-linux/guest.sh ssh 'timeout 60
 ```
 
 WiFiはnetdevのcontrolsocket権限を使う。radioのup/down ioctlはCAP_NET_ADMINがなければEPERM。資格情報query/saveの応答上限2秒、watchのrequest/updateは応答を待たず後のupdateで完了する。各connectionはprivate `/tmp/keiland-wpa-XXXXXX/socket` を所有しcloseでdirectoryも返す。ALSA mixerのみ、PCMfeedbackは無音。
+
+## logind の fd と D-Bus wire の独立 fixture
+
+`seat-fd.c` は guest の実際の DRM で nonmaster の拒否、caller fd の生存、release 後の master 保持を確認する。host で実行しない。
+`dbus-wire.c` / `dbus-wire.py` は host の socketpair で production の D-Bus reader に独立に marshal した frame を送る。fragment / interleave / SCM_RIGHTS、missing fd、oversized body、partial EOF、ancillary overflow の5ケース。普通と ASan/UBSan の両方で確認する。
+
+```sh
+clang -D_GNU_SOURCE -std=gnu17 -Wall -Wextra -Werror -I. -Iuserland/desktop/keiland \
+  -fsanitize=address,undefined -fno-omit-frame-pointer \
+  plan/tools/keiland-linux/dbus-wire.c userland/desktop/wayland/linux/dbus-linux.c \
+  -o build/keiland-linux/test/dbus-wire
+timeout 60 python3 plan/tools/keiland-linux/dbus-wire.py build/keiland-linux/test/dbus-wire
+cc -D_GNU_SOURCE -std=gnu17 -Wall -Wextra -Werror plan/tools/keiland-linux/seat-fd.c \
+  -Lbuild/keiland-linux/lib -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib \
+  -Wl,-rpath,/opt/keiland/lib -o build/keiland-linux/stage/opt/keiland/bin/seat-fd
+# install-guest.sh の後、guest の他の compositor / gdm を停止して実行する。
+timeout 30 sh plan/tools/keiland-linux/guest.sh ssh '/opt/keiland/bin/seat-fd'
+```

@@ -26,7 +26,11 @@ static struct compat_display *kms_displays;
 
 /* The one inquiry result and count are published together under compat_mutex. */
 static unsigned kms_initialized;
+
+/* Counts the published process-lifetime display list under compat_mutex. */
 static uint32_t kms_display_count;
+
+/* Retains the one initial inquiry outcome under compat_mutex, including failure. */
 static VkResult kms_inquiry_result;
 
 static VkResult kms_initialize(void);
@@ -65,8 +69,12 @@ compat_kms_displays(
 	/* Ends record protection before the caller queries or acquires a display. */
 	(void)pthread_mutex_unlock(&compat_mutex);
 
-	/* Returns the actual inquiry result, including inaccessible-device failure. */
-	return result;
+	/* Reports the retained inquiry failure without publishing success. */
+	if (result != VK_SUCCESS)
+		return result;
+
+	/* Succeeded: the caller received the stable display inquiry. */
+	return VK_SUCCESS;
 }
 
 /*
@@ -211,6 +219,9 @@ compat_kms_restore(
 	/* Marks our scanout retired so repeated cleanup never restores a removed dumb framebuffer. */
 	display->active = 0;
 	display->scanout_chain = NULL;
+
+	/* Succeeded: this WSI no longer claims active scanout. */
+	return;
 }
 
 /*
@@ -232,6 +243,9 @@ compat_kms_release(
 	display->master_fd = -1;
 	display->master_owned = 0;
 	display->saved_valid = 0;
+
+	/* Succeeded: the display duplicate and its library-owned authority have retired. */
+	return;
 }
 
 /*
@@ -243,6 +257,7 @@ compat_kms_dumb_create(
 	VkExtent2D extent,
 	struct compat_dumb *buffer)
 {
+	VkResult translated_error;
 	struct drm_mode_create_dumb create;
 	struct drm_mode_map_dumb map;
 	struct drm_mode_fb_cmd2 framebuffer;
@@ -259,8 +274,12 @@ compat_kms_dumb_create(
 	create.height = extent.height;
 	create.bpp = 32;
 	error = ioctl(buffer->fd, DRM_IOCTL_MODE_CREATE_DUMB, &create);
-	if (error != 0)
-		return kms_ioctl_result(error);
+	if (error != 0) {
+		translated_error = kms_ioctl_result(error);
+
+		/* Reports the corresponding Vulkan KMS failure. */
+		return translated_error;
+	}
 
 	/* Retains the handle immediately so every later failure can destroy this allocation. */
 	buffer->handle = create.handle;
@@ -273,8 +292,12 @@ compat_kms_dumb_create(
 	memset(&map, 0, sizeof(map));
 	map.handle = buffer->handle;
 	error = ioctl(buffer->fd, DRM_IOCTL_MODE_MAP_DUMB, &map);
-	if (error != 0)
-		return kms_ioctl_result(error);
+	if (error != 0) {
+		translated_error = kms_ioctl_result(error);
+
+		/* Reports the corresponding Vulkan KMS failure. */
+		return translated_error;
+	}
 
 	/* Maps only the allocated scanout storage; no host DRM device participates in tests. */
 	buffer->mapping = mmap(NULL, (size_t)buffer->size, PROT_READ | PROT_WRITE, MAP_SHARED, buffer->fd, (off_t)map.offset);
@@ -291,8 +314,12 @@ compat_kms_dumb_create(
 	framebuffer.handles[0] = buffer->handle;
 	framebuffer.pitches[0] = buffer->pitch;
 	error = ioctl(buffer->fd, DRM_IOCTL_MODE_ADDFB2, &framebuffer);
-	if (error != 0)
-		return kms_ioctl_result(error);
+	if (error != 0) {
+		translated_error = kms_ioctl_result(error);
+
+		/* Reports the corresponding Vulkan KMS failure. */
+		return translated_error;
+	}
 
 	/* Retains the framebuffer identity until scanout retirement precedes its removal. */
 	buffer->framebuffer = framebuffer.fb_id;
@@ -348,6 +375,7 @@ VkResult
 compat_kms_present(
 	struct compat_swapchain *chain)
 {
+	VkResult translated_error;
 	struct compat_display *display;
 	struct compat_dumb *buffer;
 	struct drm_mode_crtc crtc;
@@ -379,8 +407,12 @@ compat_kms_present(
 		crtc.mode_valid = 1;
 		crtc.mode = chain->surface->display_mode->mode;
 		error = ioctl(display->master_fd, DRM_IOCTL_MODE_SETCRTC, &crtc);
-		if (error != 0)
-			return kms_ioctl_result(error);
+		if (error != 0) {
+			translated_error = kms_ioctl_result(error);
+
+			/* Reports the corresponding Vulkan KMS failure. */
+			return translated_error;
+		}
 
 		/* Owns scanout only after the successful first modeset. */
 		display->active = 1;
@@ -394,8 +426,12 @@ compat_kms_present(
 		flip.flags = DRM_MODE_PAGE_FLIP_EVENT;
 		flip.user_data = (uint64_t)(uintptr_t)chain;
 		error = ioctl(display->master_fd, DRM_IOCTL_MODE_PAGE_FLIP, &flip);
-		if (error != 0)
-			return kms_ioctl_result(error);
+		if (error != 0) {
+			translated_error = kms_ioctl_result(error);
+
+			/* Reports the corresponding Vulkan KMS failure. */
+			return translated_error;
+		}
 
 		/* A finite event wait works for logind's nonblocking descriptor as well as direct root ownership. */
 		result = kms_flip_wait(display, flip.user_data);
@@ -572,8 +608,12 @@ kms_enumerate(
 	free(crtcs);
 	free(connectors);
 
-	/* Returns the final connector construction result. */
-	return result;
+	/* Reports why the connector list could not be constructed. */
+	if (result != VK_SUCCESS)
+		return result;
+
+	/* Succeeded: every connected connector has a stable display record. */
+	return VK_SUCCESS;
 }
 
 /* Constructs one stable connected display and its finite kernel-provided mode list. */
@@ -800,20 +840,22 @@ static VkResult
 kms_ioctl_result(
 	int error)
 {
-	/* A successful ioctl needs no error translation. */
-	if (error == 0)
-		return VK_SUCCESS;
+	/* Only failed DRM operations require an errno translation. */
+	if (error != 0) {
+		/* Access loss invalidates the chain without blocking indefinitely. */
+		if (errno == EACCES)
+			return VK_ERROR_OUT_OF_DATE_KHR;
 
-	/* Access loss invalidates the current display swapchain without blocking indefinitely. */
-	if (errno == EACCES)
-		return VK_ERROR_OUT_OF_DATE_KHR;
+		/* logind revocation may report permission loss instead of access denial. */
+		if (errno == EPERM)
+			return VK_ERROR_OUT_OF_DATE_KHR;
 
-	/* logind revocation may report permission loss instead of access denial. */
-	if (errno == EPERM)
-		return VK_ERROR_OUT_OF_DATE_KHR;
+		/* Other failures describe an unusable surface rather than a completed presentation. */
+		return VK_ERROR_SURFACE_LOST_KHR;
+	}
 
-	/* Other ioctl failures describe an unusable surface rather than fabricated presentation success. */
-	return VK_ERROR_SURFACE_LOST_KHR;
+	/* Succeeded: the DRM operation needs no error translation. */
+	return VK_SUCCESS;
 }
 
 /* Waits for the matching page-flip event within a finite monotonic deadline. */
@@ -822,6 +864,7 @@ kms_flip_wait(
 	struct compat_display *display,
 	uint64_t token)
 {
+	VkResult translated_error;
 	struct pollfd descriptor;
 	unsigned char events[4096];
 	struct drm_event header;
@@ -879,7 +922,10 @@ kms_flip_wait(
 				continue;
 
 			/* Access loss follows the compositor's out-of-date resume contract. */
-			return kms_ioctl_result(-1);
+			translated_error = kms_ioctl_result(-1);
+
+			/* Reports the corresponding Vulkan KMS failure. */
+			return translated_error;
 		}
 
 		/* A zero-byte event read means the DRM connection cannot complete the flip. */
@@ -939,4 +985,7 @@ kms_records_free(
 
 	/* An unsuccessful inquiry exposes no partial connector count. */
 	kms_display_count = 0;
+
+	/* Succeeded: no partially enumerated connector or mode remains. */
+	return;
 }

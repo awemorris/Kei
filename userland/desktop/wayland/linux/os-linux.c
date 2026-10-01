@@ -22,10 +22,14 @@ static int console_mode;
 
 /* Explicit selection is fixed before any device lease and retained until seat cleanup. */
 static unsigned seat_logind;
+
+/* The saved keyboard mode is valid only after KDGKBMODE succeeds. */
 static int keyboard_mode;
 
 /* Each successfully changed console property is restored independently on partial startup failure. */
 static unsigned console_changed;
+
+/* Tracks only a successful K_OFF transition so partial cleanup can restore it. */
 static unsigned keyboard_changed;
 
 /*

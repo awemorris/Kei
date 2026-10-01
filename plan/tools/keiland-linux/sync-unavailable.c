@@ -26,7 +26,9 @@ static PFN_vkWaitForFences probe_wait_fences;
 static PFN_vkVoidFunction probe_get_device_proc(VkDevice device, const char *name);
 static VkResult probe_wait(VkDevice device, uint32_t count, const VkFence *fences, VkBool32 all, uint64_t timeout);
 
-/* Records actual IMPORT_SYNC_FILE outcomes and optionally injects the one capability failure. */
+/*
+ * Records actual IMPORT_SYNC_FILE outcomes and optionally injects the one capability failure.
+ */
 int
 ioctl(
 	int fd,
@@ -77,7 +79,9 @@ ioctl(
 	return error;
 }
 
-/* Observes only the WSI's private device resolver while preserving backend binding isolation. */
+/*
+ * Observes only the WSI's private device resolver while preserving backend binding isolation.
+ */
 void *
 dlsym(
 	void *handle,
@@ -146,6 +150,10 @@ probe_wait(
 	result = probe_wait_fences(device, count, fences, all, timeout);
 	fprintf(stderr, "PRIVATE_WAIT count=%u all=%u result=%d\n", count, all, result);
 
-	/* Returns the unmodified driver outcome to the production WSI caller. */
-	return result;
+	/* Preserves a driver failure or timeout for the original caller. */
+	if (result != VK_SUCCESS)
+		return result;
+
+	/* Succeeded: the original fence wait completed. */
+	return VK_SUCCESS;
 }

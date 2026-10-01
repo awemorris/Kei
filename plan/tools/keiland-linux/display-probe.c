@@ -52,12 +52,15 @@ static VkResult client_frame(struct client_probe *probe, unsigned frame);
 static void client_cleanup(struct client_probe *probe);
 static int client_failed(struct client_probe *probe, VkResult error);
 
-/* Runs both seat-descriptor and direct-root display ownership with bounded visible color intervals. */
+/*
+ * Runs both seat-descriptor and direct-root display ownership with bounded visible color intervals.
+ */
 int
 main(
 	int argc,
 	char **argv)
 {
+	int exit_status;
 	struct client_probe probe;
 	VkResult error;
 	unsigned frame;
@@ -82,13 +85,21 @@ main(
 	/* Flushes state evidence before the five-second screenshot interval begins. */
 	(void)setvbuf(stdout, NULL, _IOLBF, 0);
 	error = client_setup(&probe);
-	if (error != VK_SUCCESS)
-		return client_failed(&probe, error);
+	if (error != VK_SUCCESS) {
+		exit_status = client_failed(&probe, error);
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Uses the connector's preferred physical resolution for all four sampled pixels. */
 	error = client_swapchain(&probe, probe.width, probe.height);
-	if (error != VK_SUCCESS)
-		return client_failed(&probe, error);
+	if (error != VK_SUCCESS) {
+		exit_status = client_failed(&probe, error);
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* The same N-modulo-three GPU clear operation drives each screen color. */
 	colors[0] = 0xff0000;
@@ -98,14 +109,22 @@ main(
 		/* Replaces a live chain before green to verify master ownership survives old-chain destruction. */
 		if (frame == 1) {
 			error = client_swapchain(&probe, probe.width, probe.height);
-			if (error != VK_SUCCESS)
-				return client_failed(&probe, error);
+			if (error != VK_SUCCESS) {
+				exit_status = client_failed(&probe, error);
+
+				/* Preserves the reported failure after its cleanup. */
+				return exit_status;
+			}
 		}
 
 		/* Rendering and presentation failures retain their numeric Vulkan result. */
 		error = client_frame(&probe, frame);
-		if (error != VK_SUCCESS)
-			return client_failed(&probe, error);
+		if (error != VK_SUCCESS) {
+			exit_status = client_failed(&probe, error);
+
+			/* Preserves the reported failure after its cleanup. */
+			return exit_status;
+		}
 
 		/* The host takes its QMP screenshot after observing this completed-present marker. */
 		printf("DISPLAY color=%06x\n", colors[frame]);
@@ -127,6 +146,7 @@ static VkResult
 client_setup(
 	struct client_probe *probe)
 {
+	VkResult submission;
 	VkApplicationInfo application;
 	VkInstanceCreateInfo instance;
 	VkDisplaySurfaceCreateInfoKHR surface;
@@ -336,7 +356,12 @@ client_setup(
 	fence.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
 	/* Returns the last resource allocation outcome. */
-	return vkCreateFence(probe->device, &fence, NULL, &probe->fence);
+	submission = vkCreateFence(probe->device, &fence, NULL, &probe->fence);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the probe owns its reusable rendering synchronization. */
+	return VK_SUCCESS;
 }
 
 /* Replaces a chain while keeping the old handle alive until successful new creation. */
@@ -346,6 +371,7 @@ client_swapchain(
 	uint32_t width,
 	uint32_t height)
 {
+	VkResult submission;
 	VkSwapchainCreateInfoKHR create;
 	VkSwapchainKHR next;
 	VkResult error;
@@ -390,7 +416,12 @@ client_swapchain(
 	probe->image_count = 8;
 
 	/* Returns the public enumeration result for the newly selected extent. */
-	return vkGetSwapchainImagesKHR(probe->device, next, &probe->image_count, probe->images);
+	submission = vkGetSwapchainImagesKHR(probe->device, next, &probe->image_count, probe->images);
+	if (submission != VK_SUCCESS)
+		return submission;
+
+	/* Succeeded: the probe retained the new swapchain image handles. */
+	return VK_SUCCESS;
 }
 
 /* Clears one acquired image to the deterministic N-modulo-three color and presents it. */

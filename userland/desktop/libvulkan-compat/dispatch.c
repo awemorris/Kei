@@ -518,5 +518,9 @@ compat_own_instance(
 		return 0;
 
 	/* Returns whether this application requested the owning instance extension. */
-	return (owner->enabled & bit) != 0;
+	if ((owner->enabled & bit) == 0)
+		return 0;
+
+	/* Succeeded: this instance enabled the requested extension. */
+	return 1;
 }

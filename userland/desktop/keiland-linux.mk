@@ -44,12 +44,12 @@ KEILAND_LINUX_INSTALL :=
 # $(6) the version script or empty, $(7) more link flags
 define KEILAND_LINUX_LIBRARY
 KEILAND_LINUX_SOURCES += $(3)
-KEILAND_LINUX_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_LINUX_BUILD)/obj/%.o,$(3))
--include $$(KEILAND_LINUX_OBJS_$(1):.o=.d)
-$(KEILAND_LINUX_BUILD)/lib/$(2): $$(KEILAND_LINUX_OBJS_$(1)) $$(addprefix $(KEILAND_LINUX_BUILD)/lib/,$(4)) $(6)
+KEILAND_LINUX_LIBRARY_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_LINUX_BUILD)/obj/%.o,$(3))
+-include $$(KEILAND_LINUX_LIBRARY_OBJS_$(1):.o=.d)
+$(KEILAND_LINUX_BUILD)/lib/$(2): $$(KEILAND_LINUX_LIBRARY_OBJS_$(1)) $$(addprefix $(KEILAND_LINUX_BUILD)/lib/,$(4)) $(6)
 	@mkdir -p $$(dir $$@)
 	$$(CC) -shared -Wl,-soname,$(2) -Wl,-z,defs $$(if $(6),-Wl$$(comma)--version-script=$(6)) $(7) $$(KEILAND_LINUX_LDFLAGS) \
-		$$(KEILAND_LINUX_OBJS_$(1)) $$(addprefix -l:,$(4)) $(5) -o $$@
+		$$(KEILAND_LINUX_LIBRARY_OBJS_$(1)) $$(addprefix -l:,$(4)) $(5) -o $$@
 KEILAND_LINUX_ALL += $(KEILAND_LINUX_BUILD)/lib/$(2)
 KEILAND_LINUX_INSTALL += lib/$(2)
 endef
@@ -57,11 +57,11 @@ endef
 # $(1) name, $(2) bin or libexec, $(3) sources, $(4) our libraries it links, $(5) system libraries
 define KEILAND_LINUX_PROGRAM
 KEILAND_LINUX_SOURCES += $(3)
-KEILAND_LINUX_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_LINUX_BUILD)/obj/%.o,$(3))
--include $$(KEILAND_LINUX_OBJS_$(1):.o=.d)
-$(KEILAND_LINUX_BUILD)/$(2)/$(1): $$(KEILAND_LINUX_OBJS_$(1)) $$(addprefix $(KEILAND_LINUX_BUILD)/lib/,$(4))
+KEILAND_LINUX_PROGRAM_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_LINUX_BUILD)/obj/%.o,$(3))
+-include $$(KEILAND_LINUX_PROGRAM_OBJS_$(1):.o=.d)
+$(KEILAND_LINUX_BUILD)/$(2)/$(1): $$(KEILAND_LINUX_PROGRAM_OBJS_$(1)) $$(addprefix $(KEILAND_LINUX_BUILD)/lib/,$(4))
 	@mkdir -p $$(dir $$@)
-	$$(CC) -pie $$(KEILAND_LINUX_LDFLAGS) $$(KEILAND_LINUX_OBJS_$(1)) $$(addprefix -l:,$(4)) $(5) -o $$@
+	$$(CC) -pie $$(KEILAND_LINUX_LDFLAGS) $$(KEILAND_LINUX_PROGRAM_OBJS_$(1)) $$(addprefix -l:,$(4)) $(5) -o $$@
 KEILAND_LINUX_ALL += $(KEILAND_LINUX_BUILD)/$(2)/$(1)
 KEILAND_LINUX_INSTALL += $(2)/$(1)
 endef
@@ -78,12 +78,12 @@ endef
 # $(1) name, $(2) the archive's file name, $(3) sources
 define KEILAND_LINUX_STATIC
 KEILAND_LINUX_SOURCES += $(3)
-KEILAND_LINUX_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_LINUX_BUILD)/obj/%.o,$(3))
--include $$(KEILAND_LINUX_OBJS_$(1):.o=.d)
-$(KEILAND_LINUX_BUILD)/lib/$(2): $$(KEILAND_LINUX_OBJS_$(1))
+KEILAND_LINUX_STATIC_OBJS_$(1) := $$(patsubst %.c,$(KEILAND_LINUX_BUILD)/obj/%.o,$(3))
+-include $$(KEILAND_LINUX_STATIC_OBJS_$(1):.o=.d)
+$(KEILAND_LINUX_BUILD)/lib/$(2): $$(KEILAND_LINUX_STATIC_OBJS_$(1))
 	@mkdir -p $$(dir $$@)
 	rm -f $$@
-	ar rcs $$@ $$(KEILAND_LINUX_OBJS_$(1))
+	ar rcs $$@ $$(KEILAND_LINUX_STATIC_OBJS_$(1))
 KEILAND_LINUX_ALL += $(KEILAND_LINUX_BUILD)/lib/$(2)
 endef
 

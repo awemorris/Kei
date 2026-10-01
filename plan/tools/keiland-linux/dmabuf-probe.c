@@ -85,12 +85,15 @@ static int probe_observe(struct probe_buffer *buffer);
 static uint64_t probe_time(void);
 static int probe_initialization_failed(void);
 
-/* Runs a finite test server and returns failure for malformed imports or an incomplete frame sequence. */
+/*
+ * Runs a finite test server and returns failure for malformed imports or an incomplete frame sequence.
+ */
 int
 main(
 	int argc,
 	char **argv)
 {
+	int exit_status;
 	const char *socket;
 	unsigned timeout;
 	int index;
@@ -163,28 +166,48 @@ main(
 
 	/* Uses a private test socket without any host compositor connection. */
 	error = wl_display_add_socket(probe_display, socket);
-	if (error != 0)
-		return probe_initialization_failed();
+	if (error != 0) {
+		exit_status = probe_initialization_failed();
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Advertises core v4 surface requests and version-three DMA-BUF modifier events. */
 	global = wl_global_create(probe_display, &wl_compositor_interface, 4, NULL, probe_bind_compositor);
-	if (global == NULL)
-		return probe_initialization_failed();
+	if (global == NULL) {
+		exit_status = probe_initialization_failed();
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* The DMA-BUF global is deliberately independent of system Vulkan's WSI. */
 	global = wl_global_create(probe_display, &zwp_linux_dmabuf_v1_interface, 3, NULL, probe_bind_dmabuf);
-	if (global == NULL)
-		return probe_initialization_failed();
+	if (global == NULL) {
+		exit_status = probe_initialization_failed();
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* The event loop deadline prevents an absent or stalled client from hanging the test. */
 	timer = wl_event_loop_add_timer(wl_display_get_event_loop(probe_display), probe_timeout, NULL);
-	if (timer == NULL)
-		return probe_initialization_failed();
+	if (timer == NULL) {
+		exit_status = probe_initialization_failed();
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Arms the one finite test deadline before accepting clients. */
 	error = wl_event_source_timer_update(timer, (int)timeout * 1000);
-	if (error != 0)
-		return probe_initialization_failed();
+	if (error != 0) {
+		exit_status = probe_initialization_failed();
+
+		/* Preserves the reported failure after its cleanup. */
+		return exit_status;
+	}
 
 	/* Runs until all expected commits arrive or a checked operation fails. */
 	wl_display_run(probe_display);
@@ -212,6 +235,9 @@ probe_destroy(
 	/* Resource destructors release their independently owned descriptors and callback data. */
 	(void)client;
 	wl_resource_destroy(resource);
+
+	/* Succeeded: the protocol resource no longer exists. */
+	return;
 }
 
 /* Releases the descriptor imported into one compositor buffer. */
@@ -225,6 +251,9 @@ probe_buffer_free(
 	buffer = wl_resource_get_user_data(resource);
 	(void)close(buffer->fd);
 	free(buffer);
+
+	/* Succeeded: the buffer allocation and mapped storage have retired. */
+	return;
 }
 
 /* Releases a parameter descriptor only when ownership was never transferred into a buffer. */
@@ -241,6 +270,9 @@ probe_params_free(
 
 	/* Releases the short-lived plane description after its destructor. */
 	free(params);
+
+	/* Succeeded: the unconsumed plane descriptors have retired. */
+	return;
 }
 
 /* Accepts exactly one plane and retains the received DMA-BUF descriptor. */
@@ -381,6 +413,9 @@ probe_create(
 
 	/* Transfers the new server-selected buffer identity to the client. */
 	zwp_linux_buffer_params_v1_send_created(resource, buffer);
+
+	/* Succeeded: the requested buffer resource has been published. */
+	return;
 }
 
 /* Implements the constructor used by all WSI acceptance runs. */
@@ -436,6 +471,9 @@ probe_params(
 
 	/* Owns plane data until immediate creation or parameter destruction. */
 	wl_resource_set_implementation(created, &probe_params_impl, params, probe_params_free);
+
+	/* Succeeded: the factory owns the new parameter resource. */
+	return;
 }
 
 /* Advertises modifier-only format pairs so the WSI cannot rely on legacy format events. */
@@ -463,6 +501,9 @@ probe_bind_dmabuf(
 	wl_resource_set_implementation(resource, &probe_dmabuf_impl, NULL, NULL);
 	zwp_linux_dmabuf_v1_send_modifier(resource, 0x34325241U, 0, 0);
 	zwp_linux_dmabuf_v1_send_modifier(resource, 0x34325258U, 0, 0);
+
+	/* Succeeded: the client received the fixture format advertisement. */
+	return;
 }
 
 /* Stores a pending attachment until the client's next commit. */
@@ -482,6 +523,9 @@ probe_attach(
 	(void)y;
 	surface = wl_resource_get_user_data(resource);
 	surface->buffer = buffer;
+
+	/* Succeeded: the surface retains its requested pending buffer. */
+	return;
 }
 
 /* Damage and region coordinates have no effect on the full-image probe. */
@@ -501,6 +545,9 @@ probe_damage(
 	(void)y;
 	(void)width;
 	(void)height;
+
+	/* Succeeded: the fixture needs no additional damage tracking. */
+	return;
 }
 
 /* Removes callback storage from its surface list on either done or client disconnect. */
@@ -514,6 +561,9 @@ probe_frame_free(
 	frame = wl_resource_get_user_data(resource);
 	wl_list_remove(&frame->link);
 	free(frame);
+
+	/* Succeeded: the callback no longer occupies the surface slot. */
+	return;
 }
 
 /* Queues one frame completion for the next commit. */
@@ -545,6 +595,9 @@ probe_frame_create(
 	/* Resource destruction always unlinks the retained frame. */
 	wl_list_insert(surface->frames.prev, &frame->link);
 	wl_resource_set_implementation(frame->resource, NULL, frame, probe_frame_free);
+
+	/* Succeeded: the surface owns its pending frame callback. */
+	return;
 }
 
 /* Accepts ordinary region requests without changing full-image inspection. */
@@ -558,6 +611,9 @@ probe_region_set(
 	(void)client;
 	(void)resource;
 	(void)region;
+
+	/* Succeeded: the fixture needs no clipping region storage. */
+	return;
 }
 
 /* Accepts only the test client's default transform semantics. */
@@ -571,6 +627,9 @@ probe_transform(
 	(void)client;
 	(void)resource;
 	(void)transform;
+
+	/* Succeeded: the fixture retains its fixed pixel orientation. */
+	return;
 }
 
 /* Accepts the core scale request without resampling the underlying image storage. */
@@ -584,6 +643,9 @@ probe_scale(
 	(void)client;
 	(void)resource;
 	(void)scale;
+
+	/* Succeeded: the fixture retains its one-to-one pixel scale. */
+	return;
 }
 
 /* Observes the committed buffer, then releases it and completes pending pacing callbacks. */
@@ -651,6 +713,9 @@ probe_surface_free(
 
 	/* No callback now refers to this surface's list head. */
 	free(surface);
+
+	/* Succeeded: the surface and its pending callbacks have retired. */
+	return;
 }
 
 /* Constructs one test surface with version-four core requests. */
@@ -686,6 +751,9 @@ probe_surface_create(
 
 	/* Every surface request sees this one private attachment and pacing list. */
 	wl_resource_set_implementation(created, &probe_surface_impl, surface, probe_surface_free);
+
+	/* Succeeded: the client owns the new surface resource. */
+	return;
 }
 
 /* Constructs a no-clipping region for ordinary core client compatibility. */
@@ -710,6 +778,9 @@ probe_region_create(
 
 	/* Installs ordinary add/subtract/destroy requests without private storage. */
 	wl_resource_set_implementation(created, &probe_region_impl, NULL, NULL);
+
+	/* Succeeded: the client owns the new region resource. */
+	return;
 }
 
 /* Binds the independent test compositor's core global. */
@@ -735,6 +806,9 @@ probe_bind_compositor(
 
 	/* Child requests allocate the buffer-independent surface records. */
 	wl_resource_set_implementation(resource, &probe_compositor_impl, NULL, NULL);
+
+	/* Succeeded: the client owns its compositor binding. */
+	return;
 }
 
 /* Ends a stalled or incomplete acceptance run without claiming success. */

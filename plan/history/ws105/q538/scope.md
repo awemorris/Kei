@@ -2,12 +2,12 @@
 
 # ws105-p011: 規約の全文の見直し、境界の確かめの拡張、回帰、install の文書
 
-Status: in-progress
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q538 / q538-i01
+Queue: なし
 依存: p001〜p010
-実行者: Q1 / main（N=0、単独実行）。`plan/tools/`、Master、WS105 完了も同じ executor が扱う。
+実行者: phase-runner（high）。`plan/tools/` の変更と master の更新・WS105 の完了の処理は main
 
 ## 目的
 
@@ -47,12 +47,3 @@ WS105 の完了の前の、規約の全文による見直し（Awesome Plan の 
 ## 文書の参照修正（2026-10-01、p004 の規約照合）
 
 全文規約 §12 により production の試験専用 NO_IMPLICIT_SYNC は実装しないため、install 文書の環境変数一覧から除いた。CPU fallback は能力不足/ioctl の実際の失敗で選ぶ。p011 はこの production の規則と p004 の改訂した検証をそのまま確認する。
-
-
-## 2026-10-01 最終確認の補完（q538、Q1）
-
-clean gcc build で libwayland と compositor の同名 `wayland` が `KEILAND_LINUX_OBJS_wayland` を上書きし、library の link recipe が program の object 一覧を使うことを再現（`build/ws105-p011/initial-build-failure.md` の tool 観測抜粋、missing object）。library / program / static archive の内部変数を分けた。増分 build の残存 object に依存しない clean gcc / clang、ELF と header/source checks、host と own fresh guest の全受け入れで確かめる。外部の build command・配置・公開 API・依存・既存 WS105 の受け入れは不変。p002 の過去の attempt outcome は保持し、最終 source の conformance で補完する。
-
-全文規約 §3/§11 の公開関数コメントと直接 call return を補完し、§6 の Boolean expression を分解する。評価順、short circuit、error convention、所有権は保持する。errno は libc macro の `__errno_location()` 展開であり、値の取得として手動分類する。機械 AST は semantic review の補助で、代替ではない。
-
-継続利用する `dbus-wire.c` / `.py` と `seat-fd.c` を `plan/tools/keiland-linux/` に移した。試験内容は保持、README と Master に所在地を記録する。Phase archive の過去結果を改変しない。
