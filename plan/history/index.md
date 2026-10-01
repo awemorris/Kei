@@ -2,10 +2,29 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q536](queue-q536.md)（ws105-p009 cleared）
+Last finished Queue: [q537](queue-q537.md)（ws105-p010 cleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q537 / ws105-p010
+
+cleared（q537-i01）。source b55b6bf0 + Unix cleanup91343cf2 WIP。p002 placeholdersをown wpa control client / Linux interface backend / ALSA controlへ置換、公開keiland.h / exports / 共通source / appは不変。private network-wpa.hをOS内共有、外部source複写なし。commandとATTACH event socketを別に所有し、request/updateはnonblockingのreply状態遷移、各deadline2秒 / service retry1秒。STATUS・scan・profile table検証、SSIDescape decode / strongest24 / exactly-one request completion、JOINはLIST→ENABLE→SELECT、saveはhexSSID / escapedkey / SAVE_CONFIG、ENABLEせずJOIN後SAVEせず。Linux radio up/downはkernel権限の実errorを返す。
+
+gcc14.2 / clang19.1.7 warning0、28ELF（24本体+chain/display/network/audio fixtures4）、makefile-sync、331source header-check、全新C + probeのstyle-check0 / formatter19 / whitespace PASS。ALSA card/list/info/read/write/subscribeを直接使用（alsa-libなし）、Master→PCM→Speaker、min/max/channel、readback、eventのbounded drain、device再接続。feedbackはconnectedで0 / 無音。
+
+Linux QEMU Debian13 / real mac80211_hwsim2radio + hostapd + wpa_supplicant、HDA Master raw0〜74、一般userkei audio/netdev権限。network-probe PASS（実secured AP scan、save直後に未接続、PROFILES→JOIN keiland-test / WIFI CONNECTED+kindWIFI+IPv4、disconnect、wlan0とenp0s5 / MAC / MTU / traffic、savedprofile、DNS10.0.2.3）。audio-probe PASS（available1/reachable1/device1、40%readback、amixer41%=許容±3、別process70%→fd readable / CHANGED_VOLUME /70、mute off/on、feedback0）。解析用cache値の偽装なし。fixture固定192.0.2.2はguest setupだけ、DHCPはsystemに任せる。fake wpa fallback不要。
+
+Settings QMP操作: scanにsecured keiland-test、key欄へkeiland-pass→Join→wpa_stateCOMPLETED / Settings Connected / systembarWiFi icon。Sound slider→amixer74%、systembar slider→amixer23%（Settings rawfloor22%）、PNG目視と当チャット表示。最初の接続3秒PNGはSCAN中の一時状態、7秒後stablePNGとwpaCOMPLETEDを最終証拠とする。最後にSIGTERM frames124/error0/cleanup_failed0。再起動時openvt7がbusyで拒否された元setup logを保存し、未使用VT8で再実行（source障害ではない）。
+
+終了時一時directory4個残留を発見（common compositorはwatch close呼出なし）。Linux/WPA内single event-loop watch registryとlibrary/process destructorで明示closeされないwatchを同じcloseへ渡す補完。新overlayでprobe2本再PASS、Settings正常closeとcompositor SIGTERM、frames58/error0/cleanup_failed0、owned Unix path0 / console復元を再確認。SIGKILL等destructorを実行しない異常終了と多thread共有は未検証・追加対応なし。
+
+zedBSD: Linuxだけの変更なのでPhase指定どおりdisk-image build warning0 PASS、common libkeiland不変。共通回帰一式の再実行は本Phase不要、p011 finalsource全体回帰で実施する。host追加package0、host /opt未install、host画面/input未使用、toolchain変更なし。Linux guest停止 / overlay破棄。実機・realWiFi device未実施、QEMU証拠。GitHub未公開、event/intendedcloseはoutbox pending、pushなし。次は既存p011全文規約・境界L1〜L5・両OS最終回帰・install文書・WS全体acceptance。
+
+証拠 [q537 manifest](../../history/ws105/q537/evidence/SHA256SUMS)。
+
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `91343cf27a4f6d8a5a34c238657227b30aafa03d`、GitHub 未公開・push なし。[q537](queue-q537.md)。
 
 ## 最新: 2026-10-01 q536 / ws105-p009
 
@@ -264,5 +283,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q534](queue-q534.md) | ws105-p009 uncleared |
 | [q535](queue-q535.md) | ws105-p005 cleared |
 | [q536](queue-q536.md) | ws105-p009 cleared |
+| [q537](queue-q537.md) | ws105-p010 cleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。

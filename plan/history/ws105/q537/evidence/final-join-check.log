@@ -1,0 +1,17 @@
+bssid=02:00:00:00:01:00
+freq=2437
+ssid=keiland-test
+id=0
+mode=station
+pairwise_cipher=CCMP
+group_cipher=CCMP
+key_mgmt=WPA2-PSK
+wpa_state=COMPLETED
+ip_address=192.0.2.2
+p2p_device_address=42:00:00:00:00:00
+address=02:00:00:00:00:00
+uuid=362db47b-a53a-5191-88fb-5458b986b2e4
+network id / ssid / bssid / flags
+0	keiland-test	any	[CURRENT]
+USER         PID COMMAND
+root        1154 /opt/keiland/bin/settings

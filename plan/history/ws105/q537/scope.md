@@ -2,10 +2,10 @@
 
 # ws105-p010: libkeiland の Linux の backend（wpa_supplicant・Linux の interface・ALSA）
 
-Status: cleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q537 / q537-i01
+Queue: なし
 依存: p008（Settings が Linux で動く）
 実行者: phase-runner（high）か phase-runner-mid。**始める前に [design.md](../design.md) の §6 を読む**。`plan/tools/keiland-linux/` の script は main が merge
 
@@ -103,22 +103,7 @@ app での確かめ（compositor の上、p006 の起動の手順。PNG をユ�
 
 ## 結果
 
-cleared（q537-i01）。source b55b6bf0 + Unix cleanup91343cf2 WIP。p002 placeholdersをown wpa control client / Linux interface backend / ALSA controlへ置換、公開keiland.h / exports / 共通source / appは不変。private network-wpa.hをOS内共有、外部source複写なし。commandとATTACH event socketを別に所有し、request/updateはnonblockingのreply状態遷移、各deadline2秒 / service retry1秒。STATUS・scan・profile table検証、SSIDescape decode / strongest24 / exactly-one request completion、JOINはLIST→ENABLE→SELECT、saveはhexSSID / escapedkey / SAVE_CONFIG、ENABLEせずJOIN後SAVEせず。Linux radio up/downはkernel権限の実errorを返す。
-
-gcc14.2 / clang19.1.7 warning0、28ELF（24本体+chain/display/network/audio fixtures4）、makefile-sync、331source header-check、全新C + probeのstyle-check0 / formatter19 / whitespace PASS。ALSA card/list/info/read/write/subscribeを直接使用（alsa-libなし）、Master→PCM→Speaker、min/max/channel、readback、eventのbounded drain、device再接続。feedbackはconnectedで0 / 無音。
-
-Linux QEMU Debian13 / real mac80211_hwsim2radio + hostapd + wpa_supplicant、HDA Master raw0〜74、一般userkei audio/netdev権限。network-probe PASS（実secured AP scan、save直後に未接続、PROFILES→JOIN keiland-test / WIFI CONNECTED+kindWIFI+IPv4、disconnect、wlan0とenp0s5 / MAC / MTU / traffic、savedprofile、DNS10.0.2.3）。audio-probe PASS（available1/reachable1/device1、40%readback、amixer41%=許容±3、別process70%→fd readable / CHANGED_VOLUME /70、mute off/on、feedback0）。解析用cache値の偽装なし。fixture固定192.0.2.2はguest setupだけ、DHCPはsystemに任せる。fake wpa fallback不要。
-
-Settings QMP操作: scanにsecured keiland-test、key欄へkeiland-pass→Join→wpa_stateCOMPLETED / Settings Connected / systembarWiFi icon。Sound slider→amixer74%、systembar slider→amixer23%（Settings rawfloor22%）、PNG目視と当チャット表示。最初の接続3秒PNGはSCAN中の一時状態、7秒後stablePNGとwpaCOMPLETEDを最終証拠とする。最後にSIGTERM frames124/error0/cleanup_failed0。再起動時openvt7がbusyで拒否された元setup logを保存し、未使用VT8で再実行（source障害ではない）。
-
-終了時一時directory4個残留を発見（common compositorはwatch close呼出なし）。Linux/WPA内single event-loop watch registryとlibrary/process destructorで明示closeされないwatchを同じcloseへ渡す補完。新overlayでprobe2本再PASS、Settings正常closeとcompositor SIGTERM、frames58/error0/cleanup_failed0、owned Unix path0 / console復元を再確認。SIGKILL等destructorを実行しない異常終了と多thread共有は未検証・追加対応なし。
-
-zedBSD: Linuxだけの変更なのでPhase指定どおりdisk-image build warning0 PASS、common libkeiland不変。共通回帰一式の再実行は本Phase不要、p011 finalsource全体回帰で実施する。host追加package0、host /opt未install、host画面/input未使用、toolchain変更なし。Linux guest停止 / overlay破棄。実機・realWiFi device未実施、QEMU証拠。GitHub未公開、event/intendedcloseはoutbox pending、pushなし。次は既存p011全文規約・境界L1〜L5・両OS最終回帰・install文書・WS全体acceptance。
-
-証拠 [q537 manifest](../../history/ws105/q537/evidence/SHA256SUMS)。
-
-
-実装 commit: `91343cf27a4f6d8a5a34c238657227b30aafa03d`（WIP）。終了 UTC: 2026-10-01T11:56:09.219178+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）
 
 ## 実装前の接続の具体化（2026-10-01、Q1）
 
@@ -127,11 +112,3 @@ zedBSD: Linuxだけの変更なのでPhase指定どおりdisk-image build warnin
 `libkeiland/wpa/network-wpa.h`をprivate共有helperに追加する（Unix datagram所有、SSIDescape decode、profile照合）。linux/network-link-linux.cからも同じboundedclientを利用する。公開exports / keiland.h / appは変更しない。Linux stateのwired/WiFiを分類するprivatehelperはnetwork-link-linux.c内、/sysの無線識別とgetifaddrsを使う。public linkに新fieldを足さない。ALSAはcontrolC*をnonblock/CLOEXECで開き、infoの実min/max/channelを使ってvolumeとswitchを写し、eventをboundedでdrainしてstateを再読する。feedbackはconnectedなら0で無音、deviceの再接続は1秒間隔。
 
 追加fileは既存scopeのOS内接続を具体化し、product / publicAPI / 受け入れ条件は不変。新Cは全文規約・formatter19・style-checkとmanualreview、実hwsim/wpa/HDA userkei試験・Settings/volume操作PNG・gcc/clang warning0・ELF/header/sourceとtargetbuildで確認する。共通sourceを変えない予定。
-
-## q537 内部照合（2026-10-01）
-
-実HDA Master raw範囲0〜74を確認。40%書込はnearest raw30、public stateは整数floor40、amixerはround41%（design許容±3内）、external70%はraw52→public70。stateを要求値cacheで偽装せず実readbackを使う。実hwsim+hostapd/wpa、userkeiでnetwork/audio-probe PASS、Settings scan・QMP鍵入力→wpa_stateCOMPLETED、Sound slider74% / amixer74%を観測。最終照合でtext responseのembeddedNUL / 不正STATUS/table headerを拒否、24を超えるscanは最強24を保持、disconnect時は古いWiFi/scanを捨てる補完。範囲・公開API・条件不変、gcc/clang warning0 / style0、最新版で同じprobeとUIを再確認中。共通source / app変更なし。
-
-## q537 cleanup の補完（2026-10-01）
-
-最新版UI scan・key→COMPLETED・Settings74% / bar23%・SIGTERMerror0cleanup0を確認。ただしguest /tmpに4つのprivate directoryが残った。compositor共通network.cは終了時のwatch close APIを持たず、Linuxのpathnameだけが残る。未知の外部依存ではなく本PhaseのUnix path所有を最後まで扱う内部補完として、WPA moduleのsingle event-loop watch registryを追加し、explicit closeで除去、library/process destructorで残るwatchを同じclose関数へ渡す。gcc/clangのreserved __attribute__を用い、共通source/APIを変えない。SIGKILLではdestructorが走らずpath残留可能という一般の異常終了は未対応。新しいguest overlayでprobeとcompositor通常終了を再確認し、private path0を要確認。最初の残留を示すcleanup.logは保存する。

@@ -4,10 +4,10 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q537 / q537-i01
 依存: p008（Settings が Linux で動く）
-実行者: phase-runner（high）か phase-runner-mid。**始める前に [design.md](../design.md) の §6 を読む**。`plan/tools/keiland-linux/` の script は main が merge
+実行者: phase-runner（high）か phase-runner-mid。**始める前に [design.md](../../../ws105/design.md) の §6 を読む**。`plan/tools/keiland-linux/` の script は main が merge
 
 ## 目的
 
@@ -98,7 +98,7 @@ app での確かめ（compositor の上、p006 の起動の手順。PNG をユ�
 1. build（gcc・clang）、`elf-check: PASS`、`makefile-sync: PASS`、`header-check: PASS`。
 2. `network-probe: PASS`・`audio-probe: PASS`（guest）。design §10 の V7。
 3. app での確かめの screenshot。
-4. zedBSD の回帰: libkeiland の共通の file を変えていなければ build だけ（[WS104 の commands.md](../../ws104/commands.md) §1）。変えたなら design §9.2 と `settings-regress.sh`・`host-audio.sh`。
+4. zedBSD の回帰: libkeiland の共通の file を変えていなければ build だけ（[WS104 の commands.md](../../../ws104/commands.md) §1）。変えたなら design §9.2 と `settings-regress.sh`・`host-audio.sh`。
 5. `mac80211_hwsim` が使えない場合は、wpa_supplicant の制御 socket の偽物の server（試験の道具、Python で書いてよい）を相手に 2 の network の部分を確かめ、そう記録する。
 
 ## 結果
@@ -115,7 +115,7 @@ Settings QMP操作: scanにsecured keiland-test、key欄へkeiland-pass→Join�
 
 zedBSD: Linuxだけの変更なのでPhase指定どおりdisk-image build warning0 PASS、common libkeiland不変。共通回帰一式の再実行は本Phase不要、p011 finalsource全体回帰で実施する。host追加package0、host /opt未install、host画面/input未使用、toolchain変更なし。Linux guest停止 / overlay破棄。実機・realWiFi device未実施、QEMU証拠。GitHub未公開、event/intendedcloseはoutbox pending、pushなし。次は既存p011全文規約・境界L1〜L5・両OS最終回帰・install文書・WS全体acceptance。
 
-証拠 [q537 manifest](../../history/ws105/q537/evidence/SHA256SUMS)。
+証拠 [q537 manifest](evidence/SHA256SUMS)。
 
 
 実装 commit: `91343cf27a4f6d8a5a34c238657227b30aafa03d`（WIP）。終了 UTC: 2026-10-01T11:56:09.219178+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。

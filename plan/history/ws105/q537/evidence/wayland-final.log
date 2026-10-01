@@ -1,0 +1,302 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=62
+ZWL STARTUP step=vulkan-objects-arrow ms=2
+ZWL STARTUP step=wallpaper-picture ms=7
+ZWL STARTUP step=wallpaper ms=36
+ZWL STARTUP step=glyphs-text ms=8
+ZWL STARTUP step=glyphs-icons ms=3
+ZWL STARTUP step=glyphs-mark ms=18
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=29
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=129 at_ms=717194
+ZWL INPUT device=/dev/input/event5 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event2 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL STARTUP step=input ms=66 at_ms=717260
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=717260
+ZWL STARTUP step=socket ms=0 at_ms=717260
+ZWL CLIENT client=1 fd=17 ime=1
+ZWL IME started pid=1120 client=1
+ZWL READY socket=/run/user/0/wayland-keiland width=1280 height=800 timeout_ms=18446744073709551615 pid=1102
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL NETWORK state reachable=0 connected=1 kind=wired interface=enp0s5 wifi=absent ssid=
+ZWL VOLUME reachable=1 device=1
+ZWL VOLUME preferences value=23 muted=0
+ZWL DESKTOP start pid=1121 command=/opt/keiland/bin/files --desktop at_ms=717272
+ZWL STARTUP step=output-display ms=0
+KEI-IME LANGUAGE id=direct
+ZWL STARTUP step=output-pipelines ms=12
+ZWL STARTUP step=output-swapchain ms=6
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=18 at_ms=717290
+ZWL GLASS desktops x=821 step=46 width=40
+ZWL NETWORK icon x=1065 y=3 width=30 height=28
+ZWL VOLUME icon x=1032 y=3 width=30 height=28
+ZWL CLIENT client=2 fd=24
+ZWL IME language=direct
+KEI-IME READY languages=2
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=enp0s5 wifi=disconnected ssid=
+ZWL DESKTOP role client=2 surface=8 x=0 y=34 width=1280 height=766
+ZFILES DESKTOP configure x=0 y=34 width=1280 height=766
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZWL DESKTOP ack serial=2
+ZFILES LOCATION kind=folder path=/root/Desktop items=0 error=0
+ZFILES DESKTOP layout saved=0 error=0
+ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=717388 newest_age_ms=-1
+ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+ZFILES MENU context-only
+ZFILES DESKTOP startup entered_ms=717281 fonts=7 instance=37 window=21 present=39 app=1 canvas=0 draw=2 shown=34 menus=0
+ZFILES READY width=1280 height=766 token=-
+ZWL DESKTOP drawn at_ms=717422
+ZWL HOME open via=launcher at_ms=720563
+ZWL FIRST_FRAME what=home-open frame=6 request_ms=720563 ms=20
+ZWL HOME opened apps=10 pages=1 page=1 at_ms=720866
+ZWL HOME icon name="Files" x=280 y=274
+ZWL HOME icon name="Notes" x=424 y=274
+ZWL HOME icon name="Settings" x=568 y=274
+ZWL HOME icon name="Terminal" x=712 y=274
+ZWL HOME icon name="PDF Viewer" x=856 y=274
+ZWL HOME icon name="Image Viewer" x=1000 y=274
+ZWL HOME icon name="Text Editor" x=280 y=426
+ZWL HOME icon name="Model viewer" x=424 y=426
+ZWL HOME icon name="Widget Demo" x=568 y=426
+ZWL HOME icon name="Log Out" x=712 y=426
+ZWL PERF 5005ms: passes=457 timeouts=441 | poll 89.9% work 9.7%
+ZWL PERF compose frames=15 draw_ms=28.99 (acquire 0.01 submit+present 28.64) frame_ms=30.58
+ZWL HOME launch name=Settings pid=1153
+ZWL HOME close via=launch at_ms=723044
+ZWL FIRST_FRAME what=home-close frame=17 request_ms=723044 ms=43
+ZWL CLIENT client=3 fd=25
+ZWL BOUNDS client=3 surface=8 width=1256 height=690
+ZWL CONFIGURE client=3 surface=8 serial=3 width=0 height=0 fullscreen=0
+ZWL SEAT client=3 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=3 pointer=1 keyboard=1 touch=0
+ZWL HOME closed at_ms=723304
+ZSETTINGS ABOUT kernel=Linux 6.12.107+deb13-amd64 machine=x86_64 cores=4 host=keiland-guest
+ZSETTINGS PAGE home
+ZSETTINGS NETWORK open links=5 dns=1 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=23 muted=0 link=1
+ZWL IMPORT client=3 buffer=19 width=1180 height=690 bytes=3280896
+ZWL IMPORT client=3 buffer=21 width=1180 height=690 bytes=3280896
+ZWL IMPORT client=3 buffer=23 width=1180 height=690 bytes=3280896
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=home
+ZSETTINGS MENU ready items=20
+ZWL MENU commit client=3 menu=31 serial=1 items=43 generation=1
+ZWL MENU set client=3 place=32 menu=31
+ZWL MENU commit client=3 menu=31 serial=2 items=43 generation=2
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=1 last=Settings sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS GLASS panels count=2
+ZWL TITLEBAR create client=3 titlebar=36 toplevel=10
+ZWL TITLEBAR commit client=3 titlebar=36 serial=1 mode=1 controls=6 tabs=0 generation=1
+ZWL TITLEBAR commit client=3 titlebar=36 serial=2 mode=1 controls=6 tabs=0 generation=2
+ZSETTINGS READY width=1180 height=690 glass=1 page=home
+ZWL GLASS client=3 surface=8 blur=1
+ZWL GLASS client=3 surface=8 panels=2 card:0,0,248,690,16 card:256,0,924,690,16
+ZWL MAP client=3 surface=8 x=50 y=98
+ZWL HOME launched waited_ms=351 at_ms=723395
+ZWL GLASS launch surface=8 from=532,238 to=50,98 size=1180x690
+ZSETTINGS NETWORK state reachable=0 connected=1 kind=1 interface=enp0s5 wifi=0 ssid=
+ZSETTINGS SOUND report reachable=1 device=1 value=22 muted=0
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=enp0s5 wifi=5 ssid=
+ZWL GLASS glyph codepoint=U+2026 size=0 face=0 cell=0
+ZWL TITLEBAR control client=3 surface=8 where=floating id=1 x=172 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=2 x=206 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=3 x=240 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=4 x=280 y=53 width=74 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=5 x=822 y=53 width=220 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=6 x=1046 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=0 x=1086 y=53 width=30 height=30 shown=1
+ZWL PING pong client=3 serial=8
+ZSETTINGS PAGE wifi
+ZSETTINGS NETWORK request=1 sent
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wi-Fi sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=wifi
+ZSETTINGS LAYOUT page=wifi controls=1
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZWL TITLEBAR commit client=3 titlebar=36 serial=3 mode=1 controls=6 tabs=0 generation=3
+ZWL MENU commit client=3 menu=31 serial=3 items=43 generation=3
+ZWL TITLEBAR control client=3 surface=8 where=floating id=1 x=172 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=2 x=206 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=3 x=240 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=4 x=280 y=53 width=140 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=5 x=822 y=53 width=220 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=6 x=1046 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=0 x=1086 y=53 width=30 height=30 shown=1
+ZSETTINGS NETWORK done request=1 errno=0
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=enp0s5 wifi=searching ssid=
+ZSETTINGS LAYOUT page=wifi controls=2
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=enp0s5 wifi=2 ssid=
+ZWL PERF 5019ms: passes=440 timeouts=410 | poll 81.5% work 14.9%
+ZWL PERF compose frames=27 draw_ms=26.47 (acquire 0.01 submit+present 26.16) frame_ms=31.15
+ZWL NETWORK scan count=1
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=enp0s5 wifi=disconnected ssid=
+ZSETTINGS NETWORK scan count=1
+ZSETTINGS LAYOUT page=wifi controls=3
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=enp0s5 wifi=5 ssid=
+ZWL PING pong client=3 serial=11
+ZSETTINGS NETWORK key-form ssid=keiland-test
+ZSETTINGS LAYOUT page=wifi controls=6
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZSETTINGS CONTROL index=5 x=1045 y=319 width=87 height=32
+ZSETTINGS CONTROL index=6 x=888 y=319 width=75 height=32
+ZSETTINGS CONTROL index=9 x=348 y=317 width=528 height=36
+ZWL PERF 5009ms: passes=446 timeouts=433 | poll 87.3% work 10.5%
+ZWL PERF compose frames=13 draw_ms=38.23 (acquire 0.01 submit+present 37.97) frame_ms=40.20
+ZWL PING pong client=3 serial=14
+ZSETTINGS LAYOUT page=wifi controls=7
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZSETTINGS CONTROL index=5 x=1045 y=319 width=87 height=32
+ZSETTINGS CONTROL index=4 x=971 y=319 width=66 height=32
+ZSETTINGS CONTROL index=6 x=888 y=319 width=75 height=32
+ZSETTINGS CONTROL index=9 x=348 y=317 width=528 height=36
+ZWL PING pong client=3 serial=41
+ZSETTINGS NETWORK save-key ok
+ZSETTINGS NETWORK request=6 sent
+ZSETTINGS NETWORK message bad=0 text=Joining keiland-test...
+ZSETTINGS NETWORK done request=6 errno=0
+ZSETTINGS NETWORK request=2 sent
+ZSETTINGS LAYOUT page=wifi controls=6
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZSETTINGS CONTROL index=5 x=1045 y=319 width=87 height=32
+ZSETTINGS CONTROL index=4 x=971 y=319 width=66 height=32
+ZSETTINGS CONTROL index=6 x=888 y=319 width=75 height=32
+ZSETTINGS CONTROL index=9 x=348 y=317 width=528 height=36
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=enp0s5 wifi=searching ssid=
+ZWL PERF 5007ms: passes=455 timeouts=402 | poll 84.1% work 13.0%
+ZWL PERF compose frames=24 draw_ms=25.80 (acquire 0.01 submit+present 25.56) frame_ms=26.77
+ZSETTINGS NETWORK done request=2 errno=0
+ZSETTINGS NETWORK message bad=0 text=Connected to keiland-test.
+ZSETTINGS LAYOUT page=wifi controls=3
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=1 interface=enp0s5 wifi=2 ssid=
+ZWL NETWORK scan count=1
+ZWL NETWORK state reachable=1 connected=1 kind=wifi interface=wlan0 wifi=connected ssid=keiland-test
+ZSETTINGS NETWORK scan count=1
+ZSETTINGS NETWORK state reachable=1 connected=1 kind=2 interface=wlan0 wifi=4 ssid=keiland-test
+ZSETTINGS LAYOUT page=wifi controls=4
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=3 x=948 y=123 width=122 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZWL PING pong client=3 serial=44
+ZSETTINGS PAGE sound
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Sound sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=sound
+ZSETTINGS LAYOUT page=sound controls=2
+ZSETTINGS CONTROL index=6 x=308 y=177 width=820 height=28
+ZSETTINGS CONTROL index=7 x=1082 y=249 width=52 height=32
+ZWL TITLEBAR commit client=3 titlebar=36 serial=4 mode=1 controls=6 tabs=0 generation=4
+ZWL MENU commit client=3 menu=31 serial=4 items=43 generation=4
+ZWL TITLEBAR control client=3 surface=8 where=floating id=1 x=172 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=2 x=206 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=3 x=240 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=4 x=280 y=53 width=147 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=5 x=822 y=53 width=220 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=6 x=1046 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=0 x=1086 y=53 width=30 height=30 shown=1
+ZWL PERF 5006ms: passes=457 timeouts=441 | poll 89.0% work 9.1%
+ZWL PERF compose frames=15 draw_ms=28.43 (acquire 0.01 submit+present 28.18) frame_ms=33.27
+ZSETTINGS SOUND set value=74 muted=0 final=0
+ZSETTINGS SOUND feedback error=0
+ZSETTINGS SOUND report reachable=1 device=1 value=74 muted=0
+ZWL PING pong client=3 serial=47
+ZSETTINGS SOUND set value=74 muted=0 final=1
+ZSETTINGS SOUND feedback error=0
+ZSETTINGS LOOK set key=sound.volume value=74 error=0
+ZSETTINGS LOOK set key=sound.muted value=0 error=0
+ZWL PERF 5022ms: passes=472 timeouts=466 | poll 94.3% work 2.6%
+ZWL PERF compose frames=4 draw_ms=25.15 (acquire 0.01 submit+present 24.91) frame_ms=26.76
+ZWL VOLUME popup open x=916 y=40 width=260 height=116 slider=81 mute=115 sound=1
+ZWL VOLUME set value=23 muted=0 via=slider final=0 at_ms=750222
+ZWL VOLUME feedback at_ms=750222 via=slider
+ZSETTINGS SOUND report reachable=1 device=1 value=22 muted=0
+ZWL VOLUME set value=23 muted=0 via=slider final=1 at_ms=750277
+ZWL VOLUME feedback at_ms=750277 via=slider
+ZSETTINGS LOOK changed opacity=100 wallpaper=
+ZWL VOLUME saved value=23 muted=0 error=0
+ZWL PERF 5002ms: passes=459 timeouts=451 | poll 91.9% work 5.7%
+ZWL PERF compose frames=7 draw_ms=32.94 (acquire 0.03 submit+present 32.64) frame_ms=33.89
+ZSETTINGS LOOK changed opacity=100 wallpaper=
+ZWL PERF 5058ms: passes=474 timeouts=473 | poll 95.4% work 1.2%
+ZWL PERF compose frames=1 draw_ms=31.48 (acquire 0.01 submit+present 31.13) frame_ms=33.70
+ZWL PERF 5005ms: passes=475 timeouts=475 | poll 96.8% work 0.6%
+ZWL PERF 5003ms: passes=472 timeouts=472 | poll 96.3% work 0.6%
+ZWL PERF 5002ms: passes=478 timeouts=478 | poll 97.5% work 0.6%
+ZWL PERF 5038ms: passes=472 timeouts=472 | poll 95.8% work 0.6%
+ZWL PERF 5000ms: passes=476 timeouts=476 | poll 97.1% work 0.6%
+ZWL PERF 5044ms: passes=470 timeouts=470 | poll 95.0% work 1.5%
+ZWL PERF compose frames=1 draw_ms=43.05 (acquire 0.09 submit+present 42.43) frame_ms=45.20
+ZWL PERF 5007ms: passes=476 timeouts=476 | poll 97.0% work 0.6%
+ZWL PERF 5013ms: passes=473 timeouts=473 | poll 96.3% work 0.6%
+ZWL PERF 5006ms: passes=475 timeouts=475 | poll 96.8% work 0.6%
+ZWL PERF 5034ms: passes=474 timeouts=474 | poll 96.1% work 0.6%
+ZWL PERF 5002ms: passes=478 timeouts=478 | poll 97.5% work 0.6%
+ZWL PERF 5054ms: passes=477 timeouts=477 | poll 96.4% work 0.6%
+ZWL PERF 5007ms: passes=478 timeouts=478 | poll 97.4% work 0.6%
+ZWL PERF 5005ms: passes=471 timeouts=471 | poll 96.1% work 0.6%
+ZWL VOLUME popup close via=icon
+ZWL PERF 5003ms: passes=472 timeouts=468 | poll 95.6% work 2.5%
+ZWL PERF compose frames=3 draw_ms=32.11 (acquire 0.01 submit+present 31.82) frame_ms=34.10
+ZWL PING pong client=3 serial=51
+ZSETTINGS PAGE wifi
+ZSETTINGS NETWORK request=1 sent
+ZSETTINGS TITLEBAR state back=1 forward=0 parts=2 last=Wi-Fi sidebar=1 query= focus=0
+ZSETTINGS MENU state back=1 forward=0 sidebar=1 page=wifi
+ZSETTINGS LAYOUT page=wifi controls=3
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=3 x=948 y=123 width=122 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZWL TITLEBAR commit client=3 titlebar=36 serial=5 mode=1 controls=6 tabs=0 generation=5
+ZWL MENU commit client=3 menu=31 serial=5 items=43 generation=5
+ZWL TITLEBAR control client=3 surface=8 where=floating id=1 x=172 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=2 x=206 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=3 x=240 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=4 x=280 y=53 width=140 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=5 x=822 y=53 width=220 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=6 x=1046 y=53 width=30 height=30 shown=1
+ZWL TITLEBAR control client=3 surface=8 where=floating id=0 x=1086 y=53 width=30 height=30 shown=1
+ZSETTINGS NETWORK done request=1 errno=0
+ZSETTINGS LAYOUT page=wifi controls=4
+ZSETTINGS CONTROL index=1 x=1082 y=123 width=52 height=32
+ZSETTINGS CONTROL index=3 x=948 y=123 width=122 height=32
+ZSETTINGS CONTROL index=2 x=1060 y=211 width=70 height=32
+ZSETTINGS CONTROL index=100 x=298 y=261 width=840 height=46
+ZWL PERF 5009ms: passes=460 timeouts=446 | poll 90.4% work 6.7%
+ZWL PERF compose frames=11 draw_ms=27.81 (acquire 0.01 submit+present 27.59) frame_ms=29.36
+ZWL CLEANUP client=3 objects=24 unread_fds=0
+ZWL CLEANUP client=2 objects=19 unread_fds=0
+ZSETTINGS ZWL DESKTOP gone client=2
+DONE reason=disconnected
+ZWL IME lost pid=1120
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+ZFILES DONE reason=disconnected
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=124 error=0 cleanup_failed=0 pid=1102 input_events=71 seat_events=85 at_ms=840854

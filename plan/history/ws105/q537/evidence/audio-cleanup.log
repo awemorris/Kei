@@ -1,0 +1,33 @@
+audio-probe: volume left=40 right=40 muted=0 changed=2
+Simple mixer control 'Master',0
+  Capabilities: pvolume pswitch
+  Playback channels: Front Left - Front Right
+  Limits: Playback 0 - 74
+  Mono:
+  Front Left: Playback 30 [41%] [-44.00dB] [on]
+  Front Right: Playback 30 [41%] [-44.00dB] [on]
+Simple mixer control 'Master',0
+  Capabilities: pvolume pswitch
+  Playback channels: Front Left - Front Right
+  Limits: Playback 0 - 74
+  Mono:
+  Front Left: Playback 52 [70%] [-22.00dB] [on]
+  Front Right: Playback 52 [70%] [-22.00dB] [on]
+audio-probe: external event left=70 right=70 changed=2 PASS
+audio-probe: volume left=40 right=40 muted=1 changed=2
+Simple mixer control 'Master',0
+  Capabilities: pvolume pswitch
+  Playback channels: Front Left - Front Right
+  Limits: Playback 0 - 74
+  Mono:
+  Front Left: Playback 30 [41%] [-44.00dB] [off]
+  Front Right: Playback 30 [41%] [-44.00dB] [off]
+audio-probe: volume left=40 right=40 muted=0 changed=2
+Simple mixer control 'Master',0
+  Capabilities: pvolume pswitch
+  Playback channels: Front Left - Front Right
+  Limits: Playback 0 - 74
+  Mono:
+  Front Left: Playback 30 [41%] [-44.00dB] [on]
+  Front Right: Playback 30 [41%] [-44.00dB] [on]
+audio-probe: PASS

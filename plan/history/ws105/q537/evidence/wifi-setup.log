@@ -1,0 +1,11 @@
+wlan1: interface state UNINITIALIZED->ENABLED
+wlan1: AP-ENABLED 
+Successfully initialized wpa_supplicant
+total 0
+srwxrwx--- 1 root netdev 0 Oct  1 11:37 p2p-dev-wlan0
+srwxrwx--- 1 root netdev 0 Oct  1 11:37 wlan0
+wpa_state=DISCONNECTED
+ip_address=192.0.2.2
+p2p_device_address=42:00:00:00:00:00
+address=02:00:00:00:00:00
+uuid=362db47b-a53a-5191-88fb-5458b986b2e4
