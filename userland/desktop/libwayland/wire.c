@@ -646,7 +646,7 @@ wlc_wire_control(
 		}
 
 		/* A final unpadded control header ends the returned ancillary sequence. */
-		needed = CMSG_ALIGN(control->cmsg_len);
+		needed = CMSG_SPACE(control->cmsg_len - CMSG_LEN(0));
 		if (needed > message->msg_controllen - offset)
 			break;
 

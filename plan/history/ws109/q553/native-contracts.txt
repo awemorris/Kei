@@ -1,0 +1,2 @@
+sync-rejected: PASS errno/output/fd ownership; actual GPU synchronization untested
+public-libraries: PASS installed Wayland/TrueType/standard Vulkan ABI

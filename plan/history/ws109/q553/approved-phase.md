@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q553 / q553-i01
+Queue / Attempt: q552 / q552-i01
 
 ## 目的・範囲
 
@@ -66,9 +66,3 @@ Event ws109-q552-uncleared: local evidence/outcome saved; remote comment (no Pha
 ## q553 redesign after q552 / internal L1 correction
 
 q552 failed at native libwayland/wire.c because CMSG_ALIGN is Linux's internal macro. Extend L1 changed component to common libwayland/wire.c: compute aligned record extent with standard CMSG_SPACE(cmsg_len - CMSG_LEN(0)) after validated length, preserving bounds/short final controls/fd ownership and ordered ancillary handling. Add actual native/Linux SCM_RIGHTS valid/truncated/fragmented controls contract checks. Other external interfaces/dependencies/acceptance unchanged. Resume native52source build and resolve ordinary native compilation differences within those already selected components; no scope expansion into unrelated libraries/apps or architecture. Same max60min. Retain q552 failed result/evidence; full p002 F2 integration remains uncleared after L1. Event ws109-q553-redesign saved after plan revision; remote origin comment pending, no changed foreign Phase scope.
-
-## Result / q553-i01 / 2026-10-01T19:40:30.363310+00:00
-
-Queue item cleared /whole Phase uncleared。L1 native52sources/sevenELF＋DESTDIR/publicheaders/nativeVulkan1MiBchain、actualfd/CLOEXEC/truncation/errno所有を検証。Linux library/chain/fullWaylandsuite回帰PASS。[result](../../history/ws109/q553/result.md)。fullF2のlibkeiland/compositor/apps統合はp003/p004後のL2、全source規約/zedBSD/physical gatesはp005に保持。
-
-Event ws109-q553-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

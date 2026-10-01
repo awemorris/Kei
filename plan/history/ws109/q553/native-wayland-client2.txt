@@ -1,0 +1,14 @@
+Assertion failed: (sent == -1), function check_descriptor_transport, file /root/wayland-client.c, line 1030.
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-claude1/build/ws109-control/guest.py", line 35, in <module>
+    elif sys.argv[1]=='ssh':ssh(sys.argv[2],timeout=int(sys.argv[3]) if len(sys.argv)>3 else 120)
+                            ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/awe/zedBSD-claude1/build/ws109-control/guest.py", line 11, in ssh
+    return command(['ssh','-i',str(D/'id_ed25519'),'-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null','-o','LogLevel=ERROR','-o','BatchMode=yes','-o','ConnectTimeout=3','-p',str(CFG['port']),'root@127.0.0.1',script],timeout=timeout,**kwargs)
+  File "/home/awe/zedBSD-claude1/build/ws109-control/guest.py", line 9, in command
+    return subprocess.run(args,check=True,timeout=timeout,**kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['ssh', '-i', '/home/awe/zedBSD-claude1/build/ws109-control/guest/id_ed25519', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=3', '-p', '47969', 'root@127.0.0.1', 'cd /root/keiland-src && cc -std=gnu17 -Wall -Wextra -Werror -pthread -I. -Ibuild/native-test-include -Iuserland/desktop/keiland /root/wayland-client.c -Lbuild/keiland-freebsd/lib -l:libwayland-client.so -Wl,-rpath,/opt/keiland/lib -o /root/wayland-client-test && env LD_LIBRARY_PATH=/root/keiland-stage/opt/keiland/lib timeout 40 /root/wayland-client-test']' returned non-zero exit status 255.

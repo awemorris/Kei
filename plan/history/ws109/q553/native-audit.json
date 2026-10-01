@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "source_count": 52,
+  "native_header_dependencies": 229,
+  "elf": [
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libgif-compat.so",
+      "soname": [
+        "libgif-compat.so"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "e4f05675e905c637c735ee3b578934e7d9da6d9dd35545284800be4f413e246f"
+    },
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libjpeg-compat.so",
+      "soname": [
+        "libjpeg-compat.so"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "1de5ddee275d33de630abf39df7fa91c70dda80556252549afe74a34130fca76"
+    },
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libpng-compat.so",
+      "soname": [
+        "libpng-compat.so"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "b00b57c3b38646e4ba21e9731d21af5fddd615dd47cadfe6c6efec3be70631f3"
+    },
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libtruetype.so",
+      "soname": [
+        "libtruetype.so"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "4b92fb9ef31795fa199c79d3f1559022f9724c57e12e14330302477ced3d6486"
+    },
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libvulkan.so.1",
+      "soname": [
+        "libvulkan.so.1"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libthr.so.3",
+        "libc.so.7"
+      ],
+      "sha256": "636c2886541428a0f9bd88da585c67ac41f1df6528c93b9cf7ec6ffe9b6f0f7c"
+    },
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libwayland-client.so",
+      "soname": [
+        "libwayland-client.so"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "b0225f94730ce1d505c1bc5eed1135f672245abe7eb07a91efc6d1b0d9f9bead"
+    },
+    {
+      "file": "/root/keiland-stage/opt/keiland/lib/libz-compat.so",
+      "soname": [
+        "libz-compat.so"
+      ],
+      "runpath": [
+        "/opt/keiland/lib"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "1af83c0bae3016ed778e0559357edc03ba4ec73df3a6f4c16869c6f1767c352a"
+    }
+  ]
+}

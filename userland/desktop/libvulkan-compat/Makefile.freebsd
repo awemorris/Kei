@@ -16,7 +16,7 @@ $(LIBVULKAN_COMPAT_GEN)/forward.inc $(LIBVULKAN_COMPAT_GEN)/exports.map &: $(LIB
 
 # The generated forwarders are included by dispatch.c; every source sees the generated directory.
 KEILAND_FREEBSD_CPPFLAGS_userland_desktop_libvulkan-compat_ := -I$(LIBVULKAN_COMPAT_GEN) \
-	-DKEILAND_VULKAN_BACKEND_PATHS='"/usr/local/lib/libvulkan.so.1"'
+	-DKEILAND_VULKAN_BACKEND_PATHS='"$(KEILAND_FREEBSD_LOCALBASE)/lib/libvulkan.so.1"'
 $(patsubst %.c,$(KEILAND_FREEBSD_BUILD)/obj/%.o,$(LIBVULKAN_COMPAT_SOURCES)): $(LIBVULKAN_COMPAT_GEN)/forward.inc
 
 $(eval $(call KEILAND_FREEBSD_LIBRARY,vulkan-compat,libvulkan.so.1,$(LIBVULKAN_COMPAT_SOURCES),libwayland-client.so,-pthread,$(LIBVULKAN_COMPAT_GEN)/exports.map,-Wl$(comma)-Bsymbolic))

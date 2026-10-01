@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q553](queue-q553.md)（WS109 p002 uncleared）
+Last finished Queue: [q552](queue-q552.md)（WS109 p002 uncleared）
 
-## 最新: q553 /WS109 p002
+## 最新: q552 /WS109 p002
 
-item cleared /Phase uncleared。L1 native52sources/sevenELF＋DESTDIR/publicheaders/nativeVulkan1MiBchain、actualfd/CLOEXEC/truncation/errno所有を検証。Linux library/chain/fullWaylandsuite回帰PASS。[result](../../history/ws109/q553/result.md)。fullF2のlibkeiland/compositor/apps統合はp003/p004後のL2、全source規約/zedBSD/physical gatesはp005に保持。
+item uncleared /Phase uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](../../history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
 
 WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | Queue | Outcome |
 | --- | --- |
+| [q523](queue-q523.md) | ws105-p001 cleared |
 | [q524](queue-q524.md) | ws105-p002 cleared |
 | [q525](queue-q525.md) | ws105-p003 cleared |
 | [q526](queue-q526.md) | ws105-p004 uncleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | [q551](queue-q551.md) | WS109 p001 item cleared /Phase cleared |
 | [q552](queue-q552.md) | WS109 p002 item uncleared /Phase uncleared |
-| [q553](queue-q553.md) | WS109 p002 item cleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

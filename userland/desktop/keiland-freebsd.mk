@@ -88,8 +88,12 @@ install: all install-headers
 		install -m 0755 "$(KEILAND_FREEBSD_BUILD)/$$f" "$(DESTDIR)$(KEILAND_PREFIX)/$$f"; \
 	done
 
+KEILAND_FREEBSD_PUBLIC_HEADERS := $(shell find userland/desktop/keiland/wayland -type f -name '*.h') \
+	$(addprefix userland/desktop/keiland/,wayland-client.h wayland-client-core.h wayland-client-protocol.h \
+	wayland-util.h xdg-shell-client-protocol.h primary-selection-unstable-v1-client-protocol.h \
+	tablet-unstable-v2-client-protocol.h truetype.h)
 install-headers:
-	@set -e; for f in $$(find userland/desktop/keiland -type f -name '*.h'); do \
+	@set -e; for f in $(KEILAND_FREEBSD_PUBLIC_HEADERS); do \
 		rel=$${f#userland/desktop/keiland/}; \
 		mkdir -p "$(DESTDIR)$(KEILAND_PREFIX)/include/$$(dirname "$$rel")"; \
 		install -m 0644 "$$f" "$(DESTDIR)$(KEILAND_PREFIX)/include/$$rel"; \

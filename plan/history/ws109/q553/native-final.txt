@@ -1,0 +1,5 @@
+gmake: Nothing to be done for 'libraries'.
+public-libraries: PASS installed Wayland/TrueType/standard Vulkan ABI
+chain deviceName=llvmpipe (LLVM 19.1.7, 128 bits)
+chain driverName=llvmpipe
+vk-chain-test: PASS
