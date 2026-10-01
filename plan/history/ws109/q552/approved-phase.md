@@ -2,10 +2,10 @@
 
 # ws109p002: native build・library と system Vulkan chain
 
-Status: uncleared
+Status: planned
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q552 / q552-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -56,9 +56,3 @@ p002 is staged: L1 foundation libraries first, L2 real libkeiland/compositor/app
 Delegated WS109 native implementation under user instruction; maximum60min/1Phase. Implement standalone `userland/desktop/keiland-freebsd.mk` + native package Makefile.freebsd for base codecs, digest static library, private Wayland-client, TrueType and own Vulkan compatibility library. Native flags/paths/header staging/DESTDIR install/system-inclusive dependencies and print-sources. Build only actual L1 libraries; reserve compositor/libkeiland/apps for L2 after real p003/p004 outputs. No successful stubs/target toolchain changes. Native BSD install and DRM include layout; shared wsi-swapchain calls small Linux/FreeBSD sync modules, preserving errno/fd/fallback/public behavior. Fine OS UAPI record checked against fixed upstream and native ioctl encoding. No framebuffer/backend availability claims from headless Vulkan.
 
 Scope files: independent native makefiles listed above; `libvulkan-compat/{dma-sync.h,linux/sync-linux.c,freebsd/sync-freebsd.c,wsi-swapchain.c,Makefile.linux,Makefile.freebsd}`; Phase-specific native foundation contract probes and evidence. Reuse existing standard header/vk-chain Linux tests where portable; new tests only for meaningful native ABI/fd/syscall differences. Code-style full standard loaded, clang-format19 edited scope/style-check/manual; native build -j16 warning0, DESTDIR/header/ELF/loader chain buffer copy using real system loader+Mesa, Linux affected library/chain regression. zedBSD Vulkan builds different library, no shared sync module linked; final relevant boot in p005. Whole Phase F2 remains uncleared after L1 until all real application/backend integration. p003/p004 eligibility depends on verified L1 outputs. WIP commit, no push; records/outbox pending publication.
-
-## Result / q552-i01 / 2026-10-01T19:26:37.866206+00:00
-
-Queue item uncleared /whole Phase uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](../../history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
-
-Event ws109-q552-uncleared: local evidence/outcome saved; remote comment (no Phase close) pending.

@@ -1,0 +1,10 @@
+# The native FreeBSD build of libjpeg-compat.so; the zedBSD build remains in Makefile.
+# Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+KEILAND_FREEBSD_JPEG_COMPAT_SOURCES := userland/base/libjpeg-compat/error.c \
+	userland/base/libjpeg-compat/memory.c \
+	userland/base/libjpeg-compat/source.c \
+	userland/base/libjpeg-compat/marker.c \
+	userland/base/libjpeg-compat/huffman.c \
+	userland/base/libjpeg-compat/idct.c \
+	userland/base/libjpeg-compat/decompress.c
+$(eval $(call KEILAND_FREEBSD_LIBRARY,jpeg-compat,libjpeg-compat.so,$(KEILAND_FREEBSD_JPEG_COMPAT_SOURCES),,-lm,userland/base/libjpeg-compat/exports.map))

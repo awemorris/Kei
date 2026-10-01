@@ -7,9 +7,9 @@
 
 /* Exported Vulkan images, compositor release ownership, and implicit-sync presentation. */
 #include "compat.h"
+#include "dma-sync.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <linux/dma-buf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1188,7 +1188,6 @@ chain_acquire_signal(
 {
 	struct compat_device *device;
 	struct compat_queue *queue;
-	struct dma_buf_export_sync_file export;
 	VkImportSemaphoreFdInfoKHR sem_import;
 	VkImportFenceFdInfoKHR fence_import;
 	VkSubmitInfo submit;
@@ -1224,9 +1223,7 @@ chain_acquire_signal(
 	fd = -1;
 	if (chain->fallback == 0) {
 		/* Exports both reader and writer fences to protect the application's next write. */
-		memset(&export, 0, sizeof(export));
-		export.flags = DMA_BUF_SYNC_WRITE;
-		answer = ioctl(chain->images[index].fd, DMA_BUF_IOCTL_EXPORT_SYNC_FILE, &export);
+		answer = compat_dma_sync_export(chain->images[index].fd, COMPAT_DMA_SYNC_WRITE, &fd);
 		if (answer != 0) {
 			/* Unsupported synchronization permanently selects the safe CPU path for this chain. */
 			if (errno != ENOTTY) {
@@ -1238,9 +1235,6 @@ chain_acquire_signal(
 
 			/* Release ownership proves the compositor has finished before the fallback acquire. */
 			chain->fallback = 1;
-		} else {
-			/* A successful export transfers the returned sync descriptor to this function. */
-			fd = export.fd;
 		}
 	}
 
@@ -1375,7 +1369,6 @@ chain_present(
 	    chain_frame};
 	struct compat_device *device;
 	struct compat_surface *surface;
-	struct dma_buf_import_sync_file import;
 	VkSubmitInfo submit;
 	VkSemaphoreGetFdInfoKHR export;
 	VkPipelineStageFlags *stages;
@@ -1466,10 +1459,7 @@ chain_present(
 		/* Descriptor minus one already denotes completed GPU work. */
 		if (fd >= 0) {
 			/* DMA-BUF import retains its own payload and does not consume our descriptor. */
-			memset(&import, 0, sizeof(import));
-			import.flags = DMA_BUF_SYNC_WRITE;
-			import.fd = fd;
-			answer = ioctl(chain->images[index].fd, DMA_BUF_IOCTL_IMPORT_SYNC_FILE, &import);
+			answer = compat_dma_sync_import(chain->images[index].fd, COMPAT_DMA_SYNC_WRITE, fd);
 			if (answer != 0) {
 				/* Only supported capability failures may choose the permanent CPU path. */
 				if (errno != ENOTTY) {

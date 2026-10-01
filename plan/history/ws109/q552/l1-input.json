@@ -1,0 +1,541 @@
+{
+  "files": [
+    {
+      "path": "include/libc/compat/gif_lib.h",
+      "sha256": "17d1abe2692b57b93f39d5ab45ec9acf6b44bfa3581b42942dafe65d5c8bbd12"
+    },
+    {
+      "path": "include/libc/compat/jpeglib.h",
+      "sha256": "c0e5bf9efdda81292ea4b182ae09ace9234858a51a2d5d518c27ed335af8962c"
+    },
+    {
+      "path": "include/libc/compat/png/png.h",
+      "sha256": "c6fc20bb91780891acd8613f84ec1d8b7f42b5c8456c60ffce0a10fcb7f6918a"
+    },
+    {
+      "path": "include/libc/compat/zlib/zlib.h",
+      "sha256": "0135cf63cd845fbc1385355e181ef00f417b0875428ee927610c21d3bb87e8b1"
+    },
+    {
+      "path": "include/libc/md5.h",
+      "sha256": "3aba53fc8dd1c58e08167468d9b63357197d805e18114e15fe1e35d82f6b3adb"
+    },
+    {
+      "path": "include/libc/pdf.h",
+      "sha256": "7bfbebbc7069a2a6ebd38997e9a13b7d6afb836b976ad50bcc40936396baf989"
+    },
+    {
+      "path": "include/libc/sha1.h",
+      "sha256": "d22262197251987547f355315644040ca091025334a81c674e1c0dd1cee9b72e"
+    },
+    {
+      "path": "include/libc/sha2.h",
+      "sha256": "88da537160c15e925ff98efa8e37248ee30535b6585df53b7da351f115565c73"
+    },
+    {
+      "path": "plan/tools/keiland-linux/elf-check.sh",
+      "sha256": "dc4fb2964959364d9abc87e36ece0bafb4d1f6542d23013957f6cfe282797d5e"
+    },
+    {
+      "path": "plan/tools/keiland-linux/vk-chain-test.c",
+      "sha256": "7748386a39fe3ab75578053a6ff694330c7da15e1c185dd233a3c9e371b971f6"
+    },
+    {
+      "path": "src/libc/openbsd-digest.c",
+      "sha256": "9623610dfec27c7195d60ce1ebb16778c811f90f5a008dc15ef08c9826f40705"
+    },
+    {
+      "path": "src/libc/openbsd-sha2.c",
+      "sha256": "5832ff0c5529873659d9f59cad20c9b326962d1065a1a515cd618af3ea513e2b"
+    },
+    {
+      "path": "userland/base/libgif-compat/Makefile",
+      "sha256": "19d4c9de197f35e0caf12072f642f1dd3a4168f7dd1fb1f5af19bb15c91f3699"
+    },
+    {
+      "path": "userland/base/libgif-compat/Makefile.freebsd",
+      "sha256": "8eec585c77f4340f57c6e55ffc2065f57bf55380db2903588cc5a2fcea2f4b7a"
+    },
+    {
+      "path": "userland/base/libgif-compat/Makefile.linux",
+      "sha256": "dca782a643e36f68ab8decdf19592753b27a4150250349c36be64cffc979a959"
+    },
+    {
+      "path": "userland/base/libgif-compat/decode.c",
+      "sha256": "b58f32864117dfb3012685e1680936acbf3b1ea6dfe15187d1507e53948b42c9"
+    },
+    {
+      "path": "userland/base/libgif-compat/exports.map",
+      "sha256": "e5000d239792347d9ae6340707ca00849fa426e2ab5f766dc6e88304aa1ec124"
+    },
+    {
+      "path": "userland/base/libgif-compat/internal.h",
+      "sha256": "4717f547ad102e34f7150d9e174b0b1ac45a286c16bcda43452d60c7207ccaa6"
+    },
+    {
+      "path": "userland/base/libgif-compat/lzw.c",
+      "sha256": "7433b5e2cf7fb2f31b51d0cd238408225ab3da127d5aba1fab9b43ac8240ea71"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/Makefile",
+      "sha256": "23096e884e87aa30c352f636832382454a252baea345794265ee31b224c50e8d"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/Makefile.freebsd",
+      "sha256": "fb1c156c5b2ef735f6c58702779b415d1adeda99e882f85ae80bde525ae7666c"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/Makefile.linux",
+      "sha256": "5f1f84ec1bff12634c72442a83444e94390d8135b074db8d2f725aabeb45c8ee"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/decompress.c",
+      "sha256": "9bdd4ff30c5eec6ded82bb4d82a24918e58af8b2a99738cca4fd00d365ca56a7"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/error.c",
+      "sha256": "ec6d9bc38de0b59327d042b004fc4a34029ff046334381539162c1f61315352b"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/exports.map",
+      "sha256": "fee8288cb293e4ad43767b91a67637650ecdc4ba49200ece337784ca7845bc9b"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/huffman.c",
+      "sha256": "d7acc0f4de7b2a1005be3fc9eb50c09d11d5b0d4f6345d4fd2a0692e934aee0f"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/idct.c",
+      "sha256": "6c22e5b4ddcf799720027488c376c08500e66862ce601b85a1d5becbd237216b"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/internal.h",
+      "sha256": "e3a55e78a8515ae8bd89e78069b2a567e0a805a2bb431b3ed3eef54dfd32f8b7"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/marker.c",
+      "sha256": "35942b65db66fca0004fffdf5858781aa69c349b2c7dcd4a30322673fed9a7e1"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/memory.c",
+      "sha256": "95b62105a0132da7be76d2de67c6d2f613ffeb0d7ea051e224680131757b01e8"
+    },
+    {
+      "path": "userland/base/libjpeg-compat/source.c",
+      "sha256": "9306363efc2da8a34e86b3686df38c1d7d9750e848bfc43695df2d0be69cce07"
+    },
+    {
+      "path": "userland/base/libpng-compat/Makefile",
+      "sha256": "8b60f033180f16884ae1ca2cbd4b3571a75b6abcd6ec2d93e3155e7de66971e3"
+    },
+    {
+      "path": "userland/base/libpng-compat/Makefile.freebsd",
+      "sha256": "e0a44864067ef70c6311374de5d67a9f62af8ef4c79ae07ed3a264af0b1130bf"
+    },
+    {
+      "path": "userland/base/libpng-compat/Makefile.linux",
+      "sha256": "657fc22f409f1ed4cd912d96213e25ea79ad8bf31749dda5f8240c17eb30c3d8"
+    },
+    {
+      "path": "userland/base/libpng-compat/exports.map",
+      "sha256": "a09b5987b99f349028664f5925679b0b973aeeb305b393077003b8a0393c253c"
+    },
+    {
+      "path": "userland/base/libpng-compat/read.c",
+      "sha256": "8f7748150b18e58ed8ff9ae6164e5ad8697d073b85024c4cacfb021d720b2abd"
+    },
+    {
+      "path": "userland/base/libz-compat/Makefile",
+      "sha256": "8f0f2977eee8ea8ac08f2603d7957c910022bba1df0c1840af639b19303a80c4"
+    },
+    {
+      "path": "userland/base/libz-compat/Makefile.freebsd",
+      "sha256": "aa280925e89a4e2356daaf31cd03824967cc8b1f946a8bcd0a566621f1c2a11b"
+    },
+    {
+      "path": "userland/base/libz-compat/Makefile.linux",
+      "sha256": "5c1966af5ff428140aa4e969ee77d63429da3d63761659886f26c3054c42d4d9"
+    },
+    {
+      "path": "userland/base/libz-compat/checksum.c",
+      "sha256": "1c7081d7a9b8d0bacf3de6b63e4ef023b0ee74a53521008bb1f480bde847819e"
+    },
+    {
+      "path": "userland/base/libz-compat/exports.map",
+      "sha256": "408bb3d0f27ab4a97c7fe98373b4ea851d3914185201d10125e6f2e3b9eefaf5"
+    },
+    {
+      "path": "userland/base/libz-compat/inflate.c",
+      "sha256": "17272dcfabfdf09cd13eac7892abe39edb387a4ebfefb09e0a06129c15091bb1"
+    },
+    {
+      "path": "userland/desktop/freebsd-compat/Makefile.freebsd",
+      "sha256": "be5606d19e2d2a8aa8d88497ac1f72d9f7f969955c42fa145c62f348fb1431c7"
+    },
+    {
+      "path": "userland/desktop/keiland/browser.h",
+      "sha256": "36185e5a6b5bd87e0209276c53c38c7e9397a764ea395ab80335402a70edefa0"
+    },
+    {
+      "path": "userland/desktop/keiland/keiland.h",
+      "sha256": "0966214ce712d84703a0bfdf86752677f95ae7207a3cda21ae0f66caa3b58a43"
+    },
+    {
+      "path": "userland/desktop/keiland/keiui.h",
+      "sha256": "7a10ec64c79e4bcb21f859c863fc71b4c1c3eccfcfa52adc3db7f18b14dacdb3"
+    },
+    {
+      "path": "userland/desktop/keiland/primary-selection-unstable-v1-client-protocol.h",
+      "sha256": "f3f2d7970b2c5eacdcf08b53c3b6dd0b27d88995ab44a501f4eb866b27ec8a4b"
+    },
+    {
+      "path": "userland/desktop/keiland/tablet-unstable-v2-client-protocol.h",
+      "sha256": "82650a7e2502f26069097bb8e2422cc25c1d361454183676d9c91ffb67f718dc"
+    },
+    {
+      "path": "userland/desktop/keiland/truetype.h",
+      "sha256": "fd74717872b4be809cecd29777d5f591ed4bae19e42355776f50286bd15175e2"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/API-PROVENANCE.md",
+      "sha256": "0f43abf3d12da210f22d48270392b5eeeb8a5c63733ef1234d88125a86a12010"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/input-method-unstable-v2-client-protocol.h",
+      "sha256": "9262efd58d998dacce58af9c0f16f3383cf43a711badaf85605805424634ca76"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/primary-selection-unstable-v1-client-protocol.h",
+      "sha256": "624bd6ba1b2f89c0eca921893541ce71cdcc46d941b5a99418727199b460c847"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/tablet-unstable-v2-client-protocol.h",
+      "sha256": "5fdca8e75cec52204972c44a0c12d3227d83fa3c79a59fc3f7b366a176b42442"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/text-input-unstable-v3-client-protocol.h",
+      "sha256": "4e286751c9a3b033ea847e3a9de8bcdd890be509704d749e1eb1c0372878f70d"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/virtual-keyboard-unstable-v1-client-protocol.h",
+      "sha256": "87c0d473a3aaf7dfa550112cac78c3460759cb87975c9ea1295154dfd344bf3a"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/wayland-client-core.h",
+      "sha256": "a829e7e7ceadd7861edbd7234e2e30a7e8e75e87ef80f4c8620fffb21c366401"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/wayland-client-protocol.h",
+      "sha256": "2c6db18d53ab9191e81f551571d3beff6cf7ed48cd427e5722d3c75971eccfdb"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/wayland-client.h",
+      "sha256": "b3135fc5a4c30664a58a4fb83a578025cba4fdacb1d264794674f1d9aef314ff"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/wayland-util.h",
+      "sha256": "5a2817a8481f67c091f9a825bfc364133a35c3b107565ca385b66e4cce2a4a60"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland/xdg-shell-client-protocol.h",
+      "sha256": "b8921c0fe44cf15b4731d2485db95a6f5d31bd643f55f9fb9fc913de6261ed19"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland-client-core.h",
+      "sha256": "8b73f4129f2af90ebffc4e37c23f559e18b4848a22781cd5a77856983015163a"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland-client-protocol.h",
+      "sha256": "50f96a1a5da03d47da97485f105d4489c53cabadc370ab3db4ed38d5765ede74"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland-client.h",
+      "sha256": "47726a7cc6e554782137f3338c63797ea8a15240ab071886e9f638f3916219fa"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland-egl-core.h",
+      "sha256": "05a878ec3a98c74676549d450cdbc4a05860ea855462ee4ec526188f0a2ffb09"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland-egl.h",
+      "sha256": "23367e06c7222549fd39b11edf2e36f7b1099157150379a24a4fb2eaa0093a30"
+    },
+    {
+      "path": "userland/desktop/keiland/wayland-util.h",
+      "sha256": "73e2bbe434274bebe912df33be5518b41044d4451404e37edc3b173ea4c9a08b"
+    },
+    {
+      "path": "userland/desktop/keiland/xdg-shell-client-protocol.h",
+      "sha256": "e8699b9321b03f7aa8da690ee10b2ca7358dfb7fea7c41f97bdb26f78e1ec6ff"
+    },
+    {
+      "path": "userland/desktop/keiland-freebsd.mk",
+      "sha256": "de4fb1cbe9233e9a38c86ccba20b94d924870cb5fb36c4a49b3ed239efe23c70"
+    },
+    {
+      "path": "userland/desktop/libtruetype/Makefile",
+      "sha256": "2f63026ab7944ac3ca227deb7251c9da999a2f24ff29f88d4d779b64cb62dd68"
+    },
+    {
+      "path": "userland/desktop/libtruetype/Makefile.freebsd",
+      "sha256": "a7275df2c76bd7734a0c3c3d7aea87aebeeafba296ba6d4a69b71e6769cd85e5"
+    },
+    {
+      "path": "userland/desktop/libtruetype/Makefile.linux",
+      "sha256": "c4deb65b3602f60f894fbba78eb2698d4669c65f8b14a8461ff996e3e0a52b8b"
+    },
+    {
+      "path": "userland/desktop/libtruetype/cmap.c",
+      "sha256": "5e3a0730f5102f893eadc786e5fc432878b01ada1754840820a77f495539dad9"
+    },
+    {
+      "path": "userland/desktop/libtruetype/color.c",
+      "sha256": "7fd43ecda289f2d83875f013d8f3add6807875e9e4c97375731c9ac083d45b8b"
+    },
+    {
+      "path": "userland/desktop/libtruetype/contour.c",
+      "sha256": "cb1f6be1bea6f760f3c2f6d7dfc8e5dbbf509f30c648bf5b915b5927fe912129"
+    },
+    {
+      "path": "userland/desktop/libtruetype/design.c",
+      "sha256": "17402bb19aaa404b1f18172050f5a7c5d6799092ed21aad2665ba68fe570377d"
+    },
+    {
+      "path": "userland/desktop/libtruetype/exports.map",
+      "sha256": "1b400c32343e4d018963373dc6c3a149d3354cecc0a13152a4b22008bc394f91"
+    },
+    {
+      "path": "userland/desktop/libtruetype/face.c",
+      "sha256": "a083c1715ddd20e2a101feffbaadc51300d573bf44356523d79d8b87a3a619bf"
+    },
+    {
+      "path": "userland/desktop/libtruetype/glyph.c",
+      "sha256": "269f4aba0826f99f4ea6e5c435b45b6cd2bbc8250a864261806e544493ff1c65"
+    },
+    {
+      "path": "userland/desktop/libtruetype/internal.h",
+      "sha256": "631d45a4428597e20af178e222fbbd13e7d15b2ca179bb0651fcd1d7a7eba080"
+    },
+    {
+      "path": "userland/desktop/libtruetype/outline.c",
+      "sha256": "f13c3c57887ef935a0229b3fcd2ee724724e118c05ab5c043524ca0e808b5b41"
+    },
+    {
+      "path": "userland/desktop/libtruetype/render.c",
+      "sha256": "c8949e116d5b6269d587b3f96bd4efc3b32aa04ad916d9a8a69cfe2e067cd81a"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/Makefile.freebsd",
+      "sha256": "b493f56f7f2469e63dff6e8400071ae5d0dcf71bcff477d5b3da747ffdc43edb"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/Makefile.linux",
+      "sha256": "8075159397a94b6e056f3f05fa0bdc58e9c8b094aa61cde0b797591b54966cb6"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/README.md",
+      "sha256": "50ab146ce03d73758047c691ec244dce9a6a7487fc99f190240333af5bfa10ea"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/backend.c",
+      "sha256": "bd1bb59a180d58aee85a9eea86783e98d22f33e370726c3970c0c6c4e19ed577"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/compat.h",
+      "sha256": "17fd906333ae5b4cb8719ea06fd59334621cf74aa8f95fee6d7a1656b8583976"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/device.c",
+      "sha256": "8d3f5732d581a8db303f7fd3a8be37f97eb2a341638237800da66cc774e9e8cb"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/dispatch.c",
+      "sha256": "560de3576d38dd94181d28ec38b81a55f41c98d2dfac6ef8a4d0486c8c992179"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/dma-sync.h",
+      "sha256": "ada117a962ed5bf20582d3b9a5496c9e1d6542c0de8a08f891d63b1c8a435571"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/freebsd/sync-freebsd.c",
+      "sha256": "517822ab72026a133f028ccea633e31f94933c87688673fa01c3f5ae824c708f"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/functions.tsv",
+      "sha256": "276c914c48151540df7831d5c30b59b6159baf038f1a579ae1897d44852b2568"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/gen-forward.sh",
+      "sha256": "ac336fc12bce2872de8615ade8912291b5b1c15a5813297cead21dcc299ff213"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/instance.c",
+      "sha256": "efcbaf8baf91662a6c76a41c2efd4f18526ef8aadb6b56e7e8ea13085a24ac04"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/kms.c",
+      "sha256": "102039e0999978d248ee9e9f74f6ab3acebdc795a0be1441a91ba63b5fdd4442"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/linux/sync-linux.c",
+      "sha256": "7eb065658d3b9a263bd7eca67a7ba1bb857990bf3a72661e278346760c4b657f"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/linux-dmabuf-v1-client-protocol.h",
+      "sha256": "8f6d351996406e2d1ff5eff2971d9c8733253b08b233a80632c9c7f0b44d9eeb"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/linux-dmabuf-v1-protocol.c",
+      "sha256": "2815da73307fa7b94249119d5d3f5813519f71882c5736c051fc93248f7313ae"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/wsi-display.c",
+      "sha256": "1fe51b2ecc1b5ee1406e90bcb4f512772390fe9358e5698fa52a0bfcc0270319"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/wsi-swapchain.c",
+      "sha256": "29e519fa013ce2d46d1642cfa6aa46b4974004f9d0969c9a4a60c9b00c5901ac"
+    },
+    {
+      "path": "userland/desktop/libvulkan-compat/wsi-wayland.c",
+      "sha256": "22aeaa6ec118db99c74d5d69419724770cdc205416634a693dc13e9f0147a9ac"
+    },
+    {
+      "path": "userland/desktop/libwayland/Makefile",
+      "sha256": "b638a12ac13bf0a954def52ebffc6974ee510b29d85a6372e2c0d9514104ebdf"
+    },
+    {
+      "path": "userland/desktop/libwayland/Makefile.freebsd",
+      "sha256": "c07e38f5b5525be9bf7184e71dadacfa053dc772bbbd845ee33362db9c9a55de"
+    },
+    {
+      "path": "userland/desktop/libwayland/Makefile.linux",
+      "sha256": "fdf888c6b499bf9949d6e6d739b2a73a0747ddedd6b576204c3b51312b2923fe"
+    },
+    {
+      "path": "userland/desktop/libwayland/README.md",
+      "sha256": "41798a35c24755d4abc28e62e92f37b07b5bf49756bc1bf50c0eb1a1f247f133"
+    },
+    {
+      "path": "userland/desktop/libwayland/client.c",
+      "sha256": "665bfd85f9f835ab69c330acecaa25225540c2501e56ce2cf5da6045293ce0e1"
+    },
+    {
+      "path": "userland/desktop/libwayland/data-device-protocol.c",
+      "sha256": "c8f4d4656895907c202acce47615698d63c8c929974bf685d7def63a2c8743f7"
+    },
+    {
+      "path": "userland/desktop/libwayland/edit-protocol.c",
+      "sha256": "f0c89f8a3ce4b055c7d7a325b85d6e7c6a6cfc240da839f8af787dbb53c0915b"
+    },
+    {
+      "path": "userland/desktop/libwayland/event.c",
+      "sha256": "a2efef30bb9f927e18b4bddc3362e73faa82bf5be276632b9ff9bfe11dc5433c"
+    },
+    {
+      "path": "userland/desktop/libwayland/exports.map",
+      "sha256": "8e2258683d3c02d4e42550007a091ac7206e407349bbcee08ba8d95ef34ba0a3"
+    },
+    {
+      "path": "userland/desktop/libwayland/glass-protocol.c",
+      "sha256": "0aefbc6952ff1c017eacd902f942612e6ddef2c9658ae04c24de2ab95944e765"
+    },
+    {
+      "path": "userland/desktop/libwayland/ime-status-protocol.c",
+      "sha256": "e2c0e3e5e3e3b95ea507fb9c3c309227f90ee5c85e93f3642cd5d56f61c40bce"
+    },
+    {
+      "path": "userland/desktop/libwayland/input-method-protocol.c",
+      "sha256": "8a2131cb59322a2f3aef900b63febb8446707e3d0dd08c4df55f9029e2e5cf95"
+    },
+    {
+      "path": "userland/desktop/libwayland/internal.h",
+      "sha256": "e824c9552728ee783d9683cb6e27108aa31b9e0375ef2221fa9a98b38b272a49"
+    },
+    {
+      "path": "userland/desktop/libwayland/keyboard-inset-protocol.c",
+      "sha256": "a173bf6b10af4dd04fcdbc44b31778a71e67d29480d934f23d8e6bab79967577"
+    },
+    {
+      "path": "userland/desktop/libwayland/menu-protocol.c",
+      "sha256": "974d6dd3708457e08cd3c3f8c611a07047231c512ac5dabd402c845b901b07cf"
+    },
+    {
+      "path": "userland/desktop/libwayland/primary-selection-protocol.c",
+      "sha256": "e028a347999574678c0090b3e38b0e9764ee98bb3db53a9e2b8f2edac8e2b33a"
+    },
+    {
+      "path": "userland/desktop/libwayland/protocol.c",
+      "sha256": "177d0ee3fb293f80c3f269c47a0839191124839dfbe655e4b767e716769db493"
+    },
+    {
+      "path": "userland/desktop/libwayland/proxy.c",
+      "sha256": "5ae825f694ab116374ffafb25d01869d0cd583d70312d8805002edf73f9d0d2f"
+    },
+    {
+      "path": "userland/desktop/libwayland/subsurface-protocol.c",
+      "sha256": "00e3e83ce499f35f3691e4effea04c0f36f126ee45ef293b696c01830f01f5eb"
+    },
+    {
+      "path": "userland/desktop/libwayland/tablet-protocol.c",
+      "sha256": "d000134bf1338230c87682e9f99c598d3e97400415a729041f087193596e1360"
+    },
+    {
+      "path": "userland/desktop/libwayland/text-input-protocol.c",
+      "sha256": "35befeef7990f485940f0c23fe33b3775e59735d5b23f228caebb57338041ebd"
+    },
+    {
+      "path": "userland/desktop/libwayland/titlebar-protocol.c",
+      "sha256": "66e0a1bea5f1e3f382a0bcbb82d606fb97fb2c48500df755c1f9fe2f9ecb1dd9"
+    },
+    {
+      "path": "userland/desktop/libwayland/touch-protocol.c",
+      "sha256": "34c20e484cb1bc9d18998b45e3dd2e51e2bf4a52e6b397c2a187e0fb5bb09a93"
+    },
+    {
+      "path": "userland/desktop/libwayland/utility.c",
+      "sha256": "0ae7e5d2151bf2a52f0059c9f9dba527e6f3dc30e062b857b0664a886b51c69f"
+    },
+    {
+      "path": "userland/desktop/libwayland/virtual-keyboard-protocol.c",
+      "sha256": "7b035b7212536cfe0a21de483fd9a63fb998a0a284645ac827ddd20eb11a3298"
+    },
+    {
+      "path": "userland/desktop/libwayland/wire.c",
+      "sha256": "e789aba35cc0fcfb279156b7e07fed375a4c9079b109735d2363c7eee88fe39b"
+    },
+    {
+      "path": "userland/desktop/libwayland/xdg-toplevel-menu-v1-client-protocol.h",
+      "sha256": "21fe4bc2fa5228fe6c89a05557d396bc352699de4c2d3839c8fe7a02e95ae3b8"
+    },
+    {
+      "path": "userland/desktop/libwayland/zed-edit-v1-client-protocol.h",
+      "sha256": "511f3541e108739c07d76e51399bfb4e992f9b6827579b179114a44f99e6cdb6"
+    },
+    {
+      "path": "userland/desktop/libwayland/zed-glass-v1-client-protocol.h",
+      "sha256": "7871aa5b50ddaf5b421aba5f6c46e835d254f3b8ab99cbd9534007e01da75f78"
+    },
+    {
+      "path": "userland/desktop/libwayland/zed-gpu-buffer-v1-client-protocol.h",
+      "sha256": "eb0be4aeca6596323c4ced888cbfce45193c19d9c64fca032b47fabc1289764a"
+    },
+    {
+      "path": "userland/desktop/libwayland/zed-ime-status-v1-client-protocol.h",
+      "sha256": "c87fb1c17c1ce028b47a990edcb5744674b32ebca85e9776b75e29458890e110"
+    },
+    {
+      "path": "userland/desktop/libwayland/zed-keyboard-inset-v1-client-protocol.h",
+      "sha256": "684835de20a2a18d5dde45ec287eba7c52d6b968209eaabe589dace465aa0fb5"
+    },
+    {
+      "path": "userland/desktop/libwayland/zed-titlebar-v1-client-protocol.h",
+      "sha256": "f9f66b3b1b562e1483cb70bc572139ef3bb484980329d7606681ae2c81226a86"
+    },
+    {
+      "path": "userland/desktop/paths.h",
+      "sha256": "b20a39ecca52c8d9401bc3cb631838f19a3616db571de379d0cb572550b07a68"
+    }
+  ],
+  "tar_sha256": "4bd7b5c6558a895a9f36cb5905040caa18a0745fc3792ff66ea0ddeddc9a05bb"
+}

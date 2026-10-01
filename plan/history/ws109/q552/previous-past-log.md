@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q552](queue-q552.md)（WS109 p002 uncleared）
+Last finished Queue: [q551](queue-q551.md)（WS109 p001 cleared）
 
-## 最新: q552 /WS109 p002
+## 最新: q551 /WS109 p001
 
-item uncleared /Phase uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](../../history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
+item cleared /Phase cleared。FreeBSD15.1-p4 amd64 nativeClang19/headers/OSS/evdev/vtnet/pkg/licenseと後続native手順を確認。[environment](../../history/ws109/q551/environment.md)。実GPU/seat/fence/WiFiの実機関門はp003/p004/p005に保持、WS incomplete。
 
 WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | Queue | Outcome |
 | --- | --- |
+| [q522](queue-q522.md) | 規約の全文の見直し、境界の確かめの script、回帰 |
 | [q523](queue-q523.md) | ws105-p001 cleared |
 | [q524](queue-q524.md) | ws105-p002 cleared |
 | [q525](queue-q525.md) | ws105-p003 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 | [q550](queue-q550.md) | WS109 p001 uncleared / driver license・起動方法・realdevice回答待ち |
 
 | [q551](queue-q551.md) | WS109 p001 item cleared /Phase cleared |
-| [q552](queue-q552.md) | WS109 p002 item uncleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

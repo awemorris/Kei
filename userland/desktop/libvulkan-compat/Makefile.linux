@@ -8,7 +8,8 @@ LIBVULKAN_COMPAT_SOURCES := $(LIBVULKAN_COMPAT_DIR)/backend.c $(LIBVULKAN_COMPAT
 	$(LIBVULKAN_COMPAT_DIR)/instance.c $(LIBVULKAN_COMPAT_DIR)/device.c \
 	$(LIBVULKAN_COMPAT_DIR)/wsi-wayland.c $(LIBVULKAN_COMPAT_DIR)/wsi-swapchain.c \
 	$(LIBVULKAN_COMPAT_DIR)/linux-dmabuf-v1-protocol.c \
-	$(LIBVULKAN_COMPAT_DIR)/kms.c $(LIBVULKAN_COMPAT_DIR)/wsi-display.c
+	$(LIBVULKAN_COMPAT_DIR)/kms.c $(LIBVULKAN_COMPAT_DIR)/wsi-display.c \
+	$(LIBVULKAN_COMPAT_DIR)/linux/sync-linux.c
 
 $(LIBVULKAN_COMPAT_GEN)/forward.inc $(LIBVULKAN_COMPAT_GEN)/exports.map &: $(LIBVULKAN_COMPAT_DIR)/functions.tsv $(LIBVULKAN_COMPAT_DIR)/gen-forward.sh
 	@mkdir -p $(LIBVULKAN_COMPAT_GEN)

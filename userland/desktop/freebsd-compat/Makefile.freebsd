@@ -1,0 +1,4 @@
+# Native FreeBSD libc plus the maintained permissive digest implementations.
+# Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+KEILAND_FREEBSD_DIGEST_SOURCES := src/libc/openbsd-sha2.c src/libc/openbsd-digest.c
+$(eval $(call KEILAND_FREEBSD_STATIC,digest,libkeiland-compat.a,$(KEILAND_FREEBSD_DIGEST_SOURCES)))
