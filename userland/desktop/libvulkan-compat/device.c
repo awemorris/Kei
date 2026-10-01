@@ -569,6 +569,34 @@ compat_image_supported(
 	return VK_TRUE;
 }
 
+/* Offers swapchains when either exported Wayland images or a portable KMS copy path is available. */
+int
+compat_swapchain_available(
+	VkPhysicalDevice physical)
+{
+	struct compat_capabilities capabilities;
+	struct compat_display *displays;
+	uint32_t count;
+	VkResult error;
+
+	/* An actual DMA-BUF export path needs no display-card inquiry. */
+	compat_physical_capabilities(physical, &capabilities);
+	if (capabilities.path != COMPAT_WSI_NONE)
+		return 1;
+
+	/* KMS copying uses ordinary Vulkan images even when external-memory export is absent. */
+	error = compat_kms_displays(&displays, &count);
+	if (error != VK_SUCCESS)
+		return 0;
+
+	/* A headless or explicitly disabled display card cannot supply a KMS swapchain. */
+	if (count == 0)
+		return 0;
+
+	/* Succeeded: the display copy path supplies swapchain presentation for this rendering device. */
+	return 1;
+}
+
 /* Records one retrieved queue without duplicating an existing handle's ownership. */
 static void
 device_queue_record(
@@ -755,9 +783,10 @@ device_prepare(
 	/* Adds WSI prerequisites only when this device requested our swapchain. */
 	needed = 0;
 	if (*swapchain != 0) {
-		/* Requires an actual DMA-BUF export path. */
+		/* Accepts either actual DMA-BUF export or the portable KMS copy path. */
 		compat_physical_capabilities(physical, capabilities);
-		if (capabilities->path == COMPAT_WSI_NONE) {
+		evaluated = compat_swapchain_available(physical);
+		if (evaluated == 0) {
 			free(list);
 			free(extensions);
 			return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -774,46 +803,49 @@ device_prepare(
 		if (evaluated != 0)
 			required[needed++] = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 
-		/* DMA-BUF export remains an extension at every supported API version. */
-		required[needed++] = VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME;
-		required[needed++] = VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME;
+		/* The portable display copy path needs no external-memory or synchronization extension. */
+		if (capabilities->path != COMPAT_WSI_NONE) {
+			/* DMA-BUF export remains an extension at every supported API version. */
+			required[needed++] = VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME;
+			required[needed++] = VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME;
 
-		/* API 1.0 needs explicit external-memory and dedicated-allocation names. */
-		if (version < VK_API_VERSION_1_1) {
-			required[needed++] = VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME;
-			required[needed++] = VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME;
-			required[needed++] = VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME;
-		}
-
-		/* Adds file-descriptor synchronization only when imports and exports are supported. */
-		if (capabilities->implicit_sync != 0) {
-			required[needed++] = VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME;
-			required[needed++] = VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME;
-
-			/* API 1.0 also needs the unpromoted synchronization dependencies. */
+			/* API 1.0 needs explicit external-memory and dedicated-allocation names. */
 			if (version < VK_API_VERSION_1_1) {
-				required[needed++] = VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME;
-				required[needed++] = VK_KHR_EXTERNAL_FENCE_EXTENSION_NAME;
+				required[needed++] = VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME;
+				required[needed++] = VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME;
+				required[needed++] = VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME;
 			}
-		}
 
-		/* Modifier images need their unpromoted format and binding dependencies. */
-		if (capabilities->path == COMPAT_WSI_MODIFIER) {
-			required[needed++] = VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME;
-			if (version < VK_API_VERSION_1_2)
-				required[needed++] = VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME;
+			/* Adds file-descriptor synchronization only when imports and exports are supported. */
+			if (capabilities->implicit_sync != 0) {
+				required[needed++] = VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME;
+				required[needed++] = VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME;
 
-			/* API 1.0 lacks the promoted binding and sampler capabilities. */
-			if (version < VK_API_VERSION_1_1) {
-				required[needed++] = VK_KHR_BIND_MEMORY_2_EXTENSION_NAME;
-				required[needed++] = VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME;
-				required[needed++] = VK_KHR_MAINTENANCE_1_EXTENSION_NAME;
+				/* API 1.0 also needs the unpromoted synchronization dependencies. */
+				if (version < VK_API_VERSION_1_1) {
+					required[needed++] = VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME;
+					required[needed++] = VK_KHR_EXTERNAL_FENCE_EXTENSION_NAME;
+				}
 			}
-		}
 
-		/* Foreign ownership transfer is available only when the driver advertises it. */
-		if (capabilities->foreign != 0)
-			required[needed++] = VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME;
+			/* Modifier images need their unpromoted format and binding dependencies. */
+			if (capabilities->path == COMPAT_WSI_MODIFIER) {
+				required[needed++] = VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME;
+				if (version < VK_API_VERSION_1_2)
+					required[needed++] = VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME;
+
+				/* API 1.0 lacks the promoted binding and sampler capabilities. */
+				if (version < VK_API_VERSION_1_1) {
+					required[needed++] = VK_KHR_BIND_MEMORY_2_EXTENSION_NAME;
+					required[needed++] = VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME;
+					required[needed++] = VK_KHR_MAINTENANCE_1_EXTENSION_NAME;
+				}
+			}
+
+			/* Foreign ownership transfer is available only when the driver advertises it. */
+			if (capabilities->foreign != 0)
+				required[needed++] = VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME;
+		}
 	}
 
 	/* Appends each supported prerequisite once. */
@@ -869,6 +901,9 @@ device_functions(
 		device->image_requirements = (PFN_vkGetImageMemoryRequirements2)compat_backend.get_device_proc(device->handle, "vkGetImageMemoryRequirements2KHR");
 	else
 		device->image_requirements = (PFN_vkGetImageMemoryRequirements2)compat_backend.get_device_proc(device->handle, "vkGetImageMemoryRequirements2");
+
+	/* Optimal KMS copy images also work with the mandatory API-1.0 requirements query. */
+	device->image_requirements1 = (PFN_vkGetImageMemoryRequirements)compat_backend.get_device_proc(device->handle, "vkGetImageMemoryRequirements");
 
 	/* Resolves the backend vkAllocateMemory operation without interposition. */
 	device->allocate_memory = (PFN_vkAllocateMemory)compat_backend.get_device_proc(device->handle, "vkAllocateMemory");

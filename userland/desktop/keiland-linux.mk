@@ -100,6 +100,8 @@ KEILAND_LINUX_PACKAGES ?= userland/base/libz-compat/Makefile.linux \
 	userland/desktop/libkeiland/Makefile.linux
 include $(KEILAND_LINUX_PACKAGES)
 
+include userland/desktop/vkdemo/Makefile.linux
+
 .PHONY: all install clean
 all: $(KEILAND_LINUX_ALL)
 

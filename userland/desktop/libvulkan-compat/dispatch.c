@@ -467,6 +467,7 @@ compat_own_instance(
 	const char *name)
 {
 	struct compat_instance *owner;
+	const char *display_name;
 	unsigned bit;
 	int evaluated;
 
@@ -490,6 +491,26 @@ compat_own_instance(
 	evaluated = strcmp(name, "vkGetPhysicalDeviceWaylandPresentationSupportKHR");
 	if (evaluated == 0)
 		bit = COMPAT_INSTANCE_WAYLAND;
+
+	/* KMS display entry points share display-instance enablement. */
+	display_name = strstr(name, "Display");
+	if (display_name != NULL)
+		bit = COMPAT_INSTANCE_DISPLAY;
+
+	/* Release is owned by the direct-mode display extension. */
+	evaluated = strcmp(name, "vkReleaseDisplayEXT");
+	if (evaluated == 0)
+		bit = COMPAT_INSTANCE_DIRECT;
+
+	/* Seat descriptor acquisition requires the DRM-specific instance extension. */
+	evaluated = strcmp(name, "vkAcquireDrmDisplayEXT");
+	if (evaluated == 0)
+		bit = COMPAT_INSTANCE_DRM;
+
+	/* Connector mapping shares DRM-acquisition enablement. */
+	evaluated = strcmp(name, "vkGetDrmDisplayEXT");
+	if (evaluated == 0)
+		bit = COMPAT_INSTANCE_DRM;
 
 	/* Requires the still-live instance and its application enablement bits. */
 	owner = compat_instance_get(instance);

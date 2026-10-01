@@ -25,6 +25,8 @@ static VkResult chain_commands(struct compat_swapchain *chain, struct compat_que
 static VkResult chain_acquire_signal(struct compat_swapchain *chain, uint32_t index, VkSemaphore semaphore, VkFence fence);
 static VkResult chain_present(struct compat_swapchain *chain, struct compat_queue *queue, uint32_t index, uint32_t wait_count, const VkSemaphore *waits);
 static VkResult chain_record(struct compat_swapchain *chain, uint32_t index, unsigned acquire, VkCommandBuffer command);
+static VkResult chain_display_image(struct compat_swapchain *chain, uint32_t index, const VkSwapchainCreateInfoKHR *create);
+static VkResult chain_display_readback(struct compat_swapchain *chain);
 
 /* Creates exportable images and their compositor buffers without using backend WSI. */
 VKAPI_ATTR VkResult VKAPI_CALL
@@ -63,6 +65,10 @@ vkCreateSwapchainKHR(
 	surface = (struct compat_surface *)(uintptr_t)pCreateInfo->surface;
 	if (surface == NULL)
 		return VK_ERROR_SURFACE_LOST_KHR;
+
+	/* KMS surfaces allocate ordinary optimal images and portable CPU scanout storage. */
+	if (surface->kms != NULL)
+		return compat_display_swapchain_create(owner, pCreateInfo, pAllocator, pSwapchain);
 
 	/* An older or absent protocol is diagnosed once per failed creation. */
 	if (surface->dmabuf == NULL) {
@@ -492,6 +498,178 @@ compat_swapchain_collect(
 	}
 }
 
+/* Creates a display copy swapchain whose rendering images need no external-memory extension. */
+VkResult
+compat_display_swapchain_create(
+	struct compat_device *device,
+	const VkSwapchainCreateInfoKHR *create,
+	const VkAllocationCallbacks *allocator,
+	VkSwapchainKHR *swapchain)
+{
+	struct compat_surface *surface;
+	struct compat_swapchain *chain;
+	struct compat_swapchain *old;
+	VkResult error;
+	uint32_t index;
+	uint32_t count;
+
+	/* Requires the advertised KMS FIFO and blue-first storage contract. */
+	surface = (struct compat_surface *)(uintptr_t)create->surface;
+	if (create->presentMode != VK_PRESENT_MODE_FIFO_KHR)
+		return VK_ERROR_INITIALIZATION_FAILED;
+
+	/* Scanout byte ordering is XRGB/BGRA regardless of transfer-function interpretation. */
+	if (create->imageFormat != VK_FORMAT_B8G8R8A8_UNORM) {
+		if (create->imageFormat != VK_FORMAT_B8G8R8A8_SRGB)
+			return VK_ERROR_FORMAT_NOT_SUPPORTED;
+	}
+
+	/* The copy path requires an exact full-plane image extent. */
+	if (create->imageExtent.width != surface->extent.width)
+		return VK_ERROR_INITIALIZATION_FAILED;
+
+	/* Both visible dimensions must match the selected timing. */
+	if (create->imageExtent.height != surface->extent.height)
+		return VK_ERROR_INITIALIZATION_FAILED;
+
+	/* Keeps the same minimum-three bounded image ring as the FIFO Wayland path. */
+	count = create->minImageCount;
+	if (count < 3)
+		count = 3;
+
+	/* No image count exceeds the advertised fixed maximum. */
+	if (count > 8)
+		return VK_ERROR_INITIALIZATION_FAILED;
+
+	/* Allocates callback-independent Vulkan object storage through the caller's allocator. */
+	chain = compat_object_allocate(sizeof(*chain), allocator);
+	if (chain == NULL)
+		return VK_ERROR_OUT_OF_HOST_MEMORY;
+
+	/* Initializes every field required by shared partial-resource cleanup. */
+	chain->surface = surface;
+	chain->device = device;
+	chain->extent = create->imageExtent;
+	chain->format = create->imageFormat;
+	chain->mode = VK_PRESENT_MODE_FIFO_KHR;
+	chain->fallback = 1;
+	chain->count = count;
+	chain->dumb[0].fd = -1;
+	chain->dumb[1].fd = -1;
+	if (allocator != NULL) {
+		chain->allocator = *allocator;
+		chain->allocated = 1;
+	}
+
+	/* Display images own no external descriptor or Wayland release callback. */
+	for (index = 0; index < count; index++) {
+		/* The shared image destructor must never close process descriptor zero. */
+		chain->images[index].fd = -1;
+		chain->images[index].chain = chain;
+	}
+
+	/* Root applications acquire directly, while an explicit seat acquisition remains owned by the seat's lifecycle. */
+	if (surface->kms->master_fd < 0) {
+		error = compat_kms_acquire(surface->kms, -1);
+		if (error != VK_SUCCESS) {
+			chain_free(chain);
+			return error;
+		}
+
+		/* This chain must release the ownership it acquired itself on destruction. */
+		chain->master_owned = 1;
+	}
+
+	/* Ordinary optimal images are copied out after rendering instead of exported to the display driver. */
+	for (index = 0; index < count; index++) {
+		/* Partial allocation failure uses the same device-before-callback cleanup as Wayland. */
+		error = chain_display_image(chain, index, create);
+		if (error != VK_SUCCESS) {
+			chain_free(chain);
+			return error;
+		}
+	}
+
+	/* Creates one tightly packed, coherent CPU readback allocation for the synchronous present copy. */
+	error = chain_display_readback(chain);
+	if (error != VK_SUCCESS) {
+		chain_free(chain);
+		return error;
+	}
+
+	/* Double-buffered scanout never overwrites the framebuffer still displayed by KMS. */
+	for (index = 0; index < 2; index++) {
+		/* Each dumb buffer retains its own creating file across later master-descriptor replacement. */
+		error = compat_kms_dumb_create(surface->kms, chain->extent, &chain->dumb[index]);
+		if (error != VK_SUCCESS) {
+			chain_free(chain);
+			return error;
+		}
+	}
+
+	/* A replacement inherits automatic master ownership only after successful resource creation. */
+	old = (struct compat_swapchain *)(uintptr_t)create->oldSwapchain;
+	if (old != NULL) {
+		/* Explicit seat acquisition remains owned by its independent lifecycle. */
+		if (old->master_owned != 0) {
+			chain->master_owned = 1;
+			old->master_owned = 0;
+		}
+	}
+
+	/* Publishes the new chain only after every render, readback and scanout resource exists. */
+	*swapchain = (VkSwapchainKHR)(uintptr_t)chain;
+
+	/* Succeeded: the first present performs the modeset, and later presents perform bounded flips. */
+	return VK_SUCCESS;
+}
+
+/* Restores scanout before removing dumb buffers, then retires the coherent copy allocation. */
+void
+compat_display_chain_free(
+	struct compat_swapchain *chain)
+{
+	struct compat_device *device;
+	struct compat_display *display;
+	uint32_t index;
+
+	/* An old chain cannot restore the console over a newer chain's active scanout. */
+	device = chain->device;
+	display = chain->surface->kms;
+	if (display->scanout_chain == chain)
+		compat_kms_restore(display);
+
+	/* All scanout references have retired before framebuffer and dumb-handle removal. */
+	for (index = 0; index < 2; index++) {
+		/* A failed partial creation may own only its duplicated file or dumb handle. */
+		compat_kms_dumb_destroy(display, &chain->dumb[index]);
+	}
+
+	/* Unmaps the backend readback allocation before freeing its memory. */
+	if (chain->readback_mapping != NULL) {
+		device->unmap_memory(device->handle, chain->readback_memory);
+		chain->readback_mapping = NULL;
+	}
+
+	/* The buffer retires before the memory that backs it. */
+	if (chain->readback != VK_NULL_HANDLE) {
+		device->destroy_buffer(device->handle, chain->readback, NULL);
+		chain->readback = VK_NULL_HANDLE;
+	}
+
+	/* Partial allocation failure may have no readback memory to retire. */
+	if (chain->readback_memory != VK_NULL_HANDLE) {
+		device->free_memory(device->handle, chain->readback_memory, NULL);
+		chain->readback_memory = VK_NULL_HANDLE;
+	}
+
+	/* Direct applications drop only the display ownership acquired by this chain. */
+	if (chain->master_owned != 0) {
+		compat_kms_release(display);
+		chain->master_owned = 0;
+	}
+}
+
 /* Creates one dedicated exportable image and its immediate one-plane Wayland buffer. */
 static VkResult
 chain_image_create(
@@ -843,6 +1021,8 @@ chain_record(
 {
 	VkCommandBufferBeginInfo begin;
 	VkImageMemoryBarrier barrier;
+	VkBufferMemoryBarrier visible;
+	VkBufferImageCopy copy;
 	VkResult error;
 
 	/* Begins an ordinary reusable private command buffer. */
@@ -851,6 +1031,54 @@ chain_record(
 	error = chain->device->begin_command(command, &begin);
 	if (error != VK_SUCCESS)
 		return error;
+
+	/* KMS presentation copies the ordinary rendered image into coherent readback storage. */
+	if (chain->surface->kms != NULL) {
+		/* Acquire has no display ownership command; only present performs the readback. */
+		if (acquire == 0) {
+			/* Transfers completed color writes into a source layout for one tightly packed image copy. */
+			memset(&barrier, 0, sizeof(barrier));
+			barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+			barrier.srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT;
+			barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+			barrier.oldLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+			barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.image = chain->images[index].image;
+			barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			barrier.subresourceRange.levelCount = 1;
+			barrier.subresourceRange.layerCount = 1;
+			chain->device->barrier(command, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, NULL, 0, NULL, 1, &barrier);
+
+			/* Zero row length and image height specify tightly packed four-byte pixels. */
+			memset(&copy, 0, sizeof(copy));
+			copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			copy.imageSubresource.layerCount = 1;
+			copy.imageExtent.width = chain->extent.width;
+			copy.imageExtent.height = chain->extent.height;
+			copy.imageExtent.depth = 1;
+			chain->device->copy_image(command, chain->images[index].image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, chain->readback, 1, &copy);
+
+			/* Restores the presentation layout before the application's next acquisition. */
+			barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+			barrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+			barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+			barrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+			chain->device->barrier(command, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, NULL, 0, NULL, 1, &barrier);
+
+			/* Host coherency alone does not replace the transfer-to-host memory dependency. */
+			memset(&visible, 0, sizeof(visible));
+			visible.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+			visible.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+			visible.dstAccessMask = VK_ACCESS_HOST_READ_BIT;
+			visible.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			visible.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			visible.buffer = chain->readback;
+			visible.size = VK_WHOLE_SIZE;
+			chain->device->barrier(command, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT, 0, 0, NULL, 1, &visible, 0, NULL);
+		}
+	}
 
 	/* Foreign ownership transfer is required only for drivers advertising its extension. */
 	if (chain->foreign != 0) {
@@ -1140,7 +1368,7 @@ chain_present(
 	submit.waitSemaphoreCount = wait_count;
 	submit.pWaitSemaphores = waits;
 	submit.pWaitDstStageMask = stages;
-	if (chain->foreign != 0) {
+	if (chain->foreign != 0 || surface->kms != NULL) {
 		submit.commandBufferCount = 1;
 		submit.pCommandBuffers = &chain->release_command[index];
 	}
@@ -1200,6 +1428,18 @@ chain_present(
 		error = device->wait_fences(device->handle, 1, &chain->fence[index], VK_TRUE, UINT64_MAX);
 		if (error != VK_SUCCESS)
 			return error;
+	}
+
+	/* The synchronous KMS path copies completed pixels and returns image ownership after scanout submission. */
+	if (surface->kms != NULL) {
+		error = compat_kms_present(chain);
+		if (error != VK_SUCCESS)
+			return error;
+
+		/* CPU readback has finished, so the Vulkan image can be acquired again. */
+		chain->images[index].acquired = 0;
+		chain->images[index].presented = 1;
+		return VK_SUCCESS;
 	}
 
 	/* FIFO waits no longer than 100 ms for the prior frame callback. */
@@ -1308,6 +1548,138 @@ chain_gpu_free(
 		chain->pool = VK_NULL_HANDLE;
 	}
 
+	/* KMS copy allocations and scanout retire while the creating device remains live. */
+	if (chain->surface->kms != NULL)
+		compat_display_chain_free(chain);
+
 	/* Deferred protocol records retain no backend device dependency. */
 	chain->device = NULL;
+}
+
+/* Creates one ordinary optimal-tiled image with transfer-source usage for portable KMS copying. */
+static VkResult
+chain_display_image(
+	struct compat_swapchain *chain,
+	uint32_t index,
+	const VkSwapchainCreateInfoKHR *create)
+{
+	struct compat_device *device;
+	struct compat_image *image;
+	VkImageCreateInfo info;
+	VkMemoryRequirements requirements;
+	VkPhysicalDeviceMemoryProperties properties;
+	VkMemoryAllocateInfo allocation;
+	VkResult error;
+	uint32_t type;
+
+	/* Rendering images need no tiling modifier or external-memory export capability. */
+	device = chain->device;
+	image = &chain->images[index];
+	memset(&info, 0, sizeof(info));
+	info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	info.imageType = VK_IMAGE_TYPE_2D;
+	info.format = chain->format;
+	info.extent.width = chain->extent.width;
+	info.extent.height = chain->extent.height;
+	info.extent.depth = 1;
+	info.mipLevels = 1;
+	info.arrayLayers = 1;
+	info.samples = VK_SAMPLE_COUNT_1_BIT;
+	info.tiling = VK_IMAGE_TILING_OPTIMAL;
+	info.usage = create->imageUsage | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+	info.sharingMode = create->imageSharingMode;
+	info.queueFamilyIndexCount = create->queueFamilyIndexCount;
+	info.pQueueFamilyIndices = create->pQueueFamilyIndices;
+	info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	error = device->create_image(device->handle, &info, NULL, &image->image);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Reads mandatory API-1.0 memory requirements for the unchanged backend image. */
+	device->image_requirements1(device->handle, image->image, &requirements);
+	device->instance->memory_properties(device->physical, &properties);
+	for (type = 0; type < properties.memoryTypeCount; type++) {
+		/* Any compatible backend image memory can supply the source of the GPU copy. */
+		if ((requirements.memoryTypeBits & (1U << type)) != 0)
+			break;
+	}
+
+	/* A missing compatible type cannot back this rendering image. */
+	if (type == properties.memoryTypeCount)
+		return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+
+	/* Allocates the exact image size from one compatible memory type. */
+	memset(&allocation, 0, sizeof(allocation));
+	allocation.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	allocation.allocationSize = requirements.size;
+	allocation.memoryTypeIndex = type;
+	error = device->allocate_memory(device->handle, &allocation, NULL, &image->memory);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Returns the final backend bind result without wrapping either handle. */
+	return device->bind_image(device->handle, image->image, image->memory, 0);
+}
+
+/* Allocates tightly packed coherent host-visible storage for the completed image copy. */
+static VkResult
+chain_display_readback(
+	struct compat_swapchain *chain)
+{
+	struct compat_device *device;
+	VkBufferCreateInfo info;
+	VkMemoryRequirements requirements;
+	VkPhysicalDeviceMemoryProperties properties;
+	VkMemoryAllocateInfo allocation;
+	VkMemoryPropertyFlags flags;
+	VkDeviceSize bytes;
+	VkResult error;
+	uint32_t type;
+
+	/* Copy sizes use 64-bit arithmetic even when display extents use 32-bit fields. */
+	device = chain->device;
+	bytes = (VkDeviceSize)chain->extent.width * chain->extent.height * 4;
+	memset(&info, 0, sizeof(info));
+	info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	info.size = bytes;
+	info.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+	info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	error = device->create_buffer(device->handle, &info, NULL, &chain->readback);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Readback requires both CPU visibility and coherency before the post-fence memcpy. */
+	device->buffer_requirements(device->handle, chain->readback, &requirements);
+	device->instance->memory_properties(device->physical, &properties);
+	flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+	for (type = 0; type < properties.memoryTypeCount; type++) {
+		/* The buffer's allowed type mask is independent of the optimal image's allocation. */
+		if ((requirements.memoryTypeBits & (1U << type)) == 0)
+			continue;
+
+		/* Both visibility and coherency are required for this copy backend. */
+		if ((properties.memoryTypes[type].propertyFlags & flags) == flags)
+			break;
+	}
+
+	/* An absent coherent host type cannot implement the advertised portable copy path. */
+	if (type == properties.memoryTypeCount)
+		return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+
+	/* Allocates exactly the backend's buffer requirements before mapping the copy region. */
+	memset(&allocation, 0, sizeof(allocation));
+	allocation.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	allocation.allocationSize = requirements.size;
+	allocation.memoryTypeIndex = type;
+	error = device->allocate_memory(device->handle, &allocation, NULL, &chain->readback_memory);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Binding precedes all GPU and CPU access to the readback storage. */
+	error = device->bind_buffer(device->handle, chain->readback, chain->readback_memory, 0);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Returns the actual host mapping result, retained until chain retirement. */
+	return device->map_memory(device->handle, chain->readback_memory, 0, bytes, 0, &chain->readback_mapping);
 }

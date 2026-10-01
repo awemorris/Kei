@@ -12,6 +12,8 @@
 #ifndef KEILAND_VULKAN_COMPAT_H
 #define KEILAND_VULKAN_COMPAT_H
 
+#include <drm/drm.h>
+#include <drm/drm_mode.h>
 #include <pthread.h>
 #include <stdint.h>
 #include <vulkan/vulkan.h>
@@ -21,6 +23,9 @@
 
 #define COMPAT_INSTANCE_SURFACE 1U
 #define COMPAT_INSTANCE_WAYLAND 2U
+#define COMPAT_INSTANCE_DISPLAY 4U
+#define COMPAT_INSTANCE_DIRECT 8U
+#define COMPAT_INSTANCE_DRM 16U
 #define COMPAT_WSI_NONE 0U
 #define COMPAT_WSI_MODIFIER 1U
 #define COMPAT_WSI_LINEAR 2U
@@ -72,6 +77,7 @@ struct compat_device {
 	PFN_vkCreateImage create_image;
 	PFN_vkDestroyImage destroy_image;
 	PFN_vkGetImageMemoryRequirements2 image_requirements;
+	PFN_vkGetImageMemoryRequirements image_requirements1;
 	PFN_vkAllocateMemory allocate_memory;
 	PFN_vkFreeMemory free_memory;
 	PFN_vkBindImageMemory bind_image;
@@ -120,6 +126,40 @@ struct compat_queue {
 	uint32_t family;
 };
 
+/* One KMS mode, retained with its display for the process lifetime so exported handles remain stable. */
+struct compat_display_mode {
+	struct compat_display_mode *next;
+	struct compat_display *display;
+	struct drm_mode_modeinfo mode;
+};
+
+/* One connected connector and its modes; acquisition owns a duplicated master descriptor until release. */
+struct compat_display {
+	struct compat_display *next;
+	uint32_t connector;
+	uint32_t crtc;
+	uint32_t width_mm;
+	uint32_t height_mm;
+	char name[64];
+	struct compat_display_mode *modes;
+	struct compat_display_mode *preferred;
+	int master_fd;
+	struct drm_mode_crtc saved;
+	unsigned saved_valid;
+	unsigned active;
+	struct compat_swapchain *scanout_chain;
+};
+
+/* One mapped primary-plane dumb buffer, owned by a display swapchain until scanout retirement. */
+struct compat_dumb {
+	int fd;
+	uint32_t handle;
+	uint32_t framebuffer;
+	uint32_t pitch;
+	uint64_t size;
+	void *mapping;
+};
+
 /* One compositor-advertised pixel layout, retained until its surface is destroyed. */
 struct compat_modifier {
 	uint32_t format;
@@ -129,6 +169,8 @@ struct compat_modifier {
 /* One private presentation surface; swapchains keep their callback storage alive on its retired list. */
 struct compat_surface {
 	struct compat_instance *instance;
+	struct compat_display *kms;
+	struct compat_display_mode *display_mode;
 	VkAllocationCallbacks allocator;
 	unsigned allocated;
 	struct wl_display *display;
@@ -182,6 +224,13 @@ struct compat_swapchain {
 	VkCommandBuffer acquire_command[8];
 	VkFence fence[8];
 	VkSemaphore semaphore[8];
+	VkBuffer readback;
+	VkDeviceMemory readback_memory;
+	void *readback_mapping;
+	struct compat_dumb dumb[2];
+	unsigned front;
+	unsigned scanout;
+	unsigned master_owned;
 	struct compat_image images[8];
 };
 
@@ -207,6 +256,7 @@ int compat_wsi_extension(const char *name);
 unsigned compat_instance_extension(const char *name);
 int compat_extension_has(const VkExtensionProperties *properties, uint32_t count, const char *name);
 VkResult compat_backend_extensions(VkPhysicalDevice physical, const char *layer, uint32_t *count, VkExtensionProperties **properties);
+int compat_swapchain_available(VkPhysicalDevice physical);
 void compat_physical_capabilities(VkPhysicalDevice physical, struct compat_capabilities *capabilities);
 VkBool32 compat_image_supported(VkPhysicalDevice physical, VkFormat format, unsigned path, uint64_t modifier);
 VkResult compat_extensions(VkPhysicalDevice physical, const char *layer, uint32_t *count, VkExtensionProperties *properties);
@@ -222,5 +272,16 @@ uint64_t compat_time(void);
 int compat_surface_modifier(struct compat_surface *surface, VkPhysicalDevice physical, VkFormat format, unsigned path, uint32_t *fourcc, uint64_t *modifier);
 void compat_swapchain_collect(struct compat_surface *surface, unsigned force);
 struct compat_queue *compat_device_queue(struct compat_device *device);
+
+VkResult compat_kms_displays(struct compat_display **displays, uint32_t *count);
+VkResult compat_kms_card_matches(int fd);
+VkResult compat_kms_acquire(struct compat_display *display, int fd);
+void compat_kms_release(struct compat_display *display);
+VkResult compat_kms_dumb_create(struct compat_display *display, VkExtent2D extent, struct compat_dumb *buffer);
+void compat_kms_dumb_destroy(struct compat_display *display, struct compat_dumb *buffer);
+VkResult compat_kms_present(struct compat_swapchain *chain);
+void compat_kms_restore(struct compat_display *display);
+VkResult compat_display_swapchain_create(struct compat_device *device, const VkSwapchainCreateInfoKHR *create, const VkAllocationCallbacks *allocator, VkSwapchainKHR *swapchain);
+void compat_display_chain_free(struct compat_swapchain *chain);
 
 #endif

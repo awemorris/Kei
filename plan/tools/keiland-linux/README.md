@@ -107,3 +107,12 @@ FIFO / CPU fallback / 30 frame ごとの resize / MAILBOX を各90 frame。全�
 raw fence/timeline は加工せず記録する。空/完了時の kernel stub が1になるため、raw count だけで経路を区別しない。
 `sync-unavailable.c` は試験 LD_PRELOAD fixture、compile 時指定で ENOTTY を供給する。production の試験環境変数は作らない。
 log は build/test/client-*.out / probe-*.out。X/WAYLAND の host 接続は使わず DRM=none。各 process 90秒、内部deadline60秒。
+
+## KMS の確認
+
+`display-probe.c` は guest 専用。`--acquire` は card を最初の Vulkan call 前に開き、取得後に元 fd を閉じる。direct は library が master を取得する。1280×800 の赤・緑・青を各5秒表示し、赤→緑では oldSwapchain を更新して旧 chain を破棄する。終了で CRTC を戻す。`vkdemo --time-ms=1000 --hold=10` は描画の確認用。host で KMS 試験を実行しない。
+
+```sh
+cc -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/stage/opt/keiland/bin/display-probe plan/tools/keiland-linux/display-probe.c \
+  -Lbuild/keiland-linux/lib -l:libvulkan.so.1 -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
+```

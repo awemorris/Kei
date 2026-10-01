@@ -357,8 +357,7 @@ compat_extensions(
 	VkExtensionProperties *properties)
 {
 	VkExtensionProperties *available;
-	VkExtensionProperties owned[2];
-	struct compat_capabilities capabilities;
+	VkExtensionProperties owned[5];
 	uint32_t total;
 	uint32_t index;
 	uint32_t kept;
@@ -404,11 +403,18 @@ compat_extensions(
 		owned[0].specVersion = VK_KHR_SURFACE_SPEC_VERSION;
 		(void)snprintf(owned[1].extensionName, sizeof(owned[1].extensionName), "%s", VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
 		owned[1].specVersion = VK_KHR_WAYLAND_SURFACE_SPEC_VERSION;
-		own_count = 2;
+		/* Display inquiry and explicit DRM acquisition are implemented by our portable KMS path. */
+		(void)snprintf(owned[2].extensionName, sizeof(owned[2].extensionName), "%s", VK_KHR_DISPLAY_EXTENSION_NAME);
+		owned[2].specVersion = VK_KHR_DISPLAY_SPEC_VERSION;
+		(void)snprintf(owned[3].extensionName, sizeof(owned[3].extensionName), "%s", VK_EXT_DIRECT_MODE_DISPLAY_EXTENSION_NAME);
+		owned[3].specVersion = VK_EXT_DIRECT_MODE_DISPLAY_SPEC_VERSION;
+		(void)snprintf(owned[4].extensionName, sizeof(owned[4].extensionName), "%s", VK_EXT_ACQUIRE_DRM_DISPLAY_EXTENSION_NAME);
+		owned[4].specVersion = VK_EXT_ACQUIRE_DRM_DISPLAY_SPEC_VERSION;
+		own_count = 5;
 	} else {
-		/* Offers a swapchain only for a physical device with actual image export capability. */
-		compat_physical_capabilities(physical, &capabilities);
-		if (capabilities.path != COMPAT_WSI_NONE) {
+		/* Offers a swapchain for actual image export or a connected portable KMS display. */
+		wsi = compat_swapchain_available(physical);
+		if (wsi != 0) {
 			/* Advertises the swapchain implemented by this library. */
 			(void)snprintf(owned[0].extensionName, sizeof(owned[0].extensionName), "%s", VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 			owned[0].specVersion = VK_KHR_SWAPCHAIN_SPEC_VERSION;
@@ -573,6 +579,21 @@ compat_instance_extension(
 	differs = strcmp(name, VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
 	if (differs == 0)
 		return COMPAT_INSTANCE_WAYLAND;
+
+	/* Owns KMS mode and primary-plane enumeration. */
+	differs = strcmp(name, VK_KHR_DISPLAY_EXTENSION_NAME);
+	if (differs == 0)
+		return COMPAT_INSTANCE_DISPLAY;
+
+	/* Owns explicit release of a directly acquired display. */
+	differs = strcmp(name, VK_EXT_DIRECT_MODE_DISPLAY_EXTENSION_NAME);
+	if (differs == 0)
+		return COMPAT_INSTANCE_DIRECT;
+
+	/* Owns duplication of the compositor seat's DRM master descriptor. */
+	differs = strcmp(name, VK_EXT_ACQUIRE_DRM_DISPLAY_EXTENSION_NAME);
+	if (differs == 0)
+		return COMPAT_INSTANCE_DRM;
 
 	/* Reports that this extension is not part of our current WSI. */
 	return 0;

@@ -23,7 +23,7 @@ static void surface_sync(void *data, struct wl_callback *callback, uint32_t seri
 static int surface_roundtrip(struct compat_surface *surface);
 static int surface_initialize(struct compat_surface *surface, struct wl_surface *application_surface);
 static int surface_lost(struct compat_surface *surface);
-static VkBool32 surface_support(VkPhysicalDevice physical, uint32_t family);
+static VkBool32 surface_support(VkPhysicalDevice physical, uint32_t family, unsigned external);
 
 /* Creates a private surface record while leaving application Wayland objects owned by the application. */
 VKAPI_ATTR VkResult VKAPI_CALL
@@ -148,7 +148,7 @@ vkGetPhysicalDeviceWaylandPresentationSupportKHR(
 		return VK_FALSE;
 
 	/* Returns the physical device and queue's verified export capability. */
-	return surface_support(physicalDevice, queueFamilyIndex);
+	return surface_support(physicalDevice, queueFamilyIndex, 1);
 }
 
 /* Reports graphics/export support and the still-live compositor connection. */
@@ -171,13 +171,19 @@ vkGetPhysicalDeviceSurfaceSupportKHR(
 	if (surface == NULL)
 		return VK_ERROR_SURFACE_LOST_KHR;
 
+	/* Display surfaces use the graphics copy path without a Wayland connection. */
+	if (surface->kms != NULL) {
+		*pSupported = surface_support(physicalDevice, queueFamilyIndex, 0);
+		return VK_SUCCESS;
+	}
+
 	/* Reports a disconnected compositor without querying a foreign handle. */
 	evaluated = wl_display_get_error(surface->display);
 	if (evaluated != 0)
 		return VK_ERROR_SURFACE_LOST_KHR;
 
 	/* Returns queue and export support; formats supply the compositor intersection. */
-	*pSupported = surface_support(physicalDevice, queueFamilyIndex);
+	*pSupported = surface_support(physicalDevice, queueFamilyIndex, surface->kms == NULL);
 
 	/* Succeeded: the support destination contains the physical queue's answer. */
 	return VK_SUCCESS;
@@ -225,6 +231,14 @@ vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
 	pCapabilities->supportedCompositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR | VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR | VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
 	pCapabilities->supportedUsageFlags = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 
+	/* Display images match their selected physical timing instead of client-chosen Wayland extents. */
+	if (surface->kms != NULL) {
+		pCapabilities->currentExtent = surface->extent;
+		pCapabilities->minImageExtent = surface->extent;
+		pCapabilities->maxImageExtent = surface->extent;
+		pCapabilities->supportedCompositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	}
+
 	/* Succeeded: Wayland leaves the image extent to the application. */
 	return VK_SUCCESS;
 }
@@ -255,6 +269,36 @@ vkGetPhysicalDeviceSurfaceFormatsKHR(
 	surface = (struct compat_surface *)(uintptr_t)handle;
 	if (surface == NULL)
 		return VK_ERROR_SURFACE_LOST_KHR;
+
+	/* KMS XRGB buffers support the two blue-first Vulkan encodings independently of DMA-BUF export. */
+	if (surface->kms != NULL) {
+		/* Measurement reports both display formats without reading count input. */
+		if (pSurfaceFormats == NULL) {
+			*pSurfaceFormatCount = 2;
+			return VK_SUCCESS;
+		}
+
+		/* Copies only available caller capacity. */
+		capacity = *pSurfaceFormatCount;
+		if (capacity > 0) {
+			pSurfaceFormats[0].format = VK_FORMAT_B8G8R8A8_UNORM;
+			pSurfaceFormats[0].colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+		}
+
+		/* SRGB retains the same physical byte ordering. */
+		if (capacity > 1) {
+			pSurfaceFormats[1].format = VK_FORMAT_B8G8R8A8_SRGB;
+			pSurfaceFormats[1].colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+		}
+
+		/* Reports an incomplete array without writing beyond its capacity. */
+		if (capacity < 2)
+			return VK_INCOMPLETE;
+
+		/* Succeeded: both KMS encodings fit in the output. */
+		*pSurfaceFormatCount = 2;
+		return VK_SUCCESS;
+	}
 
 	/* Intersects the four supported channel encodings with actual export capability. */
 	compat_physical_capabilities(physicalDevice, &capabilities);
@@ -310,6 +354,8 @@ vkGetPhysicalDeviceSurfacePresentModesKHR(
 	VkPresentModeKHR *pPresentModes)
 {
 	uint32_t capacity;
+	uint32_t count;
+	struct compat_surface *surface;
 
 	/* Requires a private surface and the caller's count destination. */
 	(void)physicalDevice;
@@ -320,9 +366,15 @@ vkGetPhysicalDeviceSurfacePresentModesKHR(
 	if (pPresentModeCount == NULL)
 		return VK_ERROR_INITIALIZATION_FAILED;
 
+	/* KMS scanout exposes only FIFO, while Wayland also supports MAILBOX. */
+	surface = (struct compat_surface *)(uintptr_t)handle;
+	count = 2;
+	if (surface->kms != NULL)
+		count = 1;
+
 	/* Measurement needs no output array or initialized input count. */
 	if (pPresentModes == NULL) {
-		*pPresentModeCount = 2;
+		*pPresentModeCount = count;
 		return VK_SUCCESS;
 	}
 
@@ -332,15 +384,15 @@ vkGetPhysicalDeviceSurfacePresentModesKHR(
 		pPresentModes[0] = VK_PRESENT_MODE_FIFO_KHR;
 
 	/* The second supported mode has no frame-callback pacing. */
-	if (capacity > 1)
+	if (count > 1 && capacity > 1)
 		pPresentModes[1] = VK_PRESENT_MODE_MAILBOX_KHR;
 
 	/* Reports an undersized output with the count actually copied. */
-	if (capacity < 2)
+	if (capacity < count)
 		return VK_INCOMPLETE;
 
 	/* Succeeded: both supported modes are present. */
-	*pPresentModeCount = 2;
+	*pPresentModeCount = count;
 	return VK_SUCCESS;
 }
 
@@ -455,6 +507,22 @@ compat_surface_progress(
 	int milliseconds;
 	int error;
 	int flushed;
+
+	/* KMS has no protocol release queue; finite slices avoid spinning when all images remain acquired. */
+	if (surface->kms != NULL) {
+		/* Nonblocking ownership queries need no sleep or DRM event read. */
+		if (timeout == 0)
+			return 1;
+
+		/* An externally synchronized caller can release an image between finite ownership polls. */
+		milliseconds = 100;
+		if (timeout < 100000000ULL)
+			milliseconds = (int)((timeout + 999999) / 1000000);
+
+		/* Never reads a host DRM descriptor on this path. */
+		(void)poll(NULL, 0, milliseconds);
+		return 1;
+	}
 
 	/* Processes already queued private events before reserving a socket read. */
 	error = wl_display_dispatch_queue_pending(surface->display, surface->queue);
@@ -878,7 +946,8 @@ surface_roundtrip(
 static VkBool32
 surface_support(
 	VkPhysicalDevice physical,
-	uint32_t family)
+	uint32_t family,
+	unsigned external)
 {
 	struct compat_instance *instance;
 	struct compat_capabilities capabilities;
@@ -891,10 +960,12 @@ surface_support(
 	if (instance == NULL)
 		return VK_FALSE;
 
-	/* Requires an actual image export path before describing queue support. */
-	compat_physical_capabilities(physical, &capabilities);
-	if (capabilities.path == COMPAT_WSI_NONE)
-		return VK_FALSE;
+	/* Wayland requires DMA-BUF export; KMS uses ordinary optimal images and CPU copy. */
+	if (external != 0) {
+		compat_physical_capabilities(physical, &capabilities);
+		if (capabilities.path == COMPAT_WSI_NONE)
+			return VK_FALSE;
+	}
 
 	/* Measures queue families without reading outside their returned array. */
 	instance->queue_properties(physical, &count, NULL);
