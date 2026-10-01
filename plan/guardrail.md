@@ -96,3 +96,5 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
 ユーザーの指示（HAL の制限と rollback の review、RTL8822B のライセンスの例外、refactor と試験の信頼、WS025 の規約の柔軟性、
 インストーラの受け入れの範囲、QEMU だけの UAS の受け入れ）。新しい規則はこの索引、該当する規約の全文、tool の対応、影響する計画を
 更新する。合意した構造や範囲を黙って置き換えない。
+
+- WS106 の純粋なsource移動には [既存style維持の限定例外](standards/ws106-relocation.md)を適用（2026-10-01 ユーザー回答）。新実装/意味変更は対象外、全文reviewとhash/diff/build/install/bootは必要。WS106完了時に適用を終了。

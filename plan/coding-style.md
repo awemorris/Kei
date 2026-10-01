@@ -870,3 +870,7 @@ Before finishing a C-source change, verify that:
   results are not returned directly
 - no test-only environment switch controls production behavior
 - the build, focused tests, and `git diff --check` pass
+
+## WS106 relocation exception (2026-10-01)
+
+The user explicitly authorized preserving existing C implementation style during WS106 file relocation and path-only reference edits. [Full scoped exception](standards/ws106-relocation.md) records the exact scope, evidence and expiry. This does not change the rules for new implementations or semantic refactoring. Full review of the WS changes remains required.

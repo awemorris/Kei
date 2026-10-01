@@ -1,0 +1,253 @@
+admin|admin|*|y|base||
+ar|ar|*|y|base||
+at|at|*|y|base||
+audiod|sound server|*|y|base|base/audiod|
+awk|awk|*|y|base||
+base64|base64|*|y|base||
+basename|basename|*|y|base||
+batch|batch|*|y|base||
+bc|bc|*|y|base||
+blkid|blkid|*|y|base||
+cal|cal|*|y|base||
+cat|cat|*|y|base||
+cflow|cflow|*|y|base||
+chgrp|chgrp|*|y|base||
+chmod|chmod|*|y|base||
+chown|chown|*|y|base||
+cksum|cksum|*|y|base||
+cmp|cmp|*|y|base||
+comm|comm|*|y|base||
+compress|compress|*|y|base||
+cp|cp|*|y|base||
+crontab|crontab|*|y|base||
+csplit|csplit|*|y|base||
+curses|curses terminal library|*|y|base|base/curses|base/terminfo
+cut|cut|*|y|base||
+cxref|cxref|*|y|base||
+date|date|*|y|base||
+dd|dd|*|y|base||
+delta|delta|*|y|base||
+df|df|*|y|base||
+dhcpc|dhcpc|*|y|base||
+diff|diff|*|y|base||
+dirname|dirname|*|y|base||
+diskpart|diskpart|*|y|base||
+dmesg|dmesg|*|y|base||
+du|du|*|y|base||
+echo|echo|*|y|base||
+ed|ed|*|y|base||
+egrep|egrep|*|y|base||
+env|env|*|y|base||
+expand|expand|*|y|base||
+expr|expr|*|y|base||
+false|false|*|y|base||
+fetch|fetch|*|y|base||
+fgrep|fgrep|*|y|base||
+file|file|*|y|base||
+find|find|*|y|base||
+fmt|fmt|*|y|base||
+fold|fold|*|y|base||
+fuser|fuser|*|y|base||
+gencat|gencat|*|y|base||
+get|get|*|y|base||
+getconf|getconf|*|y|base||
+gettext|gettext|*|y|base||
+grep|grep|*|y|base||
+halt|halt|*|y|base||
+head|head|*|y|base||
+host|host|*|y|base||
+hostname|hostname|*|y|base||
+iconv|iconv|*|y|base||
+id|id|*|y|base||
+ifconfig|ifconfig|*|y|base||
+infocmp|infocmp|*|y|base|base/terminfo|
+install|install|*|y|base||
+ipcrm|ipcrm|*|y|base||
+ipcs|ipcs|*|y|base||
+join|join|*|y|base||
+kill|kill|*|y|base||
+less|less|*|y|base||
+libgif-compat|GIF interface for base programs|*|y|base|base/libgif-compat|
+libjpeg-compat|JPEG interface for base programs|*|y|base|base/libjpeg-compat|
+libpdf|PDF library for base programs|*|y|base|base/libpdf|base/libz-compat base/libjpeg-compat desktop/libtruetype
+libpng-compat|PNG interface for base programs|*|y|base|base/libpng-compat|base/libz-compat
+libz-compat|zlib interface for base programs|*|y|base|base/libz-compat|
+link|link|*|y|base||
+ln|ln|*|y|base||
+locale|locale|*|y|base||
+localedef|localedef|*|y|base||
+logger|logger|*|y|base||
+login|login|*|y|base||
+logname|logname|*|y|base||
+lp|lp|*|y|base||
+lpr|lpr|*|y|base||
+ls|ls|*|y|base||
+lspci|lspci|*|y|base||
+lsusb|lsusb|*|y|base||
+m4|m4|*|y|base||
+mailx|mailx|*|y|base||
+make|make|*|y|base||
+mesg|mesg|*|y|base||
+mkdir|mkdir|*|y|base||
+mkfifo|mkfifo|*|y|base||
+mkfs|mkfs|*|y|base||
+mkswap|mkswap|*|y|base||
+mktemp|mktemp|*|y|base||
+more|more|*|y|base||
+msgfmt|msgfmt|*|y|base||
+mv|mv|*|y|base||
+newgrp|newgrp|*|y|base||
+ngettext|ngettext|*|y|base||
+nice|nice|*|y|base||
+nl|nl|*|y|base||
+nm|nm|*|y|base||
+noct|Noct language|amd64 i386 pc98 rpi4|n|packages/lang|base/noct|
+nohup|nohup|*|y|base||
+nslookup|nslookup|*|y|base||
+ntpdate|ntpdate|*|y|base||
+od|od|*|y|base||
+paste|paste|*|y|base||
+patch|patch|*|y|base||
+pathchk|pathchk|*|y|base||
+pax|pax|*|y|base||
+ping|ping|*|y|base||
+poweroff|poweroff|*|y|base||
+pr|pr|*|y|base||
+printf|printf|*|y|base||
+prs|prs|*|y|base||
+ps|ps|*|y|base||
+pwd|pwd|*|y|base||
+readlink|readlink|*|y|base||
+realpath|realpath|*|y|base||
+reboot|reboot|*|y|base||
+renice|renice|*|y|base||
+rm|rm|*|y|base||
+rmdel|rmdel|*|y|base||
+rmdir|rmdir|*|y|base||
+route|route|*|y|base||
+sact|sact|*|y|base||
+sccs|sccs|*|y|base||
+sed|sed|*|y|base||
+seq|seq|*|y|base||
+service|service|*|y|base||
+shutdown|shutdown|*|y|base||
+sleep|sleep|*|y|base||
+sort|sort|*|y|base||
+split|split|*|y|base||
+stat|stat|*|y|base||
+strings|strings|*|y|base||
+stty|stty|*|y|base||
+swapoff|swapoff|*|y|base||
+swapon|swapon|*|y|base||
+sync|sync|*|y|base||
+tabs|tabs|*|y|base|base/terminfo|
+tac|tac|*|y|base||
+tail|tail|*|y|base||
+talk|talk|*|y|base||
+tee|tee|*|y|base||
+terminfo-extra|extra terminal descriptions|*|y|base|base/terminfo-extra|base/terminfo
+terminfo|major terminal descriptions|*|y|base|base/terminfo|
+test|test|*|y|base||
+acquire-fence-test|Acquire fence test|amd64|y|desktop|base/tests/acquire-fence|desktop/libvulkan desktop/libwayland
+browser-probe|libbrowser probe|amd64|n|desktop|base/tests/browser-probe|desktop/libbrowser
+data-probe|clipboard probe|amd64|y|desktop|base/tests/data-probe|desktop/libwayland
+extras-probe|decoration cursor-shape and viewporter probe|amd64|y|desktop|base/tests/extras-probe|desktop/libwayland
+gpu-admission-test|GPU concurrent admission test|amd64|y|desktop|base/tests/gpu-admission|
+gpu-fence-test|GPU external fence test|amd64|y|desktop|base/tests/gpu-fence|desktop/libvulkan
+gpu-forge-test|GPU buffer forgery test|amd64|y|desktop|base/tests/gpu-forge|desktop/libvulkan desktop/libwayland
+gpu-i915-test|Native i915 GPU test|amd64|y|desktop|base/tests/gpu-i915|
+gpu-recovery-test|GPU isolated recovery test|amd64|y|desktop|base/tests/gpu-recovery|
+gpu-share-test|GPU allocation sharing test|amd64|y|desktop|base/tests/gpu-share|desktop/libwayland
+greeter-probe|sessiond greeter probe|amd64|n|desktop|base/tests/greeter-probe|
+menu-probe|System Menu probe|amd64|y|desktop|base/tests/menu-probe|desktop/libwayland desktop/libkeiland
+network-probe|networkd stand-in|amd64|n|desktop|base/tests/network-probe|
+peninject|test pen injector|*|n|base|base/tests/peninject|
+popup-probe|xdg_popup probe|amd64|y|desktop|base/tests/popup-probe|desktop/libwayland
+seat-probe|keyboard and output probe|amd64|y|desktop|base/tests/seat-probe|desktop/libwayland
+subsurface-probe|wl_subsurface probe|amd64|y|desktop|base/tests/subsurface-probe|desktop/libwayland
+tablet-probe|pen tablet probe|amd64|n|desktop|base/tests/tablet-probe|desktop/libwayland
+titlebar-probe|Titlebar Presentation probe|amd64|y|desktop|base/tests/titlebar-probe|desktop/libwayland desktop/libkeiland
+touchinject|test touch screen injector|*|n|base|base/tests/touchinject|
+wakebench|wake-to-run latency benchmark|*|y|base|base/tests/wakebench|
+tic|tic|*|y|base|base/terminfo|
+time|time|*|y|base||
+timeout|timeout|*|y|base||
+top|top|*|y|base||
+touch|touch|*|y|base||
+tput|tput|*|y|base|base/terminfo|
+tr|tr|*|y|base||
+true|true|*|y|base||
+truncate|truncate|*|y|base||
+tsort|tsort|*|y|base||
+tty|tty|*|y|base||
+uname|uname|*|y|base||
+uncompress|uncompress|*|y|base||
+unexpand|unexpand|*|y|base||
+unget|unget|*|y|base||
+uniq|uniq|*|y|base||
+unlink|unlink|*|y|base||
+uudecode|uudecode|*|y|base||
+uuencode|uuencode|*|y|base||
+val|val|*|y|base||
+wc|wc|*|y|base||
+what|what|*|y|base||
+which|which|*|y|base||
+who|who|*|y|base||
+whoami|whoami|*|y|base||
+wifi|wifi|*|y|base||
+write|write|*|y|base||
+xargs|xargs|*|y|base||
+zcat|zcat|*|y|base||
+browser|Web browser|amd64|n|desktop|desktop/browser|desktop/libbrowser desktop/libvulkan desktop/libwayland desktop/libkeiland
+egltest|EGL test|amd64|y|desktop|desktop/egltest|desktop/libegl desktop/libglesv2 desktop/libwayland-egl desktop/libwayland
+files|File manager|amd64|y|desktop|desktop/files|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libtruetype base/libz-compat base/libpng-compat base/libjpeg-compat base/libgif-compat
+glescompute|OpenGL ES compute test|amd64|n|desktop|desktop/glescompute|desktop/libegl desktop/libglesv2
+gpudemo|GPU compute demonstration|amd64|n|desktop|desktop/gpudemo|desktop/libegl desktop/libglesv2
+imageview|Image Viewer|amd64|y|desktop|desktop/imageview|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libkeiui desktop/libtruetype base/libz-compat base/libpng-compat base/libjpeg-compat base/libgif-compat
+ime-probe|Input method test client|amd64|n|desktop|desktop/ime-probe|desktop/libwayland
+keiland-ime|Input method|amd64|n|desktop|desktop/ime|desktop/libwayland desktop/ime/dict
+ime-dict-ja|Japanese dictionaries of the input method|*|n|desktop|desktop/ime/dict|
+kuidemo|Widgets sampler|amd64|y|desktop|desktop/kuidemo|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libkeiui desktop/libtruetype
+libbrowser|Web browser engine library|amd64|n|desktop|desktop/libbrowser|desktop/libtruetype desktop/libvulkan base/libjpeg-compat base/libpng-compat base/libz-compat base/libgif-compat
+libegl|EGL|amd64|y|desktop|desktop/libegl|desktop/libvulkan desktop/libwayland desktop/libwayland-egl
+libglesv2|OpenGL ES|amd64|y|desktop|desktop/libglesv2|desktop/libegl
+libkeiland|Desktop system library|amd64|y|desktop|desktop/libkeiland|desktop/libwayland desktop/libtruetype
+libkeiui|Desktop widgets|amd64|y|desktop|desktop/libkeiui|desktop/libtruetype desktop/libkeiland desktop/libwayland desktop/libvulkan base/libpng-compat base/libz-compat
+libtruetype|TrueType glyphs|*|y|desktop|desktop/libtruetype|
+libvulkan|Vulkan 1.0|amd64|y|desktop|desktop/libvulkan|desktop/libwayland
+libwayland-egl|Wayland EGL window|amd64|y|desktop|desktop/libwayland-egl|
+libwayland-client|Wayland client|amd64|y|desktop|desktop/libwayland|
+mview|Wayland model viewer|amd64|y|desktop|desktop/mview|desktop/libvulkan desktop/libwayland
+notes|Handwritten notebook|amd64|y|desktop|desktop/notes|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libkeiui desktop/libtruetype base/libpdf
+pdfviewer|PDF Viewer|amd64|y|desktop|desktop/pdfviewer|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libkeiui desktop/libtruetype base/libpdf
+sessiond|graphical login session manager|amd64|y|desktop|desktop/sessiond|
+settings|Settings|amd64|y|desktop|desktop/settings|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libtruetype
+terminal|Wayland terminal|amd64|y|desktop|desktop/terminal|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libkeiui desktop/libtruetype
+textedit|Text Editor|amd64|y|desktop|desktop/textedit|desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libkeiui desktop/libtruetype base/libpng-compat base/libz-compat
+vkdemo|vkdemo|amd64|y|desktop|desktop/vkdemo|desktop/libvulkan
+wayland|Wayland compositor|amd64|y|desktop|desktop/wayland|desktop/libvulkan desktop/libtruetype desktop/libkeiland desktop/sessiond base/libpng-compat base/libz-compat fonts/noto-color-emoji
+wlshm|Wayland wl_shm test|amd64|y|desktop|desktop/wlshm|desktop/libwayland
+wltest|Wayland Vulkan test|amd64|y|desktop|desktop/wltest|desktop/libvulkan desktop/libwayland
+xserver|X11 server for the compositor|amd64|y|desktop|desktop/xserver|desktop/libvulkan desktop/libwayland desktop/libtruetype
+i915-firmware|Intel i915 display DMC firmware|amd64|n|firmware|firmware/i915|
+intelax211-firmware|Intel AX211 firmware|amd64|n|firmware|firmware/intelax211|
+rtl8822b-firmware|Realtek RTL8822B firmware|i386 pc98 amd64|n|firmware|firmware/rtl8822b|
+venus-frame|Venus Vulkan test frame|amd64|y|desktop||
+libcxx|LLVM C++ runtime|*|n|packages/devel|devel/libcxx|
+remacs|Remacs editor|*|n|packages/editors|editors/remacs|base/noct
+noto-color-emoji|Colour emoji font|*|n|packages/fonts|fonts/noto-color-emoji|
+clang|clang compiler|*|n|packages/lang|lang/clang|devel/libcxx
+expat|expat XML parser|*|n|packages/libs|libs/expat|
+zlib|zlib compression library|*|n|packages/libs|libs/zlib|
+curl|curl and libcurl|*|n|packages/network|network/curl|security/openssl libs/zlib security/ca-certificates
+openssh|OpenSSH secure shell|*|n|packages/network|network/openssh|security/openssl
+ca-certificates|Trusted CA certificates|*|n|packages/security|security/ca-certificates|
+openssl|OpenSSL cryptography|*|n|packages/security|security/openssl|
+glxtest|GLX test|amd64|y|x11-applications|X11/glxtest|X11/libGL
+libgl|OpenGL and GLX|amd64|y|x11-applications|X11/libGL|desktop/libegl
+Xzed|Xzed|*|n|x11-servers||
+zedinst|zedinst|amd64 i386 pc98|y|base|retro/zedinst|base/noct
+zgears|Gears (OpenGL)|amd64|y|x11-applications|X11/zgears|X11/libGL
+zshell|zshell|*|n|x11-applications||
+zterm|zterm|*|n|x11-applications||
+zwm|zwm|*|n|x11-applications||

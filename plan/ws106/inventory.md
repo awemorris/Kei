@@ -53,3 +53,14 @@
 
 WS106 は既存 Linux 対応5本を維持する。残りを Linux/FreeBSD に新規移植する仕事はこの移動に加えない。
 全ファイルの tracked inventory・hash と runner の参照一覧は p001 の成果として保存する。
+
+
+## 2026-10-01 調査による scope 補完（q539）
+
+ユーザー回答「13 ファイルも追加して移動する」を採用。base/tests直下の syscall-smoke.c、posix-r2.c、posix-r2-remaining.c、
+susv4-xsi.c、posix-phase5-helper.c、smp-resource-stress.c、dyntest.c、tlstest.c、rpathdep.c、rpathtest.c、versiontest.c、versionuse.c、versiontest.map を userland/tests/ 直下へ。
+これに付く grouping Makefile と platform の source/object/map/runner参照も更新する。
+対象30 package は保持。T1/T2 の移動/参照台帳は追加13filesを含む。T3/T4もこの追加範囲のbuild/hash/規約reviewへ適用。
+[移動手順と検証](../ws106/design.md)、[台帳](../ws106/survey.json)。p001→p002→p003の依存は変更しない。
+Event ws106-q539-scope-update: 調査で初期inventoryの漏れを発見し、ユーザーの具体的追加指示と全変更Phase/WSへの影響を記録。
+GitHubの各Phase/WS event deliveryはoutbox pending。ime-probe所有確認と既存style扱いの回答を待つ。

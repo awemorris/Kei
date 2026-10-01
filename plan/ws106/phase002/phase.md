@@ -40,3 +40,16 @@ zedBSD の起動は boot-test.sh の PNG。Linux の既存検証は WS105 の手
 
 2026-10-01 / review-20261001-planning: 新設した Phase 案。親 WS の目標への寄与と依存を記録。実装の選定は未実施。
 GitHub の Phase 作成/comment/Project の projection は公開保留、local outbox に保持する。
+
+
+## 2026-10-01 調査による scope 補完（q539）
+
+ユーザー回答「13 ファイルも追加して移動する」を採用。base/tests直下の syscall-smoke.c、posix-r2.c、posix-r2-remaining.c、
+susv4-xsi.c、posix-phase5-helper.c、smp-resource-stress.c、dyntest.c、tlstest.c、rpathdep.c、rpathtest.c、versiontest.c、versionuse.c、versiontest.map を userland/tests/ 直下へ。
+これに付く grouping Makefile と platform の source/object/map/runner参照も更新する。
+対象30 package は保持。T1/T2 の移動/参照台帳は追加13filesを含む。T3/T4もこの追加範囲のbuild/hash/規約reviewへ適用。
+[移動手順と検証](../design.md)、[台帳](../survey.json)。p001→p002→p003の依存は変更しない。
+Event ws106-q539-scope-update: 調査で初期inventoryの漏れを発見し、ユーザーの具体的追加指示と全変更Phase/WSへの影響を記録。
+GitHubの各Phase/WS event deliveryはoutbox pending。ime-probe所有確認と既存style扱いの回答を待つ。
+
+2026-10-01 / ws106-q539-design-revision: root13fileとgrouping/menu/referenceを含む[移動手順](../design.md)へ詳細化。既存styleは[限定例外](../../standards/ws106-relocation.md)で保持。ime-probeの所有未確認なら、その1件を選定から外したpartial Queueで他29件＋13fileを先に移す。Phase全体のclearanceには残り1件の移動も要る。

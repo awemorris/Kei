@@ -2,9 +2,15 @@
 
 # Past Log
 
-Last finished Queue: [q538](queue-q538.md)（ws105-p011 cleared / WS105 completed、2026-10-01）
+Last finished Queue: [q539](queue-q539.md)（ws106p001 cleared、2026-10-01）
 
-## 最新: q538 / WS105の完了
+## 最新: q539 / WS106 p001
+
+cleared。30 package＋承認追加13files、全166 tracked fileのhash/mode/source→destinationと参照217fileを棚卸し。menu/package/config/install互換とbuild/boot手順をdesign.mdへ確定。既存styleはユーザーの限定例外を記録。ime-probeは人間作業との非競合回答まで選定から外す条件で、他29件と13filesは実行可能。証拠: plan/ws106/survey.json、programs-before.txt、style-before.txt、design.md。
+
+GitHub publication pending、commit WIP / push無し。
+
+## 前回: q538 / WS105の完了
 
 WS105 L1〜L9と全文規約を最終source c7e8a35aで照合。Linux独立/opt build/install、Vulkan chain/WSI/KMS、root/gdm、主なapp/日本語入力、WiFi/WPA/ALSAをverified。clean gcc/clang warning0、24ELF各/331source、AST32unit0/style0、host同期/独立D-Bus、own fresh guestの実画面・VT/LogOut・fd回収PASS。clean buildのlibrary/program object変数衝突を補完、LINUX.mdと継続道具を整備。
 
@@ -55,5 +61,7 @@ F-065 の FreeBSD 分は WS109 に promote。他の未指定追加scopeは defer
 | [q536](queue-q536.md) | ws105-p009 cleared |
 | [q537](queue-q537.md) | ws105-p010 cleared |
 | [q538](queue-q538.md) | ws105-p011 cleared |
+| [q539](queue-q539.md) | ws106p001 cleared |
+
 
 以前の全summary/index/判断/bugリンクは[q537までのPast Log](past-log-through-q537.md)、さらに[q522まで](past-log-through-q522.md)。元承認scope/hash・attempt結果は各Queueに保持する。
