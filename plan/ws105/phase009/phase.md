@@ -73,3 +73,13 @@ sh $G ssh 'chvt 3'; sleep 5; sh $G ssh "chvt $VT"; sleep 5; sh $G screenshot $PW
 ## 結果
 
 （実行の後に書く）
+
+## 開始前の実装接続の具体化（2026-10-01、Q1）
+
+実際のp006 sourceではseat-linux.hの共通Linux helperをseat-direct-linux.cが全て定義し、mainはOS dispatchより前にevdevを読む。p009のlogindを接続するため、root helperの実体をzwl_linux_direct_*へrenameし、既存zwl_linux_*のseat選択dispatchをos-linux.cへ置く。seat-linux.hに両backendのprivate関数を宣言し、Makefile.linuxにD-Bus / logind sourceを追加する。compositorの公開API、共通OS境界、rootのdeviceの扱いは不変。新しいproduct・方針の決定ではなく、既存D11/D12のOS内接続を具体化する。
+
+PauseDeviceの処理をevdevの読みより先に行うようmainのOS poll doneを移す。inputのpaused fdはcommon入力recordのfd=-1でpollから外し、実fdとTakeDeviceの所有はlogindのrecordに残す。古いpoll snapshotからfd=-1を読まないguardをmainに追加。ResumeDeviceは新fdを同じ入力recordへ戻し、旧fdを閉じる。goneと通常closeではReleaseDevice/所有を一度ずつ返す。DRM pauseはos_pausedを立ててoutputを閉じ、windowed=0でresume後に既存zwl_schedule→enter_window_modeを通して再生成する。queued signalはsocketのreventsが0でもdispatchする。
+
+D-Busは64KiB message / 16FD / bounded signal queue、readableになってからでもMSG_DONTWAITで読む。recvmsgは固定header16bytesとそのmessageの残りだけを読み、次のmessageのfdを混ぜない。同期callは5秒、signalを保持し、壊れたmessageとoverflowでは所有fdを閉じて失敗。device fdはCLOEXEC。Linux新moduleは全文規約で作り、実gdmのuid/VT pause/force/resume/LogOutとrootdirectの回帰で確認。
+
+Pause の実装は既存 `zwl_compose_quiesce(server)` で in-flight frame の buffer / callback の保持を終えてから `zwl_compose_output_close` を呼ぶ。古い poll snapshot の frame event は complete 済みの状態で処理し、destroyしたswapchainの保持を残さない（既存APIの利用）。

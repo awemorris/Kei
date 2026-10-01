@@ -2,10 +2,20 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q532](queue-q532.md)（ws105-p007 cleared）
+Last finished Queue: [q533](queue-q533.md)（ws105-p008 cleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q533 / ws105-p008
+
+Linux app の build/install、Home の9app・IME、data を検証し p008 cleared。source `ba46edf8` + Terminal guard `7dd3ad9e`（WIP）。gcc14.2 / clang19.1.7 warning0、26ELF（24 production + 2 test fixture）、source-sync / 329 header PASS、changed common source 4file style-check0。Homeの全appは起動10秒生存、Terminal echo、Files directory、Settingsページ、Text Editor文字、Image Viewer画像、PDF Viewer 2ページ、kuidemo / mviewを確認。IME Alt+Space→kanji→漢字→確定→直接入力PASS。Notesは起動/終了PASS、keyboard文字入力のみ理由つき未実施（既存手書き専用UI）。全appのcloseでchild status0、最後のpsはdesktop FilesとIMEのみ。compositor SIGTERM2310frame error0 / cleanup_failed0、guest停止。辞書SHA256、5gradient、既定wallpaperはtargetとbyte一致、host package追加0。
+
+zedBSD: disk-image warning0、OS boundary / V1（54source）、host dedicated18 / decoder17 ordinary+sanitize、boot login PNG、C1/C2/C9 13/13、forge拒否→3import、fence600すべてgeneration1 PASS。3commonfileのtarget path stringsはWS104 q521と3/3一致。全criteria imageはTerminal guard前（startupを試験しない）；その後final sourceを含むforge imageでTerminalの10秒生存、echo keiland-zedbsd-ok表示、timeout終了（TAB count0）、compositor継続を別に確認、BUG-128 resolved。代表PNGを目視・ユーザーに提示、実機未実施。p072 / p076今回はPASSだが修理とはしない。BUG-125 / BUG-127のtrackingとq532の元のFAILは保持。
+
+証拠: [q533 manifest](../../history/ws105/q533/evidence/SHA256SUMS)、original `build/ws105-p008/`。全guest停止。GitHub未公開、bug disposition / Phase / WS eventはoutboxで保持、pushなし。次はp009 logind / gdm。
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `7dd3ad9e26639cb9c17517b06d0fe977927b70ca`、GitHub 未公開・push なし。[q533](queue-q533.md)。
 
 ## 最新: 2026-10-01 q532 / ws105-p007
 
@@ -208,5 +218,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q530](queue-q530.md) | ws105-p005 cleared |
 | [q531](queue-q531.md) | ws105-p006 cleared |
 | [q532](queue-q532.md) | ws105-p007 cleared |
+| [q533](queue-q533.md) | ws105-p008 cleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。

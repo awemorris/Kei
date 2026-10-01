@@ -4,7 +4,7 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q533 / q533-i01
 依存: p007
 実行者: phase-runner（high）か phase-runner-mid（機械的な部分が多い）
@@ -15,7 +15,7 @@ Queue: q533 / q533-i01
 
 ## 作る・変える file
 
-`Makefile.linux` を作る package（依存と system の library は [design.md](../design.md) §3.3 の表。source の一覧は各 package の zedBSD の `Makefile` の source の変数を書き写す）:
+`Makefile.linux` を作る package（依存と system の library は [design.md](../../../ws105/design.md) §3.3 の表。source の一覧は各 package の zedBSD の `Makefile` の source の変数を書き写す）:
 
 | package | 種類 | 備考 |
 | --- | --- | --- |
@@ -96,7 +96,7 @@ Linux app の build/install、Home の9app・IME、data を検証し p008 cleare
 
 zedBSD: disk-image warning0、OS boundary / V1（54source）、host dedicated18 / decoder17 ordinary+sanitize、boot login PNG、C1/C2/C9 13/13、forge拒否→3import、fence600すべてgeneration1 PASS。3commonfileのtarget path stringsはWS104 q521と3/3一致。全criteria imageはTerminal guard前（startupを試験しない）；その後final sourceを含むforge imageでTerminalの10秒生存、echo keiland-zedbsd-ok表示、timeout終了（TAB count0）、compositor継続を別に確認、BUG-128 resolved。代表PNGを目視・ユーザーに提示、実機未実施。p072 / p076今回はPASSだが修理とはしない。BUG-125 / BUG-127のtrackingとq532の元のFAILは保持。
 
-証拠: [q533 manifest](../../history/ws105/q533/evidence/SHA256SUMS)、original `build/ws105-p008/`。全guest停止。GitHub未公開、bug disposition / Phase / WS eventはoutboxで保持、pushなし。次はp009 logind / gdm。
+証拠: [q533 manifest](evidence/SHA256SUMS)、original `build/ws105-p008/`。全guest停止。GitHub未公開、bug disposition / Phase / WS eventはoutboxで保持、pushなし。次はp009 logind / gdm。
 
 実装 commit: `7dd3ad9e26639cb9c17517b06d0fe977927b70ca`（WIP）。終了 UTC: 2026-10-01T10:24:11.027596+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
 
@@ -120,4 +120,4 @@ source `ba46edf8` + bounded Terminal修正 `7dd3ad9e`（WIP）。gcc14.2 / clang
 
 全appはtitlebarのcloseで終了、Text Editorは保存確認のDon't Saveを追加で選び、最終psで0（desktop FilesとIMEのみ）。全Home childの正常終了status0を確認。初回Terminalだけstatus139を保持（menuがscreenを作る前にNULLを読むstartup問題、guardでLinuxPASSに修正、zedBSDの確認は残る）。compositor SIGTERM2310frame error0 / cleanup_failed0、guest停止済み。辞書archiveとdictionaryのSHA256検証、既定wallpaperはzedBSDとbyte一致、5gradient生成/install。ホストのpackage追加0。共通の3fileのtarget path文字列はWS104 q521と3/3同一。
 
-[Linux証拠](../../history/ws105/q533/evidence/SHA256SUMS)。zedBSD必須回帰は直列実行中、p007で移管したp072/p076は今回各PASSだが修正とはしない。p008はin-progressのまま。
+[Linux証拠](evidence/SHA256SUMS)。zedBSD必須回帰は直列実行中、p007で移管したp072/p076は今回各PASSだが修正とはしない。p008はin-progressのまま。

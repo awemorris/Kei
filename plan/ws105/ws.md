@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q532 finished
-Resume point: p007 cleared（q532）。次は依存を満たす既存 Phase。
+Queue: q533 finished
+Resume point: p008 cleared（q533）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -111,7 +111,7 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | cleared | p004、p001 |
 | [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | cleared | p005、WS104 完了 |
 | [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | cleared | p006 |
-| [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | planned | p007 |
+| [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | cleared | p007 |
 | [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | planned | p008 |
 | [ws105-p010](phase010/phase.md) | libkeiland の Linux の backend（wpa_supplicant・Linux の interface・ALSA） | planned | p008 |
 | [ws105-p011](phase011/phase.md) | 規約の全文の見直し、境界の確かめの拡張、回帰（Linux と zedBSD）、install の文書 | planned | p001〜p010 |
@@ -311,3 +311,33 @@ zedBSD: disk-image exit0・自前warning0、OS境界C1〜C5 / V1（54source）�
 [証拠とSHA256manifest](../../history/ws105/q532/evidence/SHA256SUMS)。未実施:実機GPU、非同期hardware wait / FOREIGN queue ownership（design既存V3/V8/V9の制限）、tracked2件の修正。その他のp007必須条件は確認済み。GitHub publication / closeは未実施、eventはoutboxに保持。WS105はincomplete、次はp008。
 
 [Phase の結果](phase007/phase.md)、[Queue history](../history/queue-q532.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+## Terminal 起動の bounded 補完（2026-10-01、Q1）
+
+App HomeのTerminal childがstatus139、直接起動も同じ。source/objdumpでmain_start→main_menu_stateが最初のmain_tab_newより先、main_screenはNULLのままselection/rangeを読むと確認。OS分岐の問題ではない。D21のTerminal起動・入力という既存受け入れに必要な普通の技術修正として、common terminal/main.c:main_menu_stateを「screenが無ければ選択なし」にする。起動順、menu/tabs/shellの所有、product、依存、受け入れは不変。広いTerminal改修はしない。Linuxの修正前139→修正後Home起動・10秒生存・echo入力、zedBSDのTerminal起動/文字/終了と必須回帰で検証。ユーザーのWS105完了まで自走指示の委任を適用し、move/resizeのbug移管判断とは分ける。
+
+## Linux 検証 checkpoint（2026-10-01、q533）
+
+source `ba46edf8` + bounded Terminal修正 `7dd3ad9e`（WIP）。gcc14.2 / clang19.1.7 warning0、26ELF / source-sync / 329header PASS、4 common sourceのstyle-check0、changed scopeの全文manual review。App Homeから9appを起動して10秒生存。Terminal echo keiland-linux-ok、Filesのdirectory3item、Settingsのページ移動、Text Editor入力、Image Viewerのwallpapers内PNG、PDF Viewerのwriter-plain.pdf（2ページ）、Widget Demo、Model viewerを実画像で確認。IME Alt+Space→kanji→漢字→確定/直接入力への切替PASS。各appの代表PNGを目視・ユーザーに提示。Notesのkeyboard文字入力だけ未実施（既存の手書き専用appでその操作を提供していない）。Notes起動/終了はPASS。
+
+全appはtitlebarのcloseで終了、Text Editorは保存確認のDon't Saveを追加で選び、最終psで0（desktop FilesとIMEのみ）。全Home childの正常終了status0を確認。初回Terminalだけstatus139を保持（menuがscreenを作る前にNULLを読むstartup問題、guardでLinuxPASSに修正、zedBSDの確認は残る）。compositor SIGTERM2310frame error0 / cleanup_failed0、guest停止済み。辞書archiveとdictionaryのSHA256検証、既定wallpaperはzedBSDとbyte一致、5gradient生成/install。ホストのpackage追加0。共通の3fileのtarget path文字列はWS104 q521と3/3同一。
+
+[Linux証拠](../../history/ws105/q533/evidence/SHA256SUMS)。zedBSD必須回帰は直列実行中、p007で移管したp072/p076は今回各PASSだが修正とはしない。p008はin-progressのまま。
+
+## 開始前の実装接続の具体化（2026-10-01、Q1）
+
+実際のp006 sourceではseat-linux.hの共通Linux helperをseat-direct-linux.cが全て定義し、mainはOS dispatchより前にevdevを読む。p009のlogindを接続するため、root helperの実体をzwl_linux_direct_*へrenameし、既存zwl_linux_*のseat選択dispatchをos-linux.cへ置く。seat-linux.hに両backendのprivate関数を宣言し、Makefile.linuxにD-Bus / logind sourceを追加する。compositorの公開API、共通OS境界、rootのdeviceの扱いは不変。新しいproduct・方針の決定ではなく、既存D11/D12のOS内接続を具体化する。
+
+PauseDeviceの処理をevdevの読みより先に行うようmainのOS poll doneを移す。inputのpaused fdはcommon入力recordのfd=-1でpollから外し、実fdとTakeDeviceの所有はlogindのrecordに残す。古いpoll snapshotからfd=-1を読まないguardをmainに追加。ResumeDeviceは新fdを同じ入力recordへ戻し、旧fdを閉じる。goneと通常closeではReleaseDevice/所有を一度ずつ返す。DRM pauseはos_pausedを立ててoutputを閉じ、windowed=0でresume後に既存zwl_schedule→enter_window_modeを通して再生成する。queued signalはsocketのreventsが0でもdispatchする。
+
+D-Busは64KiB message / 16FD / bounded signal queue、readableになってからでもMSG_DONTWAITで読む。recvmsgは固定header16bytesとそのmessageの残りだけを読み、次のmessageのfdを混ぜない。同期callは5秒、signalを保持し、壊れたmessageとoverflowでは所有fdを閉じて失敗。device fdはCLOEXEC。Linux新moduleは全文規約で作り、実gdmのuid/VT pause/force/resume/LogOutとrootdirectの回帰で確認。
+
+### q533 / ws105-p008（2026-10-01T10:24:11.027596+00:00）
+
+cleared。Linux app の build/install、Home の9app・IME、data を検証し p008 cleared。source `ba46edf8` + Terminal guard `7dd3ad9e`（WIP）。gcc14.2 / clang19.1.7 warning0、26ELF（24 production + 2 test fixture）、source-sync / 329 header PASS、changed common source 4file style-check0。Homeの全appは起動10秒生存、Terminal echo、Files directory、Settingsページ、Text Editor文字、Image Viewer画像、PDF Viewer 2ページ、kuidemo / mviewを確認。IME Alt+Space→kanji→漢字→確定→直接入力PASS。Notesは起動/終了PASS、keyboard文字入力のみ理由つき未実施（既存手書き専用UI）。全appのcloseでchild status0、最後のpsはdesktop FilesとIMEのみ。compositor SIGTERM2310frame error0 / cleanup_failed0、guest停止。辞書SHA256、5gradient、既定wallpaperはtargetとbyte一致、host package追加0。
+
+zedBSD: disk-image warning0、OS boundary / V1（54source）、host dedicated18 / decoder17 ordinary+sanitize、boot login PNG、C1/C2/C9 13/13、forge拒否→3import、fence600すべてgeneration1 PASS。3commonfileのtarget path stringsはWS104 q521と3/3一致。全criteria imageはTerminal guard前（startupを試験しない）；その後final sourceを含むforge imageでTerminalの10秒生存、echo keiland-zedbsd-ok表示、timeout終了（TAB count0）、compositor継続を別に確認、BUG-128 resolved。代表PNGを目視・ユーザーに提示、実機未実施。p072 / p076今回はPASSだが修理とはしない。BUG-125 / BUG-127のtrackingとq532の元のFAILは保持。
+
+証拠: [q533 manifest](../../history/ws105/q533/evidence/SHA256SUMS)、original `build/ws105-p008/`。全guest停止。GitHub未公開、bug disposition / Phase / WS eventはoutboxで保持、pushなし。次はp009 logind / gdm。
+
+[Phase の結果](phase008/phase.md)、[Queue history](../history/queue-q533.md)。WS105 の受け入れは残りの Phase の確認を要する。

@@ -1,0 +1,15 @@
+1425
+627
+602
+ZWL IME started pid=627 client=1
+KEI-IME LANGUAGE id=direct
+ZWL IME language=direct
+KEI-IME READY languages=2
+ZWL IME activate client=9
+KEI-IME ACTIVATE
+ZWL IME deactivate
+KEI-IME DEACTIVATE
+ZWL IME activate client=16
+KEI-IME ACTIVATE
+KEI-IME LANGUAGE id=ja
+ZWL IME language=ja

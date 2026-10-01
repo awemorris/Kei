@@ -1,0 +1,74 @@
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/desktop/files/apps.c -o build/amd64/dynamic/obj/userland/desktop/files/apps.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/desktop/libkeiui/text.c -o build/amd64/dynamic/obj/userland/desktop/libkeiui/text.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -nostdinc -I. -Iinclude -isystem /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/include -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -Os -ffreestanding -fPIC -fno-builtin -fno-stack-protector -fasynchronous-unwind-tables -ftls-model=global-dynamic -Wall -Wextra -Werror -MMD -MP -c userland/base/libpdf/font.c -o build/amd64/dynamic/obj/userland/base/libpdf/font.o
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/desktop/files/main.o build/amd64/dynamic/obj/userland/desktop/files/window.o build/amd64/dynamic/obj/userland/desktop/files/dnd.o build/amd64/dynamic/obj/userland/desktop/files/present.o build/amd64/dynamic/obj/userland/desktop/files/canvas.o build/amd64/dynamic/obj/userland/desktop/files/text.o build/amd64/dynamic/obj/userland/desktop/files/icons.o build/amd64/dynamic/obj/userland/desktop/files/ui.o build/amd64/dynamic/obj/userland/desktop/files/ui-tabs.o build/amd64/dynamic/obj/userland/desktop/files/ui-grid.o build/amd64/dynamic/obj/userland/desktop/files/dir.o build/amd64/dynamic/obj/userland/desktop/files/mime.o build/amd64/dynamic/obj/userland/desktop/files/places.o build/amd64/dynamic/obj/userland/desktop/files/ui-input.o build/amd64/dynamic/obj/userland/desktop/files/ui-list.o build/amd64/dynamic/obj/userland/desktop/files/ui-field.o build/amd64/dynamic/obj/userland/desktop/files/select.o build/amd64/dynamic/obj/userland/desktop/files/task.o build/amd64/dynamic/obj/userland/desktop/files/trash.o build/amd64/dynamic/obj/userland/desktop/files/undo.o build/amd64/dynamic/obj/userland/desktop/files/clip.o build/amd64/dynamic/obj/userland/desktop/files/actions.o build/amd64/dynamic/obj/userland/desktop/files/ui-overlay.o build/amd64/dynamic/obj/userland/desktop/files/tags.o build/amd64/dynamic/obj/userland/desktop/files/search.o build/amd64/dynamic/obj/userland/desktop/files/ui-search.o build/amd64/dynamic/obj/userland/desktop/files/ui-home.o build/amd64/dynamic/obj/userland/desktop/files/thumb.o build/amd64/dynamic/obj/userland/desktop/files/peek.o build/amd64/dynamic/obj/userland/desktop/files/ui-preview.o build/amd64/dynamic/obj/userland/desktop/files/apps.o build/amd64/dynamic/obj/userland/desktop/files/info.o build/amd64/dynamic/obj/userland/desktop/files/ui-info.o build/amd64/dynamic/obj/userland/desktop/files/ui-menu.o build/amd64/dynamic/obj/userland/desktop/files/ui-help.o build/amd64/dynamic/obj/userland/desktop/files/menu.o build/amd64/dynamic/obj/userland/desktop/files/titlebar.o build/amd64/dynamic/obj/userland/desktop/files/ui-titlebar.o build/amd64/dynamic/obj/userland/desktop/files/glass.o build/amd64/dynamic/obj/userland/desktop/files/ui-context.o build/amd64/dynamic/obj/userland/desktop/files/ui-drag.o build/amd64/dynamic/obj/userland/desktop/files/ui-desktop.o build/amd64/dynamic/obj/userland/desktop/files/ui-desktop-actions.o build/amd64/dynamic/obj/userland/desktop/files/ui-desktop-drag.o build/amd64/dynamic/obj/userland/desktop/files/desktop-layout.o build/amd64/dynamic/obj/userland/desktop/files/touch.o build/amd64/dynamic/obj/userland/desktop/artwork/mark.o build/amd64/dynamic/obj/userland/desktop/picture/picture.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libkeiland.so -l:libtruetype.so -l:libpng-compat.so -l:libz-compat.so \
+ -l:libjpeg-compat.so -l:libgif-compat.so -l:libc.so -o build/amd64/bin/files
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname libkeiui.so --hash-style=both \
+ -z defs -z now -z relro -z separate-code -z stack-size=0x100000 \
+ --version-script=userland/desktop/libkeiui/exports.map \
+ build/amd64/dynamic/obj/userland/desktop/libkeiui/version.o build/amd64/dynamic/obj/userland/desktop/libkeiui/canvas.o build/amd64/dynamic/obj/userland/desktop/libkeiui/text.o build/amd64/dynamic/obj/userland/desktop/libkeiui/icons.o build/amd64/dynamic/obj/userland/desktop/libkeiui/icons-line.o build/amd64/dynamic/obj/userland/desktop/libkeiui/theme.o build/amd64/dynamic/obj/userland/desktop/libkeiui/input.o build/amd64/dynamic/obj/userland/desktop/libkeiui/scroll.o build/amd64/dynamic/obj/userland/desktop/libkeiui/text-touch.o build/amd64/dynamic/obj/userland/desktop/libkeiui/ui.o build/amd64/dynamic/obj/userland/desktop/libkeiui/window.o build/amd64/dynamic/obj/userland/desktop/libkeiui/present.o build/amd64/dynamic/obj/userland/desktop/libkeiui/present-shm.o build/amd64/dynamic/obj/userland/desktop/libkeiui/clipboard.o build/amd64/dynamic/obj/userland/desktop/libkeiui/primary.o build/amd64/dynamic/obj/userland/desktop/libkeiui/text-input.o build/amd64/dynamic/obj/userland/desktop/libkeiui/edit.o build/amd64/dynamic/obj/userland/desktop/libkeiui/widgets.o build/amd64/dynamic/obj/userland/desktop/libkeiui/field.o build/amd64/dynamic/obj/userland/desktop/libkeiui/list.o build/amd64/dynamic/obj/userland/desktop/libkeiui/cards.o build/amd64/dynamic/obj/userland/desktop/libkeiui/chooser.o build/amd64/dynamic/obj/userland/desktop/libkeiui/chooser-model.o build/amd64/dynamic/obj/userland/desktop/libkeiui/chooser-view.o build/amd64/dynamic/obj/userland/desktop/picture/color-glyph.o  -Lbuild/amd64/dynamic -l:libtruetype.so -l:libkeiland.so -l:libwayland-client.so -l:libvulkan.so \
+ -l:libpng-compat.so -l:libz-compat.so -l:libc.so -o build/amd64/dynamic/libkeiui.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role shared-library \
+ --needed libtruetype.so --needed libkeiland.so --needed libwayland-client.so --needed libvulkan.so --needed libpng-compat.so \
+ --needed libz-compat.so --needed libc.so --soname libkeiui.so build/amd64/dynamic/libkeiui.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libkeiland.so --needed libtruetype.so \
+ --needed libpng-compat.so --needed libz-compat.so --needed libjpeg-compat.so --needed libgif-compat.so --needed libc.so build/amd64/bin/files
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/desktop/terminal/main.o build/amd64/dynamic/obj/userland/desktop/terminal/screen.o build/amd64/dynamic/obj/userland/desktop/terminal/keys.o build/amd64/dynamic/obj/userland/desktop/terminal/font.o build/amd64/dynamic/obj/userland/desktop/terminal/render.o build/amd64/dynamic/obj/userland/desktop/terminal/window.o build/amd64/dynamic/obj/userland/desktop/terminal/menu.o build/amd64/dynamic/obj/userland/desktop/terminal/clipboard.o build/amd64/dynamic/obj/userland/desktop/terminal/tabs.o build/amd64/dynamic/obj/userland/desktop/terminal/primary.o build/amd64/dynamic/obj/userland/desktop/terminal/touch.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libkeiland.so -l:libkeiui.so -l:libtruetype.so -l:libc.so -o build/amd64/bin/terminal
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libkeiland.so --needed libkeiui.so --needed libtruetype.so --needed libc.so build/amd64/bin/terminal
+/home/awe/zedBSD-claude1/build/llvm/bin/ld.lld -m elf_x86_64 -shared -soname libpdf.so --hash-style=both \
+ -z defs -z now -z relro -z separate-code -z stack-size=0x100000 \
+ --version-script=userland/base/libpdf/exports.map \
+ build/amd64/dynamic/obj/userland/base/libpdf/writer.o build/amd64/dynamic/obj/userland/base/libpdf/update.o build/amd64/dynamic/obj/userland/base/libpdf/outline.o build/amd64/dynamic/obj/userland/base/libpdf/object.o build/amd64/dynamic/obj/userland/base/libpdf/reader.o build/amd64/dynamic/obj/userland/base/libpdf/filter.o build/amd64/dynamic/obj/userland/base/libpdf/ccitt.o build/amd64/dynamic/obj/userland/base/libpdf/image.o build/amd64/dynamic/obj/userland/base/libpdf/display.o build/amd64/dynamic/obj/userland/base/libpdf/content.o build/amd64/dynamic/obj/userland/base/libpdf/stroke.o build/amd64/dynamic/obj/userland/base/libpdf/raster.o build/amd64/dynamic/obj/userland/base/libpdf/font.o build/amd64/dynamic/obj/userland/base/libpdf/encoding.o build/amd64/dynamic/obj/userland/base/libpdf/shading.o build/amd64/dynamic/obj/userland/base/libpdf/charstrings.o build/amd64/dynamic/obj/userland/base/libpdf/type1.o build/amd64/dynamic/obj/userland/base/libpdf/cff.o build/amd64/dynamic/obj/userland/base/libpdf/cffdata.o build/amd64/dynamic/obj/userland/base/libpdf/crypt.o  -Lbuild/amd64/dynamic -l:libz-compat.so -l:libjpeg-compat.so -l:libtruetype.so -l:libc.so -o build/amd64/dynamic/libpdf.so
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role shared-library \
+ --needed libz-compat.so --needed libjpeg-compat.so --needed libtruetype.so --needed libc.so --soname libpdf.so build/amd64/dynamic/libpdf.so
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/desktop/notes/main.o build/amd64/dynamic/obj/userland/desktop/notes/document.o build/amd64/dynamic/obj/userland/desktop/notes/encode.o build/amd64/dynamic/obj/userland/desktop/notes/journal.o build/amd64/dynamic/obj/userland/desktop/notes/save.o build/amd64/dynamic/obj/userland/desktop/notes/geometry.o build/amd64/dynamic/obj/userland/desktop/notes/render.o build/amd64/dynamic/obj/userland/desktop/notes/window.o build/amd64/dynamic/obj/userland/desktop/notes/menu.o build/amd64/dynamic/obj/userland/desktop/notes/tablet.o build/amd64/dynamic/obj/userland/desktop/notes/ui.o build/amd64/dynamic/obj/userland/desktop/notes/touch.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libkeiland.so -l:libkeiui.so -l:libtruetype.so -l:libpdf.so -l:libc.so -o build/amd64/bin/notes
+/home/awe/zedBSD-claude1/build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot=/home/awe/zedBSD-claude1/build/amd64/sysroot -m64 -nostdlib -pie -Wl,--no-relax \
+ -Wl,--hash-style=sysv,-z,now,-z,relro,-z,separate-code \
+ -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
+ -Wl,--dynamic-linker=/lib/ld.so \
+ /home/awe/zedBSD-claude1/build/amd64/sysroot/usr/lib/crt1.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/main.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/menu.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/titlebar.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/view.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/draw.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/document.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/canvas.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/text.o build/amd64/dynamic/obj/userland/desktop/pdfviewer/touch.o  \
+ -Lbuild/amd64/dynamic -Wl,-rpath-link,build/amd64/dynamic \
+ -l:libvulkan.so -l:libwayland-client.so -l:libkeiland.so -l:libkeiui.so -l:libtruetype.so -l:libpdf.so -l:libc.so -o build/amd64/bin/pdfviewer
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libkeiland.so --needed libkeiui.so --needed libtruetype.so \
+ --needed libpdf.so --needed libc.so build/amd64/bin/notes
+python3 tools/build/check-dynamic-elf.py --machine amd64 --role application \
+ --needed libvulkan.so --needed libwayland-client.so --needed libkeiland.so --needed libkeiui.so --needed libtruetype.so \
+ --needed libpdf.so --needed libc.so build/amd64/bin/pdfviewer
+/home/awe/zedBSD-claude1/build/NoctLang/build-static/noct --path=tools/build \
+ tools/build/make-arch-overlay-ufs.noct \
+ --backend /home/awe/zedBSD-claude1/build/zedimage-host --force \
+ --profile amd64 --output build/amd64/arch-images/amd64-native-root-1024m.ufs --tree build/amd64/rootfs \
+ --size-mib 1024 --min-inodes 65536
+build/zedimage-host disk --machine pcat --layout native \
+ --kernel build/amd64/vmunix --bootx64 build/amd64/uefi/BOOTX64.EFI \
+ --zedbsd-config build/amd64/zedbsd-native-uefi-graphical-y-kmsg-n.cfg --logo build/amd64/boot-logo.ppm \
+ --ufs-root build/amd64/arch-images/amd64-native-root-1024m.ufs --swapfile build/amd64/native-swap-1024m.img \
+ build/amd64/hdd-image.img.unchecked
+python3 platform/amd64/tools/check-amd64-native-image.py \
+ --kernel build/amd64/vmunix --bootx64 build/amd64/uefi/BOOTX64.EFI \
+ --zedbsd-config build/amd64/zedbsd-native-uefi-graphical-y-kmsg-n.cfg --logo build/amd64/boot-logo.ppm \
+ --ufs-root build/amd64/arch-images/amd64-native-root-1024m.ufs --swap build/amd64/native-swap-1024m.img \
+ build/amd64/hdd-image.img.unchecked
+check-amd64-native-image: build/amd64/hdd-image.img.unchecked: OK
+mv -f build/amd64/hdd-image.img.unchecked build/amd64/hdd-image.img

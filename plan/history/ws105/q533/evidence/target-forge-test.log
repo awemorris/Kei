@@ -1,0 +1,9 @@
+GPUFORGE RESULT refused=1 error=67
+gpu-forge: PASS
+ZWL VULKAN_IMPORT_ERROR client=1 buffer=5 result=-1000072003
+ZWL IMPORT_ERROR client=1 buffer=5 errno=3
+ZWL IMPORT client=2 buffer=13 width=300 height=200 bytes=245760
+ZWL IMPORT client=2 buffer=14 width=300 height=200 bytes=245760
+ZWL IMPORT client=2 buffer=15 width=300 height=200 bytes=245760
+imports before=0 after=3 wltest_frames=120 exit=0
+forge-guest: PASS

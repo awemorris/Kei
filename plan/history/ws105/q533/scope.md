@@ -2,10 +2,10 @@
 
 # ws105-p008: app の Linux の build と install の data
 
-Status: cleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q533 / q533-i01
+Queue: なし
 依存: p007
 実行者: phase-runner（high）か phase-runner-mid（機械的な部分が多い）
 
@@ -92,13 +92,7 @@ app ごとの確かめ（screenshot は `build/keiland-linux/p008-<app>.png`、P
 
 ## 結果
 
-Linux app の build/install、Home の9app・IME、data を検証し p008 cleared。source `ba46edf8` + Terminal guard `7dd3ad9e`（WIP）。gcc14.2 / clang19.1.7 warning0、26ELF（24 production + 2 test fixture）、source-sync / 329 header PASS、changed common source 4file style-check0。Homeの全appは起動10秒生存、Terminal echo、Files directory、Settingsページ、Text Editor文字、Image Viewer画像、PDF Viewer 2ページ、kuidemo / mviewを確認。IME Alt+Space→kanji→漢字→確定→直接入力PASS。Notesは起動/終了PASS、keyboard文字入力のみ理由つき未実施（既存手書き専用UI）。全appのcloseでchild status0、最後のpsはdesktop FilesとIMEのみ。compositor SIGTERM2310frame error0 / cleanup_failed0、guest停止。辞書SHA256、5gradient、既定wallpaperはtargetとbyte一致、host package追加0。
-
-zedBSD: disk-image warning0、OS boundary / V1（54source）、host dedicated18 / decoder17 ordinary+sanitize、boot login PNG、C1/C2/C9 13/13、forge拒否→3import、fence600すべてgeneration1 PASS。3commonfileのtarget path stringsはWS104 q521と3/3一致。全criteria imageはTerminal guard前（startupを試験しない）；その後final sourceを含むforge imageでTerminalの10秒生存、echo keiland-zedbsd-ok表示、timeout終了（TAB count0）、compositor継続を別に確認、BUG-128 resolved。代表PNGを目視・ユーザーに提示、実機未実施。p072 / p076今回はPASSだが修理とはしない。BUG-125 / BUG-127のtrackingとq532の元のFAILは保持。
-
-証拠: [q533 manifest](../../history/ws105/q533/evidence/SHA256SUMS)、original `build/ws105-p008/`。全guest停止。GitHub未公開、bug disposition / Phase / WS eventはoutboxで保持、pushなし。次はp009 logind / gdm。
-
-実装 commit: `7dd3ad9e26639cb9c17517b06d0fe977927b70ca`（WIP）。終了 UTC: 2026-10-01T10:24:11.027596+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）
 
 ## 開始前の検証手順補正（2026-10-01、Q1）
 
@@ -109,15 +103,3 @@ p006 / p007 の実際の共通 shell を確認し、App Home は top-left launch
 - 現行 Home の built-in list に Settings・kuidemo がない。既存 apps.conf の config 入口を Linux の install data として使い、既存 D21 の app を Home から起動可能にする（product の追加なし、common source の変更なし）。design §2 の config 配置を具体化。
 - ユーザーの default wallpaper は WS035 p061 の決定どおり git 外に保持する。現在の `build/ws035-wallpaper/wallpaper.ppm` を、zedBSD criteria と同じ元として install。cache のない checkout でも build できるよう、既存 generator の Aurora を fallback とし、`KEILAND_LINUX_WALLPAPER` で元の画像を指定できるようにする。画像を git に取り込まない。
 - Image Viewer は既存 PNG / JPEG / GIF の reader で PPM reader を持たない。wallpapers directory の検証には同じ wallpaper の既存 PNG を guest の試験用 file として配置し、対応形式の画像表示を確認する。PPM 対応の追加はこの Phase の product scope に含めない。
-
-## Terminal 起動の bounded 補完（2026-10-01、Q1）
-
-App HomeのTerminal childがstatus139、直接起動も同じ。source/objdumpでmain_start→main_menu_stateが最初のmain_tab_newより先、main_screenはNULLのままselection/rangeを読むと確認。OS分岐の問題ではない。D21のTerminal起動・入力という既存受け入れに必要な普通の技術修正として、common terminal/main.c:main_menu_stateを「screenが無ければ選択なし」にする。起動順、menu/tabs/shellの所有、product、依存、受け入れは不変。広いTerminal改修はしない。Linuxの修正前139→修正後Home起動・10秒生存・echo入力、zedBSDのTerminal起動/文字/終了と必須回帰で検証。ユーザーのWS105完了まで自走指示の委任を適用し、move/resizeのbug移管判断とは分ける。
-
-## Linux 検証 checkpoint（2026-10-01、q533）
-
-source `ba46edf8` + bounded Terminal修正 `7dd3ad9e`（WIP）。gcc14.2 / clang19.1.7 warning0、26ELF / source-sync / 329header PASS、4 common sourceのstyle-check0、changed scopeの全文manual review。App Homeから9appを起動して10秒生存。Terminal echo keiland-linux-ok、Filesのdirectory3item、Settingsのページ移動、Text Editor入力、Image Viewerのwallpapers内PNG、PDF Viewerのwriter-plain.pdf（2ページ）、Widget Demo、Model viewerを実画像で確認。IME Alt+Space→kanji→漢字→確定/直接入力への切替PASS。各appの代表PNGを目視・ユーザーに提示。Notesのkeyboard文字入力だけ未実施（既存の手書き専用appでその操作を提供していない）。Notes起動/終了はPASS。
-
-全appはtitlebarのcloseで終了、Text Editorは保存確認のDon't Saveを追加で選び、最終psで0（desktop FilesとIMEのみ）。全Home childの正常終了status0を確認。初回Terminalだけstatus139を保持（menuがscreenを作る前にNULLを読むstartup問題、guardでLinuxPASSに修正、zedBSDの確認は残る）。compositor SIGTERM2310frame error0 / cleanup_failed0、guest停止済み。辞書archiveとdictionaryのSHA256検証、既定wallpaperはzedBSDとbyte一致、5gradient生成/install。ホストのpackage追加0。共通の3fileのtarget path文字列はWS104 q521と3/3同一。
-
-[Linux証拠](../../history/ws105/q533/evidence/SHA256SUMS)。zedBSD必須回帰は直列実行中、p007で移管したp072/p076は今回各PASSだが修正とはしない。p008はin-progressのまま。

@@ -896,6 +896,7 @@ header の field の配列 `a(yv)`（1 PATH `o`、2 INTERFACE `s`、3 MEMBER `s`
 | `userland/base/libpdf/font.c` の `convert_contours()`: `control[0] = 0.0; control[1] = 0.0;` を loop の前に | gcc の `-Wmaybe-uninitialized`（誤検出） | p008 |
 | `userland/desktop/keiland/keiui.h:73` の `KUI_TEXT_EMOJI` と `libkeiui/text.c:595`: emoji の font の path を `paths.h` から（公開の header は repo の `paths.h` を include できないので、`text.c` の中で `KEILAND_DATADIR "/fonts/keiland-emoji.ttf"` を使い、header の macro はそのまま残す） | WS104 p007 で残した物（公開の header の path） | p008 |
 | `userland/desktop/files/apps.c:111` の `apps_program_folders[]`（Open With の program を探す directory）に `KEILAND_BINDIR` を先頭に足す | Linux では program が `/opt/keiland/bin` にある（WS104 p007 で残した物） | p008 |
+| `terminal/main.c:main_menu_state` は最初の tab 前の NULL screen を選択なしとして扱う | p008 の Linux 起動139で発見した common startup bug（Q1のbounded補完、起動順・API不変） | p008 |
 | `struct zwl_server` の `os_paused` と、`zwl_schedule` の paused の扱い、resume の swapchain の作り直し、paused の間の入力の再走査の停止 | logind の pause | p009 |
 | gcc だけが出す警告の、振る舞いを変えない直し（上に無い物が出たとき） | gcc 14 と clang 19 の差 | 出た Phase。直した file と警告を結果に書く |
 
@@ -1147,3 +1148,15 @@ V1・V2 verified: 既定の backend → compat binding 0、opt-out の chain も
 ### p004 検証の改訂（q526 後、2026-10-01）
 
 [Phase 改訂](phase004/phase.md): kernel 6.12 の export は空の reservation に stub を補い、lavapipe の完了済み payload も stub と観測された。raw fences≥1 / fallback=0 の区別は成立しない。raw 値を保持し、試験 observer の IMPORT_SYNC_FILE の成功/ENOTTY と CPU fence wait、全 frame 実画素を受け入れの根拠とする。D6 の production API/同期方式に変更無し。実機 GPU の非同期待ちは従来通り未実施。
+
+## Terminal 起動の bounded 補完（2026-10-01、Q1）
+
+App HomeのTerminal childがstatus139、直接起動も同じ。source/objdumpでmain_start→main_menu_stateが最初のmain_tab_newより先、main_screenはNULLのままselection/rangeを読むと確認。OS分岐の問題ではない。D21のTerminal起動・入力という既存受け入れに必要な普通の技術修正として、common terminal/main.c:main_menu_stateを「screenが無ければ選択なし」にする。起動順、menu/tabs/shellの所有、product、依存、受け入れは不変。広いTerminal改修はしない。Linuxの修正前139→修正後Home起動・10秒生存・echo入力、zedBSDのTerminal起動/文字/終了と必須回帰で検証。ユーザーのWS105完了まで自走指示の委任を適用し、move/resizeのbug移管判断とは分ける。
+
+## 開始前の実装接続の具体化（2026-10-01、Q1）
+
+実際のp006 sourceではseat-linux.hの共通Linux helperをseat-direct-linux.cが全て定義し、mainはOS dispatchより前にevdevを読む。p009のlogindを接続するため、root helperの実体をzwl_linux_direct_*へrenameし、既存zwl_linux_*のseat選択dispatchをos-linux.cへ置く。seat-linux.hに両backendのprivate関数を宣言し、Makefile.linuxにD-Bus / logind sourceを追加する。compositorの公開API、共通OS境界、rootのdeviceの扱いは不変。新しいproduct・方針の決定ではなく、既存D11/D12のOS内接続を具体化する。
+
+PauseDeviceの処理をevdevの読みより先に行うようmainのOS poll doneを移す。inputのpaused fdはcommon入力recordのfd=-1でpollから外し、実fdとTakeDeviceの所有はlogindのrecordに残す。古いpoll snapshotからfd=-1を読まないguardをmainに追加。ResumeDeviceは新fdを同じ入力recordへ戻し、旧fdを閉じる。goneと通常closeではReleaseDevice/所有を一度ずつ返す。DRM pauseはos_pausedを立ててoutputを閉じ、windowed=0でresume後に既存zwl_schedule→enter_window_modeを通して再生成する。queued signalはsocketのreventsが0でもdispatchする。
+
+D-Busは64KiB message / 16FD / bounded signal queue、readableになってからでもMSG_DONTWAITで読む。recvmsgは固定header16bytesとそのmessageの残りだけを読み、次のmessageのfdを混ぜない。同期callは5秒、signalを保持し、壊れたmessageとoverflowでは所有fdを閉じて失敗。device fdはCLOEXEC。Linux新moduleは全文規約で作り、実gdmのuid/VT pause/force/resume/LogOutとrootdirectの回帰で確認。

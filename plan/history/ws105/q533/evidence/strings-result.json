@@ -1,0 +1,27 @@
+{
+  "build/amd64/bin/files": [
+    "/bin/browser %f",
+    "/bin/files",
+    "/bin/imageview %f",
+    "/bin/pdfviewer %f",
+    "/bin/settings",
+    "/bin/sh",
+    "/bin/terminal",
+    "/bin/textedit %f",
+    "/etc/keiland/open-with",
+    "/etc/mtab",
+    "/usr/bin",
+    "/usr/local/bin",
+    "/usr/share/fonts/keiland-fallback.ttf",
+    "/usr/share/fonts/keiland.ttf",
+    "/usr/share/keiland/wallpaper.ppm"
+  ],
+  "build/amd64/dynamic/libkeiui.so": [
+    "/usr/share/fonts/keiland-emoji.ttf",
+    "/usr/share/fonts/keiland-fallback.ttf",
+    "/usr/share/fonts/keiland.ttf"
+  ],
+  "build/amd64/dynamic/libpdf.so": [
+    "/usr/share/fonts"
+  ]
+}

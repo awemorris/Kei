@@ -1,0 +1,12 @@
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZTERM DONE run=term reason=timeout
+ZTERM TAB closed run=term id=1 count=0
+/bin/wayland
