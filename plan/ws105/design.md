@@ -566,7 +566,7 @@ libvulkan-compat の**内部**に置く（F-065 の決定 3 と同じ扱い。li
 4. `wl_surface_attach` → `wl_surface_damage_buffer`（全体）→ FIFO なら `wl_surface_frame` → `wl_surface_commit` → `wl_display_flush`。
 5. **予備の道（CPU で待つ）**: WSI の道の sync が「CPU で待つ」か、ioctl が `ENOTTY`・`EINVAL`（Linux 6.0 より前の kernel）・`EPERM` を返したとき: 手順 1 の
    submit に我々の fence を付け、`vkWaitForFences` で描画の完了を CPU で待ってから commit する（遅いが正しい）。ioctl が一度失敗したら、その swapchain では以後ずっと予備の道。
-   試験のため、環境変数 `KEILAND_VULKAN_NO_IMPLICIT_SYNC=1` で予備の道に強制できる。
+   試験は専用の LD_PRELOAD shim から IMPORT_SYNC_FILE の ENOTTY を返し、production の既定の予備の道を実行する。試験専用の production 環境変数は作らない（coding-style.md §12、p004 の検証手順の補い）。
 6. **FIFO**: 前の present の frame callback が来るまで次の commit を送らない。待ちは上の「待つ時の形」で、**上限 100 ms**（compositor が隠れた surface に
    callback を送らないときに app が止まらないように。Mesa の WSI と同じ考え方）。上限を過ぎたら待たずに commit する。MAILBOX は待たない。
 7. lavapipe では、手順 1 の submit の時点で CPU が描画の完了まで待つ（2026-10-01 確かめ）ので、`vkQueuePresentKHR` は CPU を止める。正しい動き。

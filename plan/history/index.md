@@ -2,10 +2,22 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: なし
-Last finished Queue: [q525](queue-q525.md)（ws105-p003 cleared）
+Last finished Queue: [q526](queue-q526.md)（ws105-p004 uncleared）
 <!-- awesome-plan-current:end -->
 
 # Past Log
+
+## 最新: 2026-10-01 q526 / ws105-p004
+
+- **uncleared**: 4 種の client/server がともに exit 0、各 90 frame。FIFO・resize・MAILBOX の全画素/サイズ一致。fallback の画素/サイズは一致したが、承認済み `fences=0` は不成立。
+- host kernel `6.12.101+deb13-amd64`、lavapipe。全 run の raw fences=1、driver/timeline=`stub`、status=1、waited_ms=0。既に完了した writer と空の reservation をこの観測だけでは区別できない。fences≥1 だけによる通常経路の受け入れも根拠が不足する。
+- Linux 6.12 の一次資料: [dma-buf.c](https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/dma-buf/dma-buf.c) の dma_buf_export_sync_file は空の reservation に dma_fence_get_stub を補う。[dma-fence.c](https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/dma-buf/dma-fence.c) の stub は既に signal 済み。
+- gcc の Linux WSI build warning 0。4 run の [観測](evidence/) を保存。clang/全規約/chain 回帰はこの試行では未実施。既存コードの partial resource cleanup と通常 acquire の初期 queue 記録を次試行で見直す。
+- 再開条件: 試験だけの ioctl observer で通常 IMPORT_SYNC_FILE の成功/flags=WRITE、fallback ENOTTY 1 回・以後成功 import 0 回、CPU fence 待ち・90 frame 全画素を実測する。raw fence/timeline は加工せず残す。D6 の production 同期方式、L3 の画素/安全性、他 Phase の出力は変更しない。main の委任済み技術判断で検証の観測方法を改訂し、新 Queue snapshot に残す。
+- valgrind は host に無く未実施。実機 GPU の非同期 fence 待ちは未実施、lavapipe のみ。push/GitHub 公開なし。
+
+
+ユーザー「ws105の完了をゴールにして、自走をお願いします。」により既存範囲を実行。実装 `e4588580404893bdc6f0affd33d68c064ecdeaa3`、GitHub 未公開・push なし。[q526](queue-q526.md)。
 
 ## 最新: 2026-10-01 q525 / ws105-p003
 
@@ -108,5 +120,6 @@ Focus は fg012（WS104 → WS105）、fg010 の実機デモも保持。後続 W
 | [q523](queue-q523.md) | ws105-p001 cleared |
 | [q524](queue-q524.md) | ws105-p002 cleared |
 | [q525](queue-q525.md) | ws105-p003 cleared |
+| [q526](queue-q526.md) | ws105-p004 uncleared |
 
 以前の全要約・古い Queue の index・判断・bug への参照は [q522 までの Past Log](past-log-through-q522.md) に保持。WS104 の Phase は history/ws104/q515〜q522 へ保存済み。
