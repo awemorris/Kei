@@ -2,7 +2,7 @@
 
 # ws105-p005: libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display）
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS105](../ws.md)
 Queue: q528 / q528-i01
@@ -80,7 +80,7 @@ sh $G screenshot $PWD/build/keiland-linux/p005-console.png
 6. master を失う確かめ: `display-probe` の途中で SSH から `chvt 1` → 5 秒 → `chvt 7`。root の KMS の master は VT の切り替えで失われないことがある。失われたら `VK_ERROR_OUT_OF_DATE_KHR` で
    `display-probe` が error で終わり固まらないこと、失われなければそう記録する。
 
-## 結果
+## q528 の結果（当時の clearance）
 
 cleared。VK_KHR_display・direct-mode・DRM acquisition の O 10 entry、KMS inquiry/dup master/saved CRTC/double dumb FIFO copy、Linux vkdemo を実装した。
 
@@ -94,3 +94,17 @@ cleared。VK_KHR_display・direct-mode・DRM acquisition の O 10 entry、KMS in
 
 
 実装 commit: `18a983dd30b2586f56700113f2a82add518652a5`（WIP）。終了 UTC: 2026-10-01T08:13:06.450181+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+
+## 再開設計（q529 の findings、2026-10-01）
+
+p006 の連続描画で OUT_OF_DATE による終了（frames6051、q529 source80eea509）。100ms総期限でflip待ちを打ち切る現実装は、design §4.9 の「poll 1回の上限100ms」を狭く読みすぎた。q528の短い3色試験の結果は保持し、p005の現clearanceをinvalidated/unclearedとする。
+
+main（Q1）が既存WS105完了の委任された技術判断で次を修正する: 各poll≤100ms、単発timeoutはretry、総期限5秒。EACCES/EPERM・revoked fd は即OUT_OF_DATE、総期限のevent未完了はSURFACE_LOST（master喪失と同一視しない）。影響sourceはkms.c、callback/句の規約を点検。productionのtest-only switchは足さない。
+
+検証: gcc/clang・ELF/source/header・host chain/Wayland 回帰、guestのfd/direct 3色。test-only preload observerがpollを1回だけ250ms遅らせて0を返し、2回目から実際のpollへ渡す。両経路で実frame完了/3色とoldSwapchainがPASSすること。sourceの各poll上限100msと総期限5sも点検する。このfixtureは試験の共有ライブラリのみで既定production codeを試す。p006の再開はこの修正・検証のclearanceが前提。
+
+[origin p006](../phase006/phase.md)、[q529 history](../../history/queue-q529.md)。過去のq528 scopeと結果は変更しない。KMSの実機非同期・logind revocationはp009/p011の既存確認へ。
+
+## 今回の結果
+
+（実行の後に書く）

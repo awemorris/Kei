@@ -1,0 +1,150 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=649
+ZWL STARTUP step=vulkan-objects-arrow ms=101
+ZWL STARTUP step=wallpaper-picture ms=211
+ZWL STARTUP step=wallpaper ms=240
+ZWL STARTUP step=glyphs-text ms=55
+ZWL STARTUP step=glyphs-icons ms=2
+ZWL STARTUP step=glyphs-mark ms=17
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=76
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=1067 at_ms=8899
+ZWL INPUT device=/dev/input/event5 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL STARTUP step=input ms=61 at_ms=8960
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=8960
+ZWL STARTUP step=socket ms=0 at_ms=8960
+ZWL IME none program=/opt/keiland/libexec/keiland-ime errno=2
+ZWL READY socket=/run/keiland-0 width=1280 height=800 timeout_ms=18446744073709551615 pid=601
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL DESKTOP start pid=640 command=/opt/keiland/bin/files --desktop at_ms=8973
+ZWL STARTUP step=output-display ms=0
+sh: 1: exec: /opt/keiland/bin/files: not found
+ZWL STARTUP step=output-pipelines ms=798
+ZWL STARTUP step=output-swapchain ms=7
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1280 height=800 images=3 format=44
+ZWL MODE window switch_ms=806 at_ms=9779
+ZWL GLASS desktops x=818 step=46 width=40
+ZWL NETWORK icon x=1062 y=3 width=30 height=28
+ZWL VOLUME icon x=1029 y=3 width=30 height=28
+ZWL HOME skip name=Terminal missing=/opt/keiland/bin/terminal
+ZWL HOME skip name=Model viewer missing=/opt/keiland/bin/mview
+ZWL HOME skip name=Vulkan test missing=/opt/keiland/bin/wltest
+ZWL HOME skip name=X terminal missing=/opt/keiland/libexec/keiland-x11
+ZWL HOME skip name=Gears missing=/opt/keiland/libexec/keiland-x11
+ZWL HOME skip name=Files missing=/opt/keiland/bin/files
+ZWL HOME skip name=Notes missing=/opt/keiland/bin/notes
+ZWL HOME skip name=PDF Viewer missing=/opt/keiland/bin/pdfviewer
+ZWL HOME skip name=Image Viewer missing=/opt/keiland/bin/imageview
+ZWL HOME skip name=Text Editor missing=/opt/keiland/bin/textedit
+ZWL HOME skip name=Browser missing=/opt/keiland/bin/browser
+ZWL HOME ended pid=640 status=32512
+ZWL DESKTOP exited pid=640
+ZWL DESKTOP start pid=642 command=/opt/keiland/bin/files --desktop at_ms=12124
+sh: 1: exec: /opt/keiland/bin/files: not found
+ZWL HOME ended pid=642 status=32512
+ZWL DESKTOP exited pid=642
+ZWL PERF 5005ms: passes=368 timeouts=368 | poll 97.0% work 29.8%
+ZWL PERF compose frames=1 draw_ms=430.44 (acquire 0.03 submit+present 430.08) frame_ms=433.36
+ZWL DESKTOP start pid=644 command=/opt/keiland/bin/files --desktop at_ms=14141
+sh: 1: exec: /opt/keiland/bin/files: not found
+ZWL HOME ended pid=644 status=32512
+ZWL DESKTOP exited pid=644
+ZWL DESKTOP start pid=645 command=/opt/keiland/bin/files --desktop at_ms=16154
+sh: 1: exec: /opt/keiland/bin/files: not found
+ZWL HOME ended pid=645 status=32512
+ZWL DESKTOP exited pid=645
+ZWL DESKTOP start-limit starts=4
+ZWL PERF 5009ms: passes=475 timeouts=475 | poll 96.7% work 0.3%
+ZWL PERF 5002ms: passes=480 timeouts=480 | poll 97.9% work 0.2%
+ZWL PERF 5006ms: passes=476 timeouts=476 | poll 96.9% work 0.1%
+ZWL CLIENT client=1 fd=20
+ZWL CONFIGURE client=1 surface=8 serial=1 width=0 height=0 fullscreen=0
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL MAP client=1 surface=8 x=400 y=283
+ZWL PERF 5001ms: passes=501 timeouts=468 | poll 91.5% work 6.6%
+ZWL PERF compose frames=28 draw_ms=11.27 (acquire 0.01 submit+present 11.10) frame_ms=12.98
+ZWL PERF shm copies=28 copy_ms=0.209
+ZWL PERF 5035ms: passes=792 timeouts=396 | poll 20.4% work 76.0%
+ZWL PERF compose frames=396 draw_ms=9.36 (acquire 0.01 submit+present 9.17) frame_ms=11.97
+ZWL PERF shm copies=396 copy_ms=0.177
+ZWL PERF 5001ms: passes=877 timeouts=439 | poll 22.9% work 74.8%
+ZWL PERF compose frames=439 draw_ms=8.23 (acquire 0.01 submit+present 8.05) frame_ms=10.56
+ZWL PERF shm copies=438 copy_ms=0.175
+ZWL PERF 5007ms: passes=946 timeouts=445 | poll 22.8% work 74.9%
+ZWL PERF compose frames=447 draw_ms=8.15 (acquire 0.01 submit+present 8.00) frame_ms=10.53
+ZWL PERF shm copies=446 copy_ms=0.147
+ZWL PERF 5001ms: passes=887 timeouts=440 | poll 22.8% work 73.3%
+ZWL PERF compose frames=443 draw_ms=8.05 (acquire 0.01 submit+present 7.89) frame_ms=10.40
+ZWL PERF shm copies=443 copy_ms=0.129
+ZWL PERF 5000ms: passes=932 timeouts=466 | poll 24.1% work 73.4%
+ZWL PERF compose frames=466 draw_ms=7.65 (acquire 0.01 submit+present 7.50) frame_ms=9.92
+ZWL PERF shm copies=466 copy_ms=0.128
+ZWL PERF 5003ms: passes=869 timeouts=434 | poll 22.5% work 74.5%
+ZWL PERF compose frames=434 draw_ms=8.33 (acquire 0.01 submit+present 8.16) frame_ms=10.61
+ZWL PERF shm copies=433 copy_ms=0.161
+ZWL PERF 5008ms: passes=860 timeouts=430 | poll 22.3% work 75.6%
+ZWL PERF compose frames=430 draw_ms=8.52 (acquire 0.01 submit+present 8.35) frame_ms=10.89
+ZWL PERF shm copies=430 copy_ms=0.193
+ZWL PERF 5001ms: passes=876 timeouts=436 | poll 22.5% work 74.5%
+ZWL PERF compose frames=436 draw_ms=8.26 (acquire 0.01 submit+present 8.10) frame_ms=10.51
+ZWL PERF shm copies=436 copy_ms=0.178
+ZWL PERF 5004ms: passes=882 timeouts=441 | poll 22.8% work 75.0%
+ZWL PERF compose frames=441 draw_ms=8.22 (acquire 0.01 submit+present 8.05) frame_ms=10.60
+ZWL PERF shm copies=441 copy_ms=0.194
+ZWL PERF 5000ms: passes=897 timeouts=448 | poll 23.3% work 73.8%
+ZWL PERF compose frames=448 draw_ms=7.95 (acquire 0.01 submit+present 7.79) frame_ms=10.31
+ZWL PERF shm copies=448 copy_ms=0.177
+ZWL PERF 5003ms: passes=938 timeouts=468 | poll 24.2% work 73.9%
+ZWL PERF compose frames=468 draw_ms=7.66 (acquire 0.01 submit+present 7.52) frame_ms=9.90
+ZWL PERF shm copies=468 copy_ms=0.136
+ZWL PERF 5007ms: passes=928 timeouts=464 | poll 23.9% work 73.3%
+ZWL PERF compose frames=464 draw_ms=7.67 (acquire 0.01 submit+present 7.52) frame_ms=10.11
+ZWL PERF shm copies=464 copy_ms=0.134
+ZWL PERF 5000ms: passes=858 timeouts=415 | poll 21.2% work 76.8%
+ZWL PERF compose frames=415 draw_ms=8.90 (acquire 0.01 submit+present 8.69) frame_ms=11.22
+ZWL PERF shm copies=416 copy_ms=0.186
+ZWL CLIENT gone client=1 reason=hangup
+ZWL CLEANUP client=1 objects=12 unread_fds=0
+ZWL PERF 5007ms: passes=735 timeouts=458 | poll 55.9% work 40.6%
+ZWL PERF compose frames=249 draw_ms=7.91 (acquire 0.01 submit+present 7.75) frame_ms=10.06
+ZWL PERF shm copies=247 copy_ms=0.144
+ZWL PERF 5000ms: passes=481 timeouts=481 | poll 98.0% work 0.1%
+ZWL PERF 5007ms: passes=476 timeouts=476 | poll 96.8% work 0.1%
+ZWL PERF 5002ms: passes=479 timeouts=479 | poll 97.6% work 0.1%
+ZWL PERF 5003ms: passes=474 timeouts=474 | poll 96.6% work 0.2%
+ZWL PERF 5003ms: passes=479 timeouts=478 | poll 97.3% work 0.4%
+ZWL PERF compose frames=1 draw_ms=14.41 (acquire 0.03 submit+present 14.22) frame_ms=16.52
+ZWL HOME open via=launcher at_ms=129153
+ZWL FIRST_FRAME what=home-open frame=6007 request_ms=129153 ms=15
+ZWL HOME opened apps=2 pages=1 page=1 at_ms=129446
+ZWL HOME icon name="Shared memory" x=568 y=335
+ZWL HOME icon name="Log Out" x=712 y=335
+ZWL PERF 5007ms: passes=464 timeouts=462 | poll 92.0% work 4.6%
+ZWL PERF compose frames=14 draw_ms=16.01 (acquire 0.00 submit+present 15.81) frame_ms=22.11
+ZWL PERF 5002ms: passes=478 timeouts=478 | poll 97.5% work 0.2%
+ZWL PERF 5004ms: passes=473 timeouts=473 | poll 96.4% work 0.2%
+ZWL PERF 5001ms: passes=479 timeouts=479 | poll 97.6% work 0.1%
+ZWL PERF 5007ms: passes=476 timeouts=476 | poll 96.9% work 0.1%
+ZWL HOME close via=escape at_ms=158017
+ZWL FIRST_FRAME what=home-close frame=6021 request_ms=158017 ms=27
+ZWL HOME closed at_ms=158267
+ZWL PERF 5007ms: passes=470 timeouts=468 | poll 93.3% work 4.8%
+ZWL PERF compose frames=14 draw_ms=16.58 (acquire 0.00 submit+present 16.38) frame_ms=18.53
+ZWL WISEVIEW opening key at_ms=159198
+ZWL FIRST_FRAME what=wiseview-open frame=6035 request_ms=159198 ms=15
+ZWL WISEVIEW open windows=0 at_ms=159409
+ZWL WISEVIEW close key at_ms=160847
+ZWL FIRST_FRAME what=wiseview-close frame=6044 request_ms=160847 ms=28
+ZWL VULKAN_ERROR operation=submit result=-1000001004
+ZWL FAILED site=compose_draw errno=5
+ZWL OUTPUT closed
+ZWL EXIT frames=6051 error=5 cleanup_failed=1 pid=601 input_events=20 seat_events=6 at_ms=161445

@@ -4,10 +4,10 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q529 / q529-i01
 依存: p005、**WS104 の完了**（compositor の `zwl-gpu.h`・`zwl-input.h`・`zwl-os.h`（7 つの hook）と `zedbsd/` の module）
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §5（特に §5.1・§5.3・§5.4・§5.6）を読む**
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §5（特に §5.1・§5.3・§5.4・§5.6）を読む**
 
 ## 目的
 
@@ -68,7 +68,7 @@ sh $G key esc
 5. Log Out（App Home の Log Out の項目を `click`）で compositor が終わり、`chvt 1` の後の screenshot に console の文字。VT が戻り、key が console に届く。
 6. SIGTERM（`sh $G ssh 'pkill -TERM -x wayland'`）でも console に戻る。
 7. `KEILAND_SEAT` を付けずに SSH から起動すると、`XDG_SESSION_TYPE=tty` なので `direct` を選ぶ（design §5.1 の規則の確かめ）。
-8. zedBSD の回帰（design §9.2、[WS104 の commands.md](../../ws104/commands.md) の §1・§4・§5・§6、`keiland-os-boundary/check.sh`）。
+8. zedBSD の回帰（design §9.2、[WS104 の commands.md](../../../ws104/commands.md) の §1・§4・§5・§6、`keiland-os-boundary/check.sh`）。
 
 ## 結果
 
@@ -83,7 +83,3 @@ uncleared（q529-i01）。Linux compositor/direct seat/evdev/VT/handoff/GPUな�
 
 
 実装 commit: `80eea509710d51928bf14efd1246c02c80da38f4`（WIP）。終了 UTC: 2026-10-01T08:25:21.947014+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
-
-## q529 後の再開条件
-
-p005のKMS待機を再設計してclearanceを再確認する（[変更](../phase005/phase.md)）。既存Linux sourceを保持し、再開QueueでLog Outと長い描画・入力・VTの全条件を再検証する。承認済みzedBSD回帰process52085は進行中、最終結果を再開Queueに記録する。

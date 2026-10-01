@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q528 finished
-Resume point: p005 cleared（q528）。次は依存を満たす既存 Phase。
+Queue: q529 finished
+Resume point: p006 uncleared（q529）。次は依存を満たす既存 Phase。
 <!-- awesome-plan-current:end -->
 
 ## 目標
@@ -108,8 +108,8 @@ Q1 と手順を検討して、次の「決定と理由」を確定した。zedBS
 | [ws105-p002](phase002/phase.md) | build の土台（`keiland-linux.mk`・top-level の goal・library の `Makefile.linux`・ELF・source の一覧・header の漏れの確かめ） | cleared | WS104 の p001・p003 |
 | [ws105-p003](phase003/phase.md) | libvulkan-compat (1): 後段への chain（WSI 無し） | cleared | p002 |
 | [ws105-p004](phase004/phase.md) | libvulkan-compat (2): Wayland の WSI（`zwp_linux_dmabuf_v1`、implicit sync） | cleared | p003 |
-| [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | cleared | p004、p001 |
-| [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | planned | p005、WS104 完了 |
+| [ws105-p005](phase005/phase.md) | libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display） | uncleared | p004、p001 |
+| [ws105-p006](phase006/phase.md) | compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで） | uncleared | p005、WS104 完了 |
 | [ws105-p007](phase007/phase.md) | compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync（Vulkan の client） | planned | p006 |
 | [ws105-p008](phase008/phase.md) | app の Linux の build と install の data（font・wallpaper・設定） | planned | p007 |
 | [ws105-p009](phase009/phase.md) | gdm と logind（seat-logind・最小の D-Bus・pause と resume・`keiland.desktop`） | planned | p008 |
@@ -238,3 +238,21 @@ cleared。cleared。VK_KHR_display・direct-mode・DRM acquisition の O 10 entr
 
 
 [Phase の結果](phase005/phase.md)、[Queue history](../history/queue-q528.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### q529 / ws105-p006（2026-10-01T08:25:21.947014+00:00）
+
+uncleared。uncleared（q529-i01）。Linux compositor/direct seat/evdev/VT/handoff/GPUなしglobalと、独立Makefile・fonts・wlshmを実装した。gcc/clang exit0 warning0、12ELF / source-sync / 126header / scoped style PASS。
+
+- guest: READY、Virtual-1 1280×800。wallpaper/bar (100,10)=#ebf9ec / (100,400)=#c5dde6。wl_shm center (640,400) background (224,235,248)→(0,0,255)、約6000frame表示。cursor差は(200,200)と(900,600)の付近。App HomeとEsc、Super+TabのWiseviewを確認。
+- 手順のmeta単独でHomeという記述は実装と違った。既存c5-transitions.shと同じlauncher click (23,17) に訂正、keyboardはEsc/Super+Tabで確認。受け入れ範囲は同じ。
+- WiseviewをEscで閉じる連続描画で `ZWL VULKAN_ERROR operation=submit result=-1000001004`、`ZWL FAILED site=compose_draw errno=5`、EXIT frames=6051 error5 cleanup_failed1。masterはseatのroot fdで保持。KMSが100ms総期限をOUT_OF_DATEとする実装を確認、設計は各pollの上限100msであり総期限の意図ではなかった。タイミングからpoll deadlineが原因と推定、次のp005修正Queueでbounded遅延試験により確かめる。
+- Log Outは上記でcompositorが先に終了したため未達。この終了をLog Out成功とは数えない。独立したSIGTERM終了とseat未指定のSSH tty sessionではREADY→EXIT error0、chvt1文字とconsole key 'kei' PNGを確認。
+- zedBSD disk-image exit0、C1〜C5 boundary、v1、dedicated/decode host、boot login PNG確認。C1/C2/C9＋forge/fenceの承認済み回帰processは進行中（exec session52085、outputs build/ws105-p006）。既存承認の検証だけを継続して証拠を保存し、再開Queueでterminal結果を確認する。これらを今PASSと扱わない。
+- Linux guest stop済み、overlay廃棄。sourceはWIPに保存。mainの委任された技術判断でp005を再開し、poll1回≤100ms＋有限の総期限のKMS待機に直す。p005の修正と再検証後、同じp006を再開してLog Out・SIGTERM・keyboard・zedBSD回帰の全条件を確認する。WS105の受け入れは変更しない。
+
+
+[Phase の結果](phase006/phase.md)、[Queue history](../history/queue-q529.md)。WS105 の受け入れは残りの Phase の確認を要する。
+
+### q529後のKMS待機の再設計
+
+p006はuncleared、p005のclearanceをinvalidated。100ms総期限の誤りをkms.cで修正し、test-only遅延observerで再検証後にp006を再開する。[p005](phase005/phase.md)・[origin p006](phase006/phase.md)。WS105の目的・受け入れは同じ。既存の実装とq528/q529 historyを保持する。

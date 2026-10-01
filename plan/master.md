@@ -3,7 +3,7 @@
 <!-- awesome-plan-current:start -->
 Active Queue: なし
 Current Focused Goal: fg012 — Keiland の OS の境界を整理して Linux で動かす（WS104 → WS105）。fg010 のデモの目標も保持する。
-Next（2026-10-01 に更新）: WS104 completed（q515〜q522）。後続 WS105 は incomplete、WS104 の prerequisite は満たした。WS105 p001〜p005 cleared（p004はq526 uncleared後、q527で検証を改訂）。次はp006（ユーザーの WS105 完了までの自走指示）。D25 の localhost SSH / QMP は許可済み。WS103（compositor を libvulkan だけに）は 2026-10-01 に完了（q508〜q514、ユーザーの自走の指示）。デモの優先 WS（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102・WS084・WS075・WS081・WS085・WS068・WS101）は 2026-10-01 に作業の手引き（各 `guide.md`）と実機の手引き（`tools/hw5330/README.md`）を整えた。候補: デモ critical の上位（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102）、5330 の実機の新しい demo の image とユーザーの実機の確認。サブエージェントは N=0。
+Next（2026-10-01 に更新）: WS104 completed（q515〜q522）。後続 WS105 は incomplete、WS104 の prerequisite は満たした。WS105 p001〜p004 cleared、p005/p006はq529のKMS待機によりuncleared。p005修正後p006を再開（ユーザーの WS105 完了までの自走指示）。D25 の localhost SSH / QMP は許可済み。WS103（compositor を libvulkan だけに）は 2026-10-01 に完了（q508〜q514、ユーザーの自走の指示）。デモの優先 WS（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102・WS084・WS075・WS081・WS085・WS068・WS101）は 2026-10-01 に作業の手引き（各 `guide.md`）と実機の手引き（`tools/hw5330/README.md`）を整えた。候補: デモ critical の上位（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102）、5330 の実機の新しい demo の image とユーザーの実機の確認。サブエージェントは N=0。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にした。その後は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -203,7 +203,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS102](ws102/ws.md) | MG006 | スクリーンキーボード: 右下の角の swipe で右側に flick の panel（英字・記号・日本語）、左下の角の swipe で下側に QWERTY と手書き（認識は stub）。compositor に直接（2026-09-30 ユーザー） | incomplete | 2026-09-30: L1 を満たした。L2: p006・p007・p008・p009・p015・p016（右の列の道具の面）・p017・p018・p020・p021・p023・p024（履歴の tab。受け入れの手順だけ PASS、全手順の回帰・C9・boot test は未実施）、L3 の p019（色付きの絵文字）cleared（QEMU）。ユーザーの指示で優先を下げてラップアップ（2026-09-30 夕）。保留: p022（絵文字の tab）・BUG-125・p010・p011（速さ）・p012（IME、人間） |
 | [WS103](ws103/ws.md) | MG006 | compositor を libvulkan だけにする（GPU の UAPI の直の ioctl を無くす）（2026-09-30 ユーザー「規則にして今移す」、規則は Guardrail） | completed | 2026-10-01 完了（p001〜p007、q508〜q514）: V1〜V4 を満たす（QEMU の Venus と 5330 の passthrough、単独の実機の起動は未実施）。Linux・FreeBSD の backend は F-065。試験は plan/tools/gpu-boundary |
 | [WS104](ws104/ws.md) | MG006 | Keiland の OS の境界の整理: desktop の公開の header を `userland/desktop/keiland/` へ、libkeiland と compositor の OS の部分を `zedbsd/` の module へ、install の path を macro に。zedBSD の振る舞いは変えない（2026-10-01 ユーザー「Linux移植を進めます」、WS105 の準備） | completed | q515〜q522 / A1〜A6 verified。全文規約と全必須回帰 PASS、Linux は WS105 へ |
-| [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | incomplete | p001〜p005 cleared（q528、KMS・vkdemo）。次はp006。WS104 の全前提 verified、D25 許可済み |
+| [WS105](ws105/ws.md) | MG006 | Keiland を Linux で動かす（`/opt/keiland`）: `make keiland-linux`、libvulkan-compat（独自の WSI から system の libvulkan へ chain）、compositor の Linux の module（KMS・evdev・linux-dmabuf・logind）、主な app、gdm、wpa_supplicant・ALSA（2026-10-01 ユーザー、F-065 の Linux の分） | incomplete | p001〜p004 cleared。p005はKMS待機の再設計でuncleared、p006 q529 uncleared。p005修正後にp006を再開。WS104 の全前提 verified、D25 許可済み |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 

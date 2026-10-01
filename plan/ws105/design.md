@@ -624,6 +624,7 @@ compositor の seat（§5.1）は、自分が開いた DRM の device の path �
   **libdrm には link しない**（D9）。使う ioctl: `DRM_IOCTL_SET_MASTER`・`DROP_MASTER`・`MODE_GETRESOURCES`・`GETCONNECTOR`・`GETENCODER`・`GETCRTC`・
   `CREATE_DUMB`・`MAP_DUMB`・`DESTROY_DUMB`・`ADDFB2`・`RMFB`・`SETCRTC`・`PAGE_FLIP`（`DRM_MODE_PAGE_FLIP_EVENT`）。flip の完了の event は fd の `read`。
   **logind から来た fd は `O_NONBLOCK`** なので、event は `poll(fd, POLLIN, 上限 100 ms)` してから `read` する。
+  q529の連続描画で判明した待ち方の補足: 100msはpoll1回の上限。単発timeoutはretry、総期限5秒でevent未完了ならSURFACE_LOST。masterのEACCES/EPERMはOUT_OF_DATEのまま（Q1の委任された技術判断）。
 - **image の出し方は「複写の道」（v1、全ての後段で動く、D20）**: swapchain の image は後段の普通の image（`OPTIMAL`、usage に `TRANSFER_SRC` を足す）。
   present のたびに `vkCmdCopyImageToBuffer` で host-visible・host-coherent の buffer に写し、fence を待ち、KMS の dumb buffer（`CREATE_DUMB`・`MAP_DUMB` + mmap）に
   行ごとに memcpy し（stride が違う）、`PAGE_FLIP` する（最初の 1 回は `SETCRTC`）。dumb buffer は 2 つ（前と後）。flip の完了の event を読んでから次の flip を出す（FIFO）。

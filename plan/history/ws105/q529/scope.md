@@ -2,10 +2,10 @@
 
 # ws105-p006: compositor の Linux の build と module (1): seat-direct・入力・session（wl_shm の client まで）
 
-Status: uncleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q529 / q529-i01
+Queue: なし
 依存: p005、**WS104 の完了**（compositor の `zwl-gpu.h`・`zwl-input.h`・`zwl-os.h`（7 つの hook）と `zedbsd/` の module）
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §5（特に §5.1・§5.3・§5.4・§5.6）を読む**
 
@@ -50,13 +50,13 @@ sh $G ssh 'XDG_RUNTIME_DIR=/run WAYLAND_DISPLAY=keiland-0 nohup /opt/keiland/bin
 sleep 3; sh $G screenshot $PWD/build/keiland-linux/p006-wlshm.png
 sh $G move 200 200; sleep 1; sh $G screenshot $PWD/build/keiland-linux/p006-move1.png
 sh $G move 900 600; sleep 1; sh $G screenshot $PWD/build/keiland-linux/p006-move2.png
-sh $G click 23 17; sleep 2; sh $G screenshot $PWD/build/keiland-linux/p006-home.png
+sh $G key meta_l; sleep 2; sh $G screenshot $PWD/build/keiland-linux/p006-home.png
 sh $G key esc
 ```
 
 - compositor の引数は zedBSD の `/etc/keiland/session`（`userland/desktop/wayland/session.sh`）と同じ（`--session --glass`。無いと 150 秒で終わる、design §5.1）。`ZWL READY` の行は compositor
   の stdout の log で、判定に使ってよい（compositor 自身の log。guest の serial の log ではない）。
-- App Home は `plan/ws099/tests/c5-transitions.sh` と同じ top-left launcher click（23,17）で開く。key の確かめは Esc の閉鎖と Super+Tab の Wiseview（super は QKeyCode の `meta_l`）。当初手順の「meta単独でHome」はactual sourceに無い操作だったため修正（scope・入力の受け入れは同じ）。
+- App Home を開く key は zedBSD の試験と同じ物を `plan/ws099/tests/` の script で確かめて使う（super は QKeyCode の `meta_l`）。
 - 画面の大きさは `png-probe.py --size` で確かめ、座標をその中に取る。
 
 ## 完了の条件
@@ -72,18 +72,4 @@ sh $G key esc
 
 ## 結果
 
-uncleared（q529-i01）。Linux compositor/direct seat/evdev/VT/handoff/GPUなしglobalと、独立Makefile・fonts・wlshmを実装した。gcc/clang exit0 warning0、12ELF / source-sync / 126header / scoped style PASS。
-
-- guest: READY、Virtual-1 1280×800。wallpaper/bar (100,10)=#ebf9ec / (100,400)=#c5dde6。wl_shm center (640,400) background (224,235,248)→(0,0,255)、約6000frame表示。cursor差は(200,200)と(900,600)の付近。App HomeとEsc、Super+TabのWiseviewを確認。
-- 手順のmeta単独でHomeという記述は実装と違った。既存c5-transitions.shと同じlauncher click (23,17) に訂正、keyboardはEsc/Super+Tabで確認。受け入れ範囲は同じ。
-- WiseviewをEscで閉じる連続描画で `ZWL VULKAN_ERROR operation=submit result=-1000001004`、`ZWL FAILED site=compose_draw errno=5`、EXIT frames=6051 error5 cleanup_failed1。masterはseatのroot fdで保持。KMSが100ms総期限をOUT_OF_DATEとする実装を確認、設計は各pollの上限100msであり総期限の意図ではなかった。タイミングからpoll deadlineが原因と推定、次のp005修正Queueでbounded遅延試験により確かめる。
-- Log Outは上記でcompositorが先に終了したため未達。この終了をLog Out成功とは数えない。独立したSIGTERM終了とseat未指定のSSH tty sessionではREADY→EXIT error0、chvt1文字とconsole key 'kei' PNGを確認。
-- zedBSD disk-image exit0、C1〜C5 boundary、v1、dedicated/decode host、boot login PNG確認。C1/C2/C9＋forge/fenceの承認済み回帰processは進行中（exec session52085、outputs build/ws105-p006）。既存承認の検証だけを継続して証拠を保存し、再開Queueでterminal結果を確認する。これらを今PASSと扱わない。
-- Linux guest stop済み、overlay廃棄。sourceはWIPに保存。mainの委任された技術判断でp005を再開し、poll1回≤100ms＋有限の総期限のKMS待機に直す。p005の修正と再検証後、同じp006を再開してLog Out・SIGTERM・keyboard・zedBSD回帰の全条件を確認する。WS105の受け入れは変更しない。
-
-
-実装 commit: `80eea509710d51928bf14efd1246c02c80da38f4`（WIP）。終了 UTC: 2026-10-01T08:25:21.947014+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
-
-## q529 後の再開条件
-
-p005のKMS待機を再設計してclearanceを再確認する（[変更](../phase005/phase.md)）。既存Linux sourceを保持し、再開QueueでLog Outと長い描画・入力・VTの全条件を再検証する。承認済みzedBSD回帰process52085は進行中、最終結果を再開Queueに記録する。
+（実行の後に書く）
