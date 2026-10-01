@@ -134,3 +134,22 @@ sh plan/tools/keiland-linux/guest.sh ssh 'XDG_RUNTIME_DIR=/run WAYLAND_DISPLAY=k
 ```
 
 guestにdirect compositorを起動した後に使う。確認はclientの終了0 / PASSとcompositorのIMPORT_ERROR増加・process継続。実機GPUの非同期waitはこのprobeの検証対象ではない。
+
+## WiFi と ALSA
+
+`wifi-setup.sh` は disposable guest 内の root 専用。mac80211_hwsim の2radioにhostapd / wpa_supplicantを起動し、試験専用192.0.2.2/24を付ける（DHCPはKeilandの外）。hostでは実行しない。
+
+`network-probe.c`・`audio-probe.c` は staged libkeiland.so に linkし、guestのkeiで実行する。networkはsecured APのscan、saveが自動joinしないこと、PROFILES→JOIN、IPv4/MAC/MTU/counters、saved/DNS、disconnect。audioは40%のreadback、amixer外部70% event/readable、mute、silentfeedback。HDA raw0〜74でlibraryの40%はamixer41%（許容±3）。
+
+```sh
+for p in network-probe audio-probe; do
+  cc -D_GNU_SOURCE -std=gnu17 -Wall -Wextra -Werror -o build/keiland-linux/stage/opt/keiland/bin/$p plan/tools/keiland-linux/$p.c \
+    -Iuserland/desktop/keiland -Lbuild/keiland-linux/lib -l:libkeiland.so -Wl,-rpath-link,build/keiland-linux/lib -Wl,-rpath,/opt/keiland/lib
+done
+timeout 30 sh plan/tools/keiland-linux/guest.sh put plan/tools/keiland-linux/wifi-setup.sh /tmp/wifi-setup.sh
+timeout 60 sh plan/tools/keiland-linux/guest.sh ssh 'sh /tmp/wifi-setup.sh'
+timeout 140 env SSH_USER=kei sh plan/tools/keiland-linux/guest.sh ssh 'timeout 120 /opt/keiland/bin/network-probe'
+timeout 80 env SSH_USER=kei sh plan/tools/keiland-linux/guest.sh ssh 'timeout 60 /opt/keiland/bin/audio-probe'
+```
+
+WiFiはnetdevのcontrolsocket権限を使う。radioのup/down ioctlはCAP_NET_ADMINがなければEPERM。資格情報query/saveの応答上限2秒、watchのrequest/updateは応答を待たず後のupdateで完了する。各connectionはprivate `/tmp/keiland-wpa-XXXXXX/socket` を所有しcloseでdirectoryも返す。ALSA mixerのみ、PCMfeedbackは無音。
