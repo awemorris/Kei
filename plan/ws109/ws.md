@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q550 finished / p001 uncleared）
-Resume point: p001/q550 uncleared、D1driver license/D2FreeBSD起動方法/D3realgraphics・WiFi環境の回答待ち。
+Queue: なし（q551 finished）
+Resume point: p001 cleared; FreeBSD15.1-p4 amd64 nativeClang19/headers/OSS/evdev/vtnet/pkg/licenseと後続native手順を確認。[environment](../../history/ws109/q551/environment.md)。実GPU/seat/fence/WiFiの実機関門はp003/p004/p005に保持、WS incomplete。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -27,7 +27,7 @@ Linuxulator に頼らず native libc/toolchain と system Vulkan を使い、独
 Linux 専用の fd/sync ioctl、VT/seat/device、入力、動的 loader の部分は p001 で可用性を照合して OS module に閉じる。
 audio/network/WiFi は FreeBSD backend。既存 WPA の共通 wire は再利用候補。
 FreeBSD kernel/driver の移植、未知の GPU 全機種対応、互換 Qt/GTK、FreeBSD pkg の配布はこの初期目標に足さない。
-GPL の無い構成は F-065 の意図を引き継ぎ、Keiland source と system driver/service の license を分けて確認する。
+2026-10-02ユーザー承認により、既存drm-kmod（GPLv2を含む）をsystem driverとして利用可。Keiland sourceとsystem driver/serviceのlicenseを分けて確認する。
 system の graphics stack に LinuxKPI/DRM がある場合も、GPL が無いと確認前に主張しない。
 
 ## WS 自身の完了条件
@@ -40,17 +40,17 @@ system の graphics stack に LinuxKPI/DRM がある場合も、GPL が無いと
 
 ## 依存・所有
 
-WS104/105 の境界・Linux 出力は completed context。共通描画/API の仕様を保ち、WS106 の移動後の対応 app locator を用いる。WS107 は browser を初期対象に加える場合だけ依存候補。WS105 の Linux SSH/QMP 許可を FreeBSD 環境の許可に自動で広げない。
+WS104/105 の境界・Linux 出力は completed context。共通描画/API の仕様を保ち、WS106 の移動後の対応 app locator を用いる。WS107 は browser を初期対象に加える場合だけ依存候補。FreeBSD SSH/QMP検証は2026-10-02の直接のユーザー承認による（[全文](../standards/ws109-native.md)）。
 
 ## Phase 表（後続は設計案）
 
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
-| [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | uncleared / q550 | WS105 output（context） |
+| [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | planning | p001 |
-| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | planning | p002 |
-| [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | planning | p002 |
-| [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | planning | p003、p004 |
+| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | planning | p002 L1 verified output |
+| [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | planning | p002 L1 verified output |
+| [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | planning | p002 L2、p003、p004 + hardware gates |
 
 
 依存は表の prerequisite → dependent。context は選定された作業ではない。
@@ -83,3 +83,13 @@ Queue は無し。p001 の計画を確認して有限 Queue を選定する。�
 2026-10-02 / ws109-q550-survey: p001の[実source/公式ABI調査](../history/ws109/q550/survey.md)を保存。fixed15.1amd64 image/hashと未起動guest準備済み。D1drm GPLv2 /D2FreeBSD起動方法 /D3realWiFi・graphicsdeviceの判断待ち。F1未充足、p002〜p005はplanningを保つ。Linux描画のcopy実装、productionstub、WiFimockによる受け入れ置換は行わない。
 
 2026-10-01T18:41:24.330785+00:00 / ws109-q550-uncleared: p001は調査/準備を実施したがF1環境・license未確定でuncleared。WSはincomplete、p002〜p005はplanning。321 unique source/公式native ABIの対応表、FreeBSD15.1amd64 image/hash検証と未起動8GiB guest準備を保存。F1はdriver GPLv2利用・FreeBSD起動SSH/QMP例外・real graphics/WiFi検証環境が未確定。3質問への回答待ち、production実装/native build/runtime未実施。 [履歴](../history/queue-q550.md)・[調査](../history/ws109/q550/survey.md)。GitHub Phase/WS event publication pending。
+
+## 2026-10-02 / ws109-user-decisions-20261002
+
+ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
+
+p001の環境/ABI調査を再attempt。実機の詳細確定/実表示/実WiFiはp003/p004/p005の後段に残し、native build用のverified outputから先行実装を進める。WS F1〜F5の受け入れを減らさず、各部分の検証場所を明示する。後続Phaseは自分の必要なprerequisite outputを確認し、実機未着の部分をpartial scopeとして分ける。旧q550 unclearedは保持。
+
+ws109-q551-native-environment: p001 native design saved; p002 L1/L2 scoped outputs clarify p003/p004 prerequisites and p005 final integration/physical gate. Every affected Phase own structural event saved; remote delivery pending.
+
+2026-10-01T19:21:04.454764+00:00 / ws109-q551-cleared: p001 cleared。FreeBSD15.1-p4 amd64 nativeClang19/headers/OSS/evdev/vtnet/pkg/licenseと後続native手順を確認。[environment](../../history/ws109/q551/environment.md)。実GPU/seat/fence/WiFiの実機関門はp003/p004/p005に保持、WS incomplete。

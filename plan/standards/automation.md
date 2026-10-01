@@ -69,3 +69,7 @@ WS107: [限定例外](ws107-relocation.md)の不変moveをhash/mode/path-only di
 | Runtime/private ABI/licenses/user data | elf-check19, independent40 payload/control/md5 audit, fresh install/upgrade/remove, public Vulkan/direct GUI/real input | physical/display-manager startup not re-certified |
 | CI/release fail gates | verify-artifacts.py, YAML/bash/deep-equal original build, actual merged artifacts and rejection of corrupt/missing input | remote Actions/release unexecuted |
 | Final full standards | all8 source files manual full review + Python byte compile/git diff-check; no new C | [full evidence](../history/ws108/conformance.md); no new Python-wide formatter policy |
+
+## WS109 native coverage / 2026-10-02
+
+[承認の全文](ws109-native.md)。FreeBSD guestはnative compile/header/ELF/実libc・OSS/vtnet/loader、SSH+QMP PNGを検証。actual GPU/sync/seat/WiFiはユーザー準備の実機で別に記録。C全文/clang-format/style-check/manualのcoverageを維持、code変更後の最終conformanceはp005。現在のguest/OS/module checksは結果をPhaseに追記する、mock/nativebuildをhardware結果としない。

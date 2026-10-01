@@ -1,0 +1,12 @@
+-r--r--r--  1 root wheel  9060 Sep 28 18:19 /usr/include/libutil.h
+-rw-r--r--  1 root wheel 48072 Apr 27 15:47 /usr/local/include/libdrm/drm.h
+-rw-r--r--  1 root wheel 47922 Apr 27 15:47 /usr/local/include/libdrm/drm_mode.h
+gmake 4.4.1 GPLv3
+python311 3.11.16 PSFL
+vulkan-loader 1.4.356 APACHE20
+vulkan-headers 1.4.356_1 MIT, APACHE20
+libdrm 2.4.133,1 MIT
+seatd 0.9.3_1 MIT
+pkgconf 2.4.3_1,1 ISCL
+#define OSS_GETVERSION _IOR ('M', 118, int)
+#define SOUND_MIXER_INFO _IOR('M', 101, mixer_info)

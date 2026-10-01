@@ -2,18 +2,17 @@
 
 # Past Log
 
-Last finished Queue: [q551](queue-q551.md)（WS109 p001 cleared）
+Last finished Queue: [q550](queue-q550.md)（WS109 p001 uncleared）
 
-## 最新: q551 /WS109 p001
+## 最新: q550 / WS109 p001
 
-item cleared /Phase cleared。FreeBSD15.1-p4 amd64 nativeClang19/headers/OSS/evdev/vtnet/pkg/licenseと後続native手順を確認。[environment](../../history/ws109/q551/environment.md)。実GPU/seat/fence/WiFiの実機関門はp003/p004/p005に保持、WS incomplete。
-
-WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
+uncleared。321 unique source/公式native ABIの対応表、FreeBSD15.1amd64 image/hash検証と未起動8GiB guest準備を保存。F1はdriver GPLv2利用・FreeBSD起動SSH/QMP例外・real graphics/WiFi検証環境が未確定。3質問への回答待ち、production実装/native build/runtime未実施。 [対応表と証拠](ws109/q550/survey.md)。WS109/fg016をユーザー指定で次のfocus/最優先へ反映。WS108 completed、他WSの相対順位/WS106保留を維持。WIP commit / pushなし、remote publication/outbox pending。
 
 ## Queue history（直近30、古い順）
 
 | Queue | Outcome |
 | --- | --- |
+| [q521](queue-q521.md) | install の path を `userland/desktop/paths.h` の macro に |
 | [q522](queue-q522.md) | 規約の全文の見直し、境界の確かめの script、回帰 |
 | [q523](queue-q523.md) | ws105-p001 cleared |
 | [q524](queue-q524.md) | ws105-p002 cleared |
@@ -44,6 +43,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 | [q549](queue-q549.md) | WS108 p004 cleared |
 | [q550](queue-q550.md) | WS109 p001 uncleared / driver license・起動方法・realdevice回答待ち |
 
-| [q551](queue-q551.md) | WS109 p001 item cleared /Phase cleared |
 
-前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。
+前回q549の全文は[保存済みindex](ws109/q550/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

@@ -1,0 +1,53 @@
+basu 0.2.1 LGPL21+
+expat 2.8.2 MIT
+firstboot-pkg-upgrade 1.2 BSD2CLAUSE
+gettext-runtime 1.0_1 LGPL21+, GPLv3+
+gmake 4.4.1 GPLv3
+hwdata 0.409,1 MIT, GPLv2+
+indexinfo 0.3.1_1 BSD2CLAUSE
+libX11 1.8.13_1,1 MIT
+libXau 1.0.12 MIT
+libXdamage 1.1.7 MIT
+libXdmcp 1.1.5 MIT
+libXext 1.3.7,1 MIT
+libXfixes 6.0.1 MIT
+libXrandr 1.5.5 MIT
+libXrender 0.9.12 MIT
+libXv 1.0.13,1 MIT
+libXxf86vm 1.1.7 MIT
+libdisplay-info 0.3.0 MIT
+libdrm 2.4.133,1 MIT
+libedit 3.1.20260512,1 BSD2CLAUSE
+libepoll-shim 0.0.20240608 MIT
+libffi 3.6.0 MIT
+liblz4 1.10.0_2,1 BSD2CLAUSE, GPLv2
+libpciaccess 0.19 MIT
+libxcb 1.17.0 MIT
+libxml2 2.15.3 MIT
+libxshmfence 1.3.3 MIT
+llvm19 19.1.7_4 PD, MIT, BSD3CLAUSE, LLVM, LLVM2, REGEX
+lua53 5.3.6_1 MIT
+mesa-dri 26.1.3 MIT
+mesa-libs 26.1.3 MIT
+mpdecimal 4.0.1 BSD2CLAUSE
+perl5 5.42.3 ART10, GPLv1+
+pkg 2.7.5 BSD2CLAUSE
+pkgconf 2.4.3_1,1 ISCL
+python311 3.11.16 PSFL
+python312 3.12.14 PSFL
+readline 8.3.3 GPLv3
+seatd 0.9.3_1 MIT
+spirv-llvm-translator-llvm19 19.1.20 NCSA
+spirv-tools 2026.2 APACHE20
+vulkan-headers 1.4.356_1 MIT, APACHE20
+vulkan-loader 1.4.356 APACHE20
+wayland 1.25.0 MIT
+xorgproto 2025.1 MIT
+zstd 1.5.7_2 GPLv2, BSD3CLAUSE
+total 12
+-rw-r--r--  1 root wheel 182 Aug 27 21:12 intel_icd.x86_64.json
+-rw-r--r--  1 root wheel 180 Aug 27 21:12 lvp_icd.x86_64.json
+-rw-r--r--  1 root wheel 183 Aug 27 21:12 radeon_icd.x86_64.json
+f9eadbfa0f9e1aeacc27f5c931ca3bd7b46974dbad817cd02fe601ccb5cdf08d
+ee4068c026dfb6c85c668cb4e41ff9cbf30e99c10c5e7ef2ad1c7870d3f9a3bf
+1ab3a60d1af29a9e12d80a832a73aba5592b767bd92fd4726215ee0105cc0afb

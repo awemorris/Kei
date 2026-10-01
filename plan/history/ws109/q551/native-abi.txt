@@ -1,0 +1,18 @@
+pcm0:mixer: <Generic (0x1af40022) (Analog)> on hdaa0 (play/rec) (default)
+    vol       = 0.86:0.86     pbk
+    pcm       = 1.00:1.00     pbk
+    line      = 1.00:1.00     rec src
+    rec       = 1.00:1.00     pbk
+kern.evdev.rcpt_mask: 12
+#define RTLD_DEEPBIND 0x04000
+#define EVIOCGRAB _IOWINT(EVDEV_IOC_MAGIC, 0x90)
+#define EVIOCSCLOCKID _IOW(EVDEV_IOC_MAGIC, 0xa0, int)
+5cabe1a56d2e2f711703ca35fce2a42dd6dd6d33c0dbd47b6024678d623c51d2
+28b43cc344fef9cc4d39de451dcb108aa9219b8326f46b39d8a027190645ed00
+644bd41178e643af634af8304c25f38d7b2e6d4a0a7292f8858771b1579213b3
+892bc2dbb8c7e723ad56e551c738b60a4c3dce78704d7d8073bb713d06706ebc
+a3581df3e2fc5d9ae9b1f4f5b1479b158e5ffdb6f66c1573ef7d90352381cf97
+cd30f12e285f849dbff83f097118b5f3ab9cd3cc2f26d303ede0a4cfcf623a9b
+f6ebf9a872af36fc9f510bca9fe9596b41e3f6e4fcefc63895efa91b8cb1da94
+Filesystem         Size    Used   Avail Capacity  Mounted on
+/dev/gpt/rootfs     18G    3.1G     14G    18%    /

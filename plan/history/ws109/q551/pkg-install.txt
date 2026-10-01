@@ -1,0 +1,305 @@
+Updating FreeBSD-ports repository catalogue...
+Fetching meta.conf: . done
+Fetching data: .......... done
+Processing entries: .......... done
+FreeBSD-ports repository update completed. 37840 packages processed.
+Updating FreeBSD-ports-kmods repository catalogue...
+Fetching meta.conf: . done
+Fetching data: .. done
+Processing entries: .......... done
+FreeBSD-ports-kmods repository update completed. 239 packages processed.
+Updating FreeBSD-base repository catalogue...
+Fetching meta.conf: . done
+Fetching data: .. done
+Processing entries: .......... done
+FreeBSD-base repository update completed. 509 packages processed.
+All repositories are up to date.
+Updating FreeBSD-ports repository catalogue...
+FreeBSD-ports repository is up to date.
+Updating FreeBSD-ports-kmods repository catalogue...
+FreeBSD-ports-kmods repository is up to date.
+Updating FreeBSD-base repository catalogue...
+FreeBSD-base repository is up to date.
+All repositories are up to date.
+New version of pkg detected; it needs to be installed first.
+The following 1 package(s) will be affected (of 0 checked):
+
+Installed packages to be UPGRADED:
+	pkg: 2.6.2_1 -> 2.7.5 [FreeBSD-ports]
+
+Number of packages to be upgraded: 1
+
+The operation will free 3 MiB.
+6 MiB to be downloaded.
+[1/1] Fetching pkg-2.7.5: .......... done
+Checking integrity... done (0 conflicting)
+[1/1] Upgrading pkg from 2.6.2_1 to 2.7.5...
+[1/1] Extracting pkg-2.7.5: .......... done
+Updating FreeBSD-ports repository catalogue...
+FreeBSD-ports repository is up to date.
+Updating FreeBSD-ports-kmods repository catalogue...
+FreeBSD-ports-kmods repository is up to date.
+Updating FreeBSD-base repository catalogue...
+FreeBSD-base repository is up to date.
+All repositories are up to date.
+The following 44 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	basu: 0.2.1 [FreeBSD-ports]
+	expat: 2.8.2 [FreeBSD-ports]
+	gettext-runtime: 1.0_1 [FreeBSD-ports]
+	gmake: 4.4.1 [FreeBSD-ports]
+	hwdata: 0.409,1 [FreeBSD-ports]
+	indexinfo: 0.3.1_1 [FreeBSD-ports]
+	libX11: 1.8.13_1,1 [FreeBSD-ports]
+	libXau: 1.0.12 [FreeBSD-ports]
+	libXdamage: 1.1.7 [FreeBSD-ports]
+	libXdmcp: 1.1.5 [FreeBSD-ports]
+	libXext: 1.3.7,1 [FreeBSD-ports]
+	libXfixes: 6.0.1 [FreeBSD-ports]
+	libXrandr: 1.5.5 [FreeBSD-ports]
+	libXrender: 0.9.12 [FreeBSD-ports]
+	libXv: 1.0.13,1 [FreeBSD-ports]
+	libXxf86vm: 1.1.7 [FreeBSD-ports]
+	libdisplay-info: 0.3.0 [FreeBSD-ports]
+	libdrm: 2.4.133,1 [FreeBSD-ports]
+	libedit: 3.1.20260512,1 [FreeBSD-ports]
+	libepoll-shim: 0.0.20240608 [FreeBSD-ports]
+	libffi: 3.6.0 [FreeBSD-ports]
+	liblz4: 1.10.0_2,1 [FreeBSD-ports]
+	libpciaccess: 0.19 [FreeBSD-ports]
+	libxcb: 1.17.0 [FreeBSD-ports]
+	libxml2: 2.15.3 [FreeBSD-ports]
+	libxshmfence: 1.3.3 [FreeBSD-ports]
+	llvm19: 19.1.7_4 [FreeBSD-ports]
+	lua53: 5.3.6_1 [FreeBSD-ports]
+	mesa-dri: 26.1.3 [FreeBSD-ports]
+	mesa-libs: 26.1.3 [FreeBSD-ports]
+	mpdecimal: 4.0.1 [FreeBSD-ports]
+	perl5: 5.42.3 [FreeBSD-ports]
+	pkgconf: 2.4.3_1,1 [FreeBSD-ports]
+	python311: 3.11.16 [FreeBSD-ports]
+	python312: 3.12.14 [FreeBSD-ports]
+	readline: 8.3.3 [FreeBSD-ports]
+	seatd: 0.9.3_1 [FreeBSD-ports]
+	spirv-llvm-translator-llvm19: 19.1.20 [FreeBSD-ports]
+	spirv-tools: 2026.2 [FreeBSD-ports]
+	vulkan-headers: 1.4.356_1 [FreeBSD-ports]
+	vulkan-loader: 1.4.356 [FreeBSD-ports]
+	wayland: 1.25.0 [FreeBSD-ports]
+	xorgproto: 2025.1 [FreeBSD-ports]
+	zstd: 1.5.7_2 [FreeBSD-ports]
+
+Number of packages to be installed: 44
+
+The process will require 2 GiB more space.
+386 MiB to be downloaded.
+[ 1/44] Fetching libxcb-1.17.0: .......... done
+[ 2/44] Fetching mpdecimal-4.0.1: .......... done
+[ 3/44] Fetching spirv-tools-2026.2: .......... done
+[ 4/44] Fetching libXrandr-1.5.5: ..... done
+[ 5/44] Fetching python312-3.12.14: .......... done
+[ 6/44] Fetching seatd-0.9.3_1: ..... done
+[ 7/44] Fetching libXxf86vm-1.1.7: ... done
+[ 8/44] Fetching libXdamage-1.1.7: . done
+[ 9/44] Fetching libdrm-2.4.133,1: .......... done
+[10/44] Fetching libXfixes-6.0.1: .. done
+[11/44] Fetching wayland-1.25.0: .......... done
+[12/44] Fetching libxml2-2.15.3: .......... done
+[13/44] Fetching lua53-5.3.6_1: .......... done
+[14/44] Fetching libxshmfence-1.3.3: . done
+[15/44] Fetching libepoll-shim-0.0.20240608: ... done
+[16/44] Fetching vulkan-headers-1.4.356_1: .......... done
+[17/44] Fetching llvm19-19.1.7_4: .......... done
+[18/44] Fetching libX11-1.8.13_1,1: .......... done
+[19/44] Fetching libXrender-0.9.12: ..... done
+[20/44] Fetching libXv-1.0.13,1: ..... done
+[21/44] Fetching xorgproto-2025.1: .......... done
+[22/44] Fetching hwdata-0.409,1: .......... done
+[23/44] Fetching pkgconf-2.4.3_1,1: .......... done
+[24/44] Fetching python311-3.11.16: .......... done
+[25/44] Fetching mesa-libs-26.1.3: .......... done
+[26/44] Fetching libpciaccess-0.19: ... done
+[27/44] Fetching vulkan-loader-1.4.356: .......... done
+[28/44] Fetching libedit-3.1.20260512,1: .......... done
+[29/44] Fetching libdisplay-info-0.3.0: .......... done
+[30/44] Fetching liblz4-1.10.0_2,1: .......... done
+[31/44] Fetching gmake-4.4.1: .......... done
+[32/44] Fetching zstd-1.5.7_2: .......... done
+[33/44] Fetching libXext-1.3.7,1: .......... done
+[34/44] Fetching gettext-runtime-1.0_1: .......... done
+[35/44] Fetching basu-0.2.1: .......... done
+[36/44] Fetching indexinfo-0.3.1_1: . done
+[37/44] Fetching libXau-1.0.12: .. done
+[38/44] Fetching perl5-5.42.3: .......... done
+[39/44] Fetching libffi-3.6.0: ....... done
+[40/44] Fetching readline-8.3.3: .......... done
+[41/44] Fetching mesa-dri-26.1.3: .......... done
+[42/44] Fetching libXdmcp-1.1.5: ... done
+[43/44] Fetching expat-2.8.2: .......... done
+[44/44] Fetching spirv-llvm-translator-llvm19-19.1.20: .......... done
+Checking integrity... done (0 conflicting)
+[ 1/44] Installing basu-0.2.1...
+[ 1/44] Extracting basu-0.2.1: .......... done
+[ 2/44] Installing expat-2.8.2...
+[ 2/44] Extracting expat-2.8.2: .......... done
+[ 3/44] Installing hwdata-0.409,1...
+[ 3/44] Extracting hwdata-0.409,1: .......... done
+[ 4/44] Installing indexinfo-0.3.1_1...
+[ 4/44] Extracting indexinfo-0.3.1_1: .... done
+[ 5/44] Installing gettext-runtime-1.0_1...
+[ 5/44] Extracting gettext-runtime-1.0_1: .......... done
+[ 6/44] Installing gmake-4.4.1...
+[ 6/44] Extracting gmake-4.4.1: .......... done
+[ 7/44] Installing libXau-1.0.12...
+[ 7/44] Extracting libXau-1.0.12: .......... done
+[ 8/44] Installing libdisplay-info-0.3.0...
+[ 8/44] Extracting libdisplay-info-0.3.0: .......... done
+[ 9/44] Installing libedit-3.1.20260512,1...
+[ 9/44] Extracting libedit-3.1.20260512,1: .......... done
+[10/44] Installing libepoll-shim-0.0.20240608...
+[10/44] Extracting libepoll-shim-0.0.20240608: .......... done
+[11/44] Installing libffi-3.6.0...
+[11/44] Extracting libffi-3.6.0: .......... done
+[12/44] Installing liblz4-1.10.0_2,1...
+[12/44] Extracting liblz4-1.10.0_2,1: .......... done
+[13/44] Installing libpciaccess-0.19...
+[13/44] Extracting libpciaccess-0.19: ........ done
+[14/44] Installing libdrm-2.4.133,1...
+[14/44] Extracting libdrm-2.4.133,1: .......... done
+[15/44] Installing libxshmfence-1.3.3...
+[15/44] Extracting libxshmfence-1.3.3: ......... done
+[16/44] Installing lua53-5.3.6_1...
+[16/44] Extracting lua53-5.3.6_1: .......... done
+[17/44] Installing mpdecimal-4.0.1...
+[17/44] Extracting mpdecimal-4.0.1: .......... done
+[18/44] Installing perl5-5.42.3...
+[18/44] Extracting perl5-5.42.3: .......... done
+[19/44] Installing pkgconf-2.4.3_1,1...
+[19/44] Extracting pkgconf-2.4.3_1,1: .......... done
+[20/44] Installing readline-8.3.3...
+[20/44] Extracting readline-8.3.3: .......... done
+[21/44] Installing libxml2-2.15.3...
+[21/44] Extracting libxml2-2.15.3: .......... done
+[22/44] Installing python311-3.11.16...
+[22/44] Extracting python311-3.11.16: .......... done
+[23/44] Installing python312-3.12.14...
+[23/44] Extracting python312-3.12.14: .......... done
+[24/44] Installing seatd-0.9.3_1...
+[24/44] Extracting seatd-0.9.3_1: .......... done
+[25/44] Installing spirv-tools-2026.2...
+[25/44] Extracting spirv-tools-2026.2: .......... done
+[26/44] Installing vulkan-headers-1.4.356_1...
+[26/44] Extracting vulkan-headers-1.4.356_1: .......... done
+[27/44] Installing wayland-1.25.0...
+[27/44] Extracting wayland-1.25.0: .......... done
+[28/44] Installing xorgproto-2025.1...
+[28/44] Extracting xorgproto-2025.1: .......... done
+[29/44] Installing libXdmcp-1.1.5...
+[29/44] Extracting libXdmcp-1.1.5: ......... done
+[30/44] Installing libxcb-1.17.0...
+[30/44] Extracting libxcb-1.17.0: .......... done
+[31/44] Installing libX11-1.8.13_1,1...
+[31/44] Extracting libX11-1.8.13_1,1: .......... done
+[32/44] Installing libXext-1.3.7,1...
+[32/44] Extracting libXext-1.3.7,1: .......... done
+[33/44] Installing libXfixes-6.0.1...
+[33/44] Extracting libXfixes-6.0.1: .......... done
+[34/44] Installing libXdamage-1.1.7...
+[34/44] Extracting libXdamage-1.1.7: ......... done
+[35/44] Installing libXrender-0.9.12...
+[35/44] Extracting libXrender-0.9.12: .......... done
+[36/44] Installing libXrandr-1.5.5...
+[36/44] Extracting libXrandr-1.5.5: .......... done
+[37/44] Installing libXv-1.0.13,1...
+[37/44] Extracting libXv-1.0.13,1: .......... done
+[38/44] Installing libXxf86vm-1.1.7...
+[38/44] Extracting libXxf86vm-1.1.7: .......... done
+[39/44] Installing vulkan-loader-1.4.356...
+[39/44] Extracting vulkan-loader-1.4.356: .......... done
+[40/44] Installing zstd-1.5.7_2...
+[40/44] Extracting zstd-1.5.7_2: .......... done
+[41/44] Installing llvm19-19.1.7_4...
+[41/44] Extracting llvm19-19.1.7_4: .......... done
+[42/44] Installing spirv-llvm-translator-llvm19-19.1.20...
+[42/44] Extracting spirv-llvm-translator-llvm19-19.1.20: .......... done
+[43/44] Installing mesa-libs-26.1.3...
+[43/44] Extracting mesa-libs-26.1.3: .......... done
+[44/44] Installing mesa-dri-26.1.3...
+[44/44] Extracting mesa-dri-26.1.3: .......... done
+=====
+Message from python311-3.11.16:
+
+--
+Note that some standard Python modules are provided as separate ports
+as they require additional dependencies. They are available as:
+
+py311-gdbm       databases/py-gdbm@py311
+py311-sqlite3    databases/py-sqlite3@py311
+py311-tkinter    x11-toolkits/py-tkinter@py311
+=====
+Message from python312-3.12.14:
+
+--
+Note that some standard Python modules are provided as separate ports
+as they require additional dependencies. They are available as:
+
+py312-gdbm       databases/py-gdbm@py312
+py312-sqlite3    databases/py-sqlite3@py312
+py312-tkinter    x11-toolkits/py-tkinter@py312
+=====
+Message from seatd-0.9.3_1:
+
+--
+libseat is used to get DRM master and input devices for non-root users.
+On Wayland this is only necessary when starting a compositor under KMS
+console (e.g., /dev/ttyv0 backed by /dev/dri/card0). Nested sessions like
+"Wayland on X11" or "Wayland on Wayland" don't need extra configuration.
+
+By default libseat tries to find the first working backend. To override
+set LIBSEAT_BACKEND via environ(7). Available backends and try order:
+
+* "seatd" - seatd-launch(1) or seatd rc.d(8) service
+* "consolekit2" - ck-launch-session(1) or pam_ck_connector(8)
+
+"seatd" backend requires membership in "video" group to be allowed to
+use setuid bit in seatd-launch(1) or connect to seatd(1) socket.
+
+  # pw groupmod video -m <user>
+  $ exit # log out to refresh group permissions
+
+For example, to start a wlroots-based compositor replace "sway" with
+your compositor (e.g., "hikari", "wayfire", "labwc", "river") then run
+
+  $ seatd-launch sway
+
+Alternatively, configure and run seatd(1) as system service
+
+  # sysrc seatd_enable=YES
+  # service seatd start
+  $ sway
+
+To use ConsoleKit2 run
+
+  # pkg install consolekit2 basu
+  # sysrc -x seatd_enable
+  # service seatd stop
+  # sysrc dbus_enable=YES
+  # service dbus start
+  $ ck-launch-session sway
+
+where "ck-launch-session" can be dropped after
+
+  # echo "session optional pam_ck_connector.so" >>/etc/pam.d/system
+  $ exit # log out to re-trigger PAM
+
+Known issues:
+- Garbage on console due to missing K_OFF, see
+  https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=272095
+=====
+Message from wayland-1.25.0:
+
+--
+Wayland requires XDG_RUNTIME_DIR to be defined to a path that will
+contain "wayland-%d" unix(4) sockets. This is usually handled by
+consolekit2 (via ck-launch-session) or pam_xdg (via login).

@@ -40,3 +40,13 @@ source/header/ABI の固定版への突合せと device 検証は p001 未実行
 ## 2026-10-02 q550の調査結果 / design候補の更新
 
 [対応表・取得の証拠・D1〜D3](../history/ws109/q550/survey.md)。初期15.xは15.1-RELEASE amd64 UFSに具体化（image hash verified）、native loaderにもRTLD_DEEPBINDがある。drm-kmod fixedBSDUAPIにはsync-file import/exportがあるがGPLv2を含み、systemstackの採用はユーザー判断待ち。QEMU virtioのconsole framebufferは実DRM/Vulkan表示の証明にならない。OSS mixerのみ（既存F4範囲、PCM追加なし）、AF_LINK/net80211/WPApath/Unixaddress、PTYlibutil、Filesextattrをnative境界で扱う候補。F1 environment/license未確定のため設計の確定とはしない。後続Phase scope/criteria変更は回答/実環境の証拠に基づき保存してからコメントする。
+
+## 2026-10-02 直接のユーザー判断 / 再設計
+
+ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
+
+q550のorigin p001の未決D1/D2は解消、D3は実機準備まで実装を進める承認。p001はfixed software/ABI/driver contractとQEMU実environmentを確定する。F1 physical deviceの実model、F3表示/fence/seat、F4realWiFiは実機到着後の最終関門を保つ。p002のnative独立build/library chainはverified p001 software outputがprerequisite。p003/p004はbackend実装＋guestで可能な実API確認を先行し、hardware acceptanceが必要な全Phaseの結果を分けて残す。p005は全source規約＋3OS regression、WS final acceptanceには未実施実機項目を持ち越す。
+
+## q551 native design output
+
+[Actual environment/ABI and execution procedure](../history/ws109/q551/environment.md). p002 L1→p003/p004 backend outputs→p002 L2 integration→p005 conformance/regression/physical gates. No wholePhase dependency cycle; actual scoped output is mandatory before selection. libseat/basu linkage is not selected for production; native seatd-only permissive contract is verified by p003.

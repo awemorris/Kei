@@ -1,0 +1,8 @@
+15.1-RELEASE-p4
+15.1-RELEASE-p4
+amd64
+FreeBSD clang version 19.1.7 (https://github.com/llvm/llvm-project.git llvmorg-19.1.7-0-gcd708029e0b2)
+Target: x86_64-unknown-freebsd15.1
+Thread model: posix
+InstalledDir: /usr/bin
+uid=0(root) gid=0(wheel) groups=0(wheel),5(operator)

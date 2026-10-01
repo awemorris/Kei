@@ -40,3 +40,13 @@ zedBSD の起動は boot-test.sh の PNG。Linux の既存検証は WS105 の手
 
 2026-10-01 / review-20261001-planning: 新設した Phase 案。親 WS の目標への寄与と依存を記録。実装の選定は未実施。
 GitHub の Phase 作成/comment/Project の projection は公開保留、local outbox に保持する。
+
+## 2026-10-02 / ws109-user-decisions-20261002 / このPhaseへの反映
+
+ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
+
+full C/OS rule reviewとaffectedLinux/zedBSD/nativeFreeBSD回帰を行う。F1実機model/driver、F3/F4実機の未実施はWS final acceptanceに残す。WS完了を判定する前に実機結果を確認。 [origin](../phase001/phase.md)・[WS summary](../ws.md)・[scope](../../standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
+
+## q551 design reconciliation / ws109-q551-native-environment
+
+Prerequisites include p002 final L2 integration plus p003/p004 implementation and retained physical gates. Full all-WSsource standards/3OS affected regressions; no VM-only WS completion. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](../phase001/phase.md), [WS](../ws.md), [native design](../../history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.

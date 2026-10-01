@@ -104,3 +104,9 @@ WS107 の限定例外（2026-10-02ユーザー承認）: [全文](standards/ws10
 WS108（2026-10-02 user）：Debian13/Ubuntu26.04のQEMU guest作成・native build/dpkg導入/GUI検証、loopback SSH/QMP PNGで起動確認を許可。WS105の既存SSH/PNG方式をこの2OSへ適用、serial/console log判定禁止、host画面/入力/optを変更しない。CIのmake targets/release filesを作成、pushと実remote publishは行わない。
 
 WS108 release/native検証の再利用tool: [driver/inputs/手順](../tools/release/keiland-linux-deb/README.md)、[検証coverage](standards/automation.md#ws108-packaging-coverage-2026-10-02)。2026-10-02指示を実装・検証、C標準/既存OS/ABI方針は不変。
+
+## WS109 native FreeBSD の承認（2026-10-02）
+
+ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
+
+適用の全文: [WS109 native scope](standards/ws109-native.md)。C規約の例外ではない。実機のdevice名/driver/検証結果は到着後に記録し、WS acceptance F1/F3/F4/F5の残る部分を検証する。
