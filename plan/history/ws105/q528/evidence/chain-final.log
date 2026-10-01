@@ -1,0 +1,3 @@
+chain deviceName=llvmpipe (LLVM 19.1.7, 256 bits)
+chain driverName=llvmpipe
+vk-chain-test: PASS

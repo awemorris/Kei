@@ -4,10 +4,10 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS105](../ws.md)
+Parent: [WS105](../../../ws105/ws.md)
 Queue: q528 / q528-i01
 依存: p004、p001（guest）
-実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4.9 と §7.2 を読む**
+実行者: phase-runner（high）。**始める前に [design.md](../../../ws105/design.md) の §4.9 と §7.2 を読む**
 
 ## 目的
 
@@ -90,7 +90,7 @@ cleared。VK_KHR_display・direct-mode・DRM acquisition の O 10 entry、KMS in
 - vkdemo --time-ms=1000 --hold=10: 320×240、中心 #20c5b0、描画PNGを表示、VKDEMO DONE frames=1。各経路の終了後と最終chvt1はconsole文字のPNGを確認・表示。
 - 途中chvt1→5秒→chvt7: direct/root はmasterを失わず、3色を完走してPASS。実際のlogind revoke/OUT_OF_DATE はp009で確認する。ioctlのEACCES/EPERM→OUT_OF_DATEと100ms上限はsourceで確認。
 - 完了後 guest stop、overlay廃棄。host package追加0、target toolchain/common zedBSD source変更0。実機GPU・物理monitorのcustom mode・Valgrindは未実施。問合せ/display/mode handleはprocess-lifetime、実機hotplugの動的再列挙は範囲外。
-- [ログ・PNG・sha256 manifest](../../history/ws105/q528/evidence/)。不具合残件なし。次はp006（root compositor・wl_shm・入力・VT）、前提WS104とp005を確認。
+- [ログ・PNG・sha256 manifest](evidence)。不具合残件なし。次はp006（root compositor・wl_shm・入力・VT）、前提WS104とp005を確認。
 
 
 実装 commit: `18a983dd30b2586f56700113f2a82add518652a5`（WIP）。終了 UTC: 2026-10-01T08:13:06.450181+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。

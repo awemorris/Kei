@@ -2,10 +2,10 @@
 
 # ws105-p005: libvulkan-compat (3): 画面の WSI（KMS、VK_KHR_display、VK_EXT_acquire_drm_display）
 
-Status: cleared
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q528 / q528-i01
+Queue: なし
 依存: p004、p001（guest）
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §4.9 と §7.2 を読む**
 
@@ -82,15 +82,4 @@ sh $G screenshot $PWD/build/keiland-linux/p005-console.png
 
 ## 結果
 
-cleared。VK_KHR_display・direct-mode・DRM acquisition の O 10 entry、KMS inquiry/dup master/saved CRTC/double dumb FIFO copy、Linux vkdemo を実装した。
-
-- gcc 14.2 / clang 19.1.7: final build exit0、warning0。elf-check PASS（10 ELF、probe を含む）、makefile-sync PASS、header-check PASS（70 sources）。clang-format19＋定義の改行、scoped style-check（実装・probe）0件。新規 KMS source と変更部分を全文規約で手動点検した。最終全 WS conformance は p011。
-- host は DRM=none、display 環境無し。vk-chain-test PASS（API1.0・llvmpipe・1MiB全word一致）、interpose PASS（backend→compat binding0・opt-out）、Wayland FIFO/fallback/resize/MAILBOX 各90 frame、360色/extent/import/private wait PASS。
-- guest kernel6.12.107+deb13-amd64、Mesa25.0.7、lavapipe。seat fd duplicate（元fdをclose）とdirectの2経路で Virtual-1 / 1280×800 / 74994mHz。赤・緑・青全6PNG各4点一致、probe exit0/PASS。赤→緑で live oldSwapchain を更新・破棄し、master所有権の継承を確認した。
-- vkdemo --time-ms=1000 --hold=10: 320×240、中心 #20c5b0、描画PNGを表示、VKDEMO DONE frames=1。各経路の終了後と最終chvt1はconsole文字のPNGを確認・表示。
-- 途中chvt1→5秒→chvt7: direct/root はmasterを失わず、3色を完走してPASS。実際のlogind revoke/OUT_OF_DATE はp009で確認する。ioctlのEACCES/EPERM→OUT_OF_DATEと100ms上限はsourceで確認。
-- 完了後 guest stop、overlay廃棄。host package追加0、target toolchain/common zedBSD source変更0。実機GPU・物理monitorのcustom mode・Valgrindは未実施。問合せ/display/mode handleはprocess-lifetime、実機hotplugの動的再列挙は範囲外。
-- [ログ・PNG・sha256 manifest](../../history/ws105/q528/evidence/)。不具合残件なし。次はp006（root compositor・wl_shm・入力・VT）、前提WS104とp005を確認。
-
-
-実装 commit: `18a983dd30b2586f56700113f2a82add518652a5`（WIP）。終了 UTC: 2026-10-01T08:13:06.450181+00:00。GitHub は未公開、Phase / WS event と intended close は outbox に保持。
+（実行の後に書く）
