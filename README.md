@@ -106,51 +106,6 @@ make help              # show a short command summary
 | `tools/`             | Development scripts                                    |
 | `tests/`             | Tests                                                  |
 
-## What Made This Project Possible
-
-An operating system cannot be built simply by issuing prompts to an AI
-agent. I brought this OS to life by leveraging the following areas of
-expertise:
-
-- **OS Specialist:** Capable of designing not just the kernel, but the
-    entire userland architecture.
-
-- **Senior Software Architect:** Able to define high-level
-    architectures and guide execution effectively.
-
-- **Senior Programmer:** Capable of hand-writing code that surpasses
-    AI-generated output in quality and precision.
-
-- **Software Testing Expert:** Experienced in defining test oracles
-    and designing automated test suites executable by AI agents.
-
-- **Game Engine Specialist:** Skilled in architecting low-latency
-    graphics and audio stacks.
-
-- **Compiler & Toolchain Expert:** Capable of designing and
-    configuring custom OS toolchains.
-
-- **BPO (Business Process Outsourcing) Professional:** Experienced in
-    designing standard operating procedures (SOPs) that ensure
-    consistent delivery quality, regardless of who or what executes
-    the tasks.
-
-- **Requirements Engineering Professional:** Adept at clarifying and
-    structuring requirements before a single component is built.
-
-- **Software Design Professional:** Capable of drafting comprehensive
-    design specifications prior to writing a single line of code.
-
-- **Professional Project Manager:** Experienced in defining
-    milestones, managing schedules, and keeping projects on track.
-
-- **Veteran in Quality Engineering:** Extensive background in
-    designing end-to-end quality across the entire product lifecycle.
-
-- **MOT (Management of Technology) Background:** Experienced in
-    transforming innovative technologies into structured, viable
-    product designs.
-
 ## License
 
 - `Kei`, `Keiland`, and `zedBSD` are distributed under the zlib License (see `LICENSE`).
