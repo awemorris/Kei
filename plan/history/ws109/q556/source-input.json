@@ -1,0 +1,22 @@
+[
+  {
+    "path": "userland/desktop/keiland-freebsd.mk",
+    "sha256": "5cd549a58265b1089ead68a623a7b5b5f31604f5a5880f76615b0be54fb0735c"
+  },
+  {
+    "path": "userland/desktop/libkeiland/Makefile.freebsd",
+    "sha256": "cd599c0190062e4ea3d7e3851ae31a4e7ec8592504d60621371eace16714c4e7"
+  },
+  {
+    "path": "userland/desktop/libkeiui/Makefile.freebsd",
+    "sha256": "43a11d2baf23eb329be2cb85a440a35468f79a75d2062cc0d1150c8128a0b0b3"
+  },
+  {
+    "path": "userland/base/libpdf/Makefile.freebsd",
+    "sha256": "e7e79b9c42c65d667394e7fb4f275aa436d4f1035a7b6e615c319c50e8067c6c"
+  },
+  {
+    "path": "plan/ws109/tests/ui-libraries.c",
+    "sha256": "f7fbb651bfe88db1c743b178e7e79a8f9e0bbe30420a133a3e939dd16b0c6747"
+  }
+]

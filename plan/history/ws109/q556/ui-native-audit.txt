@@ -1,0 +1,6 @@
+{
+  "source_count": 113,
+  "native_header_entries": 3461,
+  "unique_native_headers": 106,
+  "native_libraries": "/root/ui-libraries:\n\tlibkeiland.so => /root/keiland-stage-ui/opt/keiland/lib/libkeiland.so (0x3403640e9000)\n\tlibkeiui.so => /root/keiland-stage-ui/opt/keiland/lib/libkeiui.so (0x340364a3d000)\n\tlibpdf.so => /root/keiland-stage-ui/opt/keiland/lib/libpdf.so (0x340365189000)\n\tlibc.so.7 => /lib/libc.so.7 (0x3403652bd000)\n\tlibwayland-client.so => /root/keiland-stage-ui/opt/keiland/lib/libwayland-client.so (0x340366261000)\n\tlibm.so.5 => /lib/libm.so.5 (0x340367014000)\n\tlibtruetype.so => /root/keiland-stage-ui/opt/keiland/lib/libtruetype.so (0x3403672a7000)\n\tlibpng-compat.so => /root/keiland-stage-ui/opt/keiland/lib/libpng-compat.so (0x340367e1f000)\n\tlibvulkan.so.1 => /root/keiland-stage-ui/opt/keiland/lib/libvulkan.so.1 (0x340368824000)\n\tlibz-compat.so => /root/keiland-stage-ui/opt/keiland/lib/libz-compat.so (0x340368fc6000)\n\tlibjpeg-compat.so => /root/keiland-stage-ui/opt/keiland/lib/libjpeg-compat.so (0x340369a34000)\n\tlibsys.so.7 => /lib/libsys.so.7 (0x34036a52e000)\n\tlibthr.so.3 => /lib/libthr.so.3 (0x34036b0cb000)\n\t[vdso] (0x340362a6c000)\n"
+}

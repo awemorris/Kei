@@ -1,6 +1,6 @@
 # Native FreeBSD Keiland build, independent of the Linux and zedBSD rules.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
-# L1 builds foundation libraries. Real OS backends and applications are integrated by WS109 L2.
+# Builds foundation and real native service/UI/PDF libraries; compositor/apps follow in WS109 L2.
 .DEFAULT_GOAL := all
 
 KEILAND_FREEBSD_BUILD ?= build/keiland-freebsd
@@ -75,7 +75,10 @@ KEILAND_FREEBSD_PACKAGES ?= userland/base/libz-compat/Makefile.freebsd \
 	userland/desktop/freebsd-compat/Makefile.freebsd \
 	userland/desktop/libwayland/Makefile.freebsd \
 	userland/desktop/libtruetype/Makefile.freebsd \
-	userland/desktop/libvulkan-compat/Makefile.freebsd
+	userland/desktop/libvulkan-compat/Makefile.freebsd \
+	userland/desktop/libkeiland/Makefile.freebsd \
+	userland/desktop/libkeiui/Makefile.freebsd \
+	userland/base/libpdf/Makefile.freebsd
 include $(KEILAND_FREEBSD_PACKAGES)
 
 .PHONY: all libraries install install-headers print-sources header-dependencies
@@ -91,8 +94,10 @@ install: all install-headers
 KEILAND_FREEBSD_PUBLIC_HEADERS := $(shell find userland/desktop/keiland/wayland -type f -name '*.h') \
 	$(addprefix userland/desktop/keiland/,wayland-client.h wayland-client-core.h wayland-client-protocol.h \
 	wayland-util.h xdg-shell-client-protocol.h primary-selection-unstable-v1-client-protocol.h \
-	tablet-unstable-v2-client-protocol.h truetype.h)
+	tablet-unstable-v2-client-protocol.h truetype.h keiland.h keiui.h)
 install-headers:
+	@mkdir -p "$(DESTDIR)$(KEILAND_PREFIX)/include"
+	install -m 0644 include/libc/pdf.h "$(DESTDIR)$(KEILAND_PREFIX)/include/pdf.h"
 	@set -e; for f in $(KEILAND_FREEBSD_PUBLIC_HEADERS); do \
 		rel=$${f#userland/desktop/keiland/}; \
 		mkdir -p "$(DESTDIR)$(KEILAND_PREFIX)/include/$$(dirname "$$rel")"; \

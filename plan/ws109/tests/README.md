@@ -3,7 +3,7 @@
 Run from the source root on FreeBSD15 with the selected native dependency packages.
 `gmake -j16 -f userland/desktop/keiland-freebsd.mk libraries` builds the L1 foundation;
 `gmake -f userland/desktop/keiland-freebsd.mk install DESTDIR=/tmp/keiland-stage` stages it.
-Full compositor/apps need later backend integration; this target currently builds libraries only.
+Real libkeiland/libkeiui/libpdf are also built; compositor/apps need later backend integration.
 
 - public-libraries.c: compile with `-I/tmp/keiland-stage/opt/keiland/include -I/usr/local/include`,
   link staged libwayland-client.so/libtruetype.so/libvulkan.so.1. Use `-fPIE -pie` for native clients.
@@ -45,3 +45,12 @@ commands, removes its own endpoint/config, and bounds client/server lifetime. Al
 is wire-only; actual WiFi scan/connect/disconnect/storage is retained for the user's real machine.
 network-address.c links the selected OS link module alone; actual private datagram round trip
 checks native address extent on Linux and FreeBSD without touching host supplicant directories.
+
+## Installed UI/service/PDF libraries
+
+ui-libraries.c uses installed public headers only, not private source headers. Compile with
+`-fPIE -pie -std=gnu17 -Wall -Wextra -Werror -I$stage/opt/keiland/include
+-L$stage/opt/keiland/lib -Wl,-rpath-link,$stage/opt/keiland/lib -lkeiland -lkeiui -lpdf`.
+Run LD_LIBRARY_PATH=$stage/opt/keiland/lib in the owned native fixture with accessible OSS and wired
+vtnet0. It checks real service observations, all64 CPU pixels and an owned PDF write/read/digest
+round trip; it does not prove display, a window or WiFi. Exact q556 evidence and runtime limits retained.

@@ -1,0 +1,414 @@
+gmake: Nothing to be done for 'header-dependencies'.
+install -m 0644 include/libc/pdf.h "/root/keiland-stage-ui/opt/keiland/include/pdf.h"
+native OSS 86/86 muted=0; wired vtnet0
+PASS native public libkeiland/OSS/network/libkeiui pixels/libpdf round trip
+/root/ui-libraries:
+	libkeiland.so => /root/keiland-stage-ui/opt/keiland/lib/libkeiland.so (0x24fe5ef68000)
+	libkeiui.so => /root/keiland-stage-ui/opt/keiland/lib/libkeiui.so (0x24fe5f18e000)
+	libpdf.so => /root/keiland-stage-ui/opt/keiland/lib/libpdf.so (0x24fe5f255000)
+	libc.so.7 => /lib/libc.so.7 (0x24fe5fe45000)
+	libwayland-client.so => /root/keiland-stage-ui/opt/keiland/lib/libwayland-client.so (0x24fe60b19000)
+	libm.so.5 => /lib/libm.so.5 (0x24fe61045000)
+	libtruetype.so => /root/keiland-stage-ui/opt/keiland/lib/libtruetype.so (0x24fe61f6e000)
+	libpng-compat.so => /root/keiland-stage-ui/opt/keiland/lib/libpng-compat.so (0x24fe62383000)
+	libvulkan.so.1 => /root/keiland-stage-ui/opt/keiland/lib/libvulkan.so.1 (0x24fe632fe000)
+	libz-compat.so => /root/keiland-stage-ui/opt/keiland/lib/libz-compat.so (0x24fe63b21000)
+	libjpeg-compat.so => /root/keiland-stage-ui/opt/keiland/lib/libjpeg-compat.so (0x24fe63bec000)
+	libsys.so.7 => /lib/libsys.so.7 (0x24fe6419d000)
+	libthr.so.3 => /lib/libthr.so.3 (0x24fe642d8000)
+	[vdso] (0x24fe5d1c1000)
+/root/keiland-stage-ui/opt/keiland/lib/libgif-compat.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x2770 contains 24 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libgif-compat.so]
+  0x0000000000000007 (RELA)       0x650
+  0x0000000000000008 (RELASZ)     48 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  1
+  0x0000000000000017 (JMPREL)     0x680
+  0x0000000000000002 (PLTRELSZ)   264 (bytes)
+  0x0000000000000003 (PLTGOT)     0x5918
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x558
+  0x000000000000000a (STRSZ)      245 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x480
+  0x0000000000000004 (HASH)       0x4c0
+  0x000000000000000c (INIT)       0x366c
+  0x000000000000000d (FINI)       0x3678
+  0x000000006ffffff0 (VERSYM)     0x438
+  0x000000006ffffffe (VERNEED)    0x45c
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libjpeg-compat.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x81f0 contains 24 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libjpeg-compat.so]
+  0x0000000000000007 (RELA)       0x8a0
+  0x0000000000000008 (RELASZ)     792 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  30
+  0x0000000000000017 (JMPREL)     0xbb8
+  0x0000000000000002 (PLTRELSZ)   312 (bytes)
+  0x0000000000000003 (PLTGOT)     0xb3a8
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x6e0
+  0x000000000000000a (STRSZ)      444 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x580
+  0x0000000000000004 (HASH)       0x5f8
+  0x000000000000000c (INIT)       0x8fdc
+  0x000000000000000d (FINI)       0x8fe8
+  0x000000006ffffff0 (VERSYM)     0x528
+  0x000000006ffffffe (VERNEED)    0x560
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libkeiland.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x14750 contains 27 entries:
+  Tag                Type           Name/Value
+  0x000000000000001d (RUNPATH)      Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)       Shared library: [libwayland-client.so]
+  0x0000000000000001 (NEEDED)       Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)       Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)       Library soname: [libkeiland.so]
+  0x0000000000000007 (RELA)         0x3ec0
+  0x0000000000000008 (RELASZ)       1392 (bytes)
+  0x0000000000000009 (RELAENT)      24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)    48
+  0x0000000000000017 (JMPREL)       0x4430
+  0x0000000000000002 (PLTRELSZ)     3648 (bytes)
+  0x0000000000000003 (PLTGOT)       0x17988
+  0x0000000000000014 (PLTREL)       RELA
+  0x0000000000000006 (SYMTAB)       0x288
+  0x000000000000000b (SYMENT)       24 (bytes)
+  0x0000000000000005 (STRTAB)       0x28ac
+  0x000000000000000a (STRSZ)        5652 (bytes)
+  0x000000006ffffef5 (GNU_HASH)     0x1d40
+  0x0000000000000004 (HASH)         0x2084
+  0x000000000000001a (FINI_ARRAY)   0x16748
+  0x000000000000001c (FINI_ARRAYSZ) 8 (bytes)
+  0x000000000000000c (INIT)         0x14bbc
+  0x000000000000000d (FINI)         0x14bc8
+  0x000000006ffffff0 (VERSYM)       0x1ae8
+  0x000000006ffffffe (VERNEED)      0x1cf0
+  0x000000006fffffff (VERNEEDNUM)   2
+  0x0000000000000000 (NULL)         0x0
+/root/keiland-stage-ui/opt/keiland/lib/libkeiui.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x28950 contains 29 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libkeiland.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libwayland-client.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libtruetype.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libpng-compat.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libvulkan.so.1]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libkeiui.so]
+  0x0000000000000007 (RELA)       0x6d18
+  0x0000000000000008 (RELASZ)     1728 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  64
+  0x0000000000000017 (JMPREL)     0x73d8
+  0x0000000000000002 (PLTRELSZ)   9840 (bytes)
+  0x0000000000000003 (PLTGOT)     0x2bb80
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x47f8
+  0x000000000000000a (STRSZ)      9503 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x3318
+  0x0000000000000004 (HASH)       0x3918
+  0x000000000000000c (INIT)       0x27d3c
+  0x000000000000000d (FINI)       0x27d48
+  0x000000006ffffff0 (VERSYM)     0x2f10
+  0x000000006ffffffe (VERNEED)    0x32c8
+  0x000000006fffffff (VERNEEDNUM) 2
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libpdf.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x50db8 contains 27 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libz-compat.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libjpeg-compat.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libtruetype.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libpdf.so]
+  0x0000000000000007 (RELA)       0x32e8
+  0x0000000000000008 (RELASZ)     41928 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  1733
+  0x0000000000000017 (JMPREL)     0xd6b0
+  0x0000000000000002 (PLTRELSZ)   3672 (bytes)
+  0x0000000000000003 (PLTGOT)     0x53ff8
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x23c4
+  0x000000000000000a (STRSZ)      3874 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x18d8
+  0x0000000000000004 (HASH)       0x1cfc
+  0x000000000000000c (INIT)       0x4b53c
+  0x000000000000000d (FINI)       0x4b548
+  0x000000006ffffff0 (VERSYM)     0x16c8
+  0x000000006ffffffe (VERNEED)    0x1878
+  0x000000006fffffff (VERNEEDNUM) 2
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libpng-compat.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x2430 contains 25 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libz-compat.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libpng-compat.so]
+  0x0000000000000007 (RELA)       0x680
+  0x0000000000000008 (RELASZ)     48 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  1
+  0x0000000000000017 (JMPREL)     0x6b0
+  0x0000000000000002 (PLTRELSZ)   360 (bytes)
+  0x0000000000000003 (PLTGOT)     0x55e8
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x564
+  0x000000000000000a (STRSZ)      284 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x498
+  0x0000000000000004 (HASH)       0x4c4
+  0x000000000000000c (INIT)       0x32ec
+  0x000000000000000d (FINI)       0x32f8
+  0x000000006ffffff0 (VERSYM)     0x450
+  0x000000006ffffffe (VERNEED)    0x478
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libtruetype.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x5210 contains 24 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libm.so.5]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libtruetype.so]
+  0x0000000000000007 (RELA)       0x7a0
+  0x0000000000000008 (RELASZ)     48 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  1
+  0x0000000000000017 (JMPREL)     0x7d0
+  0x0000000000000002 (PLTRELSZ)   192 (bytes)
+  0x0000000000000003 (PLTGOT)     0x83b8
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x610
+  0x000000000000000a (STRSZ)      394 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x4f0
+  0x0000000000000004 (HASH)       0x560
+  0x000000000000000c (INIT)       0x613c
+  0x000000000000000d (FINI)       0x6148
+  0x000000006ffffff0 (VERSYM)     0x480
+  0x000000006ffffffe (VERNEED)    0x4ac
+  0x000000006fffffff (VERNEEDNUM) 2
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libvulkan.so.1: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x21c48 contains 26 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libwayland-client.so]
+  0x0000000000000001 (NEEDED)     Shared library: [libthr.so.3]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libvulkan.so.1]
+  0x000000000000001e (FLAGS)      SYMBOLIC 
+  0x0000000000000007 (RELA)       0x5288
+  0x0000000000000008 (RELASZ)     14160 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  584
+  0x0000000000000017 (JMPREL)     0x89d8
+  0x0000000000000002 (PLTRELSZ)   1608 (bytes)
+  0x0000000000000003 (PLTGOT)     0x24e88
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x35dc
+  0x000000000000000a (STRSZ)      7338 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x2460
+  0x0000000000000004 (HASH)       0x2b84
+  0x000000000000000c (INIT)       0x20b8c
+  0x000000000000000d (FINI)       0x20b98
+  0x000000006ffffff0 (VERSYM)     0x2178
+  0x000000006ffffffe (VERNEED)    0x240c
+  0x000000006fffffff (VERNEEDNUM) 2
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libwayland-client.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x1d7b8 contains 23 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libwayland-client.so]
+  0x0000000000000007 (RELA)       0x7b40
+  0x0000000000000008 (RELASZ)     28128 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  1039
+  0x0000000000000017 (JMPREL)     0xe920
+  0x0000000000000002 (PLTRELSZ)   1200 (bytes)
+  0x0000000000000003 (PLTGOT)     0x20fc0
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x4bec
+  0x000000000000000a (STRSZ)      12113 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x3130
+  0x0000000000000004 (HASH)       0x3d94
+  0x000000000000000c (INIT)       0x1bb0c
+  0x000000000000000d (FINI)       0x1bb18
+  0x000000006ffffff0 (VERSYM)     0x2d78
+  0x000000006ffffffe (VERNEED)    0x310c
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0
+/root/keiland-stage-ui/opt/keiland/lib/libz-compat.so: ELF 64-bit LSB shared object, x86-64, version 1 (FreeBSD), dynamically linked, for FreeBSD 15.1, with debug_info, not stripped
+Dynamic section at offset 0x23b0 contains 23 entries:
+  Tag                Type         Name/Value
+  0x000000000000001d (RUNPATH)    Library runpath: [/opt/keiland/lib]
+  0x0000000000000001 (NEEDED)     Shared library: [libc.so.7]
+  0x000000000000000e (SONAME)     Library soname: [libz-compat.so]
+  0x0000000000000007 (RELA)       0x5e8
+  0x0000000000000008 (RELASZ)     48 (bytes)
+  0x0000000000000009 (RELAENT)    24 (bytes)
+  0x000000006ffffff9 (RELACOUNT)  1
+  0x0000000000000017 (JMPREL)     0x618
+  0x0000000000000002 (PLTRELSZ)   192 (bytes)
+  0x0000000000000003 (PLTGOT)     0x5548
+  0x0000000000000014 (PLTREL)     RELA
+  0x0000000000000006 (SYMTAB)     0x288
+  0x000000000000000b (SYMENT)     24 (bytes)
+  0x0000000000000005 (STRTAB)     0x51c
+  0x000000000000000a (STRSZ)      197 (bytes)
+  0x000000006ffffef5 (GNU_HASH)   0x448
+  0x0000000000000004 (HASH)       0x494
+  0x000000000000000c (INIT)       0x32dc
+  0x000000000000000d (FINI)       0x32e8
+  0x000000006ffffff0 (VERSYM)     0x408
+  0x000000006ffffffe (VERNEED)    0x428
+  0x000000006fffffff (VERNEEDNUM) 1
+  0x0000000000000000 (NULL)       0x0
+userland/base/libz-compat/inflate.c
+userland/base/libz-compat/checksum.c
+userland/base/libpng-compat/read.c
+userland/base/libjpeg-compat/error.c
+userland/base/libjpeg-compat/memory.c
+userland/base/libjpeg-compat/source.c
+userland/base/libjpeg-compat/marker.c
+userland/base/libjpeg-compat/huffman.c
+userland/base/libjpeg-compat/idct.c
+userland/base/libjpeg-compat/decompress.c
+userland/base/libgif-compat/decode.c
+userland/base/libgif-compat/lzw.c
+src/libc/openbsd-sha2.c
+src/libc/openbsd-digest.c
+userland/desktop/libwayland/client.c
+userland/desktop/libwayland/proxy.c
+userland/desktop/libwayland/wire.c
+userland/desktop/libwayland/event.c
+userland/desktop/libwayland/protocol.c
+userland/desktop/libwayland/utility.c
+userland/desktop/libwayland/menu-protocol.c
+userland/desktop/libwayland/titlebar-protocol.c
+userland/desktop/libwayland/glass-protocol.c
+userland/desktop/libwayland/subsurface-protocol.c
+userland/desktop/libwayland/data-device-protocol.c
+userland/desktop/libwayland/primary-selection-protocol.c
+userland/desktop/libwayland/tablet-protocol.c
+userland/desktop/libwayland/touch-protocol.c
+userland/desktop/libwayland/text-input-protocol.c
+userland/desktop/libwayland/input-method-protocol.c
+userland/desktop/libwayland/virtual-keyboard-protocol.c
+userland/desktop/libwayland/ime-status-protocol.c
+userland/desktop/libwayland/keyboard-inset-protocol.c
+userland/desktop/libwayland/edit-protocol.c
+userland/desktop/libtruetype/face.c
+userland/desktop/libtruetype/cmap.c
+userland/desktop/libtruetype/outline.c
+userland/desktop/libtruetype/render.c
+userland/desktop/libtruetype/glyph.c
+userland/desktop/libtruetype/design.c
+userland/desktop/libtruetype/contour.c
+userland/desktop/libtruetype/color.c
+userland/desktop/libvulkan-compat/backend.c
+userland/desktop/libvulkan-compat/dispatch.c
+userland/desktop/libvulkan-compat/instance.c
+userland/desktop/libvulkan-compat/device.c
+userland/desktop/libvulkan-compat/wsi-wayland.c
+userland/desktop/libvulkan-compat/wsi-swapchain.c
+userland/desktop/libvulkan-compat/linux-dmabuf-v1-protocol.c
+userland/desktop/libvulkan-compat/kms.c
+userland/desktop/libvulkan-compat/wsi-display.c
+userland/desktop/libvulkan-compat/freebsd/sync-freebsd.c
+userland/desktop/libkeiland/version.c
+userland/desktop/libkeiland/menu.c
+userland/desktop/libkeiland/recent.c
+userland/desktop/libkeiland/titlebar.c
+userland/desktop/libkeiland/glass.c
+userland/desktop/libkeiland/motion.c
+userland/desktop/libkeiland/scroll.c
+userland/desktop/libkeiland/gesture.c
+userland/desktop/libkeiland/preferences.c
+userland/desktop/libkeiland/desktop.c
+userland/desktop/libkeiland/keyboard-inset.c
+userland/desktop/libkeiland/edit.c
+userland/desktop/libkeiland/wpa/network-wpa.c
+userland/desktop/libkeiland/wpa/network-config-wpa.c
+userland/desktop/libkeiland/freebsd/network-link-freebsd.c
+userland/desktop/libkeiland/freebsd/audio-freebsd.c
+userland/desktop/libkeiui/version.c
+userland/desktop/libkeiui/canvas.c
+userland/desktop/libkeiui/text.c
+userland/desktop/libkeiui/icons.c
+userland/desktop/libkeiui/icons-line.c
+userland/desktop/libkeiui/theme.c
+userland/desktop/libkeiui/input.c
+userland/desktop/libkeiui/scroll.c
+userland/desktop/libkeiui/text-touch.c
+userland/desktop/libkeiui/ui.c
+userland/desktop/libkeiui/window.c
+userland/desktop/libkeiui/present.c
+userland/desktop/libkeiui/present-shm.c
+userland/desktop/libkeiui/clipboard.c
+userland/desktop/libkeiui/primary.c
+userland/desktop/libkeiui/text-input.c
+userland/desktop/libkeiui/edit.c
+userland/desktop/libkeiui/widgets.c
+userland/desktop/libkeiui/field.c
+userland/desktop/libkeiui/list.c
+userland/desktop/libkeiui/cards.c
+userland/desktop/libkeiui/chooser.c
+userland/desktop/libkeiui/chooser-model.c
+userland/desktop/libkeiui/chooser-view.c
+userland/desktop/picture/color-glyph.c
+userland/base/libpdf/writer.c
+userland/base/libpdf/update.c
+userland/base/libpdf/outline.c
+userland/base/libpdf/object.c
+userland/base/libpdf/reader.c
+userland/base/libpdf/filter.c
+userland/base/libpdf/ccitt.c
+userland/base/libpdf/image.c
+userland/base/libpdf/display.c
+userland/base/libpdf/content.c
+userland/base/libpdf/stroke.c
+userland/base/libpdf/raster.c
+userland/base/libpdf/font.c
+userland/base/libpdf/encoding.c
+userland/base/libpdf/shading.c
+userland/base/libpdf/charstrings.c
+userland/base/libpdf/type1.c
+userland/base/libpdf/cff.c
+userland/base/libpdf/cffdata.c
+userland/base/libpdf/crypt.c
