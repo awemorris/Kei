@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q563 / q563-i01
+Queue / Attempt: q562 / q562-i01
 
 ## 目的・範囲
 
@@ -201,9 +201,3 @@ nativeintegration contract. Unexpectedfurther native/commonC prerequisite endsun
 q562failedhistory. FullF2/nativeGUI/physical and finalfullWS/threeOS gates retained. WIPcommit/no push/
 publication/hostmountmutation/make check. Originp002 redesign comment/event saved, no foreignPhase
 scope/acceptance change; finalp005 includes the newly shared Places/source membership.
-
-## Result / q563-i01 / 2026-10-01T23:37:55.816722+00:00
-
-Queue item uncleared /whole Phase uncleared。native mount iterator/sharedPlacesを実装・nativecompile。fullappsはfiles/tags.cの未計画ENODATA宣言差で停止。[failure](/home/awe/zedBSD-claude1/plan/history/ws109/q563/result.md)。native ENOATTR互換名を追加し、mount/Linux契約と残りapps/data検証を次attemptで再開。
-
-Event ws109-q563-uncleared: local evidence/outcome saved; remote comment (no Phase close) pending.

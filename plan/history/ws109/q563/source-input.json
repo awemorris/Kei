@@ -1,0 +1,30 @@
+[
+  {
+    "path": "userland/desktop/files/places.c",
+    "sha256": "67353fe52fda23e05bcc72bbbdbb1dae8e114a445b9b7ed5f6e968fe72055b1a"
+  },
+  {
+    "path": "userland/desktop/files/mounts.h",
+    "sha256": "533fb6661b984e03c7818df8e9a640c61ff65a463ae68a6be9f7fd65ec20bcd4"
+  },
+  {
+    "path": "userland/desktop/files/freebsd/mounts-freebsd.c",
+    "sha256": "6af1e5682fc48301b09e17022edaa432a4057d9507b8bb207d11cf105ff04d97"
+  },
+  {
+    "path": "userland/desktop/files/mntent/mounts-mntent.c",
+    "sha256": "cb113a863b68bfc6c81bd0fd7ffc5c184562349d06bc5b4d86d632d57bfb104b"
+  },
+  {
+    "path": "userland/desktop/files/Makefile",
+    "sha256": "eb47192aa17d89b095774bd2ee4af5d1ea9b01f4c28d648fa9bf0cd263ac16a1"
+  },
+  {
+    "path": "userland/desktop/files/Makefile.linux",
+    "sha256": "aa94cbf27d6785635c8f5b30c7fb3ac05b8540179bb5132342e399cfc96fa76d"
+  },
+  {
+    "path": "userland/desktop/files/Makefile.freebsd",
+    "sha256": "ccf298cd6a836033f56b771615ecc431354d98d9e1b855efe0dd5210b737e440"
+  }
+]

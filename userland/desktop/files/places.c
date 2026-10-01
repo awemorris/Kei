@@ -15,9 +15,9 @@
  */
 
 #include "files.h"
+#include "mounts.h"
 
 #include <errno.h>
-#include <mntent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -430,52 +430,66 @@ static void
 places_mounts(
 	struct fm_places *places)
 {
-	struct mntent *mount;
+	struct fm_mount mount;
 	struct fm_location location;
-	FILE *table;
+	struct fm_mounts *table;
+	const char *label;
 	size_t index;
+	size_t prefix;
 	int hidden;
 	int match;
+	int error;
+	int available;
 
-	/* The kernel's mount table. */
-	table = setmntent(MOUNTED, "r");
-	if (table == NULL)
+	/* Acquires the selected OS's real mount enumeration without exposing its native storage. */
+	table = NULL;
+	error = fm_mounts_open(&table);
+	if (error != 0)
 		return;
 
-	/* Each mount but the root and the virtual ones. */
+	/* Each real mount retains the existing root, virtual and system-folder filtering. */
 	for (;;) {
-		mount = getmntent(table);
-		if (mount == NULL)
+		available = fm_mounts_next(table, &mount);
+		if (available <= 0)
 			break;
-		match = strcmp(mount->mnt_dir, "/");
+
+		/* The computer's root already has its own common Places entry. */
+		match = strcmp(mount.path, "/");
 		if (match == 0)
 			continue;
+
+		/* Virtual filesystems remain absent from the user's mounted-volume sidebar. */
 		hidden = 0;
 		for (index = 0; index < sizeof(places_hidden_types) / sizeof(places_hidden_types[0]); index++) {
-			match = strcmp(mount->mnt_type, places_hidden_types[index]);
+			match = strcmp(mount.type, places_hidden_types[index]);
 			if (match == 0)
 				hidden = 1;
 		}
 
-		/* A virtual file system is not a place. */
+		/* Preserves the existing system-directory prefix policy for mount locations. */
 		for (index = 0; index < sizeof(places_system_folders) / sizeof(places_system_folders[0]); index++) {
-			match = strncmp(mount->mnt_dir, places_system_folders[index], strlen(places_system_folders[index]));
+			prefix = strlen(places_system_folders[index]);
+			match = strncmp(mount.path, places_system_folders[index], prefix);
 			if (match == 0)
 				hidden = 1;
 		}
 
-		/* A system folder is not a place either. */
+		/* Neither a virtual filesystem nor a system folder becomes a user volume. */
 		if (hidden != 0)
 			continue;
 
-		/* The volume, named by its mount point's last part. */
+		/* The volume's label retains the mount point's existing common location-name policy. */
 		location.kind = FM_LOCATION_FOLDER;
-		snprintf(location.path, sizeof(location.path), "%s", mount->mnt_dir);
-		(void)places_add(places, FM_SECTION_LOCATIONS, FM_ICON_VOLUME, fm_location_name(&location, ""), FM_LOCATION_FOLDER, mount->mnt_dir);
+		snprintf(location.path, sizeof(location.path), "%s", mount.path);
+		label = fm_location_name(&location, "");
+		(void)places_add(places, FM_SECTION_LOCATIONS, FM_ICON_VOLUME, label, FM_LOCATION_FOLDER, mount.path);
 	}
 
-	/* The table is closed. */
-	endmntent(table);
+	/* Releases only this enumeration's stream or native snapshot. */
+	fm_mounts_close(table);
+
+	/* Succeeded: common Places policy consumed the selected OS's actual mount records. */
+	return;
 }
 
 /* Writes the path of the Favorites' list ($XDG_CONFIG_HOME/files/sidebar), making its folder. */
