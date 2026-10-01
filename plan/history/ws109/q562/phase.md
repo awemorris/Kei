@@ -4,7 +4,7 @@
 
 Status: uncleared
 Disposition: normal
-Parent: [WS109](../ws.md)
+Parent: [WS109](/home/awe/zedBSD-claude1/plan/ws109/ws.md)
 Queue / Attempt: q562 / q562-i01
 
 ## 目的・範囲
@@ -24,8 +24,8 @@ F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD �
 
 ## 適用規則・影響する部品・検証
 
-[WS の制約/部品/受け入れ](../ws.md)、[Guardrail](../../guardrail.md)、
-[C 規約全文](../../coding-style.md)、[自動化](../../standards/automation.md)を適用。
+[WS の制約/部品/受け入れ](/home/awe/zedBSD-claude1/plan/ws109/ws.md)、[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、
+[C 規約全文](/home/awe/zedBSD-claude1/plan/coding-style.md)、[自動化](/home/awe/zedBSD-claude1/plan/standards/automation.md)を適用。
 新規/変更 C は全文該当節を読み、clang-format-19 と style-check の限界を補う。
 最終 conformance は全 WS の source を全文で review。build warning 0、必要な契約検証、diff-check を記録する。
 具体的な build/config/tool version と script は p001 の結果で固定する。`make check` は禁止。
@@ -45,11 +45,11 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 
 ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
 
-p001のfixed software/ABI/license/guest outputをprerequisiteとしてnative library/build/install/loaderの実検証を先行。GPU hardware availabilityはこのbuild scopeの前提にしない。全app linkにp003/p004実backendが必要ならstubを作らず対象を部分選定し後で統合する。 [origin](../phase001/phase.md)・[WS summary](../ws.md)・[scope](../../standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
+p001のfixed software/ABI/license/guest outputをprerequisiteとしてnative library/build/install/loaderの実検証を先行。GPU hardware availabilityはこのbuild scopeの前提にしない。全app linkにp003/p004実backendが必要ならstubを作らず対象を部分選定し後で統合する。 [origin](/home/awe/zedBSD-claude1/plan/ws109/phase001/phase.md)・[WS summary](/home/awe/zedBSD-claude1/plan/ws109/ws.md)・[scope](/home/awe/zedBSD-claude1/plan/standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
 
 ## q551 design reconciliation / ws109-q551-native-environment
 
-p002 is staged: L1 foundation libraries first, L2 real libkeiland/compositor/apps after p003/p004 implementation output. Retain full F2 acceptance; L1 scoped item can clear with wholePhase uncleared until integration. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](../phase001/phase.md), [WS](../ws.md), [native design](../../history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.
+p002 is staged: L1 foundation libraries first, L2 real libkeiland/compositor/apps after p003/p004 implementation output. Retain full F2 acceptance; L1 scoped item can clear with wholePhase uncleared until integration. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](/home/awe/zedBSD-claude1/plan/ws109/phase001/phase.md), [WS](/home/awe/zedBSD-claude1/plan/ws109/ws.md), [native design](/home/awe/zedBSD-claude1/plan/history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.
 
 ## q552 L1 foundation / exact partial scope
 
@@ -59,7 +59,7 @@ Scope files: independent native makefiles listed above; `libvulkan-compat/{dma-s
 
 ## Result / q552-i01 / 2026-10-01T19:26:37.866206+00:00
 
-Queue item uncleared /whole Phase uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](../../history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
+Queue item uncleared /whole Phase uncleared。L1独立native Makefile/52sources、OSsync wrappersと共有WSI変更を実装。Linux Vulkan library buildはwarning0/exit0。FreeBSD buildはlibwayland/wire.cの未計画CMSG_ALIGN依存で失敗、runtime/DESTDIR未実施。[失敗](/home/awe/zedBSD-claude1/plan/history/ws109/q552/l1-build.txt)。新attemptで標準CMSG_SPACE/CMSG_LENによる整列とnative/Linux fd受渡しをscopeに加え、残るnative buildを再検証する。
 
 Event ws109-q552-uncleared: local evidence/outcome saved; remote comment (no Phase close) pending.
 
@@ -69,7 +69,7 @@ q552 failed at native libwayland/wire.c because CMSG_ALIGN is Linux's internal m
 
 ## Result / q553-i01 / 2026-10-01T19:40:30.363310+00:00
 
-Queue item cleared /whole Phase uncleared。L1 native52sources/sevenELF＋DESTDIR/publicheaders/nativeVulkan1MiBchain、actualfd/CLOEXEC/truncation/errno所有を検証。Linux library/chain/fullWaylandsuite回帰PASS。[result](../../history/ws109/q553/result.md)。fullF2のlibkeiland/compositor/apps統合はp003/p004後のL2、全source規約/zedBSD/physical gatesはp005に保持。
+Queue item cleared /whole Phase uncleared。L1 native52sources/sevenELF＋DESTDIR/publicheaders/nativeVulkan1MiBchain、actualfd/CLOEXEC/truncation/errno所有を検証。Linux library/chain/fullWaylandsuite回帰PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q553/result.md)。fullF2のlibkeiland/compositor/apps統合はp003/p004後のL2、全source規約/zedBSD/physical gatesはp005に保持。
 
 Event ws109-q553-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.
 

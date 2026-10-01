@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q562 / q562-i01
+Queue / Attempt: q561 / q561-i01
 
 ## 目的・範囲
 
@@ -171,9 +171,3 @@ contract checks where existingportableprobes are usable; no QEMUwindow/nativeGUI
 DRM. UnexpectedcommonC/compiler/OSprerequisite endsuncleared with evidence/revised later scope,
 no semantic correction silentlyadded. FullF2/nativeGUI/appsfunctional and p005allWS/threeOS/physical
 GPU/WiFi/VT gates remain. Makefile/data/manual/diffcheck; no make check/hostmutation/push/publication.
-
-## Result / q562-i01 / 2026-10-01T23:32:57.299549+00:00
-
-Queue item uncleared /whole Phase uncleared。13apps/dataのnative Makefileを追加。実-j16buildはfiles/places.cの未計画mntent.h依存で停止。[failure](/home/awe/zedBSD-claude1/plan/history/ws109/q562/result.md)。native mount backendを別有限Queueで設計・検証し、残りbuild/install/runtimeを再開。全F2/physical/p005保持。
-
-Event ws109-q562-uncleared: local evidence/outcome saved; remote comment (no Phase close) pending.

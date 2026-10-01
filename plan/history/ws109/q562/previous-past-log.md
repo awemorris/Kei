@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q562](queue-q562.md)（WS109 p002 uncleared）
+Last finished Queue: [q561](queue-q561.md)（WS109 p002 uncleared）
 
-## 最新: q562 /WS109 p002
+## 最新: q561 /WS109 p002
 
-item uncleared /Phase uncleared。13apps/dataのnative Makefileを追加。実-j16buildはfiles/places.cの未計画mntent.h依存で停止。[failure](/home/awe/zedBSD-claude1/plan/history/ws109/q562/result.md)。native mount backendを別有限Queueで設計・検証し、残りbuild/install/runtimeを再開。全F2/physical/p005保持。
+item cleared /Phase uncleared。native PTY header/libutil・extattr adapter、実UFSのfd/path/link/コピー/権限/ERANGEと実PTY child入出力PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q561/result.md)。fullapps/nativeGUI/F2・threeOS/p005/physical gatesは保持。
 
 WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | Queue | Outcome |
 | --- | --- |
+| [q532](queue-q532.md) | ws105-p007 cleared |
 | [q533](queue-q533.md) | ws105-p008 cleared |
 | [q534](queue-q534.md) | ws105-p009 uncleared |
 | [q535](queue-q535.md) | ws105-p005 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 | [q559](queue-q559.md) | WS109 p003 item cleared /Phase uncleared |
 | [q560](queue-q560.md) | WS109 p002 item cleared /Phase uncleared |
 | [q561](queue-q561.md) | WS109 p002 item cleared /Phase uncleared |
-| [q562](queue-q562.md) | WS109 p002 item uncleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

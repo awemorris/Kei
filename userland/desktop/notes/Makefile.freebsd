@@ -1,0 +1,15 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The independent FreeBSD build of notes; source membership mirrors the target package.
+KEILAND_FREEBSD_NOTES_SOURCES := userland/desktop/notes/main.c \
+	userland/desktop/notes/document.c \
+	userland/desktop/notes/encode.c \
+	userland/desktop/notes/journal.c \
+	userland/desktop/notes/save.c \
+	userland/desktop/notes/geometry.c \
+	userland/desktop/notes/render.c \
+	userland/desktop/notes/window.c \
+	userland/desktop/notes/menu.c \
+	userland/desktop/notes/tablet.c \
+	userland/desktop/notes/ui.c \
+	userland/desktop/notes/touch.c
+$(eval $(call KEILAND_FREEBSD_PROGRAM,notes,bin,$(KEILAND_FREEBSD_NOTES_SOURCES),libkeiui.so libkeiland.so libwayland-client.so libtruetype.so libpdf.so libvulkan.so.1 libkeiland-compat.a,-lm))

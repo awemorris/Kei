@@ -1,0 +1,62 @@
+[
+  {
+    "path": "userland/desktop/keiland-freebsd.mk",
+    "sha256": "72156a632fadc2ba386874ca7e37fcd5e1796dcb5d60df728da6f0a1ddedf85f"
+  },
+  {
+    "path": "userland/desktop/wayland/freebsd/apps.conf.in",
+    "sha256": "06b47373115a615de1f0501489f6de41d158cd6d7b1e434ea088cf1cb6b5ae28"
+  },
+  {
+    "path": "userland/desktop/pdfviewer/Makefile.freebsd",
+    "sha256": "0a8bf73a688f44240354e1c360ce9e23c16e4deed7c9327954424b5ec9033102"
+  },
+  {
+    "path": "userland/desktop/files/Makefile.freebsd",
+    "sha256": "715f299d9d2ab143b09a679be27d9dc855fa2bc36df00426cf513facbbac87b4"
+  },
+  {
+    "path": "userland/desktop/settings/Makefile.freebsd",
+    "sha256": "1c1912883288135fc75c9846188a4b17f8ff8d063a7028284bd0364face56b52"
+  },
+  {
+    "path": "userland/desktop/ime/Makefile.freebsd",
+    "sha256": "d7b57811a2eea30dfe8e39ae7e4ba3075ce2e9f386573ef498a997659ecbd658"
+  },
+  {
+    "path": "userland/desktop/notes/Makefile.freebsd",
+    "sha256": "10182efff8b649f6d5058434a92708e3885ff5d8b2ee0615b9a53c3ad62ecda5"
+  },
+  {
+    "path": "userland/desktop/textedit/Makefile.freebsd",
+    "sha256": "0652143e9f4a59b169aa055d0c6f6144dc18c576b9a405da2c5358d6cfb0816c"
+  },
+  {
+    "path": "userland/desktop/terminal/Makefile.freebsd",
+    "sha256": "d4dd1bafa5f239d5cf7ee18bb2eafdb6b7fa264ca981378e03349b7f25251a19"
+  },
+  {
+    "path": "userland/desktop/imageview/Makefile.freebsd",
+    "sha256": "525ccf890c32e595b5e22218d99ed390bf93883c77ef90e9fa99866a3c68a927"
+  },
+  {
+    "path": "userland/tests/mview/Makefile.freebsd",
+    "sha256": "d68280051d2f3d94a2829f2e800f23e7a0f29f74a69759344b07646d5df09596"
+  },
+  {
+    "path": "userland/tests/wltest/Makefile.freebsd",
+    "sha256": "967e643dae1d9f20155e623a11e9f422f59dc7629654d9c298981cc6f79b88fb"
+  },
+  {
+    "path": "userland/tests/wlshm/Makefile.freebsd",
+    "sha256": "02c3d9c75d88da360f96050583d3e410cdceb75367dfa7c4159779972097efc3"
+  },
+  {
+    "path": "userland/tests/kuidemo/Makefile.freebsd",
+    "sha256": "fd554328b5f774a068de3d8b47ea810776863095d1a286a43da46c3898316afc"
+  },
+  {
+    "path": "userland/tests/vkdemo/Makefile.freebsd",
+    "sha256": "91224959ae963035f19fbe73e9476e0f71634f78ef3110b9ee6025c0f7ec67a2"
+  }
+]

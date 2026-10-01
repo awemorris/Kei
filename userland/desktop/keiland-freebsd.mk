@@ -8,6 +8,7 @@ KEILAND_PREFIX ?= /opt/keiland
 DESTDIR ?=
 KEILAND_FREEBSD_OPT ?= -O2 -g
 KEILAND_FREEBSD_LOCALBASE ?= /usr/local
+KEILAND_FREEBSD_PYTHON ?= python3.11
 KEILAND_FREEBSD_EXTRA_CPPFLAGS ?=
 KEILAND_FREEBSD_CPPFLAGS := \
 	-DKEILAND_BINDIR='"$(KEILAND_PREFIX)/bin"' -DKEILAND_LIBEXECDIR='"$(KEILAND_PREFIX)/libexec"' \
@@ -102,8 +103,62 @@ KEILAND_FREEBSD_PACKAGES ?= userland/base/libz-compat/Makefile.freebsd \
 	userland/desktop/libkeiui/Makefile.freebsd \
 	userland/base/libpdf/Makefile.freebsd \
 	userland/packages/libseat/Makefile.freebsd \
-	userland/desktop/wayland/Makefile.freebsd
+	userland/desktop/wayland/Makefile.freebsd \
+	userland/desktop/terminal/Makefile.freebsd \
+	userland/desktop/files/Makefile.freebsd \
+	userland/desktop/settings/Makefile.freebsd \
+	userland/desktop/notes/Makefile.freebsd \
+	userland/desktop/textedit/Makefile.freebsd \
+	userland/desktop/imageview/Makefile.freebsd \
+	userland/desktop/pdfviewer/Makefile.freebsd \
+	userland/desktop/ime/Makefile.freebsd \
+	userland/tests/wlshm/Makefile.freebsd \
+	userland/tests/wltest/Makefile.freebsd \
+	userland/tests/vkdemo/Makefile.freebsd \
+	userland/tests/mview/Makefile.freebsd \
+	userland/tests/kuidemo/Makefile.freebsd
 include $(KEILAND_FREEBSD_PACKAGES)
+
+# App Home uses the compositor's existing config parser; no common built-in list changes.
+$(KEILAND_FREEBSD_BUILD)/etc/keiland/apps.conf: userland/desktop/wayland/freebsd/apps.conf.in
+	@mkdir -p $(dir $@)
+	sed 's|@PREFIX@|$(KEILAND_PREFIX)|g' $< > $@.tmp
+	mv $@.tmp $@
+KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/etc/keiland/apps.conf
+KEILAND_FREEBSD_INSTALL += etc/keiland/apps.conf
+
+# Bundled gradients are generated outside git; a user's default picture stays outside git too.
+KEILAND_FREEBSD_WALLPAPER_NAMES := Aurora Dawn Lagoon Meadow Twilight
+KEILAND_FREEBSD_WALLPAPERS := $(addprefix $(KEILAND_FREEBSD_BUILD)/share/keiland/wallpapers/,$(addsuffix .ppm,$(KEILAND_FREEBSD_WALLPAPER_NAMES)))
+$(KEILAND_FREEBSD_WALLPAPERS) &: userland/desktop/wallpapers/generate.py
+	$(KEILAND_FREEBSD_PYTHON) $< $(KEILAND_FREEBSD_BUILD)/share/keiland/wallpapers
+KEILAND_FREEBSD_WALLPAPER ?= $(KEILAND_FREEBSD_BUILD)/share/keiland/wallpapers/Aurora.ppm
+$(eval $(call KEILAND_FREEBSD_DATA,share/keiland/wallpaper.ppm,$(KEILAND_FREEBSD_WALLPAPER)))
+KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_WALLPAPERS)
+KEILAND_FREEBSD_INSTALL += $(addprefix share/keiland/wallpapers/,$(addsuffix .ppm,$(KEILAND_FREEBSD_WALLPAPER_NAMES)))
+
+# Dictionary identity comes from its authoritative target declaration, without including target rules.
+KEILAND_FREEBSD_DICT_MAKEFILE := userland/desktop/ime/dict/Makefile
+KEILAND_FREEBSD_DICT_ARCHIVE := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_ARCHIVE := //p' $(KEILAND_FREEBSD_DICT_MAKEFILE))
+KEILAND_FREEBSD_DICT_URL := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_URL := //p' $(KEILAND_FREEBSD_DICT_MAKEFILE))
+KEILAND_FREEBSD_DICT_ROOT := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_ROOT := //p' $(KEILAND_FREEBSD_DICT_MAKEFILE))
+KEILAND_FREEBSD_DICT_ARCHIVE_SHA := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_SHA256 := //p' $(KEILAND_FREEBSD_DICT_MAKEFILE))
+KEILAND_FREEBSD_DICT_SHA := $(shell sed -n 's/^ZEDBSD_IME_DICT_X_SHA256 := //p' $(KEILAND_FREEBSD_DICT_MAKEFILE))
+build/distfiles/$(KEILAND_FREEBSD_DICT_ARCHIVE):
+	@mkdir -p $(dir $@)
+	fetch -o $@.tmp '$(KEILAND_FREEBSD_DICT_URL)'
+	test "$$(sha256 -q $@.tmp)" = "$(KEILAND_FREEBSD_DICT_ARCHIVE_SHA)"
+	mv $@.tmp $@
+$(KEILAND_FREEBSD_BUILD)/share/kei/ime/ja/SKK-JISYO.X: build/distfiles/$(KEILAND_FREEBSD_DICT_ARCHIVE) $(KEILAND_FREEBSD_DICT_MAKEFILE)
+	@mkdir -p $(dir $@)
+	test "$$(sha256 -q $<)" = "$(KEILAND_FREEBSD_DICT_ARCHIVE_SHA)"
+	tar -xOf $< '$(KEILAND_FREEBSD_DICT_ROOT)/dict/SKK-JISYO.X' > $@.tmp
+	test "$$(sha256 -q $@.tmp)" = "$(KEILAND_FREEBSD_DICT_SHA)"
+	mv $@.tmp $@
+# The copyright holder's WS095 D1 relicensing places the dictionary under the project license.
+KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/share/kei/ime/ja/SKK-JISYO.X
+KEILAND_FREEBSD_INSTALL += share/kei/ime/ja/SKK-JISYO.X
+$(eval $(call KEILAND_FREEBSD_DATA,share/kei/ime/ja/SKK-JISYO.kei,userland/desktop/ime/dict/SKK-JISYO.kei))
 
 .PHONY: all libraries install install-headers print-sources header-dependencies
 all: $(KEILAND_FREEBSD_ALL)
