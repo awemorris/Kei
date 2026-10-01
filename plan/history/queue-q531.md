@@ -38,7 +38,7 @@ cleared（q531-i01）。Linux の seat-direct・入力・session・wl_shm の co
 - gcc14.2 / clang19.1.7 build exit0 warning0、12ELF / source-sync / 126header PASS。Linux の OS module は `linux/` に分離し、compositor は表示を Vulkan だけで扱う。evdev は monotonic clock、KD/keyboard mode は個別保存・復元。全文規約と style-check を点検した（最終 WS conformance は p011）。
 - Linux guest: desktop / wlshm / Home / Esc / Wiseview と pointer 2 地点の PNG を確認。bar、wallpaper、青い window の画素、cursor の差分を確認。launcher は実際の top-left click を使い、Super+Tab は Wiseview（検証手順の補正、product code は不変）。
 - Home の Log Out: `ZWL SESSION logout`、`ZWL EXIT frames=1081 error=0 cleanup_failed=0`。コンソールで `kei` が入力される PNG を確認。再起動は KEILAND_SEAT 未指定・XDG_RUNTIME_DIR=/run・--socket 未指定で `/run/wayland-keiland` に READY、SIGTERM は `frames=1 error=0 cleanup_failed=0`。PNG はユーザーに表示、guest は停止し overlay を破棄。
-- zedBSD: REQUIRED_TARGET_RESULT
+- zedBSD: disk-image exit0 / 自前 source warning0、boot-test PASS（login PNG 確認・表示）、OS boundary C1〜C5 / v1 54source PASS、dedicated18・decode17（通常 / sanitize とも）PASS、C1/C2/C9 13/13 PASS（C2 14/14、Wiseview・復元・Files の PNG を目視）、forge-guest PASS（偽buffer拒否後も正しいclient120frame）、fence-guest PASS（600frame、600fence、全generation1、62秒）。guest停止。
 - [ログ・PNG・SHA256 manifest](../../history/ws105/q531/evidence/)。Target 回帰は q529 で開始した同一 source の直列実行を q531 へ引き継いだ。q530 は Linux KMS module のみの修正で、target source / toolchain はその間変更していない。
 - 実機 GPU / 物理モニタ未実施。Linux GPU client は次 p007、logind は p009、app/data は p008、network/audio は p010 の既存範囲。GitHub 未公開、outbox に証拠・event と intended close を保持、push なし。
 

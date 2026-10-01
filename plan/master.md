@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし
+Active Queue: q532（ws105-p007）
 Current Focused Goal: fg012 — Keiland の OS の境界を整理して Linux で動かす（WS104 → WS105）。fg010 のデモの目標も保持する。
 Next（2026-10-01 に更新）: WS104 completed（q515〜q522）。後続 WS105 は incomplete、WS104 の prerequisite は満たした。WS105 p001〜p004 cleared、p005はq530修正でcleared、次はp006の再開（ユーザーの WS105 完了までの自走指示）。D25 の localhost SSH / QMP は許可済み。WS103（compositor を libvulkan だけに）は 2026-10-01 に完了（q508〜q514、ユーザーの自走の指示）。デモの優先 WS（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102・WS084・WS075・WS081・WS085・WS068・WS101）は 2026-10-01 に作業の手引き（各 `guide.md`）と実機の手引き（`tools/hw5330/README.md`）を整えた。候補: デモ critical の上位（WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102）、5330 の実機の新しい demo の image とユーザーの実機の確認。サブエージェントは N=0。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。

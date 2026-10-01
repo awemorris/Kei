@@ -2,10 +2,10 @@
 
 # ws105-p007: compositor の Linux の module (2): `zwp_linux_dmabuf_v1` の server と implicit sync
 
-Status: in-progress
+Status: planned
 Disposition: normal
 Parent: [WS105](../ws.md)
-Queue: q532 / q532-i01
+Queue: なし
 依存: p006
 実行者: phase-runner（high）。**始める前に [design.md](../design.md) の §5.2・§5.6 と §4.8（client の側）を読む**
 
