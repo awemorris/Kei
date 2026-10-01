@@ -1,0 +1,23 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The independent Linux build of libpdf; source membership mirrors the target package.
+KEILAND_LINUX_LIBPDF_SOURCES := userland/base/libpdf/writer.c \
+	userland/base/libpdf/update.c \
+	userland/base/libpdf/outline.c \
+	userland/base/libpdf/object.c \
+	userland/base/libpdf/reader.c \
+	userland/base/libpdf/filter.c \
+	userland/base/libpdf/ccitt.c \
+	userland/base/libpdf/image.c \
+	userland/base/libpdf/display.c \
+	userland/base/libpdf/content.c \
+	userland/base/libpdf/stroke.c \
+	userland/base/libpdf/raster.c \
+	userland/base/libpdf/font.c \
+	userland/base/libpdf/encoding.c \
+	userland/base/libpdf/shading.c \
+	userland/base/libpdf/charstrings.c \
+	userland/base/libpdf/type1.c \
+	userland/base/libpdf/cff.c \
+	userland/base/libpdf/cffdata.c \
+	userland/base/libpdf/crypt.c
+$(eval $(call KEILAND_LINUX_LIBRARY,libpdf,libpdf.so,$(KEILAND_LINUX_LIBPDF_SOURCES),libz-compat.so libjpeg-compat.so libtruetype.so libkeiland-compat.a,-lm))

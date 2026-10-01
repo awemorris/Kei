@@ -1,0 +1,28 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The independent Linux build of libkeiui; source membership mirrors the target package.
+KEILAND_LINUX_LIBKEIUI_SOURCES := userland/desktop/libkeiui/version.c \
+	userland/desktop/libkeiui/canvas.c \
+	userland/desktop/libkeiui/text.c \
+	userland/desktop/libkeiui/icons.c \
+	userland/desktop/libkeiui/icons-line.c \
+	userland/desktop/libkeiui/theme.c \
+	userland/desktop/libkeiui/input.c \
+	userland/desktop/libkeiui/scroll.c \
+	userland/desktop/libkeiui/text-touch.c \
+	userland/desktop/libkeiui/ui.c \
+	userland/desktop/libkeiui/window.c \
+	userland/desktop/libkeiui/present.c \
+	userland/desktop/libkeiui/present-shm.c \
+	userland/desktop/libkeiui/clipboard.c \
+	userland/desktop/libkeiui/primary.c \
+	userland/desktop/libkeiui/text-input.c \
+	userland/desktop/libkeiui/edit.c \
+	userland/desktop/libkeiui/widgets.c \
+	userland/desktop/libkeiui/field.c \
+	userland/desktop/libkeiui/list.c \
+	userland/desktop/libkeiui/cards.c \
+	userland/desktop/libkeiui/chooser.c \
+	userland/desktop/libkeiui/chooser-model.c \
+	userland/desktop/libkeiui/chooser-view.c \
+	userland/desktop/picture/color-glyph.c
+$(eval $(call KEILAND_LINUX_LIBRARY,libkeiui,libkeiui.so,$(KEILAND_LINUX_LIBKEIUI_SOURCES),libkeiland.so libwayland-client.so libtruetype.so libpng-compat.so libvulkan.so.1,-lm))

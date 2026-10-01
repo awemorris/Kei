@@ -110,7 +110,7 @@ static const struct apps_builtin apps_builtins[] = {
 };
 
 /* The folders a needed program is looked for in. */
-static const char *const apps_program_folders[] = { "/bin", "/usr/bin", "/usr/local/bin" };
+static const char *const apps_program_folders[] = {KEILAND_BINDIR, "/bin", "/usr/bin", "/usr/local/bin"};
 
 static int apps_user_list(char *list, size_t size);
 static int apps_rewrite(const char *type, const struct fm_opener *opener);

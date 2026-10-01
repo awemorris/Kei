@@ -2788,6 +2788,10 @@ convert_contours(
 	scale = 1.0 / font->units_per_em;
 	points = outline->points;
 
+	/* Defines control coordinates before any pending curve (gcc dataflow). */
+	control[0] = 0.0;
+	control[1] = 0.0;
+
 	/* Converts each contour. */
 	first = 0;
 	for (contour = 0; contour < outline->contour_count; contour++) {

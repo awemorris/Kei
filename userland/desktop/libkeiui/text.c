@@ -25,6 +25,7 @@
 #include <keiui.h>
 
 #include "../picture/color-glyph.h"
+#include "userland/desktop/paths.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -592,7 +593,7 @@ text_glyph(
 	/* Neither has it: the emoji font, opened the first time (a program without one draws the main font's box). */
 	if (glyph_index == 0U && !text->emoji_tried) {
 		text->emoji_tried = 1;
-		(void)text_face_open(&text->faces[2], KUI_TEXT_EMOJI);
+		(void)text_face_open(&text->faces[2], KEILAND_DATADIR "/fonts/keiland-emoji.ttf");
 	}
 
 	/* The emoji font's glyph, when it has the character. */

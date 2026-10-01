@@ -1,0 +1,12 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The independent Linux build of pdfviewer; source membership mirrors the target package.
+KEILAND_LINUX_PDFVIEWER_SOURCES := userland/desktop/pdfviewer/main.c \
+	userland/desktop/pdfviewer/menu.c \
+	userland/desktop/pdfviewer/titlebar.c \
+	userland/desktop/pdfviewer/view.c \
+	userland/desktop/pdfviewer/draw.c \
+	userland/desktop/pdfviewer/document.c \
+	userland/desktop/pdfviewer/canvas.c \
+	userland/desktop/pdfviewer/text.c \
+	userland/desktop/pdfviewer/touch.c
+$(eval $(call KEILAND_LINUX_PROGRAM,pdfviewer,bin,$(KEILAND_LINUX_PDFVIEWER_SOURCES),libkeiui.so libkeiland.so libtruetype.so libpdf.so libwayland-client.so libvulkan.so.1,-lm))

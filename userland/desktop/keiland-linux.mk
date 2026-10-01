@@ -106,6 +106,59 @@ include userland/desktop/vkdemo/Makefile.linux
 include userland/desktop/wltest/Makefile.linux
 include userland/desktop/mview/Makefile.linux
 
+include userland/desktop/libkeiui/Makefile.linux
+include userland/base/libpdf/Makefile.linux
+include userland/desktop/terminal/Makefile.linux
+include userland/desktop/files/Makefile.linux
+include userland/desktop/settings/Makefile.linux
+include userland/desktop/notes/Makefile.linux
+include userland/desktop/textedit/Makefile.linux
+include userland/desktop/imageview/Makefile.linux
+include userland/desktop/pdfviewer/Makefile.linux
+include userland/desktop/kuidemo/Makefile.linux
+include userland/desktop/ime/Makefile.linux
+
+# App Home uses the compositor's existing config parser; no common built-in list changes.
+$(KEILAND_LINUX_BUILD)/etc/keiland/apps.conf: userland/desktop/wayland/linux/apps.conf.in
+	@mkdir -p $(dir $@)
+	sed 's|@PREFIX@|$(KEILAND_PREFIX)|g' $< > $@.tmp
+	mv $@.tmp $@
+KEILAND_LINUX_ALL += $(KEILAND_LINUX_BUILD)/etc/keiland/apps.conf
+KEILAND_LINUX_INSTALL += etc/keiland/apps.conf
+
+# Bundled gradients are generated outside git; a user's default picture stays outside git too.
+KEILAND_LINUX_WALLPAPER_NAMES := Aurora Dawn Lagoon Meadow Twilight
+KEILAND_LINUX_WALLPAPERS := $(addprefix $(KEILAND_LINUX_BUILD)/share/keiland/wallpapers/,$(addsuffix .ppm,$(KEILAND_LINUX_WALLPAPER_NAMES)))
+$(KEILAND_LINUX_WALLPAPERS) &: userland/desktop/wallpapers/generate.py
+	python3 $< $(KEILAND_LINUX_BUILD)/share/keiland/wallpapers
+KEILAND_LINUX_WALLPAPER ?= $(if $(wildcard build/ws035-wallpaper/wallpaper.ppm),build/ws035-wallpaper/wallpaper.ppm,$(KEILAND_LINUX_BUILD)/share/keiland/wallpapers/Aurora.ppm)
+$(eval $(call KEILAND_LINUX_DATA,share/keiland/wallpaper.ppm,$(KEILAND_LINUX_WALLPAPER)))
+KEILAND_LINUX_ALL += $(KEILAND_LINUX_WALLPAPERS)
+KEILAND_LINUX_INSTALL += $(addprefix share/keiland/wallpapers/,$(addsuffix .ppm,$(KEILAND_LINUX_WALLPAPER_NAMES)))
+
+# Dictionary identity comes from its authoritative target declaration, without including target rules.
+KEILAND_LINUX_DICT_MAKEFILE := userland/desktop/ime/dict/Makefile
+KEILAND_LINUX_DICT_ARCHIVE := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_ARCHIVE := //p' $(KEILAND_LINUX_DICT_MAKEFILE))
+KEILAND_LINUX_DICT_URL := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_URL := //p' $(KEILAND_LINUX_DICT_MAKEFILE))
+KEILAND_LINUX_DICT_ROOT := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_ROOT := //p' $(KEILAND_LINUX_DICT_MAKEFILE))
+KEILAND_LINUX_DICT_ARCHIVE_SHA := $(shell sed -n 's/^ZEDBSD_EXT_ime-dict-ja_SHA256 := //p' $(KEILAND_LINUX_DICT_MAKEFILE))
+KEILAND_LINUX_DICT_SHA := $(shell sed -n 's/^ZEDBSD_IME_DICT_X_SHA256 := //p' $(KEILAND_LINUX_DICT_MAKEFILE))
+build/distfiles/$(KEILAND_LINUX_DICT_ARCHIVE):
+	@mkdir -p $(dir $@)
+	curl -fL --retry 2 -o $@.tmp '$(KEILAND_LINUX_DICT_URL)'
+	printf '%s  %s\n' '$(KEILAND_LINUX_DICT_ARCHIVE_SHA)' '$@.tmp' | sha256sum -c -
+	mv $@.tmp $@
+$(KEILAND_LINUX_BUILD)/share/kei/ime/ja/SKK-JISYO.X: build/distfiles/$(KEILAND_LINUX_DICT_ARCHIVE) $(KEILAND_LINUX_DICT_MAKEFILE)
+	@mkdir -p $(dir $@)
+	printf '%s  %s\n' '$(KEILAND_LINUX_DICT_ARCHIVE_SHA)' '$<' | sha256sum -c -
+	tar -xOf $< '$(KEILAND_LINUX_DICT_ROOT)/dict/SKK-JISYO.X' > $@.tmp
+	printf '%s  %s\n' '$(KEILAND_LINUX_DICT_SHA)' '$@.tmp' | sha256sum -c -
+	mv $@.tmp $@
+# The copyright holder's WS095 D1 relicensing places the dictionary under the project license.
+KEILAND_LINUX_ALL += $(KEILAND_LINUX_BUILD)/share/kei/ime/ja/SKK-JISYO.X
+KEILAND_LINUX_INSTALL += share/kei/ime/ja/SKK-JISYO.X
+$(eval $(call KEILAND_LINUX_DATA,share/kei/ime/ja/SKK-JISYO.kei,userland/desktop/ime/dict/SKK-JISYO.kei))
+
 .PHONY: all install clean
 all: $(KEILAND_LINUX_ALL)
 
