@@ -44,4 +44,7 @@ int zwl_linux_logind_seat_paused(void);
 int zwl_linux_logind_poll_fd(void);
 int zwl_linux_logind_dispatch(struct zwl_server *server);
 
+int zwl_linux_device_revoked(struct zwl_server *server, int descriptor);
+int zwl_linux_logind_device_revoked(struct zwl_server *server, int descriptor);
+
 #endif

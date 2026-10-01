@@ -408,3 +408,22 @@ zwl_linux_seat_paused(
 	/* Succeeded: the selected backend supplies this seat property. */
 	return paused;
 }
+
+/*
+ * Retains service device ownership when revocation precedes the bus notification.
+ */
+int
+zwl_linux_device_revoked(
+	struct zwl_server *server,
+	int descriptor)
+{
+	int retained;
+
+	/* Direct device failure has no future service resume notification. */
+	if (seat_logind == 0)
+		return 0;
+	retained = zwl_linux_logind_device_revoked(server, descriptor);
+
+	/* Succeeded: the caller knows whether common teardown must wait for logind. */
+	return retained;
+}

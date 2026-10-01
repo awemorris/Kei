@@ -344,6 +344,35 @@ zwl_linux_logind_dispatch(
 	return 0;
 }
 
+/*
+ * Excludes a revoked input file while preserving its lease for the pending signal.
+ */
+int
+zwl_linux_logind_device_revoked(
+	struct zwl_server *server,
+	int descriptor)
+{
+	struct logind_device *device;
+	struct zwl_input_device *input;
+	unsigned index;
+
+	/* Only this seat's exact current input descriptor can retain service ownership. */
+	for (index = 1; index < LOGIND_DEVICES; index++) {
+		device = &seat_devices[index];
+		if (device->owned == 0 || device->fd != descriptor)
+			continue;
+		device->paused = 1;
+		input = seat_input(server, device);
+		if (input != NULL)
+			input->fd = -1;
+		printf("ZWL SEAT input_revoked device=%u:%u lease=retained\n", device->major, device->minor);
+		return 1;
+	}
+
+	/* An unknown descriptor cannot acquire logind ownership by reporting an error. */
+	return 0;
+}
+
 /* Calls the exact session object without rederiving its escaped path. */
 static int
 seat_call(

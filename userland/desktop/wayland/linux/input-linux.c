@@ -20,6 +20,9 @@
 /* The directory whose eventN nodes are the evdev devices. */
 #define INPUT_DIRECTORY "/dev/input"
 
+/* The one Linux input seat borrows this server until common service cleanup. */
+static struct zwl_server *input_server;
+
 static int event_node_name(const char *name);
 static int device_open(struct zwl_server *server, const char *path);
 static void probe_device(struct zwl_server *server, const char *path);
@@ -44,6 +47,7 @@ zwl_input_scan(
 	int paused;
 
 	/* The next rescan is due one period from now. */
+	input_server = server;
 	server->input_scan_time = zwl_milliseconds();
 
 	/* A service-paused seat cannot acquire newly discovered input devices. */
@@ -166,11 +170,24 @@ zwl_input_device_read(
 	size_t capacity)
 {
 	ssize_t bytes;
+	int error;
+	int retained;
 
 	/* Reads as many whole events as the buffer holds. */
 	bytes = read(descriptor, events, capacity * sizeof(events[0]));
-	if (bytes < 0)
+	if (bytes < 0) {
+		/* Logind can revoke the kernel file before its ordered bus notification arrives. */
+		error = errno;
+		if (error == ENODEV) {
+			retained = zwl_linux_device_revoked(input_server, descriptor);
+			if (retained != 0)
+				error = EAGAIN;
+		}
+
+		/* A retained lease waits for pause/resume; ordinary direct-device failures still close. */
+		errno = error;
 		return -1;
+	}
 
 	/* Reports the end of the device. */
 	if (bytes == 0)
