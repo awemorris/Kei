@@ -98,3 +98,12 @@ timeout 150 sh plan/tools/keiland-linux/interpose-check.sh
 再入の試験は `fake-backend.c` を gcc `-fPIC -shared` で build する（Bsymbolic・fno-semantic-interposition は付けない）。
 直接の再帰 C call は gcc が local alias に結び付けることがあるため、fake は同じ `vkCreateInstance` assembler symbol への extern alias から PLT を呼ぶ。
 `VK_CHAIN_REENTER=1` は試験の program にだけある入口。NO_DEEPBIND と fake の absolute backend path で実行すると、production の再入検出が診断して exit134 を返す。
+
+## Wayland WSI の host 試験
+
+`timeout 120 bash plan/tools/keiland-linux/wsi-check.sh`。gcc/clang の build と DESTDIR install の後に実行する。
+`KEILAND_LINUX_BUILD` と `STAGE` で独立 build を指定できる。system の Wayland server は試験 fixture のみ、client は我々の libwayland/libvulkan を使う。
+FIFO / CPU fallback / 30 frame ごとの resize / MAILBOX を各90 frame。全画素・サイズ、通常 IMPORT_SYNC_FILE 90回成功、fallback ENOTTY 1回と以後再試行無し、CPU completion wait を assert。
+raw fence/timeline は加工せず記録する。空/完了時の kernel stub が1になるため、raw count だけで経路を区別しない。
+`sync-unavailable.c` は試験 LD_PRELOAD fixture、compile 時指定で ENOTTY を供給する。production の試験環境変数は作らない。
+log は build/test/client-*.out / probe-*.out。X/WAYLAND の host 接続は使わず DRM=none。各 process 90秒、内部deadline60秒。

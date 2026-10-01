@@ -167,6 +167,7 @@ struct compat_swapchain {
 	unsigned allocated;
 	unsigned retired;
 	unsigned fallback;
+	unsigned foreign;
 	unsigned path;
 	uint32_t count;
 	VkFormat format;

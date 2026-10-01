@@ -54,6 +54,7 @@ vkGetInstanceProcAddr(
 	const struct compat_name *entry;
 	PFN_vkVoidFunction address;
 	int global;
+	int evaluated;
 
 	/* A null name cannot identify a procedure. */
 	if (pName == NULL)
@@ -82,7 +83,8 @@ vkGetInstanceProcAddr(
 	address = NULL;
 	if (entry != NULL && entry->kind == 'O') {
 		/* Instance-extension procedures require the application's enabled bit. */
-		if (compat_own_instance(instance, pName) != 0)
+		evaluated = compat_own_instance(instance, pName);
+		if (evaluated != 0)
 			address = entry->address;
 	} else if (entry != NULL && entry->kind == 'I') {
 		address = entry->address;
@@ -110,6 +112,7 @@ vkGetDeviceProcAddr(
 	PFN_vkVoidFunction address;
 	int differs;
 	struct compat_device *owner;
+	int evaluated;
 
 	/* A device procedure requires a device and a name. */
 	if (device == VK_NULL_HANDLE || pName == NULL)
@@ -133,7 +136,8 @@ vkGetDeviceProcAddr(
 		if (owner != NULL) {
 			/* Device procedures require a swapchain-enabled parent device. */
 			if (owner->swapchain != 0) {
-				if (compat_own_device(pName) != 0)
+				evaluated = compat_own_device(pName);
+				if (evaluated != 0)
 					address = entry->address;
 			}
 		}
@@ -410,36 +414,46 @@ static int
 compat_own_device(
 	const char *name)
 {
+	int evaluated;
+
 	/* Device-level swapchain procedures share one enabled extension. */
-	if (strcmp(name, "vkCreateSwapchainKHR") == 0)
+	evaluated = strcmp(name, "vkCreateSwapchainKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Device destruction retires only our own swapchain objects. */
-	if (strcmp(name, "vkDestroySwapchainKHR") == 0)
+	evaluated = strcmp(name, "vkDestroySwapchainKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Image enumeration belongs to the device-level swapchain extension. */
-	if (strcmp(name, "vkGetSwapchainImagesKHR") == 0)
+	evaluated = strcmp(name, "vkGetSwapchainImagesKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Both acquisition spellings share device swapchain enablement. */
-	if (strcmp(name, "vkAcquireNextImageKHR") == 0)
+	evaluated = strcmp(name, "vkAcquireNextImageKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Vulkan 1.1 acquisition remains owned by the same extension. */
-	if (strcmp(name, "vkAcquireNextImage2KHR") == 0)
+	evaluated = strcmp(name, "vkAcquireNextImage2KHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Queue presentation operates on device swapchain handles. */
-	if (strcmp(name, "vkQueuePresentKHR") == 0)
+	evaluated = strcmp(name, "vkQueuePresentKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Single-device group capabilities belong to the device-level extension. */
-	if (strcmp(name, "vkGetDeviceGroupPresentCapabilitiesKHR") == 0)
+	evaluated = strcmp(name, "vkGetDeviceGroupPresentCapabilitiesKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Group surface modes are likewise queried on an enabled device. */
-	if (strcmp(name, "vkGetDeviceGroupSurfacePresentModesKHR") == 0)
+	evaluated = strcmp(name, "vkGetDeviceGroupSurfacePresentModesKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* All other owned names require an instance-level enabled extension. */
@@ -454,22 +468,27 @@ compat_own_instance(
 {
 	struct compat_instance *owner;
 	unsigned bit;
+	int evaluated;
 
 	/* Instance queries may expose device-extension procedures before device creation. */
-	if (compat_own_device(name) != 0)
+	evaluated = compat_own_device(name);
+	if (evaluated != 0)
 		return 1;
 
 	/* The physical rectangle query is part of the same device-extension contract. */
-	if (strcmp(name, "vkGetPhysicalDevicePresentRectanglesKHR") == 0)
+	evaluated = strcmp(name, "vkGetPhysicalDevicePresentRectanglesKHR");
+	if (evaluated == 0)
 		return 1;
 
 	/* Other surface queries require the instance's surface enablement. */
 	bit = COMPAT_INSTANCE_SURFACE;
-	if (strcmp(name, "vkCreateWaylandSurfaceKHR") == 0)
+	evaluated = strcmp(name, "vkCreateWaylandSurfaceKHR");
+	if (evaluated == 0)
 		bit = COMPAT_INSTANCE_WAYLAND;
 
 	/* Presentation support belongs to the Wayland-specific instance extension. */
-	if (strcmp(name, "vkGetPhysicalDeviceWaylandPresentationSupportKHR") == 0)
+	evaluated = strcmp(name, "vkGetPhysicalDeviceWaylandPresentationSupportKHR");
+	if (evaluated == 0)
 		bit = COMPAT_INSTANCE_WAYLAND;
 
 	/* Requires the still-live instance and its application enablement bits. */

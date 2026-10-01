@@ -83,36 +83,7 @@ static void probe_bind_compositor(struct wl_client *client, void *data, uint32_t
 static int probe_timeout(void *data);
 static int probe_observe(struct probe_buffer *buffer);
 static uint64_t probe_time(void);
-
-/* Buffer resource requests are implemented only for descriptor lifetime and release observations. */
-static const struct wl_buffer_interface probe_buffer_impl = { probe_destroy };
-
-/* Only version-three single-plane construction is relevant to this bounded server. */
-static const struct zwp_linux_buffer_params_v1_interface probe_params_impl = {
-	probe_destroy, probe_add, probe_create, probe_create_immed
-};
-
-/* Version four feedback requests are never advertised by the version-three global. */
-static const struct zwp_linux_dmabuf_v1_interface probe_dmabuf_impl = {
-	probe_destroy, probe_params, NULL, NULL
-};
-
-/* The v4 core surface requests used by the WSI; later requests remain unavailable. */
-static const struct wl_surface_interface probe_surface_impl = {
-	probe_destroy, probe_attach, probe_damage, probe_frame_create,
-	probe_region_set, probe_region_set, probe_commit, probe_transform,
-	probe_scale, probe_damage, NULL
-};
-
-/* Regions are sufficient to accept ordinary core client setup, though the probe never clips pixels. */
-static const struct wl_region_interface probe_region_impl = {
-	probe_destroy, probe_damage, probe_damage
-};
-
-/* The test compositor constructs private surface and region resources only. */
-static const struct wl_compositor_interface probe_compositor_impl = {
-	probe_surface_create, probe_region_create
-};
+static int probe_initialization_failed(void);
 
 /* Runs a finite test server and returns failure for malformed imports or an incomplete frame sequence. */
 int
@@ -126,13 +97,15 @@ main(
 	int error;
 	struct wl_global *global;
 	struct wl_event_source *timer;
+	int evaluated;
 
 	/* Parses the same finite workload options used by the Queue acceptance commands. */
 	socket = NULL;
 	timeout = 60;
 	for (index = 1; index < argc; index++) {
 		/* Size logging does not change protocol behavior. */
-		if (strcmp(argv[index], "--size-log") == 0) {
+		evaluated = strcmp(argv[index], "--size-log");
+		if (evaluated == 0) {
 			probe_size_log = 1;
 			continue;
 		}
@@ -142,19 +115,22 @@ main(
 			return 2;
 
 		/* Selects the private absolute socket path. */
-		if (strcmp(argv[index], "--socket") == 0) {
+		evaluated = strcmp(argv[index], "--socket");
+		if (evaluated == 0) {
 			socket = argv[++index];
 			continue;
 		}
 
 		/* Selects a bounded positive frame count. */
-		if (strcmp(argv[index], "--frames") == 0) {
+		evaluated = strcmp(argv[index], "--frames");
+		if (evaluated == 0) {
 			probe_limit = (unsigned)strtoul(argv[++index], NULL, 10);
 			continue;
 		}
 
 		/* Selects the finite server deadline in seconds. */
-		if (strcmp(argv[index], "--timeout") == 0) {
+		evaluated = strcmp(argv[index], "--timeout");
+		if (evaluated == 0) {
 			timeout = (unsigned)strtoul(argv[++index], NULL, 10);
 			continue;
 		}
@@ -188,27 +164,27 @@ main(
 	/* Uses a private test socket without any host compositor connection. */
 	error = wl_display_add_socket(probe_display, socket);
 	if (error != 0)
-		goto fail;
+		return probe_initialization_failed();
 
 	/* Advertises core v4 surface requests and version-three DMA-BUF modifier events. */
 	global = wl_global_create(probe_display, &wl_compositor_interface, 4, NULL, probe_bind_compositor);
 	if (global == NULL)
-		goto fail;
+		return probe_initialization_failed();
 
 	/* The DMA-BUF global is deliberately independent of system Vulkan's WSI. */
 	global = wl_global_create(probe_display, &zwp_linux_dmabuf_v1_interface, 3, NULL, probe_bind_dmabuf);
 	if (global == NULL)
-		goto fail;
+		return probe_initialization_failed();
 
 	/* The event loop deadline prevents an absent or stalled client from hanging the test. */
 	timer = wl_event_loop_add_timer(wl_display_get_event_loop(probe_display), probe_timeout, NULL);
 	if (timer == NULL)
-		goto fail;
+		return probe_initialization_failed();
 
 	/* Arms the one finite test deadline before accepting clients. */
 	error = wl_event_source_timer_update(timer, (int)timeout * 1000);
 	if (error != 0)
-		goto fail;
+		return probe_initialization_failed();
 
 	/* Runs until all expected commits arrive or a checked operation fails. */
 	wl_display_run(probe_display);
@@ -225,13 +201,6 @@ main(
 
 	/* Succeeded: every requested frame was observed from its actual exported image. */
 	return 0;
-
-fail:
-	/* Partial initialization owns no externally persistent artifacts. */
-	wl_display_destroy(probe_display);
-
-	/* Reports server initialization failure without claiming frame evidence. */
-	return 1;
 }
 
 /* Handles core and extension protocol resource destruction. */
@@ -291,12 +260,18 @@ probe_add(
 	/* The acceptance server exercises the one-plane WSI contract only. */
 	(void)client;
 	params = wl_resource_get_user_data(resource);
-	if (plane != 0)
-		goto invalid;
+	if (plane != 0) {
+		(void)close(fd);
+		wl_resource_post_error(resource, ZWP_LINUX_BUFFER_PARAMS_V1_ERROR_PLANE_IDX, "one plane required");
+		return;
+	}
 
 	/* Duplicate plane requests are invalid protocol inputs. */
-	if (params->have != 0)
-		goto invalid;
+	if (params->have != 0) {
+		(void)close(fd);
+		wl_resource_post_error(resource, ZWP_LINUX_BUFFER_PARAMS_V1_ERROR_PLANE_IDX, "one plane required");
+		return;
+	}
 
 	/* Transfers received descriptor ownership to this parameter resource. */
 	params->fd = fd;
@@ -307,11 +282,6 @@ probe_add(
 
 	/* Succeeded: immediate creation may now consume this plane description. */
 	return;
-
-invalid:
-	/* Rejects invalid planes without leaking the newly received descriptor. */
-	(void)close(fd);
-	wl_resource_post_error(resource, ZWP_LINUX_BUFFER_PARAMS_V1_ERROR_PLANE_IDX, "one plane required");
 }
 
 /* Validates immediate construction and transfers the plane to a compositor buffer resource. */
@@ -324,6 +294,8 @@ probe_buffer_create(
 	int32_t height,
 	uint32_t format)
 {
+	/* Buffer resource requests are implemented only for descriptor lifetime and release observations. */
+	static const struct wl_buffer_interface probe_buffer_impl = {probe_destroy};
 	struct probe_buffer *params;
 	struct probe_buffer *buffer;
 	struct wl_resource *created;
@@ -441,6 +413,9 @@ probe_params(
 	struct wl_resource *resource,
 	uint32_t id)
 {
+	/* Only version-three single-plane construction is relevant to this bounded server. */
+	static const struct zwp_linux_buffer_params_v1_interface probe_params_impl = {
+	    probe_destroy, probe_add, probe_create, probe_create_immed};
 	struct wl_resource *created;
 	struct probe_buffer *params;
 
@@ -471,6 +446,9 @@ probe_bind_dmabuf(
 	uint32_t version,
 	uint32_t id)
 {
+	/* Version four feedback requests are never advertised by the version-three global. */
+	static const struct zwp_linux_dmabuf_v1_interface probe_dmabuf_impl = {
+	    probe_destroy, probe_params, NULL, NULL};
 	struct wl_resource *resource;
 
 	/* The server advertises only version three. */
@@ -634,7 +612,11 @@ probe_commit(
 	/* The compositor releases only after its CPU read and read-side synchronization have finished. */
 	wl_buffer_send_release(surface->buffer);
 	surface->buffer = NULL;
-	while (wl_list_empty(&surface->frames) == 0) {
+	for (;;) {
+		/* An empty callback list finishes the resource retirement pass. */
+		if (surface->frames.next == &surface->frames)
+			break;
+
 		/* Each callback is done exactly once for the committed frame. */
 		frame = wl_container_of(surface->frames.next, frame, link);
 		wl_callback_send_done(frame->resource, (uint32_t)(probe_time() / 1000000));
@@ -657,7 +639,11 @@ probe_surface_free(
 
 	/* A disconnected client may retain pacing callbacks that never reached a commit. */
 	surface = wl_resource_get_user_data(resource);
-	while (wl_list_empty(&surface->frames) == 0) {
+	for (;;) {
+		/* An empty callback list finishes the resource retirement pass. */
+		if (surface->frames.next == &surface->frames)
+			break;
+
 		/* Resource destruction unlinks callback data from this still-live surface. */
 		frame = wl_container_of(surface->frames.next, frame, link);
 		wl_resource_destroy(frame->resource);
@@ -674,6 +660,11 @@ probe_surface_create(
 	struct wl_resource *resource,
 	uint32_t id)
 {
+	/* The v4 core surface requests used by the WSI; later requests remain unavailable. */
+	static const struct wl_surface_interface probe_surface_impl = {
+	    probe_destroy, probe_attach, probe_damage, probe_frame_create,
+	    probe_region_set, probe_region_set, probe_commit, probe_transform,
+	    probe_scale, probe_damage, NULL};
 	struct probe_surface *surface;
 	struct wl_resource *created;
 
@@ -704,6 +695,9 @@ probe_region_create(
 	struct wl_resource *resource,
 	uint32_t id)
 {
+	/* Regions are sufficient to accept ordinary core client setup, though the probe never clips pixels. */
+	static const struct wl_region_interface probe_region_impl = {
+	    probe_destroy, probe_damage, probe_damage};
 	struct wl_resource *created;
 
 	/* Regions own no image data in this test compositor. */
@@ -726,6 +720,9 @@ probe_bind_compositor(
 	uint32_t version,
 	uint32_t id)
 {
+	/* The test compositor constructs private surface and region resources only. */
+	static const struct wl_compositor_interface probe_compositor_impl = {
+	    probe_surface_create, probe_region_create};
 	struct wl_resource *resource;
 
 	/* Each bound global only owns its protocol identity. */
@@ -876,7 +873,8 @@ probe_observe(
 
 /* Uses a monotonic timebase for writer wait evidence and callback timestamps. */
 static uint64_t
-probe_time(void)
+probe_time(
+	void)
 {
 	struct timespec now;
 	int error;
@@ -888,4 +886,16 @@ probe_time(void)
 
 	/* Returns nanoseconds without wall-clock adjustments. */
 	return (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
+}
+
+/* Retires the test display after any partial global or socket setup failure. */
+static int
+probe_initialization_failed(
+	void)
+{
+	/* Partial initialization owns no externally persistent artifacts. */
+	wl_display_destroy(probe_display);
+
+	/* Reports server initialization failure without claiming frame evidence. */
+	return 1;
 }

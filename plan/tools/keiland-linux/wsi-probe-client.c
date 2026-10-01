@@ -46,11 +46,7 @@ static VkResult client_swapchain(struct client_probe *probe, uint32_t width, uin
 static VkResult client_frame(struct client_probe *probe, unsigned frame);
 static void client_cleanup(struct client_probe *probe);
 static uint64_t client_time(void);
-
-/* Registry callbacks construct only the application's own core compositor object. */
-static const struct wl_registry_listener client_registry_listener = {
-	client_global, client_remove
-};
+static int client_failed(struct client_probe *probe, VkResult error);
 
 /* Runs the finite public WSI workload and reports PASS only after checked GPU and protocol operations. */
 int
@@ -66,6 +62,8 @@ main(
 	int index;
 	VkResult error;
 	uint64_t start;
+	int evaluated;
+	uint64_t measured_time;
 
 	/* Initializes ownership before parsing the finite acceptance options. */
 	memset(&probe, 0, sizeof(probe));
@@ -74,13 +72,15 @@ main(
 	resize = 0;
 	for (index = 1; index < argc; index++) {
 		/* MAILBOX changes the advertised present mode without changing frame colors. */
-		if (strcmp(argv[index], "--mailbox") == 0) {
+		evaluated = strcmp(argv[index], "--mailbox");
+		if (evaluated == 0) {
 			probe.mailbox = 1;
 			continue;
 		}
 
 		/* Resize recreates the swapchain every thirty frames with the prior handle supplied. */
-		if (strcmp(argv[index], "--resize") == 0) {
+		evaluated = strcmp(argv[index], "--resize");
+		if (evaluated == 0) {
 			resize = 1;
 			continue;
 		}
@@ -90,13 +90,15 @@ main(
 			return 2;
 
 		/* Selects the finite frame workload. */
-		if (strcmp(argv[index], "--frames") == 0) {
+		evaluated = strcmp(argv[index], "--frames");
+		if (evaluated == 0) {
 			frames = (unsigned)strtoul(argv[++index], NULL, 10);
 			continue;
 		}
 
 		/* Selects the checked wall-clock deadline in seconds. */
-		if (strcmp(argv[index], "--timeout") == 0) {
+		evaluated = strcmp(argv[index], "--timeout");
+		if (evaluated == 0) {
 			timeout = (unsigned)strtoul(argv[++index], NULL, 10);
 			continue;
 		}
@@ -121,19 +123,20 @@ main(
 	start = client_time();
 	error = client_setup(&probe);
 	if (error != VK_SUCCESS)
-		goto fail;
+		return client_failed(&probe, error);
 
 	/* Builds the initial client-selected extent. */
 	error = client_swapchain(&probe, 320, 240);
 	if (error != VK_SUCCESS)
-		goto fail;
+		return client_failed(&probe, error);
 
 	/* Every frame renders to the actual exported Vulkan image. */
 	for (frame = 0; frame < frames; frame++) {
 		/* Enforces the one original deadline across resize and rendering. */
-		if (client_time() - start >= (uint64_t)timeout * 1000000000ULL) {
+		measured_time = client_time();
+		if (measured_time - start >= (uint64_t)timeout * 1000000000ULL) {
 			error = VK_TIMEOUT;
-			goto fail;
+			return client_failed(&probe, error);
 		}
 
 		/* Alternates client-selected extents without waiting for compositor configure events. */
@@ -148,7 +151,7 @@ main(
 
 					/* Resize failure ends acceptance without rewriting the expected color sequence. */
 					if (error != VK_SUCCESS)
-						goto fail;
+						return client_failed(&probe, error);
 				}
 			}
 		}
@@ -156,13 +159,13 @@ main(
 		/* Checks acquire, clear, submission and per-swapchain presentation result. */
 		error = client_frame(&probe, frame);
 		if (error != VK_SUCCESS)
-			goto fail;
+			return client_failed(&probe, error);
 	}
 
 	/* Waits for the last GPU submission before reporting the finite workload complete. */
 	error = vkDeviceWaitIdle(probe.device);
 	if (error != VK_SUCCESS)
-		goto fail;
+		return client_failed(&probe, error);
 
 	/* Retires all application resources before claiming success. */
 	client_cleanup(&probe);
@@ -170,14 +173,6 @@ main(
 
 	/* Succeeded: every expected frame used the public Wayland WSI boundary. */
 	return 0;
-
-fail:
-	/* Failure retains the numeric Vulkan outcome and retires all partial resources. */
-	fprintf(stderr, "wsi-probe-client: FAIL result=%d\n", error);
-	client_cleanup(&probe);
-
-	/* No failed or timed-out frame sequence may clear the Phase. */
-	return 1;
 }
 
 /* Constructs the application's core compositor without binding the WSI's private DMA-BUF factory. */
@@ -190,10 +185,12 @@ client_global(
 	uint32_t version)
 {
 	struct client_probe *probe;
+	int evaluated;
 
 	/* Only the application's wl_surface comes from this default event queue. */
 	probe = data;
-	if (strcmp(interface, "wl_compositor") != 0)
+	evaluated = strcmp(interface, "wl_compositor");
+	if (evaluated != 0)
 		return;
 
 	/* Buffer damage requires version four in this acceptance client. */
@@ -222,6 +219,9 @@ static VkResult
 client_setup(
 	struct client_probe *probe)
 {
+	/* Registry callbacks construct only the application's own core compositor object. */
+	static const struct wl_registry_listener client_registry_listener = {
+	    client_global, client_remove};
 	VkApplicationInfo application;
 	VkInstanceCreateInfo instance;
 	VkWaylandSurfaceCreateInfoKHR surface;
@@ -627,7 +627,8 @@ client_cleanup(
 
 /* Returns monotonic nanoseconds for the one finite client workload deadline. */
 static uint64_t
-client_time(void)
+client_time(
+	void)
 {
 	struct timespec now;
 	int error;
@@ -639,4 +640,18 @@ client_time(void)
 
 	/* Uses a wall-clock-independent timebase shared across all frames. */
 	return (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
+}
+
+/* Reports a failed frame or setup and retires every partially initialized application resource. */
+static int
+client_failed(
+	struct client_probe *probe,
+	VkResult error)
+{
+	/* Failure retains the numeric Vulkan outcome and retires all partial resources. */
+	fprintf(stderr, "wsi-probe-client: FAIL result=%d\n", error);
+	client_cleanup(probe);
+
+	/* No failed or timed-out frame sequence may clear the Phase. */
+	return 1;
 }

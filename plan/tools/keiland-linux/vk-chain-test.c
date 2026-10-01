@@ -55,6 +55,8 @@ main(
 	VkResult error;
 	int found;
 	int differs;
+	unsigned surface_found;
+	unsigned wayland_found;
 	size_t length;
 	size_t suffix_length;
 
@@ -116,8 +118,22 @@ main(
 	if (error != VK_SUCCESS)
 		return 1;
 
+	/* Counts our own advertised surface extensions alongside the denied X11 names. */
+	surface_found = 0;
+	wayland_found = 0;
+
 	/* Rejects foreign platform surface extensions in the advertised list. */
 	for (index = 0; index < count; index++) {
+		/* Our public instance list includes the common surface extension. */
+		differs = strcmp(extensions[index].extensionName, "VK_KHR_surface");
+		if (differs == 0)
+			surface_found = 1;
+
+		/* Our Wayland surface extension is advertised independently of backend platform WSI. */
+		differs = strcmp(extensions[index].extensionName, "VK_KHR_wayland_surface");
+		if (differs == 0)
+			wayland_found = 1;
+
 		/* Checks XCB surface ownership. */
 		differs = strcmp(extensions[index].extensionName, "VK_KHR_xcb_surface");
 		if (differs == 0)
@@ -128,6 +144,19 @@ main(
 		if (differs == 0)
 			return 1;
 	}
+
+	/* Both own surface extensions must be available to ordinary applications. */
+	if (surface_found == 0)
+		return 1;
+
+	/* Wayland availability is required even with the host display environment unset. */
+	if (wayland_found == 0)
+		return 1;
+
+	/* An instance that did not enable Wayland cannot query its owned creation procedure. */
+	procedure = vkGetInstanceProcAddr(instance, "vkCreateWaylandSurfaceKHR");
+	if (procedure != NULL)
+		return 1;
 
 	/* Obtains one physical device from the backend instance. */
 	count = 1;

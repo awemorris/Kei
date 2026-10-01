@@ -18,20 +18,13 @@
 
 static VkResult chain_image_create(struct compat_swapchain *chain, uint32_t index, const VkSwapchainCreateInfoKHR *create);
 static void chain_free(struct compat_swapchain *chain);
+static void chain_gpu_free(struct compat_swapchain *chain);
 static void chain_release(void *data, struct wl_buffer *buffer);
 static void chain_frame(void *data, struct wl_callback *callback, uint32_t serial);
 static VkResult chain_commands(struct compat_swapchain *chain, struct compat_queue *queue);
 static VkResult chain_acquire_signal(struct compat_swapchain *chain, uint32_t index, VkSemaphore semaphore, VkFence fence);
 static VkResult chain_present(struct compat_swapchain *chain, struct compat_queue *queue, uint32_t index, uint32_t wait_count, const VkSemaphore *waits);
 static VkResult chain_record(struct compat_swapchain *chain, uint32_t index, unsigned acquire, VkCommandBuffer command);
-
-/* Release callbacks own no buffer storage and stay valid until the retired chain is collected. */
-static const struct wl_buffer_listener chain_buffer_listener = {
-    chain_release};
-
-/* FIFO has at most one pacing callback, owned by the surface until done or the next deadline. */
-static const struct wl_callback_listener chain_frame_listener = {
-    chain_frame};
 
 /* Creates exportable images and their compositor buffers without using backend WSI. */
 VKAPI_ATTR VkResult VKAPI_CALL
@@ -114,6 +107,8 @@ vkCreateSwapchainKHR(
 	chain->mode = pCreateInfo->presentMode;
 	chain->path = owner->path;
 	chain->fallback = owner->implicit_sync == 0;
+	if (pCreateInfo->imageSharingMode == VK_SHARING_MODE_EXCLUSIVE)
+		chain->foreign = owner->foreign;
 	if (pAllocator != NULL) {
 		chain->allocator = *pAllocator;
 		chain->allocated = 1;
@@ -178,6 +173,9 @@ vkDestroySwapchainKHR(
 	/* Backend resources cannot retire while our final private submission remains in flight. */
 	if (chain->queue != VK_NULL_HANDLE)
 		(void)chain->device->queue_idle(chain->queue);
+
+	/* Vulkan resource retirement must precede a later device destruction even if release is delayed. */
+	chain_gpu_free(chain);
 
 	/* Moves callback storage to the surface's deferred collection list. */
 	chain->retired = 1;
@@ -406,8 +404,11 @@ vkGetDeviceGroupPresentCapabilitiesKHR(
 	VkDevice device,
 	VkDeviceGroupPresentCapabilitiesKHR *pCapabilities)
 {
+	struct compat_device *queried_device;
+
 	/* Requires the application's swapchain-enabled device and output storage. */
-	if (compat_device_get(device) == NULL)
+	queried_device = compat_device_get(device);
+	if (queried_device == NULL)
 		return VK_ERROR_INITIALIZATION_FAILED;
 
 	/* Refuses a missing capabilities destination. */
@@ -430,8 +431,11 @@ vkGetDeviceGroupSurfacePresentModesKHR(
 	VkSurfaceKHR surface,
 	VkDeviceGroupPresentModeFlagsKHR *pModes)
 {
+	struct compat_device *queried_device;
+
 	/* Requires known device and surface ownership. */
-	if (compat_device_get(device) == NULL)
+	queried_device = compat_device_get(device);
+	if (queried_device == NULL)
 		return VK_ERROR_INITIALIZATION_FAILED;
 
 	/* A null private surface has no group presentation modes. */
@@ -495,6 +499,9 @@ chain_image_create(
 	uint32_t index,
 	const VkSwapchainCreateInfoKHR *create)
 {
+	/* Release callbacks own no buffer storage and stay valid until the retired chain is collected. */
+	static const struct wl_buffer_listener chain_buffer_listener = {
+	    chain_release};
 	struct compat_device *device;
 	struct compat_image *image;
 	struct zwp_linux_buffer_params_v1 *params;
@@ -678,12 +685,10 @@ static void
 chain_free(
 	struct compat_swapchain *chain)
 {
-	struct compat_device *device;
 	struct compat_image *image;
 	uint32_t index;
 
 	/* Protocol objects retire before their callback data or exported memory disappears. */
-	device = chain->device;
 	for (index = 0; index < chain->count; index++) {
 		/* Removes this image's release callback proxy before releasing its record. */
 		image = &chain->images[index];
@@ -693,27 +698,10 @@ chain_free(
 		/* The retained descriptor belongs solely to this image. */
 		if (image->fd >= 0)
 			(void)close(image->fd);
-
-		/* Destroys the image before releasing the memory that backs it. */
-		if (image->image != VK_NULL_HANDLE)
-			device->destroy_image(device->handle, image->image, NULL);
-
-		/* A partially created image may not yet have an allocation. */
-		if (image->memory != VK_NULL_HANDLE)
-			device->free_memory(device->handle, image->memory, NULL);
-
-		/* Private submission fences retire only after queue completion was established. */
-		if (chain->fence[index] != VK_NULL_HANDLE)
-			device->destroy_fence(device->handle, chain->fence[index], NULL);
-
-		/* The semaphore has no outstanding submission when a chain is collected. */
-		if (chain->semaphore[index] != VK_NULL_HANDLE)
-			device->destroy_semaphore(device->handle, chain->semaphore[index], NULL);
 	}
 
-	/* Destroying the pool also frees both directions' private command buffers. */
-	if (chain->pool != VK_NULL_HANDLE)
-		device->destroy_pool(device->handle, chain->pool, NULL);
+	/* Partially initialized chains may still own Vulkan resources. */
+	chain_gpu_free(chain);
 
 	/* Returns Vulkan-object storage to its creating allocator. */
 	compat_object_free(chain, chain->allocated, &chain->allocator);
@@ -774,6 +762,10 @@ chain_commands(
 		/* Reuses fully initialized private submission objects. */
 		return VK_SUCCESS;
 	}
+
+	/* A prior partial initialization remains owned for destruction and cannot be retried in place. */
+	if (chain->pool != VK_NULL_HANDLE)
+		return VK_ERROR_INITIALIZATION_FAILED;
 
 	/* Allocates a pool for foreign ownership release and acquire barriers. */
 	memset(&pool, 0, sizeof(pool));
@@ -861,7 +853,7 @@ chain_record(
 		return error;
 
 	/* Foreign ownership transfer is required only for drivers advertising its extension. */
-	if (chain->device->foreign != 0) {
+	if (chain->foreign != 0) {
 		/* The barrier leaves the application's final layout unchanged. */
 		memset(&barrier, 0, sizeof(barrier));
 		barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -915,7 +907,7 @@ chain_acquire_signal(
 	/* Initial acquire needs a device queue only for CPU fallback or foreign re-acquire. */
 	device = chain->device;
 	transfer = 0;
-	if (device->foreign != 0)
+	if (chain->foreign != 0)
 		transfer = chain->images[index].presented;
 
 	/* A private submission also establishes the resource pool used by present. */
@@ -1083,6 +1075,9 @@ chain_present(
 	uint32_t wait_count,
 	const VkSemaphore *waits)
 {
+	/* FIFO has at most one pacing callback, owned by the surface until done or the next deadline. */
+	static const struct wl_callback_listener chain_frame_listener = {
+	    chain_frame};
 	struct compat_device *device;
 	struct compat_surface *surface;
 	struct dma_buf_import_sync_file import;
@@ -1121,15 +1116,17 @@ chain_present(
 	if (error != VK_SUCCESS)
 		return error;
 
-	/* Resets only after the previous completed payload has been observed. */
-	error = device->reset_fences(device->handle, 1, &chain->fence[index]);
-	if (error != VK_SUCCESS)
-		return error;
-
 	/* Builds one explicit stage mask for every application wait semaphore. */
 	stages = calloc((size_t)wait_count + 1, sizeof(*stages));
 	if (stages == NULL)
 		return VK_ERROR_OUT_OF_HOST_MEMORY;
+
+	/* Resets only after the previous completed payload has been observed. */
+	error = device->reset_fences(device->handle, 1, &chain->fence[index]);
+	if (error != VK_SUCCESS) {
+		free(stages);
+		return error;
+	}
 
 	/* Rendering completion gates every command or exported writer payload. */
 	for (other = 0; other < wait_count; other++) {
@@ -1143,7 +1140,7 @@ chain_present(
 	submit.waitSemaphoreCount = wait_count;
 	submit.pWaitSemaphores = waits;
 	submit.pWaitDstStageMask = stages;
-	if (device->foreign != 0) {
+	if (chain->foreign != 0) {
 		submit.commandBufferCount = 1;
 		submit.pCommandBuffers = &chain->release_command[index];
 	}
@@ -1259,4 +1256,58 @@ chain_present(
 
 	/* Succeeded: implicit completion or CPU waiting protects the compositor's next read. */
 	return VK_SUCCESS;
+}
+
+/* Retires backend resources while keeping compositor release callback records alive. */
+static void
+chain_gpu_free(
+	struct compat_swapchain *chain)
+{
+	struct compat_device *device;
+	struct compat_image *image;
+	uint32_t index;
+
+	/* Callback-only retired records do not keep a backend device alive. */
+	device = chain->device;
+	if (device == NULL)
+		return;
+
+	/* Clears each handle after retirement so partial cleanup remains idempotent. */
+	for (index = 0; index < chain->count; index++) {
+		/* The same image records remain valid for future wl_buffer.release callbacks. */
+		image = &chain->images[index];
+
+		/* Destroys the image before releasing the memory that backs it. */
+		if (image->image != VK_NULL_HANDLE) {
+			device->destroy_image(device->handle, image->image, NULL);
+			image->image = VK_NULL_HANDLE;
+		}
+
+		/* A partially created image may not yet have an allocation. */
+		if (image->memory != VK_NULL_HANDLE) {
+			device->free_memory(device->handle, image->memory, NULL);
+			image->memory = VK_NULL_HANDLE;
+		}
+
+		/* Private submission fences retire only after queue completion was established. */
+		if (chain->fence[index] != VK_NULL_HANDLE) {
+			device->destroy_fence(device->handle, chain->fence[index], NULL);
+			chain->fence[index] = VK_NULL_HANDLE;
+		}
+
+		/* The semaphore has no outstanding submission when a chain is collected. */
+		if (chain->semaphore[index] != VK_NULL_HANDLE) {
+			device->destroy_semaphore(device->handle, chain->semaphore[index], NULL);
+			chain->semaphore[index] = VK_NULL_HANDLE;
+		}
+	}
+
+	/* Destroying the pool also frees both directions' private command buffers. */
+	if (chain->pool != VK_NULL_HANDLE) {
+		device->destroy_pool(device->handle, chain->pool, NULL);
+		chain->pool = VK_NULL_HANDLE;
+	}
+
+	/* Deferred protocol records retain no backend device dependency. */
+	chain->device = NULL;
 }

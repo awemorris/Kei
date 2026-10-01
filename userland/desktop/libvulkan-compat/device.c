@@ -44,6 +44,7 @@ vkCreateDevice(
 	const char **names;
 	struct compat_capabilities capabilities;
 	unsigned swapchain;
+	VkQueue initial_queue;
 
 	/* Requires valid public creation inputs. */
 	if (pCreateInfo == NULL || pDevice == NULL)
@@ -129,6 +130,15 @@ vkCreateDevice(
 
 	/* Ends list protection; callers retain the Vulkan handle lifetime themselves. */
 	(void)pthread_mutex_unlock(&compat_mutex);
+
+	/* Records one ordinary created queue even if the application acquires before retrieving it. */
+	if (pCreateInfo->queueCreateInfoCount != 0) {
+		/* Flagged queues require vkGetDeviceQueue2 and remain recorded on application retrieval. */
+		if (pCreateInfo->pQueueCreateInfos[0].flags == 0) {
+			compat_backend.get_queue(*pDevice, pCreateInfo->pQueueCreateInfos[0].queueFamilyIndex, 0, &initial_queue);
+			device_queue_record(*pDevice, initial_queue, pCreateInfo->pQueueCreateInfos[0].queueFamilyIndex);
+		}
+	}
 
 	/* Leaves the completed device creation boundary. */
 	compat_leave();
@@ -347,57 +357,6 @@ compat_queue_get(
 	return queue;
 }
 
-/* Records one retrieved queue without duplicating an existing handle's ownership. */
-static void
-device_queue_record(
-	VkDevice handle,
-	VkQueue queue_handle,
-	uint32_t family)
-{
-	struct compat_device *device;
-	struct compat_queue *queue;
-
-	/* Resolves the live parent before publishing any queue metadata. */
-	device = compat_device_get(handle);
-	if (device == NULL)
-		return;
-
-	/* Finds or creates the single queue record under the ownership mutex. */
-	(void)pthread_mutex_lock(&compat_mutex);
-
-	/* Checks whether an earlier retrieval already recorded the queue. */
-	for (queue = compat_queues; queue != NULL; queue = queue->next) {
-		/* Stops at the existing queue record. */
-		if (queue->handle == queue_handle)
-			break;
-	}
-
-	/* Allocates a queue record only for a new retrieved handle. */
-	if (queue == NULL) {
-		/* Keeps queue ownership available to later presentation calls. */
-		queue = calloc(1, sizeof(*queue));
-		if (queue == NULL) {
-			/* Releases the mutex before terminating an unreportable void-API allocation failure. */
-			(void)pthread_mutex_unlock(&compat_mutex);
-			(void)fputs("libvulkan-compat: no memory for queue ownership\n", stderr);
-			abort();
-		}
-
-		/* Publishes one fully initialized queue ownership record. */
-		queue->handle = queue_handle;
-		queue->device = device;
-		queue->family = family;
-		queue->next = compat_queues;
-		compat_queues = queue;
-	}
-
-	/* Ends list protection; callers retain the Vulkan handle lifetime themselves. */
-	(void)pthread_mutex_unlock(&compat_mutex);
-
-	/* Succeeded: the retrieved queue retains its parent device. */
-	return;
-}
-
 /* Returns an already retrieved queue belonging to this still-live device. */
 struct compat_queue *
 compat_device_queue(
@@ -610,6 +569,57 @@ compat_image_supported(
 	return VK_TRUE;
 }
 
+/* Records one retrieved queue without duplicating an existing handle's ownership. */
+static void
+device_queue_record(
+	VkDevice handle,
+	VkQueue queue_handle,
+	uint32_t family)
+{
+	struct compat_device *device;
+	struct compat_queue *queue;
+
+	/* Resolves the live parent before publishing any queue metadata. */
+	device = compat_device_get(handle);
+	if (device == NULL)
+		return;
+
+	/* Finds or creates the single queue record under the ownership mutex. */
+	(void)pthread_mutex_lock(&compat_mutex);
+
+	/* Checks whether an earlier retrieval already recorded the queue. */
+	for (queue = compat_queues; queue != NULL; queue = queue->next) {
+		/* Stops at the existing queue record. */
+		if (queue->handle == queue_handle)
+			break;
+	}
+
+	/* Allocates a queue record only for a new retrieved handle. */
+	if (queue == NULL) {
+		/* Keeps queue ownership available to later presentation calls. */
+		queue = calloc(1, sizeof(*queue));
+		if (queue == NULL) {
+			/* Releases the mutex before terminating an unreportable void-API allocation failure. */
+			(void)pthread_mutex_unlock(&compat_mutex);
+			(void)fputs("libvulkan-compat: no memory for queue ownership\n", stderr);
+			abort();
+		}
+
+		/* Publishes one fully initialized queue ownership record. */
+		queue->handle = queue_handle;
+		queue->device = device;
+		queue->family = family;
+		queue->next = compat_queues;
+		compat_queues = queue;
+	}
+
+	/* Ends list protection; callers retain the Vulkan handle lifetime themselves. */
+	(void)pthread_mutex_unlock(&compat_mutex);
+
+	/* Succeeded: the retrieved queue retains its parent device. */
+	return;
+}
+
 /* Finds one exportable single-plane colour modifier from the backend's v1 list. */
 static VkBool32
 device_modifier_supported(
@@ -702,6 +712,7 @@ device_prepare(
 	uint32_t other;
 	uint32_t version;
 	int present;
+	int evaluated;
 
 	/* Measures available backend extensions and allocates one owned rewrite. */
 	error = compat_backend_extensions(physical, NULL, &count, &extensions);
@@ -723,13 +734,15 @@ device_prepare(
 	for (index = 0; index < create->enabledExtensionCount; index++) {
 		/* Removes our swapchain request from the unchanged application input. */
 		name = create->ppEnabledExtensionNames[index];
-		if (strcmp(name, VK_KHR_SWAPCHAIN_EXTENSION_NAME) == 0) {
+		evaluated = strcmp(name, VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+		if (evaluated == 0) {
 			*swapchain = 1;
 			continue;
 		}
 
 		/* Refuses foreign WSI handles before passing ordinary extensions through. */
-		if (compat_wsi_extension(name) != 0) {
+		evaluated = compat_wsi_extension(name);
+		if (evaluated != 0) {
 			free(list);
 			free(extensions);
 			return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -757,7 +770,8 @@ device_prepare(
 			version = properties.apiVersion;
 
 		/* Enables backend swapchain layout semantics when provided. */
-		if (compat_extension_has(extensions, count, VK_KHR_SWAPCHAIN_EXTENSION_NAME) != 0)
+		evaluated = compat_extension_has(extensions, count, VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+		if (evaluated != 0)
 			required[needed++] = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 
 		/* DMA-BUF export remains an extension at every supported API version. */
@@ -805,7 +819,8 @@ device_prepare(
 	/* Appends each supported prerequisite once. */
 	for (index = 0; index < needed; index++) {
 		/* Rejects a missing prerequisite without creating a partial device. */
-		if (compat_extension_has(extensions, count, required[index]) == 0) {
+		evaluated = compat_extension_has(extensions, count, required[index]);
+		if (evaluated == 0) {
 			free(list);
 			free(extensions);
 			return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -815,7 +830,8 @@ device_prepare(
 		present = 0;
 		for (other = 0; other < used; other++) {
 			/* Retains a single name for a prerequisite requested by the application. */
-			if (strcmp(list[other], required[index]) == 0)
+			evaluated = strcmp(list[other], required[index]);
+			if (evaluated == 0)
 				present = 1;
 		}
 

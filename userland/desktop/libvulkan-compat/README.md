@@ -15,7 +15,7 @@ Keiland app (DT_NEEDED libvulkan.so.1)
 
 `functions.tsv` が関数の責務と export の正本。Vulkan 1.4.309 の prototype から作り、手動で分類を保つ。
 `gen-forward.sh` は build directory の `forward.inc` と `exports.map` を生成する。F は core の素通し、I は横取り、O は自前の WSI、N は拒む名前。
-現段階（ws105-p003）は F 222 / I 12 / N 51、WSI は全て拒む。Layer / version の enumeration も、後段の無いときの規定の fallback を持つため I とする。
+現段階（ws105-p004）は F 222 / I 12 / O 16 / N 35。Wayland の surface / swapchain と single-device group を自前で実装する。Layer / version の enumeration も、後段の無いときの規定の fallback を持つため I とする。
 
 Dispatchable handle は後段の値をそのまま使い、包まない。F は後段の export の `dlsym` pointer を呼ぶ。
 I の後段の版も必ず `dlsym` から得る。後段の GetProcAddr の答えを I の「次」にしない。
@@ -43,4 +43,11 @@ thread ごとの record は pthread key の destructor が解放する。初期�
 `make keiland-linux`（gcc / clang）、`make keiland-linux-install DESTDIR=...`。install の SONAME は `libvulkan.so.1`、RUNPATH は `/opt/keiland/lib`。
 我々の app はこの SONAME に link し、system の Wayland を使う外部 app は対象に含めない。
 [試験の道具](../../../plan/tools/keiland-linux/README.md)を参照する。host では DRM device を `none` にし、Wayland / X の環境変数を外す。
-Wayland の WSI は p004、KMS の WSI は p005 で実装する。
+Wayland は version-three linux-dmabuf と surface 専用 event queue、backend から export した単一 plane image を使う。
+implicit sync は DMA_BUF_IOCTL_IMPORT_SYNC_FILE、能力不足や ENOTTY/EINVAL/EPERM では CPU fence 待ち。試験専用の production 環境変数は無い。
+KMS の WSI は p005 で実装する。
+
+`timeout 120 bash plan/tools/keiland-linux/wsi-check.sh` は FIFO / fallback / resize / MAILBOX を各90 frameで検証する。
+試験 observer は kernel import の成否と private fence wait を記録する。raw SYNC_IOC_FILE_INFO の fence 数・driver/timeline はそのまま残す。
+kernel の stub は空の reservation にも現れるため、raw fence 数だけを payload の受け渡しの証明にしない。
+後段の RTLD_DEEPBIND は observer の run でも維持する。実機 GPU の非同期待ちは未検証。
