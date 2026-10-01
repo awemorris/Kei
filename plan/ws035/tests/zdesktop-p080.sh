@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws035-p080: xdg-decoration, cursor-shape and viewporter on the Venus guest, with /bin/extras-probe
-# (userland/base/tests/extras-probe: the protocols' code of its own over libwayland's generic marshalling).
+# (userland/tests/extras-probe: the protocols' code of its own over libwayland's generic marshalling).
 #  1. The window asks for client-side decorations and is told server-side (twice: at creation and after set_mode);
 #     zdesktop still draws its title bar (decoration.png).
 #  2. The sub-surface's viewport shows only the red quarter of its buffer, stretched to 200x100 at (20,20).

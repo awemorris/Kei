@@ -1,0 +1,1611 @@
+{
+  "moved_files": [
+    {
+      "before": "userland/base/tests/Makefile",
+      "after": "userland/tests/Makefile",
+      "sha256": "c4523c9550555ed838550468f7570bcdf8816c2530b76b5b88faa75604eb7d6a",
+      "mode": "0o664",
+      "bytes": 221
+    },
+    {
+      "before": "userland/base/tests/acquire-fence/Makefile",
+      "after": "userland/tests/acquire-fence/Makefile",
+      "sha256": "9504da0340fac082bb201db5f4e3036b4b1f4b1171c625f8d31ee1dc911f64d5",
+      "mode": "0o664",
+      "bytes": 625
+    },
+    {
+      "before": "userland/base/tests/acquire-fence/main.c",
+      "after": "userland/tests/acquire-fence/main.c",
+      "sha256": "f0bf9b6d77353f5d173210692f6e53ffb8f485249dd6707a796814eb3eaa7c5c",
+      "mode": "0o664",
+      "bytes": 13788
+    },
+    {
+      "before": "userland/base/tests/browser-probe/Makefile",
+      "after": "userland/tests/browser-probe/Makefile",
+      "sha256": "a0b753ddc2b7e8cc32bd0216c4e2f99972077fdd0b292d8b68b6040d23e9686d",
+      "mode": "0o664",
+      "bytes": 546
+    },
+    {
+      "before": "userland/base/tests/browser-probe/main.c",
+      "after": "userland/tests/browser-probe/main.c",
+      "sha256": "88bf76e061aa7d3ebdf4fcfb8f970f4ab93b9640f23c1b164bbf1be9b35c30f5",
+      "mode": "0o664",
+      "bytes": 14551
+    },
+    {
+      "before": "userland/base/tests/data-probe/Makefile",
+      "after": "userland/tests/data-probe/Makefile",
+      "sha256": "d4cc71c14f6ee9e9ad54bf6c54c33232f9d1c602c91c3ab077f22fdcf978be11",
+      "mode": "0o664",
+      "bytes": 415
+    },
+    {
+      "before": "userland/base/tests/data-probe/main.c",
+      "after": "userland/tests/data-probe/main.c",
+      "sha256": "7d2ff6a72fd32fa11436312acc91656f068ecdc8928acee81fc93de5f9e64553",
+      "mode": "0o664",
+      "bytes": 26715
+    },
+    {
+      "before": "userland/base/tests/dyntest.c",
+      "after": "userland/tests/dyntest.c",
+      "sha256": "c8337b39ce7be2eafe1018055fb61275a553904066abc95481a6d4aa5e5bf8d9",
+      "mode": "0o664",
+      "bytes": 12484
+    },
+    {
+      "before": "userland/base/tests/extras-probe/Makefile",
+      "after": "userland/tests/extras-probe/Makefile",
+      "sha256": "1182b0eb907aae4e96a990d7cf44e3fcdd7b42b5d1b6c30e83362967d175f324",
+      "mode": "0o664",
+      "bytes": 468
+    },
+    {
+      "before": "userland/base/tests/extras-probe/main.c",
+      "after": "userland/tests/extras-probe/main.c",
+      "sha256": "4ed0a23a13f2c6ba3f8b04762a63258c1427bba659ed335c4a0e5f0c436e82a1",
+      "mode": "0o664",
+      "bytes": 29147
+    },
+    {
+      "before": "userland/base/tests/gpu-admission/Makefile",
+      "after": "userland/tests/gpu-admission/Makefile",
+      "sha256": "6d9d957c1f1a4ec9e046ebbef111caa003ca35eb8421aa92654eef9f91936a55",
+      "mode": "0o664",
+      "bytes": 273
+    },
+    {
+      "before": "userland/base/tests/gpu-admission/main.c",
+      "after": "userland/tests/gpu-admission/main.c",
+      "sha256": "ae535aa70a4e7acefeecda26751aa9708af64936a480c92ac9efd249c1bcbc76",
+      "mode": "0o664",
+      "bytes": 15378
+    },
+    {
+      "before": "userland/base/tests/gpu-fence/Makefile",
+      "after": "userland/tests/gpu-fence/Makefile",
+      "sha256": "24986cc67bbb87c98154fa0029e871e528263f430489b0cf92879d365c323f98",
+      "mode": "0o664",
+      "bytes": 406
+    },
+    {
+      "before": "userland/base/tests/gpu-fence/main.c",
+      "after": "userland/tests/gpu-fence/main.c",
+      "sha256": "18dc6e0881c745bef88db36da58270cc860679f4f4a1e850b864e88c6b1ea38d",
+      "mode": "0o664",
+      "bytes": 76664
+    },
+    {
+      "before": "userland/base/tests/gpu-forge/Makefile",
+      "after": "userland/tests/gpu-forge/Makefile",
+      "sha256": "508f157c0f94e5318a29ef44aca250950c33e05c645653735d71571876134111",
+      "mode": "0o664",
+      "bytes": 502
+    },
+    {
+      "before": "userland/base/tests/gpu-forge/main.c",
+      "after": "userland/tests/gpu-forge/main.c",
+      "sha256": "2290fa89df29b8defc2959b8f174a2aa0bf9896b514fa0c122fbef383120d066",
+      "mode": "0o664",
+      "bytes": 11766
+    },
+    {
+      "before": "userland/base/tests/gpu-i915/Makefile",
+      "after": "userland/tests/gpu-i915/Makefile",
+      "sha256": "04b179b116cdd3c7abf198e5b7f3c3980ba3b8756375f97c353666cc4a75da81",
+      "mode": "0o664",
+      "bytes": 368
+    },
+    {
+      "before": "userland/base/tests/gpu-i915/main.c",
+      "after": "userland/tests/gpu-i915/main.c",
+      "sha256": "befea269b5fe66ad768834a95cf7b157ee06d08516975847c6246e466f78bf58",
+      "mode": "0o664",
+      "bytes": 15519
+    },
+    {
+      "before": "userland/base/tests/gpu-recovery/Makefile",
+      "after": "userland/tests/gpu-recovery/Makefile",
+      "sha256": "ebd9f3be35e652988b282230c14b6b8df504f14728a80c1e13a25e86dedcd936",
+      "mode": "0o664",
+      "bytes": 267
+    },
+    {
+      "before": "userland/base/tests/gpu-recovery/main.c",
+      "after": "userland/tests/gpu-recovery/main.c",
+      "sha256": "0d29174b92a8b12ee8121303e214f773121a21a763169e16a34bc197789c1e02",
+      "mode": "0o664",
+      "bytes": 15988
+    },
+    {
+      "before": "userland/base/tests/gpu-share/Makefile",
+      "after": "userland/tests/gpu-share/Makefile",
+      "sha256": "da89c3bb981e224af03138dcac758d3e4d338c809625c48686f3116db2bd11a8",
+      "mode": "0o664",
+      "bytes": 414
+    },
+    {
+      "before": "userland/base/tests/gpu-share/main.c",
+      "after": "userland/tests/gpu-share/main.c",
+      "sha256": "5890e1c101bd33e7635710b25103d93096e67152095cf160f0cc9f3651470200",
+      "mode": "0o664",
+      "bytes": 47479
+    },
+    {
+      "before": "userland/base/tests/greeter-probe/Makefile",
+      "after": "userland/tests/greeter-probe/Makefile",
+      "sha256": "22f74fb3cb876b0ceb4eb12b410a8abdb994bbbbb07df7ca0c23646433d91519",
+      "mode": "0o664",
+      "bytes": 426
+    },
+    {
+      "before": "userland/base/tests/greeter-probe/main.c",
+      "after": "userland/tests/greeter-probe/main.c",
+      "sha256": "27a651dccd2842a0e4bb45279fc9679a4468aa5da61b86bb78f5566d3e2a87c8",
+      "mode": "0o664",
+      "bytes": 4572
+    },
+    {
+      "before": "userland/base/tests/menu-probe/Makefile",
+      "after": "userland/tests/menu-probe/Makefile",
+      "sha256": "67c8b2e39593c030f85382b3fad7d3d67b193deb27588d5a5e349b5b20223204",
+      "mode": "0o664",
+      "bytes": 456
+    },
+    {
+      "before": "userland/base/tests/menu-probe/main.c",
+      "after": "userland/tests/menu-probe/main.c",
+      "sha256": "3fa75ee97a46e3e2f59a6cb519481ac33fb21c2ce744777e10d3335acd3ad151",
+      "mode": "0o664",
+      "bytes": 17648
+    },
+    {
+      "before": "userland/base/tests/network-probe/Makefile",
+      "after": "userland/tests/network-probe/Makefile",
+      "sha256": "78e4207bd108c730c4748ad09ac969e1d0210d02f4ae93a4a5b95540619f3f8c",
+      "mode": "0o664",
+      "bytes": 483
+    },
+    {
+      "before": "userland/base/tests/network-probe/main.c",
+      "after": "userland/tests/network-probe/main.c",
+      "sha256": "97bb431d8ec586cca6d0fe94775cf7dd481e79e716dda38d5d1af55769846e3b",
+      "mode": "0o664",
+      "bytes": 14219
+    },
+    {
+      "before": "userland/base/tests/peninject/Makefile",
+      "after": "userland/tests/peninject/Makefile",
+      "sha256": "e6cb911dd372ed439cf4cb7de41d4b85d125d01065c2bc484a57c8ee198167e8",
+      "mode": "0o664",
+      "bytes": 650
+    },
+    {
+      "before": "userland/base/tests/peninject/main.c",
+      "after": "userland/tests/peninject/main.c",
+      "sha256": "08448843c3017ebb5402c026505c2cce681e862922e55ed48fb0efb3e0ef3b9a",
+      "mode": "0o664",
+      "bytes": 29590
+    },
+    {
+      "before": "userland/base/tests/peninject/stroke.pen",
+      "after": "userland/tests/peninject/stroke.pen",
+      "sha256": "8448c10368f3f81f66919a6cc43ebc0ba30a3074e2f16df0fc7f92136f352a93",
+      "mode": "0o664",
+      "bytes": 408
+    },
+    {
+      "before": "userland/base/tests/popup-probe/Makefile",
+      "after": "userland/tests/popup-probe/Makefile",
+      "sha256": "16e83958afb47ed0ddc7a5fc93fb0623ea4c9fd61725a6a00fc9f9dcf4df7be2",
+      "mode": "0o664",
+      "bytes": 446
+    },
+    {
+      "before": "userland/base/tests/popup-probe/main.c",
+      "after": "userland/tests/popup-probe/main.c",
+      "sha256": "2ade619345ff17bcd50a85428f816c999657d4ebb2ae70fd9de14804d6826658",
+      "mode": "0o664",
+      "bytes": 40138
+    },
+    {
+      "before": "userland/base/tests/posix-phase5-helper.c",
+      "after": "userland/tests/posix-phase5-helper.c",
+      "sha256": "263dd5615713304b2e331437c1a4d278ff7db4b329f003d0a011f3c2b044c61d",
+      "mode": "0o664",
+      "bytes": 3032
+    },
+    {
+      "before": "userland/base/tests/posix-r2-remaining.c",
+      "after": "userland/tests/posix-r2-remaining.c",
+      "sha256": "47042a0bffc719a656df2377477926bce7d3f131a591037b586e2234dd6d172a",
+      "mode": "0o664",
+      "bytes": 44008
+    },
+    {
+      "before": "userland/base/tests/posix-r2.c",
+      "after": "userland/tests/posix-r2.c",
+      "sha256": "3ac5a18aeab5aaed2b3089cd2d78dd6459baf388f4b06230bfe4872c9864d5b4",
+      "mode": "0o664",
+      "bytes": 60908
+    },
+    {
+      "before": "userland/base/tests/rpathdep.c",
+      "after": "userland/tests/rpathdep.c",
+      "sha256": "19649a2aaca96c9b70a23d3c31676589b593207d22cdd930edc145ed745f8de7",
+      "mode": "0o664",
+      "bytes": 413
+    },
+    {
+      "before": "userland/base/tests/rpathtest.c",
+      "after": "userland/tests/rpathtest.c",
+      "sha256": "ba4381955f9816f5ccd86e4405147511237563309e3038fd65884356bf91ee2d",
+      "mode": "0o664",
+      "bytes": 519
+    },
+    {
+      "before": "userland/base/tests/seat-probe/Makefile",
+      "after": "userland/tests/seat-probe/Makefile",
+      "sha256": "2df7ebc6398676236e7b407fdce143b9e061c125f7f4823cf76d84448e471a9b",
+      "mode": "0o664",
+      "bytes": 446
+    },
+    {
+      "before": "userland/base/tests/seat-probe/main.c",
+      "after": "userland/tests/seat-probe/main.c",
+      "sha256": "656c21c4155b121ab9d6909512f0fc4e052e21b468beeb0fe74010a8ec67bcbe",
+      "mode": "0o664",
+      "bytes": 18734
+    },
+    {
+      "before": "userland/base/tests/smp-resource-stress.c",
+      "after": "userland/tests/smp-resource-stress.c",
+      "sha256": "92baeb43ccb486ae5fb6876932010a6e71651c22b033d12dd00e389d3ec23b1f",
+      "mode": "0o664",
+      "bytes": 9505
+    },
+    {
+      "before": "userland/base/tests/subsurface-probe/Makefile",
+      "after": "userland/tests/subsurface-probe/Makefile",
+      "sha256": "211fdc469664bcd14e8b746e80ecad13560d786bc44d20625d24c6da4d6a723f",
+      "mode": "0o664",
+      "bytes": 454
+    },
+    {
+      "before": "userland/base/tests/subsurface-probe/main.c",
+      "after": "userland/tests/subsurface-probe/main.c",
+      "sha256": "b9ccfd6475e0c1c7d64b0d46acd9b049befd0c2cfe905a0a80dc0a370169c4db",
+      "mode": "0o664",
+      "bytes": 24087
+    },
+    {
+      "before": "userland/base/tests/susv4-xsi.c",
+      "after": "userland/tests/susv4-xsi.c",
+      "sha256": "2310c88e7592c8602c5c58e5857ad831e92252e8ea15885458b59cea3d92a037",
+      "mode": "0o664",
+      "bytes": 3820
+    },
+    {
+      "before": "userland/base/tests/syscall-smoke.c",
+      "after": "userland/tests/syscall-smoke.c",
+      "sha256": "2b5dcd15be25b6affb75b59a08e6db0b28b720ee1e88c6a9218d94449082c7d0",
+      "mode": "0o664",
+      "bytes": 31566
+    },
+    {
+      "before": "userland/base/tests/tablet-probe/Makefile",
+      "after": "userland/tests/tablet-probe/Makefile",
+      "sha256": "4678c13c52b2965edd4c15bbd8cb20d6699e155962f3102d3f1184c4f8069707",
+      "mode": "0o664",
+      "bytes": 462
+    },
+    {
+      "before": "userland/base/tests/tablet-probe/main.c",
+      "after": "userland/tests/tablet-probe/main.c",
+      "sha256": "ff36de1a384e0b20438ef2e84b3eeb2b3611de8476c8d58e46b18df5ba9e97be",
+      "mode": "0o664",
+      "bytes": 34247
+    },
+    {
+      "before": "userland/base/tests/titlebar-probe/Makefile",
+      "after": "userland/tests/titlebar-probe/Makefile",
+      "sha256": "4eb941ff34d0006e021da3cd94a7c6ea1390c144613e165ee94b4c039ac06261",
+      "mode": "0o664",
+      "bytes": 496
+    },
+    {
+      "before": "userland/base/tests/titlebar-probe/main.c",
+      "after": "userland/tests/titlebar-probe/main.c",
+      "sha256": "f168c6ede80bdf8b6b4f8ebf2423dfc05b7bb7011169d6ea584ff32c0aca5a01",
+      "mode": "0o664",
+      "bytes": 41037
+    },
+    {
+      "before": "userland/base/tests/tlstest.c",
+      "after": "userland/tests/tlstest.c",
+      "sha256": "e9438b4daae500cc2c23c99c82f283f8a8d11b4044418425072866c5ddcf6639",
+      "mode": "0o664",
+      "bytes": 2296
+    },
+    {
+      "before": "userland/base/tests/touchinject/Makefile",
+      "after": "userland/tests/touchinject/Makefile",
+      "sha256": "f2010c2f4732da29d928ebdfff0454e4b0973f19254f811f1cfb482ad3dcf67d",
+      "mode": "0o664",
+      "bytes": 702
+    },
+    {
+      "before": "userland/base/tests/touchinject/main.c",
+      "after": "userland/tests/touchinject/main.c",
+      "sha256": "8d43b70fb8363a4e65b7320a820843c8b61d3584c10cfa564f2a2f44ea4017f9",
+      "mode": "0o664",
+      "bytes": 45162
+    },
+    {
+      "before": "userland/base/tests/touchinject/two-fingers.touch",
+      "after": "userland/tests/touchinject/two-fingers.touch",
+      "sha256": "802cf547aa90c960168e2b298ec0f6ed30024bf7c62ab4c25fe57feb0f72e3e8",
+      "mode": "0o664",
+      "bytes": 475
+    },
+    {
+      "before": "userland/base/tests/versiontest.c",
+      "after": "userland/tests/versiontest.c",
+      "sha256": "a7f7d867e74b03ce721f58119928944a2c643374a19cd26e4687b8772c9d26df",
+      "mode": "0o664",
+      "bytes": 622
+    },
+    {
+      "before": "userland/base/tests/versiontest.map",
+      "after": "userland/tests/versiontest.map",
+      "sha256": "dabb2773cc2461118ec0c54a4766f55ae5c8f736e8389aef564f5fc7e0e62fbb",
+      "mode": "0o664",
+      "bytes": 38
+    },
+    {
+      "before": "userland/base/tests/versionuse.c",
+      "after": "userland/tests/versionuse.c",
+      "sha256": "51ba84569a03aa518e52f0633908df590d7ebf05f466977e6e90839257072a12",
+      "mode": "0o664",
+      "bytes": 650
+    },
+    {
+      "before": "userland/base/tests/wakebench/Makefile",
+      "after": "userland/tests/wakebench/Makefile",
+      "sha256": "4bb3fca6b7fef5ed6a83281464cfcc347515f280eb5cff32f2d056b0a79a160d",
+      "mode": "0o664",
+      "bytes": 249
+    },
+    {
+      "before": "userland/base/tests/wakebench/main.c",
+      "after": "userland/tests/wakebench/main.c",
+      "sha256": "f7fd4e55cf5c2c5e54efbbae40015a27c5f899542a505692953b0df1f32a7907",
+      "mode": "0o664",
+      "bytes": 8046
+    },
+    {
+      "before": "userland/desktop/egltest/Makefile",
+      "after": "userland/tests/egltest/Makefile",
+      "sha256": "8427c48db87bf0800f06db1979153a9c7970d90f742ab4e8a2a3d7bcbb759ac0",
+      "mode": "0o664",
+      "bytes": 799
+    },
+    {
+      "before": "userland/desktop/egltest/blits.c",
+      "after": "userland/tests/egltest/blits.c",
+      "sha256": "90aec59f535b622dd8718cd80a929df4fd97d7d726573267c948f4b156ed8b2f",
+      "mode": "0o664",
+      "bytes": 24458
+    },
+    {
+      "before": "userland/desktop/egltest/blits.h",
+      "after": "userland/tests/egltest/blits.h",
+      "sha256": "1c850c0f26251dc51b05f6b40c81ea0cde890b5cdafdaec130a6b1a2c38d162c",
+      "mode": "0o664",
+      "bytes": 712
+    },
+    {
+      "before": "userland/desktop/egltest/cube.c",
+      "after": "userland/tests/egltest/cube.c",
+      "sha256": "4bf7bde480f4bf087b3775536bd23fe81a1bfc795c8707ec1d7af62d4b1608de",
+      "mode": "0o664",
+      "bytes": 13579
+    },
+    {
+      "before": "userland/desktop/egltest/cube.h",
+      "after": "userland/tests/egltest/cube.h",
+      "sha256": "19f8fa1357a49b01bc7be268f3664f5bba4dc6891530b6e3a35ece39d0515f2a",
+      "mode": "0o664",
+      "bytes": 633
+    },
+    {
+      "before": "userland/desktop/egltest/es3.c",
+      "after": "userland/tests/egltest/es3.c",
+      "sha256": "aecd45bee43a61aeb315448ce96b4d64561ec27408f380d129ee39f363899757",
+      "mode": "0o664",
+      "bytes": 23514
+    },
+    {
+      "before": "userland/desktop/egltest/es3.h",
+      "after": "userland/tests/egltest/es3.h",
+      "sha256": "8d4816b26dcbaeda080ee81ba944ad966b477adcda4a9b8d8d0a3670f7e8ba83",
+      "mode": "0o664",
+      "bytes": 675
+    },
+    {
+      "before": "userland/desktop/egltest/feedback.c",
+      "after": "userland/tests/egltest/feedback.c",
+      "sha256": "c0e30cff5c1db8553d307a9dd112a78d540d1b63c19d383dd6eb66912d936f24",
+      "mode": "0o664",
+      "bytes": 20068
+    },
+    {
+      "before": "userland/desktop/egltest/feedback.h",
+      "after": "userland/tests/egltest/feedback.h",
+      "sha256": "61081896d063be30e001131b21c7609dad59806e6cb200c606590e7c20a9f72a",
+      "mode": "0o664",
+      "bytes": 738
+    },
+    {
+      "before": "userland/desktop/egltest/formats.c",
+      "after": "userland/tests/egltest/formats.c",
+      "sha256": "6486a6762808bcff573b9c88d35ee9b7161c042e7ae8925a413b2e224e41fd36",
+      "mode": "0o664",
+      "bytes": 20208
+    },
+    {
+      "before": "userland/desktop/egltest/formats.h",
+      "after": "userland/tests/egltest/formats.h",
+      "sha256": "b3e9c9387ed3e2ccdc5cc07dd10244207fa62bd5757c320c73c227815e08c85e",
+      "mode": "0o664",
+      "bytes": 695
+    },
+    {
+      "before": "userland/desktop/egltest/main.c",
+      "after": "userland/tests/egltest/main.c",
+      "sha256": "c68979304adb20ed56d5b8ec9295cad657e9602ff3754217dbc0a121086e8843",
+      "mode": "0o664",
+      "bytes": 26258
+    },
+    {
+      "before": "userland/desktop/egltest/queries.c",
+      "after": "userland/tests/egltest/queries.c",
+      "sha256": "5b4b29977af34e981a858c5b98a2225d34d1eb249cef2ef48ab9e208495d8f58",
+      "mode": "0o664",
+      "bytes": 14792
+    },
+    {
+      "before": "userland/desktop/egltest/queries.h",
+      "after": "userland/tests/egltest/queries.h",
+      "sha256": "7e25a2e730fcd4b4852025fd85c4b6e7d283926dd66d6bd579240b8e61f9c4af",
+      "mode": "0o664",
+      "bytes": 720
+    },
+    {
+      "before": "userland/desktop/egltest/scene.c",
+      "after": "userland/tests/egltest/scene.c",
+      "sha256": "f41f2a41941cd224fc8dac7434d2e582b5e8a8e3732b1a249ec724fd757b72bb",
+      "mode": "0o664",
+      "bytes": 22555
+    },
+    {
+      "before": "userland/desktop/egltest/scene.h",
+      "after": "userland/tests/egltest/scene.h",
+      "sha256": "e0b10ab940559e98a436b3b1b6a474736dbd7d50e2d26d64fb16c123c062f600",
+      "mode": "0o664",
+      "bytes": 1362
+    },
+    {
+      "before": "userland/desktop/egltest/shaders.h",
+      "after": "userland/tests/egltest/shaders.h",
+      "sha256": "09b66b7e778f3e3d46e587cd5e4f1e89adb920b371fb44867b6f7ba32783f06a",
+      "mode": "0o664",
+      "bytes": 9691
+    },
+    {
+      "before": "userland/desktop/egltest/shaders/regenerate.py",
+      "after": "userland/tests/egltest/shaders/regenerate.py",
+      "sha256": "a225c0f2165c2628f7e2bb8a72fef290467799d1044b1244490a6c2bc578d57b",
+      "mode": "0o775",
+      "bytes": 2057
+    },
+    {
+      "before": "userland/desktop/egltest/shaders/scene.frag",
+      "after": "userland/tests/egltest/shaders/scene.frag",
+      "sha256": "7ff6f0129be1c454d3dc604b8be3b1d3a45cda86818dc8cacc8c10e23738aa17",
+      "mode": "0o664",
+      "bytes": 479
+    },
+    {
+      "before": "userland/desktop/egltest/shaders/scene.vert",
+      "after": "userland/tests/egltest/shaders/scene.vert",
+      "sha256": "0abfe662a9e97fb83de20689ec94ce9dbbd58d87d2132c4331b13a058e5468d3",
+      "mode": "0o664",
+      "bytes": 666
+    },
+    {
+      "before": "userland/desktop/egltest/targets.c",
+      "after": "userland/tests/egltest/targets.c",
+      "sha256": "8554e8ec1f554259f4d1f9570b7d012bcd7a755e37b7adc293de8273ff7de681",
+      "mode": "0o664",
+      "bytes": 30560
+    },
+    {
+      "before": "userland/desktop/egltest/targets.h",
+      "after": "userland/tests/egltest/targets.h",
+      "sha256": "cdd008d922355737c0089e6007a147b7b869f0fd3b2be2beb64cb3564793f1e2",
+      "mode": "0o664",
+      "bytes": 850
+    },
+    {
+      "before": "userland/desktop/egltest/volumes.c",
+      "after": "userland/tests/egltest/volumes.c",
+      "sha256": "56e7fa37ae9fd3e6d723f95c38e0451badcabd4f83a4765a221ff4ce4efe2f1d",
+      "mode": "0o664",
+      "bytes": 29242
+    },
+    {
+      "before": "userland/desktop/egltest/volumes.h",
+      "after": "userland/tests/egltest/volumes.h",
+      "sha256": "11ad0beadb8acb533df6f1ea4d36cc1011d6945870750600236fe89f258c53e5",
+      "mode": "0o664",
+      "bytes": 689
+    },
+    {
+      "before": "userland/desktop/glescompute/Makefile",
+      "after": "userland/tests/glescompute/Makefile",
+      "sha256": "c0232f26a06b3fe7593b84c2ce17774bfa1a85d5a0cea91b0e82669a6ad20ae3",
+      "mode": "0o664",
+      "bytes": 485
+    },
+    {
+      "before": "userland/desktop/glescompute/main.c",
+      "after": "userland/tests/glescompute/main.c",
+      "sha256": "484d56de463c3db94cfdff20f7d984ce27d94f5c04bba9712237fe34bdf322f9",
+      "mode": "0o664",
+      "bytes": 39058
+    },
+    {
+      "before": "userland/desktop/gpudemo/Makefile",
+      "after": "userland/tests/gpudemo/Makefile",
+      "sha256": "033a76e0bf87fa25c738c2717751c402385ac47a7205fb415aaedf4c7d6ed743",
+      "mode": "0o664",
+      "bytes": 784
+    },
+    {
+      "before": "userland/desktop/gpudemo/mix.nct",
+      "after": "userland/tests/gpudemo/mix.nct",
+      "sha256": "3ffc8f35885f979462c37b1ee0aa51a8e45c426810ee8e652b51b468579dd11c",
+      "mode": "0o664",
+      "bytes": 5456
+    },
+    {
+      "before": "userland/desktop/gpudemo/s13.sh",
+      "after": "userland/tests/gpudemo/s13.sh",
+      "sha256": "bd3a93f8383eeb2e411da5151652456cfc7148abf7f2dfc4dd14c511ea123e84",
+      "mode": "0o664",
+      "bytes": 2169
+    },
+    {
+      "before": "userland/desktop/kuidemo/Makefile",
+      "after": "userland/tests/kuidemo/Makefile",
+      "sha256": "ed71f1118ab54c650f236f382904aa377d8ebc9f3862aee59383fedf61c25ef0",
+      "mode": "0o664",
+      "bytes": 628
+    },
+    {
+      "before": "userland/desktop/kuidemo/Makefile.linux",
+      "after": "userland/tests/kuidemo/Makefile.linux",
+      "sha256": "ebae8ccf65b05e7e566d6a90bb05a86182f8f2987e03feca80e77cb2808f43c5",
+      "mode": "0o664",
+      "bytes": 388
+    },
+    {
+      "before": "userland/desktop/kuidemo/main.c",
+      "after": "userland/tests/kuidemo/main.c",
+      "sha256": "c16d010c784602fe3bf02bd3228ca1b2dc813ef7ea94270a0ecd4bd0e6cfac82",
+      "mode": "0o664",
+      "bytes": 31994
+    },
+    {
+      "before": "userland/desktop/mview/.gitattributes",
+      "after": "userland/tests/mview/.gitattributes",
+      "sha256": "6fb03d8d9a6f7df50ad8b23cd53ab085499705fb6c21b3f540481a27bb4785cf",
+      "mode": "0o664",
+      "bytes": 80
+    },
+    {
+      "before": "userland/desktop/mview/Makefile",
+      "after": "userland/tests/mview/Makefile",
+      "sha256": "87c95b1832366171a5361d78f918c6c520ce551b27482aa3de075ed97d3aefcd",
+      "mode": "0o664",
+      "bytes": 968
+    },
+    {
+      "before": "userland/desktop/mview/Makefile.linux",
+      "after": "userland/tests/mview/Makefile.linux",
+      "sha256": "1553a3716421771c401de611c9a98ea2f7408674476b1ed035a9806ecec81c2c",
+      "mode": "0o664",
+      "bytes": 829
+    },
+    {
+      "before": "userland/desktop/mview/README.md",
+      "after": "userland/tests/mview/README.md",
+      "sha256": "c79667adfdb8dd0d4caaf59735bf2bdd3110847b5c9e0782e2f782927a407b19",
+      "mode": "0o664",
+      "bytes": 6379
+    },
+    {
+      "before": "userland/desktop/mview/camera.c",
+      "after": "userland/tests/mview/camera.c",
+      "sha256": "169d3532fee2be3625714b9881d89ce7a8defc812a85a0d7dcf7f49953d884a3",
+      "mode": "0o664",
+      "bytes": 16086
+    },
+    {
+      "before": "userland/desktop/mview/input.c",
+      "after": "userland/tests/mview/input.c",
+      "sha256": "d363e193bf0659b4e922eb07f4701c6528cba790bc6fa5b93786effd0e302e8f",
+      "mode": "0o664",
+      "bytes": 9773
+    },
+    {
+      "before": "userland/desktop/mview/main.c",
+      "after": "userland/tests/mview/main.c",
+      "sha256": "2f612d4d002d242c82025e12b12aaabefd50dcf8929082d619f9158991713475",
+      "mode": "0o664",
+      "bytes": 20771
+    },
+    {
+      "before": "userland/desktop/mview/model.c",
+      "after": "userland/tests/mview/model.c",
+      "sha256": "e96758acc11347c83d09ece94de58ba191db3dc1e0a437657e3c404a8154f573",
+      "mode": "0o664",
+      "bytes": 39476
+    },
+    {
+      "before": "userland/desktop/mview/model.h",
+      "after": "userland/tests/mview/model.h",
+      "sha256": "dad8106c1fff0e21134a0eda4fa0012b61f347c9217f089154927b703d2d97b7",
+      "mode": "0o664",
+      "bytes": 6456
+    },
+    {
+      "before": "userland/desktop/mview/models/README.md",
+      "after": "userland/tests/mview/models/README.md",
+      "sha256": "1e9a37f466e297c9702e69de8569986d77da7d2e35f979008dc8b52e941c5edc",
+      "mode": "0o664",
+      "bytes": 4361
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/model.txt",
+      "after": "userland/tests/mview/models/qs40/model.txt",
+      "sha256": "39294a078a857ae17761e1d3859b64f6682f76366443012574b3c51b1cba6972",
+      "mode": "0o664",
+      "bytes": 2609059
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/provenance.json",
+      "after": "userland/tests/mview/models/qs40/provenance.json",
+      "sha256": "7982661073994da9d1cf94a8b977388fcfb48dbeee3d7c162c9f4b7264c5a3fb",
+      "mode": "0o664",
+      "bytes": 7441
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/source/qs40-r4.fbx",
+      "after": "userland/tests/mview/models/qs40/source/qs40-r4.fbx",
+      "sha256": "e18d081ec9069624214ec890639831d453df83df05252105d261441736086d98",
+      "mode": "0o664",
+      "bytes": 7883260
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/0.pam",
+      "after": "userland/tests/mview/models/qs40/tex/0.pam",
+      "sha256": "ccecfc8cebf283d6801aecdd547efc3c84ae156c21686610d07d9baf38971554",
+      "mode": "0o664",
+      "bytes": 4194375
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/1.pam",
+      "after": "userland/tests/mview/models/qs40/tex/1.pam",
+      "sha256": "55a6205afbd9ccc51855e21d2b8a5e965f8e61e49b5a1da4c2fd5de475af1dd5",
+      "mode": "0o664",
+      "bytes": 4194375
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/10.pam",
+      "after": "userland/tests/mview/models/qs40/tex/10.pam",
+      "sha256": "29050ccca74cbd8e7bf08147852ddec9dbf87a4a8d021c854ac88d65bb4e22ca",
+      "mode": "0o664",
+      "bytes": 1048646
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/11.pam",
+      "after": "userland/tests/mview/models/qs40/tex/11.pam",
+      "sha256": "7f324db457f9e66b4a0672644b74342b529aec9f89c93a0bcc9c84e2df7e4710",
+      "mode": "0o664",
+      "bytes": 1048646
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/12.pam",
+      "after": "userland/tests/mview/models/qs40/tex/12.pam",
+      "sha256": "39d5baa63c88fd729ade29cc2124196cad264cdc8b8b8061120b3127e3f4b37a",
+      "mode": "0o664",
+      "bytes": 2097222
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/2.pam",
+      "after": "userland/tests/mview/models/qs40/tex/2.pam",
+      "sha256": "b67371a214cf9b0df2704552b827e6fdeea88fdf85c2507fa04dd47beec25369",
+      "mode": "0o664",
+      "bytes": 1048645
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/3.pam",
+      "after": "userland/tests/mview/models/qs40/tex/3.pam",
+      "sha256": "f007539b70aa2414b6e432a6e409fe249d8089dcf4eaa1a17a13573515962de2",
+      "mode": "0o664",
+      "bytes": 4194375
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/4.pam",
+      "after": "userland/tests/mview/models/qs40/tex/4.pam",
+      "sha256": "1746b4de0768468eab15394fc3343ab68f95640e67bb1f8cbec239a52082b40f",
+      "mode": "0o664",
+      "bytes": 2097222
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/5.pam",
+      "after": "userland/tests/mview/models/qs40/tex/5.pam",
+      "sha256": "807982a6f8bbc727aa44b500de7d2a0d887574788cf90630f27b4cbab73bb2f3",
+      "mode": "0o664",
+      "bytes": 1048645
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/6.pam",
+      "after": "userland/tests/mview/models/qs40/tex/6.pam",
+      "sha256": "fb6957d2fa7613b20f449b67edf2d0f4daf96fe121157b1634b18462e91f712a",
+      "mode": "0o664",
+      "bytes": 2097222
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/7.pam",
+      "after": "userland/tests/mview/models/qs40/tex/7.pam",
+      "sha256": "e547ef88382ebd9b97c3f2e0ed930468221af837ca0ced2c0cdabaf9ba1c6958",
+      "mode": "0o664",
+      "bytes": 2097222
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/8.pam",
+      "after": "userland/tests/mview/models/qs40/tex/8.pam",
+      "sha256": "6fe5af7e6c034c7463ec6e153c38f2343ce0d649f7168fea922ebc4bcd1ed299",
+      "mode": "0o664",
+      "bytes": 4194375
+    },
+    {
+      "before": "userland/desktop/mview/models/qs40/tex/9.pam",
+      "after": "userland/tests/mview/models/qs40/tex/9.pam",
+      "sha256": "89b29c172a441c65565b54f3fe674ddd4497c2606aadd94cac309a658e68eabe",
+      "mode": "0o664",
+      "bytes": 2097222
+    },
+    {
+      "before": "userland/desktop/mview/models/test/model.txt",
+      "after": "userland/tests/mview/models/test/model.txt",
+      "sha256": "e72a63278904d4880e8249ca10a332467c72bb6c590470feeb4c84b1fa06b08d",
+      "mode": "0o664",
+      "bytes": 2843
+    },
+    {
+      "before": "userland/desktop/mview/models/test/tex/0.pam",
+      "after": "userland/tests/mview/models/test/tex/0.pam",
+      "sha256": "d0ca33cb368ef1e16b8b6fedbee89db8924d4b3687f9f41abc5743086f9174bd",
+      "mode": "0o664",
+      "bytes": 321
+    },
+    {
+      "before": "userland/desktop/mview/models/test/tex/1.pam",
+      "after": "userland/tests/mview/models/test/tex/1.pam",
+      "sha256": "d551b9c227fde2087a2af48dc9cff6e1ed04387aa02b6fd7e2137f9a9d103f17",
+      "mode": "0o664",
+      "bytes": 129
+    },
+    {
+      "before": "userland/desktop/mview/mview.h",
+      "after": "userland/tests/mview/mview.h",
+      "sha256": "4218a9738007bfecb16d4128fc7155fc38baef89f4768279280d74e7666708a7",
+      "mode": "0o664",
+      "bytes": 4757
+    },
+    {
+      "before": "userland/desktop/mview/renderer.c",
+      "after": "userland/tests/mview/renderer.c",
+      "sha256": "0dfa2a656400f5be3bb5c8d979ab412725d4607e83c3c5c2c9a0fb7c9e283e1b",
+      "mode": "0o664",
+      "bytes": 89192
+    },
+    {
+      "before": "userland/desktop/mview/shaders.h",
+      "after": "userland/tests/mview/shaders.h",
+      "sha256": "367d7db71f8e4d21a950669887c1724552860129deab94a0229fab8e4dc7a7f6",
+      "mode": "0o664",
+      "bytes": 61789
+    },
+    {
+      "before": "userland/desktop/mview/shaders/cutout.frag",
+      "after": "userland/tests/mview/shaders/cutout.frag",
+      "sha256": "0a78a9b3c5afefa75e4f93a060d9c4c05c02d9d932aec11e49e7ee867f95fd77",
+      "mode": "0o664",
+      "bytes": 710
+    },
+    {
+      "before": "userland/desktop/mview/shaders/cutout.frag.spv",
+      "after": "userland/tests/mview/shaders/cutout.frag.spv",
+      "sha256": "cc78e1f184acd9924a60986ec4ba0949eda1ab8f1fef7b41553a308952cab153",
+      "mode": "0o664",
+      "bytes": 1400
+    },
+    {
+      "before": "userland/desktop/mview/shaders/mview.frag",
+      "after": "userland/tests/mview/shaders/mview.frag",
+      "sha256": "25786f18d92e4583867368f0c6c5aff1968d7699e5eb050ecc1049c90c1664d3",
+      "mode": "0o664",
+      "bytes": 777
+    },
+    {
+      "before": "userland/desktop/mview/shaders/mview.frag.spv",
+      "after": "userland/tests/mview/shaders/mview.frag.spv",
+      "sha256": "5b8e8180064d0f375fd9b2cae5bb7a66cc45b781f18ed7535e0ae279da9ec2ac",
+      "mode": "0o664",
+      "bytes": 1292
+    },
+    {
+      "before": "userland/desktop/mview/shaders/mview.vert",
+      "after": "userland/tests/mview/shaders/mview.vert",
+      "sha256": "9ec70f524c734821e86d03b15e31f9c44bd71c5842383c3c84dd33323e6ee979",
+      "mode": "0o664",
+      "bytes": 1324
+    },
+    {
+      "before": "userland/desktop/mview/shaders/mview.vert.spv",
+      "after": "userland/tests/mview/shaders/mview.vert.spv",
+      "sha256": "667ccae49f6af25555d3153b3013600f6462af2abf0e03e4f075400f0e560914",
+      "mode": "0o664",
+      "bytes": 2892
+    },
+    {
+      "before": "userland/desktop/mview/shaders/pixel-cutout.frag",
+      "after": "userland/tests/mview/shaders/pixel-cutout.frag",
+      "sha256": "321747c78c1febbd3a3ee11a23760137ef277ee9151b7b5b45c2f4fd97a4189b",
+      "mode": "0o664",
+      "bytes": 2308
+    },
+    {
+      "before": "userland/desktop/mview/shaders/pixel-cutout.frag.spv",
+      "after": "userland/tests/mview/shaders/pixel-cutout.frag.spv",
+      "sha256": "c852924ec942f0cf3055a595b5f39c5da785a45b729ec4b1b913e626a47d1073",
+      "mode": "0o664",
+      "bytes": 5168
+    },
+    {
+      "before": "userland/desktop/mview/shaders/pixel.frag",
+      "after": "userland/tests/mview/shaders/pixel.frag",
+      "sha256": "c2b3746b389cc6eaf6940d8fc90e6c7a1b2c411fc166636632f0482f6fb6719d",
+      "mode": "0o664",
+      "bytes": 2577
+    },
+    {
+      "before": "userland/desktop/mview/shaders/pixel.frag.spv",
+      "after": "userland/tests/mview/shaders/pixel.frag.spv",
+      "sha256": "34b99931bfb3bb83c834d99667b24f4394df3186531d40af07fee1d4f1cf8f75",
+      "mode": "0o664",
+      "bytes": 5084
+    },
+    {
+      "before": "userland/desktop/mview/shaders/pixel.vert",
+      "after": "userland/tests/mview/shaders/pixel.vert",
+      "sha256": "51cb5c5086ac0ea24afe09c94434ca3f5a8b056feedcc36e81605f6c9515222c",
+      "mode": "0o664",
+      "bytes": 1143
+    },
+    {
+      "before": "userland/desktop/mview/shaders/pixel.vert.spv",
+      "after": "userland/tests/mview/shaders/pixel.vert.spv",
+      "sha256": "f0c5318249c02f01e3614a18f68687e745ad9605e659981f099be22f8a34e19f",
+      "mode": "0o664",
+      "bytes": 2644
+    },
+    {
+      "before": "userland/desktop/mview/shaders/provenance.json",
+      "after": "userland/tests/mview/shaders/provenance.json",
+      "sha256": "0f71c28abfb33c89182b1997bd6f8715b8d35e715e7f410337973316c13052b9",
+      "mode": "0o664",
+      "bytes": 2781
+    },
+    {
+      "before": "userland/desktop/mview/shaders/regenerate.py",
+      "after": "userland/tests/mview/shaders/regenerate.py",
+      "sha256": "abc655311df775f329d9cf82ff8e47567953e8d3aca22b3c78dc8be0aabb5014",
+      "mode": "0o775",
+      "bytes": 7377
+    },
+    {
+      "before": "userland/desktop/mview/tools/README.md",
+      "after": "userland/tests/mview/tools/README.md",
+      "sha256": "949e4420361e0dbe09ba14de8adc1e54aff9b8e7a2c1a6ca792d077f9a475d5c",
+      "mode": "0o664",
+      "bytes": 2933
+    },
+    {
+      "before": "userland/desktop/mview/tools/fbx2mview.py",
+      "after": "userland/tests/mview/tools/fbx2mview.py",
+      "sha256": "557355cc91a3301e5a90c3de0acb45dc220eeae8a1ba7e0c1322e6e1161d0e78",
+      "mode": "0o775",
+      "bytes": 41851
+    },
+    {
+      "before": "userland/desktop/mview/window.c",
+      "after": "userland/tests/mview/window.c",
+      "sha256": "8dcc501b56c00e59be8228c5396b209acf1a0f1ad8c10bf1d12165ce8d91fa37",
+      "mode": "0o664",
+      "bytes": 28136
+    },
+    {
+      "before": "userland/desktop/vkdemo/Makefile",
+      "after": "userland/tests/vkdemo/Makefile",
+      "sha256": "d5ca795d0959ec4c43bc566f6f09fbd636d42b9d418a8ed84d529183ca546129",
+      "mode": "0o664",
+      "bytes": 407
+    },
+    {
+      "before": "userland/desktop/vkdemo/Makefile.linux",
+      "after": "userland/tests/vkdemo/Makefile.linux",
+      "sha256": "5832339acf653c9d45cb90a1fe0382905a3f794aeaa84030aa9355bba9118fed",
+      "mode": "0o664",
+      "bytes": 342
+    },
+    {
+      "before": "userland/desktop/vkdemo/README.md",
+      "after": "userland/tests/vkdemo/README.md",
+      "sha256": "d79103bc06e9e2018b94c2adee28ed82f4768112465b40df5b0f5b7d2f552bcf",
+      "mode": "0o664",
+      "bytes": 10597
+    },
+    {
+      "before": "userland/desktop/vkdemo/display.c",
+      "after": "userland/tests/vkdemo/display.c",
+      "sha256": "a4c5655da2de9e016f3bdce54052cac6bf70b6de5004980d4f8e8323f10c22e1",
+      "mode": "0o664",
+      "bytes": 21011
+    },
+    {
+      "before": "userland/desktop/vkdemo/display.h",
+      "after": "userland/tests/vkdemo/display.h",
+      "sha256": "b3a5d319a20ab6177dfb7dd8b45321fab3c11a10825601932d015908a3a61b14",
+      "mode": "0o664",
+      "bytes": 1000
+    },
+    {
+      "before": "userland/desktop/vkdemo/main.c",
+      "after": "userland/tests/vkdemo/main.c",
+      "sha256": "ef4ee2b7d52c1432b906b0a39818d60c8ab4879fdcdeedb40559f2cdb431ac06",
+      "mode": "0o664",
+      "bytes": 19540
+    },
+    {
+      "before": "userland/desktop/vkdemo/renderer.c",
+      "after": "userland/tests/vkdemo/renderer.c",
+      "sha256": "3e70daa84b3e717af033f10188988ac0fe32ecf29319f22939b09a901c3c847d",
+      "mode": "0o664",
+      "bytes": 77250
+    },
+    {
+      "before": "userland/desktop/vkdemo/renderer.h",
+      "after": "userland/tests/vkdemo/renderer.h",
+      "sha256": "8a857aaf762a31013cd2ef36cf8ab0f578cbcebc373985e7f813aa6a207bcb44",
+      "mode": "0o664",
+      "bytes": 649
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders.h",
+      "after": "userland/tests/vkdemo/shaders.h",
+      "sha256": "ab02bafe18746e44af60ee81aa9dd5a5d075dee5e1bcd2b3a8102ca44894a9fc",
+      "mode": "0o664",
+      "bytes": 12728
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders/cuboid.frag",
+      "after": "userland/tests/vkdemo/shaders/cuboid.frag",
+      "sha256": "f9d355d0fb03da9a63e4cd157e7fdb7575f74a9726eac6290795c5a2aa5957c8",
+      "mode": "0o664",
+      "bytes": 404
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders/cuboid.frag.spv",
+      "after": "userland/tests/vkdemo/shaders/cuboid.frag.spv",
+      "sha256": "011e2b5719098b95a70a7023b2fec8ae38ca836c0a92fda6d7568b4418b4b658",
+      "mode": "0o664",
+      "bytes": 644
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders/cuboid.vert",
+      "after": "userland/tests/vkdemo/shaders/cuboid.vert",
+      "sha256": "450a57283e0ff252c3b5f25dc2df7f9f5d6c58688a22329ce417864a25d7f010",
+      "mode": "0o664",
+      "bytes": 1157
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders/cuboid.vert.spv",
+      "after": "userland/tests/vkdemo/shaders/cuboid.vert.spv",
+      "sha256": "0d87783e0bfcfdaa36fc9e8149b6523387470862e70f1360ba43d10010765cdf",
+      "mode": "0o664",
+      "bytes": 3076
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders/provenance.json",
+      "after": "userland/tests/vkdemo/shaders/provenance.json",
+      "sha256": "82d429133b73d6dd44d038295c6111389a75530321777d071930c4966c8893f5",
+      "mode": "0o664",
+      "bytes": 1362
+    },
+    {
+      "before": "userland/desktop/vkdemo/shaders/regenerate.py",
+      "after": "userland/tests/vkdemo/shaders/regenerate.py",
+      "sha256": "43dd06733e6ac07a93a26e6a68cc16d241397ae607676e8e5a8d7894311904bc",
+      "mode": "0o664",
+      "bytes": 7152
+    },
+    {
+      "before": "userland/desktop/wlshm/Makefile",
+      "after": "userland/tests/wlshm/Makefile",
+      "sha256": "47ee8bc6bf72c1efdb72e209b8b56dc208b6c48cef3e730aef18110a56ef412c",
+      "mode": "0o664",
+      "bytes": 359
+    },
+    {
+      "before": "userland/desktop/wlshm/Makefile.linux",
+      "after": "userland/tests/wlshm/Makefile.linux",
+      "sha256": "cef8f470bba77cecb920d883f55b1da2bb5dc0d5dc8f9b721ee28bd871e9f61a",
+      "mode": "0o664",
+      "bytes": 229
+    },
+    {
+      "before": "userland/desktop/wlshm/main.c",
+      "after": "userland/tests/wlshm/main.c",
+      "sha256": "3f01ebb3c749bfaa0d6ef26128b46c7b4277aecd290c364c144dd07d6f41decf",
+      "mode": "0o664",
+      "bytes": 21343
+    },
+    {
+      "before": "userland/desktop/wltest/Makefile",
+      "after": "userland/tests/wltest/Makefile",
+      "sha256": "258da2ed8bd9d784b497b936956ed4916c55fd3765fa954a7a761c2d7ca4dd34",
+      "mode": "0o664",
+      "bytes": 475
+    },
+    {
+      "before": "userland/desktop/wltest/Makefile.linux",
+      "after": "userland/tests/wltest/Makefile.linux",
+      "sha256": "d5ecfb685bb3f7197b052116aeeb05d87e6d0767935a7769b577171ff053bf93",
+      "mode": "0o664",
+      "bytes": 401
+    },
+    {
+      "before": "userland/desktop/wltest/README.md",
+      "after": "userland/tests/wltest/README.md",
+      "sha256": "799c5c67678152de2d449fa0f1ede84a834279697480652c5269a3c1479026b9",
+      "mode": "0o664",
+      "bytes": 2032
+    },
+    {
+      "before": "userland/desktop/wltest/main.c",
+      "after": "userland/tests/wltest/main.c",
+      "sha256": "871c21efdf101e9f0e11460ce79e319f62972ebeb0dfe3d486bd10873ccc3ece",
+      "mode": "0o664",
+      "bytes": 16883
+    },
+    {
+      "before": "userland/desktop/wltest/renderer.c",
+      "after": "userland/tests/wltest/renderer.c",
+      "sha256": "6b966f6db43621e0651c7227e0739dfc68de522acad8906b691525c346f2b5a3",
+      "mode": "0o664",
+      "bytes": 32655
+    },
+    {
+      "before": "userland/desktop/wltest/window.c",
+      "after": "userland/tests/wltest/window.c",
+      "sha256": "add3b74afa8494ec8075da29677654990fc3833a42aa89ecf022cd343162daa7",
+      "mode": "0o664",
+      "bytes": 11855
+    },
+    {
+      "before": "userland/desktop/wltest/wltest.h",
+      "after": "userland/tests/wltest/wltest.h",
+      "sha256": "10183f3e8dc04ec1177e22859c36f743806bd0dd0e75683624c053769314a6a8",
+      "mode": "0o664",
+      "bytes": 2505
+    }
+  ],
+  "edited_files": [
+    {
+      "before": "plan/tools/titlebar/menu-p002.sh",
+      "after": "plan/tools/titlebar/menu-p002.sh"
+    },
+    {
+      "before": "plan/tools/titlebar/titlebar-p008.sh",
+      "after": "plan/tools/titlebar/titlebar-p008.sh"
+    },
+    {
+      "before": "plan/ws001/phase019/migration-inventory.tsv",
+      "after": "plan/ws001/phase019/migration-inventory.tsv"
+    },
+    {
+      "before": "plan/ws001/phase020/review-ledger.tsv",
+      "after": "plan/ws001/phase020/review-ledger.tsv"
+    },
+    {
+      "before": "plan/ws001/phase021/review-ledger.tsv",
+      "after": "plan/ws001/phase021/review-ledger.tsv"
+    },
+    {
+      "before": "plan/ws001/review-ledger.tsv",
+      "after": "plan/ws001/review-ledger.tsv"
+    },
+    {
+      "before": "plan/ws014/phase007/verification-logs/q310-final-close-build.log",
+      "after": "plan/ws014/phase007/verification-logs/q310-final-close-build.log"
+    },
+    {
+      "before": "plan/ws014/phase008/build-initial.log",
+      "after": "plan/ws014/phase008/build-initial.log"
+    },
+    {
+      "before": "plan/ws014/phase009/final-evidence/build-normal.log",
+      "after": "plan/ws014/phase009/final-evidence/build-normal.log"
+    },
+    {
+      "before": "plan/ws014/phase009/final-evidence/build-short.log",
+      "after": "plan/ws014/phase009/final-evidence/build-short.log"
+    },
+    {
+      "before": "plan/ws014/tests/run-venus-remote.py",
+      "after": "plan/ws014/tests/run-venus-remote.py"
+    },
+    {
+      "before": "plan/ws014/tests/run-vkdemo-cli-test.sh",
+      "after": "plan/ws014/tests/run-vkdemo-cli-test.sh"
+    },
+    {
+      "before": "plan/ws014/tests/run-vkdemo-vulkan-test.sh",
+      "after": "plan/ws014/tests/run-vkdemo-vulkan-test.sh"
+    },
+    {
+      "before": "plan/ws014/tests/test-vkdemo-shaders.py",
+      "after": "plan/ws014/tests/test-vkdemo-shaders.py"
+    },
+    {
+      "before": "plan/ws014/tests/vkdemo-recording.c",
+      "after": "plan/ws014/tests/vkdemo-recording.c"
+    },
+    {
+      "before": "plan/ws031/handover/increment-results/e97-e109-changes.patch",
+      "after": "plan/ws031/handover/increment-results/e97-e109-changes.patch"
+    },
+    {
+      "before": "plan/ws031/handover/increment-results/e97-e115-changes.patch",
+      "after": "plan/ws031/handover/increment-results/e97-e115-changes.patch"
+    },
+    {
+      "before": "plan/ws031/handover/increment-results/e97-e116-changes.patch",
+      "after": "plan/ws031/handover/increment-results/e97-e116-changes.patch"
+    },
+    {
+      "before": "plan/ws031/handover/increment-results/e97-e117-changes.patch",
+      "after": "plan/ws031/handover/increment-results/e97-e117-changes.patch"
+    },
+    {
+      "before": "plan/ws031/handover/increment-results/e97-e118-changes.patch",
+      "after": "plan/ws031/handover/increment-results/e97-e118-changes.patch"
+    },
+    {
+      "before": "plan/ws031/handover/tools/refvk.c",
+      "after": "plan/ws031/handover/tools/refvk.c"
+    },
+    {
+      "before": "plan/ws031/handover/tools/vk_opcode_survey.py",
+      "after": "plan/ws031/handover/tools/vk_opcode_survey.py"
+    },
+    {
+      "before": "plan/ws031/tests/i915-vk-compile-test.c",
+      "after": "plan/ws031/tests/i915-vk-compile-test.c"
+    },
+    {
+      "before": "plan/ws031/tests/i915-vk-lower-test.c",
+      "after": "plan/ws031/tests/i915-vk-lower-test.c"
+    },
+    {
+      "before": "plan/ws031/tests/i915-vk-pipe-test.c",
+      "after": "plan/ws031/tests/i915-vk-pipe-test.c"
+    },
+    {
+      "before": "plan/ws031/tests/i915-vk-spirv-test.c",
+      "after": "plan/ws031/tests/i915-vk-spirv-test.c"
+    },
+    {
+      "before": "plan/ws031/tests/mview-host-test.c",
+      "after": "plan/ws031/tests/mview-host-test.c"
+    },
+    {
+      "before": "plan/ws031/tests/run-mview-host-test.sh",
+      "after": "plan/ws031/tests/run-mview-host-test.sh"
+    },
+    {
+      "before": "plan/ws031/tests/run-vk-gentool-test.sh",
+      "after": "plan/ws031/tests/run-vk-gentool-test.sh"
+    },
+    {
+      "before": "plan/ws031/tests/vkloop-hw.sh",
+      "after": "plan/ws031/tests/vkloop-hw.sh"
+    },
+    {
+      "before": "plan/ws035/phase001/baseline/amd64-user.log",
+      "after": "plan/ws035/phase001/baseline/amd64-user.log"
+    },
+    {
+      "before": "plan/ws035/phase001/baseline/i915-amd64-user.log",
+      "after": "plan/ws035/phase001/baseline/i915-amd64-user.log"
+    },
+    {
+      "before": "plan/ws035/phase001/baseline/pc98-user-k.log",
+      "after": "plan/ws035/phase001/baseline/pc98-user-k.log"
+    },
+    {
+      "before": "plan/ws035/phase001/baseline/pcat-user-k.log",
+      "after": "plan/ws035/phase001/baseline/pcat-user-k.log"
+    },
+    {
+      "before": "plan/ws035/phase001/baseline/rpi4-user-k.log",
+      "after": "plan/ws035/phase001/baseline/rpi4-user-k.log"
+    },
+    {
+      "before": "plan/ws035/phase001/baseline/sun4u-user-k.log",
+      "after": "plan/ws035/phase001/baseline/sun4u-user-k.log"
+    },
+    {
+      "before": "plan/ws035/phase002/build/amd64-user.log",
+      "after": "plan/ws035/phase002/build/amd64-user.log"
+    },
+    {
+      "before": "plan/ws035/phase002/build/i915-amd64-user.log",
+      "after": "plan/ws035/phase002/build/i915-amd64-user.log"
+    },
+    {
+      "before": "plan/ws035/phase002/pre-refs/refs.tsv",
+      "after": "plan/ws035/phase002/pre-refs/refs.tsv"
+    },
+    {
+      "before": "plan/ws035/phase034/build/amd64-disk-image.log",
+      "after": "plan/ws035/phase034/build/amd64-disk-image.log"
+    },
+    {
+      "before": "plan/ws035/phase035/build/amd64-disk-image.log",
+      "after": "plan/ws035/phase035/build/amd64-disk-image.log"
+    },
+    {
+      "before": "plan/ws035/phase035/build/amd64-user.log",
+      "after": "plan/ws035/phase035/build/amd64-user.log"
+    },
+    {
+      "before": "plan/ws035/refactor-refs/refs.tsv",
+      "after": "plan/ws035/refactor-refs/refs.tsv"
+    },
+    {
+      "before": "plan/ws035/tests/zdesktop-p076.sh",
+      "after": "plan/ws035/tests/zdesktop-p076.sh"
+    },
+    {
+      "before": "plan/ws035/tests/zdesktop-p077.sh",
+      "after": "plan/ws035/tests/zdesktop-p077.sh"
+    },
+    {
+      "before": "plan/ws035/tests/zdesktop-p078.sh",
+      "after": "plan/ws035/tests/zdesktop-p078.sh"
+    },
+    {
+      "before": "plan/ws035/tests/zdesktop-p079.sh",
+      "after": "plan/ws035/tests/zdesktop-p079.sh"
+    },
+    {
+      "before": "plan/ws035/tests/zdesktop-p080.sh",
+      "after": "plan/ws035/tests/zdesktop-p080.sh"
+    },
+    {
+      "before": "plan/ws068/tests/i915-shader-check/run.sh",
+      "after": "plan/ws068/tests/i915-shader-check/run.sh"
+    },
+    {
+      "before": "plan/ws074/tests/host-build.sh",
+      "after": "plan/ws074/tests/host-build.sh"
+    },
+    {
+      "before": "plan/ws075/tests/shader-survey/run.sh",
+      "after": "plan/ws075/tests/shader-survey/run.sh"
+    },
+    {
+      "before": "plan/ws075/tests/vk-calls.py",
+      "after": "plan/ws075/tests/vk-calls.py"
+    },
+    {
+      "before": "plan/ws079/tests/p012-guest.sh",
+      "after": "plan/ws079/tests/p012-guest.sh"
+    },
+    {
+      "before": "plan/ws101/tests/host/run.sh",
+      "after": "plan/ws101/tests/host/run.sh"
+    },
+    {
+      "before": "plan/ws101/tests/noct/g3-venus.sh",
+      "after": "plan/ws101/tests/noct/g3-venus.sh"
+    },
+    {
+      "before": "platform/amd64/vmunix.mk",
+      "after": "platform/amd64/vmunix.mk"
+    },
+    {
+      "before": "platform/arm64/vmunix.mk",
+      "after": "platform/arm64/vmunix.mk"
+    },
+    {
+      "before": "platform/pc98/vmunix.mk",
+      "after": "platform/pc98/vmunix.mk"
+    },
+    {
+      "before": "platform/pcat/vmunix.mk",
+      "after": "platform/pcat/vmunix.mk"
+    },
+    {
+      "before": "platform/sparcv9/vmunix.mk",
+      "after": "platform/sparcv9/vmunix.mk"
+    },
+    {
+      "before": "src/drivers/gpu/i915-old/vk/gfx.h",
+      "after": "src/drivers/gpu/i915-old/vk/gfx.h"
+    },
+    {
+      "before": "src/drivers/gpu/i915-old/vk/vkref-generated.inc",
+      "after": "src/drivers/gpu/i915-old/vk/vkref-generated.inc"
+    },
+    {
+      "before": "src/drivers/gpu/i915/tests/fixtures/compiler-shaders-gen.inc",
+      "after": "src/drivers/gpu/i915/tests/fixtures/compiler-shaders-gen.inc"
+    },
+    {
+      "before": "src/drivers/gpu/i915/tests/fixtures/vkref-generated.inc",
+      "after": "src/drivers/gpu/i915/tests/fixtures/vkref-generated.inc"
+    },
+    {
+      "before": "src/drivers/gpu/i915/tests/render/README.md",
+      "after": "src/drivers/gpu/i915/tests/render/README.md"
+    },
+    {
+      "before": "src/drivers/gpu/i915/tests/render/compiler-shaders/regenerate.py",
+      "after": "src/drivers/gpu/i915/tests/render/compiler-shaders/regenerate.py"
+    },
+    {
+      "before": "tools/menuconfig.py",
+      "after": "tools/menuconfig.py"
+    },
+    {
+      "before": "userland/base/tests/Makefile",
+      "after": "userland/tests/Makefile"
+    },
+    {
+      "before": "userland/base/tests/acquire-fence/Makefile",
+      "after": "userland/tests/acquire-fence/Makefile"
+    },
+    {
+      "before": "userland/base/tests/acquire-fence/main.c",
+      "after": "userland/tests/acquire-fence/main.c"
+    },
+    {
+      "before": "userland/base/tests/browser-probe/Makefile",
+      "after": "userland/tests/browser-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/data-probe/Makefile",
+      "after": "userland/tests/data-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/extras-probe/Makefile",
+      "after": "userland/tests/extras-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/gpu-admission/Makefile",
+      "after": "userland/tests/gpu-admission/Makefile"
+    },
+    {
+      "before": "userland/base/tests/gpu-fence/Makefile",
+      "after": "userland/tests/gpu-fence/Makefile"
+    },
+    {
+      "before": "userland/base/tests/gpu-forge/Makefile",
+      "after": "userland/tests/gpu-forge/Makefile"
+    },
+    {
+      "before": "userland/base/tests/gpu-i915/Makefile",
+      "after": "userland/tests/gpu-i915/Makefile"
+    },
+    {
+      "before": "userland/base/tests/gpu-recovery/Makefile",
+      "after": "userland/tests/gpu-recovery/Makefile"
+    },
+    {
+      "before": "userland/base/tests/gpu-share/Makefile",
+      "after": "userland/tests/gpu-share/Makefile"
+    },
+    {
+      "before": "userland/base/tests/greeter-probe/Makefile",
+      "after": "userland/tests/greeter-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/menu-probe/Makefile",
+      "after": "userland/tests/menu-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/network-probe/Makefile",
+      "after": "userland/tests/network-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/peninject/Makefile",
+      "after": "userland/tests/peninject/Makefile"
+    },
+    {
+      "before": "userland/base/tests/popup-probe/Makefile",
+      "after": "userland/tests/popup-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/seat-probe/Makefile",
+      "after": "userland/tests/seat-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/subsurface-probe/Makefile",
+      "after": "userland/tests/subsurface-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/tablet-probe/Makefile",
+      "after": "userland/tests/tablet-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/titlebar-probe/Makefile",
+      "after": "userland/tests/titlebar-probe/Makefile"
+    },
+    {
+      "before": "userland/base/tests/touchinject/Makefile",
+      "after": "userland/tests/touchinject/Makefile"
+    },
+    {
+      "before": "userland/base/tests/wakebench/Makefile",
+      "after": "userland/tests/wakebench/Makefile"
+    },
+    {
+      "before": "userland/desktop/egltest/Makefile",
+      "after": "userland/tests/egltest/Makefile"
+    },
+    {
+      "before": "userland/desktop/egltest/shaders/regenerate.py",
+      "after": "userland/tests/egltest/shaders/regenerate.py"
+    },
+    {
+      "before": "userland/desktop/glescompute/Makefile",
+      "after": "userland/tests/glescompute/Makefile"
+    },
+    {
+      "before": "userland/desktop/gpudemo/Makefile",
+      "after": "userland/tests/gpudemo/Makefile"
+    },
+    {
+      "before": "userland/desktop/keiland-linux.mk",
+      "after": "userland/desktop/keiland-linux.mk"
+    },
+    {
+      "before": "userland/desktop/kuidemo/Makefile",
+      "after": "userland/tests/kuidemo/Makefile"
+    },
+    {
+      "before": "userland/desktop/kuidemo/Makefile.linux",
+      "after": "userland/tests/kuidemo/Makefile.linux"
+    },
+    {
+      "before": "userland/desktop/libvulkan/README.md",
+      "after": "userland/desktop/libvulkan/README.md"
+    },
+    {
+      "before": "userland/desktop/mview/Makefile",
+      "after": "userland/tests/mview/Makefile"
+    },
+    {
+      "before": "userland/desktop/mview/Makefile.linux",
+      "after": "userland/tests/mview/Makefile.linux"
+    },
+    {
+      "before": "userland/desktop/mview/tools/README.md",
+      "after": "userland/tests/mview/tools/README.md"
+    },
+    {
+      "before": "userland/desktop/mview/tools/fbx2mview.py",
+      "after": "userland/tests/mview/tools/fbx2mview.py"
+    },
+    {
+      "before": "userland/desktop/vkdemo/Makefile",
+      "after": "userland/tests/vkdemo/Makefile"
+    },
+    {
+      "before": "userland/desktop/vkdemo/Makefile.linux",
+      "after": "userland/tests/vkdemo/Makefile.linux"
+    },
+    {
+      "before": "userland/desktop/vkdemo/README.md",
+      "after": "userland/tests/vkdemo/README.md"
+    },
+    {
+      "before": "userland/desktop/wayland/Makefile",
+      "after": "userland/desktop/wayland/Makefile"
+    },
+    {
+      "before": "userland/desktop/wayland/Makefile.linux",
+      "after": "userland/desktop/wayland/Makefile.linux"
+    },
+    {
+      "before": "userland/desktop/wayland/compose.h",
+      "after": "userland/desktop/wayland/compose.h"
+    },
+    {
+      "before": "userland/desktop/wlshm/Makefile",
+      "after": "userland/tests/wlshm/Makefile"
+    },
+    {
+      "before": "userland/desktop/wlshm/Makefile.linux",
+      "after": "userland/tests/wlshm/Makefile.linux"
+    },
+    {
+      "before": "userland/desktop/wltest/Makefile",
+      "after": "userland/tests/wltest/Makefile"
+    },
+    {
+      "before": "userland/desktop/wltest/Makefile.linux",
+      "after": "userland/tests/wltest/Makefile.linux"
+    },
+    {
+      "before": "userland/retro/glxtest/Makefile",
+      "after": "userland/retro/glxtest/Makefile"
+    },
+    {
+      "before": "userland/retro/glxtest/main.c",
+      "after": "userland/retro/glxtest/main.c"
+    }
+  ],
+  "excluded": "ime-probe ownership answer pending"
+}

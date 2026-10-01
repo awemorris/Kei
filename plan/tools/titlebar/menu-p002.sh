@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws070-p002: the System Menu's protocol errors and libkeiland's own checks, on the Venus guest.
-# zdesktop --glass runs, and /bin/menu-probe (userland/base/tests/menu-probe) sends each case on its own
+# zdesktop --glass runs, and /bin/menu-probe (userland/tests/menu-probe) sends each case on its own
 # connection; every case must print ok, and zdesktop must log each protocol error with its object and
 # code and go on serving (a terminal started afterwards shows its menus).
 #

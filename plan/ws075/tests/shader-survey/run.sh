@@ -29,7 +29,7 @@ cc -std=gnu99 -O0 -w -I"$root" -I"$root/include" -DHAL_ARCH_AMD64 -o "$out/i915-
 
 # The Vulkan clients' shaders.
 for f in "$root"/userland/desktop/wayland/shaders/*.[fv]*[gt] "$root"/userland/desktop/files/shaders/*.[fv]*[gt] \
-	"$root"/userland/desktop/terminal/shaders/*.[fv]*[gt] "$root"/userland/desktop/mview/shaders/*.[fv]*[gt] "$root"/userland/desktop/vkdemo/shaders/*.[fv]*[gt]; do
+	"$root"/userland/desktop/terminal/shaders/*.[fv]*[gt] "$root"/userland/tests/mview/shaders/*.[fv]*[gt] "$root"/userland/tests/vkdemo/shaders/*.[fv]*[gt]; do
 	name=$(echo "$f" | sed 's|.*/userland/base/||; s|/shaders/|-|')
 	# As the client is built: its checked-in SPIR-V, else glslc with the flags its regenerate.py gives (-O inlines calls).
 	if [ -f "$f.spv" ]; then
@@ -47,7 +47,7 @@ for f in "$host"/*.linked.spv "$host"/*.geom.spv; do
 done
 
 # egltest's and glxtest's scenes, linked as libGLESv2 links them.
-python3 "$here/extract.py" "$out/scenes/src" "$root"/userland/desktop/egltest/*.c "$root"/userland/retro/glxtest/*.c > "$out/extracted.txt"
+python3 "$here/extract.py" "$out/scenes/src" "$root"/userland/tests/egltest/*.c "$root"/userland/retro/glxtest/*.c > "$out/extracted.txt"
 python3 "$here/pair.py" "$out/glsl-test" "$out/scenes" $(cat "$out/extracted.txt") > "$out/unpaired.txt"
 for f in "$out"/scenes/*.vert.spv; do
 	"$out/spirv-test" "$f" "${f%.spv}.linked.spv" > /dev/null 2>&1 && mv "${f%.spv}.linked.spv" "$f"

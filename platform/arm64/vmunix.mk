@@ -257,12 +257,12 @@ endef
 $(foreach command,$(ARM64_USER_NET_COMMANDS),\
 	$(eval $(call ARM64_USER_NET_COMMAND,$(command))))
 $(BUILD)/POSIX-R1.ELF: $(ARM64_USER_RUNTIME_OBJS) \
-	$(BUILD)/user/userland/base/tests/syscall-smoke.o \
+	$(BUILD)/user/userland/tests/syscall-smoke.o \
 	$(ARM64_PLATFORM)/user.ld tools/build/check-user-elf.py
 	$(ARM64_LD) --gc-sections -nostdlib -static -z max-page-size=4096 \
  -z stack-size=0x100000 -T $(ARM64_PLATFORM)/user.ld \
  $(ARM64_USER_RUNTIME_OBJS) \
- $(BUILD)/user/userland/base/tests/syscall-smoke.o -o $@
+ $(BUILD)/user/userland/tests/syscall-smoke.o -o $@
 	@# A weak undefined symbol is an optional hook, not a link error.
 	@# GNU nm drops those from -u; llvm-nm reports them, so the strong
 	@# references are selected explicitly.
@@ -271,12 +271,12 @@ $(BUILD)/POSIX-R1.ELF: $(ARM64_USER_RUNTIME_OBJS) \
 	$(PYTHON) tools/build/check-user-elf.py --machine aarch64 $@
 
 $(BUILD)/POSIX-R2.ELF: $(ARM64_USER_RUNTIME_OBJS) \
-	$(BUILD)/user/userland/base/tests/posix-r2.o \
+	$(BUILD)/user/userland/tests/posix-r2.o \
 	$(ARM64_PLATFORM)/user.ld tools/build/check-user-elf.py
 	$(ARM64_LD) --gc-sections -nostdlib -static -z max-page-size=4096 \
  -z stack-size=0x100000 -T $(ARM64_PLATFORM)/user.ld \
  $(ARM64_USER_RUNTIME_OBJS) \
- $(BUILD)/user/userland/base/tests/posix-r2.o -o $@
+ $(BUILD)/user/userland/tests/posix-r2.o -o $@
 	@# A weak undefined symbol is an optional hook, not a link error.
 	@# GNU nm drops those from -u; llvm-nm reports them, so the strong
 	@# references are selected explicitly.
@@ -286,12 +286,12 @@ $(BUILD)/POSIX-R2.ELF: $(ARM64_USER_RUNTIME_OBJS) \
 
 $(BUILD)/POSIX-R2-REMAINING.ELF: \
 	$(ARM64_USER_RUNTIME_OBJS) \
-	$(BUILD)/user/userland/base/tests/posix-r2-remaining.o \
+	$(BUILD)/user/userland/tests/posix-r2-remaining.o \
 	$(ARM64_PLATFORM)/user.ld tools/build/check-user-elf.py
 	$(ARM64_LD) --gc-sections -nostdlib -static -z max-page-size=4096 \
  -z stack-size=0x100000 -T $(ARM64_PLATFORM)/user.ld \
  $(ARM64_USER_RUNTIME_OBJS) \
- $(BUILD)/user/userland/base/tests/posix-r2-remaining.o -o $@
+ $(BUILD)/user/userland/tests/posix-r2-remaining.o -o $@
 	@# A weak undefined symbol is an optional hook, not a link error.
 	@# GNU nm drops those from -u; llvm-nm reports them, so the strong
 	@# references are selected explicitly.
@@ -388,32 +388,32 @@ $(DYNAMIC_DIR)/libc.so: $(DYNAMIC_LIBC_OBJS)
  -z separate-code -z max-page-size=4096 -z stack-size=0x100000 \
  --allow-shlib-undefined $^ -o $@
 $(DYNAMIC_DIR)/alt/rpathdep.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/rpathdep.o $(DYNAMIC_DIR)/ld.so
+	$(DYNAMIC_DIR)/obj/userland/tests/rpathdep.o $(DYNAMIC_DIR)/ld.so
 	@mkdir -p $(dir $@)
 	$(ARM64_LD) -shared -soname rpathdep.so --hash-style=gnu \
  -z now -z relro -z separate-code -z max-page-size=4096 $< -o $@
-$(DYNAMIC_DIR)/tlstest.so: $(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o \
+$(DYNAMIC_DIR)/tlstest.so: $(DYNAMIC_DIR)/obj/userland/tests/tlstest.o \
 	$(DYNAMIC_DIR)/alt/rpathdep.so $(DYNAMIC_DIR)/ld.so
 	$(ARM64_LD) -shared -soname tlstest.so --hash-style=gnu \
  -z now -z relro -z separate-code -z max-page-size=4096 \
  --enable-new-dtags -rpath '$$ORIGIN/alt' \
- $(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/tlstest.o \
  -L$(DYNAMIC_DIR)/alt -l:rpathdep.so -o $@
 $(DYNAMIC_DIR)/rpathtest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/rpathtest.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/rpathtest.o \
 	$(DYNAMIC_DIR)/alt/rpathdep.so $(DYNAMIC_DIR)/ld.so
 	$(ARM64_LD) -shared -soname rpthtest.so --hash-style=gnu \
  -z now -z relro -z separate-code -z max-page-size=4096 \
  --disable-new-dtags -rpath '$$ORIGIN/alt' $< \
  -L$(DYNAMIC_DIR)/alt -l:rpathdep.so -o $@
 $(DYNAMIC_DIR)/verstest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/versiontest.o \
-	userland/base/tests/versiontest.map $(DYNAMIC_DIR)/ld.so
+	$(DYNAMIC_DIR)/obj/userland/tests/versiontest.o \
+	userland/tests/versiontest.map $(DYNAMIC_DIR)/ld.so
 	$(ARM64_LD) -shared -soname verstest.so --hash-style=gnu \
  -z now -z relro -z separate-code -z max-page-size=4096 \
- --version-script=userland/base/tests/versiontest.map $< -o $@
+ --version-script=userland/tests/versiontest.map $< -o $@
 $(DYNAMIC_DIR)/versuse.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/versionuse.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/versionuse.o \
 	$(DYNAMIC_DIR)/verstest.so $(DYNAMIC_DIR)/ld.so
 	$(ARM64_LD) -shared -soname versuse.so --hash-style=gnu \
  -z now -z relro -z separate-code -z max-page-size=4096 \
@@ -496,7 +496,7 @@ $(DYNAMIC_DIR)/libgif-compat.so: $(DYNAMIC_GIF_COMPAT_OBJS) $(DYNAMIC_DIR)/libc.
 	$(PYTHON) tools/build/check-dynamic-elf.py --machine aarch64 --role shared-library \
  --needed libc.so --soname libgif-compat.so $@
 $(DYNAMIC_DIR)/dyntest: $(ZEDBSD_SYSROOT_ARM64)/usr/lib/crt1.o \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/dyntest.o $(DYNAMIC_DIR)/libc.so \
+	$(DYNAMIC_DIR)/obj/userland/tests/dyntest.o $(DYNAMIC_DIR)/libc.so \
 	$(DYNAMIC_DIR)/ld.so $(DYNAMIC_DIR)/tlstest.so \
 	$(DYNAMIC_DIR)/versuse.so
 	$(CC) -nostdlib -pie -Wl,--no-relax \
@@ -504,7 +504,7 @@ $(DYNAMIC_DIR)/dyntest: $(ZEDBSD_SYSROOT_ARM64)/usr/lib/crt1.o \
  -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
  -Wl,--dynamic-linker=/lib/ld.so \
  $(ZEDBSD_SYSROOT_ARM64)/usr/lib/crt1.o \
- $(DYNAMIC_DIR)/obj/userland/base/tests/dyntest.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/dyntest.o \
  -L$(DYNAMIC_DIR) -Wl,-rpath-link,$(DYNAMIC_DIR) \
  -l:libc.so -o $@
 dynamic-userland-check: $(DYNAMIC_DIR)/ld.so $(DYNAMIC_DIR)/libc.so \

@@ -89,7 +89,7 @@ done
 for part in spirv compile eu; do
 	executor="$executor $driver/compiler/$part.c"
 done
-cp "$repo/userland/desktop/vkdemo/shaders/cuboid.vert.spv" "$repo/userland/desktop/vkdemo/shaders/cuboid.frag.spv" "$work/"
+cp "$repo/userland/tests/vkdemo/shaders/cuboid.vert.spv" "$repo/userland/tests/vkdemo/shaders/cuboid.frag.spv" "$work/"
 cc -std=gnu11 -Wall -Wextra -Werror -Wdeclaration-after-statement -DKERN_USER_ABI_LP64 -DVK_REPO="\"$repo\"" \
 	-I"$repo/include" -I"$repo" -idirafter "$repo/include/libc" -o "$work/executor" "$here/executor-test.c" $executor -lm || exit 1
 "$work/executor" "$work" || status=1

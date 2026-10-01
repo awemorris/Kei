@@ -48,7 +48,7 @@ WAYLAND_LINUX_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/wayland/inset.c \
 	userland/desktop/wayland/edit.c \
 	userland/desktop/wayland/clipboard.c \
-	userland/desktop/vkdemo/display.c \
+	userland/tests/vkdemo/display.c \
 	userland/desktop/artwork/mark.c \
 	userland/desktop/picture/color-glyph.c \
 	userland/desktop/wayland/linux/os-linux.c \

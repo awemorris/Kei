@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws035-p076: xdg_popup, xdg_positioner, the xdg_toplevel requests and the ping, on the Venus guest,
-# with /bin/popup-probe (userland/base/tests/popup-probe) in wide mode (menus 360 wide).
+# with /bin/popup-probe (userland/tests/popup-probe) in wide mode (menus 360 wide).
 # zdesktop --glass runs at 1280x800; the probe's window (400x300, dark, limits 200x150 to 800x600) is centred.
 #  1. A press in the window opens the menu (blue) there, with the grab: the menu gets the keyboard;
 #     the press pinged the client, which answered.  menu.png: the menu over the window at the press.

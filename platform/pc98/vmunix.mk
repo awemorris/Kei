@@ -349,25 +349,25 @@ $(BUILD)/userland/base/libc/posix.o $(BUILD)/userland/base/libc/poll.o \
 	$(BUILD)/userland/base/libc/termios.o \
 	$(BUILD)/userland/base/libc/pthread.o \
 	$(BUILD)/userland/base/libc/socket.o \
-	$(BUILD)/userland/base/tests/syscall-smoke.o \
-	$(BUILD)/userland/base/tests/posix-r2.o \
-	$(BUILD)/userland/base/tests/posix-r2-remaining.o: \
+	$(BUILD)/userland/tests/syscall-smoke.o \
+	$(BUILD)/userland/tests/posix-r2.o \
+	$(BUILD)/userland/tests/posix-r2-remaining.o: \
 	OBJ_CPPFLAGS = $(ZEDBSD_CPPFLAGS)
 $(BUILD)/userland/base/libc/posix.o $(BUILD)/userland/base/libc/poll.o \
 	$(BUILD)/userland/base/libc/termios.o \
 	$(BUILD)/userland/base/libc/pthread.o \
 	$(BUILD)/userland/base/libc/socket.o \
-	$(BUILD)/userland/base/tests/syscall-smoke.o \
-	$(BUILD)/userland/base/tests/posix-r2.o \
-	$(BUILD)/userland/base/tests/posix-r2-remaining.o: \
+	$(BUILD)/userland/tests/syscall-smoke.o \
+	$(BUILD)/userland/tests/posix-r2.o \
+	$(BUILD)/userland/tests/posix-r2-remaining.o: \
 	OBJ_CFLAGS = $(USER_CFLAGS)
 
-$(BUILD)/INIT.ELF: $(USER_LIBC_OBJS) $(BUILD)/userland/base/tests/syscall-smoke.o \
+$(BUILD)/INIT.ELF: $(USER_LIBC_OBJS) $(BUILD)/userland/tests/syscall-smoke.o \
 	$(ZEDBSD_SOFTFLOAT_OBJECTS) $(PC98)/noct-user.ld $(USER_ELF_CHECK)
 	$(LD) -m elf_i386 --gc-sections -nostdlib -static -z max-page-size=4096 \
  $(USER_STACK_LDFLAGS) \
  -T $(PC98)/noct-user.ld $(USER_LIBC_OBJS) \
- $(BUILD)/userland/base/tests/syscall-smoke.o \
+ $(BUILD)/userland/tests/syscall-smoke.o \
  $(ZEDBSD_SOFTFLOAT_OBJECTS) -o $@
 	$(NOCT) --path=$(BUILD_TOOLS_DIR) $(USER_ELF_CHECK) $@
 
@@ -411,20 +411,20 @@ $(BUILD)/bin/sh: $(I386_APP_INPUTS) $(I386_APP_SH_OBJS)
 	$(I386_APP_CHECK) $@
 
 $(BUILD)/POSIX-R2.ELF: $(USER_LIBC_OBJS) \
-	$(BUILD)/userland/base/tests/posix-r2.o $(PC98)/noct-user.ld \
+	$(BUILD)/userland/tests/posix-r2.o $(PC98)/noct-user.ld \
 	$(ZEDBSD_SOFTFLOAT_OBJECTS) $(USER_ELF_CHECK)
 	$(LD) -m elf_i386 --gc-sections -nostdlib -static -z max-page-size=4096 \
  $(USER_STACK_LDFLAGS) -T $(PC98)/noct-user.ld \
- $(USER_LIBC_OBJS) $(BUILD)/userland/base/tests/posix-r2.o \
+ $(USER_LIBC_OBJS) $(BUILD)/userland/tests/posix-r2.o \
  $(ZEDBSD_SOFTFLOAT_OBJECTS) -o $@
 	$(NOCT) --path=$(BUILD_TOOLS_DIR) $(USER_ELF_CHECK) $@
 
 $(BUILD)/POSIX-R2-REMAINING.ELF: $(USER_LIBC_OBJS) \
-	$(BUILD)/userland/base/tests/posix-r2-remaining.o $(PC98)/noct-user.ld \
+	$(BUILD)/userland/tests/posix-r2-remaining.o $(PC98)/noct-user.ld \
 	$(ZEDBSD_SOFTFLOAT_OBJECTS) $(USER_ELF_CHECK)
 	$(LD) -m elf_i386 --gc-sections -nostdlib -static -z max-page-size=4096 \
  $(USER_STACK_LDFLAGS) -T $(PC98)/noct-user.ld \
- $(USER_LIBC_OBJS) $(BUILD)/userland/base/tests/posix-r2-remaining.o \
+ $(USER_LIBC_OBJS) $(BUILD)/userland/tests/posix-r2-remaining.o \
  $(ZEDBSD_SOFTFLOAT_OBJECTS) -o $@
 	$(NOCT) --path=$(BUILD_TOOLS_DIR) $(USER_ELF_CHECK) $@
 
@@ -567,22 +567,22 @@ $(DYNAMIC_DIR)/obj/src/libc/crt/crt1.o: src/libc/crt/crt1-i386.S
 	$(CC) -m32 -c $< -o $@
 
 $(DYNAMIC_DIR)/alt/rpathdep.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/rpathdep.o $(DYNAMIC_DIR)/ld.so
+	$(DYNAMIC_DIR)/obj/userland/tests/rpathdep.o $(DYNAMIC_DIR)/ld.so
 	@mkdir -p $(dir $@)
 	$(LD) -m elf_i386 -shared -soname rpathdep.so --hash-style=gnu \
  -z now -z relro -z separate-code $< -o $@
 
 $(DYNAMIC_DIR)/tlstest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/tlstest.o \
 	$(DYNAMIC_DIR)/alt/rpathdep.so $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_i386 -shared -soname tlstest.so --hash-style=gnu \
  -z now -z relro -z separate-code --enable-new-dtags \
  -rpath '$$ORIGIN/alt' \
- $(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/tlstest.o \
  -L$(DYNAMIC_DIR)/alt -l:rpathdep.so -o $@
 
 $(DYNAMIC_DIR)/rpathtest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/rpathtest.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/rpathtest.o \
 	$(DYNAMIC_DIR)/alt/rpathdep.so $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_i386 -shared -soname rpthtest.so --hash-style=gnu \
  -z now -z relro -z separate-code --disable-new-dtags \
@@ -590,14 +590,14 @@ $(DYNAMIC_DIR)/rpathtest.so: \
  -l:rpathdep.so -o $@
 
 $(DYNAMIC_DIR)/verstest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/versiontest.o \
-	userland/base/tests/versiontest.map $(DYNAMIC_DIR)/ld.so
+	$(DYNAMIC_DIR)/obj/userland/tests/versiontest.o \
+	userland/tests/versiontest.map $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_i386 -shared -soname verstest.so --hash-style=gnu \
  -z now -z relro -z separate-code \
- --version-script=userland/base/tests/versiontest.map $< -o $@
+ --version-script=userland/tests/versiontest.map $< -o $@
 
 $(DYNAMIC_DIR)/versuse.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/versionuse.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/versionuse.o \
 	$(DYNAMIC_DIR)/verstest.so $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_i386 -shared -soname versuse.so --hash-style=gnu \
  -z now -z relro -z separate-code $< -L$(DYNAMIC_DIR) \
@@ -681,14 +681,14 @@ $(DYNAMIC_DIR)/libgif-compat.so: $(DYNAMIC_GIF_COMPAT_OBJS) $(DYNAMIC_DIR)/libc.
  --needed libc.so --soname libgif-compat.so $@
 
 $(DYNAMIC_DIR)/dyntest: $(ZEDBSD_SYSROOT_I386)/usr/lib/crt1.o \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/dyntest.o $(DYNAMIC_DIR)/libc.so \
+	$(DYNAMIC_DIR)/obj/userland/tests/dyntest.o $(DYNAMIC_DIR)/libc.so \
 	$(DYNAMIC_DIR)/ld.so $(DYNAMIC_DIR)/tlstest.so \
 	$(DYNAMIC_DIR)/versuse.so
 	$(CC) -m32 -nostdlib -pie -Wl,--no-relax,--hash-style=sysv,-z,now,-z,relro \
  -Wl,-z,separate-code,-z,stack-size=0x100000,--allow-shlib-undefined \
  -Wl,--dynamic-linker=/lib/ld.so \
  $(ZEDBSD_SYSROOT_I386)/usr/lib/crt1.o \
- $(DYNAMIC_DIR)/obj/userland/base/tests/dyntest.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/dyntest.o \
  -L$(DYNAMIC_DIR) -Wl,-rpath-link,$(DYNAMIC_DIR) -l:libc.so -o $@
 
 dynamic-userland-check: $(DYNAMIC_DIR)/ld.so $(DYNAMIC_DIR)/libc.so \

@@ -17,8 +17,8 @@ import sys
 LOCAL = {'vkWaitForFences', 'vkMapMemory', 'vkUnmapMemory', 'vkFlushMappedMemoryRanges', 'vkInvalidateMappedMemoryRanges',
          'vkGetDeviceQueue', 'vkEnumerateDeviceExtensionProperties'}
 
-CLIENTS = ['userland/desktop/wayland', 'userland/desktop/files', 'userland/desktop/terminal', 'userland/desktop/mview',
-           'userland/desktop/vkdemo', 'userland/desktop/wltest', 'userland/desktop/xserver', 'userland/desktop/libegl',
+CLIENTS = ['userland/desktop/wayland', 'userland/desktop/files', 'userland/desktop/terminal', 'userland/tests/mview',
+           'userland/tests/vkdemo', 'userland/tests/wltest', 'userland/desktop/xserver', 'userland/desktop/libegl',
            'userland/desktop/libglesv2']
 
 

@@ -10,7 +10,7 @@
  *
  * The device, pipelines and descriptor pool live as long as the compositor.
  * The display surface and its swapchain (vkdemo's standard display-plane
- * selection, userland/desktop/vkdemo/display.c) exist in window mode; closing
+ * selection, userland/tests/vkdemo/display.c) exist in window mode; closing
  * them (the greeter's hand-over, the exit) returns the display lease.  One frame is in flight at a time; its
  * fence is exported as an fd the event loop polls, and the buffers and frame
  * callbacks the frame used are held until it signals.
@@ -23,7 +23,7 @@
 
 #include <vulkan/vulkan.h>
 
-#include "../vkdemo/display.h"
+#include "../../tests/vkdemo/display.h"
 
 /* Bound the swapchain images and the buffers one frame may sample. */
 #define ZWL_SWAPCHAIN_MAX	8U

@@ -13,7 +13,7 @@
  * frames the model and that a reset restores the first view bit for bit.
  */
 
-#include "../../../userland/desktop/mview/model.h"
+#include "../../../userland/tests/mview/model.h"
 
 #include <math.h>
 #include <stdio.h>

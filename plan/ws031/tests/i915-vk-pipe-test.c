@@ -481,8 +481,8 @@ test_graphics_pipeline(void)
 	int found;
 
 	/* Loads the vkdemo shaders and opens the fixture session. */
-	vertex = fixture_load_spirv("userland/desktop/vkdemo/shaders", "cuboid.vert.spv", &vertex_words);
-	fragment = fixture_load_spirv("userland/desktop/vkdemo/shaders", "cuboid.frag.spv", &fragment_words);
+	vertex = fixture_load_spirv("userland/tests/vkdemo/shaders", "cuboid.vert.spv", &vertex_words);
+	fragment = fixture_load_spirv("userland/tests/vkdemo/shaders", "cuboid.frag.spv", &fragment_words);
 	stub_session_open(NULL);
 
 	/*

@@ -7,7 +7,7 @@
 
 /* Exercise the real renderer against an independent recording observer. */
 #include <assert.h>
-#include "../../../userland/desktop/vkdemo/renderer.c"
+#include "../../../userland/tests/vkdemo/renderer.c"
 
 /* This single-threaded observer counts work and records its visibility contract. */
 static unsigned draws;

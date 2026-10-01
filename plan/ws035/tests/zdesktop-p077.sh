@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws035-p077: wl_subcompositor and wl_subsurface on the Venus guest, with /bin/subsurface-probe
-# (userland/base/tests/subsurface-probe).  zdesktop --glass runs at 1280x800; the probe's window (400x300, dark 2b3444)
+# (userland/tests/subsurface-probe).  zdesktop --glass runs at 1280x800; the probe's window (400x300, dark 2b3444)
 # is centred, with a (red e04040, 100x80) above it at (20,20), c (yellow e0e040, 40x40) a child of a at (70,50), and
 # b (green 40c060, 100x80) below it at (-40,200).
 #  1. shown.png: a and c over the window, b only left of the window (the window covers the rest).

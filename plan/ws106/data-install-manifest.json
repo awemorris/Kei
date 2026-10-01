@@ -1,0 +1,74 @@
+[
+  {
+    "destination": "/usr/share/gpudemo/mix.nct",
+    "source": "userland/tests/gpudemo/mix.nct"
+  },
+  {
+    "destination": "/usr/share/gpudemo/s13.sh",
+    "source": "userland/tests/gpudemo/s13.sh"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/model.txt",
+    "source": "userland/tests/mview/models/qs40/model.txt"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/0.pam",
+    "source": "userland/tests/mview/models/qs40/tex/0.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/1.pam",
+    "source": "userland/tests/mview/models/qs40/tex/1.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/10.pam",
+    "source": "userland/tests/mview/models/qs40/tex/10.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/11.pam",
+    "source": "userland/tests/mview/models/qs40/tex/11.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/12.pam",
+    "source": "userland/tests/mview/models/qs40/tex/12.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/2.pam",
+    "source": "userland/tests/mview/models/qs40/tex/2.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/3.pam",
+    "source": "userland/tests/mview/models/qs40/tex/3.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/4.pam",
+    "source": "userland/tests/mview/models/qs40/tex/4.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/5.pam",
+    "source": "userland/tests/mview/models/qs40/tex/5.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/6.pam",
+    "source": "userland/tests/mview/models/qs40/tex/6.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/7.pam",
+    "source": "userland/tests/mview/models/qs40/tex/7.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/8.pam",
+    "source": "userland/tests/mview/models/qs40/tex/8.pam"
+  },
+  {
+    "destination": "/usr/share/mview/qs40/tex/9.pam",
+    "source": "userland/tests/mview/models/qs40/tex/9.pam"
+  },
+  {
+    "destination": "/usr/share/touchinject/two-fingers.touch",
+    "source": "userland/tests/touchinject/two-fingers.touch"
+  },
+  {
+    "destination": "/usr/share/peninject/stroke.pen",
+    "source": "userland/tests/peninject/stroke.pen"
+  }
+]

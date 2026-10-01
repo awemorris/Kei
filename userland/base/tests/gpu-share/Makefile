@@ -1,5 +1,0 @@
-include $(dir $(lastword $(MAKEFILE_LIST)))../../package.mk
-
-# Explicitly selected finite fixture; private helpers stay outside the public DSO ABI.
-# Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
-$(eval $(call ZEDBSD_USERLAND_PACKAGE,gpu-share-test,GPU allocation sharing test,amd64,y,basic,userland/base/tests/gpu-share/main.c,y,desktop,base/tests/gpu-share,desktop/libwayland,0755,program,,,bin))

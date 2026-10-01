@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG001
 Related Milestones: MG006
 Parent: [Master](../master.md)
-Queue: q539
-Resume point: p001 / q539-i01 を実行中。
+Queue: q540
+Resume point: p002 / q540-i01 を実行中。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -45,7 +45,7 @@ WS105 の既存 Linux 出力を利用。WS095 の ime-probe は人間の作業�
 | ID / Phase | 目的 | Goal | Status | 依存 |
 | --- | --- | --- | --- | --- |
 | [ws106p001](phase001/phase.md) | 対象・参照・build 契約を確定 | 台帳と移動手順、実際の build/config/check command を固定。所有が未調整なら ime-probe の実行を選定しない。 | cleared | なし |
-| [ws106p002](phase002/phase.md) | source・データと参照を移動 | T1/T2 を満たす。source とデータの move 前後の hash と差分を記録する。 | planning | p001 |
+| [ws106p002](phase002/phase.md) | source・データと参照を移動 | T1/T2 を満たす。source とデータの move 前後の hash と差分を記録する。 | in-progress | p001 |
 | [ws106p003](phase003/phase.md) | 全文規約・build/install・最終 boot | T1〜T4 と全 Phase の成果を照合。未実施の機種・アプリ実行は区別して記録する。 | planning | p002 |
 
 

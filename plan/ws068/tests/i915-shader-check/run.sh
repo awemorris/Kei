@@ -16,8 +16,8 @@ for variant in smooth flat; do
 	glslc --target-env=vulkan1.0 $define -o "$out/fixed-$variant.frag.spv" "$root/userland/retro/libGL/shaders/fixed.frag"
 	"$out/host/spirv-test" "$out/fixed-$variant.vert.spv" "$out/fixed-$variant.vert.linked.spv" >/dev/null
 done
-glslc --target-env=vulkan1.0 -o "$out/scene.vert.spv" "$root/userland/desktop/egltest/shaders/scene.vert"
-glslc --target-env=vulkan1.0 -o "$out/scene.frag.spv" "$root/userland/desktop/egltest/shaders/scene.frag"
+glslc --target-env=vulkan1.0 -o "$out/scene.vert.spv" "$root/userland/tests/egltest/shaders/scene.vert"
+glslc --target-env=vulkan1.0 -o "$out/scene.frag.spv" "$root/userland/tests/egltest/shaders/scene.frag"
 "$out/host/spirv-test" "$out/scene.vert.spv" "$out/scene.vert.linked.spv" >/dev/null
 "$out/check" vertex "$out/fixed-smooth.vert.linked.spv" "$out/fixed-flat.vert.linked.spv" "$out/scene.vert.linked.spv"
 "$out/check" fragment "$out/fixed-smooth.frag.spv" "$out/fixed-flat.frag.spv" "$out/scene.frag.spv"

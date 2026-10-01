@@ -10,7 +10,7 @@
 # draws when there is no GPU).
 # The outputs, in build/ws074-host/<variant>/:
 #   browser   the program with its headless modes (the same main.c as on zedBSD)
-#   browser-probe      the second program over the engine (userland/base/tests/browser-probe)
+#   browser-probe      the second program over the engine (userland/tests/browser-probe)
 #   host-NAME          each plan/ws074/tests/host-NAME.c unit test, linked with the engine
 # The asan variant adds -fsanitize=address,undefined; the runners use it to find crashes.  Run it with
 # ASAN_OPTIONS=detect_stack_use_after_return=0: the collector scans the real stack, and the sanitizer's
@@ -83,7 +83,7 @@ echo "built $out/browser"
 
 # The second program over the engine (ws074-p057), built from <browser.h> only (on the host it links the
 # engine's objects rather than libbrowser.so).
-"$cc" $flags -Ibuild/ws074-host/include -o "$out/browser-probe" userland/base/tests/browser-probe/main.c $engine -lvulkan -lm
+"$cc" $flags -Ibuild/ws074-host/include -o "$out/browser-probe" userland/tests/browser-probe/main.c $engine -lvulkan -lm
 echo "built $out/browser-probe"
 
 # The unit tests.

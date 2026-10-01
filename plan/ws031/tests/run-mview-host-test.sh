@@ -9,7 +9,7 @@ set -eu
 root=$(cd "$(dirname "$0")/../../.." && pwd)
 work=$(mktemp -d "${TMPDIR:-/tmp}/mview-host.XXXXXX")
 trap 'rm -rf "$work"; exit 1' INT TERM
-mview="$root/userland/desktop/mview"
+mview="$root/userland/tests/mview"
 ${CC:-cc} -std=c99 -D_DEFAULT_SOURCE -O1 -g -Wall -Wextra -Werror \
 	-fsanitize=address,undefined -fno-sanitize-recover=all \
 	"$root/plan/ws031/tests/mview-host-test.c" \

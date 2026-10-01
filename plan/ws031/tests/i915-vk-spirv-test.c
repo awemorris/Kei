@@ -47,7 +47,7 @@ load_spv(const char *name, size_t *words)
 	long size;
 	uint32_t *code;
 
-	snprintf(path, sizeof(path), "%s/userland/desktop/vkdemo/shaders/%s", VK_REPO, name);
+	snprintf(path, sizeof(path), "%s/userland/tests/vkdemo/shaders/%s", VK_REPO, name);
 	file = fopen(path, "rb");
 	assert(file != NULL);
 	fseek(file, 0, SEEK_END);

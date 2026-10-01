@@ -796,7 +796,7 @@ load_spv(const char *name, size_t *words)
 	long size;
 	uint32_t *code;
 
-	snprintf(path, sizeof(path), "%s/userland/desktop/vkdemo/shaders/%s", VK_REPO, name);
+	snprintf(path, sizeof(path), "%s/userland/tests/vkdemo/shaders/%s", VK_REPO, name);
 	file = fopen(path, "rb");
 	assert(file != NULL);
 	fseek(file, 0, SEEK_END);
@@ -942,7 +942,7 @@ load_spv_at(const char *directory, const char *name, size_t *words)
 }
 
 #define COMPILER_SHADERS "src/drivers/gpu/i915/tests/render/compiler-shaders"
-#define MVIEW_SHADERS "userland/desktop/mview/shaders"
+#define MVIEW_SHADERS "userland/tests/mview/shaders"
 #define FEATURE_SHADERS "src/drivers/gpu/i915/tests/render/feature-shaders"
 
 /* Parses a shader file, printing a refusal before failing. */

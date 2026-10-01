@@ -2,25 +2,25 @@
 
 # Queue
 
-Active Queue: なし
+Active Queue: q540
 Last finished Queue: q539
 
-## q539
+## q540
 
-Status: finished
+Status: active
 Purpose / Focus: WS106 の承認された移動を段階的に実施する。
 Timebox: 最大60分。調査の上限と結果/未達を残す。
 Approval: current user, 2026-10-01「WS106を実行してください。」、既存 WS106（commit0a43f635）の p001〜p003 / T1〜T4 と対象30件。
 追加scope: 同日回答「13 ファイルも追加して移動する」（base/tests直下の12C+versiontest.map）。この範囲の source/location/reference の移動に限る。
-Approved Phase snapshot: [保存した定義](/home/awe/zedBSD-claude1/plan/history/ws106/q539/approved-phase.md)、SHA256 67b7514d750527e7151084b55bbfe07e30c74711b118feb5ad7abffa6e48ed14。
+Approved Phase snapshot: [保存した定義](/home/awe/zedBSD-claude1/plan/history/ws106/q540/approved-phase.md)、SHA256 9da9c345789fe7a41a4fe467f4c49a0028eb1b3d401a079730e6a354ee33d401。
 Executor: Codex Q1 / N=0。前 Queue finished、owner 停止を確認。commit WIP / pushなし / GitHub公開deferred。
 Applicable rules: AGENTS.md、Guardrail、coding-style全文、WS106 inventory/design。実装の意味を変えない移動。
 
 | Attempt | Phase | exact scope | Status | 依存 |
 | --- | --- | --- | --- | --- |
-| q539-i01 | [ws106p001](/home/awe/zedBSD-claude1/plan/ws106/phase001/phase.md) | 30 package＋承認追加13ファイルの棚卸し、source/reference/menu/build/install契約と移動手順の確定。source移動なし。 | cleared | なし |
+| q540-i01 | [ws106p002](/home/awe/zedBSD-claude1/plan/ws106/phase002/phase.md) | p001確定手順のpartial scope: 所有確認待ちime-probeを除く29 package＋直下13files、grouping/Tests menu、source/build/runnerの参照を移動・照合。ime-probeは非競合回答後に明示的scope補完するまで移動/編集しない。 | in-progress | ws106p001 cleared と実成果（context） |
 
-Dependency graph: user approval → q539-i01。context は別作業の許可ではない。
+Dependency graph: ws106p001（context） → q540-i01。context は別作業の許可ではない。
 
 ## Upcoming Work Outlook
 
@@ -29,8 +29,4 @@ WS107〜109 と既存 fg010 は候補のみ、WS106 の実行指示から実装�
 
 ## Outcome
 
-未確定。Started UTC: 2026-10-01T14:12:10.698083+00:00。
-
-Outcome: q539-i01 cleared。30 package＋承認追加13files、全166 tracked fileのhash/mode/source→destinationと参照217fileを棚卸し。menu/package/config/install互換とbuild/boot手順をdesign.mdへ確定。既存styleはユーザーの限定例外を記録。ime-probeは人間作業との非競合回答まで選定から外す条件で、他29件と13filesは実行可能。証拠: plan/ws106/survey.json、programs-before.txt、style-before.txt、design.md。
-
-Finished UTC: 2026-10-01T14:19:02.676446+00:00。同じWS106の既存承認範囲を除いて次Queueは自動実行しない。
+未確定。Started UTC: 2026-10-01T14:21:05.773866+00:00。

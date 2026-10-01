@@ -2,10 +2,10 @@
 
 # ws106p002: source・データと参照を移動
 
-Status: planning
+Status: in-progress
 Disposition: normal
 Parent: [WS106](../ws.md)
-Queue / Attempt: なし（未承認）
+Queue / Attempt: q540 / q540-i01
 
 ## 目的・範囲
 
@@ -53,3 +53,11 @@ Event ws106-q539-scope-update: 調査で初期inventoryの漏れを発見し、�
 GitHubの各Phase/WS event deliveryはoutbox pending。ime-probe所有確認と既存style扱いの回答を待つ。
 
 2026-10-01 / ws106-q539-design-revision: root13fileとgrouping/menu/referenceを含む[移動手順](../design.md)へ詳細化。既存styleは[限定例外](../../standards/ws106-relocation.md)で保持。ime-probeの所有未確認なら、その1件を選定から外したpartial Queueで他29件＋13fileを先に移す。Phase全体のclearanceには残り1件の移動も要る。
+
+## q540 checkpoint（partial scope、ime-probe回答待ち）
+
+29 package＋直下13filesを移動。164 tracked files、124 byte-identical、40はMakefile/locator等の許容差分、58 Cはinclude1行以外同じ実装。全ID/default/platform/dependencyを保持、Testsへ29件。
+Linux gcc/clang clean build/install exit0、ELF24各/header331各/source同期PASS、model/texture/contentと5appのinstall確認。zedBSDはconfigにtest IDをcommand lineで明示して28app＋static POSIX/SUS/SMP/helper/dynamic loader artifact build exit0、disk-image exit0、warning0。
+最初のbin-target buildは未選択IDの規則が無いcommandでFAIL、既存の構成選択を明示して再実行PASS。誤ったsource問題とはしない。追加include確認はgpu-shareの既存private -Iを考慮してPASS。
+既存style候補は1300−ime-probe28=1272でnormalize完全一致、新指摘なし。実機/GPUの機能回帰はpure moveの規則に従い未実施。
+ime-probeは未変更で人間作業の非競合回答待ち、whole Phaseはまだclearedでない。scope補完/続行の条件を保持。

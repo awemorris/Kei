@@ -68,6 +68,7 @@ DRIVER_CATEGORIES = [
 PROGRAM_CATEGORIES = [
     ("Base", ("base", "comp")),
     ("Desktop", ("desktop", "x11-servers", "x11-applications")),
+    ("Tests", ("tests",)),
     ("Firmware", ("firmware",)),
     ("Packages", ("packages",)),
 ]

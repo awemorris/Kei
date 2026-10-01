@@ -1,0 +1,26 @@
+userland/tests/dyntest.c blank-after-brace=2 call-in-condition=31 comment-form=1 conditional=1 forward-declaration=1 name=3 paragraph-comment=5
+userland/tests/gpu-admission/main.c goto=3 paragraph-comment=6
+userland/tests/gpu-fence/main.c blank-after-brace=1 call-in-condition=6 goto=8 paragraph-comment=55
+userland/tests/gpu-forge/main.c paragraph-comment=1
+userland/tests/gpu-i915/main.c blank-after-brace=1 call-in-condition=5 conditional=4 paragraph-comment=31
+userland/tests/gpu-share/main.c blank-after-brace=3 call-in-condition=3 goto=6 paragraph-comment=2
+userland/tests/posix-phase5-helper.c call-in-condition=6 name=7 paragraph-comment=3
+userland/tests/posix-r2-remaining.c blank-after-brace=23 call-in-condition=70 comment-form=1 conditional=1 goto=7 name=139 paragraph-comment=42
+userland/tests/posix-r2.c blank-after-brace=41 call-in-condition=121 comment-form=7 name=254 paragraph-comment=37
+userland/tests/rpathtest.c name=3
+userland/tests/smp-resource-stress.c call-in-condition=15 comment-form=1 name=6 paragraph-comment=8
+userland/tests/susv4-xsi.c blank-after-brace=1 conditional=2 paragraph-comment=7
+userland/tests/syscall-smoke.c blank-after-brace=10 call-in-condition=69 comment-form=2 conditional=9 name=70 paragraph-comment=21
+userland/tests/tlstest.c forward-declaration=2 name=3
+userland/tests/versionuse.c name=3
+userland/tests/wakebench/main.c blank-after-brace=7 call-in-condition=19 conditional=3 multi-line-body=4 paragraph-comment=15
+userland/tests/mview/camera.c paragraph-comment=5
+userland/tests/mview/main.c conditional=2 goto=4 paragraph-comment=7
+userland/tests/mview/model.c paragraph-comment=10
+userland/tests/mview/renderer.c blank-after-brace=1 paragraph-comment=16
+userland/tests/mview/window.c paragraph-comment=1
+userland/tests/vkdemo/main.c goto=1 paragraph-comment=1
+userland/tests/vkdemo/renderer.c paragraph-comment=3
+userland/tests/wltest/main.c goto=2
+userland/tests/wltest/renderer.c blank-after-brace=1
+total 1272

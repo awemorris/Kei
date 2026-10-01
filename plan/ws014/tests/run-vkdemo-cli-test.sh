@@ -8,7 +8,7 @@ trap 'rm -rf "$work"' EXIT HUP INT TERM
 
 cc -std=c89 -pedantic -Wall -Wextra -Werror \
     -D_POSIX_C_SOURCE=200809L -I "$repo/include" \
-    "$repo/userland/desktop/vkdemo/main.c" \
+    "$repo/userland/tests/vkdemo/main.c" \
     "$repo/plan/ws014/tests/vkdemo-cli.c" \
     -o "$work/vkdemo-cli"
 

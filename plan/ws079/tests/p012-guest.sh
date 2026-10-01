@@ -4,7 +4,7 @@
 #
 #  1. touchinject -c: the injector refuses bad touch setups and frames and
 #     takes good ones.
-#  2. The two-finger script (userland/base/tests/touchinject/two-fingers.touch)
+#  2. The two-finger script (userland/tests/touchinject/two-fingers.touch)
 #     replayed while touchinject -d reads the evdev node: the node's name,
 #     its six axes and every event must be exactly p012-two-fingers.expected
 #     (multitouch protocol B, a frame of three fingers split over two reports).

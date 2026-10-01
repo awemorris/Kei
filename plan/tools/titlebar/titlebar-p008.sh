@@ -1,7 +1,7 @@
 #!/bin/sh
 # ws070-p008: the Titlebar Presentation's protocol errors, model and libkeiland's own checks, on the
 # Venus guest (the lean image).  zdesktop --glass runs, and /bin/titlebar-probe
-# (userland/base/tests/titlebar-probe) sends each case on its own connection; every case must print
+# (userland/tests/titlebar-probe) sends each case on its own connection; every case must print
 # ok; zdesktop must log each protocol error with its object and code, take the good case's model
 # (three commits: controls with six controls and one tab, then tabs, then controls again) and go on
 # serving (a terminal started afterwards shows its menus: the MENU mode is unchanged).

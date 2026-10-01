@@ -7,7 +7,7 @@ Vulkan 1.0 の137 core commandと、Vulkan 1.0に適用される
 `/lib/libvulkan.so`、SONAMEは `libvulkan.so` です。
 
 アプリは標準Vulkan APIを使います。zedBSDのGPU ioctl、resource ID、
-Venus wireをアプリへ公開しません。`userland/desktop/vkdemo/` が標準APIを
+Venus wireをアプリへ公開しません。`userland/tests/vkdemo/` が標準APIを
 使う実例で、別OSのVulkan実装でもビルドできます。
 
 現在のbackendはamd64 zedBSD上のVenusです。QEMUのvirtio-vga-gl、

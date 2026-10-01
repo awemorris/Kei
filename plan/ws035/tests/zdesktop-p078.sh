@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws035-p078: what zdesktop tells a toolkit about the keyboard and the output, on the Venus guest, with
-# /bin/seat-probe (userland/base/tests/seat-probe): the XKB keymap (format xkb_v1, a keymap's text in the mapped
+# /bin/seat-probe (userland/tests/seat-probe): the XKB keymap (format xkb_v1, a keymap's text in the mapped
 # file), the key repeat (25/s after 400 ms), the modifier masks (Shift held, Caps Lock and Num Lock locked), and
 # wl_output version 4 (name, description, mode, scale, done; release at the end).  The keymap's content is checked on
 # the host by plan/ws035/tests/p078/run-host.sh (libxkbcommon).

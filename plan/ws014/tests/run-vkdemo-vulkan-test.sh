@@ -10,9 +10,9 @@ work=$(CDPATH= cd -- "$work" && pwd)
 
 cc -std=c89 -pedantic -Wall -Wextra -Werror \
     -D_POSIX_C_SOURCE=200809L \
-    "$repo/userland/desktop/vkdemo/main.c" \
-    "$repo/userland/desktop/vkdemo/renderer.c" \
-    "$repo/userland/desktop/vkdemo/display.c" \
+    "$repo/userland/tests/vkdemo/main.c" \
+    "$repo/userland/tests/vkdemo/renderer.c" \
+    "$repo/userland/tests/vkdemo/display.c" \
     "$repo/userland/base/common/sha256.c" \
     -lvulkan -o "$work/vkdemo"
 

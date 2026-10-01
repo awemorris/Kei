@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws035-p079: the clipboard between clients (wl_data_device_manager v3) on the Venus guest, with /bin/data-probe
-# (userland/base/tests/data-probe) and terminal.
+# (userland/tests/data-probe) and terminal.
 #  1. Probe a (blue) sets its text as the selection (key s); probe b (green) is started on top: it gets the keyboard,
 #     is told the selection (an offer with two text types) and receives a's text through a pipe.
 #  2. a destroys its source (key q, after a press on a gives it the keyboard): the clipboard is empty; b is told so when

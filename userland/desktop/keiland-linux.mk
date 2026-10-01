@@ -99,12 +99,12 @@ KEILAND_LINUX_PACKAGES ?= userland/base/libz-compat/Makefile.linux \
 	userland/desktop/libvulkan-compat/Makefile.linux \
 	userland/desktop/libkeiland/Makefile.linux \
 	userland/desktop/wayland/Makefile.linux \
-	userland/desktop/wlshm/Makefile.linux
+	userland/tests/wlshm/Makefile.linux
 include $(KEILAND_LINUX_PACKAGES)
 
-include userland/desktop/vkdemo/Makefile.linux
-include userland/desktop/wltest/Makefile.linux
-include userland/desktop/mview/Makefile.linux
+include userland/tests/vkdemo/Makefile.linux
+include userland/tests/wltest/Makefile.linux
+include userland/tests/mview/Makefile.linux
 
 include userland/desktop/libkeiui/Makefile.linux
 include userland/base/libpdf/Makefile.linux
@@ -115,7 +115,7 @@ include userland/desktop/notes/Makefile.linux
 include userland/desktop/textedit/Makefile.linux
 include userland/desktop/imageview/Makefile.linux
 include userland/desktop/pdfviewer/Makefile.linux
-include userland/desktop/kuidemo/Makefile.linux
+include userland/tests/kuidemo/Makefile.linux
 include userland/desktop/ime/Makefile.linux
 
 # App Home uses the compositor's existing config parser; no common built-in list changes.

@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q539 finished、WS106 p001 cleared）
+Active Queue: q540（WS106 p002 in-progress）
 Current Focused Goal: fg013 — WS106のテスト配置整理（2026-10-01実行指示）。fg010デモを保持、fg012は達成済み。
 Next（2026-10-01 に更新）: WS104 completed（q515〜q522）、WS105 completed（q523〜q538、L1〜L9/最終conformance verified）。BUG-125/127は未修正tracking、GitHub公開/close/Projectはoutbox保留。次のQueueは未選定。レビューのWS106〜WS109をplanningで新設（実装未承認）。既存のfg010/デモ優先順を保持、実機とQEMUの証拠を分ける。サブエージェントN=0。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。

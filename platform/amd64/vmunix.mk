@@ -654,40 +654,40 @@ $(BUILD)/lib/libcurses.a: $(AMD64_USER_CURSES_OBJS)
 	$(AR) rcs $@ $^
 
 $(BUILD)/POSIX-R1.ELF: $(AMD64_USER_LIBC_OBJS) \
-	$(BUILD)/user64/userland/base/tests/syscall-smoke.o $(AMD64_PLATFORM)/user.ld \
+	$(BUILD)/user64/userland/tests/syscall-smoke.o $(AMD64_PLATFORM)/user.ld \
 	$(AMD64_USER_ELF_CHECK)
 	$(LD) -m elf_x86_64 --gc-sections -nostdlib -static \
  -z max-page-size=4096 -z stack-size=0x100000 \
  -T $(AMD64_PLATFORM)/user.ld \
  $(AMD64_USER_LIBC_OBJS) \
- $(BUILD)/user64/userland/base/tests/syscall-smoke.o -o $@
+ $(BUILD)/user64/userland/tests/syscall-smoke.o -o $@
 	$(NOCT) --path=tools/build $(AMD64_USER_ELF_CHECK) --machine amd64 $@
 
 $(BUILD)/POSIX-R2.ELF: $(AMD64_USER_NET_LIBC_OBJS) \
-	$(BUILD)/user64/userland/base/tests/posix-r2.o $(AMD64_PLATFORM)/user.ld \
+	$(BUILD)/user64/userland/tests/posix-r2.o $(AMD64_PLATFORM)/user.ld \
 	$(AMD64_USER_ELF_CHECK)
 	$(LD) -m elf_x86_64 --gc-sections -nostdlib -static \
  -z max-page-size=4096 -z stack-size=0x100000 \
  -T $(AMD64_PLATFORM)/user.ld $(AMD64_USER_NET_LIBC_OBJS) \
- $(BUILD)/user64/userland/base/tests/posix-r2.o -o $@
+ $(BUILD)/user64/userland/tests/posix-r2.o -o $@
 	$(NOCT) --path=tools/build $(AMD64_USER_ELF_CHECK) --machine amd64 $@
 
 $(BUILD)/POSIX-R2-REMAINING.ELF: $(AMD64_USER_NET_LIBC_OBJS) \
-	$(BUILD)/user64/userland/base/tests/posix-r2-remaining.o \
+	$(BUILD)/user64/userland/tests/posix-r2-remaining.o \
 	$(AMD64_PLATFORM)/user.ld $(AMD64_USER_ELF_CHECK)
 	$(LD) -m elf_x86_64 --gc-sections -nostdlib -static \
  -z max-page-size=4096 -z stack-size=0x100000 \
  -T $(AMD64_PLATFORM)/user.ld $(AMD64_USER_NET_LIBC_OBJS) \
- $(BUILD)/user64/userland/base/tests/posix-r2-remaining.o -o $@
+ $(BUILD)/user64/userland/tests/posix-r2-remaining.o -o $@
 	$(NOCT) --path=tools/build $(AMD64_USER_ELF_CHECK) --machine amd64 $@
 
 $(BUILD)/SUSV4-XSI.ELF: $(AMD64_USER_NET_LIBC_OBJS) \
-	$(BUILD)/user64/userland/base/tests/susv4-xsi.o \
+	$(BUILD)/user64/userland/tests/susv4-xsi.o \
 	$(AMD64_PLATFORM)/user.ld $(AMD64_USER_ELF_CHECK)
 	$(LD) -m elf_x86_64 --gc-sections -nostdlib -static \
  -z max-page-size=4096 -z stack-size=0x100000 \
  -T $(AMD64_PLATFORM)/user.ld $(AMD64_USER_NET_LIBC_OBJS) \
- $(BUILD)/user64/userland/base/tests/susv4-xsi.o -o $@
+ $(BUILD)/user64/userland/tests/susv4-xsi.o -o $@
 	@test -z "$$($(NM) -u $@)" || { $(NM) -u $@; exit 1; }
 	$(NOCT) --path=tools/build $(AMD64_USER_ELF_CHECK) --machine amd64 $@
 
@@ -699,12 +699,12 @@ $(BUILD)/bin/sh: $(AMD64_APP_INPUTS) $(AMD64_APP_SH_OBJS)
 	$(AMD64_APP_CHECK) $@
 
 $(BUILD)/SMP-STRESS.ELF: $(AMD64_USER_NET_LIBC_OBJS) \
-	$(BUILD)/user64/userland/base/tests/smp-resource-stress.o \
+	$(BUILD)/user64/userland/tests/smp-resource-stress.o \
 	$(AMD64_PLATFORM)/user.ld $(AMD64_USER_ELF_CHECK)
 	$(LD) -m elf_x86_64 --gc-sections -nostdlib -static \
  -z max-page-size=4096 -z stack-size=0x100000 \
  -T $(AMD64_PLATFORM)/user.ld $(AMD64_USER_NET_LIBC_OBJS) \
- $(BUILD)/user64/userland/base/tests/smp-resource-stress.o -o $@
+ $(BUILD)/user64/userland/tests/smp-resource-stress.o -o $@
 	@test -z "$$($(NM) -u $@)" || { $(NM) -u $@; exit 1; }
 	$(NOCT) --path=tools/build $(AMD64_USER_ELF_CHECK) --machine amd64 $@
 
@@ -808,7 +808,7 @@ $(DYNAMIC_DIR)/obj/src/rtld/tlsdesc.o: src/rtld/tlsdesc-amd64.S
 	@mkdir -p $(dir $@)
 	$(CC) -m64 -c $< -o $@
 
-$(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o: DYNAMIC_CFLAGS += -mtls-dialect=gnu2
+$(DYNAMIC_DIR)/obj/userland/tests/tlstest.o: DYNAMIC_CFLAGS += -mtls-dialect=gnu2
 
 $(DYNAMIC_LIBM_OBJS): $(DYNAMIC_FLOAT_DIR)/math/%.o: src/libc/math/%.c \
 	$(ZEDBSD_LIBM_HEADERS)
@@ -1626,7 +1626,7 @@ $(BUILD)/bin/xserver: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
 
 # The external-fence test uses only the installed standard Vulkan shared library.
 $(BUILD)/bin/gpu-fence-test: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/gpu-fence/main.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/gpu-fence/main.o \
 	$(DYNAMIC_DIR)/libvulkan.so $(DYNAMIC_DIR)/libc.so $(DYNAMIC_DIR)/ld.so
 	@mkdir -p $(dir $@)
 	$(CC) -m64 -nostdlib -pie -Wl,--no-relax \
@@ -1634,17 +1634,17 @@ $(BUILD)/bin/gpu-fence-test: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
  -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
  -Wl,--dynamic-linker=/lib/ld.so \
  $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
- $(DYNAMIC_DIR)/obj/userland/base/tests/gpu-fence/main.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/gpu-fence/main.o \
  -L$(DYNAMIC_DIR) -Wl,-rpath-link,$(DYNAMIC_DIR) \
  -l:libvulkan.so -l:libc.so -o $@
 	$(PYTHON) $(DYNAMIC_VULKAN_CHECK) --machine amd64 --role application \
  --needed libvulkan.so --needed libc.so $@
 
 # This finite fixture links private Vulkan helpers without exporting them from the public DSO.
-$(DYNAMIC_DIR)/obj/userland/base/tests/gpu-share/main.o: DYNAMIC_CPPFLAGS += -Iuserland/desktop/libvulkan
+$(DYNAMIC_DIR)/obj/userland/tests/gpu-share/main.o: DYNAMIC_CPPFLAGS += -Iuserland/desktop/libvulkan
 
 $(BUILD)/bin/gpu-share-test: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/gpu-share/main.o $(DYNAMIC_VULKAN_OBJS) \
+	$(DYNAMIC_DIR)/obj/userland/tests/gpu-share/main.o $(DYNAMIC_VULKAN_OBJS) \
 	$(DYNAMIC_DIR)/libwayland-client.so $(DYNAMIC_DIR)/libc.so $(DYNAMIC_DIR)/ld.so
 	@mkdir -p $(dir $@)
 	$(CC) -m64 -nostdlib -pie -Wl,--no-relax \
@@ -1652,29 +1652,29 @@ $(BUILD)/bin/gpu-share-test: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
  -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
  -Wl,--dynamic-linker=/lib/ld.so \
  $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
- $(DYNAMIC_DIR)/obj/userland/base/tests/gpu-share/main.o $(DYNAMIC_VULKAN_OBJS) \
+ $(DYNAMIC_DIR)/obj/userland/tests/gpu-share/main.o $(DYNAMIC_VULKAN_OBJS) \
  -L$(DYNAMIC_DIR) -Wl,-rpath-link,$(DYNAMIC_DIR) \
  -l:libwayland-client.so -l:libc.so -o $@
 	$(PYTHON) $(DYNAMIC_VULKAN_CHECK) --machine amd64 --role application \
  --needed libwayland-client.so --needed libc.so $@
 
 $(DYNAMIC_DIR)/alt/rpathdep.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/rpathdep.o $(DYNAMIC_DIR)/ld.so
+	$(DYNAMIC_DIR)/obj/userland/tests/rpathdep.o $(DYNAMIC_DIR)/ld.so
 	@mkdir -p $(dir $@)
 	$(LD) -m elf_x86_64 -shared -soname rpathdep.so --hash-style=gnu \
  -z now -z relro -z separate-code $< -o $@
 
 $(DYNAMIC_DIR)/tlstest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/tlstest.o \
 	$(DYNAMIC_DIR)/alt/rpathdep.so $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_x86_64 -shared -soname tlstest.so --hash-style=gnu \
  -z now -z relro -z separate-code --enable-new-dtags \
  -rpath '$$ORIGIN/alt' \
- $(DYNAMIC_DIR)/obj/userland/base/tests/tlstest.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/tlstest.o \
  -L$(DYNAMIC_DIR)/alt -l:rpathdep.so -o $@
 
 $(DYNAMIC_DIR)/rpathtest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/rpathtest.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/rpathtest.o \
 	$(DYNAMIC_DIR)/alt/rpathdep.so $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_x86_64 -shared -soname rpthtest.so --hash-style=gnu \
  -z now -z relro -z separate-code --disable-new-dtags \
@@ -1682,21 +1682,21 @@ $(DYNAMIC_DIR)/rpathtest.so: \
  -l:rpathdep.so -o $@
 
 $(DYNAMIC_DIR)/verstest.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/versiontest.o \
-	userland/base/tests/versiontest.map $(DYNAMIC_DIR)/ld.so
+	$(DYNAMIC_DIR)/obj/userland/tests/versiontest.o \
+	userland/tests/versiontest.map $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_x86_64 -shared -soname verstest.so --hash-style=gnu \
  -z now -z relro -z separate-code \
- --version-script=userland/base/tests/versiontest.map $< -o $@
+ --version-script=userland/tests/versiontest.map $< -o $@
 
 $(DYNAMIC_DIR)/versuse.so: \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/versionuse.o \
+	$(DYNAMIC_DIR)/obj/userland/tests/versionuse.o \
 	$(DYNAMIC_DIR)/verstest.so $(DYNAMIC_DIR)/ld.so
 	$(LD) -m elf_x86_64 -shared -soname versuse.so --hash-style=gnu \
  -z now -z relro -z separate-code $< -L$(DYNAMIC_DIR) \
  -l:verstest.so -o $@
 
 $(DYNAMIC_DIR)/dyntest: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
-	$(DYNAMIC_DIR)/obj/userland/base/tests/dyntest.o $(DYNAMIC_DIR)/libc.so \
+	$(DYNAMIC_DIR)/obj/userland/tests/dyntest.o $(DYNAMIC_DIR)/libc.so \
 	$(DYNAMIC_DIR)/ld.so $(DYNAMIC_DIR)/tlstest.so \
 	$(DYNAMIC_DIR)/versuse.so
 	$(CC) -m64 -nostdlib -pie -Wl,--no-relax \
@@ -1704,7 +1704,7 @@ $(DYNAMIC_DIR)/dyntest: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
  -Wl,-z,stack-size=0x100000,--allow-shlib-undefined \
  -Wl,--dynamic-linker=/lib/ld.so \
  $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
- $(DYNAMIC_DIR)/obj/userland/base/tests/dyntest.o \
+ $(DYNAMIC_DIR)/obj/userland/tests/dyntest.o \
  -L$(DYNAMIC_DIR) -Wl,-rpath-link,$(DYNAMIC_DIR) \
  -l:libc.so -o $@
 
@@ -2085,12 +2085,12 @@ posix-phase4-qemu-test: $(BUILD)/posix-phase4-qemu.img \
  --qemu $(QEMU) --image $(BUILD)/posix-phase4-qemu.img
 
 $(BUILD)/bin/posix-phase5-helper: $(AMD64_USER_NET_LIBC_OBJS) \
-	$(BUILD)/user64/userland/base/tests/posix-phase5-helper.o \
+	$(BUILD)/user64/userland/tests/posix-phase5-helper.o \
 	$(AMD64_PLATFORM)/user.ld $(AMD64_USER_ELF_CHECK)
 	$(LD) -m elf_x86_64 --gc-sections -nostdlib -static \
  -z max-page-size=4096 -z stack-size=0x100000 \
  -T $(AMD64_PLATFORM)/user.ld $(AMD64_USER_NET_LIBC_OBJS) \
- $(BUILD)/user64/userland/base/tests/posix-phase5-helper.o -o $@
+ $(BUILD)/user64/userland/tests/posix-phase5-helper.o -o $@
 	@test -z "$$($(NM) -u $@)" || { $(NM) -u $@; exit 1; }
 	$(NOCT) --path=tools/build $(AMD64_USER_ELF_CHECK) --machine amd64 $@
 

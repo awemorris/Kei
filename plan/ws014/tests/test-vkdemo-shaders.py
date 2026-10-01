@@ -16,7 +16,7 @@ import unittest
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[3]
-SHADERS = ROOT / 'userland/desktop/vkdemo/shaders'
+SHADERS = ROOT / 'userland/tests/vkdemo/shaders'
 _spec = importlib.util.spec_from_file_location('vkdemo_regenerate', SHADERS / 'regenerate.py')
 regenerate = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(regenerate)

@@ -1,0 +1,3 @@
+# zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
+# The shared-memory client uses only our Wayland library.
+$(eval $(call KEILAND_LINUX_PROGRAM,wlshm,bin,userland/tests/wlshm/main.c,libwayland-client.so,))

@@ -39,7 +39,7 @@ timeout 300 python3 plan/tools/guest/guest.py start "$image" --symbols "$symbols
     > "$out/start.txt" 2>&1 || { cat "$out/start.txt"; echo "g3-venus: FAIL (the guest did not start)"; exit 1; }
 timeout 400 python3 plan/tools/guest/guest.py wait --timeout 360 >> "$out/start.txt" 2>&1 || { echo "g3-venus: FAIL (no SSH)"; exit 1; }
 timeout 120 python3 plan/tools/guest/guest.py put "$noct" /tmp/noct > /dev/null || status=1
-timeout 60 python3 plan/tools/guest/guest.py put userland/desktop/gpudemo/mix.nct /tmp/mix.nct > /dev/null || status=1
+timeout 60 python3 plan/tools/guest/guest.py put userland/tests/gpudemo/mix.nct /tmp/mix.nct > /dev/null || status=1
 guest 'chmod 755 /tmp/noct' > /dev/null
 
 # The runs.
