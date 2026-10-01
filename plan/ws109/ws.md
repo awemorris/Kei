@@ -8,7 +8,7 @@ Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
 Queue: なし（q565 finished）
-Resume point: p002 cleared; F2一式fresh native322unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
+Resume point: p002 cleared; F2一式fresh native324unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -132,4 +132,4 @@ ws109-q558-permissive-seat-client: existing p001 MITclient option concretized wi
 
 2026-10-01T23:49:51.391199+00:00 / ws109-q564-cleared: p002 uncleared。13apps/compositor/nativeall warning0、25ELF/private install/data/refusal・native辞書150tests PASS。実mount contracts/LinuxFiles回帰PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q564/result.md)。F2最終一式audit・p005全文規約/threeOSと実GPU/WiFi関門は保持。
 
-2026-10-01T23:53:09.700338+00:00 / ws109-q565-cleared: p002 cleared。F2一式fresh native322unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
+2026-10-01T23:53:09.700338+00:00 / ws109-q565-cleared: p002 cleared。F2一式fresh native324unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。

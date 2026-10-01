@@ -4,7 +4,7 @@ Complete p002/F2 cleared: fresh build/native-final and /root/keiland-stage-final
 FreeBSD15.1-RELEASE-p4 amd64/base Clang19.1.7/gmake4.4.1. [Full fresh native build](native-final-build.txt)
 `gmake -j16 -f userland/desktop/keiland-freebsd.mk all install header-dependencies
 KEILAND_FREEBSD_BUILD=build/native-final CC=cc DESTDIR=/root/keiland-stage-final`, exit0/warning0.
-332source memberships/322unique own C with actual objects; actual system-inclusive header closure,
+334source memberships/324unique compiled C (322 checked-in C plus two generated shader sources) with actual objects; actual system-inclusive header closure,
 no target libc stdio/stdlib/unistd/socket/UAPI or system Wayland/EGL/GLES/basu/Linux header escape.
 11 shared libraries/14 executables, native libc and declared system providers; SONAME matches each
 installed library. Build-only Vulkan linker alias/DRM/private compatibility headers excluded from

@@ -247,6 +247,6 @@ only when its own full F2 is verified. External dependencies/WS acceptance uncha
 
 ## Result / q565-i01 / 2026-10-01T23:53:09.698212+00:00
 
-Queue item cleared /whole Phase cleared。F2一式fresh native322unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
+Queue item cleared /whole Phase cleared。F2一式fresh native324unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
 
 Event ws109-q565-cleared: local evidence/outcome saved; remote comment and close intent pending.
