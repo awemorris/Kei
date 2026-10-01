@@ -73,3 +73,15 @@ WS107: [限定例外](ws107-relocation.md)の不変moveをhash/mode/path-only di
 ## WS109 native coverage / 2026-10-02
 
 [承認の全文](ws109-native.md)。FreeBSD guestはnative compile/header/ELF/実libc・OSS/vtnet/loader、SSH+QMP PNGを検証。actual GPU/sync/seat/WiFiはユーザー準備の実機で別に記録。C全文/clang-format/style-check/manualのcoverageを維持、code変更後の最終conformanceはp005。現在のguest/OS/module checksは結果をPhaseに追記する、mock/nativebuildをhardware結果としない。
+
+## WS109 native build/service/shared-mechanism coverage
+
+Native build `gmake -j16 -f userland/desktop/keiland-freebsd.mk libraries` and DESTDIR/header-dependencies
+use baseClang19.1.7/native headers/libs, no target libc. q553/q554/q555/q556 evidence and probes in
+plan/ws109/tests cover actual SCM_RIGHTS/OSS/link/carrier/nativeUnix/publicUI/PDF/headlessVk; mockWPA
+is wire-only. NativeGPU/WiFi/seat and full3OS/fullWS source manual conformance remain acceptance gates.
+Cstandard still full coding-style.md; clang-format19 plus style-check/manual ownership/semantic review.
+Boundary check.sh recognizes nativefreebsd OS roots, rejects OSmacro outside zwl-evdev.h and ioctl
+outside OS modules, except the five shared native evdev metadata/clock request families in exactly
+wayland/evdev/input-evdev.c. Its header selector owns record/constants ABI, OS seat owns leases.
+No new operation or C relocation-style exception; unknown request families still fail the checker.

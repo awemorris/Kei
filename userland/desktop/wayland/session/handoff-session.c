@@ -5,17 +5,17 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Ends a Linux session through ordinary compositor shutdown without sessiond. */
+/* Ends a native system session through ordinary compositor shutdown without sessiond. */
 #include "../zwl.h"
 
 /*
- * Permits immediate display acquisition in a Linux session.
+ * Permits immediate display acquisition in a native system session.
  */
 void
 zwl_handoff_wait(
 	struct zwl_server *server)
 {
-	/* Linux has no sessiond handoff descriptor or READY/GO exchange. */
+	/* Native system sessions have no zedBSD sessiond handoff descriptor or READY/GO exchange. */
 	server->handed_over = 1;
 
 	/* Succeeded: display ownership may begin immediately. */
@@ -51,13 +51,13 @@ zwl_handoff_logout(
 }
 
 /*
- * Handles the absence of a Linux sessiond service.
+ * Handles the absence of a zedBSD sessiond service.
  */
 void
 zwl_handoff_tick(
 	struct zwl_server *server)
 {
-	/* Linux sessions have no handoff response stream to consume. */
+	/* Native system sessions have no handoff response stream to consume. */
 	(void)server;
 
 	/* Succeeded: the ordinary event loop continues. */

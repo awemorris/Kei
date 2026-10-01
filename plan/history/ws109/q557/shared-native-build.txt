@@ -1,0 +1,1 @@
+PASS native dma-buf export EBADF/ENOTTY/unchanged output/borrowed fd

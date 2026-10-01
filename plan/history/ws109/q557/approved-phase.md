@@ -2,10 +2,10 @@
 
 # ws109p003: 共有描画と FreeBSD の device/session/input 境界
 
-Status: uncleared
+Status: planning
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q557 / q557-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -78,14 +78,3 @@ new syscall-export rejection/borrowedfd/output/errno ownership; physicalpositive
 and actualFreeBSD seat/input/display remain F3/p005. Unsupportednativecompile prerequisites
 end attempt uncleared with evidence/revised plan. No hosttoolchain/network/buildcleanup,
 no push/publication, WIPcommit. FullWSconformance and nativeapps/3OS/physical gates retained.
-
-q557 boundary tooling clarification: existing check.sh must recognize freebsd OS directories and the
-shared evdev mechanism's five existing native metadata/clock request families selected by the
-approved tiny input-header bridge. Scope includes required path/membership/guard-test reference
-updates; no new device operation, public contract, renderer algorithm or hardware acceptance.
-
-## Result / q557-i01 / 2026-10-01T20:40:05.930503+00:00
-
-Queue item cleared /whole Phase uncleared。Linux共有dma-buf/evdev/sessionを再利用、FreeBSDsync/nativeinput header境界を実装。native4objects/exportownershipとLinuxfullcompositor/境界契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q557/result.md)。FreeBSDseat/fullcompositor/actualGPU・positiveDMA/全F3は保持。
-
-Event ws109-q557-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

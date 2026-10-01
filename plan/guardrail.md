@@ -110,3 +110,11 @@ WS108 release/native検証の再利用tool: [driver/inputs/手順](../tools/rele
 ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
 
 適用の全文: [WS109 native scope](standards/ws109-native.md)。C規約の例外ではない。実機のdevice名/driver/検証結果は到着後に記録し、WS acceptance F1/F3/F4/F5の残る部分を検証する。
+
+WS109 q557 native input classification: Linux/FreeBSD share the evdev discovery/read and native
+EVIOCGABS/EVIOCGNAME/EVIOCGID/EVIOCGBIT/EVIOCSCLOCKID mechanism in wayland/evdev, with native
+record/ioctl constants chosen only by the approved tiny zwl-evdev.h selector. Seat/VT/device
+authority stays in OS modules; dma-buf reservation export ioctl also stays in OS modules.
+This realizes the existing shared-mechanism rule for the authorized FreeBSD port; public
+contracts/device operations and zedBSD GPU/ioctl constraints are unchanged. Boundary checker
+recognizes freebsd roots and only those existing evdev request families in that one source.

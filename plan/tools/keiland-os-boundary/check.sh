@@ -10,7 +10,7 @@ status=0
 
 # Collect common compositor and system-library sources, excluding OS modules.
 find userland/desktop/libkeiland userland/desktop/wayland \
-    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/wpa' \) -prune \
+    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/freebsd' -o -path '*/wpa' \) -prune \
     -o -name '*.[ch]' -print | LC_ALL=C sort > "$work/common"
 
 # Keep exactly the agreed evdev header exception, and reject other OS includes.
@@ -30,9 +30,16 @@ while IFS= read -r file; do
     }' "$file"
 done < "$work/common" > "$work/C1"
 
-# Device ioctls belong to an OS module rather than the common code.
+# OS-specific device ioctls stay in OS modules. The shared native evdev mechanism uses
+# only the metadata/clock operations selected by the one approved native header bridge.
 while IFS= read -r file; do
-    awk '/ioctl[[:space:]]*\(/ {print FILENAME ":" FNR ": " $0}' "$file"
+    awk '/ioctl[[:space:]]*\(/ {
+        if (FILENAME == "userland/desktop/wayland/evdev/input-evdev.c" &&
+            $0 ~ /^[[:space:]]*error = ioctl\(descriptor, EV(IOCGABS|IOCGNAME|IOCGID|IOCSCLOCKID|IOCGBIT)([(,])/) {
+            next
+        }
+        print FILENAME ":" FNR ": " $0
+    }' "$file"
 done < "$work/common" > "$work/C2"
 
 # A zedBSD wire layout must stay inside the zedBSD GPU backend.
@@ -67,11 +74,11 @@ find include/libc \( -name 'keiland.h' -o -name 'keiui.h' -o -name 'truetype.h' 
 
 # Linux selection belongs to the OS modules; the evdev header bridges constants.
 find userland/desktop \
-    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/wpa' \) -prune \
+    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/freebsd' -o -path '*/wpa' \) -prune \
     -o -name '*.[ch]' -print |
 while IFS= read -r file; do
     [ "$file" != userland/desktop/wayland/zwl-evdev.h ] || continue
-    awk '/^[[:space:]]*#[[:space:]]*(if|ifdef|elif).*__linux__/ {print FILENAME ":" FNR ": " $0}' "$file"
+    awk '/^[[:space:]]*#[[:space:]]*(if|ifdef|elif).*(__linux__|__FreeBSD__)/ {print FILENAME ":" FNR ": " $0}' "$file"
 done > "$work/L1"
 
 # Each OS module consumes only its own kernel and service interfaces.

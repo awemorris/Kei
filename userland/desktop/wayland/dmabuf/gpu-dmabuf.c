@@ -6,18 +6,17 @@
  */
 
 /*
- * Receives one-plane Linux dma-bufs and passes their Vulkan images and
+ * Receives one-plane standard dma-bufs on Linux and FreeBSD and passes their Vulkan images and
  * implicit acquire fences to the compositor's common ownership machinery.
  */
 #include "../compose.h"
 #include <inttypes.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <linux/dma-buf.h>
+#include "sync.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/ioctl.h>
 #include <unistd.h>
 
 /* Bounds physical-device enumeration independently of untrusted client data. */
@@ -77,7 +76,7 @@ const char *
 zwl_gpu_global_interface(
 	void)
 {
-	/* Succeeded: Linux clients share the standard dma-buf protocol. */
+	/* Succeeded: Native clients share the standard dma-buf protocol. */
 	return "zwp_linux_dmabuf_v1";
 }
 
@@ -200,7 +199,7 @@ zwl_gpu_object_free(
 {
 	struct gpu_buffer *plane;
 
-	/* Shared-memory and other common objects own no Linux GPU record. */
+	/* Shared-memory and other common objects own no dma-buf record. */
 	plane = object->gpu_private;
 	if (plane == NULL)
 		return;
@@ -213,7 +212,7 @@ zwl_gpu_object_free(
 	free(plane);
 	object->gpu_private = NULL;
 
-	/* Succeeded: this object retains no Linux buffer ownership. */
+	/* Succeeded: this object retains no dma-buf ownership. */
 	return;
 }
 
@@ -226,7 +225,7 @@ zwl_gpu_commit(
 	struct zwl_object *buffer)
 {
 	struct gpu_buffer *plane;
-	struct dma_buf_export_sync_file fence;
+	int fence_fd;
 	int error;
 	int saved_error;
 
@@ -246,10 +245,8 @@ zwl_gpu_commit(
 	}
 
 	/* Exports only the writers that must finish before the compositor samples the image. */
-	memset(&fence, 0, sizeof(fence));
-	fence.flags = DMA_BUF_SYNC_READ;
-	fence.fd = -1;
-	error = ioctl(plane->fd, DMA_BUF_IOCTL_EXPORT_SYNC_FILE, &fence);
+	fence_fd = -1;
+	error = zwl_dmabuf_export_read(plane->fd, &fence_fd);
 	if (error != 0) {
 		/* Older kernels rely on the client's completed CPU-wait presentation path. */
 		saved_error = errno;
@@ -263,15 +260,15 @@ zwl_gpu_commit(
 	}
 
 	/* Marks the exported descriptor close-on-exec before transferring it into common state. */
-	error = fcntl(fence.fd, F_SETFD, FD_CLOEXEC);
+	error = fcntl(fence_fd, F_SETFD, FD_CLOEXEC);
 	if (error < 0) {
-		(void)close(fence.fd);
+		(void)close(fence_fd);
 		(void)zwl_error(surface->client, surface->id, "cannot retain acquire fence");
 		return;
 	}
 
 	/* Each sync_file is a fresh payload at generation one, owned by common commit cleanup. */
-	surface->acquire[surface->acquire_count].fd = fence.fd;
+	surface->acquire[surface->acquire_count].fd = fence_fd;
 	surface->acquire[surface->acquire_count].generation = 1U;
 	surface->acquire_count++;
 
@@ -284,7 +281,7 @@ zwl_gpu_commit(
 }
 
 /*
- * Supplies the Linux display-acquisition instance extensions.
+ * Supplies the standard DRM display-acquisition instance extensions.
  */
 uint32_t
 zwl_gpu_instance_extensions(
@@ -379,7 +376,7 @@ VkExternalFenceHandleTypeFlagBits
 zwl_gpu_frame_fence_type(
 	void)
 {
-	/* Succeeded: Linux frame fences remain intact for common status polling. */
+	/* Succeeded: Shared frame fences remain intact for common status polling. */
 	return 0;
 }
 
@@ -575,11 +572,15 @@ gpu_modifier_known(
 	for (index = 0U; index < gpu_modifier_count; index++) {
 		/* An exact token match selects one validated image layout. */
 		if (gpu_modifiers[index] == modifier)
-			return 1;
+			break;
 	}
 
 	/* Refuses a modifier that this compositor did not advertise. */
-	return 0;
+	if (index == gpu_modifier_count)
+		return 0;
+
+	/* Succeeded: the supplied modifier belongs to the advertised immutable set. */
+	return 1;
 }
 
 /* Creates one independent params object or destroys its factory binding. */

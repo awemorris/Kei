@@ -5,9 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Accesses Linux evdev through seat-owned descriptors with monotonic event timestamps. */
+/* Accesses native evdev through seat-owned descriptors with monotonic event timestamps. */
 #include "../zwl.h"
-#include "seat-linux.h"
+#include "seat.h"
 #include <time.h>
 #include <sys/ioctl.h>
 #include <dirent.h>
@@ -20,7 +20,7 @@
 /* The directory whose eventN nodes are the evdev devices. */
 #define INPUT_DIRECTORY "/dev/input"
 
-/* The one Linux input seat borrows this server until common service cleanup. */
+/* The one native input seat borrows this server until common service cleanup. */
 static struct zwl_server *input_server;
 
 static int event_node_name(const char *name);
@@ -51,7 +51,7 @@ zwl_input_scan(
 	server->input_scan_time = zwl_milliseconds();
 
 	/* A service-paused seat cannot acquire newly discovered input devices. */
-	paused = zwl_linux_seat_paused();
+	paused = zwl_seat_paused();
 	if (paused != 0)
 		return;
 
@@ -179,7 +179,7 @@ zwl_input_device_read(
 		/* Logind can revoke the kernel file before its ordered bus notification arrives. */
 		error = errno;
 		if (error == ENODEV) {
-			retained = zwl_linux_device_revoked(input_server, descriptor);
+			retained = zwl_seat_device_revoked(input_server, descriptor);
 			if (retained != 0)
 				error = EAGAIN;
 		}
@@ -214,7 +214,7 @@ zwl_input_device_close(
 	int descriptor)
 {
 	/* Releases the node through its seat owner. */
-	zwl_linux_device_close(server, descriptor);
+	zwl_seat_device_close(server, descriptor);
 
 	/* Succeeded: the descriptor is no longer owned by the seat. */
 	return;
@@ -234,7 +234,9 @@ event_node_name(
 		return 0;
 
 	/* Everything after the prefix is a decimal digit. */
-	for (cursor = name + 5; *cursor != '\0'; cursor++) {
+	for (cursor = name + 5;
+	     *cursor != '\0';
+	     cursor++) {
 		/* Any other character makes it some other kind of node. */
 		if (*cursor < '0' || *cursor > '9')
 			return 0;
@@ -285,7 +287,7 @@ probe_device(
 	int error;
 
 	/* Opens a nonblocking descriptor that children cannot inherit. */
-	descriptor = zwl_linux_device_open(server, path);
+	descriptor = zwl_seat_device_open(server, path);
 	if (descriptor < 0)
 		return;
 
@@ -293,14 +295,14 @@ probe_device(
 	clock_id = CLOCK_MONOTONIC;
 	error = ioctl(descriptor, EVIOCSCLOCKID, &clock_id);
 	if (error != 0) {
-		zwl_linux_device_close(server, descriptor);
+		zwl_seat_device_close(server, descriptor);
 		return;
 	}
 
 	/* Reads the bits that determine the device's role. */
 	error = read_capabilities(descriptor, &capabilities);
 	if (error != 0) {
-		zwl_linux_device_close(server, descriptor);
+		zwl_seat_device_close(server, descriptor);
 		return;
 	}
 

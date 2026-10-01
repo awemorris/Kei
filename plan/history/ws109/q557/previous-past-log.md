@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q557](queue-q557.md)（WS109 p003 uncleared）
+Last finished Queue: [q556](queue-q556.md)（WS109 p002 uncleared）
 
-## 最新: q557 /WS109 p003
+## 最新: q556 /WS109 p002
 
-item cleared /Phase uncleared。Linux共有dma-buf/evdev/sessionを再利用、FreeBSDsync/nativeinput header境界を実装。native4objects/exportownershipとLinuxfullcompositor/境界契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q557/result.md)。FreeBSDseat/fullcompositor/actualGPU・positiveDMA/全F3は保持。
+item cleared /Phase uncleared。real native113sources/10ELF＋DESTDIR/publicheaders/native libc/私有library chainを検証。installed publicclientでOSS/network/全64CPU pixels/PDFwrite-read-digest PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q556/result.md)。fullF2 compositor/apps・p003seat/graphics/全source規約/physical gatesは保持。
 
 WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 
 | Queue | Outcome |
 | --- | --- |
+| [q527](queue-q527.md) | ws105-p004 cleared |
 | [q528](queue-q528.md) | ws105-p005 cleared |
 | [q529](queue-q529.md) | ws105-p006 uncleared |
 | [q530](queue-q530.md) | ws105-p005 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acce
 | [q554](queue-q554.md) | WS109 p004 item cleared /Phase uncleared |
 | [q555](queue-q555.md) | WS109 p004 item cleared /Phase uncleared |
 | [q556](queue-q556.md) | WS109 p002 item cleared /Phase uncleared |
-| [q557](queue-q557.md) | WS109 p003 item cleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

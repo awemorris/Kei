@@ -54,3 +54,11 @@ ui-libraries.c uses installed public headers only, not private source headers. C
 Run LD_LIBRARY_PATH=$stage/opt/keiland/lib in the owned native fixture with accessible OSS and wired
 vtnet0. It checks real service observations, all64 CPU pixels and an owned PDF write/read/digest
 round trip; it does not prove display, a window or WiFi. Exact q556 evidence and runtime limits retained.
+
+## Shared dma-buf exporter
+
+dmabuf-export-rejected.c links the selected wayland/{linux,freebsd}/sync module;
+`cc -std=gnu17 -Wall -Wextra -Werror -I.`. Actual invalid fd and real pipe ioctls must return
+EBADF/ENOTTY without publishing an output or consuming a borrowed descriptor. No positiveDMA
+claim. q557 compiles sharedgpu/evdev/session as actual nativeobjects; native seat/backend and
+fullcompositor are still needed before runtime/physical display or input acceptance.
