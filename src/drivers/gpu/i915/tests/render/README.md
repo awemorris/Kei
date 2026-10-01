@@ -91,7 +91,7 @@ then `plan/ws031/tests/run-vk-host-tests.sh` and
 `BRW_TOOLS=<mesa build>/src/intel/compiler plan/ws031/tests/run-vk-gentool-test.sh`
 before a hardware run.  The generated header records the glslc version and
 the SHA-256 of every source; mview's shaders have their own generator and
-`shaders/provenance.json` under `userland/desktop/mview/shaders/`.
+`shaders/provenance.json` under `userland/tests/mview/shaders/`.
 
 ## Known unsupported features
 

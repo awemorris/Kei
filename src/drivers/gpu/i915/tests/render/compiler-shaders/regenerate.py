@@ -38,7 +38,7 @@ SHADERS = (
     ('shade.frag', 'fragment', 'i915_vkc_shade_frag'),
 )
 
-# mview's shaders as the application ships them (userland/desktop/mview/shaders/), embedded unchanged.
+# mview's shaders as the application ships them (userland/tests/mview/shaders/), embedded unchanged.
 SHIPPED = (
     ('mview.vert.spv', 'i915_vkc_mview_vert'),
 )
@@ -340,7 +340,7 @@ def main():
     for source, symbol in SHIPPED:
         binary = (shipped / source).read_bytes()
         words = struct.unpack(f'<{len(binary) // 4}I', binary)
-        lines.extend(['', f'/* userland/desktop/mview/shaders/{source} as shipped (sha256 {hashlib.sha256(binary).hexdigest()}), {len(words)} words. */'])
+        lines.extend(['', f'/* userland/tests/mview/shaders/{source} as shipped (sha256 {hashlib.sha256(binary).hexdigest()}), {len(words)} words. */'])
         c_words(lines, symbol, words)
 
     # The NDC coordinate of cell edge k (0 .. 16): -1 + k / 8.
