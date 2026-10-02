@@ -38,7 +38,8 @@ negative-report branches were reviewed but not fault-injected.
 
 [Formatter](format.json): clang-format19.1.7, with required definition argument
 tabs, immutable corpus rows and split-call arguments restored. [Style checker]
-(style-summary.txt):zero; git diff-check passes. [Final own serialized plain
+(style-summary.txt):zero; source/managed-document diff-check passes; raw
+checkpoint10 disassembly bytes remain excluded from whitespace acceptance. [Final own serialized plain
 build](plain-build.log) and four final independent compiles pass warning0.
 [Four actual native fixtures](tests.json) pass102 observations with empty stderr.
 [Object comparison](object-code.json) reports exact results without weakening

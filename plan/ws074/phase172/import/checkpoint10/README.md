@@ -25,7 +25,9 @@ are disclosed rather than reported as identical objects.
 
 [Formatter](format.json): clang-format19.1.7, followed by required argument tabs
 and readable immutable corpus rows. [Style checker](style-summary.txt): zero
-candidates; git diff-check passes. [Own serialized plain build](plain-build.log)
+candidates; source/managed-document diff-check passes. The raw disassembly diff
+retains objdump bytes and is excluded from whitespace acceptance because its
+context lines contain tool-generated whitespace. [Own serialized plain build](plain-build.log)
 passes warning0 and [all four existing fixtures](tests.json) pass with empty
 stderr. This plain run does not independently detect every memory error; existing
 ASan import receipts are retained because production operations are unchanged.
