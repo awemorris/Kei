@@ -1,0 +1,1014 @@
+{
+  "compiler": "GCC14.2.0",
+  "scope": "all168productionobjects",
+  "rows": [
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_control.o",
+      "before_text_sha256": "cfaf98552ed89cce1b2f96cc91c19d7d12b79721662cce1c02c05a4e97348f8a",
+      "final_text_sha256": "cfaf98552ed89cce1b2f96cc91c19d7d12b79721662cce1c02c05a4e97348f8a",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_document.o",
+      "before_text_sha256": "152eb0d5123fcc43f73115457fe66b6319497967c7cf3fd23d994ab05ad9c536",
+      "final_text_sha256": "152eb0d5123fcc43f73115457fe66b6319497967c7cf3fd23d994ab05ad9c536",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_select.o",
+      "before_text_sha256": "e7b66a7ec7b0e65e93cc458b475c4be1b58ea3e6569e2f68882fb022638c695d",
+      "final_text_sha256": "e7b66a7ec7b0e65e93cc458b475c4be1b58ea3e6569e2f68882fb022638c695d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_table-row.o",
+      "before_text_sha256": "0a4872ed5a85cb25ed46b8c901d45b2b973e12a60c533920758dd7b8d0666310",
+      "final_text_sha256": "0a4872ed5a85cb25ed46b8c901d45b2b973e12a60c533920758dd7b8d0666310",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_range.o",
+      "before_text_sha256": "b7d03d7a27fa86ea66e310803c404b375eee3ede879abb2d7511bc6194263f24",
+      "final_text_sha256": "b7d03d7a27fa86ea66e310803c404b375eee3ede879abb2d7511bc6194263f24",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_removal.o",
+      "before_text_sha256": "91abec2acd4124c47b7f64ec6de63b53fd943ef9c123777247d374cb2f179647",
+      "final_text_sha256": "91abec2acd4124c47b7f64ec6de63b53fd943ef9c123777247d374cb2f179647",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_html-input.o",
+      "before_text_sha256": "bfd4a7a22fd6dd7891e277fc7536f828ca7f3d140bd0c7fdb8eb1fe3ca373daa",
+      "final_text_sha256": "bfd4a7a22fd6dd7891e277fc7536f828ca7f3d140bd0c7fdb8eb1fe3ca373daa",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_html-reflection.o",
+      "before_text_sha256": "1d617f5bc02ef3ec81dfa1ce7a325187e7d85f6092bdcb8c993945e999be527f",
+      "final_text_sha256": "1d617f5bc02ef3ec81dfa1ce7a325187e7d85f6092bdcb8c993945e999be527f",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_shape.o",
+      "before_text_sha256": "e870af315b3c41648577f89283a85a035983b011b7f54e710afc66bbd3f87988",
+      "final_text_sha256": "e870af315b3c41648577f89283a85a035983b011b7f54e710afc66bbd3f87988",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_json.o",
+      "before_text_sha256": "00a07bc1c764e7ffbcff2d70402c828759c9c9498f2947739d5b1bda5020f218",
+      "final_text_sha256": "00a07bc1c764e7ffbcff2d70402c828759c9c9498f2947739d5b1bda5020f218",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_link.o",
+      "before_text_sha256": "b24f3eae8e5293e8814a8699b5c50a27c930d4a247d93a3161a2e9c725dc196f",
+      "final_text_sha256": "b24f3eae8e5293e8814a8699b5c50a27c930d4a247d93a3161a2e9c725dc196f",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_radio.o",
+      "before_text_sha256": "f29b8e38037708d1c7ba2c77340debb5c17a24cf0f37a372f0fcfeb6abac1cf0",
+      "final_text_sha256": "f29b8e38037708d1c7ba2c77340debb5c17a24cf0f37a372f0fcfeb6abac1cf0",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_utf.o",
+      "before_text_sha256": "81d0e008f00683c112b9a9503ce20450b13f3705a7f6f84a751bd027746c6be3",
+      "final_text_sha256": "81d0e008f00683c112b9a9503ce20450b13f3705a7f6f84a751bd027746c6be3",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_operation.o",
+      "before_text_sha256": "3512b59c4033c4dbb8b9df62407d35a7198aff0dabfd3a2e24960db2b9628c84",
+      "final_text_sha256": "3512b59c4033c4dbb8b9df62407d35a7198aff0dabfd3a2e24960db2b9628c84",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_storage.o",
+      "before_text_sha256": "4c227398bb8edeab7a7c8f892503a9ad08bc663e57439af76f5d2b9521b6e440",
+      "final_text_sha256": "4c227398bb8edeab7a7c8f892503a9ad08bc663e57439af76f5d2b9521b6e440",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_style-sheet.o",
+      "before_text_sha256": "cec9151aead796ab8fde717c208809e15d67caf6aefa96ce50b04fe4bbf1a842",
+      "final_text_sha256": "cec9151aead796ab8fde717c208809e15d67caf6aefa96ce50b04fe4bbf1a842",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_heap.o",
+      "before_text_sha256": "f3fe647a5497c7c6aa46a339204ab16705476b439abbab643a62b10384e4a224",
+      "final_text_sha256": "f3fe647a5497c7c6aa46a339204ab16705476b439abbab643a62b10384e4a224",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_tokenizer.o",
+      "before_text_sha256": "966eb176a343dc6667062b5b5684729a2befb3cf9199b1abbed8daca8dd3355d",
+      "final_text_sha256": "966eb176a343dc6667062b5b5684729a2befb3cf9199b1abbed8daca8dd3355d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_url.o",
+      "before_text_sha256": "a8e63b480744716e0ff2d4f8899508ef6b6244953fa73d8303a3c06b6959cd15",
+      "final_text_sha256": "a8e63b480744716e0ff2d4f8899508ef6b6244953fa73d8303a3c06b6959cd15",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_input.o",
+      "before_text_sha256": "c075b4166d3ce9ebaf523cbfbd4e453f75904fc2e410abb614d62ecca5b9da19",
+      "final_text_sha256": "c075b4166d3ce9ebaf523cbfbd4e453f75904fc2e410abb614d62ecca5b9da19",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_spread.o",
+      "before_text_sha256": "f1aa97d04a14810c179c4bc4fff3112b3531c7b9e6f99fd72215a33b0fb42d20",
+      "final_text_sha256": "f1aa97d04a14810c179c4bc4fff3112b3531c7b9e6f99fd72215a33b0fb42d20",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_tokenizer.o",
+      "before_text_sha256": "62806ee02e3720e23992bc4f629a974d79130a2e7a00ecc0e3a954a0071436f9",
+      "final_text_sha256": "62806ee02e3720e23992bc4f629a974d79130a2e7a00ecc0e3a954a0071436f9",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_loader.o",
+      "before_text_sha256": "528a87d01a7ce22a11a855b096f7d5d4e3c950f818eacae8e7b4c83770fcdacc",
+      "final_text_sha256": "528a87d01a7ce22a11a855b096f7d5d4e3c950f818eacae8e7b4c83770fcdacc",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_images.o",
+      "before_text_sha256": "e1286c77ece4a6f5969a81de365a623d3bbaea12c99028e05c0658f93bf73a79",
+      "final_text_sha256": "e1286c77ece4a6f5969a81de365a623d3bbaea12c99028e05c0658f93bf73a79",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_compile_expr.o",
+      "before_text_sha256": "71d7b060e74fc52447ef63e76c46c68d342cff329a1224e69aaef14bdebc82c4",
+      "final_text_sha256": "71d7b060e74fc52447ef63e76c46c68d342cff329a1224e69aaef14bdebc82c4",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_body.o",
+      "before_text_sha256": "b4ab556c5dee8fd3f49355abdaecbaab6435b324470f651ea7ddd61111b0446d",
+      "final_text_sha256": "b4ab556c5dee8fd3f49355abdaecbaab6435b324470f651ea7ddd61111b0446d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_dump.o",
+      "before_text_sha256": "f25bc931f27a308879f49c8016f7a2741e4a996a287c374315ecdead59450a90",
+      "final_text_sha256": "f25bc931f27a308879f49c8016f7a2741e4a996a287c374315ecdead59450a90",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_media.o",
+      "before_text_sha256": "2c90cb6d24f200366945a10d421e88fb822adfc4faac04a5a3b963ed4d75bf21",
+      "final_text_sha256": "2c90cb6d24f200366945a10d421e88fb822adfc4faac04a5a3b963ed4d75bf21",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_svg-length.o",
+      "before_text_sha256": "69a7b7575e9f24c35f3c763150e7cfa21cfc77ec048d4e31d7d8d260e3da1704",
+      "final_text_sha256": "69a7b7575e9f24c35f3c763150e7cfa21cfc77ec048d4e31d7d8d260e3da1704",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_buffer.o",
+      "before_text_sha256": "ce8be5389092d1049a4f8886619bce2aece226ca9689df5e7a074056619d12c2",
+      "final_text_sha256": "ce8be5389092d1049a4f8886619bce2aece226ca9689df5e7a074056619d12c2",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_xml.o",
+      "before_text_sha256": "67815fd7e6163f01a7a7b73c59ee779240379bd236a5eeb0b12803a68c09238c",
+      "final_text_sha256": "67815fd7e6163f01a7a7b73c59ee779240379bd236a5eeb0b12803a68c09238c",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_frame.o",
+      "before_text_sha256": "fe80d825d2ddea51ec679d6af053e9afdd92a26ee68a0d1b00cfb692edf66f4f",
+      "final_text_sha256": "fe80d825d2ddea51ec679d6af053e9afdd92a26ee68a0d1b00cfb692edf66f4f",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_implementation.o",
+      "before_text_sha256": "1758e1c36497272e5005420d6b9e32a43cbb0b491fab7c2d189ba5b5525818fd",
+      "final_text_sha256": "1758e1c36497272e5005420d6b9e32a43cbb0b491fab7c2d189ba5b5525818fd",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_http.o",
+      "before_text_sha256": "ee2ec89ba6ab040b81bb278689156c91b82f97ce966e9a58616eb5e75a6e256d",
+      "final_text_sha256": "ee2ec89ba6ab040b81bb278689156c91b82f97ce966e9a58616eb5e75a6e256d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_table.o",
+      "before_text_sha256": "8f0a628ca371ddc1e9eb407e0d2961eb8067d97017001319a15358757523b79b",
+      "final_text_sha256": "8f0a628ca371ddc1e9eb407e0d2961eb8067d97017001319a15358757523b79b",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_vector.o",
+      "before_text_sha256": "e245e16b151053ade6cfb62c08d0db97da2f4c85087fae3096108980b3daa6a1",
+      "final_text_sha256": "e245e16b151053ade6cfb62c08d0db97da2f4c85087fae3096108980b3daa6a1",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_box.o",
+      "before_text_sha256": "b6b2f96faf1aca5afb8fd51427f9002aedbdaf3b4e86cb53cf7f5247fbb02224",
+      "final_text_sha256": "b6b2f96faf1aca5afb8fd51427f9002aedbdaf3b4e86cb53cf7f5247fbb02224",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_query.o",
+      "before_text_sha256": "2d4f016919b5d98a16c5bed4688371d7dcf47487e20ef943e51080cf9c488396",
+      "final_text_sha256": "2d4f016919b5d98a16c5bed4688371d7dcf47487e20ef943e51080cf9c488396",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_click.o",
+      "before_text_sha256": "1b0b534e3780c426cd892237f52c8acaccd028f61192cd806a17b6b0e18ce0ef",
+      "final_text_sha256": "1b0b534e3780c426cd892237f52c8acaccd028f61192cd806a17b6b0e18ce0ef",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_text_linebreak.o",
+      "before_text_sha256": "1939f635ce8984fe33badb6f8dbcd35a685e5f6447b08830cf23b4d65fa3e693",
+      "final_text_sha256": "1939f635ce8984fe33badb6f8dbcd35a685e5f6447b08830cf23b4d65fa3e693",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_generator.o",
+      "before_text_sha256": "0752d23b626dca3d2d1921a1ce2ba19ccfffa211dbfc58cbebc2bf9b36ad7654",
+      "final_text_sha256": "0752d23b626dca3d2d1921a1ce2ba19ccfffa211dbfc58cbebc2bf9b36ad7654",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_position.o",
+      "before_text_sha256": "94267e31321b65ccfe396839587c07f7d268812956a3d55128d0fb170d6c4713",
+      "final_text_sha256": "94267e31321b65ccfe396839587c07f7d268812956a3d55128d0fb170d6c4713",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_float.o",
+      "before_text_sha256": "7e33259638fa73414fd0b57cfd9b975c75c92f9d8f1be37ec1f5f513e61c9410",
+      "final_text_sha256": "7e33259638fa73414fd0b57cfd9b975c75c92f9d8f1be37ec1f5f513e61c9410",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_realm.o",
+      "before_text_sha256": "0220aa400cf47fbd4d3c4475dae273676808f5a0738566509e1f78e733d484fc",
+      "final_text_sha256": "0220aa400cf47fbd4d3c4475dae273676808f5a0738566509e1f78e733d484fc",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_number.o",
+      "before_text_sha256": "03834bc6dcf3f721a7b985f44d0631be2d61b3438ca633e2bbee9f081dce8fb8",
+      "final_text_sha256": "03834bc6dcf3f721a7b985f44d0631be2d61b3438ca633e2bbee9f081dce8fb8",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_script.o",
+      "before_text_sha256": "81a8a5fa3fde6d2fcf86b7471e4b7ad58d60e8c49b3c561f6e398b162b6f4c91",
+      "final_text_sha256": "81a8a5fa3fde6d2fcf86b7471e4b7ad58d60e8c49b3c561f6e398b162b6f4c91",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_cascade.o",
+      "before_text_sha256": "a681bc57169eaa1e11ca869ee1f5da684ad2ef96e4459ca0ab11c54e1e1c6216",
+      "final_text_sha256": "a681bc57169eaa1e11ca869ee1f5da684ad2ef96e4459ca0ab11c54e1e1c6216",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_math.o",
+      "before_text_sha256": "ffade58986ebe89e20984d1ce42408e65fd0efb34e74c7444ce205db28b4cae6",
+      "final_text_sha256": "ffade58986ebe89e20984d1ce42408e65fd0efb34e74c7444ce205db28b4cae6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_xml_dom.o",
+      "before_text_sha256": "c6000bfa0e922928bc5e896aca295bbbe6bf9f9fc2f07677fb7b5c92fdf5eab6",
+      "final_text_sha256": "c6000bfa0e922928bc5e896aca295bbbe6bf9f9fc2f07677fb7b5c92fdf5eab6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_input.o",
+      "before_text_sha256": "6643f8b4ff7de5496b792e593d3cc9d4bc757ba1e0b7965982a31c2c1ff14f59",
+      "final_text_sha256": "6643f8b4ff7de5496b792e593d3cc9d4bc757ba1e0b7965982a31c2c1ff14f59",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_sheets.o",
+      "before_text_sha256": "426623f3609389728eb089ff430c996898f39e04fa90631a7954caaf9eba98fb",
+      "final_text_sha256": "426623f3609389728eb089ff430c996898f39e04fa90631a7954caaf9eba98fb",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_inline.o",
+      "before_text_sha256": "8a4a8cbc6b92ddbc6698af05dafabac3634bd566da574d9cd7430fe19f2ef790",
+      "final_text_sha256": "8a4a8cbc6b92ddbc6698af05dafabac3634bd566da574d9cd7430fe19f2ef790",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_modes.o",
+      "before_text_sha256": "e2de5658f422c0cf4bb6932e37c2dfb057df9a9f2d7537fe192751fb2286c853",
+      "final_text_sha256": "e2de5658f422c0cf4bb6932e37c2dfb057df9a9f2d7537fe192751fb2286c853",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_interpreter.o",
+      "before_text_sha256": "5fc6ba50af702043d1ec92c6b25f189b3bd906b39c66fe5fd158e92ffbb19f6a",
+      "final_text_sha256": "5fc6ba50af702043d1ec92c6b25f189b3bd906b39c66fe5fd158e92ffbb19f6a",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_markup.o",
+      "before_text_sha256": "2c157037cabfbabcd33ccdd9ff46e084e109ab287b3e0215f949c7ea89d4f472",
+      "final_text_sha256": "2c157037cabfbabcd33ccdd9ff46e084e109ab287b3e0215f949c7ea89d4f472",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_table.o",
+      "before_text_sha256": "78ab4fca3e248ca979e409edab1b1ee9d94c982c580354878e086ad7ac9f1cdd",
+      "final_text_sha256": "78ab4fca3e248ca979e409edab1b1ee9d94c982c580354878e086ad7ac9f1cdd",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_xml.o",
+      "before_text_sha256": "ad4fea1b7665258132b4a414614cccc519935d3db3086cba13a365159dbe0a49",
+      "final_text_sha256": "ad4fea1b7665258132b4a414614cccc519935d3db3086cba13a365159dbe0a49",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_control.o",
+      "before_text_sha256": "d36c8f46d1df0e73867c48ddab0660a10e591804250723c9b4ffd5d50294d36d",
+      "final_text_sha256": "d36c8f46d1df0e73867c48ddab0660a10e591804250723c9b4ffd5d50294d36d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_tls.o",
+      "before_text_sha256": "3e4b970ddef7950c9ad0b6208890484f3210acb194765e3eace55348987b007d",
+      "final_text_sha256": "3e4b970ddef7950c9ad0b6208890484f3210acb194765e3eace55348987b007d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_paint_software.o",
+      "before_text_sha256": "21b57a25fd494343059d8bab3272a925c2425b280887e23f9847a1f90cd493d1",
+      "final_text_sha256": "21b57a25fd494343059d8bab3272a925c2425b280887e23f9847a1f90cd493d1",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_access.o",
+      "before_text_sha256": "e247652a90dd17f50814d4cd2b207806308f44836d863854a976fb505bdacc29",
+      "final_text_sha256": "e247652a90dd17f50814d4cd2b207806308f44836d863854a976fb505bdacc29",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_timer.o",
+      "before_text_sha256": "be349b8e3ce67524a11b35421dd6a9e5bfa5d5c6a8241778e9e993c72149c5b7",
+      "final_text_sha256": "be349b8e3ce67524a11b35421dd6a9e5bfa5d5c6a8241778e9e993c72149c5b7",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_error.o",
+      "before_text_sha256": "604adab919fa913abe2015f38ffa3201f1c3ca0f9071421607fa00e80625c71f",
+      "final_text_sha256": "604adab919fa913abe2015f38ffa3201f1c3ca0f9071421607fa00e80625c71f",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_view_view.o",
+      "before_text_sha256": "8526c2a1c173239a6b0de9ed16e7564f0ccf450b8a556c7eac24e07a35b75eeb",
+      "final_text_sha256": "8526c2a1c173239a6b0de9ed16e7564f0ccf450b8a556c7eac24e07a35b75eeb",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_parse_stmt.o",
+      "before_text_sha256": "4fb60864575126a7e7bd884557aeece9c8d684b0e3ae61326d2a7d24ce6590ba",
+      "final_text_sha256": "4fb60864575126a7e7bd884557aeece9c8d684b0e3ae61326d2a7d24ce6590ba",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_generator.o",
+      "before_text_sha256": "1b0f2e8a1062bc67dcf55f526586e90d8d3ce62c6ee57f2f556c223061274779",
+      "final_text_sha256": "1b0f2e8a1062bc67dcf55f526586e90d8d3ce62c6ee57f2f556c223061274779",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_hash.o",
+      "before_text_sha256": "709069e9a411a0481f3b2c7b66e391d9f8e1ab574404cff6efea5da3510ebf5b",
+      "final_text_sha256": "709069e9a411a0481f3b2c7b66e391d9f8e1ab574404cff6efea5da3510ebf5b",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_data.o",
+      "before_text_sha256": "f6c8d631adf2c3341c90fd71c83f5c42ee795a219cb5070c5dd21f6da8aed61a",
+      "final_text_sha256": "f6c8d631adf2c3341c90fd71c83f5c42ee795a219cb5070c5dd21f6da8aed61a",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_values.o",
+      "before_text_sha256": "d3c6566ca7a602c9cd9b1ec4762bec0a6dc522253cfad9917cb78fa962077161",
+      "final_text_sha256": "d3c6566ca7a602c9cd9b1ec4762bec0a6dc522253cfad9917cb78fa962077161",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_geometry.o",
+      "before_text_sha256": "e8a78dc1012d9fe352babf145c2a5993402ab858362af71da60f74fcf59a3579",
+      "final_text_sha256": "e8a78dc1012d9fe352babf145c2a5993402ab858362af71da60f74fcf59a3579",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_traversal.o",
+      "before_text_sha256": "91da9e01566a78ef6024717f945b8e9144861b880b9e592847bac0dee34b198c",
+      "final_text_sha256": "91da9e01566a78ef6024717f945b8e9144861b880b9e592847bac0dee34b198c",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_regexp.o",
+      "before_text_sha256": "a1ef2ea11e5ee59652f569bb88f872a788f602923df6496c41d9c3fe81ba386f",
+      "final_text_sha256": "a1ef2ea11e5ee59652f569bb88f872a788f602923df6496c41d9c3fe81ba386f",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_input.o",
+      "before_text_sha256": "1c22fa84030eff651f458669be9fed43422ca67373c2311c340bafe9927f32c8",
+      "final_text_sha256": "1c22fa84030eff651f458669be9fed43422ca67373c2311c340bafe9927f32c8",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_image_png.o",
+      "before_text_sha256": "03e586d17d16ea90adf316dcefbe43c009cd96b3d4132114bce22f9e3e581ce5",
+      "final_text_sha256": "03e586d17d16ea90adf316dcefbe43c009cd96b3d4132114bce22f9e3e581ce5",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_unicode-case-table.o",
+      "before_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "final_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_window.o",
+      "before_text_sha256": "b3e26e917507b7bd6796e9372be5787a2a08b3c44a015282e58afa9244de676e",
+      "final_text_sha256": "b3e26e917507b7bd6796e9372be5787a2a08b3c44a015282e58afa9244de676e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_text_woff.o",
+      "before_text_sha256": "d7032f22f9108ee2b95d13fe34d9be3b57f51be0c1b795a5fe386e83193a73e6",
+      "final_text_sha256": "d7032f22f9108ee2b95d13fe34d9be3b57f51be0c1b795a5fe386e83193a73e6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_form.o",
+      "before_text_sha256": "9882a54a1f56d4ebb200553dc39e49baeaea0ef06e70e254e91d077401dad980",
+      "final_text_sha256": "9882a54a1f56d4ebb200553dc39e49baeaea0ef06e70e254e91d077401dad980",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_regexp.o",
+      "before_text_sha256": "643021012904a4d91b3720415aa757893f6f65448d27744f72c8a41836bf94ff",
+      "final_text_sha256": "643021012904a4d91b3720415aa757893f6f65448d27744f72c8a41836bf94ff",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_function.o",
+      "before_text_sha256": "87492ec84bb2a17f90a17838f4b72c3d20760a6e258f7fd4d285184aa0f04de6",
+      "final_text_sha256": "87492ec84bb2a17f90a17838f4b72c3d20760a6e258f7fd4d285184aa0f04de6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_event.o",
+      "before_text_sha256": "3bfe9f54c78251cf1569260310df22e42bc3e66e92cdd2e728a8a1fa9464cb6d",
+      "final_text_sha256": "3bfe9f54c78251cf1569260310df22e42bc3e66e92cdd2e728a8a1fa9464cb6d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_style-context.o",
+      "before_text_sha256": "c22cf13a3b636de258b0d28935615ca5c1a14573dd5d82ce2ce9a1336aa9b259",
+      "final_text_sha256": "c22cf13a3b636de258b0d28935615ca5c1a14573dd5d82ce2ce9a1336aa9b259",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_image_decode.o",
+      "before_text_sha256": "c80f520de2c59e141532462784c1b21f63ab0fb157f26c97f3e59a1c6c0b5e3b",
+      "final_text_sha256": "c80f520de2c59e141532462784c1b21f63ab0fb157f26c97f3e59a1c6c0b5e3b",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_object.o",
+      "before_text_sha256": "cce4fa720d6a90ed86e074eb103be52e0195c7f8989c8588df1700fe5b867aae",
+      "final_text_sha256": "cce4fa720d6a90ed86e074eb103be52e0195c7f8989c8588df1700fe5b867aae",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_dump.o",
+      "before_text_sha256": "2247d2d0f894dc65714d1bb174bd2ea055ef55342c1a14af8de0f3666183e375",
+      "final_text_sha256": "2247d2d0f894dc65714d1bb174bd2ea055ef55342c1a14af8de0f3666183e375",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_network.o",
+      "before_text_sha256": "3df0496e3a5b27d3bebed4ef8ee3a7451a82147f9df89bbc2f60a830ce91f0be",
+      "final_text_sha256": "3df0496e3a5b27d3bebed4ef8ee3a7451a82147f9df89bbc2f60a830ce91f0be",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_text.o",
+      "before_text_sha256": "8b7b3a8758dcc15728853b263ed3b1cf21790dfd8bf778ec72b31abf904f1715",
+      "final_text_sha256": "8b7b3a8758dcc15728853b263ed3b1cf21790dfd8bf778ec72b31abf904f1715",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_svg-text.o",
+      "before_text_sha256": "b08d67882ec1cf1a25a37b17ba6d8fabb4f5b77c2cec8c62b52f06e27e3dd1ce",
+      "final_text_sha256": "b08d67882ec1cf1a25a37b17ba6d8fabb4f5b77c2cec8c62b52f06e27e3dd1ce",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_lexer.o",
+      "before_text_sha256": "7e97aaa669ff91f464e55d7513ca84ea09df8b0f90b5e65a3eb9ee7d6e1437be",
+      "final_text_sha256": "7e97aaa669ff91f464e55d7513ca84ea09df8b0f90b5e65a3eb9ee7d6e1437be",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_string.o",
+      "before_text_sha256": "034f681e245b08af84bd9f1199e487f9a337a749d34e4dd6d97d8b08ae673e36",
+      "final_text_sha256": "034f681e245b08af84bd9f1199e487f9a337a749d34e4dd6d97d8b08ae673e36",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_storage.o",
+      "before_text_sha256": "23b77d864f4a4dc40a2fa87f97831e304578eb01df7541e69c9e38c9b680f713",
+      "final_text_sha256": "23b77d864f4a4dc40a2fa87f97831e304578eb01df7541e69c9e38c9b680f713",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_cssom.o",
+      "before_text_sha256": "dc405e932598fb7b1bcbb4b9325dd6da45f5a937891b13b3cfdcba5c4bf1dca7",
+      "final_text_sha256": "dc405e932598fb7b1bcbb4b9325dd6da45f5a937891b13b3cfdcba5c4bf1dca7",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_adopt.o",
+      "before_text_sha256": "6e649dc49f49c947e7073a580067e34614c4f05bb44d3a63c716902991dbf913",
+      "final_text_sha256": "6e649dc49f49c947e7073a580067e34614c4f05bb44d3a63c716902991dbf913",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_submit.o",
+      "before_text_sha256": "ed5656a43a5ad64b987192896b38b06f56956df4e899341b856b6e20d57c33d2",
+      "final_text_sha256": "ed5656a43a5ad64b987192896b38b06f56956df4e899341b856b6e20d57c33d2",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_arena.o",
+      "before_text_sha256": "6c15fe885ca8cd0d592c09673c1e182c469661a6eec46de61a5748a669107608",
+      "final_text_sha256": "6c15fe885ca8cd0d592c09673c1e182c469661a6eec46de61a5748a669107608",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_replaced.o",
+      "before_text_sha256": "1bd9c357bced6b28526d5077319ca6487426a82f297a58ebf3af183219ce7a33",
+      "final_text_sha256": "1bd9c357bced6b28526d5077319ca6487426a82f297a58ebf3af183219ce7a33",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_xml_parser.o",
+      "before_text_sha256": "06718d4c755db98b7be57fb13e3c6b318d294f3de7e110a44bb6849edbadc410",
+      "final_text_sha256": "06718d4c755db98b7be57fb13e3c6b318d294f3de7e110a44bb6849edbadc410",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_paint_list.o",
+      "before_text_sha256": "5f8ee2123769332c48655427ec8ca776c6945742278cf4537eefb205190cb527",
+      "final_text_sha256": "5f8ee2123769332c48655427ec8ca776c6945742278cf4537eefb205190cb527",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_form.o",
+      "before_text_sha256": "100c001229d16fd9e8050c85cb86b2d3a704067cd2fe0eb65e16912a5eef8271",
+      "final_text_sha256": "100c001229d16fd9e8050c85cb86b2d3a704067cd2fe0eb65e16912a5eef8271",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_element.o",
+      "before_text_sha256": "9e44aabaa512be7ba518ab23d80f5f24eae6379e27b885b90ac17920ba3dd1b3",
+      "final_text_sha256": "9e44aabaa512be7ba518ab23d80f5f24eae6379e27b885b90ac17920ba3dd1b3",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_handler.o",
+      "before_text_sha256": "79a3fd8ed7908b2735876bad439cdb997bfb4205ed7ce5fc97c0d4a35f8b4a7d",
+      "final_text_sha256": "79a3fd8ed7908b2735876bad439cdb997bfb4205ed7ce5fc97c0d4a35f8b4a7d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_cloning.o",
+      "before_text_sha256": "c4449fb0d638dc79f577b914ebff3db84869843252ea6c9a851847221d07f2ff",
+      "final_text_sha256": "c4449fb0d638dc79f577b914ebff3db84869843252ea6c9a851847221d07f2ff",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_entities-table.o",
+      "before_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "final_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_encoding.o",
+      "before_text_sha256": "b450e1d00974e6d41fb4d274eff64c1af6220556a6af6bd6e4506c27375d183e",
+      "final_text_sha256": "b450e1d00974e6d41fb4d274eff64c1af6220556a6af6bd6e4506c27375d183e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_bounds.o",
+      "before_text_sha256": "f13ad40ac1872179ad64934fce90d3fbb9b07e16a997ac47ac4e8f258b8038ff",
+      "final_text_sha256": "f13ad40ac1872179ad64934fce90d3fbb9b07e16a997ac47ac4e8f258b8038ff",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_string.o",
+      "before_text_sha256": "65722e16213893557319a964c0b18c4249743109e445d07ebc24fcb42bfe1907",
+      "final_text_sha256": "65722e16213893557319a964c0b18c4249743109e445d07ebc24fcb42bfe1907",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_rule-model.o",
+      "before_text_sha256": "559ed58793aca69e13074fd2aa68e3f596e1d80e747cff2c1f947988c6146556",
+      "final_text_sha256": "559ed58793aca69e13074fd2aa68e3f596e1d80e747cff2c1f947988c6146556",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_symbol.o",
+      "before_text_sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d",
+      "final_text_sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_parser.o",
+      "before_text_sha256": "776b8cdf5c9cd7fcb499468feb2a1f2d84675a0d3882473e104c86966e1f7ae2",
+      "final_text_sha256": "776b8cdf5c9cd7fcb499468feb2a1f2d84675a0d3882473e104c86966e1f7ae2",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_promise.o",
+      "before_text_sha256": "f28253368fc92e5da22755632f4a2dfc8e8627193f0bcd2687fb740a77e639c3",
+      "final_text_sha256": "f28253368fc92e5da22755632f4a2dfc8e8627193f0bcd2687fb740a77e639c3",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_date.o",
+      "before_text_sha256": "39ed4b5c046d1bcbb9bf68c98d0027960d3992a7cd55e38fb3da00fe672e17e5",
+      "final_text_sha256": "39ed4b5c046d1bcbb9bf68c98d0027960d3992a7cd55e38fb3da00fe672e17e5",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_serialize.o",
+      "before_text_sha256": "dd520ce4923e5eac68b682057bc175d283dadedd808999d25a07ccf5000a91a9",
+      "final_text_sha256": "dd520ce4923e5eac68b682057bc175d283dadedd808999d25a07ccf5000a91a9",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_iterator.o",
+      "before_text_sha256": "3fbe3e0e40b7f58446fbce87b96574b2f5a7a65569af5b24d89b70c4c068ef19",
+      "final_text_sha256": "3fbe3e0e40b7f58446fbce87b96574b2f5a7a65569af5b24d89b70c4c068ef19",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_block.o",
+      "before_text_sha256": "7de9dde9018e6901bf6475d90d3e59e253199b2c46e744f28cbde78b8a24be38",
+      "final_text_sha256": "7de9dde9018e6901bf6475d90d3e59e253199b2c46e744f28cbde78b8a24be38",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_style.o",
+      "before_text_sha256": "9170174485f62cd0d22f981fe16c3687375335d9f58f0147114c2c40a1fdcd10",
+      "final_text_sha256": "9170174485f62cd0d22f981fe16c3687375335d9f58f0147114c2c40a1fdcd10",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_names.o",
+      "before_text_sha256": "f945c42c7978443679a202c7d442587e4fb39e3c67e4f914d7e4830987525cc9",
+      "final_text_sha256": "f945c42c7978443679a202c7d442587e4fb39e3c67e4f914d7e4830987525cc9",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_global.o",
+      "before_text_sha256": "2afa9b789f017f24e694893271d37a71accf0d5d41bf04eed98b70b26e8d8241",
+      "final_text_sha256": "2afa9b789f017f24e694893271d37a71accf0d5d41bf04eed98b70b26e8d8241",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_class.o",
+      "before_text_sha256": "4c4a4bc5c0642c62f92a5484e7229ee2f82dae653c52f81d5260271a47fd86bc",
+      "final_text_sha256": "4c4a4bc5c0642c62f92a5484e7229ee2f82dae653c52f81d5260271a47fd86bc",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_image_jpeg.o",
+      "before_text_sha256": "be7d0597a082cdd09370969eaf5584697be686b26727cd3b22078585d01d2dcc",
+      "final_text_sha256": "be7d0597a082cdd09370969eaf5584697be686b26727cd3b22078585d01d2dcc",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_compile.o",
+      "before_text_sha256": "150430468fefb32be23271f561def9936e181979b32d3634a486a9b21117698e",
+      "final_text_sha256": "150430468fefb32be23271f561def9936e181979b32d3634a486a9b21117698e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_code.o",
+      "before_text_sha256": "b817543da3436a14ed6b26e3c8cbc9c9b4c1ebec75593c404ac16a1f71824c9d",
+      "final_text_sha256": "b817543da3436a14ed6b26e3c8cbc9c9b4c1ebec75593c404ac16a1f71824c9d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_collection.o",
+      "before_text_sha256": "a26f30c2ad790da846bafd7af0099f7deaf4d8cc0db2e1425e308e7de07f10b8",
+      "final_text_sha256": "a26f30c2ad790da846bafd7af0099f7deaf4d8cc0db2e1425e308e7de07f10b8",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_parser.o",
+      "before_text_sha256": "473ae4f94c9bbe445c7a8145ea69974a7827798d5af9f3ba2df23cb8d104a007",
+      "final_text_sha256": "473ae4f94c9bbe445c7a8145ea69974a7827798d5af9f3ba2df23cb8d104a007",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_atom.o",
+      "before_text_sha256": "ae8c90a84ca11c1f8e5611e7b80a35fb5046a790ed4842ed3bb2b11ee59f0605",
+      "final_text_sha256": "ae8c90a84ca11c1f8e5611e7b80a35fb5046a790ed4842ed3bb2b11ee59f0605",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_unicode.o",
+      "before_text_sha256": "a2771fc7d9e5acc1e0ec7bca71117dd62d9a628ba19671073db689b252215fa3",
+      "final_text_sha256": "a2771fc7d9e5acc1e0ec7bca71117dd62d9a628ba19671073db689b252215fa3",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_exception.o",
+      "before_text_sha256": "097c440c5b387fa1811d24f5f67d1369aa280507bfb7afce6f5d371239530d3f",
+      "final_text_sha256": "097c440c5b387fa1811d24f5f67d1369aa280507bfb7afce6f5d371239530d3f",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_uri.o",
+      "before_text_sha256": "0c0eabe2461ff71edf58e747749edb9db6da7907d9cb09e4778d7093ea486d28",
+      "final_text_sha256": "0c0eabe2461ff71edf58e747749edb9db6da7907d9cb09e4778d7093ea486d28",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_parse_expr.o",
+      "before_text_sha256": "37aab44b0b824362a1992e38f7e307c808d212384a65c22da2d609db421f6c86",
+      "final_text_sha256": "37aab44b0b824362a1992e38f7e307c808d212384a65c22da2d609db421f6c86",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_resource.o",
+      "before_text_sha256": "f12d96fa12fd09fb443aa06443b5c0b19dac3d9681be30b0d72bb1ea78d7314b",
+      "final_text_sha256": "f12d96fa12fd09fb443aa06443b5c0b19dac3d9681be30b0d72bb1ea78d7314b",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_host.o",
+      "before_text_sha256": "3120c22f02e448df752a0ea2d5f02e8f389cd5704e801a54be8375d456866cc9",
+      "final_text_sha256": "3120c22f02e448df752a0ea2d5f02e8f389cd5704e801a54be8375d456866cc9",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_attribute.o",
+      "before_text_sha256": "a53d1c7ac3efc0b50787829237dbcb844a8d6750b8728ff6ff3401ee3cb70390",
+      "final_text_sha256": "a53d1c7ac3efc0b50787829237dbcb844a8d6750b8728ff6ff3401ee3cb70390",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_collection.o",
+      "before_text_sha256": "d7dfe2b37b84fb5a0e19a329c169116dedf8c368f9ce5aa23a81aad799ce7d9a",
+      "final_text_sha256": "d7dfe2b37b84fb5a0e19a329c169116dedf8c368f9ce5aa23a81aad799ce7d9a",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_insertion.o",
+      "before_text_sha256": "b91f51b70a171cedb641a6538bedaf1ca3377d55731b2ed1d5a770a12953e902",
+      "final_text_sha256": "b91f51b70a171cedb641a6538bedaf1ca3377d55731b2ed1d5a770a12953e902",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_hit.o",
+      "before_text_sha256": "8a86af72ff4eec14193e8f2fbb59c6aa6a4fcd21ee8200a5535fefbe32a44264",
+      "final_text_sha256": "8a86af72ff4eec14193e8f2fbb59c6aa6a4fcd21ee8200a5535fefbe32a44264",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_script.o",
+      "before_text_sha256": "20a0252b0c8bc56c28c574eb28e315ead019615133c5569791277e77a6dfd76e",
+      "final_text_sha256": "20a0252b0c8bc56c28c574eb28e315ead019615133c5569791277e77a6dfd76e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_vm_function.o",
+      "before_text_sha256": "c57cf25f9da867c6a3f903f9b683b2b4c5378caeb6b79cd046a135dec8cf4256",
+      "final_text_sha256": "c57cf25f9da867c6a3f903f9b683b2b4c5378caeb6b79cd046a135dec8cf4256",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_geometry.o",
+      "before_text_sha256": "233d26fdedc063b968c4dfaadbc270ad8c182e0a96b9a918f8680b2aae9b11ec",
+      "final_text_sha256": "233d26fdedc063b968c4dfaadbc270ad8c182e0a96b9a918f8680b2aae9b11ec",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_scope.o",
+      "before_text_sha256": "7560e414c68e54956e9759ebf25a4e9a870553d0a0a73b521230fa9be30cd490",
+      "final_text_sha256": "7560e414c68e54956e9759ebf25a4e9a870553d0a0a73b521230fa9be30cd490",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_promise.o",
+      "before_text_sha256": "c5008798d388ef8a84c4e81553d595cc9cdb3148dc5d847fdaa793a1d0d8c3b8",
+      "final_text_sha256": "c5008798d388ef8a84c4e81553d595cc9cdb3148dc5d847fdaa793a1d0d8c3b8",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_object.o",
+      "before_text_sha256": "410adc204e68004e68dd06348c0c886056adc04e18293da5fd0bb09aeba5f531",
+      "final_text_sha256": "410adc204e68004e68dd06348c0c886056adc04e18293da5fd0bb09aeba5f531",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_page.o",
+      "before_text_sha256": "e1e3d937df855636b9fe891c06a1f91f1bfef9010175b03932960d4936fc1932",
+      "final_text_sha256": "e1e3d937df855636b9fe891c06a1f91f1bfef9010175b03932960d4936fc1932",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_fonts.o",
+      "before_text_sha256": "5390e064b2ec83e3274c26ccedada16e8f64c4f453043830dbb9c3182bc7e490",
+      "final_text_sha256": "5390e064b2ec83e3274c26ccedada16e8f64c4f453043830dbb9c3182bc7e490",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_array.o",
+      "before_text_sha256": "c119f1e151ce69df7e8e38e89c65c391fcea6e56feb9771d23f8be886dfe3743",
+      "final_text_sha256": "c119f1e151ce69df7e8e38e89c65c391fcea6e56feb9771d23f8be886dfe3743",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_text_font.o",
+      "before_text_sha256": "e47aac7ac339a79b79d8ad9e09138a530fb4e7d061d94388dbdeb307add09654",
+      "final_text_sha256": "e47aac7ac339a79b79d8ad9e09138a530fb4e7d061d94388dbdeb307add09654",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin.o",
+      "before_text_sha256": "4d15a3f1595ba1eb1fcd4d7e99f7bc1dfe5cfa8e46aaac7894e123898776cdc6",
+      "final_text_sha256": "4d15a3f1595ba1eb1fcd4d7e99f7bc1dfe5cfa8e46aaac7894e123898776cdc6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_dom_node.o",
+      "before_text_sha256": "b33cc7e006f3a83c0466b90931f9c64ea754d3043d6bf850bdb72e534ccb5ea0",
+      "final_text_sha256": "b33cc7e006f3a83c0466b90931f9c64ea754d3043d6bf850bdb72e534ccb5ea0",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_tool.o",
+      "before_text_sha256": "4c7aedc6511e6c2a0d4f745474246ba35894e932e6d0af681fd38622ea49ff8e",
+      "final_text_sha256": "4c7aedc6511e6c2a0d4f745474246ba35894e932e6d0af681fd38622ea49ff8e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_node.o",
+      "before_text_sha256": "65c79c7df3628152a3a2b6ede00689acde74e06e621bb48ca1a2554ebf47431e",
+      "final_text_sha256": "65c79c7df3628152a3a2b6ede00689acde74e06e621bb48ca1a2554ebf47431e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_grid.o",
+      "before_text_sha256": "3d68690a8de8b91450dbe0234064195485da1268ff5dafc2ffcd65eb43fb9e0c",
+      "final_text_sha256": "3d68690a8de8b91450dbe0234064195485da1268ff5dafc2ffcd65eb43fb9e0c",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_index.o",
+      "before_text_sha256": "abbb5b9f197bb417c63703ca037967a089d7dcb7ba0c75013547e20a3a6cb3eb",
+      "final_text_sha256": "abbb5b9f197bb417c63703ca037967a089d7dcb7ba0c75013547e20a3a6cb3eb",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_select.o",
+      "before_text_sha256": "696cbaa5e0822b7278341059170ba3e172e5de498bdab82210b08046d62352ad",
+      "final_text_sha256": "696cbaa5e0822b7278341059170ba3e172e5de498bdab82210b08046d62352ad",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_mixin.o",
+      "before_text_sha256": "1498f7c5c86a1f65b2d1c4400474a7e84f032dfb71be32efd2f7fec1b279458b",
+      "final_text_sha256": "1498f7c5c86a1f65b2d1c4400474a7e84f032dfb71be32efd2f7fec1b279458b",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_iterator.o",
+      "before_text_sha256": "cfb8adae6008f8232947c2255f2eacf399619044f2999195c23ad94ff8443940",
+      "final_text_sha256": "cfb8adae6008f8232947c2255f2eacf399619044f2999195c23ad94ff8443940",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_parser.o",
+      "before_text_sha256": "23b47ccb1895a456f17edc75bcc5667f029f5e42b803a6d8f3c7ec370aeb59d9",
+      "final_text_sha256": "23b47ccb1895a456f17edc75bcc5667f029f5e42b803a6d8f3c7ec370aeb59d9",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_frame-resource.o",
+      "before_text_sha256": "79c5250af74e60ce415d61e9ac544471fc01a69da71738fc2066fc445b7a90a6",
+      "final_text_sha256": "79c5250af74e60ce415d61e9ac544471fc01a69da71738fc2066fc445b7a90a6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_layout_flex.o",
+      "before_text_sha256": "3b3688274339375140d6fafc241fa2ae26441968d18e2160ed851f05cb0f5c92",
+      "final_text_sha256": "3b3688274339375140d6fafc241fa2ae26441968d18e2160ed851f05cb0f5c92",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_emit.o",
+      "before_text_sha256": "76c6cf3dbf8529ac84734b45689a01661507200da6e690f5c3bfdeb0b562d22e",
+      "final_text_sha256": "76c6cf3dbf8529ac84734b45689a01661507200da6e690f5c3bfdeb0b562d22e",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_page_frame-load.o",
+      "before_text_sha256": "2aab38785a70c9370efab252419822ad460de5b23d11fbddc89ef3e3ccf2b8d9",
+      "final_text_sha256": "2aab38785a70c9370efab252419822ad460de5b23d11fbddc89ef3e3ccf2b8d9",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_js_builtin_number.o",
+      "before_text_sha256": "c92c365162b4bc14854ddfe410ff979d4ba4cc36da15fd766282ba67c688ed92",
+      "final_text_sha256": "c92c365162b4bc14854ddfe410ff979d4ba4cc36da15fd766282ba67c688ed92",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_environment.o",
+      "before_text_sha256": "087d8095e4e4409d08958b2b384bd7528a0f09c29d6688eaf4f58fb8879a4fc7",
+      "final_text_sha256": "087d8095e4e4409d08958b2b384bd7528a0f09c29d6688eaf4f58fb8879a4fc7",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_css_ua.o",
+      "before_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "final_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_html_foreign.o",
+      "before_text_sha256": "ef82ce9da7a4886c905163d45a3ab569a95fcad63691adb042df12cb0caf7b7d",
+      "final_text_sha256": "ef82ce9da7a4886c905163d45a3ab569a95fcad63691adb042df12cb0caf7b7d",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_base_file.o",
+      "before_text_sha256": "2e82f85c7857cd2d5a05ce86ae638c60e123065c3047bfaa5f2d3aa002f4fe49",
+      "final_text_sha256": "2e82f85c7857cd2d5a05ce86ae638c60e123065c3047bfaa5f2d3aa002f4fe49",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_paint_vulkan.o",
+      "before_text_sha256": "a87798a500e07cb1c3d3d1889817c09fd7c1a8f0ae29b552cc28e13427c94cd6",
+      "final_text_sha256": "a87798a500e07cb1c3d3d1889817c09fd7c1a8f0ae29b552cc28e13427c94cd6",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_net_cookie.o",
+      "before_text_sha256": "558f525265753aed7c757be58c92c577f5bac970c75164e88f2f6ac0da2357e1",
+      "final_text_sha256": "558f525265753aed7c757be58c92c577f5bac970c75164e88f2f6ac0da2357e1",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_image_gif.o",
+      "before_text_sha256": "f66374b6504e9418111b17ccc62ee6298c447ebdf18be45b51abce39f6d6e179",
+      "final_text_sha256": "f66374b6504e9418111b17ccc62ee6298c447ebdf18be45b51abce39f6d6e179",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/libbrowser_bind_computed.o",
+      "before_text_sha256": "fd15c3df185613c716cff0da963ddaa3ac5195ac42ad6bdb8a548c050d4362dc",
+      "final_text_sha256": "fd15c3df185613c716cff0da963ddaa3ac5195ac42ad6bdb8a548c050d4362dc",
+      "identical": true
+    },
+    {
+      "object": "build/a1-browser2/plain/obj/browser_main.o",
+      "before_text_sha256": "9b0147f88abe68c59ec306d196cefae68ca6ee09923f767642402472aba9752b",
+      "final_text_sha256": "9b0147f88abe68c59ec306d196cefae68ca6ee09923f767642402472aba9752b",
+      "identical": true
+    }
+  ]
+}

@@ -21,6 +21,12 @@
 
 #include "vm/vm.h"
 
+/* A script already prepared by the parser or by insertion is never run again. */
+#define DOM_NODE_SCRIPT_STARTED 0x0001U
+
+/* Setting a dynamic script's async property to false preserves insertion order. */
+#define DOM_NODE_SCRIPT_ORDERED 0x0002U
+
 /*
  * The kinds of node, numbered as the DOM's nodeType numbers them.
  */
@@ -231,6 +237,24 @@ enum dom_tag {
 };
 
 /*
+ * The kinds of form control (dom_control_kind): what the element draws and
+ * how it takes the user's input.
+ */
+enum dom_control_kind {
+	DOM_CONTROL_NONE,
+	DOM_CONTROL_TEXT,
+	DOM_CONTROL_PASSWORD,
+	DOM_CONTROL_BUTTON,
+	DOM_CONTROL_SUBMIT,
+	DOM_CONTROL_RESET,
+	DOM_CONTROL_CHECKBOX,
+	DOM_CONTROL_RADIO,
+	DOM_CONTROL_HIDDEN,
+	DOM_CONTROL_TEXTAREA,
+	DOM_CONTROL_SELECT
+};
+
+/*
  * The part every node shares: its kind, its document and its place in the
  * tree.
  *
@@ -256,10 +280,6 @@ struct dom_node {
 	struct vm_cell *listeners;
 };
 
-/* A script already prepared by the parser or by insertion is never run again. */
-#define DOM_NODE_SCRIPT_STARTED	0x0001U
-#define DOM_NODE_SCRIPT_ORDERED	0x0002U
-
 /*
  * One attribute of an element: its local name (an atom), its namespace and
  * prefix (for attributes of foreign content), and its value.
@@ -272,24 +292,6 @@ struct dom_attribute {
 	struct vm_string *value;
 	struct vm_string *namespace_uri;
 	int ns;
-};
-
-/*
- * The kinds of form control (dom_control_kind): what the element draws and
- * how it takes the user's input.
- */
-enum dom_control_kind {
-	DOM_CONTROL_NONE,
-	DOM_CONTROL_TEXT,
-	DOM_CONTROL_PASSWORD,
-	DOM_CONTROL_BUTTON,
-	DOM_CONTROL_SUBMIT,
-	DOM_CONTROL_RESET,
-	DOM_CONTROL_CHECKBOX,
-	DOM_CONTROL_RADIO,
-	DOM_CONTROL_HIDDEN,
-	DOM_CONTROL_TEXTAREA,
-	DOM_CONTROL_SELECT
 };
 
 /*
@@ -382,6 +384,7 @@ struct dom_element {
 	/* Last attempted source and generation invalidate stale asynchronous responses. */
 	struct vm_string *child_source;
 	uint64_t child_epoch;
+	/* Distinguish an unobserved source from an attempted absent or empty source. */
 	int child_load_seen;
 };
 
@@ -470,6 +473,7 @@ struct dom_document *dom_document_create(struct vm_heap *heap);
 struct dom_element *dom_element_create(struct dom_document *document, int ns, struct vm_string *local_name, struct vm_string *prefix);
 struct dom_node *dom_text_create(struct dom_document *document, const uint16_t *units, size_t length);
 struct dom_node *dom_comment_create(struct dom_document *document, const uint16_t *units, size_t length);
+
 /* Native XML factories copy caller-owned C data and root the actual Document and optional PI target. */
 int dom_cdata_create(struct dom_document *document, const uint16_t *units, size_t length, struct dom_node **created);
 int dom_pi_create(struct dom_document *document, struct vm_string *target, const uint16_t *units, size_t length, struct dom_node **created);
@@ -484,6 +488,7 @@ void dom_remove(struct dom_node *child);
 int dom_text_append(struct dom_node *node, const uint16_t *units, size_t length);
 int dom_element_add_attribute(struct dom_element *element, int ns, struct vm_string *prefix, struct vm_string *name, struct vm_string *value);
 struct dom_attribute *dom_element_find_attribute(const struct dom_element *element, int ns, const struct vm_string *name);
+
 /* Exact URI helpers preserve custom expanded names; inputs are already validated native strings. */
 int dom_element_add_attribute_uri(struct dom_element *element, struct vm_string *uri, struct vm_string *prefix, struct vm_string *name, struct vm_string *value);
 struct dom_attribute *dom_element_find_attribute_uri(const struct dom_element *element, const struct vm_string *uri, const struct vm_string *name);
@@ -505,6 +510,7 @@ struct dom_element *dom_form_owner(const struct dom_element *element);
 int dom_control_kind(const struct dom_element *element);
 struct dom_control *dom_control_of(struct dom_element *element);
 int dom_control_value(struct dom_element *element, struct wb_units *out);
+
 /* Native input text prepares owned storage before changing dirty value state. */
 int dom_input_set_value(struct dom_element *element, const uint16_t *units, size_t length);
 int dom_input_clone_value(struct dom_element *destination, const struct dom_element *source);
@@ -512,6 +518,7 @@ int dom_control_set_value(struct dom_element *element, const uint16_t *units, si
 int dom_control_label(const struct dom_element *element, struct wb_units *out);
 int dom_option_text(const struct dom_element *option, struct wb_units *out);
 struct dom_element *dom_select_chosen(struct dom_element *select);
+
 /* Explicit native setters use current radio membership without automatic mutation hooks. */
 int dom_input_is_radio(const struct dom_element *element);
 struct dom_element *dom_input_checked_radio(struct dom_element *element);

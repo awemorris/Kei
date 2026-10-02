@@ -29,353 +29,72 @@
 #include <stdint.h>
 #include <string.h>
 
-struct vm_heap;
-struct vm_cell;
-
-/*
- * The behavior every cell of one kind shares.
- *
- * trace marks the cells a cell refers to (with vm_heap_mark); finalize
- * frees what a dead cell owns outside the heap and must not allocate in
- * the heap.  Either may be NULL.  A type lives as long as the program:
- * cells point to it.
- */
-struct vm_cell_type {
-	const char *name;
-	void (*trace)(struct vm_heap *heap, struct vm_cell *cell);
-	void (*finalize)(struct vm_heap *heap, struct vm_cell *cell);
-};
-
-/*
- * The header at the start of every cell.
- *
- * A cell's own structure begins with this header, so a pointer to the
- * structure is a pointer to its cell.
- */
-struct vm_cell {
-	const struct vm_cell_type *type;
-};
-
-/*
- * A string in the heap: Latin-1 (one byte per unit) or UTF-16.
- *
- * The characters follow the header; vm_string_latin1 and vm_string_units
- * find them.  Strings never change after they are made.  An atom is a
- * string interned in its heap's atom table: two atoms with the same
- * characters are the same cell, so atoms compare by pointer.
- */
-struct vm_string {
-	struct vm_cell cell;
-	uint32_t length;
-	uint32_t hash;
-	uint32_t flags;
-	uint32_t reserved;
-};
-
 /* The string's characters are UTF-16 code units rather than Latin-1 bytes. */
-#define VM_STRING_WIDE		0x1U
+#define VM_STRING_WIDE 0x1U
 
 /* The string is its heap's atom for these characters. */
-#define VM_STRING_ATOM		0x2U
+#define VM_STRING_ATOM 0x2U
 
 /* The hash field holds the string's hash. */
-#define VM_STRING_HASHED	0x4U
-
-/*
- * A function that marks cells a subsystem holds outside the heap.
- */
-typedef void (*vm_tracer)(struct vm_heap *heap, void *context);
-
-/*
- * What the heap has done, for tests and diagnostics.
- */
-struct vm_heap_stats {
-	size_t live_bytes;
-	size_t live_cells;
-	size_t heap_bytes;
-	size_t collections;
-	size_t freed_cells;
-};
-
-/* The heap (heap.c). */
-int vm_heap_create(struct vm_heap **heap, size_t limit);
-void vm_heap_destroy(struct vm_heap *heap);
-void vm_heap_set_stack_base(struct vm_heap *heap, const void *base);
-void *vm_heap_alloc(struct vm_heap *heap, const struct vm_cell_type *type, size_t size);
-void vm_heap_collect(struct vm_heap *heap);
-void vm_heap_mark(struct vm_heap *heap, struct vm_cell *cell);
-void vm_heap_mark_word(struct vm_heap *heap, uintptr_t word);
-int vm_heap_add_root(struct vm_heap *heap, struct vm_cell **slot);
-void vm_heap_remove_root(struct vm_heap *heap, struct vm_cell **slot);
-int vm_heap_add_tracer(struct vm_heap *heap, vm_tracer tracer, void *context);
-void vm_heap_remove_tracer(struct vm_heap *heap, vm_tracer tracer, void *context);
-struct vm_cell *vm_heap_find_cell(struct vm_heap *heap, uintptr_t word);
-void vm_heap_stats(const struct vm_heap *heap, struct vm_heap_stats *stats);
-
-/* Strings (string.c). */
-extern const struct vm_cell_type vm_string_type;
-struct vm_string *vm_string_from_latin1(struct vm_heap *heap, const unsigned char *bytes, size_t length);
-struct vm_string *vm_string_from_units(struct vm_heap *heap, const uint16_t *units, size_t length);
-struct vm_string *vm_string_from_utf8(struct vm_heap *heap, const char *bytes, size_t length);
-struct vm_string *vm_string_concat(struct vm_heap *heap, const struct vm_string *left, const struct vm_string *right);
-const unsigned char *vm_string_latin1(const struct vm_string *string);
-const uint16_t *vm_string_units(const struct vm_string *string);
-uint16_t vm_string_at(const struct vm_string *string, size_t index);
-uint32_t vm_string_hash(struct vm_string *string);
-int vm_string_equal(const struct vm_string *left, const struct vm_string *right);
-int vm_string_equal_ascii(const struct vm_string *string, const char *ascii);
-int vm_string_equal_units(const struct vm_string *string, const uint16_t *units, size_t length);
-int vm_string_compare(const struct vm_string *left, const struct vm_string *right);
-int vm_string_to_utf8(const struct vm_string *string, struct wb_buffer *buffer);
-int vm_string_append_units(const struct vm_string *string, struct wb_units *units);
-
-/* Atoms (atom.c). */
-struct vm_string *vm_atom(struct vm_heap *heap, struct vm_string *string);
-struct vm_string *vm_atom_from_ascii(struct vm_heap *heap, const char *ascii);
-struct vm_string *vm_atom_from_units(struct vm_heap *heap, const uint16_t *units, size_t length);
-struct vm_string *vm_atom_find_units(struct vm_heap *heap, const uint16_t *units, size_t length);
-
-/*
- * A value of the engine: 64 bits, NaN-boxed as in JavaScriptCore
- * (plan/ws074/design.md §11.1).
- *
- * A cell (an object, a string, a symbol) is its pointer, whose top 16 bits
- * are zero and whose low 4 bits are zero (cells are 16-byte aligned).  An
- * int32 is VM_VALUE_INT32_TAG with the number in the low 32 bits.  A double
- * is its bits plus 2^49, which puts every double (NaN made canonical) above
- * the pointers and below the int32s.  undefined, null, true, false and the
- * empty value (an array's hole, a slot never written) are small constants
- * no cell can have.  Wasm keeps its values unboxed in registers (§11.1), so
- * this form is only JavaScript's.
- */
-typedef uint64_t vm_value;
+#define VM_STRING_HASHED 0x4U
 
 /* The small constants. */
-#define VM_VALUE_EMPTY		0x00ULL
-#define VM_VALUE_NULL		0x02ULL
-#define VM_VALUE_FALSE		0x06ULL
-#define VM_VALUE_TRUE		0x07ULL
-#define VM_VALUE_UNDEFINED	0x0AULL
+#define VM_VALUE_EMPTY 0x00ULL
+#define VM_VALUE_NULL 0x02ULL
+#define VM_VALUE_FALSE 0x06ULL
+#define VM_VALUE_TRUE 0x07ULL
+#define VM_VALUE_UNDEFINED 0x0AULL
 
 /* The tag every number has some of, and an int32 has all of. */
-#define VM_VALUE_INT32_TAG	0xFFFE000000000000ULL
+#define VM_VALUE_INT32_TAG 0xFFFE000000000000ULL
 
 /* The bit the small constants share and cells never have. */
-#define VM_VALUE_OTHER_TAG	0x02ULL
+#define VM_VALUE_OTHER_TAG 0x02ULL
 
 /* What is added to a double's bits. */
-#define VM_VALUE_DOUBLE_OFFSET	(1ULL << 49)
+#define VM_VALUE_DOUBLE_OFFSET (1ULL << 49)
 
 /* The bits of the canonical NaN, the one NaN a value holds. */
-#define VM_VALUE_NAN_BITS	0x7FF8000000000000ULL
-
-/* Makes an int32 value. */
-static __inline vm_value
-vm_value_int32(
-	int32_t number)
-{
-	/* The tag, and the number's 32 bits. */
-	return VM_VALUE_INT32_TAG | (uint64_t)(uint32_t)number;
-}
-
-/* Makes a double value (the NaNs become the canonical one). */
-static __inline vm_value
-vm_value_double(
-	double number)
-{
-	uint64_t bits;
-
-	/* The double's bits; a NaN of any payload becomes the canonical one. */
-	memcpy(&bits, &number, sizeof(bits));
-	if (number != number)
-		bits = VM_VALUE_NAN_BITS;
-
-	/* Shifted above the pointers. */
-	return bits + VM_VALUE_DOUBLE_OFFSET;
-}
-
-/* Makes a number value: an int32 when the number is one (not -0), a double otherwise. */
-static __inline vm_value
-vm_value_number(
-	double number)
-{
-	int32_t whole;
-
-	/* A number out of int32's range, or with a fraction, stays a double. */
-	if (!(number >= -2147483648.0 && number <= 2147483647.0))
-		return vm_value_double(number);
-	whole = (int32_t)number;
-	if ((double)whole != number)
-		return vm_value_double(number);
-
-	/* Zero keeps its sign as a double (-0 is not an int32). */
-	if (whole == 0 && 1.0 / number < 0.0)
-		return vm_value_double(number);
-
-	/* A whole number in range is an int32. */
-	return vm_value_int32(whole);
-}
-
-/* Makes a cell's value. */
-static __inline vm_value
-vm_value_cell(
-	const void *cell)
-{
-	/* The pointer itself. */
-	return (vm_value)(uintptr_t)cell;
-}
-
-/* Makes true or false. */
-static __inline vm_value
-vm_value_boolean(
-	int truth)
-{
-	/* True for any nonzero truth. */
-	if (truth)
-		return VM_VALUE_TRUE;
-
-	/* False otherwise. */
-	return VM_VALUE_FALSE;
-}
-
-/* Tells whether a value is an int32. */
-static __inline int
-vm_value_is_int32(
-	vm_value value)
-{
-	/* Every tag bit is set. */
-	if ((value & VM_VALUE_INT32_TAG) == VM_VALUE_INT32_TAG)
-		return 1;
-
-	/* Some tag bit is clear. */
-	return 0;
-}
-
-/* Tells whether a value is a number (an int32 or a double). */
-static __inline int
-vm_value_is_number(
-	vm_value value)
-{
-	/* Some tag bit is set. */
-	if ((value & VM_VALUE_INT32_TAG) != 0U)
-		return 1;
-
-	/* No tag bit: a cell or a constant. */
-	return 0;
-}
-
-/* Tells whether a value is a double. */
-static __inline int
-vm_value_is_double(
-	vm_value value)
-{
-	/* A number that is not an int32. */
-	if (!vm_value_is_number(value))
-		return 0;
-	if (vm_value_is_int32(value))
-		return 0;
-
-	/* A double. */
-	return 1;
-}
-
-/* Tells whether a value is a cell (not the empty value). */
-static __inline int
-vm_value_is_cell(
-	vm_value value)
-{
-	/* No tag bit and not the other constants' bit. */
-	if ((value & (VM_VALUE_INT32_TAG | VM_VALUE_OTHER_TAG)) != 0U)
-		return 0;
-
-	/* The empty value is zero, which is no cell. */
-	if (value == VM_VALUE_EMPTY)
-		return 0;
-
-	/* A cell's pointer. */
-	return 1;
-}
-
-/* Tells whether a value is true or false. */
-static __inline int
-vm_value_is_boolean(
-	vm_value value)
-{
-	/* The two constants differ only in their lowest bit. */
-	if ((value & ~1ULL) == VM_VALUE_FALSE)
-		return 1;
-
-	/* Anything else. */
-	return 0;
-}
-
-/* Reports an int32 value's number. */
-static __inline int32_t
-vm_value_as_int32(
-	vm_value value)
-{
-	/* The low 32 bits. */
-	return (int32_t)(uint32_t)value;
-}
-
-/* Reports a double value's number. */
-static __inline double
-vm_value_as_double(
-	vm_value value)
-{
-	uint64_t bits;
-	double number;
-
-	/* The bits before the shift. */
-	bits = value - VM_VALUE_DOUBLE_OFFSET;
-	memcpy(&number, &bits, sizeof(number));
-
-	/* Reports the double. */
-	return number;
-}
-
-/* Reports a number value (an int32 or a double) as a double. */
-static __inline double
-vm_value_as_number(
-	vm_value value)
-{
-	/* An int32's number. */
-	if (vm_value_is_int32(value))
-		return (double)vm_value_as_int32(value);
-
-	/* A double's. */
-	return vm_value_as_double(value);
-}
-
-/* Reports a cell value's cell. */
-static __inline struct vm_cell *
-vm_value_as_cell(
-	vm_value value)
-{
-	/* The pointer. */
-	return (struct vm_cell *)(uintptr_t)value;
-}
+#define VM_VALUE_NAN_BITS 0x7FF8000000000000ULL
 
 /* The attributes of a property. */
-#define VM_PROPERTY_WRITABLE		0x1U
-#define VM_PROPERTY_ENUMERABLE		0x2U
-#define VM_PROPERTY_CONFIGURABLE	0x4U
-#define VM_PROPERTY_ACCESSOR		0x8U
+#define VM_PROPERTY_WRITABLE 0x1U
+#define VM_PROPERTY_ENUMERABLE 0x2U
+#define VM_PROPERTY_CONFIGURABLE 0x4U
+#define VM_PROPERTY_ACCESSOR 0x8U
 
 /* The attributes of a property made by assignment. */
-#define VM_PROPERTY_DEFAULT		(VM_PROPERTY_WRITABLE | VM_PROPERTY_ENUMERABLE | VM_PROPERTY_CONFIGURABLE)
+#define VM_PROPERTY_DEFAULT (VM_PROPERTY_WRITABLE | VM_PROPERTY_ENUMERABLE | VM_PROPERTY_CONFIGURABLE)
 
 /* The status a native function or an engine call reports when it threw (the value is the realm's exception). */
-#define VM_THROWN			(-1)
+#define VM_THROWN (-1)
 
 /* The object's flags: it is an array; it takes no new properties. */
-#define VM_OBJECT_ARRAY			0x1U
-#define VM_OBJECT_NOT_EXTENSIBLE	0x2U
+#define VM_OBJECT_ARRAY 0x1U
+#define VM_OBJECT_NOT_EXTENSIBLE 0x2U
 
 /* The hints of ToPrimitive: which of valueOf and toString is tried first. */
-#define VM_HINT_DEFAULT			0
-#define VM_HINT_NUMBER			1
-#define VM_HINT_STRING			2
+#define VM_HINT_DEFAULT 0
+#define VM_HINT_NUMBER 1
+#define VM_HINT_STRING 2
+
+/* Which fields a property descriptor has. */
+#define VM_HAS_VALUE 0x01U
+#define VM_HAS_WRITABLE 0x02U
+#define VM_HAS_GET 0x04U
+#define VM_HAS_SET 0x08U
+#define VM_HAS_ENUMERABLE 0x10U
+#define VM_HAS_CONFIGURABLE 0x20U
+
+/* The states of a promise. */
+#define VM_PROMISE_PENDING 0U
+#define VM_PROMISE_FULFILLED 1U
+#define VM_PROMISE_REJECTED 2U
+
+/* How a generator or an async function is resumed: with a value, with an exception, or told to return. */
+#define VM_RESUME_NEXT 0
+#define VM_RESUME_THROW 1
+#define VM_RESUME_RETURN 2
 
 /*
  * The operators of vm_numeric: the arithmetic ones on numbers and the
@@ -480,25 +199,6 @@ enum vm_error_kind {
 	VM_ERROR_URI
 };
 
-struct vm_shape;
-struct vm_realm;
-struct vm_code;
-struct vm_env;
-
-/*
- * A symbol: a unique property key with a description (a string or
- * undefined).  A private name (a class's #x, ws074-p085) is a symbol too,
- * marked private_name: it is never listed among an object's keys, and
- * only the class's code can read it.  registered marks a symbol of the
- * global registry (Symbol.for, ws074-p087), whose key is its description.
- */
-struct vm_symbol {
-	struct vm_cell cell;
-	vm_value description;
-	int private_name;
-	int registered;
-};
-
 /*
  * The kinds of object the built-ins tell apart (Object.prototype.toString,
  * the methods that need a Boolean, a Number, a String or an Error).
@@ -523,6 +223,101 @@ enum vm_object_kind {
 	VM_KIND_SET,
 	VM_KIND_WEAK_MAP,
 	VM_KIND_WEAK_SET
+};
+
+/* Heap and cell identity precede the callbacks that refer to them. */
+struct vm_heap;
+struct vm_cell;
+
+/*
+ * The behavior every cell of one kind shares.
+ *
+ * trace marks the cells a cell refers to (with vm_heap_mark); finalize
+ * frees what a dead cell owns outside the heap and must not allocate in
+ * the heap.  Either may be NULL.  A type lives as long as the program:
+ * cells point to it.
+ */
+struct vm_cell_type {
+	const char *name;
+	void (*trace)(struct vm_heap *heap, struct vm_cell *cell);
+	void (*finalize)(struct vm_heap *heap, struct vm_cell *cell);
+};
+
+/*
+ * The header at the start of every cell.
+ *
+ * A cell's own structure begins with this header, so a pointer to the
+ * structure is a pointer to its cell.
+ */
+struct vm_cell {
+	const struct vm_cell_type *type;
+};
+
+/*
+ * A string in the heap: Latin-1 (one byte per unit) or UTF-16.
+ *
+ * The characters follow the header; vm_string_latin1 and vm_string_units
+ * find them.  Strings never change after they are made.  An atom is a
+ * string interned in its heap's atom table: two atoms with the same
+ * characters are the same cell, so atoms compare by pointer.
+ */
+struct vm_string {
+	struct vm_cell cell;
+	uint32_t length;
+	uint32_t hash;
+	uint32_t flags;
+	uint32_t reserved;
+};
+
+/*
+ * A function that marks cells a subsystem holds outside the heap.
+ */
+typedef void (*vm_tracer)(struct vm_heap *heap, void *context);
+
+/*
+ * What the heap has done, for tests and diagnostics.
+ */
+struct vm_heap_stats {
+	size_t live_bytes;
+	size_t live_cells;
+	size_t heap_bytes;
+	size_t collections;
+	size_t freed_cells;
+};
+
+/*
+ * A value of the engine: 64 bits, NaN-boxed as in JavaScriptCore
+ * (plan/ws074/design.md §11.1).
+ *
+ * A cell (an object, a string, a symbol) is its pointer, whose top 16 bits
+ * are zero and whose low 4 bits are zero (cells are 16-byte aligned).  An
+ * int32 is VM_VALUE_INT32_TAG with the number in the low 32 bits.  A double
+ * is its bits plus 2^49, which puts every double (NaN made canonical) above
+ * the pointers and below the int32s.  undefined, null, true, false and the
+ * empty value (an array's hole, a slot never written) are small constants
+ * no cell can have.  Wasm keeps its values unboxed in registers (§11.1), so
+ * this form is only JavaScript's.
+ */
+typedef uint64_t vm_value;
+
+/* Shapes, execution owners and lexical environments have private definitions. */
+struct vm_shape;
+struct vm_realm;
+struct vm_code;
+struct vm_env;
+
+/*
+ * A symbol: a unique property key with a description (a string or
+ * undefined).  A private name (a class's #x, ws074-p085) is a symbol too,
+ * marked private_name: it is never listed among an object's keys, and
+ * only the class's code can read it.  registered marks a symbol of the
+ * global registry (Symbol.for, ws074-p087), whose key is its description.
+ */
+struct vm_symbol {
+	struct vm_cell cell;
+	vm_value description;
+	int private_name;
+	int registered;
 };
 
 /*
@@ -577,14 +372,6 @@ struct vm_property {
 	/* Virtual properties publish their data in the caller's property record. */
 	vm_value temporary;
 };
-
-/* Which fields a property descriptor has. */
-#define VM_HAS_VALUE			0x01U
-#define VM_HAS_WRITABLE			0x02U
-#define VM_HAS_GET			0x04U
-#define VM_HAS_SET			0x08U
-#define VM_HAS_ENUMERABLE		0x10U
-#define VM_HAS_CONFIGURABLE		0x20U
 
 /*
  * A property descriptor (Object.defineProperty's argument, or what
@@ -720,6 +507,59 @@ struct vm_job {
  */
 typedef void (*vm_job_report)(struct vm_realm *realm, vm_value exception, void *context);
 
+/* Strings (string.c). */
+extern const struct vm_cell_type vm_string_type;
+
+/* Objects (object.c). */
+extern const struct vm_cell_type vm_object_type;
+extern const struct vm_cell_type vm_array_type;
+extern const struct vm_cell_type vm_symbol_type;
+extern const struct vm_cell_type vm_accessor_type;
+
+/* Functions (function.c). */
+extern const struct vm_cell_type vm_function_type;
+
+/* Promises (promise.c, ws074-p086). */
+extern const struct vm_cell_type vm_promise_type;
+extern const struct vm_cell_type vm_promise_job_type;
+
+/* The heap (heap.c). */
+int vm_heap_create(struct vm_heap **heap, size_t limit);
+void vm_heap_destroy(struct vm_heap *heap);
+void vm_heap_set_stack_base(struct vm_heap *heap, const void *base);
+void *vm_heap_alloc(struct vm_heap *heap, const struct vm_cell_type *type, size_t size);
+void vm_heap_collect(struct vm_heap *heap);
+void vm_heap_mark(struct vm_heap *heap, struct vm_cell *cell);
+void vm_heap_mark_word(struct vm_heap *heap, uintptr_t word);
+int vm_heap_add_root(struct vm_heap *heap, struct vm_cell **slot);
+void vm_heap_remove_root(struct vm_heap *heap, struct vm_cell **slot);
+int vm_heap_add_tracer(struct vm_heap *heap, vm_tracer tracer, void *context);
+void vm_heap_remove_tracer(struct vm_heap *heap, vm_tracer tracer, void *context);
+struct vm_cell *vm_heap_find_cell(struct vm_heap *heap, uintptr_t word);
+void vm_heap_stats(const struct vm_heap *heap, struct vm_heap_stats *stats);
+
+/* Strings (string.c). */
+struct vm_string *vm_string_from_latin1(struct vm_heap *heap, const unsigned char *bytes, size_t length);
+struct vm_string *vm_string_from_units(struct vm_heap *heap, const uint16_t *units, size_t length);
+struct vm_string *vm_string_from_utf8(struct vm_heap *heap, const char *bytes, size_t length);
+struct vm_string *vm_string_concat(struct vm_heap *heap, const struct vm_string *left, const struct vm_string *right);
+const unsigned char *vm_string_latin1(const struct vm_string *string);
+const uint16_t *vm_string_units(const struct vm_string *string);
+uint16_t vm_string_at(const struct vm_string *string, size_t index);
+uint32_t vm_string_hash(struct vm_string *string);
+int vm_string_equal(const struct vm_string *left, const struct vm_string *right);
+int vm_string_equal_ascii(const struct vm_string *string, const char *ascii);
+int vm_string_equal_units(const struct vm_string *string, const uint16_t *units, size_t length);
+int vm_string_compare(const struct vm_string *left, const struct vm_string *right);
+int vm_string_to_utf8(const struct vm_string *string, struct wb_buffer *buffer);
+int vm_string_append_units(const struct vm_string *string, struct wb_units *units);
+
+/* Atoms (atom.c). */
+struct vm_string *vm_atom(struct vm_heap *heap, struct vm_string *string);
+struct vm_string *vm_atom_from_ascii(struct vm_heap *heap, const char *ascii);
+struct vm_string *vm_atom_from_units(struct vm_heap *heap, const uint16_t *units, size_t length);
+struct vm_string *vm_atom_find_units(struct vm_heap *heap, const uint16_t *units, size_t length);
+
 /* Values and keys (object.c). */
 void vm_heap_mark_value(struct vm_heap *heap, vm_value value);
 int vm_value_is_object(vm_value value);
@@ -729,15 +569,12 @@ int vm_key_from_string(struct vm_heap *heap, struct vm_string *string, vm_value 
 vm_value vm_key_from_ascii(struct vm_heap *heap, const char *ascii);
 
 /* Objects (object.c). */
-extern const struct vm_cell_type vm_object_type;
-extern const struct vm_cell_type vm_array_type;
-extern const struct vm_cell_type vm_symbol_type;
-extern const struct vm_cell_type vm_accessor_type;
 struct vm_object *vm_object_create(struct vm_heap *heap, struct vm_object *prototype);
 struct vm_object *vm_array_create(struct vm_heap *heap, struct vm_object *prototype);
 int vm_object_init(struct vm_heap *heap, struct vm_object *object, struct vm_object *prototype);
 struct vm_symbol *vm_symbol_create(struct vm_heap *heap, vm_value description);
 struct vm_accessor *vm_accessor_create(struct vm_heap *heap, vm_value getter, vm_value setter);
+
 /* Lookups report missing 0, found 1, or negative errno; status APIs remain positive errno. */
 int vm_object_get_own(struct vm_object *object, vm_value key, struct vm_property *property);
 int vm_object_get_own_ordinary(struct vm_object *object, vm_value key, struct vm_property *property);
@@ -760,7 +597,6 @@ uint32_t vm_shape_count(const struct vm_shape *shape);
 int vm_shape_keys(const struct vm_shape *shape, vm_value *keys, uint32_t *slots, uint32_t *attributes);
 
 /* Functions (function.c). */
-extern const struct vm_cell_type vm_function_type;
 struct vm_function *vm_function_create_native(struct vm_realm *realm, const char *name, unsigned length, vm_native native);
 int vm_value_is_callable(vm_value value);
 int vm_value_is_constructor(vm_value value);
@@ -773,6 +609,7 @@ int vm_throw_site(const struct vm_realm *realm, vm_value exception, uint32_t *li
 
 /* Realms (realm.c). */
 int vm_realm_create(struct vm_heap *heap, struct vm_realm **realm);
+
 /* Makes a collectible child realm; only the heap destroys its resources. */
 int vm_realm_create_managed(struct vm_heap *heap, struct vm_realm **realm);
 void vm_realm_destroy(struct vm_realm *realm);
@@ -841,19 +678,7 @@ int vm_private_define(struct vm_realm *realm, vm_value object, vm_value key, vm_
 int vm_private_copy(struct vm_realm *realm, vm_value target, vm_value source, vm_value key);
 int vm_private_in(struct vm_realm *realm, vm_value key, vm_value object, vm_value *result);
 
-/* The states of a promise. */
-#define VM_PROMISE_PENDING		0U
-#define VM_PROMISE_FULFILLED		1U
-#define VM_PROMISE_REJECTED		2U
-
-/* How a generator or an async function is resumed: with a value, with an exception, or told to return. */
-#define VM_RESUME_NEXT			0
-#define VM_RESUME_THROW			1
-#define VM_RESUME_RETURN		2
-
 /* Promises (promise.c, ws074-p086). */
-extern const struct vm_cell_type vm_promise_type;
-extern const struct vm_cell_type vm_promise_job_type;
 int vm_value_is_promise(vm_value value);
 int vm_promise_create(struct vm_realm *realm, struct vm_object *prototype, vm_value *promise);
 int vm_promise_state(vm_value promise, vm_value *result);
@@ -890,5 +715,220 @@ int vm_for_in_next(struct vm_realm *realm, vm_value iterator, vm_value *key, int
 /* The interpreter (interpreter.c). */
 int vm_interpret(struct vm_realm *realm, struct vm_function *function, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 int vm_interpret_construct(struct vm_realm *realm, struct vm_function *function, vm_value this_value, const vm_value *args, unsigned count, vm_value new_target, vm_value *result);
+
+/* Makes an int32 value. */
+static __inline vm_value
+vm_value_int32(
+	int32_t number)
+{
+	/* The tag, and the number's 32 bits. */
+	return VM_VALUE_INT32_TAG | (uint64_t)(uint32_t)number;
+}
+
+/* Makes a double value (the NaNs become the canonical one). */
+static __inline vm_value
+vm_value_double(
+	double number)
+{
+	uint64_t bits;
+
+	/* The double's bits; a NaN of any payload becomes the canonical one. */
+	memcpy(&bits, &number, sizeof(bits));
+	if (number != number)
+		bits = VM_VALUE_NAN_BITS;
+
+	/* Shifted above the pointers. */
+	return bits + VM_VALUE_DOUBLE_OFFSET;
+}
+
+/* Makes a number value: an int32 when the number is one (not -0), a double otherwise. */
+static __inline vm_value
+vm_value_number(
+	double number)
+{
+	int32_t whole;
+	vm_value result;
+
+	/* A number out of int32's range, or with a fraction, stays a double. */
+	if (!(number >= -2147483648.0 && number <= 2147483647.0)) {
+		result = vm_value_double(number);
+		return result;
+	}
+
+	/* Only in-range values may be converted to int32 without overflow. */
+	whole = (int32_t)number;
+	if ((double)whole != number) {
+		result = vm_value_double(number);
+		return result;
+	}
+
+	/* Zero keeps its sign as a double (-0 is not an int32). */
+	if (whole == 0 && 1.0 / number < 0.0) {
+		result = vm_value_double(number);
+		return result;
+	}
+
+	/* A whole number in range is an int32. */
+	result = vm_value_int32(whole);
+
+	/* The boxed value retains this exact integer. */
+	return result;
+}
+
+/* Makes a cell's value. */
+static __inline vm_value
+vm_value_cell(
+	const void *cell)
+{
+	/* The pointer itself. */
+	return (vm_value)(uintptr_t)cell;
+}
+
+/* Makes true or false. */
+static __inline vm_value
+vm_value_boolean(
+	int truth)
+{
+	/* True for any nonzero truth. */
+	if (truth)
+		return VM_VALUE_TRUE;
+
+	/* False otherwise. */
+	return VM_VALUE_FALSE;
+}
+
+/* Tells whether a value is an int32. */
+static __inline int
+vm_value_is_int32(
+	vm_value value)
+{
+	/* Every tag bit is set. */
+	if ((value & VM_VALUE_INT32_TAG) == VM_VALUE_INT32_TAG)
+		return 1;
+
+	/* Some tag bit is clear. */
+	return 0;
+}
+
+/* Tells whether a value is a number (an int32 or a double). */
+static __inline int
+vm_value_is_number(
+	vm_value value)
+{
+	/* Some tag bit is set. */
+	if ((value & VM_VALUE_INT32_TAG) != 0U)
+		return 1;
+
+	/* No tag bit: a cell or a constant. */
+	return 0;
+}
+
+/* Tells whether a value is a double. */
+static __inline int
+vm_value_is_double(
+	vm_value value)
+{
+	int number;
+	int integer;
+
+	/* A number that is not an int32. */
+	number = vm_value_is_number(value);
+	if (!number)
+		return 0;
+
+	/* An int32 is boxed separately from every double. */
+	integer = vm_value_is_int32(value);
+	if (integer)
+		return 0;
+
+	/* A double. */
+	return 1;
+}
+
+/* Tells whether a value is a cell (not the empty value). */
+static __inline int
+vm_value_is_cell(
+	vm_value value)
+{
+	/* No tag bit and not the other constants' bit. */
+	if ((value & (VM_VALUE_INT32_TAG | VM_VALUE_OTHER_TAG)) != 0U)
+		return 0;
+
+	/* The empty value is zero, which is no cell. */
+	if (value == VM_VALUE_EMPTY)
+		return 0;
+
+	/* A cell's pointer. */
+	return 1;
+}
+
+/* Tells whether a value is true or false. */
+static __inline int
+vm_value_is_boolean(
+	vm_value value)
+{
+	/* The two constants differ only in their lowest bit. */
+	if ((value & ~1ULL) == VM_VALUE_FALSE)
+		return 1;
+
+	/* Anything else. */
+	return 0;
+}
+
+/* Reports an int32 value's number. */
+static __inline int32_t
+vm_value_as_int32(
+	vm_value value)
+{
+	/* The low 32 bits. */
+	return (int32_t)(uint32_t)value;
+}
+
+/* Reports a double value's number. */
+static __inline double
+vm_value_as_double(
+	vm_value value)
+{
+	uint64_t bits;
+	double number;
+
+	/* The bits before the shift. */
+	bits = value - VM_VALUE_DOUBLE_OFFSET;
+	memcpy(&number, &bits, sizeof(number));
+
+	/* Reports the double. */
+	return number;
+}
+
+/* Reports a number value (an int32 or a double) as a double. */
+static __inline double
+vm_value_as_number(
+	vm_value value)
+{
+	double number;
+	int integer;
+
+	/* An int32's number. */
+	integer = vm_value_is_int32(value);
+	if (integer) {
+		number = (double)vm_value_as_int32(value);
+		return number;
+	}
+
+	/* A double's. */
+	number = vm_value_as_double(value);
+
+	/* The decoded number belongs to the caller. */
+	return number;
+}
+
+/* Reports a cell value's cell. */
+static __inline struct vm_cell *
+vm_value_as_cell(
+	vm_value value)
+{
+	/* The pointer. */
+	return (struct vm_cell *)(uintptr_t)value;
+}
 
 #endif
