@@ -511,7 +511,7 @@ segment_headword_ends(
 	size_t i;
 	bool found;
 
-	/* Each dictionary's entry adds the okurigana its candidates take; a supplement's adds them to the everyday ends too. */
+	/* Each dictionary's entry adds the okurigana its candidates take. */
 	found = false;
 	for (i = 0; i < lexicon->dict_count; i++) {
 		entry = ja_dict_find(lexicon->dicts[i], key, stem_length + 1U);
@@ -520,6 +520,8 @@ segment_headword_ends(
 
 		found = true;
 		segment_entry_ends(lexicon, entry, text, key, stem_length, stem_end, ends);
+
+		/* A supplement's okurigana are everyday ones too; the system dictionary is the last. */
 		if (i + 1U < lexicon->dict_count)
 			segment_entry_ends(lexicon, entry, text, key, stem_length, stem_end, everyday_ends);
 	}
@@ -571,6 +573,7 @@ segment_entry_ends(
 
 	/* Each conjugation named takes its own rules. */
 	for (kind = JA_CONJUGATION_GODAN; kind <= JA_CONJUGATION_ADJECTIVE; kind++) {
+		/* A conjugation no candidate names adds no okurigana. */
 		if (named[kind])
 			ja_inflect_conjugated_ends(text, stem_end, key[stem_length], (enum ja_conjugation)kind, ends);
 	}
@@ -919,7 +922,7 @@ segment_cores(
 		if (!found)
 			continue;
 
-		/* Whether the noun is an everyday word. */
+		/* Tells whether the noun is one of the everyday words. */
 		everyday = segment_is_everyday_noun(lexicon, text->bytes + text->offsets[start], key_length);
 
 		/* The noun alone; a noun of one kana costs more. */
@@ -940,6 +943,7 @@ segment_cores(
 			if (!ends[end])
 				continue;
 
+			/* The form of する counts with its noun. */
 			if (everyday)
 				item.everyday = (unsigned int)(end - start);
 			item.dictionary = (unsigned int)(end - start);
