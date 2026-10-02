@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q569 / q569-i01
+Queue / Attempt: q568 / q568-i01
 
 ## 目的・範囲
 
@@ -237,9 +237,3 @@ frame callbacks/protocolcleanup. Add realinput and VT/GPUleasepause/resume if el
 Full Cstandard/Clang19/manual source/probe review, nativeaffected library/compositor rebuild;
 sharedLinux/zedBSD source unaffected by nativeheader selection. Unknown remaining prerequisites
 end uncleared and revise. p005 must include new nativeheader/wrappers/tests in finalconformance.
-
-## Result / q569-i01 / 2026-10-02T01:21:16.708590+00:00
-
-Queue item cleared /whole Phase uncleared。Native zeroaccess capability adaptation and actual mappedVulkan3frames/ownership PASS; realGPU VT notification/lease test failed, remains F3. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q569/result.md). Next finite nativeVT integration investigation, no falseclear/kernelrepair.
-
-Event ws109-q569-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

@@ -112,3 +112,5 @@ native i915/drm-kmod may be installed in own guest under prior permission. New d
 still excluded. Actual native Vulkan/DRM/provider/render/lease checks required where possible.
 
 p005 consumes actual native i915 passthrough GPU output from p003 when verified; final q566 unchanged-source conformance retained. Whole actual GPU/main-app acceptance remains unverified, not replaced by boot. Origin p003/WS linked; required own foreign event saved.
+
+ws109-q569-native-zeroaccess-capability: originating p003 updates native capability adapters; own final source scope adds private nativeheader/two adapters and realGPU window probes. Prior q566 common-source hashes/regressions retained, affected native source/build/tests require finalrevalidation before F5. No claimed closure.

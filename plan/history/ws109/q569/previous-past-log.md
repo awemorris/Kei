@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q569](queue-q569.md)（WS109 p003 uncleared）
+Last finished Queue: [q568](queue-q568.md)（WS109 p003 uncleared）
 
-## 最新: q569 /WS109 p003
+## 最新: q568 /WS109 p003
 
-item cleared /Phase uncleared。Native zeroaccess capability adaptation and actual mappedVulkan3frames/ownership PASS; realGPU VT notification/lease test failed, remains F3. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q569/result.md). Next finite nativeVT integration investigation, no falseclear/kernelrepair.
+item uncleared /Phase uncleared。Native i915/Intel Vulkan1MiB/offscreen and realunpriv compositor-shm PASS; liveDMA_BUF zeroaccessflags block ioctl/Vulkanwindow. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q568/result.md) / [BUG-130](/home/awe/zedBSD-claude1/plan/bugs/BUG-130.md). Nextbounded native capability adaptation; no driverpatch/falseclear. Own remoteVMrunning, baselineVFIOretained.
 
 WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免除、user-selected FreeBSD QEMU i915 acceptanceは未確認。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 
 | Queue | Outcome |
 | --- | --- |
+| [q539](queue-q539.md) | ws106p001 cleared |
 | [q540](queue-q540.md) | ws106p002 partial cleared / whole uncleared、ime-probe回答待ち |
 | [q541](queue-q541.md) | WS107 p001 cleared |
 | [q542](queue-q542.md) | WS107 p002 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 | [q566](queue-q566.md) | WS109 p005 item cleared /Phase uncleared |
 | [q567](queue-q567.md) | WS109 p003 item uncleared /Phase uncleared |
 | [q568](queue-q568.md) | WS109 p003 item uncleared /Phase uncleared |
-| [q569](queue-q569.md) | WS109 p003 item cleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

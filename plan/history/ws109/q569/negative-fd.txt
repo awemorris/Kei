@@ -1,0 +1,2 @@
+sync-rejected: PASS errno/output/fd ownership; actual GPU synchronization untested
+PASS native dma-buf export EBADF/ENOTTY/unchanged output/borrowed fd

@@ -1,0 +1,93 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=Intel(R) Iris(R) Xe Graphics (ADL GT2) width=1920 height=1080 refresh_mhz=48009
+ZWL STARTUP step=vulkan-device ms=54
+ZWL STARTUP step=vulkan-objects-arrow ms=0
+ZWL STARTUP step=compose ms=105 at_ms=2232502
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event2 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event3 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event4 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event5 kind=pointer abs=1
+ZWL STARTUP step=input ms=7 at_ms=2232509
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=2232509
+ZWL STARTUP step=socket ms=0 at_ms=2232509
+ZWL CLIENT client=1 fd=23 ime=1
+ZWL IME started pid=2328 client=1
+ZWL READY socket=/tmp/ws109-intel-v20dftm3/wayland-keiland width=1920 height=1080 timeout_ms=24000 pid=2327
+ZWL STARTUP step=output-display ms=0
+KEI-IME LANGUAGE id=direct
+ZWL STARTUP step=output-pipelines ms=14
+ZWL STARTUP step=output-swapchain ms=0
+ZWL STARTUP step=output-targets ms=0
+ZWL OUTPUT open width=1920 height=1080 images=3 format=44
+ZWL MODE window switch_ms=14 at_ms=2232525
+ZWL LAT draw frame=1 at_us=2232525716
+ZWL LAT acquired frame=1 at_us=2232526790
+ZWL LAT recorded frame=1 at_us=2232527055
+ZWL COMPOSE frame=1 image=0 windows=0 at_ms=2234066
+ZWL LAT submit frame=1 at_us=2234066476
+ZWL CLIENT client=2 fd=27
+ZWL LAT shown frame=1 at_us=2234066559
+ZWL IME language=direct
+KEI-IME READY languages=2
+ZWL CONFIGURE client=2 surface=6 serial=2 width=0 height=0 fullscreen=0
+ZWL LAT draw frame=2 at_us=2234066907
+ZWL LAT acquired frame=2 at_us=2234066939
+ZWL LAT recorded frame=2 at_us=2234066986
+ZWL COMPOSE frame=2 image=0 windows=0 at_ms=2234108
+ZWL LAT submit frame=2 at_us=2234108160
+ZWL LAT shown frame=2 at_us=2234108197
+ZWL IMPORT client=2 buffer=15 width=320 height=240 bytes=307200
+ZWL IMPORT client=2 buffer=17 width=320 height=240 bytes=307200
+ZWL IMPORT client=2 buffer=19 width=320 height=240 bytes=307200
+ZWL COMMIT client=2 surface=6 buffer=15 queued=0
+ZWL LAT adopt surface=6 at_us=2234192829
+ZWL MAP client=2 surface=6 x=800 y=420
+ZWL LAT draw frame=3 at_us=2234192835
+ZWL LAT acquired frame=3 at_us=2234192853
+ZWL LAT recorded frame=3 at_us=2234192925
+ZWL COMPOSE frame=3 image=0 windows=1 at_ms=2234212
+ZWL LAT submit frame=3 at_us=2234212243
+ZWL LAT shown frame=3 at_us=2234214462
+ZWL COMMIT client=2 surface=6 buffer=17 queued=0
+ZWL LAT adopt surface=6 at_us=2234296619
+ZWL RELEASE client=2 buffer=15 dead=0
+ZWL LAT draw frame=4 at_us=2234296626
+ZWL LAT acquired frame=4 at_us=2234296643
+ZWL DAMAGE frame=4 image=0 x=800 y=420 width=320 height=240
+ZWL LAT recorded frame=4 at_us=2234297391
+ZWL COMPOSE frame=4 image=0 windows=1 at_ms=2234316
+ZWL LAT submit frame=4 at_us=2234316502
+ZWL LAT shown frame=4 at_us=2234318849
+ZWL COMMIT client=2 surface=6 buffer=15 queued=0
+ZWL LAT adopt surface=6 at_us=2234400766
+ZWL RELEASE client=2 buffer=17 dead=0
+ZWL LAT draw frame=5 at_us=2234400772
+ZWL LAT acquired frame=5 at_us=2234400784
+ZWL DAMAGE frame=5 image=0 x=800 y=420 width=320 height=240
+ZWL LAT recorded frame=5 at_us=2234400834
+ZWL COMPOSE frame=5 image=0 windows=1 at_ms=2234420
+ZWL LAT submit frame=5 at_us=2234420544
+ZWL LAT shown frame=5 at_us=2234422938
+ZWL COMMIT client=2 surface=6 buffer=17 queued=0
+ZWL LAT adopt surface=6 at_us=2234505770
+ZWL RELEASE client=2 buffer=15 dead=0
+ZWL LAT draw frame=6 at_us=2234505773
+ZWL LAT acquired frame=6 at_us=2234505784
+ZWL DAMAGE frame=6 image=0 x=800 y=420 width=320 height=240
+ZWL LAT recorded frame=6 at_us=2234505834
+ZWL COMPOSE frame=6 image=0 windows=1 at_ms=2234524
+ZWL LAT submit frame=6 at_us=2234524716
+ZWL LAT shown frame=6 at_us=2234528000
+ZWL INPUT_CLOSED device=/dev/input/event4 errno=19
+ZWL INPUT_CLOSED device=/dev/input/event5 errno=19
+ZWL CLEANUP client=2 objects=12 unread_fds=0
+ZWL RELEASE client=2 buffer=17 dead=0
+ZWL IME lost pid=2328
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+libvulkan-compat: restore CRTC failed: Permission denied
+ZWL OUTPUT closed
+KEI-IME DONE
+ZWL EXIT frames=6 error=0 cleanup_failed=0 pid=2327 input_events=0 seat_events=0 at_ms=2236113

@@ -1,0 +1,3 @@
+native-queries fdflags=1 access=ffffffff errno=0 fstat=0
+native-buffer fd=12 fdflags=1 access=ffffffff mode=3 sync=-1 errno=25 output=999
+PASS live GPU zeroaccess export/import ENOTTY, unchanged output, borrowed fd, invalid completion EBADF
