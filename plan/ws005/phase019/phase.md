@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p019 -->
 # ws005-p019: ベータ1 の WiFi の流れの実装
 
-Status: in-progress（q599-i03、P1 generation2、2026-10-02。q599-i01 は uncleared。i03 の結果は末尾）
+Status: uncleared（q599-i03、P1 generation2、2026-10-02。実装と QEMU・passthrough の on/off・鍵の field までは確認。実際の接続は試験用 AP の資格情報待ちで未実施。i03 の結果は末尾）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Focused goal: fg019（ベータ1）
@@ -127,3 +127,21 @@ networkd の owner の確認を広げ、`network` group の利用者には、roo
   AX211 の scan の一覧（「Searching for a known network」）と「Wired (ue0): connected」。kei で switch を押すと「Wi-Fi is off」に、もう一度で
   on と scan の一覧に戻った（以前は EPERM で効かなかった）。鍵の保存の無い AP を押すと menu の下に「Key for SSID」の field（Enter: join、
   Esc: cancel）が開いた。Terminal で `route -n show` は default 10.0.2.2 ue0 の 1 本、resolver は ue0 のもの。
+  run の後に AX211 は iwlwifi に戻った（`restore.log`: `driver=iwlwifi override=(null) route=enx6c1ff71a08b6`、`restored`）。
+  QEMU 0 個、iGPU は vfio-pci のまま、lock と `/tmp/i915-h4-owner` は解放。host の USB の LAN・iGPU の mode・他の VM には触れていない。
+  AP の SSID は記録しない（PNG は worktree の `build/` の中だけ、git に入れない）。
+- boot test: `plan/tools/boot-test.sh build/p1-desk2/hdd-image.img`（全変更を含む demo の image）→ PASS（`build/p1-desk2-boot/login-i03.png`）。
+
+### 未実施・残り
+
+- **desktop からの実際の接続（鍵の入力 → join → DHCP）と、WiFi の lease があるときの B3（有線が優先され WiFi の default が
+  withdraw されること、有線を外すと WiFi の route と resolver が戻ること）**: 試験用 AP の SSID と鍵が無いので未実施（Q1 に問い合わせ済み、
+  2026-10-02）。他人の AP に偽の鍵で認証を試みることはしていない。再開: 資格情報を実行時に受け取り、同じ harness で key field に入力する。
+- explicit な join での policy の移動（`wifi_policy_take`）は radio がある時だけ通る経路で、QEMU（radio 無し）では通っていない。上の実機の接続で確かめる。
+- daemon 内の group の検査（`peer_in_network_group`）は socket の権限が先に拒むため直接は試験していない。
+- 二つの有線の lease の間の切替え: QEMU の二つ目の usb-net が DHCP を得られず確かめられなかった（NET-T44 の疑い、範囲外）。
+- 既存の 30 の story（p012）の harness `plan/ws005/tests/run-wifi-stories.sh` は `1e867fbfd`（2026-09-26）で削除済みで走らせられない。
+  `make managed-lan-host-test` は `managed-lan.c` を変えていないので走らせていない。
+- login の時の自動の ENABLE（A）と logout で root に戻すこと（p018 の案の A）は今回の範囲（ユーザーの承認の文言）外で入れていない。
+  再起動の後は root の `net startup` が root の store で enable し、利用者の自動接続は利用者が menu で join したときに policy が移ってから。
+- Linux・FreeBSD の Keiland の build（`network.c` を含む）は未実施。
