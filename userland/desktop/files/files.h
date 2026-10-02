@@ -329,6 +329,8 @@ struct fm_desktop {
 	size_t laid_count;
 	time_t laid_modified;
 	uint32_t laid_names;
+	/* A recovered directory read must refresh pruning even when its names did not change. */
+	int laid_error;
 	int band;
 	int band_x;
 	int band_y;

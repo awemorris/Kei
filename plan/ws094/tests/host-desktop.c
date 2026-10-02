@@ -591,7 +591,6 @@ check_partial(
 
 	/* A later successful listing may remove that absent saved name. */
 	tab->listing.error = 0;
-	app.desk.laid_count = (size_t)-1;
 	fm_desktop_draw(&app, &canvas);
 	check(app.desk.saved_count == 0U, "prune: successful listing removes absent names");
 
