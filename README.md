@@ -2,19 +2,21 @@
 
 <div align="center">
   <img src="docs/imgs/screenshot1.png" width="80%">
-</div>
+</div><br>
 
-Kei is an operating system for computers with touch displays. It is
-built on zedBSD, a BSD-based kernel and base system written from
-scratch, and ships with Keiland, a Wayland desktop made for touch.
+Kei is an operating system for modern computers, including those with
+touch displays. It is built on zedBSD, a BSD-based kernel and base
+system written from scratch, and ships with Keiland, a Wayland desktop
+that unifies the classic desktop UI/UX and a futuristic touch UI/UX.
 
-The aim is a commercial UNIX in the line of macOS and iOS, Solaris,
-and AIX: an operating system owned end to end, then used to ship
-computers that change how the machine is operated. zedBSD is written
-to conform to POSIX.1-2024 and to the Single UNIX Specification,
-Version 4 (SUSv4). It is not yet a certified UNIX system. Conformance
-will keep being raised, and UNIX certification from The Open Group is
-a goal. UNIX is a registered trademark of The Open Group.
+Kei and zedBSD aim to become a commercial UNIX in the line of macOS
+and iOS, Solaris, and AIX: an operating system that is made for newly
+designed computers, that changes "the way computing is". zedBSD is
+written to conform to POSIX.1-2024 and to the Single UNIX
+Specification, Version 4 (SUSv4). It is not yet a certified UNIX
+system. Conformance will keep being raised, and UNIX certification
+from The Open Group is a goal. UNIX is a registered trademark of The
+Open Group.
 
 Getting there means not being bound to an existing kernel or userland
 when the whole machine has to move together. Most of the system is
