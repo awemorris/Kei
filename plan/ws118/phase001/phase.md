@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws118-p001 -->
 # ws118-p001: 5320 の遠隔の実機 log 用 image（sshd）と手順
 
-Status: uncleared（q601-i01、P1、2026-10-02 Q1 の割り込み（q599-i02）で中断。後で再開）
+Status: uncleared（q601-i02、P1、2026-10-02 Q1 の割り込み（q599-i04）で中断。後で再開）
 Disposition: normal
 Parent: [WS118](../ws.md)
 Focused goal: fg019（ベータ1）
@@ -56,3 +56,18 @@ Queue: q601 / q601-i01（P1、中断）
   - C: `video=640x480 display=edp`（graphical boot 無し、kernel の message を画面に）
 - 未実施: boot-test（A・C）、QEMU の USB 起動＋usb-net＋SSH での鍵の login、`collect-5320.sh`、disk の log の退路の確認、固定 IP の変種の build、`remote-log.md`。
   B・C の自動 login の無効化（空の autologin の上書き）が image に入ったかの確認も未実施。
+
+## q601-i02 の途中の結果（P1 generation2、2026-10-02、base main `55ff880b4`、中断）
+
+- A・B・C を main `55ff880b4` で build し直した（`REMOTE_LOG_LEAN=y`、rc=0）。B・C の `/etc/keiland/autologin` は 0 byte（自動の login 無し）、
+  A は 4 byte（kei）。C の vmunix に i915 の symbol は 0。boot の行は q601-i01 の記録どおり。
+- 作った: `tests/collect-5320.sh HOST OUTDIR`（SSH で 17 項目、`SSH_PORT` で port）、`tests/qemu-ssh-check.sh IMAGE PORT OUTDIR`（UEFI、USB の stick と
+  usb-net を一つの xHCI に、hostfwd、sshd を待って collect、`logger` の印と `sync`、`KEEP=1` で stick を残す）、`tests/root-crontab`（root の
+  crontab: 1 分ごとに `dmesg` を `/var/log/dmesg.cron` へ）とそれを入れる `config-remote-log.mk` の行、手順書 [remote-log.md](../remote-log.md)。
+- QEMU（A、crontab を足す前の build）: USB 起動、usb-net の DHCP（`ue0` 10.0.2.15、default 10.0.2.2 ue0、resolver ue0）、sshd が 113 秒で鍵の login を受けた。
+  collect の 17 項目は全部取れた（sessiond の log は `no-display` の 1 行、`/var/log/greeter.log`・`/run/user/*/session.log` は無い: QEMU の std VGA で
+  greeter が立たないため）。i915 の診断の node は無い（`dmesg` と `hw.gpu.attaching` だけ）。
+- 退路の確認（QEMU、A）: 電源断の後の stick の `/var/log/messages` を `ufs-cat.py` で読めた（`logger` の印あり）。**kernel の message は入っていない**
+  （syslogd は kernel の buffer を `/run/dmesg.boot`（tmpfs）にだけ書く）。それで root の crontab を足した（確認は未実施）。
+- 未実施（再開点）: crontab 入りの A と C の `qemu-ssh-check.sh`（C も）、`/var/log/dmesg.cron` が stick に残ることの確認、A と C の `boot-test.sh`、
+  固定 IP の変種の build と QEMU の確認（例: `C build/p1-rl-cf 10.0.2.50/24 10.0.2.2`）、remote-log.md の見直し。

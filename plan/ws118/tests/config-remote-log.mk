@@ -21,6 +21,11 @@ ZEDBSD_EXTRA_INPUTS += $(REMOTE_LOG_NETCONF)
 ZEDBSD_EXTRA_FILES += --file /etc/net.conf=$(REMOTE_LOG_NETCONF)
 endif
 
+# Root's crontab copies the kernel's messages to /var/log/dmesg.cron every
+# minute, for the hang fallback (the USB stick read on another machine).
+ZEDBSD_EXTRA_INPUTS += plan/ws118/tests/root-crontab
+ZEDBSD_EXTRA_FILES += --file /var/spool/cron/0=plan/ws118/tests/root-crontab
+
 # REMOTE_LOG_LEAN=y: without clang, libcxx and remacs, the packages that need
 # the shared toolchain work trees (an agent's worktree cannot build them).
 # The images handed to the user are built without it.
