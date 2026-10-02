@@ -1,0 +1,63 @@
+{
+  "base": "4da5eb2e5e7ad96feb42a85b50b568cd2b0fbc65",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": [
+    "-std=gnu11",
+    "-O1",
+    "-g0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/a1-browser2/include",
+    "-I."
+  ],
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/svg-length.c",
+      "before_source_sha256": "f3c6531c531228dc8a9c58b955c68009936c8408c80a30699d12b90c5f25c43e",
+      "after_source_sha256": "884133cfbf7f92319f218ab4c3c8ee4ad81aa242e0fb6cf3a9a00577835e6261",
+      "before_text_sha256": "69a7b7575e9f24c35f3c763150e7cfa21cfc77ec048d4e31d7d8d260e3da1704",
+      "after_text_sha256": "69a7b7575e9f24c35f3c763150e7cfa21cfc77ec048d4e31d7d8d260e3da1704",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_documented_normalizations": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/xml.c",
+      "before_source_sha256": "44579352a20abb8a12974a364932356885d4559dc5970d16c87563e09f9522d2",
+      "after_source_sha256": "73465cbf27b3b4be941d7afd168cc9a64949be7a22b7f28ce5a89bfc8eb48edb",
+      "before_text_sha256": "67815fd7e6163f01a7a7b73c59ee779240379bd236a5eeb0b12803a68c09238c",
+      "after_text_sha256": "67815fd7e6163f01a7a7b73c59ee779240379bd236a5eeb0b12803a68c09238c",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_documented_normalizations": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/dom.c",
+      "before_source_sha256": "c1aef535a4efc6f355e0ad85b413e41e4c39a4137bf23b78ea48383625b45658",
+      "after_source_sha256": "c008618b7423d5207f2dbd475807aded9e065d9b04e7430197b51a89194adfb4",
+      "before_text_sha256": "c6000bfa0e922928bc5e896aca295bbbe6bf9f9fc2f07677fb7b5c92fdf5eab6",
+      "after_text_sha256": "c6000bfa0e922928bc5e896aca295bbbe6bf9f9fc2f07677fb7b5c92fdf5eab6",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_documented_normalizations": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/input.c",
+      "before_source_sha256": "7756278846f9175c02aeb6a55d9ac8edac2779ab9be1f9f6acd1b0942ef9941b",
+      "after_source_sha256": "b932613c55cd8a3fdfc5518123401d2945a14f41cb071cd55b47456c3482cf1a",
+      "before_text_sha256": "1c22fa84030eff651f458669be9fed43422ca67373c2311c340bafe9927f32c8",
+      "after_text_sha256": "1c22fa84030eff651f458669be9fed43422ca67373c2311c340bafe9927f32c8",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_documented_normalizations": true
+    }
+  ],
+  "normalizations": "Local status\u2192error in bind/xml.c and xml/dom.c; equivalent explicit trailing void returns in html/input.c only.",
+  "limits": "Host compiler .text comparison; no target proof or whole-Phase clearance."
+}

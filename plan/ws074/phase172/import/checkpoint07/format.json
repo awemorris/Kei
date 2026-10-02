@@ -1,0 +1,30 @@
+{
+  "tool": "Debian clang-format version 19.1.7 (3+b1)",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/svg-length.c",
+      "formatted_sha256": "4f4adf9974995bd86b98429a8f189ad517fb8b609cfb930b1a784b4d8a09decc",
+      "final_sha256": "884133cfbf7f92319f218ab4c3c8ee4ad81aa242e0fb6cf3a9a00577835e6261",
+      "restorations": "Retain full-standard definition argument tabs, compound-clause lines and readable immutable table rows after formatter comparison."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/xml.c",
+      "formatted_sha256": "cec9e47ca381ca26caa50ad0175a9393e2e9926a36c8992fa15d23ce8bbf8484",
+      "final_sha256": "73465cbf27b3b4be941d7afd168cc9a64949be7a22b7f28ce5a89bfc8eb48edb",
+      "restorations": "Retain full-standard definition argument tabs, compound-clause lines and readable immutable table rows after formatter comparison."
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/dom.c",
+      "formatted_sha256": "96e55ebc90971304c01ff5dce4779e88de903c0c4900c08f58341282c3210dc7",
+      "final_sha256": "c008618b7423d5207f2dbd475807aded9e065d9b04e7430197b51a89194adfb4",
+      "restorations": "Retain full-standard definition argument tabs, compound-clause lines and readable immutable table rows after formatter comparison."
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/input.c",
+      "formatted_sha256": "572d66b47850d16d783640a5e08d1a649c1049dbd9d65e5993f2a82ff5b3fe63",
+      "final_sha256": "b932613c55cd8a3fdfc5518123401d2945a14f41cb071cd55b47456c3482cf1a",
+      "restorations": "Retain full-standard definition argument tabs, compound-clause lines and readable immutable table rows after formatter comparison."
+    }
+  ]
+}

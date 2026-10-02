@@ -57,3 +57,5 @@ Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queu
 2026-10-02 / q584-start: 最新userのAgent A N=3開始指示により残reviewとin-scope規約修正を最大3hのq584/A1へ選定。q579原結果を保存し、whole-Phase受け入れと後続gateを維持。指定model/highで独立worktreeから開始。
 
 2026-10-02 / q584-A1-checkpoint06: A1 completed full C/component review of four small implementations and verified the eight previous reviewed hashes. [checkpoint06](import/checkpoint06/README.md) retains final hashes, warning0 plain build, compiler-specific identical object text and implementation tokens modulo two error-code names. Reviewed12/209; remaining137 C/header+60other. q584-i01 and p172 remain in-progress; no downstream work or whole-Phase clearance. GitHub publication pending under main ownership.
+
+2026-10-02 / q584-A1-checkpoint07: Four more complete C/component reviews finished; [checkpoint07](import/checkpoint07/README.md) fixes SVG/PI/XML projection/HTML input hashes and warning0 compiler-specific identical object text. Reviewed16/209; remaining133 C/header+60other. q584-i01/p172 remain in-progress; downstream gate closed and remote publication pending.
