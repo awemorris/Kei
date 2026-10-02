@@ -275,3 +275,5 @@ Event ws074-dedicated-interop2025-20261002: ユーザーが3人案の1人をWS07
 Event ws074-browser-next-goals-20261002: ユーザーが専任P10の次の目標としてFile System Access API、OPFS、Interop 2025 100%、JavaScript Test262を指定。新しい[p174](phase174/phase.md)・[p175](phase175/phase.md)・[p176](phase176/phase.md)を追加し、p173の数値目標を全対象PASS 100%と明示。専任の投入候補順はp172→p100→p174→p175→p173→p176。p101 CSS2全件は独立候補として保持。Phaseの最初のbaseline/design clearanceは製品目標達成を意味しない。実装Queue/agent起動/merge/pushは未実施、GitHub publication保留。
 
 2026-10-02 / n3-execution-start: current userのN=3継続指示。P8 q577 BUG-125/p017、P9 q578 C10/p014、P10 q579 browser2/p172を有限3時間で開始。既存focus/順位を保持、browser後続はp172 whole-Phase clearance待ち。[Queue](../queue.md)を参照。GitHub publication保留。
+
+2026-10-02 / c-table-forward-order-20261002: [p172](phase172/phase.md)全文レビューによりC§2の定数callback tableと先行宣言のcompile矛盾を確認、userが必要宣言だけ先行させる例外を承認。全文標準/Guardrail/automationに記録。import gate/他の全文条件/後続依存は不変。GitHub comment未公開。

@@ -168,3 +168,7 @@ Event ws113-multidisplay-plan-20261002: current userのi915接続通知/Vulkan D
 ## GTK4/Qt6 upstream移植と独自実装（2026-10-02）
 
 Event ws114-gtk-qt-port-projections-20261002: user指定の順序は[全文](standards/ws114-gtk-qt-learning.md)。Linux標準GTK4の実測・機能表のユーザーレビュー、採用範囲のXDG-shell/portal改善、zedBSD upstream GTK4/Qt6移植で知見を得てから独自書き下ろしWS097/WS096へ渡す。外部source/license境界とC全文規約は不変。WS034 p029/p030は新WSへ移管、p028/p034/p038は維持。採否未決の機能実装、Qt6詳細実装は選定しない。
+
+## C定数テーブルの先行宣言 / 2026-10-02
+
+ユーザー「必要な関数宣言だけ先に置く例外を認める」。[C全文§2](coding-style.md)に追加: 初期化子が参照する関数の一行forward宣言だけを定数file-scope table前へ置ける。それ以外は変数後の通常宣言block、comment/definition/所有/寿命の規則は維持。WS074 p172のcompile上の矛盾を解消する限定規則。簡約版なし、全文を直接使用。

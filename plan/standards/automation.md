@@ -154,3 +154,7 @@ Authority: [package方針全文](ws112-linux-packages.md)、[WS112](../ws112/ws.
 | urgent回収 | `git diff --binary HEAD`、未追跡/ignored assetの一覧とhash、base SHA、worktree保持 | patchは未検証で自動統合しない |
 
 [運用契約](../agents/protocol.md)。未実装Queueのため実行結果ではなく事前チェックの設計。
+
+## C file ordering addition / 2026-10-02
+
+User authorizes only initializer-required one-line function prototypes before constant file-scope tables (full C §2). Coverage: full/manual review confirms each early declaration is referenced by the table initializer; all unrelated prototypes retain their normal block. Compiler verifies symbol/type visibility, formatter preserves single-line prototypes. style-check does not prove initializer necessity and no new checker or global reformat is introduced. No concise copy exists; full standard remains authoritative.

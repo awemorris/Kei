@@ -59,6 +59,16 @@ C source files use the following basic order after the include directives:
 6. public function definitions
 7. static function definitions
 
+A constant file-scope table whose initializer names a function needs that
+function declared first. In this case only, put the one-line forward declarations
+required by the initializer before the table. Keep all other forward declarations
+in the normal block after file-scope variables. This exception preserves valid
+ANSI C constant initialization; it does not move function definitions, permit
+runtime initialization, or waive table/variable purpose comments.
+
+Authority: 2026-10-02 user decision, “必要な関数宣言だけ先に置く例外を認める”.
+This is a narrowly scoped addition to file ordering, not a relocation-style waiver.
+
 An implementation-local macro may remain next to the `static inline` functions
 that use it when moving it to the top would make the implementation harder to
 read.  This is a narrow exception for macros that are inseparable from the
