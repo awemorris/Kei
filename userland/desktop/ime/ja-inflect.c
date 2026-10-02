@@ -24,7 +24,8 @@
  *
  * The endings are a small automaton: each state lists the kana that may
  * follow and the state they lead to, so that ています or ませんでした are
- * made of their parts.  する and 来る have their own states.  The rules
+ * made of their parts.  する and 来る have their own states, whose stems
+ * し, き and こ take only the endings each really takes.  The rules
  * accept more than Japanese does; the segmenter's costs and the
  * dictionary decide among what they accept.
  */
@@ -49,7 +50,10 @@ enum inflect_tail {
 	TAIL_PAST,
 	TAIL_PAST_VOICED,
 	TAIL_SURU,
-	TAIL_KURU
+	TAIL_SURU_STEM,
+	TAIL_KURU,
+	TAIL_KURU_KI,
+	TAIL_KURU_KO
 };
 
 /*
@@ -150,14 +154,57 @@ static const struct inflect_suffix inflect_past_voiced[] = {
 
 /* The forms of する. */
 static const struct inflect_suffix inflect_suru[] = {
-	{ "し", TAIL_ICHIDAN }, { "する", TAIL_END }, { "すれば", TAIL_END }, { "すべき", TAIL_END },
+	{ "し", TAIL_SURU_STEM }, { "する", TAIL_END }, { "すれば", TAIL_END }, { "すべき", TAIL_END },
 	{ "され", TAIL_ICHIDAN }, { "させ", TAIL_ICHIDAN }, { "せず", TAIL_END },
+	{ NULL, TAIL_NONE }
+};
+
+/*
+ * The endings after する's stem し (します, しない, しよう, しろ): an
+ * ichidan verb's, without る and れば, which する spells する and すれば, and
+ * without られ and させ, which it spells され and させ (知る, not しる).
+ */
+static const struct inflect_suffix inflect_suru_stem[] = {
+	{ "よう", TAIL_END }, { "ろ", TAIL_END }, { "ながら", TAIL_END },
+	{ "ない", TAIL_END }, { "なかった", TAIL_END }, { "なかったら", TAIL_END }, { "なくて", TAIL_END },
+	{ "なければ", TAIL_END }, { "なく", TAIL_END }, { "ないで", TAIL_END }, { "ないでください", TAIL_END },
+	{ "ます", TAIL_END }, { "ました", TAIL_END }, { "ません", TAIL_END }, { "ませんでした", TAIL_END },
+	{ "ましょう", TAIL_END }, { "まして", TAIL_END },
+	{ "たい", TAIL_END }, { "たかった", TAIL_END }, { "たくない", TAIL_END }, { "たくて", TAIL_END },
+	{ "たければ", TAIL_END }, { "たく", TAIL_END },
+	{ "た", TAIL_END }, { "たら", TAIL_END }, { "たり", TAIL_END }, { "て", TAIL_TE },
 	{ NULL, TAIL_NONE }
 };
 
 /* The forms of 来る. */
 static const struct inflect_suffix inflect_kuru[] = {
-	{ "き", TAIL_ICHIDAN }, { "こ", TAIL_ICHIDAN }, { "くる", TAIL_END }, { "くれば", TAIL_END },
+	{ "き", TAIL_KURU_KI }, { "こ", TAIL_KURU_KO }, { "くる", TAIL_END }, { "くれば", TAIL_END },
+	{ NULL, TAIL_NONE }
+};
+
+/*
+ * The endings after 来る's continuative き (来ます, 来た, 来て): the polite
+ * forms, the wish, the past and the te form; き takes no る (切る, not 来る).
+ */
+static const struct inflect_suffix inflect_kuru_ki[] = {
+	{ "ます", TAIL_END }, { "ました", TAIL_END }, { "ません", TAIL_END }, { "ませんでした", TAIL_END },
+	{ "ましょう", TAIL_END }, { "まして", TAIL_END },
+	{ "たい", TAIL_END }, { "たかった", TAIL_END }, { "たくない", TAIL_END }, { "たくて", TAIL_END },
+	{ "たければ", TAIL_END }, { "たく", TAIL_END }, { "ながら", TAIL_END },
+	{ "た", TAIL_END }, { "たら", TAIL_END }, { "たり", TAIL_END }, { "て", TAIL_TE },
+	{ NULL, TAIL_NONE }
+};
+
+/*
+ * The endings after 来る's irrealis こ (来ない, 来よう, 来られる, 来い); こ
+ * takes no polite or past ending (頃, not 来ろ).
+ */
+static const struct inflect_suffix inflect_kuru_ko[] = {
+	{ "ない", TAIL_END }, { "なかった", TAIL_END }, { "なかったら", TAIL_END }, { "なくて", TAIL_END },
+	{ "なければ", TAIL_END }, { "なく", TAIL_END }, { "ず", TAIL_END }, { "ずに", TAIL_END },
+	{ "ないで", TAIL_END }, { "ないでください", TAIL_END },
+	{ "よう", TAIL_END }, { "い", TAIL_END },
+	{ "られ", TAIL_ICHIDAN }, { "させ", TAIL_ICHIDAN },
 	{ NULL, TAIL_NONE }
 };
 
@@ -175,7 +222,10 @@ static const struct inflect_state inflect_states[] = {
 	{ TAIL_PAST, false, inflect_past, TAIL_NONE },
 	{ TAIL_PAST_VOICED, false, inflect_past_voiced, TAIL_NONE },
 	{ TAIL_SURU, false, inflect_suru, TAIL_NONE },
-	{ TAIL_KURU, false, inflect_kuru, TAIL_NONE }
+	{ TAIL_SURU_STEM, false, inflect_suru_stem, TAIL_NONE },
+	{ TAIL_KURU, false, inflect_kuru, TAIL_NONE },
+	{ TAIL_KURU_KI, false, inflect_kuru_ki, TAIL_NONE },
+	{ TAIL_KURU_KO, false, inflect_kuru_ko, TAIL_NONE }
 };
 
 /*
@@ -322,6 +372,57 @@ ja_inflect_ends(
 	/* An adjective whose okurigana is its ending alone (高い, 高く). */
 	if (consonant == 'i' || consonant == 'k')
 		inflect_walk(text, stem_end, TAIL_ADJECTIVE, ends);
+
+	/* An okurigana is never empty. */
+	ends[stem_end] = false;
+}
+
+/*
+ * Marks where the okurigana after a headword's reading can end for a
+ * candidate whose conjugation the dictionary names.
+ *
+ * The reading holds every kana of the stem that does not change: a godan
+ * verb conjugates through the row of the headword's letter straight after
+ * it (かえr 帰: 帰ります), an ichidan verb's and an adjective's endings
+ * follow it straight (かえr 変え: 変えます, たかi 高: 高かった).  A
+ * candidate whose conjugation is not named takes every okurigana
+ * ja_inflect_ends() knows.  The ends are marked as ja_inflect_ends()
+ * marks them.
+ */
+void
+ja_inflect_conjugated_ends(
+	const struct ja_text *text,
+	size_t stem_end,
+	char consonant,
+	enum ja_conjugation conjugation,
+	bool *ends)
+{
+	/* No okurigana fits after the last unit. */
+	if (stem_end >= text->unit_count)
+		return;
+
+	/* Follows the endings of the conjugation named. */
+	switch (conjugation) {
+	case JA_CONJUGATION_GODAN:
+		/* The row of the headword's letter, with its sound changes. */
+		inflect_godan(text, stem_end, consonant, ends);
+		break;
+	case JA_CONJUGATION_ICHIDAN:
+		/* An ichidan verb's dictionary form ends in る, its headword in r. */
+		if (consonant == 'r')
+			inflect_walk(text, stem_end, TAIL_ICHIDAN, ends);
+		break;
+	case JA_CONJUGATION_ADJECTIVE:
+		/* An adjective's dictionary form ends in い, its headword in i or k. */
+		if (consonant == 'i' || consonant == 'k')
+			inflect_walk(text, stem_end, TAIL_ADJECTIVE, ends);
+		break;
+	case JA_CONJUGATION_ANY:
+	default:
+		/* Every rule, as for a headword of SKK-JISYO.X. */
+		ja_inflect_ends(text, stem_end, consonant, false, ends);
+		break;
+	}
 
 	/* An okurigana is never empty. */
 	ends[stem_end] = false;

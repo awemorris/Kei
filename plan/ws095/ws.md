@@ -52,7 +52,7 @@ Resume point（2026-10-02 計画詳細化）: **次は p005 の新 attempt**（�
 | ws095-p009 | Browser の text field | planning（WS074 はこの session の対象外。引継ぎか保留をユーザーが決める） | p006、WS074 の担当 | — |
 | ws095-p010 | PS/2 の日本語の key の写し（条件付き: JIS の PS/2 keyboard の利用者が出た時、F-058 と一緒に。5330 は PS/2 だが US 配列で日本語の key が無い。main 2026-09-29） | planning | JIS の PS/2 の利用者（F-058） | — |
 | [ws095-p011](phase011/phase.md) | 全体の規約の適合、guest の回帰（実機の確認は別に記録） | planning | p005〜p008・p012（p009/p010 は行った時だけ） | 2〜3h |
-| [ws095-p012](phase012/phase.md) | 補いの辞書を千語へ広げ、活用の種類の注釈（SKK の `;…`）を engine が読む。held-out の文 100 以上で拡張の前後を測る（ユーザーの答え 2026-09-29 夜） | planned（p005 と並行可、compositor を触らない） | p003・p004 | 4h |
+| [ws095-p012](phase012/phase.md) | 補いの辞書を千語へ広げ、活用の種類の注釈（SKK の `;…`）を engine が読む。held-out の文 100 以上で拡張の前後を測る（ユーザーの答え 2026-09-29 夜） | cleared（q593-i01、2026-10-02、P4。1,478 見出し、100 文 92→97、held-out A 64→102（盲検）・109、B 47→81。merge は Q1） | p003・p004 | 4h |
 
 **source の衝突**: p005 は `userland/desktop/wayland/` の compose.c・protocol.c・display.c・shell.c・input-method.c・ime.h を触る。WS114 p007 の再 attempt（修正が要る時の shell.c・protocol.c）、WS117 p003、WS099（BUG-125）・WS094（desktop surface）・WS113（display.c）の compositor の Queue と同時に実行すると merge の衝突が出る。main が順を決める。p008 は Files（WS127 最重点）と titlebar-shell.c を触る。p006 は Terminal、p007 は textedit・notes。p012 は `userland/desktop/ime/` の中だけで衝突しない。
 
@@ -65,3 +65,6 @@ Resume point（2026-10-02 計画詳細化）: **次は p005 の新 attempt**（�
 ## Event
 
 2026-10-02 / ws095-beta1-plan-20261002: 計画担当が source と plan を照合（上の current block）し、ベータ1の到達目標 I-B1〜I-B5、p005 の新 attempt の範囲、p006・p007・p008・p011・p012 の Phase file を作成。p006 は libkeiland の新しい helper ではなく既存の libkeiui の text-input を使う形に改め、p007 に Notes を加えた。p009（Browser）は WS074 がこの session の対象外のため判断待ち。重複していた「再開のときに直すこと」の節を 1 つにした（内容は p005 の新 attempt の範囲にも入れた）。実装・guest なし。
+2026-10-02 / ws095-p012-q593: P4 が p012 を実行（q593-i01）。補いの辞書を 337 → 1,478 見出しに広げ、活用の種類の注釈（五段・一段・形容詞）を engine が読み、
+分割の費用に日常の語の段、する・来る の語尾の規則を直した。host の試験 203 通過、100 文 92→97、held-out A（125 文）64→102（盲検）・109、
+B（110 文）47→81。語の数がユーザーの「千語まで」を約 4 割超えた点は判断待ち（[phase012](phase012/phase.md)）。I-B4 の受け入れを満たす。

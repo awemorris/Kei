@@ -111,6 +111,23 @@ struct ja_text {
 };
 
 /*
+ * How a verb's or an adjective's candidate conjugates, as the candidate's
+ * SKK annotation says (たべr /食べ;一段/, かえr /帰;五段/変え;一段/).
+ *
+ * The supplement writes a verb's stem with every kana that does not
+ * change, so that its headword letter is the row of the kana that
+ * conjugates (五段), the る of an ichidan verb (一段) or the い of an
+ * adjective (形容詞).  A candidate without such an annotation, as every
+ * one of SKK-JISYO.X is, may take every okurigana the rules know.
+ */
+enum ja_conjugation {
+	JA_CONJUGATION_ANY,
+	JA_CONJUGATION_GODAN,
+	JA_CONJUGATION_ICHIDAN,
+	JA_CONJUGATION_ADJECTIVE
+};
+
+/*
  * One headword of an SKK dictionary: the reading (with the consonant of
  * the okurigana for a verb or an adjective) and its candidates as the
  * dictionary writes them ("/a/b/").
@@ -245,6 +262,7 @@ int ja_dict_load(struct ja_dict *dict, const char *path, size_t size_max);
 void ja_dict_free(struct ja_dict *dict);
 const struct ja_dict_entry *ja_dict_find(const struct ja_dict *dict, const char *key, size_t key_length);
 bool ja_dict_next_candidate(const struct ja_dict_entry *entry, size_t *position, const char **candidate, size_t *length);
+bool ja_dict_next_conjugated(const struct ja_dict_entry *entry, size_t *position, const char **candidate, size_t *length, enum ja_conjugation *conjugation);
 
 /* ja-user.c */
 int ja_user_open(struct ja_user *user, const char *path);
@@ -255,6 +273,7 @@ int ja_user_save(const struct ja_user *user);
 
 /* ja-inflect.c */
 void ja_inflect_ends(const struct ja_text *text, size_t stem_end, char consonant, bool adjective, bool *ends);
+void ja_inflect_conjugated_ends(const struct ja_text *text, size_t stem_end, char consonant, enum ja_conjugation conjugation, bool *ends);
 void ja_inflect_suru_ends(const struct ja_text *text, size_t start, bool *ends);
 void ja_inflect_kuru_ends(const struct ja_text *text, size_t start, bool *ends);
 void ja_inflect_kana_verb_ends(const struct ja_text *text, size_t start, bool *ends);

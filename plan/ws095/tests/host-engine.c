@@ -50,12 +50,18 @@ static void test_romaji(void);
 static void test_dict_reader(void);
 static void test_dict_x(void);
 static void test_inflect(void);
+static void test_conjugation(void);
+static void test_suru_kuru(void);
 static void test_split(void);
 static void test_user(void);
 static void test_engine_keys(void);
 static void test_direct(void);
 static void romaji_case(const char *typed, const char *expected);
 static void inflect_case(const char *reading, size_t stem_end, char consonant, size_t end, int expected);
+static void conjugated_case(const char *reading, size_t stem_end, char consonant, enum ja_conjugation conjugation, size_t end, int expected);
+static void conjugation_of(const struct ja_dict *dict, const char *key, size_t index, const char *word, enum ja_conjugation expected);
+static void irregular_case(const char *reading, bool kuru, size_t end, int expected);
+static void annotated_split_case(const char *system, const char *supplement, const char *reading, const char *expected);
 static void split_case(struct ja_core *core, const char *reading, const char *expected);
 static size_t set_reading(struct ja_core *core, const char *reading);
 static void join_split(const struct ja_core *core, char *out, size_t size);
@@ -101,6 +107,8 @@ main(
 	test_dict_reader();
 	test_dict_x();
 	test_inflect();
+	test_conjugation();
+	test_suru_kuru();
 	test_split();
 	test_user();
 	test_engine_keys();
@@ -376,6 +384,314 @@ inflect_case(
 	check((ends[end] ? 1 : 0) == expected, "inflect %s (stem %zu, %c) %s at %zu", reading, stem_end, consonant,
 	      expected ? "ends" : "does not end", end);
 	free(text);
+}
+
+/*
+ * The conjugations a supplement's annotations name (ws095-p012): the
+ * reader gives them, the okurigana rules follow only the one named, and a
+ * conversion leaves out a candidate whose conjugation does not fit.
+ */
+static void
+test_conjugation(void)
+{
+	struct ja_dict dict;
+	char supplement[1024];
+	char system[1024];
+	int error;
+
+	/* Writes a small annotated supplement and a system dictionary with the words it competes with. */
+	error = write_file("conjugation-kei.dict",
+			   ";; annotated supplement of the host tests\n"
+			   "かえr /帰;五段/変え;一段/\n"
+			   "いr /要;五段/\n"
+			   "いれr /入れ;一段/\n"
+			   "かりr /借り;一段/\n"
+			   "はなs /話;五段/\n"
+			   "たかi /高;形容詞/\n"
+			   "ともだち /友達/\n"
+			   "とうきょう /東京;地名/\n",
+			   supplement,
+			   sizeof(supplement));
+	check(error == 0, "conjugation: the supplement is written (error %d)", error);
+	if (error != 0)
+		return;
+
+	error = write_file("conjugation-system.dict",
+			   ";; system dictionary of the host tests\n"
+			   "かr /借/狩/\n"
+			   "しr /知/\n"
+			   "すr /刷/\n"
+			   "なs /成/\n"
+			   "とうきょう /東京/\n",
+			   system,
+			   sizeof(system));
+	check(error == 0, "conjugation: the system dictionary is written (error %d)", error);
+	if (error != 0)
+		return;
+
+	/* The reader gives each candidate's conjugation; an annotation for the reader names none. */
+	error = ja_dict_load(&dict, supplement, JA_DICT_SIZE_MAX);
+	check(error == 0, "conjugation: the supplement loads (error %d)", error);
+	if (error != 0)
+		return;
+
+	conjugation_of(&dict, "かえr", 0, "帰", JA_CONJUGATION_GODAN);
+	conjugation_of(&dict, "かえr", 1, "変え", JA_CONJUGATION_ICHIDAN);
+	conjugation_of(&dict, "たかi", 0, "高", JA_CONJUGATION_ADJECTIVE);
+	conjugation_of(&dict, "とうきょう", 0, "東京", JA_CONJUGATION_ANY);
+	ja_dict_free(&dict);
+
+	/* The okurigana of each conjugation alone. */
+	conjugated_case("かえります", 2, 'r', JA_CONJUGATION_GODAN, 5, 1);
+	conjugated_case("かえます", 2, 'r', JA_CONJUGATION_GODAN, 4, 0);
+	conjugated_case("かえます", 2, 'r', JA_CONJUGATION_ICHIDAN, 4, 1);
+	conjugated_case("かえります", 2, 'r', JA_CONJUGATION_ICHIDAN, 5, 0);
+	conjugated_case("かえった", 2, 'r', JA_CONJUGATION_GODAN, 4, 1);
+	conjugated_case("かえた", 2, 'r', JA_CONJUGATION_ICHIDAN, 3, 1);
+	conjugated_case("かりた", 2, 'r', JA_CONJUGATION_ICHIDAN, 3, 1);
+	conjugated_case("かった", 1, 'w', JA_CONJUGATION_GODAN, 3, 1);
+	conjugated_case("かった", 1, 'w', JA_CONJUGATION_ICHIDAN, 3, 0);
+	conjugated_case("たかかった", 2, 'i', JA_CONJUGATION_ADJECTIVE, 5, 1);
+	conjugated_case("たかきます", 2, 'k', JA_CONJUGATION_ADJECTIVE, 5, 0);
+	conjugated_case("たかきます", 2, 'k', JA_CONJUGATION_ANY, 5, 1);
+
+	/* Conversions with the supplement before the system dictionary. */
+	annotated_split_case(system, supplement, "かえります", "帰ります");
+	annotated_split_case(system, supplement, "かえます", "変えます");
+	annotated_split_case(system, supplement, "いれた", "入れた");
+	annotated_split_case(system, supplement, "いります", "要ります");
+	annotated_split_case(system, supplement, "かりた", "借りた");
+	annotated_split_case(system, supplement, "とうきょう", "東京");
+
+	/* Of two splits into as many segments, the one of the supplement's words (not 友達とは|成しました). */
+	annotated_split_case(system, supplement, "ともだちとはなしました", "友達と|話しました");
+
+	/* A form of する alone comes before a system dictionary's verb read alike (not 知ますか, 刷る). */
+	annotated_split_case(system, supplement, "しますか", "しますか");
+	annotated_split_case(system, supplement, "する", "する");
+	annotated_split_case(system, supplement, "しらない", "知らない");
+}
+
+/*
+ * The forms of する and 来る (ws095-p012): the stems し, き and こ take
+ * only the endings each really takes.
+ */
+static void
+test_suru_kuru(void)
+{
+	/* する. */
+	irregular_case("します", false, 3, 1);
+	irregular_case("しよう", false, 3, 1);
+	irregular_case("しない", false, 3, 1);
+	irregular_case("しろ", false, 2, 1);
+	irregular_case("していた", false, 4, 1);
+	irregular_case("すれば", false, 3, 1);
+	irregular_case("される", false, 3, 1);
+	irregular_case("しる", false, 2, 0);
+	irregular_case("しれば", false, 3, 0);
+
+	/* 来る. */
+	irregular_case("きます", true, 3, 1);
+	irregular_case("きた", true, 2, 1);
+	irregular_case("きてください", true, 6, 1);
+	irregular_case("こない", true, 3, 1);
+	irregular_case("こよう", true, 3, 1);
+	irregular_case("こい", true, 2, 1);
+	irregular_case("くる", true, 2, 1);
+	irregular_case("きる", true, 2, 0);
+	irregular_case("ころ", true, 2, 0);
+	irregular_case("こます", true, 3, 0);
+	irregular_case("きない", true, 3, 0);
+}
+
+/*
+ * Checks where a form of する or 来る beginning a reading ends.
+ */
+static void
+irregular_case(
+	const char *reading,
+	bool kuru,
+	size_t end,
+	int expected)
+{
+	struct ja_unit units[JA_UNITS_MAX];
+	struct ja_text *text;
+	bool ends[JA_UNITS_MAX + 1U];
+	size_t position;
+	size_t count;
+	size_t used;
+	uint32_t code;
+	int ended;
+
+	/* The segmenter's view of the reading, every character a kana. */
+	text = malloc(sizeof(*text));
+	if (text == NULL) {
+		check(0, "irregular %s: no memory", reading);
+		return;
+	}
+
+	count = 0;
+	position = 0;
+	while (reading[position] != '\0') {
+		used = ja_utf8_decode(reading + position, strlen(reading + position), &code);
+		memset(&units[count], 0, sizeof(units[count]));
+		units[count].code = code;
+		units[count].kind = JA_UNIT_KANA;
+		count++;
+		position += used;
+	}
+
+	ja_text_build(text, units, count);
+
+	/* Marks the ends of the verb's forms and compares the one asked about. */
+	memset(ends, 0, sizeof(ends));
+	if (kuru) {
+		ja_inflect_kuru_ends(text, 0, ends);
+	} else {
+		ja_inflect_suru_ends(text, 0, ends);
+	}
+
+	ended = 0;
+	if (ends[end])
+		ended = 1;
+
+	check(ended == expected, "irregular %s (%s) %s at %zu", reading, kuru ? "来る" : "する",
+	      expected ? "ends" : "does not end", end);
+	free(text);
+}
+
+/*
+ * Checks where the okurigana of one conjugation ends after a stem.
+ */
+static void
+conjugated_case(
+	const char *reading,
+	size_t stem_end,
+	char consonant,
+	enum ja_conjugation conjugation,
+	size_t end,
+	int expected)
+{
+	struct ja_unit units[JA_UNITS_MAX];
+	struct ja_text *text;
+	bool ends[JA_UNITS_MAX + 1U];
+	size_t position;
+	size_t count;
+	size_t used;
+	uint32_t code;
+	int ended;
+
+	/* The segmenter's view of the reading, every character a kana. */
+	text = malloc(sizeof(*text));
+	if (text == NULL) {
+		check(0, "conjugated %s: no memory", reading);
+		return;
+	}
+
+	count = 0;
+	position = 0;
+	while (reading[position] != '\0') {
+		used = ja_utf8_decode(reading + position, strlen(reading + position), &code);
+		memset(&units[count], 0, sizeof(units[count]));
+		units[count].code = code;
+		units[count].kind = JA_UNIT_KANA;
+		count++;
+		position += used;
+	}
+
+	ja_text_build(text, units, count);
+
+	/* Marks the ends of the conjugation named and compares the one asked about. */
+	memset(ends, 0, sizeof(ends));
+	ja_inflect_conjugated_ends(text, stem_end, consonant, conjugation, ends);
+	ended = 0;
+	if (ends[end])
+		ended = 1;
+
+	check(ended == expected, "conjugated %s (stem %zu, %c, conjugation %d) %s at %zu", reading, stem_end, consonant,
+	      (int)conjugation, expected ? "ends" : "does not end", end);
+	free(text);
+}
+
+/*
+ * Checks one candidate of a headword and the conjugation its annotation names.
+ */
+static void
+conjugation_of(
+	const struct ja_dict *dict,
+	const char *key,
+	size_t index,
+	const char *word,
+	enum ja_conjugation expected)
+{
+	const struct ja_dict_entry *entry;
+	enum ja_conjugation conjugation;
+	const char *candidate;
+	size_t length;
+	size_t position;
+	size_t i;
+	bool more;
+	bool same;
+
+	/* Finds the headword. */
+	entry = ja_dict_find(dict, key, strlen(key));
+	if (entry == NULL) {
+		check(0, "conjugation: %s found", key);
+		return;
+	}
+
+	/* Walks to the candidate asked about. */
+	position = 0;
+	more = false;
+	for (i = 0; i <= index; i++) {
+		more = ja_dict_next_conjugated(entry, &position, &candidate, &length, &conjugation);
+		if (!more)
+			break;
+	}
+
+	if (!more) {
+		check(0, "conjugation: %s has a candidate %zu", key, index);
+		return;
+	}
+
+	/* The word without its annotation, and the conjugation named. */
+	same = ja_bytes_equal(candidate, length, word, strlen(word));
+	check(same, "conjugation: %s candidate %zu is %s", key, index, word);
+	check(conjugation == expected, "conjugation: %s %s names conjugation %d (got %d)", key, word, (int)expected,
+	      (int)conjugation);
+}
+
+/*
+ * Converts a reading with a system dictionary and a supplement and checks
+ * the split with its first candidates.
+ */
+static void
+annotated_split_case(
+	const char *system,
+	const char *supplement,
+	const char *reading,
+	const char *expected)
+{
+	struct ja_core core;
+	struct ja_config config;
+	char user[1024];
+	int error;
+
+	/* Opens the engine with both dictionaries and an empty user dictionary of its own. */
+	snprintf(user, sizeof(user), "%s/conjugation-user.dict", test_dir);
+	(void)unlink(user);
+	config.system_dictionary = system;
+	config.supplement_dictionary = supplement;
+	config.user_dictionary = user;
+	error = ja_core_open(&core, &config);
+	if (error != 0) {
+		check(0, "conjugation: the engine opens (error %d)", error);
+		return;
+	}
+
+	/* Converts and compares the split. */
+	split_case(&core, reading, expected);
+	ja_core_close(&core);
 }
 
 /*
