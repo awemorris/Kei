@@ -3,15 +3,17 @@
 # dictionaries and counts how many come out right as a whole on the first
 # candidates.  Needs build/ws095/host-engine (sh plan/ws095/tests/host-engine.sh).
 #   sh plan/ws095/tests/measure.sh SYSTEM [SUPPLEMENT]
+# ws095-p012: ENGINE names another engine binary, SENTENCES another sentence list
+# (the held-out set is plan/ws095/tests/ja-heldout.tsv).
 # Prints one line per sentence (ok or NG, the split, the expected text) and a total.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -e
 cd "$(dirname "$0")/../../.."
-engine=build/ws095/host-engine
+engine=${ENGINE:-build/ws095/host-engine}
 test -x "$engine" || { echo "measure: build $engine first" >&2; exit 1; }
 system=$1
 supplement=${2:-}
-sentences=plan/ws095/tests/ja-sentences.tsv
+sentences=${SENTENCES:-plan/ws095/tests/ja-sentences.tsv}
 readings=$(grep -v '^#' "$sentences" | cut -f1)
 # shellcheck disable=SC2086
 if test -n "$supplement"; then
