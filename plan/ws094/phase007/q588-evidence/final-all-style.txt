@@ -1,0 +1,8 @@
+userland/desktop/files/main.c:229: blank-after-brace: if (status != 0) {
+userland/desktop/files/main.c:642: blank-after-brace: drawn = fm_clock();
+userland/desktop/picture/picture.c:294: call-in-condition: setjmp
+userland/desktop/wayland/compose.c:358: blank-after-brace: if (server->log_frames)
+userland/desktop/wayland/compose.c:373: blank-after-brace: if (server->log_frames)
+userland/desktop/wayland/compose.c:403: blank-after-brace: if (server->log_frames) {
+userland/desktop/wayland/display.c:243: call-in-condition: zwl_desktop_is
+userland/desktop/wayland/menu.c:843: call-in-condition: zwl_desktop_surface

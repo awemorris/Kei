@@ -467,6 +467,7 @@ keiland_picture_gif_first(
 {
 	GraphicsControlBlock control;
 	int large;
+	int status;
 
 	/* Nothing yet; a GIF without a frame has no picture. */
 	memset(picture, 0, sizeof(*picture));
@@ -491,7 +492,11 @@ keiland_picture_gif_first(
 	/* The first frame, with its transparent colour if it has one. */
 	memset(&control, 0, sizeof(control));
 	control.TransparentColor = NO_TRANSPARENT_COLOR;
-	(void)DGifSavedExtensionToGCB(gif, 0, &control);
+	status = DGifSavedExtensionToGCB(gif, 0, &control);
+	if (status != GIF_OK)
+		control.TransparentColor = NO_TRANSPARENT_COLOR;
+
+	/* Draws the first frame using any available transparency metadata. */
 	keiland_picture_gif_draw(gif, 0, control.TransparentColor, picture->pixels);
 
 	/* Succeeded: the first frame on its screen. */

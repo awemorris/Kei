@@ -1,0 +1,231 @@
+userland/desktop/keiland/keiland.h:238: split-args: const struct keiland_window_menu_listener *listener, void *data);
+userland/desktop/keiland/keiland.h:261: no-decl-comment: struct keiland_context_menu_listener {
+userland/desktop/keiland/keiland.h:272: split-args: int32_t x, int32_t y, struct wl_seat *seat, uint32_t serial,
+userland/desktop/keiland/keiland.h:273: split-args: const struct keiland_context_menu_listener *listener, void *data);
+userland/desktop/keiland/keiland.h:382: split-args: const struct keiland_titlebar_listener *listener, void *data);
+userland/desktop/keiland/keiland.h:827: split-args-first: int keiland_motion_device_time(struct keiland_motion_device *device, uint64_t host_us, uint32_t device_us,
+userland/desktop/keiland/keiland.h:871: split-args-first: int keiland_motion_point(struct keiland_motion *motion, uint64_t now_us, uint32_t extrapolation_us, double *x,
+userland/desktop/keiland/keiland.h:932: split-args: double maximum_y, double viewport_width, double viewport_height);
+userland/desktop/keiland/keiland.h:1034: split-args-first: int keiland_gesture_down(struct keiland_gesture *gesture, int32_t id, uint64_t time_us, uint64_t arrival_us, double x,
+userland/desktop/keiland/keiland.h:1038: split-args-first: int keiland_gesture_motion(struct keiland_gesture *gesture, int32_t id, uint64_t time_us, uint64_t arrival_us, double x,
+plan/ws094/tests/desktop-probe.c:122: split-args: 0, NULL
+plan/ws094/tests/desktop-probe.c:139: split-args: 1, surface_events
+userland/desktop/files/main.c:100: no-decl-comment: static struct fm_present main_present;
+userland/desktop/files/main.c:101: no-decl-comment: static struct fm_app main_app;
+userland/desktop/files/main.c:102: no-decl-comment: static struct fm_text main_text;
+userland/desktop/files/main.c:137: no-decl-comment: static struct fm_titlebar_state main_titlebar_state;
+userland/desktop/files/main.c:144: no-decl-comment: static struct fm_canvas main_canvas;
+userland/desktop/files/main.c:327: cond-one-line: if (argc > 0 && argv[0] != NULL && argv[0][0] == '/')
+userland/desktop/files/menu.c:379: void-cast: (void)window_menu;
+userland/desktop/files/menu.c:380: void-cast: (void)seat;
+userland/desktop/files/menu.c:402: void-cast: (void)context_menu;
+userland/desktop/files/menu.c:419: void-cast: (void)context_menu;
+userland/desktop/files/menu.c:732: bool-expr: error = keiland_menu_set_enabled(model, MENU_OPEN_WITH, state->opener_count > 0);
+userland/desktop/files/menu.c:756: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_VIEW_ICONS), state->view == FM_VIEW_ICONS);
+userland/desktop/files/menu.c:758: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_VIEW_LIST), state->view == FM_VIEW_LIST);
+userland/desktop/files/menu.c:764: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_SORT_NAME), state->sort == FM_SORT_NAME);
+userland/desktop/files/menu.c:766: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_SORT_KIND), state->sort == FM_SORT_KIND);
+userland/desktop/files/menu.c:768: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_SORT_SIZE), state->sort == FM_SORT_SIZE);
+userland/desktop/files/menu.c:770: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_SORT_MODIFIED), state->sort == FM_SORT_MODIFIED);
+userland/desktop/files/menu.c:784: bool-expr: error = keiland_menu_set_enabled(model, MENU_ACTION_ID(FM_ACTION_NEW_TAB), state->tabs < FM_TABS);
+userland/desktop/files/menu.c:786: bool-expr: error = keiland_menu_set_enabled(model, MENU_ACTION_ID(FM_ACTION_PREVIOUS_TAB), state->tabs > 1);
+userland/desktop/files/menu.c:788: bool-expr: error = keiland_menu_set_enabled(model, MENU_ACTION_ID(FM_ACTION_NEXT_TAB), state->tabs > 1);
+userland/desktop/files/menu.c:820: bool-expr: error = keiland_menu_set_visible(model, id, index < state->opener_count);
+userland/desktop/files/menu.c:829: bool-expr: error = keiland_menu_set_visible(model, id, index < state->tag_count);
+userland/desktop/files/menu.c:831: bool-expr: error = keiland_menu_set_checked(model, id, (state->tags_checked & (1U << index)) != 0U);
+userland/desktop/files/menu.c:837: bool-expr: error = keiland_menu_set_checked(model, MENU_ACTION_ID(FM_ACTION_COLUMN_FIRST + menu_columns[index]), (state->columns & bit) != 0U);
+userland/desktop/files/present.c:959: split-args: 1.0f, 0.0f, 1.0f, 0.0f,
+userland/desktop/files/present.c:960: split-args: 0.0f, 1.0f, 0.0f, 1.0f,
+userland/desktop/files/present.c:961: split-args: 1.0f, 0.0f, 1.0f, 0.0f,
+userland/desktop/files/present.c:962: split-args: 1.0f, 1.0f, 1.0f, 1.0f,
+userland/desktop/files/present.c:963: split-args: 0.0f, 1.0f, 0.0f, 1.0f
+userland/desktop/files/thumb.c:97: cond-one-line: if (size > 8U && data[0] == 0x89U && data[1] == 'P' && data[2] == 'N' && data[3] == 'G')
+userland/desktop/files/thumb.c:550: cond-one-line: if (*at >= size || data[*at] < '0' || data[*at] > '9')
+userland/desktop/files/thumb.c:555: cond-one-line: while (*at < size && data[*at] >= '0' && data[*at] <= '9') {
+userland/desktop/files/ui-context.c:154: cond-one-line: if (action == FM_ACTION_DROP_MOVE || action == FM_ACTION_DROP_COPY || action == FM_ACTION_DROP_LINK) {
+userland/desktop/files/ui-context.c:264: void-cast: (void)state;
+userland/desktop/files/window.c:131: split-args: window_pointer_axis, window_pointer_frame, window_pointer_axis_source, window_pointer_axis_stop,
+userland/desktop/files/window.c:132: split-args: window_pointer_axis_discrete, NULL, NULL
+userland/desktop/files/window.c:138: split-args: window_keyboard_key, window_keyboard_modifiers, window_keyboard_repeat
+userland/desktop/files/window.c:648: void-cast: (void)data;
+userland/desktop/files/window.c:649: void-cast: (void)registry;
+userland/desktop/files/window.c:650: void-cast: (void)name;
+userland/desktop/files/window.c:661: void-cast: (void)data;
+userland/desktop/files/window.c:727: void-cast: (void)toplevel;
+userland/desktop/files/window.c:767: void-cast: (void)toplevel;
+userland/desktop/files/window.c:787: void-cast: (void)toplevel;
+userland/desktop/files/window.c:839: void-cast: (void)data;
+userland/desktop/files/window.c:840: void-cast: (void)seat;
+userland/desktop/files/window.c:841: void-cast: (void)name;
+userland/desktop/files/window.c:858: void-cast: (void)pointer;
+userland/desktop/files/window.c:859: void-cast: (void)serial;
+userland/desktop/files/window.c:860: void-cast: (void)surface;
+userland/desktop/files/window.c:881: void-cast: (void)pointer;
+userland/desktop/files/window.c:882: void-cast: (void)serial;
+userland/desktop/files/window.c:883: void-cast: (void)surface;
+userland/desktop/files/window.c:903: void-cast: (void)pointer;
+userland/desktop/files/window.c:904: void-cast: (void)time;
+userland/desktop/files/window.c:927: void-cast: (void)pointer;
+userland/desktop/files/window.c:928: void-cast: (void)time;
+userland/desktop/files/window.c:958: void-cast: (void)pointer;
+userland/desktop/files/window.c:959: void-cast: (void)time;
+userland/desktop/files/window.c:979: void-cast: (void)data;
+userland/desktop/files/window.c:980: void-cast: (void)pointer;
+userland/desktop/files/window.c:991: void-cast: (void)data;
+userland/desktop/files/window.c:992: void-cast: (void)pointer;
+userland/desktop/files/window.c:993: void-cast: (void)source;
+userland/desktop/files/window.c:1005: void-cast: (void)data;
+userland/desktop/files/window.c:1006: void-cast: (void)pointer;
+userland/desktop/files/window.c:1007: void-cast: (void)time;
+userland/desktop/files/window.c:1008: void-cast: (void)axis;
+userland/desktop/files/window.c:1020: void-cast: (void)data;
+userland/desktop/files/window.c:1021: void-cast: (void)pointer;
+userland/desktop/files/window.c:1022: void-cast: (void)axis;
+userland/desktop/files/window.c:1023: void-cast: (void)discrete;
+userland/desktop/files/window.c:1036: void-cast: (void)data;
+userland/desktop/files/window.c:1037: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1038: void-cast: (void)format;
+userland/desktop/files/window.c:1039: void-cast: (void)size;
+userland/desktop/files/window.c:1057: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1058: void-cast: (void)serial;
+userland/desktop/files/window.c:1059: void-cast: (void)surface;
+userland/desktop/files/window.c:1060: void-cast: (void)keys;
+userland/desktop/files/window.c:1083: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1084: void-cast: (void)serial;
+userland/desktop/files/window.c:1085: void-cast: (void)surface;
+userland/desktop/files/window.c:1112: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1113: void-cast: (void)serial;
+userland/desktop/files/window.c:1114: void-cast: (void)time;
+userland/desktop/files/window.c:1154: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1155: void-cast: (void)serial;
+userland/desktop/files/window.c:1156: void-cast: (void)latched;
+userland/desktop/files/window.c:1157: void-cast: (void)locked;
+userland/desktop/files/window.c:1158: void-cast: (void)group;
+userland/desktop/files/window.c:1182: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1285: void-cast: (void)touch;
+userland/desktop/files/window.c:1286: void-cast: (void)surface;
+userland/desktop/files/window.c:1300: void-cast: (void)touch;
+userland/desktop/files/window.c:1301: void-cast: (void)serial;
+userland/desktop/files/window.c:1316: void-cast: (void)touch;
+userland/desktop/files/window.c:1327: void-cast: (void)data;
+userland/desktop/files/window.c:1328: void-cast: (void)touch;
+userland/desktop/files/window.c:1338: void-cast: (void)touch;
+userland/desktop/wayland/compose.c:400: split-args: (unsigned long long)server->transition_ms, (unsigned long long)(now - server->transition_ms));
+userland/desktop/wayland/compose.c:481: cond-one-line: if (server->compose == NULL || !server->compose->in_flight || server->compose->fence_fd)
+userland/desktop/wayland/compose.c:664: cond-one-line: if ((result != VK_SUCCESS && result != VK_INCOMPLETE) || count == 0U)
+userland/desktop/wayland/compose.c:1069: split-args: 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f
+userland/desktop/wayland/compose.c:1356: return-call: return vkCreateGraphicsPipelines(compose->device, VK_NULL_HANDLE, 1U, &pipeline, NULL, result);
+userland/desktop/wayland/compose.c:1867: return-call: return vkEndCommandBuffer(compose->command);
+userland/desktop/wayland/compose.c:2062: cond-one-line: if (server->dnd_active && surface != NULL && !surface->dead && surface->current != NULL) {
+userland/desktop/wayland/compose.c:2090: cond-one-line: if (surface != NULL && !surface->dead && surface->current != NULL) {
+userland/desktop/wayland/data.c:218: cond-one-line: if (object == server->dnd_origin && server->dnd_source != NULL && !server->dnd_source->dead)
+userland/desktop/wayland/data.c:243: cond-one-line: if (object->kind == ZWL_DATA_OFFER && object->dnd_dropped && object->data_source != NULL && !object->data_source->dead) {
+userland/desktop/wayland/data.c:320: cond-one-line: if (device != NULL && !device->dead && server->dnd_target != NULL) {
+userland/desktop/wayland/data.c:323: cond-one-line: if (source != NULL && offer != NULL && offer->dnd_accepted && (offer->version < DATA_ACTIONS_VERSION || offer->dnd_action != ACTION_NONE))
+userland/desktop/wayland/data.c:351: cond-one-line: if (source != NULL && !source->dead && source->version >= DATA_ACTIONS_VERSION) {
+userland/desktop/wayland/data.c:645: cond-one-line: if (source == NULL || source->dead || source->client->fatal) {
+userland/desktop/wayland/data.c:1113: cond-one-line: if (preferred != ACTION_NONE && preferred != ACTION_COPY && preferred != ACTION_MOVE && preferred != ACTION_ASK) {
+userland/desktop/wayland/data.c:1127: cond-one-line: if (offer->dnd_dropped && offer->dnd_action == ACTION_ASK && preferred != ACTION_NONE && preferred != ACTION_ASK) {
+userland/desktop/wayland/data.c:1132: cond-one-line: if (offer->data_source != NULL && !offer->data_source->dead && offer->data_source->version >= DATA_ACTIONS_VERSION)
+userland/desktop/wayland/data.c:1159: cond-one-line: if (source != NULL && !source->dead && source->version >= DATA_ACTIONS_VERSION)
+userland/desktop/wayland/data.c:1228: cond-one-line: if (surface->kind != ZWL_SURFACE || surface->dead || !surface->mapped || surface->role == NULL)
+userland/desktop/wayland/data.c:1235: cond-one-line: if (x < surface->x || y < surface->y || x >= surface->x + (int32_t)width || y >= surface->y + (int32_t)height)
+userland/desktop/wayland/data.c:1291: cond-one-line: if (surface != NULL && server->dnd_source == NULL && surface->client != server->dnd_origin->client) {
+userland/desktop/wayland/data.c:1430: cond-one-line: if (titlebar == server->dnd_titlebar && id == server->dnd_part_id && detail == server->dnd_part_detail)
+userland/desktop/wayland/data.c:1466: cond-one-line: if (offer == NULL || source == NULL || source->dead)
+userland/desktop/wayland/desktop.c:797: cond-one-line: if (text[3] != '\0' && text[3] != '\n' && text[3] != ' ')
+userland/desktop/wayland/display.c:237: cond-one-line: if (surface->kind != ZWL_SURFACE || surface->dead || !surface->mapped)
+userland/desktop/wayland/display.c:363: cond-one-line: if (surface->place_pending && surface->mapped && !surface->fullscreen && surface->current != NULL) {
+userland/desktop/wayland/main.c:228: void-cast: (void)signal_number;
+userland/desktop/wayland/main.c:468: cond-one-line: if (parsed > maximum / 10U || (parsed == maximum / 10U && digit > maximum % 10U))
+userland/desktop/wayland/menu-shell.c:198: split-args: 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 0xff0d, 0, 'a', 's',
+userland/desktop/wayland/menu-shell.c:199: split-args: 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\', 'z', 'x', 'c', 'v',
+userland/desktop/wayland/menu-shell.c:200: split-args: 'b', 'n', 'm', ',', '.', '/', 0, 0, 0, ' ', 0, 0xffbe, 0xffbf, 0xffc0, 0xffc1, 0xffc2,
+userland/desktop/wayland/menu-shell.c:201: split-args: 0xffc3, 0xffc4, 0xffc5, 0xffc6, 0xffc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:202: split-args: 0, 0, 0, 0, 0, 0, 0, 0xffc8, 0xffc9, 0, 0, 0, 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:203: split-args: 0, 0, 0, 0, 0, 0, 0xff50, 0xff52, 0xff55, 0xff51, 0xff53, 0xff57, 0xff54, 0xff56, 0xff63, 0xffff
+userland/desktop/wayland/menu-shell.c:209: split-args: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '{', '}', 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:210: split-args: 0, 0, 0, 0, 0, 0, 0, ':', '"', '~', 0, '|', 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:211: split-args: 0, 0, 0, '<', '>', '?', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:212: split-args: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:213: split-args: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+userland/desktop/wayland/menu-shell.c:214: split-args: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+userland/desktop/wayland/menu-shell.c:256: void-cast: (void)server;
+userland/desktop/wayland/menu-shell.c:279: void-cast: (void)server;
+userland/desktop/wayland/menu-shell.c:2032: split-args: where, item, hit->x - area->origin, hit->y, hit->width, hit->height);
+userland/desktop/wayland/menu-shell.c:2080: split-args: parent, level + 1U, popup->x, popup->y, popup->width, popup->height);
+userland/desktop/wayland/menu.c:362: split-args: (unsigned long long)place->client->number, place->id, item->id, item->action, words[3], via);
+userland/desktop/wayland/menu.c:398: split-args: (unsigned long long)context->client->number, context->id, item->id, item->action, words[2], via);
+userland/desktop/wayland/menu.c:854: cond-one-line: if (serial != 0U && serial == server->dnd_drop_serial && manager->client->number == server->dnd_drop_client)
+userland/desktop/wayland/menu.c:958: split-args: (unsigned long long)menu->client->number, menu->id, serial, model->count, (unsigned long long)model->generation);
+userland/desktop/wayland/objects.c:70: cond-one-line: if (id == 0 || id >= 0xff000000U || client->object_count >= ZWL_OBJECT_MAX)
+userland/desktop/wayland/objects.c:360: cond-one-line: if (object->kind == ZWL_SURFACE || object->kind == ZWL_TOPLEVEL || object->kind == ZWL_TITLEBAR)
+userland/desktop/wayland/protocol.c:171: cond-one-line: } else if ((opcode == 1U || opcode == 2U) && size == 16U) {
+userland/desktop/wayland/protocol.c:223: cond-one-line: if (opcode == 0 && size == 0 && object->version >= 3U) {
+userland/desktop/wayland/protocol.c:781: cond-one-line: if ((opcode == 7U && scalar != 0U) || (opcode == 8U && scalar != 1U))
+userland/desktop/wayland/protocol.c:895: cond-one-line: if (server->log_frames && attached && surface->pending != NULL) {
+userland/desktop/wayland/protocol.c:900: split-args: surface->pending->id, replaced);
+userland/desktop/wayland/protocol.c:1064: cond-one-line: if (opcode == 0 && size == 0 && object->top == NULL) {
+userland/desktop/wayland/protocol.c:1070: cond-one-line: if (opcode == 1U && size == 4U && object->top == NULL) {
+userland/desktop/wayland/protocol.c:1116: cond-one-line: if (!surface->configured || serial == 0 || serial > surface->configure_serial)
+userland/desktop/wayland/protocol.c:1223: cond-one-line: if (server->bounds_width == 0 || (width == server->bounds_width && height == server->bounds_height))
+userland/desktop/wayland/protocol.c:1238: cond-one-line: if (surface->kind != ZWL_SURFACE || surface->dead || surface->role == NULL || !surface->configured)
+userland/desktop/wayland/protocol.c:1241: cond-one-line: if (top == NULL || top->kind != ZWL_TOPLEVEL || top->version < 4U)
+userland/desktop/wayland/protocol.c:1401: cond-one-line: if (!surface->fullscreen && !surface->maximized && role->top->version >= 4U) {
+userland/desktop/wayland/shell.c:480: cond-one-line: if (drawn > 0U && home <= 0.0f && blur) {
+userland/desktop/wayland/shell.c:532: cond-one-line: if (server->keyboard_blur && showing && home <= 0.0f)
+userland/desktop/wayland/shell.c:573: cond-one-line: if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving) {
+userland/desktop/wayland/shell.c:850: cond-one-line: if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving) {
+userland/desktop/wayland/shell.c:917: cond-one-line: if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving) {
+userland/desktop/wayland/shell.c:988: cond-one-line: if (top == NULL || !top->fullscreen || top->current == NULL)
+userland/desktop/wayland/shell.c:1014: cond-one-line: if (top == NULL || home > 0.0f || server->home_to > 0.0f)
+userland/desktop/wayland/shell.c:1247: cond-one-line: if (server->greeter || server->locked || server->dnd_active)
+userland/desktop/wayland/shell.c:1258: cond-one-line: if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving)
+userland/desktop/wayland/shell.c:1369: cond-one-line: if (server->anim != NULL || server->drag != NULL || server->pull != NULL || server->dnd_active)
+userland/desktop/wayland/shell.c:1373: cond-one-line: if (server->wiseview > 0.0f || server->wiseview_gesture || server->wiseview_moving)
+userland/desktop/wayland/shell.c:1435: cond-one-line: if (!still || !surface->mapped || surface->minimized || surface->desktop != server->desktop)
+userland/desktop/wayland/shell.c:1448: cond-one-line: if (other == surface || other->kind != ZWL_SURFACE || !other->mapped)
+userland/desktop/wayland/shell.c:1450: cond-one-line: if (other->map_order < surface->map_order || other->minimized || other->desktop != server->desktop)
+userland/desktop/wayland/shell.c:1530: cond-one-line: if (surface->dead || !surface->mapped || surface->desktop != server->desktop)
+userland/desktop/wayland/shell.c:1595: void-cast: (void)step;
+userland/desktop/wayland/shell.c:1720: cond-one-line: if (title_x >= x && title_x < x + width && title_y >= y - ZWL_GLASS_GAP - ZWL_GLASS_TITLE && title_y < y + height)
+userland/desktop/wayland/shell.c:1726: cond-one-line: if (dx > -GLASS_NEAR && dx < GLASS_NEAR && dy > -GLASS_NEAR && dy < GLASS_NEAR)
+userland/desktop/wayland/shell.c:1778: cond-one-line: if (other == surface || other->kind != ZWL_SURFACE || other->dead || !other->mapped)
+userland/desktop/wayland/shell.c:1780: cond-one-line: if (other->role == NULL || other->cursor_role || other->minimized || other->maximized || other->fullscreen)
+userland/desktop/wayland/shell.c:1944: cond-one-line: if (surface != NULL && target >= 0 && target < DESKTOPS)
+userland/desktop/wayland/shell.c:2114: cond-one-line: if (shift <= -(float)server->width || shift >= (float)server->width || surface->minimized)
+userland/desktop/wayland/shell.c:2291: cond-one-line: if (surface->maximized && surface == server->pull && server->pull_distance > 0) {
+userland/desktop/wayland/shell.c:2383: cond-one-line: if (surface->fullscreen && server->anim != surface && panels == 0U) {
+userland/desktop/wayland/shell.c:2414: cond-one-line: if (server->window_opacity < 1.0f && panels == 0U && !whole) {
+userland/desktop/wayland/shell.c:2708: cond-one-line: if ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z') || (first >= '0' && first <= '9'))
+userland/desktop/wayland/shell.c:3184: cond-one-line: if (surface->maximized && surface == server->pull && server->pull_distance > 0) {
+userland/desktop/wayland/shell.c:3244: void-cast: (void)server;
+userland/desktop/wayland/shell.c:3290: cond-one-line: if (x >= body.x && x < body.x + body.width && y >= body.y && y < body.y + body.height)
+userland/desktop/wayland/shell.c:3300: cond-one-line: if (!surface->maximized && y >= top && y < top + ZWL_GLASS_TITLE)
+userland/desktop/wayland/shell.c:3365: cond-one-line: if (x >= left && x < right && y >= top && y < bottom)
+userland/desktop/wayland/shell.c:3557: cond-one-line: if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving)
+userland/desktop/wayland/shell.c:3565: cond-one-line: if (top == NULL || !top->maximized || server->anim == top)
+userland/desktop/wayland/shell.c:3595: cond-one-line: if (surface == top || (sheet != NULL && sheet == top))
+userland/desktop/wayland/shell.c:3666: bool-expr: moved = surface->x != x || surface->y != y;
+userland/desktop/wayland/shell.c:3716: cond-one-line: if (width <= wanted || wanted < SHEET_NARROWEST || wanted < surface->min_width)
+userland/desktop/wayland/shell.c:3847: split-args: bar.buttons[BUTTON_CLOSE], bar.buttons[BUTTON_MAXIMIZE], bar.buttons[BUTTON_MINIMIZE], bar.title_x,
+userland/desktop/wayland/shell.c:3848: split-args: (int)to.x, (int)to.y, (int)to.width, (int)to.height);
+userland/desktop/wayland/shell.c:4300: cond-one-line: if (server->home_press || server->home_page_press || server->home_bottom_press)
+userland/desktop/wayland/shell.c:4468: cond-one-line: if (surface == NULL || surface->dead || !surface->mapped) {
+userland/desktop/wayland/shell.c:4852: cond-one-line: if (panels == 0U || current || over)
+userland/desktop/wayland/shell.c:4985: cond-one-line: if (target >= 0 && (unsigned)target != surface->desktop && !surface->dead)
+userland/desktop/wayland/shell.c:5001: cond-one-line: if (state == 0 || button != ZWL_BUTTON_LEFT || server->wiseview_moving)
+userland/desktop/wayland/shell.c:5161: cond-one-line: if (surface->kind != ZWL_SURFACE || surface->dead || !surface->mapped || surface->role == NULL || surface->cursor_role)
+userland/desktop/wayland/shell.c:5220: cond-one-line: if (surface == NULL || surface->dead || !surface->mapped || server->pull_distance <= 0) {
+userland/desktop/wayland/shell.c:5327: cond-one-line: if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving) {
+userland/desktop/wayland/shell.c:5374: cond-one-line: if (!server->desktop_dragging && (dx >= DESKTOP_START || dx <= -DESKTOP_START)) {
+userland/desktop/wayland/shell.c:5383: cond-one-line: if ((dx > 0 && server->desktop == 0U) || (dx < 0 && server->desktop + 1U >= (unsigned)DESKTOPS))
+userland/desktop/wayland/touch.c:448: split-args: contact->place_x / 256, contact->place_y / 256, (unsigned long long)(stamp / 1000U),
+userland/desktop/wayland/touch.c:449: split-args: (unsigned long long)(input->frame_time_us / 1000U), screen->msc_present);
+userland/desktop/wayland/touch.c:614: cond-one-line: if (contact->surface == NULL || contact->surface->client != client || contact->down_serial != serial)
+userland/desktop/wayland/touch.c:631: split-args-first: printf("ZWL TOUCH drag start client=%llu contact=%u x=%d y=%d\n", (unsigned long long)client->number, number, found->place_x / 256,
+userland/desktop/wayland/touch.c:1447: split-args-first: error = keiland_motion_add(contact->motion, screen->report_us, arrival, contact->place_x / 256.0,
+userland/desktop/wayland/touch.c:1453: split-args-first: (void)keiland_motion_add(contact->motion, screen->report_us, arrival, contact->place_x / 256.0,
+userland/desktop/wayland/touch.c:1533: split-args: point_y, contact->place_x / 256, contact->place_y / 256, (unsigned long long)(now / 1000U));
+userland/desktop/wayland/touch.c:1822: cond-one-line: if (contact->route != ROUTE_CLIENT || contact->surface == NULL || contact->surface->client != client)
+userland/desktop/wayland/zwl.h:274: no-decl-comment: struct zwl_fence {

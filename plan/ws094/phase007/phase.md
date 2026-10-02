@@ -2,7 +2,7 @@
 
 # ws094-p007: 全文の規約と回帰（WS094 の最後）
 
-Status: in-progress（q588 source/host/build partial、whole基準は未達）
+Status: uncleared（q588 source/host/build partial criteria satisfied、whole p007の所有外規約/全guest/実機/最後bootは未達）
 Disposition: normal
 Parent: [WS094](../ws.md)
 Queue: q588-i01（source/host/build partial、全guestと実機gateは保持）
@@ -55,3 +55,5 @@ format・style・build・試験を流し、範囲の中の違反を直す。新�
 - cleared の後、main が WS094 を完了の形に書き直す（guide.md §1.2）。
 
 2026-10-02 / b2-q588-partial-dispatch: ユーザー連続Queue指示により[q588 exact partial scope](q588-approved-scope.md)を投入。p011実出力clear後にsource inventory/全文reviewとhost/buildを先行。B1所有waylandは読取reviewのみ。whole p007の実機/最終guest条件は保持、partial item clearanceと区別する。
+
+2026-10-02 / b2-q588-terminal: [部分結果](q588-result.md)と[56-path inventory](q588-inventory.json)・[全文manual判定/所有外残件](q588-review.md)を保存。editable違反修正、host4本、対象4build warning0、境界C1–C5/L1–L5、probe compile/必要host負例を確認。部分Queue itemのcriteriaは満たすがmain review/ACKは別に待つ。whole Phaseはuncleared、WS094 incompleteのまま、所有外source conformance/実機p012/全guest/probe2回/p010/Files14/C9/最終bootを次の承認scopeで再開。ユーザー最新指示により現行q588のラップアップ後B2終了、予約q593は実装せず[背景再開資料](q593-resume.md)へ引き継ぐ。

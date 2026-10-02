@@ -1,0 +1,42 @@
+[
+  {
+    "path": "plan/tools/files/host-build.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/tools/imageview/run-host.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/ws094/tests/build-probe.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/ws094/tests/desktop-guest.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/ws094/tests/desktop-p010.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/ws094/tests/files-desktop-guest.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/ws094/tests/host-desktop.sh",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "path": "plan/ws094/tests/host-thumb.sh",
+    "exit": 0,
+    "stderr": ""
+  }
+]
