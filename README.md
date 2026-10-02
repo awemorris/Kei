@@ -43,13 +43,12 @@ are published for real PC and QEMU.
 
 ### Real PC
 
-Write the disk image to a USB stick, then boot from it.
+Write a disk image to a USB stick, then boot from it.
 
 Supported hardware:
-- CPU: Intel Core i series
-- GPU: Intel Iris Xe (Tested on Intel Core i5 1245U)
-- WiFi: Intel AX211 and Realtek RTL8822BU USB WiFi
-
+- CPU: 64-bit Intel/AMD
+- GPU: Intel Iris Xe (Gen12)
+- WiFi: Intel AX211, Realtek RTL8822BU
 
 ### Windows (VM)
 
