@@ -1,0 +1,30 @@
+
+(python3:676): Gtk-CRITICAL **: 08:01:12.180: gtk_icon_theme_add_resource_path: assertion 'GTK_IS_ICON_THEME (self)' failed
+
+(python3:676): Gtk-CRITICAL **: 08:01:12.181: gtk_icon_theme_get_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+
+(python3:676): Gtk-CRITICAL **: 08:01:12.181: gtk_icon_theme_has_icon: assertion 'GTK_IS_ICON_THEME (self)' failed
+Traceback (most recent call last):
+  File "/tmp/gtk4-baseline.py", line 22, in activate
+    self.window = Gtk.ApplicationWindow(application=app, title=os.environ.get('WS114_PROBE_TITLE', 'WS114 GTK4 baseline'))
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/gi/overrides/Gtk.py", line 505, in __init__
+    raise RuntimeError(
+        "Gtk couldn't be initialized. "
+        "Use Gtk.init_check() if you want to handle this case.")
+RuntimeError: Gtk couldn't be initialized. Use Gtk.init_check() if you want to handle this case.
+ZFILES DESKTOP layout saved=0 error=0
+ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+ZFILES DESKTOP ready items=0 cells=0 width=1280 height=766 at_ms=56166 newest_age_ms=-1 hidden=0
+ZWL IMPORT client=2 buffer=22 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=24 width=1280 height=766 bytes=3932160
+ZWL IMPORT client=2 buffer=26 width=1280 height=766 bytes=3932160
+ZWL DESKTOP drawn at_ms=56257
+ZFILES MENU context-only
+ZFILES DESKTOP startup entered_ms=55963 fonts=40 instance=46 window=34 present=74 app=2 canvas=0 draw=7 shown=91 menus=15
+ZFILES READY width=1280 height=766 token=-
+ZWL PERF 5004ms: passes=476 timeouts=462 | poll 96.8% work 3.7%
+ZWL PERF compose frames=3 draw_ms=37.52 (acquire 0.41 submit+present 36.95) frame_ms=37.62
+ZWL PERF 5031ms: passes=477 timeouts=477 | poll 96.7% work 0.4%
+ZWL PERF 5008ms: passes=476 timeouts=476 | poll 97.0% work 0.4%
+ZWL PERF 5036ms: passes=472 timeouts=472 | poll 95.6% work 0.4%

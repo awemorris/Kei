@@ -1,0 +1,27 @@
+{"event": "gtk-version", "pid": 791, "version": "4.18.6"}
+{"event": "focus", "pid": 791, "active": true}
+{"event": "snapshot", "pid": 791, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+[  26460.441] {Default Queue} wl_pointer#6.enter(75, wl_surface#23, 323.00000000, 351.00000000)
+[  80051.624] {Default Queue} wl_pointer#6.button(90, 411569, 272, 1)
+[  80404.376]  -> xdg_toplevel#31.move(wl_seat#14, 90)
+[  83004.721] {Default Queue} wl_pointer#6.axis_source(0)
+[  83004.762] {Default Queue} wl_pointer#6.axis_discrete(0, 1)
+[  83004.775] {Default Queue} wl_pointer#6.axis(414522, 0, 15.00000000)
+ZWL DECORATION applied client=3 surface=23 mode=1
+ZWL DECORATION applied client=3 surface=39 mode=1
+ZWL DECORATION applied client=5 surface=8 mode=1
+ZWL DECORATION applied client=4 surface=23 mode=1
+ZWL DECORATION applied client=6 surface=8 mode=1
+ZWL DECORATION applied client=6 surface=8 mode=2
+ZWL DECORATION applied client=6 surface=8 mode=1
+ZWL DECORATION applied client=6 surface=8 mode=2
+ZWL DECORATION applied client=6 surface=8 mode=1
+ZWL DECORATION applied client=6 surface=8 mode=2
+ZWL DECORATION applied client=6 surface=8 mode=1
+ZWL DECORATION applied client=6 surface=8 mode=2
+ZWL DECORATION applied client=6 surface=8 mode=1
+ZWL DECORATION applied client=6 surface=8 mode=2
+ZWL DECORATION applied client=6 surface=8 mode=1
+ZWL DECORATION applied client=7 surface=8 mode=2
+ZWL DECORATION applied client=7 surface=8 mode=1
+ZWL DECORATION applied client=8 surface=8 mode=1
