@@ -1,9 +1,15 @@
 # サブエージェント台帳
 
-[運用契約](protocol.md)。2026-10-02のユーザー指示: `N_target=8`、`gpt-6.1-sol` / high。runtime上限は各メインsessionにつき子3（メインを含め4枠）。旧P8/P9/P10 generation2は通常wrap-up済みで、現在`N_effective=0`。A/Bの各3laneは担当予約であり、Queue選定後に新しいagentを起動する。
+[運用契約](protocol.md)。指定modelは`gpt-6.1-sol` / high。runtime上限は各メインsessionにつき子3（メインを含め4枠）。旧P8/P9/P10 generation2はwrap-up済み。2026-10-02最新user指示でAはN=3を実起動、BもN=3投入済みとのuser報告とcommit991fc890を確認。A/B各3laneを下表で管理する。
 
 | Agent / generation | Model / effort | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / wrap-up / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | 未投入、p172 whole-clearまで後続禁止 | running | runtime `/root/a1_browser`、base0e68854ac、preflight PASS |
+| A2 packages / generation1 | `gpt-6.1-sol` / high | WS112 p001 | `/home/awe/zedBSD-worktrees/a2` / `codex/a2-packages` | [q585](A2/queue.md) | 未投入 | running | runtime `/root/a2_packages`、base0e68854ac、preflight PASS |
+| A3 display / generation1 | `gpt-6.1-sol` / high | WS113 p001 | `/home/awe/zedBSD-worktrees/a3` / `codex/a3-display` | [q586](A3/queue.md) | 未投入 | running | runtime `/root/a3_display`、base0e68854ac |
+| B1 GTK / generation1 | `gpt-6.1-sol` / high | WS114 p001 | `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114` | [q581](B1/queue.md) | 未投入、p002採否はuser | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、Bが実行所有 |
+| B2 desktop / generation1 | `gpt-6.1-sol` / high | WS094 p011 | `/home/awe/zedBSD-worktrees/b2` / `codex/b2-ws094` | [q582](B2/queue.md) | 未投入 | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、Bが実行所有 |
+| B3 bugs / generation1 | `gpt-6.1-sol` / high | WS099 p017 / BUG-125 | `/home/awe/zedBSD-worktrees/b3` / `codex/b3-bug125` | [q583](B3/queue.md) | 未投入、whole p017はuncleared | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、部分診断のみ |
 | P8（バグ修正専任、generation 2） | `gpt-6.1-sol` / high | [Bug Board](../known-bugs.md)の未解決項目を個別のhandling WS/Phaseで担当 | `/home/awe/zedBSD-worktrees/p8` / `codex/p8` | [q577](P8/queue.md) | BUG-125はAgent B B3の再開候補 | stopped / wrapped | final23065bf05 → main c1487ae3f。q577 uncleared、runtime cleanup済み |
 | P9（Keilandデスクトップ高度化専任、generation 2） | `gpt-6.1-sol` / high | [desktop outlook](desktop-outlook.md)のWS099/090/094/113/114等を順に担当 | `/home/awe/zedBSD-worktrees/p9` / `codex/p9` | [q580](P9/queue.md) | WS114 p001はAgent B B1の再開候補 | stopped / wrapped | final8556185a3 → main ff0522115。q580 uncleared、QEMU/SSH cleanup済み |
 | P10（ブラウザ専任、generation 2） | `gpt-6.1-sol` / high | [WS074](../ws074/ws.md) 固定 | `/home/awe/zedBSD-worktrees/p10` / `codex/p10` | [q579](P10/queue.md) | p172はAgent A A1の再開候補 | stopped / wrapped | final db6a5b336 → main2f37ca98e。q579 uncleared、owned processなし |

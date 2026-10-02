@@ -30,3 +30,5 @@ Commands/results/commit/environment/artifacts/skipped checks: 未実施（計画
 ## Event
 
 2026-10-02 / ws113-multidisplay-plan-20261002-ws113-p001-created: current userの5条件・3つの追加判断をこのPhaseへ投影。planned/Queue none。GitHub body/comment/Projectへの公開は保留。
+
+2026-10-02 / q586-start: 最新userのAgent A N=3開始指示から、p001契約設計調査のみをA3へ最大90minで選定。Vulkan仕様/実source/fixtureの能力を照合し、driver/HAL API/製品source編集や実機占有は後続。scopeとclearanceはlane/snapshotへ固定。

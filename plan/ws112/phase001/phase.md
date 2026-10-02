@@ -41,3 +41,5 @@ Resume: prerequisitesの実出力と判断を照合し、当PhaseだけのQueue�
 2026-10-02 / ws112-package-plan-20261002-ws112-p001-created: userの5OS package計画をこの有限Phaseへ分割、Status planned・Queue none。RPi arm64回答を契約に反映。詳細とscopeはWS/design参照。GitHub body/comment/Project公開は保留、local/outboxに記録。
 
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。
+
+2026-10-02 / q585-start: 最新userのAgent A N=3開始指示から、p001調査のみをA2へ最大60minで選定。input/format/native環境/CI契約を文書化し、製品code変更やguest取得/起動は後続。scopeとclearanceはlane/snapshotへ固定。

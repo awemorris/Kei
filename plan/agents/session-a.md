@@ -2,7 +2,7 @@
 
 Temporary owner: Agent A  
 Checkout: `/home/awe/zedBSD-claude1`  
-Branch: `codex/agent-a`（2026-10-02起動時環境で確認）  
+Branch: `codex/agent-a`（2026-10-02起動時環境で確認）
 Subagent capacity: three concurrent children
 
 Agent A is the single writer for `plan/master.md`, `plan/queue.md`,

@@ -2,7 +2,7 @@
 
 # Queue / all-agent index
 
-Active Queues: q584/A1 browser、q585/A2 package契約調査、q586/A3 display契約調査。B側実行はB-owned laneから後で投影。
+Active Queues: q581/B1 GTK4、q582/B2 desktop、q583/B3 BUG-125、q584/A1 browser、q585/A2 package契約調査、q586/A3 display契約調査。
 Status: active
 Main executor / plan writer: Q1
 Approval: current user / 2026-10-02「では、N=3でしばらく実行を続けてください」。既定専任3枠の最初のscopeを各lane/snapshotに固定。各上限3時間、開始時N_effective=3、利用上限後0/main引継ぎ。
@@ -10,6 +10,9 @@ Last finished Queue: [q580](history/queue-q580.md)
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
+| q581 / q581-i01 | B1 | [p001](ws114/phase001/phase.md) | GTK4標準baseline残実測のみ、最大3h | active / in-progress（B報告） | [lane](agents/B1/queue.md)、commit991fc890 |
+| q582 / q582-i01 | B2 | [p011](ws094/phase011/phase.md) | Files desktop overflow log・listing成功時pruneと限定回帰、最大3h | active / in-progress（B報告） | [lane](agents/B2/queue.md)、commit991fc890 |
+| q583 / q583-i01 | B3 | [p017](ws099/phase017/phase.md) | BUG-125の2popup症状を各最大5runで時刻/画素分類、90min。部分scope | active / in-progress（B報告） | [lane](agents/B3/queue.md)、commit991fc890 |
 | q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md) |
 | q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | active / in-progress | [lane](agents/A2/queue.md) |
 | q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | active / in-progress | [lane](agents/A3/queue.md) |
@@ -22,7 +25,7 @@ Dependency graph: C9実出力 → q577; c5-hw/hdmi-h4-hw → q578; WS107実sourc
 
 ## Upcoming Work Outlook
 
-2026-10-02 A N=3再開: 最新user開始指示を既定A/B分担の最初の有限Phaseへ適用。q584はq579統合source→残review、q585/q586はcontext成果→契約調査で相互のsource依存なし。q581〜q583はB用に予約。全posterior Phase未投入、push/Issue公開保留。
+2026-10-02 A/B N=3再開: 最新user開始指示を既定A/B分担の最初の有限Phaseへ適用。q579統合source→q584→後続browser（未投入）、WS108/111 context→q585、WS075/089/103 context→q586。q580 overlay→q581、WS094 p010→q582、q577同期patch/原FAIL→q583。6Queue間に実行source依存なし。q583は部分診断clearとwhole p017 unclearedを区別。q585/q586は文書調査のみでB sourceと競合なし。全後続Phase未投入、push/Issue公開保留。
 
 WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ。
 [P8 bug](agents/registry.md): [Bug Board](known-bugs.md)の未解決項目を個別のhandling WS/Phaseで消化。最初の候補は[BUG-125](bugs/BUG-125.md)（デモC9のresize不安定）。既存の保留/実機/owner条件を保持、Queue未選定。
