@@ -26,7 +26,7 @@ QEMU・実機・image の build は流していない（未確認）。
 | W2 | double click で WS093 の対応の app が開く、folder は新しい Files の窓 | 済み（p004） |
 | W3 | 右 click の menu・名前の変更・Trash・Copy・Paste・New Folder・Show in Files | 済み（p005） |
 | W4 | 移動と保存、Files の窓との DnD、touch の double tap と long press | 済み（p006） |
-| W5 | 段 L3〜L5 のうち main が選んだ段の Phase（ws.md「段」） | L3 は p008・p013 cleared、p009 uncleared（合否は実機、下の §2.2）。L4a p010 cleared。L4b p011・L5 p012 は planned |
+| W5 | 段 L3〜L5 のうち main が選んだ段の Phase（ws.md「段」） | L3 は p008・p013 cleared、p009 uncleared（合否は実機、下の §2.2）。L4a p010 cleared。L4b p011 は q582でcleared（2026-10-02、[結果](phase011/q582-result.md)）、L5 p012 は planned |
 | W6 | 全文の規約と回帰（p007、code を作る WS の最後の Phase。Awesome Plan §6） | planned |
 
 **完了の定義**: W1〜W4 は済み。残りは「main が選んだ最後の段の Phase」と p007 が cleared になること。このあと ws.md を完了の形に書き直し、
@@ -67,7 +67,7 @@ master の Tools 節に登録する（AGENTS.md「記録の置き場所」。mas
 | --- | --- |
 | p009（L3b） | uncleared。QEMU で (a) 1954・(c) 90 ms。残りは Files の外（zdesktop の buffer の import と QEMU の Venus の 1 回約 10 ms）。**Q1 の判断: 合否は実機（p012）で決める**。zdesktop の import の短縮は WS099 の p016 へ移した。Venus の 10 ms は Future Work の F-064 |
 | p010 の残り | Terminal を開く場面と ws035-p088 の切り分け、実機は未実施（phase010 の最後の節）。p007 の回帰で拾う |
-| p011（L4b） | planned、phase.md を 2026-10-01 に作った（[phase011](phase011/phase.md)） |
+| p011（L4b） | cleared（2026-10-02、q582）。host/build/guest/boot PASS（[結果](phase011/q582-result.md)） |
 | p012（L5） | planned、実機とユーザーの時間が要る（[phase012](phase012/phase.md)） |
 | p007（規約と回帰） | planned（[phase007](phase007/phase.md)） |
 | p010 の L4 (b) の表の数値 | ws.md の段の表は「1920x1280」、p010 は 1920x1080 で試した。どちらでも規則は同じ（保存の場所が grid の中なら保つ） |
@@ -89,7 +89,7 @@ master の優先順位（2026-09-30 夜ユーザー）: WS099・WS079・WS090・
 
 | 順 | Phase | 目的 | 実行 | 受け入れ |
 | --- | --- | --- | --- | --- |
-| 1 | [ws094-p011](phase011/phase.md) | L4b: 溢れた項目の数の log と、無い名前の保存の行の掃除 | agent（phase-runner-mid） | host 試験の新しい確かめ、guest の `files-desktop-guest.sh … install show saved prune`（新しい手順）PASS |
+| 済 | [ws094-p011](phase011/phase.md) | L4b: 溢れた項目の数の log と、無い名前の保存の行の掃除 | agent（phase-runner-mid） | host 試験の新しい確かめ、guest の `files-desktop-guest.sh … install show saved prune`（新しい手順）PASS |
 | 2 | [ws094-p012](phase012/phase.md) | L5: 5330 で L1 の手順と L3 の (a)(c) | ユーザーが 5330 を操作し、agent が SSH で log を読む | (a) ≤ 1500 ms・(c) ≤ 50 ms・SLOW-FRAME 0、L1 の操作が働く（写真） |
 | 3 | [ws094-p007](phase007/phase.md) | 全文の規約と回帰（WS の最後） | agent（phase-runner） | style-check 0（既存の例外を除く）、host・guest・C9・boot test PASS |
 | 4 | p009 の扱い | p012 の実機の値で (a)(c) が以内なら p009 を「実機で clear」の follow-up に、超えれば新しい Phase（実機の値を見て Files の command buffer の事前の記録、phase009「残り」の 3） | main の判断 | — |
