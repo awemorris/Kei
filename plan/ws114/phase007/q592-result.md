@@ -31,12 +31,12 @@ GL の client A の source entry から「q592 Ω copy-ünï」を Ctrl+A/Ctrl+C
 
 compositor に TERM を送り `ZWL EXIT frames=2899 error=0 cleanup_failed=0`（[compositor-stop.log](../evidence/q592/compositor-stop.log)）。guest で `systemctl poweroff`。11:07:01 UTC に QEMU PID 513268 が消え、port 10322 が空いたことを確認（[stop-proof.log](../evidence/q592/stop-proof.log)）。overlay `build/p3-q592/guest/q592.qcow2` と複写した base は残している。q587 の資産（b1）は読んだだけで、変更していない。
 
-## 未達 4: 最終 source の zedBSD target build・image・boot PNG — build は済み、boot PNG はまだ
+## 未達 4: 最終 source の zedBSD target build・image・boot PNG — 達成
 
 - config: main の `config.mk` の複写から、共有の work tree が要る外部 package（libcxx remacs curl openssh ca-certificates openssl）を外し、`ZEDBSD_NOCT_ACCEL := n` にした（ws004-p051 と同じ扱い）。`build/p3-q592/config.mk`。
 - command: `make -j16 ZEDBSD_CONFIG=build/p3-q592/config.mk BUILD=build/p3-q592/zedbsd ZEDBSD_LLVM_SOURCE=/home/awe/zedBSD-claude1/build/llvm-source disk-image`。共有の LLVM source は読むだけで、取得も展開もしていない。sysroot は worktree の中の `build/amd64/sysroot`。distfiles・firmware・NoctLang の tarball は main から worktree へ複写した。1 回目は sysroot ができる前に `zedbsd-target-toolchain-ready` の判定が先に走って exit 2。`sysroot-amd64` の後の 2 回目で exit 0。我々の source の warning は 0（残る 2 行は gmake の jobserver の通知と外部 Noct の upstream の source）。[zedbsd-build.log](../evidence/q592/zedbsd-build.log)
 - target の wayland の SHA256 `69e6c8d3fe19938a34731bc8633cc1523b4a476001a133609f40ea337d32cf9b`（q587 の target build と同じ値。製品 source が同じなので再現した）。image の SHA256 は `b270c73d…`。
-- boot-test.sh: 3 回とも FAIL（boot-test.py の QMP screendump の 30 秒 timeout）。手で同じ条件の QEMU を QMP で調べたところ、起動後約 15 秒で QEMU の main loop が 1 回 41 秒止まり、その後は応答して guest は `login:` まで達した（[手での QMP PNG](../evidence/q592/manual-qmp-login-not-boot-test.png)。boot-test の証拠ではない）。[attempts](../evidence/q592/boot-test-attempts.log) / [1 回目の最後の frame](../evidence/q592/boot-attempt1-last-frame.png)。Q1 によれば、host disk の I/O で main loop が止まる問題として P1 の q594 で修正済み（main a768b804c、tmpfs の BOOT_TEST_WORK）。修正版で再試行するまで、この基準は未達。
+- boot-test.sh: 3 回とも FAIL（boot-test.py の QMP screendump の 30 秒 timeout）。手で同じ条件の QEMU を QMP で調べたところ、起動後約 15 秒で QEMU の main loop が 1 回 41 秒止まり、その後は応答して guest は `login:` まで達した（[手での QMP PNG](../evidence/q592/manual-qmp-login-not-boot-test.png)。boot-test の証拠ではない）。[attempts](../evidence/q592/boot-test-attempts.log) / [1 回目の最後の frame](../evidence/q592/boot-attempt1-last-frame.png)。Q1 によれば、host disk の I/O で main loop が止まる問題として P1 の q594 で修正済み（main a768b804c、tmpfs の BOOT_TEST_WORK）。Q1 の再開の連絡の後、worktree に main 27c3616ef（a768b804c を含む）を取り込み、修正版の `boot-test.sh` で同じ image（SHA256 b270c73d…）を試した。`boot-test: PASS`。PNG で `login:` の prompt を目で確かめた（greeter は QEMU では終わり、getty へ移る）。[boot-test-final.log](../evidence/q592/boot-test-final.log) / [zedbsd-boot-login.png](../evidence/q592/zedbsd-boot-login.png)。これは QEMU の証拠で、実機では試していない。
 
 ## 未達 5: 規約・境界・停止
 
@@ -45,3 +45,7 @@ compositor に TERM を送り `ZWL EXIT frames=2899 error=0 cleanup_failed=0`（
 - OS 境界: `MAKEFLAGS="-o disk-image <上の vars>" sh plan/tools/keiland-os-boundary/check.sh` で C1–C5・L1–L5 が PASS。image の mtime は変わっていない。[os-boundary.log](../evidence/q592/os-boundary.log)
 - GPU 境界: `ZEDBSD_STANDALONE_CONFIG=build/p3-q592/config.mk sh plan/tools/gpu-boundary/v1-check.sh build/amd64` で 54 source が PASS（[gpu-boundary.log](../evidence/q592/gpu-boundary.log)）。config を渡さなかった最初の 1 回は、find の予備の経路で freebsd の source を拾って FAIL になった。原証拠として [gpu-boundary-fallback-fail.log](../evidence/q592/gpu-boundary-fallback-fail.log) を残す。
 - 未実施: 集約の make check（禁止）、物理 GPU・dmabuf、portal、lock/DnD の runtime。WS 全体の最終 conformance は p006。
+
+## 判定
+
+p007 の Clearance / verification 1〜5 を q592 の最終 binary と image で満たした。製品 source は q587 の MR01/MR02（19452fe8）から変わっていない。q587 の部分的な runtime 証拠（複数 button、moving client の destroy、原 surface の外での release）は、同じ製品 source で採ったものとして補足に使える。q592 で最終 binary について確かめたのは、wire、GTK4 の 3 renderer、clipboard、native の SSD、phantom release。**q592-i01: cleared（P3 の判断）。** Phase の clearance の確定と、Queue・共有記録への投影は Q1 が行う。WS114 は incomplete のまま（p002 の採否、p003〜p006）。

@@ -1,0 +1,6 @@
+boot-test 4 (main 27c3616ef の修正版 boot-test.sh、BOOT_TEST_WORK は既定の /tmp tmpfs)
+OUTPUT=build/p3-q592/boot4 plan/tools/boot-test.sh build/p3-q592/zedbsd/hdd-image.img
+boot-test: saw '^(?:\\S+ )?login: ?'
+boot-test: PASS build/p3-q592/boot4/login.png
+b270c73d12dde38001644a5bc3665e43e267d16efc7a93070cc8a99b0f04a8b6  build/p3-q592/zedbsd/hdd-image.img
+9d10ed8c59a8a6e7b96e58ee2682cb71c5acd98141a5854623747e17ae1f838d  build/p3-q592/boot4/login.png
