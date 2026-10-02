@@ -16,7 +16,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* One private cache owns the rect and all three stable, distinct native length wrappers. */
+/*
+ * One collectible cache owns the rect and three stable, distinct native length wrappers.
+ * Every wrapper traces this cache, which keeps the complete owner and peer graph alive.
+ */
 struct svg_width_state {
 	struct vm_cell cell;
 	struct dom_element *owner;
@@ -25,12 +28,7 @@ struct svg_width_state {
 	struct vm_object *animation;
 };
 
-static void svg_width_trace(struct vm_heap *heap, struct vm_cell *cell);
-static const struct vm_cell_type *svg_width_type(void);
 static int svg_width_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-static int svg_width_make(struct dom_element *element, struct svg_width_state **out);
-static int svg_width_wrapper(struct svg_width_state *state, int interface, struct vm_object **out);
-static int svg_width_this(struct vm_realm *realm, vm_value receiver, int animated, struct svg_width_state **out);
 static int svg_base_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int svg_animation_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int svg_unit_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
@@ -40,28 +38,21 @@ static int svg_string_get(struct vm_realm *realm, vm_value receiver, const vm_va
 static int svg_value_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int svg_specified_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int svg_string_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-static int svg_length_read(struct vm_realm *realm, vm_value receiver, int mode, vm_value *result);
-static int svg_length_write(struct vm_realm *realm, vm_value receiver, vm_value argument, int mode, vm_value *result);
-static int svg_length_current(struct svg_width_state *state, double *number, int *unit);
-static int svg_length_parse(const struct vm_string *text, double *number, int *unit);
-static int svg_length_format(double number, int unit, char *text, size_t capacity);
-static int svg_length_factor(int unit, double *factor);
-static int svg_length_publish(struct svg_width_state *state, double number, int unit);
 
-/* Width retains its stable native handle without exposing an untyped public storage property. */
+/* Immutable process-lifetime rect accessors expose stable native width identity without public storage. */
 static const struct bind_attribute svg_rect_attributes[] = {
 	{ "width", svg_width_get, NULL },
 	{ NULL, NULL, NULL }
 };
 
-/* Animated and base handles are distinct SameObject readonly accessors on the real interface. */
+/* Immutable process-lifetime animated accessors preserve distinct SameObject base and animated handles. */
 static const struct bind_attribute svg_animated_attributes[] = {
 	{ "baseVal", svg_base_get, NULL },
 	{ "animVal", svg_animation_get, NULL },
 	{ NULL, NULL, NULL }
 };
 
-/* Scalar attributes operate on live native content; unsupported conversion methods remain absent. */
+/* Immutable process-lifetime scalar accessors use live content; unsupported conversion methods are absent. */
 static const struct bind_attribute svg_length_attributes[] = {
 	{ "unitType", svg_unit_get, NULL },
 	{ "value", svg_value_get, svg_value_set },
@@ -70,7 +61,7 @@ static const struct bind_attribute svg_length_attributes[] = {
 	{ NULL, NULL, NULL }
 };
 
-/* Unit indices are the specified SVGLength numeric identities, including recognized relative units. */
+/* Immutable process-lifetime constants preserve specified SVGLength identities, including relative units. */
 static const struct bind_constant svg_length_constants[] = {
 	{ "SVG_LENGTHTYPE_UNKNOWN", 0 },
 	{ "SVG_LENGTHTYPE_NUMBER", 1 },
@@ -86,30 +77,43 @@ static const struct bind_constant svg_length_constants[] = {
 	{ NULL, 0 }
 };
 
-/* Serialization uses one canonical suffix for each supported or recognized native unit. */
+/* Immutable process-lifetime suffixes serialize each supported or recognized native unit canonically. */
 static const char *const svg_length_suffixes[] = {
 	NULL, "", "%", "em", "ex", "px", "cm", "mm", "in", "pt", "pc"
 };
 
-/* Genuine rect identity retains the actual graphical SVG prototype chain. */
+/* This immutable process-lifetime descriptor retains the actual graphical SVG prototype chain. */
 const struct bind_interface bind_svg_geometry_element_interface = {
 	"SVGGeometryElement", BIND_SVG_GRAPHICS_ELEMENT, 0, NULL, NULL, NULL, NULL
 };
 
-/* Only exact canonical rects receive the currently supported live width attribute. */
+/* This immutable process-lifetime rect descriptor supplies the currently supported live width attribute. */
 const struct bind_interface bind_svg_rect_element_interface = {
 	"SVGRectElement", BIND_SVG_GEOMETRY_ELEMENT, 0, NULL, svg_rect_attributes, NULL, NULL
 };
 
-/* Length wrappers are actual private-branded native objects with illegal constructors. */
+/* This immutable process-lifetime descriptor brands animated wrappers and keeps their constructors illegal. */
 const struct bind_interface bind_svg_animated_length_interface = {
 	"SVGAnimatedLength", BIND_NO_PARENT, 0, NULL, svg_animated_attributes, NULL, NULL
 };
 
-/* Scalar length identity and constants remain independent of public prototype replacement. */
+/* This immutable process-lifetime scalar descriptor preserves identity through public prototype replacement. */
 const struct bind_interface bind_svg_length_interface = {
 	"SVGLength", BIND_NO_PARENT, 0, NULL, svg_length_attributes, NULL, svg_length_constants
 };
+
+static void svg_width_trace(struct vm_heap *heap, struct vm_cell *cell);
+static const struct vm_cell_type *svg_width_type(void);
+static int svg_width_make(struct dom_element *element, struct svg_width_state **out);
+static int svg_width_wrapper(struct svg_width_state *state, int interface, struct vm_object **out);
+static int svg_width_this(struct vm_realm *realm, vm_value receiver, int animated, struct svg_width_state **out);
+static int svg_length_read(struct vm_realm *realm, vm_value receiver, int mode, vm_value *result);
+static int svg_length_write(struct vm_realm *realm, vm_value receiver, vm_value argument, int mode, vm_value *result);
+static int svg_length_current(struct svg_width_state *state, double *number, int *unit);
+static int svg_length_parse(const struct vm_string *text, double *number, int *unit);
+static int svg_length_format(double number, int unit, char *text, size_t capacity);
+static int svg_length_factor(int unit, double *factor);
+static int svg_length_publish(struct svg_width_state *state, double number, int unit);
 
 /* Traces both the owner and every SameObject handle, including saved-only creator graphs. */
 static void
@@ -174,6 +178,8 @@ svg_width_get(
 	error = bind_this_node(realm, receiver, &node);
 	if (error != 0)
 		return error;
+
+	/* Only native elements can carry the rect width cache. */
 	if (node->type != DOM_ELEMENT) {
 		error = bind_throw_illegal(realm);
 		return error;
@@ -193,6 +199,8 @@ svg_width_get(
 		error = svg_width_make(element, &state);
 		if (error != 0)
 			return error;
+
+		/* Publish the cache only when every stable native wrapper is initialized. */
 		element->svg_width = &state->cell;
 	}
 
@@ -221,6 +229,8 @@ svg_width_make(
 	error = vm_heap_add_root(heap, &owner_root);
 	if (error != 0)
 		return error;
+
+	/* Allocate the branded state while its native rect owner remains precisely rooted. */
 	type = svg_width_type();
 	state = vm_heap_alloc(heap, type, sizeof(*state));
 	if (state == NULL) {
@@ -233,6 +243,8 @@ svg_width_make(
 	state->animated = NULL;
 	state->base = NULL;
 	state->animation = NULL;
+
+	/* Protect the partial state before subsequent wrapper allocation can collect. */
 	state_root = &state->cell;
 	error = vm_heap_add_root(heap, &state_root);
 	if (error != 0) {
@@ -285,15 +297,21 @@ svg_width_wrapper(
 		error = vm_object_get(document->binding_prototypes, vm_value_int32(interface), &snapshot);
 		if (error != 0)
 			return error;
+
+		/* A creator snapshot must name a real native prototype object. */
 		valid = vm_value_is_object(snapshot);
 		if (!valid)
 			return EINVAL;
+
+		/* Borrow the prototype retained by the protected actual owner Document. */
 		prototype = (struct vm_object *)vm_value_as_cell(snapshot);
 	} else {
 		/* Ordinary parser Documents use their actual owning view, never the borrowed getter realm. */
 		window = document->view;
 		if (window == NULL)
 			return EINVAL;
+
+		/* Use the actual owning view's stable prototype rather than the caller's realm. */
 		prototype = window->prototypes[interface];
 	}
 
@@ -352,11 +370,13 @@ svg_width_this(
 	/* Animated-length accessors cannot be borrowed onto either scalar length wrapper. */
 	state = (struct svg_width_state *)cell;
 	if (animated) {
+		/* Only the animated-length wrapper may expose baseVal and animVal. */
 		if (object != state->animated) {
 			error = bind_throw_illegal(realm);
 			return error;
 		}
 	} else {
+		/* Scalar accessors accept the base or animation peer, excluding the animated-length wrapper. */
 		if (object != state->base && object != state->animation) {
 			error = bind_throw_illegal(realm);
 			return error;
@@ -594,10 +614,14 @@ svg_length_read(
 	error = svg_width_this(realm, receiver, 0, &state);
 	if (error != 0)
 		return error;
+
+	/* Keep the genuine owner graph alive through scalar reads and possible string allocation. */
 	root = &state->cell;
 	error = vm_heap_add_root(realm->heap, &root);
 	if (error != 0)
 		return error;
+
+	/* Convert supported absolute units only for a successfully parsed user-unit query. */
 	error = svg_length_current(state, &number, &unit);
 	if (error == 0 && mode == 1) {
 		/* Relative scales remain explicitly unsupported instead of using guessed viewport or font metrics. */
@@ -611,11 +635,13 @@ svg_length_read(
 
 	/* Allocate string results only after the actual scalar and unit have been read. */
 	if (error == 0) {
+		/* Select the unit identity, specified scalar or serialization requested by this accessor. */
 		if (mode == 0) {
 			*result = vm_value_int32(unit);
 		} else if (mode == 3) {
 			error = svg_length_format(number, unit, text, sizeof(text));
 			if (error == 0) {
+				/* Build the VM string while the real native owner remains precisely rooted. */
 				string = vm_string_from_utf8(realm->heap, text, strlen(text));
 				if (string == NULL) {
 					error = ENOMEM;
@@ -662,10 +688,14 @@ svg_length_write(
 	error = svg_width_this(realm, receiver, 0, &state);
 	if (error != 0)
 		return error;
+
+	/* Protect the private owner graph across script coercion and any resulting collection. */
 	root = &state->cell;
 	error = vm_heap_add_root(realm->heap, &root);
 	if (error != 0)
 		return error;
+
+	/* Choose the actual scalar coercion before any native mutation is permitted. */
 	number = 0;
 	unit = 1;
 	if (mode == 3) {
@@ -691,6 +721,8 @@ svg_length_write(
 	readonly = 0;
 	if (receiver == animated)
 		readonly = 1;
+
+	/* Reject a readonly receiver only after its required argument coercion succeeded. */
 	if (error == 0 && readonly)
 		error = bind_throw_dom(realm, "NoModificationAllowedError", "The animated SVG length is read-only.");
 
@@ -710,6 +742,8 @@ svg_length_write(
 	/* Publish one complete actual native scalar, with no stale public-property cache. */
 	if (error == 0)
 		error = svg_length_publish(state, number, unit);
+
+	/* Remove temporary protection whether conversion, validation or publication failed. */
 	vm_heap_remove_root(realm->heap, &root);
 	if (error != 0)
 		return error;
@@ -768,9 +802,13 @@ svg_length_parse(
 	/* Missing attributes and strings without a complete numeric token use the caller's initial value. */
 	if (text == NULL || text->length == 0)
 		return EINVAL;
+
+	/* The ASCII copy needs one terminator byte in addition to the native input units. */
 	length = text->length;
 	if (length == SIZE_MAX)
 		return ENOMEM;
+
+	/* Allocate C storage only after its complete byte length is proven representable. */
 	bytes = malloc(length + 1U);
 	if (bytes == NULL)
 		return ENOMEM;
@@ -803,6 +841,8 @@ svg_length_parse(
 	       *end == '\n' ||
 	       *end == '\f')
 		end++;
+
+	/* A leading sign belongs to the numeric token rather than its unit suffix. */
 	if (*end == '+' || *end == '-')
 		end++;
 
@@ -816,6 +856,8 @@ svg_length_parse(
 	/* Fractional digits may supply the token's first or remaining decimal digits. */
 	if (*end == '.') {
 		end++;
+
+		/* Consume all fractional digits before deciding whether an exponent follows. */
 		while (*end >= '0' && *end <= '9') {
 			digits++;
 			end++;
@@ -824,10 +866,16 @@ svg_length_parse(
 
 	/* An exponent is numeric only when its optional sign is followed by at least one digit. */
 	if ((*end == 'e' || *end == 'E') &&
-	    (end[1] == '+' || end[1] == '-' || (end[1] >= '0' && end[1] <= '9'))) {
+	    (end[1] == '+' ||
+	     end[1] == '-' ||
+	     (end[1] >= '0' && end[1] <= '9'))) {
 		end++;
+
+		/* The exponent sign is optional and cannot substitute for a real digit. */
 		if (*end == '+' || *end == '-')
 			end++;
+
+		/* Count the complete exponent digit sequence before accepting the exponent. */
 		exponent_digits = 0;
 		while (*end >= '0' && *end <= '9') {
 			exponent_digits++;
@@ -866,6 +914,7 @@ svg_length_parse(
 	for (tail = end;
 	     *tail != 0;
 	     tail++) {
+		/* Fold ASCII unit spelling without applying a locale-dependent conversion. */
 		if (*tail >= 'A' && *tail <= 'Z')
 			*tail += 'a' - 'A';
 	}
@@ -884,6 +933,8 @@ svg_length_parse(
 	free(bytes);
 	if (*unit == 0)
 		return EINVAL;
+
+	/* Preserve the accepted finite WebIDL float value rather than extra host double precision. */
 	*number = (float)*number;
 
 	/* Succeeded: only a complete finite scalar token and recognized unit were accepted. */
@@ -903,8 +954,12 @@ svg_length_format(
 	/* A private unit outside this supported profile cannot index the serialization table. */
 	if (unit < 1 || unit > 10)
 		return EINVAL;
+
+	/* Canonical serialization hides a floating-point negative-zero sign. */
 	if (number == 0)
 		number = 0;
+
+	/* Format the complete canonical scalar and suffix into the caller's bounded buffer. */
 	length = snprintf(text, capacity, "%.9g%s", number, svg_length_suffixes[unit]);
 	if (length < 0 || (size_t)length >= capacity)
 		return EOVERFLOW;
@@ -969,13 +1024,19 @@ svg_length_publish(
 	error = svg_length_format(number, unit, text, sizeof(text));
 	if (error != 0)
 		return error;
+
+	/* Resolve the native width atom before allocating its new content value. */
 	heap = state->owner->node.document->heap;
 	name = vm_atom_from_ascii(heap, "width");
 	if (name == NULL)
 		return ENOMEM;
+
+	/* Copy the validated scalar serialization into traced native attribute storage. */
 	string = vm_string_from_utf8(heap, text, strlen(text));
 	if (string == NULL)
 		return ENOMEM;
+
+	/* Use ordinary native attribute mutation so every saved handle reads the committed value. */
 	error = dom_element_set_attribute(state->owner, name, string);
 	if (error != 0)
 		return error;
