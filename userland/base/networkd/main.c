@@ -28,6 +28,7 @@
 #include <net/if.h>
 #include <net/route.h>
 #include <poll.h>
+#include <pwd.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,6 +46,9 @@
 #define NETWORKD_AUTH_LOG_MAX 512U
 #define NETWORKD_GROUP_DATABASE_MAX 8192U
 #define NETWORKD_GROUP_BUFFER_MAX 2048U
+
+/* The most groups of one account that the Wi-Fi control check examines. */
+#define NETWORKD_PEER_GROUP_MAX 64
 #define NETWORKD_GROUP_FILE "/etc/group"
 #define NETWORKD_GROUP_GID ((gid_t)69)
 #define NETWORKD_GROUP_NAME "network"
@@ -160,6 +164,22 @@ struct networkd_control_input {
 	unsigned char bytes[NETWORKD_PROTOCOL_HEADER_MAX + NETWORKD_REQUEST_MAX + 1U];
 };
 
+/*
+ * One wired interface's lease: the default route and resolver its DHCP gave.
+ *
+ * The network preference keeps them so that it can withdraw the route while
+ * another interface is preferred and put it back when that one goes.  A
+ * record lives from a successful DHCP configuration of the interface until
+ * the interface is configured again or taken down.
+ */
+struct networkd_lan_l3 {
+	char interface[IFNAMSIZ];
+	int route_present;
+	struct networkd_managed_route route;
+	size_t resolver_length;
+	unsigned char resolver[NETWORKD_MANAGED_RESOLVER_MAX];
+};
+
 static volatile sig_atomic_t stopping;
 static struct networkd_managed_wlan managed_wlan;
 
@@ -173,6 +193,13 @@ static struct networkd_managed_wlan managed_wlan;
  * waiting to be told.
  */
 static struct networkd_lan managed_lan;
+
+/*
+ * The leases of the wired interfaces, one slot for each, an empty interface
+ * name marking a free slot.  The network preference reads them; lan_configure
+ * fills a slot and lan_take_down empties it.
+ */
+static struct networkd_lan_l3 lan_l3[NETWORKD_LAN_MAX];
 
 /*
  * The watchers, and whether the network has moved since they were last told.
@@ -211,6 +238,7 @@ static struct networkd_control_input control_inputs[NETWORKD_CONTROL_INPUT_MAX];
 static int control_input_pending(void);
 static int receive_wait_request(struct networkd_request *, struct kern_peercred *, enum networkd_client_role *);
 static int service_wifi_wait(void);
+static int interrupts_background_work(const struct networkd_request *, const struct kern_peercred *);
 static void remember_wifi_observation(const char *, const struct networkd_wifi_child_result *);
 static void clear_wifi_observation(size_t);
 static int append_wifi_snapshot(const char *, const char *, size_t, uint64_t, char *, size_t, size_t *);
@@ -238,6 +266,15 @@ static int lan_policy_decode(const struct networkd_request *,
 static int lan_interface_name(uint32_t, char *, size_t);
 static void lan_snapshot(void);
 static int lan_address_usable(const char *);
+static void lan_l3_record(const char *);
+static void lan_l3_forget(const char *, int);
+static struct networkd_lan_l3 *lan_l3_find(const char *);
+static int lan_l3_eligible(const struct networkd_lan_l3 *);
+static void apply_network_preference(void);
+static int prefer_route(int, const struct networkd_managed_route *);
+static int withdraw_route(int, const struct networkd_managed_route *);
+static int route_present_exact(int, const struct networkd_managed_route *);
+static int prefer_resolver(const unsigned char *, size_t);
 static void lan_assign_link_local(const char *, uint64_t);
 static void lan_configure(const struct networkd_lan_work *);
 static void lan_take_down(const char *);
@@ -271,7 +308,8 @@ static void handle_wifi_request(int, struct networkd_request *,
 static int wifi_request_list(struct networkd_wifi_request *);
 static int wifi_request_enable(struct networkd_wifi_request *, const struct kern_peercred *);
 static int wifi_request_stop(struct networkd_wifi_request *, int);
-static int wifi_request_connect(struct networkd_wifi_request *, const struct networkd_request *);
+static int wifi_request_connect(struct networkd_wifi_request *, const struct networkd_request *, const struct kern_peercred *);
+static int wifi_policy_take(struct networkd_wifi_request *, uid_t);
 static int wifi_request_prepare(struct networkd_wifi_request *);
 static void process_wifi_request(int, struct networkd_request *, const struct kern_peercred *);
 static int read_request(int descriptor, struct networkd_request *request);
@@ -330,6 +368,7 @@ static int reconcile_pending_l3(void);
 static const struct wifi_conf_profile *find_profile(const struct wifi_conf_model *, const void *, size_t);
 static int load_policy(uid_t, struct wifi_conf_model *, char *, size_t);
 static int owner_allowed(const struct kern_peercred *);
+static int peer_in_network_group(const struct kern_peercred *);
 static const char *managed_state_name(enum networkd_managed_wlan_state);
 static int append_managed_status(char *, size_t, size_t *);
 static int snapshot_interface_l3(const char *, uint32_t *, struct networkd_managed_l3 *);
@@ -1427,6 +1466,12 @@ lan_configure(
 	if (!obtained)
 		lan_assign_link_local(work->interface, deadline);
 	(void)networkd_lan_configured(&managed_lan, work->interface, obtained);
+
+	/* Keeps a DHCP lease's route and resolver for the network preference. */
+	lan_l3_forget(work->interface, 0);
+	if (obtained && work->policy.mode == NETWORKD_LAN_MODE_DHCP)
+		lan_l3_record(work->interface);
+	apply_network_preference();
 	notify_state_changed();
 }
 
@@ -1448,7 +1493,379 @@ lan_take_down(
 	(void)run_command_until(arguments, 10U,
 	    netutil_monotonic_us() + 15000000ULL, diagnostic);
 	(void)networkd_lan_down(&managed_lan, name);
+
+	/* Withdraws the lease's route and lets another interface carry the default. */
+	lan_l3_forget(name, 1);
+	apply_network_preference();
 	notify_state_changed();
+}
+
+/*
+ * Keeps the default route and resolver one wired interface's DHCP gave.
+ *
+ * dhcpc installs both itself; the record lets the network preference move
+ * the default between interfaces afterwards.  The resolver is kept only when
+ * dhcpc wrote it for this interface, which its first line says.
+ */
+static void
+lan_l3_record(
+	const char *interface)
+{
+	struct networkd_managed_l3 snapshot;
+	struct networkd_lan_l3 *record;
+	char marker[80];
+	uint32_t ifindex;
+	size_t index;
+	int differs;
+	int length;
+	int error;
+
+	/* Reads what the interface holds now. */
+	memset(&snapshot, 0, sizeof(snapshot));
+	error = snapshot_interface_l3(interface, &ifindex, &snapshot);
+	if (error != 0)
+		return;
+
+	/* Reuses the interface's slot, or takes a free one. */
+	record = lan_l3_find(interface);
+	for (index = 0U; record == NULL && index < NETWORKD_LAN_MAX; index++) {
+		if (lan_l3[index].interface[0] == '\0')
+			record = &lan_l3[index];
+	}
+	if (record == NULL) {
+		networkd_protocol_clear(&snapshot, sizeof(snapshot));
+		return;
+	}
+
+	/* Records the route the lease installed, if it gave a router. */
+	memset(record, 0, sizeof(*record));
+	(void)snprintf(record->interface, sizeof(record->interface), "%s",
+	    interface);
+	record->route_present = snapshot.default_route_present;
+	record->route = snapshot.default_route;
+
+	/* Tells whether the resolver file is large enough to carry the marker. */
+	length = snprintf(marker, sizeof(marker),
+	    "# Generated by dhcpc for %s\n", interface);
+	differs = 1;
+	if (length > 0 &&
+	    (size_t)length < sizeof(marker) &&
+	    snapshot.resolver_present &&
+	    !snapshot.resolver_oversized &&
+	    snapshot.resolver_length >= (size_t)length)
+		differs = memcmp(snapshot.resolver, marker, (size_t)length);
+
+	/* Records the resolver only when dhcpc wrote it for this interface. */
+	if (differs == 0) {
+		memcpy(record->resolver, snapshot.resolver,
+		    snapshot.resolver_length);
+		record->resolver_length = snapshot.resolver_length;
+	}
+	networkd_protocol_clear(&snapshot, sizeof(snapshot));
+}
+
+/*
+ * Forgets one wired interface's lease.
+ *
+ * When the interface is taken down its route is withdrawn too: the kernel
+ * keeps a route through a device that is down, and such a route could still
+ * be chosen ahead of a working interface.
+ */
+static void
+lan_l3_forget(
+	const char *interface,
+	int withdraw)
+{
+	struct networkd_lan_l3 *record;
+	int descriptor;
+
+	/* Nothing is kept for an interface without a record. */
+	record = lan_l3_find(interface);
+	if (record == NULL)
+		return;
+
+	/* Withdraws the recorded route when asked, if it is still there. */
+	if (withdraw && record->route_present) {
+		descriptor = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+		if (descriptor >= 0) {
+			(void)withdraw_route(descriptor, &record->route);
+			(void)close(descriptor);
+		}
+	}
+
+	/* Frees the slot. */
+	networkd_protocol_clear(record, sizeof(*record));
+}
+
+/* Finds the lease record of one wired interface. */
+static struct networkd_lan_l3 *
+lan_l3_find(
+	const char *interface)
+{
+	size_t index;
+	int differs;
+
+	/* Looks through the occupied slots for the interface's name. */
+	for (index = 0U; index < NETWORKD_LAN_MAX; index++) {
+		if (lan_l3[index].interface[0] == '\0')
+			continue;
+		differs = strcmp(lan_l3[index].interface, interface);
+		if (differs == 0)
+			return &lan_l3[index];
+	}
+
+	/* The interface has no record. */
+	return NULL;
+}
+
+/* Tests whether a wired lease may carry the default route now. */
+static int
+lan_l3_eligible(
+	const struct networkd_lan_l3 *record)
+{
+	size_t index;
+	int differs;
+
+	/* A lease without a router cannot carry the default route. */
+	if (!record->route_present)
+		return 0;
+
+	/* Only an interface configured with its cable in is eligible. */
+	for (index = 0U; index < managed_lan.interface_count; index++) {
+		differs = strcmp(managed_lan.interfaces[index].name,
+		    record->interface);
+		if (differs != 0)
+			continue;
+		if (managed_lan.interfaces[index].state != NETWORKD_LAN_CONFIGURED)
+			return 0;
+		if (!managed_lan.interfaces[index].carrier)
+			return 0;
+		return 1;
+	}
+
+	/* An interface the daemon no longer sees is not eligible. */
+	return 0;
+}
+
+/*
+ * Decides which interface carries the default route and the resolver.
+ *
+ * The user decided on 2026-10-02 (ws005-p019, B3) that a wired connection
+ * is preferred to Wi-Fi.  dhcpc still installs each lease's route and writes
+ * the resolver as it finishes, so the last lease would otherwise win; this
+ * one place puts the preferred interface's route and resolver in effect and
+ * withdraws every other default this daemon knows of.  The first configured
+ * wired interface with a router is preferred, then a Wi-Fi connection.
+ * Routes this daemon did not record (an administrator's) are left alone.
+ */
+static void
+apply_network_preference(
+	void)
+{
+	const struct networkd_managed_l3 *wifi;
+	struct networkd_lan_l3 *chosen;
+	size_t index;
+	int wifi_route;
+	int descriptor;
+	int eligible;
+
+	/* Finds the first wired lease that may carry the default route. */
+	chosen = NULL;
+	for (index = 0U; chosen == NULL && index < NETWORKD_LAN_MAX; index++) {
+		if (lan_l3[index].interface[0] == '\0')
+			continue;
+		eligible = lan_l3_eligible(&lan_l3[index]);
+		if (eligible)
+			chosen = &lan_l3[index];
+	}
+
+	/* Tells whether the Wi-Fi connection holds a route of its own lease. */
+	wifi = &managed_wlan.connection.l3;
+	wifi_route = 0;
+	if (managed_wlan.connection.interface[0] != '\0' &&
+	    managed_wlan.connection.owns_l3 &&
+	    !managed_wlan.connection.l3_pending &&
+	    managed_wlan.state != NETWORKD_WLAN_RETIRING &&
+	    managed_wlan.state != NETWORKD_WLAN_DISABLED &&
+	    wifi->default_route_present &&
+	    wifi->default_route_owned)
+		wifi_route = 1;
+
+	/* Nothing to choose between. */
+	if (chosen == NULL && !wifi_route)
+		return;
+	descriptor = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (descriptor < 0)
+		return;
+
+	/* Withdraws the default of every wired lease that is not the chosen one. */
+	for (index = 0U; index < NETWORKD_LAN_MAX; index++) {
+		if (lan_l3[index].interface[0] == '\0')
+			continue;
+		if (&lan_l3[index] == chosen || !lan_l3[index].route_present)
+			continue;
+		(void)withdraw_route(descriptor, &lan_l3[index].route);
+	}
+
+	/* A wired lease is preferred: Wi-Fi gives up its default and resolver. */
+	if (chosen != NULL) {
+		if (wifi_route)
+			(void)withdraw_route(descriptor, &wifi->default_route);
+		(void)prefer_route(descriptor, &chosen->route);
+		if (chosen->resolver_length != 0U)
+			(void)prefer_resolver(chosen->resolver, chosen->resolver_length);
+		fprintf(stderr, "networkd: default route and resolver: %s (wired preferred)\n",
+		    chosen->interface);
+	} else {
+		(void)prefer_route(descriptor, &wifi->default_route);
+		if (wifi->resolver_owned && wifi->resolver_length != 0U)
+			(void)prefer_resolver(wifi->resolver, wifi->resolver_length);
+		fprintf(stderr, "networkd: default route and resolver: %s (Wi-Fi)\n",
+		    managed_wlan.connection.interface);
+	}
+	(void)close(descriptor);
+}
+
+/* Installs one recorded default route unless it is already in the table. */
+static int
+prefer_route(
+	int descriptor,
+	const struct networkd_managed_route *route)
+{
+	struct rtentry entry;
+	struct sockaddr_in *address;
+	int present;
+	int error;
+
+	/* Looks for the route in the table. */
+	present = route_present_exact(descriptor, route);
+	if (present < 0)
+		return -1;
+
+	/* A route already in the table stays as it is. */
+	if (present > 0)
+		return 0;
+
+	/* Rebuilds the route-table entry from the recorded fields. */
+	memset(&entry, 0, sizeof(entry));
+	entry.rt_flags = route->flags;
+	entry.rt_ifindex = route->ifindex;
+	address = (struct sockaddr_in *)&entry.rt_dst;
+	address->sin_family = AF_INET;
+	address->sin_addr.s_addr = route->destination;
+	address = (struct sockaddr_in *)&entry.rt_gateway;
+	address->sin_family = AF_INET;
+	address->sin_addr.s_addr = route->gateway;
+	address = (struct sockaddr_in *)&entry.rt_genmask;
+	address->sin_family = AF_INET;
+	address->sin_addr.s_addr = route->netmask;
+
+	/* Adds it. */
+	error = ioctl(descriptor, SIOCADDRT, &entry);
+	if (error != 0)
+		return -1;
+
+	/* Succeeded: the route is in effect again. */
+	return 0;
+}
+
+/* Removes one recorded default route if it is still in the table. */
+static int
+withdraw_route(
+	int descriptor,
+	const struct networkd_managed_route *route)
+{
+	int error;
+
+	/* Deletes only the exact route; one already gone is not an error. */
+	error = delete_interface_default_exact(descriptor, route);
+	if (error != 0 && errno != ESTALE)
+		return -1;
+
+	/* Succeeded: the route is no longer in the table. */
+	return 0;
+}
+
+/* Reports whether one recorded route is in the table (1), absent (0), or unreadable (-1). */
+static int
+route_present_exact(
+	int descriptor,
+	const struct networkd_managed_route *route)
+{
+	struct rtentry entry;
+	unsigned ordinal;
+	int error;
+	int matches;
+
+	/* Walks the route table until the kernel reports its end. */
+	for (ordinal = 0U;; ordinal++) {
+		memset(&entry, 0, sizeof(entry));
+		entry.rt_index = ordinal;
+		error = ioctl(descriptor, SIOCGRTENTRY, &entry);
+		if (error != 0 && errno == ENOENT)
+			break;
+		if (error != 0)
+			return -1;
+		matches = route_matches_owned(&entry, route);
+		if (matches)
+			return 1;
+	}
+
+	/* The route is not in the table. */
+	return 0;
+}
+
+/* Writes the preferred interface's resolver unless it is already in effect. */
+static int
+prefer_resolver(
+	const unsigned char *resolver,
+	size_t length)
+{
+	struct networkd_managed_l3 current;
+	const char *temporary;
+	ssize_t written;
+	int descriptor;
+	int differs;
+	int error;
+
+	/* Reads the resolver file in effect. */
+	memset(&current, 0, sizeof(current));
+	error = snapshot_resolver(&current);
+
+	/* Compares it with the preferred bytes when the lengths agree. */
+	differs = 1;
+	if (error == 0 &&
+	    current.resolver_present &&
+	    !current.resolver_oversized &&
+	    current.resolver_length == length)
+		differs = memcmp(current.resolver, resolver, length);
+	networkd_protocol_clear(&current, sizeof(current));
+
+	/* A resolver file with the same bytes is left alone. */
+	if (differs == 0)
+		return 0;
+
+	/* Writes the bytes to a file beside it. */
+	temporary = "/etc/resolv.conf.networkd";
+	descriptor = open(temporary, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
+	if (descriptor < 0)
+		return -1;
+	written = write(descriptor, resolver, length);
+	error = close(descriptor);
+	if (written < 0 || (size_t)written != length || error != 0) {
+		(void)unlink(temporary);
+		return -1;
+	}
+
+	/* Puts it in place in one step, so a reader sees one file or the other. */
+	error = rename(temporary, "/etc/resolv.conf");
+	if (error != 0) {
+		(void)unlink(temporary);
+		return -1;
+	}
+
+	/* Succeeded: the preferred interface's resolver is in effect. */
+	return 0;
 }
 
 /*
@@ -1887,6 +2304,9 @@ run_due_work(
 	if (lan_work_due) {
 		lan_work_due = 0;
 		run_lan_work();
+
+		/* A wired interface that went away hands the default back (B3). */
+		apply_network_preference();
 	}
 	run_confirmed_due();
 	if (!networkd_confirmed_active(&confirmed) &&
@@ -3175,18 +3595,47 @@ wifi_request_enable(
 	    managed_connection_usable())
 		return 0;
 
-	work->stage = "retire prior Wi-Fi connection";
-	if (managed_wlan.state != NETWORKD_WLAN_DISABLED &&
-	    retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1) != 0)
-		return -1;
-	work->stage = "enable Wi-Fi policy";
-	if (networkd_managed_wlan_enable(&managed_wlan, peer->euid) != 0)
+	/* Retires the prior connection and makes the sender the policy owner. */
+	if (wifi_policy_take(work, peer->euid) != 0)
 		return -1;
 
 	/* RF association belongs to scheduled work, never to enable dispatch. */
-	automatic_candidate_skip = 0U;
 	schedule_automatic_work(0U);
 	return wifi_request_prepare(work);
+}
+
+/*
+ * Moves the enabled Wi-Fi policy to one account.
+ *
+ * The prior connection, whoever owned it, is retired first, and the new
+ * owner's store is what automatic and manual joins read afterwards.
+ */
+static int
+wifi_policy_take(
+	struct networkd_wifi_request *work,
+	uid_t owner_uid)
+{
+	int error;
+
+	/* Retires the connection the prior owner made, if any. */
+	work->stage = "retire prior Wi-Fi connection";
+	if (managed_wlan.state != NETWORKD_WLAN_DISABLED) {
+		error = retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1);
+		if (error != 0)
+			return -1;
+	}
+
+	/* Publishes the new owner with automatic discovery in effect. */
+	work->stage = "enable Wi-Fi policy";
+	error = networkd_managed_wlan_enable(&managed_wlan, owner_uid);
+	if (error != 0)
+		return -1;
+
+	/* A new owner's profiles are all candidates again. */
+	automatic_candidate_skip = 0U;
+
+	/* Succeeded: the account owns the enabled policy. */
+	return 0;
 }
 
 /* Pauses automatic policy before fallible teardown and radio normalization. */
@@ -3244,13 +3693,17 @@ wifi_disable_defer(void)
 static int
 wifi_request_connect(
 	struct networkd_wifi_request *work,
-	const struct networkd_request *request)
+	const struct networkd_request *request,
+	const struct kern_peercred *peer)
 {
 	const struct wifi_conf_profile *profile;
 	uint64_t selection_deadline;
 	uint64_t deadline;
 	size_t winner;
+	uid_t store_uid;
 	int l2_succeeded;
+	int transfer;
+	int taken;
 
 	if (wifi_disable_pending) {
 		errno = EBUSY;
@@ -3261,8 +3714,22 @@ wifi_request_connect(
 		errno = EPERM;
 		return -1;
 	}
+
+	/*
+	 * A join by an account that does not own the policy moves the policy to
+	 * that account (user decision 2026-10-02, ws005-p019), so the key comes
+	 * from the joining account's own store.  Nothing moves until that store
+	 * holds the profile and a radio exists.
+	 */
+	transfer = 0;
+	store_uid = managed_wlan.owner_uid;
+	if (!networkd_managed_wlan_owner_matches(&managed_wlan, peer->euid)) {
+		transfer = 1;
+		store_uid = peer->euid;
+	}
+
 	work->stage = "load Wi-Fi profiles";
-	if (load_policy(managed_wlan.owner_uid, &work->profiles,
+	if (load_policy(store_uid, &work->profiles,
 	    work->diagnostic, sizeof(work->diagnostic)) != 0)
 		return -1;
 	work->stage = "unknown Wi-Fi profile";
@@ -3279,6 +3746,13 @@ wifi_request_connect(
 		work->stage = "no WLAN radio";
 		errno = ENODEV;
 		return -1;
+	}
+
+	/* Moves the policy to the joining account through the enable path. */
+	if (transfer) {
+		taken = wifi_policy_take(work, peer->euid);
+		if (taken != 0)
+			return -1;
 	}
 
 	/* This covers connected, reconnecting, connecting and retiring identities. */
@@ -3356,7 +3830,7 @@ process_wifi_request(
 			result = wifi_request_stop(&work, 0);
 			break;
 		case NETWORKD_OP_WIFI_CONNECT:
-			result = wifi_request_connect(&work, request);
+			result = wifi_request_connect(&work, request, peer);
 			break;
 		case NETWORKD_OP_WIFI_PROFILES_CHANGED:
 			wifi_profiles_changed(peer);
@@ -3785,6 +4259,7 @@ service_wifi_wait(
 	int client;
 	int error;
 	int deferred;
+	int interrupts;
 	uint64_t cleanup_deadline;
 
 	if (wifi_work.cleanup)
@@ -3832,11 +4307,10 @@ service_wifi_wait(
 		    NETWORKD_RESULT_OK, 0, NULL, NULL, 0U);
 	} else {
 		error = EBUSY;
-		if (wifi_work.background &&
-		    (request.header.opcode < NETWORKD_OP_WIFI_ENABLE ||
-		    ((request.header.opcode == NETWORKD_OP_WIFI_DISCONNECT ||
-		    request.header.opcode == NETWORKD_OP_WIFI_DISABLE) &&
-		    owner_allowed(&peer)))) {
+		interrupts = 0;
+		if (wifi_work.background)
+			interrupts = interrupts_background_work(&request, &peer);
+		if (interrupts) {
 			wifi_pending_client = client;
 			wifi_pending.role = role;
 			memcpy(&wifi_pending.request, &request, sizeof(request));
@@ -3864,6 +4338,46 @@ service_wifi_wait(
 	if (!deferred)
 		(void)close(client);
 	return deferred ? EINTR : 0;
+}
+
+/*
+ * Tests whether a request arriving during background Wi-Fi work stops it.
+ *
+ * Wired requests always do.  So does an explicit Wi-Fi on, off, join or
+ * disconnect from a peer allowed to make it: the user decided on 2026-10-02
+ * (ws005-p019) that a person's choice is never kept waiting behind the
+ * automatic search, which is cancelled and resumes from the new state.
+ */
+static int
+interrupts_background_work(
+	const struct networkd_request *request,
+	const struct kern_peercred *peer)
+{
+	uint32_t opcode;
+	int allowed;
+
+	/* A wired request is never held behind automatic Wi-Fi work. */
+	opcode = request->header.opcode;
+	if (opcode < NETWORKD_OP_WIFI_ENABLE)
+		return 1;
+
+	/* Turning Wi-Fi on is open to every admitted peer, as on dispatch. */
+	if (opcode == NETWORKD_OP_WIFI_ENABLE)
+		return 1;
+
+	/* Listing and profile notices are served without stopping the work. */
+	if (opcode != NETWORKD_OP_WIFI_DISABLE &&
+	    opcode != NETWORKD_OP_WIFI_CONNECT &&
+	    opcode != NETWORKD_OP_WIFI_DISCONNECT)
+		return 0;
+
+	/* Off, join and disconnect stop the work only for a peer allowed them. */
+	allowed = owner_allowed(peer);
+	if (!allowed)
+		return 0;
+
+	/* Succeeded: the explicit request takes the place of the search. */
+	return 1;
 }
 
 /* Starts one actor transaction; every exit goes through its outer wrapper. */
@@ -5016,19 +5530,93 @@ load_policy(
 	    diagnostic_capacity);
 }
 
-/* Tests whether one peer may control the currently enabled policy. */
+/*
+ * Tests whether one peer may control the Wi-Fi policy, whoever owns it.
+ *
+ * The user decided on 2026-10-02 (ws005-p019): a member of the network group
+ * may control Wi-Fi.  Turning it on or off, joining and disconnecting are
+ * therefore not reserved to the account that enabled the policy; root and
+ * every network member may do them.  A join moves the policy to the joining
+ * account, whose own store supplies the key, so a key still never passes
+ * through this daemon.  Any other account is refused.
+ */
 static int
 owner_allowed(
 	const struct kern_peercred *peer)
 {
-	/* Root may override; other admitted peers must own the active policy. */
+	int member;
+
+	/* Refuses a request whose sender is unknown. */
 	if (peer == NULL)
 		return 0;
+
+	/* Root may control the policy. */
 	if (peer->euid == 0)
 		return 1;
-	if (managed_wlan.state == NETWORKD_WLAN_DISABLED)
+
+	/* Admits a member of the network group and nobody else. */
+	member = peer_in_network_group(peer);
+	if (!member)
+		return 0;
+
+	/* Succeeded: the peer is a network operator. */
+	return 1;
+}
+
+/*
+ * Tests whether one peer belongs to the network group.
+ *
+ * The listener's mode already keeps other accounts out; this check states the
+ * same rule where the policy is decided.  The peer counts as a member when it
+ * runs with the group as its effective group, or when the group database
+ * lists its account in the group.
+ */
+static int
+peer_in_network_group(
+	const struct kern_peercred *peer)
+{
+	char buffer[NETWORKD_GROUP_BUFFER_MAX];
+	gid_t groups[NETWORKD_PEER_GROUP_MAX];
+	struct passwd storage;
+	struct passwd *account;
+	int group_count;
+	int error;
+	int index;
+
+	/* A process running with the network group is a member. */
+	if ((gid_t)peer->egid == NETWORKD_GROUP_GID)
 		return 1;
-	return networkd_managed_wlan_owner_matches(&managed_wlan, peer->euid);
+
+	/* Finds the account behind the peer's effective user. */
+	account = NULL;
+	error = getpwuid_r((uid_t)peer->euid, &storage, buffer, sizeof(buffer),
+	    &account);
+	if (error != 0)
+		return 0;
+
+	/* An effective user with no account is not a member. */
+	if (account == NULL || account->pw_name == NULL)
+		return 0;
+
+	/*
+	 * Collects the groups the database gives the account.  A list longer
+	 * than the buffer still stores its first entries, which are searched.
+	 */
+	memset(groups, 0, sizeof(groups));
+	group_count = NETWORKD_PEER_GROUP_MAX;
+	(void)getgrouplist(account->pw_name, account->pw_gid, groups,
+	    &group_count);
+	if (group_count > NETWORKD_PEER_GROUP_MAX)
+		group_count = NETWORKD_PEER_GROUP_MAX;
+
+	/* Looks for the network group among them. */
+	for (index = 0; index < group_count; index++) {
+		if (groups[index] == NETWORKD_GROUP_GID)
+			return 1;
+	}
+
+	/* The account is not a member of the network group. */
+	return 0;
 }
 
 /* Returns the public spelling for one managed policy state. */
@@ -5574,6 +6162,10 @@ acquire_managed_l3(
 		identify_l3_ownership(interface, &before, &after);
 		result = networkd_managed_wlan_commit_l3(&managed_wlan, &after);
 	}
+
+	/* A wired connection keeps the default route and resolver (B3). */
+	if (result == 0)
+		apply_network_preference();
 
 	/* On failure the retained baseline remains available to retirement. */
 	saved = errno;
