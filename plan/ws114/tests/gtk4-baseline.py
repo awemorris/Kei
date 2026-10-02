@@ -2,6 +2,7 @@
 # zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 """Supplement gtk4-demo with observable GTK4 API operations in an owned guest."""
 import json
+import os
 import gi
 
 gi.require_version('Gtk', '4.0')
@@ -9,16 +10,16 @@ from gi.repository import Gio, GLib, Gtk
 
 
 def report(event, **fields):
-    print(json.dumps({'event': event, **fields}, ensure_ascii=False), flush=True)
+    print(json.dumps({'event': event, 'pid': os.getpid(), **fields}, ensure_ascii=False), flush=True)
 
 
 class Baseline(Gtk.Application):
     def __init__(self):
-        super().__init__(application_id='org.zedbsd.WS114Baseline')
+        super().__init__(application_id=os.environ.get('WS114_PROBE_ID', 'org.zedbsd.WS114Baseline'))
         self.connect('activate', self.activate)
 
     def activate(self, app):
-        self.window = Gtk.ApplicationWindow(application=app, title='WS114 GTK4 baseline')
+        self.window = Gtk.ApplicationWindow(application=app, title=os.environ.get('WS114_PROBE_TITLE', 'WS114 GTK4 baseline'))
         self.window.set_default_size(700, 460)
         header = Gtk.HeaderBar()
         self.window.set_titlebar(header)
@@ -30,6 +31,7 @@ class Baseline(Gtk.Application):
             action.connect('activate', lambda action, value: report('menu-action', name=action.get_name()))
             self.add_action(action)
         menu_button = Gtk.MenuButton(label='Menu', menu_model=menu)
+        menu_button.set_tooltip_text('WS114 menu tooltip')
         header.pack_start(menu_button)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         box.set_margin_start(22)
@@ -38,8 +40,9 @@ class Baseline(Gtk.Application):
         box.set_margin_bottom(20)
         self.window.set_child(box)
         box.append(Gtk.Label(label='Standard Debian GTK4 — QMP input and lifecycle probe'))
-        self.source = Gtk.Entry(text='q580 clipboard omega Ω')
+        self.source = Gtk.Entry(text=os.environ.get('WS114_PROBE_TEXT', 'q581 clipboard Ω 日本語'))
         self.source.set_placeholder_text('Copy source')
+        self.source.connect('changed', lambda entry: report('source-text', text=entry.get_text()))
         box.append(self.source)
         self.target = Gtk.Entry()
         self.target.set_placeholder_text('Paste target / keyboard input')
@@ -56,10 +59,13 @@ class Baseline(Gtk.Application):
         text.get_buffer().set_text('Scroll and select text.\n' + '\n'.join('GTK4 line %02d' % i for i in range(1, 30)))
         scroll = Gtk.ScrolledWindow(vexpand=True)
         scroll.set_child(text)
+        adjustment = scroll.get_vadjustment()
+        adjustment.connect('value-changed', lambda value: report('scroll', value=value.get_value(), upper=value.get_upper(), page=value.get_page_size()))
         box.append(scroll)
         self.window.connect('close-request', lambda window: report('close-request'))
         self.window.connect('notify::maximized', lambda window, prop: report('maximized', value=window.is_maximized()))
         self.window.connect('notify::fullscreened', lambda window, prop: report('fullscreen', value=window.is_fullscreen()))
+        self.window.connect('notify::is-active', lambda window, prop: report('focus', active=window.is_active()))
         self.window.present()
         GLib.timeout_add(800, self.snapshot)
         report('gtk-version', version='%d.%d.%d' % (Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version()))

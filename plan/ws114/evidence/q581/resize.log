@@ -1,0 +1,3 @@
+[1383989.884] xdg_toplevel#31.configure_bounds(1256, 690)
+[1383989.887] xdg_toplevel#31.configure(0, 0, array[4])
+[1384188.992]  -> xdg_surface#30.set_window_geometry(14, 12, 700, 460)

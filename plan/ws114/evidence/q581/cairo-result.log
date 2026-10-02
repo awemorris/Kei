@@ -1,0 +1,11 @@
+{"event": "gtk-version", "pid": 1009, "version": "4.18.6"}
+{"event": "focus", "pid": 1009, "active": true}
+{"event": "snapshot", "pid": 1009, "renderer": "GskCairoRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+[1709543.132] {Default Queue} wl_callback#34.done(504720)
+[1709544.831]  -> wl_surface#23.attach(wl_buffer#31, 0, 0)
+[1709544.856]  -> wl_surface#23.damage_buffer(35, 110, 658, 36)
+[1709544.868]  -> wl_surface#23.frame(new id wl_callback#34)
+[1709544.879]  -> wl_surface#23.commit()
+[1709559.666] {Default Queue} wl_buffer#31.release()
+[1709561.882] {Display Queue} wl_display#1.delete_id(34)
+[1709561.908] {Default Queue} wl_callback#34.done(504739)
