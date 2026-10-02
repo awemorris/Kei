@@ -157,3 +157,5 @@ networkd の owner の確認を広げ、`network` group の利用者には、roo
   QEMU 0 個、iGPU は vfio-pci のまま、lock と owner の file は解放。資格情報の一時 file と、それを読む補助の script は消した。guest には何も入力していない。
 - 再開の条件: ユーザーが、この AP（試験用の AP がユーザーのものであること）への接続をエージェントが行うことを、このセッションの権限の確認の場で
   明示に承認する（または permission の規則を足す）。承認後は `plan/ws005/phase019/wifi-desktop-hw.sh` で i03 の手順の続き（AP を選ぶ → 鍵の field）から。
+
+2026-10-02 user（明示の承認）:「WiFiの資格情報を利用することを明示的に許可します。」→ 試験用 AP（2.4GHz・5GHz）への接続の試験を許可。資格情報は記録しない。P1 を再起動して q599 の残りと p024 の試験を行う。
