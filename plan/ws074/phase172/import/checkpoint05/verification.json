@@ -1,0 +1,42 @@
+{
+  "base": "580e2d3fc456d6d9373e73430e710628aeb18147",
+  "source": "userland/desktop/libbrowser/bind/svg-length.c",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": [
+    "-std=gnu11",
+    "-O1",
+    "-g0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/p10-browser2/include",
+    "-I."
+  ],
+  "objects": {
+    "before": {
+      "source_sha256": "c2b2b73e8fa530e4ae7092e0b7d29bea050febdfdc7770a63bc03ba9dc50f437",
+      "text_sha256": "69a7b7575e9f24c35f3c763150e7cfa21cfc77ec048d4e31d7d8d260e3da1704",
+      "warnings": 0
+    },
+    "after": {
+      "source_sha256": "f3c6531c531228dc8a9c58b955c68009936c8408c80a30699d12b90c5f25c43e",
+      "text_sha256": "69a7b7575e9f24c35f3c763150e7cfa21cfc77ec048d4e31d7d8d260e3da1704",
+      "warnings": 0
+    }
+  },
+  "text_equal": true,
+  "implementation_tokens_equal_excluding_static_prototype_location": true,
+  "formatter": "Debian clang-format version 19.1.7 (3+b1)",
+  "formatter_sha256": "ef85490efe1f73d45da1708dafe55f6d83ec5b067c43c9f1980443bd98cc72f9",
+  "formatter_restoration": "Retain separate definition arguments/tabs, readable constant table rows and multiline compound decision clauses required by the full C standard.",
+  "pre_table_declarations": 10,
+  "normal_helper_declarations_after_variables": 12,
+  "policy_source": "8367481d9:plan/coding-style.md section2/user necessary-only table initializer exception",
+  "whole_phase_cleared": false,
+  "runtime": "Existing checkpoint02/03/04 runtime evidence retained for identical implementation operations; no new target run or broad regression repetition."
+}
