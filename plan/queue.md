@@ -28,3 +28,5 @@ WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ�
 
 
 2026-10-02 / n3-execution-start: reserved3枠を実行に移す。共有計画の上書き・browser2全branch merge・pushなし。成果は小さなWIP commitからmainがレビュー/統合。
+
+Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21d68d4be/common493b6eea90c45b3c1f393c0c62a0f7882b43621c不変。toolchain4trees writable dirs0。P9 solaris10-man SSH可、他QEMU/lockなし、GPU既存vfio-pci。P8既存image/renderer実在、geometry差の診断を優先。P10 manifest/classification開始。

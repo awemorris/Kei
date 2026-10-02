@@ -16,3 +16,5 @@ Ordered next Queues: 未投入。mainが結果/依存確認後に明示dispatch�
 Merge requests / ACK: none
 Outcome: 実行準備、未検証。
 Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
+
+Pinned source read-only fetch 2026-10-02: tip e53ef03b80113aec959deb67f828cba21d68d4be、common493b6eea90c45b3c1f393c0c62a0f7882b43621c、approval snapshotと一致。browser92files/28137insertions/770deletions。

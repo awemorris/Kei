@@ -16,3 +16,5 @@ Ordered next Queues: 未投入。mainが結果/依存確認後に明示dispatch�
 Merge requests / ACK: none
 Outcome: 実行準備、未検証。
 Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
+
+Preflight: fixture host solaris10-man（chaos）SSH可、他QEMU/owner/lock無し、GPU既にvfio-pci。mainが所有lockを取得した専用fixtureの使用を許可。rebind/reboot/他VM停止はしない。source freshnessを確認してimageを選ぶ。
