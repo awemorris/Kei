@@ -21,6 +21,7 @@
 #include "userland/desktop/paths.h"
 
 #include <errno.h>
+#include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,6 +36,7 @@ static void main_global_remove(void *data, struct wl_registry *registry, uint32_
 static int main_engines(struct program *program);
 static void main_user_path(char *path, size_t size);
 static void main_warm(struct program *program, struct ime_engine *engine);
+static int main_serve(struct program *program);
 
 /*
  * The registry's events.
@@ -115,11 +117,15 @@ main(
 		return 1;
 	}
 
+	/* The candidate window; without it the program still converts, only the candidates are not shown. */
+	status = program_popup_start(&program);
+	printf("KEI-IME POPUP ready=%d error=%d\n", program.popup.ready, status);
+
 	/* Serves the keyboard until the connection ends or another input method holds the seat. */
 	printf("KEI-IME READY languages=%u\n", program.engine_count);
 	while (!program.unavailable) {
-		status = wl_display_dispatch(program.display);
-		if (status < 0)
+		status = main_serve(&program);
+		if (status != 0)
 			break;
 	}
 
@@ -176,8 +182,22 @@ main_global(
 
 	/* zdesktop's status. */
 	order = strcmp(interface, "keiland_ime_status_manager_v1");
-	if (order == 0)
+	if (order == 0) {
 		program->status_manager = wl_registry_bind(registry, name, &keiland_ime_status_manager_v1_interface, 1);
+		return;
+	}
+
+	/* The compositor, for the candidate window's surface. */
+	order = strcmp(interface, "wl_compositor");
+	if (order == 0) {
+		program->compositor = wl_registry_bind(registry, name, &wl_compositor_interface, 1);
+		return;
+	}
+
+	/* Shared memory, for its buffers. */
+	order = strcmp(interface, "wl_shm");
+	if (order == 0)
+		program->shm = wl_registry_bind(registry, name, &wl_shm_interface, 1);
 }
 
 /*
@@ -290,4 +310,50 @@ main_user_path(
 
 	/* The file in it. */
 	snprintf(path, size, "%s/ja-user.dict", directory);
+}
+
+/*
+ * Serves one turn of the connection: the events queued, then a wait for
+ * more no longer than the held key's next repeat, then the repeat when it
+ * is due.
+ *
+ * Returns 0, or -1 when the connection ended.
+ */
+static int
+main_serve(
+	struct program *program)
+{
+	struct pollfd descriptor;
+	int timeout;
+	int status;
+
+	/* The events already read. */
+	status = wl_display_dispatch_pending(program->display);
+	if (status < 0)
+		return -1;
+
+	/* What the program sends, sent now. */
+	(void)wl_display_flush(program->display);
+
+	/* Waits for zdesktop, or until the held key repeats. */
+	timeout = program_repeat_timeout(program, program_clock_ms());
+	descriptor.fd = wl_display_get_fd(program->display);
+	descriptor.events = POLLIN;
+	descriptor.revents = 0;
+	status = poll(&descriptor, 1, timeout);
+	if (status < 0 && errno != EINTR)
+		return -1;
+
+	/* zdesktop's events, read and handled. */
+	if (status > 0) {
+		status = wl_display_dispatch(program->display);
+		if (status < 0)
+			return -1;
+	}
+
+	/* The held key's repeat. */
+	program_repeat_due(program, program_clock_ms());
+
+	/* Succeeded: the connection goes on. */
+	return 0;
 }

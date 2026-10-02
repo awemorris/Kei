@@ -17,6 +17,7 @@
 
 #include "engine.h"
 
+#include <keiui.h>
 #include <wayland/wayland-client.h>
 #include <wayland/input-method-unstable-v2-client-protocol.h>
 #include <wayland/virtual-keyboard-unstable-v1-client-protocol.h>
@@ -25,6 +26,55 @@
 /* The most languages the program keeps, and the evdev codes whose presses it remembers. */
 #define PROGRAM_ENGINES_MAX	4U
 #define PROGRAM_KEYS		768U
+
+/* The candidate window's buffers: one shown while the next is drawn. */
+#define PROGRAM_POPUP_BUFFERS	2U
+
+/*
+ * One buffer of the candidate window: its place in the shared memory both
+ * are in, and the wl_buffer of the window's size made over it at each change.
+ *
+ * Busy from its attach until the compositor gives it back.
+ */
+struct program_popup_buffer {
+	struct wl_buffer *buffer;
+	uint32_t *pixels;
+	int32_t offset;
+	unsigned busy;
+};
+
+/*
+ * The candidate window (popup.c): the input popup surface, its buffers and
+ * the fonts it draws with.
+ *
+ * Made once after the input method; ready stays zero when it could not be
+ * made, and then no candidates are shown.
+ */
+struct program_popup {
+	struct wl_shm *shm;
+	struct wl_shm_pool *pool;
+	struct wl_surface *surface;
+	struct zwp_input_popup_surface_v2 *role;
+	struct program_popup_buffer buffers[PROGRAM_POPUP_BUFFERS];
+	struct kui_text text;
+	unsigned text_open;
+	unsigned ready;
+	unsigned shown;
+};
+
+/*
+ * The key the input method repeats while it is held (zdesktop gives the
+ * grab no repeated presses, only the rate and the delay to make them by).
+ *
+ * The key is zero when none is held; next_ms is when the next press is due.
+ */
+struct program_repeat {
+	int32_t rate;
+	int32_t delay;
+	uint32_t key;
+	uint32_t time;
+	unsigned long long next_ms;
+};
 
 /*
  * The input method program's whole state.
@@ -37,6 +87,8 @@ struct program {
 	struct wl_display *display;
 	struct wl_registry *registry;
 	struct wl_seat *seat;
+	struct wl_compositor *compositor;
+	struct wl_shm *shm;
 	struct zwp_input_method_manager_v2 *method_manager;
 	struct zwp_virtual_keyboard_manager_v1 *keyboard_manager;
 	struct keiland_ime_status_manager_v1 *status_manager;
@@ -59,11 +111,20 @@ struct program {
 	unsigned char passed[PROGRAM_KEYS];
 	unsigned unavailable;
 	struct ime_output *out;
+	struct program_popup popup;
+	struct program_repeat repeat;
 };
 
 /* method.c */
 int program_method_start(struct program *program);
 void program_announce_language(struct program *program);
+int program_repeat_timeout(const struct program *program, unsigned long long now_ms);
+void program_repeat_due(struct program *program, unsigned long long now_ms);
+unsigned long long program_clock_ms(void);
+
+/* popup.c */
+int program_popup_start(struct program *program);
+void program_popup_update(struct program *program, const struct ime_output *out);
 
 /* keys.c */
 uint32_t program_key_character(uint32_t code, uint32_t modifiers);
