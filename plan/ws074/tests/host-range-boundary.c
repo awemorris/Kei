@@ -252,10 +252,10 @@ range_case(
 	for (kind = 0; kind < 3U; kind++) {
 		/* The Range alone owns its otherwise detached XML creator and old text endpoints. */
 		status = range_script(
-			realm,
-			"(function(){var d=document.implementation.createDocument(null,null,null);"
-			"var t=d.createTextNode('old');var r=d.createRange();r.selectNodeContents(t);return r;})()",
-			&receiver);
+		    realm,
+		    "(function(){var d=document.implementation.createDocument(null,null,null);"
+		    "var t=d.createTextNode('old');var r=d.createRange();r.selectNodeContents(t);return r;})()",
+		    &receiver);
 		if (status != 0)
 			break;
 
@@ -375,11 +375,11 @@ range_case(
 	for (kind = 0; status == 0 && kind < 3U; kind++) {
 		/* Both independent native states initially share one detached actual XML element interval. */
 		status = range_script(
-			realm,
-			"(function(){var d=document.implementation.createDocument(null,null,null);"
-			"var box=d.createElement('box');box.appendChild(d.createTextNode('old'));"
-			"var r=d.createRange();r.selectNodeContents(box);return r;})()",
-			&receiver);
+		    realm,
+		    "(function(){var d=document.implementation.createDocument(null,null,null);"
+		    "var box=d.createElement('box');box.appendChild(d.createTextNode('old'));"
+		    "var r=d.createRange();r.selectNodeContents(box);return r;})()",
+		    &receiver);
 		if (status != 0)
 			break;
 

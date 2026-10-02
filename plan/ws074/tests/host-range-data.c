@@ -267,22 +267,22 @@ partial_case(
 	/* Genuine globals own source data and every independent native boundary tuple. */
 	do {
 		status = partial_script(realm,
-			"var partialTarget=document.createElement('div');document.appendChild(partialTarget);"
-			"var partialDoc=document.implementation.createDocument(null,'root',null);"
-			"var partialText=partialDoc.createTextNode('ABCDEFGH');"
-			"partialDoc.documentElement.appendChild(partialText);"
-			"var partialRanges=[],partialOffsets=[0,2,3,5,6,8];"
-			"for(var j=0;j<6;j++)partialRanges.push(partialDoc.createRange());"
-			"var partialClone=partialDoc.createRange();partialClone.detach();"
-			"function partialReset(s){partialText.data=s;for(var j=0;j<6;j++){"
-			"partialRanges[j].setStart(partialText,partialOffsets[j]);"
-			"partialRanges[j].collapse(true);}partialClone.setStart(partialText,5);"
-			"partialClone.collapse(true);}partialReset('ABCDEFGH');"
-			"partialClone=partialRanges[3].cloneRange();partialClone.detach();"
-			"function partialPoints(){return partialRanges.map(function(r){"
-			"return r.startOffset+':'+r.endOffset;}).join(',')+','+partialClone.startOffset;}"
-			"partialText;",
-			&answer);
+					"var partialTarget=document.createElement('div');document.appendChild(partialTarget);"
+					"var partialDoc=document.implementation.createDocument(null,'root',null);"
+					"var partialText=partialDoc.createTextNode('ABCDEFGH');"
+					"partialDoc.documentElement.appendChild(partialText);"
+					"var partialRanges=[],partialOffsets=[0,2,3,5,6,8];"
+					"for(var j=0;j<6;j++)partialRanges.push(partialDoc.createRange());"
+					"var partialClone=partialDoc.createRange();partialClone.detach();"
+					"function partialReset(s){partialText.data=s;for(var j=0;j<6;j++){"
+					"partialRanges[j].setStart(partialText,partialOffsets[j]);"
+					"partialRanges[j].collapse(true);}partialClone.setStart(partialText,5);"
+					"partialClone.collapse(true);}partialReset('ABCDEFGH');"
+					"partialClone=partialRanges[3].cloneRange();partialClone.detach();"
+					"function partialPoints(){return partialRanges.map(function(r){"
+					"return r.startOffset+':'+r.endOffset;}).join(',')+','+partialClone.startOffset;}"
+					"partialText;",
+					&answer);
 		if (status != 0)
 			break;
 		text = bind_node_of(answer);
@@ -477,7 +477,7 @@ partial_case(
 		/* Actual adoption migrates data subscriptions according to their associated native root. */
 		sequence = 0;
 		status = partial_script(realm,
-			"partialTarget.appendChild(partialText);partialReset('ABCDEFGH');", &answer);
+					"partialTarget.appendChild(partialText);partialReset('ABCDEFGH');", &answer);
 		if (status != 0)
 			break;
 		partial_check(text->document != owner, "real adoption changes current native data owner");
@@ -495,11 +495,12 @@ partial_case(
 
 		/* Comments use the same partial data algorithm and native live boundary repair. */
 		status = partial_script(realm,
-			"var partialComment=partialDoc.createComment('comment');"
-			"partialDoc.documentElement.appendChild(partialComment);"
-			"var partialCommentRange=partialDoc.createRange();"
-			"partialCommentRange.setStart(partialComment,1);"
-			"partialCommentRange.setEnd(partialComment,6);partialComment;", &answer);
+					"var partialComment=partialDoc.createComment('comment');"
+					"partialDoc.documentElement.appendChild(partialComment);"
+					"var partialCommentRange=partialDoc.createRange();"
+					"partialCommentRange.setStart(partialComment,1);"
+					"partialCommentRange.setEnd(partialComment,6);partialComment;",
+					&answer);
 		if (status != 0)
 			break;
 		comment = bind_node_of(answer);
@@ -515,8 +516,9 @@ partial_case(
 
 		/* Remove external script ownership before inspecting weak callback retention. */
 		status = partial_script(realm,
-			"partialText.remove();partialRanges=null;partialClone=null;partialText=null;"
-			"partialDoc=null;partialComment=null;partialCommentRange=null;", &answer);
+					"partialText.remove();partialRanges=null;partialClone=null;partialText=null;"
+					"partialDoc=null;partialComment=null;partialCommentRange=null;",
+					&answer);
 		if (status != 0)
 			break;
 		vm_heap_collect(realm->heap);

@@ -267,13 +267,13 @@ mutation_case(
 	/* Globals supply genuine script ownership while direct C calls have no receiver frame. */
 	do {
 		status = mutation_script(realm,
-			"var mutationDoc=document.implementation.createDocument(null,'root',null);"
-			"var mutationText=mutationDoc.createTextNode('ABCDE');"
-			"mutationDoc.documentElement.appendChild(mutationText);"
-			"var mutationRange=mutationDoc.createRange();"
-			"mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,4);"
-			"var mutationIncoming=mutationDoc.createComment('incoming');mutationText;",
-			&answer);
+					 "var mutationDoc=document.implementation.createDocument(null,'root',null);"
+					 "var mutationText=mutationDoc.createTextNode('ABCDE');"
+					 "mutationDoc.documentElement.appendChild(mutationText);"
+					 "var mutationRange=mutationDoc.createRange();"
+					 "mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,4);"
+					 "var mutationIncoming=mutationDoc.createComment('incoming');mutationText;",
+					 &answer);
 		if (status != 0)
 			break;
 		text = bind_node_of(answer);
@@ -338,8 +338,8 @@ mutation_case(
 
 		/* Nonzero current endpoints make failed preparation's preservation independently observable. */
 		status = mutation_script(realm,
-			"mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,2);",
-			&answer);
+					 "mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,2);",
+					 &answer);
 		if (status != 0)
 			break;
 
@@ -377,7 +377,7 @@ mutation_case(
 
 		/* With no script graph roots, configured weak callbacks cannot retain their creator Document. */
 		status = mutation_script(realm,
-			"mutationRange=null;mutationIncoming=null;mutationText=null;mutationDoc=null;", &answer);
+					 "mutationRange=null;mutationIncoming=null;mutationText=null;mutationDoc=null;", &answer);
 		if (status != 0)
 			break;
 		vm_heap_collect(realm->heap);

@@ -153,9 +153,10 @@ collection_case(
 
 	/* List value selection changes clean current state without setting either dirty flag. */
 	status = collection_script(realm,
-		"var form=document.createElement('form');"
-		"form.innerHTML='<input type=radio name=group value=a checked><input type=radio name=group value=b>';"
-		"form.elements.group.value='b';form", &answer);
+				   "var form=document.createElement('form');"
+				   "form.innerHTML='<input type=radio name=group value=a checked><input type=radio name=group value=b>';"
+				   "form.elements.group.value='b';form",
+				   &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -175,7 +176,7 @@ collection_case(
 
 	/* A dirty IDL setter and a later direct list assignment have independent flag effects. */
 	status = collection_script(realm,
-		"form.elements[1].checked=false;form.elements.group.value='b';true", &answer);
+				   "form.elements[1].checked=false;form.elements.group.value='b';true", &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -190,7 +191,7 @@ collection_case(
 
 	/* Cloning a clean current group-unchecked radio copies current state without dirtying it. */
 	status = collection_script(realm,
-		"var clone=form.elements[0].cloneNode(false);clone", &answer);
+				   "var clone=form.elements[0].cloneNode(false);clone", &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

@@ -154,9 +154,10 @@ collection_case(
 
 	/* Only the XML select remains globally reachable after its native cache is created. */
 	error = collection_script(realm,
-		"var xml=document.implementation.createDocument('http://www.w3.org/1999/xhtml','select');"
-		"var table=xml.documentElement;var option=xml.createElementNS('http://www.w3.org/1999/xhtml','option');"
-		"option.id='held';table.add(option);table.options;xml=null;option=null;table", &answer);
+				  "var xml=document.implementation.createDocument('http://www.w3.org/1999/xhtml','select');"
+				  "var table=xml.documentElement;var option=xml.createElementNS('http://www.w3.org/1999/xhtml','option');"
+				  "option.id='held';table.add(option);table.options;xml=null;option=null;table",
+				  &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -211,7 +212,7 @@ collection_case(
 
 	/* Public native methods remain live after collection, using the original XML prototype snapshot. */
 	error = collection_script(realm,
-		"saved.length===1&&saved.item(0).id==='held'&&saved.namedItem('held')===saved[0]", &answer);
+				  "saved.length===1&&saved.item(0).id==='held'&&saved.namedItem('held')===saved[0]", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

@@ -157,13 +157,14 @@ collection_case(
 
 	/* Form alone retains its SameObject cache; the original duplicate-name key is dynamic. */
 	error = collection_script(realm,
-		"var xml=document.implementation.createDocument(null,'Root');"
-		"var form=xml.createElementNS('http://www.w3.org/1999/xhtml','form');"
-		"xml.documentElement.appendChild(form);"
-		"var key='held-'+String(1234);"
-		"var a=xml.createElementNS('http://www.w3.org/1999/xhtml','input');a.id=key;a.checked=true;a.value='owned';a.defaultValue='raw';form.appendChild(a);"
-		"var b=xml.createElementNS('http://www.w3.org/1999/xhtml','button');b.setAttribute('name',key);form.appendChild(b);"
-		"form.elements;xml=null;a=null;b=null;form", &answer);
+				  "var xml=document.implementation.createDocument(null,'Root');"
+				  "var form=xml.createElementNS('http://www.w3.org/1999/xhtml','form');"
+				  "xml.documentElement.appendChild(form);"
+				  "var key='held-'+String(1234);"
+				  "var a=xml.createElementNS('http://www.w3.org/1999/xhtml','input');a.id=key;a.checked=true;a.value='owned';a.defaultValue='raw';form.appendChild(a);"
+				  "var b=xml.createElementNS('http://www.w3.org/1999/xhtml','button');b.setAttribute('name',key);form.appendChild(b);"
+				  "form.elements;xml=null;a=null;b=null;form",
+				  &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -204,7 +205,7 @@ collection_case(
 
 	/* Only the list remains as a script root; its name has no independent variable. */
 	error = collection_script(realm,
-		"var saved=form.elements.namedItem(key);form=null;key=null;saved", &answer);
+				  "var saved=form.elements.namedItem(key);form=null;key=null;saved", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -236,7 +237,7 @@ collection_case(
 
 	/* Public live membership uses the captured name after real collection. */
 	error = collection_script(realm,
-		"saved.length===2&&saved.item(0).id==='held-1234'&&saved.item(1).getAttribute('name')==='held-1234'", &answer);
+				  "saved.length===2&&saved.item(0).id==='held-1234'&&saved.item(1).getAttribute('name')==='held-1234'", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -251,7 +252,7 @@ collection_case(
 
 	/* Owned input text remains independent from its default attribute after actual GC. */
 	error = collection_script(realm,
-		"saved[0].value==='owned'&&saved[0].defaultValue==='raw'", &answer);
+				  "saved[0].value==='owned'&&saved[0].defaultValue==='raw'", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -266,7 +267,7 @@ collection_case(
 
 	/* Checkedness shares native owned state but never creates a content default. */
 	error = collection_script(realm,
-		"saved[0].checked===true&&!saved[0].hasAttribute('checked')", &answer);
+				  "saved[0].checked===true&&!saved[0].hasAttribute('checked')", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -281,7 +282,7 @@ collection_case(
 
 	/* Member mutation is observed without retaining a removed snapshot member in the list. */
 	error = collection_script(realm,
-		"saved[0].id='changed';saved.length===1&&saved.item(0).getAttribute('name')==='held-1234'", &answer);
+				  "saved[0].id='changed';saved.length===1&&saved.item(0).getAttribute('name')==='held-1234'", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

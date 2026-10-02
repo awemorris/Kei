@@ -223,8 +223,9 @@ collection_case(
 	for (kind = 0; kind < 2U; kind++) {
 		/* The target has native option state but no independent script variable or external root. */
 		status = collection_script(realm,
-			"(function(){var s=document.createElement('select');"
-			"s.add(document.createElement('option'));s.add(document.createElement('option'));return s;})()", &receiver);
+					   "(function(){var s=document.createElement('select');"
+					   "s.add(document.createElement('option'));s.add(document.createElement('option'));return s;})()",
+					   &receiver);
 		if (status != 0)
 			break;
 		table = bind_node_of(receiver);

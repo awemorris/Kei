@@ -6,497 +6,639 @@
       "reported_branch_status": "cleared",
       "heading": "# ws074-p100: Acid3 full acceptance",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase100/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Historical branch score-only acceptance preserved; current p100 exact pixel goal remains planned/unmet",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p102",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p102: Acid3 execution and failure inventory",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase102/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p103",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p103: Parser insertion for document.write",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase103/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p104",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p104: Initial HTML iframe child contexts",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase104/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p105",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p105: Cross-realm execution and exception transport",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase105/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p106",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p106: Reachable child-context ownership foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase106/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p107",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p107: createElement name validation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase107/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p108",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p108: createElementNS and element namespace identity",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase108/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p109",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p109: Initial child-document computed CSS foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase109/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p110",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p110: Reject missing combinators between selector compounds",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase110/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p111",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p111: Language inheritance and empty-text selector semantics",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase111/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p112",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p112: Button, label and meta reflected attributes",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase112/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p113",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p113: Unsigned array-length metadata without dense growth",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase113/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p114",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p114: CSS predefined cursor values and computed inheritance",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase114/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p115",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p115: HTMLObjectElement.data reflected URL foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase115/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p116",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p116: Legacy Event/UIEvent creation and initialization",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase116/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p117",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p117: DOMImplementation and XML Document creation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase117/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p118",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p118: TreeWalker and NodeFilter foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase118/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p119",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p119: weak pre-removal subscription foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase119/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p120",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p120: NodeIterator reference/candidate traversal",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase120/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p121",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p121: native dynamic property protocol foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase121/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p122",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p122: live HTMLCollection, children and Document.links",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase122/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p123",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p123: SameObject live Document.forms",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase123/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p124",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p124: ordinary DOM form ownership and listed-control predicates",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase124/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p125",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p125: live form.elements and indexed duplicate-name lists",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase125/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p126",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p126: HTMLInputElement reflection and text/password value",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase126/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p127",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p127: native input checkedness and RadioNodeList.value",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase127/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p128",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p128: script click checkbox/radio activation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase128/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p129",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p129: input submit-button submission events",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase129/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p130",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p130: native live table collections",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase130/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p131",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p131: native table caption/head/foot operations",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase131/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p132",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p132: subtree Document adoption and iterator subscription migration",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase132/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p133",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p133: native table/section row mutations and row indices",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase133/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p134",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p134: native select options membership and typed addition",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase134/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p135",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p135: owned option selectedness and native selected index",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase135/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p136",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p136: native Range boundary foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase136/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p137",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p137: native Range live removal repair",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase137/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p138",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p138: native Range cloning, boundary comparison and text stringification",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase138/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p139",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p139: reusable native DOM pre-insertion validity",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase139/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p140",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p140: live Range insertion and existing CharacterData mutation repair",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase140/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p141",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p141: native Text.splitText and Range.insertNode",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase141/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p142",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p142: checked rooted reusable native Node cloning",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase142/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p143",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p143: checked partial native CharacterData replacement and deletion",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase143/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p144",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p144: actual native Range.cloneContents",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase144/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p145",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p145: rooted native child-list MutationRecord construction",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase145/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p146",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p146: VM object and Array factory callee GC ownership",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase146/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p147",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p147: actual native Range.deleteContents",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase147/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p148",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p148: actual native Range.extractContents",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase148/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p149",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p149: actual native Range.surroundContents",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase149/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p150",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p150: CSS text-transform computed state and numeric color media",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase150/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p151",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p151: iframe content-box viewport for child CSS",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase151/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p152",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p152: managed child HTML parser lifetime",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase152/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p153",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p153: active managed child HTML replacement streams",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase153/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p154",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p154: native live Document.images collection",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase154/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p155",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p155: child native geometry and rendered image dimensions",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase155/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p156",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p156: definite zero replaced dimensions and empty native image rectangles",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase156/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p157",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p157: native top-level CSS rule source model",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase157/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p158",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p158: inline native CSS source association and rendering bridge",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase158/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p159",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p159: native inline sheet wrappers and live rule counts",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase159/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p160",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p160: native ordinary CSSStyleSheet insertRule and deleteRule",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase160/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p161",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p161: strict UTF8 XML namespace-aware native parsing model",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase161/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p162",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p162: exact native attribute namespace identity for XML projection",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase162/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p163",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p163: native XML CDATA and ProcessingInstruction owning nodes",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase163/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p164",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p164: real XML character-node wrappers and existing native category integration",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase164/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p165",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p165: strict XML native model to owning DOM Document projection",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase165/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p166",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p166: owned response metadata and declared document MIME foundation",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase166/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p167",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p167: preserve data URL body decoding failures (BUG-132)",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase167/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p168",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p168: actual same-origin child response loading, XML activation and task events",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase168/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p169",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p169: headless virtual timer and real child network progress",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase169/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p170",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p170: native SVG text interface and addressable UTF16 character count",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase170/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     },
     {
       "logical_id": "ws074-p171",
       "reported_branch_status": "cleared",
       "heading": "# ws074-p171: native SVG rect width and live scalar length reflection",
       "source_path": "plan/ws074/phase172/import/browser2-evidence/plan/ws074/phase171/phase.md.source.txt",
-      "current_acceptance": "historical evidence only; p172 gate remains"
+      "current_acceptance": "historical evidence only; p172 gate remains",
+      "current_verified_outcome": "Imported final branch source: executable regression98groups pass plain/ASan; legacy81goldens pass both; originalAcid3 score/inventory100, pixel37.04%; no current Phase clearance",
+      "reconciliation_owner": "main; phase172/import/main-reconciliation.md"
     }
   ]
 }

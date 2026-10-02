@@ -180,10 +180,11 @@ delete_case(
 	do {
 		/* A genuine primary Document needs its first Element before this host fixture can select it. */
 		status = delete_script(realm,
-		    "var root=document.createElement('div');document.appendChild(root);"
-		    "for(var i=0;i<1800;i++){var child=document.createElement('i');child.setAttribute('data-id',String(i));root.appendChild(child);}"
-		    "var observer=new MutationObserver(function(){});observer.observe(root,{childList:true});"
-		    "var r=document.createRange();r.selectNodeContents(root);r", &receiver);
+				       "var root=document.createElement('div');document.appendChild(root);"
+				       "for(var i=0;i<1800;i++){var child=document.createElement('i');child.setAttribute('data-id',String(i));root.appendChild(child);}"
+				       "var observer=new MutationObserver(function(){});observer.observe(root,{childList:true});"
+				       "var r=document.createRange();r.selectNodeContents(root);r",
+				       &receiver);
 		if (status != 0)
 			break;
 		wrapper = (struct vm_object *)vm_value_as_cell(receiver);
@@ -254,10 +255,11 @@ delete_case(
 		/* Pending records retain detached identities after the callee's roots have returned. */
 		vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
 		status = delete_script(realm,
-		    "var records=observer.takeRecords(),good=records.length===1800;"
-		    "for(var i=0;i<records.length;i++){var x=records[i];"
-		    "if(x.type!=='childList'||x.target!==root||x.addedNodes.length!==0||x.removedNodes.length!==1||"
-		    "x.removedNodes[0].getAttribute('data-id')!==String(i)||x.removedNodes[0].parentNode!==null)good=false;}good", &answer);
+				       "var records=observer.takeRecords(),good=records.length===1800;"
+				       "for(var i=0;i<records.length;i++){var x=records[i];"
+				       "if(x.type!=='childList'||x.target!==root||x.addedNodes.length!==0||x.removedNodes.length!==1||"
+				       "x.removedNodes[0].getAttribute('data-id')!==String(i)||x.removedNodes[0].parentNode!==null)good=false;}good",
+				       &answer);
 		if (status != 0)
 			break;
 		truth = vm_to_boolean(answer);
@@ -270,7 +272,7 @@ delete_case(
 
 		/* Releasing records and the source root makes the detached graph collectible. */
 		status = delete_script(realm,
-		    "observer.disconnect();records=null;observer=null;document.removeChild(root);root=null;child=null;x=null", &answer);
+				       "observer.disconnect();records=null;observer=null;document.removeChild(root);root=null;child=null;x=null", &answer);
 		if (status != 0)
 			break;
 		vm_heap_set_stack_base(realm->heap, NULL);

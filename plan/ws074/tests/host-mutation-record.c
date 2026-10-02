@@ -185,10 +185,11 @@ mutation_case(
 			/* Genuine observers use their ordinary native target registrations. */
 			vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
 			status = mutation_script(realm,
-			    "var parent=document.createElement('div');var child=document.createElement('b');"
-			    "var removed=document.createComment('removed');parent.appendChild(removed);"
-			    "var one=new MutationObserver(function(){}),two=new MutationObserver(function(){});"
-			    "one.observe(parent,{childList:true});two.observe(parent,{childList:true,subtree:true});parent", &answer);
+						 "var parent=document.createElement('div');var child=document.createElement('b');"
+						 "var removed=document.createComment('removed');parent.appendChild(removed);"
+						 "var one=new MutationObserver(function(){}),two=new MutationObserver(function(){});"
+						 "one.observe(parent,{childList:true});two.observe(parent,{childList:true,subtree:true});parent",
+						 &answer);
 			if (status != 0)
 				break;
 			parent = bind_node_of(answer);
@@ -250,13 +251,14 @@ mutation_case(
 			/* Both observers publish independent complete records through their existing takeRecords API. */
 			vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
 			status = mutation_script(realm,
-			    "var first=one.takeRecords(),second=two.takeRecords();"
-			    "first.length===1&&second.length===1&&first!==second&&first[0]!==second[0]&&"
-			    "first[0].type==='childList'&&first[0].target===parent&&second[0].target===parent&&"
-			    "first[0].addedNodes.constructor.name==='NodeList'&&first[0].removedNodes.constructor.name==='NodeList'&&"
-			    "first[0].addedNodes!==second[0].addedNodes&&first[0].removedNodes!==second[0].removedNodes&&"
-			    "first[0].previousSibling===null&&first[0].nextSibling===null&&first[0].attributeName===null&&"
-			    "first[0].attributeNamespace===null&&first[0].oldValue===null", &answer);
+						 "var first=one.takeRecords(),second=two.takeRecords();"
+						 "first.length===1&&second.length===1&&first!==second&&first[0]!==second[0]&&"
+						 "first[0].type==='childList'&&first[0].target===parent&&second[0].target===parent&&"
+						 "first[0].addedNodes.constructor.name==='NodeList'&&first[0].removedNodes.constructor.name==='NodeList'&&"
+						 "first[0].addedNodes!==second[0].addedNodes&&first[0].removedNodes!==second[0].removedNodes&&"
+						 "first[0].previousSibling===null&&first[0].nextSibling===null&&first[0].attributeName===null&&"
+						 "first[0].attributeNamespace===null&&first[0].oldValue===null",
+						 &answer);
 			if (status != 0)
 				break;
 			truth = vm_to_boolean(answer);

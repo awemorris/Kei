@@ -191,11 +191,12 @@ sheet_case(
 
 	/* Primary and child styles start with different actual native cascade results. */
 	status = sheet_script(page->realm,
-	    "var ps=document.createElement('style');ps.appendChild(document.createTextNode('img{display:block;width:10px;height:7px}'));document.head.appendChild(ps);"
-	    "document.body.appendChild(document.createElement('img'));"
-	    "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
-	    "var d=f.contentDocument;d.open();d.write('<style>img{display:block;width:10px;height:10px}</style><img>');d.close();"
-	    "var s=d.getElementsByTagName('style')[0];var mo=new MutationObserver(function(){});mo.observe(s,{childList:true,characterData:true,subtree:true});s", &answer);
+			      "var ps=document.createElement('style');ps.appendChild(document.createTextNode('img{display:block;width:10px;height:7px}'));document.head.appendChild(ps);"
+			      "document.body.appendChild(document.createElement('img'));"
+			      "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
+			      "var d=f.contentDocument;d.open();d.write('<style>img{display:block;width:10px;height:10px}</style><img>');d.close();"
+			      "var s=d.getElementsByTagName('style')[0];var mo=new MutationObserver(function(){});mo.observe(s,{childList:true,characterData:true,subtree:true});s",
+			      &answer);
 	if (status != 0)
 		return status;
 	element = (struct dom_element *)bind_node_of(answer);

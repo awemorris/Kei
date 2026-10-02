@@ -254,8 +254,9 @@ collection_case(
 
 	/* No global script binding or active call frame retains the returned form or its input. */
 	status = collection_script(realm,
-		"(function(){var f=document.createElement('form');var i=document.createElement('input');"
-		"i.type='submit';f.appendChild(i);f.onsubmit=collectSubmit;document.appendChild(f);return f;})()", &answer);
+				   "(function(){var f=document.createElement('form');var i=document.createElement('input');"
+				   "i.type='submit';f.appendChild(i);f.onsubmit=collectSubmit;document.appendChild(f);return f;})()",
+				   &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -290,9 +291,10 @@ collection_case(
 
 	/* The converted temporary type string must survive getters which invoke actual collection. */
 	status = collection_script(realm,
-		"(function(){var e=new SubmitEvent({toString:function(){return 'ephemeral-'+'type';}},"
-		"{get bubbles(){collectDictionary();return true;},get composed(){collectDictionary();return true;}});"
-		"return e.type==='ephemeral-type' && e.bubbles && e.composed && e.submitter===null;})()", &answer);
+				   "(function(){var e=new SubmitEvent({toString:function(){return 'ephemeral-'+'type';}},"
+				   "{get bubbles(){collectDictionary();return true;},get composed(){collectDictionary();return true;}});"
+				   "return e.type==='ephemeral-type' && e.bubbles && e.composed && e.submitter===null;})()",
+				   &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -305,8 +307,9 @@ collection_case(
 
 	/* A sole constructed Event, not the tree, retains its actual disconnected submitter. */
 	status = collection_script(realm,
-		"(function(){var i=document.createElement('input');i.value='held';"
-		"return new SubmitEvent('submit',{submitter:i});})()", &answer);
+				   "(function(){var i=document.createElement('input');i.value='held';"
+				   "return new SubmitEvent('submit',{submitter:i});})()",
+				   &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

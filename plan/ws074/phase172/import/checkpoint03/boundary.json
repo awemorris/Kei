@@ -1,0 +1,13 @@
+{
+  "engine_sources": 167,
+  "include_dependencies": 377,
+  "wayland_project_dependencies": 0,
+  "exports_equal": true,
+  "exports_count": 39,
+  "headers": [
+    "c89",
+    "c++11"
+  ],
+  "soname": "libbrowser.so",
+  "system_linux_uapi_note": "The host libc includes system /usr/lib/linux/uapi socket definitions; these are not project uapi/ or Wayland dependencies."
+}

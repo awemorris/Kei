@@ -122,10 +122,16 @@ svg_width_trace(
 	/* The native owner itself traces the actual Document and creator prototype snapshot. */
 	state = (struct svg_width_state *)cell;
 	vm_heap_mark(heap, &state->owner->node.cell);
+
+	/* Construction may collect before the animated wrapper has been allocated. */
 	if (state->animated != NULL)
 		vm_heap_mark(heap, &state->animated->cell);
+
+	/* A failed partial construction has no base handle to keep alive. */
 	if (state->base != NULL)
 		vm_heap_mark(heap, &state->base->cell);
+
+	/* The readonly handle is published only after its allocation succeeds. */
 	if (state->animation != NULL)
 		vm_heap_mark(heap, &state->animation->cell);
 
@@ -236,12 +242,20 @@ svg_width_make(
 
 	/* Initialize each stable wrapper individually so a partially built graph remains traceable. */
 	error = svg_width_wrapper(state, BIND_SVG_ANIMATED_LENGTH, &state->animated);
+
+	/* A failed animated handle prevents creation of a partially usable base handle. */
 	if (error == 0)
 		error = svg_width_wrapper(state, BIND_SVG_LENGTH, &state->base);
+
+	/* The readonly peer requires both preceding native handle allocations to succeed. */
 	if (error == 0)
 		error = svg_width_wrapper(state, BIND_SVG_LENGTH, &state->animation);
+
+	/* Complete or failed construction releases both temporary precise roots. */
 	vm_heap_remove_root(heap, &state_root);
 	vm_heap_remove_root(heap, &owner_root);
+
+	/* The caller cannot publish a cache whose native handles are incomplete. */
 	if (error != 0)
 		return error;
 

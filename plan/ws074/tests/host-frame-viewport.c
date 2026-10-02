@@ -201,8 +201,9 @@ viewport_case(
 
 	/* Build a genuine connected iframe and then discard script references to its child. */
 	status = viewport_script(realm,
-	    "var root=document.createElement('div');document.appendChild(root);"
-	    "var f=document.createElement('iframe');root.appendChild(f);var w=f.contentWindow;f", &answer);
+				 "var root=document.createElement('div');document.appendChild(root);"
+				 "var f=document.createElement('iframe');root.appendChild(f);var w=f.contentWindow;f",
+				 &answer);
 	if (status != 0)
 		return status;
 	frame_node = bind_node_of(answer);

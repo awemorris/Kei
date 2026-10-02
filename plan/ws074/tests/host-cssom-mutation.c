@@ -191,9 +191,10 @@ mutation_case(
 
 	/* Genuine child streams and fonts supply ordinary rendered geometry before mutation pressure. */
 	status = mutation_script(page->realm,
-	    "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
-	    "var d=f.contentDocument;d.open();d.write('<style>img{display:block;width:10px;height:10px}</style><img>');d.close();"
-	    "var s=d.getElementsByTagName('style')[0];d.images[0].height===10", &answer);
+				 "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
+				 "var d=f.contentDocument;d.open();d.write('<style>img{display:block;width:10px;height:10px}</style><img>');d.close();"
+				 "var s=d.getElementsByTagName('style')[0];d.images[0].height===10",
+				 &answer);
 	if (status != 0)
 		return status;
 	truth = vm_to_boolean(answer);

@@ -239,8 +239,9 @@ collection_case(
 		/* Fixture construction cannot invoke the subsequent mutation observer prematurely. */
 		window->host.node_inserted = NULL;
 		status = collection_script(realm,
-			"(function(){var t=document.createElement('table');"
-			"t.appendChild(document.createElement('tbody'));return t;})()", &receiver);
+					   "(function(){var t=document.createElement('table');"
+					   "t.appendChild(document.createElement('tbody'));return t;})()",
+					   &receiver);
 		if (status != 0)
 			break;
 		table = bind_node_of(receiver);
@@ -265,11 +266,12 @@ collection_case(
 		/* A borrowed primary operation must call the retained actual child's host instead. */
 		if (kind == 2) {
 			status = collection_script(realm,
-				"document.appendChild(document.createElement('html'));"
-				"document.documentElement.appendChild(document.createElement('body'));"
-				"(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
-				"var t=f.contentDocument.createElement('table');"
-				"t.appendChild(f.contentDocument.createElement('tbody'));f.remove();return t;})()", &receiver);
+						   "document.appendChild(document.createElement('html'));"
+						   "document.documentElement.appendChild(document.createElement('body'));"
+						   "(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
+						   "var t=f.contentDocument.createElement('table');"
+						   "t.appendChild(f.contentDocument.createElement('tbody'));f.remove();return t;})()",
+						   &receiver);
 			if (status != 0)
 				break;
 			table = bind_node_of(receiver);
