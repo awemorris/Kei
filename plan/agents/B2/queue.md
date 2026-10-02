@@ -1,7 +1,7 @@
 # Agent B2 Queue q588
 
 Status: active
-Attempt: q588-i01 / pending
+Attempt: q588-i01 / in-progress
 Owner: Agent B / B2 desktop executor
 Approval: current user / 2026-10-02 same-agent continuous Queue指示、既存WS094 source conformance部分。AがID予約。
 Timebox: 最大3時間
@@ -15,3 +15,5 @@ Merge requests / ACK: 未提出。
 Previous: [q582 finished/cleared](q582-queue.md)
 Upcoming Work Outlook: 所有外findingsの対応、実機p012と最終guestを依存確認後の別Queueへ。未投入。
 Sync: WIP/no push、共有projection/GitHubはA所有。同じagent contextで継続。
+
+Start receipt: 2026-10-02 07:52:18 UTC、snapshot照合とB main FFを確認。実行担当は同じcontextで継続。

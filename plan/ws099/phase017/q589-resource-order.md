@@ -19,3 +19,5 @@ new finite execution deadline.
 MR B3-q589-01 submitted0d93e727, integrated42b08dab, ACK. Python compile/staged
 whitespace/manual source review PASS. Host first-verdict negative receipt included.
 Guest has not started. Whole p017 uncleared/BUG125 tracking.
+
+Read-back: B1 actual q587 start07:41 UTC、finite deadline10:41 UTC。q589 preparation約5分を消費、guest grant時の残り実作業budget最大40分。10:41 UTCまでにgrant不能ならq589をunclearedで終了しprepared成果を保持する。
