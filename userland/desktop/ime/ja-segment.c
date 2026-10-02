@@ -16,8 +16,9 @@
  * right, comparing the costs of the ways to reach each place in this
  * order: the fewest kana no dictionary knows and one-kana nouns counted
  * together (い 胃 and き 木 would otherwise swallow kana), then the fewest
- * segments, then the most kana read as particles, then the most kana found
- * in a dictionary.
+ * segments, then the most kana in everyday words (the user's, the engine's
+ * own and the supplement's) and particles together, then the most kana read
+ * as particles, then the most kana found in a dictionary.
  */
 
 #include "ja.h"
@@ -45,6 +46,7 @@ struct segment_cost {
 	unsigned int unknown;
 	unsigned int single;
 	unsigned int segments;
+	unsigned int everyday;
 	unsigned int particles;
 	unsigned int dictionary;
 	size_t previous;
@@ -56,6 +58,7 @@ struct segment_cost {
 struct segment_item {
 	unsigned int unknown;
 	unsigned int single;
+	unsigned int everyday;
 	unsigned int dictionary;
 };
 
@@ -68,7 +71,10 @@ static const struct segment_builtin segment_builtins[] = {
 
 static bool *segment_particle_table(const struct ja_text *text, size_t start);
 static bool segment_has_noun(const struct ja_lexicon *lexicon, const char *key, size_t length);
-static bool segment_has_verb(const struct ja_lexicon *lexicon, const char *key, size_t length);
+static bool segment_is_everyday_noun(const struct ja_lexicon *lexicon, const char *key, size_t length);
+static bool segment_headword_ends(const struct ja_lexicon *lexicon, const struct ja_text *text, const char *key, size_t stem_length, size_t stem_end, bool *ends, bool *everyday_ends);
+static void segment_entry_ends(const struct ja_lexicon *lexicon, const struct ja_dict_entry *entry, const struct ja_text *text, const char *key, size_t stem_length, size_t stem_end, bool *ends);
+static bool segment_candidate_fits(const struct ja_lexicon *lexicon, const struct ja_text *text, const char *key, size_t stem_length, size_t stem_end, enum ja_conjugation conjugation, size_t core_end);
 static bool segment_is_adjective(const struct ja_lexicon *lexicon, const char *stem, size_t length, char consonant);
 static uint32_t segment_code_at(const struct ja_text *text, size_t unit);
 static bool segment_is_loanword(const struct ja_text *text, size_t start, size_t end);
@@ -79,6 +85,7 @@ static void segment_cores(const struct ja_lexicon *lexicon, const struct ja_text
 static void segment_add_nouns(const struct ja_lexicon *lexicon, const char *key, size_t length, const char *suffix, size_t suffix_length, struct ja_segment *segment);
 static void segment_add_dict_nouns(const struct ja_dict *dict, const char *key, size_t length, const char *suffix, size_t suffix_length, struct ja_segment *segment);
 static void segment_add_dict_verbs(const struct ja_lexicon *lexicon, const struct ja_dict *dict, const struct ja_text *text, size_t start, size_t core_end, size_t end, struct ja_segment *segment);
+static void segment_add_conjugated_entry(const struct ja_lexicon *lexicon, const struct ja_dict_entry *entry, const struct ja_text *text, const char *key, size_t stem_length, size_t stem_end, size_t core_end, size_t end, struct ja_segment *segment);
 static void segment_add_dict_suru(const struct ja_dict *dict, const struct ja_text *text, size_t start, size_t core_end, size_t end, struct ja_segment *segment);
 static void segment_add_entry(const struct ja_dict_entry *entry, const char *suffix, size_t suffix_length, struct ja_segment *segment);
 static void segment_add_joined(struct ja_segment *segment, const char *word, size_t word_length, const char *suffix, size_t suffix_length);
@@ -183,6 +190,7 @@ ja_segment_split(
 				candidate.unknown += cores[core_end].unknown;
 				candidate.single += cores[core_end].single;
 				candidate.segments++;
+				candidate.everyday += cores[core_end].everyday;
 				candidate.particles += (unsigned int)(end - core_end);
 				candidate.dictionary += cores[core_end].dictionary;
 				candidate.previous = position;
@@ -440,26 +448,166 @@ segment_has_noun(
 }
 
 /*
- * Tells whether any dictionary has a verb's or an adjective's headword.
+ * Tells whether a reading is an everyday noun: one the user converted
+ * before, one the engine knows itself, or one of a supplement (a
+ * dictionary before the system dictionary, the last one).
  */
 static bool
-segment_has_verb(
+segment_is_everyday_noun(
 	const struct ja_lexicon *lexicon,
 	const char *key,
 	size_t length)
 {
 	const struct ja_dict_entry *entry;
+	const struct ja_user_entry *learned;
 	size_t i;
+	bool same;
 
-	/* A headword of one of the dictionaries. */
-	for (i = 0; i < lexicon->dict_count; i++) {
+	/* A reading the user converted before. */
+	if (lexicon->user != NULL) {
+		learned = ja_user_find(lexicon->user, key, length);
+		if (learned != NULL)
+			return true;
+	}
+
+	/* A word the engine knows itself. */
+	for (i = 0; i < sizeof(segment_builtins) / sizeof(segment_builtins[0]); i++) {
+		same = ja_bytes_equal(segment_builtins[i].reading, strlen(segment_builtins[i].reading), key, length);
+		if (same)
+			return true;
+	}
+
+	/* A headword of a supplement; the system dictionary is the last one. */
+	for (i = 0; i + 1U < lexicon->dict_count; i++) {
 		entry = ja_dict_find(lexicon->dicts[i], key, length);
 		if (entry != NULL)
 			return true;
 	}
 
-	/* No dictionary knows it. */
+	/* Only the system dictionary knows it, if any does. */
 	return false;
+}
+
+/*
+ * Marks where the okurigana of a verb's or an adjective's headword can end
+ * after its stem, in every dictionary that has the headword, and apart
+ * from them where it can end in a supplement (a dictionary before the
+ * system dictionary, the last one).
+ *
+ * The key holds the stem's reading and, after it, the headword's letter.
+ * Returns whether any dictionary has the headword.
+ */
+static bool
+segment_headword_ends(
+	const struct ja_lexicon *lexicon,
+	const struct ja_text *text,
+	const char *key,
+	size_t stem_length,
+	size_t stem_end,
+	bool *ends,
+	bool *everyday_ends)
+{
+	const struct ja_dict_entry *entry;
+	size_t i;
+	bool found;
+
+	/* Each dictionary's entry adds the okurigana its candidates take; a supplement's adds them to the everyday ends too. */
+	found = false;
+	for (i = 0; i < lexicon->dict_count; i++) {
+		entry = ja_dict_find(lexicon->dicts[i], key, stem_length + 1U);
+		if (entry == NULL)
+			continue;
+
+		found = true;
+		segment_entry_ends(lexicon, entry, text, key, stem_length, stem_end, ends);
+		if (i + 1U < lexicon->dict_count)
+			segment_entry_ends(lexicon, entry, text, key, stem_length, stem_end, everyday_ends);
+	}
+
+	/* Reports whether any dictionary knows the headword. */
+	return found;
+}
+
+/*
+ * Marks where the okurigana of one entry's candidates can end: the rules
+ * of each conjugation a candidate names, and every rule for a candidate
+ * that names none.
+ */
+static void
+segment_entry_ends(
+	const struct ja_lexicon *lexicon,
+	const struct ja_dict_entry *entry,
+	const struct ja_text *text,
+	const char *key,
+	size_t stem_length,
+	size_t stem_end,
+	bool *ends)
+{
+	enum ja_conjugation conjugation;
+	bool named[JA_CONJUGATION_ADJECTIVE + 1];
+	const char *word;
+	size_t word_length;
+	size_t position;
+	int kind;
+	bool adjective;
+	bool more;
+
+	/* Notes which conjugations the candidates name. */
+	memset(named, 0, sizeof(named));
+	position = 0;
+	for (;;) {
+		more = ja_dict_next_conjugated(entry, &position, &word, &word_length, &conjugation);
+		if (!more)
+			break;
+
+		named[conjugation] = true;
+	}
+
+	/* A candidate that names none takes every rule, or an adjective's alone under an adjective's headword. */
+	if (named[JA_CONJUGATION_ANY]) {
+		adjective = segment_is_adjective(lexicon, key, stem_length, key[stem_length]);
+		ja_inflect_ends(text, stem_end, key[stem_length], adjective, ends);
+	}
+
+	/* Each conjugation named takes its own rules. */
+	for (kind = JA_CONJUGATION_GODAN; kind <= JA_CONJUGATION_ADJECTIVE; kind++) {
+		if (named[kind])
+			ja_inflect_conjugated_ends(text, stem_end, key[stem_length], (enum ja_conjugation)kind, ends);
+	}
+}
+
+/*
+ * Tells whether one candidate's okurigana, after its stem, can end a word
+ * at a place.
+ */
+static bool
+segment_candidate_fits(
+	const struct ja_lexicon *lexicon,
+	const struct ja_text *text,
+	const char *key,
+	size_t stem_length,
+	size_t stem_end,
+	enum ja_conjugation conjugation,
+	size_t core_end)
+{
+	bool ends[JA_UNITS_MAX + 1U];
+	bool adjective;
+
+	/* The okurigana the candidate's conjugation takes, or every rule when it names none. */
+	memset(ends, 0, sizeof(ends));
+	if (conjugation == JA_CONJUGATION_ANY) {
+		adjective = segment_is_adjective(lexicon, key, stem_length, key[stem_length]);
+		ja_inflect_ends(text, stem_end, key[stem_length], adjective, ends);
+	} else {
+		ja_inflect_conjugated_ends(text, stem_end, key[stem_length], conjugation, ends);
+	}
+
+	/* An okurigana that does not end the word here. */
+	if (!ends[core_end])
+		return false;
+
+	/* The candidate's okurigana ends the word. */
+	return true;
 }
 
 /*
@@ -600,13 +748,21 @@ segment_item_better(
 		return;
 	}
 
-	/* Fewer unknown kana and one-kana nouns win, then more dictionary kana. */
+	/* Fewer unknown kana and one-kana nouns win. */
 	if (item->unknown + item->single != best->unknown + best->single) {
 		if (item->unknown + item->single < best->unknown + best->single)
 			*best = *item;
 		return;
 	}
 
+	/* Then more kana of everyday words. */
+	if (item->everyday != best->everyday) {
+		if (item->everyday > best->everyday)
+			*best = *item;
+		return;
+	}
+
+	/* Then more dictionary kana. */
 	if (item->dictionary > best->dictionary)
 		*best = *item;
 }
@@ -621,6 +777,8 @@ segment_cost_better(
 {
 	unsigned int left_doubt;
 	unsigned int right_doubt;
+	unsigned int left_known;
+	unsigned int right_known;
 
 	/* Any way beats none. */
 	if (!right->reached)
@@ -642,6 +800,22 @@ segment_cost_better(
 	/* Then the fewest segments. */
 	if (left->segments != right->segments) {
 		if (left->segments < right->segments)
+			return true;
+		return false;
+	}
+
+	/*
+	 * Then the most kana in everyday words and particles, that is the
+	 * fewest read from the system dictionary alone: of two splits into as
+	 * many segments, the one made of the supplement's words is the likelier
+	 * (友達と｜話しました rather than 友達とは｜成しました), and a particle
+	 * the supplement's verb would swallow stays one (月曜日に｜会いましょう
+	 * rather than 月曜日｜似合いましょう).
+	 */
+	left_known = left->everyday + left->particles;
+	right_known = right->everyday + right->particles;
+	if (left_known != right_known) {
+		if (left_known > right_known)
 			return true;
 		return false;
 	}
@@ -679,6 +853,7 @@ segment_cores(
 {
 	struct segment_item item;
 	bool ends[JA_UNITS_MAX + 1U];
+	bool everyday_ends[JA_UNITS_MAX + 1U];
 	char key[JA_HEADWORD_MAX * 4U + 2U];
 	size_t run_end;
 	size_t length;
@@ -686,7 +861,7 @@ segment_cores(
 	size_t end;
 	size_t i;
 	bool found;
-	bool adjective;
+	bool everyday;
 	bool no_word;
 	uint32_t first;
 
@@ -710,6 +885,7 @@ segment_cores(
 	for (end = start + 1U; end <= run_end; end++) {
 		item.unknown = (unsigned int)(end - start);
 		item.single = 0;
+		item.everyday = 0;
 		item.dictionary = 0;
 		segment_item_better(&cores[end], &valid[end], &item);
 	}
@@ -720,7 +896,7 @@ segment_cores(
 	if (no_word)
 		return;
 
-	/* する, 来る and the verbs written in kana, in their forms. */
+	/* する, 来る and the verbs written in kana, in their forms: the engine's own everyday words. */
 	memset(ends, 0, sizeof(ends));
 	ja_inflect_suru_ends(text, start, ends);
 	ja_inflect_kuru_ends(text, start, ends);
@@ -731,6 +907,7 @@ segment_cores(
 
 		item.unknown = 0;
 		item.single = 0;
+		item.everyday = (unsigned int)(end - start);
 		item.dictionary = (unsigned int)(end - start);
 		segment_item_better(&cores[end], &valid[end], &item);
 	}
@@ -742,21 +919,29 @@ segment_cores(
 		if (!found)
 			continue;
 
+		/* Whether the noun is an everyday word. */
+		everyday = segment_is_everyday_noun(lexicon, text->bytes + text->offsets[start], key_length);
+
 		/* The noun alone; a noun of one kana costs more. */
 		item.unknown = 0;
 		item.single = 0;
 		if (length == 1U)
 			item.single = 1;
+		item.everyday = 0;
+		if (everyday)
+			item.everyday = (unsigned int)length;
 		item.dictionary = (unsigned int)length;
 		segment_item_better(&cores[start + length], &valid[start + length], &item);
 
-		/* The noun with a form of する (勉強します). */
+		/* The noun with a form of する (勉強します), everyday as the noun is. */
 		memset(ends, 0, sizeof(ends));
 		ja_inflect_suru_ends(text, start + length, ends);
 		for (end = start + length + 1U; end <= run_end; end++) {
 			if (!ends[end])
 				continue;
 
+			if (everyday)
+				item.everyday = (unsigned int)(end - start);
 			item.dictionary = (unsigned int)(end - start);
 			segment_item_better(&cores[end], &valid[end], &item);
 		}
@@ -767,21 +952,23 @@ segment_cores(
 		key_length = text->offsets[start + length] - text->offsets[start];
 		memcpy(key, text->bytes + text->offsets[start], key_length);
 		for (i = 0; SEGMENT_CONSONANTS[i] != '\0'; i++) {
+			/* Every okurigana the headword's candidates can take here, and those a supplement's take. */
 			key[key_length] = SEGMENT_CONSONANTS[i];
-			found = segment_has_verb(lexicon, key, key_length + 1U);
+			memset(ends, 0, sizeof(ends));
+			memset(everyday_ends, 0, sizeof(everyday_ends));
+			found = segment_headword_ends(lexicon, text, key, key_length, start + length, ends, everyday_ends);
 			if (!found)
 				continue;
 
-			/* Every okurigana the headword can take here. */
-			adjective = segment_is_adjective(lexicon, key, key_length, SEGMENT_CONSONANTS[i]);
-			memset(ends, 0, sizeof(ends));
-			ja_inflect_ends(text, start + length, SEGMENT_CONSONANTS[i], adjective, ends);
 			for (end = start + length + 1U; end <= run_end; end++) {
 				if (!ends[end])
 					continue;
 
 				item.unknown = 0;
 				item.single = 0;
+				item.everyday = 0;
+				if (everyday_ends[end])
+					item.everyday = (unsigned int)(end - start);
 				item.dictionary = (unsigned int)(end - start);
 				segment_item_better(&cores[end], &valid[end], &item);
 			}
@@ -997,7 +1184,8 @@ segment_add_tier(
 
 /*
  * Adds one dictionary's verbs and adjectives whose okurigana ends a word,
- * the longest stem first.
+ * the longest stem first; a candidate that names its conjugation is added
+ * only where that conjugation's okurigana ends the word.
  */
 static void
 segment_add_dict_verbs(
@@ -1010,12 +1198,10 @@ segment_add_dict_verbs(
 	struct ja_segment *segment)
 {
 	const struct ja_dict_entry *entry;
-	bool ends[JA_UNITS_MAX + 1U];
 	char key[JA_HEADWORD_MAX * 4U + 2U];
 	size_t stem_length;
 	size_t key_length;
 	size_t i;
-	bool adjective;
 
 	/* Each stem, the longest first, with each letter a headword can end with. */
 	for (stem_length = core_end - start - 1U; stem_length >= 1U; stem_length--) {
@@ -1030,16 +1216,54 @@ segment_add_dict_verbs(
 			if (entry == NULL)
 				continue;
 
-			/* The headword's okurigana must end the word. */
-			adjective = segment_is_adjective(lexicon, key, key_length, SEGMENT_CONSONANTS[i]);
-			memset(ends, 0, sizeof(ends));
-			ja_inflect_ends(text, start + stem_length, SEGMENT_CONSONANTS[i], adjective, ends);
-			if (!ends[core_end])
-				continue;
-
-			segment_add_entry(entry, text->bytes + text->offsets[start + stem_length],
-					  text->offsets[end] - text->offsets[start + stem_length], segment);
+			/* The candidates whose okurigana ends the word, each with the rest of the segment. */
+			segment_add_conjugated_entry(lexicon, entry, text, key, key_length, start + stem_length, core_end, end, segment);
 		}
+	}
+}
+
+/*
+ * Adds the candidates of a verb's or an adjective's entry whose okurigana
+ * ends a word, each followed by the rest of the segment as typed.
+ */
+static void
+segment_add_conjugated_entry(
+	const struct ja_lexicon *lexicon,
+	const struct ja_dict_entry *entry,
+	const struct ja_text *text,
+	const char *key,
+	size_t stem_length,
+	size_t stem_end,
+	size_t core_end,
+	size_t end,
+	struct ja_segment *segment)
+{
+	enum ja_conjugation conjugation;
+	const char *word;
+	const char *after_stem;
+	size_t word_length;
+	size_t after_length;
+	size_t position;
+	bool more;
+	bool fits;
+
+	/* The okurigana and particles after the stem, as typed. */
+	after_stem = text->bytes + text->offsets[stem_end];
+	after_length = text->offsets[end] - text->offsets[stem_end];
+
+	/* Walks the entry's candidates. */
+	position = 0;
+	for (;;) {
+		more = ja_dict_next_conjugated(entry, &position, &word, &word_length, &conjugation);
+		if (!more)
+			break;
+
+		/* A candidate whose okurigana cannot end the word here is left out (借 一段 in 借った). */
+		fits = segment_candidate_fits(lexicon, text, key, stem_length, stem_end, conjugation, core_end);
+		if (!fits)
+			continue;
+
+		segment_add_joined(segment, word, word_length, after_stem, after_length);
 	}
 }
 

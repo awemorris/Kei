@@ -14,6 +14,9 @@
  * comments.  A line of any other shape is counted and skipped, so that a
  * damaged file still gives what it can.  A candidate's annotation (after
  * ";") is not shown, and a Lisp candidate ("(concat ...)") is skipped.
+ * An annotation that is exactly 五段, 一段 or 形容詞 says how a verb's or an
+ * adjective's candidate conjugates; any other annotation says nothing to
+ * the engine.
  */
 
 #include "ja.h"
@@ -34,6 +37,7 @@ static int dict_index(struct ja_dict *dict);
 static bool dict_parse_line(const char *line, size_t length, struct ja_dict_entry *entry);
 static void dict_insert(struct ja_dict *dict, const struct ja_dict_entry *entry);
 static uint32_t dict_hash(const char *key, size_t length);
+static enum ja_conjugation dict_conjugation(const char *annotation, size_t length);
 
 /*
  * Reads an SKK dictionary.
@@ -128,6 +132,34 @@ ja_dict_next_candidate(
 	const char **candidate,
 	size_t *length)
 {
+	enum ja_conjugation conjugation;
+	bool more;
+
+	/* Reads the candidate; how it conjugates is not wanted here. */
+	more = ja_dict_next_conjugated(entry, position, candidate, length, &conjugation);
+	if (!more)
+		return false;
+
+	/* Succeeded: one candidate found. */
+	return true;
+}
+
+/*
+ * Gives the next candidate of an entry and how it conjugates, from a
+ * position that starts at 0.
+ *
+ * Returns false when there are no more.  The candidate is not
+ * terminated; its annotation is left out, and read only for the
+ * conjugation it names.
+ */
+bool
+ja_dict_next_conjugated(
+	const struct ja_dict_entry *entry,
+	size_t *position,
+	const char **candidate,
+	size_t *length,
+	enum ja_conjugation *conjugation)
+{
 	const char *text;
 	size_t start;
 	size_t end;
@@ -168,6 +200,11 @@ ja_dict_next_candidate(
 
 		break;
 	}
+
+	/* Reads the conjugation the annotation names, if it names one. */
+	*conjugation = JA_CONJUGATION_ANY;
+	if (annotation < end)
+		*conjugation = dict_conjugation(text + annotation + 1U, end - annotation - 1U);
 
 	/* Succeeded: one candidate found. */
 	*candidate = text + start;
@@ -405,4 +442,33 @@ dict_hash(
 
 	/* The headword's hash. */
 	return hash;
+}
+
+/*
+ * Tells which conjugation an annotation names; any other text names none.
+ */
+static enum ja_conjugation
+dict_conjugation(
+	const char *annotation,
+	size_t length)
+{
+	bool same;
+
+	/* A godan verb, conjugating through its headword letter's row. */
+	same = ja_bytes_equal(annotation, length, "五段", strlen("五段"));
+	if (same)
+		return JA_CONJUGATION_GODAN;
+
+	/* An ichidan verb, whose endings follow its stem. */
+	same = ja_bytes_equal(annotation, length, "一段", strlen("一段"));
+	if (same)
+		return JA_CONJUGATION_ICHIDAN;
+
+	/* An adjective, whose endings follow its stem. */
+	same = ja_bytes_equal(annotation, length, "形容詞", strlen("形容詞"));
+	if (same)
+		return JA_CONJUGATION_ADJECTIVE;
+
+	/* An annotation for the reader only. */
+	return JA_CONJUGATION_ANY;
 }

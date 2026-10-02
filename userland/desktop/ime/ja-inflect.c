@@ -328,6 +328,57 @@ ja_inflect_ends(
 }
 
 /*
+ * Marks where the okurigana after a headword's reading can end for a
+ * candidate whose conjugation the dictionary names.
+ *
+ * The reading holds every kana of the stem that does not change: a godan
+ * verb conjugates through the row of the headword's letter straight after
+ * it (かえr 帰: 帰ります), an ichidan verb's and an adjective's endings
+ * follow it straight (かえr 変え: 変えます, たかi 高: 高かった).  A
+ * candidate whose conjugation is not named takes every okurigana
+ * ja_inflect_ends() knows.  The ends are marked as ja_inflect_ends()
+ * marks them.
+ */
+void
+ja_inflect_conjugated_ends(
+	const struct ja_text *text,
+	size_t stem_end,
+	char consonant,
+	enum ja_conjugation conjugation,
+	bool *ends)
+{
+	/* No okurigana fits after the last unit. */
+	if (stem_end >= text->unit_count)
+		return;
+
+	/* Follows the endings of the conjugation named. */
+	switch (conjugation) {
+	case JA_CONJUGATION_GODAN:
+		/* The row of the headword's letter, with its sound changes. */
+		inflect_godan(text, stem_end, consonant, ends);
+		break;
+	case JA_CONJUGATION_ICHIDAN:
+		/* An ichidan verb's dictionary form ends in る, its headword in r. */
+		if (consonant == 'r')
+			inflect_walk(text, stem_end, TAIL_ICHIDAN, ends);
+		break;
+	case JA_CONJUGATION_ADJECTIVE:
+		/* An adjective's dictionary form ends in い, its headword in i or k. */
+		if (consonant == 'i' || consonant == 'k')
+			inflect_walk(text, stem_end, TAIL_ADJECTIVE, ends);
+		break;
+	case JA_CONJUGATION_ANY:
+	default:
+		/* Every rule, as for a headword of SKK-JISYO.X. */
+		ja_inflect_ends(text, stem_end, consonant, false, ends);
+		break;
+	}
+
+	/* An okurigana is never empty. */
+	ends[stem_end] = false;
+}
+
+/*
  * Marks where a form of する beginning at a unit can end.
  */
 void
