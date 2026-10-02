@@ -32,3 +32,5 @@ Parent: [WS005](../ws.md)
 3. logout（session の終了）で、session が networkd に**通知**し、networkd はその利用者の store を候補から外す（その store の profile で張った接続は切り、system の store の候補へ戻る）。
 4. 通知は既存の networkd の socket の protocol の要求として足す（network group の利用者だけ、要求者自身の store だけを登録できる）。鍵は利用者の store に残し、networkd に鍵を渡さない境界は不変。
 5. 確認: 本物の networkd の QEMU（system の store だけでの起動時の接続の試み、login の通知での利用者の store の追加、logout での除去）、5330 の AX211 passthrough で再起動後の console の自動接続（system の store）と、login 後の利用者の store での自動接続、logout 後の切り替え。資格情報は記録に書かない。
+
+2026-10-02 user（明示の承認）:「WiFi自動再接続を明示的に承認します。」→ 改訂した設計（起動時は system の store、login で利用者の store を通知して追加、logout で通知して除去）の実装と試験を承認。
