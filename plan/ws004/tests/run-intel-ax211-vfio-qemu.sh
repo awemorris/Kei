@@ -26,6 +26,14 @@ device=/sys/bus/pci/devices/$bdf
 qemu_pid=
 usb_wlan_port=${AX211_VFIO_USB_WLAN_PORT:-}
 usb_node=
+# Optional companions for analysis (ws004-p051): the iGPU, which must already
+# be owned by vfio-pci and is never rebound here, so the guest sees the same
+# i915 + AX211 pair as the bare machine; and a gdbstub on the host loopback.
+igpu_bdf=${AX211_VFIO_IGPU_BDF:-}
+gdb_port=${AX211_VFIO_GDB_PORT:-}
+gdb_wait=${AX211_VFIO_GDB_WAIT:-0}
+memory=${AX211_VFIO_MEMORY:-1024}
+smp=${AX211_VFIO_SMP:-4}
 
 fail()
 {
@@ -170,6 +178,35 @@ if [ -n "$usb_wlan_port" ]; then
 	echo "AX211-VFIO: companion USB WLAN $usb_wlan_port 2357:0138" >&2
 fi
 
+case $memory in
+	''|*[!0-9]*|0) fail "AX211_VFIO_MEMORY must be a positive number of MiB" ;;
+esac
+case $smp in
+	''|*[!0-9]*|0) fail "AX211_VFIO_SMP must be a positive CPU count" ;;
+esac
+set -- "$@" -m "$memory"
+if [ -n "$igpu_bdf" ]; then
+	igpu_device=/sys/bus/pci/devices/$igpu_bdf
+	[ -d "$igpu_device" ] || fail "iGPU is missing: $igpu_bdf"
+	[ "$(basename "$(readlink -f "$igpu_device/driver")")" = vfio-pci ] ||
+		fail "$igpu_bdf is not owned by vfio-pci"
+	# The i915 passthrough needs a shared guest memory backend and a
+	# 39-bit physical address limit (plan/ws075/tests/hdmi/h4-qemu.sh).
+	cpu="$cpu,host-phys-bits-limit=39"
+	set -- "$@" -object "memory-backend-memfd,id=mem,size=${memory}M,share=on" \
+		-machine memory-backend=mem \
+		-device "vfio-pci,host=$igpu_bdf,x-igd-opregion=on,rombar=0"
+	echo "AX211-VFIO: companion iGPU $igpu_bdf" >&2
+fi
+if [ -n "$gdb_port" ]; then
+	case $gdb_port in
+		''|*[!0-9]*) fail "AX211_VFIO_GDB_PORT must be a port number" ;;
+	esac
+	set -- "$@" -gdb "tcp:127.0.0.1:$gdb_port"
+	[ "$gdb_wait" != 1 ] || set -- "$@" -S
+	echo "AX211-VFIO: gdbstub on 127.0.0.1:$gdb_port" >&2
+fi
+
 mkdir -p "$work_dir"
 chmod 0700 "$work_dir"
 cp --sparse=always "$image" "$work_dir/guest.img"
@@ -187,7 +224,7 @@ printf '%s' "$bdf" > /sys/bus/pci/drivers_probe
 echo "AX211-VFIO: $bdf assigned; QEMU monitor is $work_dir/monitor.sock" >&2
 timeout --foreground --kill-after=10 "${run_timeout}s" "$qemu" \
 	-machine q35,accel=kvm \
-	-cpu "$cpu" -m 1024 -smp 4 \
+	-cpu "$cpu" -smp "$smp" \
 	-drive if=pflash,format=raw,readonly=on,file="$ovmf_code" \
 	-drive if=pflash,format=raw,file="$work_dir/OVMF_VARS_4M.fd" \
 	-device qemu-xhci,id=xhci \
