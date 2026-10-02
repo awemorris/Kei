@@ -23,3 +23,7 @@ p007 build/install。ユーザーの実操作報告が必要、agentが代替し
 ## Event history
 
 2026-10-02 / ws109-20261002-physical-reopen-p008: ユーザーの実機受け入れ指示とGDM撤回により追加、p006→p007→p008の依存。既存p001〜p005結果は当時の条件で保存。実機操作・WIP push/pull承認はQueueで具体化。
+
+## Resume / 2026-10-02
+
+p007/q574 cleared、実機/opt・seatd/video/runtime準備済み。ユーザーへlocalconsoleからの--session手順を案内。GUIのuser確認報告待ち、実装Queue無し。実機で動いたとの報告が受け入れ判断の入力。ログインscreen/sessiond/nativepasswordlockの未移植をdocs/ユーザーへ明示した。

@@ -2,7 +2,7 @@
 
 # WS109 p006: native make入口/直接起動/docs
 
-Parent: [WS109](../ws.md)
+Parent: [WS109](/home/awe/zedBSD-claude1/plan/ws109/ws.md)
 Status: cleared
 Disposition: normal
 Queue / Attempt: q573 / q573-i01
@@ -18,7 +18,7 @@ q572 native output verified。BSD make/GNU makeのfile探索差を確認。
 
 ## Standards / verification / bounds
 
-[Guardrail](../../guardrail.md)、[全文C規約](../../coding-style.md)、[native full rules](../../standards/ws109-native.md)。既存C変更が必要になれば全文を適用。新make/shellは近傍形式を保ち、BSD/GNU parse、no-config/toolchain dry-run、実FreeBSD native build warning0、実install/ELF/readbackで検証。最終規約レビューはp007。最大60分/attempt、新driver修理は含めない。user GUIはp008別。Issue/Project同期保留。
+[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、[全文C規約](/home/awe/zedBSD-claude1/plan/coding-style.md)、[native full rules](/home/awe/zedBSD-claude1/plan/standards/ws109-native.md)。既存C変更が必要になれば全文を適用。新make/shellは近傍形式を保ち、BSD/GNU parse、no-config/toolchain dry-run、実FreeBSD native build warning0、実install/ELF/readbackで検証。最終規約レビューはp007。最大60分/attempt、新driver修理は含めない。user GUIはp008別。Issue/Project同期保留。
 
 ## Event history
 
@@ -26,6 +26,6 @@ q572 native output verified。BSD make/GNU makeのfile探索差を確認。
 
 ## Result / q573-i01 / 2026-10-02T02:08:43.980070+00:00
 
-cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
+cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](/home/awe/zedBSD-claude1/plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
 
 Event ws109-q573-cleared: local result/close intent保存、Issue comment/closeは保留。

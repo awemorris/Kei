@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q574](queue-q574.md)（WS109 p007 cleared）
+Last finished Queue: [q573](queue-q573.md)（WS109 p006 cleared）
 
-## 最新: q574 /WS109 p007
+## 最新: q573 /WS109 p006
 
-cleared。実機native build/sudo install warning0、334source/11library native auditと全14実行file loader/hash PASS、seatd/video/runtime準備済み。[結果](/home/awe/zedBSD-claude1/plan/history/ws109/q574/result.md)。p008ユーザーlocalGUI acceptanceは未実施。
+cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
 
 今回のWIP commit/push/実機pullは承認済み。Issue/Project同期は保留。WS109はincomplete、ユーザーの実機acceptance待ち。
 
@@ -14,6 +14,7 @@ cleared。実機native build/sudo install warning0、334source/11library native 
 
 | Queue | Outcome |
 | --- | --- |
+| [q544](queue-q544.md) | WS107 p004 cleared |
 | [q545](queue-q545.md) | WS108 p001 cleared |
 | [q546](queue-q546.md) | WS108 p002 cleared |
 | [q547](queue-q547.md) | WS108 p003 uncleared |
@@ -44,6 +45,5 @@ cleared。実機native build/sudo install warning0、334source/11library native 
 | [q571](queue-q571.md) | WS109 p004 item cleared /Phase cleared |
 | [q572](queue-q572.md) | WS109 p005 item cleared /Phase cleared |
 | [q573](queue-q573.md) | WS109 p006 cleared |
-| [q574](queue-q574.md) | WS109 p007 cleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

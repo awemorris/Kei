@@ -98,6 +98,14 @@ ordinary session user from a local console, after logging in again following
 the `video` group change. An SSH shell is for building/installing, and does not
 supply the local active VT needed by seatd.
 
+The shared compositor has a graphical login screen (`--greeter`). On zedBSD,
+`sessiond` supplies its authentication channel and starts the selected user's
+session. The native FreeBSD build does not include that session manager:
+authenticate at the FreeBSD console first, then start the desktop with
+`--session`. That option does not display a login screen. The shared password
+lock also needs the session-manager channel and is inactive in this direct
+native session.
+
 Select the actual DRM primary node when it differs from `/dev/dri/card0`.
 A standard Vulkan loader's normal device/ICD configuration selects the GPU;
 `VK_DRIVER_FILES` may explicitly select an installed ICD when needed. The primary

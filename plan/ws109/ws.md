@@ -6,8 +6,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: q574
-Resume point: p007/q574 executing; physical user acceptance pending.
+Queue: なし（q574 finished）
+Resume point: p006/q573・p007/q574 cleared。awe@10.0.30.3 のlocalconsoleでユーザーがKeilandを操作し、動いたと報告したらp008/F6を判定。
 Prior completion: 2026-10-02 q572 /当時のQEMU受け入れを検証。最新指示で実機受け入れへreopened。
 
 ## 目標と承認
@@ -66,9 +66,11 @@ p001〜p005のclearance/close intentとWScompletion eventはlocal保存済み、
 | ID | 目的 | Status | Dependencies |
 | --- | --- | --- | --- |
 | ws109p006 | [native make入口/直接起動/docs](phase006/phase.md) | cleared / q573 | q572 verified native output |
-| ws109p007 | [実機build/install・最終全文規約](phase007/phase.md) | in-progress | p006 actual source |
+| ws109p007 | [実機build/install・最終全文規約](phase007/phase.md) | cleared / q574 | p006 actual source |
 | ws109p008 | [ユーザー実機GUI受け入れ](phase008/phase.md) | planned | p007 build/install |
 
 F6: 実機で指定make build/install成功し/optにnative成果物を配置、ユーザーが実際にKeilandを操作して動いたと確認。ユーザーの全実機操作事前承認、今回のWIP push/pull承認を記録。変更済みED25519 SHA256:SU3SAIyuzmOC97UBmW2veciwXDfHLA+C8AAKcZTiysE はユーザー確認済み。Issue再開/新Phase構造イベントはlocal/outbox保存、公開保留。
 
-2026-10-02T02:08:43.981982+00:00 / ws109-q573-cleared: p006 cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
+2026-10-02T02:08:43.981982+00:00 / ws109-q573-cleared: p006 cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](/home/awe/zedBSD-claude1/plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
+
+2026-10-02T02:15:32.402831+00:00 / ws109-q574-cleared: p007 cleared。実機native build/sudo install warning0、334source/11library native auditと全14実行file loader/hash PASS、seatd/video/runtime準備済み。[結果](/home/awe/zedBSD-claude1/plan/history/ws109/q574/result.md)。p008ユーザーlocalGUI acceptanceは未実施。

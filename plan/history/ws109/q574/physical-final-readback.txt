@@ -1,0 +1,183 @@
+From github.com:awemorris/zedBSD
+ * branch              main       -> FETCH_HEAD
+   9ff894ff..54370f9b  main       -> origin/main
+Updating 9ff894ff..54370f9b
+Fast-forward
+ GNUmakefile                               | 15 ++++++++++++++-
+ plan/history/ws109/q574/approved-phase.md | 25 +++++++++++++++++++++++++
+ plan/history/ws109/q574/previous-queue.md | 26 ++++++++++++++++++++++++++
+ plan/master.md                            |  2 +-
+ plan/queue.md                             | 15 ++++++---------
+ plan/ws109/phase007/phase.md              |  8 ++++++--
+ plan/ws109/ws.md                          |  6 +++---
+ userland/desktop/README.freebsd.md        |  9 ++++++++-
+ 8 files changed, 89 insertions(+), 17 deletions(-)
+ create mode 100644 plan/history/ws109/q574/approved-phase.md
+ create mode 100644 plan/history/ws109/q574/previous-queue.md
+seatd is running as pid 7864.
+gmake -f userland/desktop/keiland-freebsd.mk all
+gmake[1]: Entering directory '/home/awe/zedBSD'
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Leaving directory '/home/awe/zedBSD'
+env -u MAKEFLAGS -u MFLAGS gmake -j 1 -f userland/desktop/keiland-freebsd.mk all 
+gmake[1]: Entering directory '/home/awe/zedBSD'
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Leaving directory '/home/awe/zedBSD'
+env -u MAKEFLAGS -u MFLAGS gmake -j 1 -f userland/desktop/keiland-freebsd.mk install 
+gmake[1]: Entering directory '/home/awe/zedBSD'
+install -m 0644 build/keiland-freebsd/include/libseat.h "/opt/keiland/include/libseat.h"
+install -m 0644 include/libc/pdf.h "/opt/keiland/include/pdf.h"
+gmake[1]: Leaving directory '/home/awe/zedBSD'
+{
+  "status": "PASS",
+  "source_memberships": 334,
+  "unique_sources": 324,
+  "header_count": 630,
+  "libraries": [
+    {
+      "file": "libgif-compat.so",
+      "soname": [
+        "libgif-compat.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "00daec5308f7abc304c835e3ea4c8afae3ba6b792623cc6317d1acb9fd676866"
+    },
+    {
+      "file": "libjpeg-compat.so",
+      "soname": [
+        "libjpeg-compat.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "e42f7f7157bf522c619069598034176badb55c6e5194b1f2817ac70d3ce3155f"
+    },
+    {
+      "file": "libkeiland.so",
+      "soname": [
+        "libkeiland.so"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "1e7267944fe72fb1535827ab7ac508d472ad1481a5fe69201453e9286ac89cc9"
+    },
+    {
+      "file": "libkeiui.so",
+      "soname": [
+        "libkeiui.so"
+      ],
+      "needed": [
+        "libkeiland.so",
+        "libwayland-client.so",
+        "libtruetype.so",
+        "libpng-compat.so",
+        "libvulkan.so.1",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "28cb26cade1fd18ac8a5621b9195a4d3f21266ad2d699f2fc8abe6e7044821be"
+    },
+    {
+      "file": "libpdf.so",
+      "soname": [
+        "libpdf.so"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libjpeg-compat.so",
+        "libtruetype.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "029f748b20dada65fc78e5b961da7311ad20650558545d048b4037b3c32a9f57"
+    },
+    {
+      "file": "libpng-compat.so",
+      "soname": [
+        "libpng-compat.so"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "f7fd287b85ef9b129e57dc995c769d3f56f3f258ecaaee784eeff2748cdb650c"
+    },
+    {
+      "file": "libseat.so.1",
+      "soname": [
+        "libseat.so.1"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "ac3506cc3a6ea9a01af564fc2948a712a8b0192d396532c634dd087725c6a3fa"
+    },
+    {
+      "file": "libtruetype.so",
+      "soname": [
+        "libtruetype.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "1298048165e36f275bc6c4d95588362640c5e0caf359642b1fb229ad6a670685"
+    },
+    {
+      "file": "libvulkan.so.1",
+      "soname": [
+        "libvulkan.so.1"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libthr.so.3",
+        "libc.so.7"
+      ],
+      "sha256": "e14384d71bf9b73931f7564a72d2be26d01ac415a7b0b17c733b5fc07ffcc1b6"
+    },
+    {
+      "file": "libwayland-client.so",
+      "soname": [
+        "libwayland-client.so"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "b327cc9ef4d5eb1b331eb629501c2204c3500a6f8c3bbaea68e5796e9c7caf7a"
+    },
+    {
+      "file": "libz-compat.so",
+      "soname": [
+        "libz-compat.so"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "ab90ac6c95076e371ea6ed4557213a74adcd87e3fbce261b24f493da21410b34"
+    }
+  ]
+}
+srwxrwx---  1 root video 0 Oct  2 11:13 /var/run/seatd.sock
+54370f9b3351cb620e59324596e979483c481794
+/opt/keiland/bin/wayland:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x280edd403000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x280ede2fd000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x280ede322000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x280edc3b6000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x280edeff6000)
+	libseat.so.1 => /opt/keiland/lib/libseat.so.1 (0x280ee06bc000)
+	libm.so.5 => /lib/libm.so.5 (0x280edf96c000)
+	libthr.so.3 => /lib/libthr.so.3 (0x280ee1a80000)
+	libc.so.7 => /lib/libc.so.7 (0x280ee2762000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x280ee3270000)
+	libsys.so.7 => /lib/libsys.so.7 (0x280ee3293000)
+	[vdso] (0x280edb900000)
+usage: wayland [--socket=/path] [--width=N] [--height=N] [--timeout=seconds] [--max-frames=N] [--log-frames] [--keyboard-blur] [--glass] [--font=/path] [--fallback-font=/path] [--wallpaper=/path.ppm] [--window-opacity=1..100] [--desktop-client=COMMAND|none] [--desktop-token=TOKEN] [--session [--control-fd=N] [--lock-idle=seconds] | --greeter --auth-fd=N]

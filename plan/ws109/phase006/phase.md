@@ -26,6 +26,6 @@ q572 native output verified。BSD make/GNU makeのfile探索差を確認。
 
 ## Result / q573-i01 / 2026-10-02T02:08:43.980070+00:00
 
-cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
+cleared。GNU/BSD make native入口とdirect --session文書を検証。[結果](/home/awe/zedBSD-claude1/plan/history/ws109/q573/result.md)。実機build/installはp007、ユーザー実操作はp008。
 
 Event ws109-q573-cleared: local result/close intent保存、Issue comment/closeは保留。

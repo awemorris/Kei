@@ -2,7 +2,7 @@
 
 # WS109 p007: 実機build/install・最終全文規約
 
-Parent: [WS109](../ws.md)
+Parent: [WS109](/home/awe/zedBSD-claude1/plan/ws109/ws.md)
 Status: cleared
 Disposition: normal
 Queue / Attempt: q574 / q574-i01
@@ -18,7 +18,7 @@ p006 cleared actual source。SSH鍵確認済み。GUI合格はユーザーに残
 
 ## Standards / verification / bounds
 
-[Guardrail](../../guardrail.md)、[全文C規約](../../coding-style.md)、[native full rules](../../standards/ws109-native.md)。既存C変更が必要になれば全文を適用。新make/shellは近傍形式を保ち、BSD/GNU parse、no-config/toolchain dry-run、実FreeBSD native build warning0、実install/ELF/readbackで検証。最終規約レビューはp007。最大60分/attempt、新driver修理は含めない。user GUIはp008別。Issue/Project同期保留。
+[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、[全文C規約](/home/awe/zedBSD-claude1/plan/coding-style.md)、[native full rules](/home/awe/zedBSD-claude1/plan/standards/ws109-native.md)。既存C変更が必要になれば全文を適用。新make/shellは近傍形式を保ち、BSD/GNU parse、no-config/toolchain dry-run、実FreeBSD native build warning0、実install/ELF/readbackで検証。最終規約レビューはp007。最大60分/attempt、新driver修理は含めない。user GUIはp008別。Issue/Project同期保留。
 
 ## Event history
 

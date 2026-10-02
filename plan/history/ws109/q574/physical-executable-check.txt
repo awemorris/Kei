@@ -1,0 +1,17 @@
+installed native executable PASS /opt/keiland/bin/files
+installed native executable PASS /opt/keiland/bin/imageview
+installed native executable PASS /opt/keiland/bin/kuidemo
+installed native executable PASS /opt/keiland/bin/mview
+installed native executable PASS /opt/keiland/bin/notes
+installed native executable PASS /opt/keiland/bin/pdfviewer
+installed native executable PASS /opt/keiland/bin/settings
+installed native executable PASS /opt/keiland/bin/terminal
+installed native executable PASS /opt/keiland/bin/textedit
+installed native executable PASS /opt/keiland/bin/vkdemo
+installed native executable PASS /opt/keiland/bin/wayland
+installed native executable PASS /opt/keiland/bin/wlshm
+installed native executable PASS /opt/keiland/bin/wltest
+installed native executable PASS /opt/keiland/libexec/keiland-ime
+all installed executable hashes and loader dependencies PASS
+seatd is running as pid 7864.
+uid=1001(awe) gid=0(wheel) groups=0(wheel),44(video)

@@ -1,0 +1,17 @@
+seatd is running as pid 5872.
+5871 daemon: /usr/local/bin/seatd[5872]
+5872 /usr/local/bin/seatd -g video
+/opt/keiland/bin/wayland:
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x1b6b0ad9e000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x1b6b0b822000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x1b6b0bb91000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x1b6b0be76000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x1b6b0c072000)
+	libseat.so.1 => /opt/keiland/lib/libseat.so.1 (0x1b6b0cf4c000)
+	libm.so.5 => /lib/libm.so.5 (0x1b6b0d3e0000)
+	libthr.so.3 => /lib/libthr.so.3 (0x1b6b0d59c000)
+	libc.so.7 => /lib/libc.so.7 (0x1b6b0e3de000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x1b6b0ea0e000)
+	libsys.so.7 => /lib/libsys.so.7 (0x1b6b0f730000)
+	[vdso] (0x1b6b08d40000)
+usage: wayland [--socket=/path] [--width=N] [--height=N] [--timeout=seconds] [--max-frames=N] [--log-frames] [--keyboard-blur] [--glass] [--font=/path] [--fallback-font=/path] [--wallpaper=/path.ppm] [--window-opacity=1..100] [--desktop-client=COMMAND|none] [--desktop-token=TOKEN] [--session [--control-fd=N] [--lock-idle=seconds] | --greeter --auth-fd=N]
