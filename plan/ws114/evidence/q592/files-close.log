@@ -1,0 +1,5 @@
+    PID COMMAND
+files-exited
+ZWL GLASS dock surface=8 via=button buttons=774,728,682 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=8 via=button x=80 y=98
+737 /opt/keiland/bin/wayland --socket=/run/p3-q592/wayland-q592 --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm

@@ -1,0 +1,9 @@
+{"event": "gtk-version", "pid": 1010, "version": "4.18.6"}
+{"event": "focus", "pid": 1010, "active": true}
+{"event": "snapshot", "pid": 1010, "renderer": "GskVulkanRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "target-text", "pid": 1010, "text": "v"}
+{"event": "target-text", "pid": 1010, "text": "vk"}
+{"event": "target-text", "pid": 1010, "text": "vk1"}
+Using renderer 'GskVulkanRenderer' for surface 'GdkWaylandToplevel'
+0
+[1667601.981] {Default Queue} wl_pointer#6.button(160, 377811, 272, 0)

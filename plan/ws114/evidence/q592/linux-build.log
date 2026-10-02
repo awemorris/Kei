@@ -1,0 +1,19 @@
+source HEAD 901037f9fa45abc8770b63e78fb6b4d7bd9d470c
+command: make -j16 -f userland/desktop/keiland-linux.mk KEILAND_LINUX_BUILD=build/p3-q592/linux all; install DESTDIR=build/p3-q592/stage
+gcc (Debian 14.2.0-19) 14.2.0
+exit=0
+warnings: 0
+elf-check: PASS (24 ELF)
+1eed587637933aa240dbbe2afd5b1677215d82b5fe049ca625a491f9dec0536b  build/p3-q592/stage/opt/keiland/bin/wayland
+448d908e74cd2aa0ce61bcc1cb6be2c2b9a55fe9bfcab081f90139964de756b2  build/p3-q592/stage/opt/keiland/bin/terminal
+025b74d2a63587db5e21b2f786cf9e689d515651962b7ed9721a7423b39aedcf  build/p3-q592/stage/opt/keiland/bin/files
+60cc0e0bb30fc3002dfa4082bbc0ee3aaf5a0737a9b44f539d99b4c08b46e7de  build/p3-q592/stage/opt/keiland/bin/textedit
+5572af479353709fa3be50eb862c0407d6a8a8f1603ac04fc6bfd7a5ee685cdb  build/p3-q592/stage/opt/keiland/lib/libkeiland.so
+build/p3-q592/stage/opt/keiland/bin/wayland: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=334843bad7420844d58a59cd94329b3148fcb5c2, for GNU/Linux 3.2.0, with debug_info, not stripped
+ 0x0000000000000001 (NEEDED)             Shared library: [libkeiland.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libtruetype.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpng-compat.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libvulkan.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000001d (RUNPATH)            Library runpath: [/opt/keiland/lib]

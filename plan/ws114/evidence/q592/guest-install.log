@@ -1,0 +1,16 @@
+1eed587637933aa240dbbe2afd5b1677215d82b5fe049ca625a491f9dec0536b  /opt/keiland/bin/wayland
+448d908e74cd2aa0ce61bcc1cb6be2c2b9a55fe9bfcab081f90139964de756b2  /opt/keiland/bin/terminal
+025b74d2a63587db5e21b2f786cf9e689d515651962b7ed9721a7423b39aedcf  /opt/keiland/bin/files
+60cc0e0bb30fc3002dfa4082bbc0ee3aaf5a0737a9b44f539d99b4c08b46e7de  /opt/keiland/bin/textedit
+5572af479353709fa3be50eb862c0407d6a8a8f1603ac04fc6bfd7a5ee685cdb  /opt/keiland/lib/libkeiland.so
+ 177   E   L   F 002 001 001  \0  \0  \0  \0  \0  \0  \0  \0  \0
+	linux-vdso.so.1 (0x00007f6451467000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x00007f6451386000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x00007f645137e000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x00007f6451378000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x00007f6451355000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f6451259000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6451065000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x00007f6451045000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x00007f645103f000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f6451469000)

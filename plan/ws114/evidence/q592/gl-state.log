@@ -1,0 +1,31 @@
+{"event": "gtk-version", "pid": 824, "version": "4.18.6"}
+{"event": "focus", "pid": 824, "active": true}
+{"event": "snapshot", "pid": 824, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "focus", "pid": 824, "active": false}
+{"event": "focus", "pid": 824, "active": true}
+{"event": "focus", "pid": 824, "active": false}
+{"event": "focus", "pid": 824, "active": true}
+{"event": "menu-action", "pid": 824, "name": "second"}
+{"event": "focus", "pid": 824, "active": false}
+{"event": "focus", "pid": 824, "active": true}
+{"event": "dialog-opened", "pid": 824, "modal": true, "transient": true}
+{"event": "focus", "pid": 824, "active": false}
+{"event": "dialog-closed", "pid": 824}
+{"event": "focus", "pid": 824, "active": true}
+{"event": "maximized", "pid": 824, "value": true}
+{"event": "snapshot", "pid": 824, "renderer": "GskGLRenderer", "width": 1280, "height": 762, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "maximized", "pid": 824, "value": false}
+{"event": "fullscreen", "pid": 824, "value": true}
+{"event": "snapshot", "pid": 824, "renderer": "GskGLRenderer", "width": 1280, "height": 800, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "fullscreen", "pid": 824, "value": false}
+[1453926.188] xdg_toplevel#31.configure_bounds(1256, 690)
+[1453926.192] xdg_toplevel#31.configure(0, 0, array[4])
+[1486114.613] xdg_toplevel#47.configure_bounds(1256, 690)
+[1486114.630] xdg_toplevel#47.configure(0, 0, array[4])
+[1507848.898] xdg_toplevel#31.configure(1280, 762, array[8])
+[1511850.388] xdg_toplevel#31.configure_bounds(1256, 690)
+[1511850.413] xdg_toplevel#31.configure(700, 460, array[4])
+[1515066.452] xdg_toplevel#31.configure(1280, 800, array[8])
+[1519066.483] xdg_toplevel#31.configure_bounds(1256, 690)
+[1519066.507] xdg_toplevel#31.configure(700, 460, array[4])
+[1525663.789]  -> xdg_toplevel#31.move(wl_seat#14, 69)

@@ -1,0 +1,6 @@
+{"event": "scroll", "pid": 944, "value": 101.56998901778078, "upper": 540.0, "page": 197.0}
+{"event": "scroll", "pid": 944, "value": 135.4266520237077, "upper": 540.0, "page": 197.0}
+{"event": "close-request", "pid": 944}
+{"event": "close-request", "pid": 824}
+994 bash -c grep -E "scroll|close-request" /tmp/q592-b2.stdout | tail -3; grep close-request /tmp/q592-a.stdout; sleep 1; pgrep -af gtk4-baseline; echo none-left
+none-left

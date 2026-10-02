@@ -1,0 +1,18 @@
+{"event": "gtk-version", "pid": 944, "version": "4.18.6"}
+{"event": "focus", "pid": 944, "active": true}
+{"event": "snapshot", "pid": 944, "renderer": "GskCairoRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "target-text", "pid": 944, "text": "q592 Ω copy-ünï"}
+---A
+---wire
+/tmp/q592-a.trace:[1578991.382] {Default Queue}  -> wl_data_source#44.offer("text/plain;charset=utf-8")
+/tmp/q592-a.trace:[1578991.391] {Default Queue}  -> wl_data_source#44.offer("text/plain")
+/tmp/q592-a.trace:[1578991.906] {Default Queue} wl_data_device#16.data_offer(new id wl_data_offer#4278190081)
+/tmp/q592-a.trace:[1578991.923] {Default Queue} wl_data_offer#4278190081.offer("text/plain;charset=utf-8")
+/tmp/q592-a.trace:[1578991.933] {Default Queue} wl_data_offer#4278190081.offer("text/plain")
+/tmp/q592-a.trace:[1578991.941] {Default Queue} wl_data_device#16.selection(wl_data_offer#4278190081)
+/tmp/q592-a.trace:[1578991.952] {Default Queue} wl_data_source#44.send("text/plain;charset=utf-8", fd 12)
+/tmp/q592-a.trace:[1580660.204] {Default Queue} wl_data_device#16.data_offer(new id wl_data_offer#4278190082)
+/tmp/q592-a.trace:[1580660.215] {Default Queue} wl_data_offer#4278190082.offer("text/plain;charset=utf-8")
+/tmp/q592-a.trace:[1580660.221] {Default Queue} wl_data_offer#4278190082.offer("text/plain")
+/tmp/q592-a.trace:[1580660.224] {Default Queue} wl_data_device#16.selection(wl_data_offer#4278190082)
+/tmp/q592-a.trace:[1622142.328] {Default Queue} wl_data_source#44.send("text/plain;charset=utf-8", fd 12)

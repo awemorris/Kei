@@ -15,7 +15,8 @@ spec.loader.exec_module(protocol)
 Wire, word, string = protocol.Wire, protocol.word, protocol.string
 
 client = Wire()
-client.socket.settimeout(90)
+limit = float(os.environ.get('WS114_WIRE_DEADLINE', '90'))
+client.socket.settimeout(limit)
 shm = client.bind('wl_shm', 1)
 seat = client.bind('wl_seat', 5)
 pointer = client.new()
@@ -41,7 +42,7 @@ client.commit('mapped bounded 300x180')
 print('READY', flush=True)
 mode = sys.argv[1] if len(sys.argv) > 1 else 'resize'
 received = []
-deadline = time.monotonic() + 90
+deadline = time.monotonic() + limit
 while time.monotonic() < deadline:
     target, opcode, payload = client.receive()
     if target == pointer and opcode == 3:
