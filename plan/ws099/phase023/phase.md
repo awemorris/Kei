@@ -15,3 +15,8 @@ Bugs: [BUG-136](../../bugs/BUG-136.md)、[BUG-137](../../bugs/BUG-137.md)
 ## 所有 path
 
 `userland/desktop/wayland/` の titlebar・x11 の関係の file、`userland/desktop/terminal/`、`userland/desktop/x11server/`（要る範囲）、`plan/ws099/`。
+
+
+## 2026-10-02 Q1: 範囲の追加（ws099-p020 / q591 の発見）
+
+直す前（base 901037f9f）から落ちている C 基準の試験も、この Phase で原因を調べて直す: Notes にタイトルバーが出ない（p138・c3、BUG-136 と同じ根の可能性）、p137 の probe-a の focus と key、p134 の probe の窓の角が丸くない、C9 の p072。直した後に C9 ×5 と C3・C4・C8 を流し、p020（BUG-125）の clearance の残り（C9 ×5 FAIL 0）もここで確かめる。SSH の retry を他の C9 の script にも入れる。
