@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Validates ordinary DOM insertion without moving nodes or notifying hosts. */
+/*
+ * Validates ordinary DOM insertion without moving nodes or notifying hosts.
+ */
 
 #include "bind/internal.h"
 
@@ -27,7 +29,7 @@ bind_validate_insert(
 	struct dom_node *reference)
 {
 	int ancestor;
-	int status;
+	int error;
 
 	/* Invalid embedding inputs cannot be used to construct a script exception. */
 	if (realm == NULL ||
@@ -39,21 +41,21 @@ bind_validate_insert(
 	if (parent->type != DOM_DOCUMENT &&
 	    parent->type != DOM_DOCUMENT_FRAGMENT &&
 	    parent->type != DOM_ELEMENT) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "The parent cannot have children.");
-		return status;
+		error = bind_throw_dom(realm, "HierarchyRequestError", "The parent cannot have children.");
+		return error;
 	}
 
 	/* Cycles are refused before testing whether the reference belongs to the parent. */
 	ancestor = dom_is_inclusive_ancestor(node, parent);
 	if (ancestor) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "The new child contains the parent.");
-		return status;
+		error = bind_throw_dom(realm, "HierarchyRequestError", "The new child contains the parent.");
+		return error;
 	}
 
 	/* A foreign reference cannot identify an insertion position. */
 	if (reference != NULL && reference->parent != parent) {
-		status = bind_throw_dom(realm, "NotFoundError", "The insertion reference is not a child of the parent.");
-		return status;
+		error = bind_throw_dom(realm, "NotFoundError", "The insertion reference is not a child of the parent.");
+		return error;
 	}
 
 	/* Only supported ordinary child types may enter a tree. */
@@ -64,21 +66,21 @@ bind_validate_insert(
 	    node->type != DOM_CDATA_SECTION &&
 	    node->type != DOM_PROCESSING_INSTRUCTION &&
 	    node->type != DOM_COMMENT) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "Nodes of this type cannot be inserted here.");
-		return status;
+		error = bind_throw_dom(realm, "HierarchyRequestError", "Nodes of this type cannot be inserted here.");
+		return error;
 	}
 
 	/* A doctype belongs directly to a Document, never to an element or fragment. */
 	if (node->type == DOM_DOCUMENT_TYPE && parent->type != DOM_DOCUMENT) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "A doctype requires a Document parent.");
-		return status;
+		error = bind_throw_dom(realm, "HierarchyRequestError", "A doctype requires a Document parent.");
+		return error;
 	}
 
 	/* Document child order and counts require validation of the whole incoming fragment. */
 	if (parent->type == DOM_DOCUMENT) {
-		status = insertion_document(realm, parent, node, reference);
-		if (status != 0)
-			return status;
+		error = insertion_document(realm, parent, node, reference);
+		if (error != 0)
+			return error;
 	}
 
 	/* Succeeded: the insertion is valid, and every node remains in its original position. */
@@ -96,12 +98,12 @@ insertion_document(
 	const struct dom_node *child;
 	unsigned elements;
 	int before_reference;
-	int status;
+	int error;
 
 	/* Even an empty Text node is forbidden directly beneath a Document. */
 	if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "A Document cannot contain Text children.");
-		return status;
+		error = bind_throw_dom(realm, "HierarchyRequestError", "A Document cannot contain Text children.");
+		return error;
 	}
 
 	/* Comments have no effect on the Document's unique element and doctype constraints. */
@@ -110,20 +112,23 @@ insertion_document(
 
 	/* Refuse a complete fragment before its first child can be adopted or spliced. */
 	if (node->type == DOM_DOCUMENT_FRAGMENT) {
+		/* Count element children while rejecting text before any fragment child moves. */
 		elements = 0;
-		for (child = node->first_child; child != NULL; child = child->next) {
+		for (child = node->first_child;
+		     child != NULL;
+		     child = child->next) {
 			/* Text is invalid regardless of its length or position among fragment children. */
 			if (child->type == DOM_TEXT || child->type == DOM_CDATA_SECTION) {
-				status = bind_throw_dom(realm, "HierarchyRequestError", "A Document fragment cannot insert Text here.");
-				return status;
+				error = bind_throw_dom(realm, "HierarchyRequestError", "A Document fragment cannot insert Text here.");
+				return error;
 			}
 
 			/* Stop at the second element so the bounded counter cannot overflow. */
 			if (child->type == DOM_ELEMENT) {
 				elements++;
 				if (elements > 1U) {
-					status = bind_throw_dom(realm, "HierarchyRequestError", "Only one Document element is allowed.");
-					return status;
+					error = bind_throw_dom(realm, "HierarchyRequestError", "Only one Document element is allowed.");
+					return error;
 				}
 			}
 		}
@@ -135,22 +140,25 @@ insertion_document(
 
 	/* An element must be unique and must not precede an existing doctype. */
 	if (node->type == DOM_ELEMENT || node->type == DOM_DOCUMENT_FRAGMENT) {
+		/* Inspect every existing child relative to the proposed element position. */
 		before_reference = 1;
-		for (child = parent->first_child; child != NULL; child = child->next) {
+		for (child = parent->first_child;
+		     child != NULL;
+		     child = child->next) {
 			/* The referenced child and all following children would follow the new element. */
 			if (child == reference)
 				before_reference = 0;
 
 			/* No existing Document element is excluded from ordinary pre-insertion. */
 			if (child->type == DOM_ELEMENT) {
-				status = bind_throw_dom(realm, "HierarchyRequestError", "Only one Document element is allowed.");
-				return status;
+				error = bind_throw_dom(realm, "HierarchyRequestError", "Only one Document element is allowed.");
+				return error;
 			}
 
 			/* The existing doctype must remain before the new element. */
 			if (!before_reference && child->type == DOM_DOCUMENT_TYPE) {
-				status = bind_throw_dom(realm, "HierarchyRequestError", "The Document element must follow its doctype.");
-				return status;
+				error = bind_throw_dom(realm, "HierarchyRequestError", "The Document element must follow its doctype.");
+				return error;
 			}
 		}
 
@@ -160,21 +168,23 @@ insertion_document(
 
 	/* A doctype must be unique and must not follow an existing element. */
 	before_reference = 1;
-	for (child = parent->first_child; child != NULL; child = child->next) {
+	for (child = parent->first_child;
+	     child != NULL;
+	     child = child->next) {
 		/* Appending keeps every existing child before the insertion position. */
 		if (child == reference)
 			before_reference = 0;
 
 		/* Ordinary insertion cannot exclude the existing doctype, including node itself. */
 		if (child->type == DOM_DOCUMENT_TYPE) {
-			status = bind_throw_dom(realm, "HierarchyRequestError", "Only one Document doctype is allowed.");
-			return status;
+			error = bind_throw_dom(realm, "HierarchyRequestError", "Only one Document doctype is allowed.");
+			return error;
 		}
 
 		/* An element preceding the reference would precede the new doctype. */
 		if (before_reference && child->type == DOM_ELEMENT) {
-			status = bind_throw_dom(realm, "HierarchyRequestError", "The Document doctype must precede its element.");
-			return status;
+			error = bind_throw_dom(realm, "HierarchyRequestError", "The Document doctype must precede its element.");
+			return error;
 		}
 	}
 

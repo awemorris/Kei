@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Declared MIME essence selects the native document parser independently of resource names or contents. */
+/*
+ * Declared MIME essence selects the native document parser independently of resource names or contents.
+ */
 
 #include "page/page.h"
 
@@ -39,6 +41,8 @@ page_document_content(
 	/* Missing declaration storage or output is not a default HTML resource. */
 	if (mime == NULL || content == NULL)
 		return EINVAL;
+
+	/* Skip only the leading HTTP whitespace permitted before a declared MIME type. */
 	start = 0;
 	while (start < length) {
 		space = resource_space((unsigned char)mime[start]);
@@ -59,6 +63,8 @@ page_document_content(
 	/* Empty type or absent separator rejects this declaration before subtype inspection. */
 	if (slash == start || slash == length)
 		return EINVAL;
+
+	/* Locate the subtype boundary before optional MIME parameters. */
 	end = slash + 1;
 	while (end < length && mime[end] != ';')
 		end++;
@@ -74,6 +80,8 @@ page_document_content(
 	/* Every actual subtype character must be a token; another slash or embedded NUL is invalid. */
 	if (end == slash + 1)
 		return EINVAL;
+
+	/* Validate every remaining subtype byte before recognizing any supported processing model. */
 	for (index = slash + 1; index < end; index++) {
 		token = resource_token((unsigned char)mime[index]);
 		if (!token)
@@ -109,6 +117,8 @@ page_document_content(
 		same = resource_equal(mime + end - 4, 4, "+xml");
 	if (!same)
 		return ENOTSUP;
+
+	/* Publish ordinary XML processing only after its complete declared essence is recognized. */
 	*content = DOM_CONTENT_XML;
 
 	/* Succeeded: validated actual metadata supplies this processing model. */
@@ -139,8 +149,12 @@ resource_token(
 	/* ASCII alphanumeric characters are token bytes independently of process locale. */
 	if (character >= 'A' && character <= 'Z')
 		return 1;
+
+	/* Lowercase ASCII letters have the same HTTP-token membership as uppercase letters. */
 	if (character >= 'a' && character <= 'z')
 		return 1;
+
+	/* Decimal digits are the remaining alphanumeric HTTP-token bytes. */
 	if (character >= '0' && character <= '9')
 		return 1;
 
@@ -182,10 +196,14 @@ resource_equal(
 	expected_length = strlen(expected);
 	if (length != expected_length)
 		return 0;
+
+	/* Compare the whole declared essence after folding only ASCII uppercase bytes. */
 	for (index = 0; index < length; index++) {
 		character = (unsigned char)mime[index];
 		if (character >= 'A' && character <= 'Z')
 			character += 'a' - 'A';
+
+		/* Any differing canonical byte rejects this complete MIME essence. */
 		if (character != (unsigned char)expected[index])
 			return 0;
 	}

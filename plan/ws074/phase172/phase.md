@@ -55,3 +55,5 @@ Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queu
 2026-10-02 / q579-wrap-uncleared: userの全agent停止指示で通常wrap-up。branch差分の現行libbrowser配置への統合、ABI/境界、plain/ASan buildと既存回帰、target boot/native p014までの証拠は保存した。[checkpoint05](import/checkpoint05/README.md)時点で全209対象のmanual reviewは8完了、C/header 141とその他60が未完了。whole-Phaseはuncleared、後続browser gateは閉じたまま。再開は残りreviewを有限Queueへ再選定する。
 
 2026-10-02 / q584-start: 最新userのAgent A N=3開始指示により残reviewとin-scope規約修正を最大3hのq584/A1へ選定。q579原結果を保存し、whole-Phase受け入れと後続gateを維持。指定model/highで独立worktreeから開始。
+
+2026-10-02 / q584-A1-checkpoint06: A1 completed full C/component review of four small implementations and verified the eight previous reviewed hashes. [checkpoint06](import/checkpoint06/README.md) retains final hashes, warning0 plain build, compiler-specific identical object text and implementation tokens modulo two error-code names. Reviewed12/209; remaining137 C/header+60other. q584-i01 and p172 remain in-progress; no downstream work or whole-Phase clearance. GitHub publication pending under main ownership.

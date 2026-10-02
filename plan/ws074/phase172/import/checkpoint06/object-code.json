@@ -1,0 +1,62 @@
+{
+  "base": "0e68854ace6a84b06eb23268ae75c4cf7b79b6da",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": [
+    "-std=gnu11",
+    "-O1",
+    "-g0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/a1-browser2/include",
+    "-I."
+  ],
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/insertion.c",
+      "before_source_sha256": "631eb455e5003fc586ca680d61a872e9b6fb9632d4c409761e5ea645a1f644a1",
+      "after_source_sha256": "5485067931766c25aca5e13eb8412ff6b5adae56d6ba281c77f2e420477fda29",
+      "before_text_sha256": "b91f51b70a171cedb641a6538bedaf1ca3377d55731b2ed1d5a770a12953e902",
+      "after_text_sha256": "b91f51b70a171cedb641a6538bedaf1ca3377d55731b2ed1d5a770a12953e902",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_error_name_normalization": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/frame-resource.c",
+      "before_source_sha256": "c536f54e57966d436f5bf7a1d76004c8be77fd6798bb959b2feb5c68222d2f00",
+      "after_source_sha256": "5c0a59944df78aa4f58b1ab3bf8167ee6aec517ee62f01ac6cf5ccc87b715b48",
+      "before_text_sha256": "79c5250af74e60ce415d61e9ac544471fc01a69da71738fc2066fc445b7a90a6",
+      "after_text_sha256": "79c5250af74e60ce415d61e9ac544471fc01a69da71738fc2066fc445b7a90a6",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_error_name_normalization": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/style-sheet.c",
+      "before_source_sha256": "87b8634a6f35382693046d13e82177251bd739b2d95c7aebff792a5afce1f80e",
+      "after_source_sha256": "581087e06a335bc4125d6d98ea9af8e41cceff42f01e6820849e93c4b3e40553",
+      "before_text_sha256": "cec9151aead796ab8fde717c208809e15d67caf6aefa96ce50b04fe4bbf1a842",
+      "after_text_sha256": "cec9151aead796ab8fde717c208809e15d67caf6aefa96ce50b04fe4bbf1a842",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_error_name_normalization": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/resource.c",
+      "before_source_sha256": "8c5face9daf4219a2fb3b5d022da5ee346f47203ccf6a5d4ab2bd8dd1da264c9",
+      "after_source_sha256": "23d34f12a7d390f8535725ad7c611d4bde9484c311d47a87e410a05b1c75e87a",
+      "before_text_sha256": "f12d96fa12fd09fb443aa06443b5c0b19dac3d9681be30b0d72bb1ea78d7314b",
+      "after_text_sha256": "f12d96fa12fd09fb443aa06443b5c0b19dac3d9681be30b0d72bb1ea78d7314b",
+      "text_equal": true,
+      "warnings": 0,
+      "implementation_tokens_equal_with_error_name_normalization": true
+    }
+  ],
+  "limits": "Compiler-specific .text equality and implementation-token equality modulo two local error-code renames; not target compilation or whole-Phase clearance."
+}

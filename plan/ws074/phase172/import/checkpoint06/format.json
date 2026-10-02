@@ -1,0 +1,30 @@
+{
+  "tool": "Debian clang-format version 19.1.7 (3+b1)",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/insertion.c",
+      "formatted_sha256": "77e2a3e7ef3469d511528344319335f3d9dbee57b79256c93087b3537317c910",
+      "final_sha256": "5485067931766c25aca5e13eb8412ff6b5adae56d6ba281c77f2e420477fda29",
+      "restorations": "Definition argument tabs; readable immutable descriptor row."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/frame-resource.c",
+      "formatted_sha256": "28414fcdc58e1dbbff3ba90670b9a6535112ddf77f9d52d1ef892818b7d4d5ce",
+      "final_sha256": "5c0a59944df78aa4f58b1ab3bf8167ee6aec517ee62f01ac6cf5ccc87b715b48",
+      "restorations": "Definition argument tabs; readable immutable descriptor row."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/style-sheet.c",
+      "formatted_sha256": "0123554af85d1ce9eec2c769d0e9c558bde6ba235a18451bbc365a84ee606fef",
+      "final_sha256": "581087e06a335bc4125d6d98ea9af8e41cceff42f01e6820849e93c4b3e40553",
+      "restorations": "Definition argument tabs; readable immutable descriptor row."
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/resource.c",
+      "formatted_sha256": "ab407c85238270306cadcdde819b534bd60b86a650c18b57a110da81a8f5dc44",
+      "final_sha256": "23d34f12a7d390f8535725ad7c611d4bde9484c311d47a87e410a05b1c75e87a",
+      "restorations": "Definition argument tabs; readable immutable descriptor row."
+    }
+  ]
+}
