@@ -629,6 +629,7 @@ primary docs for operational syntax:
   一度コンテキストを埋めた担当はなるべく長く動かし、Q1 が次の仕事を絶え間なく依頼・予約する。同時に動かす数 N はユーザーが指定する（2026-10-02 は N=4）。
   詳細は[サブエージェント別Queueの運用契約](plan/agents/protocol.md)。固定版Awesome Planの「1 project / 1 active Queue / 1 executor」「次Queueを自動開始しない」はこの範囲で置き換える。
   各担当は独立worktreeで承認済みQueueを最大1つactiveにし、Q1が投入済みで承認/依存を満たす次Queueへ継続できる。1Queueは原則1Phase。
+- **権限で止まったとき（2026-10-02 ユーザー）**: サブエージェントの操作が Claude Code の権限の確認・security の判定で実行できなかったら、担当は別の経路で同じ結果を作らずに止まって Q1 に返す。Q1 はユーザーに内容を示して**明示の承認**を得てから、その担当を通常のラップアップで終了させ、同じ名前で再起動して承認の引用とともに再開させる（再起動で権限が付与される）。Q1 は担当が止められた操作を自分で代わりに行わない。
 - サブエージェントはPhaseが終わる前でもコミット可能な小単位で`git commit -m WIP -- <担当path>...`し、mainへSHA/検証/残件とmerge依頼を送る。mainが統合してACKする。通常ラップアップは安全なcommit地点で返却して自発的に終了。urgentは未commit差分をbinary patchと再開情報に保存し、直ちに返して自発的に終了。commit/mergeとPhase clearanceは別の状態。
 - 実行中に未知の依存が分かったPhaseはunclearedとして証拠/再開条件を残す。依存成果が実際にmainへ統合されるまで他WSのdependent Queueを開始しない。`.claude/agents/phase-runner*.md`はこの運用に合わせ、独立worktreeの担当pathだけをWIP commitする（main checkoutは編集しない）。
 - 人間の判断が要る点、計画に無い依存、未達の受け入れ条件は、その場でユーザーへ報告する。

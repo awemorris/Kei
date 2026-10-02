@@ -32,6 +32,10 @@
 - 強制終了/利用制限時はmainがworktree・branch・未commit差分・最後のmerge requestを調べ、重複適用を避けて回収する。中断したattemptの結果と再開条件はmainがQueue/Phase/historyへ残す。急停止を成功扱いしない。
 - コンテキスト残量/実行時間が限界ならチェックポイントを作ってmainに知らせ、残りは同じ名前の担当の新しい世代へ引き継ぐ。
 
+## 権限で止まったとき（2026-10-02 ユーザー）
+
+ユーザー:「セキュリティや権限で実行できなかった場合は、私に明示的な承認を得て、サブエージェントをラップアップしてから再起動する運用にします。こうすることで、サブエージェントに権限が付与されます。」→ 担当は止まって Q1 に返す。Q1 はユーザーの明示の承認を得る → 担当を通常のラップアップ → 同じ名前の新しい generation を起動し、承認の引用とともに再開させる。Q1 は止められた操作を代わりに行わない。
+
 ## 記録の最小項目
 
 [Registry](registry.md)は担当名/世代、WS、worktree/branch、current Queue、ordered next Queues、状態、最終checkpoint、wrap-up指示、最終merge ACKを持つ。Queue laneは承認元/範囲/Phase/attempt/依存と結果を持つ。成果のGit commit、統合、Queue/Phase clearance、WS completionは別イベント。shared cache/outboxはmainだけが書き、GitHub publicationの保留とローカル実行成果を混同しない。
