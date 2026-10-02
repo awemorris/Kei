@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ws115-p005: the schema the GLib probe reads and writes through a memory backend. -->
+<!-- Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<schemalist>
+  <schema id="org.zedbsd.GlibProbe" path="/org/zedbsd/glib-probe/">
+    <key name="count" type="i">
+      <default>7</default>
+    </key>
+  </schema>
+</schemalist>

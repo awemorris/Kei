@@ -194,3 +194,19 @@ GTK 4.18 は GL が使えなければ Cairo に落ちる。最初の目標は Ca
 
 - 実施: tarball の取得と SHA-256 の照合（GNOME の公開値、inventory の値）、GTK・依存の `meson.build` の読解、GTK と glib の OS API の grep、zedBSD の `libc.so`・`libwayland-client.so`・`libEGL.so` の export と SONAME の照合、header の比較、glib 2.84.4 の target 向け meson の dry 構成（`sys/poll.h` で止まり、shim を置けば pcre2 まで進むことを確認）、host 道具の版。
 - 未実施: どの package の実際の build も、GTK の meson 構成も（依存が無いため）、runtime（zedBSD 上の実行）も、generic 配送の実測も、license の機械監査（p005 以降）もしていない。版を pin すると決めたら、署名の検証は各 Phase で inventory の方法に従う。
+
+## 11. 移植で分かった zedBSD の libc と kernel の差（p005 以降、追記していく）
+
+Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h から strings.h を読むかどうか）は WS001 の観点で後に決める。それまでは package ごとの小さな patch で対処し、どの package で起きたかをここに残す。libc の判断の材料にする。
+
+| 差 | 種類 | 見つけた package | 対処 |
+| --- | --- | --- | --- |
+| `<sys/poll.h>` が無い | libc の header | glib（meson が必須にしている） | **libc に追加済み**（main acb5a2da9、L1） |
+| `<arpa/nameser.h>` が無い（定義は `<resolv.h>` にある）。`HEADER` 構造体と `GETSHORT`/`GETLONG` も無い | libc の header | glib（gio の検査、`gthreadedresolver.c`） | glib の patch 0001・0003。record の検索は G_RESOLVER_ERROR_INTERNAL を返す |
+| `string.h` が strcasecmp/strncasecmp を宣言しない（POSIX どおり `strings.h` だけ） | libc の header（名前空間） | glib（glib-init.c、gstrfuncs.c） | glib の patch 0002（`HAVE_STRINGS_H` で `strings.h` を読む） |
+| gettext 系に `format_arg` の属性が無い | libc の header | glib（-Werror=format-nonliteral/-security） | **libc の差分を提案**: plan/ws115/proposed/libc-libintl-format-arg.diff（Q1 が許可。P3 の権限では libc を編集できず、main が入れる） |
+| `CMSG_NXTHDR` が無い（POSIX が要求する） | libc の header | glib（gsocket.c） | **libc の差分を提案**: plan/ws115/proposed/libc-cmsg-nxthdr.diff と host 試験 tests/cmsg-nxthdr-test.c（同上） |
+| `IN_MULTICAST()`・`SOMAXCONN` が無い | libc の header（BSD と POSIX の定数） | glib（ginetaddress.c、gsocket.c） | glib の patch 0004（通常の定義と 128 を置く） |
+| IP 層の socket option（IP_TTL、multicast、group membership、IPv6 版）・`SOCK_SEQPACKET`・`FIONREAD` が無い | kernel（UAPI に無い） | glib（gsocket.c） | glib の patch 0004（G_IO_ERROR_NOT_SUPPORTED、available bytes は -1）。kernel に足すかは別の判断（記録だけ） |
+| `__tls_get_addr` が ld.so にだけあり、link のときには見えない | link の契約 | glib（meson の既定 `--no-undefined`） | glib に `-Db_lundef=false`。p006 以降で同じことが起きたら external.mk の共通規則か、link で ld.so を見せる案で決める（Q1） |
+| `config.sub` と libtool が zedbsd を知らない | 外部の build 道具 | libffi（autotools だけ） | libffi の patch 0001（OpenSSH の先例と同じ形） |
