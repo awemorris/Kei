@@ -18,3 +18,4 @@ Next（予約）: ws115-p006（libpng・freetype・harfbuzz・fontconfig）〜
 | P3-004 | q597 | 33e061c3b..be587f8ae（前回 597841d2a） | plan/ws115 | integrated 408a31586 |
 | P3-005 | q600 | 503b94c80（前回 be587f8ae） | external.mk・packages/tools/gen-meson-cross.sh・devel/gperf・plan/ws115 | integrated 81f77738d |
 | P3-006 | q602 途中 | 24c66c58e（前回 503b94c80） | packages/libs/pcre2・libffi・plan/ws115（proposed の libc 差分 2 つはユーザーの承認待ち） | integrated dea890041 |
+| P3-007 | q602 wrap | c4e303ffa（前回 24c66c58e） | packages/libs/glib・plan/ws115 | integrated 698759738 |
