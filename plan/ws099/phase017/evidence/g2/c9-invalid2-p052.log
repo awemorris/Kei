@@ -1,0 +1,29 @@
+p052: timed out waiting for: grep "frame=20 " /tmp/b.log
+check: (10,10) want 203040 got 000000 DIFFERS
+check: (1270,790) want 203040 got 000000 DIFFERS
+check: (450,260) want ff0000 got 000000 DIFFERS
+check: (460,540) want ff0000 got 000000 DIFFERS
+check: (830,260) want ff0000 got 000000 DIFFERS
+check: (530,340) want 00ff00 got 000000 DIFFERS
+check: (810,520) want 00ff00 got 000000 DIFFERS
+check: (830,545) want ff0000 got 000000 DIFFERS
+check: (850,540) want 203040 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p052/windows.png 1280x800 FAIL
+p052: timed out waiting for: grep -E "CONFIGURE .*fullscreen=1" /tmp/zdesktop.log
+check: (10,10) want 00ff00 got 000000 DIFFERS
+check: (640,400) want 00ff00 got 000000 DIFFERS
+check: (1270,790) want 00ff00 got 000000 DIFFERS
+check: (450,260) want 00ff00 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p052/fullscreen.png 1280x800 FAIL
+p052: timed out waiting for: sed -n "/CONFIGURE .*fullscreen=1/,\$p" /tmp/zdesktop.log | grep -E "CONFIGURE .*fullscreen=0"
+check: (10,10) want 203040 got 000000 DIFFERS
+check: (450,260) want ff0000 got 000000 DIFFERS
+check: (530,340) want 00ff00 got 000000 DIFFERS
+check: (810,520) want 00ff00 got 000000 DIFFERS
+check: (850,540) want 203040 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p052/back.png 1280x800 FAIL
+direct presents: 0
+vulkan imports: 0
+compose frames: 1
+ZWL VULKAN_ERROR operation=device result=-3
+p052: FAIL

@@ -1,0 +1,24 @@
+copies: 0
+check: (10,10) want 203040 got 000000 DIFFERS
+check: (450,260) want ff0000 got 000000 DIFFERS
+check: (530,340) want 7f8000 got 000000 DIFFERS
+check: (810,340) want 7f8000 got 000000 DIFFERS
+check: (700,450) want 0000ff got 000000 DIFFERS
+check: (100,100) want 000000 got 000000 ok
+check: (101,102) want ffffff got 000000 DIFFERS
+check: (99,110) want 203040 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p053/shm.png 1280x800 FAIL
+check: (636,396) want ffff00 got 000000 DIFFERS
+check: (643,403) want ffff00 got 000000 DIFFERS
+check: (646,406) want ff0000 got 000000 DIFFERS
+check: (634,394) want ff0000 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p053/cursor.png 1280x800 FAIL
+check: (640,400) want ff0000 got 000000 DIFFERS
+check: (641,402) want ff0000 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p053/hidden.png 1280x800 FAIL
+check: (100,700) want 000000 got 000000 ok
+check: (101,702) want ffffff got 000000 DIFFERS
+check: (110,720) want 0000ff got 000000 DIFFERS
+check: (640,200) want 00ff00 got 000000 DIFFERS
+check: build/p8-q577/c9-2/c9-p053/fullscreen.png 1280x800 FAIL
+p053: FAIL
