@@ -1,0 +1,16 @@
+ZBROWSER READY width=900 height=640 document=406
+ZBROWSER NAVIGATE path=/usr/share/browser-tests/first.html title=browser: the first page
+ZBROWSER TITLEBAR back=0 forward=0 path=/usr/share/browser-tests/first.html
+ZBROWSER FRAME scroll=0 width=900 height=640
+
+COMPOSITOR RELEVANT
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL GLASS ready text=1
+ZWL READY socket=/tmp/wayland-0 width=1280 height=800 timeout_ms=900000 pid=69
+ZWL GLASS desktops x=821 step=46 width=40
+ZWL MAP client=1 surface=7 x=190 y=123
+ZWL GLASS glyph codepoint=U+2026 size=0 face=0 cell=0
+ZWL MAP client=2 surface=7 x=190 y=123
+ZWL MAP client=3 surface=7 x=190 y=123
+ZWL GLASS moved surface=7 x=290 y=183
+ZWL GLASS close surface=7

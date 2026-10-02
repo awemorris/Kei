@@ -12,3 +12,5 @@ Venus専用runtime build/main-n3-browser-guest/runtime、zdesktop-guest.sh start
 first.html/blocks.htmlをguestの/usr/share/browser-testsへput、service stop greeter後に既存browser-p014.shでshell/GPUCPU比較/scroll/titlebar/closeを実行中。console/seriallogは判定に使わない。
 
 p172全Phaseは全文manual/最終source検証と全disposition照合までin-progress。target/bootだけでclearanceしない。
+
+Native guest browser-p014 exit0/status0: READY/frame、first/blocks各GPUCPU agree、End224/wheel179/Home0、CtrlQ、titlebar移動+100,+60/close、compositorERROR0。mainがfirst/moved画像を目視。独立guestをstopし所有資源のみ終了。[testlog](main-evidence/native-p014.log)、[app/compositor対象log](main-evidence/native-app.log)、[first PNG](main-evidence/native-first.png)。

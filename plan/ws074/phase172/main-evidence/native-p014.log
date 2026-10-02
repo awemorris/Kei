@@ -1,0 +1,20 @@
+log: ZBROWSER READY width=900 height=640 ok
+log: ZBROWSER FRAME scroll=0  ok
+close: ok
+gpu-compare first-gpu: largest channel difference 2, 0/480000 pixels over 2 (0.0000%): agree
+gpu-compare blocks-gpu: largest channel difference 1, 0/480000 pixels over 2 (0.0000%): agree
+log: ZBROWSER READY width=900 height=640 ok
+log: ZBROWSER FRAME scroll=0  ok
+scroll: End went to 224
+scroll: End ok
+scroll: the wheel went to 179
+scroll: wheel ok
+scroll: Home ok
+close: ok
+log: ZBROWSER READY width=900 height=640 ok
+log: ZBROWSER FRAME scroll=0  ok
+log: ZWL GLASS moved surface=[0-9]* x=290 y=183 ok
+log: ZWL GLASS close surface= ok
+titlebar close: ok
+zdesktop: no ERROR
+browser-p014: status 0 (pictures in build/main-n3-browser-guest/p014)
