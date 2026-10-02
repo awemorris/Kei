@@ -71,6 +71,8 @@ struct main_options {
  * the desktop mode.
  */
 static char main_desktop_token[128];
+
+/* The desktop folder path, retained for option storage throughout the run. */
 static char main_desktop_folder[FM_PATH_MAX];
 
 /*
@@ -140,6 +142,8 @@ struct main_startup {
 	uint64_t shown;		/* the first frame shown */
 	uint64_t menus;		/* the desktop's context menus open, after the first frame */
 };
+
+/* The current run's startup samples; zero means a step has not been recorded yet. */
 static struct main_startup main_startup;
 
 static int main_parse(int argc, char **argv, struct main_options *options);
@@ -493,11 +497,16 @@ main_loop(
 		main_open_context_menus();
 		main_startup.menus = fm_clock();
 		fm_log("DESKTOP startup entered_ms=%llu fonts=%lu instance=%lu window=%lu present=%lu app=%lu canvas=%lu draw=%lu shown=%lu menus=%lu",
-		    (unsigned long long)main_startup.entered, (unsigned long)(main_startup.fonts - main_startup.entered),
-		    (unsigned long)(main_startup.instance - main_startup.fonts), (unsigned long)(main_startup.window - main_startup.instance), (unsigned long)(main_startup.present - main_startup.window),
-		    (unsigned long)(main_startup.app - main_startup.present), (unsigned long)(main_startup.canvas - main_startup.app),
-		    (unsigned long)main_startup.draw_ms, (unsigned long)(main_startup.shown - main_startup.canvas - main_startup.draw_ms),
-		    (unsigned long)(main_startup.menus - main_startup.shown));
+		       (unsigned long long)main_startup.entered,
+		       (unsigned long)(main_startup.fonts - main_startup.entered),
+		       (unsigned long)(main_startup.instance - main_startup.fonts),
+		       (unsigned long)(main_startup.window - main_startup.instance),
+		       (unsigned long)(main_startup.present - main_startup.window),
+		       (unsigned long)(main_startup.app - main_startup.present),
+		       (unsigned long)(main_startup.canvas - main_startup.app),
+		       (unsigned long)main_startup.draw_ms,
+		       (unsigned long)(main_startup.shown - main_startup.canvas - main_startup.draw_ms),
+		       (unsigned long)(main_startup.menus - main_startup.shown));
 	}
 
 	/* The log line the tests wait for. */
@@ -643,10 +652,18 @@ main_frame(void)
 		shown = fm_clock();
 
 		/* The desktop's selection shown: the time from the press that selected (ws094-p008). */
-		if (main_app.desktop && main_app.desk.select_ms != 0U && result == VK_SUCCESS) {
-			fm_log("DESKTOP select-frame ms=%lu before=%lu draw=%lu copy=%u acquire=%u submit=%u queue=%u wait=%u", (unsigned long)(shown - main_app.desk.select_ms),
-			    (unsigned long)(started - main_app.desk.select_ms), (unsigned long)(drawn - started), main_present.copy_ms, main_present.acquire_ms, main_present.submit_ms,
-			    main_present.present_ms, main_present.wait_ms);
+		if (main_app.desktop &&
+		    main_app.desk.select_ms != 0U &&
+		    result == VK_SUCCESS) {
+			fm_log("DESKTOP select-frame ms=%lu before=%lu draw=%lu copy=%u acquire=%u submit=%u queue=%u wait=%u",
+			       (unsigned long)(shown - main_app.desk.select_ms),
+			       (unsigned long)(started - main_app.desk.select_ms),
+			       (unsigned long)(drawn - started),
+			       main_present.copy_ms,
+			       main_present.acquire_ms,
+			       main_present.submit_ms,
+			       main_present.present_ms,
+			       main_present.wait_ms);
 			main_app.desk.select_ms = 0U;
 		}
 
@@ -1246,6 +1263,9 @@ main_open_context_menus(void)
 		fm_log("MENU failed errno=%d", error);
 		fm_menu_close(&main_menu);
 	}
+
+	/* Succeeded: the desktop menu service is available or its failure logged. */
+	return;
 }
 
 /* Hands an input to the desktop (files --desktop) or to the window's file manager. */
@@ -1261,4 +1281,7 @@ main_dispatch(
 
 	/* The window's. */
 	fm_ui_event(&main_app, event);
+
+	/* Succeeded: the window has received its input. */
+	return;
 }

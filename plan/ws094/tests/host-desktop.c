@@ -563,9 +563,23 @@ check_partial(
 	check(error == 0, "partial: the font");
 	if (error != 0)
 		return;
+
+	/* Allocates and checks the desktop canvas before the comparison image. */
 	pixels = calloc(1280U * 766U, sizeof(uint32_t));
+	if (pixels == NULL) {
+		check(0, "partial: the canvas");
+		return;
+	}
+
+	/* Allocates the reference image only after the canvas allocation succeeded. */
 	whole = calloc(1280U * 766U, sizeof(uint32_t));
-	error = pixels == NULL || whole == NULL || fm_canvas_init(&canvas, pixels, 1280U, 1280, 766) != 0;
+	if (whole == NULL) {
+		check(0, "partial: the canvas");
+		return;
+	}
+
+	/* Attaches the canvas to the allocated pixel storage. */
+	error = fm_canvas_init(&canvas, pixels, 1280U, 1280, 766);
 	check(error == 0, "partial: the canvas");
 	if (error != 0)
 		return;
@@ -633,6 +647,7 @@ partial_same(
 	size_t size;
 	int kept;
 	int same;
+	int differs;
 
 	/* The mark, in the bottom-left corner. */
 	corner = canvas->pixels + (size_t)765 * canvas->stride;
@@ -640,7 +655,9 @@ partial_same(
 
 	/* The changed cells only: the mark stays. */
 	fm_desktop_draw(app, canvas);
-	kept = corner[0] == 0x12345678U;
+	kept = 0;
+	if (corner[0] == 0x12345678U)
+		kept = 1;
 	corner[0] = 0U;
 
 	/* The same state drawn whole, for the comparison. */
@@ -648,9 +665,18 @@ partial_same(
 	memcpy(whole, canvas->pixels, size);
 	fm_desktop_repaint(&app->desk);
 	fm_desktop_draw(app, canvas);
-	same = memcmp(whole, canvas->pixels, size) == 0;
+	differs = memcmp(whole, canvas->pixels, size);
+	same = 0;
+	if (differs == 0)
+		same = 1;
 	check(kept && same, text);
-	return kept && same;
+
+	/* Refuses a frame that repainted the corner or differs from the whole image. */
+	if (!kept || !same)
+		return 0;
+
+	/* Succeeded: the changed cells match the complete frame. */
+	return 1;
 }
 
 /*
@@ -675,6 +701,7 @@ check_label(void)
 	size_t index;
 	size_t length;
 	int fits;
+	int width;
 	int error;
 
 	/* The desktop's font (the fallback for the Japanese name). */
@@ -686,7 +713,17 @@ check_label(void)
 	/* Each name, as the desktop shows it. */
 	for (index = 0; index < sizeof(names) / sizeof(names[0]); index++) {
 		fm_desktop_label(&text, names[index], 88, 13U, first, second);
-		fits = fm_text_width(&text, first, strlen(first), 13U, 0) <= 88 && fm_text_width(&text, second, strlen(second), 13U, 0) <= 88;
+
+		/* Checks the second line only when the first fits, preserving the short circuit. */
+		fits = 0;
+		width = fm_text_width(&text, first, strlen(first), 13U, 0);
+		if (width <= 88) {
+			width = fm_text_width(&text, second, strlen(second), 13U, 0);
+			if (width <= 88)
+				fits = 1;
+		}
+
+		/* Reports the two rendered lines and verifies their fit. */
 		printf("label %zu: \"%s\" / \"%s\"\n", index, first, second);
 		check(fits, "label: both lines fit the cell");
 		check(first[0] != '\0', "label: a first line");

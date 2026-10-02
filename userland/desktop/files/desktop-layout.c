@@ -51,6 +51,9 @@
 /* The longest line of the layout file. */
 #define LAYOUT_LINE		(FM_NAME_MAX + 32)
 
+/* The ellipsis put where the middle of a long name is left out (UTF-8). */
+#define LABEL_ELLIPSIS "\xe2\x80\xa6"
+
 static int layout_saved_index(const struct fm_desktop_saved *saved, size_t count, const char *name);
 static size_t label_prefix(struct fm_text *text, const char *name, size_t length, int width, unsigned pixels);
 static size_t label_suffix(struct fm_text *text, const char *name, size_t length, size_t from, int width, unsigned pixels);
@@ -77,6 +80,9 @@ fm_desktop_grid(
 	*rows = (height - 2 * LAYOUT_MARGIN) / LAYOUT_CELL_HEIGHT;
 	if (*rows < 1)
 		*rows = 1;
+
+	/* Succeeded: the caller has a nonempty grid. */
+	return;
 }
 
 /*
@@ -206,7 +212,9 @@ fm_desktop_arrange(
 			continue;
 
 		/* The next free cell. */
-		while (next < columns * rows && taken != NULL && taken[next] != 0U)
+		while (next < columns * rows &&
+		       taken != NULL &&
+		       taken[next] != 0U)
 			next++;
 		if (next >= columns * rows)
 			continue;
@@ -221,6 +229,9 @@ fm_desktop_arrange(
 
 	/* The marks are done with. */
 	free(taken);
+
+	/* Succeeded: every item has a cell or the overflow marker. */
+	return;
 }
 
 /*
@@ -658,32 +669,10 @@ fm_desktop_release(
 	free(desk->shown);
 	free(desk->painted_cells);
 	memset(desk, 0, sizeof(*desk));
+
+	/* Succeeded: the desktop owns no layout or paint records. */
+	return;
 }
-
-/* Finds a name among the saved places; -1 when it is not there. */
-static int
-layout_saved_index(
-	const struct fm_desktop_saved *saved,
-	size_t count,
-	const char *name)
-{
-	size_t index;
-	int differs;
-
-	/* Each saved place. */
-	for (index = 0; index < count; index++) {
-		/* The same name. */
-		differs = strcmp(saved[index].name, name);
-		if (differs == 0)
-			return (int)index;
-	}
-
-	/* Not saved. */
-	return -1;
-}
-
-/* The ellipsis put where the middle of a long name is left out (UTF-8). */
-#define LABEL_ELLIPSIS		"\xe2\x80\xa6"
 
 /*
  * Works out how an item's name is shown under its icon, in lines at most
@@ -742,7 +731,9 @@ fm_desktop_label(
 	}
 
 	/* Prefer a word boundary when the remaining text fits on the second line. */
-	if (space < length && name[space] == ' ' && space > 0U) {
+	if (space < length &&
+	    name[space] == ' ' &&
+	    space > 0U) {
 		wide = fm_text_width(text, name + space + 1U, length - space - 1U, pixels, 0);
 		if (wide <= width) {
 			memcpy(first, name, space);
@@ -770,6 +761,31 @@ fm_desktop_label(
 	memcpy(second, LABEL_ELLIPSIS, sizeof(LABEL_ELLIPSIS) - 1U);
 	memcpy(second + sizeof(LABEL_ELLIPSIS) - 1U, name + tail, length - tail);
 	second[sizeof(LABEL_ELLIPSIS) - 1U + length - tail] = '\0';
+
+	/* Succeeded: both output lines contain the fitted name. */
+	return;
+}
+
+/* Finds a name among the saved places; -1 when it is not there. */
+static int
+layout_saved_index(
+    const struct fm_desktop_saved *saved,
+    size_t count,
+    const char *name)
+{
+	size_t index;
+	int differs;
+
+	/* Each saved place. */
+	for (index = 0; index < count; index++) {
+		/* The same name. */
+		differs = strcmp(saved[index].name, name);
+		if (differs == 0)
+			return (int)index;
+	}
+
+	/* Not saved. */
+	return -1;
 }
 
 /* Finds how many bytes of a name's start fit a width (whole characters; 0 when not even one does). */
