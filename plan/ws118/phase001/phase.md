@@ -1,11 +1,11 @@
 <!-- awesome-plan project=zedbsd record=ws118-p001 -->
 # ws118-p001: 5320 の遠隔の実機 log 用 image（sshd）と手順
 
-Status: planned
+Status: uncleared（q601-i01、P1、2026-10-02 Q1 の割り込み（q599-i02）で中断。後で再開）
 Disposition: normal
 Parent: [WS118](../ws.md)
 Focused goal: fg019（ベータ1）
-Queue: none（未承認）
+Queue: q601 / q601-i01（P1、中断）
 目安: 2〜3h（build と QEMU だけ、実機は使わない）
 
 ## 範囲
@@ -44,3 +44,15 @@ Queue: none（未承認）
 ## 未決の判断
 
 上の確認。i915 の診断の node が無い場合に作るか（i915 の source、WS118 p003 か i915 の WS で）。
+
+## q601-i01 の途中の結果（P1、2026-10-02、base `66d27ed7c`、中断）
+
+- 作った: `plan/ws118/tests/config-remote-log.mk`（デモの config＋`REMOTE_LOG_NO_AUTOLOGIN`・`REMOTE_LOG_NETCONF`・`REMOTE_LOG_LEAN` の切替）、
+  `config-remote-log-c.mk`（i915=n）、`empty-autologin`（B・C の自動 login を消す空の `/etc/keiland/autologin`）、`build-remote-log-image.sh A|B|C BUILD
+  [ADDRESS/PREFIX GATEWAY [DNS]]`（`build-demo-image.sh` を呼ぶだけ。固定 IP は ue0 の static と default route・DNS の net.conf を生成）。
+- build（`REMOTE_LOG_LEAN=y`、clang・libcxx・remacs を除く。利用者に渡す image は除かない）: A・B・C とも rc=0、zedBSD の source の warning 0。boot の行:
+  - A: `logo=logo.ppm login=graphical kmsg=quiet display=edp`
+  - B: `video=640x480 display=edp login=graphical`（login=graphical は一つ）
+  - C: `video=640x480 display=edp`（graphical boot 無し、kernel の message を画面に）
+- 未実施: boot-test（A・C）、QEMU の USB 起動＋usb-net＋SSH での鍵の login、`collect-5320.sh`、disk の log の退路の確認、固定 IP の変種の build、`remote-log.md`。
+  B・C の自動 login の無効化（空の autologin の上書き）が image に入ったかの確認も未実施。
