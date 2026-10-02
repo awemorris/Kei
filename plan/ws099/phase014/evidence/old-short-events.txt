@@ -1,0 +1,14 @@
+ZWL WISEVIEW open windows=10 at_ms=173830
+ZWL CLIENT gone client=11 reason=flush
+ZWL WISEVIEW open windows=10 at_ms=197619
+ZWL WISEVIEW open windows=10 at_ms=209167
+ZWL WISEVIEW open windows=10 at_ms=220759
+ZWL WISEVIEW open windows=10 at_ms=232315
+ZWL WISEVIEW open windows=10 at_ms=243863
+ZWL WISEVIEW open windows=10 at_ms=255526
+ZWL WISEVIEW open windows=10 at_ms=267069
+ZWL WISEVIEW open windows=10 at_ms=278650
+ZWL WISEVIEW open windows=10 at_ms=290246
+ZWL WISEVIEW open windows=10 at_ms=301848
+ZWL CLIENT gone client=12 reason=flush
+ZWL WISEVIEW open windows=10 at_ms=325694
