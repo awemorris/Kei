@@ -85,3 +85,8 @@ Queue: q594 / q594-i01（P1）
   `plan/ws075/demo/build-demo-image.sh BUILD [passthrough]` を走らせる）。root の 1 GiB に収まるかもその build で確かめる。
 - 5330 の実機の単独起動（ユーザー）。5330 の passthrough の smoke（この Phase の範囲外）。
 - 古い demo の build directory は消していない（main の `build/demo-*` に触れていない）。
+
+## 2026-10-02 / Q1 の full image の確認
+
+main（c4ed68f12 以降、CI 土台のデモ config）で `plan/ws075/demo/build-demo-image.sh build/demo-ci`（clang・libcxx・remacs を含む full）: rc=0。warning は外部 package（clang/lldb・OpenSSL など）のものだけで、zedBSD の source の warning 0。root partition に収まった（image 2216689664 bytes）。`plan/tools/boot-test.sh build/demo-ci/hdd-image.img`: **PASS**（[login.png](evidence/demo-ci-boot-login.png)、QEMU の std VGA、greeter は GPU 無しで終わり getty の login）。5330 の実機の単独起動は未実施。
+Status: cleared（q594、範囲 1〜4 を満たす）。
