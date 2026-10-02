@@ -12,5 +12,5 @@ Dependencies: q577統合済み同期patch、元FAIL/PNG、Venus imageと明示re
 Criteria: 二症状それぞれの再現条件/時刻/画像による分類、または再現不能/期限到達を証拠とともに記録する。新helperのsyntax/規約と有限試験結果を確認する。この部分itemがclearしてもwhole p017の20回単独/5回C9基準は満たさず、Phaseはuncleared、BUG-125はtrackingのまま。共有harness修正は原因判定後の別Queue。
 Worktree: `/home/awe/zedBSD-worktrees/b3` / `codex/b3-bug125`
 Next Queue: 未投入。compositor修正は別Queue。
-Merge requests / ACK: なし
+Merge requests / ACK: MR B3-q583-01（base ea55c973、提出2d33d3e7、B統合c2a8ba9f、ACK）。timeline helper/host negative/syntax/準備記録。guest未実施、whole Phase uncleared。B1 guest停止後にtiming観察を実行。
 Sync: GitHub publication保留。WIP commitのみ、pushなし。Agent Aが共有投影を所有。
