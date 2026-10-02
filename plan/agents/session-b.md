@@ -32,3 +32,16 @@ Initial setup is complete only after `main` has been fast-forwarded from
 `origin/main`, `codex/agent-b` points at that commit, and `git status --short`
 is empty.  Record the exact handoff SHA in the first B checkpoint.
 
+
+## Continuity instruction / 2026-10-02
+
+Current user:「サブエージェントのコンテキスト読み込みが繰り返されるのは、トークンが無駄になります。サブエージェントは終了せずに、次々とqueueを送り込んで、長時間稼働させてください。」
+
+B maintains the same B1/B2/B3 agent identities, worktrees and loaded context.
+Queue completion produces an MR/checkpoint and dispatch waiting state rather
+than voluntary wrap-up. Main prepares and dispatches subsequent finite Queues
+within the assigned WS/bug scope, with A-assigned global IDs, verified dependencies
+and resource ownership. Existing rules need only changed sections and the next
+scope's missing material reloaded. User wrap-up/stop still takes effect promptly.
+No context reload or agent replacement is required solely because a Queue ends;
+actual runtime/context limits are reported accurately when observed.
