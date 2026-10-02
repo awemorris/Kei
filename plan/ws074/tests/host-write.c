@@ -18,7 +18,10 @@
 #include <stdio.h>
 #include <string.h>
 
-/* One parser callback attempt, with a chosen point for a fatal host failure. */
+/*
+ * One stack-owned callback attempt borrows its live parser and owns inserted units.
+ * calls counts the observed boundaries; fail_at chooses which reports ENOMEM.
+ */
 struct write_probe {
 	struct html_parser *parser;
 	struct wb_units text;
@@ -47,6 +50,8 @@ main(
 	/* Exercises both an initial failure and one inside a reentrant write. */
 	probe_failure(heap, 1);
 	probe_failure(heap, 2);
+
+	/* Reclaims the shared heap after both parser attempts have released their roots. */
 	vm_heap_destroy(heap);
 
 	/* Publishes the verified cases, refusing a lost test report. */
@@ -116,8 +121,12 @@ probe_failure(
 	/* Owns the document and parser until all terminal outcomes are checked. */
 	document = dom_document_create(heap);
 	assert(document != NULL);
+
+	/* The parser roots the live document until the test destroys it. */
 	error = html_parser_create(&probe.parser, document, 1);
 	assert(error == 0);
+
+	/* The callback borrows this stack-owned attempt for the parser lifetime. */
 	html_parser_set_script_hook(probe.parser, probe_script, &probe);
 
 	/* A fatal callback must fail feed, finish and any subsequent insertion. */
@@ -133,4 +142,7 @@ probe_failure(
 	html_parser_destroy(probe.parser);
 	wb_units_release(&source);
 	wb_units_release(&probe.text);
+
+	/* Succeeded: all failed parser outcomes were observed and owned buffers released. */
+	return;
 }

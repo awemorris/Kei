@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Verifies that huge array metadata never implies a huge dense allocation. */
+/*
+ * Verifies that huge array metadata never implies a huge dense allocation.
+ */
 
 #include "js/js.h"
 
@@ -69,7 +71,8 @@ main(
 	}
 
 	/* Logical growth must leave dense capacity bounded by actual stored elements. */
-	if (array->length != 4294967295U || array->element_capacity > 1024U) {
+	if (array->length != 4294967295U ||
+	    array->element_capacity > 1024U) {
 		vm_heap_destroy(heap);
 		return 1;
 	}
@@ -106,6 +109,8 @@ main(
 
 	/* Reclaims the normal object graph and its C storage. */
 	vm_heap_destroy(heap);
+
+	/* Publishes the verified capacity cases only after the heap is released. */
 	printed = printf("array length capacity checks: 4/4 passed\n");
 	if (printed < 0)
 		return 2;

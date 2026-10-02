@@ -1,0 +1,102 @@
+--- base
+
++++ final
+
+@@ -1,5 +1,5 @@
+
+ 
+-build/a1-review/tests10/host-write.c.base.o:     file format elf64-x86-64
++build/a1-review/tests10/host-write.c.final.o:     file format elf64-x86-64
+ 
+ 
+ Disassembly of section .text:
+@@ -111,7 +111,7 @@
+
+  15c:	c3                   	ret
+  15d:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 164 <probe_failure+0x137>
+ 			160: R_X86_64_PC32	.rodata-0x4
+- 164:	ba 6b 00 00 00       	mov    $0x6b,%edx
++ 164:	ba 70 00 00 00       	mov    $0x70,%edx
+  169:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 170 <probe_failure+0x143>
+ 			16c: R_X86_64_PC32	.LC1-0x4
+  170:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 177 <probe_failure+0x14a>
+@@ -120,7 +120,7 @@
+
+ 			178: R_X86_64_PLT32	__assert_fail-0x4
+  17c:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 183 <probe_failure+0x156>
+ 			17f: R_X86_64_PC32	.rodata-0x4
+- 183:	ba 72 00 00 00       	mov    $0x72,%edx
++ 183:	ba 77 00 00 00       	mov    $0x77,%edx
+  188:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 18f <probe_failure+0x162>
+ 			18b: R_X86_64_PC32	.LC1-0x4
+  18f:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 196 <probe_failure+0x169>
+@@ -129,7 +129,7 @@
+
+ 			197: R_X86_64_PLT32	__assert_fail-0x4
+  19b:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 1a2 <probe_failure+0x175>
+ 			19e: R_X86_64_PC32	.rodata-0x4
+- 1a2:	ba 76 00 00 00       	mov    $0x76,%edx
++ 1a2:	ba 7b 00 00 00       	mov    $0x7b,%edx
+  1a7:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 1ae <probe_failure+0x181>
+ 			1aa: R_X86_64_PC32	.LC1-0x4
+  1ae:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 1b5 <probe_failure+0x188>
+@@ -138,7 +138,7 @@
+
+ 			1b6: R_X86_64_PLT32	__assert_fail-0x4
+  1ba:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 1c1 <probe_failure+0x194>
+ 			1bd: R_X86_64_PC32	.rodata-0x4
+- 1c1:	ba 78 00 00 00       	mov    $0x78,%edx
++ 1c1:	ba 7f 00 00 00       	mov    $0x7f,%edx
+  1c6:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 1cd <probe_failure+0x1a0>
+ 			1c9: R_X86_64_PC32	.LC1-0x4
+  1cd:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 1d4 <probe_failure+0x1a7>
+@@ -147,7 +147,7 @@
+
+ 			1d5: R_X86_64_PLT32	__assert_fail-0x4
+  1d9:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 1e0 <probe_failure+0x1b3>
+ 			1dc: R_X86_64_PC32	.rodata-0x4
+- 1e0:	ba 7d 00 00 00       	mov    $0x7d,%edx
++ 1e0:	ba 86 00 00 00       	mov    $0x86,%edx
+  1e5:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 1ec <probe_failure+0x1bf>
+ 			1e8: R_X86_64_PC32	.LC1-0x4
+  1ec:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 1f3 <probe_failure+0x1c6>
+@@ -156,7 +156,7 @@
+
+ 			1f4: R_X86_64_PLT32	__assert_fail-0x4
+  1f8:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 1ff <probe_failure+0x1d2>
+ 			1fb: R_X86_64_PC32	.rodata-0x4
+- 1ff:	ba 7e 00 00 00       	mov    $0x7e,%edx
++ 1ff:	ba 87 00 00 00       	mov    $0x87,%edx
+  204:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 20b <probe_failure+0x1de>
+ 			207: R_X86_64_PC32	.LC1-0x4
+  20b:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 212 <probe_failure+0x1e5>
+@@ -165,7 +165,7 @@
+
+ 			213: R_X86_64_PLT32	__assert_fail-0x4
+  217:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 21e <probe_failure+0x1f1>
+ 			21a: R_X86_64_PC32	.rodata-0x4
+- 21e:	ba 80 00 00 00       	mov    $0x80,%edx
++ 21e:	ba 89 00 00 00       	mov    $0x89,%edx
+  223:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 22a <probe_failure+0x1fd>
+ 			226: R_X86_64_PC32	.LC1-0x4
+  22a:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 231 <probe_failure+0x204>
+@@ -174,7 +174,7 @@
+
+ 			232: R_X86_64_PLT32	__assert_fail-0x4
+  236:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 23d <probe_failure+0x210>
+ 			239: R_X86_64_PC32	.rodata-0x4
+- 23d:	ba 82 00 00 00       	mov    $0x82,%edx
++ 23d:	ba 8b 00 00 00       	mov    $0x8b,%edx
+  242:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 249 <probe_failure+0x21c>
+ 			245: R_X86_64_PC32	.LC1-0x4
+  249:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 250 <probe_failure+0x223>
+@@ -216,7 +216,7 @@
+
+  2b6:	c3                   	ret
+  2b7:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 2be <main+0x69>
+ 			2ba: R_X86_64_PC32	.rodata+0xa
+- 2be:	ba 2c 00 00 00       	mov    $0x2c,%edx
++ 2be:	ba 2f 00 00 00       	mov    $0x2f,%edx
+  2c3:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2ca <main+0x75>
+ 			2c6: R_X86_64_PC32	.LC1-0x4
+  2ca:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 2d1 <main+0x7c>

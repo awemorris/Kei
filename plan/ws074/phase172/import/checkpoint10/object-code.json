@@ -1,0 +1,47 @@
+{
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "base": "443bb5fb1e13a141ae497e15b2d4d179f12e6be3",
+  "files": [
+    {
+      "path": "plan/ws074/tests/host-realm-retirement.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "host-color status\u2192error; host-write equivalent final void return only",
+      "before_text_sha256": "a0b83f46396add9f9440f0106886db396b0e8e0bc2ca24611194a62a5a691f9e",
+      "after_text_sha256": "a0b83f46396add9f9440f0106886db396b0e8e0bc2ca24611194a62a5a691f9e",
+      "text_equal": true,
+      "limitation": ""
+    },
+    {
+      "path": "plan/ws074/tests/host-array-length.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "host-color status\u2192error; host-write equivalent final void return only",
+      "before_text_sha256": "c3a09667879d08c73d2e74ad514cfe88785993a2ddac70a51be6c977d450b044",
+      "after_text_sha256": "c3a09667879d08c73d2e74ad514cfe88785993a2ddac70a51be6c977d450b044",
+      "text_equal": true,
+      "limitation": ""
+    },
+    {
+      "path": "plan/ws074/tests/host-write.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "host-color status\u2192error; host-write equivalent final void return only",
+      "before_text_sha256": "c07ed9bb2fcf06c2449fa9cefebb4a211871a0400357bc23ad6050a1a232f6af",
+      "after_text_sha256": "f97a7a2e437b543122f8a6449bdf5be504cd2f8c463fea24e414c4b04c46bafb",
+      "text_equal": false,
+      "limitation": "host-write assert source-line immediates change with added comments; exact executable-token equality and real assertion run are the preservation evidence"
+    },
+    {
+      "path": "plan/ws074/tests/host-color-media.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "host-color status\u2192error; host-write equivalent final void return only",
+      "before_text_sha256": "1118c02ef6c163f37b7ba38c5e5b159dd8d587ecf901c74076e8e724416c0547",
+      "after_text_sha256": "1118c02ef6c163f37b7ba38c5e5b159dd8d587ecf901c74076e8e724416c0547",
+      "text_equal": true,
+      "limitation": ""
+    }
+  ],
+  "flags": "cc -std=gnu11 -O1 -g -Wall -Wextra -Werror -D_GNU_SOURCE -fPIC -Iuserland/desktop/libbrowser -Iuserland/desktop/browser -Iplan/ws074/tests -Ibuild/a1-browser2/include -I. -g0 -c SOURCE -o OBJECT"
+}
