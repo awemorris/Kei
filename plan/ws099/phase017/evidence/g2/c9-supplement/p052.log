@@ -1,0 +1,31 @@
+check: (10,10) want 203040 got 203040 ok
+check: (1270,790) want 203040 got 203040 ok
+check: (450,260) want ff0000 got ff0000 ok
+check: (460,540) want ff0000 got ff0000 ok
+check: (830,260) want ff0000 got ff0000 ok
+check: (530,340) want 00ff00 got 00ff00 ok
+check: (810,520) want 00ff00 got 00ff00 ok
+check: (830,545) want ff0000 got ff0000 ok
+check: (850,540) want 203040 got 203040 ok
+check: build/p8-q577/g2-c9-1/c9-p052/windows.png 1280x800 PASS
+check: (10,10) want 00ff00 got 00ff00 ok
+check: (640,400) want 00ff00 got 00ff00 ok
+check: (1270,790) want 00ff00 got 00ff00 ok
+check: (450,260) want 00ff00 got 00ff00 ok
+check: build/p8-q577/g2-c9-1/c9-p052/fullscreen.png 1280x800 PASS
+check: (10,10) want 203040 got 203040 ok
+check: (450,260) want ff0000 got ff0000 ok
+check: (530,340) want 00ff00 got 00ff00 ok
+check: (810,520) want 00ff00 got 00ff00 ok
+check: (850,540) want 203040 got 203040 ok
+check: build/p8-q577/g2-c9-1/c9-p052/back.png 1280x800 PASS
+direct presents: 0
+vulkan imports: 12
+compose frames: 231
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=639 at_ms=47504
+ZWL PERF compose frames=27 draw_ms=112.53 (acquire 18.27 submit+present 72.96) frame_ms=121.40
+ZWL PERF compose frames=64 draw_ms=65.53 (acquire 15.18 submit+present 38.73) frame_ms=71.49
+ZWL PERF compose frames=62 draw_ms=62.15 (acquire 16.08 submit+present 34.08) frame_ms=67.75
+ZWL PERF compose frames=61 draw_ms=60.21 (acquire 15.65 submit+present 32.51) frame_ms=66.29
+p052: PASS

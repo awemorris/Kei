@@ -1,0 +1,6 @@
+C9 p052 PASS seconds=34 p052: PASS 
+C9 p053 PASS seconds=72 p053: PASS 
+C9 p072 PASS seconds=48 zdesktop-p072: PASS (and judge the screens) 
+C9 p076 PASS seconds=66 p076: PASS 
+C9 p126 PASS seconds=106 zdesktop-p126: status=0 
+C9 p128 FAIL seconds=45 
