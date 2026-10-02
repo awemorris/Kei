@@ -2,7 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q576](queue-q576.md)（WS111 p002 cleared）
+Last finished Queue: [q578](queue-q578.md)（WS111 p002 cleared）
+
+## 最新: q578 / C10 hardware cleared（2026-10-02）
+
+[Archive](queue-q578.md)、[結果](../ws099/phase014/q578-result.md)。i915 passthroughで実3602秒/278周/errors0/restarts0、final live Terminal/disk receipt/cleanup確認。WS099はincomplete、USB素実機は範囲外。補助framebuffer boot timeoutは別記。P9利用上限終了後mainが判定。q577/q579はmain継続中、3children停止/N_effective0、全WIP/pushなし/GitHub公開保留。
 
 ## 2026-10-02 並列実行開始（結果は未確定）
 
@@ -84,3 +88,5 @@ Event ws074-dedicated-interop2025-20261002: userが前回3人案のP10を[WS074]
 ## 計画追記 / 2026-10-02（3専任枠とブラウザ次目標）
 
 Event three-dedicated-lanes-and-browser-goals-20261002: userが[P8バグ修正、P9デスクトップ高度化、P10ブラウザ](../agents/registry.md)を固定。P9の発見したbugはmainが[Bug Board](../known-bugs.md)へ登録しP8へ渡す。[desktop作業一覧](../agents/desktop-outlook.md)を作成。P10の新目標は[p174 File System Access](../ws074/phase174/phase.md)→[p175 OPFS](../ws074/phase175/phase.md)→[p173 Interop 2025 100%](../ws074/phase173/phase.md)→[p176 Test262](../ws074/phase176/phase.md)。既存p172/p100 gateとp101 CSS2は保持、Test262最終率は未指定。3枠ともreserved/未起動、q576 finished、実装/Queue/merge/pushなし。Issue/Project publication保留。
+
+| [q578](queue-q578.md) | WS099 p014 cleared / C10 passthrough60分 |

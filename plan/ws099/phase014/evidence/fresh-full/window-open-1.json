@@ -1,0 +1,1 @@
+{"width": 1920, "height": 1080, "pitch": 7680, "time": 1790918289.5384274, "buffers": {"A": "0xffff8001119e7000", "B": "0xffff8001121d0000"}, "surfaces": {"A": "0xbc0c0000", "B": "0xbca00000"}, "live": "B", "live_source": "PLANE_SURFLIVE pipe A = 0xbca00000"}

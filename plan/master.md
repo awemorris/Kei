@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: q577/P8 BUG-125、q578/P9 C10、q579/P10 browser2（N=3、各上限3時間）
+Active Queues: q577 BUG-125、q579 browser2（children利用上限停止、main引継ぎ）。q578 C10 finished/cleared。
 Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
 Next（2026-10-02 更新）: WS111共通launcher completed。P8 bug/P9 desktop/P10 browserのgeneration1実行中。共有計画/統合はQ1。[desktop作業一覧](agents/desktop-outlook.md)を作成。--login本人確認/PIN交換とWS110/testingは検討のみ。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。WS114 Linux標準GTK4調査/レビュー→WS115 upstream GTK4移植→WS116 Qt6範囲判断/移植を計画し、その知見をWS097/WS096書き下ろしへ渡す。既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。P8 bug・P9 desktop・P10 browserの3専任枠は起動済み、[Queue index](queue.md)で各scopeを管理。
@@ -208,7 +208,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS096](ws096/ws.md) | MG002 | Qt6（core・gui・widgets）の互換の書き下ろし（API の interface だけ、zlib）（2026-09-29 ユーザー、デモの後） | planning | デモの後 |
 | [WS097](ws097/ws.md) | MG002 | GTK4 の互換の書き下ろし（API の interface だけ、zlib）（2026-09-29 ユーザー、デモの後） | planning | デモの後 |
 | [WS098](ws098/ws.md) | MG006 | IME の変換のニューラル化: 辞書で候補を作り、小型のモデル（15 MB 未満）で同音異義語の選択（語の番号の並び）とひらがな列の形態素解析（語の境界と品詞、BiLSTM か小型の Attention）を評価する（2026-09-29 夜 ユーザー、IME の最後の仕上げ） | planning | WS095 の基本の辞書の後。学習の corpus と license はユーザーの判断 |
-| [WS099](ws099/ws.md) | MG006 | Keiland の compositor（zdesktop）のデモの基準: 窓の操作・App Home・Wiseview・全画面と最大化の解除・greeter から Log Out と Shut Down・すりガラスの上の文字の contrast・回帰の試験の全通過（2026-09-30 ユーザー、WS035 の後継。基準は ws.md） | incomplete | 2026-09-30: L1 がそろった。L2: p011（BUG-121、5330 の角の drag 20 回で消失 6 → 0）、p015（全画面を常に合成、下からの swipe で窓に戻す）、p016（import の待ちを無くす）、p002（C5: 5330 の実機で App Home・Wiseview の開閉の最初の frame 34 回とも ≤ 100 ms、最大 55 ms）cleared。L2 の残りは C1 の実機の目視（ユーザー）。L3 は C6（WS075）・C10 の実機の 1 時間 |
+| [WS099](ws099/ws.md) | MG006 | Keiland の compositor（zdesktop）のデモの基準: 窓の操作・App Home・Wiseview・全画面と最大化の解除・greeter から Log Out と Shut Down・すりガラスの上の文字の contrast・回帰の試験の全通過（2026-09-30 ユーザー、WS035 の後継。基準は ws.md） | incomplete | 2026-09-30: L1 がそろった。L2: p011（BUG-121、5330 の角の drag 20 回で消失 6 → 0）、p015（全画面を常に合成、下からの swipe で窓に戻す）、p016（import の待ちを無くす）、p002（C5: 5330 の実機で App Home・Wiseview の開閉の最初の frame 34 回とも ≤ 100 ms、最大 55 ms）cleared。L2 の残りは C1 の実機の目視（ユーザー）。L3 C10はq578でi915 passthrough3602秒/278周/errors0/restarts0を確認、p014 cleared。C6（WS075）は残る |
 | [WS100](ws100/ws.md) | MG006 | system bar の音量: 右上の通知領域の音量の icon、音量の slider と mute、変えたときの確かめの音（2026-09-30 ユーザー。動画の再生はデモの後） | incomplete | 2026-09-30: L1 がそろった（A1〜A6、Settings の Sound の頁）。L2 は 5330 の実機（A7、ユーザー）。L3 の p008 cleared: 確かめの音の遅れは QEMU の guest の中で中央値 31〜37 ms（≤ 50 ms、合否は実機で）。kernel の fragment を小さくする直しは実機で 50 ms を超えたとき |
 | [WS101](ws101/ws.md) | MG006 | GPU の compute: i915 の Vulkan の compute（dispatch・shared memory・barrier・atomic）、libglesv2 の GLES 3.1 の compute、Noct の自動並列化（accel_opengles）が 5330 の GPU で動く（2026-09-30 ユーザー、10/17 のデモまで、最優先ではない） | incomplete | 2026-09-30: L1 で S13 が 5330 で通った。L2: p016（時間の分解）cleared、p017（buffer の使い回しと copy の削減、QEMU の GPU の call 835 → 212 ms、CPU の 10.6 倍遅い）uncleared。ユーザーの判断「今のまま」で S13 は今の見本、最適化はここで止める（5330 の p017 の値は P1 が追記） |
 | [WS102](ws102/ws.md) | MG006 | スクリーンキーボード: 右下の角の swipe で右側に flick の panel（英字・記号・日本語）、左下の角の swipe で下側に QWERTY と手書き（認識は stub）。compositor に直接（2026-09-30 ユーザー） | incomplete | 2026-09-30: L1 を満たした。L2: p006・p007・p008・p009・p015・p016（右の列の道具の面）・p017・p018・p020・p021・p023・p024（履歴の tab。受け入れの手順だけ PASS、全手順の回帰・C9・boot test は未実施）、L3 の p019（色付きの絵文字）cleared（QEMU）。ユーザーの指示で優先を下げてラップアップ（2026-09-30 夕）。保留: p022（絵文字の tab）・BUG-125・p010・p011（速さ）・p012（IME、人間） |
@@ -515,3 +515,5 @@ ws109-20261002-user-i915-passthrough: user selected awe@10.0.10.25 i915 passthro
 Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調査/行別レビュー→選択したcompositor/portal改善→zedBSD upstream GTK4移植→Qt6実装範囲の検討/移植→後の独自実装、という順序をWS114/115/116に投影。WS034 p029/p030は未実行のまま移管、p028/p034/p038は維持。WS096/097の書き下ろし方針とfg010/デモ順位は保持。新WSは未順位の依存順候補でQueue外、GTK4機能の採否とQt6範囲は未決。GitHub publication pending。
 
 2026-10-02 / n3-execution-start: current userのN=3継続指示。P8 q577 BUG-125/p017、P9 q578 C10/p014、P10 q579 browser2/p172を有限3時間で開始。既存focus/順位を保持、browser後続はp172 whole-Phase clearance待ち。[Queue](queue.md)を参照。GitHub publication保留。
+
+2026-10-02 / q578-cleared-and-main-takeover: C10 L3 passthroughを[p014結果](ws099/phase014/q578-result.md)で確認。WS099 incomplete維持。P8/P9/P10は指定model利用上限で終了、N_target3/現在N_effective0、mainがq577/q579検証/保全を継続。後続browserはp172 whole-clear待ち、既存scope不変、push/GitHub公開なし。

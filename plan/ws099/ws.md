@@ -63,7 +63,7 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 | [ws099-p011](phase011/phase.md) | BUG-121: 窓の角の drag で窓が消える。試験 `resize-stress.sh`（QEMU、角の drag 100 回）・`resize-hw.sh`（5330 の passthrough、20 回）。原因は上の窓の frame の帯の press を下の窓の title bar の control が取って下の窓を前に出したこと（`titlebar-shell.c`）と、端の帯が frame を覆う置き場所（`shell.c`）。client を外す log `ZWL CLIENT gone` | cleared（2026-09-30: 5330 直しの前 20 回中 6 回消失 → 後 0、QEMU Model viewer・wlshm 各 100 回 0、C2・C9 PASS、boot PASS。QEMU の Venus の swapchain の失敗は別件） | p010 |
 | [ws099-p015](phase015/phase.md) | 全画面を常に合成する（全画面の直の scanout（`display.c` の fullscreen mode）を消す）、全画面の窓を下の端から上への swipe で窓に戻す（pointer と touch。全画面の間は下の端の swipe を Wiseview より先に全画面の解除に使う。下の左右の角は WS102 の keyboard のまま）。C3 の試験に swipe の解除を足す | cleared（2026-09-30: P6 の実装と `c3-swipe-back.sh` PASS、demo-s8-s9 PASS（page の frame 最長 139→135 ms）、pen の遅れの中央値 74→117 ms・frame の間隔 107→113 ms（QEMU、1 frame の合成の費用の分）。P6 の uncleared の理由だった他の WS の試験 3 本（p010・p052・p053、消した直の scanout を前提）は、Q1 が P6 の差分を当てた。P6 が同じ差分の複写で最後の image で PASS を確かめている。5330 は未実施） | p010 |
 | [ws099-p016](phase016/phase.md) | zdesktop の buffer の import の短縮（ws094-p009 の発見: 1 枚約 210 ms、うち layout の変更の submit と `vkQueueWaitIdle` が 100 ms。次の合成の command buffer の barrier にまとめる）。app の起動から最初の frame まで（C5 と WS094 の (a')）を前後で測る。QEMU と 5330 | cleared（2026-09-30、QEMU: WS094 (a') 2977 → 2652 ms、App Home → Files の最初の frame 2655 → 2407 ms、Model viewer 4439 → 4182 ms。C9・WS079-p010・boot PASS。5330 は lock が使用中で未実施） | —（p015 と file を分ける: import.c・compose.c の周り。display.c・shell.c・seat.c・backdrop.c は他の Phase が作業中） |
-| [ws099-p014](phase014/phase.md) | C10 i915 passthroughの60分連続操作。試験script/短時間試走とsoak | in-progress（q578 / P9、3時間） | p001/p002/WS075 hdmi-h4の実出力 |
+| [ws099-p014](phase014/phase.md) | C10 i915 passthroughの60分連続操作。試験script/短時間試走とsoak | cleared（q578、i915 passthrough: 3602秒/278周、errors0/restarts0、main最終確認） | p001/p002/WS075 hdmi-h4の実出力 |
 | [ws099-p017](phase017/phase.md) | BUG-125のmove/resize再現と試験同期の切り分け。実compositor defectは別Phaseへ | in-progress（q577 / P8、3時間） | p003/p007のC9実出力 |
 
 ## 段の計画（2026-09-30 main 経由のユーザーの方針「広く浅く」: まず動く段をそろえ、磨き込みは段ごとの数値目標の小さな Phase）
@@ -97,3 +97,5 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 - **C6**は WS075 の段（100 → 75 → 50 ms）に従う。WS099 では測った値の記録だけ。
 
 2026-10-02 / n3-start: userのN=3継続指示でp017を具体化、p014をP9へ割当。共有source変更は重ねず、BUG-125はP8、C10試験はP9。acceptanceは従来どおり。GitHub publication保留。
+
+2026-10-02 / ws099-p014-cleared-q578: [p014](phase014/phase.md)のC10 L3を5330 i915 passthroughで確認、3602秒/278周/errors0/restarts0。[結果](phase014/q578-result.md)。USB実機では未検証。WS099自体はincomplete、C6や他の必須条件は継続。P9モデル利用上限後にmainが証拠/cleanupを回収。GitHub progress/closure未公開。

@@ -1,6 +1,6 @@
 # P9 Queue q578
-Status: active
-Attempt: q578-i01 / in-progress
+Status: finished
+Attempt: q578-i01 / cleared
 Owner: Q1 main（canonical記録） / P9 generation 1（isolated executor）
 Approval: current user / 2026-10-02 chat「では、N=3でしばらく実行を続けてください」、直前の専任3枠と最初の候補に基づく。
 Started UTC: 2026-10-02T04:50:43.686853+00:00
@@ -14,7 +14,7 @@ Branch: codex/p9
 Checks/criteria: snapshotのwhole-Phase基準を保持。部分commit/Queue結果とPhase clearanceを区別。
 Ordered next Queues: 未投入。mainが結果/依存確認後に明示dispatch。
 Merge requests / ACK: none
-Outcome: 実行準備、未検証。
+Outcome: cleared。実3602秒/278周/errors0/restarts0、main画面・receipt・cleanup確認。
 Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
 
 Preflight: fixture host solaris10-man（chaos）SSH可、他QEMU/owner/lock無し、GPU既にvfio-pci。mainが所有lockを取得した専用fixtureの使用を許可。rebind/reboot/他VM停止はしない。source freshnessを確認してimageを選ぶ。
@@ -26,3 +26,5 @@ MR P9-q578-02: requested21042cf4ebc25cb529f30b3ccb51959a45fe3962、ACK済4bdd922
 MR P9-q578-03: requested992b6de86、ACK済21042cf4e以後のPhase checkpoint/旧short3PNG/disk events。main provenance/中断の限界/ownercleanup/PNG証拠の範囲/diff-check reviewPASS。旧short結果でclearanceなし、現行freshshort進行中。
 
 MR P9-q578-04: requested7d82da63a、lastACK992b6de86。freshshort14round/187秒/errors0/restarts0/exitstatus0、session receiptとlive Terminal/実open-close PNGの耐久証拠をmain review。whole60minは継続中、short結果でclearanceなし。script source変更なし、diff-check PASS。
+
+2026-10-02 / q578-terminal: P9 model usage limitで停止後、mainが最終判定を引継ぎ。whole-Phase cleared、[result](../../ws099/phase014/q578-result.md)。60分criteriaを満たす。次Queueは未投入。GitHub close/comment未公開。

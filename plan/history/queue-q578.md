@@ -1,8 +1,44 @@
+<!-- awesome-plan project=zedbsd record=q578 -->
+# Queue q578 / finished
+
+# P9 Queue q578
+Status: finished
+Attempt: q578-i01 / cleared
+Owner: Q1 main（canonical記録） / P9 generation 1（isolated executor）
+Approval: current user / 2026-10-02 chat「では、N=3でしばらく実行を続けてください」、直前の専任3枠と最初の候補に基づく。
+Started UTC: 2026-10-02T04:50:43.686853+00:00
+Timebox: 最大3時間 / 1Phase
+Phase: [phase](../../ws099/phase014/phase.md)
+Snapshot: [q578-approved-phase.md](q578-approved-phase.md) / SHA256 `6b7a2e619fe882e5e9a3feee6dc6445206c81680cbd800374fe958a6ee6008d8`
+Exact scope: C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。
+Dependencies: approved Phaseにある実出力を開始時に検証。未検証依存は実行せずmainへ返す。
+Worktree: /home/awe/zedBSD-worktrees/p9
+Branch: codex/p9
+Checks/criteria: snapshotのwhole-Phase基準を保持。部分commit/Queue結果とPhase clearanceを区別。
+Ordered next Queues: 未投入。mainが結果/依存確認後に明示dispatch。
+Merge requests / ACK: none
+Outcome: cleared。実3602秒/278周/errors0/restarts0、main画面・receipt・cleanup確認。
+Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
+
+Preflight: fixture host solaris10-man（chaos）SSH可、他QEMU/owner/lock無し、GPU既にvfio-pci。mainが所有lockを取得した専用fixtureの使用を許可。rebind/reboot/他VM停止はしない。source freshnessを確認してimageを選ぶ。
+
+MR P9-q578-01: requested4bdd9224f/base41aac4fc7。main review: sh-n/diff-check PASS、exact owner/QEMU PID cleanup、有限elapsed、fresh receipt、error/restart判定を確認。試験script統合checkpointのみ、短試走/60分/10窓/実open-closeの画面確認は未実施。古いimageで現行clearanceを主張しない。
+
+MR P9-q578-02: requested21042cf4ebc25cb529f30b3ccb51959a45fe3962、ACK済4bdd9224f以降、script atomic checkpoint/5round進捗追加のみ。sh-n/diff-check/main review PASS。旧short exec session外部中断143、owner/PID照合してfixture/log救出し正常返却。旧shortはPASSなし、fresh fixtureをsetsid nohupで継続。
+
+MR P9-q578-03: requested992b6de86、ACK済21042cf4e以後のPhase checkpoint/旧short3PNG/disk events。main provenance/中断の限界/ownercleanup/PNG証拠の範囲/diff-check reviewPASS。旧short結果でclearanceなし、現行freshshort進行中。
+
+MR P9-q578-04: requested7d82da63a、lastACK992b6de86。freshshort14round/187秒/errors0/restarts0/exitstatus0、session receiptとlive Terminal/実open-close PNGの耐久証拠をmain review。whole60minは継続中、short結果でclearanceなし。script source変更なし、diff-check PASS。
+
+2026-10-02 / q578-terminal: P9 model usage limitで停止後、mainが最終判定を引継ぎ。whole-Phase cleared、[result](../../ws099/phase014/q578-result.md)。60分criteriaを満たす。次Queueは未投入。GitHub close/comment未公開。
+
+## Approved snapshot
+
 <!-- awesome-plan project=zedbsd record=ws099-p014 -->
 
 # ws099-p014: C10 の 5330 の 1 時間（L3）
 
-Status: cleared
+Status: in-progress
 Disposition: normal
 Parent: [WS099](../ws.md)
 Queue: q578 / q578-i01 / P9
@@ -56,22 +92,3 @@ tail -3 build/ws099-p014/c10-hw/c10-hw.out 2>/dev/null
 - FAIL なら uncleared。落ちた周、session.log の最後の `ZWL` の行、`SESSIOND GREETER failed reason=` を記録し、直しの Phase を main に提案する。
 
 2026-10-02 / n3-start-P9: current user「では、N=3でしばらく実行を続けてください」により最初の有限Queue q578を承認・開始。上限3時間、既存whole-Phase基準を保持。部分commitはclearanceではない。GitHub publication保留。
-
-## q578-i01 / P9 の途中結果（2026-10-02）
-
-[証拠と再開記録](q578-checkpoint.md)。試験scriptを作成し、構文・差分whitespace・所有資源のcleanupと判定をreview。
-既存C10の「窓の開閉」を確かめるため、元の10appを保ち、10周ごとに追加Terminalを開き`exit`で閉じる操作と前後PNGを追加。
-毎周の回数・実経過秒・QEMU PIDをatomic checkpointへ保存する。compositor sourceは変更無し。
-
-旧WS103イメージの道具確認は実行ツールの中断で未達。所有者・元のQEMU PIDを照合してログを救出し、自分のVMとlockを返却。
-現行source `5ac9b753d` のfresh demo image（mainのbuild exit0/project warnings0、SHA256
-`72003343313d85b5e0950f5659ca6af5a6183ef3c0776c68a1e7ecdfba0b3e7e`）をread-only copyで使用。
-fresh 3分試走は **PASS**: 14周・実187秒、errors0/restarts0、disk receiptと実Terminal PNGを確認。
-10appの維持・追加窓の実closeもPNGとdisk sessionで確認。lock/owner返却、vfio binding不変。
-
-60分本番は独立session（PID203752、`build/ws099-p014/c10-full-fresh`）で実行中。全体Phaseのclearanceは未確定。
-補助のframebuffer boot検証はmainが実施中、実機のPNG/受け入れと区別する。未実施をPASSにしない。
-
-## q578-i01 outcome / 2026-10-02
-
-**cleared**: main verified 3602 seconds, 278 rounds, errors0/restarts0/exit0, live Terminal receipt and ownership cleanup. [Full result and limitations](q578-result.md). C10 L3 verified by i915 passthrough; bare-metal USB test not performed. Intended Issue closure pending publication, no remote close claimed.
