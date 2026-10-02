@@ -10,6 +10,13 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1、2026-10-17）
 Queue: none
 Resume point（2026-10-02 計画）: **p001（棚卸し・回帰の取り直し・候補の一覧、source は変えない）を最初の Queue に**。p001 の最後にユーザーが候補を選び、p002 以降の採否と順が決まる。p002〜p007 は p001 の結果で planned にする。
+2026-10-02 user のベータ1 の採否（[requirements](requirements.md) §5 への回答）:
+- 推奨の 5 つ（BUG-140/141 と試験の直し、BUG-142 の調査、PDF の thumbnail と disk cache（F-035）、DnD の自動 scroll と spring-loaded（F-039）、「Move To」「Open in New Window」）を入れる。
+- 日本語 UI は入れない:「ローカライズの仕組みをあとで実装して、複数の言語で一斉に対応したいです。ベータ2以降です。」
+- 取り出し（eject、F-036）を入れる:「マウントの制御をlibkeilandに入れる必要がありますね。工数が小さいので入れましょう。」（USB storage の hotplug の通知が前提なので依存を確かめる）
+- ネットワーク・クラウドの drive は入れない:「私の方で設計どころか構想も終わっていません。」
+- 検索の index は入れない:「私はこの技術があまり好きではないです。ドキュメントはクラウドに置く時代だと思うので、ローカルのインデックスはバッテリーの無駄と思います。」
+- カラム表示はベータ1 に入れる（ユーザー）。詳細（list）表示は既に有る（Name・Kind・Size・Date Modified、並べ替え）ので、Finder のカラム（階層の pane）か詳細表示の改善かを確認中。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー（ベータ1、リリース目標 10/17））
