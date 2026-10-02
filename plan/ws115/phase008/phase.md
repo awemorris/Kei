@@ -3,10 +3,10 @@
 # ws115-p008: gdk-pixbuf・libjpeg-turbo・libtiff・graphene・libepoxy・libxkbcommon・xkeyboard-config
 
 Parent: [WS115](../ws.md)
-Status: planning
+Status: in-progress（q610-i01、P3）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
-Queue / attempts: none
+Queue / attempts: q610-i01（P3、継続 dispatch、時限 4h、base main 9f408ea0c）
 Purpose / goal: GTK4 の残りの必須依存を移植する。
 Prerequisites: p005（p007 と並行可）
 Investigation bound: timebox 4h。収まらなければ libxkbcommon/xkeyboard-config を別 Queue に分ける

@@ -3,7 +3,7 @@
 # ws115-p007: pixman・cairo・fribidi・pango
 
 Parent: [WS115](../ws.md)
-Status: in-progress（q608-i01、P3。作業と受け入れの証拠は揃った。clearance の確定は Q1）
+Status: cleared（2026-10-02 Q1。q608-i01、03f00921d まで main に統合）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
 Queue / attempts: q608-i01（P3、継続 dispatch、時限 4h、base main e99a3c589）
