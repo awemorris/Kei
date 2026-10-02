@@ -108,3 +108,5 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 2026-10-02 / user-common-wallpapers-20261002: userがテスト背景のsource/zedBSD・Linux・FreeBSD共通収録をB2へ追加指示。[p019](phase019/phase.md)をWS035後継として追加しasset goalをscopeへ加える。C1〜C10と実機/最終conformance条件は保持、asset追加だけでWS acceptanceを満たしたとしない。q588後に有限Queueで実行、現時点は読取調査。
 
 2026-10-02 / user-lake-default-20261002: userが旧画像のぼやけた湖を起動defaultとし、収録済み背景を切り替えで維持するよう追加決定。[p019](phase019/phase.md)のcriteriaへ反映、保存済み設定の優先も維持する。予約済みq593のsnapshot準備に含め、同じB2へ受領を確認。既存C1〜C10/実機/最終conformance条件とq588のscopeは維持。
+
+2026-10-02 / b3-q589-user-wrap-20261002: [p017 q589終端結果](phase017/q589-result.md)を回収、準備/hostチェックのみでguest実測未実行のためattemptとwhole p017はuncleared。user指示でB3終了、BUG-125 tracking/WS incomplete維持。証拠と再開手順は保存済み。p019は最新user全agent終了指示により未着手で再開待ち。
