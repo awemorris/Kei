@@ -79,8 +79,8 @@ qemu-system-x86_64 \
 ```sh
 git clone https://github.com/awemorris/zedBSD.git
 cd zedBSD
-make keiland
-make keiland-install
+make keiland-linux
+make keiland-linux-install
 ```
 
 Or, one of:
@@ -98,8 +98,8 @@ Then restart your display manager such as GDM.
 ```sh
 git clone https://github.com/awemorris/zedBSD.git
 cd zedBSD
-make keiland
-make keiland-install
+make keiland-freebsd
+make keiland-freebsd-install
 ```
 
 Or,
