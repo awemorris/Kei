@@ -1,0 +1,5 @@
+PASS console runtime, native defaults, prefix/argv spaces and exact exit status
+PASS existing native session environment and runtime permissions preserved
+PASS absolute socket and rejection before launch for unusable runtime paths
+PASS exec PID identity and normal SIGTERM delivery
+ALL PASS on linux

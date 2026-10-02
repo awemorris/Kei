@@ -1,0 +1,6 @@
+PASS console runtime, native defaults, prefix/argv spaces and exact exit status
+PASS existing native session environment and runtime permissions preserved
+PASS absolute socket and rejection before launch for unusable runtime paths
+PASS exec PID identity and normal SIGTERM delivery
+ALL PASS on freebsd15
+usage: wayland [--socket=/path] [--width=N] [--height=N] [--timeout=seconds] [--max-frames=N] [--log-frames] [--keyboard-blur] [--glass] [--font=/path] [--fallback-font=/path] [--wallpaper=/path.ppm] [--window-opacity=1..100] [--desktop-client=COMMAND|none] [--desktop-token=TOKEN] [--session [--control-fd=N] [--lock-idle=seconds] | --greeter --auth-fd=N]

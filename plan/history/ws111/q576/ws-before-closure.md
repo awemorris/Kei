@@ -2,12 +2,12 @@
 
 # WS111: Linux/FreeBSD共通 keiland-desktop launcher
 
-Status: completed
+Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
 Queue: none（q576 finished）
-Resume point: L1〜L3完了、共通console launcher利用可能。--login本人password→将来PINの案は別実装指示/Queue待ち。
+Resume point: userの共通console launcher実装をp001→p002で進める。GDMはwayland直接起動。
 
 ## Objective / acceptance
 
@@ -21,8 +21,8 @@ Scope: 共通shell.in・両native mk・FreeBSD/配布READMEとconsole docs、必
 
 | ID | Purpose | Goal | Status | Dependencies |
 | --- | --- | --- | --- | --- |
-| ws111p001 | [共通console launcher実装](../history/ws111/q575/phase.md) | L1/L2 script/build/install/docs | cleared / q575 | WS105/WS109 actual native outputs |
-| ws111p002 | [最終全文規約/両OS確認](../history/ws111/q576/phase.md) | L3 final all changed source/native install | cleared / q576 | p001 actual source |
+| ws111p001 | [共通console launcher実装](phase001/phase.md) | L1/L2 script/build/install/docs | cleared / q575 | WS105/WS109 actual native outputs |
+| ws111p002 | [最終全文規約/両OS確認](phase002/phase.md) | L3 final all changed source/native install | cleared / q576 | p001 actual source |
 
 2026-10-02 / ws111-user-console-launcher: currentuser共通起動script実装を承認。直後の「GDMはスクリプトを通さない方がいいです」でLinux.desktop変更をscopeから除外、currentExecに変更無し。WS110 testing提案は別の未承認検討として維持。新login質問は検討のみ。
 
@@ -31,9 +31,3 @@ Scope: 共通shell.in・両native mk・FreeBSD/配布READMEとconsole docs、必
 2026-10-02T02:47:22.733590+00:00 / ws111-q575-cleared: p001 cleared。共通scriptと両native install membership/console docsを実装。Linux native/stage/ELF/GDMdirect cmpと両OS shell env/args/exec PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q575/result.md)。最終sourcereview/実機installはp002。
 
 2026-10-02T02:51:00.580258+00:00 / ws111-q576-cleared: p002 cleared。L1〜L3: 両OS shell/native build/install、FreeBSD/opt script0755、LinuxGDM direct entry unchanged、全source review PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q576/result.md)。--loginは本人確認/PIN交換案のみ、WS110/testing未実装。
-
-## Completion / 2026-10-02
-
-WS自身L1〜L3照合、全source finalstandard完了。p001/q575・p002/q576 clearedでcompleted。Linux/FreeBSD native installに/opt/keiland/bin/keiland-desktopを追加。GDM直接entryをbyte不変で保持。実機の既存user GUIを再起動せずread-back。再利用probeをplan/toolsへ移し、Phase/WS-only testsをgit/history保持で削除。shellcheck/GDM実ログイン/GUI/dpkg再全試験/zedBSD imageは未実施の具体的理由をfinalreviewに保存。--login/--testingを実装済みと報告しない。Issue/Project公開保留。
-
-Event ws111-completed-20261002: Phase/WSclearance/completion/close意図をlocal/outbox保存。ログイン本人確認/PIN判断はlogin-designに保持、次実装権限は別。

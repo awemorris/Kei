@@ -1,0 +1,79 @@
+From github.com:awemorris/zedBSD
+ * branch              main       -> FETCH_HEAD
+   b49ffa9b..41ef7553  main       -> origin/main
+Updating b49ffa9b..41ef7553
+Fast-forward
+ plan/future-work.md                                |   2 +-
+ plan/history/index.md                              |  10 +-
+ plan/history/queue-q575.md                         |  26 ++
+ .../ws109/user-acceptance-20261002/phase008.md     |  35 ++
+ .../user-acceptance-20261002/previous-past-log.md  |  49 +++
+ .../user-acceptance-20261002/ws-before-closure.md  |  76 +++++
+ plan/history/ws111/q575/approved-phase.md          |  22 ++
+ plan/history/ws111/q575/freebsd-shell.txt          |   5 +
+ plan/history/ws111/q575/phase.md                   |  28 ++
+ plan/history/ws111/q575/previous-past-log.md       |  49 +++
+ .../ws111/q575/previous-queue-with-followup.md     |  28 ++
+ plan/history/ws111/q575/result.md                  |   5 +
+ plan/master.md                                     |  20 +-
+ plan/queue.md                                      |  24 +-
+ plan/ws109/phase006/phase.md                       |  31 --
+ plan/ws109/phase007/phase.md                       |  35 --
+ plan/ws109/phase008/phase.md                       |  29 --
+ plan/ws109/ws.md                                   |  25 +-
+ plan/ws110/design.md                               |  41 +++
+ plan/ws110/launch-candidates.txt                   | 365 +++++++++++++++++++++
+ plan/ws110/ws.md                                   |  32 ++
+ plan/ws111/login-design.md                         |  21 ++
+ plan/ws111/phase001/phase.md                       |  28 ++
+ plan/ws111/phase002/phase.md                       |  22 ++
+ plan/ws111/tests/launcher.py                       |  85 +++++
+ plan/ws111/ws.md                                   |  31 ++
+ tools/release/keiland-linux-deb/README.md          |   2 +-
+ tools/release/keiland-linux-deb/build.py           |   2 +-
+ userland/desktop/README.freebsd.md                 |  25 +-
+ userland/desktop/keiland-freebsd.mk                |   9 +
+ userland/desktop/keiland-linux.mk                  |   9 +
+ userland/desktop/wayland/keiland-desktop.in        |  41 +++
+ 32 files changed, 1070 insertions(+), 142 deletions(-)
+ create mode 100644 plan/history/queue-q575.md
+ create mode 100644 plan/history/ws109/user-acceptance-20261002/phase008.md
+ create mode 100644 plan/history/ws109/user-acceptance-20261002/previous-past-log.md
+ create mode 100644 plan/history/ws109/user-acceptance-20261002/ws-before-closure.md
+ create mode 100644 plan/history/ws111/q575/approved-phase.md
+ create mode 100644 plan/history/ws111/q575/freebsd-shell.txt
+ create mode 100644 plan/history/ws111/q575/phase.md
+ create mode 100644 plan/history/ws111/q575/previous-past-log.md
+ create mode 100644 plan/history/ws111/q575/previous-queue-with-followup.md
+ create mode 100644 plan/history/ws111/q575/result.md
+ delete mode 100644 plan/ws109/phase006/phase.md
+ delete mode 100644 plan/ws109/phase007/phase.md
+ delete mode 100644 plan/ws109/phase008/phase.md
+ create mode 100644 plan/ws110/design.md
+ create mode 100644 plan/ws110/launch-candidates.txt
+ create mode 100644 plan/ws110/ws.md
+ create mode 100644 plan/ws111/login-design.md
+ create mode 100644 plan/ws111/phase001/phase.md
+ create mode 100644 plan/ws111/phase002/phase.md
+ create mode 100644 plan/ws111/tests/launcher.py
+ create mode 100644 plan/ws111/ws.md
+ create mode 100644 userland/desktop/wayland/keiland-desktop.in
+--- keiland-freebsd ---
+env -u MAKEFLAGS -u MFLAGS gmake -j 8 -f userland/desktop/keiland-freebsd.mk all 
+gmake[1]: Entering directory '/home/awe/zedBSD'
+sed 's|@PREFIX@|/opt/keiland|g' userland/desktop/wayland/keiland-desktop.in > build/keiland-freebsd/bin/keiland-desktop.tmp
+chmod 0755 build/keiland-freebsd/bin/keiland-desktop.tmp
+mv build/keiland-freebsd/bin/keiland-desktop.tmp build/keiland-freebsd/bin/keiland-desktop
+gmake[1]: Leaving directory '/home/awe/zedBSD'
+env -u MAKEFLAGS -u MFLAGS gmake -j 1 -f userland/desktop/keiland-freebsd.mk install 
+gmake[1]: Entering directory '/home/awe/zedBSD'
+install -m 0644 build/keiland-freebsd/include/libseat.h "/opt/keiland/include/libseat.h"
+install -m 0644 include/libc/pdf.h "/opt/keiland/include/pdf.h"
+gmake[1]: Leaving directory '/home/awe/zedBSD'
+PASS console runtime, native defaults, prefix/argv spaces and exact exit status
+PASS existing native session environment and runtime permissions preserved
+PASS absolute socket and rejection before launch for unusable runtime paths
+PASS exec PID identity and normal SIGTERM delivery
+ALL PASS on freebsd15
+root wheel 755 /opt/keiland/bin/keiland-desktop
+41ef7553

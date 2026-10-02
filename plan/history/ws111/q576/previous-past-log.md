@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q576](queue-q576.md)（WS111 p002 cleared）
+Last finished Queue: [q575](queue-q575.md)（WS111 p001 cleared）
 
-## 最新: q576 /WS111 completed
+## 最新: q575 /WS111 p001
 
-L1〜L3: 両OS shell/native build/install、FreeBSD/opt script0755、LinuxGDM direct entry unchanged、全source review PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q576/result.md)。--loginは本人確認/PIN交換案のみ、WS110/testing未実装。
+共通scriptと両native install membership/console docsを実装。Linux native/stage/ELF/GDMdirect cmpと両OS shell env/args/exec PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q575/result.md)。最終sourcereview/実機installはp002。
 
 WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認を利用。Issue/Project公開保留。WS110/testing/--loginは検討のみ。
 
@@ -14,6 +14,7 @@ WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認
 
 | Queue | Outcome |
 | --- | --- |
+| [q546](queue-q546.md) | WS108 p002 cleared |
 | [q547](queue-q547.md) | WS108 p003 uncleared |
 | [q548](queue-q548.md) | WS108 p003 cleared |
 | [q549](queue-q549.md) | WS108 p004 cleared |
@@ -44,8 +45,5 @@ WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認
 | [q573](queue-q573.md) | WS109 p006 cleared |
 | [q574](queue-q574.md) | WS109 p007 cleared |
 | [q575](queue-q575.md) | WS111 p001 cleared |
-| [q576](queue-q576.md) | WS111 p002 cleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。
-
-2026-10-02 /ws111-completed-20261002: p001/p002に加えWS L1〜L3を照合、completed。userのGDM直接entry/pw本人確認→PIN案を保持。--login実装は検討のみ。

@@ -3,12 +3,10 @@
 from pathlib import Path
 import json
 import os
-import signal
 import stat
 import subprocess
 import sys
 import tempfile
-import time
 
 source = Path(sys.argv[1]).read_text()
 with tempfile.TemporaryDirectory(prefix='keiland-launcher-') as directory:
@@ -18,9 +16,11 @@ with tempfile.TemporaryDirectory(prefix='keiland-launcher-') as directory:
     fake = prefix / 'bin/wayland'
     fake.write_text('''#!/usr/bin/env python3
 import json, os, signal, sys, time
-print(json.dumps({'args': sys.argv[1:], 'runtime': os.environ.get('XDG_RUNTIME_DIR'), 'display': os.environ.get('WAYLAND_DISPLAY'), 'seat': os.environ.get('KEILAND_SEAT'), 'session': os.environ.get('XDG_SESSION_ID'), 'type': os.environ.get('XDG_SESSION_TYPE'), 'pid': os.getpid()}), flush=True)
-if '--wait-for-signal' in sys.argv:
+waiting = '--wait-for-signal' in sys.argv
+if waiting:
     signal.signal(signal.SIGTERM, lambda signum, frame: sys.exit(0))
+print(json.dumps({'args': sys.argv[1:], 'runtime': os.environ.get('XDG_RUNTIME_DIR'), 'display': os.environ.get('WAYLAND_DISPLAY'), 'seat': os.environ.get('KEILAND_SEAT'), 'session': os.environ.get('XDG_SESSION_ID'), 'type': os.environ.get('XDG_SESSION_TYPE'), 'pid': os.getpid()}), flush=True)
+if waiting:
     while True:
         signal.pause()
 sys.exit(37)
