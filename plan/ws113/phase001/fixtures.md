@@ -79,4 +79,4 @@ plug stormを無限反復しない。有限例として通常plug/unplug各3cycl
 
 ## 6. 本Phaseの残判断
 
-[contracts.md D-ID/D-ATOMIC等](contracts.md#10-未決と通常提案の選択材料)とcurrent physical fixture availabilityが未決。D-BOOT/LAYOUT/REC/AUTH/PORTの通常案はmain技術採択（2026-10-02）、旧boot overrideとのcompatibilityは別に確認。p001は能力/技術契約/有限試験を提示できるが、未採択のidentity transportや物理移動policyを採択済みとしてclearしない。後続Phaseの開始は新Queue選定/承認とactual prerequisitesの確認後。
+[contracts.md D-ATOMIC](contracts.md#10-未決と通常提案の選択材料)のuser回答が未決。D-ID A2とD-BOOT/LAYOUT/REC/AUTH/PORT通常案、旧boot preferred anchorは2026-10-02 main技術採択。current physical fixture availabilityはp008選定前のreadiness前提として未確認。p001は能力/技術契約/有限試験を提示できるが、未採択の物理移動policyを採択済みとしてclearしない。後続Phaseの開始は新Queue選定/承認とactual prerequisitesの確認後。

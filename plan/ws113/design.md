@@ -7,16 +7,17 @@ Status: incomplete / p001 in-progress / q586-i01。
 
 - [能力表](phase001/source-audit.md): 20行。i915 HPD eventsはsequence1固定、選択outputはID1/generation1の0/1台、claim/presentは単一。通知UAPIのper-open QUERY/ACKは既存。拡張enum値だけはheader内に存在するが、EXT control/counterのstruct/prototype/entry/runtime広告は非検出。
 - [契約](phase001/contracts.md): native→Vulkan→compositor→public libkeiland→Settingsの所有、ID/世代、per-fence cursor、idle/0台watch、0/1/2台状態、rollback、異解像度mirror、pointer境界でroot tree単一owner、protocol snapshot/transaction、保存。
-- [IDとpresent完了比較](phase001/identity-completion.md): session keyと保存mappingを分離。GPU deviceUUID+displayNameのport key案/全key案/typed私有API案を比較。私有拡張未採択。standard present_waitの曖昧な切断成功・timingと実scanout消去の差を明記。
+- [IDとpresent完了比較](phase001/identity-completion.md): session keyと保存mappingを分離。GPU deviceUUID+displayNameのport key案/全key案/typed私有API案を比較。私有拡張は比較のみでmain不採用。standard present_waitの曖昧な切断成功・timingと実scanout消去の差を明記。
+- [native capability](phase001/native-contract.md): EXT control全entryへ必要なsemantic operation/power/timing/counter/寿命/失敗domain。既存UAPIに無い能力を差分review入力とし、HAL/API変更承認とは分離。
 - [fixture](phase001/fixtures.md): 歴史上の5330/eDP+HDMI成功をcontextに、H01–H10/D01–D10の有限検証案。現在の実fixtureは未確認/未利用。virtual capture/host contractを実i915合格へ代用しない。
 
-D-IDはstandard displayName短port key案+GPU標準UUID実能力別gateを詳細化し、私有Vulkan拡張はmain不採用。D-ATOMIC（logical ownerとstrict physical移動の解釈/不表示期間）はuser回答待ち。旧boot overrideのcompatibilityはmainへ材料を送付。D-BOOT/LAYOUT/REC/AUTH/PORTの通常案は2026-10-02 main技術採択（初回全extended/internal anchor、edge snap/辺連結/非重複、退避窓奪回無し、active同UID変更、eDP+HDMI初回fixture）。材料未解決のままp001をclearしない。
+D-IDはmain技術採択A2（local PCI segment:BDF+connector kind+物理DDI key→native name/standard displayName）、私有Vulkan拡張はmain不採用。GPU標準UUIDは別能力として残し必須追加しない。D-ATOMIC（logical ownerとstrict physical移動の解釈/不表示期間）はuser回答待ち。旧hdmi/edpは初期preferred anchorを保ち全connected inventoryを隠すdisableに転用しないmain採択。D-BOOT/LAYOUT/REC/AUTH/PORTの通常案は2026-10-02 main技術採択（初回全extended/internal anchor、edge snap/辺連結/非重複、退避窓奪回無し、active同UID変更、eDP+HDMI初回fixture）。材料未解決のままp001をclearしない。
 
 ## 後続へ渡す実出力
 
 | Phase | 対応契約 / 実出力 / gate |
 | --- | --- |
-| p002 | connector slot/ID/generationとcoherent inventory、HPD worker→sequence publish/wake、複数pipe/plane/lease/scanout寿命。EXT power/first-pixel等に必要なnative能力とGPU UUID queryの差分設計。追加APIを採択済としない |
+| p002 | connector slot/ID/generationとcoherent inventory、HPD worker→sequence publish/wake、複数pipe/plane/lease/scanout寿命。[EXT power/first-pixel等のnative能力結線案](phase001/native-contract.md)を差分設計。A2 keyは既存PCI APIで生成し、UUID query追加は必須にしない。追加APIを採択済としない |
 | p003 | KHR display/plane/mode/surface、EXT control全4entry+surface counter依存、device event fence独立consumer/寿命/timeout、header ABI/procaddr enable広告。D-ATOMIC採択時だけpresent completion追加を規約限界付きで設計 |
 | p004 | output table、0台live server/watch、独立swapchain、global/local座標、全extended/allmirror、GPU aspect-fit+opaque bars、transaction rollback/degradedとdynamic wl_output |
 | p005 | 専用Wayland snapshot/batched done、expected topology/config serial、token/gen全member、apply/result、public wrapper ownership、active-session credential、保存と適用結果分離 |

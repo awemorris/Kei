@@ -37,6 +37,11 @@ Verification / resume: H04–H10を独立Vulkan clientで確認。別fence/devic
 
 Status/dependenciesは上記のまま。未採択architecture/製品判断とactual prerequisiteを確認し、新QueueでこのPhaseだけを有限選定・承認後に実装する。q586はp001文書のみで後続sourceを許可しない。
 
+## 採択済local port ID / native capability入力
+
+[main採択A2とsource](../phase001/identity-completion.md)、[native capability結線](../phase001/native-contract.md)を使う。自Phaseへの影響: local keyをimmutable standard displayNameへ転送、instance handleのname寿命を保持。GPU UUIDのmissing queryは別能力。core display-event waitの切断をSURFACE_LOSTなど非規範resultへ変えない。native capabilityを全EXTentryへ結線。
+後続の実装権限/依存は不変。actual API番号/layout/共有callback差分は選定前にowner/main review、HAL変更なら事前承認。
+
 ## Event
 
 2026-10-02 / ws113-multidisplay-plan-20261002-ws113-p003-created: current userの5条件・3つの追加判断をこのPhaseへ投影。planned/Queue none。GitHub body/comment/Projectへの公開は保留。
@@ -44,3 +49,5 @@ Status/dependenciesは上記のまま。未採択architecture/製品判断とact
 2026-10-02 / ws113-contract-design-20261002-a3-ws113-p003: p001のsource/一次仕様で明らかになった不足に合わせ、上記の自Phase procedureと検証/resumeを詳細化。H04–H10を独立Vulkan clientで確認。別fence/device/processが同じeventを独立受信、lease/swapchain無しでも通知。struct-type enumのみを対応証拠にしない。properties2KHRの既存wrapperとi915 opcode148未実装を区別。strict物理消去を標準present_waitの存在だけで宣言しない。 origin/WSリンクは上記。planned/Queue noneを保持。GitHub body/comment/Projectはmainへdelivery依頼pending。
 
 2026-10-02 / ws113-technical-choice-20261002-a3-ws113-p003: mainのdelegated technical decision messageからD-BOOT/LAYOUT/REC/AUTH/PORT通常案を採択記録。自Phase影響: 私有Vulkan identity拡張は不採用。standard短portkeyのpolicyと実GPU UUIDqueryを別gateにする。 [origin](../phase001/phase.md)/[詳細](../phase001/identity-completion.md)/[WS](../ws.md)。依存/Queue権限不変、main remote delivery pending。
+
+2026-10-02 / ws113-local-port-id-20261002-a3-ws113-p003: mainのD-ID A2/旧bootpreferred技術採択messageを受領。local keyをimmutable standard displayNameへ転送、instance handleのname寿命を保持。GPU UUIDのmissing queryは別能力。core display-event waitの切断をSURFACE_LOSTなど非規範resultへ変えない。native capabilityを全EXTentryへ結線。 [origin](../phase001/phase.md)/[sourceと範囲](../phase001/identity-completion.md)/[WS](../ws.md)。既往eventを保存し、該当current designを更新。p001 in-progress、他Phase planned/Queue none。main remote delivery pending。

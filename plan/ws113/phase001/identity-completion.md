@@ -5,7 +5,7 @@ Parent: [契約](contracts.md)、[能力](source-audit.md)。
 
 ## 1. session内識別と保存mapping
 
-session識別は既存native(device_id,display_id)→instance-lifetime VkDisplayKHR→compositor output_tokenで足りる。再接続時の同port mapping、generation失効、mode handle更新を検証する。保存には別のconnector keyを要する。
+session識別は既存native(device_id,display_id)→instance-lifetime VkDisplayKHR→compositor output_tokenで足りる。再接続時の同port mapping、generation失効、mode handle更新を検証する。保存には別のconnector keyを要する。**2026-10-02 main技術採択は下記A2（local PCI segment:BDF+connector kind+物理DDI port）で、GPU標準UUIDを必須にしない。**
 
 [VkPhysicalDeviceIDProperties](https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDeviceIDProperties.html)のdeviceUUIDはinstance/process/API/driver version/rebootを跨いで同deviceに不変である規約を持つ。ただし電源off中のhardware構成変更で変わり得て、serialized device識別への依存を避ける注意がある。driverUUIDはbuild識別、pipelineCacheUUIDはcache互換性であり、保存output keyにはしない。deviceLUIDはこの実装ではinvalid。いずれもconnectorやEDID identityを供給しない。
 
@@ -21,7 +21,7 @@ session識別は既存native(device_id,display_id)→instance-lifetime VkDisplay
 | 案 | compositorが使う値 | 長所 / 残条件 |
 | --- | --- | --- |
 | A: standard GPU UUID + implementation port key | properties2KHR IDのdeviceUUIDと、displayNameの認識済み`zedbsd-port-v1:…`等の短いconnector key | 私有Vulkan API追加無し。native name[64]にport部分だけなら収めやすい。GPU query未実装を補う必要。標準displayNameの一意/永続規約を新たに主張せず、このimplementation内のpolicyとして検証 |
-| A2: full platform/port key in displayName | version付きfull connector keyのみ。session VkPhysicalDeviceとの対応も保持 | UUID runtime追加と切り離せる可能性。GPUのPCI BDF等の再起動安定性/構成変更意味/64byte制限を確認。hard-code「GPU0」は他deviceへ誤復元する危険 |
+| A2: full platform/port key in displayName（main採択） | version付きlocal PCI segment:BDF+connector kind+物理DDI key。session VkPhysicalDeviceとの対応も保持 | UUID runtime追加を必須にしない。同一machine/同一PCI portに保存範囲を限定し、再起動時もmode/capability再validate。hardware/PCI配置変更・別machine移植後の恒久identityは保証しない。64byte内を検査 |
 | B: typed private Vulkan identity extension（比較のみ、main不採用） | 明示key/label/persistence scope/capability | EDID表示名とconnector keyを分離できる。新ABIとarchitecture所有/他OS扱いを要するため未採択。standard extensionを偽装しない |
 | C: session only | VkDisplayKHR/output_tokenで実行中だけmapping、保存は保留 | 実行中hotplugには対応可能。restart/reconnect設定保存の要件を満たさないのでscope判断なしに最終採用不可 |
 
@@ -79,4 +79,16 @@ D-IDはstandard implementation policy/私有APIに関わるarchitecture選択と
 
 mainのdelegated technical decision messageを受領: 初回全connected extended+internal anchor、辺で連結/非重複edge snap、退避窓の自動奪回無し、active session同UID peer検査/Settings限定secret無し、初回実fixture eDP+HDMI。contracts/WSと影響Phaseへ投影する。D-PORTは未移植portの成功/実装省略を承認した意味に拡張しない。
 
-D-IDはstandard displayName短portkeyとGPU標準UUID別gateを詳細化する方向。mainは私有Vulkan拡張を不採用。UUID実能力、scheme/API端の完全性、旧boot overrideとのcompatibilityは後続選定前に確認する。D-ATOMICはmainがuserへ質問中、回答前に採択しない。
+D-IDはA2としてnative display.name→標準displayNameでlocal port keyを渡すmain技術採択。私有Vulkan拡張は不採用、GPU UUIDqueryは別能力のまま必須実装に増やさない。旧boot hdmi/edpは初期preferred anchorを保持し、全connected inventoryを隠すdisable指定に転用しないmain採択。D-ATOMICはmainがuserへ質問中、回答前に採択しない。
+
+## 4. A2の具体的schemaとsource対応（main技術採択）
+
+- wire/displayName案: `zedbsd-port-v1:pci:0000:00:02.0:edp:A`（37byte、NUL込み38byte、Python ASCII lengthで照合）。segment4hex、bus2hex、device2hex、function1hex、kindは固定ASCII `edp`/`hdmi`等、portはphysical DDIのstable token。hex大小文字/先頭zeroをcanonicalにする。全体63byte以下、終端NUL必須、format/parseを同revisionで定義する。
+- native source: `i915_device.pci`（i915.h54）、`drv_pci_device_address()`（公開pci.h304/pci.c701、既にi915/pci.c775で使用）でsegment/bus/device/functionを得る。HPD encoder.port（hotplug.c3137）はVBTの物理DDI portで、hpd.numやHDMI-A-<n>生成順を使わない。driver.queryのname[64]→libvulkan immutable name cache→standard displayNameの既存経路を使う。
+- display_idもport固定mappingにし、世界のnum_encoders列挙順のid値をpersistent identityへ昇格しない。Vulkan globalplane indexはknown slotの固定順を維持する。MST branch等、version1で表現/実装していないconnectorは勝手にsuffixを作って完成扱いにしない。
+- compositorは認識済みversion/PCI fields/kind/port/range/length/collisionを検査し、port keyをsession output_tokenへmapping。unsupported/unknown/duplicate schemeはpersistable=false、保存自動復元を拒否してworking配置へfallbackし通知する。既知schemaでもmode/capability/全memberを通常transactionで再validate。
+- Settingsのlabelはcompositor/libkeiland snapshot内のkind/portから「内蔵ディスプレイ（eDP A）」「外部ディスプレイ（HDMI B）」等を作る。displayName内へEDID名を併記してhotplugで上書きしない。同一instance handleのimmutable string寿命を保持する。
+- 保存keyはlocal machine/同PCI portの意味。GPU・PCI配置変更でkeyが変わればnew connectorとしてfallback、旧entryは保持。別machineへのfile移植で同BDFが一致し得るためmachine-global hardware serialの保証はしない。同種GPU交換で同portが同keyになる場合も、port-based mappingの範囲としてmode/capabilityを再検査し、old modeを強制しない。
+- invalid saved file/unknown schema/stale dimensions/unsupported modeは部分適用せず、現working状態と失敗理由を公開。記録の例byte長はp002実装前にsizeof/ABIfixtureで照合する。
+
+採択源: 2026-10-02 mainから本agentへのD-ID A2/旧boot anchor技術決定message。製品source変更は未実施。標準deviceUUID query不足と最新仕様の注意は上記のread-only能力記録として残す。

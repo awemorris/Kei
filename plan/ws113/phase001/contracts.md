@@ -23,18 +23,18 @@ Source evidence: [能力/source照合](source-audit.md)、[ID/完了保証の詳
 | --- | --- | --- |
 | native device_id | 登録中のGPU identity。`gpu_handle_allocate()`の値で再起動/再登録の恒久identityではない | 不可 |
 | native display_id | GPU登録寿命内の物理connector identity。ordinalや接続順から生成しない。切断/同じport再接続で同じ値 | 不可（device_idと組でも再起動保証無し） |
-| output generation | 接続・mode/capability/scanout契約が変わるepoch。通常frame、単なる列挙、別outputの変化では増やさない | 不可 |
+| output generation | 接続・支持mode/capability/lease契約が失効するepoch。通常frame、支持mode内の選択、純power設定、単なる列挙、別outputの変化では増やさない | 不可 |
 | topology sequence | device全体の表示inventory変更。1から始まり、ACK対象でありoutput generationとは別 | 不可 |
 | VkDisplayKHR | instance寿命のhandle。切断しても破棄/別connectorへの再利用をしない。mode handleはgenerationに結ぶ | 不可 |
 | compositor output_token | session内で重複/再利用しない64bit token。native keyへの内部対応を保持 | 不可 |
 | topology_serial / config_serial | 完全snapshotと適用状態を区別するcompositorの単調64bit値 | 不可 |
-| persistent connector key | 同じ接続portを再起動後も認識する、version付き文字列。**標準Vulkanからの伝達方法はD-ID未決** | 採択/検証後のみ可 |
+| persistent connector key | main採択A2のlocal PCI segment:BDF+kind+DDI port。native name→standard displayNameのimplementation policy | schema/一意性/mode/capability検証後のみ可 |
 
 切断時は当該generationを失効させ、再接続では新generation。stale mode/lease/surfaceは旧outputへ副作用を起こさない。上限に達したsequence/generation/tokenをwrapして再利用せず、terminal errorを返す。いずれも固定1の現在のi915実装とは異なる後続目標。
 
 `VkDisplayPropertiesKHR.displayName`はNULLも許される名称で、通常EDID由来、instance中不変のUTF-8 string。[一次仕様](https://docs.vulkan.org/refpages/latest/refpages/source/VkDisplayPropertiesKHR.html)には一意・再起動後永続・同一monitor識別の保証が無い。EDID名の一致、VkDisplayKHR値、ordinal、`/dev/gpuN`名を保存用IDにしない。
 
-D-ID候補Aはstandard properties2KHRのdeviceUUID（実query能力を確認後）とdisplayName内の短いversion付きport keyを組むimplementation policy。GPU UUIDはconnectorを識別せず、通常のEDID名称とのcompatibility、同じportでmonitor交換してもnameを変えられない寿命、native name[64]制限、UI用human labelの別表現を設計する必要がある。現i915 native opcode148は未実装であり、wrapperの存在だけでは利用可能ではない。認識済みscheme/一意性検査に合格した場合だけpersistableとする。候補Bは明示的typed identityの私有Vulkan拡張であり、**既定契約として採択していない**。別途architecture承認とABI/runtime/他OSの扱いが必要。[詳細比較](identity-completion.md#1-session内識別と保存mapping)を参照。
+D-IDは2026-10-02 main技術採択A2: local machineのPCI segment:BDF+connector kind+物理DDI portをversion付きkeyにし、native name[64]→標準displayNameの既存経路で伝達する。例`zedbsd-port-v1:pci:0000:00:02.0:edp:A`。同一machine/同PCI portに保存範囲を限定、hardware/PCI配置変更やconfig別machine移植後の恒久GPU identityを保証しない。ordinal/conn_nameは使わない。unknown/invalid/collisionは復元拒否、mode/capability再validateを必須とする。人向けlabelはkind/portからsnapshot/Settingsで表現し、同handleのEDID名上書きをしない。[source/grammar/比較詳細](identity-completion.md)を参照。私有Vulkan identity拡張はmain不採用。GPU標準UUIDはi915 nativequery未実装の別能力として残し、この採択へ必須追加しない。
 
 ## 3. i915 HPDとnative ACK
 
@@ -50,7 +50,7 @@ native inventoryは既知の物理connector slotを切断時も保持し、CONNE
 
 [VK_EXT_display_control](https://docs.vulkan.org/refpages/latest/refpages/source/VK_EXT_display_control.html)はdevice revision 1で、依存はinstance `VK_EXT_display_surface_counter`とdevice `VK_KHR_swapchain`。4 entry（device event、display event、power、counter）がある。hotplugだけを実装して拡張全体を広告しない。surface counter側は`vkGetPhysicalDeviceSurfaceCapabilities2EXT`を含める。counter bitは実際に提供できるもののみ（0も可能）。power/first-pixel-outも能力と結果をsource/実機で検証する。
 
-現在GPU display UAPIにpower/next-first-pixel/vblankcounter操作は無い。lease-owned WAITをidle display eventへ代用しない。p002/p003で標準entry全体に必要なnative能力の差分設計を提示し、共有/HAL APIの所有・事前承認を守る。新APIを本設計で採択した扱いにしない。
+現在GPU display UAPIにpower/next-first-pixel/vblankcounter操作は無い。[native capability結線案](native-contract.md)を後続review入力とし、lease-owned WAITをidle display eventへ代用しない。p002/p003で標準entry全体に必要なnative能力の差分設計を提示し、共有/HAL APIの所有・事前承認を守る。新APIを本設計で採択した扱いにしない。
 
 [vkRegisterDeviceEventEXT](https://docs.vulkan.org/refpages/latest/refpages/source/vkRegisterDeviceEventEXT.html)は新しいVkFenceを返す。DISPLAY_HOTPLUGはplug/unplug時の再列挙の契機であり、native seqやACKをapplicationへ公開するAPIではない。[イベント定義](https://docs.vulkan.org/refpages/latest/refpages/source/VkDeviceEventTypeEXT.html)を適用する。
 
@@ -70,7 +70,7 @@ native inventoryは既知の物理connector slotを切断時も保持し、CONNE
 
 [vkResetFences](https://docs.vulkan.org/refpages/latest/refpages/source/vkResetFences.html)はunsignal操作であり、既にunsignaledなら効果無し。したがってpending eventのresetで監視を取消してはならない。latched後resetはunsignalし、過去のeventを再playしない（以後のhotplugを捕捉するcompositorは新登録を使う）。core fenceのhost external synchronizationとtemporary importの復帰を保持する。signaled状態をqueue submitへ再利用する場合など、coreで合法な操作は新payloadとの切替を監査し、独自禁止を追加しない。
 
-[vkDestroyFence](https://docs.vulkan.org/refpages/latest/refpages/source/vkDestroyFence.html)の未完queue使用禁止・allocator一致・host external synchronizationを保持する。未発火display登録はlibraryが安全に取消す設計とし、「plugするまでdestroy不可」とは書かない。切断は対象surfaceのSURFACE_LOST/OUT_OF_DATEとして扱い、正常な別outputをdevice-lostに巻き込まない。GPU自体の喪失は別のterminal device error。
+[vkDestroyFence](https://docs.vulkan.org/refpages/latest/refpages/source/vkDestroyFence.html)の未完queue使用禁止・allocator一致・host external synchronizationを保持する。未発火display登録はlibraryが安全に取消す設計とし、「plugするまでdestroy不可」とは書かない。切断は対象surfaceのSURFACE_LOST/OUT_OF_DATEとして扱い、正常な別outputをdevice-lostに巻き込まない。GPU自体の喪失は別のterminal device error。display-event fenceが切断中に未発火ならcore waitへSURFACE_LOST等の許されないerrorを追加せずpendingのまま、同handle再接続後の次実refreshで発火できるようgeneration/cursorを安全にrebaseする。切断自体をfirst-pixelとしてsignalしない。
 
 ### 4.3 header/広告/完全性
 
@@ -153,15 +153,15 @@ compositorがdisplay設定の保存を所有し、既存desktop.confとは別の
 
 | ID | 未決内容 / 選択肢 | 事実と影響 / 待つ後続 |
 | --- | --- | --- |
-| D-ID | port-based永続identityをstandard displayName implementation policyで運ぶ / 私有typed Vulkan APIを別承認 / 永続範囲をsession内へ変更 | 標準はpersistent ID無し。最後の案は保存・再起動目標の範囲判断。p002/p003/p005 |
+| D-ID | main技術採択A2: local PCI segment:BDF+kind+physical DDI port keyをnative name→standard displayNameへ | 同machine/同PCI portに限定。mode/capability再validate、scheme拒否。私有API不採用、UUID能力は別。p002/p003/p005 |
 | D-ATOMIC | logical ownerの同時更新を受入解釈 / 物理重複無しで短い不表示期間を許容しsource completionを追加 / 物理2head同時latchを追加要求 | 現標準/driverには同時latch保証無し。p003/p004/p007/p008 |
-| D-BOOT | main通常技術採択: 保存優先、初回全接続extended+internal anchor | 旧`auto/hdmi/edp`起動overrideをdesktopでどう読むかのcompatibilityだけ残る。p002/p004/p005 |
+| D-BOOT | main通常技術採択: 保存優先、初回全接続extended+internal anchor。旧hdmi/edpは初期preferred anchor | 全connected inventoryを隠すdisable指定に転用しない。p002/p004/p005 |
 | D-PORT | main通常技術採択: 最初の受け入れfixtureはeDP+HDMI | 全接続要件から他portを削除した判断ではない。Type-C/DP/MSTの未移植/後続不足を明記し成功を主張しない。現fixture不明。p002/p008 |
 | D-LAYOUT | main通常技術採択: edge snap、非重複、辺で連結 | signed origin/half-open/shared edgeを検証。p004/p006/p007 |
 | D-REC | main通常技術採択: output layoutだけ復元、退避窓は現ownerに保持 | 0台park→1台復帰を含む。p007/p008 |
 | D-AUTH | main通常技術採択: active session同UID変更許可、nonactive/greeter拒否、Settings限定secret無し | OS-specific credential検査を実装。既存tokenを転用しない。p005 |
 
-Authority: 2026-10-02 mainから本agentへの通常技術設計採択message（D-BOOT/LAYOUT/REC/AUTH/PORT）。D-IDはstandard短port key案を詳細化し、私有Vulkan拡張はmainが不採用。D-ATOMICはuser回答待ちで未採択。mainへ材料を送付済み。[裁量境界](identity-completion.md#3-main技術裁量へ渡す通常提案)を参照。全7件をuser必須選択にはしない。material architecture/要求解釈/受け入れ範囲は既存authorityと照合し、main技術裁量の通常採択はsourceを記録する。未決を受け入れ条件の緩和で埋めない。
+Authority: 2026-10-02 mainから本agentへの通常技術設計採択message（D-BOOT/LAYOUT/REC/AUTH/PORT）。D-ID A2と旧boot preferred anchorもmainが採択、私有Vulkan拡張は不採用。D-ATOMICはuser回答待ちで未採択。mainへ材料を送付済み。[裁量境界](identity-completion.md#3-main技術裁量へ渡す通常提案)を参照。全7件をuser必須選択にはしない。material architecture/要求解釈/受け入れ範囲は既存authorityと照合し、main技術裁量の通常採択はsourceを記録する。未決を受け入れ条件の緩和で埋めない。
 
 ## 一次仕様の確認時点とvalidity
 
