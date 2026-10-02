@@ -1,0 +1,37 @@
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: ^ZWL GLASS request move surface=[0-9]+$ ok
+log: POPUPPROBE move ok
+log: ZWL GLASS request move surface= ok
+log: ZWL GLASS moved surface=[0-9]+ x=540 y=393 ok
+check: (740,548) want 2b3444 got 2b3444 ok
+check: build/p8-q577/geometry-handshake-1/moved.png 1280x800 PASS
+diagnostic: resize start count before=0 needed=1 observed=1
+log: POPUPPROBE resize bottom-right ok
+log: ZWL RESIZE start surface=[0-9]+ edges=10 width=400 height=300 ok
+log: POPUPPROBE configure window width=[0-9]+ height=[0-9]+ states=2 resizing=1 ok
+log: ZWL RESIZE end surface=[0-9]+ width=550 height=400 ok
+log: POPUPPROBE configure window width=550 height=400 states=1 resizing=0 ok
+check: (1080,778) want 2b3444 got 2b3444 ok
+check: build/p8-q577/geometry-handshake-1/resized.png 1280x800 PASS
+diagnostic: resize start count before=1 needed=2 observed=2
+log: POPUPPROBE resize left ok
+log: ZWL RESIZE end surface=[0-9]+ width=200 height=400 ok
+log: ZWL RESIZE settled surface=[0-9]+ x=890 y=393 width=200 height=400 ok
+check: (990,778) want 2b3444 got 2b3444 ok
+check: build/p8-q577/geometry-handshake-1/narrowed.png 1280x800 PASS
+diagnostic: resize start count before=2 needed=3 observed=3
+log: ZWL RESIZE end surface=[0-9]+ width=800 height=400 ok
+log: ZWL RESIZE settled surface=[0-9]+ x=290 y=393 width=800 height=400 ok
+check: (320,778) want 2b3444 got 2b3444 ok
+check: build/p8-q577/geometry-handshake-1/widened.png 1280x800 PASS
+log: POPUPPROBE pong off ok
+log: POPUPPROBE window-menu ok
+log: POPUPPROBE ping serial=[0-9]+ ignored ok
+log: ZWL PING unresponsive client=1 ok
+log: POPUPPROBE pong on answered=[1-9] ok
+log: ZWL PING responsive client=1 ok
+log: ZWL GLASS dock surface=[0-9]+ via=request ok
+log: ZWL GLASS undock surface=[0-9]+ via=request ok
+log: ZWL GLASS minimize surface= ok
+p076: PASS

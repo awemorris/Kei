@@ -1,0 +1,10 @@
+POPUPPROBE configure window width=0 height=0 states=1 resizing=0
+POPUPPROBE ready run=p
+POPUPPROBE focus window
+POPUPPROBE enter window x=200 y=107
+POPUPPROBE button window state=1 x=200 y=10
+POPUPPROBE move
+POPUPPROBE ping serial=6 answered
+POPUPPROBE button window state=0 x=300 y=110
+POPUPPROBE button window state=0 x=640 y=490
+POPUPPROBE configure window width=400 height=300 states=1 resizing=0

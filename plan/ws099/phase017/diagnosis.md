@@ -28,3 +28,15 @@ q538の元 `plan/history/ws105/q538/evidence/criteria/c9-p076/zdesktop.log` はc
 現行sourceではtoplevel.cの `press_held` がbuttons_down無しまたはserial不一致のrequestを拒否する。main.cはinputをまとめて読んでからclient requestを読む。固定時間のdragがclientからのresize request到着前にmotion/releaseを送る可能性は残るが、この時点では仮説。geometry失敗を描画待ちで隠す修正は行っていない。
 
 次: 未変更baselineの再現、`--log-frames`によるevent順序の観測、必要なら新規resize startをcountで待つ診断との比較。製品sourceは読取のみ。20単独/5C9と実機は未実施、Phase clearance無し。
+
+## 05:07 UTC checkpoint: request到着前のrelease
+
+- 未変更baseline-2もPASS。`--log-frames`を足した元のp076全手順も1回PASS。各settledから次のcomposeはlog上1frameで、今回の成功試料からpixel待ちだけの修正を採用する根拠は無い。
+- menu手順を省略しmap直後に同じstage7 move入力を送る診断で、**遅延注入より前に** `ZWL GLASS request move surface=8 refused=no-press` とexpected moved log MISSINGを再現。[試験出力](evidence/natural-move-no-press.txt)、[compositor全log](evidence/natural-move-no-press-frames.log)、[probe全log](evidence/natural-move-no-press-probe.log)。初期map440,293、button press local200,10、release local300,110。probeはmove要求とpongを出すがcompositorはheld無しとして拒否する。
+- moved画素740,548は元の440,293 / 400x300の範囲にも含まれるためPASSした。expected moved logはMISSINGのままなので全試験のFAILは維持される。この1画素だけではmove成功を証明しない。
+- 上記試料は短縮手順であり、全p076の自然再現率とは分ける。元のmenu操作で経過する時間が無い初期条件。後続cornerの操作は既にmove未達なので判定に使用しない。
+- 遅延注入のprototypeはPID取得が空で、STOP/CONT信号は有効なtest compositorへ送られなかった。後続ジェスチャーが一部進んだ後でhost scriptを停止して証拠回収した。**注入による416幅の因果証明は得ていない**。その部分を再現証拠に転用しない。
+- 同じ短縮初期条件で、button held中の新規move requestとresize-start count（0→1→2→3）を観測してからmotion/releaseを送る診断は1回PASS。move540,393、550/200/800幅と各期待settled geometry・画素を維持。[比較出力](evidence/geometry-handshake-1.txt)。このprototypeはtimeout時のabort/transport上限をまだfinal-reviewしていないため、共有p076へ適用していない。
+- mainの05:04 UTC通知: 現行main `5ac9b753d` のfresh passthrough-demo build warning0、wayland hash `2cf785aea72e344ba1f957ba481328d87afcdb62d01f130ddf65fa7bc47a5732` が今回imageのbinaryと一致。対象compositorのcurrent build一致を支持するが、kernel/config/image全体の証明には使わない。
+
+次: held中の新規requestを有限に待ち、timeout時はreleaseしてFAIL終了する診断に整える。追加注入なしでgeometry基準を保った比較を行う。mainの追加指示によりrequest handshakeはq577内のharness同期候補、製品sourceは読取だけ。単独20/C9 5はまだ未実施。

@@ -1,0 +1,17 @@
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: POPUPPROBE move ok
+log: ZWL GLASS request move surface= ok
+log: ZWL GLASS moved surface=[0-9]+ x=540 y=393 MISSING (found 0)
+check: (740,548) want 2b3444 got 2b3444 ok
+check: build/p8-q577/late-two-moves/moved.png 1280x800 PASS
+log: POPUPPROBE resize bottom-right MISSING (found 0)
+log: ZWL RESIZE start surface=[0-9]+ edges=10 width=400 height=300 MISSING (found 0)
+log: POPUPPROBE configure window width=[0-9]+ height=[0-9]+ states=2 resizing=1 MISSING (found 0)
+log: ZWL RESIZE end surface=[0-9]+ width=550 height=400 MISSING (found 0)
+log: POPUPPROBE configure window width=550 height=400 states=1 resizing=0 MISSING (found 0)
+check: (1080,778) want 2b3444 got dadda4 DIFFERS
+check: build/p8-q577/late-two-moves/resized.png 1280x800 FAIL
+diagnostic: compositor= mode=two-moves
+log: ZWL RESIZE start surface=[0-9]+ edges=4 MISSING (found 0)
+log: POPUPPROBE resize left MISSING (found 0)
