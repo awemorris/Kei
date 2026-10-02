@@ -1,11 +1,11 @@
 <!-- awesome-plan project=zedbsd record=ws005-p018 -->
 # ws005-p018: ベータ1 の WiFi の利用者の流れの調査と契約
 
-Status: planned
+Status: cleared（q596-i01、P1、2026-10-02。調査と案。疑い 1 は source の読みだけで未検証。方式はユーザーの判断待ち）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Focused goal: fg019（ベータ1）
-Queue: none（未承認）
+Queue: q596 / q596-i01（P1）
 目安: 2〜3h（調査と設計だけ、実装はしない）
 
 ## 範囲
@@ -47,3 +47,15 @@ Queue: none（未承認）
 ## 未決の判断
 
 - 2 の案（利用者の鍵の扱いと login 後の自動の再接続）はユーザーの判断。このPhaseは選択肢と推奨を出すまで。
+
+## 結果（q596-i01、P1、2026-10-02、base `a768b804c`）
+
+- 成果: [flow.md](flow.md)（現在の流れを file:行つきで、B1〜B4 の足りない点、案の比較と推奨、p019 の範囲、ユーザーの判断の一覧）。source は変えていない。
+- 要点（source の読み、未検証）: 起動の `net startup`（root）が WiFi の方針の所有者を root にする。その後の利用者の Settings の鍵つき join は、
+  `PROFILES_CHANGED` が捨てられ、`CONNECT` が `owner_allowed` で EPERM。Settings の案内「off して on」の off も EPERM で、UI から抜けられない。
+  login の時に利用者の store を有効にする仕組みが無く、再起動の後に自動で戻らない（B2）。有線と WiFi の default route は metric 無しで並び、
+  resolver は後勝ちで WiFi の切断で消えうる（B3）。
+- 推奨: login 時に利用者として ENABLE（logout で root へ）＋ join の前に必要なら ENABLE（A＋A'）。有線優先と networkd による route/resolver の一元化。
+- 確かめ: 疑い 1 は **未検証**。Q1 の一時停止（2026-10-02、main の build/ の整理で新しい build・QEMU を止める）のため、本物の networkd と偽の
+  `/sbin/wifi` の子の QEMU の試験はしていない。host の試験も無し（`owner_allowed` は networkd の static で、host の器が無い）。手順は flow.md の 4・5。
+- ユーザーの判断: flow.md の 6（方式 A/A'/B/C、system bar の鍵の入力、有線優先、複数利用者で接続を奪ってよいか）。
