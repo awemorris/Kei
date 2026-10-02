@@ -1,0 +1,4 @@
+{"event": "gtk-version", "pid": 901, "version": "4.18.6"}
+{"event": "focus", "pid": 901, "active": true}
+{"event": "snapshot", "pid": 901, "renderer": "GskCairoRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+Using renderer 'GskCairoRenderer' for surface 'GdkWaylandToplevel'

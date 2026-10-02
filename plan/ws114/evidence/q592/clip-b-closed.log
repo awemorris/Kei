@@ -1,0 +1,4 @@
+{"event": "focus", "pid": 901, "active": true}
+{"event": "close-request", "pid": 901}
+{"event": "focus", "pid": 901, "active": false}
+824 python3 /tmp/gtk4-baseline.py

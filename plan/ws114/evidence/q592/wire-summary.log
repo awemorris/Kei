@@ -1,0 +1,9 @@
+wire_exit=0
+PASS no decoration object
+PASS mode events/configure serials/commit boundaries
+PASS native opt-in and withdrawal
+PASS explicit CSD takes precedence over native opt-in
+PASS expected duplicate protocol error
+PASS expected invalid protocol error
+15
+737 /opt/keiland/bin/wayland --socket=/run/p3-q592/wayland-q592 --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm

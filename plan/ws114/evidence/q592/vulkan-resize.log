@@ -1,0 +1,5 @@
+[1682108.767] xdg_toplevel#46.configure(764, 500, array[8])
+[1682188.436] xdg_toplevel#46.configure(772, 505, array[8])
+[1682286.161] xdg_toplevel#46.configure(780, 510, array[8])
+[1682383.688] xdg_toplevel#46.configure(780, 510, array[4])
+[1682383.663] {Default Queue} wl_pointer#6.button(174, 392593, 272, 0)

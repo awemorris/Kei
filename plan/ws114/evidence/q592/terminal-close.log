@@ -1,0 +1,4 @@
+    PID COMMAND
+terminal-exited
+ZWL GLASS dock surface=16 via=button buttons=775,729,683 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=16 via=button x=182 y=127

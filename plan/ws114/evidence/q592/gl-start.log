@@ -1,0 +1,7 @@
+{"event": "gtk-version", "pid": 824, "version": "4.18.6"}
+{"event": "focus", "pid": 824, "active": true}
+{"event": "snapshot", "pid": 824, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+0
+(python3:824): Gsk-WARNING **: 10:53:11.582: The old GL renderer has been removed. Try GSK_RENDERER=help
+Environment variable GSK_RENDERER=gl set, trying GskGLRenderer
+Using renderer 'GskGLRenderer' for surface 'GdkWaylandToplevel'
