@@ -6,11 +6,18 @@
  */
 
 /*
- * The host test of the zedBSD CMSG_NXTHDR (plan/ws115/proposed/libc-cmsg-nxthdr.diff).
+ * The host test of the zedBSD CMSG_NXTHDR (include/libc/sys/socket.h).
  *
  * It is compiled against zedBSD's own <sys/socket.h> with the build
  * machine's compiler and calls no library function, so the exit status is
- * the result: 0 when every boundary case answers as expected.
+ * the result: 0 when every boundary case answers as expected.  From the
+ * repository root, with gcc or clang as CC:
+ *
+ *   $CC -std=c11 -Wall -Wextra -DKERN_UAPI_NATIVE -nostdinc \
+ *       -isystem include/libc -isystem include \
+ *       -isystem "$($CC -print-file-name=include)" \
+ *       -o cmsg-nxthdr-test plan/ws115/tests/cmsg-nxthdr-test.c
+ *   ./cmsg-nxthdr-test
  */
 
 #include <sys/socket.h>
