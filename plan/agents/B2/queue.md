@@ -17,3 +17,5 @@ Upcoming Work Outlook: 所有外findingsの対応、実機p012と最終guestを�
 Sync: WIP/no push、共有projection/GitHubはA所有。同じagent contextで継続。
 
 Start receipt: 2026-10-02 07:52:18 UTC、snapshot照合とB main FFを確認。実行担当は同じcontextで継続。
+
+MR B2-q588-01: base60201ab8 / submitted8beb7e31 / B integrated71bf741a / ACK。挙動を保持する規約差分とhost4/warning0 build/boundary PASSをreview。inventory/full manual tableは進行中、item/whole clearanceをまだ主張しない。[checkpoint](../../ws094/phase007/q588-checkpoint1.md)。

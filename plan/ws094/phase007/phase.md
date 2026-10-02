@@ -2,7 +2,7 @@
 
 # ws094-p007: 全文の規約と回帰（WS094 の最後）
 
-Status: planned（2026-10-01 に phase.md を作った。手順は下）
+Status: in-progress（q588 source/host/build partial、whole基準は未達）
 Disposition: normal
 Parent: [WS094](../ws.md)
 Queue: q588-i01（source/host/build partial、全guestと実機gateは保持）
