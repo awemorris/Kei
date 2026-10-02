@@ -8,3 +8,5 @@ For this first N=3 cycle, reserve q581–q583 for B and q584–q586 for A. B's l
 A active scope: q584/WS074 p172 final review, q585/WS112 p001 contract research, q586/WS113 p001 display design research. A2/A3 edit only their WS documentation and evidence. A1 edits browser/libbrowser and WS074 source/test evidence. B owns its assigned desktop/GTK/bug work; no A runtime claims shared hardware.
 
 No next Queue is automatically authorized. WIP commits, no push. Shared plans/GitHub remain A-owned; B projection changes are handed to A in commits for review/integration.
+
+Each `approved-phase.md` is a byte-preserved approval snapshot. Its relative links retain the original Phase directory as their base, specified by the `Phase:` link in the accompanying lane Queue; resolve links there instead of rewriting the approved bytes. The current Phase and lane are the navigable records. All six snapshot hashes were checked on A after B record import.
