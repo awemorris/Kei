@@ -1,0 +1,74 @@
+{
+  "build_command": "BROWSER_HOST_BUILD=build/p10-browser2 sh plan/ws074/tests/host-build.sh plain",
+  "build_exit": 0,
+  "build_warnings": 0,
+  "tests": [
+    {
+      "test": "host-attribute-namespace",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-attribute-namespace-plain.log"
+    },
+    {
+      "test": "host-form-owner",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-form-owner-plain.log"
+    },
+    {
+      "test": "host-form-collection",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-form-collection-plain.log"
+    },
+    {
+      "test": "host-node-cloning",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-node-cloning-plain.log"
+    },
+    {
+      "test": "host-radio-state",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-radio-state-plain.log"
+    },
+    {
+      "test": "host-select",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-select-plain.log"
+    },
+    {
+      "test": "host-option-state",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-option-state-plain.log"
+    },
+    {
+      "test": "host-select-collection",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-select-collection-plain.log"
+    },
+    {
+      "test": "host-xml-node",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-xml-node-plain.log"
+    },
+    {
+      "test": "host-xml-dom",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-xml-dom-plain.log"
+    },
+    {
+      "test": "host-xml-binding",
+      "variant": "plain",
+      "exit": 0,
+      "log": "host-xml-binding-plain.log"
+    }
+  ],
+  "bound": "11 existing affected groups, 120 seconds/group, serialized after builder finished; no relink while tests execute."
+}

@@ -27,9 +27,11 @@ dom_cdata_create(
 
 	/* The native factory preserves CDATA identity rather than converting it to ordinary Text. */
 	status = xml_character_create(document, DOM_CDATA_SECTION, NULL, units, length, created);
+	if (status != 0)
+		return status;
 
-	/* Succeeded or failed: the shared helper owns every temporary collector registration. */
-	return status;
+	/* Succeeded: the caller owns a native CDATA node with no temporary roots left behind. */
+	return 0;
 }
 
 /*
@@ -45,16 +47,22 @@ dom_pi_create(
 {
 	int status;
 
-	/* Native target validation belongs to the parser or later public factory caller. */
+	/* Missing output storage cannot receive a completed processing instruction. */
 	if (created == NULL)
 		return EINVAL;
+
+	/* Leave the output empty unless a validated native instruction is constructed. */
 	*created = NULL;
 	if (target == NULL)
 		return EINVAL;
-	status = xml_character_create(document, DOM_PROCESSING_INSTRUCTION, target, units, length, created);
 
-	/* Succeeded or failed: target ownership never depends on an unrooted caller local. */
-	return status;
+	/* Copy the character data while the validated native target stays rooted. */
+	status = xml_character_create(document, DOM_PROCESSING_INSTRUCTION, target, units, length, created);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the instruction owns its target independently of the caller's local. */
+	return 0;
 }
 
 /*
@@ -67,13 +75,15 @@ dom_is_character_data(
 	/* Missing nodes have no character buffer. */
 	if (node == NULL)
 		return 0;
+
+	/* Every native CharacterData subtype stores content outside its child list. */
 	if (node->type == DOM_TEXT ||
 	    node->type == DOM_CDATA_SECTION ||
 	    node->type == DOM_PROCESSING_INSTRUCTION ||
 	    node->type == DOM_COMMENT)
 		return 1;
 
-	/* Rejected: all other native kinds expose children rather than character storage. */
+	/* Succeeded: this remaining native kind is outside the CharacterData category. */
 	return 0;
 }
 
@@ -87,10 +97,12 @@ dom_is_text(
 	/* Only these two native kinds contribute text content. */
 	if (node == NULL)
 		return 0;
+
+	/* CDATA preserves Text behavior while retaining its distinct native identity. */
 	if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION)
 		return 1;
 
-	/* Rejected: comments and processing instructions are not Text. */
+	/* Succeeded: this remaining native kind does not contribute Text content. */
 	return 0;
 }
 
@@ -111,14 +123,20 @@ xml_character_create(
 	struct vm_cell *target_root;
 	int status;
 
-	/* Invalid native inputs cannot publish a partial node or overflow the copied UTF16 buffer. */
+	/* Missing output storage cannot receive a completed native character node. */
 	if (created == NULL)
 		return EINVAL;
+
+	/* Keep the caller's output empty if the requested owner is invalid. */
 	*created = NULL;
 	if (document == NULL)
 		return EINVAL;
+
+	/* Nonempty character data requires readable caller-owned input storage. */
 	if (length != 0 && units == NULL)
 		return EINVAL;
+
+	/* Reserve one terminating unit without overflowing the copied UTF16 allocation. */
 	if (length > (size_t)-1 / sizeof(*units) - 1U)
 		return EOVERFLOW;
 
@@ -128,9 +146,13 @@ xml_character_create(
 	target_root = NULL;
 	if (target != NULL)
 		target_root = &target->cell;
+
+	/* Protect the actual owner before the factory can trigger collection. */
 	status = vm_heap_add_root(heap, &document_root);
 	if (status != 0)
 		return status;
+
+	/* Protect an optional target with a nullable slot and undo the owner root on failure. */
 	status = vm_heap_add_root(heap, &target_root);
 	if (status != 0) {
 		vm_heap_remove_root(heap, &document_root);
@@ -150,6 +172,8 @@ xml_character_create(
 	data->target = target;
 	node->type = (uint16_t)type;
 	*created = node;
+
+	/* Release temporary protection after the complete node is available to the caller. */
 	vm_heap_remove_root(heap, &target_root);
 	vm_heap_remove_root(heap, &document_root);
 

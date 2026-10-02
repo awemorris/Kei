@@ -37,20 +37,29 @@ dom_option_select(
 	grouped = 0;
 	ancestor = option->parent;
 	while (ancestor != NULL) {
+		/* Datalist descendants do not participate in an outer select's option list. */
 		actual = select_html(ancestor, DOM_TAG_DATALIST);
 		if (actual)
 			return NULL;
+
+		/* A separator prevents a deeper option from joining an outer select. */
 		actual = select_html(ancestor, DOM_TAG_HR);
 		if (actual)
 			return NULL;
+
+		/* Nested options do not supply members of their outer select. */
 		actual = select_html(ancestor, DOM_TAG_OPTION);
 		if (actual)
 			return NULL;
+
+		/* At most one group can occur between an option and its owner. */
 		actual = select_html(ancestor, DOM_TAG_OPTGROUP);
 		if (actual) {
 			/* A second group does not belong to the option list of an outer select. */
 			if (grouped)
 				return NULL;
+
+			/* Remember the group so a second one terminates the ownership search. */
 			grouped = 1;
 		}
 
@@ -58,6 +67,8 @@ dom_option_select(
 		actual = select_html(ancestor, DOM_TAG_SELECT);
 		if (actual)
 			return ancestor;
+
+		/* Search the next ordinary ancestor after this one supplied no select. */
 		ancestor = ancestor->parent;
 	}
 
@@ -83,6 +94,7 @@ dom_select_option_next(
 
 	/* Walk ordinary descendants and return only options currently owned by this select. */
 	while (node != NULL) {
+		/* A child starts the next subtree before any following sibling is visited. */
 		if (node->first_child != NULL) {
 			node = node->first_child;
 		} else {
@@ -93,6 +105,8 @@ dom_select_option_next(
 			/* The root's next sibling belongs to a different option list. */
 			if (node == select)
 				return NULL;
+
+			/* Visit the following subtree after finding an ancestor with a sibling. */
 			node = node->next;
 		}
 
@@ -124,6 +138,8 @@ dom_select_reset(
 	/* Optional detached owners and multiple-select lists need no single-selection fallback. */
 	if (select == NULL)
 		return;
+
+	/* Multiple selection preserves every member's independent selectedness. */
 	attribute = dom_attribute_ascii((struct dom_element *)select, "multiple");
 	if (attribute != NULL)
 		return;
@@ -133,11 +149,14 @@ dom_select_reset(
 	first = NULL;
 	node = dom_select_option_next(select, NULL);
 	while (node != NULL) {
+		/* Keep only the last explicitly selected member of this single-select list. */
 		option = (struct dom_element *)node;
 		if (option->option_selected) {
 			/* Later selected members take precedence during ordinary normalization. */
 			if (last != NULL)
 				last->option_selected = 0;
+
+			/* Retain this selected candidate until a later selected member replaces it. */
 			last = option;
 		}
 
@@ -154,8 +173,13 @@ dom_select_reset(
 
 	/* Explicit list-box display sizes allow a list to have no selected option. */
 	size = select_display_size(select);
-	if (last == NULL && first != NULL && size == 1)
+	if (last == NULL &&
+	    first != NULL &&
+	    size == 1)
 		first->option_selected = 1;
+
+	/* Succeeded: this single-select list now has its required explicit or fallback selection. */
+	return;
 }
 
 /*
@@ -169,18 +193,32 @@ dom_option_set_selected(
 {
 	struct dom_node *owner;
 
-	/* Only exact native options participate in this allocation-free state transition. */
-	selected = !!selected;
+	/* Normalize every nonzero request to the native selectedness flag without allocating. */
+	if (selected != 0)
+		selected = 1;
+
+	/* Native option accessors observe the assigned state independently of its content attribute. */
 	option->option_selected = selected;
+
+	/* Script assignment prevents subsequent selected-attribute changes from replacing current state. */
 	if (dirty)
 		option->option_dirty = 1;
+
+	/* Resolve the live owner after the option's current selectedness is published. */
 	owner = dom_option_select(&option->node);
 
 	/* A new single-select selection clears peers without dirtying their default reflection. */
 	if (selected)
 		select_prefer(owner, &option->node);
+
+	/* Restore the owner's fallback rules after either selection or deselection. */
 	dom_select_reset(owner);
+
+	/* Invalidate generation-based Document observers after the native option transition. */
 	option->node.document->generation++;
+
+	/* Succeeded: current option state and its owner's selection rules agree. */
+	return;
 }
 
 /*
@@ -207,6 +245,8 @@ dom_select_tree_changed(
 			owner = dom_option_select(node);
 			old = option->option_select;
 			option->option_select = owner;
+
+			/* Reconcile both cached and current owners after a membership change. */
 			if (old != owner) {
 				/* The last selected incoming subtree member wins over an existing destination peer. */
 				preferred = select_tree_preferred(root, owner);
@@ -219,6 +259,9 @@ dom_select_tree_changed(
 		/* Visit every ordinary descendant, stopping before the root's next sibling. */
 		node = select_subtree_next(root, node);
 	}
+
+	/* Succeeded: every incoming option cache names its actual current ordinary owner. */
+	return;
 }
 
 /*
@@ -243,6 +286,7 @@ dom_select_attribute_changed(
 	node = &element->node;
 	actual = select_html(node, DOM_TAG_OPTION);
 	if (actual) {
+		/* Only a selected-attribute presence transition can change default selectedness. */
 		matches = vm_string_equal_ascii(name, "selected");
 		if (matches && before != after) {
 			/* Dirty selectedness is independent of subsequent default attribute changes. */
@@ -272,7 +316,9 @@ dom_select_attribute_changed(
 	/* Group disabling affects its owning option list without creating reflected IDL features. */
 	actual = select_html(node, DOM_TAG_OPTGROUP);
 	matches = vm_string_equal_ascii(name, "disabled");
-	if (actual && matches && before != after) {
+	if (actual &&
+	    matches &&
+	    before != after) {
 		owner = select_ancestor(node);
 		dom_select_reset(owner);
 		return;
@@ -282,6 +328,8 @@ dom_select_attribute_changed(
 	actual = select_html(node, DOM_TAG_SELECT);
 	if (!actual)
 		return;
+
+	/* Size changes can add or suppress automatic single-select fallback. */
 	matches = vm_string_equal_ascii(name, "size");
 	if (matches) {
 		dom_select_reset(node);
@@ -292,15 +340,22 @@ dom_select_attribute_changed(
 	matches = vm_string_equal_ascii(name, "multiple");
 	if (!matches || before == after)
 		return;
+
+	/* Removing multiple preserves the first explicit selection before normal fallback runs. */
 	if (!after) {
 		kept = 0;
+
+		/* Visit every current option and keep only the earliest selected member. */
 		member = dom_select_option_next(node, NULL);
 		while (member != NULL) {
+			/* Unselected members cannot consume the one preserved selection. */
 			option = (struct dom_element *)member;
 			if (option->option_selected) {
 				/* Only the first existing selection survives this attribute transition. */
 				if (kept)
 					option->option_selected = 0;
+
+				/* Later selected members must yield to the selection already preserved. */
 				kept = 1;
 			}
 
@@ -311,6 +366,9 @@ dom_select_attribute_changed(
 
 	/* Added or removed multiple updates single-selection fallback according to the new attribute. */
 	dom_select_reset(node);
+
+	/* Succeeded: current selectedness follows the committed select-family attribute. */
+	return;
 }
 
 /* Distinguishes exact HTML local names from folded XML and foreign tags. */
@@ -326,11 +384,15 @@ select_html(
 	/* Optional nodes and non-elements cannot own or join an option list. */
 	if (node == NULL || node->type != DOM_ELEMENT)
 		return 0;
+
+	/* Inspect namespace and tag fields only after native element identity is established. */
 	element = (const struct dom_element *)node;
 
 	/* Internal folded tag codes never override namespace or exact local case. */
 	if (element->ns != DOM_NS_HTML || element->tag != tag)
 		return 0;
+
+	/* Exact local spelling rejects case lookalikes in XML Documents. */
 	name = dom_tag_name(tag);
 	actual = vm_string_equal_ascii(element->local_name, name);
 
@@ -351,20 +413,29 @@ select_ancestor(
 	grouped = 0;
 	ancestor = node->parent;
 	while (ancestor != NULL) {
+		/* Options cannot act as transparent containers for an outer option list. */
 		actual = select_html(ancestor, DOM_TAG_OPTION);
 		if (actual)
 			return NULL;
+
+		/* Datalists terminate the search for a select owner. */
 		actual = select_html(ancestor, DOM_TAG_DATALIST);
 		if (actual)
 			return NULL;
+
+		/* Separators block a nested option list from an outer select. */
 		actual = select_html(ancestor, DOM_TAG_HR);
 		if (actual)
 			return NULL;
+
+		/* A second group makes the ancestor chain ineligible for option membership. */
 		actual = select_html(ancestor, DOM_TAG_OPTGROUP);
 		if (actual) {
 			/* Two nested groups block membership of the outer select. */
 			if (grouped)
 				return NULL;
+
+			/* Remember this group before searching farther toward the select. */
 			grouped = 1;
 		}
 
@@ -372,6 +443,8 @@ select_ancestor(
 		actual = select_html(ancestor, DOM_TAG_SELECT);
 		if (actual)
 			return ancestor;
+
+		/* Continue across an ordinary wrapper which supplied no owner or blocker. */
 		ancestor = ancestor->parent;
 	}
 
@@ -396,23 +469,34 @@ select_disabled(
 	/* The nearest optgroup contributes disability until a blocking container or select is reached. */
 	ancestor = node->parent;
 	while (ancestor != NULL) {
+		/* A reached select contributes no option disability of its own. */
 		actual = select_html(ancestor, DOM_TAG_SELECT);
 		if (actual)
 			return 0;
+
+		/* A containing option ends the search before any outer group can disable this one. */
 		actual = select_html(ancestor, DOM_TAG_OPTION);
 		if (actual)
 			return 0;
+
+		/* A datalist isolates its descendants from an outer optgroup. */
 		actual = select_html(ancestor, DOM_TAG_DATALIST);
 		if (actual)
 			return 0;
+
+		/* A separator isolates its descendants from an outer optgroup. */
 		actual = select_html(ancestor, DOM_TAG_HR);
 		if (actual)
 			return 0;
+
+		/* Only the nearest eligible optgroup can supply inherited option disability. */
 		actual = select_html(ancestor, DOM_TAG_OPTGROUP);
 		if (actual) {
 			attribute = dom_attribute_ascii((struct dom_element *)ancestor, "disabled");
 			if (attribute != NULL)
 				return 1;
+
+			/* Succeeded: the nearest group is enabled, so outer groups do not participate. */
 			return 0;
 		}
 
@@ -451,6 +535,8 @@ select_display_size(
 		    unit != '\n' &&
 		    unit != '\f')
 			break;
+
+		/* Consume this permitted whitespace unit before inspecting the integer token. */
 		offset++;
 	}
 
@@ -475,9 +561,15 @@ select_display_size(
 		unit = vm_string_at(attribute, offset);
 		if (unit < '0' || unit > '9')
 			break;
+
+		/* Remember a real digit so an empty numeric token falls back to the default. */
 		digit = 1;
+
+		/* Saturate after the greater-than-one class without overflowing a long digit string. */
 		if (size < 2) {
 			size = size * 10 + unit - '0';
+
+			/* All values above one have the same fallback behavior. */
 			if (size > 2)
 				size = 2;
 		}
@@ -487,7 +579,9 @@ select_display_size(
 	}
 
 	/* Invalid unsigned prefixes use the default instead of a negative display size. */
-	if (!digit || (negative && size != 0))
+	if (!digit ||
+	    (negative &&
+	     size != 0))
 		return 1;
 
 	/* Succeeded: this finite class preserves exactly whether the normative display size is one. */
@@ -507,6 +601,8 @@ select_prefer(
 	/* Detached owners and absent preferred candidates need no exclusive selection. */
 	if (select == NULL || preferred == NULL)
 		return;
+
+	/* Multiple-select owners preserve independent selectedness for every peer. */
 	attribute = dom_attribute_ascii((struct dom_element *)select, "multiple");
 	if (attribute != NULL)
 		return;
@@ -514,11 +610,17 @@ select_prefer(
 	/* Clear all other current option members, including disabled ones, without touching defaults. */
 	node = dom_select_option_next(select, NULL);
 	while (node != NULL) {
+		/* Preserve the preferred member and clear only other current selections. */
 		option = (struct dom_element *)node;
 		if (node != preferred)
 			option->option_selected = 0;
+
+		/* Derive the next peer from live ordinary ownership without a cached list. */
 		node = dom_select_option_next(select, node);
 	}
+
+	/* Succeeded: only the requested option remains selected in this single-select owner. */
+	return;
 }
 
 /* Advances through a finite ordinary subtree without entering separate template contents. */
@@ -534,6 +636,8 @@ select_subtree_next(
 	/* Find a later subtree without crossing the supplied root's sibling boundary. */
 	while (node != root && node->next == NULL)
 		node = node->parent;
+
+	/* The root's following sibling belongs to a different subtree. */
 	if (node == root)
 		return NULL;
 
@@ -563,6 +667,7 @@ select_tree_preferred(
 	while (node != NULL) {
 		html = select_html(node, DOM_TAG_OPTION);
 		if (html) {
+			/* A selected incoming option is preferred only for its actual current owner. */
 			option = (struct dom_element *)node;
 			actual = dom_option_select(node);
 			if (actual == owner && option->option_selected)

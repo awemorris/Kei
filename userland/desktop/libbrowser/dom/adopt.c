@@ -36,6 +36,8 @@ dom_adopt(
 
 	/* Original Document observers repair references while every old link still exists. */
 	dom_remove(node);
+
+	/* Transfers the prepared subtree without replacing its native identities. */
 	status = adopt_tree(document, node);
 	if (status != 0)
 		return status;
@@ -66,7 +68,9 @@ adopt_prepare(
 	}
 
 	/* Descendants may expose an old heterogeneous tree produced before adoption was supported. */
-	for (child = node->first_child; child != NULL; child = child->next) {
+	for (child = node->first_child;
+	     child != NULL;
+	     child = child->next) {
 		status = adopt_prepare(document, child);
 		if (status != 0)
 			return status;
@@ -75,6 +79,8 @@ adopt_prepare(
 	/* Existing template content graphs use this engine's same-Document fragment ownership model. */
 	if (node->type == DOM_ELEMENT) {
 		element = (struct dom_element *)node;
+
+		/* Validate the separately owned template fragment before any node is unlinked. */
 		if (element->content != NULL) {
 			status = adopt_prepare(document, element->content);
 			if (status != 0)
@@ -101,11 +107,15 @@ adopt_tree(
 		status = dom_removal_move_root(node, document);
 		if (status != 0)
 			return status;
+
+		/* Publish the owner only after all subscriptions follow the destination. */
 		node->document = document;
 	}
 
 	/* Each actual descendant receives the new current Document before later host callbacks. */
-	for (child = node->first_child; child != NULL; child = child->next) {
+	for (child = node->first_child;
+	     child != NULL;
+	     child = child->next) {
 		status = adopt_tree(document, child);
 		if (status != 0)
 			return status;
@@ -114,6 +124,8 @@ adopt_tree(
 	/* Nested template content fragments follow their existing owner model without entering tree order. */
 	if (node->type == DOM_ELEMENT) {
 		element = (struct dom_element *)node;
+
+		/* Transfer template storage even though ordinary child traversal cannot reach it. */
 		if (element->content != NULL) {
 			status = adopt_tree(document, element->content);
 			if (status != 0)

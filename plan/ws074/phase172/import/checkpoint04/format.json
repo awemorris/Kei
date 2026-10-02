@@ -1,0 +1,43 @@
+{
+  "tool": "Debian clang-format version 19.1.7 (3+b1)",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/dom/adopt.c",
+      "formatted_sha256": "8041a9d39a2d0a3599d0d40eeabe10f2999af6f951a33da9f6c9552b2b0c3275",
+      "final_sha256": "489a4fe605ac61302bbb4ea8dacf8a8f36298c834e9e3ce745b6eea25505170c",
+      "formatter_restoration_reviewed": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/attribute.c",
+      "formatted_sha256": "7f4a29e3ab16d83b62ff94b341130dd9bb6d88ba81f5a10eedbc7a914e94c926",
+      "final_sha256": "1b2b2de7965d0b326321255048dfb5da826cf0c7b54975d1491165912293f1d6",
+      "formatter_restoration_reviewed": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/form.c",
+      "formatted_sha256": "bd6b37fd7b641fb4948ea106bc4cc3ca4b43b88df7f65a7840fcd768b0cddd31",
+      "final_sha256": "487599bbefee3151b763351f3696619360109689d38e91c238760ca08ac53d3f",
+      "formatter_restoration_reviewed": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/xml.c",
+      "formatted_sha256": "1a53bbd217024f2f244a327cb3d8646dc3835d2171fc41473c36705081f075f7",
+      "final_sha256": "7ff0f9fed4c25029e267406e497deeefc2594c29b73c6611642ef765fbc3cd7c",
+      "formatter_restoration_reviewed": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/radio.c",
+      "formatted_sha256": "fb257c81fabcf92d963b9c4d4b702635b2236641eda5c0fee4e4ba23d9c43e47",
+      "final_sha256": "039588e67f37ce93680e1abddbe8bed5a12d99377514bdc98438cf728b1592d1",
+      "formatter_restoration_reviewed": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/select.c",
+      "formatted_sha256": "65c191e4863fe902771dfb5d10462ce14bd1bfb50ef3e2050b45b930d8d9411e",
+      "final_sha256": "7ae91d25ce984782915d9a6c771b89b030f942775751fb21c9bf48f2f29fcc2a",
+      "formatter_restoration_reviewed": true
+    }
+  ],
+  "restoration": "Required argument tabs/definition lines, three-clause decision lines and readable immutable array rows restored after formatter comparison; other formatting retained."
+}

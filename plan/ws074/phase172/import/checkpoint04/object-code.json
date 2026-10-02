@@ -1,0 +1,101 @@
+{
+  "comparison_base": "25729c88ab4a2221113238256b9aa5bcaf5e26c8",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": [
+    "-std=gnu11",
+    "-O1",
+    "-g0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/p10-browser2/include",
+    "-I."
+  ],
+  "objcopy": "GNU objcopy (GNU Binutils for Debian) 2.44",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/dom/adopt.c",
+      "before": {
+        "source_sha256": "57873a3122325cd8eae077eedb8a032292f19cb9c890bc69c75d8c78d718e26c",
+        "text_sha256": "6e649dc49f49c947e7073a580067e34614c4f05bb44d3a63c716902991dbf913"
+      },
+      "after": {
+        "source_sha256": "489a4fe605ac61302bbb4ea8dacf8a8f36298c834e9e3ce745b6eea25505170c",
+        "text_sha256": "6e649dc49f49c947e7073a580067e34614c4f05bb44d3a63c716902991dbf913"
+      },
+      "text_equal": true,
+      "warnings": 0
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/attribute.c",
+      "before": {
+        "source_sha256": "705454ea982969fcc2be5f2d138ec2a870eb2ec267a65d5d358881c2b451a7c9",
+        "text_sha256": "a53d1c7ac3efc0b50787829237dbcb844a8d6750b8728ff6ff3401ee3cb70390"
+      },
+      "after": {
+        "source_sha256": "1b2b2de7965d0b326321255048dfb5da826cf0c7b54975d1491165912293f1d6",
+        "text_sha256": "a53d1c7ac3efc0b50787829237dbcb844a8d6750b8728ff6ff3401ee3cb70390"
+      },
+      "text_equal": true,
+      "warnings": 0
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/form.c",
+      "before": {
+        "source_sha256": "11f0fcef5c97036a2bfbf60188fa4c257e307ab553875dbbf1ed6b51b1ec6bf3",
+        "text_sha256": "9882a54a1f56d4ebb200553dc39e49baeaea0ef06e70e254e91d077401dad980"
+      },
+      "after": {
+        "source_sha256": "487599bbefee3151b763351f3696619360109689d38e91c238760ca08ac53d3f",
+        "text_sha256": "9882a54a1f56d4ebb200553dc39e49baeaea0ef06e70e254e91d077401dad980"
+      },
+      "text_equal": true,
+      "warnings": 0
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/xml.c",
+      "before": {
+        "source_sha256": "01691ca59a30bec51e6c57f53962bc6289e0cf071dc75cfa3277f1ea34a1ef55",
+        "text_sha256": "ad4fea1b7665258132b4a414614cccc519935d3db3086cba13a365159dbe0a49"
+      },
+      "after": {
+        "source_sha256": "7ff0f9fed4c25029e267406e497deeefc2594c29b73c6611642ef765fbc3cd7c",
+        "text_sha256": "ad4fea1b7665258132b4a414614cccc519935d3db3086cba13a365159dbe0a49"
+      },
+      "text_equal": true,
+      "warnings": 0
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/radio.c",
+      "before": {
+        "source_sha256": "579113388586aa5aebd7bc5be0ce298c29d4a9da07970bfca0a3c96be45ea646",
+        "text_sha256": "f29b8e38037708d1c7ba2c77340debb5c17a24cf0f37a372f0fcfeb6abac1cf0"
+      },
+      "after": {
+        "source_sha256": "039588e67f37ce93680e1abddbe8bed5a12d99377514bdc98438cf728b1592d1",
+        "text_sha256": "f29b8e38037708d1c7ba2c77340debb5c17a24cf0f37a372f0fcfeb6abac1cf0"
+      },
+      "text_equal": true,
+      "warnings": 0
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/select.c",
+      "before": {
+        "source_sha256": "1bb0733211983b76ff982ab72fedffe8191efebb1ec756935a1051402e99d99b",
+        "text_sha256": "e7b66a7ec7b0e65e93cc458b475c4be1b58ea3e6569e2f68882fb022638c695d"
+      },
+      "after": {
+        "source_sha256": "7ae91d25ce984782915d9a6c771b89b030f942775751fb21c9bf48f2f29fcc2a",
+        "text_sha256": "e7b66a7ec7b0e65e93cc458b475c4be1b58ea3e6569e2f68882fb022638c695d"
+      },
+      "text_equal": true,
+      "warnings": 0
+    }
+  ],
+  "limit": "Host GCC14.2 emitted .text equality is supporting behavior-preservation evidence for these six files. This is not a target compiler equivalence proof or full source conformance."
+}
