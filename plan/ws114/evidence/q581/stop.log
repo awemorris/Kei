@@ -1,0 +1,5 @@
+UTC 2026-10-02T07:25:23.053168+00:00
+Normal guest poweroff completed. Owned QEMU PID283995 absent and QEMU pidfile removed.
+State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+Owned overlay retained at /home/awe/zedBSD-worktrees/b1/build/b1-q581/overlay.qcow2. No guest.sh stop overlay deletion.
+Receipt writer initially attempted to read the pidfile after poweroff; QEMU had removed it. Absence checked directly using saved PID283995.

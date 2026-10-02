@@ -1,0 +1,92 @@
+{"event": "gtk-version", "pid": 1050, "version": "4.18.6"}
+{"event": "snapshot", "pid": 1050, "renderer": "GskVulkanRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "focus", "pid": 1050, "active": true}
+{"event": "target-text", "pid": 1050, "text": "v"}
+'DISPLAY' environment variable not set... skipping surface info
+==========
+VULKANINFO
+==========
+
+Vulkan Instance Version: 1.4.309
+
+
+Instance Extensions: count = 24
+-------------------------------
+VK_EXT_acquire_drm_display             : extension revision 1
+VK_EXT_acquire_xlib_display            : extension revision 1
+VK_EXT_debug_report                    : extension revision 10
+VK_EXT_debug_utils                     : extension revision 2
+VK_EXT_direct_mode_display             : extension revision 1
+VK_EXT_display_surface_counter         : extension revision 1
+VK_EXT_headless_surface                : extension revision 1
+VK_EXT_surface_maintenance1            : extension revision 1
+VK_EXT_swapchain_colorspace            : extension revision 5
+VK_KHR_device_group_creation           : extension revision 1
+VK_KHR_display                         : extension revision 23
+VK_KHR_external_fence_capabilities     : extension revision 1
+VK_KHR_external_memory_capabilities    : extension revision 1
+VK_KHR_external_semaphore_capabilities : extension revision 1
+VK_KHR_get_display_properties2         : extension revision 1
+VK_KHR_get_physical_device_properties2 : extension revision 2
+VK_KHR_get_surface_capabilities2       : extension revision 1
+VK_KHR_portability_enumeration         : extension revision 1
+VK_KHR_surface                         : extension revision 25
+VK_KHR_surface_protected_capabilities  : extension revision 1
+VK_KHR_wayland_surface                 : extension revision 6
+VK_KHR_xcb_surface                     : extension revision 6
+VK_KHR_xlib_surface                    : extension revision 6
+VK_LUNARG_direct_driver_loading        : extension revision 1
+
+Instance Layers: count = 3
+--------------------------
+VK_LAYER_INTEL_nullhw       INTEL NULL HW                1.1.73   version 1
+VK_LAYER_MESA_device_select Linux device selection layer 1.4.303  version 1
+VK_LAYER_MESA_overlay       Mesa Overlay layer           1.4.303  version 1
+
+Devices:
+========
+GPU0:
+	apiVersion         = 1.4.305
+	driverVersion      = 0.0.1
+	vendorID           = 0x10005
+	deviceID           = 0x0000
+	deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+	deviceName         = llvmpipe (LLVM 19.1.7, 256 bits)
+	driverID           = DRIVER_ID_MESA_LLVMPIPE
+	driverName         = llvmpipe
+	driverInfo         = Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)
+	conformanceVersion = 1.3.1.1
+	deviceUUID         = 6d657361-3235-2e30-2e37-2d322b646500
+	driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+keiland	0~git20261001.b0e1eaf972e1-1+debian13
+mesa-vulkan-drivers:amd64	25.0.7-2+deb13u1
+[1712705.243] {Default Queue} wl_registry#2.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712705.474] {Default Queue} wl_registry#2.global(6, "wl_shm", 1)
+[1712705.485] {Default Queue}  -> wl_registry#2.bind(6, "wl_shm", 1, new id [unknown]#7)
+[1712705.884] {Default Queue}  -> wl_shm#7.create_pool(new id wl_shm_pool#3, fd 13, 2304)
+[1712716.430] {Default Queue} wl_shm#7.format(0)
+[1712716.436] {Default Queue} wl_shm#7.format(1)
+[1712810.800] {Default Queue} wl_registry#2.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712810.828] {Default Queue} wl_registry#2.global(6, "wl_shm", 1)
+[1712811.252] {Default Queue} wl_registry#2.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712811.275] {Default Queue} wl_registry#2.global(6, "wl_shm", 1)
+[1712843.066] {mesa formats query} wl_registry#25.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712843.092] {mesa formats query} wl_registry#25.global(6, "wl_shm", 1)
+[1712843.097] {mesa formats query}  -> wl_registry#25.bind(6, "wl_shm", 1, new id [unknown]#27)
+[1712843.195] {mesa formats query} wl_shm#27.format(0)
+[1712843.222] {mesa formats query} wl_shm#27.format(1)
+[1712843.360] {mesa formats query} wl_registry#26.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712843.385] {mesa formats query} wl_registry#26.global(6, "wl_shm", 1)
+[1712843.389] {mesa formats query}  -> wl_registry#26.bind(6, "wl_shm", 1, new id [unknown]#29)
+[1712843.491] {mesa formats query} wl_shm#29.format(0)
+[1712843.496] {mesa formats query} wl_shm#29.format(1)
+[1712843.765] {mesa image count query} wl_registry#28.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712843.776] {mesa image count query} wl_registry#28.global(6, "wl_shm", 1)
+[1712843.780] {mesa image count query}  -> wl_registry#28.bind(6, "wl_shm", 1, new id [unknown]#31)
+[1712843.893] {mesa image count query} wl_shm#31.format(0)
+[1712843.898] {mesa image count query} wl_shm#31.format(1)
+[1712844.020] {mesa present modes query} wl_registry#30.global(3, "zwp_linux_dmabuf_v1", 3)
+[1712844.032] {mesa present modes query} wl_registry#30.global(6, "wl_shm", 1)
+[1712844.036] {mesa present modes query}  -> wl_registry#30.bind(6, "wl_shm", 1, new id [unknown]#33)
+[1712844.143] {mesa present modes query} wl_shm#33.format(0)
+[1712844.148] {mesa present modes query} wl_shm#33.format(1)

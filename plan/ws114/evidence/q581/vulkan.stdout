@@ -1,0 +1,6 @@
+{"event": "gtk-version", "pid": 1050, "version": "4.18.6"}
+{"event": "snapshot", "pid": 1050, "renderer": "GskVulkanRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "focus", "pid": 1050, "active": true}
+{"event": "target-text", "pid": 1050, "text": "v"}
+{"event": "close-request", "pid": 1050}
+{"event": "focus", "pid": 1050, "active": false}

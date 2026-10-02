@@ -1,0 +1,50 @@
+image: build/b1-q581/overlay.qcow2
+file format: qcow2
+virtual size: 8 GiB (8589934592 bytes)
+disk size: 8.2 MiB
+cluster_size: 65536
+backing file: /home/awe/zedBSD-worktrees/p9/build/p9-q580/resume/gtk-baseline.qcow2
+backing file format: qcow2
+Format specific information:
+    compat: 1.1
+    compression type: zlib
+    lazy refcounts: false
+    refcount bits: 16
+    corrupt: false
+    extended l2: false
+Child node '/file':
+    filename: build/b1-q581/overlay.qcow2
+    protocol type: file
+    file length: 8.25 MiB (8650752 bytes)
+    disk size: 8.2 MiB
+
+image: /home/awe/zedBSD-worktrees/p9/build/p9-q580/resume/gtk-baseline.qcow2
+file format: qcow2
+virtual size: 8 GiB (8589934592 bytes)
+disk size: 934 MiB
+cluster_size: 65536
+backing file: /home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img
+backing file format: raw
+Format specific information:
+    compat: 1.1
+    compression type: zlib
+    lazy refcounts: false
+    refcount bits: 16
+    corrupt: false
+    extended l2: false
+Child node '/file':
+    filename: /home/awe/zedBSD-worktrees/p9/build/p9-q580/resume/gtk-baseline.qcow2
+    protocol type: file
+    file length: 934 MiB (979566592 bytes)
+    disk size: 934 MiB
+
+image: /home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img
+file format: raw
+virtual size: 8 GiB (8589934592 bytes)
+disk size: 1.05 GiB
+Child node '/file':
+    filename: /home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img
+    protocol type: file
+    file length: 8 GiB (8589934592 bytes)
+    disk size: 1.05 GiB
+d32af77ba5709fdaa26f807aefb02c1ddffe20f5c1746e654e0cce1b3cb43ec8  build/b1-q581/overlay.qcow2

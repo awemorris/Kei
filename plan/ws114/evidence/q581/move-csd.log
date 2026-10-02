@@ -1,0 +1,4 @@
+/tmp/q581-a.trace:[1409883.976]  -> xdg_toplevel#31.move(wl_seat#14, 7)
+{"event": "gtk-version", "pid": 671, "version": "4.18.6"}
+{"event": "focus", "pid": 671, "active": true}
+{"event": "snapshot", "pid": 671, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}

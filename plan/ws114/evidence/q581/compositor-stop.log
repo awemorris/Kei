@@ -1,0 +1,16 @@
+owned compositor pid=669
+ZWL PING pong client=8 serial=131
+ZWL IME deactivate
+KEI-IME DEACTIVATE
+ZWL CURSOR client=8 shown=0
+ZWL CLIENT gone client=8 reason=read
+ZWL CLEANUP client=8 objects=41 unread_fds=0
+ZWL CLEANUP client=2 objects=19 unread_fds=0
+ZWL DESKTOP gone client=2
+ZWL IME lost pid=689
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+ZFILES DONE reason=disconnected
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=702 error=0 cleanup_failed=0 pid=669 input_events=222 seat_events=305 at_ms=636898
+    PID COMMAND

@@ -1,0 +1,5 @@
+[1519029.871] xdg_toplevel#31.configure_bounds(1256, 690)
+[1519029.874] xdg_toplevel#31.configure(0, 0, array[4])
+[1519181.349]  -> xdg_surface#30.set_window_geometry(14, 12, 700, 460)
+[1520117.292] {Default Queue} wl_pointer#6.button(21, 315294, 272, 1)
+[1521388.337] {Default Queue} wl_pointer#6.button(23, 316565, 272, 0)
