@@ -25,6 +25,11 @@ KEILAND_SOURCES := userland/desktop/wayland/main.c userland/desktop/wayland/wire
 # App Home starts X11 applications through zdesktop-x11, which starts xserver when it is needed.
 ZEDBSD_PACKAGE_INPUTS += userland/desktop/wayland/keiland-x11
 ZEDBSD_PACKAGE_FILES += $(if $(filter wayland,$(ZEDBSD_USER_PROGRAMS)),--file /usr/libexec/keiland-x11=userland/desktop/wayland/keiland-x11)
+# App Home's default list (ws129-p010), unless the image brings its own (a test's or the demonstration's extra files,
+# which would otherwise name the same destination twice).
+ZEDBSD_PACKAGE_INPUTS += userland/desktop/wayland/apps.conf
+ZEDBSD_PACKAGE_FILES += $(if $(filter wayland,$(ZEDBSD_USER_PROGRAMS)),$(if $(findstring /etc/keiland/apps.conf=,$(ZEDBSD_TEST_EXTRA_FILES)),,\
+	--file /etc/keiland/apps.conf=userland/desktop/wayland/apps.conf --mode /etc/keiland/apps.conf=0644))
 KEILAND_FONT_DATA := /usr/share/fonts/keiland.ttf=userland/desktop/fonts/Inter.ttf \
 	/usr/share/fonts/keiland-mono.ttf=userland/desktop/fonts/JetBrainsMono-Regular.ttf \
 	/usr/share/fonts/keiland-fallback.ttf=userland/desktop/fonts/DroidSansFallbackFull.ttf \

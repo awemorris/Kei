@@ -888,16 +888,15 @@ home_read_apps(
 		fclose(file);
 	}
 
-	/* Without a usable file, the applications the compositor has. */
+	/* Without a usable file, the desktop's applications (ws129-p010: Settings, and no test client). */
 	if (home_app_count == 0U) {
 		home_add_app("Terminal", KEILAND_BINDIR "/terminal", "term shell console sh", 0x323a4eU, "terminal");
 		home_add_app("Model viewer", KEILAND_BINDIR "/mview --windowed --size=960x640", "3d mview model vulkan viewer", 0xe07a5aU, "model");
-		home_add_app("Vulkan test", KEILAND_BINDIR "/wltest --windowed --size=640x420 --frames=3600 --delay-ms=30", "wltest gpu test", 0x5a8de0U, "");
-		home_add_app("Shared memory", KEILAND_BINDIR "/wlshm --size=480x320 --frames=6000", "wlshm shm test", 0x5aa87aU, "");
 		home_add_app("X terminal", "/bin/sh " KEILAND_LIBEXECDIR "/keiland-x11 " KEILAND_BINDIR "/zterm -geometry 80x24", "x11 xterm zterm", 0x4a4a78U, "xterm");
 		home_add_app("Gears", "/bin/sh " KEILAND_LIBEXECDIR "/keiland-x11 " KEILAND_BINDIR "/zgears --frames=0", "gears opengl glx x11 3d", 0xd05a3aU, "gears");
 		home_add_app("Files", KEILAND_BINDIR "/files", "files file manager folder finder browse", 0x2f7cf6U, "files");
 		home_add_app("Notes", KEILAND_BINDIR "/notes", "notes note notebook pen handwriting draw pdf", 0xe0a526U, "notes");
+		home_add_app("Settings", KEILAND_BINDIR "/settings", "settings preferences control panel system network wifi display sound wallpaper about", 0x6b7a8fU, "settings");
 		home_add_app("PDF Viewer", KEILAND_BINDIR "/pdfviewer", "pdf viewer document reader", 0xd9534fU, "pdf");
 		home_add_app("Image Viewer", KEILAND_BINDIR "/imageview", "image picture photo viewer png jpeg gif", 0x3fa36bU, "image");
 		home_add_app("Text Editor", KEILAND_BINDIR "/textedit", "text editor edit txt notepad write", 0x1f9e9aU, "text");
