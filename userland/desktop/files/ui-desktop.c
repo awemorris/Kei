@@ -621,6 +621,7 @@ desktop_layout(
 	    desk->laid_count == tab->listing.count &&
 	    desk->laid_modified == tab->listing.modified &&
 	    desk->laid_names == names_hash &&
+	    desk->laid_error == tab->listing.error &&
 	    desk->place_count == tab->listing.count)
 		return;
 
@@ -681,6 +682,7 @@ desktop_layout(
 	desk->laid_count = tab->listing.count;
 	desk->laid_modified = tab->listing.modified;
 	desk->laid_names = names_hash;
+	desk->laid_error = tab->listing.error;
 	desk->logged = 0;
 }
 
