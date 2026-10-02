@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: A q584/browser・q585/package・q586/displayはfinished/uncleared、A1/A2/A3終了済み。browser残112全文review、package D1・display D-ATOMIC判断を保存。B q587/GTK4・q588/規約・q589/診断はlatest4b655803 → A8f807c73f、全体wrap方針共有/停止実績未確認。q581/q582/q583部分はcleared、whole p017/BUG-125未解決。
+Active Queues: なし。A/B各3担当は全員終了、codex/agent-aとremote codex/agent-b（0018bc6c8）をローカルmainへ統合済み。q584/q585/q586/q587/q589 uncleared、q588部分clear（whole p007 uncleared）。各残作業/判断/証拠はQueue履歴から再開。
 Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
 Next（2026-10-02 更新）: user指示で全agentを区切り終了し成果を統合。新Queueは投入しない。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。Aは共有投影/mergeを所有し、Bは自checkoutのGTK/desktop/bugを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。旧P8/P9/P10は停止・回収済みで、[Queue index](queue.md)にterminal outcomeを保存。
@@ -557,3 +557,5 @@ Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調�
 2026-10-02 / all-agent-normal-wrap: 最新userが全agentをきりのいいところで切り上げ終了へ指示。A1/A2のPhase完了待ちを置換、A3はfinal2ad9c951 → 83b111c63、q586/p001 uncleared履歴と再開を[archive](history/queue-q586.md)へ保存して終了確認。B checkpoint4b655803 → A8f807c73fを統合、q582 cleared、q588 source partial/q589診断準備/q587amendment01を共有投影。B2背景資産・3 OS収録q593は予約だけで開始しない。全次Queue未投入、B停止未確認、source受け入れ/WS completionを停止に合わせて偽らない。
 
 2026-10-02 / local-main-integration-request: userがサブエージェント結果→codex/agent-a→ローカルmain→リモートcodex/agent-b出現後ローカルmainの順に統合を指示。全commit message WIP、pushなし。A1 final2f6556750を10e844f23へ統合、A2/A3既統合、全A worker停止確認。
+
+2026-10-02 / B-final-main-integrated: main35a6c8634へB最終成果を統合。q587装飾/release実装は最終実機物の導入/回帰等未達、q588 source部分clearとwhole条件を区別、q589準備のみでBUG-125 reproduced/tracking維持。WS099 p019/q593背景は計画のみ。B記録のuser決定「従来のぼかした湖を初期背景、既収録背景も選択可能・保存設定優先」をPhaseと再開資料へ保存済み。全次Queue未投入、計画GitHub公開は保留。

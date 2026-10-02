@@ -2,6 +2,9 @@
 
 # Past Log
 
+最新統合 / 2026-10-02: リモートB0018bc6c8をmain35a6c8634へ統合。全6担当終了、active Queueなし。[q587](queue-q587.md)は実装/部分検証uncleared、[q588](queue-q588.md)はsource/host/build部分cleared・whole未達、[q589](queue-q589.md)は準備のみuncleared。過去の待機/停止未確認の記述は当時の履歴。最終runtime/boot等を未実施のまま保存、GitHub計画publication pending。
+
+
 最新: [q584](queue-q584.md) / 2026-10-02 07:12–08:53 UTC。通常終了でuncleared、browser全文97/209・残112件。A1最終成果10e844f23へ統合、209hashes確認。A1/A2/A3すべて終了、未達条件と再開証拠を保存。B停止は最終報告未確認。GitHub publication保留。
 
 

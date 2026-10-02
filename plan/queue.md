@@ -2,20 +2,20 @@
 
 # Queue / all-agent index
 
-Active Queues: Aのq584/q585/q586はfinished/uncleared、A1/A2/A3終了済み。Bのq587/GTK4、q588/規約、q589/BUG診断は最新報告でactive（全体wrap方針共有、停止実績未確認）。q581/q582/q583はfinished/cleared（q583部分のみ）、q585/q586はfinished/uncleared。
-Status: active
+Active Queues: なし。A1/A2/A3・B1/B2/B3は全員終了、全成果をローカルmainへ統合。
+Status: finished
 Main executor / plan writer: Q1
 Approval: 各lane/snapshotがexact scopeの正本。Aは2026-10-02 user「エージェントA、あなたもN=3で作業を開始してください」、BはuserのB開始指示とcommit991fc890のlaneを確認。A/B各3枠、timeboxはlaneごと。旧P8/P9/P10の承認・終了履歴を現行Queueへ流用しない。
-Last finished Queue: [q584](history/queue-q584.md)（通常終了 / 残全文reviewでuncleared）
+Last reconciled Queues: [q587](history/queue-q587.md)、[q588](history/queue-q588.md)、[q589](history/queue-q589.md)（B最終統合）。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
 | q581 / q581-i01 | B1 | [p001](ws114/phase001/phase.md) | GTK4標準baseline残実測のみ、最大3h | finished / cleared | [archive](history/queue-q581.md)、B df66db5e → A435a62126 |
 | q582 / q582-i01 | B2 | [p011](ws094/phase011/phase.md) | Files desktop overflow log・listing成功時pruneと限定回帰、最大3h | finished / cleared | [archive](history/queue-q582.md)、B4b655803 → A8f807c73f |
 | q583 / q583-i01 | B3 | [p017](ws099/phase017/phase.md) | BUG-125の2popup症状を各最大5runで時刻/画素分類、90min。部分scope | finished / cleared（whole Phase uncleared） | [archive](history/queue-q583.md)、B df66db5e → A435a62126 |
-| q587 / q587-i01 | B1 | [p007](ws114/phase007/phase.md) | CSD/SSD modeのconfigure/ack/commitと標準GTK4/native SSD回帰、3h | active / in-progress（user開始共有） | [lane](agents/B1/queue.md)、snapshot6de86725 |
-| q588 / q588-i01 | B2 | [p007](ws094/phase007/phase.md) | WS094全文規約のsource/host/build部分のみ、3h。whole p007 uncleared | active / in-progress（B報告、wrap-up指示） | [lane](agents/B2/queue.md)、snapshota1faf483 / checkpoint4b655803 |
-| q589 / q589-i01 | B3 | [p017](ws099/phase017/phase.md) | pre-capture SSHを減らす5run/45min、first verdict維持。guest資源待ち | active / prepared（B報告、wrap-up指示） | [lane](agents/B3/queue.md)、snapshot16005006 |
+| q587 / q587-i01 | B1 | [p007](ws114/phase007/phase.md) | CSD/SSD実装とGTK4/native SSD、3h | finished / uncleared | [archive](history/queue-q587.md)、最終runtime/clipboard/Textedit/boot等残 |
+| q588 / q588-i01 | B2 | [p007](ws094/phase007/phase.md) | source/host/build conformance部分、3h | finished / cleared（whole Phase uncleared） | [archive](history/queue-q588.md)、実機/guest/boot等残 |
+| q589 / q589-i01 | B3 | [p017](ws099/phase017/phase.md) | BUG-125低overhead診断、45min/5run | finished / uncleared | [archive](history/queue-q589.md)、準備保存・guest未実施 |
 | q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | finished / uncleared | [archive](history/queue-q584.md)、A1-009 → 10e844f23 / reviewed97/209 / stopped |
 | q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | finished / uncleared | [archive](history/queue-q585.md)、D1 user返答待ち |
 | q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | finished / uncleared | [archive](history/queue-q586.md)、final2ad9c951 → 83b111c63 ACK |
@@ -58,3 +58,5 @@ Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21
 2026-10-02 / q593-reserved-B2: userが既存白樺・湖背景と見つかれば直線的抽象版の共通source収録を追加指示。q588後続WS099 p019のID **q593** をB2へ予約、exact Phase/scope/assets/3 OS verificationと依存はBから受領後に投影。予約はactive membershipではない。次の未予約IDq594。[協調記録](agents/two-session-coordination.md)。
 
 2026-10-02 / final-user-normal-wrap: 全agentを現在の安全なcommit地点で切り上げるuser指示を各A workerへ送付。A3は終了確認、A1/A2は回収中。B checkpoint4b655803をA8f807c73fへ統合しq582終端、q588/q589開始、q587amendment01を投影。q593予約は保持、新Queue無し。B停止実績はB receipt待ち、GitHub/push無し。
+
+2026-10-02 / all-final-integrated: A branch 5d3276cc4 → main31cf408ab、remote B0018bc6c8 → main35a6c8634。全6担当終了。q590〜q593は未投入、次未予約q594。新Queue開始には残scope/承認/依存を照合する。

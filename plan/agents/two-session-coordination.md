@@ -18,3 +18,5 @@ Each `approved-phase.md` is a byte-preserved approval snapshot. Its relative lin
 2026-10-02 / B2-wallpaper-next-ID: current userの追加共有指示により **q593をB2専用、q588後続のWS099 p019背景資産・3 OS収録用に予約**。既存の白樺・湖の背景を共通sourceへ収録し、見つかった場合は直線的な抽象版も含める。対象はzedBSD/Linux/FreeBSD共通収録の計画、発見条件・出典/利用条件・資産一覧・各OSの登録/build/install検証をBがPhaseとexact snapshotに定める。Phase草稿はB最新4b655803に未収録、予約で開始/clearanceを主張しない。q588完了/ACKとexact scope/criteria確認後、同じB2 runtime/contextに投入する。q587入力release修正は既存GTK4確認内amendment01としてBが記録、Aは差分とsnapshotを照合する。次の全体未予約IDは **q594**。旧browser2出典namespaceの同番号は既往記録として別に保持。
 
 2026-10-02 / all-agent-normal-wrap: latest user「すべてのエージェントを終了に向かわせます」「きりのいいところで作業をきりあげてもらいます」。A1/A2のPhase完了待ち条件を置換し、現在commit可能地点でnormal wrap-up、全次Queue未投入。A3成果2ad9c951/root83b111c63回収・clean/process無し・終了を確認。Bのq587/q588/q589はfixed4b655803をA8f807c73fへ統合、全体停止方針を[A→B handoff](A-to-B.md)へ保存するがB worker停止実績は未確認。q593予約は保持して開始しない、番号は再利用しない。
+
+2026-10-02 / integration-complete: 全A/B worker終了receipt確認。codex/agent-a5d3276cc4をmain31cf408abへ、remote codex/agent-b0018bc6c8をmain35a6c8634へWIP merge。共有Queue/registry/history/Masterは最終結果へ投影。未達をclear扱いしない。q593未投入・次未予約q594。ローカルmainで停止、新Queueなし、Aからpushなし。
