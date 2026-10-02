@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p019 -->
 # ws005-p019: ベータ1 の WiFi の流れの実装
 
-Status: in-progress（q599-i01）
+Status: uncleared（q599-i01、P1、2026-10-02。system bar の鍵の入力と待ちの slot は実装。所有者の扱い（A＋A′）は止めてユーザーの判断待ち）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Focused goal: fg019（ベータ1）
@@ -42,3 +42,34 @@ p018、ユーザーの判断（p018 の未決の判断）。WS033 p001 と `user
 ## 未決の判断
 
 p018 の結果による。
+
+## q599-i01 の結果（P1、2026-10-02、base は main `a48948669` を merge した `4a835cb24`）
+
+### 実装したこと（`userland/desktop/wayland/network.c` だけ）
+
+- **鍵の入力（BUG-138 の「パスワード入力ができない」）**: menu の AP を押すと、鍵を要し（`secured`）利用者の store に保存の無い network なら menu の中に
+  鍵の field（「Key for SSID」、`*` だけを表示、Backspace、Shift と Caps Lock、Enter で決定、Esc で field だけを閉じる）を開く。Enter で
+  `keiland_network_save_key`（利用者の `~/.wifi.conf`）→ 鍵の buffer を volatile で消去 → `PROFILES` → その答えで `JOIN`（Settings と同じ 3 段）。
+  8 文字未満は「The key must be 8 to 63 characters」。鍵の無い join の ENOENT でも、secured の AP なら field を開く。menu を閉じると入力中の鍵も消す。
+- **待ちの slot（「on/off を押しても何も起きない」の一因）**: libkeiland は request を一つしか持てず、menu を開いたときの scan が出ている間に押した
+  switch・AP は `EBUSY` で失敗の文になっていた。押した request を一つの slot に置き、出ている request の答えの後に送る（scan は置かない）。
+- 失敗の文: join の EPERM は「Wi-Fi is managed by another account」、PROFILES の失敗は「Could not save the key (...)」。
+- 確かめ: `plan/ws075/demo/build-demo-image.sh build/p1-desk2 ZEDBSD_CONFIG=build/p1-demo-notc.mk`（CI 土台のデモ config から clang・libcxx・remacs を除く
+  一時の config）で `network.c` は `-Wall -Wextra -Werror` で warning 0、rc=0。`plan/tools/boot-test.sh build/p1-desk2/hdd-image.img` → PASS
+  （`build/p1-desk2-boot/login.png`）。画面での鍵の field の操作と、本物の radio（5330 の AX211 passthrough）での接続は**未実施**。Linux・FreeBSD の
+  Keiland の build（`Makefile.linux`・`Makefile.freebsd` も `network.c` を含む）は未実施（標準の C と既存の libkeiland の関数だけを使った）。
+
+### 止めたこと（判断が要る）
+
+- p018 で確かめたとおり、起動の `net startup`（root）が方針の所有者を root にし、利用者の join と off は networkd の `owner_allowed` で EPERM になる
+  （on/off が効かない・接続できないの主因）。採用の方式 A＋A′ を networkd で実装しようとした変更（`owner_allowed` を network group の利用者に
+  広げ、explicit な connect で所有者を移す）は、**エージェントの権限の確認（auto mode の classifier）に「Security Weaken」として拒否された**。
+  同じ結果を別の経路（libkeiland・system bar・Settings から join の前に `ENABLE` を送って所有者を取る、login の時の自動の `ENABLE`）で達するのも
+  同じ判断の対象とみなし、行っていない。networkd の source は変えていない（試した変更は戻した）。
+- 必要な判断（ユーザー）: 次のどれかを、ユーザーが明示に承認すること。
+  1. networkd: network group の利用者が root（または他の利用者）の WiFi の方針を操作し、join で所有者を自分に移せるようにする（A′ を server で）。
+  2. client: system bar・Settings が、所有者でないときに既存の `ENABLE`（今も network group の利用者に許される操作）を先に送り所有者を取る（A′ を client で）、
+     と login の時の自動の `ENABLE`（A）。
+  3. 別の方式（例: 起動時の `net startup` が WiFi を有効にしない、または console の login の利用者を所有者にする）。
+  承認が得られれば、承認の文言を引用して実装を再開する。それまで BUG-138 の「on/off」「接続」は、利用者が root でない限り EPERM のまま。
+- B3（有線優先、route と DNS の一元化）は未着手。

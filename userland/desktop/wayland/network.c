@@ -19,9 +19,17 @@
  * state under it, the networks the radio sees (the one it is on checked,
  * a padlock on those that ask for a key, the signal as bars), the wired
  * connection, and "Disconnect" while the Wi-Fi is connected.  A click on a
- * network joins it (with its saved profile), on the switch turns the Wi-Fi
- * on or off.  A click elsewhere, or Esc, closes the menu.  Opening the menu
- * asks for a scan.
+ * network joins it with its saved profile; a network that asks for a key
+ * and has none saved opens a key field in the menu instead, and Enter saves
+ * the key in the user's store, tells the daemon and joins (ws005-p019,
+ * BUG-138), the same three steps Settings takes.  A click on the switch
+ * turns the Wi-Fi on or off.  A click elsewhere, or Esc, closes the menu.
+ * Opening the menu asks for a scan.
+ *
+ * libkeiland carries one request at a time.  A switch or a network clicked
+ * while another request (the menu's own scan, usually) is still out waits
+ * in one slot and is sent when that one is answered, rather than being
+ * refused with "busy".
  *
  * All of it comes through libkeiland (keiland_network_*): zdesktop never
  * speaks networkd's protocol.  Nothing here waits for the daemon; each tick
@@ -36,8 +44,22 @@
 #include <stdio.h>
 #include <string.h>
 
-/* The evdev code of Esc. */
+/* The evdev codes of Esc, Backspace, Enter and the keypad's Enter. */
 #define NETWORK_KEY_ESC		1U
+#define NETWORK_KEY_BACKSPACE	14U
+#define NETWORK_KEY_ENTER	28U
+#define NETWORK_KEY_KPENTER	96U
+
+/* How many evdev codes the character tables cover (up to the space bar). */
+#define NETWORK_KEYS		58U
+
+/* The depressed Shift and the locked Caps Lock in the seat's modifier masks. */
+#define NETWORK_SHIFT		0x1U
+#define NETWORK_CAPS		0x2U
+
+/* The shortest and the longest WPA passphrase, in characters. */
+#define NETWORK_KEY_MIN		8U
+#define NETWORK_KEY_MAX		63U
 
 /* The menu's width, its padding, its rows' height, and its corner radius. */
 #define NETWORK_MENU_WIDTH	300
@@ -57,7 +79,8 @@ enum network_row_kind {
 	NETWORK_ROW_SEPARATOR,
 	NETWORK_ROW_AP,
 	NETWORK_ROW_WIRED,
-	NETWORK_ROW_DISCONNECT
+	NETWORK_ROW_DISCONNECT,
+	NETWORK_ROW_KEY
 };
 
 /*
@@ -78,6 +101,15 @@ struct network_row {
  * state and scan last read from it, whether the menu is open and where,
  * its rows, where the icon was last drawn, the network last asked to be
  * joined, and the text of the last failed request.
+ *
+ * The key field: key_open while it is shown, for key_ssid, with the
+ * characters typed so far in key (key_length of them, never more than
+ * NETWORK_KEY_MAX, wiped whenever the field closes or the key is saved).
+ * join_after_profiles is set while the daemon is being told the saved
+ * networks changed, so that its answer sends the join of key_ssid.
+ *
+ * The waiting slot: pending_request (KEILAND_NETWORK_REQUEST_NONE when
+ * empty) and pending_ssid, sent when the outstanding request is answered.
  *
  * It lives as long as zdesktop; the menu's rows are laid out again each
  * time the menu is drawn, so they always show the state last read.
@@ -102,6 +134,13 @@ struct network_view {
 	unsigned icon_logged;
 	char failure[96];
 	char joining[KEILAND_NETWORK_SSID_MAX];
+	unsigned key_open;
+	char key_ssid[KEILAND_NETWORK_SSID_MAX];
+	char key[NETWORK_KEY_MAX + 1U];
+	size_t key_length;
+	unsigned join_after_profiles;
+	unsigned pending_request;
+	char pending_ssid[KEILAND_NETWORK_SSID_MAX];
 };
 
 /*
@@ -109,6 +148,23 @@ struct network_view {
  * (the ticks, the drawing, the input).
  */
 static struct network_view network_view;
+
+/*
+ * The characters each key types into the key field, without and with Shift
+ * (US layout, as the greeter's password field); 0 for none.
+ */
+static const char network_plain[NETWORK_KEYS] = {
+	0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 0, 0,
+	'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 0, 0,
+	'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\',
+	'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, 0, 0, ' '
+};
+static const char network_shifted[NETWORK_KEYS] = {
+	0, 0, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 0, 0,
+	'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0, 0,
+	'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~', 0, '|',
+	'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0, 0, 0, ' '
+};
 
 static void network_open_menu(struct zwl_server *server);
 static void network_close_menu(struct zwl_server *server, const char *via);
@@ -129,6 +185,14 @@ static void network_draw_lock(struct zwl_server *server, VkCommandBuffer command
 static unsigned network_strength(int rssi);
 static const char *network_request_name(unsigned request);
 static const char *network_wifi_name(unsigned wifi);
+static void network_choose_ap(struct zwl_server *server, unsigned ap);
+static int network_key_saved(const char *ssid);
+static void network_key_open(struct zwl_server *server, const char *ssid);
+static void network_key_close(void);
+static void network_key_type(struct zwl_server *server, uint32_t key);
+static void network_key_submit(struct zwl_server *server);
+static void network_key_wipe(void);
+static void network_finished(struct zwl_server *server, unsigned request, int error);
 
 /*
  * Reads what the network watch has brought since the last tick, and makes
@@ -172,18 +236,11 @@ zwl_network_tick(
 		printf("ZWL NETWORK scan count=%u\n", (unsigned)network_view.scan_count);
 	}
 
-	/* A request that finished; a failure is said in the menu. */
+	/* A request that finished: its failure said, and what waited for it sent. */
 	if ((changed & KEILAND_NETWORK_CHANGED_DONE) != 0) {
 		request = keiland_network_get_request(network_view.watch, &error);
 		printf("ZWL NETWORK done request=%s error=%d\n", network_request_name(request), error);
-		network_view.failure[0] = '\0';
-
-		/* A join the daemon has no profile for says so; other failures say the errno's text. */
-		if (error == ENOENT && request == KEILAND_NETWORK_REQUEST_JOIN) {
-			(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not join %s: no saved profile", network_view.joining);
-		} else if (error != 0 && request != KEILAND_NETWORK_REQUEST_SCAN) {
-			(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not %s (%s)", network_request_name(request), strerror(error));
-		}
+		network_finished(server, request, error);
 	}
 
 	/* Something shown has changed. */
@@ -381,6 +438,13 @@ zwl_network_key(
 	if (!network_view.open)
 		return 0;
 
+	/* With the key field open, the keys type into it; Esc closes the field. */
+	if (network_view.key_open) {
+		if (state != 0)
+			network_key_type(server, key);
+		return 1;
+	}
+
 	/* Esc, pressed, closes it. */
 	if (key == NETWORK_KEY_ESC && state != 0)
 		network_close_menu(server, "key");
@@ -445,6 +509,9 @@ network_close_menu(
 	struct zwl_server *server,
 	const char *via)
 {
+	/* A key half typed goes with the menu. */
+	network_key_close();
+
 	/* The menu goes; the icon's back goes with it. */
 	network_view.open = 0;
 	server->dirty = 1;
@@ -495,6 +562,15 @@ network_layout(
 		/* Each network the scan found. */
 		for (index = 0; index < network_view.scan_count; index++)
 			network_add_row(NETWORK_ROW_AP, network_view.scan[index].ssid, NETWORK_ROW_HEIGHT, index);
+	}
+
+	/* The key field: what it is for, the field, and how to finish. */
+	if (network_view.key_open) {
+		network_add_row(NETWORK_ROW_SEPARATOR, "", NETWORK_SEPARATOR, 0);
+		(void)snprintf(text, sizeof(text), "Key for %s", network_view.key_ssid);
+		network_add_row(NETWORK_ROW_NOTE, text, NETWORK_NOTE_HEIGHT, 0);
+		network_add_row(NETWORK_ROW_KEY, "", NETWORK_ROW_HEIGHT, 0);
+		network_add_row(NETWORK_ROW_NOTE, "Enter: join   Esc: cancel", NETWORK_NOTE_HEIGHT, 0);
 	}
 
 	/* The wired connection's line, after a separator. */
@@ -618,7 +694,7 @@ network_act(
 		network_request(server, wanted, NULL);
 		break;
 	case NETWORK_ROW_AP:
-		network_request(server, KEILAND_NETWORK_REQUEST_JOIN, network_view.scan[row->ap].ssid);
+		network_choose_ap(server, row->ap);
 		break;
 	case NETWORK_ROW_DISCONNECT:
 		network_request(server, KEILAND_NETWORK_REQUEST_DISCONNECT, NULL);
@@ -651,6 +727,13 @@ network_request(
 	error = keiland_network_request(network_view.watch, request, ssid);
 	printf("ZWL NETWORK request %s ssid=%s error=%d\n", network_request_name(request), network_view.joining, error);
 	server->dirty = 1;
+
+	/* A request behind another one waits for its answer (a scan is not kept). */
+	if (error == EBUSY && request != KEILAND_NETWORK_REQUEST_SCAN) {
+		network_view.pending_request = request;
+		(void)snprintf(network_view.pending_ssid, sizeof(network_view.pending_ssid), "%s", network_view.joining);
+		return;
+	}
 
 	/* A request that could not even be sent is said in the menu. */
 	if (error != 0 && request != KEILAND_NETWORK_REQUEST_SCAN)
@@ -829,7 +912,11 @@ network_draw_row(
 	static const float white[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	static const float blue[4] = { 0.25f, 0.52f, 0.98f, 1.0f };
 	static const float line[4] = { 0.12f, 0.16f, 0.24f, 0.16f };
+	static const float field[4] = { 1.0f, 1.0f, 1.0f, 0.95f };
+	static const float frame[4] = { 0.25f, 0.52f, 0.98f, 0.70f };
 	const struct keiland_network_ap *ap;
+	char stars[NETWORK_KEY_MAX + 2U];
+	size_t count;
 	float ink[4];
 	int32_t left;
 	int32_t right;
@@ -889,6 +976,20 @@ network_draw_row(
 		if (ap->secured)
 			network_draw_lock(server, command, right - 42, middle, ink);
 		network_draw_bars(server, command, right - 18, middle + 7, network_strength(ap->rssi), ink, 0.25f);
+		return;
+	}
+
+	/* The key field: a pale box with a star for each character typed and the cursor. */
+	if (row->kind == NETWORK_ROW_KEY) {
+		glass_draw_solid(server, command, (float)(left + 11), (float)(top + 2), (float)(NETWORK_MENU_WIDTH - 22), (float)(row->height - 4), 6.0f, frame);
+		glass_draw_solid(server, command, (float)(left + 12), (float)(top + 3), (float)(NETWORK_MENU_WIDTH - 24), (float)(row->height - 6), 5.0f, field);
+
+		/* The key is never drawn, only its length. */
+		for (count = 0U; count < network_view.key_length; count++)
+			stars[count] = '*';
+		stars[count] = '|';
+		stars[count + 1U] = '\0';
+		glass_draw_text(server, command, SIZE_BAR, left + 20, baseline, stars, NETWORK_MENU_WIDTH - 40, dark);
 		return;
 	}
 
@@ -987,6 +1088,8 @@ network_request_name(
 		return "turn Wi-Fi on";
 	case KEILAND_NETWORK_REQUEST_WIFI_OFF:
 		return "turn Wi-Fi off";
+	case KEILAND_NETWORK_REQUEST_PROFILES:
+		return "save the key";
 	default:
 		break;
 	}
@@ -1018,4 +1121,253 @@ network_wifi_name(
 
 	/* No radio. */
 	return "absent";
+}
+
+/*
+ * Acts on a network chosen in the menu: one that asks for a key and has
+ * none saved opens the key field; any other is joined with its saved
+ * profile.
+ */
+static void
+network_choose_ap(
+	struct zwl_server *server,
+	unsigned ap)
+{
+	const struct keiland_network_ap *chosen;
+	int saved;
+
+	/* The network as the scan last reported it. */
+	chosen = &network_view.scan[ap];
+
+	/* A network with a saved key, or one that asks for none, is joined. */
+	saved = network_key_saved(chosen->ssid);
+	if (saved || !chosen->secured) {
+		network_request(server, KEILAND_NETWORK_REQUEST_JOIN, chosen->ssid);
+		return;
+	}
+
+	/* A key is asked for. */
+	network_key_open(server, chosen->ssid);
+}
+
+/* Tells whether the user's store has a key for a network. */
+static int
+network_key_saved(
+	const char *ssid)
+{
+	char saved[KEILAND_NETWORK_SCAN_MAX][KEILAND_NETWORK_SSID_MAX];
+	size_t count;
+	size_t index;
+	int differs;
+
+	/* The networks the user has saved (read from the store, not the daemon). */
+	count = keiland_network_get_saved(saved, KEILAND_NETWORK_SCAN_MAX);
+	if (count > KEILAND_NETWORK_SCAN_MAX)
+		count = KEILAND_NETWORK_SCAN_MAX;
+
+	/* Looks for this one among them. */
+	for (index = 0; index < count; index++) {
+		differs = strcmp(saved[index], ssid);
+		if (differs == 0)
+			return 1;
+	}
+
+	/* Not saved. */
+	return 0;
+}
+
+/* Opens the key field for a network, empty. */
+static void
+network_key_open(
+	struct zwl_server *server,
+	const char *ssid)
+{
+	/* The field, for this network, with nothing typed and no failure from before. */
+	network_key_wipe();
+	(void)snprintf(network_view.key_ssid, sizeof(network_view.key_ssid), "%s", ssid);
+	network_view.key_open = 1;
+	network_view.failure[0] = '\0';
+	server->dirty = 1;
+	printf("ZWL NETWORK key open ssid=%s\n", network_view.key_ssid);
+}
+
+/* Closes the key field, wiping what was typed. */
+static void
+network_key_close(
+	void)
+{
+	/* Nothing of the key is kept. */
+	network_key_wipe();
+	network_view.key_open = 0;
+}
+
+/* Types one key into the field: a character, Backspace, Enter or Esc. */
+static void
+network_key_type(
+	struct zwl_server *server,
+	uint32_t key)
+{
+	char character;
+	int shift;
+
+	/* Esc closes the field and leaves the menu open. */
+	if (key == NETWORK_KEY_ESC) {
+		network_key_close();
+		server->dirty = 1;
+		printf("ZWL NETWORK key cancel\n");
+		return;
+	}
+
+	/* Enter saves the key and joins. */
+	if (key == NETWORK_KEY_ENTER || key == NETWORK_KEY_KPENTER) {
+		network_key_submit(server);
+		return;
+	}
+
+	/* Backspace takes back the last character. */
+	if (key == NETWORK_KEY_BACKSPACE) {
+		/* An empty field has nothing to take back. */
+		if (network_view.key_length != 0U) {
+			network_view.key_length--;
+			network_view.key[network_view.key_length] = '\0';
+		}
+		server->dirty = 1;
+		return;
+	}
+
+	/* Keys beyond the table type nothing. */
+	if (key >= NETWORK_KEYS)
+		return;
+
+	/* Shift, and Caps Lock for the letters. */
+	shift = 0;
+	if ((server->modifiers & NETWORK_SHIFT) != 0U)
+		shift = 1;
+	character = network_plain[key];
+	if ((server->locked_modifiers & NETWORK_CAPS) != 0U && character >= 'a' && character <= 'z')
+		shift = !shift;
+	if (shift)
+		character = network_shifted[key];
+	if (character == 0)
+		return;
+
+	/* A full field takes no more. */
+	if (network_view.key_length >= NETWORK_KEY_MAX)
+		return;
+
+	/* The character. */
+	network_view.key[network_view.key_length] = character;
+	network_view.key_length++;
+	network_view.key[network_view.key_length] = '\0';
+	server->dirty = 1;
+}
+
+/*
+ * Saves the key typed in the user's store, wipes it, and tells the daemon
+ * the saved networks changed; the join follows that answer.
+ */
+static void
+network_key_submit(
+	struct zwl_server *server)
+{
+	int error;
+
+	/* A WPA key is 8 to 63 characters; a shorter one is said and kept to finish. */
+	if (network_view.key_length < NETWORK_KEY_MIN) {
+		(void)snprintf(network_view.failure, sizeof(network_view.failure), "The key must be 8 to 63 characters");
+		server->dirty = 1;
+		return;
+	}
+
+	/* The key, saved in the user's own store. */
+	error = keiland_network_save_key(network_view.key_ssid, network_view.key);
+	network_key_wipe();
+	if (error != 0) {
+		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not save the key (%s)", strerror(error));
+		printf("ZWL NETWORK key save error=%d\n", error);
+		server->dirty = 1;
+		return;
+	}
+	printf("ZWL NETWORK key saved ssid=%s\n", network_view.key_ssid);
+
+	/* The field closes; the daemon is told, and its answer sends the join. */
+	network_view.key_open = 0;
+	network_view.join_after_profiles = 1;
+	(void)snprintf(network_view.joining, sizeof(network_view.joining), "%s", network_view.key_ssid);
+	network_request(server, KEILAND_NETWORK_REQUEST_PROFILES, NULL);
+}
+
+/* Wipes the key field's characters, every byte of it. */
+static void
+network_key_wipe(
+	void)
+{
+	volatile char *byte;
+	size_t index;
+
+	/* Through a volatile pointer, so the stores are not left out as dead. */
+	byte = network_view.key;
+	for (index = 0; index < sizeof(network_view.key); index++)
+		byte[index] = '\0';
+	network_view.key_length = 0U;
+}
+
+/*
+ * Follows a request that finished: says its failure in the menu, sends the
+ * join that waited for a saved key to reach the daemon, opens the key field
+ * for a network the daemon has no key for, and sends the request that
+ * waited in the slot.
+ */
+static void
+network_finished(
+	struct zwl_server *server,
+	unsigned request,
+	int error)
+{
+	unsigned waiting;
+	unsigned index;
+	int differs;
+
+	/* No failure from before. */
+	network_view.failure[0] = '\0';
+
+	/* The daemon has the new key: the join follows (the slot waits for it). */
+	if (request == KEILAND_NETWORK_REQUEST_PROFILES && network_view.join_after_profiles) {
+		network_view.join_after_profiles = 0;
+		network_request(server, KEILAND_NETWORK_REQUEST_JOIN, network_view.key_ssid);
+		return;
+	}
+
+	/* A join of a network that asks for a key, without one, asks for it. */
+	if (error == ENOENT && request == KEILAND_NETWORK_REQUEST_JOIN) {
+		for (index = 0; index < network_view.scan_count; index++) {
+			/* The scan's entry of the network, when it asks for a key. */
+			differs = strcmp(network_view.scan[index].ssid, network_view.joining);
+			if (differs == 0 && network_view.scan[index].secured)
+				network_key_open(server, network_view.joining);
+		}
+
+		/* A network that asks for no key, or is no longer seen, says so. */
+		if (!network_view.key_open)
+			(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not join %s: no saved key", network_view.joining);
+	} else if (error == EPERM && request == KEILAND_NETWORK_REQUEST_JOIN) {
+		/* The policy belongs to another account (root's, from the boot). */
+		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Wi-Fi is managed by another account");
+	} else if (error != 0 && request != KEILAND_NETWORK_REQUEST_SCAN) {
+		/* Anything else that failed says the errno's text. */
+		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not %s (%s)", network_request_name(request), strerror(error));
+	}
+
+	/* What waited in the slot is sent now. */
+	waiting = network_view.pending_request;
+	if (waiting != KEILAND_NETWORK_REQUEST_NONE) {
+		network_view.pending_request = KEILAND_NETWORK_REQUEST_NONE;
+
+		/* A join names its network; the other requests take none. */
+		if (network_view.pending_ssid[0] != '\0') {
+			network_request(server, waiting, network_view.pending_ssid);
+		} else {
+			network_request(server, waiting, NULL);
+		}
+	}
 }
