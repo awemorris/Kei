@@ -73,3 +73,8 @@ p018 の結果による。
   3. 別の方式（例: 起動時の `net startup` が WiFi を有効にしない、または console の login の利用者を所有者にする）。
   承認が得られれば、承認の文言を引用して実装を再開する。それまで BUG-138 の「on/off」「接続」は、利用者が root でない限り EPERM のまま。
 - B3（有線優先、route と DNS の一元化）は未着手。
+
+
+## 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」
+
+networkd の owner の確認を広げ、`network` group の利用者には、root や他の利用者が持つ WiFi の policy の操作（on/off、join、key の通知の受理）を許可する（p018/p019 の選択肢 1）。permission system が止めた変更（`owner_allowed` の拡張、explicit な join での owner の移動、explicit な要求による自動の search の中断）はこの承認の範囲。`network` group に入っていない利用者は従来どおり EPERM。ベータ1 のデモの利用者（kei）が `network` group に入るかを確かめる。q599-i02 で再開。
