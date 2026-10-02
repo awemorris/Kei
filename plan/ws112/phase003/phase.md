@@ -22,7 +22,7 @@ Investigation bound: 90分の有限1Phase Queue案。具体的なscope/timebox/c
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
 公式2026-09-15 RPi Lite Trixie arm64 image/rootfsを候補入力とする。外側既存Debian13 pinned QEMU VM+内側RPi rootfs/native arm64 compilerのQEMU-user方式をmainの委任された通常技術判断で採用。外側の既存Debian boot例外を用い、内RPi kernelはbootしない。境界/command/補助kernel案との差は環境契約へ保存。
 後続command/証拠: make keiland-linux-rpi、RPi imageのcompressed/expanded hashと利用可能な署名、RPi marker/packages/repo、compiler自体と全出力ELF AArch64、native dpkg DB/dependency/encoderと独立deb展開を保存。outer kernelとinner rootfsのidentityを区別、elapsedを工程別記録。
-Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は後記の採用環境に従い、実成立は担当Phaseで確認する。
 
 ## Clearance criteria / verification
 

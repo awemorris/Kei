@@ -22,7 +22,7 @@ Investigation bound: 60分の有限1Phase Queue案。具体的なscope/timebox/c
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
 既存image/zipと5OS package matrix全件をrelease needsに設定。target_id/CPU/format/source/inputと20file集合を検査し、downloadの重複上書きを防止、runtime PNG/smoke必須を解除する。
 後続command/証拠: 全5実package+3sidecars setをnative metadata/manifest/checksumで受理。missing/duplicate/truncated/wrong OS・CPU・source・hash・dirty/path traversal/test payloadの有限各1例を拒否、PNGだけで欠損packageを受理しない。既存CI/YAMLをlocal検査しremote未実施を明記。
-Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は[環境契約](../native-environments.md)の採用方式に従い、実成立は担当Phaseで確認する。
 
 ## Clearance criteria / verification
 

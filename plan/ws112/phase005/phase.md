@@ -22,7 +22,7 @@ Investigation bound: 90分の有限1Phase Queue案。具体的なscope/timebox/c
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
 公式Arch cloudimg v20261001.604814と2026/10/01 repo snapshotを候補入力とする。公式arch-boxes checksum signerを使用、native非root makepkgのminimal PKGBUILDで既存stageを収録、system依存とbackup/licenseを設定する。
 後続command/証拠: make keiland-linux-arch、native pacman/makepkg版・repo時点・signed packages、PKGINFO/BUILDINFO/MTREEとpacman -Qip/-Qlp/bsdtarの独立展開をmanifest比較。CPU x86_64・pkg.tar.zst・strip/debug抑止を確認、新OS boot条件を次Queue承認前に照合。
-Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は[環境契約](../native-environments.md)の採用方式に従い、実成立は担当Phaseで確認する。
 
 ## Clearance criteria / verification
 

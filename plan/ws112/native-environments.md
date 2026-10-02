@@ -65,7 +65,7 @@ Archは[2026/10/01公式repo](https://archive.archlinux.org/repos/2026/10/01/cor
 専用DESTDIRからproductionだけを選び、test/demo削除とapps.conf調整後、ELF/依存/manifest監査を行う。build guestが起動した事実をpackage runtime合格としない。
 package queryと展開はtarget native toolまたは形式を理解する読取toolで行う。native ELFをhost `ldd`で実行しない。
 
-## RPi OS実rootfsの成立性（D2未決）
+## RPi OS実rootfsの成立性（D2選択済み、実確認は後続）
 
 公式[image .info](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2026-09-15/2026-09-15-raspios-trixie-arm64-lite.info)はRPi reference2026-09-15、
 pi-gen commit `2c235fa703cacb65e0fe0b2ab2fcb23d44dfd268`、stage2（Lite）を記録。bounded GETで確認したpackage inventory:
@@ -134,6 +134,7 @@ plain chrootも外側VMのkernelを共有し、VM内rootを保護するsandbox�
 userが要求したnative compiler/真のRPi rootfs/build-onlyを満たすかは上記native provenanceと実buildで検証する。
 この採用方式はscope/CPUを変えず、GPU/GUI試験やhost変更を追加しない。RPi kernelをbootしないため、外側の既存Debian boot例外を適用する。
 90分Phase案やCI45minの達成を推測で保証しない。p003ではmetadata/input/環境準備/compile/encoder/audit別のelapsedを記録し、有限timeboxで止める。
+既存[WS108 q546](../history/ws108/q546/result.md)/[q548](../history/ws108/q548/result.md)はnative TCG/KVMと8GiB/CI45min設定を実証したが、工程別elapsedを保存していない。今回の新OS/方式の時間見積は未実測で、既存成功を新OSの時間保証へ転用しない。
 
 ## 判断と再開
 

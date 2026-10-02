@@ -22,7 +22,7 @@ Investigation bound: 60分の有限1Phase Queue案。具体的なscope/timebox/c
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
 全WS最終source/config/docsと5実成果物の全文/manual conformance。共通契約のnative toolchain/source archive/payload/loader dependency/config/licenseとCI全件gateを実最終revisionへ照合する。
 後続command/証拠: 最終変更範囲のPython/shell/Makefile/YAML syntax/manual/git diff --check、該当native build/独立package auditとbounded verifier否定試験結果を記録。追加Cがあれば全文規約/formatter/必要compileを適用。無効化された証拠だけ再確認し、runtime/実機/FreeBSD packageを追加しない。
-Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は[環境契約](../native-environments.md)の採用方式に従い、実成立は担当Phaseで確認する。
 
 ## Clearance criteria / verification
 
