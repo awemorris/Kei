@@ -210,4 +210,6 @@ Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h
 | IP 層の socket option（IP_TTL、multicast、group membership、IPv6 版）・`SOCK_SEQPACKET`・`FIONREAD` が無い | kernel（UAPI に無い） | glib（gsocket.c） | glib の patch 0004（G_IO_ERROR_NOT_SUPPORTED、available bytes は -1）。kernel に足すかは別の判断（記録だけ） |
 | `__tls_get_addr` が ld.so にだけあり、link のときには見えない | link の契約 | glib（meson の既定 `--no-undefined`） | glib に `-Db_lundef=false`。p006 以降で同じことが起きたら external.mk の共通規則か、link で ld.so を見せる案で決める（Q1） |
 | glib の fuzz の `fuzz_resolver` が record の parser（0003 で外した）を呼ぶ | 上の nameser の結果 | glib（fuzzing/meson.build） | glib の patch 0005（`arpa/nameser.h` が無ければその target だけ外す） |
+| harfbuzz（C++）が libc++ の header を要る | toolchain の package（devel/libcxx） | harfbuzz | upstream の既定（`with_libstdcxx=false`）で C の linker で link するので、実行時に libc++ は要らない（NEEDED と未定義の C++ の symbol が無いことを確かめた）。header は `ZEDBSD_EXT_harfbuzz_DEPENDS` の `libcxx` の stage から `-nostdinc++ -isystem <view>/usr/include/c++/v1`（lang/clang と同じ形）。subagent の worktree では main の stage の複写を使い、make に `-o <libcxx の stage>/.zedbsd-staged` を渡す（p006） |
+| fontconfig の `additional-fonts-dirs=yes` が build の機械の X11 の font の directory を調べる | cross の build の道具 | fontconfig | `no` にし、`default-fonts-dirs=/usr/share/fonts`（p006） |
 | `config.sub` と libtool が zedbsd を知らない | 外部の build 道具 | libffi（autotools だけ） | libffi の patch 0001（OpenSSH の先例と同じ形） |

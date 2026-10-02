@@ -77,7 +77,7 @@ shot() {
 # Starts a probe (its log at $1), with more options after.
 start_probe() {
 	log=$1; shift
-	guest "export XDG_RUNTIME_DIR=/tmp HOME=/root; /bin/ime-probe --log=$log $* > /dev/null 2>&1 </dev/null & sleep 3; echo started" >/dev/null
+	guest "export XDG_RUNTIME_DIR=/tmp HOME=/root; /bin/ime-probe --log=$log $* > /dev/null 2>&1 </dev/null & echo \$! > $log.pid; sleep 3; echo started" >/dev/null
 	expect_log "$log" 'PROBE READY'
 	expect_log "$log" 'PROBE ENTER'
 }
@@ -136,7 +136,9 @@ keys 'a'
 expect_log /tmp/pw.log 'PROBE KEY key=30 state=1'
 expect_none /tmp/pw.log 'preedit=[^ ]'
 shot password.png
-guest 'for p in $(ps -A -o pid,args | grep "[i]me-probe" | awk "{print \$1}"); do kill $p; done; sleep 2' >/dev/null
+# Only the password field's probe goes (ws095-p005: by the pid it started with; the guest's ps shows no arguments,
+# and killing every ime-probe closed the first window too, which was taken for BUG-113).
+guest 'kill $(cat /tmp/pw.log.pid); sleep 2' >/dev/null
 
 # A new probe for the rest (zdesktop gives the keyboard to the next window only when one is shown).
 start_probe /tmp/p2.log

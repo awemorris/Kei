@@ -23,6 +23,7 @@
 #include "popup.h"
 #include "subsurface.h"
 #include "extras.h"
+#include "ime.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -1858,6 +1859,9 @@ compose_record(
 		/* The popups over the windows. */
 		zwl_popup_draw(server, compose->command);
 	}
+
+	/* The input method's candidate window over the windows and their popups, in both looks (input-method.c). */
+	zwl_ime_popup_draw(server, compose->command);
 
 	/* The cursor over everything. */
 	compose_cursor(server, compose->command);

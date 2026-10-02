@@ -832,6 +832,9 @@ surface_commit(
 		if (error != 0)
 			return error;
 		zwl_subsurface_applied(surface);
+
+		/* The input method's candidate window is such a surface; its commit redraws the output (input-method.c). */
+		zwl_ime_surface_commit(surface);
 		return 0;
 	}
 

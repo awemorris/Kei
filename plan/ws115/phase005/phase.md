@@ -3,7 +3,7 @@
 # ws115-p005: libffi・pcre2・glib
 
 Parent: [WS115](../ws.md)
-Status: in-progress（q602-i01、P3 generation2。作業と受け入れの証拠は揃った。clearance の確定は Q1）
+Status: cleared（2026-10-02 Q1。q602-i01、958b6c060 まで main に統合。license は手での分類で可、audit-licenses.sh の拡張は ws129-p002）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
 Queue / attempts: q602-i01（P3 generation1 が中断、generation2 が継続して完了）

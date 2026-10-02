@@ -48,7 +48,7 @@ Resume point（2026-10-02 計画詳細化）: **次は p005 の新 attempt**（�
 | [ws095-p002](phase002/phase.md) | 日本語の engine（Wayland 無し）: ローマ字・辞書・活用の規則・分割・候補・利用者の辞書、固定の辞書で host の試験 | cleared（2026-09-29） | p001 | — |
 | [ws095-p003](phase003/phase.md) | 辞書の package（pin した tarball の取得・検証）、100 文での品質の計測、補いの辞書の案（ユーザーと相談） | cleared（2026-09-29） | p002、D1・D3 | — |
 | [ws095-p004](phase004/phase.md) | protocol の記述、zdesktop の仲介（起動と信頼・key の経路・Alt+Space・watchdog）、IME の program（日本語の engine の結線を含む）、ime-probe の guest の試験 | cleared（2026-09-29） | p002 | — |
-| [ws095-p005](phase005/phase.md) | 候補の窓の合成と IME の描画、indicator、IME の中の key の repeat、guest の画面の確認 | uncleared（2026-09-29 中断）。**新 attempt を Queue 投入可** | p003・p004 | 4h |
+| [ws095-p005](phase005/phase.md) | 候補の窓の合成と IME の描画、indicator、IME の中の key の repeat、guest の画面の確認 | cleared（q604-i01、2026-10-02、P4。QEMU で候補の窓・system bar の A／あ と click・repeat を確認、実機の目視はユーザー） | p003・p004 | 4h |
 | [ws095-p006](phase006/phase.md) | Terminal の text-input（libkeiui の `kui_window_text_input` を使う、password の検出）と Terminal の CJK の fallback の font（D14） | planned（p005 の後） | p005 | 3〜4h |
 | [ws095-p007](phase007/phase.md) | Text Editor と Notes の確認と不足の修正（preedit の表示・cursor の矩形） | planned（p005 の後） | p005 | 2〜3h |
 | [ws095-p008](phase008/phase.md) | zdesktop の自前の field（titlebar の検索）と Files の field | planning（Files の担当 WS127 と file の調整） | p005・p006、WS127 との調整 | 3〜4h |

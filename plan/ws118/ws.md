@@ -11,6 +11,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1、2026-10-02 user: ネットワークの次）
 Queue: none
 Resume point: [p001](phase001/phase.md)（sshd を起動する遠隔の実機 log 用 image と手順、planned、実機は使わない）。p002 以降の実機の作業は Q1 がユーザーに時期を聞いてから。
+2026-10-02 user:「使うネットワークの手段はUSB の LAN の RTL8156。これは明日の朝以降にやります。」→ 5320 は RTL8156 の USB の LAN で遠隔の log を取る。実機の作業は 2026-10-03 の朝以降、時期はユーザーに確かめる。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー）
