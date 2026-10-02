@@ -52,3 +52,5 @@ Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21
 2026-10-02 / B-df66db5e-projected: B checkpoint df66db5eをmain435a62126へ統合、195 BUG診断assets+73 GTK assetsのhash照合、代表PNG目視、Files source diff/style-check0・helper syntaxを確認。q581/p001調査clear、q583部分item clear/whole p017 uncleared、user共有によりq587/p007開始投入を投影。B2 q582 guest/boot関門は未達のまま。次ID q588/B2最終規約、q589/B3追加切り分け予約、A q590〜q592確保。全次Queueは個別lane/snapshotと依存で実行を確認する。
 
 2026-10-02 / A-checkpoints-terminal-q585: A1 reviewed88/209とA3契約/foreign Phasesを統合・ACK。A2 q585契約調査を有限上限内に終了、D1未解決でuncleared、[archive](history/queue-q585.md)検証済み。workerは同sessionで待機、q590〜q592はID予約/候補のみ。GitHub publication保留、pushなし。
+
+2026-10-02 / q593-reserved-B2: userが既存白樺・湖背景と見つかれば直線的抽象版の共通source収録を追加指示。q588後続WS099 p019のID **q593** をB2へ予約、exact Phase/scope/assets/3 OS verificationと依存はBから受領後に投影。予約はactive membershipではない。次の未予約IDq594。[協調記録](agents/two-session-coordination.md)。
