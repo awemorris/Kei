@@ -59,6 +59,8 @@ display engineのlatch/start scanout、全行の新frame走査完了、LCD側の
 4. `VK_ERROR_OUT_OF_DATE_KHR`/surface-lost/退役raceのとき、標準の曖昧なSUCCESSだけでsource eraseを証明しない。接続/generationを再照合し、物理出力が停止したことをdriver契約で確認できるか、target出現を保留してdegraded/parkへ移る。target失敗でsourceへ戻すときも対称のcompletion制約を守る。
 5. latch後に旧frameの下部がまだ走査中かもしれない厳格解釈には、driverのpipe frame/scanline境界で**全sourceframe走査完了**を待つ強い実装保証を要する。100ms固定sleep/refresh推定は保証にしない。能力未確認でfeatureを広告しない。LCDのoptical残像までの無重複はVulkan/scanout contractでは約束できない。
 
+比較補足（未採択）: direct-i915/FIFOでpresent_waitを実erase latchへ対応づけられる場合、latch成功後のfresh FIRST_PIXEL_OUT fence F1、F1 signal後にfresh F2を登録してF2まで待つ案がある。source sceneが引き続き窓無しなら実refresh境界間に全sourceframe走査を経過させられる可能性がある。native NEXT_REFRESH/first-pixel能力は未実証、切断/generation/曖昧SUCCESSの再照合が必要。精密latency・LCD内部/optical残像の保証は無い。user回答前にこの処理・追加API・refresh待機回数をmandatoryに採択しない。
+
 通常候補は「描画ownerをpointer境界で原子的に変更、各frameは1owner、old/new scanout遷移を規定」である。厳格候補は「sourceの窓無しframeが必要な境界まで完了してからtargetに出す」ので短い不表示時間が生じる。物理全head同時切替/不表示無しを必須とするなら追加下層能力が必要で、現在のsourceと標準だけでは成立しない。**この要求解釈と不表示期間の許容はmainがreview可能な製品判断として残す。**
 
 ## 3. main技術裁量へ渡す通常提案
