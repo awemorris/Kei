@@ -51,7 +51,7 @@ Event ws115-beta1-plan-20261002: 2026-10-02 計画担当が依存 package の移
 | xkeyboard-config | 2.48 | meson（data。compat rules あり、nls なし） | data 263 file（`/usr/share/xkeyboard-config-2`）と `/usr/share/X11/xkb` の link | — | なし | — |
 | libxkbcommon | 1.13.2 | meson（library だけ。x11・registry・tools・wayland の道具なし。data root は `/usr/share/xkeyboard-config-2`） | libxkbcommon.so.0 → `.0.13.2` | libc.so | 0001〜0003 | `-Wformat` 32（PRId64、§11） |
 
-- **libjpeg の方針**: port-contract §2 のとおり libjpeg-turbo（libjpeg 6b の ABI、SONAME libjpeg.so.62）。
+- **libjpeg の方針**: port-contract §1 の版の表のとおり libjpeg-turbo（libjpeg 6b の ABI、SONAME libjpeg.so.62）。
 - **libepoxy patch 0001**（Q1 の指示の `__ZEDBSD__` の patch）: dlopen の名前を zedBSD の `libEGL.so`・`libGLESv2.so`・`libGL.so` にした。zedBSD の `/lib/libGL.so` は desktop GL と GLX を export している（`glClear`・`glBegin`・`glXCreateContext` を `llvm-nm` で確かめた）。GLES 1 は無く、名前だけ置いた。
 - **libepoxy patch 0002**: `RTLD_NOLOAD` が無ければ、「読み込まずに調べる」問い合わせは「読み込まれていない」と答える。epoxy 自身が開いた library は handle に残るので見つかる。
 - **libxkbcommon patch 0001**: zedBSD では version script を使わない。
