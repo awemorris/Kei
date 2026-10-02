@@ -26,6 +26,24 @@
 #include "js/js.h"
 
 /*
+ * The flags of bind_fire_event: the event bubbles; it can be canceled; its
+ * target is the document although it is dispatched at the window (the
+ * window's load event).
+ */
+#define BIND_EVENT_BUBBLES 0x1U
+#define BIND_EVENT_CANCELABLE 0x2U
+#define BIND_EVENT_DOCUMENT 0x4U
+
+/*
+ * The modifier keys an input event says were held (shiftKey, ctrlKey,
+ * altKey and metaKey of MouseEvent and KeyboardEvent).
+ */
+#define BIND_MOD_SHIFT 0x01U
+#define BIND_MOD_CTRL 0x02U
+#define BIND_MOD_ALT 0x04U
+#define BIND_MOD_META 0x08U
+
+/*
  * The levels of the console's methods, which the host may show apart.
  */
 enum bind_console_level {
@@ -37,13 +55,29 @@ enum bind_console_level {
 };
 
 /*
- * The flags of bind_fire_event: the event bubbles; it can be canceled; its
- * target is the document although it is dispatched at the window (the
- * window's load event).
+ * The two storage areas of a window (ws074-p080): sessionStorage's and
+ * localStorage's.
  */
-#define BIND_EVENT_BUBBLES	0x1U
-#define BIND_EVENT_CANCELABLE	0x2U
-#define BIND_EVENT_DOCUMENT	0x4U
+enum bind_storage_area {
+	BIND_STORAGE_SESSION,
+	BIND_STORAGE_LOCAL
+};
+
+/*
+ * The parts of the document's location the host's location callback
+ * writes (the parts of the URL interface).
+ */
+enum bind_location_part_index {
+	BIND_LOCATION_HREF,
+	BIND_LOCATION_ORIGIN,
+	BIND_LOCATION_PROTOCOL,
+	BIND_LOCATION_HOST,
+	BIND_LOCATION_HOSTNAME,
+	BIND_LOCATION_PORT,
+	BIND_LOCATION_PATHNAME,
+	BIND_LOCATION_SEARCH,
+	BIND_LOCATION_HASH
+};
 
 struct css_engine;
 struct css_style;
@@ -77,21 +111,13 @@ struct bind_box {
 };
 
 /*
- * The two storage areas of a window (ws074-p080): sessionStorage's and
- * localStorage's.
- */
-enum bind_storage_area {
-	BIND_STORAGE_SESSION,
-	BIND_STORAGE_LOCAL
-};
-
-/*
  * What the window asks of its host for Web Storage (ws074-p080): the
  * items of a storage area of the page's origin, keys and values in UTF-16.
  * key reports the index-th key in the host's order (found is 0 past the
  * last); get reports a key's value (found is 0 for a key not there); set
  * reports ENOSPC when the item would take the origin past its quota; each
- * reports ENOMEM when memory runs out.
+ * reports ENOMEM when memory runs out. The Window borrows this immutable
+ * callback table for its lifetime; returned units are appended to caller storage.
  */
 struct bind_storage_calls {
 	int (*length)(void *context, int area, size_t *count);
@@ -104,7 +130,7 @@ struct bind_storage_calls {
 
 /* Completion of a resource fetched for the Fetch API. */
 typedef void (*bind_fetch_done)(void *context, int error, int status,
-	const unsigned char *bytes, size_t length, const char *url);
+				const unsigned char *bytes, size_t length, const char *url);
 
 /*
  * What the window asks of its host: where the console's lines go (one
@@ -127,6 +153,11 @@ typedef void (*bind_fetch_done)(void *context, int error, int status,
  * writes nothing: no engine matches nothing, and no layout has no boxes.
  * node_inserted is told after a script changes a DOM tree; checkpoint is
  * called after the outermost script task and its microtasks have finished.
+ *
+ * The Window copies this record. Its context, user_agent and optional storage
+ * table remain borrowed from the host for the Window lifetime. These callbacks
+ * are internal engine collaborators; the public view callback contract is in
+ * browser.h and does not expose these private records.
  */
 struct bind_host {
 	void *context;
@@ -150,31 +181,6 @@ struct bind_host {
 	/* Inserts into the active parser; ENOTSUP when no insertion point exists. */
 	int (*document_write)(void *context, const uint16_t *units, size_t length);
 };
-
-/*
- * The parts of the document's location the host's location callback
- * writes (the parts of the URL interface).
- */
-enum bind_location_part_index {
-	BIND_LOCATION_HREF,
-	BIND_LOCATION_ORIGIN,
-	BIND_LOCATION_PROTOCOL,
-	BIND_LOCATION_HOST,
-	BIND_LOCATION_HOSTNAME,
-	BIND_LOCATION_PORT,
-	BIND_LOCATION_PATHNAME,
-	BIND_LOCATION_SEARCH,
-	BIND_LOCATION_HASH
-};
-
-/*
- * The modifier keys an input event says were held (shiftKey, ctrlKey,
- * altKey and metaKey of MouseEvent and KeyboardEvent).
- */
-#define BIND_MOD_SHIFT		0x01U
-#define BIND_MOD_CTRL		0x02U
-#define BIND_MOD_ALT		0x04U
-#define BIND_MOD_META		0x08U
 
 /*
  * A pointer event's place and button, for bind_fire_mouse_event and

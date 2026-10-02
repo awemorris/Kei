@@ -37,6 +37,8 @@ struct net_loader;
 struct net_request;
 struct net_response;
 struct pollfd;
+struct page_box_slot;
+struct net_url;
 
 /* A request's callback, as the loader calls it (net_request_done). */
 typedef void (*page_request_done)(void *context, struct net_request *request);
@@ -81,8 +83,6 @@ typedef void (*page_request_done)(void *context, struct net_request *request);
  * whose serial box_index_serial is, made when a script first asks after a
  * layout (geometry.c).
  */
-struct page_box_slot;
-
 struct page {
 	struct vm_heap *heap;
 	struct dom_document *document;
@@ -114,7 +114,9 @@ struct page {
 	struct wb_vector fetches;
 	/* Pending child responses own temporary native roots until task completion. */
 	struct wb_vector frame_loads;
+	/* Defer nested child-response checkpoints while the outer snapshot drains. */
 	int frames_running;
+	/* Defer nested ready-script drains while the outer insertion-order loop runs. */
 	int scripts_running;
 	struct wb_vector fonts;
 	uint32_t fonts_generation;
@@ -192,7 +194,6 @@ void page_fonts_install(struct page *page);
 void page_fonts_release(struct page *page);
 
 /* Scripts, events and time (script.c). */
-struct net_url;
 int page_start_scripts(struct page *page);
 int page_url(const struct page *page, struct net_url *url);
 int page_run_script_element(void *context, struct dom_element *script);

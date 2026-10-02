@@ -34,7 +34,11 @@ main(
 	error = vm_heap_create(&heap, 0);
 	if (error != 0)
 		return 2;
+
+	/* The ordinary stack keeps construction values alive until the explicit root exists. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+
+	/* The explicitly owned realm supplies the native function's creator during setup. */
 	error = vm_realm_create(heap, &realm);
 	if (error != 0) {
 		vm_heap_destroy(heap);
