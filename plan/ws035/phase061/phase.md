@@ -37,3 +37,5 @@ Queue: q462-i01
 ## 追記（2026-09-26）: 壁紙の差し替え
 
 ユーザー「背景画像はこの添付をベースに差し替え、さらに強くぼかして抽象度を上げましょう。」（同じ白樺と山と湖の、ややぼけた版）。1672x941 の中央を 1506x941 で切り、1280x800 にし、3 段（median 7・9・11、Gaussian 6・10・16 px）を比べて中（median 9、Gaussian 10 px、彩度 0.85、contrast 0.85、明るさ 1.05）を採った（`build/ws035-wallpaper/v2-soft-b.png`、比較は `v2-preview.png`、`wallpaper.ppm` を置き換え。git 外のまま）。コードの変更は無い。QEMU の Venus guest で窓と Wiseview の画面を撮った（`build/ws035-p061b/desktop.png`・`wiseview.png`）。
+
+2026-10-02 / user-common-wallpapers-20261002 follow-up: userが当時git外に保存した白樺・湖の背景を共通source/releaseへ入れるようB2へ新しく指示。発見された直線的な抽象版も対象。[後継WS099 p019](../../ws099/phase019/phase.md)で収録する。旧p061の実測/clearanceを保持し、当時のgit外方針はこの追加指示でsource/release収録へ置換。
