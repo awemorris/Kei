@@ -13,3 +13,5 @@
 2026-10-02 / n3-execution-start: latest userがN=3継続実行を承認。runtime IDはspawn後に追記。main checkout所有Q1、publication保留、pushなし。
 
 Runtime: P8=`/root/p8_bugs`、P9=`/root/p9_desktop`、P10=`/root/p10_browser`。全員GPT-6.1 Sol High、起動時Queue受領済み。base41aac4fc7、3独立worktree、共有toolchain symlink read-only。
+
+P8 capacity incident: GPT-6.1 Sol High一時capacityでturn失敗。mainが未追跡5filesをplan/ws099/temp/p8-recoveryへ回収し同agentへ再投入。同modelで復帰、N_effective=3維持。runtime/成果を保持し重複試験なし。

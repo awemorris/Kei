@@ -12,3 +12,5 @@ Command: sh plan/ws075/demo/build-demo-image.sh build/main-n3-demo-pt passthroug
 
 Framebuffer boot-test1: exit1 QMP screendump recv TimeoutError、PNG無し。kernel/serial logは判定に使わず、boot合格は主張しない。有限1回再試行の結果を追記する。
 Hardware short/60minはP9が独立所有fixtureで実施し、このbuild/旧shortのみでwhole-Phase clearにしない。
+
+Framebuffer boot-test2: 同じQMPscreendump TimeoutErrorでexit1、PNG無し。無限再試行せずこの補助確認を未達として保持。passthrough configのhardware受け入れはP9の実PNG/ログで別途判定する。
