@@ -24,3 +24,5 @@ MR P9-q578-01: requested4bdd9224f/base41aac4fc7。main review: sh-n/diff-check P
 MR P9-q578-02: requested21042cf4ebc25cb529f30b3ccb51959a45fe3962、ACK済4bdd9224f以降、script atomic checkpoint/5round進捗追加のみ。sh-n/diff-check/main review PASS。旧short exec session外部中断143、owner/PID照合してfixture/log救出し正常返却。旧shortはPASSなし、fresh fixtureをsetsid nohupで継続。
 
 MR P9-q578-03: requested992b6de86、ACK済21042cf4e以後のPhase checkpoint/旧short3PNG/disk events。main provenance/中断の限界/ownercleanup/PNG証拠の範囲/diff-check reviewPASS。旧short結果でclearanceなし、現行freshshort進行中。
+
+MR P9-q578-04: requested7d82da63a、lastACK992b6de86。freshshort14round/187秒/errors0/restarts0/exitstatus0、session receiptとlive Terminal/実open-close PNGの耐久証拠をmain review。whole60minは継続中、short結果でclearanceなし。script source変更なし、diff-check PASS。

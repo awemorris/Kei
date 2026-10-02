@@ -56,3 +56,18 @@ tail -3 build/ws099-p014/c10-hw/c10-hw.out 2>/dev/null
 - FAIL なら uncleared。落ちた周、session.log の最後の `ZWL` の行、`SESSIOND GREETER failed reason=` を記録し、直しの Phase を main に提案する。
 
 2026-10-02 / n3-start-P9: current user「では、N=3でしばらく実行を続けてください」により最初の有限Queue q578を承認・開始。上限3時間、既存whole-Phase基準を保持。部分commitはclearanceではない。GitHub publication保留。
+
+## q578-i01 / P9 の途中結果（2026-10-02）
+
+[証拠と再開記録](q578-checkpoint.md)。試験scriptを作成し、構文・差分whitespace・所有資源のcleanupと判定をreview。
+既存C10の「窓の開閉」を確かめるため、元の10appを保ち、10周ごとに追加Terminalを開き`exit`で閉じる操作と前後PNGを追加。
+毎周の回数・実経過秒・QEMU PIDをatomic checkpointへ保存する。compositor sourceは変更無し。
+
+旧WS103イメージの道具確認は実行ツールの中断で未達。所有者・元のQEMU PIDを照合してログを救出し、自分のVMとlockを返却。
+現行source `5ac9b753d` のfresh demo image（mainのbuild exit0/project warnings0、SHA256
+`72003343313d85b5e0950f5659ca6af5a6183ef3c0776c68a1e7ecdfba0b3e7e`）をread-only copyで使用。
+fresh 3分試走は **PASS**: 14周・実187秒、errors0/restarts0、disk receiptと実Terminal PNGを確認。
+10appの維持・追加窓の実closeもPNGとdisk sessionで確認。lock/owner返却、vfio binding不変。
+
+60分本番は独立session（PID203752、`build/ws099-p014/c10-full-fresh`）で実行中。全体Phaseのclearanceは未確定。
+補助のframebuffer boot検証はmainが実施中、実機のPNG/受け入れと区別する。未実施をPASSにしない。

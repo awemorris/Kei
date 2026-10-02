@@ -76,8 +76,24 @@ reused canonical Noct accelerator/stamp without toolchain edits. Worker
 read-only copied it to build/ws099-p014/fresh-5ac9b753d.img and verified hash.
 /bin/textedit remains absent, preserving the ten visible tiles.
 
-Fresh three-minute run is detached with setsid/nohup to survive tool-session
-limits, PID/session ID 188402, OUTDIR build/ws099-p014/c10-short-fresh.
-At checkpoint it is running. Fresh short final receipt/PNG, 60-minute soak
-and final criteria evaluation remain outstanding. Main's fresh boot result
-is pending. Phase remains in-progress; no clearance claim or GitHub publication.
+Fresh three-minute run used setsid/nohup to survive tool-session limits,
+PID/session ID 188402, OUTDIR build/ws099-p014/c10-short-fresh. It completed:
+rounds=14, requested minutes=3, actual operation elapsed_seconds=187, errors=0,
+restarts=0, exit.status=0. Inspected its opened/extra-open/extra-closed PNGs and
+saved-live.png: ten app windows remain, the extra Terminal closes with exit,
+and the final real Terminal shows the log-copy/receipt/sync command followed
+by a fresh shell prompt. Session receipt C10_HW_SAVED_1790917793 is present.
+Disk session records show Wiseview windows=10 throughout. Exact owner and
+hardware lock were given back; remote QEMU absent, GPU still vfio-pci.
+
+[Fresh short receipts and PNGs](evidence/fresh-short/) retain output, full
+disk session/sessiond logs, atomic checkpoint, cleanup receipt and four PNGs.
+Console/serial logs are excluded. This validates the fixture and runner,
+but supplies only 187 seconds of C10 operation.
+
+The approved 60-minute run started detached at 2026-10-02 05:14 UTC:
+PID/session ID 203752, OUTDIR build/ws099-p014/c10-full-fresh, same fresh
+source/image. At checkpoint it is initializing. Whole-hour receipt/periodic
+PNGs and final criteria evaluation remain outstanding. Main's supplementary
+framebuffer boot result is separate and pending. Phase remains in-progress;
+no clearance claim or GitHub publication.
