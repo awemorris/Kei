@@ -124,3 +124,5 @@ Event ws115-beta1-plan-20261002: 2026-10-02 計画担当が依存 package の移
 
 - worktree で harfbuzz を build するには、libcxx の stage の複写と `-o` が要る。main の checkout での build（本物の libcxx の stage）では要らないはず。merge 後の main の build で確かめてほしい。
 - hb-cairo（p007 の後）。freetype を harfbuzz 付きで作り直すか。
+
+main の checkout（`make -j8 harfbuzz`、`-o` 無し）: exit 0、stage 済み（Q1、2026-10-02）。
