@@ -15,6 +15,7 @@ Resume point（2026-10-02 q597）: p001 cleared。[移植契約](port-contract.m
 2026-10-02 user:「Keilandネイティブのfile chooserを呼び出すlibkeilandの関数呼び出しを、GTK4に追加してもOKです。」→ 新 [p011](phase011/phase.md)（p010 の後）。portal 無しで、GTK のファイルダイアログを Keiland の共有の file chooser で出す。
 2026-10-02 user:「GtkApplication が、session bus が無いと警告を出す件は、該当コードを無効化するパッチをお願いします。」→ p010 の範囲に追加（glib/GTK の patch）。
 2026-10-02 user（Vulkan 1.3 の調査 [vulkan-1.3-survey](vulkan-1.3-survey.md) の後）:「うーん、仕方ないです、CairoはGLでいきます。」→ R1 = **Cairo → GL**（p008 の epoxy の SONAME の patch で GL を有効に）。Vulkan renderer は libvulkan の header・instance 1.1 と i915 の compiler の作業が要るので後回し（[F-067](../future-work.md)）。
+2026-10-02 user:「libcへの変更をあなたに明示的に許可します。」（`plan/ws115/proposed/libc-libintl-format-arg.diff`・`libc-cmsg-nxthdr.diff` の適用。P3 の権限は permission system に止められたため、P3 を再起動して適用する）。
 <!-- awesome-plan-current:end -->
 
 ## Objective / scope
