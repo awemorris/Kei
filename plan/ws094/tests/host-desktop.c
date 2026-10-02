@@ -54,7 +54,9 @@ static void check_label(void);
 static void check_resize(void);
 static void check_prune(void);
 
-/* Runs the checks. */
+/*
+ * Runs the checks.
+ */
 int
 main(
 	int argc,
@@ -73,6 +75,7 @@ main(
 	int columns;
 	int rows;
 	int error;
+	int read_error;
 
 	/* The temporary folder is the configuration folder. */
 	if (argc != 2) {
@@ -132,11 +135,23 @@ main(
 	check(error == 0 && count == 1U && read[0].column == 3 && read[0].row == 2, "the place read back");
 	free(read);
 	error = fm_desktop_layout_set(&desk, "photo.png", 4, 1);
-	error |= fm_desktop_layout_read(path, &read, &count);
+	if (error != 0)
+		check(0, "the repeated placement writes its layout");
+
+	/* Reads back the saved places even when the writer reported an error. */
+	read_error = fm_desktop_layout_read(path, &read, &count);
+	if (read_error != 0)
+		error = read_error;
 	check(error == 0 && count == 1U && read[0].column == 4 && read[0].row == 1, "the same item placed again: one line");
 	free(read);
 	error = fm_desktop_clean_up(&desk);
-	error |= fm_desktop_layout_read(path, &read, &count);
+	if (error != 0)
+		check(0, "Clean Up removes the saved layout");
+
+	/* Reads the empty layout after the cleanup attempt. */
+	read_error = fm_desktop_layout_read(path, &read, &count);
+	if (read_error != 0)
+		error = read_error;
 	check(error == 0 && count == 0U && desk.saved_count == 0U, "Clean Up forgets every place");
 	free(read);
 	fm_desktop_release(&desk);
@@ -180,6 +195,9 @@ check(
 
 	/* A passed check is printed. */
 	printf("ok: %s\n", text);
+
+	/* Succeeded: this check's outcome is reported. */
+	return;
 }
 
 /* Checks pruning against the full listing and its deferred file write. */
@@ -287,6 +305,7 @@ check_shown(void)
 	char path[1200];
 	size_t count;
 	int error;
+	int operation_error;
 
 	/* b, c and d laid out down the first column, and remembered. */
 	memset(&desk, 0, sizeof(desk));
@@ -305,11 +324,29 @@ check_shown(void)
 	/* A renamed item keeps its place shown under the new name; c had a saved place, which follows too. */
 	desk.place_count = 4U;
 	error = fm_desktop_remember(&desk, after, 4U);
-	error |= fm_desktop_layout_set(&desk, "c", 5, 4);
-	error |= fm_desktop_layout_rename(&desk, "c", "e");
+	if (error != 0)
+		check(0, "the preceding layout operation succeeded");
+
+	/* Writes the renamed item's original saved cell. */
+	operation_error = fm_desktop_layout_set(&desk, "c", 5, 4);
+	if (operation_error != 0)
+		error = operation_error;
+	if (error != 0)
+		check(0, "the preceding layout operation succeeded");
+
+	/* Renames the saved and shown places. */
+	operation_error = fm_desktop_layout_rename(&desk, "c", "e");
+	if (operation_error != 0)
+		error = operation_error;
 	check(error == 0 && strcmp(desk.shown[2].name, "e") == 0, "the rename carries the place shown");
 	error = fm_desktop_layout_path(path, sizeof(path));
-	error |= fm_desktop_layout_read(path, &read, &count);
+	if (error != 0)
+		check(0, "the preceding layout operation succeeded");
+
+	/* Reads back the renamed saved place. */
+	operation_error = fm_desktop_layout_read(path, &read, &count);
+	if (operation_error != 0)
+		error = operation_error;
 	check(error == 0 && count == 1U && strcmp(read[0].name, "e") == 0 && read[0].column == 5, "the rename carries the saved place in the file");
 	free(read);
 
@@ -320,6 +357,9 @@ check_shown(void)
 	/* The places were the test's; the rest is freed. */
 	desk.places = NULL;
 	fm_desktop_release(&desk);
+
+	/* Succeeded: saved/shown rename and cleanup were exercised. */
+	return;
 }
 
 /* Checks the desktop's context menus and its rename over a folder of the temporary folder (ws094-p005). */
@@ -389,6 +429,9 @@ check_menus(
 	/* The model is done with. */
 	fm_desktop_release(&app.desk);
 	fm_app_release(&app);
+
+	/* Succeeded: desktop menu and rename checks finished. */
+	return;
 }
 
 /* Tells whether a context menu has a row with a label. */
@@ -485,6 +528,9 @@ check_drag(
 	app.desk.places = NULL;
 	fm_desktop_release(&app.desk);
 	fm_app_release(&app);
+
+	/* Succeeded: cell and drop checks finished. */
+	return;
 }
 
 /* Tells whether a name has a saved place at a cell. */
@@ -629,6 +675,9 @@ check_partial(
 	free(pixels);
 	free(whole);
 	fm_text_close(&text);
+
+	/* Succeeded: all retained-canvas comparisons finished. */
+	return;
 }
 
 /*
@@ -753,6 +802,9 @@ check_label(void)
 
 	/* The fonts are done with. */
 	fm_text_close(&text);
+
+	/* Succeeded: the label checks released their fonts. */
+	return;
 }
 
 /*
@@ -797,4 +849,7 @@ check_resize(void)
 	/* Larger again: far.txt back at its saved place. */
 	fm_desktop_arrange(names, 3U, saved, 2U, 1920, 1046, places);
 	check(places[1].column == 16 && places[1].row == 8, "resize: 1920 again, far.txt back at 16,8");
+
+	/* Succeeded: the resized grids retained the saved places. */
+	return;
 }

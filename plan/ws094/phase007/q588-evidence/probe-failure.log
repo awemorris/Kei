@@ -1,0 +1,4 @@
+fault=1 error=12 pool=0 buffer=0 callback=0
+fault=2 error=12 pool=1 buffer=0 callback=0
+fault=3 error=12 pool=1 buffer=1 callback=0
+fault=4 error=22 pool=1 buffer=1 callback=1

@@ -1,0 +1,3 @@
+userland/desktop/files/main.c:229: blank-after-brace: if (status != 0) {
+userland/desktop/files/main.c:642: blank-after-brace: drawn = fm_clock();
+userland/desktop/picture/picture.c:294: call-in-condition: setjmp

@@ -269,10 +269,31 @@ desktop_bind(
 	/* The globals, announced to this search alone. */
 	search.name = 0;
 	registry = wl_display_get_registry(wrapper);
-	if (registry != NULL) {
-		status = wl_registry_add_listener(registry, &desktop_registry_listener, &search);
-		if (status == 0)
-			(void)wl_display_roundtrip_queue(display, queue);
+	if (registry == NULL) {
+		wl_proxy_wrapper_destroy(wrapper);
+		wl_event_queue_destroy(queue);
+		errno = ENOTSUP;
+		return NULL;
+	}
+
+	/* Receives globals before the search begins dispatching its private queue. */
+	status = wl_registry_add_listener(registry, &desktop_registry_listener, &search);
+	if (status != 0) {
+		wl_registry_destroy(registry);
+		wl_proxy_wrapper_destroy(wrapper);
+		wl_event_queue_destroy(queue);
+		errno = ENOTSUP;
+		return NULL;
+	}
+
+	/* A failed roundtrip cannot supply a usable manager, even after partial announcements. */
+	status = wl_display_roundtrip_queue(display, queue);
+	if (status < 0) {
+		wl_registry_destroy(registry);
+		wl_proxy_wrapper_destroy(wrapper);
+		wl_event_queue_destroy(queue);
+		errno = ENOTSUP;
+		return NULL;
 	}
 
 	/* The manager, bound when announced, is moved to the application's default queue. */

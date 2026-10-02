@@ -339,6 +339,7 @@ struct fm_desktop {
 	int click_index;
 	uint64_t click_ms;
 	int logged;
+	/* Selection press time for the next successful frame log; zero means no sample pending. */
 	uint64_t select_ms;
 	int pressing;
 	int press_alone;

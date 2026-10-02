@@ -65,6 +65,23 @@ struct main_options {
 };
 
 /*
+ * The times of the steps of the start, in fm_clock()'s milliseconds, logged
+ * once with the first frame in the desktop mode (ws094-p009).
+ */
+struct main_startup {
+	uint64_t entered;  /* main() entered */
+	uint64_t fonts;	   /* the fonts read */
+	uint64_t instance; /* the desktop's Vulkan instance made (before its surface) */
+	uint64_t window;   /* the window or desktop surface open */
+	uint64_t present;  /* the presenter open */
+	uint64_t app;	   /* the file manager (its first listing) made */
+	uint64_t canvas;   /* the first canvas made */
+	uint64_t draw_ms;  /* the first frame's drawing */
+	uint64_t shown;	   /* the first frame shown */
+	uint64_t menus;	   /* the desktop's context menus open, after the first frame */
+};
+
+/*
  * The desktop mode (files --desktop, ws094-p003): the token zdesktop gave
  * the program, copied before it leaves the environment (unsetenv frees the
  * environment's string), and the folder shown (~/Desktop).  Empty outside
@@ -125,23 +142,6 @@ static struct fm_titlebar_state main_titlebar_state;
  */
 static uint32_t *main_pixels;
 static struct fm_canvas main_canvas;
-
-/*
- * The times of the steps of the start, in fm_clock()'s milliseconds, logged
- * once with the first frame in the desktop mode (ws094-p009).
- */
-struct main_startup {
-	uint64_t entered;	/* main() entered */
-	uint64_t fonts;		/* the fonts read */
-	uint64_t instance;	/* the desktop's Vulkan instance made (before its surface) */
-	uint64_t window;	/* the window or desktop surface open */
-	uint64_t present;	/* the presenter open */
-	uint64_t app;		/* the file manager (its first listing) made */
-	uint64_t canvas;	/* the first canvas made */
-	uint64_t draw_ms;	/* the first frame's drawing */
-	uint64_t shown;		/* the first frame shown */
-	uint64_t menus;		/* the desktop's context menus open, after the first frame */
-};
 
 /* The current run's startup samples; zero means a step has not been recorded yet. */
 static struct main_startup main_startup;

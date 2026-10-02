@@ -1,0 +1,125 @@
+{
+  "base": "60201ab88cbf482024a70db9bcae4f2e2d771a45",
+  "previous_integrated_checkpoint": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+  "source_inventory": "q588-inventory.json",
+  "log_root": "/home/awe/zedBSD-worktrees/b2/build/b2-ws094-p007",
+  "versions": {
+    "target_clang": "23.1.0",
+    "host_gcc": "14.2.0",
+    "python": "3.13.5",
+    "clang_format": "19.1.7"
+  },
+  "logs": [
+    {
+      "name": "target-final-dryrun.log",
+      "bytes": 44668,
+      "sha256": "b19b1810a79296e5b05bb0bef26a43b4fc1dc96f98f0d69c8c904af8299e619e"
+    },
+    {
+      "name": "target-final-build.log",
+      "bytes": 41701,
+      "sha256": "faeea39e13186698a3487f43863b866924b4eb75a8352a0d36770e4a852c24fa"
+    },
+    {
+      "name": "format-results.json",
+      "bytes": 3260,
+      "sha256": "d4a0cd009f7401aa9d47512a9e44e2b91880f86e8d25f3995951d81161519f5d"
+    },
+    {
+      "name": "probe-host-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-failure-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-all-style.txt",
+      "bytes": 614,
+      "sha256": "ec4690eb42c74be459aa0aa1cb806641f26fc64e3d052f0c25c206781c24714b"
+    },
+    {
+      "name": "final-owned-style.txt",
+      "bytes": 213,
+      "sha256": "ba73e826b9fae77aad4eda3a7fc0cfca81320f13d6e21fb63b24ffae9ead0490"
+    },
+    {
+      "name": "final-all-extra.txt",
+      "bytes": 25115,
+      "sha256": "ea135cc2a4974097d0f70fd4c3d6dadca456fd05f7292bb4024834fa14a966e8"
+    },
+    {
+      "name": "final-owned-extra.txt",
+      "bytes": 5339,
+      "sha256": "1589780b3728cd645f4f43964437fe0d34432f28b9c64792a47a1359cfde5402"
+    },
+    {
+      "name": "host-final-results.json",
+      "bytes": 467,
+      "sha256": "e8b66b72548061fc90099781070237f51270bc5211223846f230f57663724e92"
+    },
+    {
+      "name": "probe-negative.json",
+      "bytes": 314,
+      "sha256": "63a0a72226c5c90f64136049be60072c8d783e80dfc7e1cef123910068628d33"
+    },
+    {
+      "name": "probe-failure.log",
+      "bytes": 176,
+      "sha256": "99db537c05a38dd06f378213aa5d03fafbb02b91387e95183188305d1ed2eb9b"
+    },
+    {
+      "name": "probe-failure-host.c",
+      "bytes": 4485,
+      "sha256": "21246a9ebc18cdd603d1500e2105634eeacf1131a17a55ac2d8d33083459e261"
+    },
+    {
+      "name": "os-boundary-final.log",
+      "bytes": 176,
+      "sha256": "613589faedee481e3269ff1447343d02f747f9d1234b4f550b82807808dfb0b5"
+    },
+    {
+      "name": "probe-target-build.log",
+      "bytes": 52,
+      "sha256": "cda9ef701d802ddcac0be9d9511b62894d73a732309ddbc22a956a5f47dea7c2"
+    },
+    {
+      "name": "host-final-desktop.log",
+      "bytes": 7314,
+      "sha256": "427374fd96ddd9fa4ddfeac50a74557f312e6a7ca15bfd7bccdd7e2e3340b546"
+    },
+    {
+      "name": "host-final-thumb.log",
+      "bytes": 751,
+      "sha256": "1a756961681095992b72da2ce936338af4aeb8cf21cbc75d3d6be99529f3f3eb"
+    },
+    {
+      "name": "host-final-model.log",
+      "bytes": 4735,
+      "sha256": "6c1be18c9ac7e6c90e934c004739a46a5c7cdf9299f81a6fe7ab586c478ee7ac"
+    },
+    {
+      "name": "host-final-imageview.log",
+      "bytes": 694,
+      "sha256": "b3c8fbd242f8227d55a5e9d80761a5ddb739982c350bb320289430c156d5a9d3"
+    }
+  ],
+  "durable_shell_parse": {
+    "name": "q588-evidence/shell-parse.json",
+    "bytes": 718,
+    "sha256": "86efe470434d4e630a47fe7e0e6d90b1b2d8e58dc1eb2904c75b1dfa0f4644c7"
+  },
+  "owned_cleanup": {
+    "q588_guest_started": false,
+    "q588_shell_build_test_processes": "all finished",
+    "q582_session_json": "absent on owned build read-back",
+    "qemu_renderer": "no owned B2 process; process scan self match excluded"
+  },
+  "durable_artifact_normalization": {
+    "path": "q588-evidence/host-final-imageview.log",
+    "operation": "strip trailing whitespace only; raw local log and original hash retained above",
+    "sha256": "007684c77beb3af3ac1141e9161d42d24770c248a0af0f453ec7825ee71bf0e5"
+  }
+}

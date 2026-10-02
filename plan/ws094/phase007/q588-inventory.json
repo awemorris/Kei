@@ -1,0 +1,1137 @@
+{
+  "base": "60201ab88cbf482024a70db9bcae4f2e2d771a45",
+  "checkpoint": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+  "method": "union of non-merge WS094 record commits; cec34d3e is cross-WS104 follow-up, not WS094 source origin; current native registration added as context",
+  "sources": [
+    {
+      "path": "userland/desktop/keiland/keiland.h",
+      "original_path": "include/libc/keiland.h",
+      "ws_record_commits": [
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "a5790e29215f040c455631dd012e6628679002ef",
+        "7e3ac1bc26ede65bd94e364eee2d23c84a6668d0",
+        "12d7efeea05917a0d12c50a93824a6b6dc990c59"
+      ],
+      "sha256": "cb3942d6009fddc680421176dd721a669120c33d87f62df2c6e36fb1a21ac5c8",
+      "git_blob": "3d6868120723ff2e1ae7e67e96c2383e13b815d6",
+      "last_commit": "a5790e29215f040c455631dd012e6628679002ef",
+      "line_count": 1343,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "plan/tools/files/host-build.sh",
+      "original_path": "plan/tools/files/host-build.sh",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "d34fd35bf19603fc50ad71ef3661b442714f9099",
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "12d7efeea05917a0d12c50a93824a6b6dc990c59"
+      ],
+      "sha256": "5eef78c0b37c4e9a5c3da5fb841d278956a72513f73b56bdd239f6592ed5060b",
+      "git_blob": "efda6a5293223f76d9fb3d23096411e48966d486",
+      "last_commit": "d34fd35bf19603fc50ad71ef3661b442714f9099",
+      "line_count": 86,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "plan/tools/imageview/run-host.sh",
+      "original_path": "plan/tools/imageview/run-host.sh",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "43beae3a6d8655372df1d8ab8f5964fd3464ccd2"
+      ],
+      "sha256": "8f78005e640811214aa4c60c5e04e0be327e3d4289dfcbe9f042a213aa735c29",
+      "git_blob": "5698f06bd45b3e671bf4c8a7f93eb2f619b7445b",
+      "last_commit": "43beae3a6d8655372df1d8ab8f5964fd3464ccd2",
+      "line_count": 162,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "plan/ws094/tests/build-probe.sh",
+      "original_path": "plan/ws094/tests/build-probe.sh",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [],
+      "sha256": "b9d607c9f68a0cef8e87a022e75ff91d25305eee27b7498491f34cd8fa8f1393",
+      "git_blob": "1a0a98d328f20f0a82d6eed6e4a25b1145e30ad6",
+      "last_commit": "2c82629dd0b6c04a31775baa277167b3f9a80dec",
+      "line_count": 21,
+      "ownership": "read-only test runner",
+      "manual_scope": "setup, build/install membership, assertions and cleanup contracts"
+    },
+    {
+      "path": "plan/ws094/tests/desktop-guest.sh",
+      "original_path": "plan/ws094/tests/desktop-guest.sh",
+      "ws_record_commits": [
+        "b802372945ff9db7896d98999850847eb633d770",
+        "b60f8a38a28f0a63924e08119a85be5e82654344",
+        "fc29e1f2256e6532b54c41aec5c152c46ce53bf5",
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "b802372945ff9db7896d98999850847eb633d770",
+        "b60f8a38a28f0a63924e08119a85be5e82654344",
+        "fc29e1f2256e6532b54c41aec5c152c46ce53bf5"
+      ],
+      "sha256": "8cd2c7bb417c0374294756a5bd75b5c6011a7b35645b8a3d6e5076d86348a32b",
+      "git_blob": "1b3627be4e6396f2c6acc5647e474c666ad038a3",
+      "last_commit": "b802372945ff9db7896d98999850847eb633d770",
+      "line_count": 210,
+      "ownership": "read-only test runner",
+      "manual_scope": "setup, build/install membership, assertions and cleanup contracts"
+    },
+    {
+      "path": "plan/ws094/tests/desktop-p010.sh",
+      "original_path": "plan/ws094/tests/desktop-p010.sh",
+      "ws_record_commits": [
+        "f9b70135c9d433d9df383a84dc596ee9b96b2db7"
+      ],
+      "follow_up_commits": [],
+      "sha256": "0a16ccd434d3d0b5790ef26f6cacd746d2085db4e61066af3ba87283ab79eebf",
+      "git_blob": "3f6e33d242d5415d6e4f0b9deb65bf2ddaa26781",
+      "last_commit": "f9b70135c9d433d9df383a84dc596ee9b96b2db7",
+      "line_count": 90,
+      "ownership": "read-only test runner",
+      "manual_scope": "setup, build/install membership, assertions and cleanup contracts"
+    },
+    {
+      "path": "plan/ws094/tests/desktop-probe.c",
+      "original_path": "plan/ws094/tests/desktop-probe.c",
+      "ws_record_commits": [
+        "fc29e1f2256e6532b54c41aec5c152c46ce53bf5",
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "fc29e1f2256e6532b54c41aec5c152c46ce53bf5"
+      ],
+      "sha256": "86ac8337cfce249799403ce0082782e6c48d5e8e3aa13f6009ec4e5bbb672752",
+      "git_blob": "f83036c5bbb1cd1e107b5a1399c7c650d33751f2",
+      "last_commit": "fc29e1f2256e6532b54c41aec5c152c46ce53bf5",
+      "line_count": 1311,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "plan/ws094/tests/files-desktop-guest.sh",
+      "original_path": "plan/ws094/tests/files-desktop-guest.sh",
+      "ws_record_commits": [
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "b802372945ff9db7896d98999850847eb633d770",
+        "9a8e786bb0552f9fa71039514bf6945b8fd2d1ec",
+        "64139a88df39d2c58fac820ec04b63525e832bbe",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "b802372945ff9db7896d98999850847eb633d770",
+        "9a8e786bb0552f9fa71039514bf6945b8fd2d1ec",
+        "64139a88df39d2c58fac820ec04b63525e832bbe"
+      ],
+      "sha256": "c04d4327250fd9c749fe37a1d13b937dd6a4a28718fd0d1aeb94ea69f2253fcb",
+      "git_blob": "52a3bb15d569ed550734c315a8678726ca34376a",
+      "last_commit": "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+      "line_count": 535,
+      "ownership": "read-only test runner",
+      "manual_scope": "setup, build/install membership, assertions and cleanup contracts"
+    },
+    {
+      "path": "plan/ws094/tests/host-desktop.c",
+      "original_path": "plan/ws094/tests/host-desktop.c",
+      "ws_record_commits": [
+        "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "64139a88df39d2c58fac820ec04b63525e832bbe",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+        "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "64139a88df39d2c58fac820ec04b63525e832bbe",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "sha256": "fd45905d915baaa9dda679f92f181ebbcd39010feeba9e5a630844096de45398",
+      "git_blob": "c7550b6cee9ed0106e9f9395efd1600ee4d5be3a",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 855,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "plan/ws094/tests/host-desktop.sh",
+      "original_path": "plan/ws094/tests/host-desktop.sh",
+      "ws_record_commits": [
+        "05e418fe2023871dc80a29f02111b7c5d7c91335",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "sha256": "9e0a23f7169ad527afa474fd1bb2d8159930d987f8b72e9d690d1a56b16960a9",
+      "git_blob": "a670de963f70a624ac89abbded7dca52eaa4d3bb",
+      "last_commit": "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+      "line_count": 16,
+      "ownership": "read-only test runner",
+      "manual_scope": "setup, build/install membership, assertions and cleanup contracts"
+    },
+    {
+      "path": "plan/ws094/tests/host-thumb.c",
+      "original_path": "plan/ws094/tests/host-thumb.c",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [],
+      "sha256": "0c2eaf97f5e24179d0a82d6ba2142fcd1972634bc8492398c041e56bf70216b3",
+      "git_blob": "2dcbe2a40371d1fbd1388085b32e68e177e7ca3a",
+      "last_commit": "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+      "line_count": 90,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "plan/ws094/tests/host-thumb.sh",
+      "original_path": "plan/ws094/tests/host-thumb.sh",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20"
+      ],
+      "sha256": "6e38098098987ae82560e370fc81d76ba27206f5420822f3e4b97846138833db",
+      "git_blob": "eb527d265232aa3aaa443d9f81d7f4999c97a799",
+      "last_commit": "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+      "line_count": 111,
+      "ownership": "read-only test runner",
+      "manual_scope": "setup, build/install membership, assertions and cleanup contracts"
+    },
+    {
+      "path": "platform/amd64/vmunix.mk",
+      "original_path": "platform/amd64/vmunix.mk",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "2770e48107b64d7417e8f8bcd0e1d9d4fb8858b8",
+        "771469b025938e01e20e3e0834cc9449f6604157",
+        "0d3a44d8df23a0f5cc93b8b0943f8bcac26ccc29",
+        "31d88d384e7d55e539b2e9a47fee0428ad389de6",
+        "a6424673e46d8b49c2dc73553eb48eebe02e7711",
+        "f615c1c628ceaf91d827453386a999af416642f3",
+        "2656dd7de29d625001c712d95ad44bde29e2d4fb"
+      ],
+      "sha256": "d495c8d14121d725b67dba6db53c152286038d36fe24e4fcb0c94ba0916d035f",
+      "git_blob": "b4d458ab006448b857b4f1a0f3c262755ec3b0b0",
+      "last_commit": "2770e48107b64d7417e8f8bcd0e1d9d4fb8858b8",
+      "line_count": 2388,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/files/Makefile",
+      "original_path": "userland/desktop/files/Makefile",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "5d7f3ef15cd8095a24d2997cb71dd390be1412b4",
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "sha256": "eb47192aa17d89b095774bd2ee4af5d1ea9b01f4c28d648fa9bf0cd263ac16a1",
+      "git_blob": "2425a40e04fda4c1a7b0d8f4440c5ebe08727cd5",
+      "last_commit": "5d7f3ef15cd8095a24d2997cb71dd390be1412b4",
+      "line_count": 31,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/files/desktop-layout.c",
+      "original_path": "userland/desktop/files/desktop-layout.c",
+      "ws_record_commits": [
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "64139a88df39d2c58fac820ec04b63525e832bbe",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+        "7847fd67109cb6475c17caa7220627f183581bd2",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "64139a88df39d2c58fac820ec04b63525e832bbe"
+      ],
+      "sha256": "85ace35f6b906ed704452a5ffd0e80adef54d4243f7d9622f9582c8e2506ba66",
+      "git_blob": "cb06abada3929f725d71564e5d6f94d7248df4f3",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 898,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/files/files.h",
+      "original_path": "userland/desktop/files/files.h",
+      "ws_record_commits": [
+        "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "bb6b16f774d6c1b36313db481f38a89824a4937e",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "sha256": "8d628b3a343936603b2f861e06bcb33f51c8509a99368c180bc8f8bc712b0715",
+      "git_blob": "65e23b6573e69dde92e8803cfbdf0bfe5e01bf89",
+      "last_commit": "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+      "line_count": 1583,
+      "ownership": "B2 editable WS094 parts only",
+      "manual_scope": "WS094 additions / changed function paragraphs"
+    },
+    {
+      "path": "userland/desktop/files/main.c",
+      "original_path": "userland/desktop/files/main.c",
+      "ws_record_commits": [
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "sha256": "8262df1a84acc4c6173ab2f7398051bb0dd3bf013eebe23fb7d1ffd8a93d2b0c",
+      "git_blob": "c22d1508f55d00ab86d1fca791a9f5b8413636a6",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 1287,
+      "ownership": "B2 editable WS094 parts only",
+      "manual_scope": "WS094 additions / changed function paragraphs"
+    },
+    {
+      "path": "userland/desktop/files/menu.c",
+      "original_path": "userland/desktop/files/menu.c",
+      "ws_record_commits": [
+        "fa88c205f3226afee8e52ec67e667ec179a5b139"
+      ],
+      "follow_up_commits": [],
+      "sha256": "3feae68571ae11d0631ba39c263f3753e1402d0cacb7d066beedbc1ea7e25ae5",
+      "git_blob": "b9faf293d024b31cba3aaa6a1bc10b99cabfd95a",
+      "last_commit": "fa88c205f3226afee8e52ec67e667ec179a5b139",
+      "line_count": 897,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/files/present.c",
+      "original_path": "userland/desktop/files/present.c",
+      "ws_record_commits": [
+        "948775b94caa08187cc00cbcec699ba5f6433538"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2"
+      ],
+      "sha256": "f1712288bd6142cf1b690880de0ce9a57cba5510c24fbc6522ed9f9fe6c80ddf",
+      "git_blob": "24c364bb62d1ef0d6f2748720b4589c7faad10ae",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 1243,
+      "ownership": "B2 editable WS094 parts only",
+      "manual_scope": "WS094 additions / changed function paragraphs"
+    },
+    {
+      "path": "userland/desktop/files/thumb.c",
+      "original_path": "userland/desktop/files/thumb.c",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [],
+      "sha256": "2348ebc1c0678af590cf540b1e619f9fde0ff92d49d351ca798cf0d03c701bcb",
+      "git_blob": "717bdab3d2f45cc154d00549031b1776105b4596",
+      "last_commit": "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+      "line_count": 768,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/files/ui-context.c",
+      "original_path": "userland/desktop/files/ui-context.c",
+      "ws_record_commits": [
+        "fa88c205f3226afee8e52ec67e667ec179a5b139"
+      ],
+      "follow_up_commits": [],
+      "sha256": "7e4dcb0a3b522d7a49c5523d0d98138cf2767f699f3e338c824adee877389f92",
+      "git_blob": "c1faf73b26d1f7f41dfc03a32217f0b8406102a3",
+      "last_commit": "fa88c205f3226afee8e52ec67e667ec179a5b139",
+      "line_count": 455,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/files/ui-desktop-actions.c",
+      "original_path": "userland/desktop/files/ui-desktop-actions.c",
+      "ws_record_commits": [
+        "fa88c205f3226afee8e52ec67e667ec179a5b139"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20"
+      ],
+      "sha256": "8a48c5cc1ed143ff79cab9c87752404be48ca4bfa7d3b47a5a6824cf0aade816",
+      "git_blob": "8a5944a030fedb0194015d25229d1577b0ad1f95",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 274,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/files/ui-desktop-drag.c",
+      "original_path": "userland/desktop/files/ui-desktop-drag.c",
+      "ws_record_commits": [
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2"
+      ],
+      "sha256": "a92a6f1a83e4bffdcc93df82b67b804d757f52af8eb341b7f6caca736579f0fa",
+      "git_blob": "267a3d8b875520e3e559cbe301136e996071cdb5",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 641,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/files/ui-desktop.c",
+      "original_path": "userland/desktop/files/ui-desktop.c",
+      "ws_record_commits": [
+        "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "64139a88df39d2c58fac820ec04b63525e832bbe",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+        "45f8d2da21093886e3ecd0114c3fa9059d80482b",
+        "7847fd67109cb6475c17caa7220627f183581bd2",
+        "3d09f8c29a1d0f8f44fa5d8f67ac33495e8452b1",
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "3e05646bb616e8b65e2a0ad1da4f7983e50e9a4e",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "77136b7977c2b15590a0bfc2f83221eb3d9a89a4",
+        "fa88c205f3226afee8e52ec67e667ec179a5b139",
+        "64139a88df39d2c58fac820ec04b63525e832bbe",
+        "05e418fe2023871dc80a29f02111b7c5d7c91335"
+      ],
+      "sha256": "8f8bdeda4e47df2579d50d5b576ae4c8a473a19c3504ef8ebbd4f4aacca821a7",
+      "git_blob": "924e466f7c9e705da938ddbfa5df1a2f14ccd599",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 1469,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/files/window.c",
+      "original_path": "userland/desktop/files/window.c",
+      "ws_record_commits": [
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2"
+      ],
+      "sha256": "a3a9e892758ae87f96da352cda1166707946b7333d6cd2b619632c21595fd905",
+      "git_blob": "2151cf4f07a979c591d3bb419965b9a4c27ced6d",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 1340,
+      "ownership": "B2 editable WS094 parts only",
+      "manual_scope": "WS094 additions / changed function paragraphs"
+    },
+    {
+      "path": "userland/desktop/files/window.h",
+      "original_path": "userland/desktop/files/window.h",
+      "ws_record_commits": [
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "948775b94caa08187cc00cbcec699ba5f6433538"
+      ],
+      "sha256": "22ca36a835b19c785ccd09e80f597edd1bbc88fafadcdab16877d939483cb4e7",
+      "git_blob": "03341f0167f17cfbf86a559ed54a2aca848eabcc",
+      "last_commit": "948775b94caa08187cc00cbcec699ba5f6433538",
+      "line_count": 284,
+      "ownership": "B2 editable WS094 parts only",
+      "manual_scope": "WS094 additions / changed function paragraphs"
+    },
+    {
+      "path": "userland/desktop/imageview/Makefile",
+      "original_path": "userland/desktop/imageview/Makefile",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "43beae3a6d8655372df1d8ab8f5964fd3464ccd2",
+        "2656dd7de29d625001c712d95ad44bde29e2d4fb"
+      ],
+      "sha256": "465d9ae646fa84d8eb8e184dde661dd893e2af39fac5f3d682a4e29602d18646",
+      "git_blob": "069d4b3c993df1dd0623614c22d9f80e51182c5a",
+      "last_commit": "43beae3a6d8655372df1d8ab8f5964fd3464ccd2",
+      "line_count": 16,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/imageview/image.c",
+      "original_path": "userland/desktop/imageview/image.c",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [],
+      "sha256": "6d9fd7f82c8f847d4caeaa7b2f152549f73efeceb243b70790a6a7fe71b4b9f6",
+      "git_blob": "7268130c14be876969ab7636a5a0c17495061a39",
+      "last_commit": "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d",
+      "line_count": 933,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/libkeiland/Makefile",
+      "original_path": "userland/desktop/libkeiland/Makefile",
+      "ws_record_commits": [
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "78da13872bbef7d62572fadab616ab78043d13f6",
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "c2757dd4226f61c541de2eeacc96d02bbd63e716",
+        "a29f541eab72a0eb7b0afed41e1621b1fec10e63",
+        "ae3e9c8e1917de2e95c093ea8d96b90b74c6d1eb"
+      ],
+      "sha256": "9dc66a7d8ca4f81c434a3f2fbfc1ef8e0a381d521cb8c7cea1e2c2fe3882725e",
+      "git_blob": "11512529aca47ec738cd9302b0a3721888d85d0a",
+      "last_commit": "78da13872bbef7d62572fadab616ab78043d13f6",
+      "line_count": 25,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/libkeiland/desktop.c",
+      "original_path": "userland/desktop/libkeiland/desktop.c",
+      "ws_record_commits": [
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2"
+      ],
+      "sha256": "34a6f854437f52c91eaddb1fe258105ee76b5a9bab52e13c5ae6e6fa4305ac14",
+      "git_blob": "be562fc93917ffeb6c7b5ab5c7af913bf049bd34",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 387,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/libkeiland/exports.map",
+      "original_path": "userland/desktop/libkeiland/exports.map",
+      "ws_record_commits": [
+        "79038551979d8154e41573720278c6f88ab6aa98"
+      ],
+      "follow_up_commits": [
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "c2757dd4226f61c541de2eeacc96d02bbd63e716",
+        "a29f541eab72a0eb7b0afed41e1621b1fec10e63",
+        "ae3e9c8e1917de2e95c093ea8d96b90b74c6d1eb"
+      ],
+      "sha256": "6e2eb21a3eafd63f9044b49db413732cdf6e529ae0afcae2b07c747f168ea30f",
+      "git_blob": "bc8b39c21ed870c63277b0ddd1b8819cff646a5e",
+      "last_commit": "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+      "line_count": 29,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/picture/picture.c",
+      "original_path": "userland/desktop/picture/picture.c",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2"
+      ],
+      "sha256": "6ec40981fd1256ff3082a0950c21ddb97417b09897597543bb2129ee0c982650",
+      "git_blob": "4d7fd1d50c802aeef55ff199aaf49219a7b378e7",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 612,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/picture/picture.h",
+      "original_path": "userland/desktop/picture/picture.h",
+      "ws_record_commits": [
+        "6acfb6166e9ea5dd773be8b8a20cbca60a1b9d9d"
+      ],
+      "follow_up_commits": [
+        "8beb7e3126d15d8b886803f0c0ab98d925636eb2"
+      ],
+      "sha256": "f0a52f79db150fbdb49ced35f6d891b77e8177f519d267a38f17bcac323a8bd7",
+      "git_blob": "9cc7ea5709958811944a00d327f2c765e9baed39",
+      "last_commit": "8beb7e3126d15d8b886803f0c0ab98d925636eb2",
+      "line_count": 44,
+      "ownership": "B2 editable",
+      "manual_scope": "complete file"
+    },
+    {
+      "path": "userland/desktop/wayland/Makefile",
+      "original_path": "userland/desktop/wayland/Makefile",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "771469b025938e01e20e3e0834cc9449f6604157",
+        "3bfe50b946aac0d3bcd8a3ff60b0b1bf5cd23906",
+        "96d14088b27df63a5a7779efcb7bbc811dd37bf0",
+        "5d413c08051c50ef856dd81989f15d1989e81438",
+        "7ce84c77f41443de99dd5a1b1dadebbaca49e95b",
+        "51ac1e25da159ab69a13bebb78b1d37c2c351c06",
+        "5ffff2014460459a5142849e8fcaafc29c27ab78",
+        "60651e0614a26ff4a4b27fb44b88c6567a0f2d0e",
+        "34f458f0083c71ed2acfe2b79819be5b8a9db74f",
+        "ad956e83f1271135d03fe3a191ac58f2c7f90693",
+        "f615c1c628ceaf91d827453386a999af416642f3",
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "c2757dd4226f61c541de2eeacc96d02bbd63e716",
+        "a5b154451a66723d5e9b37bdca08077d77f0db12",
+        "a7b71b9fe2e967db03544e041f3aa9dfbb1fb21a",
+        "b58cda30f10a251060ecda0913e16646d15a4399",
+        "a2960ab34b7ef1024b97042f43744ec689a03ffb",
+        "a4c14422ad89ccab6c95ba208cdcee27f7c13df9"
+      ],
+      "sha256": "658130eeb9a38221e70c930729f17d3d9c440e471dbf63c2301e9d8ef3085361",
+      "git_blob": "f26961a0ff85ef33136ab086f0b858589a9d7cf6",
+      "last_commit": "771469b025938e01e20e3e0834cc9449f6604157",
+      "line_count": 35,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/compose.c",
+      "original_path": "userland/desktop/wayland/compose.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "6efb4f2bbe86e44da74a79f44ec4cf4a4576318c",
+        "3bfe50b946aac0d3bcd8a3ff60b0b1bf5cd23906",
+        "5d413c08051c50ef856dd81989f15d1989e81438",
+        "d09860e00f9162aafaefc438975cd2b20c1cf6de",
+        "7ce84c77f41443de99dd5a1b1dadebbaca49e95b",
+        "e27565f3b5a1101e7edfd9122269e3a8c756b072",
+        "21e9f6a7f1805d89a7d58b0048b2a6c2ff3a7d0a",
+        "6cb8e214e04edb9394a984a7c482324569473306",
+        "9d45e128d9a6d34d75919afa2306eb2221a81192",
+        "0b533849c355456c340c7a6fc092cbcaf3edcf66",
+        "bd7f05974d98b468bccb6995412b2803e458e9f6",
+        "64da5e52f416d6b20c194cdf589dd03ef39defa3",
+        "3b53ae5d784489a5ea92c6e4c0049c9fbce50eb4",
+        "278f9f7449db7d084e5c34f3502624a6cdac8823",
+        "6611caae4d0d97e381f81d7f620832ab023c3da0"
+      ],
+      "sha256": "20dfdb49981779029ab49da9c8f04e7fb07b176f0d600297e2395593f9af1044",
+      "git_blob": "7978fc0614d4b52c20618e38f4892244c6a529b3",
+      "last_commit": "6efb4f2bbe86e44da74a79f44ec4cf4a4576318c",
+      "line_count": 2101,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/compose.h",
+      "original_path": "userland/desktop/wayland/compose.h",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "771469b025938e01e20e3e0834cc9449f6604157",
+        "3bfe50b946aac0d3bcd8a3ff60b0b1bf5cd23906",
+        "5d413c08051c50ef856dd81989f15d1989e81438",
+        "21e9f6a7f1805d89a7d58b0048b2a6c2ff3a7d0a",
+        "6cb8e214e04edb9394a984a7c482324569473306",
+        "0b533849c355456c340c7a6fc092cbcaf3edcf66",
+        "bd7f05974d98b468bccb6995412b2803e458e9f6",
+        "64da5e52f416d6b20c194cdf589dd03ef39defa3"
+      ],
+      "sha256": "c54f724f0ab2130585c43060d8b8f769e4e1af6fad3c5cbac01386debd30a024",
+      "git_blob": "d14d518ce6b1e62f50e23fedb3121fb9c7c5e123",
+      "last_commit": "771469b025938e01e20e3e0834cc9449f6604157",
+      "line_count": 238,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/data.c",
+      "original_path": "userland/desktop/wayland/data.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "34f458f0083c71ed2acfe2b79819be5b8a9db74f"
+      ],
+      "sha256": "ed63e98f6b3c634e88a8779787d84dbc6d942891afa45059e2d3115b24733913",
+      "git_blob": "97bea7b2f3db2a1cdc85cbc7f423d1fa2588ba38",
+      "last_commit": "34f458f0083c71ed2acfe2b79819be5b8a9db74f",
+      "line_count": 1616,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/desktop.c",
+      "original_path": "userland/desktop/wayland/desktop.c",
+      "ws_record_commits": [
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "79038551979d8154e41573720278c6f88ab6aa98",
+        "b60f8a38a28f0a63924e08119a85be5e82654344",
+        "fc29e1f2256e6532b54c41aec5c152c46ce53bf5",
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "7db7d4546d86b2fc65fc2d3e3ca7110602e95567",
+        "948775b94caa08187cc00cbcec699ba5f6433538",
+        "608987c602c9332d3c8ac2abdde4e1ac15776919",
+        "79038551979d8154e41573720278c6f88ab6aa98",
+        "b60f8a38a28f0a63924e08119a85be5e82654344",
+        "fc29e1f2256e6532b54c41aec5c152c46ce53bf5"
+      ],
+      "sha256": "1366a822c387d704465602f9ac0531ab4cb884c0da017c017e8540f96bd8deb4",
+      "git_blob": "23c139dcffb38612c283ca6091994cfc798bc7bf",
+      "last_commit": "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+      "line_count": 838,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/desktop.h",
+      "original_path": "userland/desktop/wayland/desktop.h",
+      "ws_record_commits": [
+        "b60f8a38a28f0a63924e08119a85be5e82654344",
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "b60f8a38a28f0a63924e08119a85be5e82654344"
+      ],
+      "sha256": "27e297882495d0189571cb90a09a05e6b4f90eb11ef8dae3195df219c6b1e7dd",
+      "git_blob": "c73c97f3f2fe873aadb5d30ff0d57f4f072a3029",
+      "last_commit": "b60f8a38a28f0a63924e08119a85be5e82654344",
+      "line_count": 32,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/display.c",
+      "original_path": "userland/desktop/wayland/display.c",
+      "ws_record_commits": [
+        "b60f8a38a28f0a63924e08119a85be5e82654344",
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "3400a098a66f8ae10875ca458b95d00aff01ac6d",
+        "d09860e00f9162aafaefc438975cd2b20c1cf6de",
+        "81b6d3080952342043046e7f021592de8b744faa",
+        "7ce84c77f41443de99dd5a1b1dadebbaca49e95b",
+        "e27565f3b5a1101e7edfd9122269e3a8c756b072",
+        "9d45e128d9a6d34d75919afa2306eb2221a81192",
+        "64da5e52f416d6b20c194cdf589dd03ef39defa3",
+        "3b53ae5d784489a5ea92c6e4c0049c9fbce50eb4",
+        "98e7c26e35a2537a795fc65ec48652b0d3d7669e",
+        "1b62df752a3111518ca102c4c07a338741ad9651",
+        "b60f8a38a28f0a63924e08119a85be5e82654344"
+      ],
+      "sha256": "8888c9a6d4ebf59ab72f410849f18799d6395c07965c04dc8e01a483e213e708",
+      "git_blob": "d2012fb88597f552256b6a3b8a8754dcb09d37e2",
+      "last_commit": "3400a098a66f8ae10875ca458b95d00aff01ac6d",
+      "line_count": 466,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/main.c",
+      "original_path": "userland/desktop/wayland/main.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "3400a098a66f8ae10875ca458b95d00aff01ac6d",
+        "80eea509710d51928bf14efd1246c02c80da38f4",
+        "cec34d3e1871e30290e471562b0d6c9c25da3f20",
+        "3bfe50b946aac0d3bcd8a3ff60b0b1bf5cd23906",
+        "81b6d3080952342043046e7f021592de8b744faa",
+        "e27565f3b5a1101e7edfd9122269e3a8c756b072",
+        "34f458f0083c71ed2acfe2b79819be5b8a9db74f",
+        "e211a55122af6a4af228c669f1c4cef657a64e36",
+        "d3521b7b5573805f04ca5ba4422dcc97cb49d34c",
+        "a4c14422ad89ccab6c95ba208cdcee27f7c13df9"
+      ],
+      "sha256": "076d60973105638d9d0dbc8afe1e8820cb8749df14c5e82d92610baa5c6f3836",
+      "git_blob": "125b614e4f98cc5cffdc4880ea3c92f2537cf4fa",
+      "last_commit": "3400a098a66f8ae10875ca458b95d00aff01ac6d",
+      "line_count": 1052,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/menu-shell.c",
+      "original_path": "userland/desktop/wayland/menu-shell.c",
+      "ws_record_commits": [
+        "fa88c205f3226afee8e52ec67e667ec179a5b139"
+      ],
+      "follow_up_commits": [],
+      "sha256": "bf55838fab619b0831dfa5e2b15eb9f0968d4c9edb1191af7f2cf3b15c715418",
+      "git_blob": "8e29e7a2c9dd104118ca55150d1b86224a3e995e",
+      "last_commit": "fa88c205f3226afee8e52ec67e667ec179a5b139",
+      "line_count": 2508,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/menu.c",
+      "original_path": "userland/desktop/wayland/menu.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [],
+      "sha256": "6d10cf095fc1579c63cf314fb5d7ff09ea56cf335df4985f9dd3e3e42e5bf7c0",
+      "git_blob": "1410b733940e12b238979c5a1cdf5937c2ce78c4",
+      "last_commit": "2c82629dd0b6c04a31775baa277167b3f9a80dec",
+      "line_count": 1443,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/objects.c",
+      "original_path": "userland/desktop/wayland/objects.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "2d4abde19fa2837bb9b7014d1bf931542d557c21",
+        "5d413c08051c50ef856dd81989f15d1989e81438",
+        "81b6d3080952342043046e7f021592de8b744faa",
+        "7ce84c77f41443de99dd5a1b1dadebbaca49e95b",
+        "e27565f3b5a1101e7edfd9122269e3a8c756b072",
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "c2757dd4226f61c541de2eeacc96d02bbd63e716",
+        "278f9f7449db7d084e5c34f3502624a6cdac8823",
+        "a4c14422ad89ccab6c95ba208cdcee27f7c13df9"
+      ],
+      "sha256": "45aeacae98ef0ae8f90bd3540f5beaa63aa1897d9c7ad57d901571190056454c",
+      "git_blob": "e78865abeb31a64f053caabcd5967a122471d753",
+      "last_commit": "2d4abde19fa2837bb9b7014d1bf931542d557c21",
+      "line_count": 595,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/protocol.c",
+      "original_path": "userland/desktop/wayland/protocol.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "2d4abde19fa2837bb9b7014d1bf931542d557c21",
+        "80eea509710d51928bf14efd1246c02c80da38f4",
+        "6efb4f2bbe86e44da74a79f44ec4cf4a4576318c",
+        "5d413c08051c50ef856dd81989f15d1989e81438",
+        "81b6d3080952342043046e7f021592de8b744faa",
+        "f62638f7c1252cdcd90d11825b0a02c16c609239",
+        "7ce84c77f41443de99dd5a1b1dadebbaca49e95b",
+        "5ffff2014460459a5142849e8fcaafc29c27ab78",
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "c2757dd4226f61c541de2eeacc96d02bbd63e716",
+        "e211a55122af6a4af228c669f1c4cef657a64e36",
+        "98e7c26e35a2537a795fc65ec48652b0d3d7669e",
+        "1b62df752a3111518ca102c4c07a338741ad9651",
+        "a4c14422ad89ccab6c95ba208cdcee27f7c13df9"
+      ],
+      "sha256": "8d5a65b1ae2618ea0a8fc3695e1e26c036f20ef179c0b8cbc35d27560f9ca4dd",
+      "git_blob": "789f2f4e8d88300a1235a4ea7ac3a6ad457a2d12",
+      "last_commit": "2d4abde19fa2837bb9b7014d1bf931542d557c21",
+      "line_count": 1599,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/shell.c",
+      "original_path": "userland/desktop/wayland/shell.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "5ffff2014460459a5142849e8fcaafc29c27ab78",
+        "cdfc525a33dbe4f07df05b415e93c881a2d9e254",
+        "3191f91a84bf9257c1c48055388b68538f109925",
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "7db7d4546d86b2fc65fc2d3e3ca7110602e95567",
+        "6b409c048b9bd99662e3d1dcf7ed9c4b7981c076",
+        "9d45e128d9a6d34d75919afa2306eb2221a81192",
+        "4da8c22a8422ef15bd7f6cf377c7bf44ead96c19",
+        "e211a55122af6a4af228c669f1c4cef657a64e36",
+        "d182c7c9e2a59dc6fc3de14c54f324ebfb6cd004",
+        "e5129e7a58c3dc9f726925321978c9bcf4b2d94d",
+        "14b42c2f5115483e514e87135d4c4a8e273dae42",
+        "64da5e52f416d6b20c194cdf589dd03ef39defa3",
+        "4eb51eff003f53fba8a993bd539fc964d3eb0d58",
+        "d7822a99fe4e34b759f35e77177b94e2ccf7204e",
+        "b58cda30f10a251060ecda0913e16646d15a4399",
+        "a2960ab34b7ef1024b97042f43744ec689a03ffb",
+        "6611caae4d0d97e381f81d7f620832ab023c3da0",
+        "98e7c26e35a2537a795fc65ec48652b0d3d7669e",
+        "1b62df752a3111518ca102c4c07a338741ad9651",
+        "a4c14422ad89ccab6c95ba208cdcee27f7c13df9",
+        "151cd78bcfe4ecfc4768287e865ee22adb488a7c"
+      ],
+      "sha256": "c55de100f779fe64dd6d0c40135f9a0b87a3ba81e233a1df08468672ddd78d8d",
+      "git_blob": "549466bad84befc07399f84b36e088b1a0d6f5fc",
+      "last_commit": "5ffff2014460459a5142849e8fcaafc29c27ab78",
+      "line_count": 5440,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/touch.c",
+      "original_path": "userland/desktop/wayland/touch.c",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "96d14088b27df63a5a7779efcb7bbc811dd37bf0",
+        "26f4643cdf7d8ea4d37648577fb1036f377bfced"
+      ],
+      "sha256": "bea1f656a1b31bfbeacd6335a7562e7088c96bb184bc1ffd6eb02c5c6e3fbe1b",
+      "git_blob": "f5300d858ef3751e951418e2e230dd5548a9d782",
+      "last_commit": "96d14088b27df63a5a7779efcb7bbc811dd37bf0",
+      "line_count": 1978,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/wayland/zwl.h",
+      "original_path": "userland/desktop/wayland/zwl.h",
+      "ws_record_commits": [
+        "2c82629dd0b6c04a31775baa277167b3f9a80dec"
+      ],
+      "follow_up_commits": [
+        "3400a098a66f8ae10875ca458b95d00aff01ac6d",
+        "2d4abde19fa2837bb9b7014d1bf931542d557c21",
+        "80eea509710d51928bf14efd1246c02c80da38f4",
+        "96d14088b27df63a5a7779efcb7bbc811dd37bf0",
+        "5d413c08051c50ef856dd81989f15d1989e81438",
+        "d09860e00f9162aafaefc438975cd2b20c1cf6de",
+        "81b6d3080952342043046e7f021592de8b744faa",
+        "7ce84c77f41443de99dd5a1b1dadebbaca49e95b",
+        "e27565f3b5a1101e7edfd9122269e3a8c756b072",
+        "51ac1e25da159ab69a13bebb78b1d37c2c351c06",
+        "5ffff2014460459a5142849e8fcaafc29c27ab78",
+        "60651e0614a26ff4a4b27fb44b88c6567a0f2d0e",
+        "cdfc525a33dbe4f07df05b415e93c881a2d9e254",
+        "ca409b49f1d6b0dfd0c934f9af0d7373bf3fa9d2",
+        "34f458f0083c71ed2acfe2b79819be5b8a9db74f",
+        "659a0016de530abe768ef09b7a2f5dc68a145ec6",
+        "3191f91a84bf9257c1c48055388b68538f109925",
+        "5ba6a609a4798ab629bf8c1d0508d7b9524d421a",
+        "0ed25ad3a36b2f8300ce7a5bedc56967c4152fa2",
+        "26f4643cdf7d8ea4d37648577fb1036f377bfced",
+        "7db7d4546d86b2fc65fc2d3e3ca7110602e95567",
+        "c2757dd4226f61c541de2eeacc96d02bbd63e716",
+        "6b409c048b9bd99662e3d1dcf7ed9c4b7981c076",
+        "9d45e128d9a6d34d75919afa2306eb2221a81192",
+        "e211a55122af6a4af228c669f1c4cef657a64e36",
+        "64da5e52f416d6b20c194cdf589dd03ef39defa3",
+        "98f7cd175a55daa726e21c72059efd7e2a513339",
+        "b58cda30f10a251060ecda0913e16646d15a4399",
+        "3b53ae5d784489a5ea92c6e4c0049c9fbce50eb4",
+        "a2960ab34b7ef1024b97042f43744ec689a03ffb",
+        "278f9f7449db7d084e5c34f3502624a6cdac8823",
+        "98e7c26e35a2537a795fc65ec48652b0d3d7669e",
+        "1b62df752a3111518ca102c4c07a338741ad9651",
+        "a4c14422ad89ccab6c95ba208cdcee27f7c13df9"
+      ],
+      "sha256": "08a433b285c4e353bb1e57b9527250c0bd5f78a57413cd7f6cf266c0ccddb36f",
+      "git_blob": "794b4d8d25c7aa97859e6d8ce1a39231b09716ad",
+      "last_commit": "3400a098a66f8ae10875ca458b95d00aff01ac6d",
+      "line_count": 1206,
+      "ownership": "read-only",
+      "manual_scope": "WS094 source hunks / complete new desktop.c/h"
+    },
+    {
+      "path": "userland/desktop/files/Makefile.linux",
+      "original_path": "userland/desktop/files/Makefile.linux",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "5d7f3ef15cd8095a24d2997cb71dd390be1412b4"
+      ],
+      "sha256": "aa94cbf27d6785635c8f5b30c7fb3ac05b8540179bb5132342e399cfc96fa76d",
+      "git_blob": "815bf916ff9f533c2d0e48e225fb61224b6b0ea8",
+      "line_count": 52,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/files/Makefile.freebsd",
+      "original_path": "userland/desktop/files/Makefile.freebsd",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "5d7f3ef15cd8095a24d2997cb71dd390be1412b4"
+      ],
+      "sha256": "ccf298cd6a836033f56b771615ecc431354d98d9e1b855efe0dd5210b737e440",
+      "git_blob": "0e88bc1b7b65b8bdfb45f7bc7ae9db959e2c61cf",
+      "line_count": 52,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/libkeiland/Makefile.linux",
+      "original_path": "userland/desktop/libkeiland/Makefile.linux",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "9ab81aca5a0ec5384fdbe689ced4bce2dd6b9568"
+      ],
+      "sha256": "059d1d17ee7a97d13b1e2e7b31e4694a9448c3d3523ba3e404765f1efbdd428c",
+      "git_blob": "35b4f304f30392ad6702d69ea6219f6193e12320",
+      "line_count": 20,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/libkeiland/Makefile.freebsd",
+      "original_path": "userland/desktop/libkeiland/Makefile.freebsd",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "2599341fefce80b5b44ec2004c75b0e2dbde73f3"
+      ],
+      "sha256": "cd599c0190062e4ea3d7e3851ae31a4e7ec8592504d60621371eace16714c4e7",
+      "git_blob": "c1794508381c5f32abe3939d7d4235aede37f583",
+      "line_count": 20,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/wayland/Makefile.linux",
+      "original_path": "userland/desktop/wayland/Makefile.linux",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "8cf03a0a0850629a857da47b08382b15180e770f"
+      ],
+      "sha256": "8a1bc8ede310157f1151a66b599b2d72642514079187da5c25e089f3604f9b81",
+      "git_blob": "5273a085e53cc1409cb69d1f60c3367d1883208c",
+      "line_count": 89,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/wayland/Makefile.freebsd",
+      "original_path": "userland/desktop/wayland/Makefile.freebsd",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "81865629b4a90d9dcb3857ce42591b8f821eb7c1"
+      ],
+      "sha256": "6ab5040d2484e9ddbd7880c0d4ec1148228385c439685346b2378514d785d1a2",
+      "git_blob": "b1b58eccddac9ed7d0fb11a9e6da021c73e772c1",
+      "line_count": 85,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/imageview/Makefile.linux",
+      "original_path": "userland/desktop/imageview/Makefile.linux",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "ba46edf89661d8fbccd6c5df92e442fac2d1b05e"
+      ],
+      "sha256": "ecd420045481aa02b6f4e5263da7254550fe95e0b7a16c71c72497d422286515",
+      "git_blob": "a719f7af3deda08e73a03a94c8176f64d3a76b03",
+      "line_count": 17,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    },
+    {
+      "path": "userland/desktop/imageview/Makefile.freebsd",
+      "original_path": "userland/desktop/imageview/Makefile.freebsd",
+      "ws_record_commits": [],
+      "follow_up_commits": [
+        "1ed1a4b5918db07667ef3507f87892169a8716f9"
+      ],
+      "sha256": "525ccf890c32e595b5e22218d99ed390bf93883c77ef90e9fa99866a3c68a927",
+      "git_blob": "f402931cd75e25f3cde2e656c71fc3be6d4239a6",
+      "line_count": 17,
+      "ownership": "read-only supporting native registration",
+      "manual_scope": "desktop / picture source registration"
+    }
+  ]
+}

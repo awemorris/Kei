@@ -1,0 +1,79 @@
+plan/ws094/tests/desktop-probe.c:122: split-args: 0, NULL
+plan/ws094/tests/desktop-probe.c:139: split-args: 1, surface_events
+userland/desktop/files/main.c:100: no-decl-comment: static struct fm_present main_present;
+userland/desktop/files/main.c:101: no-decl-comment: static struct fm_app main_app;
+userland/desktop/files/main.c:102: no-decl-comment: static struct fm_text main_text;
+userland/desktop/files/main.c:137: no-decl-comment: static struct fm_titlebar_state main_titlebar_state;
+userland/desktop/files/main.c:144: no-decl-comment: static struct fm_canvas main_canvas;
+userland/desktop/files/main.c:327: cond-one-line: if (argc > 0 && argv[0] != NULL && argv[0][0] == '/')
+userland/desktop/files/present.c:959: split-args: 1.0f, 0.0f, 1.0f, 0.0f,
+userland/desktop/files/present.c:960: split-args: 0.0f, 1.0f, 0.0f, 1.0f,
+userland/desktop/files/present.c:961: split-args: 1.0f, 0.0f, 1.0f, 0.0f,
+userland/desktop/files/present.c:962: split-args: 1.0f, 1.0f, 1.0f, 1.0f,
+userland/desktop/files/present.c:963: split-args: 0.0f, 1.0f, 0.0f, 1.0f
+userland/desktop/files/window.c:131: split-args: window_pointer_axis, window_pointer_frame, window_pointer_axis_source, window_pointer_axis_stop,
+userland/desktop/files/window.c:132: split-args: window_pointer_axis_discrete, NULL, NULL
+userland/desktop/files/window.c:138: split-args: window_keyboard_key, window_keyboard_modifiers, window_keyboard_repeat
+userland/desktop/files/window.c:648: void-cast: (void)data;
+userland/desktop/files/window.c:649: void-cast: (void)registry;
+userland/desktop/files/window.c:650: void-cast: (void)name;
+userland/desktop/files/window.c:661: void-cast: (void)data;
+userland/desktop/files/window.c:727: void-cast: (void)toplevel;
+userland/desktop/files/window.c:767: void-cast: (void)toplevel;
+userland/desktop/files/window.c:787: void-cast: (void)toplevel;
+userland/desktop/files/window.c:839: void-cast: (void)data;
+userland/desktop/files/window.c:840: void-cast: (void)seat;
+userland/desktop/files/window.c:841: void-cast: (void)name;
+userland/desktop/files/window.c:858: void-cast: (void)pointer;
+userland/desktop/files/window.c:859: void-cast: (void)serial;
+userland/desktop/files/window.c:860: void-cast: (void)surface;
+userland/desktop/files/window.c:881: void-cast: (void)pointer;
+userland/desktop/files/window.c:882: void-cast: (void)serial;
+userland/desktop/files/window.c:883: void-cast: (void)surface;
+userland/desktop/files/window.c:903: void-cast: (void)pointer;
+userland/desktop/files/window.c:904: void-cast: (void)time;
+userland/desktop/files/window.c:927: void-cast: (void)pointer;
+userland/desktop/files/window.c:928: void-cast: (void)time;
+userland/desktop/files/window.c:958: void-cast: (void)pointer;
+userland/desktop/files/window.c:959: void-cast: (void)time;
+userland/desktop/files/window.c:979: void-cast: (void)data;
+userland/desktop/files/window.c:980: void-cast: (void)pointer;
+userland/desktop/files/window.c:991: void-cast: (void)data;
+userland/desktop/files/window.c:992: void-cast: (void)pointer;
+userland/desktop/files/window.c:993: void-cast: (void)source;
+userland/desktop/files/window.c:1005: void-cast: (void)data;
+userland/desktop/files/window.c:1006: void-cast: (void)pointer;
+userland/desktop/files/window.c:1007: void-cast: (void)time;
+userland/desktop/files/window.c:1008: void-cast: (void)axis;
+userland/desktop/files/window.c:1020: void-cast: (void)data;
+userland/desktop/files/window.c:1021: void-cast: (void)pointer;
+userland/desktop/files/window.c:1022: void-cast: (void)axis;
+userland/desktop/files/window.c:1023: void-cast: (void)discrete;
+userland/desktop/files/window.c:1036: void-cast: (void)data;
+userland/desktop/files/window.c:1037: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1038: void-cast: (void)format;
+userland/desktop/files/window.c:1039: void-cast: (void)size;
+userland/desktop/files/window.c:1057: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1058: void-cast: (void)serial;
+userland/desktop/files/window.c:1059: void-cast: (void)surface;
+userland/desktop/files/window.c:1060: void-cast: (void)keys;
+userland/desktop/files/window.c:1083: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1084: void-cast: (void)serial;
+userland/desktop/files/window.c:1085: void-cast: (void)surface;
+userland/desktop/files/window.c:1112: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1113: void-cast: (void)serial;
+userland/desktop/files/window.c:1114: void-cast: (void)time;
+userland/desktop/files/window.c:1154: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1155: void-cast: (void)serial;
+userland/desktop/files/window.c:1156: void-cast: (void)latched;
+userland/desktop/files/window.c:1157: void-cast: (void)locked;
+userland/desktop/files/window.c:1158: void-cast: (void)group;
+userland/desktop/files/window.c:1182: void-cast: (void)keyboard;
+userland/desktop/files/window.c:1285: void-cast: (void)touch;
+userland/desktop/files/window.c:1286: void-cast: (void)surface;
+userland/desktop/files/window.c:1300: void-cast: (void)touch;
+userland/desktop/files/window.c:1301: void-cast: (void)serial;
+userland/desktop/files/window.c:1316: void-cast: (void)touch;
+userland/desktop/files/window.c:1327: void-cast: (void)data;
+userland/desktop/files/window.c:1328: void-cast: (void)touch;
+userland/desktop/files/window.c:1338: void-cast: (void)touch;
