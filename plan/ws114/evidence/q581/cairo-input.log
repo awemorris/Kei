@@ -1,0 +1,4 @@
+{"event": "gtk-version", "pid": 1009, "version": "4.18.6"}
+{"event": "focus", "pid": 1009, "active": true}
+{"event": "snapshot", "pid": 1009, "renderer": "GskCairoRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "target-text", "pid": 1009, "text": "a"}

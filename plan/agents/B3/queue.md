@@ -1,7 +1,7 @@
 # Agent B3 Queue q583
 
-Status: active
-Attempt: q583-i01 / in-progress
+Status: finished
+Attempt: q583-i01 / cleared（部分診断のみ）
 Owner: Agent B / B3 bug executor
 Approval: current user / 2026-10-02「では、N=3で作業を開始してください。」。既存B3のBUG-125引継ぎ候補を症状別の有限診断として選定。
 Timebox: 最大90分 / ws099-p017の部分診断scope
@@ -12,5 +12,7 @@ Dependencies: q577統合済み同期patch、元FAIL/PNG、Venus imageと明示re
 Criteria: 二症状それぞれの再現条件/時刻/画像による分類、または再現不能/期限到達を証拠とともに記録する。新helperのsyntax/規約と有限試験結果を確認する。この部分itemがclearしてもwhole p017の20回単独/5回C9基準は満たさず、Phaseはuncleared、BUG-125はtrackingのまま。共有harness修正は原因判定後の別Queue。
 Worktree: `/home/awe/zedBSD-worktrees/b3` / `codex/b3-bug125`
 Next Queue: 未投入。compositor修正は別Queue。
-Merge requests / ACK: なし
+Merge requests / ACK: MR B3-q583-01（base ea55c973、提出2d33d3e7、B統合c2a8ba9f、ACK）。timeline helper/host negative/syntax/準備記録。guest未実施、whole Phase uncleared。B1 guest停止後にtiming観察を実行。
 Sync: GitHub publication保留。WIP commitのみ、pushなし。Agent Aが共有投影を所有。
+
+MR B3-q583-02: 提出6a00fba6、B統合3ed1834c、ACK。原条件5/handshake5の部分PASS、2症状非再現。195assetsのhashをmainで照合、代表PNGを目視。whole p017 unclearedとBUG-125 reproduced/trackingを保持。[結果](../../ws099/phase017/q583-result.md)、[conformance](../../ws099/phase017/q583-conformance.md)。owned guest/renderer停止済み。追加反復は未投入。

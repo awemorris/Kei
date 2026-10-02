@@ -1,0 +1,21 @@
+{"event": "gtk-version", "pid": 1050, "version": "4.18.6"}
+{"event": "snapshot", "pid": 1050, "renderer": "GskVulkanRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "focus", "pid": 1050, "active": true}
+[1714356.562] {Default Queue}  -> zwp_text_input_v3#41.set_text_change_cause(1)
+[1714356.575] {Default Queue}  -> zwp_text_input_v3#41.set_content_type(0, 0)
+[1714356.594] {Default Queue}  -> zwp_text_input_v3#41.set_cursor_rectangle(189, 112, 0, 32)
+[1714356.601] {Default Queue}  -> zwp_text_input_v3#41.commit()
+[1714356.606] {Default Queue} wl_pointer#6.enter(124, wl_surface#23, 223.00000000, 175.00000000)
+[1714356.617] {Default Queue} wl_pointer#6.frame()
+[1714356.654] {Default Queue}  -> wp_cursor_shape_device_v1#21.set_shape(124, 1)
+[1714357.232] {Default Queue}  -> wp_cursor_shape_device_v1#21.set_shape(124, 9)
+[1714357.888] {Display Queue} wl_display#1.delete_id(60)
+[1714357.903] {Default Queue} wl_callback#60.done(509535)
+[1714359.042]  -> wl_surface#23.frame(new id wl_callback#60)
+[1714364.772] {mesa vk display queue}  -> wl_surface#23.attach(wl_buffer#53, 0, 0)
+[1714364.785] {mesa vk display queue}  -> wl_surface#23.damage_buffer(0, 0, 728, 489)
+[1714364.791] {mesa vk display queue}  -> wl_surface#23.commit()
+[1714380.768] {Display Queue} wl_display#1.delete_id(60)
+[1714380.781] {Default Queue} wl_callback#60.done(509558)
+    PID COMMAND
+   1050 python3 /tmp/gtk4-baseline.py

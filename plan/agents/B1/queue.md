@@ -1,16 +1,17 @@
-# Agent B1 Queue q581
+# Agent B1 Queue q587
 
 Status: active
-Attempt: q581-i01 / in-progress
+Attempt: q587-i01 / pending
 Owner: Agent B / B1 GTK executor
-Approval: current user / 2026-10-02「では、N=3で作業を開始してください。」。既存B1担当とWS114 p001残測定候補を選定。
-Timebox: 最大3時間 / 1 Phaseの残測定
-Phase: [ws114-p001](../../ws114/phase001/phase.md)
-Snapshot: [approved phase](approved-phase.md) / SHA256 `635c60678bd8d56d172f5f43fc5069866ea0f1f9dc515a3799972b4737715144`
-Exact scope: q580で未測定の標準Debian13 GTK4 4.18.6 baselineを、保存済みKeiland package/sourceに固定した専用guestで有限実測する。interactive move/有効なresize、cross-client Unicode clipboard、wheel/focus/cursor、tooltip/repositionを優先し、Cairo/Vulkan rendererは実行可能性と結果を分けて調べる。G01–G19各行へ実測証拠または具体的skip理由、版、手順、QMP PNG、Wayland/application/D-Bus結果を記録する。source修正、p002の採否、p003/p004の実装、guest外の共有build変更は含めない。
-Dependencies: q580の保存overlay/backing/keyとWS105/WS108 Linux compositor実成果を起動前に確認する。B1専用runtime/SSH2249を使い、他guestは停止しない。
-Criteria: 行別reviewに必要な再現可能な結果/未測定理由と正常停止証拠。whole p001基準を満たさなければattempt unclearedにして残件を保存する。
+Approval: current user / 2026-10-02、[Phaseに保存した追加CSD指示](../../ws114/phase007/phase.md)。具体実装と確認の追加実行を承認。Agent Aがq587を予約。
+Timebox: 最大3時間 / 1 Phase
+Phase: [ws114-p007](../../ws114/phase007/phase.md)
+Snapshot: [approved phase](q587-approved-phase.md) / SHA256 `6de8672526c942a4211b12369846a116e1049f6a38e6461cfc7a068e789a339f`
+Exact scope / criteria: 上記snapshotのScope/designとClearance/verification。SSD未要求またはCSD要求でKeilandが装飾しないmodeを実装し、標準GTK4・native SSD回帰を専用runtimeで確認する。
+Dependencies: p001/q581 clearedの実測と停止済み資産、G05ユーザー採用指示。QEMU実測はB2専用guest終了後のmain割当に依存（外部資源、q587の実装権限ではない）。
+Graph: q581実測 + G05 user decision → q587; B2 guest停止 → q587 guest検証。
 Worktree: `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114`
-Next Queue: 未投入。p002のユーザー採否は別。
-Merge requests / ACK: なし
+Merge requests / ACK: 未提出。
+Previous: [q581 finished/clearedのlane snapshot](q581-queue.md)。過去attemptを改変しない。
+Upcoming Work Outlook: 残る機能行はp002判断後に個別選定。p005/p006は依存未達で未投入。
 Sync: GitHub publication保留。WIP commitのみ、pushなし。Agent Aが共有投影を所有。

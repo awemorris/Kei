@@ -32,6 +32,7 @@
 
 #include "files.h"
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,6 +52,7 @@ static int partial_same(struct fm_app *app, struct fm_canvas *canvas, uint32_t *
 static int saved_at(const struct fm_desktop *desk, const char *name, int column, int row);
 static void check_label(void);
 static void check_resize(void);
+static void check_prune(void);
 
 /* Runs the checks. */
 int
@@ -149,6 +151,9 @@ main(
 	check_label();
 	check_resize();
 
+	/* Verify that stale names disappear only from the next saved layout. */
+	check_prune();
+
 	/* The outcome. */
 	if (failures != 0) {
 		printf("host-desktop: FAIL (%d)\n", failures);
@@ -175,6 +180,99 @@ check(
 
 	/* A passed check is printed. */
 	printf("ok: %s\n", text);
+}
+
+/* Checks pruning against the full listing and its deferred file write. */
+static void
+check_prune(void)
+{
+	static const char *const names[] = { "a.txt", "far.txt", "new.txt" };
+	struct fm_desktop desk;
+	struct fm_desktop_saved *read;
+	char path[FM_PATH_MAX];
+	size_t count;
+	int error;
+	int present;
+	int differs;
+
+	/* Start with one retained name, one stale name and one off-grid place. */
+	memset(&desk, 0, sizeof(desk));
+	desk.saved = calloc(3U, sizeof(desk.saved[0]));
+	check(desk.saved != NULL, "prune: room for saved places");
+	if (desk.saved == NULL)
+		return;
+
+	/* Populate the saved array in the order its compacted version must keep. */
+	desk.saved_count = 3U;
+	snprintf(desk.saved[0].name, sizeof(desk.saved[0].name), "a.txt");
+	desk.saved[0].column = 2;
+	desk.saved[0].row = 3;
+	snprintf(desk.saved[1].name, sizeof(desk.saved[1].name), "gone.txt");
+	desk.saved[1].column = 4;
+	desk.saved[1].row = 4;
+	snprintf(desk.saved[2].name, sizeof(desk.saved[2].name), "far.txt");
+	desk.saved[2].column = 40;
+	desk.saved[2].row = 0;
+
+	/* Put the original saved names on disk before pruning memory. */
+	error = fm_desktop_layout_path(path, sizeof(path));
+	check(error == 0, "prune: layout path");
+	if (error != 0) {
+		fm_desktop_release(&desk);
+		return;
+	}
+
+	/* Preserve the old file until an ordinary placement writes again. */
+	error = fm_desktop_layout_write(path, desk.saved, desk.saved_count);
+	check(error == 0, "prune: original layout written");
+	if (error != 0) {
+		fm_desktop_release(&desk);
+		return;
+	}
+
+	/* Include far.txt even though its saved cell lies beyond the grid. */
+	fm_desktop_layout_prune(&desk, names, 3U);
+	check(desk.saved_count == 2U, "prune: only existing names retained");
+	present = saved_at(&desk, "a.txt", 2, 3);
+	check(present == 1, "prune: visible name retains its place");
+	present = saved_at(&desk, "far.txt", 40, 0);
+	check(present == 1, "prune: off-grid name retains its place");
+
+	/* The disk still contains all three names before the next save. */
+	error = fm_desktop_layout_read(path, &read, &count);
+	check(error == 0 && count == 3U, "prune: pruning alone does not write the file");
+	free(read);
+
+	/* A second prune leaves the retained places unchanged. */
+	fm_desktop_layout_prune(&desk, names, 3U);
+	check(desk.saved_count == 2U, "prune: repeated listing preserves retained names");
+
+	/* Move an existing item using the production layout-file writer. */
+	error = fm_desktop_layout_set(&desk, "a.txt", 3, 3);
+	check(error == 0, "prune: next placement written");
+	if (error != 0) {
+		fm_desktop_release(&desk);
+		return;
+	}
+
+	/* The new file keeps the two listing names and has no stale row. */
+	error = fm_desktop_layout_read(path, &read, &count);
+	check(error == 0 && count == 2U, "prune: next save omits the stale name");
+	if (count == 2U) {
+		differs = strcmp(read[0].name, "a.txt");
+		check(differs == 0 && read[0].column == 3, "prune: first saved name moved");
+		differs = strcmp(read[1].name, "far.txt");
+		check(differs == 0 && read[1].column == 40, "prune: overflow saved name persists");
+	}
+
+	/* A successful empty listing removes every saved name safely. */
+	free(read);
+	fm_desktop_layout_prune(&desk, NULL, 0U);
+	check(desk.saved_count == 0U, "prune: empty listing removes remaining names");
+	fm_desktop_release(&desk);
+
+	/* Succeeded: pruning and the next save were exercised. */
+	return;
 }
 
 /* Checks the places shown: kept for the next layout, carried by a rename, forgotten by Clean Up (ws094-p005). */
@@ -483,6 +581,18 @@ check_partial(
 	/* The first frame is whole, and kept. */
 	fm_desktop_draw(&app, &canvas);
 	check(app.desk.painted == 1, "partial: the first frame is kept");
+
+	/* A failed directory read must not discard a saved name missing from its listing. */
+	error = fm_desktop_layout_set(&app.desk, "missing.txt", 8, 6);
+	check(error == 0, "prune: saved name prepared before a failed listing");
+	tab->listing.error = EIO;
+	fm_desktop_draw(&app, &canvas);
+	check(app.desk.saved_count == 1U, "prune: failed listing preserves saved names");
+
+	/* A later successful listing may remove that absent saved name. */
+	tab->listing.error = 0;
+	fm_desktop_draw(&app, &canvas);
+	check(app.desk.saved_count == 0U, "prune: successful listing removes absent names");
 
 	/* One item selected, another added with Ctrl (the long name), and none. */
 	fm_select_only(tab, 0);

@@ -1,0 +1,26 @@
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: ZWL POPUP grab popup= ok
+log: ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1 ok
+log: ZWL PING pong client=1  ok
+log: POPUPPROBE ping serial=[0-9]+ answered ok
+log: POPUPPROBE configure menu x=60 y=60 width=360 height=180 ok
+log: POPUPPROBE focus menu ok
+check: (600,398) want 4a90e2 got 4a90e2 ok
+check: /home/awe/zedBSD-worktrees/b3/build/b3-q583/handshake-5/menu.png 1280x800 PASS
+log: POPUPPROBE button menu state=1 x=100 y=130 ok
+log: POPUPPROBE configure submenu x=360 y=120 width=360 height=120 ok
+log: POPUPPROBE focus submenu ok
+check: (960,518) want e2a04a got e2a04a ok
+check: /home/awe/zedBSD-worktrees/b3/build/b3-q583/handshake-5/submenu.png 1280x800 PASS
+log: POPUPPROBE choose submenu row=1 ok
+log: POPUPPROBE close menu ok
+log: POPUPPROBE focus window ok
+check: (600,398) want 2b3444 got 2b3444 ok
+check: /home/awe/zedBSD-worktrees/b3/build/b3-q583/handshake-5/chosen.png 1280x800 PASS
+ZWL POPUP map surface=29 x=800 y=353 grab=1
+P017_FAR_READY=1
+log: POPUPPROBE configure submenu x=-360 y=120 width=360 height=120 ok
+check: (540,518) want e2a04a got e2a04a ok
+check: /home/awe/zedBSD-worktrees/b3/build/b3-q583/handshake-5/flipped.png 1280x800 PASS
+p076: PASS

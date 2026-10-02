@@ -1,0 +1,12 @@
+{"event": "gtk-version", "pid": 951, "version": "4.18.6"}
+{"event": "focus", "pid": 951, "active": true}
+{"event": "snapshot", "pid": 951, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "target-text", "pid": 951, "text": "q581 clipboard Ω 日本語"}
+/tmp/q581-input.trace:[1604688.917] {Default Queue}  -> zwp_primary_selection_device_v1#15.set_selection(zwp_primary_selection_source_v1#43, 55)
+/tmp/q581-input.trace:[1604799.850] {Default Queue}  -> wl_data_device#16.set_selection(wl_data_source#41, 63)
+/tmp/q581-input.trace:[1604800.324] {Default Queue} wl_data_source#41.send("text/plain;charset=utf-8", fd 12)
+/tmp/q581-input.trace:[1631136.643] {Default Queue} wl_data_source#41.send("text/plain;charset=utf-8", fd 12)
+/tmp/q581-b.trace:[1631136.037] {Default Queue}  -> wl_data_offer#4278190080.receive("text/plain;charset=utf-8", fd 19)
+    PID COMMAND
+    890 python3 /tmp/gtk4-baseline.py
+    951 python3 /tmp/gtk4-baseline.py

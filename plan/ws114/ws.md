@@ -6,8 +6,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG002（後続の移植知見）
 Parent: [Master](../master.md)
-Queue: なし（last: q580-i01 uncleared）
-Resume point: q580の部分実測と[19行機能表](gtk4-compat-matrix.md)を保存。未測定のmove/resize、cross-client clipboard、入力、D&D/PRIMARY、renderer/scale/IME等を有限なp001継続で測り、p001をclearしてからユーザーの行別採否へ進む。
+Queue: q581-i01 cleared（q580-i01 unclearedの履歴を保持）
+Resume point: p001/q581の残主要測定をclearし、[19行機能表](gtk4-compat-matrix.md)を行別採否に渡す。残るoptional経路のskipとbaseline不足を明記。G05はユーザーが個別採用したp007/q587で実装・GTK4検証する。残る行の採否はp002へ。
 
 ## Objective / scope
 
@@ -30,14 +30,16 @@ WS105 Linux compositorはcontext、WS034 p038のzedBSD Vulkan/EGL横断調査は
 
 | ID | Purpose / goal | Status | Dependencies |
 | --- | --- | --- | --- |
-| [ws114-p001](phase001/phase.md) | 標準Linux GTK4 baselineと機能表の実測 | uncleared（q580 finished / 部分実測） | WS105実行環境（context） |
+| [ws114-p001](phase001/phase.md) | 標準Linux GTK4 baselineと機能表の実測 | cleared（q581 / 残測定と全行skip理由） | WS105実行環境（context） |
 | [ws114-p002](phase002/phase.md) | 行ごとの採否をユーザーと確定 | planning | p001の実測 |
 | [ws114-p003](phase003/phase.md) | 選択されたXDG-shell/compositor修正 | planning | p002の採用範囲 |
 | [ws114-p004](phase004/phase.md) | 選択されたportal/session統合 | planning | p002の採用範囲。不要なら取消判断を記録 |
-| [ws114-p005](phase005/phase.md) | 標準GTK4の再検証と知見の引継ぎ | planning | p003/p004の採用出力 |
+| [ws114-p005](phase005/phase.md) | 標準GTK4の再検証と知見の引継ぎ | planning | p003/p004/p007の採用出力 |
 | [ws114-p006](phase006/phase.md) | 全変更の全文規約と最終回帰 | planning | p005実測/最終source |
 
-Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS115。選択しない行のPhaseは現状のまま自動clearせず、採否に応じ取消と依存/WS受け入れを改訂する。実装は新Queueの承認が必要。
+| [ws114-p007](phase007/phase.md) | G05 CSD/明示SSDの装飾モードとGTK4確認 | planned（q587） | p001実測・G05ユーザー指示 |
+
+Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS115。追加: p001 + G05ユーザー指示 → p007 → p005。選択しない行のPhaseは現状のまま自動clearせず、採否に応じ取消と依存/WS受け入れを改訂する。実装は新Queueの承認が必要。
 
 ## Event
 
@@ -46,3 +48,7 @@ Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS1
 2026-10-02 / desktop-next-gtk4: user指定でP9の次作業をWS114 p001→行別採否レビューに変更。[q580](../agents/P9/queue.md)は3時間のbaseline実測のみ。GTK4移植そのものはWS114選択改善→WS115、Qt6はその後。採否前の機能実装/portal backend追加は未許可。
 
 2026-10-02 / q580-wrap-uncleared: GTK4 4.18.6のwindow/menu/dialog、同一client clipboard、FileDialog、maximize/fullscreen等を実測し、全19行に証拠またはskip理由を保存。未測定項目が残るためp001/q580はuncleared。専用QEMU/SSHを停止しoverlayを保全。B1がp001継続候補を所有するが、採否p002やsource修正は開始しない。
+
+2026-10-02 / q581-baseline-cleared: p001の残主要操作を測定、全19行の再現証拠/具体skipを保存し調査基準clear。WS acceptanceの採否/改善/引継ぎ/全文最終回帰は未達、WS114はincomplete。q580 uncleared履歴は保持。[q581結果](phase001/q581-result.md)。追加CSD指示のsource実装は新Phase/Queue投入後。
+
+2026-10-02 / ws114-csd-user-selection-20261002: userがG05の装飾モード実装・GTK4確認を個別採用。[p007](phase007/phase.md)を追加しq587へ投入。p002は他行の判断を継続、p003はG05を重複実装せず、p005はp007出力を再検証/引継ぎに含める。WS acceptanceとp006最終conformanceは未達。

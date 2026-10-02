@@ -1,0 +1,4 @@
+capture negative: original FAIL retained after six later PASS; coordinates/color preserved: PASS
+stale/timeout handshake control: 1 clicks exit=1: PASS
+fresh handshake control: 2 clicks exit=0: PASS
+Python syntax compile and both generated shell sh -n: PASS

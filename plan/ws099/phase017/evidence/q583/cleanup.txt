@@ -1,0 +1,4 @@
+Owned QEMU stop command completed.
+session.json exists=False
+Owned QEMU/renderer/diagnostic processes=[]
+QEMU297933 absent from /proc; owned Unix socket entries=0.
