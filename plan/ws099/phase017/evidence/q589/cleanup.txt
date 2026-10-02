@@ -1,0 +1,7 @@
+Receipt UTC: 2026-10-02T08:45:39Z
+q589 guest/boot/actual observations were never started.
+Owned QEMU/renderer/diagnostic processes=[]
+Owned Unix socket entries=0
+runtime/session.json exists=False
+runtime directory exists=False
+No stop command used against another owner or default runtime.
