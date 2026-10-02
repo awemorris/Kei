@@ -1,0 +1,62 @@
+[
+  {
+    "argv": [
+      "build/a1-browser2/plain/host-heap"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.739,
+    "PASS_lines": 0,
+    "stderr_bytes": 0,
+    "reported_checks": 31
+  },
+  {
+    "argv": [
+      "build/a1-browser2/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.029,
+    "PASS_lines": 0,
+    "stderr_bytes": 0,
+    "reported_checks": 20
+  },
+  {
+    "argv": [
+      "build/a1-browser2/plain/host-color-media"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.003,
+    "PASS_lines": 0,
+    "stderr_bytes": 0,
+    "reported_checks": 29
+  },
+  {
+    "argv": [
+      "build/a1-browser2/plain/host-namespace"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.014,
+    "PASS_lines": 0,
+    "stderr_bytes": 0,
+    "reported_checks": 12
+  },
+  {
+    "argv": [
+      "build/a1-browser2/plain/host-submit"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.021,
+    "PASS_lines": 0,
+    "stderr_bytes": 0,
+    "reported_checks": 13
+  },
+  {
+    "argv": [
+      "build/a1-browser2/plain/host-cssom-mutation"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 0.032,
+    "PASS_lines": 0,
+    "stderr_bytes": 0,
+    "reported_checks": 12
+  }
+]

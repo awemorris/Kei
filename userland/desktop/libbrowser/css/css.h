@@ -23,13 +23,40 @@
 #include "dom/dom.h"
 
 /* The four sides, in the order of the margin and padding shorthands. */
-#define CSS_TOP		0
-#define CSS_RIGHT	1
-#define CSS_BOTTOM	2
-#define CSS_LEFT	3
+#define CSS_TOP 0
+#define CSS_RIGHT 1
+#define CSS_BOTTOM 2
+#define CSS_LEFT 3
 
 /* How many font families a computed style keeps. */
-#define CSS_FAMILIES_MAX	8
+#define CSS_FAMILIES_MAX 8
+
+/* The most media lists a sheet of the cascade is under (a <link>'s and its imports'). */
+#define CSS_MEDIA_CHAIN_MAX 10
+
+/* The most sources an @font-face rule keeps (ws074-p070; the ones after are dropped). */
+#define CSS_FONT_SOURCES 4
+
+/* The most box shadows a style keeps (ws074-p062; the ones after are dropped). */
+#define CSS_SHADOWS 4
+
+/* The corners of border-radius, in the order its shorthand lists them. */
+#define CSS_TOP_LEFT 0
+#define CSS_TOP_RIGHT 1
+#define CSS_BOTTOM_RIGHT 2
+#define CSS_BOTTOM_LEFT 3
+
+/* The most tracks a grid template keeps (ws074-p072; the ones after are dropped). */
+#define CSS_TRACKS 24
+
+/*
+ * The pseudo-elements that make boxes (ws074-p069), as numbers of the
+ * cascade and as bits of a style's pseudo_elements.
+ */
+#define CSS_PSEUDO_ELEMENT_NONE 0
+#define CSS_PSEUDO_ELEMENT_BEFORE 1
+#define CSS_PSEUDO_ELEMENT_AFTER 2
+#define CSS_PSEUDO_ELEMENT_OTHER 3
 
 /*
  * The units a length can have after the cascade: pixels, a percentage of
@@ -46,26 +73,6 @@ enum css_unit {
 	CSS_UNIT_MIN_CONTENT,
 	CSS_UNIT_FIT_CONTENT
 };
-
-/*
- * A computed length: a value and its unit.  A percentage may carry pixels
- * added to it (offset, from a calc() that mixes the two, ws074-p061);
- * the layout resolves the percentage and adds them.
- */
-struct css_length {
-	float value;
-	int unit;
-	float offset;
-};
-
-/* An element's custom properties (css/internal.h). */
-struct css_custom;
-
-/* A media query list (css/internal.h). */
-struct css_media;
-
-/* The most media lists a sheet of the cascade is under (a <link>'s and its imports'). */
-#define CSS_MEDIA_CHAIN_MAX	10
 
 /* The values of display. */
 enum css_display {
@@ -122,9 +129,6 @@ enum css_vertical_align {
 	CSS_VALIGN_LENGTH
 };
 
-/* The most sources an @font-face rule keeps (ws074-p070; the ones after are dropped). */
-#define CSS_FONT_SOURCES	4
-
 /* The formats an @font-face source declares (format("...")), or unknown when it declares none. */
 enum css_font_format {
 	CSS_FONT_FORMAT_UNKNOWN,
@@ -134,77 +138,11 @@ enum css_font_format {
 	CSS_FONT_FORMAT_OTHER
 };
 
-/*
- * One @font-face rule (ws074-p070): the family it names (an atom), the
- * range of weights it covers, whether it is italic (or oblique), and its
- * sources in order of preference (URLs as atoms, resolved against the
- * sheet once the page resolves the sheet's URLs, each with its format;
- * local() sources are not kept).
- */
-struct css_font_face {
-	struct vm_string *family;
-	int weight_min;
-	int weight_max;
-	int italic;
-	struct vm_string *sources[CSS_FONT_SOURCES];
-	int formats[CSS_FONT_SOURCES];
-	size_t source_count;
-};
-
-/* The most box shadows a style keeps (ws074-p062; the ones after are dropped). */
-#define CSS_SHADOWS	4
-
-/* The corners of border-radius, in the order its shorthand lists them. */
-#define CSS_TOP_LEFT		0
-#define CSS_TOP_RIGHT		1
-#define CSS_BOTTOM_RIGHT	2
-#define CSS_BOTTOM_LEFT		3
-
-/*
- * One box shadow (ws074-p062): its offset, blur radius and spread in
- * pixels, its color, and whether it is drawn inside the box.
- */
-struct css_shadow {
-	float x;
-	float y;
-	float blur;
-	float spread;
-	uint32_t color;
-	int inset;
-};
-
-/* The most tracks a grid template keeps (ws074-p072; the ones after are dropped). */
-#define CSS_TRACKS	24
-
 /* The kinds of grid track size: a length (or percentage), a share of the free space, or the content's. */
 enum css_track_kind {
 	CSS_TRACK_LENGTH,
 	CSS_TRACK_FR,
 	CSS_TRACK_AUTO
-};
-
-/*
- * One track of a grid template (ws074-p072): its kind, its size (a
- * length or percentage of the grid's content box, or its fr share) and
- * the smallest it may be (minmax(); a length, or auto for none given).
- */
-struct css_track {
-	int kind;
-	struct css_length size;
-	float fr;
-	struct css_length minimum;
-};
-
-/*
- * Where a grid item goes on one axis (ws074-p072): its start and end,
- * each a line (0 for auto; a negative line counts from the end) or a span
- * (0 for none).
- */
-struct css_grid_place {
-	int start;
-	int start_span;
-	int end;
-	int end_span;
 };
 
 /* The values of container-type (ws074-p075): not a container, a container of its width, or of both sizes. */
@@ -351,37 +289,10 @@ enum css_background_size {
 	CSS_BACKGROUND_SIZE_COVER = 101
 };
 
-/*
- * The pseudo-elements that make boxes (ws074-p069), as numbers of the
- * cascade and as bits of a style's pseudo_elements.
- */
-#define CSS_PSEUDO_ELEMENT_NONE		0
-#define CSS_PSEUDO_ELEMENT_BEFORE	1
-#define CSS_PSEUDO_ELEMENT_AFTER	2
-#define CSS_PSEUDO_ELEMENT_OTHER	3
-
 /* What a ::before or ::after box holds: nothing, or a list of strings and attributes' values. */
 enum css_content_kind {
 	CSS_CONTENT_NONE,
 	CSS_CONTENT_LIST
-};
-
-/*
- * One item of generated content: a string, or the name of an attribute
- * whose value is shown (both atoms).
- */
-struct css_content_item {
-	int is_attribute;
-	struct vm_string *text;
-};
-
-/*
- * The generated content of a ::before or ::after: its items in order, in
- * the arena of the sheet that declared it.
- */
-struct css_content {
-	const struct css_content_item *items;
-	size_t count;
 };
 
 /* The values of flex-direction (ws074-p035). */
@@ -420,6 +331,95 @@ enum css_generic_family {
 	CSS_FAMILY_SERIF,
 	CSS_FAMILY_SANS_SERIF,
 	CSS_FAMILY_MONOSPACE
+};
+
+/*
+ * A computed length: a value and its unit.  A percentage may carry pixels
+ * added to it (offset, from a calc() that mixes the two, ws074-p061);
+ * the layout resolves the percentage and adds them.
+ */
+struct css_length {
+	float value;
+	int unit;
+	float offset;
+};
+
+/* An element's custom properties (css/internal.h). */
+struct css_custom;
+
+/* A media query list (css/internal.h). */
+struct css_media;
+
+/*
+ * One @font-face rule (ws074-p070): the family it names (an atom), the
+ * range of weights it covers, whether it is italic (or oblique), and its
+ * sources in order of preference (URLs as atoms, resolved against the
+ * sheet once the page resolves the sheet's URLs, each with its format;
+ * local() sources are not kept).
+ */
+struct css_font_face {
+	struct vm_string *family;
+	int weight_min;
+	int weight_max;
+	int italic;
+	struct vm_string *sources[CSS_FONT_SOURCES];
+	int formats[CSS_FONT_SOURCES];
+	size_t source_count;
+};
+
+/*
+ * One box shadow (ws074-p062): its offset, blur radius and spread in
+ * pixels, its color, and whether it is drawn inside the box.
+ */
+struct css_shadow {
+	float x;
+	float y;
+	float blur;
+	float spread;
+	uint32_t color;
+	int inset;
+};
+
+/*
+ * One track of a grid template (ws074-p072): its kind, its size (a
+ * length or percentage of the grid's content box, or its fr share) and
+ * the smallest it may be (minmax(); a length, or auto for none given).
+ */
+struct css_track {
+	int kind;
+	struct css_length size;
+	float fr;
+	struct css_length minimum;
+};
+
+/*
+ * Where a grid item goes on one axis (ws074-p072): its start and end,
+ * each a line (0 for auto; a negative line counts from the end) or a span
+ * (0 for none).
+ */
+struct css_grid_place {
+	int start;
+	int start_span;
+	int end;
+	int end_span;
+};
+
+/*
+ * One item of generated content: a string, or the name of an attribute
+ * whose value is shown (both atoms).
+ */
+struct css_content_item {
+	int is_attribute;
+	struct vm_string *text;
+};
+
+/*
+ * The generated content of a ::before or ::after: its items in order, in
+ * the arena of the sheet that declared it.
+ */
+struct css_content {
+	const struct css_content_item *items;
+	size_t count;
 };
 
 /*
@@ -597,6 +597,12 @@ typedef int (*css_container_lookup)(void *context, const struct dom_element *con
 /* A native ordered top-level source list owns immutable entries until its final release. */
 struct css_rule_model;
 
+/*
+ * A selector list a script gave (querySelector and the like), parsed once
+ * and matched against elements (css_query_parse, css_engine_query_matches).
+ */
+struct css_query;
+
 /* Structural sources, not normative CSSRule.cssText serialization (rule-model.c). */
 int css_rule_model_create(struct css_rule_model **model, struct vm_heap *heap, const uint16_t *units, size_t length);
 void css_rule_model_destroy(struct css_rule_model *model);
@@ -617,12 +623,6 @@ struct vm_string *css_sheet_import(const struct css_sheet *sheet, size_t index);
 size_t css_sheet_rule_count(const struct css_sheet *sheet);
 const struct css_media *css_sheet_import_media(const struct css_sheet *sheet, size_t index);
 int css_sheet_resolve_urls(struct css_sheet *sheet, css_url_resolver resolve, void *context);
-
-/*
- * A selector list a script gave (querySelector and the like), parsed once
- * and matched against elements (css_query_parse, css_engine_query_matches).
- */
-struct css_query;
 
 /* The selector lists of scripts (parser.c, cascade.c; ws074-p031). */
 int css_query_parse(struct vm_heap *heap, const uint16_t *units, size_t length, struct css_query **query);

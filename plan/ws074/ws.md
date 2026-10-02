@@ -9,7 +9,7 @@ Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
 Queue: q584 / A1（q579の残review、last: q579-i01 uncleared）
-Resume point: p099 cleared. p172 integrated the pinned origin/browser2 changes and retained build/runtime evidence. q579 ended uncleared; q584 is now reviewing the remainder. Integrated checkpoint06 reviewed12/209, remaining137 C/header and60 other. Downstream p100/p174/p175/p173/p176/p101 remain gated by whole p172 clearance.
+Resume point: p099 cleared. p172 integrated the pinned origin/browser2 changes and retained build/runtime evidence. q584 ended uncleared at user-requested normal wrap-up with97/209 full reviews finished and112 C/header remaining (all60 other entries reviewed). Reconcile checkpoint14 final WIP/hashes and explicitly select a finite p172 continuation before p100, p174, p175, p173, p176 or p101; the downstream gate remains closed.
 <!-- awesome-plan-current:end -->
 
 2026-10-02 ユーザー更新: ブラウザ専任のP10枠を固定。p172の取込が実際に統合・検証された後は、p100でAcid3の100/100とpixel完全一致・fail 0を目指す。追加指示によりFile System Access API・OPFS・Interop 2025の100%・JavaScript Test262をこの専任枠に積む。p101のCSS2全件目標は保持する。最新のN=3実行指示でp172/q579をP10に投入。後続目標はp172のwhole-Phase clearance後に有限Queueへ選定する。
@@ -230,7 +230,7 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p099](phase099/phase.md) | Acid2 100%: 固定harnessでexact pixel一致、crash・timeout 0 | **cleared**（2026-09-30、q507。90.56% → 100.00%、plain/ASan） | p097 |
 | [ws074-p100](phase100/phase.md) | Acid3の100/100、固定参照とのpixel完全一致、fail・Uncaught・crash・timeout 0 | planned（p172後、p099 cleared） | p099、p172 |
 | ws074-p101 | WPT CSS2 reftest 100%: 固定commitのscriptなし全5904件でpass 100%、error 0 | planned（p100後、p172も必須） | p100、p172 |
-| [ws074-p172](phase172/phase.md) | origin/browser2のbrowser変更をWS107後のlibbrowser/browser配置へ取込み、関連計画/試験/bugを意味的に照合するblocking gate | in-progress / q584 A1（q579 unclearedの続き） | WS107の実成果、p099、branch snapshot |
+| [ws074-p172](phase172/phase.md) | origin/browser2のbrowser変更をWS107後のlibbrowser/browser配置へ取込み、関連計画/試験/bugを意味的に照合するblocking gate | uncleared / q584 A1、user通常停止（97/209review、残112 C/header） | WS107の実成果、p099、branch snapshot |
 | [ws074-p173](phase173/phase.md) | Interop 2025の公式focus area対象WPTを固定・baseline化し、全件PASSへ向けた失敗群と後続Phaseを設計 | planned / Queueなし | p172、p100 |
 | [ws074-p174](phase174/phase.md) | File System Access APIの仕様/WPT・権限・picker/handle契約を確定し、機能群ごとの実装Phaseへ分割 | planning / Queueなし | p172、p100 |
 | [ws074-p175](phase175/phase.md) | OPFSのorigin分離・永続保存・handle契約を確定し、機能群ごとの実装Phaseへ分割 | planning / Queueなし | p172、p174の共有契約の実出力 |
@@ -281,3 +281,5 @@ Event ws074-browser-next-goals-20261002: ユーザーが専任P10の次の目標
 2026-10-02 / c-table-forward-order-20261002: [p172](phase172/phase.md)全文レビューによりC§2の定数callback tableと先行宣言のcompile矛盾を確認、userが必要宣言だけ先行させる例外を承認。全文標準/Guardrail/automationに記録。import gate/他の全文条件/後続依存は不変。GitHub comment未公開。
 
 2026-10-02 / q584-checkpoint06-integrated: A1-001 4da5eb2e5をmain c2743455cへ統合・ACK。4全文reviewと規約修正、worker warning0 host build/.text同一の証拠、main所有権/例外契約/diff/source hash照合。[checkpoint06](phase172/import/checkpoint06/README.md)。p172はin-progress、review12/209でwhole gateは閉じたまま。
+
+2026-10-02 / q584-A1-wrap-uncleared: Latest user requested normal all-agent wrap-up. [p172 checkpoint14](phase172/import/checkpoint14/README.md) retains all209 current hashes,97 full reviews,112 pending C/header files, warning0 affected build/compiles, identical168 object texts and117 actual native checks. q584-i01/whole p172 end uncleared; WS remains incomplete and downstream gates stay closed. Explicit finite p172 continuation and final conformance are required after main merge/reconciliation. GitHub WS/Phase comments remain unpublished under main ownership.

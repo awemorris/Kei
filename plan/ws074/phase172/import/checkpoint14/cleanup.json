@@ -1,0 +1,9 @@
+{
+  "owned_build_session": 22419,
+  "build_exit": 0,
+  "six_tests_exited": true,
+  "active_owned_build_tests": [],
+  "owned_qemu_launched": false,
+  "temporary_outputs": "ignored build/a1-browser2 and build/a1-review; retained, no source patch outstanding",
+  "shared_projection_owner": "main"
+}
