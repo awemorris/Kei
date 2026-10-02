@@ -10,6 +10,7 @@ Objectives: O2
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: **2026-09-29 ユーザーの指示でブラッシュアップは後回し**（「Settingsはある程度動いたらブラッシュアップは後回しにします。」main 経由）。p001〜p009 は cleared（p006 で規約の照合・回帰（8 つの guest の試験が PASS）・デモの通しを終えた）。新しい Phase は始めない。残りの候補は下の「後回しの候補」。WS の完了の処理（受け入れの確認、試験の plan/tools への移し、Phase の directory の削除）は main の判断。完了の後、Settings の libkeiui への移行（WS090 の p007）が始められる。試験の手順は各 phase.md と `plan/ws089/tests/`（`settings-regress.sh` が guest の試験の全部）。壁紙の生成は `userland/desktop/wallpapers/generate.py`
+2026-10-02 user: fg019（ベータ1）で Settings を重点的にブラッシュアップする（標準アプリはまんべんなく、Files が最重点）。
 <!-- awesome-plan-current:end -->
 作業の手引き（2026-10-01）: [guide.md](guide.md)
 

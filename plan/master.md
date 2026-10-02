@@ -2,7 +2,7 @@
 
 <!-- awesome-plan-current:start -->
 Active Queues: q590（P1、BUG-134 AX211）。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=2 から開始（[protocol](agents/protocol.md)）。
-Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
+Current Focused Goals: **fg019 — ベータ1のリリース（2026-10-17、内容は Current Focused Goals の表）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
 **WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
 優先順位の調整（2026-10-02 user）: **WS099 を優先**（BUG-125 を WS099 の blocking にし、WS099 の担当が直す。実機の目視確認はユーザーに声をかける）。**WS114 を優先**し、GTK/Qt は WS114 p007（Linux 本物 GTK4 の CSD 完成）→ WS117（Linux 本物 Qt6 調査と compositor 改良）→ WS115 GTK4 / WS116 Qt6 の zedBSD 移植の順。**IME（WS095）は人間の作業が完了し、エージェント（Q1 の割当）が担当する**（人間の作業中の制限は解除）。WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる。**複数 display（WS113）は標準アプリの次**。**最初に BUG-134（AX211 不動作・driver 有効で起動停止）を passthrough で解析**（q590）。**ネットワーク（WiFi を含む）> 対象 platform（WS118 Latitude 5320）> インストーラの作り直し（WS119）> Linux packaging（WS112、下げる）**。GTK/Qt: まず Linux で本物の GTK4・Qt6 が我々の compositor で完璧に動くかを調査してから到達点を決める。手前のゴールは `userland/packages/desktop/gtk4`・`userland/packages/desktop/qt6` の実装（WS115/WS116）、奥のゴールは独自実装の互換 gtk4・qt6（WS097/WS096）。全体の順位は fg019 確定時に見直す。
@@ -51,7 +51,7 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
-| **fg019** | **ベータ1のリリース**。含める内容（機能・対象 platform・配布物・品質基準）は2026-10-02からユーザーと議論して決める（draft、受け入れ条件は未定義） | 未定（MG006/MG007 などを内容確定時に決める） | 未定 | 2026-10-02 user「次のFeature Goalはベータ1のリリースにします。ベータ1に含める内容は、一緒に議論して決めましょう！」 |
+| **fg019** | **ベータ1 のリリース（目標 2026-10-17）**。内容（2026-10-02 user と議論して決定）: 最初に BUG-134（AX211）／デスクトップの基盤 WS099（BUG-125 blocking）・WS094／GTK4・Qt6（WS114 p007 → WS117 → WS115・WS116、奥は WS097・WS096）／IME 日本語 WS095／標準アプリをまんべんなく（Files 最重点 WS127、Settings 重点 WS089、他 WS128）／複数 display WS113／ネットワーク（WiFi を含む）／Latitude 5320 WS118／Wayland で動くインストーラ WS119／音楽アプリ WS120／Vulkan Video の H.264 decode を Intel Xe-LP で WS083／VA-API の library WS123／動画プレーヤ WS122／ブラウザの accelerated video WS121／packages: GNU Emacs WS124・vim WS125・python3 WS126／Linux packaging WS112（最後）。対象 platform は Latitude 5330・5320 | MG003・MG006・MG002 | WS は左の一覧 | 2026-10-02 user「次のFeature Goalはベータ1のリリースにします」「リリース目標は10/17です」「ここまでがベータ1です。」 |
 | **fg018** | WS114のLinux標準GTK4の動作と不足を機能表で実測し、ユーザー行別採否レビューを経てWS115 upstream移植への前提を整える | MG006 | [WS114](ws114/ws.md) / Agent B B1 | 2026-10-02 userがdesktop次作業をGTK4移植WSへ指定。q580は部分実測でuncleared、改善機能の採否は未決 |
 | **fg017**（このsessionの対象外、2026-10-02 user: Codex が担当） | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / Agent A A1 | 2026-10-02 ユーザー指示と同日の追加。p172/q579は部分統合・検証後unclearedで、残reviewの再選定が先。Interop対象はp173で固定、Test262の到達率は未指定 |
 
@@ -230,6 +230,15 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS117](ws117/ws.md) | MG006 | Linux の本物の Qt6 を調査し、素の Qt6 アプリが動くよう compositor を改良（WS115/116 の前） | planning | WS114 p007 の後に p001 |
 | [WS118](ws118/ws.md) | MG003 | Latitude 5320 で Kei を動かす（LCD の制御の不具合、sshd の遠隔 log 用 image、ユーザーと実機） | planning | p001、実機の時期はユーザーに聞く |
 | [WS119](ws119/ws.md) | MG003 | インストーラの作り直し | planning | 要件の議論 |
+| [WS120](ws120/ws.md) | MG006 | 音楽アプリ（fg019） | planning | p001 |
+| [WS121](ws121/ws.md) | MG006 | Web ブラウザでのアクセラレーションつきのビデオ再生（fg019） | planning | p001 |
+| [WS122](ws122/ws.md) | MG006 | 動画プレーヤアプリ（fg019） | planning | p001 |
+| [WS123](ws123/ws.md) | MG006 | VA-API のライブラリ（fg019） | planning | p001 |
+| [WS124](ws124/ws.md) | MG002 | GNU Emacs の package（fg019） | planning | p001 |
+| [WS125](ws125/ws.md) | MG002 | vim の package（fg019） | planning | p001 |
+| [WS126](ws126/ws.md) | MG002 | Python 3 の package（fg019） | planning | p001 |
+| [WS127](ws127/ws.md) | MG006 | Files のベータ1 のブラッシュアップ（最重点）（fg019） | planning | p001 |
+| [WS128](ws128/ws.md) | MG006 | 標準アプリ全般のベータ1 のブラッシュアップ（fg019） | planning | p001 |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
