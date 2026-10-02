@@ -485,8 +485,16 @@ struct te_app {
 	size_t counted_length;
 	int counted_valid;
 
-	/* Text being composed by an input method (WS095), drawn at the cursor. */
-	char preedit[64];
+	/*
+	 * Text being composed by an input method (WS095, the text input's
+	 * preedit), drawn in the body at the cursor in the body's own cells and
+	 * size, the text after the cursor moved on by it.  The begin and the
+	 * end are the preedit's cursor in bytes: the segment being converted
+	 * when they differ, the caret when they are equal, none when negative.
+	 */
+	char preedit[KUI_WINDOW_TEXT_MAX];
+	int32_t preedit_begin;
+	int32_t preedit_end;
 };
 
 /* The canvas (canvas.c). */
@@ -597,6 +605,7 @@ int te_app_sync_scroll(struct te_app *app, uint64_t now_us);
 void te_app_touch(struct te_app *app);
 void te_app_text_rect(const struct te_app *app, struct te_rect *rect);
 void te_app_caret_rect(const struct te_app *app, struct te_rect *rect);
+unsigned te_app_preedit_cells(const struct te_app *app, unsigned column, size_t bytes);
 void te_app_card(const struct te_app *app, struct te_rect *rect);
 double te_app_max_scroll_x(const struct te_app *app);
 double te_app_max_scroll_y(const struct te_app *app);
