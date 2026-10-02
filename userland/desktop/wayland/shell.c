@@ -2207,11 +2207,17 @@ draw_window_blurred(
 	struct shell_rect body;
 	struct shell_rect panel;
 	struct glass_shape shape;
+	int decorated;
 
 	/* The body where it is now (docked, its lower corners below the output). */
 	body_rect(server, surface, &body);
 	draw_body(server, command, surface, &body, surface->maximized, 0U);
 	if (surface->maximized)
+		return;
+
+	/* Blurred scenes must not recreate the titlebar removed from CSD windows. */
+	decorated = zwl_decoration_server(surface);
+	if (!decorated)
 		return;
 
 	/* A floating title bar's glass (rounded even on a window whose body keeps square corners). */
@@ -2246,6 +2252,7 @@ draw_window(
 	struct shell_rect slot;
 	struct zwl_object *parent;
 	float t;
+	int decorated;
 
 	/* A sheet has only its body, under its parent's title bar (ws090-p014). */
 	parent = zwl_sheet_parent(surface);
@@ -2256,6 +2263,15 @@ draw_window(
 
 	/* The body, where it is now. */
 	body_rect(server, surface, &body);
+
+	/* Client-decorated windows supply their own frame, controls and animation content. */
+	decorated = zwl_decoration_server(surface);
+	if (!decorated) {
+		draw_body(server, command, surface, &body, 0, focused);
+
+		/* The client image is the entire decorated window. */
+		return;
+	}
 
 	/* A window a launch from Home started grows out of the icon; its title bar fades in on it. */
 	if (server->anim == surface && server->anim_docking == ANIM_LAUNCH) {
@@ -2342,6 +2358,7 @@ draw_body(
 	float radius;
 	unsigned square;
 	int whole;
+	int decorated;
 	float scale_x;
 	float scale_y;
 	float raise;
@@ -2381,6 +2398,13 @@ draw_body(
 	 */
 	whole = 0;
 	if (surface->fullscreen && server->anim != surface && panels == 0U) {
+		whole = 1;
+		radius = 0.0f;
+	}
+
+	/* CSD owns its alpha, shadows and corners; server embellishments must not clip them. */
+	decorated = zwl_decoration_server(surface);
+	if (!decorated) {
 		whole = 1;
 		radius = 0.0f;
 	}
@@ -3282,6 +3306,7 @@ window_hit(
 	struct zwl_object *parent;
 	uint32_t edges;
 	int32_t top;
+	int decorated;
 
 	/* A sheet has only its body: no title bar, no frame (ws090-p014). */
 	body_rect(server, surface, &body);
@@ -3289,6 +3314,16 @@ window_hit(
 	if (parent != NULL) {
 		if (x >= body.x && x < body.x + body.width && y >= body.y && y < body.y + body.height)
 			return HIT_BODY;
+		return HIT_NONE;
+	}
+
+	/* A CSD surface has no hidden titlebar or server resize band to consume input. */
+	decorated = zwl_decoration_server(surface);
+	if (!decorated) {
+		if (x >= body.x && x < body.x + body.width && y >= body.y && y < body.y + body.height)
+			return HIT_BODY;
+
+		/* The client owns only its surface extent. */
 		return HIT_NONE;
 	}
 
@@ -3333,6 +3368,12 @@ frame_edges(
 	int32_t right;
 	int32_t top;
 	int32_t bottom;
+	int decorated;
+
+	/* CSD clients request interactive resize from their own visible edges. */
+	decorated = zwl_decoration_server(surface);
+	if (!decorated)
+		return 0U;
 
 	/* Only a floating toplevel window has a frame: not a docked one, nor one moving, animated or without an image. */
 	if (surface->maximized ||
@@ -3552,6 +3593,7 @@ docked_window(
 {
 	struct zwl_object *parent;
 	struct zwl_object *top;
+	int decorated;
 
 	/* None while Wiseview shows. */
 	if (server->wiseview_gesture || server->wiseview > 0.0f || server->wiseview_moving)
@@ -3567,7 +3609,12 @@ docked_window(
 	if (server->pull == top && server->pull_distance > 0)
 		return NULL;
 
-	/* Succeeded. */
+	/* CSD windows retain their own controls when maximized; the system bar adds none. */
+	decorated = zwl_decoration_server(top);
+	if (!decorated)
+		return NULL;
+
+	/* Succeeded: this maximized SSD window supplies the system bar's titlebar. */
 	return top;
 }
 
@@ -3810,19 +3857,19 @@ window_dock(
 	struct shell_rect from;
 	struct shell_rect to;
 	struct shell_bar bar;
-	int32_t width;
-	int32_t height;
+	uint32_t geometry_width;
+	uint32_t geometry_height;
 
 	/* A docked window stays docked. */
 	if (surface->maximized)
 		return;
 
 	/* The place and size to come back to, and where the body is now. */
-	window_size(surface, &width, &height);
 	surface->restore_x = restore_x;
 	surface->restore_y = restore_y;
-	surface->restore_width = (uint32_t)width;
-	surface->restore_height = (uint32_t)height;
+	zwl_decoration_geometry(surface, &geometry_width, &geometry_height);
+	surface->restore_width = geometry_width;
+	surface->restore_height = geometry_height;
 	body_rect(server, surface, &from);
 
 	/* Docked. */
@@ -4819,6 +4866,7 @@ draw_tile(
 	float appear;
 	float radius;
 	unsigned square;
+	int decorated;
 
 	/* The tile's corners: rounded, or square for a window that keeps them (window_square). */
 	radius = WISEVIEW_RADIUS;
@@ -4894,8 +4942,9 @@ draw_tile(
 		glass_shape_draw(server, command, &shape);
 	}
 
-	/* A floating title bar fades as the window goes. */
-	if (!surface->maximized && progress < 1.0f) {
+	/* Only an SSD title bar fades as its window goes to a tile. */
+	decorated = zwl_decoration_server(surface);
+	if (decorated && !surface->maximized && progress < 1.0f) {
 		floating_title(tile, &panel);
 		draw_title_bar(server, command, surface, &panel, 1.0f - progress, 1.0f - progress, 0);
 	}

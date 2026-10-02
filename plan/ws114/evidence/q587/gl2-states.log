@@ -1,0 +1,13 @@
+{"event": "gtk-version", "pid": 880, "version": "4.18.6"}
+{"event": "focus", "pid": 880, "active": true}
+{"event": "snapshot", "pid": 880, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "maximized", "pid": 880, "value": true}
+{"event": "snapshot", "pid": 880, "renderer": "GskGLRenderer", "width": 1280, "height": 762, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "maximized", "pid": 880, "value": false}
+{"event": "fullscreen", "pid": 880, "value": true}
+{"event": "snapshot", "pid": 880, "renderer": "GskGLRenderer", "width": 1280, "height": 800, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "fullscreen", "pid": 880, "value": false}
+{"event": "dialog-opened", "pid": 880, "modal": true, "transient": true}
+{"event": "focus", "pid": 880, "active": false}
+{"event": "dialog-closed", "pid": 880}
+{"event": "focus", "pid": 880, "active": true}

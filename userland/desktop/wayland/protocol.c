@@ -873,6 +873,9 @@ surface_commit(
 	if (!surface->acknowledged)
 		return EPROTO;
 
+	/* Decoration ownership and window geometry join the content for this commit. */
+	zwl_decoration_commit(surface);
+
 	/* A commit without attach reuses its existing surface content. */
 	if (!surface->attached) {
 		/* Latest committed content may still be waiting for presentation. */
@@ -1116,6 +1119,11 @@ shell_request(
 			if (!surface->configured || serial == 0 || serial > surface->configure_serial)
 				return EPROTO;
 
+			/* Selects the decoration snapshot for this exact outstanding configure. */
+			error = zwl_decoration_ack(surface, serial);
+			if (error != 0)
+				return error;
+
 			/* Buffer-bearing commits may now publish this configured surface; a resize's end waits for this serial. */
 			surface->acknowledged = 1;
 			surface->acked_serial = serial;
@@ -1277,7 +1285,7 @@ zwl_window_enter_fullscreen(
 	surface->window_width = 0;
 	surface->window_height = 0;
 	if (surface->current != NULL)
-		zwl_surface_size(surface, &surface->window_width, &surface->window_height);
+		zwl_decoration_geometry(surface, &surface->window_width, &surface->window_height);
 
 	/* It covers the output from the origin. */
 	surface->x = 0;
@@ -1416,6 +1424,13 @@ zwl_window_send_configure(
 
 	/* The xdg_surface configure commits the toplevel state. */
 	surface->configure_serial = server->serial;
+
+	/* Retains the decoration ownership associated with this configure serial. */
+	error = zwl_decoration_configure(surface, surface->configure_serial);
+	if (error != 0)
+		return error;
+
+	/* Publishes the serial after its associated state has a durable owner. */
 	error = zwl_emit(surface->client, role->id, 0, &surface->configure_serial, 4);
 	if (error != 0)
 		return error;

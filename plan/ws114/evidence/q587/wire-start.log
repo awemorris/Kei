@@ -1,0 +1,9 @@
+wire_exit=0
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [12, 0], "payload_hex": "01000000"}
+{"event": [13, 0], "payload_hex": "8c760500"}
+{"request": [12, 1], "payload": [9]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [1, 0], "payload_hex": "0c00000003000000160000006e6f742061206465636f726174696f6e206d6f6465000000"}
+PASS expected invalid protocol error

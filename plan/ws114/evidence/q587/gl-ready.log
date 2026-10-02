@@ -1,0 +1,11 @@
+{"event": "gtk-version", "pid": 730, "version": "4.18.6"}
+{"event": "focus", "pid": 730, "active": true}
+{"event": "snapshot", "pid": 730, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+ZWL CURSOR shape client=3 shape=1 image=10
+KEI-IME ACTIVATE
+ZWL PERF 5005ms: passes=490 timeouts=469 | poll 95.8% work 2.0%
+ZWL PERF compose frames=3 draw_ms=23.41 (acquire 0.02 submit+present 23.14) frame_ms=24.89
+ZWL PERF shm copies=2 copy_ms=3.555
+ZWL PERF 5047ms: passes=474 timeouts=474 | poll 95.8% work 0.4%
+ZWL PERF 5001ms: passes=477 timeouts=477 | poll 97.5% work 0.4%
+ZWL PERF 5007ms: passes=472 timeouts=472 | poll 96.2% work 0.4%
