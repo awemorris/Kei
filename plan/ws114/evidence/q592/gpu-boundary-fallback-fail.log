@@ -1,0 +1,8 @@
+sh plan/tools/gpu-boundary/v1-check.sh build/amd64 (worktree private sysroot)
+v1-check: FAIL userland/desktop/wayland/dmabuf/gpu-dmabuf.c: userland/desktop/wayland/dmabuf/gpu-dmabuf.c:293:14: error: use of undeclared identifier 'VK_EXT_DIRECT_MODE_DISPLAY_EXTENSION_NAME'
+v1-check: FAIL userland/desktop/wayland/evdev/input-evdev.c: userland/desktop/wayland/evdev/input-evdev.c:296:28: error: use of undeclared identifier 'EVIOCSCLOCKID'
+v1-check: FAIL userland/desktop/wayland/freebsd/os-freebsd.c: userland/desktop/wayland/freebsd/os-freebsd.c:157:2: error: use of undeclared identifier 'PFN_vkAcquireDrmDisplayEXT'
+v1-check: FAIL userland/desktop/wayland/freebsd/seat-freebsd.c: userland/desktop/wayland/freebsd/seat-freebsd.c:14:10: fatal error: 'libseat.h' file not found
+v1-check: FAIL userland/desktop/wayland/freebsd/sync-freebsd.c: userland/desktop/wayland/freebsd/sync-freebsd.c:15:10: fatal error: 'sys/ioccom.h' file not found
+v1-check: 52 sources compiled with the GPU UAPI headers poisoned
+gpu-check exit=1

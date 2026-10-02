@@ -3,10 +3,10 @@
 # ws114-p007: GTK4 CSDとKeiland SSDの選択を実装・検証する
 
 Parent: [WS114](../ws.md)
-Status: uncleared（新 attempt を Queue 投入可、下の「次の attempt」）
+Status: in-progress（q592-i01、P3。zedBSD の boot PNG だけ未達、修正版 boot-test の再試行待ち）
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
-Queue / attempts: q587-i01
+Queue / attempts: q587-i01（uncleared）、q592-i01（P3、in-progress）
 Purpose / goal: SSDを明示要求しないclientとCSD要求clientをKeilandが装飾しないモードにし、標準GTK4で検証する。
 Investigation bound: 最大3時間 / 1 Phase。未達基準と再開条件を保存し、無制限再試験しない。
 
@@ -71,3 +71,5 @@ Scope は新しく広げず、[q587-result](q587-result.md) の未達 1〜5 だ�
 未決の判断: なし（G05 はユーザー採用済み）。cleared になれば WS117 p001 を開始できる。
 
 2026-10-02 / ws114-beta1-plan-20261002: 次 attempt の範囲・資源・目安を記録。Status は uncleared のまま（新 attempt は main の Queue 承認後）。
+
+2026-10-02 / q592 P3 checkpoint: 新 attempt q592-i01（承認: ユーザー「作業を開始しましょう。」、Q1 が投入）を base 901037f9f で実行。製品 source の変更なし。未達 1〜3 と 5 は達成: 最終 source の Linux 実物を guest に導入して SHA を照合、wire の 6 PASS、GTK4 の GL/Cairo/Vulkan の smoke、空 entry への別 client の Unicode paste の完全一致、Textedit の全 control、SSD の phantom release 0、Terminal/Files の回帰なし、style-check 0、OS/GPU 境界 PASS、guest の正常停止。未達 4 は target build の warning 0 と image まで済み、`boot-test.sh` は QMP の 30 秒 timeout で 3 回 FAIL（host I/O による QEMU main loop の停止。P1 の q594 で修正済みの boot-test で再試行待ち）。[q592 結果](q592-result.md)。

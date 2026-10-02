@@ -1,0 +1,25 @@
+== boot
+    answer = self.read_object()
+  File "/home/awe/zedBSD-worktrees/p3/plan/tools/boot-test.py", line 86, in read_object
+    chunk = self.socket.recv(65536)
+TimeoutError: timed out
+last-frame-attempt1.png
+login.ppm
+qemu.log
+uefi-vars.fd
+== boot2
+    answer = self.read_object()
+  File "/home/awe/zedBSD-worktrees/p3/plan/tools/boot-test.py", line 86, in read_object
+    chunk = self.socket.recv(65536)
+TimeoutError: timed out
+login.ppm
+qemu.log
+uefi-vars.fd
+== boot3
+    answer = self.read_object()
+  File "/home/awe/zedBSD-worktrees/p3/plan/tools/boot-test.py", line 86, in read_object
+    chunk = self.socket.recv(65536)
+TimeoutError: timed out
+login.ppm
+qemu.log
+uefi-vars.fd

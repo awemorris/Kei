@@ -1,0 +1,4 @@
+ZEDBSD_STANDALONE_CONFIG=/home/awe/zedBSD-worktrees/p3/build/p3-q592/config.mk sh plan/tools/gpu-boundary/v1-check.sh build/amd64
+v1-check: 54 sources compiled with the GPU UAPI headers poisoned
+v1-check: PASS
+gpu-check exit=0
