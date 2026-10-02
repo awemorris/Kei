@@ -30,7 +30,7 @@ zedBSD i915で外部ディスプレイの接続/切断をVulkan Display拡張か
 
 ## Design / standards / dependencies
 
-[現状と順番](design.md)、[p001契約](phase001/contracts.md)、[ID/完了保証比較](phase001/identity-completion.md)、[fixture](phase001/fixtures.md)、[全文方針](../standards/ws113-display.md)、[Guardrail](../guardrail.md)、[C全文](../coding-style.md)、[automation](../standards/automation.md#ws113-multi-display-coverage-2026-10-02)。WS075/WS103/WS089はcontext。既存のSettings Display stubを新目標で拡張する。WS099の現在のデモ基準と既存順位は変更しない。
+[現状と順番](design.md)、[p001契約](phase001/contracts.md)、[checkpoint証拠](phase001/evidence.md)、[次選定候補](phase001/next-selection.md)、[ID/完了保証比較](phase001/identity-completion.md)、[fixture](phase001/fixtures.md)、[全文方針](../standards/ws113-display.md)、[Guardrail](../guardrail.md)、[C全文](../coding-style.md)、[automation](../standards/automation.md#ws113-multi-display-coverage-2026-10-02)。WS075/WS103/WS089はcontext。既存のSettings Display stubを新目標で拡張する。WS099の現在のデモ基準と既存順位は変更しない。
 ユーザーが追加判断: pointer境界で切替、「単一display」は拡張時だけ、実機完了はまずzedBSD i915。設定の永続化/異解像度mirror/安定IDの細目はp001で技術設計する。各Phaseは有限1 Queue、今回Queueには入れない。
 
 ## Phases
@@ -59,3 +59,5 @@ p008はp002〜p007の実出力を要する。見込みは実装許可ではな�
 2026-10-02 / ws113-technical-choice-20261002-a3-ws113: main通常技術裁量で初回全extended/internal anchor、edge snap/非重複/辺連結、退避窓自動奪回無し、active同UID peer変更、初回eDP+HDMI fixtureを採択。p001–p008へ自Phase影響とeventを記録。私有Vulkan identity拡張不採用、standard短portkeyとUUID別gateを詳細化。D-ATOMIC user回答、旧boot override互換性と現fixtureは未確認。WS acceptance/Phase依存/実装権限の削除拡張無し。main remote delivery/projection pending。
 
 2026-10-02 / ws113-local-port-id-20261002-a3-ws113: mainがA2（同machine/local PCI segment:BDF+kind+物理DDI key）をnative name→standard displayNameへ採択。37byte/NUL38例を確認、64byte上限・invalid/unknown/collision拒否・mode/capability再validate・kind/port人向けlabelを契約化。GPU UUIDquery追加と私有Vulkan拡張は必須にしない。旧boot hdmi/edpはpreferred anchorで全connected inventoryを隠さない。p001–p008の影響/foreign eventを保存。D-ATOMICのみuser回答待ち、現physical fixtureは後続readiness未確認。新API/製品実装承認へ拡大無し。main remote delivery/projection pending。
+
+2026-10-02 / ws113-next-selection-20261002-a3-ws113: p001がq592候補/criteria mappingとcheckpoint ledgerを保存。p002追加/依存変更/実装承認は無し。D-ATOMIC回答とp001 outcome判定を待ち、次Queueはmainのexact approval/actual readinessを必要とする。同一agent sessionを保ちcheckpoint後に次指示待機。main delivery/projection pending。

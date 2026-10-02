@@ -9,7 +9,7 @@ Primary Milestone: MG006（WSから継承）
 Queue / attempts: q586 / q586-i01 / A3（契約調査のみ）
 Purpose / goal: hotplug/複数出力/拡張とmirror/Settings/窓所属の仕様を確定
 Prerequisites: 既存WS075/WS089/WS103の実出力を確認（context）
-Investigation bound: 90分の有限1 Phase Queue案。選定時にscope/時間を再照合する。
+Investigation bound: q586-i01で07:12–08:42 UTC（2026-10-02）、90分の有限1 Phase。scopeは読取契約設計とWS113文書/証拠だけ。
 
 ## Procedure / affected components
 
@@ -25,8 +25,8 @@ driver UAPI、Vulkan Display実装、Settings/Waylandの所有を調査。安定
 
 [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、[scoped full rule](../../standards/ws113-display.md)、[automation](../../standards/automation.md#ws113-multi-display-coverage-2026-10-02)を実装前に読む。formatter/style-checkは補助、意味/所有/イベント順はfull/manual review。HAL API変更は差分ごとの事前承認。compositorのGPU UAPI直接ioctl禁止。無関係なtoolchain変更、aggregate make check、既存WS089/WS099のPhase改変は含めない。
 
-Commands/results/commit/environment/artifacts/skipped checks: 2026-10-02 q586-i01でsource/plan全文・関係functionをrg/sed/catで読取、Khronos一次ページopen、docsのgit diff --checkとlocal link存在照合PASS。baseline0e68854ac、A3-001 commit6e34d1bb9 / main ACK8021bc210、A3-002 commit6a0a532b2。build/製品実装/hardware/SSH/host操作は未実施。
-Findings/artifacts: [source能力20行](source-audit.md)、[契約](contracts.md)、[ID/完了保証](identity-completion.md)、[fixture](fixtures.md)、[native capability結線](native-contract.md)、[現状/依存](../design.md)。D-ID A2/旧boot anchor等はmain技術採択、D-ATOMICは未採択材料。標準仕様から実能力を推定しない。Resume: 本q586期限08:42 UTC内で選択材料/影響Phaseを記録しmain reviewへ。後続p002は未承認。
+Commands/results/commit/environment/artifacts/skipped checks: 2026-10-02 q586-i01でsource/plan全文・関係functionをrg/sed/catで読取、Khronos一次ページopen、docsのgit diff --checkとlocal link存在照合PASS。baseline0e68854ac、A3-001 commit6e34d1bb9 / main ACK8021bc210、A3-002 commit6a0a532b2、A3-003 addd258356、A3-004 df2f36ff3 / main ACKec870f856。全checkpoint/commandは[evidence ledger](evidence.md)。build/製品実装/hardware/SSH/host操作は未実施。
+Findings/artifacts: [source能力20行](source-audit.md)、[契約](contracts.md)、[ID/完了保証](identity-completion.md)、[fixture](fixtures.md)、[native capability結線](native-contract.md)、[現状/依存](../design.md)。D-ID A2/旧boot anchor等はmain技術採択、D-ATOMICは未採択材料。標準仕様から実能力を推定しない。Resume: 本q586期限08:42 UTC内で選択材料/影響Phaseを記録しmain reviewへ。後続p002は未承認。[q592候補/criteria](next-selection.md)は準備だけ。
 
 ## 採択済local port ID / native capability入力
 
@@ -42,3 +42,5 @@ Findings/artifacts: [source能力20行](source-audit.md)、[契約](contracts.md
 2026-10-02 / ws113-technical-choice-20261002-a3-ws113-p001: mainのdelegated technical decision messageからD-BOOT/LAYOUT/REC/AUTH/PORT通常案を採択記録。自Phase影響: D-IDのstandard短port key/UUID別gateを詳細化し、D-ATOMIC回答と旧override互換性を待つ。p001 in-progress。 [origin](../phase001/phase.md)/[詳細](../phase001/identity-completion.md)/[WS](../ws.md)。依存/Queue権限不変、main remote delivery pending。
 
 2026-10-02 / ws113-local-port-id-20261002-a3-ws113-p001: mainのD-ID A2/旧bootpreferred技術採択messageを受領。D-ID A2/旧boot anchorは解決、D-ATOMICのみuser回答待ち。native capability semantic contractを設計入力へ追加。 [origin](../phase001/phase.md)/[sourceと範囲](../phase001/identity-completion.md)/[WS](../ws.md)。既往eventを保存し、該当current designを更新。p001 in-progress、他Phase planned/Queue none。main remote delivery pending。
+
+2026-10-02 / ws113-next-selection-20261002-a3-ws113-p001: checkpoint evidence ledgerとq592候補のexact scope/criteria/readinessを保存。既存p002全scopeの選定材料で、implementation権限を新設しない。D-ATOMIC user回答待ち、first-pixel/native NEXT_REFRESHは未実証。strict F1/F2案を短い比較材料として追記したがmandatory処理/APIには採択しない。in-progress/q586期限を保持しmain reviewへ。
