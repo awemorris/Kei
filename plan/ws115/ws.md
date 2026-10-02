@@ -62,8 +62,8 @@ Resume point（2026-10-02 q597）: p001 cleared。[移植契約](port-contract.m
 | [ws115-p004](phase004/phase.md) | meson のクロス契約と host 道具（cross file・pkg-config・gperf・host の glib 道具と wayland-scanner）（旧 WS034 p025） | cleared（q600 / P3） | p001、共有 path の割当 | 3〜4h |
 | [ws115-p005](phase005/phase.md) | libffi・pcre2・glib（旧 WS034 p026） | cleared（q602-i01、Q1 2026-10-02） | p004 | 4h |
 | [ws115-p006](phase006/phase.md) | libpng・freetype・harfbuzz・fontconfig（旧 WS034 p027） | cleared（q605-i01、Q1 2026-10-02） | p005 | 3〜4h |
-| [ws115-p007](phase007/phase.md) | pixman・cairo・fribidi・pango（旧 WS034 p028 の前半） | in-progress（q608-i01、受け入れの証拠あり。clearance は Q1） | p006 | 4h |
-| [ws115-p008](phase008/phase.md) | gdk-pixbuf・libjpeg-turbo・libtiff・graphene・libepoxy・libxkbcommon・xkeyboard-config（旧 WS034 p028 の後半） | planning | p005（p007 と並行可） | 4h |
+| [ws115-p007](phase007/phase.md) | pixman・cairo・fribidi・pango（旧 WS034 p028 の前半） | cleared（q608-i01、Q1 2026-10-02） | p006 | 4h |
+| [ws115-p008](phase008/phase.md) | gdk-pixbuf・libjpeg-turbo・libtiff・graphene・libepoxy・libxkbcommon・xkeyboard-config（旧 WS034 p028 の後半） | in-progress（q610-i01、受け入れの証拠あり。clearance は Q1） | p005（p007 と並行可） | 4h |
 | [ws115-p009](phase009/phase.md) | libwayland-client の upstream ABI 互換・wayland-protocols・wayland-cursor（旧 WS034 p034） | planning | p001、共有 path の割当 | 3〜4h |
 | [ws115-p002](phase002/phase.md) | GTK4 本体の package（`userland/packages/desktop/gtk4`）の build/install | planning | p007・p008・p009 | 4h |
 | [ws115-p010](phase010/phase.md) | zedBSD QEMU で GTK4 demo app の起動と代表操作（Cairo → GL/Vulkan） | planning | p002、WS117 p003（compositor の改良） | 4h（＋debug） |

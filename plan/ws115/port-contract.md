@@ -216,4 +216,9 @@ Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h
 | `getc_unlocked()` が無い（POSIX。flockfile・funlockfile はある） | libc | pango（pango-utils.c） | pango の patch 0001（meson の検査と getc への fallback）。libc に足すかは別の判断（記録だけ。p007） |
 | LLVM 23 の clang が `-Wunused-but-set-variable` の群に `-Wunused-but-set-global` を含め、G_DEFINE_TYPE の parent_class を報告する | toolchain の版 | pango（`-Werror=unused-but-set-variable`）。glib・cairo などでは warning だけ | pango の patch 0001（その診断だけ `-Wno-error`）（p007） |
 | pixman が TLS を使い `__tls_get_addr` を呼ぶ | link の契約（glib と同じ） | pixman | `-Db_lundef=false` を package ごとに指定（glib と pixman の 2 つ。external.mk の共通化はしていない。p007） |
+| `<inttypes.h>` の `PRId64`・`PRIu64` が `"lld"`・`"llu"` で、`int64_t` は `long`（LP64） | libc の header | libtiff・libxkbcommon・glib（gtestutils）・expat の `-Wformat` の warning（実行時は同じ幅で害は無い） | 記録だけ。libc の inttypes.h を `"ld"`・`"lu"` に直す差分の候補（main の判断。p008） |
+| `<assert.h>` が C11 の `static_assert` を定義しない | libc の header | libxkbcommon | libxkbcommon の patch 0002（meson の検査で、無ければ config.h で `_Static_assert` に）。libc に足す差分の候補（p008） |
+| `<dlfcn.h>` に `RTLD_NOLOAD` が無い（拡張で、POSIX ではない） | libc・rtld | libepoxy | libepoxy の patch 0002（無ければ「読み込まれていない」と扱う）（p008） |
+| `CLOCK_PROCESS_CPUTIME_ID` が無い | libc（POSIX の CPU 時間の clock） | libxkbcommon の bench | patch 0003（cross build では試験・bench を作らない）。記録だけ（p008） |
+| EGL・GLES・GL の SONAME が版の無い `libEGL.so`・`libGLESv2.so`・`libGL.so`（/lib） | zedBSD の library の名前 | libepoxy（dlopen） | libepoxy の patch 0001（`__ZEDBSD__` で名前を足す）。guest で epoxy 経由の `eglQueryString` が通った（p008） |
 | `config.sub` と libtool が zedbsd を知らない | 外部の build 道具 | libffi（autotools だけ） | libffi の patch 0001（OpenSSH の先例と同じ形） |
