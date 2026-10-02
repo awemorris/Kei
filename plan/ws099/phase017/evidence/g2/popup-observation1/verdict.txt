@@ -1,0 +1,42 @@
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: ZWL POPUP grab popup= ok
+log: ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1 ok
+log: ZWL PING pong client=1  ok
+log: POPUPPROBE ping serial=[0-9]+ answered ok
+log: POPUPPROBE configure menu x=60 y=60 width=360 height=180 ok
+log: POPUPPROBE focus menu ok
+check: (600,398) want 4a90e2 got 4a90e2 ok
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/menu.png 1280x800 PASS
+log: POPUPPROBE button menu state=1 x=100 y=130 ok
+log: POPUPPROBE configure submenu x=360 y=120 width=360 height=120 ok
+log: POPUPPROBE focus submenu ok
+check: (960,518) want e2a04a got e2a04a ok
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/submenu.png 1280x800 PASS
+log: POPUPPROBE choose submenu row=1 ok
+log: POPUPPROBE close menu ok
+log: POPUPPROBE focus window ok
+check: (600,398) want 2b3444 got 2b3444 ok
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/chosen.png 1280x800 PASS
+log: POPUPPROBE configure submenu x=-360 y=120 width=360 height=120 MISSING (found 0)
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped.png 1280x800 FAIL
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped-later-1.png 1280x800 FAIL
+observation: original=1 later=1 poll=1
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped-later-2.png 1280x800 FAIL
+observation: original=1 later=1 poll=2
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped-later-3.png 1280x800 FAIL
+observation: original=1 later=1 poll=3
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped-later-4.png 1280x800 FAIL
+observation: original=1 later=1 poll=4
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped-later-5.png 1280x800 FAIL
+observation: original=1 later=1 poll=5
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: /home/awe/zedBSD-worktrees/p8/build/p8-q577/g2-popup-1/flipped-later-6.png 1280x800 FAIL
+observation: original=1 later=1 poll=6
+p076: FAIL
