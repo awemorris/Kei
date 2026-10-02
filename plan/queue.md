@@ -2,14 +2,14 @@
 
 # Queue / all-agent index
 
-Active Queues: q590（P1）、q591（P2）、q592（P3）、q593（P4）。
+Active Queues: q591（P2）、q592（P3）、q593（P4）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
 Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q594。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
-| q590 / q590-i01 | P1 | [ws004-p051](ws004/phase051/phase.md) | BUG-134: passthrough で再現せず → ユーザーの実機試験 image を作って渡し、解析は後回し | in-progress（wrap 中） | user 2026-10-02、[lane](agents/P1/queue.md) |
+| q590 / q590-i01 | P1 | [ws004-p051](ws004/phase051/phase.md) | BUG-134: passthrough 4 回とも再現せず、実機試験 image を作成 | finished / uncleared（ユーザーの実機試験待ち） | user 2026-10-02、P1 5a9da8080 → main 487372080 |
 | q591 / q591-i01 | P2 | [ws099-p020](ws099/phase020/phase.md) | BUG-125 の原因特定と compositor の修正（phase.md の範囲）、4h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P2/queue.md) |
 | q592 / q592-i01 | P3 | [ws114-p007](ws114/phase007/phase.md) | CSD/SSD の残り5点（新 attempt、phase.md の範囲）、3h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P3/queue.md) |
 | q593 / q593-i01 | P4 | [ws095-p012](ws095/phase012/phase.md) | IME の辞書を千語に拡張し held-out で測る（phase.md の範囲）、4h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P4/queue.md) |

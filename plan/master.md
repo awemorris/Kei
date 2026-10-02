@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: q590（P1、BUG-134 AX211 の実機試験 image）、q591（P2 ws099-p020）、q592（P3 ws114-p007）、q593（P4 ws095-p012）。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=4（2026-10-02 user）（[protocol](agents/protocol.md)）。
+Active Queues: q591（P2 ws099-p020）、q592（P3 ws114-p007）、q593（P4 ws095-p012）。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=4（2026-10-02 user）（[protocol](agents/protocol.md)）。
 Current Focused Goals: **fg019 — ベータ1のリリース（2026-10-17、内容は Current Focused Goals の表）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
 **WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
