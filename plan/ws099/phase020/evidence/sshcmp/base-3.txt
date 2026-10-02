@@ -1,0 +1,37 @@
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: ZWL POPUP grab popup= ok
+log: ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1 ok
+log: ZWL PING pong client=1  ok
+log: POPUPPROBE ping serial=[0-9]+ answered ok
+log: POPUPPROBE configure menu x=60 y=60 width=360 height=180 ok
+log: POPUPPROBE focus menu ok
+check: (600,398) want 4a90e2 got 4a90e2 ok
+check: build/p2-p020/sshcmp/base-3/menu.png 1280x800 PASS
+log: POPUPPROBE button menu state=1 x=100 y=130 ok
+log: POPUPPROBE configure submenu x=360 y=120 width=360 height=120 ok
+log: POPUPPROBE focus submenu ok
+check: (960,518) want e2a04a got e2a04a ok
+check: build/p2-p020/sshcmp/base-3/submenu.png 1280x800 PASS
+log: POPUPPROBE choose submenu row=1 ok
+log: POPUPPROBE close menu ok
+log: POPUPPROBE focus window ok
+check: (600,398) want 2b3444 got 2b3444 ok
+check: build/p2-p020/sshcmp/base-3/chosen.png 1280x800 PASS
+log: POPUPPROBE configure submenu x=-360 y=120 width=360 height=120 ok
+check: (540,518) want e2a04a got 2b3444 DIFFERS
+check: build/p2-p020/sshcmp/base-3/flipped.png 1280x800 FAIL
+log: ZWL POPUP dismiss client= ok
+log: POPUPPROBE done submenu ok
+log: POPUPPROBE close menu ok
+check: (820,493) want 2b3444 got 2b3444 ok
+check: build/p2-p020/sshcmp/base-3/dismissed.png 1280x800 PASS
+log: POPUPPROBE repositioned token=1 ok
+log: POPUPPROBE configure menu x=10 y=40 width=360 height=180 ok
+check: (470,343) want 4a90e2 got 4a90e2 ok
+check: build/p2-p020/sshcmp/base-3/repositioned.png 1280x800 PASS
+log: POPUPPROBE close menu ok
+request: ^ZWL GLASS request move surface=[0-9]+$ MISSING new count (before 0, found 0, status 255)
+reply: Connection timed out during banner exchange
+21:49:27.414828105
+p076: FAIL

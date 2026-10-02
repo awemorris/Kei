@@ -740,11 +740,13 @@ zwl_seat_button_deliver(
 	if (serial == 0U)
 		return;
 
-	/* A delivered press authorizes requests from this live client's actual button. */
+	/* A delivered press authorizes requests from this live client's actual button, which start where it was pressed. */
 	if (state != 0U) {
 		server->press_serial = serial;
 		server->press_surface = target;
 		server->press_button = button;
+		server->press_x = server->pointer_x;
+		server->press_y = server->pointer_y;
 		zwl_ping_send(target->client);
 	}
 

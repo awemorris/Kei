@@ -1,0 +1,9 @@
+base 1 p076: FAIL ssh_fail=3
+fix 1 p076: FAIL ssh_fail=2
+base 2 p076: PASS ssh_fail=0
+fix 2 p076: PASS ssh_fail=0
+base 3 p076: FAIL ssh_fail=2
+fix 3 p076: FAIL ssh_fail=2
+base 4 p076: FAIL ssh_fail=0
+fix 4 p076: PASS ssh_fail=0
+done

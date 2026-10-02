@@ -27,24 +27,7 @@ GUEST_RUNTIME="${GUEST_RUNTIME:-$(pwd)/build/ws035-sq-run}"
 export GUEST_RUNTIME
 out=${1:-build/ws035-p076}
 mkdir -p "$out"
-# Runs a guest command within a host deadline per attempt (seconds); when ssh itself fails (status 255: the guest's
-# sshd did not answer in time, BUG-135), tries again, three attempts in all.  The command's own status is kept.  Each
-# retry is printed (to stderr), so that a harness failure is told from the compositor's (ws099-p020).
-guest_retry() {
-	retry_attempt=1
-	while :; do
-		retry_reply=$(timeout "$1" python3 plan/tools/guest/guest.py run "$2" 2>&1)
-		retry_status=$?
-		[ "$retry_status" -ne 255 ] && break
-		[ "$retry_attempt" -ge 3 ] && break
-		echo "harness: ssh failed, attempt $retry_attempt: $(printf '%s\n' "$retry_reply" | tail -1)" >&2
-		retry_attempt=$((retry_attempt + 1))
-	done
-	[ "$retry_status" -eq 255 ] && echo "harness: ssh failed, attempt $retry_attempt (last): $(printf '%s\n' "$retry_reply" | tail -1)" >&2
-	[ -n "$retry_reply" ] && printf '%s\n' "$retry_reply"
-	return "$retry_status"
-}
-guest() { guest_retry 90 "$1"; }
+guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -75,10 +58,9 @@ count_log() {
 }
 
 # Requires a new accepted request while the button remains held, within six half-second polls.
-# A ten-second host deadline bounds each SSH attempt (a failed ssh is tried again, guest_retry); an old matching line
-# cannot pass.
+# A ten-second host deadline also bounds a stalled SSH command; an old matching line cannot pass.
 wait_request() {
-	request_reply=$(guest_retry 10 "i=0; n=0; while [ \$i -lt 6 ]; do n=\$(grep -cE '$2' '$1'); if [ \$n -gt $3 ]; then echo P076_REQUEST=\$n; exit 0; fi; sleep 0.5; i=\$((i + 1)); done; echo P076_REQUEST=\$n; exit 1")
+	request_reply=$(timeout 10 python3 plan/tools/guest/guest.py run "i=0; n=0; while [ \$i -lt 6 ]; do n=\$(grep -cE '$2' '$1'); if [ \$n -gt $3 ]; then echo P076_REQUEST=\$n; exit 0; fi; sleep 0.5; i=\$((i + 1)); done; echo P076_REQUEST=\$n; exit 1" 2>&1)
 	request_status=$?
 	request_seen=$(printf '%s\n' "$request_reply" | sed -n 's/^P076_REQUEST=\([0-9][0-9]*\)$/\1/p' | tail -1)
 	if [ "$request_status" -eq 0 ] && [ "${request_seen:-0}" -gt "$3" ]; then
@@ -92,7 +74,7 @@ wait_request() {
 
 # Starts the gesture only after counting accepted requests, so a previous drag cannot satisfy it.
 press_request() {
-	request_before=$(guest_retry 10 "grep -cE '$3' /tmp/zdesktop.log" | tail -1)
+	request_before=$(timeout 10 python3 plan/tools/guest/guest.py run "grep -cE '$3' /tmp/zdesktop.log" 2>&1 | tail -1)
 	case "$request_before" in
 	''|*[!0-9]*) echo "request: invalid initial count ($request_before)"; status=1; return 1 ;;
 	esac
@@ -131,7 +113,7 @@ drag() {
 
 guest "$stop_all" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
-/bin/wayland --timeout=400 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
+/tmp/p020-wayland --timeout=400 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/popup-probe --wide --timeout-s=300 --token=p > /tmp/p.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 expect_log /tmp/p.log 'POPUPPROBE ready run=p'
 set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
@@ -170,74 +152,10 @@ click $((wx + 360)) $((wy + 60)) 1200
 click $((wx + 360 + 100)) $((wy + 60 + 130)) 1200
 expect_log /tmp/p.log 'POPUPPROBE configure submenu x=-360 y=120 width=360 height=120'
 check "$out/flipped.png" --expect $((wx + 360 - 360 + 100)),$((wy + 60 + 120 + 45)),e2a04a || status=1
+guest "echo P020_AFTER_CAPTURE >> /tmp/zdesktop.log" >/dev/null
 
-# 5. A press on the desktop closes the popups (popup_done) and reaches nobody.
-before=$(count_log /tmp/p.log 'POPUPPROBE button other state=1')
-click 40 700 1200
-expect_log /tmp/zdesktop.log 'ZWL POPUP dismiss client='
-expect_log /tmp/p.log 'POPUPPROBE done submenu'
-expect_log /tmp/p.log 'POPUPPROBE close menu' 2
-after=$(count_log /tmp/p.log 'POPUPPROBE button other state=1')
-[ "${after:-1}" = "${before:-0}" ] || { echo "a press outside reached the client"; status=1; }
-check "$out/dismissed.png" --expect $((wx + 380)),$((wy + 200)),2b3444 || status=1
-
-# 6. The menu again, and r: it is placed again at window-local (10,40).
-click $((wx + 60)) $((wy + 60)) 1200
-keys 'r'
-expect_log /tmp/p.log 'POPUPPROBE repositioned token=1'
-expect_log /tmp/p.log 'POPUPPROBE configure menu x=10 y=40 width=360 height=180'
-check "$out/repositioned.png" --expect $((wx + 30)),$((wy + 50)),4a90e2 || status=1
-click 40 700 1200
-expect_log /tmp/p.log 'POPUPPROBE close menu' 3
-
-# 7. A move from the window's top strip.
-press_request $((wx + 200)) $((wy + 10)) '^ZWL GLASS request move surface=[0-9]+$' || finish
-pointer move $((wx + 240)) $((wy + 40)) sleep 150 move $((wx + 300)) $((wy + 110)) sleep 300 up sleep 800
-expect_log /tmp/p.log 'POPUPPROBE move'
-expect_log /tmp/zdesktop.log 'ZWL GLASS request move surface='
-expect_log /tmp/zdesktop.log "ZWL GLASS moved surface=[0-9]+ x=$((wx + 100)) y=$((wy + 100))"
-check "$out/moved.png" --expect $((wx + 100 + 200)),$((wy + 100 + 155)),2b3444 || status=1
-mx=$((wx + 100)); my=$((wy + 100))
-
-# 8. Resizes: the corner, the left edge (to the minimum width), the corner again (to the maximum).
-drag $((mx + 390)) $((my + 290)) 150 100
-expect_log /tmp/p.log 'POPUPPROBE resize bottom-right'
-expect_log /tmp/zdesktop.log 'ZWL RESIZE start surface=[0-9]+ edges=10 width=400 height=300'
-expect_log /tmp/p.log 'POPUPPROBE configure window width=[0-9]+ height=[0-9]+ states=2 resizing=1'
-expect_log /tmp/zdesktop.log 'ZWL RESIZE end surface=[0-9]+ width=550 height=400'
-expect_log /tmp/p.log 'POPUPPROBE configure window width=550 height=400 states=1 resizing=0'
-check "$out/resized.png" --expect $((mx + 540)),$((my + 385)),2b3444 || status=1
-drag $((mx + 5)) $((my + 200)) 400 0
-expect_log /tmp/p.log 'POPUPPROBE resize left'
-expect_log /tmp/zdesktop.log 'ZWL RESIZE end surface=[0-9]+ width=200 height=400'
-expect_log /tmp/zdesktop.log "ZWL RESIZE settled surface=[0-9]+ x=$((mx + 350)) y=$my width=200 height=400"
-check "$out/narrowed.png" --expect $((mx + 350 + 100)),$((my + 385)),2b3444 || status=1
-drag $((mx + 355)) $((my + 200)) -800 0
-expect_log /tmp/zdesktop.log 'ZWL RESIZE end surface=[0-9]+ width=800 height=400'
-expect_log /tmp/zdesktop.log "ZWL RESIZE settled surface=[0-9]+ x=$((mx - 250)) y=$my width=800 height=400"
-check "$out/widened.png" --expect $((mx - 250 + 30)),$((my + 385)),2b3444 || status=1
-
-# 9. Not responding: pongs off, a right press (the window menu) pings, 5 s pass; then pongs on.
-keys 'p'
-expect_log /tmp/p.log 'POPUPPROBE pong off'
-pointer move $((mx - 250 + 400)) $((my + 100)) sleep 300 right-down sleep 60 right-up sleep 800
-expect_log /tmp/p.log 'POPUPPROBE window-menu'
-expect_log /tmp/p.log 'POPUPPROBE ping serial=[0-9]+ ignored'
-sleep 6
-expect_log /tmp/zdesktop.log 'ZWL PING unresponsive client=1'
-check "$out/unresponsive.png" >/dev/null
-keys 'p'
-expect_log /tmp/p.log 'POPUPPROBE pong on answered=[1-9]'
-expect_log /tmp/zdesktop.log 'ZWL PING responsive client=1'
-
-# 10. Maximize, unmaximize and minimize from the keyboard.
-keys 'm'
-expect_log /tmp/zdesktop.log 'ZWL GLASS dock surface=[0-9]+ via=request'
-keys 'u'
-expect_log /tmp/zdesktop.log 'ZWL GLASS undock surface=[0-9]+ via=request'
 sleep 1
-keys 'n'
-expect_log /tmp/zdesktop.log 'ZWL GLASS minimize surface='
-
-# Nothing failed.
-finish
+check "$out/flipped-1s.png" --expect $((wx + 360 - 360 + 100)),$((wy + 60 + 120 + 45)),e2a04a
+guest 'cat /tmp/zdesktop.log' > "$out/zdesktop-full.log"
+guest 'cat /tmp/p.log' > "$out/probe.log"
+guest "$stop_all" >/dev/null
