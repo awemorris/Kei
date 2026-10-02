@@ -20,3 +20,5 @@ Next（予約）: ws115-p006（libpng・freetype・harfbuzz・fontconfig）〜
 | P3-006 | q602 途中 | 24c66c58e（前回 503b94c80） | packages/libs/pcre2・libffi・plan/ws115（proposed の libc 差分 2 つはユーザーの承認待ち） | integrated dea890041 |
 | P3-007 | q602 wrap | c4e303ffa（前回 24c66c58e） | packages/libs/glib・plan/ws115 | integrated 698759738 |
 | P3-008 | q602 | 150c2f51f（base 798ad97bc） | include/libc/libintl.h・sys/socket.h（ユーザー許可の libc 差分） | integrated 871777b34 |
+| P3-009 | q602 | 31155f84d..958b6c060（前回 150c2f51f） | packages/libs/glib・plan/ws115 | integrated（cleared） |
+| q605 / q605-i01 | ws115-p006 | libpng・freetype・harfbuzz・fontconfig | 継続 dispatch | 4h | in-progress |

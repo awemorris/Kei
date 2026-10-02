@@ -31,3 +31,6 @@ Queue: none（未承認）
 ## 未決の判断
 
 なし。
+
+
+2026-10-02 Q1: `plan/tools/packages/audit-licenses.sh` は openssl・openssh の tarball だけを見ている（ws115-p005 で判明）。この Phase で全外部 package（glib・pcre2・libffi 以降の GTK の依存、Emacs・vim・Python を含む）に広げる。

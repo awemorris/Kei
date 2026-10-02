@@ -10,7 +10,7 @@
 | q598 / q598-i01 | [ws033-p001](../../ws033/phase001/phase.md) | USB の LAN の hotplug を QEMU で | 継続 dispatch | 3 時間 | finished / uncleared（WiFi 優先で中断） |
 | q599 / q599-i01 | [ws005-p019](../../ws005/phase019/phase.md) | BUG-138 WiFi menu・利用者の join の実装 | 2026-10-02 user「実装をお願いします。優先度高いです。」 | 4 時間 | finished / uncleared（networkd の owner 変更がユーザーの明示の承認待ち） |
 | q601 / q601-i01 | [ws118-p001](../../ws118/phase001/phase.md) | 5320 の遠隔 log 用 image | 継続 dispatch | 3 時間 | in-progress（再開） |
-| q599 / q599-i02 | [ws005-p019](../../ws005/phase019/phase.md) | network group の利用者に WiFi の制御を許可し desktop から on/off・join | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」 | 4 時間 | finished / uncleared（permission の再拒否、ユーザーの直接の許可待ち） |
+| q599 / q599-i02 | [ws005-p019](../../ws005/phase019/phase.md) | network group の利用者に WiFi の制御を許可し desktop から on/off・join（i02） | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」 | 4 時間 | finished / uncleared（permission の再拒否、ユーザーの直接の許可待ち） |
 
 Next（予約）: ws005-p019 再開（ユーザーの承認後）→ ws033-p001 再投入
 
@@ -22,3 +22,5 @@ Next（予約）: ws005-p019 再開（ユーザーの承認後）→ ws033-p001 
 | P1-004 | q598 | a4669dc8e..cb6ce3e76（前回 3019d674b） | plan/ws033/phase001 | integrated b828c5372（中断、hotplug の ue1 が RX/TX 0 の途中所見） |
 | P1-005 | q599 | c26fb2c78（base 4a835cb24、前回 3019d674b、q598 は cb6ce3e76 で統合済み） | wayland/network.c・plan/ws005/phase019・BUG-138 | integrated b67aa0f88 |
 | P1-006 | q601 途中 | c3103cdd4・ce94725fb（前回 c26fb2c78） | ws118 の config・script・phase001 | integrated 03d75d732 |
+| q599 / q599-i03 | ws005-p019 | generation2: networkd・UI・B3 の実装、QEMU・passthrough | user 承認 | 4h | finished / uncleared（AP の資格情報待ち） |
+| P1-007 | q599-i03 | ff357e48c..c662d6e33 | networkd・network.c・settings/network.c・plan/ws005・BUG-138 | integrated 364ea5f22 |

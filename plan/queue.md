@@ -2,10 +2,10 @@
 
 # Queue / all-agent index
 
-Active Queues: q599-i03（P1 generation2）、q591（P2）、q602（P3）、q604（P4）。
+Active Queues: q601（P1）、q591（P2）、q605（P3）、q604（P4）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q605。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q606。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
@@ -17,12 +17,13 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 | q598 / q598-i01 | P1 | [ws033-p001](ws033/phase001/phase.md) | USB の LAN の後挿し・抜去・carrier・networking.wait を QEMU で通す、3h | finished / uncleared（2026-10-02 user の WiFi 優先の指示で中断、q599 の後に再投入） | 継続 dispatch（user 2026-10-02、ネットワーク優先）、[lane](agents/P1/queue.md) |
 | q599 / q599-i01 | P1 | [ws005-p019](ws005/phase019/phase.md) | BUG-138: system bar の WiFi menu の on/off・AP 選択→鍵→接続、利用者の owner（A＋A′）、有線優先の route/DNS、AX211 passthrough で確認、4h | finished / uncleared（networkd の owner の変更は permission system が "Security Weaken" として拒否、ユーザーの明示の承認待ち。system bar の鍵の入力と待ちの slot は実装済み） | 2026-10-02 user「実装をお願いします。優先度高いです。」、[lane](agents/P1/queue.md)、P1 c26fb2c78 → main b67aa0f88 |
 | q600 / q600-i01 | P3 | [ws115-p004](ws115/phase004/phase.md) | meson の cross 契約（cross file の生成）と host 道具（gperf 3.3）。版に依らない範囲、4h | finished / cleared | 継続 dispatch（user 2026-10-02「まずは素のGTK4を移植してください」）、[lane](agents/P3/queue.md)、P3 503b94c80 → main 81f77738d |
-| q602 / q602-i01 | P3 | [ws115-p005](ws115/phase005/phase.md) | libffi・pcre2・glib 2.84.4 の package（D-Bus を前提にしない構成、GApplication の session bus 警告の出所の確認と patch）、4h | in-progress（P3 generation2 へ引き継ぎ、c4e303ffa まで統合） | 継続 dispatch（user 2026-10-02 GTK4 移植）、[lane](agents/P3/queue.md) |
+| q602 / q602-i01 | P3 | [ws115-p005](ws115/phase005/phase.md) | libffi・pcre2・glib 2.84.4 | finished / cleared（QEMU の guest probe PASS・boot-test PASS、license は手での分類） | P3 958b6c060 → main |
 | q603 / q603-i01 | P4 | [ws095-p013](ws095/phase013/phase.md) | BUG-139: IME の変換中の文字を本文と同じ大きさで inline に、4h | finished / cleared（QEMU。実機の目視はユーザー） | 2026-10-02 user「テキスト本文と同じ文字の大きさにしたいです。ここはUI/UXの完成度の要」、[lane](agents/P4/queue.md)、P4 12bc714ea → main c0449523a |
 | q604 / q604-i01 | P4 | [ws095-p005](ws095/phase005/phase.md) | IME の候補の窓、右上の通知領域の IME の status（A／あ）、key repeat、ime-p004.sh の kill の修正、4h | in-progress | user 2026-10-02「IMEのステータスを画面右上の通知領域に追加してください」＋継続 dispatch、[lane](agents/P4/queue.md) |
-| q601 / q601-i01 | P1 | [ws118-p001](ws118/phase001/phase.md) | 5320 の遠隔 log 用 image（sshd、USB LAN、3 種、手順書）、QEMU で SSH まで、実機は使わない、3h | paused（P1 の再起動のため中断、c3103cdd4 まで統合済み） | 継続 dispatch（user 2026-10-02、5320 は「SSHDを起動してリモート実機でログを取れるようなイメージを作成」）、[lane](agents/P1/queue.md) |
+| q605 / q605-i01 | P3 | [ws115-p006](ws115/phase006/phase.md) | libpng・freetype・harfbuzz（libcxx）・fontconfig、4h | in-progress | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md) |
+| q601 / q601-i01 | P1 | [ws118-p001](ws118/phase001/phase.md) | 5320 の遠隔 log 用 image（sshd、USB LAN、3 種、手順書）、QEMU で SSH まで、実機は使わない、3h | in-progress（再開） | 継続 dispatch（user 2026-10-02、5320 は「SSHDを起動してリモート実機でログを取れるようなイメージを作成」）、[lane](agents/P1/queue.md) |
 | q599 / q599-i02 | P1 | [ws005-p019](ws005/phase019/phase.md) | BUG-138 の続き: networkd で network group の利用者に WiFi の制御を許可、desktop からの on/off・join を AX211 passthrough で確認、有線優先の route/DNS、4h | finished / uncleared（permission system が relayed approval を受け付けず再拒否、ユーザーの直接の許可待ち） | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」、[lane](agents/P1/queue.md) |
-| q599 / q599-i03 | P1（generation2） | [ws005-p019](ws005/phase019/phase.md) | networkd で network group の利用者に WiFi の制御を許可、desktop からの on/off・join、AX211 passthrough、有線優先 route/DNS、4h | in-progress | 2026-10-02 user「WiFiの制御は、networkグループに入っているユーザには許可する」「networkdについて承認しますので、権限確認は表示されたら再度承認します。」 |
+| q599 / q599-i03 | P1（generation2） | [ws005-p019](ws005/phase019/phase.md) | networkd で network group の利用者に WiFi の制御を許可、desktop からの on/off・join、AX211 passthrough、有線優先 route/DNS、4h | finished / uncleared（実装と QEMU・passthrough の on/off・一覧・鍵の field まで。実際の join は試験用 AP の資格情報待ち） | 2026-10-02 user「WiFiの制御は、networkグループに入っているユーザには許可する」「networkdについて承認しますので、権限確認は表示されたら再度承認します。」、P1 c662d6e33 → main 364ea5f22 |
 | q591 / q591-i01 | P2 | [ws099-p020](ws099/phase020/phase.md) | BUG-125 の原因特定と compositor の修正（phase.md の範囲）、4h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P2/queue.md) |
 | q592 / q592-i01 | P3 | [ws114-p007](ws114/phase007/phase.md) | CSD/SSD の残り5点（新 attempt、phase.md の範囲）、3h | finished / cleared | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P3/queue.md)、P3 597841d2a → main 3b985ae4c |
 | q593 / q593-i01 | P4 | [ws095-p012](ws095/phase012/phase.md) | IME の辞書を千語に拡張し held-out で測る（phase.md の範囲）、4h | finished / cleared | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P4/queue.md)、P4 c9d9187ad → main c7bbbf06a（held-out A 64→109/125、B 47→81/110、host 203 tests） |
