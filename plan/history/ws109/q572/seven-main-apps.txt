@@ -1,0 +1,89 @@
+terminal 0 ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZTERM TAB closed run=term id=1 count=0
+ZTERM DONE run=term reason=shell-exited
+
+files 0 ZFILES LOCATION kind=folder path=/tmp/ws109-native-apps-2vix4pep items=6 error=0
+ZFILES GLASS on
+ZFILES MENU state selection=0 folder=1 paste=0 undo=0 back=0 view=0 sort=0 openers=0 tags=5
+ZFILES MENU ready items=68
+ZFILES TITLEBAR state back=0 forward=0 parts=1 last=Home view=0 preview=0 progress=-1 query= focus=0
+ZFILES TITLEBAR ready controls=8
+ZFILES GLASS panels count=2
+ZFILES READY width=1120 height=720 token=-
+ZFILES THUMB path=/tmp/ws109-native-apps-2vix4pep/sample.png error=0 width=32 height=32
+ZFILES DONE reason=timeout
+
+settings 0 ZSETTINGS ABOUT kernel=FreeBSD 15.1-RELEASE-p4 machine=amd64 cores=4 host=ws109-freebsd
+ZSETTINGS PAGE sound
+ZSETTINGS NETWORK open links=2 dns=1 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=sound
+ZSETTINGS MENU ready items=20
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=2 last=Sound sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS GLASS panels count=2
+ZSETTINGS READY width=1180 height=800 glass=1 page=sound
+ZSETTINGS NETWORK state reachable=0 connected=1 kind=1 interface=vtnet0 wifi=0 ssid=
+ZSETTINGS SOUND report reachable=1 device=1 value=86 muted=0
+ZSETTINGS LAYOUT page=sound controls=2
+ZSETTINGS CONTROL index=6 x=308 y=177 width=820 height=28
+ZSETTINGS CONTROL index=7 x=1082 y=249 width=52 height=32
+ZSETTINGS DONE reason=timeout
+
+notes 0 NOTES OPEN pages=1 strokes=0 kind=foreign path=/tmp/ws109-native-apps-2vix4pep/sample.pdf
+NOTES TABLET seat
+NOTES START width=1024 height=768 fullscreen=0 pages=1 strokes=0 path=/tmp/ws109-native-apps-2vix4pep/sample.pdf
+NOTES LAYOUT window=1024x768 page=178,84,668,668 scale=2.2267
+NOTES BUTTONS 1:18,16,52,36 2:72,16,77,36 3:151,16,72,36 14:274,16,71,36 20:361,16,36,36 21:399,16,36,36 22:437,16,36,36 23:475,16,36,36 24:513,16,36,36 30:565,16,36,36 31:603,16,36,36 32:641,16,36,36 8:947,16,77,36 9:1040,16,61,36
+NOTES BACKGROUND source=0 items=1 flags=0 size=668x668 render_us=26 raster_us=757
+NOTES PICTURE full strokes=0..0
+NOTES FRAME first draws=52
+NOTES EXIT pages=1 strokes=0 dirty=0
+
+textedit 0 TEXTEDIT GLASS on
+TEXTEDIT OPEN path=/tmp/ws109-native-apps-2vix4pep/sample.txt bytes=39 lines=3 crlf=0 bom=0
+TEXTEDIT MENU ready items=30
+TEXTEDIT TITLEBAR ready controls=5
+TEXTEDIT TITLE sample.txt — Text Editor
+TEXTEDIT GLASS card width=884 height=664
+TEXTEDIT READY width=900 height=680 lines=3
+TEXTEDIT DONE reason=timeout
+
+imageview 0 IMAGEVIEW PRESENT smooth=1 max-dimension=16384
+IMAGEVIEW GLASS on
+IMAGEVIEW IMAGE path=/tmp/ws109-native-apps-2vix4pep/sample.png format=PNG width=32 height=32 file=32x32 levels=1 frames=0 ms=0
+IMAGEVIEW SHOW path=/tmp/ws109-native-apps-2vix4pep/sample.png index=0 count=1 width=32 height=32 frames=0 error=0
+IMAGEVIEW MENU ready items=24
+IMAGEVIEW TITLEBAR ready controls=8
+IMAGEVIEW GLASS panels count=2
+IMAGEVIEW READY width=1000 height=720 glass=1 images=1
+IMAGEVIEW GLASS panels count=1
+IMAGEVIEW DONE reason=timeout
+
+pdfviewer 0 PDFVIEWER OPEN path=/tmp/ws109-native-apps-2vix4pep/sample.pdf pages=1
+PDFVIEWER MENU ready items=24
+PDFVIEWER TITLEBAR ready controls=11
+PDFVIEWER PAGE index=0 items=1 flags=0 ms=0
+PDFVIEWER RASTER index=0 size=968x968 ms=1
+PDFVIEWER READY width=1000 height=760 pages=1
+PDFVIEWER DONE reason=timeout
+
+files 1 ZFILES FAILED operation=desktop error=22
+
+owned seatd cleanup 0 
+Traceback (most recent call last):
+  File "/root/ws109-main-apps.py", line 49, in <module>
+    assert client.returncode==0 and all(marker in report for marker in positive), name
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: files

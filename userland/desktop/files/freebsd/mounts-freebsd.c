@@ -21,7 +21,9 @@ struct fm_mounts {
 	size_t at;
 };
 
-/* Captures a bounded native kernel mount list and publishes only a complete owned snapshot. */
+/*
+ * Captures a bounded native kernel mount list and publishes only a complete owned snapshot.
+ */
 int
 fm_mounts_open(
 	struct fm_mounts **result)
@@ -92,7 +94,9 @@ fm_mounts_open(
 	return 0;
 }
 
-/* Supplies the next native mounted directory and filesystem type without transferring storage. */
+/*
+ * Supplies the next native mounted directory and filesystem type without transferring storage.
+ */
 int
 fm_mounts_next(
 	struct fm_mounts *mounts,
@@ -120,7 +124,9 @@ fm_mounts_next(
 	return 1;
 }
 
-/* Frees only this enumeration's native record storage and owner. */
+/*
+ * Frees only this enumeration's native record storage and owner.
+ */
 void
 fm_mounts_close(
 	struct fm_mounts *mounts)

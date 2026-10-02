@@ -1,0 +1,7 @@
+{
+  "owned_qemu_pid": 19587,
+  "running": false,
+  "gpu_binding": "vfio-pci",
+  "disk_retained": "/home/awe/ws109-freebsd-fixture/native.qcow2",
+  "disk_bytes": 3442081792
+}

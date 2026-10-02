@@ -2,10 +2,10 @@
 
 # ws109p005: 全文規約・主な app と3 OS の最終回帰
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q572 / q572-i01
+Queue / Attempt: q566 / q566-i01
 
 ## 目的・範囲
 
@@ -133,9 +133,3 @@ port. IfallF1..F5 evidence verified, reconcile WS/Master/goals/priority/bugs and
 Phase-specific directories perAGENTS preservinghistory, reusable nativeprobes to registeredtools
 only where justified. Stopownedremoteguest cleanly/verifyoriginalhostVFIO/nohostmutation; no push/
 GitHubpublication. No extra broadstress or waivedhardwaregate. WIP ownpaths.
-
-## Result / q572-i01 / 2026-10-02T01:47:37.308377+00:00
-
-Queue item cleared /whole Phase cleared。Actual sevennativeGPU mainapps/PTY/fileopens plus AppHome PASS; fullsource C fixes/review/nativeheaderELF/3OS builds/finalboot/docs verified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q572/result.md). F1..F5 satisfied under userselectedi915/physicalWiFiwaiver; BUG130 upstreamtracking, ownVMstopped/VFIOpreserved.
-
-Event ws109-q572-cleared: local evidence/outcome saved; remote comment and close intent pending.

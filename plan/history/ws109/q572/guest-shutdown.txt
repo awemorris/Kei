@@ -1,0 +1,7 @@
+remaining_wayland=1
+remaining_seatd=1
+Shutdown NOW!
+Shutdown NOW!
+
+System shutdown time has arrived
+shutdown: [pid 1962]

@@ -10,7 +10,9 @@
 #include <sys/kbio.h>
 #include <stdio.h>
 
-/* Supplies native ABI constants without copying platform ioctl encodings into Python. */
+/*
+ * Supplies native ABI constants without copying platform ioctl encodings into Python.
+ */
 int
 main(
 	void)

@@ -1,0 +1,137 @@
+{
+  "status": "PASS",
+  "source_memberships": 334,
+  "unique_sources": 324,
+  "header_count": 630,
+  "libraries": [
+    {
+      "file": "libgif-compat.so",
+      "soname": [
+        "libgif-compat.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "d163e5b11682f9715bcdc2d6dd118409e6a7fe545f605af745e22f64d9914681"
+    },
+    {
+      "file": "libjpeg-compat.so",
+      "soname": [
+        "libjpeg-compat.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "b14ece2989bd35f060d11bcc4e4567891298bdc50f39b1c9c13c4859654c5a94"
+    },
+    {
+      "file": "libkeiland.so",
+      "soname": [
+        "libkeiland.so"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "8285663440e8fda076a7cb690f4e39385c70c5c67d4c2ce7f6fb1cccb06d0278"
+    },
+    {
+      "file": "libkeiui.so",
+      "soname": [
+        "libkeiui.so"
+      ],
+      "needed": [
+        "libkeiland.so",
+        "libwayland-client.so",
+        "libtruetype.so",
+        "libpng-compat.so",
+        "libvulkan.so.1",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "44d531b47a6033e0f2b567abacf3c7692606ad3e1b83b24ee2d0dc562be04e7b"
+    },
+    {
+      "file": "libpdf.so",
+      "soname": [
+        "libpdf.so"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libjpeg-compat.so",
+        "libtruetype.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "1a6f006235cec2ceebde8df2091120f61488ba47ed24a1ea765cf6a9f8858600"
+    },
+    {
+      "file": "libpng-compat.so",
+      "soname": [
+        "libpng-compat.so"
+      ],
+      "needed": [
+        "libz-compat.so",
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "54e80b723c8bfbd3d8be3a8da09569810079f695e6faa34d9951f299036c01d9"
+    },
+    {
+      "file": "libseat.so.1",
+      "soname": [
+        "libseat.so.1"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "4066d135dc7d9b9640887aa6062312a35be7d5318937be0a1930b419aaecd0be"
+    },
+    {
+      "file": "libtruetype.so",
+      "soname": [
+        "libtruetype.so"
+      ],
+      "needed": [
+        "libm.so.5",
+        "libc.so.7"
+      ],
+      "sha256": "4b92fb9ef31795fa199c79d3f1559022f9724c57e12e14330302477ced3d6486"
+    },
+    {
+      "file": "libvulkan.so.1",
+      "soname": [
+        "libvulkan.so.1"
+      ],
+      "needed": [
+        "libwayland-client.so",
+        "libthr.so.3",
+        "libc.so.7"
+      ],
+      "sha256": "479c5c77ad66cc5ca29fbcae3aa9bf759d3263f15401a61717432592530c0468"
+    },
+    {
+      "file": "libwayland-client.so",
+      "soname": [
+        "libwayland-client.so"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "4bc6c316385f9f1cae1e1446b4bf445547232b9ca2753777f1c293c437056481"
+    },
+    {
+      "file": "libz-compat.so",
+      "soname": [
+        "libz-compat.so"
+      ],
+      "needed": [
+        "libc.so.7"
+      ],
+      "sha256": "017e6259714b912dc4ab6f887b4b1f8306dcd061047ba9f8662496cb8ca1a17b"
+    }
+  ]
+}

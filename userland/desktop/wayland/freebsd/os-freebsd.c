@@ -14,7 +14,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Takes real native seat and primary ownership before Vulkan performs any device inquiry. */
+/*
+ * Takes real native seat and primary ownership before Vulkan performs any device inquiry.
+ */
 int
 zwl_os_open(
 	struct zwl_server *server)
@@ -67,7 +69,9 @@ zwl_os_open(
 	return 0;
 }
 
-/* Returns the native authority after common input and Vulkan cleanup have finished. */
+/*
+ * Returns the native authority after common input and Vulkan cleanup have finished.
+ */
 void
 zwl_os_close(
 	struct zwl_server *server)
@@ -79,7 +83,9 @@ zwl_os_close(
 	return;
 }
 
-/* Counts the service descriptor that must remain observable while output is withdrawn. */
+/*
+ * Counts the service descriptor that must remain observable while output is withdrawn.
+ */
 size_t
 zwl_os_poll_count(
 	const struct zwl_server *server)
@@ -96,7 +102,9 @@ zwl_os_poll_count(
 	return 1;
 }
 
-/* Publishes the daemon's readiness entry to the common event-loop snapshot. */
+/*
+ * Publishes the daemon's readiness entry to the common event-loop snapshot.
+ */
 void
 zwl_os_poll_fill(
 	struct zwl_server *server,
@@ -111,7 +119,9 @@ zwl_os_poll_fill(
 	return;
 }
 
-/* Delivers native ownership changes and marks a disconnected authority for ordinary teardown. */
+/*
+ * Delivers native ownership changes and marks a disconnected authority for ordinary teardown.
+ */
 void
 zwl_os_poll_done(
 	struct zwl_server *server,
@@ -135,7 +145,9 @@ zwl_os_poll_done(
 	return;
 }
 
-/* Lets Vulkan acquire the display using its own duplicate of the native primary lease. */
+/*
+ * Lets Vulkan acquire the display using its own duplicate of the native primary lease.
+ */
 VkResult
 zwl_os_display_acquire(
 	struct zwl_server *server,
@@ -165,7 +177,9 @@ zwl_os_display_acquire(
 	return VK_SUCCESS;
 }
 
-/* Releases Vulkan's display duplicate before the native seat returns its original primary file. */
+/*
+ * Releases Vulkan's display duplicate before the native seat returns its original primary file.
+ */
 void
 zwl_os_display_release(
 	struct zwl_server *server,

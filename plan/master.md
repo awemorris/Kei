@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q571 finished、WS109 p004 cleared）
+Active Queue: なし（q572 finished、WS109 p005 cleared）
 Current Focused Goal: fg016 — WS109 FreeBSD15 native Keiland移植。fg015達成、fg010/fg013の未達を保持。
 Next（2026-10-02 に更新）: WS109 native guest/ABIを確認しbuild/backend移植を先行。実機検証はユーザー免除、FreeBSD QEMU Venusの実使用を新関門とする。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
@@ -217,7 +217,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | q540 partial cleared、p002 uncleared（ime-probe回答待ち）、p003未実行。 |
 | [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | completed | B1〜B5 verified / q544、API v2/public Vulkan client/最終boot。GitHub deferred |
 | [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | completed | P1〜P5 / q549、2OS native deb＋QEMU runtime、CI/release定義。remote未実施 |
-| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | incomplete | p004 cleared/q571; actual FreeBSD QEMU graphics pending (user-selected i915 passthrough) |
+| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | incomplete | p005 cleared/q572; actual FreeBSD QEMU graphics pending (user-selected i915 passthrough) |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
@@ -325,6 +325,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | `plan/tools/toolchain-lock.sh` | 共有の toolchain の tree（`build/llvm`・`llvm-source`・`llvm-build`・`NoctLang`）の directory を読み取り専用にして、許可の無い変更を防ぐ（BUG-096） | `lock`・`unlock`（main が許可した toolchain の変更の間だけ）・`status` |
 | [boot-test.sh](tools/boot-test.sh)（`boot-test.py`） | 起動の確認。OVMF の USB（amd64）か BIOS の IDE（i386）で起動し、画面を QMP で撮って login prompt を読む | `plan/tools/boot-test.sh [IMAGE]`。`OUTPUT`（既定 `build/boot-test`）、`BOOT_TIMEOUT`、`BOOT_MODE=uefi-usb` か `bios-ide` |
 | [Keiland の OS 境界 checker](tools/keiland-os-boundary/check.sh)（WS104） | 共通 source の OS include / ioctl、GPU layout の所有、install literal、libc に残る desktop header を C1〜C5、Linux/zedBSD moduleと実build membershipをL1〜L5で確認。evdev の 1 行だけを例外とする | `sh plan/tools/keiland-os-boundary/check.sh`。PASS は exit 0、違反は各項目の file:line と exit 1 |
+| [FreeBSD native の検証](tools/keiland-freebsd/README.md)（WS109） | actual native header/ELF/borrowedfd、properVulkanwindow、IntelGPU/VTlease/input、主要app/PTY/fileopen。専用guest限定、mockを実GPU結果としない | READMEのnativecompile/fixture手順。SSH/QMPの操作は既存承認範囲だけ |
 | [Linux の試験 guest と操作の道具](tools/keiland-linux/README.md)（WS105） | Debian 13 の image / overlay・loopback SSH・QMP screenshot / 入力・install・PNG の画素。host の画面を使わない | `build-guest.sh` / `guest.sh` / `install-guest.sh` / `png-probe.py`、build/ELF/header/source の checks、Vulkan chain/interpose と `wsi-check.sh`（90 frame ×4）。README の timeout 付き command |
 | [Keiland の zedBSD の検証手順](tools/keiland-linux/zedbsd-commands.md)（WS104 から移した） | build / warning・sysroot・boot・C1/C2/C9・GPU・glass / pen・Settings / 音量の既存回帰。image build は直列、BUILD と OUTPUT を個別指定 | 各節 §0〜§9 |
 | Dell Latitude 5330 の実機の操作とデモの image（[tools/hw5330](tools/hw5330/README.md)、2026-10-01） | 実機の構成（5330 自身が host の passthrough、ssh `solaris10-man`）、`/tmp/i915-hw.lock`、画面・入力・結果の読み戻し、USB の単独の起動（ユーザー）、`build-demo-image.sh` と boot の行の落とし穴、実機の試験の script の一覧と PASS の印、よくある失敗。デモの優先 WS の作業の手引きは各 `plan/wsNNN/guide.md` | README.md |

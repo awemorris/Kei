@@ -1,0 +1,38 @@
+[
+  {
+    "path": "userland/desktop/files/freebsd/mounts-freebsd.c",
+    "public_headers": 3,
+    "noncomment_sha256": "3c5548e6533f76db833efd4218e434caad362ab20ee1e0e9cd0a17489b8e572e",
+    "tokens_unchanged": true
+  },
+  {
+    "path": "userland/desktop/files/mntent/mounts-mntent.c",
+    "public_headers": 3,
+    "noncomment_sha256": "91ea6ba2a7651a43b9623f65ab396e19b161f8d86275033ee727a32022bc335b",
+    "tokens_unchanged": true
+  },
+  {
+    "path": "userland/desktop/files/places.c",
+    "public_headers": 2,
+    "noncomment_sha256": "87be5a2e4e5f7f8a579fe9fba40c482cd5f274edfcae00282a8f88690f557369",
+    "tokens_unchanged": true
+  },
+  {
+    "path": "userland/desktop/freebsd-compat/freebsd/xattr-freebsd.c",
+    "public_headers": 8,
+    "noncomment_sha256": "a914c8f59461acc3a47cfdcc02332d09f69448f6c99337e673f0c478684183d4",
+    "tokens_unchanged": true
+  },
+  {
+    "path": "userland/desktop/wayland/freebsd/os-freebsd.c",
+    "public_headers": 7,
+    "noncomment_sha256": "86a32bbe13f416cdf4749918b116353544102b428ef5e0f2ddf5d681d1e44cae",
+    "tokens_unchanged": true
+  },
+  {
+    "path": "userland/desktop/wayland/freebsd/seat-freebsd.c",
+    "public_headers": 11,
+    "noncomment_sha256": "f116b8754bce86ed58a7e23366139118e20956396363f398e175c0a36cf3a822",
+    "tokens_unchanged": true
+  }
+]

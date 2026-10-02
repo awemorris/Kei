@@ -134,7 +134,9 @@ fm_places_add_favorite(
 	return 0;
 }
 
-/* Removes one persisted favorite folder while retaining all other sidebar positions. */
+/*
+ * Removes one persisted favorite folder while retaining all other sidebar positions.
+ */
 int
 fm_places_remove_favorite(
 	struct fm_places *places,
@@ -159,7 +161,9 @@ fm_places_remove_favorite(
 	return 0;
 }
 
-/* Persists the same before/after ordering used when a favorite is dropped on another favorite. */
+/*
+ * Persists the same before/after ordering used when a favorite is dropped on another favorite.
+ */
 int
 fm_places_move_favorite(
 	struct fm_places *places,

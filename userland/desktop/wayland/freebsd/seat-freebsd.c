@@ -52,7 +52,9 @@ static void lease_close(struct zwl_server *server, unsigned slot);
 static void seat_enable(struct libseat *seat, void *data);
 static void seat_disable(struct libseat *seat, void *data);
 
-/* Connects the compositor to its real native seat authority before requesting any device. */
+/*
+ * Connects the compositor to its real native seat authority before requesting any device.
+ */
 int
 zwl_freebsd_seat_connect(
 	struct zwl_server *server)
@@ -114,7 +116,9 @@ zwl_freebsd_seat_connect(
 	return 0;
 }
 
-/* Retires every surviving device owner before returning the native seat to its daemon. */
+/*
+ * Retires every surviving device owner before returning the native seat to its daemon.
+ */
 void
 zwl_freebsd_seat_close(
 	struct zwl_server *server)
@@ -144,7 +148,9 @@ zwl_freebsd_seat_close(
 	return;
 }
 
-/* Takes a real primary-node lease before Vulkan opens its independent inquiry file. */
+/*
+ * Takes a real primary-node lease before Vulkan opens its independent inquiry file.
+ */
 int
 zwl_freebsd_primary_open(
 	struct zwl_server *server)
@@ -165,7 +171,9 @@ zwl_freebsd_primary_open(
 	return 0;
 }
 
-/* Supplies the native primary file without transferring its original owner. */
+/*
+ * Supplies the native primary file without transferring its original owner.
+ */
 int
 zwl_freebsd_primary_fd(
 	void)
@@ -178,7 +186,9 @@ zwl_freebsd_primary_fd(
 	return seat_leases[0].descriptor;
 }
 
-/* Supplies the fixed native primary choice used by both the seat and Vulkan. */
+/*
+ * Supplies the fixed native primary choice used by both the seat and Vulkan.
+ */
 const char *
 zwl_freebsd_primary_path(
 	void)
@@ -187,7 +197,9 @@ zwl_freebsd_primary_path(
 	return primary_path;
 }
 
-/* Supplies the daemon connection even while device access is withdrawn. */
+/*
+ * Supplies the daemon connection even while device access is withdrawn.
+ */
 int
 zwl_freebsd_seat_poll_fd(
 	void)
@@ -207,7 +219,9 @@ zwl_freebsd_seat_poll_fd(
 	return descriptor;
 }
 
-/* Processes queued native seat notifications without delaying the compositor's event loop. */
+/*
+ * Processes queued native seat notifications without delaying the compositor's event loop.
+ */
 int
 zwl_freebsd_seat_dispatch(
 	struct zwl_server *server)
@@ -231,7 +245,9 @@ zwl_freebsd_seat_dispatch(
 	return 0;
 }
 
-/* Obtains an independently tracked nonblocking evdev lease from the native daemon. */
+/*
+ * Obtains an independently tracked nonblocking evdev lease from the native daemon.
+ */
 int
 zwl_seat_device_open(
 	struct zwl_server *server,
@@ -270,7 +286,9 @@ zwl_seat_device_open(
 	return seat_leases[slot].descriptor;
 }
 
-/* Returns an input file and its protocol owner to the same native seat. */
+/*
+ * Returns an input file and its protocol owner to the same native seat.
+ */
 void
 zwl_seat_device_close(
 	struct zwl_server *server,
@@ -295,7 +313,9 @@ zwl_seat_device_close(
 	return;
 }
 
-/* Reports whether shared evdev discovery must wait for native activation. */
+/*
+ * Reports whether shared evdev discovery must wait for native activation.
+ */
 int
 zwl_seat_paused(
 	void)
@@ -308,7 +328,9 @@ zwl_seat_paused(
 	return 0;
 }
 
-/* Lets ordinary input retirement close a revoked lease before the daemon's later notification. */
+/*
+ * Lets ordinary input retirement close a revoked lease before the daemon's later notification.
+ */
 int
 zwl_seat_device_revoked(
 	struct zwl_server *server,

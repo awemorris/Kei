@@ -95,18 +95,56 @@ OSS `/dev/mixer*`; networking uses actual FreeBSD interfaces/net80211 and the
 existing WPA control protocol. A real WPA service and supported radio are needed
 for scan/connect/disconnect, and user access must follow that service's policy.
 
-## Verification state and QEMU Venus gate
+## Verified QEMU i915 configuration
 
-Native full build/DESTDIR, installed ELF/public ABI, real 1 MiB software Vulkan
-fill/copy, CPU UI/PDF, UFS attributes/mounts, PTY, OSS controls, wired state,
-native evdev leases and real VT callbacks were verified on the dedicated guest.
-The initial guest configuration has no usable DRM card or WiFi radio.
+The user selected Intel i915 PCI passthrough after the native Venus prerequisite
+check. The tested guest is FreeBSD 15.1-RELEASE-p4 amd64, with the host's isolated
+Intel Alder Lake-UP3 Iris Xe (`8086:46a8`) already bound to `vfio-pci`. The test
+uses QEMU 10.0.11, Q35/KVM, four CPUs and 4 GiB RAM. Host devices and driver
+bindings were preserved; this is a dedicated guest, not a host desktop session.
 
-The user waived real-machine tests on 2026-10-02 and selected actual Venus usage
-in FreeBSD QEMU as the graphics acceptance condition. This requires a compatible
-host/virglrenderer/QEMU configuration and native guest kernel/Mesa Venus path.
-Software lavapipe, host-only Venus capability or another OS's guest results do
-not prove that condition. Native WiFi ABI/refusal and WPA wire tests remain
-classified separately from the waived physical-radio operations. Final source
-conformance and Linux/zedBSD/native regression still apply. See WS109's current
-Queue/evidence for the bounded Venus capability investigation and final result.
+The GPU is assigned at guest PCI `00:02.0`, with `rombar=0` and
+`x-igd-opregion=on`. The CPU setting `host-phys-bits-limit=39` matches this host's
+IOMMU address width; use the actual width of the intended host. An emulated VGA
+console supplies QMP boot observations separately from the passed-through GPU.
+A QMP console screenshot does not capture the Intel display's scanout.
+
+The guest uses `drm-66-kmod-6.6.25.1501000_8`, the matching FreeBSD 15.1 package,
+and `gpu-firmware-intel-kmod-alderlake-20260519.1500068`. Load `i915kms` using the
+normal native module configuration. The resulting `/dev/dri/card0` and
+`renderD128` belong to the Intel GPU. Mesa 26.1.3's
+`/usr/local/share/vulkan/icd.d/intel_icd.x86_64.json` selects actual Intel Vulkan;
+it is not the software `lvp` ICD. The normal seatd service and the session's
+`video` group membership supply device authority.
+
+Native drm-kmod currently exports DMA-BUF files with zero internal access
+flags. Their reservation ioctl returns `EBADF` even though the descriptor is
+live. The FreeBSD adapters recognize this precise file-query result and report
+unsupported transport to Keiland's existing CPU completion/release fallback.
+Closed descriptors and invalid completion descriptors keep their original
+errors; no fake fence is published. Actual mapped GPU windows and descriptor
+ownership were tested. The upstream driver defect remains tracked as BUG-130;
+this workaround does not claim to repair its sync-file implementation.
+
+## Verification and limits
+
+Native full build/DESTDIR, installed ELF/public ABI, Vulkan fill/copy, GPU
+readback and actual unprivileged compositor/Vulkan windows were verified.
+Native seatd VT withdrawal retires input and primary leases asynchronously;
+restored VT activation acquires fresh leases and resumes actual GPU frames.
+QEMU USB input was observed through the native kernel and Wayland path. CPU
+UI/PDF, UFS attributes/mounts, PTY, OSS controls and wired state have separate
+native evidence. See WS109's final acceptance record for the application results.
+
+The original Venus configuration booted, but the native guest lacked the
+required DRM/Venus ICD path. The current upstream virtio driver also lacks the
+required host-visible memory feature. Venus remains unverified; the later user
+instruction selected the tested i915 passthrough route. Neither host Venus
+support nor lavapipe is reported as successful native Venus use.
+
+Physical-machine and physical WiFi tests were explicitly waived. Native WiFi
+ABI/refusal and WPA wire tests use an independent datagram peer; these do not
+prove actual radio scan/association or a system supplicant's persistent storage.
+Only FreeBSD 15.1 amd64 and the named Intel GPU stack were exercised. Other
+FreeBSD versions, GPU drivers and physical radios remain untested. Linux and
+zedBSD regression evidence covers the shared changes made by this port.

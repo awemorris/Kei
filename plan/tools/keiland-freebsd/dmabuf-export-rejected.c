@@ -29,7 +29,9 @@ main(
 	exported = 123;
 	errno = 0;
 	error = zwl_dmabuf_export_read(-1, &exported);
-	if (error != -1 || errno != EBADF || exported != 123)
+	if (error != -1 ||
+	    errno != EBADF ||
+	    exported != 123)
 		return 1;
 
 	/* Uses an actual non-DMA kernel file rather than mocking a driver response. */
@@ -42,13 +44,24 @@ main(
 	errno = 0;
 	error = zwl_dmabuf_export_read(descriptors[0], &exported);
 	saved = errno;
-	flags = fcntl(descriptors[0], F_GETFD);
-	(void)close(descriptors[0]);
-	(void)close(descriptors[1]);
 	if (error != -1 ||
 	    saved != ENOTTY ||
-	    exported != 456 ||
-	    flags < 0)
+	    exported != 456)
+		return 1;
+
+	/* Requires the borrowed file to remain live after the unsupported operation. */
+	flags = fcntl(descriptors[0], F_GETFD);
+	if (flags < 0)
+		return 1;
+
+	/* Retires the independently owned native buffer peer after checking borrowed ownership. */
+	error = close(descriptors[0]);
+	if (error != 0)
+		return 1;
+
+	/* Retires the remaining native peer before reporting the positive failure contract. */
+	error = close(descriptors[1]);
+	if (error != 0)
 		return 1;
 
 	/* Succeeded: actual rejected exports preserve fd ownership and native errno. */

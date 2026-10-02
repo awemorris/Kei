@@ -36,7 +36,9 @@ static ssize_t native_list(enum attribute_target target, const char *path, int d
 static int namespace_names(enum attribute_target target, const char *path, int descriptor, int space, size_t prefix, struct attribute_names *names);
 static ssize_t attribute_list(enum attribute_target target, const char *path, int descriptor, char *names, size_t capacity);
 
-/* Reads a followed path's native attribute with nontruncating value semantics. */
+/*
+ * Reads a followed path's native attribute with nontruncating value semantics.
+ */
 ssize_t
 getxattr(
 	const char *path,
@@ -55,7 +57,9 @@ getxattr(
 	return size;
 }
 
-/* Reads an attribute of the link itself rather than its target. */
+/*
+ * Reads an attribute of the link itself rather than its target.
+ */
 ssize_t
 lgetxattr(
 	const char *path,
@@ -74,7 +78,9 @@ lgetxattr(
 	return size;
 }
 
-/* Reads the native attribute of an already opened copy source. */
+/*
+ * Reads the native attribute of an already opened copy source.
+ */
 ssize_t
 fgetxattr(
 	int descriptor,
@@ -93,7 +99,9 @@ fgetxattr(
 	return size;
 }
 
-/* Stores a followed path's tags using native namespace ownership. */
+/*
+ * Stores a followed path's tags using native namespace ownership.
+ */
 int
 setxattr(
 	const char *path,
@@ -113,7 +121,9 @@ setxattr(
 	return 0;
 }
 
-/* Stores copied metadata on the caller's already opened destination file. */
+/*
+ * Stores copied metadata on the caller's already opened destination file.
+ */
 int
 fsetxattr(
 	int descriptor,
@@ -133,7 +143,9 @@ fsetxattr(
 	return 0;
 }
 
-/* Deletes a followed path's native attribute without affecting the file itself. */
+/*
+ * Deletes a followed path's native attribute without affecting the file itself.
+ */
 int
 removexattr(
 	const char *path,
@@ -157,7 +169,9 @@ removexattr(
 	return 0;
 }
 
-/* Lists complete namespace-qualified names from an opened native file. */
+/*
+ * Lists complete namespace-qualified names from an opened native file.
+ */
 ssize_t
 flistxattr(
 	int descriptor,
@@ -175,7 +189,9 @@ flistxattr(
 	return size;
 }
 
-/* Lists attributes on a symbolic link without enumerating its target. */
+/*
+ * Lists attributes on a symbolic link without enumerating its target.
+ */
 ssize_t
 llistxattr(
 	const char *path,

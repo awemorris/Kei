@@ -16,7 +16,9 @@ struct fm_mounts {
 	FILE *table;
 };
 
-/* Opens the same authoritative mounted-filesystem table used by the existing Places implementation. */
+/*
+ * Opens the same authoritative mounted-filesystem table used by the existing Places implementation.
+ */
 int
 fm_mounts_open(
 	struct fm_mounts **result)
@@ -48,7 +50,9 @@ fm_mounts_open(
 	return 0;
 }
 
-/* Copies the current table record's borrowed directory and filesystem type. */
+/*
+ * Copies the current table record's borrowed directory and filesystem type.
+ */
 int
 fm_mounts_next(
 	struct fm_mounts *mounts,
@@ -82,7 +86,9 @@ fm_mounts_next(
 	return 1;
 }
 
-/* Returns this iterator's mount stream and allocation after the sidebar has copied its records. */
+/*
+ * Returns this iterator's mount stream and allocation after the sidebar has copied its records.
+ */
 void
 fm_mounts_close(
 	struct fm_mounts *mounts)

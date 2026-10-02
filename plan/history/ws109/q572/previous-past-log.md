@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q572](queue-q572.md)（WS109 p005 cleared）
+Last finished Queue: [q571](queue-q571.md)（WS109 p004 cleared）
 
-## 最新: q572 /WS109 p005
+## 最新: q571 /WS109 p004
 
-item cleared /Phase cleared。Actual sevennativeGPU mainapps/PTY/fileopens plus AppHome PASS; fullsource C fixes/review/nativeheaderELF/3OS builds/finalboot/docs verified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q572/result.md). F1..F5 satisfied under userselectedi915/physicalWiFiwaiver; BUG130 upstreamtracking, ownVMstopped/VFIOpreserved.
+item cleared /Phase cleared。F4 verified using unchanged actualOSS/nativewired/radioABI/WPAwire evidence and current nativeguest; physicalradio userwaived, mock correctlyclassified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q571/result.md). F5mainapps/finalreview remains.
 
 WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免除、user-selected FreeBSD QEMU i915 acceptanceは未確認。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 
 | Queue | Outcome |
 | --- | --- |
+| [q542](queue-q542.md) | WS107 p002 cleared |
 | [q543](queue-q543.md) | WS107 p003 cleared |
 | [q544](queue-q544.md) | WS107 p004 cleared |
 | [q545](queue-q545.md) | WS108 p001 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 | [q569](queue-q569.md) | WS109 p003 item cleared /Phase uncleared |
 | [q570](queue-q570.md) | WS109 p003 item cleared /Phase cleared |
 | [q571](queue-q571.md) | WS109 p004 item cleared /Phase cleared |
-| [q572](queue-q572.md) | WS109 p005 item cleared /Phase cleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

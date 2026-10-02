@@ -1,0 +1,6 @@
+{"get_active":1074034183,"activate":537163269,"get_vt_mode":1074296323,"set_vt_mode":2148038146,"vt_size":8,"get_drawing":1074023177,"set_drawing":537152266,"get_keyboard":1074023174,"set_keyboard":537152263}
+sync-rejected: PASS errno/output/fd ownership; actual GPU synchronization untested
+PASS native dma-buf export EBADF/ENOTTY/unchanged output/borrowed fd
+native-queries fdflags=1 access=ffffffff errno=0 fstat=0
+native-buffer fd=12 fdflags=1 access=ffffffff mode=3 sync=-1 errno=25 output=999
+PASS live GPU zeroaccess export/import ENOTTY, unchanged output, borrowed fd, invalid completion EBADF

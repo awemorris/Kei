@@ -89,3 +89,7 @@ No new operation or C relocation-style exception; unknown request families still
 ## WS109 acceptance revision / 2026-10-02
 
 User waives physical-machine tests; actual native FreeBSD QEMU Venus replaces that gate. Earlier hardware-check descriptions are superseded for WS109. Full C/manual review and affected native/Linux/zedBSD checks remain required; no host-only or lavapipe substitute. [Decision](ws109-native.md).
+
+## WS109 final native GPU coverage / 2026-10-02
+
+[Retainednativeprobes](../tools/keiland-freebsd/README.md): systemheader/object/privateELF audit; realpipe/closedfd/output/borrowedownership and realGPU zeroaccesssync boundary; properxdgtoplevel/Vulkan positiveframes; actualVT/nativeleases/reacquisition/QMPUSBinput; sevenmainapps/fileopens and kernel→Wayland→PTYkeyboard. Manual fullC covers semanticparagraphs/function/declorder/ownership, formatter19.1.7 and stylechecker remain auxiliary (permitted forwardcleanup gotos are candidates, not violations). q566 unchangedsource/Linux/zedBSD receipts retained by hashes, q569..q572 nativeonly additions finalreviewed. Userselectedi915 replaces missingnativeVenusroute; physicalWiFi waived, WPApeer staysmockwire evidence. Source-only testmoves retain fullreview/evidence, WSspecifictests removed at completion perAGENTS.

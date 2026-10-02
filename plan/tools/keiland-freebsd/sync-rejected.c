@@ -84,8 +84,14 @@ main(
 		return 1;
 
 	/* Releases the probe's descriptors after every ownership assertion. */
-	(void)close(pipes[0]);
-	(void)close(pipes[1]);
+	error = close(pipes[0]);
+	if (error != 0)
+		return 1;
+
+	/* Retires the independently owned completion peer after its reader was closed. */
+	error = close(pipes[1]);
+	if (error != 0)
+		return 1;
 
 	/* Publishes the actual failure contract without claiming successful DMA-BUF synchronization. */
 	(void)puts("sync-rejected: PASS errno/output/fd ownership; actual GPU synchronization untested");

@@ -4,7 +4,7 @@
 
 Status: cleared
 Disposition: normal
-Parent: [WS109](../ws.md)
+Parent: [WS109](/home/awe/zedBSD-claude1/plan/ws109/ws.md)
 Queue / Attempt: q572 / q572-i01
 
 ## 目的・範囲
@@ -24,8 +24,8 @@ F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実
 
 ## 適用規則・影響する部品・検証
 
-[WS の制約/部品/受け入れ](../ws.md)、[Guardrail](../../guardrail.md)、
-[C 規約全文](../../coding-style.md)、[自動化](../../standards/automation.md)を適用。
+[WS の制約/部品/受け入れ](/home/awe/zedBSD-claude1/plan/ws109/ws.md)、[Guardrail](/home/awe/zedBSD-claude1/plan/guardrail.md)、
+[C 規約全文](/home/awe/zedBSD-claude1/plan/coding-style.md)、[自動化](/home/awe/zedBSD-claude1/plan/standards/automation.md)を適用。
 新規/変更 C は全文該当節を読み、clang-format-19 と style-check の限界を補う。
 最終 conformance は全 WS の source を全文で review。build warning 0、必要な契約検証、diff-check を記録する。
 具体的な build/config/tool version と script は p001 の結果で固定する。`make check` は禁止。
@@ -45,11 +45,11 @@ GitHub の Phase 作成/comment/Project の projection は公開保留、local o
 
 ユーザー「drm-kmodを利用OKです。FreeBSDにも例外を適用します。FreeBSD実機は用意しておくので、作業を進めておいてください。」（2026-10-02 JST、このchat）。D1:既存FreeBSD drm-kmod利用可、GPL-free systemstack条件をこの範囲で置換。Keiland sourceの寛容license/外部実装を取り込まない境界は維持。D2:WS109専用FreeBSD QEMU guestのloopback SSH/QMP PNG検証を承認。D3:実機はユーザーが準備、入手前にnative build/backend実装を進める。実GPU/WiFi結果は将来の実機関門に残し、mock/QEMUbuildで代替しない。
 
-full C/OS rule reviewとaffectedLinux/zedBSD/nativeFreeBSD回帰を行う。F1実機model/driver、F3/F4実機の未実施はWS final acceptanceに残す。WS完了を判定する前に実機結果を確認。 [origin](../phase001/phase.md)・[WS summary](../ws.md)・[scope](../../standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
+full C/OS rule reviewとaffectedLinux/zedBSD/nativeFreeBSD回帰を行う。F1実機model/driver、F3/F4実機の未実施はWS final acceptanceに残す。WS完了を判定する前に実機結果を確認。 [origin](/home/awe/zedBSD-claude1/plan/ws109/phase001/phase.md)・[WS summary](/home/awe/zedBSD-claude1/plan/ws109/ws.md)・[scope](/home/awe/zedBSD-claude1/plan/standards/ws109-native.md)。foreign Phase own検証/再開条件を更新、remote comment pending。
 
 ## q551 design reconciliation / ws109-q551-native-environment
 
-Prerequisites include p002 final L2 integration plus p003/p004 implementation and retained physical gates. Full all-WSsource standards/3OS affected regressions; no VM-only WS completion. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](../phase001/phase.md), [WS](../ws.md), [native design](../../history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.
+Prerequisites include p002 final L2 integration plus p003/p004 implementation and retained physical gates. Full all-WSsource standards/3OS affected regressions; no VM-only WS completion. Reason: actual native dependencies and backend/link ordering inspected in p001. [Origin](/home/awe/zedBSD-claude1/plan/ws109/phase001/phase.md), [WS](/home/awe/zedBSD-claude1/plan/ws109/ws.md), [native design](/home/awe/zedBSD-claude1/plan/history/ws109/q551/environment.md). Own revised verification/resume condition saved; remote structural comment pending.
 
 ## q566 early final-conformance subset / native integration output available
 
