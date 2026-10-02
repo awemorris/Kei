@@ -11,6 +11,7 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-144](bugs/BUG-144.md) | 8 番目の Model viewer が vkAllocateMemory -4 | reproduced（QEMU） / tracking | ws129-p010、Venus の hostmem の見当 | 実機で確かめる |
 | [BUG-143](bugs/BUG-143.md) | IME の確定のたびに 500 ms 超で止まり IME を迂回 | reproduced（QEMU） / tracking | ws095-p005、辞書の保存の fsync の見当 | WS095 の次の Phase |
 | [BUG-142](bugs/BUG-142.md) | Files: 起動直後の停止中の Ctrl+C が遅れて処理 | reproduced once（QEMU） / tracking | ws127-p001 | 実機で再現したら ws127-p002 |
 | [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | reproduced / tracking | ws127-p001 | ws127-p002 |
