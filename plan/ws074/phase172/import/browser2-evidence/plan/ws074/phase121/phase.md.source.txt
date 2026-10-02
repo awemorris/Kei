@@ -1,0 +1,75 @@
+<!-- awesome-plan project=zedbsd record=ws074-p121 -->
+
+# ws074-p121: native dynamic property protocol foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q531 / q531-i01
+Prerequisite: p120e21136d0 verified all10071/100/DOM/VM/GC. Current code exposes
+snapshots through ordinary arrays; VM vm_property borrows stored value slots and
+lookup reports onlyfound/missing. Checked ordinaryproperty calls enumerated before
+selection (53references, including definitions); no native ownproperty hooks exist.
+Approval currentuser2026-09-30 autonomousAcid3/automaticQueues +2026-10-01continuation.
+Rootsolewriter/executor/timebox one finiteVMfoundationPhase; q530archiveverified.
+
+## Exact scope / design / criteria
+
+Add optional constnativeoperations table on vm_object, NULLdefault preserving all
+ordinaryobjects/arrays/functions/platformnodes. Native callbacks operate C state in
+existing internal tracedvalue; no rawrealm/windowcontext or JSProxy. GetOwnProperty
+may return virtualdescriptor with caller-owned vm_property inline value, avoiding
+pointer to ephemeralcallbackstack or fakepersistentpropertyslots. Explicit threeway
+lookup contract missing0/found1/negativeerrno forfallible C lookup; prototypefind/
+getown-descriptor preserve this contract. Higherstatus APIs convert negativefound
+into positiveerrno; audit each affected caller, including getter/assignment/in/hasOwn/
+descriptor/defineproperty/delete/ownkeys/forin/spread/JSON/private/global/binding
+ordinaryboundaries, and propagate consistently. Do not treat failure as found/missing.
+No throwvalue alteration; errorstatus remains existingVM errno convention.
+
+Optional native own-key prefix hook plus ordinary keys, exact order/no duplicates
+owned bynativeimplementation; ordinary shape lookup exposed as explicit bypasshelper
+for internalpolicy/visibility withoutrecursivevirtualdispatch. Optional native
+DefineOwnProperty/Delete callbacks can handle/refuse/fallthrough independently of
+virtualdescriptor flags; no indexedsetter/legacyvisibilitypolicy hardcoded inVM.
+PreventExtensions nativecallback can refuse, Object.preventExtensions/seal/freeze
+must honor actual refusal beforemutatingflag/descriptors. Ordinaryoperations keep
+existingsemantics. Nativecallbacks may allocate but not execute JS or recurse on
+sameobject; all privatecell/descriptorGCedges remain supported. No new collector
+mode/roots/global switches. Allocationfailures reachable via supportedhostfixture
+callback errno output, not productionfaultinjection/environment.
+
+Affected VM vm.h/object.c/access.c plus actualneeded property-call sites inVM/JS/
+bind event/frame solelyerrorpropagation. Existingsource module registration unchanged;
+meaningful host-native-properties.c fixture registers ordinary native Coperations on
+actualVMobjects, drives script semanticboundaries and realGC. No HTMLCollection/DOM
+query/liveAPI/mutationobserver/nativecollectioncode yet; nextPhaseowns those policies.
+No arraylength changes/Proxy/VMlanguage expansion/control/Range/CSS/loading/SVG/HAL/
+toolchain. Fullstandard conformance scope covers all touched call sites.
+
+Plain+ASan hostfixture dynamicallychanging virtualindexed/nameddata/getter/getown/
+prototype/has/in/ownkeys/forin/descriptors/read-onlywrite/define/delete/protection/
+preventextensions/refusal/noordinaryregression/errorpropagation throughallrelevant
+scriptboundaries/realGC/internalstate retention/drop PASS. Existing object100/interp45/
+realm30/owner27/JS14/DOM23/NodeIterator60/TreeWalker70/GC9/frame58/removal19/XML62+
+GC16/namespace/childCSS selectedregressions PASS; originalall100prior71preserved/
+equalinventories/Uncaught0/errors0/completeTrue/runstatus0/Acid2exact. Warning0/
+ASan0/fullCmanual/style/diff/hashes/evidence. No scoreincrease criterion forfoundation.
+Unknownprerequisites enduncleared, no unlimited retries; investigate boundedfixtures
+and fixedsuite. OS/guest/boot/GPU untested. Localunpublished/nopush.
+Guardrail/fullCstandard read. Primary [WebIDL legacyplatformobjects](https://webidl.spec.whatwg.org/#legacy-platform-objects)
+and [DOM HTMLCollection](https://dom.spec.whatwg.org/#interface-htmlcollection)
+read2026-10-01. This genericVMprotocol does not claim fullWebIDLconformance.
+
+## Introduction / q531 activation (2026-10-01)
+
+Actual Acid4/5/forms/tables need live/namedcollections, beyond refreshing arrays only
+when Documentgetter is read. Separate genericproperty/errorfoundation beforeDOMpolicy
+and publiccollectionAPIs. Existingp120unchanged; p100full100/100 remains unmet.
+
+## q531 result (2026-10-01)
+
+Cleared; [evidence](verification.md). Nativeproperties65/65 plus allselected
+plain/ASanregressionsPASS, unchangedall10071/100/noerrors/Acid2exact.
+Dynamicproperty/keys/guards/errorfoundationready, no DOMcollectionAPIclaim.
+Next finitePhase owns HTMLCollection livepolicy/document.links.

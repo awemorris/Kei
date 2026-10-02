@@ -35,7 +35,9 @@ enum media_feature {
 	MEDIA_FEATURE_HEIGHT,
 	MEDIA_FEATURE_ASPECT_RATIO,
 	MEDIA_FEATURE_ORIENTATION,
-	MEDIA_FEATURE_RESOLUTION
+	MEDIA_FEATURE_RESOLUTION,
+	MEDIA_FEATURE_COLOR,
+	MEDIA_FEATURE_MONOCHROME
 };
 
 /* How a test compares the feature with its value. */
@@ -59,6 +61,12 @@ struct media_name {
 
 /* The range features by their names (the -webkit- pixel ratios are resolutions in dppx). */
 static const struct media_name media_names[] = {
+	{ "color", MEDIA_FEATURE_COLOR, MEDIA_EQUAL },
+	{ "min-color", MEDIA_FEATURE_COLOR, MEDIA_AT_LEAST },
+	{ "max-color", MEDIA_FEATURE_COLOR, MEDIA_AT_MOST },
+	{ "monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_EQUAL },
+	{ "min-monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_AT_LEAST },
+	{ "max-monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_AT_MOST },
 	{ "width", MEDIA_FEATURE_WIDTH, MEDIA_EQUAL },
 	{ "min-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_LEAST },
 	{ "max-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_MOST },
@@ -105,11 +113,9 @@ static const struct media_discrete media_discretes[] = {
 	{ "display-mode", { "browser", NULL, NULL } },
 	{ "scan", { "progressive", NULL, NULL } },
 	{ "update", { "fast", NULL, NULL } },
-	{ "color", { "8", NULL, NULL } },
 	{ "color-gamut", { "srgb", NULL, NULL } },
 	{ "dynamic-range", { "standard", NULL, NULL } },
 	{ "grid", { "none", NULL, NULL } },
-	{ "monochrome", { "none", NULL, NULL } },
 	{ NULL, { NULL, NULL, NULL } }
 };
 
@@ -386,6 +392,20 @@ media_condition(
 		known = media_feature_name(name, &feature, &comparison);
 		test->feature = MEDIA_FEATURE_CONSTANT;
 		test->value = 1;
+		/* Numeric depth features use their actual zero/nonzero display-model value. */
+		if (known &&
+		    (feature == MEDIA_FEATURE_COLOR || feature == MEDIA_FEATURE_MONOCHROME)) {
+			/* A min/max prefix requires an explicit comparison value. */
+			if (comparison != MEDIA_EQUAL)
+				return EINVAL;
+
+			/* Compare the native depth against zero for the Boolean feature form. */
+			test->feature = feature;
+			test->comparison = MEDIA_MORE;
+			test->value = 0;
+		}
+
+		/* Other existing discrete features keep their established Boolean behavior. */
 		if (!known) {
 			holds = media_discrete_true(name, NULL);
 			test->value = (float)holds;
@@ -632,6 +652,22 @@ media_value(
 
 	/* The kind of feature picks the kind of value. */
 	switch (feature) {
+	case MEDIA_FEATURE_COLOR:
+	case MEDIA_FEATURE_MONOCHROME:
+		/* Depth comparisons accept one nonnegative integer and trailing whitespace only. */
+		if (token->type != CSS_TOKEN_NUMBER ||
+		    !token->integer ||
+		    token->number < 0)
+			return EINVAL;
+
+		/* Reject extra tokens instead of silently accepting a numeric prefix. */
+		index = media_skip_space(tokens, count, index + 1U);
+		if (index != count)
+			return EINVAL;
+
+		/* The exact parsed threshold is compared to the existing display model. */
+		*value = (float)token->number;
+		return 0;
 	case MEDIA_FEATURE_WIDTH:
 	case MEDIA_FEATURE_HEIGHT:
 		/* A length: zero, px or em (rem) at the initial size. */
@@ -807,6 +843,14 @@ media_test_holds(
 		actual = 0;
 		if (width > height)
 			actual = 1;
+		break;
+	case MEDIA_FEATURE_COLOR:
+		/* The current color output model has eight bits per component. */
+		actual = 8;
+		break;
+	case MEDIA_FEATURE_MONOCHROME:
+		/* Color output has no monochrome bits. */
+		actual = 0;
 		break;
 	case MEDIA_FEATURE_RESOLUTION:
 		actual = 1;

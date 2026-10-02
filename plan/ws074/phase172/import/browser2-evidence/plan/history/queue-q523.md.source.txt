@@ -1,0 +1,41 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none; finished Queue: q523 (root sole executor, this checkout)
+Last finished Queue: [q522](history/queue-q522.md), exact archive verified.
+
+## q523
+
+Purpose: legal unsigned array-length metadata, WS074/fg011.
+Timebox: onefinitePhase, bounded numeric/metadata/sparse/VM regressions.
+Approval: currentuser2026-09-30 autonomousAcid3/automaticQueue instruction and
+2026-10-01continuation. Exactscope: [p113 savedrevision](ws074/phase113/phase.md).
+Uint32 length assignment/descriptor/constructor validation/order, normalized
+numeric C length and readonly attributes, capacity-based bounded dense selection.
+No property-key redesign/fullarray methods/BigInt/typedarrays/interpreter/compiler/
+DOM/CSS/loading/Traversal/Range/HAL/toolchain/newmodules.
+
+| Attempt | Phase | Status | Dependency / reason |
+| --- | --- | --- | --- |
+| q523-i01 | [ws074-p113](ws074/phase113/phase.md) | cleared | p112cleared52a76648, existing uint32metadata/sparse slots;95signed cap fails |
+
+Criteria: focused numeric/boundary/coercion/error/identity/descriptor/readonly/
+sparse capacity PASS plain+ASan/95PASS/object100/interp45/realm30/JSselected/DOM23;
+all100 noformer60passregression/Uncaught0/errors0/Acid2exact/no warnings/sanitizer;
+fullchangedsourceCstandard/style/diff/durableevidence. No billion-element iteration.
+Graph: existing verifiedVM/scopedp112inventory(external) → q523/p113 → p100(external).
+No cycle; onlyp113implementationauthorized.
+
+## Upcoming Work Outlook
+
+RemainingHTMLcontrols/collections/activation/CSSproperties/media/Traversal/Range/
+loading/SVG toward100/100. p101/p098outsidegoal/p044fullWSconformanceremains.
+Localunpublished/nopush.
+
+## Outcome
+
+q523-i01/p113 cleared: focused39/capacity4/VM+JS+DOM allPASS both variants,
+Acid3 all10061/100 solely95newPASS/no regression/Uncaught0/errors0/Acid2exact.
+[Evidence](ws074/phase113/verification.md). Remaining39 features; localunpublished.

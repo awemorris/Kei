@@ -1,0 +1,41 @@
+# q533 / p123 verification — 2026-10-01
+
+Cleared. Plain+ASan original Acid3 all10073/100, indexed98 newPASS, prior72
+preserved; inventories equal/complete, exceptions/runerrors/Uncaught/crash/runner
+timeout0/runstatus0. Acid2 exact100%. Full p100100/100 unmet, remaining27 gaps.
+
+Document.forms is an actual native HTMLCollection, SameObject cached/traced on its
+own Document, current descendant HTML form filter with exact XML local case. Reuses
+p122 live virtual-property and relevant owner/legacy visibility/guard behavior.
+No form.elements/control/RadioNodeList/ownership/parser special association stub.
+
+Both variants ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- host-build plain/asan warning/error0.
+- document-forms-probe35/35: SameObject/nativeprototype/empty, saved insertion/
+  descendant/reorder/removal/attribute/name/id/keys/descriptors, first tree-order
+  name/id winner, prototype/older expando visibility, write/define/delete/integrity,
+  foreign/XMLuppercase/template exclusions, script inserted nested forms, XML,
+  Document brand, borrowed actual child owner/retired method/independent Documents.
+- host-collection16/16: prior13 plus forms cache survival/identity/reclamation using
+  actual stack-excluded production GC and no extra registered node roots.
+- frame lifetime68/68: prior63 plus sole saved forms collection retains managed child
+  after removal and explicit primary host teardown; member wrapper/method usable;
+  final root drop reclaims child owner once.
+- Previous collection104/NodeIterator60/TreeWalker70/traversal9/removal19/native65/
+  XML62+GC16/namespace38+GC12/names31/iframe17/legacy56/childCSS30/owner27/realms30/
+  object100/interp45/DOM23/JS14/selectors golden allPASS.
+- Fixed Acid suite reports/sourcehashes/results in verification.json, no test edits.
+- style-check changed C/headers/tests no findings, git diff --check PASS. Manual full
+  changed-source C review covers ANSI locals/function order/static declarations,
+  no calls in conditions/initializers, comments/paragraphs, checked allocation/
+  native fallible callbacks/cache publication, namespace/local case, root tracing,
+  relevant owner lifetime and collectible cycles. Compilercc14.2.0/Python3.13.5;
+  clang-format absent/manual formatting. No skipped applicable host criterion.
+
+No new score criterion for this accessor prerequisite; actual fixed-suite98 passes
+because saved Document.forms now sees inserted XHTML form. HTMLFormElement/control
+reflection/owner associations/RadioNodeList remain known next work for4/52–58.
+Full WebIDL/form/WPT/fuzz/OS/guest/boot/GPU not claimed; p044 final conformance still
+pending. WPT pinned2d66b9b7998bb58c336138c178323ddee857b586 unchanged. Local unpublished,
+no push. All original p122 acceptance preserved by104/16/68 and full inventories.

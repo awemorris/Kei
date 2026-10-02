@@ -1,0 +1,116 @@
+<!-- awesome-plan project=zedbsd record=q554 -->
+
+# q554 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q554](history/queue-q554.md), exact archive verified; p142 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q554
+
+Purpose WS074/fg011 checked rooted reusable native Node cloning for Range contents.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p142](ws074/phase142/phase.md) snapshot saved before generation.
+One finite Phase/bounded checks60sec; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q554-i01 | [ws074-p142](ws074/phase142/phase.md) | cleared | p132/p135/p141 cleared,0cda7ad988/all56; actual supported cloning needs safe reusable helper |
+
+Whole exactp142 registered iterative native clone helper/rooted public clone wrapper/
+ordinary+template graphs/existing control state/pending roots/checked cleanup/output
+publication/current owner prototypes/new Page+actual native GC+ENOMEM fixtures/prior56/
+plain+ASan original>=88/prior88/equal/noerrors/Acid2exact/full changed C review.
+No contents/new data/Document/Shadow/fullDOM/OS expansion. Graph p132+p135+p141(external)
+->p142->contents/p100(external), acyclic; unknown dependency ends uncleared before
+redesign, no arbitrary expansion/retries.
+
+## Upcoming Work Outlook
+
+Partial native CharacterData replacement/deletion; Range clone/delete/extract/surround
+contents; CSS/loading/SVG; final p100/p044. Forecast is not authorization.
+
+## q554 outcome (2026-10-01)
+
+[p142](ws074/phase142/phase.md) cleared in q554, [evidence](ws074/phase142/verification.md).
+Registered checked iterative rooted native cloning/no silent depth cutoff/complete-only
+publication/existing control+template/native namespace state/current owner wrapping/
+actual allocation GC+ENOMEM/source preservation/collectibility verified. Original88/
+no new or lost indexed passes/prior88 preserved/equal/noerrors/Acid2exact/all58PASS/
+Page27/native26. Remaining12; next partial native data deletion then Range contents.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p142 -->
+
+# ws074-p142: checked rooted reusable native Node cloning
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q554 / q554-i01
+Prerequisites p132/p135/p141 cleared; base0cda7ad9 actual88/all56/Acid2exact.
+Executor root only, no concurrent executor/conflict/cancellation.
+Approval user2026-09-30 autonomous Acid3/automatic Queues and2026-10-01 continuation;
+this exact finite snapshot saved BEFORE source generation.
+
+## Scope / design / acceptance
+
+Range clone/extract contents needs genuine shallow/deep native cloning. Existing
+private recursive Node.cloneNode silently truncates at512 and lacks explicit callee
+roots; replace that implementation with registered bind/cloning.c/internal.h API
+bind_clone_node(realm,source,deep,created) and rooted Node.cloneNode call/wrapper.
+Supported existing native Element/Text/Comment/doctype/Fragment only; Document remains
+NotSupported in public method, unsupported internal kind/heap/null EINVAL before
+allocation. Preserve actual current Document, namespaces/prefix/localname/URI/all
+attributes, independent UTF16 including unpaired units, dirty input value/caret and
+radio checked state, ordinary option default initialization established by p135.
+No wrapper/expando/listener/frame/geometry/cache identity copied. Preserve existing
+HTML template separate content graph when deep; shallow contents lazily empty.
+
+Iterative checked C vector frames replace arbitrary depth cutoff and native recursion;
+copy ordinary children in order then separate template content children, using existing
+native append and template helper. Explicit temporary roots hold full original graph,
+complete top copy graph, pending unlinked copy before any allocation. Vector pointers
+are valid only before next push; raw frame participants already traced from graphs.
+Shallow helper puts newly allocated node into pending root before later fallible
+attribute/control copies. Publish output ONLY full success; clean vector/all registered
+roots on every error, partial unpublished copy reclaimable. Native source links/data/
+owner remain unchanged; existing Document generation changes from clone append/input
+initialization remain conservative and are not promised unchanged. No environment/
+host callback or script mutation during cloning. Node.cloneNode roots source and copy
+through actual current owner wrapper allocation, borrowed child/XML snapshots preserved.
+
+New Page probe checks complete tree depth beyond512, mixed child order, separate
+nested template contents, identity/attributes/namespaces/UTF16, shallow copies, dirty
+input/radio/option cloning, borrowed/saved child and adopted owner prototypes, brands/
+Document error and source graph unchanged. Native fixture disables stack scanning and
+calls real shared helper without outer VM receiver frame: large bounded native graph
+forces allocation-triggered collection, proves collection occurred and complete copy
+survival/source then copy collectibility. A finite separately heap-limited fixture
+checks actual ENOMEM/output unpublished/source preserved/root cleanup; invalid inputs
+checked. No production test switch or allocator modification. Each runner60sec;
+unknown dependency ends uncleared before redesign, no endless retry.
+
+Verify new fixtures plus all56 existing regression groups plain/ASan, original pinned
+Acid3 >=88/prior88 preserved/full100 equivalent/complete/no Uncaught/crash/runner timeout,
+Acid2 exact; expected no newly passing indexed tests in this prerequisite Phase.
+Build warnings0/sanitizer0/style-check output empty/full changed C manual review/
+diff check/source hashes and durable history. Guardrail/full coding-style/automation
+loaded; no concise standard exists. Clang-format unavailable, manual formatting.
+Sources bind/cloning.c,node.c,internal.h and libbrowser Makefile registration, scoped
+new Page/native fixtures. No DOM/heap API architecture change, contents methods,
+partial CharacterData APIs, Document/Shadow/Attr/PI/custom/script cloning expansion,
+full WPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/push/GitHub publication. p100/p044/WS
+remain incomplete. Primary DOM Living24Sept2026 clone algorithm read2026-10-01:
+https://dom.spec.whatwg.org/#concept-node-clone . Existing supported HTML cloning
+steps reused; no new HTML state. Graph p132+p135+p141(external)->p142->contents/p100
+(external), acyclic.
+
+## Introduction / q554 activation (2026-10-01)
+
+p141 clears original indexed12 at88. Native content operations are deferred until
+checked reusable cloning and partial native data deletion are verified prerequisites.
+This structural addition does not change prior cleared Phase acceptance.

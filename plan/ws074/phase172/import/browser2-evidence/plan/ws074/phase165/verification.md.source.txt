@@ -1,0 +1,53 @@
+# q581 / p165 strict XML owning DOM projection — 2026-10-02
+
+CLEARED. xml_document_project copies complete successfully parsed immutable XML
+records into an actual native Document, iterative preorder/paired parents, no
+C recursion or silent depth truncation. Explicit XML/XHTML/SVG caller selector;
+HTML rejected. Actual Element/Text/CDATA4/Comment/PI7, exact case/local/prefix/URI,
+expanded attribute identity/value and source order; only canonical URI gets
+built-in namespace class. Non-atom ordinary URI and PI target own VM storage,
+character buffers own copied native C data. Model/input can be destroyed before
+any observation. Six NULL roots registered before first VM allocation; Document,
+pending unlinked node and all temporary strings retained during allocating
+conversion; complete identities attach before subsequent allocations. NULL output
+until every real node succeeds. All registration/string/factory errors unwind
+precise roots; model remains caller-owned. Added module once, existing parser/DOM/
+binding APIs unchanged. No Window, response guessing, script or resource effects.
+
+Native54/54 both: ordinary namespace-heavy real XML including custom same-local
+attributes/different URIs/noNS/XML/XMLNS/default empty/sibling scope/Unicode names/
+supplementary text/entities/CDATA/PI/Comment/case/native order/parents, all observed
+after model destruction and mutable input overwritten. Actual pinned SVG PI/root,
+XHTML1 and wrong-URI XHTML3 source scripts copied as data, explicit content kind;
+malformed XHTML2 and bad-UTF8 empty.xml rejected before projection. Invalid API
+arguments/content leave NULL output. No fake parser/tree/Window/JS behavior.
+
+Actual 30000-element/attribute native conversion naturally exceeds unchanged
+8MiB production threshold and collects midway with conservative stack disabled,
+only callee precise roots; every node/URI/attribute/parent survives after model
+destruction. Completed result survives explicit collection. Subtree-only actual
+Document graph retains owner, sibling non-atom PI target and expanded attribute
+URI; last release collects all three. Real2048-byte heap limit yields ENOMEM,
+NULL output, unchanged model, and collectible unpublished partial graph with
+freed-cell increase/live-byte decrease. Interned name atoms remain permanent
+per existing VM atom-table ownership; no incorrect empty-heap assertion or new
+permanent roots. Heap destruction releases remaining normal intern allocations.
+
+All94groupsPASSboth; original94/prior94/72/equal100inventory/complete/status0/
+noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact100%. Remaining69/74/75/
+77/79/80 need loading/SVG; internal retrytime inventory failures distinct from
+complete runner. Pixel agreement37.03% independent diagnostic, not acceptance.
+Bothfull builds finished before any tests; warning0/style output empty/manual
+all new C/Guardrail/full coding-style1–14/automation/diff clean. clang-format absent,
+manual; cc14.2.0/Python3.13.5. JSON actual source hashes/full reports/all94 groups.
+Commands: host-build.sh plain/asan, host-xml-dom both, q581-regressions.py both,
+original run-acid-tests.py both (ASAN_OPTIONS=detect_stack_use_after_return=0),
+style-check.py xml/dom.[ch] and native fixture, git diff --check.
+
+Bounded valid-model projection only, not forged arbitrary mutable C graphs.
+Parser UTF8/XML1.0 profile limits (no DTD/DOCTYPE/nonUTF8/XML1.1) retained. XML
+metadata beyond actual native fields/fullXMLserializer not invented. Response
+URL/MIME/new Doc Window realm/retirement/parsererrorDocument/load tasks/namespace-
+gated scripts/object ownership/SVG remain subsequent prerequisites. FullWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHub publication
+not performed. p100/p044/WS incomplete; no projection-only score gain claimed.

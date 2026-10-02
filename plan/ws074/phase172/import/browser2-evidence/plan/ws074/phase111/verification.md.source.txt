@@ -1,0 +1,25 @@
+# q521 evidence — 2026-10-01
+
+p111cleared: single nonempty CSSidentifier :lang(), inherited HTML/XML namespace
+language with empty override, ASCII exact/hyphen comparison and class specificity;
+:empty ignores comments/zero-length text while nonempty text/foreign element
+children prevent match. No strings/multiple/wildcard range/HTTPmeta or other scope.
+
+Plain/ASan focused32/32, grammar37/37, childCSS30/30, frameGC33/33, DOM23/23 and
+existing selectors.style golden byte-identical. No warnings/sanitizer. All100
+Acid3 inventories equal56→58 solely34/38 newPASS/no regression; Uncaught0,
+completeTrue/run_status0/run_errors[], Acid2exact/different_pixels0. Visual metric
+unchanged40.05354166666667%, separate diagnostic. Remaining42features.
+
+Commands: host-build.sh plain/asan; browser --run language-empty-probe.html,
+selector-grammar-probe.html/child-style-probe.html; host-frame-lifetime;
+run-dom-tests.py; browser --dump=style selectors.html and diff selectors.style;
+run-acid-tests.py --out build/ws074-acid-q521-<variant>. ASan real-stack option
+ASAN_OPTIONS=detect_stack_use_after_return=0. Logs build/ws074-q521-*;
+[hashes/tools/reports](verification.json), [inventory](inventory.json).
+Full changed-source C standard review covers enum registry/atoms/ancestor traversal/
+allocation checks/ANSI declarations/paragraphs/control/UTF16ASCII boundary/ownership.
+style-check.py parser.c/cascade.c and git diff --check PASS, manual formatting,
+clang-format absent, cc14.2.0/Python3.13.5. No full Selectors4 conformance, fuzz,
+exhaustive locales/failures, OS/guest/boot/GPU checked. p100100/100 remains unmet.
+Localunpublished/nopush; WIP commit containing this evidence supplies revision.

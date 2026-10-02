@@ -1,0 +1,58 @@
+<!-- awesome-plan project=zedbsd record=ws074-p115 -->
+
+# ws074-p115: HTMLObjectElement.data reflected URL foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q525 / q525-i01
+Prerequisites: p112 branded reflection cleared/p1146d64a2ec inventory62/100,
+production net_url_parse/serialize, actual Document.view and host.location.
+Approval: currentuser2026-09-30 autonomousAcid3/automaticQueue plus2026-10-01
+continuation. Rootsoleexecutor, onefinitePhase.
+
+## Exact scope / inspected design / criteria
+
+Indexed64 object.data undefined. Add HTMLObjectElement taggedinterface using
+existing binding registry and html-reflection.c, only data accessor. Setterbrands
+actualHTMLobject before one DOMString conversion then UTF8 roundtrip USVString
+replacement into content attribute. Getterabsentempty, present USVString+existing
+netURL parser/serialization against actualreceiverdocument's hostURL, parsefailure
+returns raw scalar string, allocations/host failures propagate. Detachedelement
+keeps nodeDocument view. Honor first connectedHTMLbase[href] in treeorder, resolving
+against documentURL, invalid/data/javascript base falls back; laterbases ignored.
+No borrowedcallee URL, no prototype spoof, foreignNS tag reject, no fetching.
+
+Known prerequisite limitation identified beforeselection: existinginitialblank
+childreportsabout:blank but has no stored about-base URL snapshot. RelativeURLs
+there retain rawparsefailure until separateblankbasefoundation; explicitabsolute
+childbase works. No change to Document URL/baseURI API, fallback snapshots/URL
+navigation, iframe/objectloading/contentDocument/getSVGDocument, other objectattrs,
+CSP/basefreezing/across-document adoption, HTMLcollections/activation/HAL/toolchain.
+This scoped foundation does not claim fullHTML URL or objectinterface conformance.
+[Objectdata](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#dom-object-data)
+and [USVString URLreflection](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#reflecting-content-attributes-in-idl-attributes)
+read2026-10-01. Guardrail/fullCstandard loaded, existingmodule boundaries preserved.
+Affectedbind/html-reflection.c/internal.h/node.c/window.c; no new module/API/ABI.
+
+Focusedrelative/dot/path/query/fragment/absolute/invalid/absence/empty/rawattribute/
+USV/coercionexception/brand/parser/clone/firstbase/mutation/removal/childownbase/
+borrowedgetter checks PASS plain+ASan; existingreflection40/DOM23/GCframe33/owner27.
+ProductionhostURL100selectedcheckspass. Acid3all100 preserves62/64PASS/noUncaught/
+crash/runnererror/completeTrue/runstatus0, Acid2exact/warning0/ASan0; fullstandard/
+style/diff/hashes/evidence/tools/skips. BoundedURLs and focusedGC, nofetch/network
+stress/allHTML URL/exhaustivefailurefuzz/OS/guest/boot/GPU. Unknown prerequisite
+endsuncleared before replanning. Localunpublished/nopush.
+
+## Introduction / q525 activation (2026-10-01)
+
+MissingURLdata64 reuses verifiedparser and tagged reflection, no architecture
+choice needed. Blankfallback prerequisite scoped out explicitly beforeexecution,
+not silently credited. [WS](../ws.md); p100100/100 unchanged.
+
+## q525 outcome (2026-10-01)
+
+q525-i01 cleared; [verification](verification.md) satisfiesfinitecriteria.
+44/44 plusreflection/DOM/GC/100URL bothvariantsPASS,64newPASS/all10063/100/no
+regression/Uncaught0/Acid2exact. Remaining37features/p100 unmet, knownblankbase
+foundation retained. [WS](../ws.md). Localunpublished/nopush.

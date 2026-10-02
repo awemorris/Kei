@@ -1,0 +1,59 @@
+<!-- awesome-plan project=zedbsd record=ws074-p116 -->
+
+# ws074-p116: Legacy Event/UIEvent creation and initialization
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q526 / q526-i01
+Prerequisites: p11593de18a4 inventory63/100, verifiedexistingeventstate/dispatch/
+GC graph/VM conversions. Rootsoleexecutor. Approval currentuser2026-09-30
+Acid3 autonomous/automaticQueue plus2026-10-01continuation. OnefinitePhase.
+
+## Exact scope / design / criteria
+
+Indexed30 fails document.createEvent (missing), then UIEvent.initUIEvent also
+missing. Add Document.createEvent for Event/events/HTMLEvents/SVGEvents and
+UIEvent/UIEvents ASCIIcase-insensitive aliases; other factoriesNotSupportedError
+in this scoped foundation. Use existingbind_event_create, empty type/uninitialized
+factory flag, existingconstructors/internalfire remain initialized. dispatchEvent
+rejects uninitialized factoryevent in addition to activeevent. Add Event.initEvent
+and UIEvent.initUIEvent, readonly UIEvent.view/detail defaultsnull/0. Real state
+records interface brand/initialized/view; trace view through existingeventcell,
+UI subclasses share numericaldefaultdetail without alteringCustomEvent any detail.
+
+Initializers brand beforeargumentconversion, requiredtype DOMString thenflags,
+UIview nullable actualWindow(identity via immutable ownDocument/view/global, no
+useraccessor) and detailToInt32; exceptions do not partiallypublish. Argument
+conversion precedes active-dispatch no-op; only after successfulconversion reset
+initialized/stop/immediate/canceled/trusted/target/type/bubbles/cancelable; initUI
+also view/detail, initEvent preservesUI fields. Reentrancy guarded at commit.
+No new UIEventconstructor/mouse/custom/keyboard initializer/allfactoryinterfaces,
+passive/shadow/composed dispatch overhaul, targetpath architecture, HTMLcontrols/
+collections/XML/Traversal/Range/CSS/loading/SVG/HAL/toolchain.
+Affectedbind/event.c/document.c/internal.h, focusedfixture+optional GC retention
+host extension if needed; existingDOM/frame/owner tests. Guardrail/fullCstandard
+loaded. [DOM initEvent/createEvent](https://dom.spec.whatwg.org/#dom-event-initevent),
+[UIEvents legacy initializer](https://www.w3.org/TR/uievents/#dom-uievent-inituievent)
+read2026-10-01. No fullDOMEvent/UIEventsconformance claim.
+
+Focusedaliases/defaults/preinitdispatch/brand/requiredargs/conversionorder/errors/
+nullableview/int32detail/reset/reinit/active-noop/nodeandtextbubbling/listenerremove/
+crossrealm retainedview and ordinaryCustomEvent/mouse/defaults PASS plain+ASan.
+ExistingDOM23/frame33/owner27/event/input fixture and suitableeventGC retention
+checks mustPASS; all100prior63preserved/30PASS/Uncaught0/errors0/completeTrue/
+runstatus0/Acid2exact/warning0/ASan0. Fullsource manualstandard/style/diff/hash/tools/
+logs/limitations. Bounded lifecycle/conversion cases, noexhaustivefuzz/OS/guest/
+boot/GPU checks. Unknown prerequisite endsuncleared before replanning.
+Localunpublished/nopush.
+
+## Introduction / q526 activation (2026-10-01)
+
+Missinglegacyfactory/initializer30 are a single finiteexistingevent-state scope,
+not a new dispatcharchitecture. [WS](../ws.md); p100100/100 remains unmet.
+
+## q526 outcome (2026-10-01)
+
+q526-i01 cleared; [verification](verification.md) satisfiesfinitecriteria.
+56/56+GC38/38/owner27/DOM23 plain+ASanPASS; all10065/100/30+73newPASS/no regression/
+Uncaught0/Acid2exact. Remaining35features/p100 unmet. [WS](../ws.md). Localunpublished.

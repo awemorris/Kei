@@ -1,0 +1,38 @@
+# q579 / p163 native XML character nodes — 2026-10-02
+
+CLEARED. Genuine native CDATA4 and PI7 retain actual Document identity, exact owned
+UTF16 character data and optional traced non-atom PI target. Character-data tracer
+marks normal node graph then optional target; finalizer releases only C buffer.
+New native C factories root actual Document/target before any VM allocation, publish
+only complete type/target/data, NULLout on error, unwind every registration/allocation
+failure. Native source data is caller-owned C storage; no unrooted VM buffer borrowed.
+Native Text/CharacterData classifiers distinguish CDATA from PI/Comment. Checked
+replace/truncate accept all genuine CharacterData; native append/set/interval edits
+retain target/type; Text+CDATA retire current style identity. Clone preserves both
+actual kinds and PI target with existing source/pending/complete clone roots.
+
+Native32/32 both: actual8MiB pressure makes PI factory allocate through real GC with
+no caller Document/target or conservative stack roots; callee retains both correctly.
+CDATA copies mutable C source including native lone surrogate; native tree insertion/
+removal/append/set/interval/truncate/empty/bounds rollback; invalid factory inputs
+NULLout. Result-only roots retain target/actual Document; clone-only releases detached
+original PI/CDATA while retaining copied kinds/target/data/owner; last release collects
+non-atom target and Document. No permanent roots. Allocation/root failure cleanup
+reviewed manually; no allocation-failure injection claim.
+
+All92groupsPASSboth; actual94/prior94/72/equal100inventory/complete/status0/noUncaught/
+crash/sanitizer/runnererrors/timeouts/Acid2exact100%. Remaining69/74/75/77/79/80 need
+loading/SVG; internal retrytime inventory failures distinct from complete runner.
+Acid3 pixel result separately diagnostic. Both full builds finished before tests,
+warning0/style output empty/diff clean/manual affected full coding-style1–14/
+Guardrail/automation. clang-format absent/manual, cc14.2.0/Python3.13.5. JSON actual
+source hashes/full original reports/all92; commands host-build.sh both, host-xml-node
+both, build/ws074-q579-regressions.py both, original run-acid-tests.py both with
+ASAN_OPTIONS=detect_stack_use_after_return=0, style-check.py affected C, git diff --check.
+
+Native representation prerequisite only. Existing public factory APIs produce no
+new kinds. Public PI/CDATA interfaces/nodeName/value/textContent/CharacterData brands/
+insertion/Range/Text.split/render/HTML serialization integration known next work
+before XML DOM projection/JS exposure. New DOM PI attributes/constructor/full XML
+validation/DTD/loading/events/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/
+.internal/aggregatecheck/push/GitHub publication excluded; p100/p044/WS incomplete.

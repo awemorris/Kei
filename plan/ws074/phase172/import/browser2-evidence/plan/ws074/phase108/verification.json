@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-01",
+  "queue": "q517",
+  "baseline": "1dd5f77c",
+  "sources": {
+    "userland/desktop/browser/bind/document.c": "eb086abed889ff7fc01e7eb33dc79c887c20c056b767eab59307bb01a7f7f79e",
+    "userland/desktop/browser/bind/element.c": "bbabc18fa64a2c48a56009d898dcab8a744df7bedb5029a345436ae855dc1ff8",
+    "userland/desktop/browser/bind/node.c": "2d2ea1452c2e45ecab6a81a5b2ffd22f85f0ac61599fe619254491a43bfffdd1",
+    "userland/desktop/browser/dom/dom.h": "85982ed542a291312e97cee21503822968d493b3c4a4d4bd010891b2cce18ac7",
+    "userland/desktop/browser/dom/node.c": "4aed47911bdea8110d4c393722cf3f4b6f94f1d93b95aa7f68b0706c73a19a10",
+    "plan/ws074/tests/host-namespace.c": "3e847b9c48b3cb826294d9eda5e1008a791341743ee23327ed4227015205ad93",
+    "plan/ws074/tests/pages/namespace-probe.html": "24feecbf77c3b2aac55c4eb022764ccad4cab1b731d05e4c488bc9955c3f328c"
+  },
+  "plain_asan": {
+    "namespace_fixture": "38/38",
+    "namespace_GC": "12/12",
+    "names": "31/31",
+    "DOM": "23/23",
+    "frame_reference": "17/17",
+    "realms": "30/30",
+    "Acid2": "exact100%",
+    "Acid3": "47/100; all100; Uncaught0/completeTrue/run_status0/no errors"
+  },
+  "changes": [
+    [
+      21,
+      "fail",
+      "pass"
+    ],
+    [
+      23,
+      "fail",
+      "pass"
+    ],
+    [
+      76,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q517-plain/report.json",
+    "build/ws074-acid-q517-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "clang-format": "unavailable"
+  }
+}

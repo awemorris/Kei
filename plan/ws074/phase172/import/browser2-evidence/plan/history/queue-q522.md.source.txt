@@ -1,0 +1,42 @@
+<!-- awesome-plan project=zedbsd record=queue-q522 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q521](queue-q521.md), exact archive verified.
+
+## q522
+
+Purpose: button/label/meta reflection, WS074/fg011.
+Timebox: onefinitePhase, representative binding/owner/regression checks.
+Approval: currentuser2026-09-30 autonomousAcid3/automaticQueue instruction and
+2026-10-01continuation. Exactscope: [p112 savedrevision](../ws074/phase112/phase.md).
+Three taggedHTMLsubclasses; button.type/value with currentAuto/default/canonical
+semantics/rawDOMStringsetter; label.htmlFor/meta.httpEquiv reflectedattributes,
+branding/childowner/clone; registerbindingmodule. No activation/form/input/fullHTML,
+metaeffects/network/CSS/layout/Traversal/Range/SVG/VM/HAL/toolchain.
+
+| Attempt | Phase | Status | Dependency / reason |
+| --- | --- | --- | --- |
+| q522-i01 | [ws074-p112](../ws074/phase112/phase.md) | cleared | p109/p110/p111cleared6f5b5818;59/62missing reflected attributes |
+
+Criteria: focused reflection/identity/brand/Auto/conversion/alias/owner/clonePASS
+plain+ASan,59/62PASS/DOM23/23/iframe17/17/frame33/33/realm30/30/ownership27/27;
+all100 noformer58passregression/Uncaught0/errors0/Acid2exact/no warnings/sanitizer;
+fullchangedsourceCstandard/style/diff/durableevidence.
+Graph: clearedp109+p110+p111(external) → q522/p112 → p100(externalplanned). No cycle.
+
+## Upcoming Work Outlook
+
+Input/form control state/collections/activation, CSSproperty/media then indexed
+Traversal/Range/loading/SVG/VM toward100/100. p101/p098outsidegoal/p044remains.
+Localunpublished/nopush.
+
+## q522 terminal outcome (2026-10-01)
+
+p112cleared: reflection40/40/DOM23/23/frame33/33/iframe17/17/owner27/27/realm30/30
+plain+ASanPASS, all10060/100 solely59/62newPASS/no regression/Uncaught0/Acid2exact.
+[Evidence](../ws074/phase112/verification.md). FullchangedCstandard/style/diffPASS,
+formatterabsent/OSguestbootGPUnotrun; remaining40including arraylength95, other
+HTML/CSS/Traversal/Range/loading/SVG gaps. Localunpublished/nopush.

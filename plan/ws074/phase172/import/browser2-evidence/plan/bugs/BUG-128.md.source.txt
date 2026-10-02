@@ -1,0 +1,34 @@
+# BUG-128: CSS parser accepts a second type/universal selector in one compound
+
+Reproduction: reproduced (plain/ASan,2026-10-01)
+Disposition: resolved
+Origin: [ws074-p109 q518-i01](../ws074/phase109/phase.md)
+Handling: [ws074-p110 q519](../ws074/phase110/phase.md), then p109 revalidation.
+
+Expected: `html*.test` is invalid; its author rule is ignored and querySelector/
+matches reject it with SyntaxError. A compound permits a type or universal only
+at its beginning. Observed: existing parser interprets it as a descendant/universal
+combination; connected body and p incorrectly inherit z-index1. q51744 PASS was
+masked by the absence of a child CSS engine, not verified selector correctness.
+
+Input: pinned Acid3 test44 (no fixture edits), `selectorTest` appends an author
+rule `html*.test {z-index:1}` and expectsbody/p0. q518 plain/ASan inventory:
+expected0/got1. Host cc14.2.0; q517 baseline462c4ed8 plus q518 retained CSScontext.
+No sanitizer/crash/Uncaught/runner timeout; child CSS30/30/GC33/33PASS, Acid2exact.
+Search active/archived bug tickets and index for selector/grammar/html* found no
+matching browser defect. Detailed [evidence](../ws074/phase109/verification.md) and
+[inventory](../ws074/phase109/inventory.json). Bounds: actual all100 plus focused
+foundation fixture, no exhaustive selector grammar suite. Existing parser source
+review before repair; add finite grammar fixture, run DOM/CSS/Acid preservation.
+
+No non-blocking transfer approved; this bug blocks p109 clearance. Resolve with
+invalid compound rejection in both stylesheet and query parse entry points and
+restore44, preserving all other passes. Reopen on the same invalid acceptance.
+
+## Resolution (2026-10-01, q519/p110)
+
+[Evidence](../ws074/phase110/verification.md): require actual combinator; focused
+invalid/valid grammar37/37 plain/ASan,44 restored/all10056/100/no other changes.
+DOM23/23/selector golden/childCSS30/30/frame33/33/Acid2exact/no sanitizer. Bug
+resolved locally; remote lifecycle unpublished. p109 same acceptance revalidation
+follows; q518 historical uncleared preserved. Reopen if invalid compound accepted.

@@ -176,6 +176,10 @@ bind_matches(
 	if (status != 0)
 		return status;
 
+	/* Selects the receiver's owner rather than the borrowed method's realm. */
+	if (element->node.document->view != NULL)
+		window = element->node.document->view;
+
 	/* The selector list, which must parse. */
 	status = query_parse(realm, js_argument(args, count, 0), "matches", &query);
 	if (status != 0)
@@ -224,6 +228,10 @@ bind_closest(
 	status = query_element_this(realm, this_value, &element);
 	if (status != 0)
 		return status;
+
+	/* Selects the receiver's owner rather than the borrowed method's realm. */
+	if (element->node.document->view != NULL)
+		window = element->node.document->view;
 
 	/* The selector list, which must parse. */
 	status = query_parse(realm, js_argument(args, count, 0), "closest", &query);
@@ -393,6 +401,10 @@ query_find(
 	if (status != 0)
 		return status;
 
+	/* Selects the receiver's owner rather than the borrowed method's realm. */
+	if (root->document->view != NULL)
+		window = root->document->view;
+
 	/* The selector list, which must parse. */
 	method = "querySelector";
 	if (all)
@@ -524,17 +536,26 @@ query_engine(
 	struct bind_window *window,
 	struct css_engine **engine)
 {
-	/* A host without one matches nothing. */
+	int error;
+
+	/* Initial children use their own cascade when no page host was installed. */
 	*engine = NULL;
-	if (window->host.selector_engine == NULL)
+	if (window->host.selector_engine == NULL) {
+		error = bind_style_context_engine(window, engine);
+		if (error != 0)
+			return error;
+	} else {
+		/* A primary host's missing engine reports failed preparation. */
+		*engine = window->host.selector_engine(window->host.context);
+		if (*engine == NULL)
+			return ENOMEM;
+	}
+
+	/* An unsupported empty host or retired child matches nothing. */
+	if (*engine == NULL)
 		return 0;
 
-	/* The host's engine; NULL means it could not make one. */
-	*engine = window->host.selector_engine(window->host.context);
-	if (*engine == NULL)
-		return ENOMEM;
-
-	/* Succeeded: the engine forgets the class attributes it split before. */
+	/* Succeeded: the engine forgets class attributes split by an earlier query. */
 	css_engine_query_begin(*engine);
 	return 0;
 }

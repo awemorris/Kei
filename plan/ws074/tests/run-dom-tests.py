@@ -28,13 +28,16 @@ CONSOLE = re.compile(r':CONSOLE(?:\(\d+\)|:\d+)\] "(.*)", source: ')
 
 
 def fonts():
-    # ws074-p031: the geometry tests need the page laid out, and a host has no fonts at the system's place
-    # (/usr/share/fonts/keiland*.ttf, where the guest has them); the ones of build/ws035-fonts are given when
-    # they are there.  The tests measure only boxes whose place the fonts do not change.
-    sans = os.path.join(ROOT, "build/ws035-fonts/Inter.ttf")
-    if not os.path.exists(sans):
-        return []
-    return ["--font=" + sans]
+    # Geometry needs the same comparison fonts on hosts without the guest font paths.
+    # Use staged artifacts or their checked-in sources; missing fonts must not silently
+    # turn every geometry answer into zero.
+    names = ("Inter.ttf", "JetBrainsMono-Regular.ttf", "DroidSansFallbackFull.ttf")
+    for directory in ("build/ws035-fonts", "userland/desktop/fonts"):
+        paths = [os.path.join(ROOT, directory, name) for name in names]
+        if all(os.path.isfile(path) for path in paths):
+            return ["--font=" + paths[0], "--mono-font=" + paths[1],
+                    "--fallback-font=" + paths[2]]
+    raise RuntimeError("the DOM comparison fonts were not found")
 
 
 def tests():

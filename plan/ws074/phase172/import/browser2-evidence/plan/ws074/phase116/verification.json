@@ -1,0 +1,40 @@
+{
+  "queue": "q526",
+  "baseline": "93de18a4",
+  "sources": {
+    "userland/desktop/browser/bind/event.c": "6365547b0a6aff77973288b76d33476660430be9cf5289326b26b3714cf28b50",
+    "userland/desktop/browser/bind/document.c": "975ccfc596be7896472c246be7ec22f54e3a8331224ca894eb14ee38bbe8bf55",
+    "userland/desktop/browser/bind/internal.h": "2420c6afb264432634c7e22f9a9f21d37550cff54c894e82fe3838945ec69310",
+    "plan/ws074/tests/host-frame-lifetime.c": "ea2ff68c85f88b975b395b13e76025cdcbdb49e606f4c1a3b2ebaf4f78a517ec",
+    "plan/ws074/tests/pages/legacy-event-probe.html": "fec1930d2d1077a31c730d5c4c289484f5d4548b68401b516ce85f2eb4e9a228"
+  },
+  "plain_asan": {
+    "legacy": "56/56",
+    "frame": "38/38, prior33 preserved+5UIviewonlyretention",
+    "owner": "27/27",
+    "DOM": "23/23 including events/pointerkey/form fixtures",
+    "Acid2": "exact100%",
+    "Acid3": "65/100 all100,30/73newPASS,no regression/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "changes": [
+    [
+      30,
+      "fail",
+      "pass"
+    ],
+    [
+      73,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q526-plain/report.json",
+    "build/ws074-acid-q526-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

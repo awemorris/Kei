@@ -1,0 +1,53 @@
+<!-- awesome-plan project=zedbsd record=ws074-p110 -->
+
+# ws074-p110: Reject missing combinators between selector compounds
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q519 / q519-i01
+Prerequisite: q518 retained child CSS30/30/GC33/33 scoped output, baseline dfaa2acf;
+p109 whole-Phase remains uncleared. Sole executorroot; standing2026-09-30 automatic
+Acid3 Queue authorization and2026-10-01 continuation, exact finite scope below.
+
+## Objective / finite scope and design
+
+Repair [BUG-128](../../bugs/BUG-128.md): parser_selector defaults to descendant even
+when parser_compound stopped on a type/universal token without intervening space.
+Require actual whitespace or an explicit >/+/~ combinator before parsing the next
+compound. A second type/universal cannot be silently treated as a descendant.
+Shared parser supplies author sheets and query selectors; stylesheet invalid
+selector-list rules must be ignored, query APIs throw SyntaxError, subsequent
+valid author rules survive. Preserve ordinary compounds/whitespace/comments/
+explicit combinators/selector lists and existing supported functional selectors.
+
+Affected CSS parser only, focused grammar fixture and existing CSS/DOM/Acid tests.
+No pseudo-class additions, HTML control state, media/new CSS properties, CSSOM,
+layout/loading/Traversal/Range/VM/HAL/toolchain. Apply Guardrail/full C standard,
+existing CSS parser boundaries; no new external API/module/architecture choice.
+[Selectors3 grammar/syntax](https://www.w3.org/TR/selectors-3/#selector-syntax),
+2018-11-06 Recommendation, inspected2026-10-01: compound type/universal at start,
+combinators separate compounds. Bounded syntax repair, not full selector conformance.
+
+## Criteria and bounds
+
+Focused invalid adjacent type/universal/stylesheet rule and invalid query checks,
+valid compound/combinator/comment/list controls PASS plain+ASan. Existing DOM23/23,
+CSS host selected tests, child CSS30/30/frame33/33; warning-free/no sanitizer.
+All100 Acid3 former q518 passes preserved and44 restored; Acid2 exact/no Uncaught,
+crash/errors/runner timeout. Full changed-source standards/style/diff/hashes/tools.
+No exhaustive fuzz/allocation suite; finite representative syntax matrix. Unknown
+prerequisites end attempt uncleared before separately replanning. p109 clearance
+remains separate revalidation Queue. Local unpublished/no push.
+
+## Introduction / q519 activation (2026-10-01)
+
+Origin p109 unexpected prerequisite. This repair enables its no-regression
+acceptance to be checked again. [WS summary](../ws.md); p100100/100 unchanged.
+
+## q519-i01 clearance / intended local closure (2026-10-01)
+
+[Verification](verification.md): grammar37/37, childCSS30/30/frame33/33/DOM23/23/
+selectors golden plain+ASan PASS; all100Acid356/100,44 restored/no other changes,
+Uncaught0/Acid2exact. BUG-128 resolved; p109 revalidation is next, no prior attempt
+rewritten. Local clearance only/remote publication and closure not performed.

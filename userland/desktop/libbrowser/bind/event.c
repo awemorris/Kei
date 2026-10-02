@@ -51,6 +51,7 @@ static int event_type(struct vm_realm *realm, vm_value this_value, const vm_valu
 static int event_target(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_current_target(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_phase(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int event_composed(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_bubbles(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_cancelable(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_default_prevented(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -64,6 +65,14 @@ static int event_client_y(struct vm_realm *realm, vm_value this_value, const vm_
 static int event_page_x(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_page_y(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_button(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int event_init(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int event_init_ui(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int event_ui_detail(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int event_view(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int event_is_ui(int interface);
+static int event_ui_this(struct vm_realm *realm, vm_value this_value, struct bind_event **event);
+static int event_window_value(struct vm_realm *realm, vm_value given, vm_value *view);
+static void event_initialize(struct bind_event *event, struct vm_string *type, int bubbles, int cancelable);
 static int event_detail(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_message_origin(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int event_message_last_id(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -111,6 +120,7 @@ static const struct bind_attribute event_attributes[] = {
 	{ "eventPhase", event_phase, NULL },
 	{ "bubbles", event_bubbles, NULL },
 	{ "cancelable", event_cancelable, NULL },
+	{ "composed", event_composed, NULL },
 	{ "defaultPrevented", event_default_prevented, NULL },
 	{ "isTrusted", event_is_trusted, NULL },
 	{ "timeStamp", event_time_stamp, NULL },
@@ -122,6 +132,7 @@ static const struct bind_attribute event_attributes[] = {
  * program.
  */
 static const struct bind_operation event_operations[] = {
+	{ "initEvent", 1, event_init },
 	{ "preventDefault", 0, event_prevent_default },
 	{ "stopPropagation", 0, event_stop_propagation },
 	{ "stopImmediatePropagation", 0, event_stop_immediate },
@@ -147,11 +158,22 @@ const struct bind_interface bind_event_interface = {
 	"Event", BIND_NO_PARENT, 1, event_construct, event_attributes, event_operations, event_constants
 };
 
-/*
- * The UIEvent interface (no members of its own in this pass).
- */
+/* Read-only UI data is stored on the traced event state, not in wrapper expandos. */
+static const struct bind_attribute ui_event_attributes[] = {
+	{ "view", event_view, NULL },
+	{ "detail", event_ui_detail, NULL },
+	{ NULL, NULL, NULL }
+};
+
+/* The legacy UI initializer reuses the existing event dispatch state. */
+static const struct bind_operation ui_event_operations[] = {
+	{ "initUIEvent", 1, event_init_ui },
+	{ NULL, 0, NULL }
+};
+
+/* The UIEvent prototype contributes the legacy initializer and UI data views. */
 const struct bind_interface bind_ui_event_interface = {
-	"UIEvent", BIND_EVENT, 1, NULL, NULL, NULL, NULL
+	"UIEvent", BIND_EVENT, 1, NULL, ui_event_attributes, ui_event_operations, NULL
 };
 
 /*
@@ -271,6 +293,20 @@ bind_event_create(
 	state->target = VM_VALUE_NULL;
 	state->current_target = VM_VALUE_NULL;
 	state->detail = VM_VALUE_NULL;
+	state->view = VM_VALUE_NULL;
+	state->submitter = VM_VALUE_NULL;
+	state->interface = interface;
+	state->initialized = 1;
+
+	/* UI-derived events start with numerical detail while custom payloads keep null. */
+	if (interface == BIND_UI_EVENT ||
+	    interface == BIND_MOUSE_EVENT ||
+	    interface == BIND_KEYBOARD_EVENT ||
+	    interface == BIND_FOCUS_EVENT ||
+	    interface == BIND_WHEEL_EVENT)
+		state->detail = vm_value_int32(0);
+
+	/* Other message and dispatch references begin empty. */
 	state->source = VM_VALUE_NULL;
 	state->ports = VM_VALUE_NULL;
 	state->time_stamp = window->now;
@@ -301,9 +337,25 @@ bind_dispatch(
 {
 	struct bind_event *event;
 	struct vm_object *path;
+	struct vm_cell *roots[3];
+	unsigned root_index;
 	vm_value current;
 	uint32_t index;
 	int status;
+
+	/* Retain target, event and the detached path through arbitrary listener-triggered GC. */
+	roots[0] = vm_value_as_cell(target);
+	roots[1] = vm_value_as_cell(event_value);
+	roots[2] = NULL;
+	for (root_index = 0; root_index < 3U; root_index++) {
+		status = vm_heap_add_root(window->realm->heap, &roots[root_index]);
+		if (status != 0) {
+			/* Failed registration unwinds only slots which this dispatch actually owns. */
+			for (index = 0; index < root_index; index++)
+				vm_heap_remove_root(window->realm->heap, &roots[index]);
+			return status;
+		}
+	}
 
 	/* The event is being dispatched at the target. */
 	*canceled = 0;
@@ -316,13 +368,20 @@ bind_dispatch(
 	event->stop_immediate = 0;
 
 	/* The path from the target up. */
+	path = NULL;
 	status = bind_array_create(window->realm, &path);
-	if (status != 0)
-		return status;
-	status = event_build_path(window, target, event, path);
+	if (status == 0) {
+		roots[2] = &path->cell;
+		status = event_build_path(window, target, event, path);
+	}
 
 	/* The capture phase, from the top down to the target's parent. */
-	for (index = path->length; status == 0 && index > 1U; index--) {
+	index = 0;
+	if (status == 0)
+		index = path->length;
+	for (;
+	     status == 0 && index > 1U;
+	     index--) {
 		current = path->elements[index - 1U];
 		status = event_invoke(window, current, event_value, BIND_PHASE_CAPTURING, EVENT_INVOKE_CAPTURE);
 	}
@@ -345,6 +404,10 @@ bind_dispatch(
 	event->current_target = VM_VALUE_NULL;
 	event->stop = 0;
 	event->stop_immediate = 0;
+
+	/* Every path/event root is removed after dispatch state is reset, including failures. */
+	for (root_index = 0; root_index < 3U; root_index++)
+		vm_heap_remove_root(window->realm->heap, &roots[root_index]);
 	if (status != 0)
 		return status;
 
@@ -724,6 +787,107 @@ bind_event_prepare(
 	return 0;
 }
 
+/*
+ * Creates an uninitialized legacy Event or UIEvent for a branded Document.
+ */
+int
+bind_document_create_event(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_node *node;
+	struct bind_window *window;
+	struct bind_event *event;
+	struct vm_string *name;
+	struct vm_string *type;
+	int interface;
+	int matched;
+	int error;
+
+	/* A borrowed factory still requires an actual Document receiver. */
+	node = bind_node_of(this_value);
+	if (node == NULL || node->type != DOM_DOCUMENT) {
+		error = bind_throw_illegal(realm);
+		if (error != 0)
+			return error;
+
+		/* Invalid hosts cannot proceed without a real Document. */
+		return EINVAL;
+	}
+
+	/* The required interface name is converted exactly once with ASCII folding. */
+	if (count < 1U) {
+		error = vm_throw_type_error(realm, "createEvent requires an interface name.");
+		return error;
+	}
+
+	/* Folded atoms let aliases match without running any additional user conversions. */
+	error = bind_to_atom(realm, args[0], 1, &name);
+	if (error != 0)
+		return error;
+
+	/* The implemented Event aliases are the standard legacy spellings. */
+	interface = BIND_NO_PARENT;
+	matched = vm_string_equal_ascii(name, "event");
+	if (matched)
+		interface = BIND_EVENT;
+
+	/* The historical plural aliases still produce an ordinary Event. */
+	matched = vm_string_equal_ascii(name, "events");
+	if (matched)
+		interface = BIND_EVENT;
+
+	/* HTML and SVG event aliases do not select separate interfaces. */
+	matched = vm_string_equal_ascii(name, "htmlevents");
+	if (matched)
+		interface = BIND_EVENT;
+
+	/* SVGEvents also aliases the base Event interface. */
+	matched = vm_string_equal_ascii(name, "svgevents");
+	if (matched)
+		interface = BIND_EVENT;
+
+	/* UIEvent names select the interface with view, detail and initUIEvent. */
+	matched = vm_string_equal_ascii(name, "uievent");
+	if (matched)
+		interface = BIND_UI_EVENT;
+
+	/* Its historical plural is accepted with the same ASCII case folding. */
+	matched = vm_string_equal_ascii(name, "uievents");
+	if (matched)
+		interface = BIND_UI_EVENT;
+
+	/* Other legacy factories remain outside this scoped foundation. */
+	if (interface == BIND_NO_PARENT) {
+		error = bind_throw_dom(realm, "NotSupportedError", "This legacy event interface is not supported.");
+		return error;
+	}
+
+	/* The receiver's relevant Window supplies its event prototype when it has one. */
+	window = node->document->view;
+	if (window == NULL)
+		window = bind_window_of(realm);
+
+	/* Factories begin with an empty type and an unset initialized flag. */
+	type = vm_atom_from_ascii(realm->heap, "");
+	if (type == NULL)
+		return ENOMEM;
+
+	/* Builds the normal traced state and wrapper before changing its factory readiness. */
+	error = bind_event_create(window, interface, type, result, &event);
+	if (error != 0)
+		return error;
+
+	/* dispatchEvent observes this flag until a legacy initializer succeeds. */
+	event->initialized = 0;
+
+	/* Succeeded: the caller owns a real, initially uninitialized event. */
+	return 0;
+}
+
 /* Marks what an event's state refers to. */
 static void
 event_trace(
@@ -739,6 +903,8 @@ event_trace(
 	vm_heap_mark_value(heap, event->target);
 	vm_heap_mark_value(heap, event->current_target);
 	vm_heap_mark_value(heap, event->detail);
+	vm_heap_mark_value(heap, event->view);
+	vm_heap_mark_value(heap, event->submitter);
 	vm_heap_mark_value(heap, event->source);
 	vm_heap_mark_value(heap, event->ports);
 	vm_heap_mark_value(heap, event->target_override);
@@ -999,8 +1165,8 @@ event_dispatch_method(
 	if (event == NULL) {
 		status = vm_throw_type_error(realm, "Failed to execute 'dispatchEvent': parameter 1 is not of type 'Event'.");
 		return status;
-	} else if (event->dispatching) {
-		status = bind_throw_dom(realm, "InvalidStateError", "The event is already being dispatched.");
+	} else if (event->dispatching || !event->initialized) {
+		status = bind_throw_dom(realm, "InvalidStateError", "The event is uninitialized or already being dispatched.");
 		return status;
 	}
 
@@ -1653,6 +1819,322 @@ event_button(
 
 	/* Succeeded: the button is reported. */
 	*result = vm_value_int32(event->mouse.button);
+	return 0;
+}
+
+/* Initializes base Event fields after all argument conversions have succeeded. */
+static int
+event_init(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct bind_event *event;
+	struct vm_string *type;
+	int bubbles;
+	int cancelable;
+	int error;
+
+	/* Branding must precede any user conversion of the required type. */
+	*result = VM_VALUE_UNDEFINED;
+	error = event_this(realm, this_value, &event);
+	if (error != 0)
+		return error;
+
+	/* The legacy signature still requires its first argument. */
+	if (count < 1U) {
+		error = vm_throw_type_error(realm, "initEvent requires a type.");
+		return error;
+	}
+
+	/* Converts the type before reading the Boolean arguments. */
+	error = bind_to_atom(realm, args[0], 0, &type);
+	if (error != 0)
+		return error;
+
+	/* Missing flags become false through the ordinary Boolean conversion. */
+	bubbles = vm_to_boolean(js_argument(args, count, 1));
+	cancelable = vm_to_boolean(js_argument(args, count, 2));
+
+	/* The method body runs after conversion and cannot rewrite a dispatch in progress. */
+	if (event->dispatching)
+		return 0;
+
+	/* Resets only the base Event state, retaining subclass data. */
+	event_initialize(event, type, bubbles, cancelable);
+
+	/* Succeeded: the event may be dispatched with its newly initialized base fields. */
+	return 0;
+}
+
+/* Initializes UI fields without publishing a partial conversion or changing an active event. */
+static int
+event_init_ui(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct bind_event *event;
+	struct vm_string *type;
+	vm_value view;
+	int32_t detail;
+	int bubbles;
+	int cancelable;
+	int error;
+
+	/* The internal interface brand cannot be forged through an inherited prototype. */
+	*result = VM_VALUE_UNDEFINED;
+	error = event_ui_this(realm, this_value, &event);
+	if (error != 0)
+		return error;
+
+	/* UI initialization also requires an event type. */
+	if (count < 1U) {
+		error = vm_throw_type_error(realm, "initUIEvent requires a type.");
+		return error;
+	}
+
+	/* WebIDL argument conversion follows type, flags, nullable Window, then long detail. */
+	error = bind_to_atom(realm, args[0], 0, &type);
+	if (error != 0)
+		return error;
+
+	/* Boolean flags never invoke script conversion hooks. */
+	bubbles = vm_to_boolean(js_argument(args, count, 1));
+	cancelable = vm_to_boolean(js_argument(args, count, 2));
+
+	/* Only an actual Window global or null may become the stored view. */
+	error = event_window_value(realm, js_argument(args, count, 3), &view);
+	if (error != 0)
+		return error;
+
+	/* The long detail uses the existing signed 32-bit WebIDL conversion. */
+	error = vm_to_int32(realm, js_argument(args, count, 4), &detail);
+	if (error != 0)
+		return error;
+
+	/* Reentrant conversion may have dispatched this same event before this point. */
+	if (event->dispatching)
+		return 0;
+
+	/* Publishes all initialized fields together after fallible conversions. */
+	event_initialize(event, type, bubbles, cancelable);
+	event->view = view;
+	event->detail = vm_value_int32(detail);
+
+	/* Succeeded: both base and UI fields describe the newly initialized event. */
+	return 0;
+}
+
+/* Reports numerical detail only for a real UI-derived event. */
+static int
+event_ui_detail(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct bind_event *event;
+	int error;
+
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* Custom payloads cannot be read through a borrowed UI detail accessor. */
+	error = event_ui_this(realm, this_value, &event);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: detail contains the UI event's signed numerical value. */
+	*result = event->detail;
+	return 0;
+}
+
+/* Reports the actual retained Window global carried by a UI-derived event. */
+static int
+event_view(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct bind_event *event;
+	int error;
+
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* A base or custom event cannot impersonate UI view through prototype changes. */
+	error = event_ui_this(realm, this_value, &event);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the traced view remains readable after its frame is removed. */
+	*result = event->view;
+	return 0;
+}
+
+/* Identifies the implemented interfaces that actually inherit UIEvent state. */
+static int
+event_is_ui(
+	int interface)
+{
+	/* These interface identities are fixed when bind_event_create allocates state. */
+	switch (interface) {
+	case BIND_UI_EVENT:
+	case BIND_MOUSE_EVENT:
+	case BIND_KEYBOARD_EVENT:
+	case BIND_FOCUS_EVENT:
+	case BIND_WHEEL_EVENT:
+		return 1;
+	default:
+		break;
+	}
+
+	/* Base, custom and message events have no UI-specific state. */
+	return 0;
+}
+
+/* Brands UI receivers from their internal event interface, not their prototypes. */
+static int
+event_ui_this(
+	struct vm_realm *realm,
+	vm_value this_value,
+	struct bind_event **event)
+{
+	int is_ui;
+	int error;
+
+	/* Resolves the normal traced event state before applying the narrower UI brand. */
+	error = event_this(realm, this_value, event);
+	if (error != 0)
+		return error;
+
+	/* Forging UIEvent.prototype on a plain event does not change its native identity. */
+	is_ui = event_is_ui((*event)->interface);
+	if (!is_ui) {
+		error = bind_throw_illegal(realm);
+		if (error != 0)
+			return error;
+
+		/* A host without a published exception still cannot accept a false UI brand. */
+		return EINVAL;
+	}
+
+	/* Succeeded: the receiver has actual UI-derived state. */
+	return 0;
+}
+
+/* Converts a nullable Window by checking immutable own Document and global identity. */
+static int
+event_window_value(
+	struct vm_realm *realm,
+	vm_value given,
+	vm_value *view)
+{
+	struct vm_object *object;
+	struct vm_property property;
+	struct dom_node *node;
+	struct bind_window *window;
+	vm_value key;
+	int is_object;
+	int found;
+	int error;
+
+	/* Omitted and explicitly nullable arguments both name no view. */
+	*view = VM_VALUE_NULL;
+	if (given == VM_VALUE_NULL || given == VM_VALUE_UNDEFINED)
+		return 0;
+
+	/* The object must be a global belonging to the Document it owns. */
+	is_object = vm_value_is_object(given);
+	if (!is_object) {
+		error = vm_throw_type_error(realm, "UIEvent view requires a Window or null.");
+		return error;
+	}
+
+	/* An own data property is read without evaluating a forged document getter. */
+	object = (struct vm_object *)vm_value_as_cell(given);
+	key = vm_key_from_ascii(realm->heap, "document");
+	if (key == VM_VALUE_EMPTY)
+		return ENOMEM;
+
+	/* Missing or accessor document properties cannot establish a Window brand. */
+	found = vm_object_get_own_ordinary(object, key, &property);
+	if (!found || (property.attributes & VM_PROPERTY_ACCESSOR) != 0) {
+		error = vm_throw_type_error(realm, "UIEvent view requires an actual Window.");
+		return error;
+	}
+
+	/* The property's value must wrap an actual Document node. */
+	node = bind_node_of(*property.value);
+	if (node == NULL || node->type != DOM_DOCUMENT) {
+		error = vm_throw_type_error(realm, "UIEvent view requires a Window document.");
+		return error;
+	}
+
+	/* Copied documents or released primary views do not identify a global owner. */
+	window = node->document->view;
+	if (window == NULL || window->realm->global != object) {
+		error = vm_throw_type_error(realm, "UIEvent view requires its document's Window.");
+		return error;
+	}
+
+	/* Succeeded: storing this value retains the actual global and its traced owner. */
+	*view = given;
+	return 0;
+}
+
+/* Resets the DOM initialization fields while preserving subclass-specific payloads. */
+static void
+event_initialize(
+	struct bind_event *event,
+	struct vm_string *type,
+	int bubbles,
+	int cancelable)
+{
+	/* Initialization clears dispatch-control history before making the event ready. */
+	event->initialized = 1;
+	event->stop = 0;
+	event->stop_immediate = 0;
+	event->canceled = 0;
+	event->trusted = 0;
+	event->target = VM_VALUE_NULL;
+	event->target_override = VM_VALUE_EMPTY;
+	event->type = type;
+	event->bubbles = bubbles;
+	event->cancelable = cancelable;
+
+	/* Succeeded: the base Event fields are ready for a fresh dispatch. */
+	return;
+}
+
+/* Observes stored composed state without introducing shadow-path behavior. */
+static int
+event_composed(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct bind_event *event;
+	int status;
+
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* Every genuine Event subclass shares this native boolean state. */
+	status = event_this(realm, this_value, &event);
+	if (status != 0)
+		return status;
+	*result = vm_value_boolean(event->composed);
 	return 0;
 }
 

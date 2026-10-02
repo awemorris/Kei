@@ -1,0 +1,24 @@
+# q557 / p145 verification — 2026-10-01
+
+UNCLEARED. Existing record/NodeList temporary roots implemented; Page13 PASS both.
+Native actual allocation-GC three shapes14/16: added identity and cardinality FAIL;
+ASan additionally64-byte LeakSanitizer allocation stacks inside vm_array_create /
+js_builtin_array / environment_node_list. Actual GC counter advanced in all three
+cases. [plain](native-plain.log), [ASan](native-asan.log). No suppression/criterion relaxation.
+
+Both host plain/ASan builds warning0 after correcting test-only dom_append spelling to
+existing void dom_append_child; production contract unchanged. Original Acid3 remains
+88/100 both, prior88/all100 equivalent/complete/noerrors/Acid2exact100%. All prior61+
+newPage pass, newnative fails (62/63 groups). Full changed C manual review/empty style
+output/diff check; cc14.2.0/Python3.13.5/clang-format absent/manual. Host-native only;
+OS/guest/boot/GPU/WPTfull/fuzz unperformed. No successful acceptance claim.
+
+Readback vm_array_create allocates newborn array, then vm_key_from_ascii allocates a
+string before its caller can receive/root array; vm_object_init can also allocate the
+root shape on cold heap. The direct callee needs its own prototype/newborn ownership;
+caller record/list roots cannot protect this unpublished cell. This unknown VM factory
+prerequisite is outside p145 exact scope. [BUG-130](../../bugs/BUG-130.md) reproduced/
+scheduled; q557 ends before redesign. Next finite factory ownership Phase, then a new
+p145 attempt with unchanged original63 acceptance. Existing pending observer lifetime
+and no permanent managed roots preserved. Current source improvement remains WIP;
+no push/local records unpublished/root executor released.

@@ -1,0 +1,40 @@
+# q572 / p157 verification — 2026-10-01
+
+CLEARED. Native pureCSS top-level source model owns immutable UTF16 entries and live
+order independently of existing flattened cascade rules. Tokenizer records original
+half-open source offsets after skipped comments. Existing token values/parser behavior
+unchanged. Transactional qualified style-rule insert/delete preserve existing source
+addresses/stable IDs; invalid index/selector/multiple/trailing/empty/unsupported-at
+insertion does not mutate live order. Retired source remains accessible until model
+finalrelease. Bounded nesting128/retainedentries65536/checked id overflow. No VMroots,
+DOM writes/notifications, source-buffer alias or script-visible array/wrapper shim.
+
+Native33/33 plain+ASan: original caller buffers unchanged and freed, original escaped
+brace/string tokens survive, invalid selectors/unknownat ignored; recognized media/
+supports/import/font-face source count5 vs native rendering flattened3, group type4;
+real native cascade height10->20->40->20; beginning/middle/end insertion; invalid
+indices/single-rule/selector/trailing input/no-error mutations; stable deleted source
+present0 and original source address retained; native DOMgeneration unchanged;
+EOF block closure, UTF16 non-ASCII+surrogate source preservation, invalid recognized
+at-rule block-vs-semicolon forms dropped, nestingoverflow/no partial publication.
+All84 regression groups PASS both. Actual93/prior93/full100 identical/complete/
+status0/noexceptions/crash/sanitizer/runnererrors/timeouts; Acid2exact100%.
+No score gain: actual72 still reaches explicitly excluded DOM CSSOM dependency.
+
+Build warning0/styleoutputempty/diffclean/manual full affected C Guardrail/coding-style
+1–14/automation; clang-format unavailable/manual, cc14.2.0/Python3.13.5. New source
+registered once in existing libbrowser source list. JSON hashes/all84results/actual
+reports. sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q572-regressions.py plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q572-VARIANT; style-check affected C; git diff --check.
+Fixture-only relink after comment formatting once, then native rerun; final substantive
+source/test edits followed both full builds and all84 checks. No OOM injection or
+max65536entry saturation test; rollback reviewed and error cases tested. Recognized
+groups' inner grammar and canonical CSSOM cssText are excluded from this source model
+increment; future DOM wrappers must retain those limits and native source semantics.
+
+Next finite native inline sheet association/live wrappers+rendering integration.
+No CSSOMwrappers/DOM/Pageintegration/loading/XML/SVG/fullCSSSyntax/fullWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHubpublication.
+p100/p044/WS incomplete; pixel agreement37.026875% diagnostic separately.

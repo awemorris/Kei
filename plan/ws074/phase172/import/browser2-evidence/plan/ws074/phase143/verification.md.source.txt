@@ -1,0 +1,60 @@
+# q555 / p143 verification — 2026-10-01
+
+Base802e509f. Pinned original Acid3 plain/ASan88/100/no new or lost indexed passes/
+prior88 preserved/all100 outcomes exactly equal/completeTrue/runstatus0/exceptions[]/
+runerrors[]. Acid2 exact100% both. Remaining12 unchanged; p100/p044/WS incomplete.
+All59 regression groups PASS, final native partial-data100/100 both, noFAIL/Uncaught/
+sanitizer/runtimeerror. Original58 groups unchanged. Final production and fixture
+source used in full regression/Acid verification; no later source modifications.
+
+New dom_text_replace validates kind/null/nonempty units/current offset; clamps count
+without overflow, checks total unit addition and exact UTF16 byte multiplication.
+Pure deletion uses allocation-free native memmove/length commit; insertion/replacement
+prepare exact independent malloc buffer while aliased original input remains owned.
+Publish complete data before p140 optional weak interval repair; checked failure leaves
+storage/data/owners/tree/endpoints/generation/callback counts unchanged. Native caller
+retains node; no VM allocation/script/environment/host hook in helper. Existing append/
+full setter/split suffix truncate unchanged. No new public CharacterData JS methods.
+
+Native fixture calls real DOM helper with conservative stack scanning disabled;
+genuine script Range/private state includes multiple before/equal/interior/removed-end/
+following collapsed tuples, real independent cloneRange, detach and XML/current-owner
+adoption. Replacement/deletion/insertion/clamped SIZE_MAX count/prefix/suffix/full/empty/
+end/aliased data/unpaired UTF16/Comment actual graph/points verified. FIFO optional
+observers see complete buffer/length/exact interval; removal-only subscription has no
+data callback. Invalid offset/kind/null/missing units/oversize addition and byte overflow
+fail before reading short input, changing nonzero points or notifying. No fabricated
+allocator fault injection or huge allocation runtime coverage. Weak tokens cannot
+retain released endpoint/original creator, and cleanup works after original Doc GC.
+Initial fixture attempted document.body on an empty native primary Document; diagnostic
+identified that exact fixture error. Added real primary target Element through existing
+native bindings. Production implementation/acceptance unchanged; final100 checks pass.
+
+Internal checked-allocation design refined after reading geometric wb_units_reserve:
+rounded capacity can overflow bytes for huge representable requests. New API avoids
+that dependency using exact allocation, with unchanged scope/API/criteria. Existing
+shared helper static concern tracked [BUG-129](../../bugs/BUG-129.md), reproduction
+unknown/runtime untested; no repair/non-blocking bug transfer/clearance exception claimed.
+Verified former ordinary checks not invalidated by this static extreme-size finding.
+
+Commands:
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: production source registration,
+  both builds awaited before tests; final warning/error0.
+- `python3 build/ws074-q555-regressions.py VARIANT`: all59 PASS, each60sec bound;
+  exact commands/outcomes retained in verification.json, native partial-data100/100.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+  --program build/ws074-host/VARIANT/browser --out build/ws074-acid-q555-VARIANT`:
+  original88/prior88/equal/noerrors/Acid2exact; aggregate Acid3FAIL retained until100.
+- `python3 plan/tools/style-check.py userland/desktop/browser/dom/node.c
+  userland/desktop/browser/dom/dom.h plan/ws074/tests/host-range-data.c`:
+  output inspected empty. `git diff --check`: PASS.
+- cc14.2.0/Python3.13.5; clang-format unavailable/manual format.
+
+Full changed C/header manually reviewed against coding-style: ANSI leading locals/
+public before static/one-line forwards/purpose paragraphs/if+loop+return comments/
+blanklines/compound conditions, checked individual fallible calls/no calls in conditions
+or initializers, exact buffer arithmetic/alias lifetime/atomic data publication/pure
+weak callbacks/current owner/lifetime cleanup. Source hashes/reports/regressions retained.
+Host native semantics only; no fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregate check/push/GitHub publication. Exact original approval snapshot and internal
+refinement retained in history. Next finite actual Range content algorithms.

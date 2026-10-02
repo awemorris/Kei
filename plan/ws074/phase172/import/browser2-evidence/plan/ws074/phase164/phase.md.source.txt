@@ -1,0 +1,87 @@
+<!-- awesome-plan project=zedbsd record=ws074-p164 -->
+
+# ws074-p164: real XML character-node wrappers and existing native category integration
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q580 / q580-i01
+Base f3a397d4/q579 cleared/native32/all92both/actual94/prior94/Acid2exact.
+Current user automatic Acid3 Queues 2026-09-30 +continuation2026-10-02 authorize
+this finite exact prerequisite before generation. Root/browser2 sole executor/writer;
+local unpublished/no push/no cancellation/concurrent attempt. Guardrail/full C
+coding-style1–14/automation/actual node binding/window table/range/insertion/Text/
+serialization/layout/style source/script text code read. DOM Standard2026-09-24
+verified2026-10-02 https://dom.spec.whatwg.org/ ; native DOM p161–p163 prerequisites.
+
+## Exact scope / criteria
+
+Register real CDATASection prototype inheriting Text and ProcessingInstruction
+inheriting CharacterData, with actual PI-only target getter/native cell brand;
+new bind/xml.c registered once, internal enum/declarations/window tables agree.
+Existing bind_wrap roots actual native node before prototype lookup/VM wrapper
+allocation, every error unwinds slot; relevant actual Document snapshot/view supplies
+prototype, not caller realm. SameObject cached native wrapper, actual node/target/Doc
+tracing, no expandos/prototype-based fake brand or permanent registry.
+No JS Document.createCDATASection/createProcessingInstruction/new constructors/PI
+attribute map APIs in this Phase; importer will create validated native nodes first.
+
+Existing Node.nodeName reports #cdata-section and actual PI target; nodeValue/
+textContent use real CharacterData for4kinds. Descendant/child text includes Text+
+CDATA, excludes PI/Comment. Existing CharacterData data/length/append/remove works
+with genuine new kinds and rejects lookalikes. Existing Text.splitText acceptsCDATA
+and returns ordinary Text suffix (standard createText semantics), original subtype
+retained, correct native roots/hooks/live Range repair; PI is rejected by Text brand.
+Pre-insertion admitsCDATA and PI with genuine Document hierarchy: PI allowed,
+Text+CDATA forbidden directly or through fragment; existing adoption/removal rules.
+Existing Range length/bounds/clone/delete/extract support all CharacterData; string
+content includesCDATA but excludesPI/Comment; partially contained non-Text PI
+surround refusal, CDATA Text allowed; insertNode starts PI/Comment refusal, CDATA
+Text split semantics. Clone slices preserve actual kind/PI target. No unrelated
+Range normalization algorithm or full CharacterData missing operations added.
+
+Layout Text boxes/inline style source collection/primary script text/XML-document
+child text gathering includeCDATA as Text; PI remains non-rendered/data-only.
+Existing HTML serializer treatsCDATA as Text, PI as actual HTML fragment PI syntax;
+full XML serialization and XMLstylesheet resource effects remain separate limits.
+Affected bind/internal.h/window.c/node.c/text.c/insertion.c/range.c/document.c/
+style-sheet.c/new bind/xml.c/dom/serialize.c/layout/box.c/page/script.c/Makefile/
+new host-xml-binding.c only. Existing original HTML/Acid output preserved.
+
+Native fixture uses actual Page+DOMImplementation-created XMLDocument and native
+factories, real scripts/DOM APIs rather than fake JS node constructors. Check actual
+prototypes/type/name/data/target/value/textContent/descent/brands/native clone,
+CharacterData edits and Text.split subtype/suffix/live Range, XML Document PI insert/
+CDATA hierarchy rejection, Range PI bounds/kind+target slice/extract/delete/string/
+CDATA intervals/PI insert/surround rejection, live collections/traversal masks,
+actual HTML serialization/new-kind text/render source where applicable.
+Force real8MiB GC inside bind_wrap with caller native node/target/stack roots absent;
+actual owner snapshot retained, saved native wrapper alone retains graph and last
+release collection. Allpartialroot/error exits reviewed; no permanent roots.
+Prior92+native1=93groupsPASSboth/original>=94/prior94/72/equal100 inventory/complete/
+status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact. Bothfull builds
+finishbeforetests/warning0/style output empty/fullmanual affected C/diff/hashes.
+Finite one Phase; unknown prerequisite ends uncleared before redesign.
+
+Graph p163(external)->p164->XMLDOMprojection/loading/SVG/p100(external), acyclic.
+Known native C factories require validated target/data; public IDL factory validation,
+new PI attribute APIs/constructors/fullXMLserializer/fullDOM/fullWPT/fuzz/loading/
+SVG/event/script activation/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/
+push/publication excluded. No score gain expected; p100/p044/WS incomplete.
+
+## Introduction (2026-10-02)
+
+Native identity/rooted factories verified in p163. Integrate existing genuine node
+operations before projecting loaded XML trees into accessible Documents; new node
+kinds must not masquerade as fragments or lose their CharacterData semantics.
+
+## q580 cleared outcome (2026-10-02)
+
+[p164](phase.md) cleared in q580, [evidence](verification.md).
+Actual PI/CDATA wrappers/prototypes/callee roots/Node/CharacterData/Text/Range/
+insertion/render/HTML serialization categories verified on genuine native XML nodes.
+Native34/all93PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Actual threshold wrapper GC/saved-only/lastrelease; CDATA native text/CSS/script
+and Range subtype semantics verified. Partial XML node core limits retained.
+Next native XML DOM projection/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.

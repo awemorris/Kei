@@ -1,0 +1,77 @@
+<!-- awesome-plan project=zedbsd record=ws074-p148 -->
+
+# ws074-p148: actual native Range.extractContents
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q561 / q561-i01
+Prerequisites p136/p140/p142/p143/p144/p145/p147 cleared; base c501555f
+original88/all66/Acid2exact. Root sole executor/no cancellation/conflict. Approval
+current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact finite snapshot saved BEFORE generation.
+
+## Exact scope / design / criteria
+
+Implement only Range.extractContents() on genuine private native Range in existing
+bind/range.c at next stable operation index16, arity0/existing descriptor flags.
+Follow DOM Living Standard 2026-09-24 https://dom.spec.whatwg.org/#dom-range-extractcontents
+read2026-10-01 lines4970–5061: create Fragment in actual current start Document,
+return empty when collapsed; same Text/Comment clone exact selected UTF16 code units,
+append clone, delete original interval; else preflight contained doctype Hierarchy3
+before mutation, compute shared native collapse point as deleteContents and commit
+collapsed original Range BEFORE any source mutation. Build output in tree order:
+partial first/last CharacterData become exact independent same-kind slices while native
+original suffix/prefix is removed; partial Element branches become shallow native
+shells whose equivalent subintervals recursively extract; fully contained nodes MOVE
+original native identity into output Fragment rather than clone, with actual weak live
+repair, iframe teardown and source-owner child-list notification. No document doctype
+in output, no JS shim, no visible point property access. Existing p142 native shallow
+cloning, p143 allocation-free deletion and p145 observer record ownership reused.
+
+Implement checked iterative interval frames instead of C recursion/512 cutoff. Capture
+next source sibling before mutation/push; no pointer into vector after push. Preflight
+supported uint32 graph lengths/offsets and all direct contained doctypes before
+mutation. Original endpoint and source graphs, complete output Fragment and pending
+unlinked shell/current moved node rooted through allocations and wrapper publication;
+state's live collapse cannot lose immutable original points. New partial shell is
+published only after complete native initialization; fragment output may be partially
+built on post-mutation allocation error and remains unpublished. Ordinary source
+mutation/observer errors after commit retain real partial changes/current collapsed
+Range; no arbitrary transaction claim. Existing native source generation behavior.
+
+New Page probe covers descriptor/brand, collapsed Document, same Text/Comment/unpaired
+UTF16 and live points, original indexed9 exact clone-shell/moved-t3 identity, fully
+contained identity, doctype no mutation on throw, deep640 partial descent, observers/
+weak other Range repair, template ordinary/separate content, current adopted/borrowed/
+saved child XML and expando shadows. New native direct registered method fixture with
+stack scanning disabled/no outer receiver frame, real allocation GC mid-extract,
+complete source/output/record/private boundary identities and post-release graph
+collectibility. Bounded ordinary pressure/no production test switch. New Page/native+
+prior66=68 groups plain+ASan; pinned original Acid3>=88/prior88 preserved/all100
+inventory equivalent/complete/no Uncaught/crash/runner timeout/Acid2 exact. Expected
+indexed9 should pass if full algorithm succeeds; do not change acceptance if it does
+not. Each runner60sec; unknown prerequisite ends uncleared before redesign. Full
+changed C against Guardrail/full coding-style/automation, manual formatting
+(clang-format absent), inspect style output/diff/hashes/buildwarning0/sanitizer0.
+Graph p136+p140+p142+p143+p144+p145+p147(external)->p148->surround/p100(external),
+acyclic.
+
+Exclusions: surroundContents/new public DOM API/CharacterData observer kinds,
+Document.cloneNode/shadow/custom/PI/Attr, >UINT32 graphs, new host removal API,
+fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/push/GitHub publication. p100/p044/WS
+remain incomplete. Affected bind/range.c/new Page/native fixtures only.
+
+## Introduction / q561 activation (2026-10-01)
+
+p147 verifies native removal, live repair/owner observer under GC; p142/p144 verify
+iterative partial shells and native identity cloning. Extraction now adds transfer
+identity in one finite Phase, without changing prior clearance criteria.
+
+## q561 cleared outcome (2026-10-01)
+
+[p148](phase.md) cleared in q561, [evidence](verification.md).
+Actual extractContents preserves moved native identities/partial shells/UTF16/live
+repair/owner notices through actual GC. Acid3 90/100, new7/9/prior88 preserved/full100
+same/noerrors/Acid2exact; all68PASS plain+ASan/Page22/native14. Next surroundContents,
+CSS/SVG/loading; p100/p044/WS incomplete/local unpublished/root released/no push.

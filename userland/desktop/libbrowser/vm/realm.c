@@ -26,6 +26,16 @@
 /* How many 64-bit slots the VM stack of a realm has (2 MiB). */
 #define REALM_STACK_SLOTS	(256U * 1024U)
 
+static int realm_create(struct vm_heap *heap, int managed, struct vm_realm **realm);
+static void realm_cell_trace(struct vm_heap *heap, struct vm_cell *cell);
+static void realm_cell_finalize(struct vm_heap *heap, struct vm_cell *cell);
+static void realm_release(struct vm_realm *realm);
+
+/* A managed realm owns its C stack and host until no cell reaches it. */
+static const struct vm_cell_type realm_type = {
+	"realm", realm_cell_trace, realm_cell_finalize
+};
+
 static int realm_fill(struct vm_realm *realm);
 static void realm_trace(struct vm_heap *heap, void *context);
 static int realm_empty_function(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -51,77 +61,61 @@ static const char *const realm_symbol_names[VM_SYMBOLS] = {
 };
 
 /*
- * Makes a realm in a heap with its intrinsic objects and global object.
+ * Makes an explicitly owned primary realm with a permanent tracer.
  */
 int
 vm_realm_create(
 	struct vm_heap *heap,
 	struct vm_realm **realm)
 {
-	struct vm_realm *made;
 	int error;
 
-	/* The realm, kept by a tracer the heap calls in every collection. */
-	*realm = NULL;
-	made = calloc(1, sizeof(*made));
-	if (made == NULL)
-		return ENOMEM;
-	made->heap = heap;
-	made->exception = VM_VALUE_UNDEFINED;
-	made->throw_value = VM_VALUE_UNDEFINED;
-	made->callee = VM_VALUE_UNDEFINED;
-	made->new_target = VM_VALUE_UNDEFINED;
-
-	/* The VM stack its code runs on. */
-	made->stack = calloc(REALM_STACK_SLOTS, sizeof(vm_value));
-	if (made->stack == NULL) {
-		free(made);
-		return ENOMEM;
-	}
-
-	/* The stack's size, empty. */
-	made->stack_capacity = REALM_STACK_SLOTS;
-	wb_vector_init(&made->jobs, sizeof(struct vm_job));
-	wb_vector_init(&made->rejections, sizeof(vm_value));
-
-	/* The tracer. */
-	error = vm_heap_add_tracer(heap, realm_trace, made);
-	if (error != 0) {
-		free(made->stack);
-		free(made);
+	/* Builds the primary realm with its existing explicit lifetime. */
+	error = realm_create(heap, 0, realm);
+	if (error != 0)
 		return error;
-	}
 
-	/* Its objects. */
-	error = realm_fill(made);
-	if (error != 0) {
-		vm_realm_destroy(made);
-		return error;
-	}
-
-	/* Succeeded: the realm. */
-	*realm = made;
+	/* Succeeded: the embedder owns the primary realm. */
 	return 0;
 }
 
 /*
- * Lets a realm's objects go (they are freed by the next collection that
- * finds nothing else holding them) and frees the realm.
+ * Makes a child realm retained by functions, globals and embedding cells.
+ */
+int
+vm_realm_create_managed(
+	struct vm_heap *heap,
+	struct vm_realm **realm)
+{
+	int error;
+
+	/* Builds the child as a cell, so raw execution pointers are GC roots. */
+	error = realm_create(heap, 1, realm);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: traced references own the child realm. */
+	return 0;
+}
+
+/*
+ * Releases an explicitly owned primary realm; managed realms belong to GC.
  */
 void
 vm_realm_destroy(
 	struct vm_realm *realm)
 {
-	/* Nothing to destroy. */
-	if (realm == NULL)
+	/* A missing realm has no resources; the heap owns every managed realm. */
+	if (realm == NULL || realm->managed)
 		return;
 
-	/* The tracer, then the stack and the realm. */
+	/* Drops the primary tracer before freeing its C resources and record. */
 	vm_heap_remove_tracer(realm->heap, realm_trace, realm);
-	wb_vector_release(&realm->jobs);
-	wb_vector_release(&realm->rejections);
-	free(realm->stack);
+	realm_release(realm);
 	free(realm);
+
+	/* Succeeded: only the heap's remaining object references survive. */
+	return;
 }
 
 /*
@@ -289,6 +283,142 @@ realm_fill(
 
 	/* Succeeded: the realm has its objects. */
 	return 0;
+}
+
+/* Builds either ownership kind before publishing the realm to its caller. */
+static int
+realm_create(
+	struct vm_heap *heap,
+	int managed,
+	struct vm_realm **realm)
+{
+	struct vm_realm *made;
+	int error;
+
+	/* Managed pointers must already denote cells during intrinsic creation. */
+	*realm = NULL;
+	if (managed) {
+		made = vm_heap_alloc(heap, &realm_type, sizeof(*made));
+	} else {
+		made = calloc(1, sizeof(*made));
+	}
+
+	/* No state has been published if the realm record could not be made. */
+	if (made == NULL)
+		return ENOMEM;
+
+	/* Initializes state that both partial and final cleanup can release. */
+	made->heap = heap;
+	made->managed = managed;
+	made->exception = VM_VALUE_UNDEFINED;
+	made->throw_value = VM_VALUE_UNDEFINED;
+	made->callee = VM_VALUE_UNDEFINED;
+	made->new_target = VM_VALUE_UNDEFINED;
+	wb_vector_init(&made->jobs, sizeof(struct vm_job));
+	wb_vector_init(&made->rejections, sizeof(vm_value));
+
+	/* Reserves the non-moving stack before any execution or tracing. */
+	made->stack = calloc(REALM_STACK_SLOTS, sizeof(vm_value));
+	if (made->stack == NULL) {
+		if (!managed)
+			free(made);
+		return ENOMEM;
+	}
+
+	/* A manual realm needs a root; a managed realm is reached as a cell. */
+	made->stack_capacity = REALM_STACK_SLOTS;
+	if (!managed) {
+		error = vm_heap_add_tracer(heap, realm_trace, made);
+		if (error != 0) {
+			realm_release(made);
+			free(made);
+			return error;
+		}
+	}
+
+	/* Creates the existing globals and intrinsic skeleton in this realm. */
+	error = realm_fill(made);
+	if (error != 0) {
+		if (managed) {
+			realm_release(made);
+		} else {
+			vm_realm_destroy(made);
+		}
+
+		/* No partially initialized realm is published to the caller. */
+		return error;
+	}
+
+	/* Saved globals and bare prototype objects retain their child's lifetime. */
+	if (managed) {
+		made->global->internal = vm_value_cell(made);
+		made->object_prototype->internal = vm_value_cell(made);
+	}
+
+	/* Succeeded: the caller receives a fully initialized realm. */
+	*realm = made;
+	return 0;
+}
+
+/* Marks a managed realm and the cells retained by its host. */
+static void
+realm_cell_trace(
+	struct vm_heap *heap,
+	struct vm_cell *cell)
+{
+	struct vm_realm *realm;
+
+	/* Uses the same root walk for explicit and GC ownership. */
+	realm = (struct vm_realm *)cell;
+	realm_trace(heap, realm);
+
+	/* Host records are malloc objects whose cells need this owner's trace. */
+	if (realm->host_trace != NULL)
+		realm->host_trace(heap, realm->host);
+
+	/* Succeeded: the child and its host's references were marked. */
+	return;
+}
+
+/* Releases a dead realm's host without dereferencing other finalized cells. */
+static void
+realm_cell_finalize(
+	struct vm_heap *heap,
+	struct vm_cell *cell)
+{
+	struct vm_realm *realm;
+
+	UNUSED_PARAMETER(heap);
+
+	/* Host cleanup may use the C realm record, so it runs before stack cleanup. */
+	realm = (struct vm_realm *)cell;
+	if (realm->host_release != NULL)
+		realm->host_release(realm->host);
+
+	/* Releases C allocations only; the heap frees the cell itself. */
+	realm_release(realm);
+
+	/* Succeeded: no child C resource remains. */
+	return;
+}
+
+/* Releases buffers safely after partial construction or final host cleanup. */
+static void
+realm_release(
+	struct vm_realm *realm)
+{
+	/* These buffers contain values but cleanup never reads the referenced cells. */
+	wb_vector_release(&realm->jobs);
+	wb_vector_release(&realm->rejections);
+	free(realm->stack);
+
+	/* A failed managed creation can be finalized later without a second free. */
+	realm->stack = NULL;
+	realm->stack_top = 0;
+	realm->stack_capacity = 0;
+
+	/* Succeeded: the stack and queued work no longer own C allocations. */
+	return;
 }
 
 /* Marks a realm's objects and its exception. */

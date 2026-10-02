@@ -1,0 +1,29 @@
+# q571 / p155 revalidation — 2026-10-01
+
+CLEARED after separately approved same-Phase revalidation. Original q569 uncleared
+snapshot/outcome/evidence remain unchanged. p156 independently supplied actual zero
+percentage lengths and first empty fragment rectangles; output verified in current
+working code. Child native transient layout and actual rendered content width/height
+now satisfy original Page22/native10 real callback GC/stack disabled/retirement/
+collectibility. All83 groups pass both, original93/prior93/full100 identical/complete/
+status0/no Uncaught/crash/sanitizer/runner errors or timeouts; Acid2exact100%.
+Actual72 advances beyond real rendered10 to explicitly excluded missing CSSOM.
+
+Full p155 affected-source review against Guardrail/coding-style1–14/automation,
+including current p156 dependency output: no persistent C child layout edges/roots,
+Document+queriednode rooted before primary layout allocations, owner/target retained
+through geometry callback GC, retirement/adoption revalidated before using CSS and
+before returning image dimension, zero viewport bound check before signed fixed-unit
+multiply, every transient arena released, primary indexed layout path preserved,
+actual content subtracts borders/padding and finite/integer bounds checked. Corrected
+public function header and decision semantic comments only, no functional changes
+in q571. clang-format unavailable/manual; style tool output empty/build warning0/
+diffclean; cc14.2.0/Python3.13.5. JSON hashes/full83 results/actualreports; commands
+sh plan/ws074/tests/host-build.sh plain|asan; python3 build/ws074-q571-regressions.py
+plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0 python3
+plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q571-VARIANT; style-check full affected C; git diff --check.
+
+Next native CSSOM; XML loading/SVG remain. Pixel agreement37.026875% diagnostic;
+no full rendering/CSSOM/child painting/loading/fullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregatecheck/push/GitHub publication. p100/p044/WS incomplete.

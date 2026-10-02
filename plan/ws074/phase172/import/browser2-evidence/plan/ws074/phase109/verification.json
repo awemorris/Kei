@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-01",
+  "queue": "q518",
+  "baseline": "462c4ed8",
+  "outcome": "uncleared: unexpected existing selector grammar prerequisite / BUG-128",
+  "sources": {
+    "userland/desktop/browser/bind/style-context.c": "6dcf54430de23041b9aea3ce6f4e7bb03c1c9f60267f3525d8f94e19057b1c80",
+    "userland/desktop/browser/bind/internal.h": "c8aad8f85f6322deda295965c0b0a7f3fe6726b4b2e2ac63c3fbb667bddb6903",
+    "userland/desktop/browser/bind/window.c": "76599cfc34d3bafb9bf6c9103a4be8122c4386c8760e0ae66c2cee9ef1b5a743",
+    "userland/desktop/browser/bind/computed.c": "1700502078bbc6089cc7b0cf880201143020bb86c4f44b2f723aa88b1b21d8e2",
+    "userland/desktop/browser/bind/query.c": "a31740de92a21528c7d9ccdac9557eb5a864462e49e67eb1cad17134a6230d50",
+    "userland/desktop/browser/bind/style.c": "fcc44ded0aea1dfb6cb83a0d5ba255003d0187c74e454e47919d3818da100536",
+    "userland/desktop/libbrowser/Makefile": "07f9a3945ae379137e52697c3d28d80196cefcd8fbf02d92535f787f58253bbd",
+    "plan/ws074/tests/host-frame-lifetime.c": "7ab0767ac67cb363f42a785c849fbb425634f2f9adc357512b4e4e4f3b553807",
+    "plan/ws074/tests/pages/child-style-probe.html": "eb327191a53f5efe8ce3c10bdcaafa6a26c21f516150148dca9e756d6a87bca3"
+  },
+  "plain_asan": {
+    "focused_css": "30/30",
+    "frame_GC_and_viewport": "33/33 (original24 plus9)",
+    "ownership": "27/27",
+    "realms": "30/30",
+    "object": "100/100",
+    "interp": "45/45",
+    "DOM": "23/23",
+    "iframe": "17/17",
+    "Acid2": "exact100%",
+    "Acid3": "55/100 all100, Uncaught0/completeTrue/run_status0/no errors",
+    "inventory_equal": true
+  },
+  "changes": [
+    [
+      33,
+      "fail",
+      "pass"
+    ],
+    [
+      35,
+      "fail",
+      "pass"
+    ],
+    [
+      36,
+      "fail",
+      "pass"
+    ],
+    [
+      37,
+      "fail",
+      "pass"
+    ],
+    [
+      39,
+      "fail",
+      "pass"
+    ],
+    [
+      40,
+      "fail",
+      "pass"
+    ],
+    [
+      41,
+      "fail",
+      "pass"
+    ],
+    [
+      42,
+      "fail",
+      "pass"
+    ],
+    [
+      44,
+      "pass",
+      "fail"
+    ],
+    [
+      45,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q518-plain/report.json",
+    "build/ws074-acid-q518-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "clang-format": "unavailable"
+  }
+}

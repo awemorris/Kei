@@ -1,0 +1,48 @@
+# q513 bounded ownership investigation — 2026-09-30
+
+Initial iframe production progress passes saved Chromium lifecycle17/17 in plain;
+no full Phase acceptance, ASan iframe run or fresh Acid measurement is claimed.
+Source review of primary teardown found a separate unsafe function trace path.
+A retained native function cell was rooted, its explicit primary realm destroyed,
+then heap collection ran with explicit roots only. The function was never called
+after retirement. ASan reproduces heap-use-after-free in function_trace while
+reading function->realm->managed. Plain exits0; absence of a plain crash is not
+absence of the defect. This is a regression introduced by p106's trace change.
+
+Probe: ../tests/host-realm-retirement.c. Compiled cc14.2.0 against current plain
+host objects and p106 ASan objects; the affected VM source is identical to p106
+f8c12297, not dependent on unfinished iframe APIs. ASan options disable fake
+stacks. Saved outputs build/ws074-p104-retirement-{plain,asan}.{stdout,stderr}.
+
+ASan evidence:
+
+```text
+==2503134==ERROR: AddressSanitizer: heap-use-after-free on address 0x516000000090 at pc 0x55cdc2304e8c bp 0x7ffd952aba30 sp 0x7ffd952aba28
+READ of size 4 at 0x516000000090 thread T0
+    #0 0x55cdc2304e8b in function_trace userland/desktop/browser/vm/function.c:701
+    #1 0x55cdc24ece4f in heap_drain userland/desktop/browser/vm/heap.c:933
+    #2 0x55cdc24ece4f in vm_heap_collect userland/desktop/browser/vm/heap.c:275
+    #3 0x55cdc22b1fd1 in main plan/ws074/tests/host-realm-retirement.c:64
+    #4 0x7f445b235ca7  (/lib/x86_64-linux-gnu/libc.so.6+0x29ca7) (BuildId: c495b62edadd6c356265942ec1282d98058a7b41)
+    #5 0x7f445b235d64 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29d64) (BuildId: c495b62edadd6c356265942ec1282d98058a7b41)
+    #6 0x55cdc22b1ce0 in _start (/home/awe/zedBSD-codex/build/ws074-p104-retirement-asan+0x341ce0) (BuildId: e97345d34610aadeed054609950f457d8a7c686f)
+
+0x516000000090 is located 16 bytes inside of 592-byte region [0x516000000080,0x5160000002d0)
+freed by thread T0 here:
+    #0 0x7f445bcf38f8 in free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:52
+    #1 0x55cdc246ef02 in vm_realm_destroy userland/desktop/browser/vm/realm.c:115
+    #2 0x55cdc22b1f8a in main plan/ws074/tests/host-realm-retirement.c:62
+    #3 0x7f445b235ca7  (/lib/x86_64-linux-gnu/libc.so.6+0x29ca7) (BuildId: c495b62edadd6c356265942ec1282d98058a7b41)
+
+previously allocated by thread T0 here:
+    #0 0x7f445bcf4610 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55cdc246f43b in realm_create userland/desktop/browser/vm/realm.c:303
+    #2 0x55cdc246fa1b in vm_realm_create userland/desktop/browser/vm/realm.c:74
+```
+
+q513-i01 ends uncleared; preserve iframe progress but do not extend this attempt
+into a VM prerequisite repair. BUG-127 scheduled, p106 clearance invalidated
+with dated follow-up; q512's historical cleared outcome is preserved. Fix by
+caching a managed realm cell reference in each function during live creation,
+so GC never dereferences an already destroyed manual realm. Revalidate p106,
+then resume p104 under a new Queue using standing autonomous consent.

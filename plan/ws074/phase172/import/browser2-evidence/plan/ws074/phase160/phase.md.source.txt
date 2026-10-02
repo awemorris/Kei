@@ -1,0 +1,84 @@
+<!-- awesome-plan project=zedbsd record=ws074-p160 -->
+
+# ws074-p160: native ordinary CSSStyleSheet insertRule and deleteRule
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q576 / q576-i01
+Base80ee7b41/q575finished/p159Page22/native12/all87both/original93/Acid2exact.
+Current user 2026-09-30 automatic Acid3Queues+2026-10-01 continuation approve exact
+finite scope before generation. Root solewriter/executor/no cancellation/conflict.
+Guardrail/fullcoding-style1–14/automation/actualnativeCSSOM/model/VMstringconversions/
+heaproots/stylebridge read. CSSOM2026-08-31 insert/delete algorithms and hierarchy,
+required/defaultWebIDLarguments verified2026-10-01 https://drafts.csswg.org/cssom/ .
+
+## Exact scope / design / criteria
+
+Add actual CSSStyleSheet native insertRule(rule,index=0) and deleteRule(index) to
+p159 interface operationtable, ordinary qualified rule insertion only. Privatekind/
+operations/celltype sheetbrand before parameter conversion; missingrequiredarg
+TypeError, ruleCSSOMString ordinary vm_to_string preserving UTF16 (Latin1+wide),
+index vm_to_uint32 required/default0, normal conversion order rulethenindex and
+reentrant DOMsourcechange/retirement observed on genuine savedreceiver source.
+Root actualnative source graph through conversions/parsing/allocation; initialize
+and register separate nullable stringcellroot before result conversion, assign
+immediately after vm_to_string before indexconversion. Copied wb_units independent
+UTF16, release every success/error; all roots removed. No new permanentroot/tracer.
+
+PublicCSSOM parse-before-index-error semantics: validateexact oneordinaryqualified
+input in independentlyowned emptytemporary css_rule_model through existing native
+insert; destroytemporary; invalid/multiple/trailing/empty -> DOMSyntaxError,
+unsupported valid at-rule -> explicit partialcore DOMNotSupportedError withoutmutation.
+After validation, bounds index>count -> DOMIndexSizeError. Existing recognized
+import rules cannot be displaced after newordinaryrule: inspect actual current
+source IDs/types at/afterindex, DOMHierarchyRequestError iffollowingtopLevelimport.
+Generalnamespace/layer/import insertion/fullCSSSyntax remain excluded. Actualmodel
+insert/delete atomicexistingnativeAPI, failedcalls preservecount/generation/rendering/
+DOMText, returnedinsert index numeric, delete undefined. delete>=count->IndexSizeError.
+Successfulactualmodel edit bind_style_sheet_changed only; savedcurrentrulelist length
+updates, genuine renderer/Ccascade heightupdates, noDOMTextwrite/MutationObserverrecord.
+Oldretiredsheet mutatesownsavedmodel/list only, no currentownerDocgeneration/rendering.
+No fakeCSSRule/serialization/score-specificpath. A temporaryvalidation doubleparse
+is bounded/reuses existing nativegrammar and trades small work for correcterror
+precedence before actualmodelcommit; no p157pureAPI/scopechange.
+
+Affected bind/cssom.c/internal.h operationprototypes only; newPageprobe/nativefixture.
+Page with actualfonts/primary+managedchild streams: currentnativeinsert/end/default/
+middle/delete actualheight10->20->40->20/restoresprecedence, savedlistliveness,
+Textunchanged/noObserverrecords/currentDocumentstylesheet/nativehref, failedsyntax/
+bounds/unsupported/hierarchy no statechanges, requiredargs/brands/borrowedmethods/
+UTF16unicode selectors/conversionorder/defaultuint32, reentrantTextreset retires
+receiver whilemutatingoldsavedmodelonly; parent/childcascade isolated.
+Native directmethodcallerroot-free thresholdGC during ruleToString/modelparser;
+actualsavedsource graph survives cellallocation, resultactualrulecount/cascade,
+stringroot persists allocating indexconversion, retirementinsideconversion affects
+onlysavedmodel, finalreleasecollectsgraph. Existingp159/p158GCfixturesstillpass.
+
+Prior87+newPage1+newnative1=89allPASSboth/original>=94 includingactual72/prior93/
+equalfull100/complete/noUncaught/crash/sanitizer/runnererror/timeout/Acid2exact,
+actualindependentAcid3inventory/pixel diagnostic separately. Bothfullbuilds finish
+beforetests/runner60sec/buildwarning0/styleoutputempty/fullaffectedCmanual/diff/hashes.
+Graph p159(externalcleared)->p160->loading/SVG+p100(external), acyclic. Knownremaining
+69/74/75/77/79/80 after72; unknownprereqendsuncleared before redesign. Excludes
+at-ruleinsertion/ruleobjects/index/item/iterables/fullSyntax/CSStext/metadata/fullCSSOM,
+external/link/import wrappers/originflags/MIME/CSP/stylesets/disabled/media setters/
+constructed/adoptedShadow/replace/loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregatecheck/push/GitHubpublication. p100/p044/WS incomplete.
+
+## Introduction / q576 (2026-10-01)
+
+Actual sheet and savedrulecount identities/retiredsource GC verified in p159 before
+native JSmodelmutation. Ordinary source edits now connect existing DOM, puremodel
+and Page/childrendering outputs to clear actual72 rather than a count or layout shim.
+
+## q576 cleared outcome (2026-10-01)
+
+[p160](phase.md) cleared in q576, [evidence](verification.md).
+Native ordinary CSSStyleSheet insertRule/deleteRule with actualsource/argument/
+convertedstring roots, errorprecedence/importhierarchy/reentrantretirement verified.
+Page23/native12/all89bothPASS; actual94/100 including72/prior93/equal100/noerrors/
+Acid2exact. Actualmodel/list/renderedheight update withoutDOMwrites orObserverrecords;
+callerroot-free threshold+conversionGC/obsoleteonlyedit/lastrelease verified.
+Remaining69/74/75/77/79/80 need SVG/loading/XML. PartialCSSOM/ruleobject/fullSyntax
+limits retained; p100/p044/WS incomplete/rootreleased/localunpublished/no push.

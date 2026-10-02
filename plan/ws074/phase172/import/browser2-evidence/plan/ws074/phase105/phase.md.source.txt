@@ -1,0 +1,117 @@
+<!-- awesome-plan project=zedbsd record=ws074-p105 -->
+
+# ws074-p105: Cross-realm execution and exception transport
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q511 / q511-i01 (standing autonomous approval, 2026-09-30)
+Prerequisites: existing shared-heap realm/function/interpreter APIs verified;
+q510 [reproduction](../phase104/investigation.md) and [BUG-126](../../bugs/BUG-126.md).
+
+## Objective and exact scope
+
+Make calls between two live realms in one heap execute in the callee's realm
+and carry the actual thrown value back to the caller. This is the first missing
+prerequisite for p104 initial iframe contexts, not iframe implementation itself.
+Keep the one-agent-per-tab and existing separate realm/global design.
+
+Affected areas: `vm/function.c`, `vm/interpreter.c`, minimal shared VM declarations
+if needed, and WS074 focused tests. Scope covers ordinary bytecode/native calls,
+bytecode/native constructors, accessor/VM API paths, and reentrant calls back to
+the originating realm. Preserve argument/result/this/new.target and closure
+identity, exception identity and existing stack/depth/error unwinding. Existing
+generator/async dispatch must retain its behavior; smoke-test its cross-realm
+boundary without expanding Promise/generator feature coverage.
+
+No child Window/Document API, lifetime ownership/GC redesign, URL loading,
+navigation, document.write/open/close, modules, CSSOM, HAL or toolchain work.
+Both realms remain explicitly owned and alive for these tests. Do not claim
+that this fixes detached-frame lifetime or completes p104/p100.
+
+## Design and finite procedure
+
+1. Reproduce the saved 8-check baseline against current source.
+2. Route foreign-realm calls/constructors through the callee realm while keeping
+   the existing same-realm interpreter frame fast path. Reuse VM entry points;
+   preserve existing recursion/depth bounds and unwind the foreign stack before
+   continuing or catching in the caller.
+3. Make every VM/native/interpreter boundary consistently transfer the actual
+   exception and relevant throw metadata to the caller without overwriting the
+   thrown object's realm or swallowing allocation/depth failures. Include native
+   constructor and accessor paths; don't repair only one failing instruction.
+4. Add bounded bidirectional/reentrant, closure, constructor/new.target, native
+   throw and C-API assertions. Keep test assertions independent and identify
+   which paths were tested; no mass test262 rerun unless failures justify it.
+5. Check changed source against full standards; run plain/ASan builds, focused VM
+   tests, DOM regressions and Acid2/Acid3 preservation checks for changed behavior.
+
+## Acceptance
+
+- Saved baseline changes from 3/8 to **8/8**, both plain and ASan.
+- Direct bytecode, VM API, native/accessor and constructor paths retain callee
+  globals, closures and this/new.target; calls in both directions and reentrant
+  calls return to the right caller/stack.
+- Child and parent catch the actual foreign exception with correct object and
+  constructor identity; ordinary completion and allocation/depth failure paths
+  preserve their existing contracts. No crash, sanitizer issue or leaked stack.
+- Existing VM/object and DOM checks pass; Acid2 remains exact; all 100 Acid3
+  results are recorded with no regression from p103 40 pass / Uncaught 0.
+- Warning-free plain/ASan builds and full changed-source standards review,
+  style/diff checks, recorded tools/skips/limits. Full WS conformance stays p044.
+
+Apply [Guardrail](../../guardrail.md), full [C standard](../../coding-style.md),
+`.clang-format` and browser design §§1,4,11,12,14. Formatter absence requires
+explicitly recorded manual formatting review; host checks do not prove guest
+or full OS behavior.
+
+## Introduction / dependency redesign event (2026-09-30)
+
+Origin: q510-i01 ended [p104 uncleared](../phase104/phase.md) after five reproduced
+cross-realm failures. This Phase isolates the prerequisite from child-context
+ownership, planned separately as [p106](../phase106/phase.md). Verified p105 output
+is required before p106/p104 execution. See [WS summary](../ws.md). q511 is only
+a proposal; this creation record does not authorize implementation.
+
+## q511 activation (2026-09-30)
+
+Current user delegated autonomous execution to Acid3 100% including automatic
+Queues (exact instruction in config.md). q511 selects this unchanged call/
+exception scope; q510 evidence and current clean checkout e5699c06 are verified.
+Detailed procedure/acceptance above applies. Both realms stay alive; ownership
+redesign remains p106. Root executor, no concurrent attempt or publication.
+
+### Concrete call-boundary design (2026-09-30)
+
+Foreign bytecode call/construct instructions route through existing vm_call /
+vm_construct into the callee's realm, retaining the same-realm frame fast path.
+Native paths use a scoped helper that restores callee/new.target on normal and
+error exits. A shared internal transfer helper moves the actual foreign exception
+and throw-site metadata to the caller and clears the foreign pending throw.
+Ordinary/native default intrinsic prototypes are translated for direct foreign
+new.target functions when their prototype is primitive. This preserves the
+planned constructor scope; it adds no Reflect API or new syntax support.
+
+Baseline 8-check probe is retained unchanged. A separate host-realms test adds
+bidirectional/reentrant, closure/this, ordinary/derived construction, explicit
+new.target and default Object/Array/Error prototypes, accessor exceptions,
+generator/async smoke, VM API exceptions/throw-site, native ENOMEM and bounded
+stack-overflow recovery. Both realms remain explicitly alive. Full bound/Proxy
+function semantics and arbitrary unsupported JS feature combinations are not
+claimed as ECMAScript conformance; p100 remains a separate complete Acid3 gate.
+Reference: [ECMAScript GetPrototypeFromConstructor](https://tc39.es/ecma262/multipage/ordinary-and-exotic-objects-behaviours.html#sec-getprototypefromconstructor).
+
+## q511 terminal event (2026-09-30, q511-i01)
+
+**cleared**. Callee realm execution, actual exception/throw-site transfer and
+scoped native callee/new.target are implemented and verified. Saved baseline
+8/8, additional host-realms30/30, object100/100, interp45/45 and DOM23/23 pass
+in plain/ASan, warning-free, no sanitizer issue. Acid2 exact100%; Acid3 remains
+40/100, Uncaught0, all100 results identical to p103. Full changed-source manual
+standards review and style/diff pass; formatter unavailable. Evidence:
+[verification](verification.md), [hashes/results](verification.json),
+[all100 inventory](inventory.json). BUG-126 resolved for its reproduced scope.
+
+This supplies p106's call-boundary prerequisite and p104's execution output;
+child lifetime is still unimplemented. p100 and WS acceptance remain unmet.
+Local result/closure event only; no GitHub publication or remote closure.

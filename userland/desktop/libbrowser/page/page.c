@@ -66,6 +66,7 @@ page_create(
 	page_sheets_init(created);
 	page_fonts_init(created);
 	page_scripts_init(created);
+	page_frames_init(created);
 
 	/* Makes the document and keeps it alive as a root. */
 	created->document = dom_document_create(created->heap);
@@ -132,6 +133,7 @@ page_destroy(
 	page_box_index_release(page);
 	page_sheets_release(page);
 	page_fonts_release(page);
+	page_frames_release(page);
 	page_scripts_release(page);
 	bind_window_destroy(page->window);
 	vm_realm_destroy(page->realm);
@@ -177,11 +179,13 @@ page_load_html(
 
 	/* The page runs the scripts the parser reaches. */
 	html_parser_set_script_hook(parser, page_run_script_element, page);
+	page->parser = parser;
 
 	/* Feeds it all and finishes. */
 	error = html_parser_feed(parser, units.data, units.length);
 	if (error == 0)
 		error = html_parser_finish(parser);
+	page->parser = NULL;
 	html_parser_destroy(parser);
 	wb_units_release(&units);
 	if (error != 0)

@@ -1,0 +1,81 @@
+<!-- awesome-plan project=zedbsd record=ws074-p137 -->
+
+# ws074-p137: native Range live removal repair
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q549 / q549-i01
+Prerequisites p136/c82d68ad verified86/prior85/equal/noerrors/Acid2exact/all48;
+p119 weak removal tokens, p132 checked adoption/root migration actual code read.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation.
+Root sole executor, local unpublished. One finite Phase, bounded60sec commands;
+unknown prerequisite ends uncleared before redesign.
+
+## Exact scope / design / criteria
+
+Add live **removal** boundary repair to native Range. Subscribe one weak C token
+in the actual start endpoint Document; native state retains creator and endpoints,
+registry/token never trace state or nodes. Reuse existing separately allocated
+Document removal registry/refcount cleanup safe in either GC finalization order.
+Native state finalizer unsubscribes exactly its current token, including unpublished
+allocation failures; creation subscribes before wrapper publication. Range setters,
+select and collapse commit both endpoints through a checked helper: prospective
+current Document subscription allocated BEFORE native boundary changes; same-owner
+updates reuse token. Failure preserves endpoints/subscription and roots unwind.
+Actual subscription registry identity queried against a live Document without raw
+Document/realm retention in C tokens. New scoped callback-safe root rebind updates
+only the weak associated node, never list/refcounts; old set_root API remains
+unchanged. This association names the actual start container, not creator/root.
+
+Before unlink: each endpoint inclusively inside removed node becomes (old parent,
+old child index); endpoints in old parent with offset greater than removed child
+index decrement. Other containers/offsets remain unchanged. Pure ancestor/index
+checks, no VM allocation/GC/script/nested DOM/subscription-list mutation during
+callback. Callback updates associated start container so checked adoption migrates
+only tokens whose repaired start still belongs to the adopted subtree. Actual
+parentless removal does nothing. Removing an ancestor, child, repeated siblings,
+Document child/doctype, fragment children, same-Document moves and ordinary
+replace/textContent/innerHTML remove paths must reflect existing native removals.
+Different-Document setters refresh token before commit; adopted detached roots
+follow existing p132 token migration and continue repair in current Document.
+Multiple ranges independent; detach remains live; creator prototype owner stays
+strong separately from current endpoints. Representable native uint32 boundaries
+only as p136; theoretical >uint32 parent index native graphs remain outside scope.
+
+Affected bind/range.c, dom/removal.c/dom.h scoped token query/rebind API, native
+fixtures/production registered sources unchanged otherwise. No new generic DOM
+behavior policy, insertion/CharacterData/split/normalize live repair, Range clone/
+comparison/stringification/contents algorithms, geometry/Selection/StaticRange/
+custom/shadow/fullRange. These known next increments remain required before p100.
+Partial live removal foundation supplies no full live-mutation acceptance.
+
+Verify direct actual removal ownership/order/different roots/offset edge cases,
+multiple ranges/legacy detach/current native fields/ignored expandos, typed setter
+cross-Document token refresh, ordinary checked adoption, current owner and saved
+creator, actual GC during conversion/error/root release (existing native40), sole
+child creator and endpoint lifetimes/final release, existing iterator/adoption
+regressions. New focused removal fixture + prior48 groups plain/ASan, original87/
+newindexed13/prior86 preserved/full100 equal/complete/status0/noerrors/Acid2exact.
+Full changed C manual standard/format/style/diff/checks/buildwarning0/sanitizer0/
+hashes/durable evidence. No fullWPT/fuzz/OS/guest/boot/GPU/push/remote publication.
+Guardrail/fullcoding-style/automation read (no concise); DOM removing-node primary
+algorithms current https://dom.spec.whatwg.org/#concept-node-remove (2026-10-01).
+Graph p119+p132+p136(external)->p137->p100(external), acyclic.
+
+## Introduction / q549 activation (2026-10-01)
+
+Original indexed13 now reaches actual missing live pre-removal endpoint repair.
+The existing Document weak registry supplies the known needed notification and
+adoption migration. Add scoped callback-safe association/query and native Range
+commit/finalizer, while retaining insertion/data/content work for later Queues.
+
+## q549 result (2026-10-01)
+
+[p137](phase.md) cleared in q549, [evidence](verification.md).
+Native weak live removal repair/checked current-owner boundary commits/token root
+association/adoption migration/finalizer/GC verified. Original87/100/newindexed13/
+prior86 preserved/equal/noerrors/Acid2exact/all49 groupsPASS/removal33/boundary80/
+nativeGC49/frame143. Remaining13; next Range clone/comparison/stringification,
+live insertion/data/content algorithms, CSS/loading/SVG. p100/p044/WS incomplete;
+root released/local unpublished/no push.

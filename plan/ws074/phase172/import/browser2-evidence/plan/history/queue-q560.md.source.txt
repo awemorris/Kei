@@ -1,0 +1,112 @@
+<!-- awesome-plan project=zedbsd record=q560 -->
+
+# q560 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q560](history/queue-q560.md), exact archive verified; p147 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q560
+
+Purpose WS074/fg011 actual native Range.deleteContents after p145 notification GC
+and p143 exact deletion. Approval current user2026-09-30 autonomous Acid3/automatic
+Queues +2026-10-01 continuation; exact [p147](ws074/phase147/phase.md) snapshot
+saved before generation. One finite Phase/bounded runners60sec/no cancellation/conflict.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q560-i01 | [ws074-p147](ws074/phase147/phase.md) | cleared | p136/p140/p143/p145/p146 cleared;97db878f88/all64; actual Range delete for Acid3 and extract dependency |
+
+Exact whole p147 native private deleteContents/collapse before native mutation/topmost
+contained nodes/original snapshots/partial Text+Comment/weak live repair/frame teardown/
+actual-owner child-list notices/roots/doctype/checked preflight; Page+native actual GC;
+prior64+2=66 groups plain+ASan original>=88/prior88/equal/noerrors/Acid2exact/full
+changed C. No extraction/surround or new DOM API. Graph p136+p140+p143+p145+p146
+(external)->p147->extract/surround/p100(external), acyclic; unknown dependency ends
+uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Actual Range extract/surround contents; CSS/loading/SVG; final p100/p044.
+Forecast is not authorization.
+
+## q560 outcome (2026-10-01)
+
+[p147](ws074/phase147/phase.md) cleared in q560, [evidence](ws074/phase147/verification.md).
+Actual Range.deleteContents topmost native removal/collapse-before-mutation/partial
+UTF16/doctype/weak repair/iframe teardown/owner child-list notices and actual mid-
+delete GC verified. Original Acid3 88/no lost indexed/equal/noerrors/Acid2exact,
+all66PASS plain+ASan/Page17/native11. Test7 next needs extract; p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p147 -->
+
+# ws074-p147: actual native Range.deleteContents
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q560 / q560-i01
+Prerequisites p136/p140/p143/p145/p146 cleared; base97db878f original88/all64/
+Acid2exact. Root sole executor/no cancellation/conflict. Approval current user2026-09-30
+autonomous Acid3/automatic Queues +2026-10-01 continuation; exact snapshot saved
+BEFORE generation.
+
+## Exact scope / native design / criteria
+
+Implement only Range.deleteContents() on genuine private native Range in existing
+bind/range.c at next stable operation index15, arity0 with existing descriptor flags.
+Follow 2026-09-24 DOM Living Standard https://dom.spec.whatwg.org/#dom-range-deletecontents
+read2026-10-01: collapsed no-op; same Text/Comment interval exact allocation-free
+native delete; otherwise snapshot original endpoints, collect topmost fully contained
+nodes in tree order using checked C storage before any mutation, compute normative
+collapse point (start if inclusive ancestor of end, else parent of first start-side
+branch below shared ancestor and its index+1), commit collapsed start/end BEFORE
+partial CharacterData deletion and ordinary node removals. Apply start suffix deletion,
+then each collected actual node removal with existing weak Range/iterator repair,
+frame teardown and child-list MutationObserver notification in source order, then
+end prefix deletion. Doctype is removed when contained (no clone preflight). Existing
+p143 dom_text_replace deletion supplies exact UTF16/no allocation and live data repair;
+no new public CharacterData methods or string flattening. Select only ordinary native
+links, no visible point property/JS shim; support existing uint32 boundary graphs,
+reject unsupported larger traversed lengths/offsets before mutation. No silent cutoff.
+
+Root genuine state, original endpoint graphs, original tree and each currently detached
+removed node across all native and VM allocations, including observer record and wrapper
+work; use actual parent Document view if present, else caller Window, matching bind_insert.
+Preserve original snapshots even after live collapse/weak repairs. Checked preflight
+allocation errors leave source unchanged; after mutation begins, notification failures
+report partial mutation and keep real collapsed/current state, no transaction promise.
+No host.node_removed callback exists; use dom_remove's existing iframe teardown and
+observer path, no invented host API. No new GC/observer architecture.
+
+Add focused Page probe: descriptor/private brand, collapsed Document, same Text/Comment
+and UTF16, whole sibling/doctype/ancestor/cross-container partials, original indexed9
+delete result, deep >512 ordinary traversal, live cloned/other Range repair, observer
+FIFO and retained detached identities, current adopted/borrowed/saved child XML,
+expandos ignored, source generation not promised. Add direct native fixture with no
+outer receiver frame or stack scanning; actual allocation-triggered collection during
+many removals, every removed identity/record and final native point/graph complete,
+state and detached graph collectible after roots/observer release. Bounded true native
+pressure; no production test switch. New Page/native+prior64=66 groups plain+ASan;
+original pinned Acid3>=88/prior88 preserved/all100 equivalent/complete/no Uncaught/
+crash/runner timeout/Acid2exact. No new indexed pass required (test7 next needs extract).
+Each runner60sec; unknown prerequisite ends uncleared before redesign. Full changed C
+against Guardrail/full coding-style/automation, manual formatting (clang-format absent),
+inspect style output/diff/hashes/build warning0/sanitizer0. Graph p136+p140+p143+p145+
+p146(external)->p147->extract/surround/p100(external), acyclic.
+
+Exclusions: extractContents/surroundContents/new DOM API/CharacterData observer kinds,
+Range arbitrary >UINT32 graphs, observer full spec, explicit host removal callback,
+HTML parser/CSS/SVG/network/VM/GC/fuzz/fullWPT/OS/guest/boot/GPU/HAL/toolchain/push/
+GitHub publication. p100/p044/WS remain incomplete. Affected bind/range.c/new Page/
+native fixtures only.
+
+## Introduction / q560 activation (2026-10-01)
+
+p145 retry verifies actual observer record GC and p143 allocation-free UTF16 deletion;
+these are concrete native mutation prerequisites. One finite actual deleteContents
+Phase follows without changing earlier Phase criteria or acceptance.

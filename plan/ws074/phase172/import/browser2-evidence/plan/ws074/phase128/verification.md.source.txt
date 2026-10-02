@@ -1,0 +1,58 @@
+# p128 / q538 verification — 2026-10-01
+
+Outcome cleared. Actual script checkbox/radio click preactivation, cancellation,
+current-group restoration, recursion guard, independent indeterminate/clone,
+input disabled reflection/effective fieldset suppression, actual child event realm,
+explicit activation and event/path/target roots. Original fixed WPT
+2d66b9b7998bb58c336138c178323ddee857b586 all100: **78/100** both variants,
+new indexed43, all prior77 preserved, equal inventories/complete/status0/
+Uncaught/run_errors/crash/runner timeout0. Acid2 exact100% both. 22 failures remain.
+
+Commands (both plain and asan; ASAN_OPTIONS=detect_stack_use_after_return=0):
+- sh plan/ws074/tests/host-build.sh VARIANT (cc14.2.0, warning/error0)
+- browser --run tests/pages/click-activation-probe.html: 57 PASS, no FAIL/Uncaught
+- host-click: 10/10, actual native listener removes target/prior radio/ancestor,
+  collector with stack_base=NULL retains pending selection/dispatch graph; after
+  return all three cells reclaimed, guard released/target dirty observed.
+- host-frame-lifetime: 93/93, new sole child input .click and child-created handler
+  after manual primary destruction, final retained child releases once.
+- python3 build/ws074-q538-regressions.py VARIANT: all32 groups PASS, full command/
+  results in verification.json. Prior radio73/native12/controls100/GC13/input94/
+  owner56/forms35/collection104/walker70/iterator60 and selected JS/DOM/XML/realm/
+  CSS golden regressions preserved. No sanitizer diagnostic in final runs.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q538-VARIANT; goalFAIL until100 is expected; real reports
+  saved verbatim in verification.json.
+- python3 plan/tools/style-check.py changed C/header paths: 0 findings; manual
+  full C standard review for generated/modified code, manual format (clang-format
+  unavailable), ANSI leading locals/error checks/no calls in conditions/static
+  forwards/paragraphs/root cleanup/ownership/public-static order reviewed. Existing
+  native method table declaration order follows established scoped exception.
+- git diff --check PASS; source hashes and base31d9ed14 in verification.json.
+
+Primary WHATWG HTML input/interaction algorithms read2026-10-01. Bounded Chromium
+153.0.8010.52 reference confirmed dirty checkbox click, untrusted click/trusted
+input/change, canceled checked+indeterminate restoration and selected-radio event
+suppression. Scope description initially said Element.click; actual existing
+entry point is HTMLElement.click, clarified without changing authorized behavior.
+Foreign fixture therefore borrows HTMLElement.prototype.click and uses the actual
+EventTarget listener rather than an unavailable foreign HTMLElement member.
+
+The first new frame fixture incorrectly retained a primary-created JS handler
+while explicitly destroying its manual primary VM realm, triggering ASan UAF in
+that invalid embedding lifetime. Corrected to a child-created w.Function handler,
+the retained graph under test; manual primary realm destruction does not authorize
+invoking JS closures from that destroyed manual realm. Final93/93 both variants.
+No production VM lifetime rule weakened or engine test-mode added.
+
+Known boundaries retained: dispatchEvent/GUI/ancestor activation/label forwarding,
+submit/reset/navigation/validation, PointerEvent/composed/shadow DOM, automatic
+radio/checked attribute/owner/type/connect hooks, advanced input and other recorded
+residuals. Explicit current setters recompute group. No forced calloc-OOM injection;
+root registration unwind/group preallocation and state/error cleanup manually
+reviewed. No full WPT/fuzz/OS/guest/boot/GPU; host semantics only. p100/p044 acceptance
+unchanged. Local unpublished/no push.
+
+Primary references:
+[HTML input](https://html.spec.whatwg.org/multipage/input.html),
+[HTML click](https://html.spec.whatwg.org/multipage/interaction.html#dom-click).

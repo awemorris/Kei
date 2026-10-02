@@ -1,0 +1,27 @@
+# q566 / p152 verification — 2026-10-01
+
+CLEARED. Window retains optional owned HTML parser, traces actual native stacks,
+and destroys C parser storage at release without dereferencing GC DOM records.
+Ownership transfer removes standalone tracer only after owner edge publication;
+NULL-safe owned trace reuses complete existing parser_trace. Existing standalone
+primary/fragment parser contracts preserved. No Document API introduced here.
+
+Native8/8 plain+ASan: actual collection with stack disabled; removed open subtree
+retained only through parser stacks; parser resumes/finishes after GC; destroying
+parser releases hidden cells; saved retired child retains incomplete stream;
+forgotten incomplete managed child collected; standalone parser retains context
+until destruction then context collected. No permanent owner roots/test switch.
+Prior74+native=75 groups pass both. Original pinned92/100/prior92 preserved/full100
+equal/complete/status0/exceptions[]/runerrors[]/Acid2exact100%. Production source
+unchanged after these complete runs; final fixture comment corrections rebuilt both
+and repeated native8. Builds warning0/sanitizer0/diff clean/style output empty.
+Manual full changed C review Guardrail/coding-style1–14/automation; clang-format
+unavailable, cc14.2.0/Python3.13.5. Exact source hashes and reports in JSON.
+Commands: sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q566-regressions.py plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q566-VARIANT; host-document-parser both; style-check changed C.
+
+Only parser ownership prerequisite, no score increase claimed. Next independently
+selected Document streams. No fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregate check/push/GitHub publication. p100/p044/WS incomplete/local unpublished.

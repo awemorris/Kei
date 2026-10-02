@@ -1,0 +1,68 @@
+<!-- awesome-plan project=zedbsd record=ws074-p149 -->
+
+# ws074-p149: actual native Range.surroundContents
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q562 / q562-i01
+Prerequisites p136/p140/p141/p142/p143/p145/p148 cleared; base871e44b0 actual90/
+all68/Acid2exact. Root sole executor/no conflict or cancellation; current user
+2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation supplies
+approval. Exact finite snapshot saved before generation.
+
+## Exact scope / criteria
+
+Add genuine private Range.surroundContents index17/arity1 in existing bind/range.c.
+DOM Living Standard2026-09-24 https://dom.spec.whatwg.org/#dom-range-surroundcontents
+read2026-10-01 lines5169–5183. Private receiver/required typed Node conversion;
+callback-free native endpoint ancestor chains identify any partially contained
+non-Text, including Comment, and throw InvalidState11 BEFORE invalid parent kind
+check. Document/doctype/Fragment parent throws InvalidNodeType24. Same Comment
+interval is not partially contained and CharacterData parent is not eagerly rejected.
+Reuse actual extraction, remove all newParent ordinary children through native
+removal/frame teardown/live repair/actual owner existing child-list mechanism,
+reuse validated Range native insertion (root slots contract0..4), append actual
+Fragment via bind_insert, select actual newParent after append. No visible boundary
+reads or JS shim. Root private state/newParent/source graph/output/current removed
+child and insertion participants through every fallible allocation/hook. Extracted
+fragment root is separate from insertion scratch roots. Checked failure reports
+actual partial mutation, no rollback; original indexed11 requires late Hierarchy3
+in Document after extracting Comment and early refusal for partial Comments.
+
+Page fixture covers descriptors/brand/required typed/error order, same Text and
+Comment, unpaired UTF16, partial non-Text before mutation, whole native identity,
+collapsed Text/child intervals, replacing parent contents and live repair/observer,
+parent already in source, invalid/cyclic and CharacterData late failure, deep640,
+template ordinary/separate graph, borrowed/adopted/saved XML owner/expando shadow.
+Native direct registered method fixture, disabled stack scan/no outer receiver
+frame, actual allocation GC during wide1800-child surround, all moved identities/
+observer records/private final parent interval and release collectibility. Existing
+observer per-child delivery semantics are retained; this Phase does not expand
+MutationObserver to aggregate replace-all/Fragment records or new record kinds.
+
+New Page/native plus prior68=70 groups plain+ASan; original pinned Acid3>=90/prior90
+preserved/full100 inventory equivalent/complete/status0/Uncaught/crash/runnererrors0;
+Acid2 exact100%. Each runner60sec, bounded native pressure. Full changed C against
+Guardrail/full coding-style sections1–14/automation, inspect style output/diff,
+manual formatting (clang-format unavailable), warning0/sanitizer0/source hashes.
+Unknown prerequisite ends uncleared before redesign. Graph p136+p140+p141+p142+
+p143+p145+p148(external)->p149->p100(external), acyclic.
+
+Exclusions full observer aggregation/new public DOM APIs/shadow/custom/PI/Attr/
+>UINT32 graphs/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/
+push/GitHub publication. p100/p044/WS incomplete. Source range.c plus new fixtures.
+
+## Introduction / q562 activation (2026-10-01)
+
+q561 verifies extraction prerequisites at90/100. Complete surround algorithm and
+indexed11 exception behavior are selected as one finite Phase; prerequisite criteria
+unchanged. Local unpublished/root sole executor.
+
+## q562 cleared outcome (2026-10-01)
+
+[p149](phase.md) cleared in q562, [evidence](verification.md).
+Native surround normative error/mutation order/private roots verified at real GC;
+Page24/native16/all70PASS plain+ASan. Original91/100/new11/prior90/equal100/noerrors/
+Acid2exact. Next CSS/media/text-transform, XML loading/SVG; p100/p044/WS incomplete/
+root released/local unpublished/no push.

@@ -153,6 +153,10 @@ vm_define_method(
 	getter = VM_VALUE_UNDEFINED;
 	setter = VM_VALUE_UNDEFINED;
 	found = vm_object_get_own(object, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found && (property.attributes & VM_PROPERTY_ACCESSOR) != 0U) {
 		accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 		getter = accessor->getter;
@@ -214,6 +218,10 @@ vm_get_super(
 
 	/* The property on the prototype's chain. */
 	found = vm_object_find(object, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* A missing descriptor follows the absence path after errors have been excluded. */
 	if (!found)
 		return 0;
 
@@ -426,7 +434,7 @@ vm_private_copy(
 
 	/* The prototype's member. */
 	holder = (struct vm_object *)vm_value_as_cell(source);
-	found = vm_object_get_own(holder, key, &property);
+	found = vm_object_get_own_ordinary(holder, key, &property);
 	if (!found)
 		return EINVAL;
 
@@ -460,7 +468,7 @@ vm_private_in(
 	}
 
 	/* Its own member. */
-	found = vm_object_get_own((struct vm_object *)vm_value_as_cell(object), key, &property);
+	found = vm_object_get_own_ordinary((struct vm_object *)vm_value_as_cell(object), key, &property);
 	*result = VM_VALUE_FALSE;
 	if (found)
 		*result = VM_VALUE_TRUE;
@@ -489,7 +497,7 @@ class_private_find(
 		return 0;
 
 	/* Only the object's own (never its prototypes'). */
-	*found = vm_object_get_own((struct vm_object *)vm_value_as_cell(object), key, property);
+	*found = vm_object_get_own_ordinary((struct vm_object *)vm_value_as_cell(object), key, property);
 
 	/* Succeeded: whether it has it. */
 	return 0;

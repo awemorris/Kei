@@ -1,0 +1,96 @@
+<!-- awesome-plan project=zedbsd record=ws074-p170 -->
+
+# ws074-p170: native SVG text interface and addressable UTF16 character count
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q587 / q587-i01
+Basebc6bee82/q586 p169cleared; actual98/all97plain+ASan/Acid2exact.
+Current user autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation
+2026-10-02 approve this exact finite native feature before source generation.
+Root/browser2 sole executor/writer/localunpublished/no push/cancellation/concurrent.
+Guardrail/full C1–14/automation/current bind interfaces/native wrapper/Document
+creator snapshots/managed lifetimes/live child CSS/DOM/Text+CDATA read.
+
+## Exact finite scope / criteria
+
+Actual canonical SVG namespace and exact local names text/tspan/textPath receive
+native interface prototype hierarchy SVGElement→SVGGraphicsElement→
+SVGTextContentElement→SVGTextPositioningElement→SVGTextElement/SVGTSpanElement;
+SVGTextPathElement inherits SVGTextContentElement. Generic other SVG elements get
+SVGElement, without claiming their still absent specialized full interfaces.
+Branded SVGTextContentElement.getNumberOfChars operates on actual native receiver
+and owning Document/CSS context, not public prototype/properties or hardcodedtext.
+Wrong namespace, case, unrelated native interfaces/forged platform receivers fail
+brand; borrowed actual method on another real text-content subtype works.
+Classify native nodes without allocations; expose actual interface constants
+LENGTHADJUST_UNKNOWN/SPACING/SPACINGANDGLYPHS, illegal constructors as existing
+DOM interface policy. Other text metrics/lengthAdjust/textLength/painting/font/
+glyph APIs remain absent, not stubbed or asserted completeSVG conformance.
+
+Count live native Text and CDATA content in native preorder with actual inherited
+CSS white-space normal/nowrap/pre/pre-wrap/pre-line; support collapse and preserved
+line breaks, trim collapsible flow edges, adjacent-node/nested tspan continuity,
+exclude comments/PI and display:none subtrees/ancestors; visibility:hidden retains
+addressable characters. Count UTF16 code units as SVG2 explicitly requires (a
+supplementary character counts2), not glyphs/codepoints/String.length expando.
+Checked signed-long result overflow; precise actual receiver/owner roots across CSS
+query callbacks/allocation; saved native wrappers retain actual owner/creator
+prototype graph and live data after GC. Inactive or disconnected contexts expose
+no rendered addressable count; no parent Page realm alias or new permanent roots.
+Existing CSS scope/normalization limitations and absent fullSVG shaping/rendering/
+XML-space-to-CSS presentation mapping retained explicitly; XMLspace/newCSS rules
+not added here. No allSVG/white-space implementation conformance claim.
+
+New bind/svg-text.c registered once, selected bind/internal.h/window.c/node.c for
+native interface registry and exact dispatch only. No VM/net/parser/DOM algorithms/
+renderer/width length API/source load/lifecycle changes. New ordinary native
+host-svg-text.c uses production Page loadedHTML/realfonts and genuine SVG child
+native wrappers, Unicode/Text+CDATA/nested flow/white-space/live mutations/CSS
+hidden+display:none/namespace+case/privatebrands/borrowedmethods/GC saved-owner
+release. Actual connected same-origin iframeSVG child also exercised. No modified
+pinned suites/scoring/tests switches/fake truthy API.
+
+Bothfull plain/ASan builds beforetests/warning0/styleempty/manual all changed full
+C1–14/diff/sourcehashes/toolversions/clang-format absent manual. Prior97 +newnative1
+=98groupsPASSboth, original>=99/native77pass/allprior98+72preserved/equal100
+inventory/complete/status0/noUncaught/crash/sanitizer/runnererror/timeout/Acid2exact.
+Original75 width/fullp100 remain separate. Finite one implementation+verification
+cycle; unexpected prerequisite ends uncleared with recoverable evidence before
+redesign. Graphp168/p169(external)->p170->p100(external), SVG75 independent, acyclic.
+No new VM/net/renderer/style algorithm/fullSVG/OS/guest/HAL/.internal/aggregate/
+push/publication. p100/p044/fullWS incomplete until own actual criteria verified.
+
+## Primary standards consulted — 2026-10-02
+
+https://www.w3.org/TR/SVG2/text.html#InterfaceSVGTextContentElement
+SVG2 explicitly defines UTF16 unit indexing/count, native whitespace-normalized
+addressable text and non-rendered subtree behavior. Historical SVG1.1 also read:
+https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTextContentElement
+https://www.w3.org/TR/SVG2/types.html#InterfaceSVGElement
+No copied fulltext or alternate suite; existing native CSS actual ownership is
+reused. Other actual SVGLength/AnimatedLength standards read for later width scope,
+not authorized source generation here.
+
+## Outcome / q587-p170-clear — 2026-10-02
+
+Canonical native SVG text/tspan/textPath now have actual SVG interface inheritance
+and private-branded getNumberOfChars. Live native Text+CDATA traversal counts UTF16
+units after actual inherited CSS whitespace normalization, skips display:none
+subtrees/ancestors and excludes comments/PI; visibility:hidden remains addressable.
+Actual owner CSS and precise receiver/cursor roots preserve child realm/prototype
+ownership through allocation and collection; last release collects the saved child.
+Native42/42both covers actual Unicode, lone surrogate, adjacent/nested flow, native
+CDATA, actual CSS, namespace/case/forgery brands, borrowed methods and saved-owner GC.
+All98groupsPASSboth; original99/100, new77pass/allprior98+72preserved/equal100,
+complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact.
+Only75 SVGRectElement.width remains. SVG painting/glyph metrics/textLength/
+lengthAdjust/XMLspace presentation mapping and full SVG/CSS whitespace are outside
+this partial native text feature; no placeholders or pinned-suite edits.
+Both full builds finished before tests; warning0/styleempty/manual changed full C1–14/
+diffclean; cc14.2.0/Python3.13.5/clang-format absent/manual. Legacy unchanged binding
+file ordering retained; no full-WS p044 conformance claim. Pixel38.44% diagnostic.
+
+[Evidence](verification.md), [artifacts](verification.json), [WS](../ws.md).
+Root released/local unpublished, remote close not performed.

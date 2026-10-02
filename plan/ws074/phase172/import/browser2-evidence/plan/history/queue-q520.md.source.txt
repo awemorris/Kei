@@ -1,0 +1,40 @@
+<!-- awesome-plan project=zedbsd record=queue-q520 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q519](queue-q519.md), exact archive verified.
+
+## q520
+
+Purpose: revalidate retained child CSS foundation after BUG-128 repair.
+Timebox: one finite existing Phase, bounded acceptance rerun/no new implementation.
+Approval: current user2026-09-30 automatic Acid3 Queue instruction and2026-10-01continuation.
+Exact scope: [p109 original criteria/revalidation revision](../ws074/phase109/phase.md),
+unchanged childCSS/owner/media/query/cssFloat/GC scope. p110cleared412fe6e5 supplies
+actual invalid-selector fix; no new CSS grammar/API/property/loading/layout/HAL/toolchain.
+
+| Attempt | Phase | Status | Dependency / reason |
+| --- | --- | --- | --- |
+| q520-i01 | [ws074-p109](../ws074/phase109/phase.md) | cleared | p104/p106/p108/p110cleared,412fe6e5; q518unknown selector prerequisite now fixed |
+
+Criteria: childCSS30/30/frameGC+viewport33/33 (original24plus9)/ownership27/27/
+realms30/30/object100/interp45/DOM23/iframe17/17 plain+ASan, no sanitizer/warnings;
+all100 no former q51747 or q51956 pass regression/44PASS/Uncaught0/no errors,
+Acid2exact; full p109changedsource standards/style/diff/evidence. No new code.
+Graph: clearedp104+p106+p108+p110 → q520/p109 → plannedp100(external). No cycle.
+
+## Upcoming Work Outlook
+
+Indexed lang/empty/HTML/CSS properties, then Traversal/Range/loading/SVG/VM in
+finite Queues to100/100; p101/p098outsidegoal/fullWSconformancep044 remains.
+Localunpublished/nopush.
+
+## q520 terminal outcome (2026-10-01)
+
+p109cleared, q518historicaluncleared preserved. Same finite acceptance revalidated
+after p110repair: childCSS30/30/frame33/33/VM+DOM plain+ASan PASS; all10056/100
+no q517/q519 pass regression/44PASS/Uncaught0/Acid2exact. [Evidence](../ws074/phase109/revalidation-q520.md).
+No code changes, full changed-source rules/style/diff PASS, formatter unavailable,
+OS/guest/boot/GPU not run. Next lang/empty then indexed44 gaps. Localunpublished/nopush.

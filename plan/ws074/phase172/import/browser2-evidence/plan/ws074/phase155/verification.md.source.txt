@@ -1,0 +1,36 @@
+# q569 / p155 verification — 2026-10-01
+
+UNCLEARED: new existing-layout prerequisites discovered during finite verification.
+Transient child layout/actual CSS+viewport bridge and rendered native content image
+getters implemented, no permanent child layout cache/DOM roots. Target Document
+and node rooted before primary layout allocation and parent callbacks; image getter
+roots target and actual owner realm. Both native10/10 actual callback GC stack disabled,
+retirement fallback/child realm+Document+image collectible. Page21/22 pass, but exact
+zero viewport percentage returns content attributes7/8 rather than0/0. All prior79
+regression groups pass; new native passes; new Page fails one named criterion.
+
+gdb on actual default host code confirms layout/replaced.c replaced_length rejects
+CSS_UNIT_PERCENT when containing==0, although zero is a definite size. No existing
+layout source changed in this Queue. Original72 still expects10 but sees0: inline
+img has actual native box with width0/height10, while layout/bounds.c bounds_add
+ignores every rectangle with width<=0 OR height<=0. Page node_box reports absent
+geometry and getter falls back to missing content height0. These verified layout
+prerequisites were outside this finite affected-source design. No criteria relaxed,
+no fake CSS size/shim/fixture score changes. Resume: separately selected finite layout
+zero/empty-box repair, then same p155 acceptance revalidation and CSSOM.
+
+Both original93/100/full100 identical/prior93 preserved/complete/status0/no Uncaught,
+crash, sanitizer errors, runner errors or timeout; Acid2exact100%. 81 groups evaluated,
+80 pass and one Page group has the zero percentage failure. Builds warning0; style
+output empty/manual full affected source against Guardrail/coding-style1–14;
+clang-format unavailable/manual, cc14.2.0/Python3.13.5. JSON holds hashes/full reports.
+Commands sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q569-regressions.py plain|asan (exit1 expected named criterion failure);
+ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+--program build/ws074-host/VARIANT/browser --out build/ws074-acid-q569-VARIANT;
+style-check affected C; git diff --check; bounded host gdb investigation stored build.
+Initial fixtures used indefinite body percentage heights; corrected real CSS
+html/body height100%/margin0. No production workaround for those fixture mistakes.
+
+No fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub
+publication; p100/p044/WS incomplete. Pixel agreement37.026875% diagnostic separately.

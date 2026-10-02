@@ -1,0 +1,45 @@
+<!-- awesome-plan project=zedbsd record=queue-q518 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q517](queue-q517.md), exact archive verified.
+
+## q518
+
+Purpose: child-document computed CSS/selector foundation, WS074 / fg011.
+Timebox: one finite Phase, existing cascade embedding and bounded GC/regressions.
+Approval: current user2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」 and2026-10-01 continuation.
+Exact scope: [p109 saved revision](../ws074/phase109/phase.md); Window-owned child
+CSS context from inline styles/media, dynamic generation/viewport update,
+existing cascade/inheritance/queries/owner routing, cssFloat alias and safe
+C-resource cleanup. Register new binding source; no existing engine API change.
+No new CSS grammar/properties/selectors/CSSStyleSheet API, URL loading/layout/
+painting/Traversal/Range/HAL/toolchain/modules.
+
+| Attempt | Phase | Status | Dependencies / reason |
+| --- | --- | --- | --- |
+| q518-i01 | [ws074-p109](../ws074/phase109/phase.md) | uncleared | p104/p106/p108 cleared462c4ed8; existing CSS engine but missing child host paths block33–43 |
+
+Criteria: focused isolation/cascade/inheritance/media/live DOM/query/owner/float/
+detach/GC/cleanup PASS plain+ASan; frame24/24+17/17/ownership27/27/realm30/30/
+VM+DOM; warning-free/no sanitizer; Acid2 exact/all100 Acid3 no regression from47,
+Uncaught0/no errors; full changed-source standards/style/diff and durable evidence.
+Graph: p104+p106+p108 (external cleared) → q518-i01/p109 → p100 (external planned).
+No cycle; other nodes are context, not implementation authority.
+
+## Upcoming Work Outlook
+
+Assess enabled CSS behavior, then split remaining CSS/Traversal/Range/HTML/
+loading/VM gaps into finite phases toward p100100/100, preserving Acid2 exact.
+p101/p098 outside this goal; p044 full WS conformance remains.
+
+## q518 terminal outcome (2026-10-01)
+
+q518-i01/p109 uncleared: child CSS30/30, GC/viewport33/33 and all existing VM/DOM
+checks PASS plain/ASan, but invalid selector grammar BUG-128 exposes prior44FAIL.
+Acid3 all10055/100 (9 newPASS,1regression), Uncaught0/no errors/Acid2 exact.
+[Evidence](../ws074/phase109/verification.md). Implementation retained; next finite
+selector repair, then p109 revalidation. Full changed C standards/style/diff PASS;
+formatter absent/guest/OS/boot/GPU not run, local unpublished/no push.

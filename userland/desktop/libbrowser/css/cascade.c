@@ -208,6 +208,8 @@ static void cascade_container(struct css_engine *engine, float *width, float *he
 static int cascade_candidate_matches(struct css_engine *engine, struct dom_element *element, const struct css_selector *selector);
 static int cascade_selector_matches(struct css_engine *engine, struct dom_element *element, const struct css_selector *selector, size_t index, struct dom_element *anchor);
 static int cascade_anchored(struct dom_element *element, int combinator, struct dom_element *anchor);
+static int cascade_language(struct dom_element *element, const struct vm_string *range);
+static int cascade_language_matches(const struct vm_string *language, const struct vm_string *range);
 static int cascade_pseudo_class(struct css_engine *engine, struct dom_element *element, const struct css_simple *simple);
 static int cascade_any_matches(struct css_engine *engine, struct dom_element *element, const struct css_simple *simple);
 static int cascade_has(struct css_engine *engine, struct dom_element *element, const struct css_simple *simple);
@@ -651,6 +653,8 @@ cascade_compute(
 		style->border_spacing[1] = parent->border_spacing[1];
 		style->border_collapse = parent->border_collapse;
 		style->white_space = parent->white_space;
+		style->text_transform = parent->text_transform;
+		style->cursor = parent->cursor;
 		style->visibility = parent->visibility;
 		style->list_style = parent->list_style;
 		style->underline = parent->underline;
@@ -853,6 +857,8 @@ css_initial_style(
 	style->line_height.unit = CSS_UNIT_NORMAL;
 	style->text_align = CSS_TEXT_ALIGN_START;
 	style->white_space = CSS_WHITE_SPACE_NORMAL;
+	style->text_transform = CSS_TEXT_TRANSFORM_NONE;
+	style->cursor = CSS_CURSOR_AUTO;
 	style->list_style = CSS_LIST_DISC;
 	style->z_index_auto = 1;
 
@@ -2328,6 +2334,108 @@ cascade_simple_matches(
 	}
 }
 
+/* Finds the nearest declared HTML or namespaced XML language for this element. */
+static int
+cascade_language(
+	struct dom_element *element,
+	const struct vm_string *range)
+{
+	struct dom_element *ancestor;
+	struct dom_attribute *attribute;
+	struct vm_string *language;
+	size_t index;
+	int same;
+	int matches;
+
+	/* Walks the actual element ancestry, stopping at the first declared language. */
+	ancestor = element;
+	while (ancestor != NULL) {
+		/* A namespaced XML language takes precedence over an HTML lang attribute. */
+		language = NULL;
+		for (index = 0; index < ancestor->attribute_count; index++) {
+			attribute = &ancestor->attributes[index];
+			if (attribute->ns != DOM_NS_XML)
+				continue;
+
+			/* Only XML's lang local name defines inherited human language. */
+			same = vm_string_equal_ascii(attribute->name, "lang");
+			if (same) {
+				language = attribute->value;
+				break;
+			}
+		}
+
+		/* HTML elements may declare language in their ordinary lang attribute. */
+		if (language == NULL && ancestor->ns == DOM_NS_HTML)
+			language = dom_attribute_ascii(ancestor, "lang");
+
+		/* An explicit empty language stops inheritance and matches no nonempty range. */
+		if (language != NULL) {
+			matches = cascade_language_matches(language, range);
+			if (!matches)
+				return 0;
+
+			/* The nearest declaration matches without consulting more distant ancestors. */
+			return 1;
+		}
+
+		/* Inherits only when this element has no language declaration of its own. */
+		ancestor = cascade_parent_element(ancestor);
+	}
+
+	/* No document metadata or protocol language is available in this embedding. */
+	return 0;
+}
+
+/* Compares a language with a single range using ASCII folding and a hyphen boundary. */
+static int
+cascade_language_matches(
+	const struct vm_string *language,
+	const struct vm_string *range)
+{
+	size_t index;
+	uint16_t actual;
+	uint16_t expected;
+
+	/* A nonempty range cannot match a shorter or explicitly unknown language. */
+	if (range == NULL || range->length == 0)
+		return 0;
+
+	/* The complete range must fit before inspecting a following boundary. */
+	if (language->length < range->length)
+		return 0;
+
+	/* Language-range comparison folds ASCII only, without allocating VM strings. */
+	for (index = 0; index < range->length; index++) {
+		actual = vm_string_at(language, index);
+		expected = vm_string_at(range, index);
+
+		/* Uppercase ASCII in the declared language has no semantic difference. */
+		if (actual >= 'A' && actual <= 'Z')
+			actual += 'a' - 'A';
+
+		/* Applies the same ASCII folding to the selector's range. */
+		if (expected >= 'A' && expected <= 'Z')
+			expected += 'a' - 'A';
+
+		/* A differing unit prevents both exact and hyphen-prefix matches. */
+		if (actual != expected)
+			return 0;
+	}
+
+	/* Exact language equality needs no suffix separator. */
+	if (language->length == range->length)
+		return 1;
+
+	/* A longer language matches only at a language-subtag separator. */
+	actual = vm_string_at(language, range->length);
+	if (actual != '-')
+		return 0;
+
+	/* Succeeded: the selector names this language or one of its parent ranges. */
+	return 1;
+}
+
 /* Tells whether an element matches a pseudo-class. */
 static int
 cascade_pseudo_class(
@@ -2336,6 +2444,7 @@ cascade_pseudo_class(
 	const struct css_simple *simple)
 {
 	struct dom_node *child;
+	const struct dom_character_data *text;
 	struct vm_string *attribute;
 	struct wb_units value;
 	int kind;
@@ -2352,13 +2461,26 @@ cascade_pseudo_class(
 		return cascade_next_element(element) == NULL && cascade_parent_element(element) != NULL;
 	case CSS_PSEUDO_ONLY_CHILD:
 		return cascade_previous_element(element) == NULL && cascade_next_element(element) == NULL;
+	case CSS_PSEUDO_LANG:
+		/* The nearest declared language controls both this element and its descendants. */
+		matches = cascade_language(element, simple->value);
+		return matches;
 	case CSS_PSEUDO_EMPTY:
+		/* Elements and text containing any data prevent structural emptiness. */
 		for (child = element->node.first_child; child != NULL; child = child->next) {
-			if (child->type == DOM_ELEMENT || child->type == DOM_TEXT)
+			/* Any namespace's element is real structural content. */
+			if (child->type == DOM_ELEMENT)
 				return 0;
+
+			/* Empty text nodes and comments do not contribute content. */
+			if (child->type == DOM_TEXT) {
+				text = (const struct dom_character_data *)child;
+				if (text->data.length != 0)
+					return 0;
+			}
 		}
 
-		/* The empty element. */
+		/* No element or nonempty text child prevents the match. */
 		return 1;
 	case CSS_PSEUDO_LINK:
 		if (element->ns != DOM_NS_HTML || (element->tag != DOM_TAG_A && element->tag != DOM_TAG_AREA))
@@ -3128,12 +3250,28 @@ cascade_apply(
 	value = &declaration->value;
 	property = declaration->property;
 	if (value->kind == CSS_VALUE_INHERIT || value->kind == CSS_VALUE_UNSET) {
-		inherited = property == CSS_PROP_COLOR || property == CSS_PROP_FONT_SIZE || property == CSS_PROP_FONT_WEIGHT ||
-		    property == CSS_PROP_FONT_STYLE || property == CSS_PROP_FONT_FAMILY || property == CSS_PROP_LINE_HEIGHT ||
-		    property == CSS_PROP_TEXT_ALIGN || property == CSS_PROP_TEXT_INDENT || property == CSS_PROP_WHITE_SPACE || property == CSS_PROP_VISIBILITY ||
-		    property == CSS_PROP_DIRECTION || property == CSS_PROP_BORDER_SPACING_X || property == CSS_PROP_BORDER_SPACING_Y ||
+		/* Unset follows inheritance only for properties whose initial cascade inherits. */
+		inherited = 0;
+		if (property == CSS_PROP_COLOR ||
+		    property == CSS_PROP_FONT_SIZE ||
+		    property == CSS_PROP_FONT_WEIGHT ||
+		    property == CSS_PROP_FONT_STYLE ||
+		    property == CSS_PROP_FONT_FAMILY ||
+		    property == CSS_PROP_LINE_HEIGHT ||
+		    property == CSS_PROP_TEXT_ALIGN ||
+		    property == CSS_PROP_TEXT_INDENT ||
+		    property == CSS_PROP_WHITE_SPACE ||
+		    property == CSS_PROP_TEXT_TRANSFORM ||
+		    property == CSS_PROP_CURSOR ||
+		    property == CSS_PROP_VISIBILITY ||
+		    property == CSS_PROP_DIRECTION ||
+		    property == CSS_PROP_BORDER_SPACING_X ||
+		    property == CSS_PROP_BORDER_SPACING_Y ||
 		    property == CSS_PROP_BORDER_COLLAPSE ||
-		    property == CSS_PROP_LIST_STYLE_TYPE;
+		    property == CSS_PROP_LIST_STYLE_TYPE)
+			inherited = 1;
+
+		/* Explicit inheritance and inherited unset take the parent value. */
 		if (value->kind == CSS_VALUE_INHERIT || inherited) {
 			if (parent != NULL)
 				cascade_inherit(style, parent, property);
@@ -3366,6 +3504,13 @@ cascade_apply(
 		}
 
 		/* The place is set. */
+		break;
+	case CSS_PROP_CURSOR:
+		style->cursor = value->keyword;
+		break;
+	case CSS_PROP_TEXT_TRANSFORM:
+		/* Retain the specified keyword without changing the underlying DOM text. */
+		style->text_transform = value->keyword;
 		break;
 	case CSS_PROP_WHITE_SPACE:
 		style->white_space = value->keyword;
@@ -3734,6 +3879,13 @@ cascade_inherit(
 	case CSS_PROP_GRID_ROW_START:
 	case CSS_PROP_GRID_ROW_END:
 		style->grid_row = parent->grid_row;
+		break;
+	case CSS_PROP_CURSOR:
+		style->cursor = parent->cursor;
+		break;
+	case CSS_PROP_TEXT_TRANSFORM:
+		/* Explicit inheritance and initial/unset use the same native computed field. */
+		style->text_transform = parent->text_transform;
 		break;
 	case CSS_PROP_WHITE_SPACE:
 		style->white_space = parent->white_space;

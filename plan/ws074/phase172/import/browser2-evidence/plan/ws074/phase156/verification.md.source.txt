@@ -1,0 +1,32 @@
+# q570 / p156 verification — 2026-10-01
+
+CLEARED. Existing native replaced_length now resolves percentages and offsets at
+nonnegative definite containing dimensions including0; caller still refuses indefinite
+height and negative sentinel remains ordinary attribute fallback. Native rectangle
+walk keeps first actual empty fragment as fallback, discards later empty fragments,
+first positive rectangle replaces fallback, positive unions preserve original edges.
+Native return availability remains0/1. No fake geometry/CSS dimension shortcut.
+
+New native10/10 both: genuine DOM ancestry with independent native fragment inputs,
+zero bases/offsets, indefinite height and negative fallback attributes, no box,
+first empty coordinates/nonzero opposite side, later-empty exclusion, positive
+replacement and unchanged exact positive union. Page15 PASS both: primary and child
+inline width0/height10, opposite axis/bothzero/borders/padding/actual rects, percent
+zero overriding attributes, resize/nonzero/returnzero, displaynone vs actual zero
+box and retirement. Existing p155 Page22 PASS and native10/10 callback GC passed.
+All83 regression groups PASS plain+ASan. Original93/prior93/full100 identical/
+complete/status0/no exceptions/errors/crash/runner timeout/Acid2exact100%. Actual72
+now accepts rendered height10 and reaches known missing styleSheets/CSSOM instead
+of failing geometry. No score gain claim. Pixel agreement37.026875% diagnostic.
+
+Build warning0/sanitizer0/styleoutputempty/full affected C reviewed against
+Guardrail/coding-style1–14/automation/manual formatting clang-format unavailable,
+cc14.2.0/Python3.13.5/diffclean/source hashes fullreportsJSON. Commands
+sh plan/ws074/tests/host-build.sh plain|asan; python3 build/ws074-q570-regressions.py
+plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0 python3
+plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q570-VARIANT; style-check affected C; git diff --check.
+
+p155 earlier uncleared remains historical; next independently authorized same
+acceptance revalidation. CSSOM/loading/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/
+.internal/aggregatecheck/push/GitHubpublication absent. p100/p044/WS incomplete.

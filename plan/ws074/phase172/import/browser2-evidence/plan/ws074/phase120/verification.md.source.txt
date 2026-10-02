@@ -1,0 +1,54 @@
+# q530 / p120 verification — 2026-10-01
+
+Outcome: cleared. Plain/ASan original fixed Acid3 68→71/100 solely indexed1/2/3PASS,
+all100inventory equal/prior68PASS preserved, Uncaught/exceptions/errors0,
+completeTrue/runstatus0; Acid2exact100%. Pixel agreement remains diagnostic,
+p100full100/100 unmet. Durable inventory and source hashes accompany this evidence.
+
+NodeIterator native state uses actual live preorder, root-inclusive forward/reverse
+cursor sides, REJECT and SKIP both descend. Weak rootDocument token repairs permanent
+reference and in-flight candidate before unlink; accepted original candidate may be
+returned detached while committed cursor points into the remaining tree. Callback
+exception clears in-flight state while preserving removal-adjusted reference. Active
+reentry guard preserves outercandidate. Callback-interface invocation shared unchanged
+with TreeWalker. Relevant factory realm/prototype follows receiverDocument snapshot;
+root Document controls notifications. detach branded noop, attributes readonly.
+
+Both variants ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: finalwarning/error0.
+- browser `--run plan/ws074/tests/pages/node-iterator-probe.html`:60/60 root/cursors/
+  preorder/direction/masks/defaults/oncecoercion/REJECT+SKIP/dynamicfilter/ushort/this/
+  exactexceptions/recovery/reentry/brands/readonly/detach/before+afterposition/
+  ancestor/root removal/accepted-detached/reject+remove/throw+remove/moving/infinite
+  regrafting termination/borrowedrealm/XMLsnapshot/removedchild.
+- TreeWalker70/70 preserved, host-traversal9/9: stackscanoffrealGC while iterator
+  candidate position repaired afterunlink retains original argument; accepted Node
+  intact/cursorcorrect. Actual discarded iterator reclaimed while its Document stays
+  globally live; subsequent real DOM mutation cannot reach stale token. Prior foreign
+  current-node ownership tests preserved.
+- host-frame-lifetime58/58: savedchildXMLiterator/filter survivesparentdestruction,
+  nextNode returns childnode viaactual survivingnative method; finalrootdrop cleanup
+  exactlyonce/repeatedGCsafe. host-removal19/19 preserved.
+- XML62/62+GC16/16, namespace38/38+GC12/12, names31/31/iframe17/17/legacy56/56/
+  childCSS30/30/owner27/27/realm30/30/object100/interp45/DOM23/23/JS14/14/
+  selectorsstyle golden byte-identical.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/<variant>/browser --out build/ws074-acid-q530-<variant>`: abovecomplete100entryinventory.
+- `python3 plan/tools/style-check.py` changed C/header/tests no findings and
+  `git diff --check` PASS. Full Cstandard/manualformat review ANSIdecls/publicorder/
+  staticforwards/tableordering/purposeparagraphs/checkedcalls/error+allocation/
+  wrapperpublication/trace/tokenfinalizers/livealgorithms/onceconversion.
+
+Fixture corrections: regrafting expected15callbacks was wrong: sevenaccepted plus
+sevenskipped yields14 actualcallbacks, with exactexpectedtitles unchanged; production
+unchanged. Initial frame-test patch had unmatched context and made no change; corrected
+against actualsource. New test local declaration initially placed in callback instead
+of case corrected beforefinalbuild. First Acid invocation raced browser relinking and
+failed PermissionError before suite execution; finalrun started only after both builds
+completed and all checks rerun. No dependency bypass, goal reduction or bug waiver.
+
+Compilercc14.2.0/Python3.13.5/clang-format unavailable manualformat. Logsbuild/ws074-q530-
+build/style/probe/final/acid-*, fixedWPT revision2d66b9b7998bb58c336138c178323ddee857b586
+unchanged. No fullDOMTraversal/WPT/fuzz, OS/guest/boot/GPU verification. Genericadoption/
+collections/controls/Range/CSS/loading/SVG remain later,29indexedfailures. Local unpublished,
+no push. WS incomplete/p100criteria unchanged; next liveHTMLCollection foundation.

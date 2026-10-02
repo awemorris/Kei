@@ -1,0 +1,117 @@
+<!-- awesome-plan project=zedbsd record=ws074-p157 -->
+
+# ws074-p157: native top-level CSS rule source model
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q573 / q573-i01 (q572 cleared then invalidated, history retained)
+Baseb3469725/q571 finished/actual93/all83PASS both/Acid2exact. Rootonly writer/executor.
+Current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation
+approves finite exact scope saved before code generation. No cancellation/conflict.
+Guardrail/full coding-style1–14/automation/browser design6/actualCSS token/parser/
+engine/basevector read. CSSOM2026-08-31 sheet/rule/list/insert algorithm read2026-10-01.
+
+## Exact scope / design / criteria
+
+Actual72 now needs styleSheets/nativecssRules/insertRule. Existing parser produces
+flattened cascade rules but no structural mutable rule list, so add pure CSS-layer
+source model BEFORE DOM wrappers. Tokenizer tokens gain original UTF16 start/end
+source offsets (after skipped comments, before token consumption), lexer offset
+state/emit only; existing parsing token semantics unchanged. New css/rule-model.c
+and public internal css/css.h opaque model APIs: create/destroy/count, stable id at
+index, lookup immutable source by id incl retired, type/present result, append
+current rules' source text to checked wb_units, insert ordinary qualified style
+rule at explicitindex transactionally and delete at index. Invalid indexERANGE,
+invalid single ruleEINVAL, unsupported at-rule insertionENOTSUP; no mutation onerror.
+IDs uint32monotonic checked overflow; live ordered rule vector and allsource-owned
+entry vector keep removed entries until modeldestroy for future real CSSRule handles.
+No VMroots/callbacks/DOMmutation/wrapper functions introduced. Sources C owned and
+serialized aggregate rebuilt only through ordinary existing css_sheet/parser/cascade.
+Original source spans preserve escaped braces/functions/strings/UTF16/comments.
+Tolerant sheet creation uses token grammar rule boundaries, ignores CDOMarkers/
+whitespace/unsupported unknown at-rules/invalid selectors with existing qualified
+parser validation; preserves recognized media/supports/import/font-face top-level
+source as group, even conditionfalse (no flattened-rule count substitution). Nested
+CSSOM APIs/canonical CSSRule.cssText/at-rule insertion+placement/constructable sheets/
+fullCSSSyntax conformance deliberately later; source units are explicitly source,
+not normative CSSOM serialized cssText. No claims those APIs are implemented yet.
+Use finite nesting128 and <=65536 retained entries to bound native source operations;
+ENOMEM/EOVERFLOW propagate and old model unchanged. New file registered exactly
+once in existing libbrowser Makefile source list, no new build system or dependency.
+Affected css/internal.h,tokenizer.c,css.h,newrule-model.c,libbrowserMakefile,newnative.
+
+Native fixture ordinary realCSS tokenizer/model create/qualifiedselector validation,
+comments/string/escaped braces/groups vs flattened counts/EOF token source bounds,
+ordered insertion beginning/middle/end, invalid/multiple/atRule/index rejection with
+unchanged model, delete/stable retiredsource identity, original input bytes unchanged,
+model source reparse + actual native cascade height10->20->40->20 and noDOMgeneration
+change. Prior83+new1=84 plain+ASanallpass/original>=93/prior93/full100same/complete/
+noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact. Both builds before tests,
+runner60sec; fullaffectedC/manualformatting clang-format unavailable/styleoutput/
+warning0/diff/hashes. Unknown dependency endsuncleared before redesign. Graph
+p155(external)->p157->futureDOMCSSOM->p100(external), acyclic. No DOMCSSOM wrappers/
+Pageintegration/scoregain obligation/loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/
+HAL/toolchain/.internal/aggregatecheck/push/GitHubpublication. p100/p044/WS incomplete.
+
+## Introduction / q572 (2026-10-01)
+
+Native structural CSS sources and immutable handles supply legitimate prerequisites
+for SameObject live rule-list wrappers and rendering integration without rewriting
+DOM Text on CSSOM insertion. Implementation/rendering ownership stays in CSS layer;
+DOM association and rule-list tracing remain separately selected finite Phase.
+
+## q572 cleared outcome (2026-10-01)
+
+[p157](phase.md) cleared in q572, [evidence](verification.md).
+Native structural source model/immutable stable handles/transactional qualified rule
+insert/delete implemented; native33/all84PASS both/actual93/prior93/equal100/noerrors/
+Acid2exact. No DOMwrites or CSSOM shim; ordinary cascade verified10->20->40->20.
+Next native sheet association/live CSSOM wrappers and rendering integration, then
+XMLloading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+## q572 clearance invalidation / design revision (2026-10-01)
+
+Read-only build/ws074-q573-EOF-probe.c copied existing native fixture, no production
+edits. Original valid img{height:10px without finalbrace is accepted; insertion of
+img{height:20px succeeds but actual cascade remains10. Probe34/35, one named failure
+EOF append affectsactualcascade. q572 original evidence/cleared archive retained;
+current clearance invalidated because current source aggregation fails existing
+transactional ordinary-source mutation/reparse commitment on accepted EOF blocks.
+FullCSSSyntax was excluded, but this own accepted ordinary syntax must be sound.
+Reopen same p157 as uncleared before this explicitly approved resumption; no new ID.
+
+## q573 exact finite approval / revised criteria (2026-10-01)
+
+Baseeeafdd57/rootonly/current user automatic Acid3 Queues +continuation approves
+finite samePhase correction/revalidation, snapshot BEFORE source generation. Preserve
+all original p157 obligations and q572 outcome/history. model_source stores immutable
+original units plus separately owned implicit closing-block suffix; model_next records
+remaining curlydepth atEOF and permitted import terminator; model_text appends closure
+suffix before separating a following rule. Original source getter/raw pointers unchanged;
+ordinary insertedsource immutable and retiredsource valid, no DOMtext mutation. Ensure
+EOF recognized import retained and terminated before subsequent rules; invalid
+block-required at-rules remain ignored. Keep128depth/65536entries and no state changes
+onerror. New source metadata owned with each entry and destroyed without VM/DOMreads.
+No independent raw-text CSS lexer, use actual token grammar/offsets; no general
+canonical CSSRule.cssText serializer. EOF component strings/functions/comments and
+fullCSSSyntax remain excluded and explicitly tracked as boundaries before broader
+conformance; this finite fix covers omitted CSS block braces and import semicolons.
+Affected only css/rule-model.c and existingnativefixture. Native retained33 plus EOF
+actual cascadeappend10->20, grouped nestedEOFclosures, importEOFcount/ordinary insert
+source reparse/importcount, originalsourceunchanged. Prior84allPASS both/original>=93/
+prior93/equal100/noerrors/Acid2exact; builds both before tests/runner60sec/full affectedC
+Guardrail/codingstyle1–14/automation/styleoutputempty/manualformatting/versions/hashes.
+Unknown dependencies enduncleared before redesign. No DOMCSSOM/Pageintegration/loading/
+SVG/XML/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/
+GitHubpublication. Future native association/wrappers depend on correctedp157 outputs.
+p100/p044/WS incomplete. No cancellation or human productdecision.
+
+## q573 cleared outcome (2026-10-01)
+
+[p157](phase.md) cleared in q573, [evidence](verification-q573.md).
+SamePhase accepted EOF block/import closure repair revalidated native44/all84PASS
+both/original93/prior93/equal100/noerrors/Acid2exact. Source addresses/IDs/raw units
+preserved; real cascade append effects verified. q572 original archive/evidence plus
+later invalidation retained. Next native association/live wrappers/rendering integration
+then XMLloading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.

@@ -1,0 +1,42 @@
+<!-- awesome-plan project=zedbsd record=q536 -->
+
+# q536 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q535](history/queue-q535.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q536
+
+Purpose WS074/fg011 input reflection and text/password dirty-value semantics.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation, exact [p126 scope](ws074/phase126/phase.md) saved before generation.
+Timebox one finite Phase; no cancellation/conflicting edit/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q536-i01 | [ws074-p126](ws074/phase126/phase.md) | cleared | p125 df81469a verified; indexed53 missing actual input reflection/value |
+
+Wholep126 native name/type/defaultValue/form and selected value modes/dirty text/
+clone, dedicated fixtures/GC/prior27 regressions both variants/prior75 preserved/
+new53/equal/noerrors/Acid2exact/warning0/full C/evidence. Explicit later: cross-mode
+type transitions/radio checkedness/activation/submission/advanced type sanitation/
+selection/files service/NodeList iterables/form own maps/parser magic/table/Range/
+CSS/loading/SVG. Graph p125(external) -> p126 -> future input state/radio(external)
+-> p100(external), acyclic; unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Actual checkedness/radio grouping/value and type state hooks, then activation;
+remaining table/Range/CSS/loading/SVG. Known NodeList/form/parser and advanced input
+residuals retained. p100100/100/p044 unchanged.
+
+## q536 outcome (2026-10-01)
+
+[p126](ws074/phase126/phase.md) cleared, [evidence](ws074/phase126/verification.md).
+Native input reflection/text-password dirty values/clone; input94/GC12/frame83/all
+selected regressionsPASS plain+ASan. Original all10076/100/indexed53newPASS/prior75
+preserved/equal/noerrors/Acid2exact. Remaining24; next checkedness/radio value/group.
+Known type-transition/advanced-input/NodeList/form/parser residuals retained.
+p100100/100/p044 unchanged; root executor released/local unpublished/no push.

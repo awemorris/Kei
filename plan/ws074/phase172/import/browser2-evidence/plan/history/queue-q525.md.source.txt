@@ -1,0 +1,36 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none; finished Queue: q525 (root sole executor)
+Last finished Queue: [q524](history/queue-q524.md), archiveverified.
+
+## q525
+
+Purpose: brandedobjectdata URL64, WS074/fg011. Timebox: onefinitePhase/focusedURLs.
+Approval: currentuser2026-09-30 autonomousAcid3/automaticQueue instruction and
+2026-10-01continuation. Exact[p115scope](ws074/phase115/phase.md): HTMLObjectElement
+registry/dataURL USVreflection, actualdocURL/firstbase, rawparsefailure/branding.
+No URLblankfallback snapshot/navigation/objectloading/otherinterfaces/HAL/toolchain.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q525-i01 | [ws074-p115](ws074/phase115/phase.md) | cleared | p112 reflection/p1146d64a2ec62 inventory, verifiedproductionURLparser;64missingdata |
+
+Criteria: focusedURLs/reflection40/DOM23/frame33/owner27/hostURL plain+ASanPASS,
+all100former62preserved/64PASS/Uncaught0/errors0/completeTrue/runstatus0/Acid2exact,
+warning0/noASan/fullstandard/style/diff/evidence. Graph existingURLparser/reflection
+(external) → p115 → p100(external), no cycle/onlyp115implementationauthorized.
+
+## Upcoming Work Outlook
+
+Blankabout-baseURL snapshot, HTMLcontrols/collections/activation/CSS/media/
+Traversal/Range/loading/SVG in finiteQueuestoward100/100. p101/p098 notauthorized,
+p044fullWSconformanceremains. Localunpublished/nopush.
+
+## Outcome
+
+q525-i01/p115cleared, focused44/44/100URL/reflection/DOM/GC PASS bothvariants,
+all10063/100/64newPASS/no regression/Uncaught0/Acid2exact.
+[Evidence](ws074/phase115/verification.md). Remaining37features/blankbasefoundation.

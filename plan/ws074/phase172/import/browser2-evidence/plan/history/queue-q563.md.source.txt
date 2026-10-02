@@ -1,0 +1,92 @@
+<!-- awesome-plan project=zedbsd record=q563 -->
+
+# q563 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q563](history/queue-q563.md), exact archive verified; p150 uncleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q563
+
+Purpose WS074/fg011 CSS computed text-transform/numeric color media. Current user
+2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation approval;
+exact [p150](ws074/phase150/phase.md) snapshot saved before generation; finite one
+Phase/bounded runners60sec/no cancellation/conflict.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q563-i01 | [ws074-p150](ws074/phase150/phase.md) | uncleared | existing CSS/computed/p111/q562 verified;48bc59e4 actual91/all70; indexed46 |
+
+Exact whole p1504keyword computed cascade/serialization/accessors and existing8/0
+numeric color/monochrome min/max/Boolean/range; no text rendering or media grammar
+expansion. New Page/native+prior70=72/plain+ASan original>=91/prior91/equal100/
+noerrors/Acid2exact/full changed C. Graph CSS+computed+p111(external)->p150->p100
+(external), acyclic. Unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+XML/HTML support document loading; SVG native object interfaces; selected transform
+rendering follow-up; final p100/p044. Forecast not authorization.
+
+## q563 outcome (2026-10-01)
+
+[p150](ws074/phase150/phase.md) uncleared in q563, [evidence](ws074/phase150/verification.md).
+Computed text-transform and numeric color media native29/29 verified; Page36PASS/
+2FAIL and original46 reaches y1. Unknown child viewport dependency [BUG-131](bugs/BUG-131.md)
+ends attempt; finite repair then unchanged retry. Original91/prior91/equal100/
+noerrors/Acid2exact/prior70PASS. Transform rendering pending; p150/p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p150 -->
+
+# ws074-p150: CSS text-transform computed state and numeric color media
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q563 / q563-i01
+Prerequisites existing CSS cascade/computed/child viewport p111 and q562 verified;
+base48bc59e4 actual91/all70/Acid2exact. Root sole executor/no cancellation/conflict.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation. Finite snapshot saved BEFORE generation.
+
+## Exact scope / criteria
+
+CSS2 text-transform none/capitalize/uppercase/lowercase parser and computed state:
+append stable property ID, native enum/field/default none, actual cascade inherited/
+explicit declaration/initial/inherit/unset including important and var via existing
+machinery, CSSStyleDeclaration CSS/camel accessors, resolved computed serializer.
+Only computed state this Phase; Unicode/language-dependent layout/painting transform
+requires separately selected follow-up and is not claimed implemented here.
+CSS Text3 https://drafts.csswg.org/css-text-3/#text-transform-property and MediaQueries4
+https://drafts.csswg.org/mediaqueries-4/#color read2026-10-01. Existing display model
+color8 bits/component/monochrome0 promoted from incorrect discrete-name handling
+to numeric range feature with min/max and existing range comparators; Boolean color
+true/monochrome false, exact integer nonnegative value with no trailing junk. Reuse
+existing all/not/only/OR/AND grammar and native viewport including child0x0; no
+new global media grammar rewrite, display architecture or actual output query.
+
+Affected css/css.h,css/internal.h,css/values.c,css/cascade.c,css/media.c,bind/computed.c;
+new Page and native numeric-media fixture. Page full active original46 case matrix,
+property/default/inline validation/inheritance/initial/unset/important/var/dynamic
+stylesheet/child owner; DOM text unchanged by computed observation. Native independent
+media numeric bounds/equality/min/max/Boolean/range/combinations/invalid direct
+syntax/viewport0. New2+prior70=72 groups plain+ASan; pinned original>=91/prior91
+preserved/full100 equal/complete/status0/no Uncaught/crash/runner errors/Acid2exact.
+Each runner60sec. Unknown prerequisite ends uncleared before redesign. Fullchanged
+C against Guardrail/full coding-style1–14/automation, inspect style output/diff,
+manual formatting clang-format unavailable, builds warning0/sanitizer0/hashes.
+Graph CSS cascade+computed+p111(external)->p150->p100(external), acyclic.
+
+Exclusions transform rendering/full Unicode mapping/fullMQ grammar/allWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub publication.
+p100/p044/WS incomplete. Existing observer and DOM APIs untouched.
+
+## Introduction / q563 activation (2026-10-01)
+
+Original46 first fails missing resolved textTransform, numeric color prefixes also
+absent in actual media registry. Both finite CSS prerequisites selected together;
+render transformation remains explicit follow-up, no wider text compliance claim.

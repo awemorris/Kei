@@ -1,0 +1,34 @@
+<!doctype html><html><head><title>Native Document adoption</title></head><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function el(d,tag,p){var e=d.createElementNS('http://www.w3.org/1999/xhtml',tag);if(p)p.appendChild(e);return e;}
+var x=document.implementation.createDocument('http://www.w3.org/1999/xhtml','root'),a=x.documentElement;
+var t=el(x,'table',a),c=t.createCaption(),s=el(x,'span',c),tx=x.createTextNode('held'),cm=x.createComment('kept');s.appendChild(tx);s.appendChild(cm);
+var b=el(x,'tbody',t),r=el(x,'tr',b),cell=el(x,'td',r),rows=t.rows,bodies=t.tBodies,cells=r.cells;
+var input=el(x,'input',cell);input.value='dirty';input.checked=true;var oldWrapper=c;
+var oldIt=x.createNodeIterator(a,1);oldIt.nextNode();oldIt.nextNode();check(oldIt.referenceNode===t,'old outer cursor before adoption');
+var it=x.createNodeIterator(t,1);it.nextNode();it.nextNode();it.nextNode();check(it.referenceNode===s,'adopted root cursor before move');
+document.body.appendChild(t);
+check(t.ownerDocument===document&&b.ownerDocument===document&&r.ownerDocument===document&&cell.ownerDocument===document,'generic append adopts table subtree');
+check(c.ownerDocument===document&&s.ownerDocument===document&&tx.ownerDocument===document&&cm.ownerDocument===document,'all element/text/comment descendants adopted');
+check(t.caption===oldWrapper&&oldWrapper===c,'native wrapper identity preserved');check(t.rows===rows&&t.tBodies===bodies&&r.cells===cells,'native collection identity preserved');
+check(input.ownerDocument===document&&input.value==='dirty'&&input.checked,'dirty native input state preserved');check(tx.data==='held'&&cm.data==='kept','character data preserved');
+check(oldIt.referenceNode===a&&!oldIt.pointerBeforeReferenceNode&&oldIt.nextNode()===null,'original Document outer iterator repaired before adoption');
+s.remove();check(it.referenceNode===c&&!it.pointerBeforeReferenceNode,'adopted iterator receives new Document removal');check(it.nextNode()===b,'adopted iterator continues after removed subtree');
+var two=x.createNodeIterator(r,1);two.nextNode();two.nextNode();check(two.referenceNode===cell,'iterator factory may differ from actual root owner');
+a.appendChild(t);check(t.ownerDocument===x&&input.ownerDocument===x&&t.rows===rows,'move back adopts current owners with same cache');cell.remove();check(two.referenceNode===r&&two.nextNode()===null,'nested iterator migration on move back');
+var next=el(x,'td',r);it.nextNode();it.nextNode();it.nextNode();document.body.appendChild(t);next.remove();check(two.referenceNode===r&&two.nextNode()===null,'repeated token transfer remains subscribed');
+var frag=x.createDocumentFragment(),fc=el(x,'caption',frag),fs=el(x,'span',fc),fit=x.createNodeIterator(fc,1);fit.nextNode();fit.nextNode();
+t.appendChild(frag);check(frag.ownerDocument===document&&fc.ownerDocument===document&&fs.ownerDocument===document&&frag.childNodes.length===0,'fragment and transferred descendants adopted');fs.remove();check(fit.referenceNode===fc,'fragment descendant iterator follows new Document');
+var form=el(x,'form',a),control=el(x,'input',form),controls=form.elements;control.setAttribute('name','held');document.body.appendChild(form);check(control.form===form&&controls===form.elements&&controls.held===control,'adopted form ordinary association and cached controls');
+var xd=document.implementation.createDocument('http://www.w3.org/1999/xhtml','table'),xt=xd.documentElement;xt.tHead=t.createTHead();xt.tFoot=t.createTFoot();xt.caption=c;
+check(xt.tHead.ownerDocument===xd&&xt.tFoot.ownerDocument===xd&&xt.caption.ownerDocument===xd,'all typed structural setters adopt members');
+var temp=el(x,'template',a);temp.innerHTML='<span><template><b></b></template></span>';var content=temp.content,ts=content.firstChild,nt=ts.firstChild,nc=nt.content;
+document.body.appendChild(temp);check(temp.ownerDocument===document&&content.ownerDocument===document&&ts.ownerDocument===document&&nc.ownerDocument===document&&nc.firstChild.ownerDocument===document,'existing same-Document nested content ownership follows adoption');
+var iframe=document.createElement('iframe');document.body.appendChild(iframe);var cw=iframe.contentWindow,cd=iframe.contentDocument,ct=cd.createElement('table'),cr=cd.createElement('tr');ct.appendChild(cr);var childRows=ct.rows,childIt=cd.createNodeIterator(ct,1);childIt.nextNode();childIt.nextNode();
+document.body.appendChild(ct);iframe.remove();check(ct.ownerDocument===document&&cr.ownerDocument===document&&childRows===ct.rows,'child nodes adopt while original wrappers survive frame removal');cr.remove();check(childIt.referenceNode===ct&&childIt.nextNode()===null,'child iterator removal repair after frame retirement and adoption');
+var newHead=ct.createTHead();check(newHead.ownerDocument===document&&newHead instanceof HTMLTableSectionElement,'adopted child table creates in current primary Document');
+var retiring=document.createElement('iframe');document.body.appendChild(retiring);var rd=retiring.contentDocument,rt=rd.createElement('table'),rc=rd.createElement('caption');rt.caption=rc;var iterator=rd.createNodeIterator(rc,1);iterator.nextNode();var rs=rd.createElement('span');rc.appendChild(rs);iterator.nextNode();
+var foreign=x.createElementNS('urn:foreign','piece');rc.appendChild(foreign);t.caption=rc;retiring.remove();check(rc.ownerDocument===document&&rs.ownerDocument===document&&foreign.namespaceURI==='urn:foreign'&&foreign.ownerDocument===document,'retired child subtree adopts while exact namespaces preserved');rs.remove();check(iterator.referenceNode===rc,'sole adopted child iterator repairs current native state');
+var active=x.createNodeIterator(t,1,{acceptNode:function(n){if(n===b){xd.documentElement.appendChild(t);b.remove();}return NodeFilter.FILTER_ACCEPT;}});active.nextNode();var seen;while((seen=active.nextNode())!==null){if(seen===b)break;}check(t.ownerDocument===xd&&seen===b&&active.referenceNode!==b,'active candidate repaired during filter adoption and removal');
+console.log('Document adoption probe done');
+</script></body></html>

@@ -1,0 +1,41 @@
+{
+  "queue": "q521",
+  "baseline": "f47a5062",
+  "sources": {
+    "userland/desktop/browser/css/parser.c": "8950ab64e598a285f706b82a93829fa8dee3227f16b99b6150eb13614affe86a",
+    "userland/desktop/browser/css/internal.h": "9c59074fa06ffe5a454e6f67c495c917ceaab3fd651721a517c205e69e1aa0cf",
+    "userland/desktop/browser/css/cascade.c": "852dc10a3c871d3b31a476fdce081d71e291d234d3868e03a46c094fde924284",
+    "plan/ws074/tests/pages/language-empty-probe.html": "cdb7dd7d6f7ec4aead8762030223ca9e544b8945cef34e3760f0b15903cca537"
+  },
+  "plain_asan": {
+    "language_empty": "32/32",
+    "grammar": "37/37",
+    "DOM": "23/23",
+    "selectors_golden_style": "identical",
+    "child_css": "30/30",
+    "frame_lifetime": "33/33",
+    "Acid2": "exact100%",
+    "Acid3": "58/100 all100,34/38newPASS,no regression/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "changes": [
+    [
+      34,
+      "fail",
+      "pass"
+    ],
+    [
+      38,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q521-plain/report.json",
+    "build/ws074-acid-q521-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

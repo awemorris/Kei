@@ -1,0 +1,60 @@
+# q556 / p144 verification — 2026-10-01
+
+Base0831aa4a. Pinned original Acid3 plain/ASan88/100/no new or lost indexed passes/
+prior88 preserved/all100 outcomes exactly equal/completeTrue/runstatus0/exceptions[]/
+runerrors[]. Acid2 exact100% both; remaining12 unchanged, p100/p044/WS incomplete.
+All61 regression groups PASS, new Page32/native15, prior59 retained. NoFAIL/Uncaught/
+sanitizer/runtimeerror. Final native fixture includes actual first/last Text partial
+boundaries; full61 regression and Acid runs used final source, no later source changes.
+
+Actual Range.cloneContents registeredindex14/arity0/enumerable native operation. New
+same-current-start-owner Fragment independent of invoking realm/Range creator. Private
+state and source/output/pending graph roots retained through full native clone and owner
+wrapper allocation. Checked iterative interval frames preserve partial shallow shells/
+empty end shells, exact selected Text/Comment UTF16 slices, ordinary deep-contained
+subtrees and established complete template/control state. Shared rooted p142 cloning,
+allocation-free p143 prefix deletion/p141 suffix truncate reused. Source links/data/
+identities/owners/live boundaries unchanged; existing conservative generation changes
+from cloning retained. Doctype preflight rejects actual contained native doctype before
+child cloning. No flattened string shim, visible property dependency, depth cutoff,
+source environment/host callbacks or mutating contents method added.
+
+Page32 covers collapsed Document/Text, exact unpaired sameText, Comment, sibling child
+interval/attributes, original indexed9 cloned h1/em/text and emptyP shells (original
+extract method still pending), ancestor and cross-container endpoints, empty selected
+partialText identity, ordinary/separate template graphs, doctype DOM code3/source
+preservation, deep640 partial shell descent, expando shadows and current/adopted/borrowed/
+saved child XML prototype snapshots. Native15 directly registered operation: stack
+scanning disabled/no outer VM receiver frame/no source or state caller root during
+operation. Real7MiB inert allocation crosses unchanged production collector threshold
+mid-clone; actual collection count increased.6000 native Element+Text pairs with
+first/last partial character boundaries produce partial shells plus5998 deep contained
+siblings; every original buffer/link unchanged, every copied partial/complete unit/link
+survives. Genuine private start/end offsets1 preserved through reconstructed native
+receiver inspection; private cell is production-created, unavailable to JS forgery.
+After callee/post-inspection roots release, source graph and private state collectible;
+only explicit complete wrapped result retains creator, then output and Document reclaim.
+Wrong native brand preserves unpublished result sentinel. No production test switches.
+Shared p142 actual ENOMEM checked; no direct cloneContents allocator fault injection/
+OOM runtime coverage claimed, error/root/vector cleanup manually reviewed.
+
+Commands:
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: production registered source,
+  both awaited before tests/final warning/error0.
+- `python3 build/ws074-q556-regressions.py VARIANT`: all61 PASS/each60sec bound;
+  exact commands/outcomes retained, new Page32/native15.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+  --program build/ws074-host/VARIANT/browser --out build/ws074-acid-q556-VARIANT`:
+  original88/prior88/equal/noerrors/Acid2exact; aggregate Acid3FAIL retained until100.
+- `python3 plan/tools/style-check.py userland/desktop/browser/bind/range.c
+  plan/ws074/tests/host-range-clone-contents.c`: inspected output empty.
+- `git diff --check`: PASS. cc14.2.0/Python3.13.5; clang-format unavailable/manual.
+
+Full changed C manually reviewed against coding-style: ANSI leading locals/type/forward/
+public-before-static order and established binding table exception, purpose paragraphs/
+if+loop+return comments/spacing/compound conditions, checked fallible calls/no calls in
+conditions/initializers, vector pointer lifetime/no recursion/root cleanup/source purity/
+exact UTF16/native containment/current owner and private brand. Source SHA256/reports/
+regressions retained. Host native semantics only; no fullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregate check/push/GitHub publication, >UINT32 graphs excluded.
+Exact approved snapshot preserved; next actual delete/extract/surround contents.

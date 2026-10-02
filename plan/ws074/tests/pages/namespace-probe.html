@@ -1,0 +1,58 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) { console.log((condition ? "PASS " : "FAIL ") + label); }
+var uri = "http://ns.example.com/";
+var element = document.createElementNS(uri, "prefix:localname");
+check("qualified identity", element.tagName === "prefix:localname" && element.nodeName === "prefix:localname");
+check("namespace identity", element.prefix === "prefix" && element.localName === "localname" && element.namespaceURI === uri);
+check("generic namespace wrapper", element instanceof Element && !(element instanceof HTMLElement));
+var upper = document.createElementNS(uri, "P:LocalName");
+check("namespace case preserved", upper.prefix === "P" && upper.localName === "LocalName" && upper.tagName === "P:LocalName");
+check("qualified serialization", upper.outerHTML === "<P:LocalName></P:LocalName>");
+var clone = upper.cloneNode(true);
+check("clone namespace identity", clone.namespaceURI === uri && clone.prefix === "P" && clone.localName === "LocalName" && clone !== upper);
+check("null namespace", document.createElementNS(null, "Local").namespaceURI === null);
+check("empty namespace normalized", document.createElementNS("", "Local").namespaceURI === null);
+check("undefined namespace normalized", document.createElementNS(undefined, "Local").namespaceURI === null);
+check("no prefix", document.createElementNS(uri, "Local").prefix === null);
+check("Unicode names", document.createElementNS(uri, "\u00E9:\uD801\uDC00Local").localName === "\uD801\uDC00Local");
+var html = document.createElementNS("http://www.w3.org/1999/xhtml", "DIV");
+check("known HTML namespace", html instanceof HTMLElement && html.localName === "DIV" && html.namespaceURI === "http://www.w3.org/1999/xhtml");
+check("known SVG namespace", document.createElementNS("http://www.w3.org/2000/svg", "rect").namespaceURI === "http://www.w3.org/2000/svg");
+var invalid = ["<div>", "0div", "di v", "-div", ".div", ":local", "p:", "p:0local", "bad prefix:local", "p:lo\0cal"];
+for (var i = 0; i < invalid.length; i++) {
+  var caught = null;
+  try { document.createElementNS(uri, invalid[i]); } catch (error) { caught = error; }
+  check("invalid qualified name " + i, caught instanceof DOMException && caught.name === "InvalidCharacterError" && caught.code === 5);
+}
+var invalidBindings = [[null, "d:iv"], ["", "d:iv"], [uri, "xml:test"], [uri, "xmlns:test"], [uri, "xmlns"], ["http://www.w3.org/2000/xmlns/", "x:test"]];
+for (var i = 0; i < invalidBindings.length; i++) {
+  var caught = null;
+  try { document.createElementNS(invalidBindings[i][0], invalidBindings[i][1]); } catch (error) { caught = error; }
+  check("invalid namespace binding " + i, caught instanceof DOMException && caught.name === "NamespaceError" && caught.code === 14);
+}
+check("reserved XML binding", document.createElementNS("http://www.w3.org/XML/1998/namespace", "xml:test").prefix === "xml");
+check("reserved XMLNS binding", document.createElementNS("http://www.w3.org/2000/xmlns/", "xmlns:test").prefix === "xmlns");
+check("reserved unprefixed XMLNS", document.createElementNS("http://www.w3.org/2000/xmlns/", "xmlns").prefix === null);
+var conversions = "";
+var made = document.createElementNS({toString: function() { conversions += "n"; return uri; }}, {toString: function() { conversions += "q"; return "p:local"; }});
+check("argument conversion order once", conversions === "nq" && made.namespaceURI === uri);
+var sentinel = {};
+var same = false;
+try { document.createElementNS({toString: function() { throw sentinel; }}, {toString: function() { conversions += "bad"; return "local"; }}); } catch (error) { same = error === sentinel; }
+check("namespace conversion exception", same && conversions === "nq");
+same = false;
+try { document.createElementNS(Symbol(), "local"); } catch (error) { same = error instanceof TypeError; }
+check("namespace symbol rejected", same);
+same = false;
+try { document.createElementNS(null); } catch (error) { same = error instanceof TypeError; }
+check("required arguments", same);
+var frame = document.createElement("iframe"); document.body.appendChild(frame);
+var child = frame.contentWindow;
+var doc = frame.contentDocument;
+check("borrowed child wrapper owner", Document.prototype.createElementNS.call(doc, uri, "p:local") instanceof child.Element);
+same = false;
+try { doc.createElementNS(null, "p:local"); } catch (error) { same = error instanceof child.DOMException && error.code === 14; }
+check("child namespace exception realm", same);
+</script>

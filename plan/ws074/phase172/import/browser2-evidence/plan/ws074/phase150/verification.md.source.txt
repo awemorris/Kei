@@ -1,0 +1,26 @@
+# q563 / p150 verification — 2026-10-01
+
+UNCLEARED. Computed CSS2 text-transform4keywords actual parser/cascade/default/
+inherit/inherit-unset/initial/important/var/dynamic style/accessors/serialization
+implemented. Numeric color8/monochrome0 range features with Boolean/min/max/existing
+comparators and checked integer syntax implemented. Native29/29 both; Page36PASS,
+2FAIL y1/y4: iframe0x0 is still assigned primary viewport, so child min-width/min-
+height evaluate true. Actual original46 now reaches y1 and fails there. Unknown
+prerequisite [BUG-131](../../bugs/BUG-131.md) ends finite attempt before extra source
+scope. Existing p109 explicitly excluded child box-size viewport work; approved
+p150 references to p111 as child viewport were mistaken (p111 is lang/empty). No
+claim that prior phases promised correct child box viewport, no retrospective
+approval expansion. Replan finite child viewport prerequisite then unchanged retry.
+
+Pinned original91/100 both/prior91 preserved/full100 equal/complete/status0/
+exceptions[]/runerrors[]/Acid2 exact100%. Prior70 groups PASS/newnative29PASS; overall
+72 includes failed new Page, not allPASS. Builds warning0/ASan error+leak0/style-check
+full affected C empty/diff clean/full changed portions manually reviewed against
+Guardrail/full coding-style1–14/automation. clang-format unavailable/manual,
+cc14.2.0/Python3.13.5. Exact pre-generation snapshot archived; hashes/reports JSON.
+
+Computed observation leaves DOM text intact. Transform rendering explicitly absent
+and awaits selected follow-up; no Unicode/fullMQ/allWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregate check/push/GitHub publication. No source edit made to
+viewport after dependency discovered. Root released/local unpublished/no push;
+p150/p100/p044/WS incomplete, resume only after needed viewport output verified.

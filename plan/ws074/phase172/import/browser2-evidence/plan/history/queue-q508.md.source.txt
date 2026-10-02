@@ -1,0 +1,79 @@
+<!-- awesome-plan project=zedbsd record=queue-q508 -->
+
+# Queue q508: Acid3 execution and failure inventory
+
+<!-- awesome-plan-current:start -->
+Status: finished (2026-09-30)
+Active Queue: none
+Last finished Queue: [q507](queue-q507.md)
+<!-- awesome-plan-current:end -->
+
+## q508
+
+- Purpose: WS074 Acid3 bounded execution and actionable failure inventory.
+- Timebox: this session, one Phase; stop at p102 acceptance/investigation bounds.
+- Focus: fg010 / WS074. WS103 paused by current user instruction.
+- Approval: current user, 2026-09-30 「では、取り組んでください。」 after
+  the proposed split: completion/diagnosis → document.write/child document →
+  DOM/CSSOM → full acceptance. Exact first item: [ws074-p102](../ws074/phase102/phase.md).
+- Scope: bounded headless task execution, explicit virtual-time budget, honest
+  score/completion/error reports and indexed failure inventory. No unrelated
+  APIs, HAL, toolchain or feature implementations.
+
+| Attempt | Phase | Status | Dependency | Reason |
+| --- | --- | --- | --- | --- |
+| q508-i01 | [ws074-p102](../ws074/phase102/phase.md) | cleared | p099 cleared | Needed to measure all Acid3 cases before feature implementation |
+
+Dependency graph: `p099 (external, cleared) → q508-i01/p102 → p100 (external, planned)`.
+
+## Upcoming Work Outlook
+
+p100 retains full Acid3 acceptance. The p102 inventory selects the next bounded
+feature Phase; document.write and child-document foundations are likely first.
+p101 full CSS2 and p098 ES modules follow p100. No next Queue is active.
+
+## Terminal outcome
+
+q508-i01 / p102 cleared: finite execution and failure inventory are verified.
+Plain/ASan: Acid2 100% exact; original Acid3 completes at 32/100 with one
+pre-existing Uncaught; diagnostic 100 results, 32 pass / 68 fail, zero missing.
+14 runtime checks + 8 diagnostic checks pass in each build. No process crash,
+overall runner timeout or sanitizer finding. Full p100 acceptance remains unmet.
+See [p102](../ws074/phase102/phase.md) and its indexed evidence.
+
+Next candidate is p103 parser-time document.write. No p103 implementation is
+approved by q508. Local records only; GitHub publication and push not performed.
+
+## Approved Phase scope snapshot
+
+## Scope and approval
+
+2026-09-30 current user: 「では、取り組んでください。」 following the explanation
+that p100 needs smaller Phases: completion/diagnosis, document.write and child
+contexts, DOM/CSSOM, then full verification. This first finite item repairs bounded
+headless execution and establishes an honest Acid3 inventory. The whole p100 goal
+remains 100/100 with no Uncaught, crash or timeout; this item does not claim that goal.
+
+## Acceptance and design
+
+- A page making over 100 finite timer/message tasks can finish within the virtual
+  clock budget. A zero-delay loop still has a task bound; exhausted work is reported
+  instead of silently appearing settled.
+- Headless callers can explicitly choose a bounded virtual-time budget; default
+  behavior remains 5000 ms. No test-specific production path.
+- Unmodified pinned Acid3 is run with an explicit budget. Score, completion,
+  exceptions and process status are distinct from pixel agreement. A separate
+  diagnostic copy records all 100 indexed results or explicitly lists missing ones.
+  Test assertions and expected answers are never modified.
+- Acid2 remains exact. Plain/ASan builds, targeted timer/message regressions,
+  runner verification, full review of changed source and whitespace/style pass.
+- Record the missing feature groups and a bounded next Phase; no DOM API, iframe,
+  HAL, toolchain, ES module, or full CSS2 implementation in this item.
+
+## Prerequisites and bounds
+
+p099 cleared, fixed WPT 2d66b9b7998bb58c336138c178323ddee857b586.
+Guardrail, full coding-style.md and design.md apply. Host only; no guest-only
+path changes anticipated. No aggregate make check. Stop after the execution and
+inventory criteria; full Acid3 remains p100. GitHub publication is not requested.
+

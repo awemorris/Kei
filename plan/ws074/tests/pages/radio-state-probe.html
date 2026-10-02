@@ -1,0 +1,75 @@
+<!doctype html><html><head><title>Native checkedness and radio list value</title></head><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function raises(fn,name){try{fn();return false;}catch(e){return e.name===name;}}
+function radio(name,value){var e=document.createElement('input');e.type='radio';if(name!==undefined)e.name=name;if(value!==undefined)e.value=value;return e;}
+var checkedGetter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'checked').get;
+var checkedSetter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'checked').set;
+function current(e){return checkedGetter.call(e);}
+var box=document.createElement('input');box.type='checkbox';
+check(box.checked===false&&!box.hasAttribute('checked'),'new checkbox false without attribute');
+box.setAttribute('checked','false');check(box.checked===true,'clean checked uses attribute presence');
+box.removeAttribute('checked');check(box.checked===false,'clean checked attribute removal');
+box.checked=true;check(box.checked===true&&!box.hasAttribute('checked'),'native checked setter leaves content absent');
+box.setAttribute('checked','');box.checked=false;check(box.checked===false&&box.hasAttribute('checked'),'dirty false distinct from present default');
+box.removeAttribute('checked');box.setAttribute('checked','');check(box.checked===false,'dirty state ignores later default mutations');
+var calls=0;box.checked={valueOf:function(){calls++;return 0;},toString:function(){calls++;return '';}};check(box.checked===true&&calls===0,'boolean setter never invokes user conversion');
+box.checked=0;check(box.checked===false,'zero boolean false');box.checked='';check(box.checked===false,'empty string boolean false');box.checked='false';check(box.checked===true,'nonempty string boolean true');box.checked=null;check(box.checked===false,'null boolean false');box.checked=undefined;check(box.checked===false,'undefined boolean false');box.checked=Symbol();check(box.checked===true,'symbol boolean true');
+var bc=box.cloneNode(false);check(bc.checked===true&&bc.hasAttribute('checked'),'clone copies actual dirty checkedness');bc.checked=false;check(!bc.checked&&box.checked,'cloned checked storage independent');
+var dirtyFalse=box.cloneNode(false);dirtyFalse.checked=false;var df=dirtyFalse.cloneNode(true);check(!df.checked&&df.hasAttribute('checked'),'clone copies dirty false over checked default');
+var f=document.createElement('form');f.id='owner';document.body.appendChild(f);var a=radio('group','a'),b=radio('group','b'),c=radio('other','c');f.appendChild(a);f.appendChild(b);f.appendChild(c);
+check(!a.checked&&!b.checked&&!c.checked,'new radios unselected');
+a.checked=true;check(a.checked&&!b.checked&&!c.checked,'first radio selection');b.checked=true;check(!a.checked&&b.checked&&!c.checked,'second radio unchecks first');c.checked=true;check(!a.checked&&b.checked&&c.checked,'different names independent');a.checked=true;check(a.checked&&!b.checked&&c.checked,'first radio selection leaves other group');
+a.checked=false;check(!a.checked&&!b.checked&&c.checked,'false setter leaves group without selection');
+check(!a.hasAttribute('checked')&&!b.hasAttribute('checked'),'radio setters leave defaults untouched');
+a.setAttribute('disabled','');a.checked=true;check(a.checked&&!b.checked,'disabled radio still groups');b.checked=true;check(!a.checked&&b.checked,'disabled previous member unchecks');
+var checkSame=document.createElement('input');checkSame.type='checkbox';checkSame.name='group';checkSame.checked=true;f.appendChild(checkSame);a.checked=true;check(checkSame.checked&&a.checked&&!b.checked,'checkbox same name not radio group');
+var uppercase=radio('Group','upper');f.appendChild(uppercase);uppercase.checked=true;b.checked=true;check(uppercase.checked&&b.checked&&!a.checked,'radio names exact case');
+var unnamed1=radio(),unnamed2=radio('');f.appendChild(unnamed1);f.appendChild(unnamed2);unnamed1.checked=true;unnamed2.checked=true;check(unnamed1.checked&&unnamed2.checked,'missing and empty names do not group');
+var g=document.createElement('form');g.id='other';document.body.appendChild(g);var ga=radio('group','g');g.appendChild(ga);ga.checked=true;a.checked=true;check(ga.checked&&a.checked&&!b.checked,'same name different actual form owners isolated');
+var external=radio('group','external');external.setAttribute('form','owner');document.body.appendChild(external);external.checked=true;check(external.checked&&!a.checked&&!b.checked&&ga.checked,'explicit outside owner shares actual group');
+b.checked=true;check(b.checked&&!external.checked,'inside setter unchecks external current member');
+external.setAttribute('form','other');external.checked=true;check(external.checked&&!ga.checked&&b.checked,'setter uses changed actual owner');
+external.removeAttribute('form');external.checked=true;check(external.checked&&b.checked,'null owner isolated from form owner');
+var div=document.createElement('div'),x=radio('none','x'),y=radio('none','y');div.appendChild(x);div.appendChild(y);x.checked=true;y.checked=true;check(!x.checked&&y.checked,'same detached tree and null owners share group');
+div.removeChild(y);x.checked=true;check(x.checked&&y.checked,'different detached tree roots independent');div.appendChild(y);y.checked=true;check(!x.checked&&y.checked,'explicit setter sees rejoined detached tree');
+var foreign=document.createElementNS('urn:foreign','input');foreign.setAttribute('type','radio');foreign.setAttribute('name','group');foreign.checked=true;f.appendChild(foreign);a.checked=true;check(foreign.checked&&a.checked&&!b.checked,'foreign input never a radio group member');
+var old=document.createElement('input');old.type='radio';old.name='fresh';old.setAttribute('checked','');f.appendChild(old);var newer=radio('fresh','new');f.appendChild(newer);newer.checked=true;
+check(!old.checked&&old.hasAttribute('checked')&&newer.checked,'group unchecks clean current state without clearing default');
+var oldClone=old.cloneNode(false);check(!oldClone.checked&&oldClone.hasAttribute('checked'),'clone copies initialized clean group-unchecked state');
+var newClone=newer.cloneNode(false);check(newClone.checked&&newer.checked,'cloning checked radio does not uncheck source');newClone.checked=false;check(!newClone.checked&&newer.checked,'checked radio clone independently mutable');
+b.name='changed';b.checked=true;check(a.checked&&b.checked,'setter recomputes group after name change');b.name='group';b.checked=true;check(!a.checked&&b.checked,'setter recomputes restored group');
+b.type='checkbox';b.checked=true;a.checked=true;check(a.checked&&b.checked,'setter current type excludes checkbox');b.type='radio';b.checked=true;check(!a.checked&&b.checked,'setter uses current radio type');
+check(raises(function(){checkedGetter.call({});},'TypeError')&&raises(function(){checkedSetter.call(f,true);},'TypeError'),'checked getter and setter native brands');
+check(raises(function(){checkedSetter.call(Object.create(HTMLInputElement.prototype),true);},'TypeError'),'checked prototype lookalike rejected');
+check(f.querySelectorAll('input[type="radio"][name="group"]:checked').length===1&&f.querySelector('input[type="radio"][name="group"]:checked')===b,'CSS checked uses actual DOM checkedness');
+// Duplicate list is a filter of controls, which may include multiple actual radio groups.
+var lf=document.createElement('form');document.body.appendChild(lf);var r1=radio('actual','one'),r2=radio('pick','two'),outside=radio('actual','outside'),nonradio=document.createElement('input');nonradio.type='checkbox';nonradio.name='pick';nonradio.value='one';r1.id='pick';lf.appendChild(nonradio);lf.appendChild(r1);lf.appendChild(r2);lf.appendChild(outside);var list=lf.elements.pick;
+check(list instanceof RadioNodeList&&list.length===3&&list.value==='','duplicate list no checked radio gives empty');
+nonradio.checked=true;check(list.value==='','checked checkbox ignored by list value');
+r1.checked=true;check(list.value==='one','list first checked actual radio value');r2.checked=true;check(list.value==='one'&&r1.checked&&r2.checked,'different actual groups first current tree member wins');
+lf.insertBefore(r2,r1);check(list.value==='two','saved list value sees current tree order');
+list.value='one';check(r1.checked&&r2.checked&&list.value==='two','list setter does not conflate filtered list with actual group');
+outside.checked=true;check(!r1.checked&&outside.checked&&r2.checked,'outside filtered radio can uncheck list member');
+list.value='one';check(r1.checked&&!outside.checked&&r2.checked,'list setter unchecks actual group member outside filter');
+list.value='missing';check(r1.checked&&r2.checked&&!outside.checked,'missing list value leaves selection intact');
+r2.value='one';list.value='one';check(r2.checked&&r1.checked,'duplicate content values choose first current member group');
+var defaultRadio=radio('pick');lf.appendChild(defaultRadio);list.value='on';check(defaultRadio.checked&&!r2.checked&&r1.checked&&list.value==='one','absent radio value on matches actual group');
+defaultRadio.value='';list.value='';check(defaultRadio.checked&&defaultRadio.hasAttribute('value'),'present empty radio value matches empty');
+r1.checked=false;check(list.value==='','getter returns present empty checked radio value');
+var noMatch=0;list.value={toString:function(){noMatch++;return 'none';}};check(noMatch===1&&defaultRadio.checked,'list DOMString conversion once no match');
+var marker={m:1};try{list.value={toString:function(){throw marker;}};check(false,'list conversion exception');}catch(e){check(e===marker&&defaultRadio.checked,'list conversion exception');}
+check(raises(function(){list.value=Symbol();},'TypeError')&&defaultRadio.checked,'list symbol conversion exception');
+list.value=null;check(defaultRadio.checked,'list null converts string null without clearing selection');
+var vset=Object.getOwnPropertyDescriptor(RadioNodeList.prototype,'value').set,vget=Object.getOwnPropertyDescriptor(RadioNodeList.prototype,'value').get;calls=0;var side={toString:function(){calls++;return 'one';}};
+check(raises(function(){vset.call(lf.elements,side);},'TypeError')&&calls===0,'list brand before DOMString conversion');
+check(raises(function(){vget.call(Object.create(RadioNodeList.prototype));},'TypeError'),'list value prototype lookalike rejected');
+list.value={toString:function(){lf.removeChild(r2);defaultRadio.value='mutated';return 'mutated';}};check(defaultRadio.checked&&list.length===3,'list setter observes conversion-time membership and value mutation');
+// Script overrides cannot change the internal radio selection or content value lookup.
+var spy=0;Object.defineProperty(r1,'value',{get:function(){spy++;return 'fake';},configurable:true});Object.defineProperty(r1,'checked',{get:function(){spy++;return false;},configurable:true});
+checkedSetter.call(r1,true);check(current(r1)&&spy===0&&list.value==='one'&&spy===0,'list getter ignores shadowed input value and checked getters');
+list.value='one';check(current(r1)&&spy===0,'list setter ignores shadowed input properties');delete r1.value;delete r1.checked;
+var xf=document.implementation.createDocument(null,'Root'),xmlForm=xf.createElementNS('http://www.w3.org/1999/xhtml','form');xf.documentElement.appendChild(xmlForm);var xa=xf.createElementNS('http://www.w3.org/1999/xhtml','input'),xb=xf.createElementNS('http://www.w3.org/1999/xhtml','input'),xu=xf.createElementNS('http://www.w3.org/1999/xhtml','INPUT');xa.type='RADIO';xa.name='xml';xb.type='radio';xb.name='xml';xu.setAttribute('type','radio');xu.setAttribute('name','xml');xu.checked=true;xmlForm.appendChild(xa);xmlForm.appendChild(xb);xmlForm.appendChild(xu);xa.checked=true;xb.checked=true;check(!xa.checked&&xb.checked&&xu.checked&&xmlForm.elements.xml.value==='on','XML current radio namespace and exact case');
+var frame=document.createElement('iframe');document.body.appendChild(frame);var w=frame.contentWindow,cd=frame.contentDocument,cf=cd.createElement('form');cd.body.appendChild(cf);cf.innerHTML='<input type=radio name=pair value=child><input type=radio name=pair value=other>';var childList=cf.elements.pair;childList.value='other';check(childList.value==='other'&&childList[1].checked&&!childList[0].checked,'managed child radio list native group');
+var childValue=Object.getOwnPropertyDescriptor(w.RadioNodeList.prototype,'value').get;document.body.removeChild(frame);frame=null;w=null;cd=null;cf=null;childList.value='child';check(childValue.call(childList)==='child'&&childList[0].checked&&!childList[1].checked,'retired child radio value remains native callable');
+console.log('radio state probe done');
+</script></body></html>

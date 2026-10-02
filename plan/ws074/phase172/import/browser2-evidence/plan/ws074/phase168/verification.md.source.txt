@@ -1,0 +1,43 @@
+# q585 / p168 — 2026-10-02
+
+CLEARED. Actual native iframe.src URL reflection, object.contentDocument and
+iframe/object.getSVGDocument use branded native owners. Page-owned nonblocking
+HTTP response copies/tasks, URL/origin/redirect verification, native source epochs,
+removal/adoption/reinsertion/teardown cancellation, owning loaded URL/MIME metadata,
+strict XML projection/error Documents and namespace-gated inline scripts now run
+through actual independent managed child contexts. Initial observed blank stays
+synchronous; loaded source replacement retires former actual realm/global/Document
+pair quietly. Existing lack of stable WindowProxy remains an explicit limitation.
+
+Native46/46both: real loopback headers/redirects/extension vs MIME/HTML stream write/
+child DCL→Window→embedding event order/PI/CDATA/expanded attributes/XML wrong URI/
+case/malformed full-input gating/error offset/current globals; exact load counts,
+stale delayed source cancellation/removal/adoption/reinsertion/opaque origin/
+foreign redirect/Page destruction; actual local URL query+fragment and MIME;
+saved-only native Doc/PI target/non-atom URI retention and lastrelease collection;
+production8MiB threshold crossed inside actual realm install with stack NULL.
+Development GC test caught registering primary C realm as a GC cell; final code
+roots actual parent Document. Local absolute URL forwarding retains fragment.
+Fixture assumptions about absent getAttributeNS/adoptNode APIs corrected to native
+expanded-attribute observation and existing implicit DOM adoption, without adding
+those APIs or weakening actual namespace/lifetime checks.
+
+All97groupsPASSboth (96 actual completed regressions plus focused native group
+reused on identical final source). Original94/100/prior94+72preserved/equal100
+inventory/complete/status0/noUncaught/crash/sanitizer/runnererror/timeout/Acid2exact.
+No score gain claimed. Original69/74/79/80 still fail because headless virtual
+page_settle never polls newly started child network requests between timers;
+normal loader→Page checkpoint native fixture passes. Next finite scheduler
+integration before SVG75/77 and p100 full100. Internal69/80 timeout failures remain
+unmet goal, not runner timeout or nonblocking transfer.
+
+Commands: host-build.sh plain/asan both completed before tests; actual
+run-frame-load-tests.py both; q585-regressions.py both; original
+run-acid-tests.py both; ASAN_OPTIONS=detect_stack_use_after_return=0.
+Style-check empty/full changed C1–14 manual/Guardrail/automation/diffclean/build
+warning0. cc14.2.0/Python3.13.5; clang-format absent/manual. JSON stores exact
+approved snapshot hash, final source hashes/full actual reports/all97 results.
+No VM/net/parser algorithms/SVG length/text/renderer/guest/HAL/toolchain/.internal/
+aggregate/push/publication. XML profile/fullWindowProxy/crossorigin/CSP/external
+script/PI stylesheet/full encoding limitations remain. p100/p044/WS incomplete.
+Root released/local unpublished/no push.

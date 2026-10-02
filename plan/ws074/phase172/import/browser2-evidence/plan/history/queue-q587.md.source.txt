@@ -1,0 +1,119 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-02)
+Finished Queue: q587
+Last finished Queue: [q586](queue-q586.md), exact archive verified; p169 cleared.
+Executor root / browser2 / one finite Phase / local unpublished.
+
+## Exact q587 scope and approval
+
+User autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation2026-10-02
+approve exact native p170 pre-generation snapshot. Actual98/all97both/Acid2exact,
+p168/p169 code and full evidence verified. Native77 remains actual missing SVG text
+API. Root sole executor; no completed/concurrent/canceled attempt.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q587-i01 | [ws074-p170](../ws074/phase170/phase.md) | cleared | p168/p169 cleared; actual native SVG text interface/live UTF16 addressable character count |
+
+Exact bind/svg-text.c/registered native interfaces/exact SVG receiver dispatch/
+existing actual CSS whitespace and display state/native Text+CDATA/live nested flow/
+privatebrands/GC owner graph; new ordinary native host-svg-text.c/realPage/fonts.
+Prior97+native1=98both/original>=99/actual77/prior98+72/equal100/noerrors/Acid2exact.
+No SVG width/othermetrics/painting/shaping/newCSS/VM/net/parser/DOM algorithm/
+load/renderer/OS/HAL/.internal/aggregate/push/publication. Known XMLspace/CSS/SVG
+profile limits retained. Finite implementation+verification cycle; unknownprereq
+endsuncleared. Graphp168/p169(external)->p170->p100(external), SVG75 independent,
+acyclic. p100/p044/fullWS incomplete; no acceptance criterion waiver.
+
+## Upcoming Work Outlook
+
+Actual SVGRectElement.width / SVGAnimatedLength+SVGLength, then actual original100
+and same p100 acceptance. Readiness/finite exact scope recorded before execution.
+
+## q587 outcome
+
+p170cleared/native42/all98both/original99/prior98+72/equal100/noerrors/Acid2exact.
+77pass, remaining75width. [Evidence](../ws074/phase170/verification.md).
+Allselectedterminal/rootreleased/localunpublished/no push. p100/WS incomplete.
+
+## Exact approved p170 snapshot before generation
+
+```markdown
+<!-- awesome-plan project=zedbsd record=ws074-p170 -->
+
+# ws074-p170: native SVG text interface and addressable UTF16 character count
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q587 / q587-i01
+Basebc6bee82/q586 p169cleared; actual98/all97plain+ASan/Acid2exact.
+Current user autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation
+2026-10-02 approve this exact finite native feature before source generation.
+Root/browser2 sole executor/writer/localunpublished/no push/cancellation/concurrent.
+Guardrail/full C1–14/automation/current bind interfaces/native wrapper/Document
+creator snapshots/managed lifetimes/live child CSS/DOM/Text+CDATA read.
+
+## Exact finite scope / criteria
+
+Actual canonical SVG namespace and exact local names text/tspan/textPath receive
+native interface prototype hierarchy SVGElement→SVGGraphicsElement→
+SVGTextContentElement→SVGTextPositioningElement→SVGTextElement/SVGTSpanElement;
+SVGTextPathElement inherits SVGTextContentElement. Generic other SVG elements get
+SVGElement, without claiming their still absent specialized full interfaces.
+Branded SVGTextContentElement.getNumberOfChars operates on actual native receiver
+and owning Document/CSS context, not public prototype/properties or hardcodedtext.
+Wrong namespace, case, unrelated native interfaces/forged platform receivers fail
+brand; borrowed actual method on another real text-content subtype works.
+Classify native nodes without allocations; expose actual interface constants
+LENGTHADJUST_UNKNOWN/SPACING/SPACINGANDGLYPHS, illegal constructors as existing
+DOM interface policy. Other text metrics/lengthAdjust/textLength/painting/font/
+glyph APIs remain absent, not stubbed or asserted completeSVG conformance.
+
+Count live native Text and CDATA content in native preorder with actual inherited
+CSS white-space normal/nowrap/pre/pre-wrap/pre-line; support collapse and preserved
+line breaks, trim collapsible flow edges, adjacent-node/nested tspan continuity,
+exclude comments/PI and display:none subtrees/ancestors; visibility:hidden retains
+addressable characters. Count UTF16 code units as SVG2 explicitly requires (a
+supplementary character counts2), not glyphs/codepoints/String.length expando.
+Checked signed-long result overflow; precise actual receiver/owner roots across CSS
+query callbacks/allocation; saved native wrappers retain actual owner/creator
+prototype graph and live data after GC. Inactive or disconnected contexts expose
+no rendered addressable count; no parent Page realm alias or new permanent roots.
+Existing CSS scope/normalization limitations and absent fullSVG shaping/rendering/
+XML-space-to-CSS presentation mapping retained explicitly; XMLspace/newCSS rules
+not added here. No allSVG/white-space implementation conformance claim.
+
+New bind/svg-text.c registered once, selected bind/internal.h/window.c/node.c for
+native interface registry and exact dispatch only. No VM/net/parser/DOM algorithms/
+renderer/width length API/source load/lifecycle changes. New ordinary native
+host-svg-text.c uses production Page loadedHTML/realfonts and genuine SVG child
+native wrappers, Unicode/Text+CDATA/nested flow/white-space/live mutations/CSS
+hidden+display:none/namespace+case/privatebrands/borrowedmethods/GC saved-owner
+release. Actual connected same-origin iframeSVG child also exercised. No modified
+pinned suites/scoring/tests switches/fake truthy API.
+
+Bothfull plain/ASan builds beforetests/warning0/styleempty/manual all changed full
+C1–14/diff/sourcehashes/toolversions/clang-format absent manual. Prior97 +newnative1
+=98groupsPASSboth, original>=99/native77pass/allprior98+72preserved/equal100
+inventory/complete/status0/noUncaught/crash/sanitizer/runnererror/timeout/Acid2exact.
+Original75 width/fullp100 remain separate. Finite one implementation+verification
+cycle; unexpected prerequisite ends uncleared with recoverable evidence before
+redesign. Graphp168/p169(external)->p170->p100(external), SVG75 independent, acyclic.
+No new VM/net/renderer/style algorithm/fullSVG/OS/guest/HAL/.internal/aggregate/
+push/publication. p100/p044/fullWS incomplete until own actual criteria verified.
+
+## Primary standards consulted — 2026-10-02
+
+https://www.w3.org/TR/SVG2/text.html#InterfaceSVGTextContentElement
+SVG2 explicitly defines UTF16 unit indexing/count, native whitespace-normalized
+addressable text and non-rendered subtree behavior. Historical SVG1.1 also read:
+https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTextContentElement
+https://www.w3.org/TR/SVG2/types.html#InterfaceSVGElement
+No copied fulltext or alternate suite; existing native CSS actual ownership is
+reused. Other actual SVGLength/AnimatedLength standards read for later width scope,
+not authorized source generation here.
+```

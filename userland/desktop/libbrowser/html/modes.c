@@ -573,8 +573,8 @@ tb_mode_text(
 	if (element == NULL)
 		return;
 	is_script = dom_element_is(&element->node, DOM_NS_HTML, DOM_TAG_SCRIPT);
-	if (is_script && p->script_hook != NULL)
-		p->script_hook(p->script_context, element);
+	if (is_script)
+		tb_run_script(p, element);
 }
 
 /*

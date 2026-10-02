@@ -1,0 +1,104 @@
+<!doctype html><html><head><title>NodeIterator contracts</title></head><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function raises(fn,name){try{fn();return false;}catch(e){return e.name===name;}}
+function tree(){var d=document.implementation.createDocument(null,'Root');var r=d.documentElement;var a=d.createElement('A'),x=d.createElement('X'),b=d.createElement('B'),y=d.createElement('Y'),c=d.createElement('C');a.appendChild(x);b.appendChild(y);r.appendChild(a);r.appendChild(b);r.appendChild(c);return {d:d,r:r,a:a,x:x,b:b,y:y,c:c};}
+var t=tree(),i=t.d.createNodeIterator(t.r);
+check(i.root===t.r&&i.referenceNode===t.r&&i.pointerBeforeReferenceNode===true,'initial reference before root');
+check(i.whatToShow===4294967295&&i.filter===null,'default unsigned mask and null filter');
+check(Object.getPrototypeOf(i)===NodeIterator.prototype,'NodeIterator relevant prototype');
+check(i.previousNode()===null&&i.referenceNode===t.r&&i.pointerBeforeReferenceNode,'initial previous exhausted preserves cursor');
+check(i.nextNode()===t.r&&!i.pointerBeforeReferenceNode,'root is included first');
+var forward=[];var n;while((n=i.nextNode())!==null)forward.push(n.tagName);
+check(forward.join(',')==='A,X,B,Y,C','live forward preorder');
+check(i.referenceNode===t.c&&!i.pointerBeforeReferenceNode,'forward exhaustion retains final cursor');
+var backward=[];while((n=i.previousNode())!==null)backward.push(n.tagName);
+check(backward.join(',')==='C,Y,B,X,A,Root','reverse preorder includes current first');
+check(i.referenceNode===t.r&&i.pointerBeforeReferenceNode,'reverse exhaustion retains before root');
+check(i.nextNode()===t.r&&i.previousNode()===t.r&&i.nextNode()===t.r,'direction changes visit same reference');
+check(i.detach()===undefined&&i.nextNode()===t.a,'detach is harmless');
+var calls=0,none=t.d.createNodeIterator(t.r,null,function(){calls++;return 1;});
+check(none.whatToShow===0&&none.nextNode()===null&&calls===0,'zero mask suppresses callbacks');
+check(t.d.createNodeIterator(t.r,undefined).whatToShow===4294967295,'explicit undefined mask defaults');
+var converted=0,mask={valueOf:function(){converted++;return 4294967297;}};
+check(t.d.createNodeIterator(t.r,mask).whatToShow===1&&converted===1,'unsigned mask coerces once');
+check(t.d.createNodeIterator(t.r,-1).whatToShow===4294967295,'negative mask wraps uint32');
+t.a.appendChild(t.d.createTextNode('text'));
+var textOnly=t.d.createNodeIterator(t.r,4,function(node){calls++;return 1;});calls=0;
+check(textOnly.nextNode().nodeType===3&&textOnly.nextNode()===null&&calls===1,'hidden nodes do not call filter');
+var reject=t.d.createNodeIterator(t.r,1,function(node){return node===t.a?2:1;});reject.nextNode();
+check(reject.nextNode()===t.x,'REJECT still descends for NodeIterator');
+var skip=t.d.createNodeIterator(t.r,1,function(node){return node===t.a?3:1;});skip.nextNode();
+check(skip.nextNode()===t.x,'SKIP descends for NodeIterator');
+var object={calls:0,acceptNode:function(node){check(this===object,'object operation this');this.calls++;return 1;}};
+var objectIterator=t.d.createNodeIterator(t.r,1,object);
+check(objectIterator.filter===object&&object.calls===0,'factory preserves filter without invoking it');
+check(objectIterator.nextNode()===t.r&&object.calls===1,'callback object method invoked');
+object.acceptNode=function(){return 3;};
+check(objectIterator.nextNode()===null,'acceptNode dynamically replaced');
+var lookups=0,getter={};Object.defineProperty(getter,'acceptNode',{get:function(){lookups++;return function(){return 65537;};}});
+var dynamic=t.d.createNodeIterator(t.r,1,getter);
+check(lookups===0&&dynamic.nextNode()===t.r&&lookups===1,'dynamic getter and unsigned short conversion');
+var marker={},throwing=true,exceptions=t.d.createNodeIterator(t.r,1,function(){if(throwing)throw marker;return true;});
+var exact=false;try{exceptions.nextNode();}catch(e){exact=e===marker;}
+check(exact&&exceptions.referenceNode===t.r&&exceptions.pointerBeforeReferenceNode,'filter exact exception preserves reference');
+throwing=false;check(exceptions.nextNode()===t.r,'filter recovers after exception');
+throwing=true;var resultObject={valueOf:function(){if(throwing)throw marker;return 1;}},conversion=t.d.createNodeIterator(t.r,1,function(){return resultObject;});
+exact=false;try{conversion.nextNode();}catch(e){exact=e===marker;}
+check(exact&&conversion.pointerBeforeReferenceNode,'return conversion exact exception');
+throwing=false;check(conversion.nextNode()===t.r,'return conversion recovers');
+var nested,guarded=false;nested=t.d.createNodeIterator(t.r,1,function(){guarded=raises(function(){nested.nextNode();},'InvalidStateError');return 1;});
+check(nested.nextNode()===t.r&&guarded,'reentry throws without destroying outer candidate');
+check(nested.nextNode()===t.a,'active flag resets after callback');
+var missing=t.d.createNodeIterator(t.r,1,{});
+check(raises(function(){missing.nextNode();},'TypeError'),'missing acceptNode throws TypeError');
+var noncallable=t.d.createNodeIterator(t.r,1,{acceptNode:7});
+check(raises(function(){noncallable.nextNode();},'TypeError'),'noncallable acceptNode throws TypeError');
+check(raises(function(){t.d.createNodeIterator(t.r,1,7);},'TypeError'),'primitive filter rejected');
+check(raises(function(){document.createNodeIterator();},'TypeError'),'root required');
+check(raises(function(){document.createNodeIterator(Object.create(Node.prototype));},'TypeError'),'fake root brand rejected');
+check(raises(function(){Document.prototype.createNodeIterator.call(t.r,t.r);},'TypeError'),'factory Document brand required');
+check(raises(function(){NodeIterator.prototype.nextNode.call(Object.create(NodeIterator.prototype));},'TypeError'),'navigation native brand required');
+check(raises(function(){NodeIterator.prototype.detach.call({});},'TypeError'),'detach native brand required');
+var rootGetter=Object.getOwnPropertyDescriptor(NodeIterator.prototype,'root').get;
+check(raises(function(){rootGetter.call({});},'TypeError'),'accessor native brand required');
+check(raises(function(){new NodeIterator();},'TypeError'),'illegal iterator constructor');
+i.root=t.a;i.referenceNode=t.a;i.pointerBeforeReferenceNode=false;i.whatToShow=0;i.filter=object;
+check(i.root===t.r&&i.referenceNode===t.a&&!i.pointerBeforeReferenceNode&&i.whatToShow===4294967295&&i.filter===null,'all cursor attributes readonly');
+
+t=tree();i=t.d.createNodeIterator(t.r,1);i.nextNode();i.nextNode();i.nextNode();t.r.removeChild(t.a);
+check(i.referenceNode===t.r&&!i.pointerBeforeReferenceNode,'after reference removal falls back to parent');
+check(i.nextNode()===t.b,'after removal resumes following subtree');
+t=tree();i=t.d.createNodeIterator(t.r,1);i.nextNode();i.nextNode();i.nextNode();i.previousNode();t.r.removeChild(t.a);
+check(i.referenceNode===t.b&&i.pointerBeforeReferenceNode,'before reference removal prefers following outside subtree');
+check(i.nextNode()===t.b,'before replacement position visits following reference');
+t=tree();i=t.d.createNodeIterator(t.r,1);while(i.nextNode()!==null){}i.previousNode();t.r.removeChild(t.c);
+check(i.referenceNode===t.y&&!i.pointerBeforeReferenceNode,'last before removal falls back to preceding deepest descendant');
+check(i.nextNode()===null&&i.previousNode()===t.y,'fallback cursor preserves both directional semantics');
+t=tree();var parent=t.d.createElement('Parent');parent.appendChild(t.r);i=t.d.createNodeIterator(t.r,1);i.nextNode();parent.removeChild(t.r);
+check(i.referenceNode===t.r&&!i.pointerBeforeReferenceNode&&i.nextNode()===t.a,'removing iterator root preserves root tree cursor');
+t=tree();parent=t.d.createElement('Parent');var grand=t.d.createElement('Grand');grand.appendChild(parent);parent.appendChild(t.r);i=t.d.createNodeIterator(t.r,1);i.nextNode();grand.removeChild(parent);
+check(i.referenceNode===t.r&&i.nextNode()===t.a,'removing root ancestor preserves iterator positions');
+t=tree();i=t.d.createNodeIterator(t.r,1,function(node){if(node===t.a)t.r.removeChild(t.a);return 1;});i.nextNode();
+check(i.nextNode()===t.a&&t.a.parentNode===null,'removed original candidate can be accepted and returned');
+check(i.referenceNode===t.r&&!i.pointerBeforeReferenceNode,'accepted removed node commits adjusted candidate');
+check(i.nextNode()===t.b,'accepted detached candidate resumes live root');
+t=tree();i=t.d.createNodeIterator(t.r,1,function(node){if(node===t.a){t.r.removeChild(t.a);return 2;}return 1;});i.nextNode();
+check(i.nextNode()===t.b,'rejected removed candidate resumes corrected position');
+t=tree();i=t.d.createNodeIterator(t.r,1,function(node){if(node===t.a){t.r.removeChild(t.a);throw marker;}return 1;});i.nextNode();exact=false;try{i.nextNode();}catch(e){exact=e===marker;}
+check(exact&&i.referenceNode===t.r&&!i.pointerBeforeReferenceNode,'removal during throwing filter preserves permanent repair');
+check(i.nextNode()===t.b,'throw after removal recovers with corrected state');
+t=tree();i=t.d.createNodeIterator(t.r,1);i.nextNode();i.nextNode();t.r.appendChild(t.a);
+check(i.referenceNode===t.r&&i.nextNode()===t.b,'moving reference subtree repairs before reinsert');
+var d=document.implementation.createDocument(null,'Root'),r=d.documentElement;for(var k=0;k<5;k++){var e=d.createElement('Section');e.setAttribute('title',''+k);r.appendChild(e);}
+calls=0;i=d.createNodeIterator(r,1,function(){if(calls>3&&calls<12)r.appendChild(r.firstChild);calls++;return calls%2===0?1:2;});var titles=[];
+while((n=i.nextNode())!==null)titles.push(n.getAttribute('title'));
+check(titles.join(',')==='0,2,4,1,3,0,2','finite traversal follows repeated callback regrafting');
+check(calls===14,'regrafting ends after seven accepted and seven skipped live nodes');
+
+var f=document.createElement('iframe');document.body.appendChild(f);var w=f.contentWindow,child=f.contentDocument;
+var borrowed=Document.prototype.createNodeIterator.call(child,r,1,null);
+check(Object.getPrototypeOf(borrowed)===w.NodeIterator.prototype&&borrowed.root===r,'borrowed factory prototype follows receiver Document');
+var xml=child.implementation.createDocument(null,'Child'),saved=xml.createNodeIterator(xml.documentElement,1,null);
+check(Object.getPrototypeOf(saved)===w.NodeIterator.prototype,'child XML prototype snapshot used');
+document.body.removeChild(f);check(saved.nextNode()===xml.documentElement&&borrowed.nextNode()===r,'removed child factories remain usable');
+</script></body></html>

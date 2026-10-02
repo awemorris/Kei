@@ -1,0 +1,121 @@
+<!-- awesome-plan project=zedbsd record=q556 -->
+
+# q556 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q556](history/queue-q556.md), exact archive verified; p144 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q556
+
+Purpose WS074/fg011 actual native Range.cloneContents.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p144](ws074/phase144/phase.md) snapshot saved before generation.
+One finite Phase/bounded checks60sec; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q556-i01 | [ws074-p144](ws074/phase144/phase.md) | cleared | p136/p138/p142/p143 cleared,0831aa4a88/all59; supported checked content prerequisites |
+
+Whole exactp144 private actual cloneContents/rooted source/output/pending/iterative
+partial-shell and fully contained native copies/doctype preflight/current owner wrapping/
+Page+actual native GC/prior59/plain+ASan original>=88/prior88/equal/noerrors/Acid2exact/
+full changed C. No mutating contents/new DOMAPI/fullDOM/OS expansion. Graph p136+p138+
+p142+p143(external)->p144->delete/extract/surround/p100(external), acyclic; unknown
+dependency ends uncleared before redesign, no arbitrary expansion/retries.
+
+## Upcoming Work Outlook
+
+Actual Range delete/extract/surround contents; CSS/loading/SVG; final p100/p044.
+Forecast is not authorization.
+
+## q556 outcome (2026-10-01)
+
+[p144](ws074/phase144/phase.md) cleared in q556, [evidence](ws074/phase144/verification.md).
+Actual private Range.cloneContents/iterative partial shells/complete contained subtrees/
+exact UTF16/doctype preflight/current owner prototype/rooted graph+actual mid-clone GC/
+source and independent output lifetime verified. Original88/no new or lost indexed
+passes/prior88/equal/noerrors/Acid2exact/all61PASS/Page32/native15. Remaining12.
+Next actual Range delete/extract/surround contents; p100/p044/WS incomplete/root released/
+local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p144 -->
+
+# ws074-p144: actual native Range.cloneContents
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q556 / q556-i01
+Prerequisites p136/p138/p142/p143 cleared; base0831aa4a original88/all59/Acid2exact.
+Root sole executor/no cancellation/conflict. Approval user2026-09-30 autonomous Acid3/
+automatic Queues +2026-10-01 continuation; exact finite snapshot saved BEFORE generation.
+
+## Exact scope / native design / criteria
+
+Implement only actual Range.cloneContents() in existing bind/range.c, registered at
+next stable operation index14, arity0/enumerable/writable/configurable through existing
+Range registration. Private native Range brand before allocation; required no args.
+New Fragment belongs to current native start.container.Document, independent of Range
+creator or calling realm; actual current owner wrapper/prototype snapshot. Retain genuine
+state/full original endpoint graph, full output Fragment graph, pending unlinked copy
+with explicit temporary slots through allocation and wrapping. No raw realm lifetime.
+
+Clone complete collapsed/empty, same Text/Comment partial UTF16, ordinary child intervals
+and cross-container partial subtrees according to DOM cloneContents. Original points,
+nodes/links/data/owners/wrappers/ranges unchanged; native clone conservative generation
+increments remain existing semantics, no unchanged-generation promise. Shared p142
+cloning supplies exact ordinary/HTML control/template state. For same CharacterData,
+clone real native kind then allocation-free prefix deletion/suffix truncate its buffer
+for exact selected code units. Empty boundary slices still yield actual empty Text or
+Comment where the normative algorithm clones it, not flattening/omitting identities.
+
+Checked iterative frames replace recursive contents descent/depth cutoff. One frame
+has immutable start/end points, actual common ancestor, next direct child and output
+container; vector participants traced via rooted source/output graphs. Before processing
+a frame, preflight all actually contained direct children for doctype Hierarchy3. First/
+last partially contained branch clones shallow native shell then descends equivalent
+subrange interval into that shell; fully contained children deep-clone via p142. Handle
+ancestor endpoints, empty partial shells, comments, template ordinary vs independent
+contents correctly. Private comparisons/native inclusive ancestors/ordinary links only;
+no visible property access. Do not retain a pointer into vector across push. Publish
+wrapped full Fragment only success; all pending frames/temporary roots unwind on DOM/
+allocation/wrapper failure, partial unpublished copies reclaimable. No source mutation
+or source environment/host callbacks, no subrange JS shim/native hidden test branch.
+
+New Page probe: descriptor/brand, initial Document collapsed fragment, zero/nonzero same
+CharacterData/UTF16, sibling/deep640/mixed/template/doctype cases, ancestor and two partial
+shell branches including original indexed9 tree shape (clone identity only), independent
+source/live clone points, public expandos, adopted/current XML/borrowed child/saved realm
+prototype cases. New native fixture directly registered method without outer VM receiver
+frame/stack scanning, genuine private Range/source graph; production allocation pressure
+forces real mid-clone collection, complete cloned graph/state/source survive, temporary
+roots release and only explicit result retains creator; source/Range then result graphs
+collectible. Invalid brand/doctype exceptions retain state and correct DOM code. Existing
+p142 actual ENOMEM/helper cleanup covers shared cloning; no broad allocator fault-injection
+or direct cloneContents OOM runtime claim if not tested.
+
+Verify prior59 +2new groups both plain/ASan (61 total), original pinned Acid3>=88/prior88
+preserved/all100 equivalent/complete/no Uncaught/crash/runner timeout/Acid2exact. No new
+indexed passes required: test7 needs later delete/extract, test9 needs later extraction.
+Bound each runner60sec, unknown prerequisite ends uncleared before redesign. Full changed
+C/manual/style output inspected/diff/buildwarning0/sanitizer0/hashes/durable outcomes.
+Guardrail/full coding-style/automation loaded/no concise standard/manual clang-format
+unavailable. Primary DOM Living24Sept2026 cloneContents5063-5141/native containment4767-
+4784 read2026-10-01 https://dom.spec.whatwg.org/#dom-range-clonecontents . Graph p136+p138+
+p142+p143(external)->p144->delete/extract/surround/p100(external), acyclic.
+
+Exclusions: deleteContents/extractContents/surroundContents/new public CharacterData API,
+Document.cloneNode/Shadow/custom/PI/Attr/script cloning expansion, new native source API,
+shared buffer BUG-129 repair, >UINT32 graphs/fullDOM/WPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/
+push/GitHub publication. No source hooks or arbitrary host-reentrant transaction claim.
+p100/p044/WS acceptance remains incomplete. Affected bind/range.c/new Page/native fixtures.
+
+## Introduction / q556 activation (2026-10-01)
+
+p142/p143 supply verified rooted cloning/allocation-free partial data deletion. Implement
+complete native cloneContents as one finite Phase; mutating contents methods follow
+separate Queues. No earlier cleared criteria or foreign Phase designs changed.

@@ -1,0 +1,62 @@
+{
+  "queue": "q527",
+  "baseline": "5e6457f5",
+  "sources": {
+    "userland/desktop/browser/bind/implementation.c": "12126b92256d208eb3fb3a83d47e52ca6f843acbb3c1e42ff1b4f84a256218f8",
+    "userland/desktop/browser/bind/document.c": "a2f48eaf59e94604ac98587ee49e11be9a8e36b0da77dc269ee7f40f2735de9a",
+    "userland/desktop/browser/bind/node.c": "54e05222ce54f58344ab3b9b3005a6c2412df26b0aad38aead971f9806ab4591",
+    "userland/desktop/browser/bind/element.c": "91cb4b64a3f9eef5d667e97621a45d273b3a078ea2b8c344281e1a0e123f0f23",
+    "userland/desktop/browser/bind/mixin.c": "61052f534ad40ddede4e9a52f85d2c48490576152007c31bd3c19aabe701dfc0",
+    "userland/desktop/browser/bind/internal.h": "de41451def8b4598cb973a0c866898777eed6e9e37a9f9842741d70e6e9dfc8d",
+    "userland/desktop/browser/bind/window.c": "e5e4498253e0f5ce5b87617dacf0a199959d1985a9d0ccea0d08d22c8901cba3",
+    "userland/desktop/browser/dom/dom.h": "b126abaafa8a53025393c27a0a65729d4020f75b143e98b2be339d7833a22830",
+    "userland/desktop/browser/dom/node.c": "976c9b8eea5819a66a2017e789a484e20b503416efa164b4552fb90db9080ad6",
+    "userland/desktop/libbrowser/Makefile": "77159091e49957a1b166791f175ecff804eb2f75c58f1f5e37b8b2935686844b",
+    "plan/ws074/tests/host-frame-lifetime.c": "a8621a20a231d837365652af439d1526b504b4756e558c04c68609ef64961a02",
+    "plan/ws074/tests/host-xml-document.c": "e8f7a292dc0cb219eac34b959c61f81e543fdf63673a966b8ef315286fd13fea",
+    "plan/ws074/tests/pages/xml-document-probe.html": "a08e6da6b386678c15405e40fa455c02a188f9c61ca6124c2ff94f352311f6d3"
+  },
+  "plain_asan": {
+    "XML API": "62/62",
+    "XML GC": "16/16",
+    "frame": "48/48 prior38+10 XML retainednode/implementation owner checks",
+    "namespace": "38/38+GC12/12",
+    "name": "31/31",
+    "iframe": "17/17",
+    "legacy": "56/56",
+    "child CSS": "30/30",
+    "owner": "27/27",
+    "realms": "30/30",
+    "VM": "object100/interp45",
+    "DOM": "23/23",
+    "JS": "14/14",
+    "selectors": "golden byte-identical",
+    "Acid2": "exact100%",
+    "Acid3": "67/100 all100,26+27 newPASS, no regression/Uncaught0/errors0/completeTrue/runstatus0"
+  },
+  "changes": [
+    [
+      26,
+      "fail",
+      "pass"
+    ],
+    [
+      27,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q527-plain/report.json",
+    "build/ws074-acid-q527-asan/report.json"
+  ],
+  "regressions": [
+    "build/ws074-q527-final-plain.json",
+    "build/ws074-q527-final-asan.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

@@ -130,12 +130,13 @@ net_data_parse(
 	if (error == 0)
 		error = wb_buffer_append(&mime, input + start, end - start);
 
-	/* The type's serialization, or the default when it does not parse. */
-	if (error == 0)
+	/* MIME-only fallback cannot erase an earlier body-decoding or allocation failure. */
+	if (error == 0) {
 		error = data_mime(wb_buffer_string(&mime), mime.length, &data->mime);
-	if (error == EINVAL) {
-		wb_buffer_clear(&data->mime);
-		error = wb_buffer_append_string(&data->mime, DATA_DEFAULT_MIME);
+		if (error == EINVAL) {
+			wb_buffer_clear(&data->mime);
+			error = wb_buffer_append_string(&data->mime, DATA_DEFAULT_MIME);
+		}
 	}
 
 	/* The working buffers go. */

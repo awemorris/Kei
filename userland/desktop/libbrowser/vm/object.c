@@ -247,7 +247,7 @@ vm_key_from_ascii(
 
 /*
  * Makes a plain object with a prototype (NULL for none); NULL when out of
- * memory.
+ * memory. Both the input prototype and unpublished cell survive collection.
  */
 struct vm_object *
 vm_object_create(
@@ -255,24 +255,52 @@ vm_object_create(
 	struct vm_object *prototype)
 {
 	struct vm_object *object;
+	struct vm_cell *roots[2];
+	unsigned registered;
+	unsigned index;
 	int error;
 
-	/* The cell. */
-	object = vm_heap_alloc(heap, &vm_object_type, sizeof(*object));
-	if (object == NULL)
+	/* The prototype remains available even if allocating the new cell collects. */
+	roots[0] = NULL;
+	if (prototype != NULL)
+		roots[0] = &prototype->cell;
+	roots[1] = NULL;
+	registered = 0;
+	error = 0;
+	for (index = 0; index < 2U; index++) {
+		error = vm_heap_add_root(heap, &roots[index]);
+		if (error != 0)
+			break;
+		registered++;
+	}
+
+	/* Protect the newborn before shape initialization can allocate a cold root shape. */
+	object = NULL;
+	if (error == 0) {
+		object = vm_heap_alloc(heap, &vm_object_type, sizeof(*object));
+		if (object != NULL) {
+			roots[1] = &object->cell;
+			error = vm_object_init(heap, object, prototype);
+		}
+	}
+
+	/* No factory-owned roots survive a failed or complete construction. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(heap, &roots[registered]);
+	}
+
+	/* Allocation or shape failure leaves no published object. */
+	if (object == NULL || error != 0)
 		return NULL;
 
-	/* No properties yet. */
-	error = vm_object_init(heap, object, prototype);
-	if (error != 0)
-		return NULL;
-
-	/* Succeeded: the object. */
+	/* Succeeded: the caller receives the complete object. */
 	return object;
 }
 
 /*
  * Makes an empty array with a prototype; NULL when out of memory.
+ * Its unpublished cell survives the fallible length-property construction.
  */
 struct vm_object *
 vm_array_create(
@@ -280,30 +308,65 @@ vm_array_create(
 	struct vm_object *prototype)
 {
 	struct vm_object *array;
+	struct vm_cell *roots[2];
 	vm_value key;
+	unsigned registered;
+	unsigned index;
 	int error;
 
-	/* The cell, an object whose length follows its elements. */
-	array = vm_heap_alloc(heap, &vm_array_type, sizeof(*array));
-	if (array == NULL)
+	/* An incoming prototype can be the only caller-visible graph edge. */
+	roots[0] = NULL;
+	if (prototype != NULL)
+		roots[0] = &prototype->cell;
+	roots[1] = NULL;
+	registered = 0;
+	error = 0;
+	for (index = 0; index < 2U; index++) {
+		error = vm_heap_add_root(heap, &roots[index]);
+		if (error != 0)
+			break;
+		registered++;
+	}
+
+	/* The newborn Array is retained through shape, key and named-length allocation. */
+	array = NULL;
+	if (error == 0) {
+		do {
+			array = vm_heap_alloc(heap, &vm_array_type, sizeof(*array));
+			if (array == NULL)
+				break;
+			roots[1] = &array->cell;
+
+			/* A cold root shape may itself require a collector allocation. */
+			error = vm_object_init(heap, array, prototype);
+			if (error != 0)
+				break;
+			array->flags |= VM_OBJECT_ARRAY;
+			array->kind = VM_KIND_ARRAY;
+
+			/* Heap-owned atoms keep the key, while this root keeps the Array. */
+			key = vm_key_from_ascii(heap, "length");
+			if (key == VM_VALUE_EMPTY) {
+				error = ENOMEM;
+				break;
+			}
+
+			/* Store the zero length only after the key has a heap-owned atom. */
+			error = object_store_named(heap, array, key, vm_value_int32(0), VM_PROPERTY_WRITABLE);
+		} while (0);
+	}
+
+	/* Even a partially initialized Array becomes reclaimable after failure. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(heap, &roots[registered]);
+	}
+
+	/* Report the allocation or length-property failure through the existing NULL convention. */
+	if (array == NULL || error != 0)
 		return NULL;
 
-	/* No properties yet. */
-	error = vm_object_init(heap, array, prototype);
-	if (error != 0)
-		return NULL;
-	array->flags |= VM_OBJECT_ARRAY;
-	array->kind = VM_KIND_ARRAY;
-
-	/* Its length, the first named property: writable, neither enumerable nor configurable. */
-	key = vm_key_from_ascii(heap, "length");
-	if (key == VM_VALUE_EMPTY)
-		return NULL;
-	error = object_store_named(heap, array, key, vm_value_int32(0), VM_PROPERTY_WRITABLE);
-	if (error != 0)
-		return NULL;
-
-	/* Succeeded: the array. */
+	/* Succeeded: callers receive an initialized Array with zero length. */
 	return array;
 }
 
@@ -327,6 +390,7 @@ vm_object_init(
 	/* The object's layout and prototype; the cell came zeroed, so there are no slots or elements. */
 	object->shape = root;
 	object->prototype = prototype;
+	object->native_operations = NULL;
 
 	/* Succeeded: the object is ready for properties. */
 	return 0;
@@ -377,10 +441,37 @@ vm_accessor_create(
 }
 
 /*
- * Finds an object's own property of a key; zero when it has none.
+ * Finds an own native or stored property, preserving fallible lookup outcomes.
  */
 int
 vm_object_get_own(
+	struct vm_object *object,
+	vm_value key,
+	struct vm_property *property)
+{
+	int found;
+
+	/* Native policy may expose a virtual value without creating a stored property. */
+	if (object->native_operations != NULL && object->native_operations->get_own != NULL) {
+		found = object->native_operations->get_own(object, key, property);
+		if (found != 0)
+			return found;
+	}
+
+	/* Missing virtual properties continue into the ordinary own storage. */
+	found = vm_object_get_own_ordinary(object, key, property);
+	if (found == 0)
+		return 0;
+
+	/* Succeeded: the own stored property is available. */
+	return found;
+}
+
+/*
+ * Finds an object's own property of a key; zero when it has none.
+ */
+int
+vm_object_get_own_ordinary(
 	struct vm_object *object,
 	vm_value key,
 	struct vm_property *property)
@@ -429,6 +520,8 @@ vm_object_find(
 	/* Each object of the chain, from the object itself. */
 	while (object != NULL) {
 		found = vm_object_get_own(object, key, property);
+		if (found < 0)
+			return found;
 		if (found)
 			return 1;
 
@@ -441,8 +534,9 @@ vm_object_find(
 }
 
 /*
- * Defines (or redefines) an own property with a value and attributes; for
- * an accessor property the value is its vm_accessor's cell.
+ * Defines a stored ordinary property with a value and attributes.
+ * Native script policy is dispatched before this storage primitive; an accessor
+ * property stores its vm_accessor cell.
  */
 int
 vm_object_define(
@@ -455,37 +549,62 @@ vm_object_define(
 	uint32_t index;
 	uint32_t slot;
 	uint32_t old_attributes;
-	int32_t length;
+	double number;
+	uint32_t length;
 	int is_index;
 	int is_length;
-	int is_int32;
+	int is_number;
 	int dense;
 	int named;
 	int error;
 
-	/* An array's length is set through its own rules (a length that is not an int32 is not taken yet). */
+	/* Script access has already normalized length; the C boundary accepts any valid uint32 number. */
 	is_length = object_is_length(heap, object, key);
 	if (is_length) {
-		is_int32 = vm_value_is_int32(value);
-		if (!is_int32)
+		/* Requires a numeric value rather than silently applying user coercion in the VM heap layer. */
+		is_number = vm_value_is_number(value);
+		if (!is_number)
 			return EINVAL;
-		length = vm_value_as_int32(value);
-		if (length < 0)
+
+		/* Positive range checks reject NaN as well as infinities before the C unsigned cast. */
+		number = vm_value_as_number(value);
+		if (!(number >= 0.0 && number <= 4294967295.0))
 			return EINVAL;
-		error = vm_array_set_length(heap, object, (uint32_t)length);
+
+		/* Only exact integer metadata is a valid array length. */
+		length = (uint32_t)number;
+		if ((double)length != number)
+			return EINVAL;
+
+		/* Locates the existing length slot before updating its value and descriptor attributes. */
+		named = vm_shape_find(object->shape, key, &slot, &old_attributes);
+		if (!named)
+			return EINVAL;
+
+		/* Updates metadata and deletes existing supported indices after a contraction. */
+		error = vm_array_set_length(heap, object, length);
 		if (error != 0)
 			return error;
+
+		/* Descriptor writability must survive even when length is outside signed int32. */
+		if (old_attributes != attributes) {
+			error = object_reshape(heap, object, VM_VALUE_EMPTY, key, attributes);
+			if (error != 0)
+				return error;
+		}
+
+		/* Succeeded: the array's length value and requested attributes agree. */
 		return 0;
 	}
 
-	/* An index with the default attributes goes into the elements, unless a slot has it or it is far past them. */
+	/* Dense storage follows actual capacity, never a possibly huge logical length. */
 	is_index = vm_value_is_array_index(key, &index);
 	named = vm_shape_find(object->shape, key, &slot, &old_attributes);
 	dense = 0;
 	if (is_index &&
 	    !named &&
 	    attributes == VM_PROPERTY_DEFAULT &&
-	    index <= object->length + OBJECT_SPARSE_GAP)
+	    (uint64_t)index <= (uint64_t)object->element_capacity + OBJECT_SPARSE_GAP)
 		dense = 1;
 	if (dense) {
 		/* A new property of an object that takes none is refused. */
@@ -563,6 +682,8 @@ vm_object_get(
 
 	/* The property, wherever on the chain. */
 	found = vm_object_find(object, key, &property);
+	if (found < 0)
+		return -found;
 	if (!found) {
 		*value = VM_VALUE_UNDEFINED;
 		return 0;
@@ -588,12 +709,31 @@ vm_object_set(
 	int *done)
 {
 	struct vm_property property;
+	struct vm_descriptor descriptor;
 	int found;
 	int error;
+	int handled;
 
 	/* Nothing is written until the rules allow it. */
 	*done = 0;
+	if (object->native_operations != NULL && object->native_operations->define != NULL) {
+		/* Native assignment may reject unsupported virtual keys before ordinary storage is created. */
+		memset(&descriptor, 0, sizeof(descriptor));
+		descriptor.has = VM_HAS_VALUE | VM_HAS_WRITABLE | VM_HAS_ENUMERABLE | VM_HAS_CONFIGURABLE;
+		descriptor.value = value;
+		descriptor.attributes = VM_PROPERTY_DEFAULT;
+		handled = 0;
+		error = object->native_operations->define(NULL, object, key, &descriptor, &handled, done);
+		if (error != 0)
+			return error;
+		if (handled)
+			return 0;
+	}
+
+	/* Stored and virtual descriptors still apply ordinary readonly and accessor restrictions. */
 	found = vm_object_find(object, key, &property);
+	if (found < 0)
+		return -found;
 
 	/* An accessor's setter is called by the caller; a non-writable property refuses. */
 	if (found && (property.attributes & VM_PROPERTY_ACCESSOR) != 0U)
@@ -639,6 +779,17 @@ vm_object_delete(
 	int is_index;
 	int named;
 	int error;
+	int handled;
+
+	/* Native deletion policy may refuse a live virtual property or handle its removal. */
+	if (object->native_operations != NULL && object->native_operations->delete != NULL) {
+		handled = 0;
+		error = object->native_operations->delete(heap, object, key, &handled, deleted);
+		if (error != 0)
+			return error;
+		if (handled)
+			return 0;
+	}
 
 	/* A missing property is deleted already. */
 	*deleted = 1;
@@ -740,23 +891,43 @@ vm_object_own_keys(
 	uint32_t count;
 	uint32_t index;
 	uint32_t first;
+	size_t beginning;
+	size_t read;
+	size_t write;
+	size_t prior;
+	int duplicate;
 	vm_value key;
 	int pass;
 	int is_index;
 	int is_symbol;
 	int error;
 
-	UNUSED_PARAMETER(heap);
+	/* Native keys form a policy-ordered prefix before ordinary own storage keys. */
+	beginning = keys->count;
+	if (object->native_operations != NULL && object->native_operations->own_keys != NULL) {
+		error = object->native_operations->own_keys(heap, object, keys);
+		if (error != 0)
+			return error;
+	}
 
 	/* The shape's keys in the order they were added. */
 	count = vm_shape_count(object->shape);
-	named_keys = calloc(count + 1U, sizeof(*named_keys));
-	slots = calloc(count + 1U, sizeof(*slots));
-	attributes = calloc(count + 1U, sizeof(*attributes));
-	if (named_keys == NULL || slots == NULL || attributes == NULL) {
+	named_keys = calloc((size_t)count + 1U, sizeof(*named_keys));
+	if (named_keys == NULL)
+		return ENOMEM;
+
+	/* Slot metadata is allocated independently so a failure releases only completed owners. */
+	slots = calloc((size_t)count + 1U, sizeof(*slots));
+	if (slots == NULL) {
+		free(named_keys);
+		return ENOMEM;
+	}
+
+	/* Attribute metadata completes the temporary shape enumeration before it is read. */
+	attributes = calloc((size_t)count + 1U, sizeof(*attributes));
+	if (attributes == NULL) {
 		free(named_keys);
 		free(slots);
-		free(attributes);
 		return ENOMEM;
 	}
 
@@ -815,7 +986,64 @@ vm_object_own_keys(
 	if (error != 0)
 		return error;
 
+	/* Ordinary objects keep their existing enumeration cost and ordering. */
+	if (object->native_operations != NULL && object->native_operations->own_keys != NULL) {
+		/* Native and ordinary names may overlap; retain the first occurrence of each key. */
+		write = beginning;
+		for (read = beginning; read < keys->count; read++) {
+			key = ((vm_value *)keys->items)[read];
+
+			/* A preceding occurrence wins over duplicate native or stored property keys. */
+			duplicate = 0;
+			for (prior = beginning; prior < write; prior++) {
+				if (((vm_value *)keys->items)[prior] == key) {
+					duplicate = 1;
+					break;
+				}
+			}
+
+			/* Only unique keys advance the compacted prefix and ordinary tail. */
+			if (!duplicate) {
+				((vm_value *)keys->items)[write] = key;
+				write++;
+			}
+		}
+
+		/* The caller sees the compacted sequence, leaving any earlier append prefix intact. */
+		keys->count = write;
+	}
+
 	/* Succeeded: the keys are listed. */
+	return 0;
+}
+
+/*
+ * Prevents extensions only when native policy permits the state transition.
+ */
+int
+vm_object_prevent_extensions(
+	struct vm_object *object,
+	int *done)
+{
+	int allowed;
+	int error;
+
+	/* Refusal leaves flags and every descriptor unchanged. */
+	*done = 0;
+	allowed = 1;
+	if (object->native_operations != NULL && object->native_operations->prevent_extensions != NULL) {
+		error = object->native_operations->prevent_extensions(object, &allowed);
+		if (error != 0)
+			return error;
+		if (!allowed)
+			return 0;
+	}
+
+	/* Ordinary objects retain their established nonextensible flag semantics. */
+	object->flags |= VM_OBJECT_NOT_EXTENSIBLE;
+	*done = 1;
+
+	/* Succeeded: this object refuses every subsequent new own property. */
 	return 0;
 }
 

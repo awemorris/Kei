@@ -1,0 +1,43 @@
+# q575 / p159 public native inline sheet/list/count core — 2026-10-01
+
+CLEARED. Genuine HTMLStyleElement/StyleSheet/CSSStyleSheet/StyleSheetList/CSSRuleList
+interfaces expose actual p158 source identity. Document cached traced SameObject
+query reads current connected exact HTMLstyle tree order; no template/foreign/child
+Document traversal. Actual inline sheet wrappers cache on native source, ownerNode
+actual current associated element or null retired; href null; source-owned SameObject
+rulecount view reads actual savedmodel, preserving false topLevelgroup count.
+Native platformkind/operations/privatecelltype/kind establish brand independently
+of prototype/expandos. Factories use checked actualDoc/source then initializedprivate
+state roots through prototype/VMobject allocation; relevantDocument snapshot/Window
+prototypes, no rawrealmownership/permanentroots. Source and Doc trace wrappercaches.
+Indexed native query configurable/enumerable/readonly properties, current keys before
+expandos, canonicalindex setter/define refused, supporteddeletefalse/missingtrue,
+extension prevention refused; reentrant WebIDLindex conversion observes actual newDOM.
+
+Page22/22 and native12/12 both. Page: native identities/move/sameText/oldsheet+oldrules,
+falsemedia asone, currenttreeorder/exclusions/descriptors/keys/expandos/refusals/brands/
+prototypechanges/illegalconstructors/reentrantitem/childrealm/parserreplacement/
+retirement/XMLsnapshot/exactlocalcase. Native genuine Cmodelinsert changes savedJS
+rulecount1->2 and real imageheight10->20 with unchangedDOMText; sameTextresetcurrent
+height10 whileoldsavedcount2. Conservative stack disabled and iframe/JSedges removed:
+saved sheetwrapper alone retains retiredmodel/owner; direct ruleview factory triggers
+real8MBthresholdGC after callerroot dropped; returnedruleview alone retains actual
+model/Document/realm/readablecount; lastrootrelease collects allfour ASanquiet.
+All87groupsPASSboth/original93/prior93/equalfull100inventory/complete/status0/
+noexceptions/crashes/sanitizer/runnererrors/timeouts/Acid2exact100%. Actual72 now
+reaches separately excluded insertRule; no fabricatedCSSRule/scoregain claimed.
+Pixel37.026875% diagnostic separately. Initial source-registration and bind_wrap
+argument compile errors fixed; final both builds finish before any tests.
+Buildwarning0/styleoutputempty/diffclean/manualfullaffectedC Guardrail/coding-style
+1–14/automation, clang-format absent/manual, cc14.2.0/Python3.13.5; JSONhashes/reports/87.
+sh plan/ws074/tests/host-build.sh plain|asan; python3 build/ws074-q575-regressions.py
+plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0 python3
+plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q575-VARIANT; style-check affectedC; git diff --check.
+
+Partial bounded core: ruleobjects/index/item/iterable/nativeJSinsert/delete follow
+separate finite phases; constructors currentlyillegal; onlyownerNode/href metadata.
+External/link/import wrappers/MIME/type/CSP/stylesets/disabled/media setters/styleload/
+constructed/adoptedShadow/replace/canonicalCSStext/fullCSSSyntax/loading/XML/SVG/
+fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHub
+publication excluded. p100/p044/WS incomplete; no completeCSSOM conformance claim.

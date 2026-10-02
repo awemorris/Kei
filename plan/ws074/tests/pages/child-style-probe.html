@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<style>body { color: rgb(99, 88, 77); } .sample { z-index: 777; }</style>
+<body><script>
+function check(label, condition) { console.log((condition ? 'PASS ' : 'FAIL ') + label); }
+var frame = document.createElement('iframe'); document.body.appendChild(frame);
+var w = frame.contentWindow, d = frame.contentDocument;
+var style = d.createElement('style');
+style.textContent = 'body { color: rgb(12, 34, 56); font-size: 19px; } .sample { position: relative; z-index: 7; float: left; } .sample.hot { z-index: 9 !important; }';
+d.head.appendChild(style);
+var box = d.createElement('div'); box.className = 'sample'; d.body.appendChild(box);
+var computed = w.getComputedStyle(box);
+check('child stylesheet cascade', computed.zIndex === '7');
+check('ancestor color inheritance', computed.color === 'rgb(12, 34, 56)');
+check('ancestor font inheritance', computed.fontSize === '19px');
+check('child author sheet isolation', computed.zIndex !== '777');
+check('parent sheet preserved', getComputedStyle(document.body).color === 'rgb(99, 88, 77)');
+check('computed float alias', computed.cssFloat === 'left' && computed.getPropertyValue('float') === 'left');
+check('child document query', d.querySelector('.sample') === box);
+check('child matches and closest', box.matches('.sample') && box.closest('body') === d.body);
+check('child querySelectorAll', d.querySelectorAll('.sample').length === 1);
+check('borrowed query owner', Document.prototype.querySelector.call(d, '.sample') === box);
+check('borrowed matches owner', Element.prototype.matches.call(box, '.sample'));
+check('borrowed computed owner', getComputedStyle(box).zIndex === '7');
+box.style.zIndex = '11';
+check('live inline mutation', computed.zIndex === '11');
+box.className = 'sample hot';
+check('important author wins', computed.zIndex === '9');
+check('class query mutation', d.querySelector('.hot') === box);
+box.style.setProperty('z-index', '13', 'important');
+check('important inline wins', computed.zIndex === '13');
+box.style.removeProperty('z-index'); box.className = 'sample';
+check('removed inline and class state', computed.zIndex === '7');
+box.style.cssFloat = 'right';
+check('inline float alias', box.style.getPropertyValue('float') === 'right' && computed.cssFloat === 'right');
+box.style.removeProperty('float');
+check('removed inline float', computed.cssFloat === 'left');
+style.textContent = 'body { color: rgb(1, 2, 3); font-size: 23px; } .sample { z-index: 21; }';
+check('sheet text replacement', computed.zIndex === '21');
+check('live ancestor inheritance', computed.color === 'rgb(1, 2, 3)' && computed.fontSize === '23px');
+var media = d.createElement('style'); media.setAttribute('media', 'print');
+media.textContent = '.sample { z-index: 31; }'; d.head.appendChild(media);
+check('media attribute exclusion', computed.zIndex === '21');
+media.setAttribute('media', 'screen');
+check('media attribute mutation', computed.zIndex === '31');
+media.textContent = '@media screen and (min-width: 0px) { .sample { z-index: 41; } }';
+check('embedded media with nonnegative viewport', computed.zIndex === '41');
+d.head.removeChild(media);
+check('sheet removal invalidation', computed.zIndex === '21');
+var sibling = document.createElement('iframe'); document.body.appendChild(sibling);
+var sd = sibling.contentDocument, ss = sd.createElement('style'); ss.textContent = 'body { color: rgb(4, 5, 6); }'; sd.head.appendChild(ss);
+check('sibling sheet isolation', sibling.contentWindow.getComputedStyle(sd.body).color === 'rgb(4, 5, 6)' && computed.color === 'rgb(1, 2, 3)');
+d.body.removeChild(box);
+check('disconnected computed empty', computed.color === '' && computed.zIndex === '');
+d.body.appendChild(box);
+check('reinserted declaration remains live', computed.zIndex === '21');
+var saved = computed;
+document.body.removeChild(frame);
+check('retired child computed empty', saved.color === '' && saved.zIndex === '');
+check('retired child selector empty', d.querySelector('.sample') === null);
+</script>

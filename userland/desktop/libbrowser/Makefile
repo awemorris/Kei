@@ -73,17 +73,34 @@ LIBBROWSER_SOURCES := $(LIBBROWSER_DIR)/base/arena.c \
 	$(LIBBROWSER_DIR)/html/body.c \
 	$(LIBBROWSER_DIR)/html/foreign.c \
 	$(LIBBROWSER_DIR)/dom/node.c \
+	$(LIBBROWSER_DIR)/dom/attribute.c \
+	$(LIBBROWSER_DIR)/dom/xml.c \
+	$(LIBBROWSER_DIR)/dom/removal.c \
+	$(LIBBROWSER_DIR)/dom/adopt.c \
 	$(LIBBROWSER_DIR)/dom/names.c \
 	$(LIBBROWSER_DIR)/dom/control.c \
+	$(LIBBROWSER_DIR)/dom/form.c \
+	$(LIBBROWSER_DIR)/dom/select.c \
+	$(LIBBROWSER_DIR)/dom/radio.c \
 	$(LIBBROWSER_DIR)/dom/serialize.c \
+	$(LIBBROWSER_DIR)/xml/parser.c \
+	$(LIBBROWSER_DIR)/xml/dom.c \
 	$(LIBBROWSER_DIR)/css/tokenizer.c \
 	$(LIBBROWSER_DIR)/css/parser.c \
+	$(LIBBROWSER_DIR)/css/rule-model.c \
 	$(LIBBROWSER_DIR)/css/values.c \
 	$(LIBBROWSER_DIR)/css/cascade.c \
 	$(LIBBROWSER_DIR)/css/index.c \
 	$(LIBBROWSER_DIR)/css/media.c \
 	$(LIBBROWSER_DIR)/css/ua.c \
 	$(LIBBROWSER_DIR)/bind/window.c \
+	$(LIBBROWSER_DIR)/bind/frame.c \
+	$(LIBBROWSER_DIR)/bind/frame-resource.c \
+	$(LIBBROWSER_DIR)/bind/svg-text.c \
+	$(LIBBROWSER_DIR)/bind/svg-length.c \
+	$(LIBBROWSER_DIR)/bind/style-context.c \
+	$(LIBBROWSER_DIR)/bind/style-sheet.c \
+	$(LIBBROWSER_DIR)/bind/cssom.c \
 	$(LIBBROWSER_DIR)/bind/environment.c \
 	$(LIBBROWSER_DIR)/bind/query.c \
 	$(LIBBROWSER_DIR)/bind/geometry.c \
@@ -94,10 +111,25 @@ LIBBROWSER_SOURCES := $(LIBBROWSER_DIR)/base/arena.c \
 	$(LIBBROWSER_DIR)/bind/computed.c \
 	$(LIBBROWSER_DIR)/bind/exception.c \
 	$(LIBBROWSER_DIR)/bind/node.c \
+	$(LIBBROWSER_DIR)/bind/cloning.c \
+	$(LIBBROWSER_DIR)/bind/insertion.c \
 	$(LIBBROWSER_DIR)/bind/mixin.c \
 	$(LIBBROWSER_DIR)/bind/element.c \
+	$(LIBBROWSER_DIR)/bind/click.c \
+	$(LIBBROWSER_DIR)/bind/submit.c \
+	$(LIBBROWSER_DIR)/bind/html-reflection.c \
+	$(LIBBROWSER_DIR)/bind/html-input.c \
 	$(LIBBROWSER_DIR)/bind/text.c \
+	$(LIBBROWSER_DIR)/bind/xml.c \
 	$(LIBBROWSER_DIR)/bind/document.c \
+	$(LIBBROWSER_DIR)/bind/implementation.c \
+	$(LIBBROWSER_DIR)/bind/traversal.c \
+	$(LIBBROWSER_DIR)/bind/iterator.c \
+	$(LIBBROWSER_DIR)/bind/collection.c \
+	$(LIBBROWSER_DIR)/bind/table.c \
+	$(LIBBROWSER_DIR)/bind/table-row.c \
+	$(LIBBROWSER_DIR)/bind/select.c \
+	$(LIBBROWSER_DIR)/bind/range.c \
 	$(LIBBROWSER_DIR)/bind/event.c \
 	$(LIBBROWSER_DIR)/bind/handler.c \
 	$(LIBBROWSER_DIR)/bind/timer.c \
@@ -111,6 +143,8 @@ LIBBROWSER_SOURCES := $(LIBBROWSER_DIR)/base/arena.c \
 	$(LIBBROWSER_DIR)/net/loader.c \
 	$(LIBBROWSER_DIR)/page/page.c \
 	$(LIBBROWSER_DIR)/page/link.c \
+	$(LIBBROWSER_DIR)/page/resource.c \
+	$(LIBBROWSER_DIR)/page/frame-load.c \
 	$(LIBBROWSER_DIR)/page/script.c \
 	$(LIBBROWSER_DIR)/page/geometry.c \
 	$(LIBBROWSER_DIR)/page/storage.c \

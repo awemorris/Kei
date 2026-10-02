@@ -1,0 +1,32 @@
+# q526 evidence — 2026-10-01
+
+p116 cleared: Event/UIEvent factory aliases, initially empty/uninitialized state,
+initEvent/initUIEvent, readonlyUI view/detail, nativeinterfacebrand/initialized
+flag and tracedview implemented. Dispatch rejectspreinit/activeevent; constructors
+and internalfire remaininitialized. Type/Window/long conversions precede active
+no-op and atomicpublication; resetstop/immediate/canceled/trusted/target preserves
+subclasspayload when usinginitEvent. No fakeWindow getter runs duringbranding.
+
+Bothvariants legacy56/56, frame38/38 (original33plus5 explicitUIview-only lifetime
+checks), owner27/27, DOM23/23 includingevents/input/form behavior. HostGC sample
+uses a primary-created event whose prototype has no child owner; only storedview
+retains removedchild afterprimarydestroy+actualGC. Livechildgetterclosed works,
+last eventroot dropped→exactlyoncechildfinalization, repeatedGC no doublefinalize.
+All100 equalinventories63→65 solely30/73newPASS (SVGEvents alias in saved scope),
+no formerPASSlost/Uncaught0/completeTrue/runstatus0/run_errors[], Acid2exact/
+different_pixels0/warning0/noASan. Visual38.486875% separate diagnostic.
+
+Commands host-build.sh plain/asan; browser --run legacy-event-probe.html;
+host-frame-lifetime/host-context-ownership; run-dom-tests.py;
+run-acid-tests.py --out build/ws074-acid-q526-<variant>. ASAN_OPTIONS=
+detect_stack_use_after_return=0 uses realstackGC. Logs build/ws074-q526-*.
+[Hashes/reports](verification.json), [inventory](inventory.json).
+Fullchangedsource manualCstandardreview receiverbrand/immutableWindow identity/
+conversionorder/reentrancy/publish-after-errors/no stale raw owner/reftracing/
+no permanentroot/flags/subclasspayload/ANSI/forwardtabledependency/paragraphs/
+checkedallocation PASS; style-check.py event.c/document.c/host-frame-lifetime.c
+and git diff --check PASS. cc14.2.0/Python3.13.5; clang-formatunavailable/manualformat.
+No otherfactory/initializer/newUIconstructor/shadow/composed/passive dispatch
+redesign/fullUIEvents/exhaustivefailurefuzz/OS/guest/boot/GPU checks. Remaining35
+features/p100100/100 unmet; p044 fullWSconformance remains. Localunpublished/nopush.
+WIPcommit suppliesrecordrevision.

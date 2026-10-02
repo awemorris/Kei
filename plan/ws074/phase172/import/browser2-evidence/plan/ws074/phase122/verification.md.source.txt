@@ -1,0 +1,59 @@
+# q532 / p122 verification — 2026-10-01
+
+Outcome cleared. Fixed original Acid3 plain and ASan72/100, indexed5 new PASS,
+all prior71 preserved, all100 inventory equal/complete/noexceptions/runerrors/
+Uncaught/crash/runner timeout/runstatus0. Acid2 exact100%, zero differing pixels.
+p100full100/100 still unmet, remaining28 indexed gaps.
+
+Actual native HTMLCollection observes current DOM links on every operation.
+SameObject children and Document.links caches trace through DOM owners; collection
+state traces actual root, wrapper traces state/prototype. No member-array snapshots
+or raw Window/realm state. Relevant prototype follows actual Document view or XML
+private snapshot. HTML a/area namespace/localname and no-namespace href presence
+filter excludes XML uppercase A, foreign links, template content and removed nodes.
+
+Readonly configurable virtual indexed/named descriptors and legacy delete/define/
+preventExtensions policy implemented using verified p121 protocol. Named visibility
+respects ordinary own expandos and full prototype own-property chain without getters.
+Indices normalized for VM keys; binding classifies all canonical indices up to
+2^32-2 even when VM stores high indices as strings. Numeric names never override
+indices, uint32maximum/01/-0 remain names. Native prefix keys merge/deduplicate with
+ordinary strings/symbols. Missing indexed properties undefined, missing item/namedItem
+null. Required arguments/branding before single conversion checked.
+
+Both variants, ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: warning/error0.
+- html-collection-probe104/104: saved insertion/removal/reorder/attributes/names,
+  namespace/case/filter/direct versus descendant membership, SameObject Document/
+  Element/Fragment, descriptors/hasOwn/in/keys/for-in/values/entries/assign/spread/JSON,
+  prototype methods/data/getter visibility and setter receiver, older expandos/symbols/
+  ordinary accessors, indexed/named define/write/delete refusal/unsupported indices,
+  extension/seal/freeze refusal, constructor/lookalike/other platform branding,
+  coercion once/order/mutation/exception, XML and borrowed two-realm methods.
+- host-collection13/13: actual GC with C stack scanning off proves SameObject cache
+  retention/identity via only node/Document, sole saved collection roots unwrapped
+  member/root, wrapping after GC, final root drop reclaims actual root/member/both
+  cache cycles. C DOM attribute mutation verifies namespace href exclusion/restoration;
+  absent JS setAttributeNS was not added for a test dependency.
+- frame lifetime63/63 (prior58 plus sole child collection case): after removal and
+  explicit primary host teardown real collection method remains callable, unwrapped
+  XML member wraps in actual child owner; final root drop reclaims owner exactly once.
+- Prior selected NodeIterator60/TreeWalker70/traversal9/removal19/native65/XML62+
+  GC16/namespace38+GC12/names31/iframe17/legacy56/childCSS30/owner27/realms30/
+  object100/interp45/DOM23/JS14/selectors style golden allPASS.
+- Original fixed Acid suite reports/inventory/hashes in verification.json.
+- Checked-in style-check on changed C/headers/tests has no findings, git diff --check
+  PASS; full manual changed-source C review covers module/public/static ordering,
+  ANSI locals, one-line forwards, paragraph/purpose comments, unsigned overflow,
+  checked allocations/key/vector/lookup errors, ephemeral descriptor ownership,
+  prototype/GC/cache cycles and actual relevant owner selection. clang-format absent,
+  manual formatting; compilercc14.2.0/Python3.13.5. Final purpose whitespace changes
+  are semantic-neutral; fixture extended98→104 and rerun both variants.
+
+Initial numeric own-key string/int32 mismatch caused missing Object.keys/JSON data;
+fixed normalization before final verification. No criterion waiver/Acid source edits.
+Pinned WPT2d66b9b7998bb58c336138c178323ddee857b586 unchanged. No full WebIDL/HTML/
+WPT/fuzz, OS/guest/boot/GPU claim; getElementsBy* still snapshots, form/control/table/
+Range/CSS/loading/SVG remain later finite work, p044 final conformance pending.
+Records local/unpublished, no push.

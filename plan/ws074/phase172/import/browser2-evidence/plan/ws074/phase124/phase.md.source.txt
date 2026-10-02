@@ -1,0 +1,70 @@
+<!-- awesome-plan project=zedbsd record=ws074-p124 -->
+
+# ws074-p124: ordinary DOM form ownership and listed-control predicates
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q534 / q534-i01
+Prerequisite p1235e27e7ff cleared / forms35/collection104/GC16/frame68 /
+all10073/100/noerrors/Acid2 exact. q533 archive verified. Root sole executor.
+Approval current-user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; one finite Phase timebox, exact scope before source generation.
+
+## Exact scope / design / criteria
+
+Add bounded DOM C foundation dom_form_listed(element), dom_form_control_member(element)
+and dom_form_owner(element) for ordinary live trees without parser-special persisted
+associations. Listed built-ins button/fieldset/input/object/output/select/textarea
+require actual HTML namespace and exact local case; img associated but not listed.
+Control-member predicate excludes input image state via exact ASCII-case-insensitive
+type keyword, keeps hidden/disabled/unnamed listed members. No custom-element system.
+
+Owner query performs no allocation/user script/caching/raw realm. For listed control
+with no-namespace form attribute and connected Document root, find first tree-order
+element with exact nonempty ID matching attribute. That first matching element must
+be actual HTML form or result null (including duplicate ID on nonform/foreign).
+No nearest-form fallback when connected explicit attribute exists but misses.
+Otherwise use nearest actual HTML form ancestor; detached trees/DocumentFragments
+and nested script-created forms handled by ordinary ancestry. Detached explicit
+attribute falls back to ancestry per connected condition. Nonassociated nodes null;
+img ignores form attribute and uses ancestry. Recompute after moves/removal/reorder/
+form or id changes, never retain stale ancestor/owner state.
+
+Parser-magic associations (foster-parenting/active parser form pointer persistence),
+custom elements, public JS input.form/HTMLFormElement/form.elements/RadioNodeList/
+reflection/activation/submission/radio grouping are known later requirements and
+outside this ordinary-tree foundation. API comments state this scope, no full form
+association or parser conformance claim. Needed by later control collection and
+radio ownership, while p100 full acceptance remains unchanged.
+
+Affected new dom/form.c registration libbrowser/Makefile, dom.h declarations, bounded
+host-form-owner fixture exposing actual C helpers to ordinary JS just in fixture and
+script test source under owning WS tests. No DOM mutation/GC/parser or existing page
+form behavior change. Guardrail/full C standard loaded (no concise copy). Primary
+HTML categories and form-owner algorithm read2026-10-01, standards linked in evidence.
+
+Plain+ASan fixture passes built-in categories/namespace/case/nonmember/image/hidden/
+disabled, ancestry/nested/move/detach/reinsert/root, connected explicit reference/
+empty/missing/case/duplicate nonform/foreign/ID mutation/attribute removal/reorder/
+first-ID priority, detached explicit/fragment/image semantics, independent Documents/
+managed child/XML cases and repeated allocation-free queries. All p123 selected
+regressions (forms35/collection104/GC16/frame68 etc.) PASS; all10073 preserved/equal/
+noerrors/complete/runstatus0/Acid2exact. No score increase criterion for Cfoundation.
+Warning0/ASan0/manual full changed-source C/style/diff/hashes/evidence. Unknown
+prerequisites end uncleared before redesign; bounded fixtures/fixed suite, no full
+WPT/fuzz/OS/guest/boot/GPU claim. Local unpublished/no push, p044/p100 unchanged.
+
+## Introduction / q534 activation (2026-10-01)
+
+Known form.controls membership needs ordinary owner/category predicates before
+native indexed/named collection and RadioNodeList implementation. Add bounded
+allocation-free ordinary-tree foundation, preserve separate parser-special residual.
+
+## q534 result (2026-10-01)
+
+Cleared, [evidence](verification.md). Owner56/56 and all selected regressionsPASS
+both variants. Original all10073/100 exact inventory unchanged/noerrors/Acid2 exact.
+Ordinary live owner/category output ready before controls collection/RadioNodeList;
+known parser-special/public control residual retained. p100full100/100 unmet.
+Local unpublished, no push.

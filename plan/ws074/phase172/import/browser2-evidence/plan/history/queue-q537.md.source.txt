@@ -1,0 +1,43 @@
+<!-- awesome-plan project=zedbsd record=q537 -->
+
+# q537 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q536](history/queue-q536.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q537
+
+Purpose WS074/fg011 native checkedness/group setter and RadioNodeList.value.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation, exact [p127 scope](ws074/phase127/phase.md) saved before generation.
+Timebox one finite Phase; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q537-i01 | [ws074-p127](ws074/phase127/phase.md) | cleared | p126 f32314fe verified; indexed56 requires actual cloned radio group checkedness |
+
+Wholep127 explicit setter/group/initialized-vs-dirty/clone/Radio.value, selected
+fixtures/GC/lifetime/prior28 regressions plain+ASan/prior76 preserved/new56/equal/
+noerrors/Acid2exact/warning0/fullC/evidence. Exclude automatic checked/name/type/form/
+owner/connection mutation group hooks/type-value transitions/activation/submission/
+advanced sanitation/NodeList/form/parser/table/Range/CSS/loading/SVG. Graph
+p126(external) -> p127 -> future radio mutation/activation(external) -> p100(external),
+acyclic; unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Radio/input mutation hooks and click activation/submission, then table/Range/CSS/
+loading/SVG. Known NodeList/form/parser/advanced-input residuals retained. p100/p044
+acceptance unchanged.
+
+## q537 outcome (2026-10-01)
+
+[p127](ws074/phase127/phase.md) cleared, [evidence](ws074/phase127/verification.md).
+Native explicit checkedness/group/clone and RadioNodeList.value; radio73/native12/
+GC13/frame88/all selected regressionsPASS both variants. Original all10077/100/
+indexed56newPASS/prior76 preserved/equal/noerrors/Acid2exact. Remaining23; next
+click activation/submission. Known automatic mutation/group/type/advanced input/
+NodeList/form/parser residuals retained. p100/p044 unchanged; root released/local
+unpublished/no push.

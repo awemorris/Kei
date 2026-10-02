@@ -1,0 +1,123 @@
+<!-- awesome-plan project=zedbsd record=ws074-p109 -->
+
+# ws074-p109: Initial child-document computed CSS foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q520 / q520-i01; prior q518/q518-i01 uncleared preserved
+Prerequisites: p104/p106/p108 cleared, baseline462c4ed8, q517 exact archive verified.
+Root sole executor. Standing2026-09-30 autonomous Acid3/automatic Queue instruction
+and2026-10-01 continuation authorize this finite prerequisite.
+
+## Objective / concrete finite scope
+
+Give active initial child Documents their own working existing CSS cascade and
+selector engine, rather than empty host callbacks or parent stylesheet aliases.
+All100 inventory shows33–43 return empty zIndex and45 lacks cssFloat. Wire existing
+CSS capabilities through child owner contexts, dynamic DOM/style updates,
+inheritance and CSSStyleDeclaration's existing float property alias. Do not
+expand into new CSS properties/selectors or pretend this alone supplies p100.
+
+## Evidence and design before execution
+
+frame_create currently supplies no computed_style/selector_engine callback;
+computed_write returns empty and query_engine matches nothing. Existing css_engine
+already handles cascade, UA sheet, inline declarations and selectors. Its style
+cache contains raw DOM pointers; parsed VM strings are atoms, marked for the heap
+lifetime (vm_heap_collect/atom table), not ownership edges to a child realm.
+Existing css_engine/css_sheet destruction frees C storage without reading DOM
+cells, so Window-owned context cleanup can obey p106 finalizer ordering.
+
+Add bind/style-context.c and register in libbrowser/Makefile. Opaque C context
+owned by Window stores an engine and parsed inline sheets. Gather connected HTML
+<style> text in tree order using existing css_sheet_create/engine APIs and the
+element media list. UA/inline styles and embedded @media use existing parser;
+external link/@import/resource fetching remains absent. Prepare a new complete
+context when Document generation changes before replacing old one; viewport
+changes invalidate engine caches through existing setter. Preserve current
+embedding viewport contract; no child layout/painting or box-size viewport work.
+
+Child-only fallback: context_depth>0, managed active Window, correct owning
+Document. Primary supplied host engines and empty-host behavior remain intact.
+Resolve element/query root's owner through Document.view, including borrowed
+parent methods. Computed lookup walks ancestor elements from root to target
+using existing inheritance/cascade, with checked C buffers and output pointer
+lifetime through serialization. Context release at window_release frees engine
+then lent sheets/C vectors; never reads DOM/VM cells. It registers no permanent
+child roots; saved declarations retain their elements through existing tracing.
+Expose supported float under cssFloat using ordinary prototype accessor setup.
+
+Affected: new binding module, internal/window/query/computed/style bindings,
+libbrowser source registry, focused tests. No CSS grammar/new properties/selector
+fixes, CSSStyleSheet API, URLs/navigation/parser/Traversal/Range/HAL/toolchain.
+These remaining gaps get subsequent finite phases; unknown prerequisites still
+end this attempt uncleared before replanning.
+
+Apply [Guardrail](../../guardrail.md), full [C standard](../../coding-style.md),
+browser design CSS/DOM/VM boundaries and inspected [CSSOM getComputedStyle](https://drafts.csswg.org/cssom/#dom-window-getcomputedstyle)
+Editor Draft2026-08-31. Shared engine APIs stay unchanged; no new public libbrowser
+API or agent architecture. Full changed-source standard review is required.
+
+## Acceptance / bounded verification
+
+Focused child-sheet isolation/ancestor inheritance/inline+important cascade/
+media/mutation/live declaration/query/borrowed owner/cssFloat/detach checks PASS
+plain/ASan, with saved declaration/GC/whole-heap cleanup showing child collection
+not inhibited by CSS context. Existing frame lifetime24/24+17/17, ownership27/27,
+realm30/30, VM/DOM preservation; warning-free/no sanitizer. Acid2 exact, all100
+Acid3/no former pass regressions from47/100, Uncaught0/no errors/crash/timeout;
+record actual newly enabled passes and remaining CSS gaps rather than demand
+unsupported grammar inside this foundation. Full standards/style/diff/hashes/
+commands/tools/skips. Bounded representative fixture and host GC, no exhaustive
+fault injection or full CSS/layout conformance claim.
+
+## Introduction / q518 activation (2026-10-01)
+
+Origin [p108 inventory](../phase108/inventory.json); child computed values absent
+prevent assessing existing selectors. This prerequisite unlocks that assessment
+and later CSS/HTML phases. p100100/100 unchanged, WS incomplete. [WS summary](../ws.md).
+Local unpublished/no push.
+
+## q518-i01 outcome / unexpected prerequisite (2026-10-01)
+
+Uncleared. [Evidence](verification.md) verifies child CSS30/30 and GC/viewport33/33,
+VM/DOM preservation plain/ASan. Acid3 rises47→55 with9 newPASS but prior44 nowFAIL
+because invalid `html*.test` selectors are accepted by the existing parser:
+[BUG-128](../../bugs/BUG-128.md). No former pass regression criteria unmet; CSS
+implementation retained, no exception or claim of completed acceptance. New finite
+selector Phase required, then p109 acceptance revalidation. All100/no Uncaught/
+run errors/Acid2 exact. WS remains incomplete/p100 unchanged; local unpublished.
+
+## Post-uncleared dependency revision (2026-10-01)
+
+[Introducedp110](../phase110/phase.md) repairs missing selector combinators first,
+using this Phase's verified scoped CSS output. Then rerun p109 same criteria
+in a finite revalidation Queue. q518uncleared outcome preserved/no cancellation.
+[WS summary](../ws.md).
+
+## q520 revalidation activation (2026-10-01)
+
+Prerequisitep110cleared412fe6e5/BUG-128resolved; same p109 implementation and
+acceptance, no expanded scope. Standing autonomous Acid3 instruction authorizes
+this finite one-Phase revalidation. Rerun focused CSS/GC/owner/VM/DOM/iframe and
+Acid2/all100, require q51747passes preserved including44 and current56passes.
+Full p109 changed-source C review/style/diff on final sources; q518 stayshistorical
+uncleared. No product code additions in q520. Rootsoleexecutor/localunpublished.
+
+## q520-i01 clearance / local closure (2026-10-01)
+
+[Revalidation](revalidation-q520.md) verifies every original criterion after
+BUG-128repair. ChildCSS30/30/GC+viewport33/33/VM+DOM plain+ASanPASS, all10056/100,
+prior47pass preserved/44PASS/Uncaught0/Acid2exact. q518uncleared preserved.
+No remote closure/publication performed. Remaining44 gaps belong to subsequent
+finite work; p100 unchanged. [WS](../ws.md).
+
+## Child viewport successor and fixture update (2026-10-01)
+
+[p151](../phase151/phase.md) intentionally adds parent content-box viewport output
+excluded from this Phase. Existing child-style-probe embedded-media smoke threshold
+changes1px to0px to remain valid at corrected child viewport0. Native explicit
+viewport setter contract remains tested unchanged; new p151 Page/native separately
+verify conditional media and content sizing. Earlier q518/q520 outcomes retained,
+own initial-CSS acceptance unchanged. [WS](../ws.md).

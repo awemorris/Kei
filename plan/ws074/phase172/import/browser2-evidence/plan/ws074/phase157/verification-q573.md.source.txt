@@ -1,0 +1,34 @@
+# q573 / p157 corrected EOF source revalidation — 2026-10-01
+
+CLEARED. Read-only probe first reproduced accepted ordinary EOF block followed by
+successful insertion that failed actual cascade (34/35); p157 currentclearance was
+invalidated and same record reopened with exact finite scope before source edits.
+q572 original cleared archive33/84 evidence retained, later invalidation dated.
+
+Native source entries now retain separate implicit block-closure count/import
+terminator metadata without replacing original source units, addresses or stable IDs.
+Aggregate rendering output appends omitted braces or an import semicolon before
+separating the next rule; recognized EOF import retained; block-required invalid
+at-rules ignored. Current deletion/retired source/rollback/state bounds unchanged.
+Native44/44 both: original33 retained, unchanged original raw EOFsource, append after
+accepted EOFblock actualheight20, nested media+style EOFclosure then independent
+insert actualheight20, valid EOFimportcount1 then actualnative importcount1 and
+ordinaryrulecount1 after append. No DOMtext changes/network IO/score fixture shim.
+All84groups pass plain+ASan; original93/prior93/full100 identical/complete/status0/
+noexceptions/crashes/sanitizer/runnererrors/timeouts/Acid2exact100%. Actual72 still
+known excluded DOMCSSOM. Pixel agreement37.026875% diagnostic separately.
+
+Both full builds finish before tests; final comment formatting followed both final
+fullbuilds. Buildwarning0/styleoutputempty/diffclean/manualfullaffectedC Guardrail/
+coding-style1–14/automation, clang-format unavailable/manual, cc14.2.0/Python3.13.5.
+JSON hashes/fullreports/all84; sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q573-regressions.py plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q573-VARIANT; style-check affectedC; git diff --check.
+
+Remaining explicit boundaries: EOF strings/functions/comments/general component
+completion and normative canonical CSSRule.cssText serializer are excluded from this
+finite omitted-brace/import fix and from original fullCSSSyntax scope. Preserve this
+limit in follow-up/native association; no broad CSSSyntax or CSSOM conformance claim.
+No DOMCSSOM/Pageintegration/loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregatecheck/push/GitHubpublication; p100/p044/WS incomplete.

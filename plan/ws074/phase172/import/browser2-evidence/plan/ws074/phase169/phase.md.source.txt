@@ -1,0 +1,77 @@
+<!-- awesome-plan project=zedbsd record=ws074-p169 -->
+
+# ws074-p169: headless virtual timer and real child network progress
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q586 / q586-i01
+Base a4203fd7/q585 p168 cleared native46/all97both/original94/Acid2exact.
+Root/browser2 sole executor/writer; local unpublished/no push/concurrent/cancellation.
+User2026-09-30 autonomousAcid3 automaticfiniteQueues +2026-10-02continuation
+approve this exact finite scope before source generation. Guardrail/full C1–14/
+automation/native Page virtual clock/loader/frame task/view code and actualq585
+evidence read. p168 native normal loader→Page checkpoint verifies actual child
+loading; view_settle_network processes only before/after page_settle, while
+page_settle jumps through all virtual timers without polling newly started requests.
+
+## Exact finite scope / criteria
+
+Connect existing production page_settle headless virtual timers to actual pending
+child response tasks. New source discovery/ready task drain at outer checkpoints;
+while native child records remain pending, poll actual existing loader descriptors
+in bounded short waits, process real network callbacks, then drain completed tasks
+outside those callbacks. Advance Page virtual time by actual monotonic elapsed
+waiting time, respecting budget and due timers (including timers which remove,
+replace or cancel pending frames); once child tasks settle, preserve existing fast
+virtual jumps between timers. No fake timer/network results, suite modifications,
+test names, new VM/net algorithms, source MIME parsing or native navigation edits.
+No script in borrowed child callback, no headless test-only switch.
+
+Exact implementation page/script.c and existing native host-frame-load.c fixture
+extension only; reuse real loopback driver/delayed XML sources. Internal poll/clock
+helper can use existing public POSIX poll/clock_gettime supported by loader/view.
+Checked monotonic failures/poll EINTR behavior; actual pending child work at budget,
+30-second network wait bound or existing10000 task-round limit is explicit
+ETIMEDOUT rather than falsely reported settled. No busy-unbounded request wait,
+source pointer into callbacks or change to GUI browser_view_process scheduling.
+General full event-loop/history/crossorigin/WindowProxy/module/PI/renderer/OS/.internal/
+HAL/toolchain/aggregate/push/publication excluded.
+
+Native existing46 remain plus real page_settle HTTP source created after initial
+load, delayed completion producing genuine Document/load event, intervening native
+timer progress, cancellation timer while real request pending, no stale callback or
+root. Real virtual timer-only behavior unchanged. All97groupsPASSboth, same actual
+focused native evidence reused in final97 without redundant rerun; original>=98,
+actual69/74/79/80 pass, allprior94+72preserved/equal100inventory/complete/status0/
+zeroUncaught/crash/sanitizer/runnererror/timeout/Acid2exact. SVG75/77/p100 remain
+separate native API/full100 criteria. Bothfull builds before any tests/warning0/
+styleempty/manual full all changed C1–14/diff/sourcehashes/actual toolversions,
+clang-format unavailable/manual. Finite one implementation+verification cycle;
+unknown prerequisite ends uncleared with recoverable evidence before redesign.
+
+Graph p168(external)->p169->remainingSVG75/77/p100(external), acyclic.
+No p100 selection/clearance or WS/p044 completion implied. Actual network time
+and virtual clock remain distinct; no scoring substitution or goal criterion waiver.
+
+## Outcome / q586-p169-clear — 2026-10-02
+
+Headless page_settle now discovers actual child tasks and polls the native
+loader while child responses are pending, advancing virtual time by real monotonic
+elapsed wait and honoring due cancellation timers. Normal timer-only virtual jumps
+stay fast. Poll waits round upward at submillisecond granularity instead of busy
+waiting; actual budget/30sec network wait/10000task bound returns ETIMEDOUT for
+unfinished work. Native callbacks only copy child response metadata; actual scripts
+and events drain at the outer Page checkpoint, not inside borrowed callbacks.
+Native52/52both includes all previous46 plus actual delayed headless response,
+intervening native timer, cancellation while pending and complete root cleanup.
+All97groupsPASSboth; original98/100, new69/74/79/80pass, allprior94+72preserved,
+equal100inventory/complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts/
+Acid2exact. Remaining75(width) and77(text character count) are separate actual
+native SVG APIs; no placeholder or suite edits. Pixel38.44% independent diagnostic.
+Bothfull builds finished beforetests/warning0/styleempty/manual changed full C1–14/
+diffclean; cc14.2.0/Python3.13.5/clang-format absent/manual. Existing script.c legacy
+ordering outside changed scope remains; no full-WS p044 conformance claim.
+
+[Evidence](verification.md), [artifacts](verification.json), [WS](../ws.md).
+Root released/local unpublished, remote close not performed.

@@ -1,0 +1,42 @@
+# q588 / p171 — 2026-10-02
+
+CLEARED. Actual canonical rects now expose SVGRectElement/SVGGeometryElement identity and
+SameObject native SVGAnimatedLength.width with distinct writable baseVal and
+readonly animVal SVGLength wrappers. A private traced cache owns the real rect and
+all wrappers; live unnamespaced width attributes supply actual scalar data.
+Numeric/absolute units convert at96CSSpx/in; finite decimal/exponent parsing and
+scalar setters use actual native attribute invalidation. .value resets toNUMBER,
+.specified preserves actual post-coercion unit, .string validates before publication.
+Native animVal changes throw NoModificationAllowedError; unitless/absolute values
+are real, not truthy placeholder objects. Native60/60both covers scalar grammar,
+conversions/livewrites/readonly/brands/clones/actual child prototypes/borrowedgetters/
+coercion including genuine precise-only GC/saved-only owner and lastrelease.
+Prior98+native1=99groupsPASSboth. Original unchanged pinned Acid3 completes100/100,
+all100inventoryPASS/equalboth/prior99+72preserved/status0/noUncaught/crash/sanitizer/
+runnererror/timeouts; Acid2 exact100%/different_pixels0. Final plain screenshot
+visually inspected: displayed100/100, but FAIL labels/rendering differences remain;
+Acid3 pixel agreement37.04% is independent diagnostic, not full visual acceptance.
+Recognized percentage/em/ex specified coefficients/strings remain live, while user
+unit conversion throws explicit NotSupportedError rather than guessed geometry.
+Other rect geometry/conversion methods/animation/CSS overrides/modern grammar/
+full SVG rendering remain absent or unsupported in this declared partial profile.
+Both full final builds finished beforetests/warning0/styleempty/manual changed
+full C1–14/diffclean; cc14.2.0/Python3.13.5/clang-format absent/manual. Callback
+forward declarations precede immutable native descriptors for C name resolution;
+actual public interfaces precede static function definitions. Existing untouched
+legacy ordering retained; no full-WS p044 conformance claim.
+
+Commands: host-build.sh plain+asan; host-svg-length both; q588-regressions.py both;
+original run-acid-tests.py both (ASAN_OPTIONS=detect_stack_use_after_return=0);
+style-check.py new SVG length/text/native fixture; git diff --check. JSON contains
+final source hashes/full reports/all99 results; focused final native run reused
+without redundant rerun. Development compile corrected typed Window access and
+ordinary owner prototype fallback before any runtime test. No skipped mandatory
+check. Samep100 acceptance Queue next; p044/WS incomplete.
+Root released/local unpublished/no push.
+
+## Dated correction — 2026-10-02 / q589
+
+The earlier full C compliance claim is invalidated for section3 function definition
+layout; numeric/runtime evidence remains valid. Current p171 is uncleared until
+routine formatting and final revalidation. [Origin](../phase100/phase.md).

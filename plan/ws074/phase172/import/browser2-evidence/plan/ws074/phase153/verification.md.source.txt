@@ -1,0 +1,43 @@
+# q567 / p153 verification — 2026-10-01
+
+CLEARED. Actual child HTML Document open/write/close uses original real HTML parser.
+Object-preserving replacement and checked preallocation; actual native weak Range,
+iterator and nested iframe removal repairs, owner child-list notifications. Same
+Document/Window/realm, readinessloading->complete, split input/entities/doctype/head/
+body, implicit/repeated replacement and EOF. Actual owner realm rooted through
+ordered conversions/parser scripts/GC/retirement. Existing primary Page active write
+callback preserved. Reentrant open ignored, nested writes insertionpoint guarded,
+close deferred until outer parser frame unwinds then storage destroyed. Fatal parser
+failure cannot clear as success. No script/score shim/permanent child root.
+
+Page36 PASS and native9/9 both. Page complete actual71 two doctype structure cases
+and72 preparation tree; genuine identity/split/writeln/implicit/repeated/emptyEOF,
+borrowed owner/XML InvalidState11/illegal brand/inactive9, actual child inline/nested
+source trailing order/reentrant close/conversion atomicity/nested frame retirement/
+existing primary parser writes. Native direct bindings bypass VM caller roots;
+actual inline console callback GC with stack scanning disabled, child execution and
+nested stream retained, reentrant close safe release, retirement during callback,
+forgotten incomplete stream collectible; genuine ownerless native HTML factory refused.
+Initial probe corrected old body parent expectation (removing HTML root preserves
+its descendant links), nested JS fixture quoting and unsupported createHTMLDocument
+fixture API; ownerless HTML factory criterion verified directly native instead.
+No acceptance requirement removed or production fix for those fixture mistakes.
+
+All77 groups PASS both. Actual pinned93/100/new71/prior92 preserved/full100 equal/
+complete/status0/exceptions[]/runerrors[]/Acid2exact100%. Final source public interface
+ordering corrected before both builds and repeated full77/actual Acid. Build warning0/
+sanitizer0/diff clean/style output empty/manual full changed C Guardrail/style1–14/
+automation. clang-format unavailable, cc14.2.0/Python3.13.5; exact hashes/reports JSON.
+Commands: sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q567-regressions.py plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q567-VARIANT; style-check affected C; git diff --check.
+
+Explicit subset limits preserved: primary replacement/three-arg Window.open,
+inactive HTML factories, complete event handler erasure/origin/history/aggregate
+MutationRecords/readiness-load events, all MIME aliases/external-module loading
+not implemented. Existing per-child notifications and actual supported inline
+classics only. Pending full dynamic-markup semantics before broad compliance.
+Next images/CSSOM/native image dimensions, XML support loading/SVG. No fullWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub publication.
+p100/p044/WS incomplete/local unpublished/root released.

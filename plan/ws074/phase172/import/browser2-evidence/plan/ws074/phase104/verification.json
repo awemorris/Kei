@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-01",
+  "queue": "q515",
+  "baseline": "8dd06539",
+  "p104_implementation_origin": "q513 / 9a4a91db",
+  "sources": {
+    "userland/desktop/browser/bind/frame.c": "5091438cad137fbc48ae0309e13f35eda044271cfaa038e70488518adca90c00",
+    "userland/desktop/browser/bind/document.c": "e97f1fd5321ac20bc11771459ef2310693eb32589412f3845c25be2fc5cb8006",
+    "userland/desktop/browser/bind/environment.c": "1197f6244d33b9b7bd67c34aebe1c8a19d05ba4c74530888ea5f67dda7bbeb87",
+    "userland/desktop/browser/bind/node.c": "c4c1b17f46701322179676a129ac4ea8418ea644537ea14a94d1f350b0d52e16",
+    "userland/desktop/browser/bind/window.c": "854d3c29563d4b56a1ad2ac15cbe467bd4055600ef4c0252e8c47e459a548482",
+    "userland/desktop/browser/bind/internal.h": "8dd60b3ca9b61cde237f7c71b9eec25a20f2dad166233c93c46db0ff69e010d4",
+    "userland/desktop/browser/dom/dom.h": "b6a62cafc5fc3b79015745d1b5ec290a8def5348d007b7b4e97381e843fc1cad",
+    "userland/desktop/browser/dom/node.c": "84ef71d0ca429e59065b07e1241858228f0a4d2892612a6631a3e3972912c87b",
+    "userland/desktop/libbrowser/Makefile": "2ffcf9a31849a28cbfd0eb9ced31f231aea85ccb677ca3a922c44c047316a9c3",
+    "plan/ws074/tests/host-frame-lifetime.c": "eb7305ef1682037cc8f768082bedab0dbb96b0d9dbbf5669d45ff33f96979b3a",
+    "plan/ws074/tests/pages/iframe-context-probe.html": "983d8bed7561f6d481ae59a92128153df52b0e1253953de99a968d643d95f878",
+    "plan/ws074/tests/pages/iframe-safety-probe.html": "3b0e7f941327f73b83eb67d31cf0918f5a5ee7d109678074549dbc196e7d204f"
+  },
+  "plain_asan": {
+    "frame_lifetime": "24/24",
+    "Chromium_lifecycle_reference": "17/17",
+    "safety_defined_scope": "14/14",
+    "ownership": "27/27",
+    "realms": "30/30",
+    "object": "100/100",
+    "interp": "45/45",
+    "DOM": "23/23",
+    "Acid2": "exact100%",
+    "Acid3": "42/100; all100 unchanged; Uncaught0/run_errors0/run_status0/completeTrue"
+  },
+  "reports": [
+    "build/ws074-acid-q515-plain/report.json",
+    "build/ws074-acid-q515-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "clang-format": "unavailable"
+  },
+  "limits": [
+    "initial blank contexts only; lazy first observation",
+    "sandbox safe fallback null; no sandbox execution",
+    "depth cap64; bounded1MiB construction failure, not exhaustive injection",
+    "no URL/loading/WindowProxy/frame enumeration or full iframe compatibility",
+    "guest/OS/boot/GPU not run; local unpublished/no push"
+  ]
+}

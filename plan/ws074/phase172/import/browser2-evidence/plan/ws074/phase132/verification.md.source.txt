@@ -1,0 +1,46 @@
+# p132 / q542 verification — 2026-10-01
+
+Cleared checked native Document adoption for bind_insert ordinary/fragment paths.
+Preflight subtree heaps/Document rejection and prospective registry allocation
+before original removal. Current ownership updates all ordinary descendants and
+existing nested template content graphs; identity/state/cache/prototypes retained.
+Weak optional-root tokens migrate by identity, preserve generic old observers and
+subscriber finalizer cleanup handles, no tracing registry or permanent heap roots.
+
+Original fixed WPT2d66b9b7998bb58c336138c178323ddee857b586 all100 **81/100**
+plain+ASan; all prior81/equal complete inventories/status0/Uncaught/run_errors/
+crash/runner timeout0, Acid2 exact100%. Infrastructure Phase requires no score gain.
+Whole p131 still uncleared until its next finite validation attempt.
+
+Commands plain and asan (ASAN_OPTIONS=detect_stack_use_after_return=0):
+- sh plan/ws074/tests/host-build.sh VARIANT: cc14.2.0 final warning/error0.
+- python3 build/ws074-q542-regressions.py VARIANT: all39 groups PASS; all exact
+  commands/counts/results in verification.json. Includes adoption26 and final
+  p131 structure68 (former cross-Document assertion now PASS), table collection71/
+  GC25/native mutation42, prior Submit56/GC13/click57/GC10/radio73/input94/form100,
+  traversal/collection/DOM/JS/XML/namespace/realm/child CSS/selector golden.
+- host-removal: 37/37. Real different heaps reject before unlink/ownership change;
+  Document input rejects, four back-and-forth token migrations, destination delivery,
+  original generic observers/unrelated roots, and migrated-token observer-before-Doc,
+  Doc-before-observer, small/large whole-heap finalization orders under actual GC.
+- host-frame-lifetime: 118/118. Sole old-child iterator adopts root into second
+  managed child, both native creator and current owner survive manual primary
+  destruction and stack-excluded GC; actual new-Document removal repairs reference;
+  final root release reclaims both actual children exactly once.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q542-VARIANT: real original reports embedded in JSON;
+  aggregate goalFAIL until100 expected.
+- python3 plan/tools/style-check.py all changed C/header/host files: 0 findings.
+  Full C manual review/manual formatting (clang-format absent), no calls in
+  conditions/initializers, native token ownership/counter checks/preflight/error/
+  cleanup/Document trace and managed original prototype lifetimes reviewed.
+- git diff --check PASS; base f9e65a3f and source SHA256 in verification.json.
+
+No forced malloc/registry-cap/SIZE_MAX injection. Preflight allocation occurs before
+unlink; impossible counter overflow propagation checked manually, whole-subtree
+rollback on such overflow not claimed. Existing template content model has same
+Document fragments; distinct inert template Documents/HTML adopting reactions/
+shadow/Attr-as-Node/new adoptNode/importNode APIs not implemented. Parser's direct
+void insertion API unchanged. Other WS residuals/p100/p044 retained. No full WPT/
+fuzz/OS/guest/boot/GPU checks, host semantics only. Local unpublished/no push.
+Primary algorithm read2026-10-01: [DOM adoption](https://dom.spec.whatwg.org/#concept-node-adopt).

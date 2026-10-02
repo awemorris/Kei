@@ -1,0 +1,122 @@
+<!-- awesome-plan project=zedbsd record=q581 -->
+
+# q581 exact Queue scope and outcome
+
+Status: finished (2026-10-02)
+Active Queue: none
+Last finished Queue: [q581](history/queue-q581.md), exact archive verified; p165 cleared.
+Executor root / browser2 checkout / one finite Phase / local unpublished.
+
+## q581 exact scope and approval
+
+Current user automatic Acid3 Queues +continuation approve exact finite p165 snapshot
+before generation. Strict native XML model to owning DOM projection prerequisite;
+actual94/all93both/Acid2exact verified, no cancellation/concurrent attempt.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q581-i01 | [ws074-p165](ws074/phase165/phase.md) | cleared | p164 cleared; strict XML model must become real owning native Documents before resource loading |
+
+Exact p165 new xml/dom.h+dom.c/Makefile/native fixture only, rooted iterative full
+conversion and exact actual namespaces/data/kinds, NULLout on partial failure.
+Prior93+native1=94both/original>=94/prior94/72/equal100/noerrors/Acid2exact.
+Graph p164(external)->p165->native response navigation/SVG/p100(external), acyclic.
+Native MIME/new Doc Window realm/retirement/errorDoc/load tasks/script gating known
+future dependencies. Unknown dependency ends uncleared before redesign. One finite
+Phase; p100/p044/WS incomplete; no score gain expected.
+
+## Upcoming Work Outlook
+
+Actual MIME/child navigation/events/namespace-gated scripts/object ownership, SVG
+APIs, then full standards acceptance after original100. Forecast only.
+
+## q581 outcome (2026-10-02)
+
+[p165](ws074/phase165/phase.md) cleared in q581, [evidence](ws074/phase165/verification.md).
+Strict immutable XML model now projects into actual owning native DOM Documents;
+exact namespace/case/expanded attributes/PI/CDATA/data, iterative full tree copy,
+NULL output/error root unwind. Native54/all94PASSboth; actual94/prior94/72/
+equal100/noerrors/Acid2exact. Natural 30000-element threshold GC, subtree-only/
+lastrelease and real heap-limit failure verified after source/model destruction.
+Next actual MIME/child response navigation/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p165 -->
+
+# ws074-p165: strict XML native model to owning DOM Document projection
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q581 / q581-i01
+Base b93f6b95/q580 cleared/native34/all93both/actual94/prior94/Acid2exact.
+Current user automatic Acid3 Queues2026-09-30 +continuation2026-10-02 authorize
+this finite exact prerequisite before generation. Root/browser2 sole writer/executor,
+local unpublished/no push/no cancellation/concurrent attempt. Guardrail/full C
+coding-style1–14/automation/parser model/native factories/attribute URI/GC/binding
+categories read. p161–p164 actual outputs verified. XML1.0/Namespaces1.0 and DOM
+Standard references from those Phases apply; no new policy/major architecture choice.
+
+## Exact scope / design / criteria
+
+New xml/dom.h and xml/dom.c native C xml_document_project(heap,model,content,&created)
+converts a successfully validated immutable p161 XML model into a new owning native
+DOM Document. NULLout until whole projection succeeds; explicit caller content kind
+XML/XHTML/SVG (HTML rejected), no MIME guessing by root or test name. Document
+DOM_NO_QUIRKS/default native identity; no browsing context/view/prototype snapshots
+created here. Real binding owner/window installation and actual response URL/MIME/
+activation belong to later native navigation. Pure conversion does not execute
+scripts, fetch PI stylesheets, synthesize events or call binding mutation hooks.
+
+Iterative native preorder uses actual source parent/next/child edges and corresponding
+native parent, no C recursion or depth truncation. Every real model Element/Text/
+CDATA/Comment/PI becomes matching native type; qualified names represented by exact
+local/prefix atoms and exact namespace URI strings, built-in namespace classes only
+for canonical exact URIs; arbitrary namespace preserved, no HTML name/case recovery.
+Attribute URI/local/prefix/value stored in actual native attribute records through
+p162 exact add helper; unprefixed noNS distinct from xmlns/XML/custom attrs. Native
+PI actual target/data and CDATA type preserved via p163 rooted factories. Source
+C storage copied to owning VM strings/atoms or native CharacterData C buffers;
+no projected object borrows model arena/input after model destruction. XML declaration
+metadata remains parser-model metadata, not a made-up DOM field/API. DTD profile
+already unsupported in parser; no DOM doctype or full XML metadata serialization claim.
+
+Root slots registered NULL before any VM allocation, owning Document root/pending
+unlinked native node and all temporary local/prefix/URI/value/PI target strings kept
+through allocating conversions/factories. Publish complete Element names/URI before
+attributes; append complete pending nodes into rooted actual tree. Every partial
+registration/conversion/allocation/unsupported model-kind failure unwinds roots and
+leaves NULLout; unreachable partial native graph collected normally, only C-owned
+model remains caller-owned. Module registered once in libbrowser Makefile; no changes
+to parser or existing DOM/binding/public APIs, source addition only plus fixture.
+
+New host-xml-dom.c: actual valid namespace-heavy ordinary model incl alias scopes/
+CDATA/PI/text/comments/default empty/custom attr/builtins/Unicode; parse thenproject,
+destroy input/model before observing native tree/strings/buffers; exact casing/kinds/
+parent/attributes/values. Actual pinned svg.xml/xhtml.1/xhtml.3 projected with explicit
+SVG/XHTML kind; wrong root URI preserved. Actual xhtml.2/empty.xml rejected by parser
+before any projection (no normal partial tree). Native lifetime heap-only/roots,
+real8MiB threshold collection while conversion and pending strings/nodes constructed;
+projected subtree alone retains owner and non-atom URI/PI target after input destroyed,
+last release collects graph; native heap limit real ENOMEM leaves NULLout/partial
+model graph collectible and caller model unchanged. Invalid content/arguments reject.
+Prior93+native1=94groupsPASSboth/original>=94/prior94/72/equal100 inventory/complete/
+status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact; bothfull builds
+beforetests/warning0/style output empty/fullmanual new C/diff/hashes.
+
+Finite one Phase; unknown prerequisite ends uncleared before redesign. Graph
+p164(external)->p165->actual child MIME/navigation/SVG/p100(external), acyclic.
+Known navigation prerequisites native response URL/MIME, actual new Doc/Window/realm
+pair+retirement, parser-error Document representation, genuine load event tasks,
+namespace/wellformedness-gated scripts, object-owned child context. No implementation
+of these selected here. SVG APIs/PI CSS resource/loading/JS Document XML factories/
+fullXMLserialization/fullXML/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregatecheck/push/publication excluded; p100/p044/WS incomplete/no score gain expected.
+
+## Introduction (2026-10-02)
+
+Parser output, native expanded attribute names and PI/CDATA public categories now
+verified. Copy complete strict XML output into actual owning DOM before selecting
+resource activation/navigation; malformed inputs cannot publish a recovered HTML tree.

@@ -1,0 +1,19 @@
+{
+  "VM_baseline": "f8c12297",
+  "acid_last_actual": "q51240/100Uncaught0; not rerun q513",
+  "asan_exit": 1,
+  "asan_kind": "heap-use-after-free",
+  "attempt": "q513-i01",
+  "bug": "BUG-127",
+  "date": "2026-09-30",
+  "hashes": {
+    "plan/ws074/tests/host-realm-retirement.c": "ec39965a141ae78c2070fd0719dba99d6d1a15aa58541bc78bdfa1fb9631b9be",
+    "userland/desktop/browser/vm/function.c": "75b34ab916c6cb870073889510f72d9c8a93b6beb1249453a8a972be2ecf7051",
+    "userland/desktop/browser/vm/realm.c": "f840fa0b68b82019508199f4bb7bb10fea4b83bfc59d991e3927bda1c9aeaad1"
+  },
+  "iframe_plain_checks": "17/17",
+  "phase": "ws074-p104",
+  "plain_exit": 0,
+  "queue": "q513",
+  "site": "vm/function.c:function_trace:701"
+}

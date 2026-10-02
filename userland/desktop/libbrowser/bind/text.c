@@ -15,6 +15,8 @@
 #include <errno.h>
 #include <string.h>
 
+static int text_split(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+static void text_unroot(struct vm_heap *heap, struct vm_cell **roots, unsigned count);
 static int text_this(struct vm_realm *realm, vm_value this_value, struct dom_character_data **text);
 static int text_data_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int text_data_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -59,11 +61,17 @@ const struct bind_interface bind_character_data_interface = {
 	"CharacterData", BIND_NODE, 0, NULL, character_data_attributes, character_data_operations, NULL
 };
 
+/* The concrete Text split operation follows current native data and owner graphs. */
+static const struct bind_operation text_operations[] = {
+	{ "splitText", 1, text_split },
+	{ NULL, 0, NULL }
+};
+
 /*
  * The Text interface (new Text(data) makes a text node).
  */
 const struct bind_interface bind_text_interface = {
-	"Text", BIND_CHARACTER_DATA, 0, text_construct, NULL, NULL, NULL
+	"Text", BIND_CHARACTER_DATA, 0, text_construct, NULL, text_operations, NULL
 };
 
 /*
@@ -131,6 +139,224 @@ const struct bind_interface bind_document_fragment_interface = {
 	"DocumentFragment", BIND_NODE, 0, fragment_construct, fragment_attributes, fragment_operations, NULL
 };
 
+/*
+ * Splits genuine native Text while retaining both halves through actual host callbacks.
+ */
+int
+bind_split_text(
+	struct vm_realm *realm,
+	struct dom_node *node,
+	uint32_t offset,
+	struct dom_node **created)
+{
+	struct dom_character_data *text;
+	struct dom_node *suffix;
+	struct dom_node *parent;
+	struct bind_window *window;
+	struct vm_cell *roots[2];
+	const uint16_t *units;
+	size_t length;
+	unsigned index;
+	int status;
+
+	/* Invalid embedding arguments cannot start a split or publish an output. */
+	if (realm == NULL ||
+	    node == NULL ||
+	    created == NULL)
+		return EINVAL;
+
+	/* The shared native helper supports only genuine Text in the invoking collector. */
+	if ((node->type != DOM_TEXT &&
+	     node->type != DOM_CDATA_SECTION) ||
+	    node->document->heap != realm->heap)
+		return EINVAL;
+
+	/* Both original ownership and a pending suffix survive native allocation and host collection. */
+	roots[0] = &node->cell;
+	roots[1] = NULL;
+	for (index = 0; index < 2U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0) {
+			text_unroot(realm->heap, roots, index);
+			return status;
+		}
+	}
+
+	/* Current characters determine bounds after the public method's reentrant conversion. */
+	text = (struct dom_character_data *)node;
+	if (offset > text->data.length) {
+		status = bind_throw_dom(realm, "IndexSizeError", "The Text split offset exceeds its length.");
+		text_unroot(realm->heap, roots, 2);
+		return status;
+	}
+
+	/* Borrowed methods still deliver hooks to the actual current Document owner. */
+	window = node->document->view;
+	if (window == NULL)
+		window = bind_window_of(realm);
+
+	/* An embedding without a binding owner cannot deliver normal DOM environment hooks. */
+	if (window == NULL) {
+		text_unroot(realm->heap, roots, 2);
+		return EINVAL;
+	}
+
+	/* Empty suffixes avoid pointer arithmetic on an empty native buffer. */
+	length = text->data.length - offset;
+	units = NULL;
+	if (length != 0)
+		units = text->data.data + offset;
+
+	/* Allocate complete suffix data before changing the original tree or characters. */
+	suffix = dom_text_create(node->document, units, length);
+	if (suffix == NULL) {
+		text_unroot(realm->heap, roots, 2);
+		return ENOMEM;
+	}
+
+	/* Retain the complete suffix before insertion or any host callback can collect. */
+	roots[1] = &suffix->cell;
+
+	/* Attached splits repair insertion positions before transferring Text and equal parent points. */
+	parent = node->parent;
+	if (parent != NULL) {
+		dom_insert_before(parent, suffix, node->next);
+		dom_split_notify(node->document, node, suffix, offset);
+	}
+
+	/* Suffix truncation needs no allocation after the new Text has been inserted. */
+	status = dom_text_truncate(node, offset);
+	if (status != 0) {
+		text_unroot(realm->heap, roots, 2);
+		return status;
+	}
+
+	/* Actual host observers see the complete split and all repaired live boundaries. */
+	if (parent != NULL) {
+		status = bind_environment_child_mutation(window, parent, suffix, NULL);
+		if (status != 0) {
+			text_unroot(realm->heap, roots, 2);
+			return status;
+		}
+
+		/* Optional host work retains both halves even if it collects or reports a failure. */
+		if (window->host.node_inserted != NULL) {
+			status = window->host.node_inserted(window->host.context, suffix);
+			if (status != 0) {
+				text_unroot(realm->heap, roots, 2);
+				return status;
+			}
+		}
+	}
+
+	/* Publish the complete native suffix only after all checked split work succeeds. */
+	*created = suffix;
+	text_unroot(realm->heap, roots, 2);
+
+	/* Succeeded: the caller receives a same-current-Document native Text suffix. */
+	return 0;
+}
+
+/* Converts one current split offset while keeping native ownership independent of VM call frames. */
+static int
+text_split(
+	struct vm_realm *realm,
+	vm_value receiver,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_node *node;
+	struct dom_node *created;
+	struct bind_window *window;
+	struct vm_cell *roots[3];
+	uint32_t offset;
+	unsigned index;
+	int cell;
+	int status;
+
+	/* Exact Text branding precedes required arguments and numeric conversion. */
+	*result = VM_VALUE_UNDEFINED;
+	node = bind_node_of(receiver);
+	if (node == NULL ||
+	    (node->type != DOM_TEXT &&
+	     node->type != DOM_CDATA_SECTION)) {
+		status = bind_throw_illegal(realm);
+		return status;
+	}
+
+	/* A missing required offset cannot enter observable numeric conversion. */
+	if (count < 1U) {
+		status = vm_throw_type_error(realm, "Text.splitText requires an offset.");
+		return status;
+	}
+
+	/* Foreign collector cells cannot be retained by these root slots. */
+	if (node->document->heap != realm->heap)
+		return EINVAL;
+
+	/* Register genuine node, conversion input and pending suffix before any reentrant work. */
+	roots[0] = &node->cell;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	cell = vm_value_is_cell(args[0]);
+	if (cell)
+		roots[1] = vm_value_as_cell(args[0]);
+
+	/* Conversion may remove or adopt the only otherwise reachable original Text. */
+	for (index = 0; index < 3U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0) {
+			text_unroot(realm->heap, roots, index);
+			return status;
+		}
+	}
+
+	/* Resolve actual current data and owner only after one unsigned offset conversion. */
+	status = vm_to_uint32(realm, args[0], &offset);
+	if (status != 0) {
+		text_unroot(realm->heap, roots, 3);
+		return status;
+	}
+
+	/* Split the genuine Text using its post-conversion data and owner. */
+	status = bind_split_text(realm, node, offset, &created);
+	if (status != 0) {
+		text_unroot(realm->heap, roots, 3);
+		return status;
+	}
+
+	/* Keep a detached returned suffix alive during wrapper allocation. */
+	roots[2] = &created->cell;
+
+	/* The actual current Document chooses the returned suffix's binding prototype. */
+	window = bind_window_of(realm);
+	status = bind_wrap(window, created, result);
+	text_unroot(realm->heap, roots, 3);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: one genuine new Text wrapper is returned with no temporary root slots. */
+	return 0;
+}
+
+/* Releases only the successfully registered temporary native root slots. */
+static void
+text_unroot(
+	struct vm_heap *heap,
+	struct vm_cell **roots,
+	unsigned count)
+{
+	/* Reverse registration order keeps partial construction cleanup deterministic. */
+	while (count != 0) {
+		count--;
+		vm_heap_remove_root(heap, &roots[count]);
+	}
+
+	/* Succeeded: the embedding holds no root slot on this returned C stack. */
+	return;
+}
+
 /* Finds the text or comment node a method's this value stands for, throwing a TypeError otherwise. */
 static int
 text_this(
@@ -143,7 +369,11 @@ text_this(
 
 	/* The node, which must be character data. */
 	node = bind_node_of(this_value);
-	if (node == NULL || (node->type != DOM_TEXT && node->type != DOM_COMMENT)) {
+	if (node == NULL ||
+	    (node->type != DOM_TEXT &&
+	     node->type != DOM_CDATA_SECTION &&
+	     node->type != DOM_PROCESSING_INSTRUCTION &&
+	     node->type != DOM_COMMENT)) {
 		status = bind_throw_illegal(realm);
 		return status;
 	}

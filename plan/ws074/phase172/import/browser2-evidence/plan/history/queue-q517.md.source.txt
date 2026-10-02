@@ -1,0 +1,45 @@
+<!-- awesome-plan project=zedbsd record=queue-q517 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q516](queue-q516.md), exact archive verified.
+
+## q517
+
+Purpose: namespaced element creation/identity, WS074 / fg011.
+Timebox: one finite Phase, namespace API/GC/clone and bounded regressions.
+Approval: current user2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」; 2026-10-01 「続けてください」.
+Exact scope: [p108 saved revision](../ws074/phase108/phase.md); createElementNS
+validation/conversion, exact URI/prefix/localName, custom internal namespace,
+tracing/clone/getters/serialization and existing folding preservation.
+No attributes/XML parser/DOMImplementation/Traversal/Range/loading/CSSOM/
+custom-element registry/HAL/toolchain/modules.
+
+| Attempt | Phase | Status | Dependencies / selection reason |
+| --- | --- | --- | --- |
+| q517-i01 | [ws074-p108](../ws074/phase108/phase.md) | cleared | p107/p104 cleared1dd5f77c; all10021/23 missing namespaced element APIs |
+
+Criteria: focused namespace/case/exception/conversion/owner/clone/GC PASS plain
++ASan; name31/31/DOM23/23/frame17/17/realm30/30; warning-free/no sanitizer;
+Acid2 exact/all100 Acid3 no regression from44,21/23 PASS/Uncaught0/no errors;
+full changed-source standard/style/diff and durable evidence.
+Graph: p104+p107 (external cleared) → q517-i01/p108 → p100 (external planned).
+No cycle; external nodes are context, not implementation authority.
+
+## Upcoming Work Outlook
+
+Indexed Traversal/Range/CSSOM/HTML/loading/VM gaps follow in finite phases to
+p100100/100 zero Uncaught/crash/timeout, preserving Acid2 exact. p101/p098
+outside goal; p044 full WS conformance remains.
+
+## q517 terminal outcome (2026-10-01)
+
+q517-i01/p108 cleared. Namespaced creation/identity/errors38/38 and GC/clone12/12
+plain/ASan, name31/31/DOM23/23/frame17/17/realm30/30, no warnings/sanitizer.
+Acid2 exact; Acid3 all10047/100,21/23/76 newPASS/no regression/Uncaught0/no errors.
+[Evidence](../ws074/phase108/verification.md). Full changed-source standards/style/
+diff PASS, formatter absent; OS/guest/boot/GPU not run. Next child-document CSS
+foundation candidate and indexed remaining53 features; p100 unchanged. Local
+unpublished/no push.

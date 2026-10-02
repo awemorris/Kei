@@ -1,0 +1,28 @@
+# q522 evidence — 2026-10-01
+
+p112cleared: HTMLButtonElement/HTMLLabelElement/HTMLMetaElement proper tagged
+subclasses; button.type/currentAuto contexts and rawcontentsetter, button.value
+independent of text; label.htmlFor↔for/meta.httpEquiv↔http-equiv. Exact receiver
+brands, rawDOMStringconversion once, preserved conversionexceptions, childrealm/
+borrowedgetter/prototype/clone/parser identities verified. No HTML activation,
+form/input state/collections or complete interfaces promised.
+
+Both variants focused40/40, DOM23/23, iframe17/17, frameGC33/33, ownership27/27,
+realm30/30. All100 Acid3 inventories equal58→60 solely59/62newPASS/no regressions,
+Uncaught0/completeTrue/run_status0/run_errors[], Acid2exact/different_pixels0,
+no warnings/sanitizer. Visual40.05354166666667% remains separate diagnostic.
+
+Commands: host-build.sh plain/asan; browser --run html-reflection-probe.html and
+iframe-context-probe.html; host-frame-lifetime/host-context-ownership/host-realms;
+run-dom-tests.py; run-acid-tests.py --out build/ws074-acid-q522-<variant>,
+ASAN_OPTIONS=detect_stack_use_after_return=0 for real-stackGC. Logs build/ws074-q522-*.
+Initial build rejected registry initializers referring to undeclared native functions;
+restored necessary forwards before tables, as required by C/existing binding registry.
+Final builds warning-free. Full changed-source standard manually reviewed including
+native declarations/table dependencies/ANSI locals/paragraphs/brands/conversion/
+checkedallocation/cleanup/UTF16/ownership. style-check.py changedC and diffcheckPASS.
+clang-format unavailable/manual formatting, cc14.2.0/Python3.13.5.
+[Hashes/reports](verification.json), [inventory](inventory.json). No fullHTML,
+activation/form behavior, exhaustive fuzz/failures, OS/guest/boot/GPU checked.
+Remaining40features, p100100/100 unmet. Localunpublished/nopush, WIP commit supplies
+revision for these records.

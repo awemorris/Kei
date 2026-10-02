@@ -1,0 +1,72 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) {console.log((condition?'PASS ':'FAIL ')+label);}
+function throws(name, call) {var yes=false;try{call();}catch(e){yes=e.name===name;}return yes;}
+var aliases=['Event','events','HTMLEvents','SVGEvents','UIEvent','uIeVeNtS'];
+for(var i=0;i<aliases.length;i++){
+ var item=document.createEvent(aliases[i]);
+ check('factory alias '+aliases[i],item instanceof Event && (i<4 || item instanceof UIEvent));
+ check('factory default '+i,item.type==='' && !item.bubbles && !item.cancelable && item.target===null && !item.isTrusted);
+ check('uninitialized refused '+i,throws('InvalidStateError',function(){document.body.dispatchEvent(item);}));
+}
+check('unknown factory',throws('NotSupportedError',function(){document.createEvent('Bogus');}));
+check('factory required argument',throws('TypeError',function(){document.createEvent();}));
+check('document receiver brand',throws('TypeError',function(){Document.prototype.createEvent.call({},'Event');}));
+var calls=0;var e=document.createEvent({toString:function(){calls++;return 'UIEvents';}});
+check('factory one conversion',calls===1);
+check('UI defaults',e.view===null && e.detail===0);
+check('init required type',throws('TypeError',function(){e.initEvent();}));
+check('UI init required type',throws('TypeError',function(){e.initUIEvent();}));
+check('initializer return',e.initUIEvent('test',true,true,null,6)===undefined);
+check('UI initial fields',e.type==='test' && e.bubbles && e.cancelable && e.view===null && e.detail===6);
+var parent=document.createElement('div'), child=document.createElement('span');document.body.appendChild(parent);parent.appendChild(child);
+var text=document.createTextNode('x');child.appendChild(text);var seen=0,detail=true;
+function listener(event){seen++;detail=detail && event.detail===6;event.preventDefault();}
+parent.addEventListener('test',listener);
+check('node bubble dispatch canceled',child.dispatchEvent(e)===false && seen===1 && e.defaultPrevented);
+check('text bubble dispatch canceled',text.dispatchEvent(e)===false && seen===2 && detail);
+parent.removeEventListener('test',listener);
+check('listener removal',child.dispatchEvent(e)===false && seen===2);
+e.initUIEvent('reset'); check('reinit clears cancellation and target',!e.defaultPrevented && e.target===null && !e.bubbles && !e.cancelable && e.detail===0 && e.view===null);
+e.initUIEvent('again',false,false,window,2147483648);
+check('view actual Window',e.view===window);
+check('signed long detail',e.detail===-2147483648);
+e.initUIEvent('fraction',true,false,null,3.8);check('detail integer truncation',e.detail===3);
+e.initEvent('base',false,true);check('base initializer keeps UI detail',e.detail===3 && e.view===null && e.type==='base');
+var marker={},caught;try{e.initUIEvent({toString:function(){throw marker;}});}catch(x){caught=x;}
+check('type conversion exception unchanged',caught===marker && e.type==='base');
+var order=''; e.initUIEvent({toString:function(){order+='type,';return 'order';}},true,true,null,{valueOf:function(){order+='detail';return 9;}});
+check('conversion order',order==='type,detail' && e.detail===9);
+caught=null;try{e.initUIEvent('broken',false,false,null,{valueOf:function(){throw marker;}});}catch(x){caught=x;}
+check('detail exception atomic',caught===marker && e.type==='order' && e.detail===9 && e.bubbles);
+check('view invalid type',throws('TypeError',function(){e.initUIEvent('bad',false,false,{});}) && e.type==='order');
+var fakeWindow={document:document};check('copied Document cannot forge Window',throws('TypeError',function(){e.initUIEvent('bad',false,false,fakeWindow);}));
+var read=0;fakeWindow={};Object.defineProperty(fakeWindow,'document',{get:function(){read++;return document;}});
+check('Window brand avoids user getter',throws('TypeError',function(){e.initUIEvent('bad',false,false,fakeWindow);}) && read===0);
+var base=new Event('plain');check('base Event initialized by constructor',child.dispatchEvent(base)===true);
+check('UI initializer rejects base',throws('TypeError',function(){UIEvent.prototype.initUIEvent.call(base,'bad');}));
+var payload={}, custom=new CustomEvent('custom',{detail:payload});
+check('custom payload unchanged',custom.detail===payload);
+check('UI getter rejects custom',throws('TypeError',function(){Object.getOwnPropertyDescriptor(UIEvent.prototype,'detail').get.call(custom);}));
+check('mouse UI defaults',new MouseEvent('mouse').detail===0 && new MouseEvent('mouse').view===null);
+var active=0,unmodified=false;child.addEventListener('order',function(event){active++;event.initUIEvent('changed',false,false,window,1);unmodified=event.type==='order' && event.detail===9;});
+check('active initialization no-op',child.dispatchEvent(e)===true && active===1 && unmodified && e.type==='order');
+e.initUIEvent('fresh',false,false,window,4);check('after dispatch init works',e.type==='fresh' && e.detail===4 && e.target===null);
+var f=document.createElement('iframe');document.body.appendChild(f);var w=f.contentWindow,d=f.contentDocument;
+var ce=d.createEvent('UIEvents');ce.initUIEvent('child',false,false,window,2);
+check('child event prototype',ce instanceof w.UIEvent && !(ce instanceof UIEvent));
+check('crossrealm view identity',ce.view===window);
+e.initUIEvent('held',false,false,w,7);document.body.removeChild(f);w=null;d=null;f=null;
+check('saved retired child view',e.view.closed===true && e.detail===7);
+check('readonly view and detail',!e.hasOwnProperty('view') && !e.hasOwnProperty('detail'));
+var fake=Object.create(UIEvent.prototype);calls=0;
+check('initializer brand before conversion',throws('TypeError',function(){UIEvent.prototype.initUIEvent.call(fake,{toString:function(){calls++;return 'fake';}});}) && calls===0);
+var fresh=document.createEvent('Event');fresh.initEvent('resetflags',true,false);fresh.stopImmediatePropagation();fresh.initEvent('resetflags',true,false);
+var reached=0;parent.addEventListener('resetflags',function(){reached++;});child.dispatchEvent(fresh);
+check('initialization clears stop flags',reached===1);
+check('empty initialized type dispatch allowed',child.dispatchEvent(new Event(''))===true);
+var activeFailure=false;child.addEventListener('activeerror',function(event){activeFailure=throws('TypeError',function(){event.initUIEvent('x',false,false,{});}) && event.type==='activeerror';});
+e.initUIEvent('activeerror');child.dispatchEvent(e);check('active method still converts arguments',activeFailure);
+
+</script>

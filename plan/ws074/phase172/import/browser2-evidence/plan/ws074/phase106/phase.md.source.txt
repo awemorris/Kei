@@ -1,0 +1,179 @@
+<!-- awesome-plan project=zedbsd record=ws074-p106 -->
+
+# ws074-p106: Reachable child-context ownership foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q514 / q514-i01; q512 historical cleared, q513 invalidation retained
+Prerequisite: [p105](../phase105/phase.md) cleared and verified cross-realm output.
+
+## Objective and boundary
+
+Define and implement ownership that can safely retain a child realm/window while
+reachable JavaScript functions, objects or Documents refer to it, and reclaim
+unreachable detached contexts. Preserve one heap/agent per tab. This foundation
+precedes p104; it does not itself expose HTML iframe contexts or URL loading.
+
+Existing malloc/tracer ownership is safe only while the embedding retains the
+realm until all functions are gone. q510 [source evidence](../phase104/investigation.md)
+shows no way to satisfy both saved-reference safety and reclaimability simply by
+calling destroy on removal or keeping every child forever. This is a missing
+ownership design, not a reproduced dangling-pointer bug.
+
+## Readiness and design work before selection
+
+Inspect every VM cell with a raw realm pointer (functions, suspended execution,
+promise jobs), document/wrapper references and window host pointers. Specify a
+GC-traced owner for child-context C resources, connected-context roots, roots
+while executing, saved references, pending work, cancellation on detach and
+collector/heap-destruction ordering. Prefer existing collector mechanisms; any
+new VM lifetime API must keep explicit ownership of the top-level realm intact.
+
+Bound the candidate implementation to VM/bind ownership support and tests. Save
+exact affected types/APIs, cleanup/failure procedure and acceptance before Queue
+selection. Verify missing partial-construction paths and tracer/root removal;
+don't introduce unrelated realm scheduling or agent-cluster architecture.
+
+Proposed verification: saved foreign function/global/document survives GC;
+unreferenced detached ownership is reclaimed; connected/nested contexts and
+in-flight calls remain alive; partial failure and tab destruction free resources
+once under plain/ASan. Timers/observer/job ownership needs an explicit design,
+not an unverified claim of complete cleanup. Full changed-source standards
+review and focused existing regressions are required.
+
+Apply [Guardrail](../../guardrail.md), full [C standard](../../coding-style.md),
+browser design §§1,4,11,12,14 and checked-in formatting configuration. No HAL,
+toolchain, navigation, document-open/close or module changes. Scope/design still
+planning; this record grants no implementation authority.
+
+## Introduction / dependency redesign event (2026-09-30)
+
+Origin: [p104 q510 outcome](../phase104/phase.md). Separates ownership readiness
+from reproduced call/exception repair in [p105](../phase105/phase.md). p104 keeps
+its initial-context acceptance but must verify this output before resuming.
+[p100](../phase100/phase.md) stays 100/100 with no Uncaught/crash/timeout; full WS
+conformance stays p044. See the [WS redesign summary](../ws.md).
+
+## p105 prerequisite clearance event (2026-09-30)
+
+[p105](../phase105/phase.md) cleared in q511: saved8/8 and additional30/30
+plain/ASan, correct callee globals/exceptions, Acid2 exact and Acid3 unchanged
+40/100, Uncaught0. [Verification](../phase105/verification.md) supplies the
+execution output. p106 ownership is still planning; no child lifetime/iframe
+acceptance is supplied by this clearance. Remaining dependencies and original
+criteria are preserved; next ownership Queue uses standing autonomous consent.
+
+## Concrete ownership design / q512 activation (2026-09-30)
+
+p105 verified in commit f39fdea9. Root executor, no concurrent Queue; q511 exact
+scope/outcome archive verified before rotation. Current user's autonomous Acid3
+instruction authorizes this finite prerequisite Queue.
+
+Implement optional GC-managed realms in existing vm/realm.c: embed a cell header
+in vm_realm; preserve explicit malloc/tracer primary realms. Managed creation
+allocates the realm itself as a cell before any intrinsic/function is made.
+Its trace walks existing realm roots/stack/jobs and an optional host tracer;
+finalization releases host C resources, then stack/job buffers exactly once.
+Function tracing marks managed realm cells; global.internal and Document's
+context cell retain their realm. Raw in-flight realm pointers are real heap
+cell pointers recognized by the existing conservative stack scan. Connected
+embedding retains the child Document/global explicitly; p104 owns actual tree
+relationships/removal and nested context creation, not this Phase.
+
+Managed bind_window_create registers host trace/release hooks and removes its
+permanent window tracer only after successful installation. It rejects a
+non-NULL asynchronous host.fetch before allocation: no host callback can outlive
+a collectible window. Future loading must add verified cancellation separately.
+Document/context, prototypes, listeners, timers, storage and observer state are
+traced by the owned window. Managed observers use window tracing rather than
+permanent heap roots; primary observer behavior remains unchanged.
+
+Add an idempotent bind_window_detach: disable task checkpoints/timer execution,
+clear queued jobs/rejections/timers and pending observer targets/records while
+retaining saved observer objects/backend until owner finalization. Later calls
+may construct internal state but cannot deliver detached tasks or create global
+retention roots. Finalizers neither allocate nor read unrelated DOM/VM cells;
+tab heap destruction may finalize cells in any order. Explicit destroy is for
+manual primary realms/windows; managed resources are released by the collector.
+Partial construction unwinds C resources and leaves safe finalizable cells.
+
+Affected: vm/vm.h, realm.c, function.c; bind/bind.h, internal.h, window.c,
+environment.c, timer.c; dom/dom.h, node.c; focused host ownership tests. No new
+source module, HAL/toolchain/agent scheduler, iframe getters/relationships,
+URL loading, navigation, document-open/close or module work.
+
+Acceptance: managed saved function/global/Document and suspended function state
+survive collections; raw in-flight C/VM pointers survive GC; unreached contexts
+and observer cycles reclaim after bounded stack clearing; detach cancels queued
+tasks/observer delivery, connected explicit roots retain contexts; no async
+callback registration for managed hosts; bounded allocation failure and whole
+heap destruction release once under plain/ASan. Existing realm/object/interp/DOM
+regressions and Acid2 exact/Acid3 all100 no regression, warning-free builds,
+full changed-source standards/style/diff checks. No full iframe acceptance claim.
+
+This replaces the provisional separate owner-cell idea with a cell-backed realm,
+which lets existing GC recognize raw realm pointers without a new scheduler or
+reference-counting protocol. p104 prerequisite/interface is updated reciprocally.
+
+## q512 terminal event (2026-09-30, q512-i01)
+
+**cleared**. Managed realm cell / host trace-finalize, function/global/Document
+retention, managed observer tracing, idempotent detached-task cancellation and
+active timer rooting implemented. Primary explicit ownership preserved. Plain/
+ASan27/27 ownership, realm30/30, object100/100, interp45/45, DOM23/23 pass,
+warning-free/no sanitizer. Acid2 exact, Acid3 all100 unchanged40/100 Uncaught0.
+[Verification](verification.md), [hashes/results](verification.json),
+[inventory](inventory.json). Full changed-source manual standards/style/diff
+PASS; formatter unavailable, OS/guest/boot/GPU skipped. No async cancellation or
+actual iframe APIs supplied. p104 now has verified VM/GC prerequisites and may
+resume under standing autonomous consent. Local events unpublished; no push.
+
+## Clearance invalidation / redesign (2026-09-30)
+
+q513/p104 GC teardown investigation reproduced [BUG-127](../../bugs/BUG-127.md):
+retained native function tracing reads function->realm->managed after manual
+primary realm destruction. [ASan stack](../phase104/retirement-investigation.md)
+and unchanged VM source hashes prove the p106 regression; plain exit0 is not a
+repair. Status becomes **uncleared**; q512's27/27 and historical clearance remain
+recorded as actually observed. No remote Issue reopen is claimed.
+
+Revise function ownership: add a separate realm_owner cell reference initialized
+once in both bytecode/native creation while realm is live. Managed functions
+retain &realm.cell; primary functions retain NULL. GC traces realm_owner without
+reading raw realm memory. Keep raw execution realm and explicit-primary invocation
+contract unchanged. Add retained-primary GC regression, rerun managed ownership/
+VM/DOM/Acid and full changed-source review. Next finite Queue under standing
+consent repairs/revalidates this scope before p104 may resume. No other VM feature
+or iframe acceptance is supplied by this redesign.
+
+## q514 activation / exact repair scope (2026-09-30)
+
+Current user standing autonomous instruction supplies this finite revalidation
+Queue. Baseline9a4a91db includes q513 unaccepted iframe progress; no additional
+iframe implementation is authorized by q514. Only VM function-owner cache and
+its retirement/ownership regressions are selected. Root sole executor, q513 exact
+archive read back, no concurrent attempt. Applicable full coding-style.md and
+Guardrail are loaded; prerequisites p105 still verified.
+
+Add vm_function.realm_owner cell pointer, initialize in both bytecode/native
+creation (NULL for manual realm, &realm.cell for managed), trace it without
+reading raw realm flags. Keep function.realm for live execution; do not permit
+calling a manually destroyed realm's functions. Test host-realm-retirement now
+PASS under plain/ASan, ownership27/27 and realm30/30, VM/object/DOM and saved
+initial-frame17/17 regressions; Acid2 exact and all100 Acid3/no regressions from
+prior40/100. Any new score enabled by q513 progress must be attributed accurately;
+p104 is not cleared by this VM revalidation. Warning-free builds, full affected
+p106 source/changed VM standard review/style/diff, hashes/commands/skips/results.
+BUG-127 resolves only with these checks; p106 may reclear, then p104 can resume.
+
+## q514 terminal event (2026-10-01, q514-i01)
+
+**cleared** again; [BUG-127](../../bugs/BUG-127.md) resolved by independent
+managed-owner tracing. Retirement PASS plain/ASan; ownership27/27, realms30/30,
+object100/100, interp45/45, DOM23/23, saved frame17/17. Acid2 exact; Acid3
+42/100, all100/no regression/Uncaught0/no run errors. Score gains44/78 belong to
+retained q513 iframe progress. [Revalidation](revalidation-q514.md) supplies
+commands, limits, standards review and hashes. Original q512 clearance and
+q513 invalidation preserved; p104 remains uncleared and requires its new
+completion attempt. Local unpublished, no remote lifecycle action or push.

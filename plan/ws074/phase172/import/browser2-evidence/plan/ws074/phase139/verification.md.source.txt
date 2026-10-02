@@ -1,0 +1,53 @@
+# q551 / p139 verification — 2026-10-01
+
+Base 3df1768c; actual original pinned Acid3 plain/ASan87/100, prior87 preserved,
+newnone, all100 indexed results exactly equal, completeTrue/runstatus0/exceptions[]/
+runerrors[]. Acid2 both exact100%; Acid3pixel38.30% diagnostic only, not p100 clearance.
+All52 regression groups PASS both; pre-insertion Page64, native29, existingRangecore59/
+boundary80/removal33/nativeGC89/frame148 unchanged. Remaining13 and p100/p044/WS acceptance
+remain incomplete.
+
+Production new bind/insertion.c/internal.h/libbrowser registration and bind_insert
+validation extraction. Pure checks cover actual parent/ancestor/reference/type/error
+priority, Document Text/unique element/doctype/order/whole Fragment; empty exclusions
+preserve Document self-move rejection. Rejected fragments retain native identity/order/
+owner; no partial adoption/splice. Native fixture independently observes success-only
+validation preserving generations/parents/owners/host/removal counts, actual insertion
+still adopts/notifies, caller explicit roots retain foreign creator with conservative
+stack scanning disabled, invalid native Fragment/NULL input behavior. Borrowed child/
+XML/saved owner and visible expando independence verified by Page. No Range insertion/
+Textsplit/data repair or replacement atomicity claimed.
+
+Commands (bounded60sec each):
+- `sh plan/ws074/tests/host-build.sh plain` and `asan`; both awaited before execution,
+  production source list reused; final warning/error0. First native-fixture compile
+  caught a wrong dom_removal_subscribe invocation; corrected to checked int/output
+  contract, final clean builds. No product API relaxation.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 build/ws074-host/VARIANT/browser --run
+  plan/ws074/tests/pages/pre-insertion-probe.html` and `host-insertion`: focusedPASS.
+- `python3 build/ws074-q551-regressions.py VARIANT`: all52 PASS, bounded native/page/
+  DOM23/JS14/form/table/option/Range/lifetime/cache/style-golden groups; noFAIL/Uncaught/
+  sanitizer/runtimeerror. JSON exact commands/results retained in verification.json.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+  --program build/ws074-host/VARIANT/browser --out build/ws074-acid-q551-VARIANT`:
+  original87/complete/equal/errors0/Acid2exact; overall Acid3FAIL correctly retained.
+- `python3 plan/tools/style-check.py userland/desktop/browser/bind/node.c
+  userland/desktop/browser/bind/insertion.c plan/ws074/tests/host-insertion.c`:
+  output inspected empty; `git diff --check`: PASS.
+
+Full plan/coding-style.md manual review of changed final C/header/registration:
+ANSI leading declarations/no calls in conditions/initializers; public-before-static/
+one-line forwards; purpose paragraphs/if/loops/returns and blanklines; compound
+conditions multiline; allocation/error propagation/ownership/status semantics and
+cleanup reviewed. New helper neither performs DOM changes nor calls environment/host
+hooks; only possible VM allocation is checked DOM exception with caller-owned inputs.
+Nearby unaffected code not reformatted. clang-format unavailable: manual formatting;
+cc14.2.0/Python3.13.5. No new policy/standard exception.
+
+Evidence is host native semantics, not full WPT/fuzz/OS/guest/boot/GPU acceptance.
+No aggregate make check, HAL/toolchain/.internal changes, push or remote publication.
+Source SHA256/build/report/regression evidence recorded in verification.json;
+exact approved pre-generation snapshot retained in Queue archive. Next finite scoped
+work: live insertion/data/Text split foundation then actual Range insertion/content;
+CSS/loading/SVG, final conformance/p100/p044. No expanded implementation authorized
+by this result alone; standing user delegation permits concrete subsequent Queue.

@@ -1,0 +1,38 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none; finished Queue: q527 (root sole executor)
+Last finished Queue: [q526](history/queue-q526.md), archive verified.
+
+## q527
+
+Purpose: XML Document/DOMImplementation foundation for26/27, WS074/fg011.
+Timebox: one finite Phase. Approval currentuser2026-09-30 autonomous Acid3 /
+automaticQueue instruction plus2026-10-01 continuation. Exact saved
+[p117 scope](ws074/phase117/phase.md) includes creation/doctype/contentkind/case/
+namespace helper/prototype ownership+GC; excludes loading/collections/general
+adoption/constructors/other DOM/CSS/HTML/SVG/HAL/toolchain implementation.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q527-i01 | [ws074-p117](ws074/phase117/phase.md) | cleared | p108/p104/p106 outputs and5e6457f5 inventory65 verified;26/27 missing factory |
+
+Criteria focused creation/GC plus namespace38/name31/DOM23/frame38/owner27 and VM
+plain+ASanPASS, all100 prior65preserved/26+27PASS/Uncaught0/errors0/completeTrue/
+runstatus0/Acid2exact/warning0/noASan/fullstandard/style/diff/evidence.
+Graph p108/p104/p106(external) → p117 → p100(external), no cycle.
+Only p117 implementation authorized.
+
+## Upcoming Work Outlook
+
+HTML collections/control activation, Traversal/Range, CSSmedia/loading/SVG and
+blankabout-base snapshot finite Queues toward100/100. p100100/100 unchanged;
+p044 conformance remains. Local unpublished/no push.
+
+## Outcome
+
+q527-i01/p117cleared. XML62/62/GC16/16/frame48/48+owner27/DOM23/JS14/namespace/
+VM/childCSS PASSbothvariants; all10067/100/26+27newPASS/no regression/Uncaught0/
+Acid2exact. [Evidence](ws074/phase117/verification.md), remaining33/p100unmet.

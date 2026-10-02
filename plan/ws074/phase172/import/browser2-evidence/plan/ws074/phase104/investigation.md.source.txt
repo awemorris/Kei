@@ -1,0 +1,98 @@
+# q510 readiness evidence (2026-09-30)
+
+Production baseline: `596fc1ca` (full hash and tool versions in
+[investigation.json](investigation.json)). No production source was changed.
+
+## Bounded reproduction
+
+The new [realm probe](../tests/realm-context-probe.c) creates two realms in one
+heap, installs their built-ins, and exposes the child global to the parent.
+Parent `marker` is 11; child `marker` is 22. These are ordinary supported
+embedding operations; no iframe binding or dangling-pointer call is involved.
+
+Run after `sh plan/ws074/tests/host-build.sh plain` and `asan`:
+
+```sh
+python3 plan/ws074/tests/run-realm-context-probe.py
+```
+
+The runner checks existing engine objects against source/header timestamps,
+compiles the probe with `-std=gnu11 -O1 -g -Wall -Wextra -Werror`, and links the
+same engine as the host build. ASan adds address/undefined sanitizers and uses
+`ASAN_OPTIONS=detect_stack_use_after_return=0` for the conservative collector.
+Both variants compile without warnings, exit **1**, and report the same
+**3/8 passing, 5 failing** inventory. Neither produces sanitizer/stderr output.
+Reproducing failures is investigation evidence, not passing acceptance.
+
+| Check | Plain / ASan | Consequence |
+| --- | --- | --- |
+| Parent reads its marker | PASS | Ordinary parent execution works |
+| Child reads its marker | PASS | Ordinary child execution works |
+| Parent calls child bytecode, expects child marker | FAIL | Direct calls do not select the callee realm |
+| Parent calls child-created Function, expects child marker | FAIL | Dynamic functions are also affected |
+| Parent invokes child getter, expects child marker | PASS | VM API accessor path behaves differently from direct calls |
+| Parent catches child native TypeError | FAIL | Native exception value is not transported to the caller |
+| Parent catches child Function-constructor SyntaxError | FAIL | Constructor exception transport is also missing |
+| Parent catches child bytecode TypeError with child identity | FAIL | Wrong execution realm changes exception identity |
+
+`build/ws074-host/{plain,asan}/host-object` remains **100 checks, 0 failed**
+in each variant. This exposes a missing multi-realm prerequisite, rather than
+invalidating the previous one-realm acceptance or claiming a regression caused
+by this Queue. [BUG-126](../../bugs/BUG-126.md) tracks the reproduced failures.
+
+## Source evidence and lifetime gap
+
+- `vm/interpreter.c:1355`: bytecode calls push the child function into
+  `run->realm` and retain that realm as the execution environment.
+- `vm/interpreter.c:1368,1431`: native/constructor paths execute in the callee
+  realm but return the thrown status without copying its exception to the
+  caller realm. `vm/function.c:400,443` has the same transport gap in VM APIs.
+- `vm/realm.c:88,112,296`: malloc-owned realms remain permanent heap tracers
+  until `vm_realm_destroy`; destroying them frees the VM stack and C record.
+- `vm/function.c:516`: function tracing covers its object/code/environment/data,
+  but does not retain the C realm referenced by `function->realm`.
+- `bind/window.c:159,184,1172`: windows similarly rely on a manually destroyed
+  C record/tracer. Keeping every detached frame forever would retain its realm,
+  globals and stack; immediate destruction would invalidate saved functions.
+
+The lifetime gap is a design prerequisite, **not** a reproduced use-after-free:
+the probe retains both realms until all calls finish. The existing embedding
+contract requires realms to outlive functions. Child contexts need a separate
+reachability-based ownership plan consistent with browser design §§1,4,11.
+
+## Chromium lifecycle reference
+
+Chromium 153.0.8010.52 passes all **17** checks in
+[iframe-context-probe.html](../tests/pages/iframe-context-probe.html), with the
+console saved as [reference output](../tests/pages/iframe-context-probe.expected).
+The reference covers parser-created/detached/nested frames, initial tree and
+URL, distinct constructors, saved references on removal and fresh reattachment.
+Notable requirements: removal closes the saved Window, makes the old Document's
+defaultView null, destroys nested contexts, and leaves no child context when a
+new iframe is attached to the old inactive Document.
+
+```sh
+chromium --headless --no-sandbox --disable-gpu --allow-file-access-from-files \
+  --user-data-dir=/tmp/ws074-p104-reference --enable-logging=stderr --v=0 \
+  --virtual-time-budget=5000 --dump-dom \
+  file:///home/awe/zedBSD-codex/plan/ws074/tests/pages/iframe-context-probe.html
+```
+
+Raw output is under `build/ws074-p104/`. The required insertion/removal lifecycle
+also follows [WHATWG HTML iframe steps](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element).
+This is reference evidence only; these iframe checks have **not passed zedBSD**.
+
+## Bounds, limitations and disposition
+
+q510-i01 / p104 **uncleared**: initial contexts are not implemented. Resume after
+[p105](../phase105/phase.md) fixes cross-realm calls and exceptions, and
+[p106](../phase106/phase.md) supplies verified context ownership. No attempt to
+transfer a reproduced failure as non-blocking, no relaxation of p104 criteria.
+
+Only the investigation C source was added. Full C-standard and `.clang-format`
+manual review, style check, Python compilation and diff check pass. clang-format
+is unavailable, so automatic formatting was skipped. A subsequent formatting
+edit was recompiled/rechecked with unchanged results. No new production build,
+Acid2/Acid3 run, full OS build, guest/boot or GPU validation was necessary or
+performed. The last Acid3 measurement remains p103 **40/100, Uncaught 0**;
+that measurement is historical, not a new result. GitHub records are unpublished.

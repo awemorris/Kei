@@ -1,0 +1,46 @@
+# q518 bounded evidence — 2026-10-01
+
+Outcome **uncleared**: child CSS foundation itself passes, but enabling the
+existing cascade exposes invalid selector grammar, [BUG-128](../../bugs/BUG-128.md).
+Prior44 PASS becomes FAIL; the no-former-pass-regression criterion is unmet.
+Retain the working implementation, repair the prerequisite in a new finite Phase,
+then rerun this Phase's acceptance. No bug-transfer clearance decision is assumed.
+
+Added Window-owned C cascade, current-generation replacement, direct inline style
+text and media, ancestor inheritance, receiver-owner queries/computed values and
+cssFloat alias. Primary host callbacks remain used; empty primary hosts unchanged.
+Engine borrows parsed sheets; cleanup destroys engine then sheets without DOM/VM
+reads and registers no permanent child GC root. CSS parser strings are atoms,
+marked through the existing atom table; connected raw DOM cache entries live via
+Window Document tracing and generation replacement. No child layout/used boxes,
+external/import loading or new grammar/property implementation.
+
+Both plain/ASan: focused child CSS30/30; frame lifetime33/33 (original24 plus saved
+computed declaration5 and active CSS/GC/viewport4). Every original ownership graph
+now builds CSS before retirement, including whole heap teardown. Saved declaration
+survives parent destroy/GC, inactive values empty, last root permits owner release
+exactly once. Host ownership27/27, realms30/30, object100/100, interp45/45, DOM23/23,
+iframe17/17. No warnings or sanitizer diagnostics. All100 Acid3 results equal
+between variants,55/100, newPASS33/35/36/37/39/40/41/42/45, regression44; exceptions
+and run_errors empty, completeTrue/run_status0, Acid2 different_pixels0/exact100%.
+Visual agreement39.21333333333333% remains a separate diagnostic. Remaining45 tests
+include lang/empty/checked, DOM/Traversal/Range/loading/SVG/VM/CSS property gaps.
+
+Commands: `sh plan/ws074/tests/host-build.sh plain` and `asan`;
+`build/ws074-host/<variant>/browser --run plan/ws074/tests/pages/child-style-probe.html`
+and `iframe-context-probe.html`; host-frame-lifetime, host-context-ownership,
+host-realms, host-object, host-interp; `python3 plan/ws074/tests/run-dom-tests.py
+--program build/ws074-host/<variant>/browser`; `python3 plan/ws074/tests/run-acid-tests.py
+--program build/ws074-host/<variant>/browser --out build/ws074-acid-q518-<variant>`.
+ASan commands use `ASAN_OPTIONS=detect_stack_use_after_return=0` for real-stack GC.
+An initial regression invocation used nonexistent host-ownership/iframe-probe paths;
+no success claimed; corrected to the actual files above, every corrected check PASS.
+
+Full changed-source C rules manually reviewed: definitions/declarations/comments,
+condition calls/ANSI locals/control flow/allocation checks/error cleanup/ownership/
+finalizer ordering. `python3 plan/tools/style-check.py` changed C and `git diff --check`
+PASS. cc14.2.0/Python3.13.5; clang-format unavailable, manual formatting/review.
+Hashes, inventory and report paths in [verification.json](verification.json),
+[inventory](inventory.json). Logs under build/ws074-q518-*.log; no OS/guest/boot/GPU,
+exhaustive allocator failure or full CSS/layout conformance run. Local unpublished,
+no push. Record commit is the WIP commit containing this evidence.

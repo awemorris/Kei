@@ -1,0 +1,37 @@
+{
+  "queue": "q524",
+  "baseline": "ee552efa",
+  "sources": {
+    "userland/desktop/browser/css/css.h": "8ecd1aeabfe2222b50c0d0f5eb92e4cd37a37690991090f18fef028747cd0637",
+    "userland/desktop/browser/css/internal.h": "d8fb360fccc9f1a171a75dc6d92807fed6da0b81a9f8d766db49d1f2df6bd262",
+    "userland/desktop/browser/css/values.c": "740dd89e0bfeab30b093452c8d57430418b72e6637abeb40761066ea7c4f9767",
+    "userland/desktop/browser/css/cascade.c": "1179ce38aeaf0ca2d2d5a23d03c3858f5deae233f5ed1c2408622a44d01732ab",
+    "userland/desktop/browser/bind/computed.c": "05795992ddc78f30662cba07fa88d872a1c9dcdabee084901aef1a634f912848",
+    "plan/ws074/tests/pages/cursor-probe.html": "6a2abeba1075ac065e6c1c548db12874e0bc9d8e3cb7853453def54ef04e819e"
+  },
+  "plain_asan": {
+    "cursor": "54/54",
+    "childCSS": "30/30",
+    "frame": "33/33",
+    "DOM": "23/23",
+    "selectors": "golden identical",
+    "Acid2": "exact100%",
+    "Acid3": "62/100 all100,47newPASS,no regression/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "changes": [
+    [
+      47,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q524-plain/report.json",
+    "build/ws074-acid-q524-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

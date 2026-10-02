@@ -1,0 +1,57 @@
+# q537 / ws074-p127 verification — 2026-10-01
+
+Cleared. Final plain+ASan original Acid3 **77/100**, all100 inventories identical,
+indexed56newPASS/prior76 preserved/completeTrue/run_status0/Uncaught/crash/runner
+timeout0. Acid2 exact100% both. [Full reports/source hashes/results](verification.json).
+Remaining23/p100 full100/100 unmet, pinned historical tests unchanged.
+
+- Radio fixture73/73: native initial/dirty checkedness/content attributes independent/
+  boolean conversion without user script/Symbol/null, dirty false and true clones/
+  initialized clean group-unchecked clone/disconnected clone has no group effects;
+  actual same-name/case/current tree/current ordinary owner/null owners/detached/
+  disabled/external/other form/checkbox/foreign/XML groups, explicit setters after
+  owner/name/type/tree changes, CSS checked sees actual state; Radio.value current
+  order/first checked actual radio/no checkbox/current value/on default/empty value/
+  absent and duplicate matching values/no match/first match/actual group beyond list
+  filter, one conversion/errors/brands/conversion-time mutation/shadowed getters never
+  invoked/relevant XML and managed child/retired native getter+setter.
+- Host-radio-state12/12 confirms actual internal dirty-state contract: list-value
+  setter checks target without dirtying it, group unchecking leaves clean other
+  dirty flag false, IDL checked setter sets only target dirty flag, later direct
+  list selection and group unchecking preserve existing independent flags, clone
+  retains clean initialized false/current state and independent native storage.
+- Actual form collection GC13/13: sole list retains current native checkedness
+  independently of content default, dirty text/private prototypes/cache cycles and
+  final root-drop reclamation. Managed frame88/88: sole RadioNodeList invokes its
+  checked-radio value getter after frame removal/manual primary destruction; final
+  script-root removal releases actual child once. Prior lifetimes preserved.
+- Input94/controls100/owner56/forms35/collection104/GC16/NodeIterator60/TreeWalker70/
+  traversal9/removal19/native65/XML62+GC16/namespace38+GC12/names31/iframe17/legacy56/
+  childCSS30/contextowner27/realms30/object100/interp45/DOM23/JS14/selectors golden
+  allPASS,30 selected command groups per variant.
+- Final builds `sh plan/ws074/tests/host-build.sh plain|asan`, warnings/errors0.
+  Final runners `python3 build/ws074-q537-regressions.py <variant>` and pinned Acid
+  runner `--out build/ws074-acid-q537-<variant>`, ASAN_OPTIONS=detect_stack_use_after_return=0
+  preserves actual stack scanning, ASan/UBSan0; variant builds finished before tests.
+- Full changed-source manual C: leading declarations/one-line forwards/public before
+  static/native table exception/purpose+loop+paragraph comments; exact actual input/
+  type/name/owner/tree group, checked-vs-dirty initialized state compatibility,
+  allocations of every affected currently checked member precede any state commit,
+  no user JS/allocations during commit, target/other dirty flags independent,
+  generation invalidation/clone independent state/no group update during cloning,
+  content-only list getter/setter and one conversion before live scan, traced name/
+  form/actual realm and node-owned state finalization, checked fallible APIs. Allocation
+  refusal is reviewed structurally; no forced C allocator OOM/fault switch claimed.
+  style-check no findings/git diff --check PASS. cc14.2.0/Python3.13.5,
+  clang-format absent/manual formatting.
+
+Primary [radio group](https://html.spec.whatwg.org/multipage/input.html#radio-button-group)
+and [RadioNodeList.value](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#dom-radionodelist-value)
+read2026-10-01. This increment enforces exclusivity when the selected explicit
+setter runs. Checked/defaultChecked attribute changes, name/type/form/id/owner/
+connection mutation group repair, cross-value-mode transitions, legacy click
+preactivation/cancellation/events/submission remain known subsequent scope.
+Advanced input/NodeList iterables/form own maps/parser magic/custom association
+residuals retained. No full HTML radio/input/WPT/fuzz/OS/guest/boot/GPU claim.
+WPT2d66b9b7998bb58c336138c178323ddee857b586 unchanged, p100/p044 acceptance
+unchanged, local unpublished/no push.

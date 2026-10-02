@@ -1,0 +1,60 @@
+<!-- awesome-plan project=zedbsd record=ws074-p112 -->
+
+# ws074-p112: Button, label and meta reflected attributes
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q522 / q522-i01
+Prerequisites: p109/p110/p111cleared6f5b5818,58/100 inventory.
+Rootsoleexecutor, standing2026-09-30 autonomousAcid3/automaticQueue instruction
+and2026-10-01continuation authorize exact finite scope below.
+
+## Objective / exact scope / design
+
+Indexed59 lacksbutton.type/value;62 lackslabel.htmlFor andmeta.httpEquiv. Add
+HTMLButtonElement/HTMLLabelElement/HTMLMetaElement subclasses in existing binding
+interface/prototype registries and select them for actual HTML tags, including
+parser/script/clone/childrealm owner paths. New bind/html-reflection.c registered
+in libbrowser source list. Exact branded receivers; getters ordinary content
+attributes or emptystring, DOMString setter conversion once preserving raw text,
+normal existing DOMgeneration update. Button.value independent of child text,
+label htmlFor↔for/meta httpEquiv↔http-equiv (no alias content attributes created).
+
+Button.type getter canonical submit/reset/button with ASCIIcase folding, invalid/
+missing Auto state: submit if no command/commandfor and parent is not HTMLselect,
+otherwisebutton; explicit submit retains submit. Setter reflects raw string,
+no HTML activation/submission/formowner/disabled/validation/input/value dirty state.
+No broader HTML interface property completion, customelements constructor changes,
+meta processing/network/CSS/layout/Traversal/Range/SVG/VM/HAL/toolchain. Ordinary
+internal class additions, no external libbrowser API or architecture choice.
+
+ApplyGuardrail/fullCstandard/browserbinding registry+ownership design.
+HTML Living Standard2026-09-29 inspected2026-10-01:
+[button](https://html.spec.whatwg.org/multipage/form-elements.html#dom-button-type),
+[label](https://html.spec.whatwg.org/multipage/forms.html#dom-label-htmlfor),
+[meta](https://html.spec.whatwg.org/multipage/semantics.html#dom-meta-httpequiv).
+Current Auto-state context semantics included, no fullHTML conformance claim.
+
+## Criteria / finite bounds
+
+Focused interface identity/prototype/tagbranding/canonical+rawtype/Auto contexts/
+stringconversion/errors/aliascontent/childborrowedmethod/clone and mutation PASS
+plain+ASan;59/62PASS. DOM23/23/iframe17/17/frameGC33/33/realm30/30/ownership27/27,
+warningfree/no sanitizer. All100 noformer58passregression/Uncaught0/errors0/
+Acid2exact; fullchangedsourceCstandard/style/diff/hashes/tools/skips. Bounded
+representative reflection cases, no fullHTML/activation/allocationfuzz. Unknown
+prerequisites end attempt uncleared before separate replan. Localunpublished/nopush.
+
+## Introduction / q522 activation (2026-10-01)
+
+Origin [p111 inventory](../phase111/inventory.json), two missing reflectedattribute
+families. Input/form collections/activation remain future finite phases, not part
+of this scope. [WS summary](../ws.md), p100100/100 unchanged.
+
+## q522-i01 clearance / local closure (2026-10-01)
+
+[Evidence](verification.md): reflectedattributes40/40/VMowner+DOM plain+ASanPASS,
+59/62newPASS/all10060/100/no regression/Uncaught0/Acid2exact. Fullchangedsource
+Cstandard/style/diffPASS; remaining40gaps get finite Queues. Remotepublication/
+closure notperformed. [WS](../ws.md), p100 unchanged.

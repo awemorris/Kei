@@ -1,0 +1,478 @@
+<!-- awesome-plan project=zedbsd record=ws074-p100 -->
+
+# ws074-p100: Acid3 full acceptance
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q591 / q591-i01 (prior q589 uncleared retained)
+Prerequisites: p102/p103 cleared; [p105](../phase105/phase.md) →
+[p106](../phase106/phase.md) → [p104](../phase104/phase.md), and remaining feature
+Phases from the indexed inventory.
+
+## Current prerequisite evidence (2026-10-02 / q590)
+
+Original100/all100indexedPASS/equalboth/all99groupsPASS/noerrors/Acid2exact.
+[Samep171](../phase171/verification-q590.md) re-cleared after mandatory signature
+layout repair and full final-code both-build/runtime/manual C checks. Oldq589
+p100uncleared retained. Screenshot100/100 with visualFAILlabels/pixel37.04%independent
+diagnostic; fullSVG/relativegeometry/renderer/CSS/WindowProxy limits retained.
+This samep100 cleared in q591; p044/WS incomplete.
+
+## Goal retained
+
+Unmodified historical Acid3 at pinned WPT 2d66b9b7998bb58c336138c178323ddee857b586
+must finish with 100/100, no Uncaught, crash or timeout. Pixel agreement is an
+independent diagnostic. Acid2 exact equality must be preserved.
+
+## 2026-09-30 design refinement
+
+Current user authorized starting the work after the proposal to split feature
+groups. p102 addresses finite headless execution and the failure inventory first;
+parser document.write/child contexts, DOM traversal/Range, XML/namespace,
+HTML interfaces and CSSOM follow according to verified dependencies. Preserve
+all obligations: p102 clearance is not p100 clearance. p101 CSS2 and p098 ES
+modules remain after p100. Per-item Queue selection is required.
+
+## 2026-09-30 prerequisite refinement
+
+p102 cleared in q508: original Acid3 now completes at 32/100, one Uncaught,
+and 100 indexed diagnostic results. The former 9/100 was partial execution.
+Added planned [p103](../phase103/phase.md) to restore parser-time document.write;
+child contexts and further DOM/CSSOM features require subsequent finite Phases.
+See [p102 evidence](../phase102/inventory.json). This changes prerequisite
+planning, not the 100/100 acceptance or p101 dependency. No full clearance or
+implementation authorization is implied by the diagnostic result.
+
+## 2026-09-30 p103 result and next prerequisite
+
+p103/q509 cleared: parser-time write/writeln restores structural fixtures and
+raises full execution from 32/100 to 40/100, Uncaught 1 → 0. Added planning
+[p104](../phase104/phase.md) for initial iframe contexts. URL loading and other
+missing DOM/CSSOM/XML/JS features are still external prerequisites. Late-write
+replacement/open/close is explicitly deferred; p103 is not full Document or
+Acid3 conformance. [New inventory](../phase103/inventory.json) records the 60
+remaining failures. Full acceptance and p101 order are unchanged.
+
+## q510 dependency redesign event (2026-09-30)
+
+Origin [p104](../phase104/phase.md) ended uncleared before iframe implementation:
+shared-heap two-realm calls and exception transport fail; child-context ownership
+also lacks a safe reachability model. Added prerequisite [p105](../phase105/phase.md)
+(call/exception repair) and planning [p106](../phase106/phase.md) (ownership)
+before p104. This changes the feature dependency order, not p100's complete
+100/100 and no-Uncaught/crash/timeout goal or p101 order. Resume p100 only after
+verified feature outputs, including real child contexts; q511 proposes p105 alone.
+No new Acid3 run in q510: last actual result remains p103 40/100, Uncaught 0.
+See [WS summary](../ws.md), [q510](../../history/queue-q510.md) and
+[p104 investigation](../phase104/investigation.md). Event is local/unpublished.
+
+## p107 structural dependency event (2026-10-01)
+
+[p104](../phase104/phase.md) cleared in q515; initial blank child contexts now
+verified. Added [p107](../phase107/phase.md) for indexed20/22 local-name validation,
+one necessary feature before this Phase's full100/100 acceptance. Remaining
+namespace/Traversal/Range/CSSOM/loading/VM features still require separate phases.
+No p100 execution/clearance, criterion unchanged; [WS summary](../ws.md).
+
+## p108 structural dependency event (2026-10-01)
+
+Added [p108](../phase108/phase.md) for21/23 namespace creation/identity/errors
+and clone/GC preservation after p107 cleared44/100. This necessary feature
+precedes full acceptance alongside remaining54+ indexed gaps. p100 remains
+planned/100/100 criterion unchanged, [WS summary](../ws.md).
+
+## p109 structural dependency event (2026-10-01)
+
+Added [p109](../phase109/phase.md) for missing child computed CSS paths blocking
+existing selector assessment33–43. p108 cleared47/100. This foundation and
+subsequent indexed CSS/DOM/loading/VM work precede full acceptance; p100 stays
+planned/100/100 criterion unchanged, [WS summary](../ws.md).
+
+## q518 dependency outcome (2026-10-01)
+
+[p109](../phase109/phase.md) remains uncleared because BUG-128 regresses44 after
+child CSS activation. Score55/100 is progress, not p100 acceptance. Repair separate
+selector prerequisite and revalidatep109; criteria100/100 unchanged. [WS](../ws.md).
+
+## p110 structural prerequisite event (2026-10-01)
+
+[Newp110](../phase110/phase.md) repairs BUG-128 after p109's scoped child CSS
+output; p109revalidation follows. p100 remainsplanned100/100/no Uncaught/crash/
+timeout/Acid2exact. [WS summary](../ws.md).
+
+## q520 dependency clearance event (2026-10-01)
+
+[p109](../phase109/phase.md) nowcleared afterp110 repair and actual full revalidation,
+all10056/100/no regressions/Uncaught0/Acid2exact. Next remaining44 gaps, including
+lang/empty. p100 own100/100 criteria remain unmet. [WS](../ws.md).
+
+## p111 structural dependency event (2026-10-01)
+
+[Addedp111](../phase111/phase.md) for indexed34/38 language/empty semantics;
+requires clearedp109/p110. p100remains100/100planned; remaining inventory updated after actual result. [WS summary](../ws.md).
+
+## q521 prerequisite clearance event (2026-10-01)
+
+[p111](../phase111/phase.md) cleared/all10058/100,34/38newPASS/no regression.
+Remaining42gaps require finite downstreamwork; p100criteriaunchanged. [WS](../ws.md).
+
+## p112 structural dependency event (2026-10-01)
+
+[Addedp112](../phase112/phase.md) for missingbutton/label/meta reflection59/62;
+requires clearedp109/p110/p111. p100100/100planned unchanged, other remaining42
+gaps assessed after actual result. [WSsummary](../ws.md).
+
+## q522 prerequisite clearance event (2026-10-01)
+
+[p112](../phase112/phase.md) cleared/all10060/100,59/62newPASS/no regression.
+Remaining40features require finite downstream work; p100criteriaunchanged. [WS](../ws.md).
+
+## p113 structural dependency event (2026-10-01)
+
+[Addedp113](../phase113/phase.md) for indexed95 legaluint32length metadata, using
+existingVM storage. p100100/100planned unchanged; no other feature scope expanded.
+[WS summary](../ws.md).
+
+## q523 prerequisite clearance event (2026-10-01)
+
+[p113](../phase113/phase.md) cleared/all10061/100,95newPASS/no regression.
+Remaining39features require finite downstream work; p100 criteria unchanged.
+[WS](../ws.md).
+
+## p114 structural dependency event (2026-10-01)
+
+[Addedp114](../phase114/phase.md) for missingCSS cursor47 via existing verified
+childcontext. p100100/100 unchanged; [WS](../ws.md).
+
+## q524 prerequisite clearance event (2026-10-01)
+
+[p114](../phase114/phase.md) cleared/all10062/100,47newPASS/no regression.
+Remaining38 features; p100100/100 unchanged. [WS](../ws.md).
+
+## p115 structural dependency event (2026-10-01)
+
+[Addedp115](../phase115/phase.md) for object.data64, existingURLparser/reflection.
+Blankabout-base foundation separately known; p100100/100 unchanged. [WS](../ws.md).
+
+## q525 prerequisite clearance event (2026-10-01)
+
+[p115](../phase115/phase.md) cleared/all10063/100,64newPASS/no regression.
+Remaining37 features; p100100/100 unchanged. [WS](../ws.md).
+
+## p116 structural dependency event (2026-10-01)
+
+[Addedp116](../phase116/phase.md) for legacyeventfactory/initialization30 after
+verifiedeventstate. p100100/100 unchanged. [WS](../ws.md).
+
+## q526 prerequisite clearance event (2026-10-01)
+
+[p116](../phase116/phase.md) cleared/all10065/100,30+73newPASS/no regression.
+Remaining35features; p100100/100 unchanged. [WS](../ws.md).
+
+### p117 prerequisite introduction (2026-10-01)
+
+[p117](../phase117/phase.md) supplies DOMImplementation/XML creation and ownership
+for26/27; existing namespace helper/case projections revalidate. p100100/100
+acceptance unchanged, no collections/loading acceptance claimed. [WS](../ws.md).
+
+### p118 prerequisite introduction (2026-10-01)
+
+[p118](../phase118/phase.md) supplies TreeWalker/filter/GC for6. NodeIterator and
+livecollection prerequisites remain separate; full100/100 unchanged. [WS](../ws.md).
+
+### q528 prerequisite result (2026-10-01)
+
+[p118](../phase118/phase.md) cleared, [evidence](../phase118/verification.md).
+Original Acid3 plain/ASan68/100,6newPASS, prior67preserved, Uncaught0/Acid2exact.
+Remaining32 include NodeIterator/collections/controls/Range/CSS/loading/SVG;
+this Phase full100/100 remains planned/unmet.
+
+### p119 prerequisite introduction (2026-10-01)
+
+[p119](../phase119/phase.md) weak pre-remove registration/GC prerequisite precedes
+NodeIterator1–3. Infrastructure scope adds no full100/100 acceptance reduction.
+
+### q529 prerequisite result (2026-10-01)
+
+[p119](../phase119/phase.md) cleared, [evidence](../phase119/verification.md). Weak
+pre-remove/GC foundation verified, no NodeIterator API yet. Bothvariants all100
+68/100 unchanged/Uncaught0/Acid2exact. Full acceptance remains planned/unmet.
+
+### p120 prerequisite introduction (2026-10-01)
+
+[p120](../phase120/phase.md) actualNodeIterator state/filter/pre-removalgorithms for1–3
+follows verifiedp119. Full100/100 criteria unchanged;4/5collections later.
+
+### q530 prerequisite result (2026-10-01)
+
+[p120](../phase120/phase.md) cleared,[evidence](../phase120/verification.md).
+Bothvariants71/100 all100/1–3newPASS/prior68preserved/Uncaught0/Acid2exact.
+Remaining29, full100/100 acceptance staysplanned/unmet.
+
+### p121 prerequisite introduction (2026-10-01)
+
+[p121](../phase121/phase.md) nativeproperty/keys/errorfoundation precedeslive
+HTMLcollections for4/5/forms/tables. Full100/100 unchanged; noDOMAPI addedhere.
+
+### q531 prerequisite result (2026-10-01)
+
+[p121](../phase121/phase.md) cleared,[evidence](../phase121/verification.md). VMnative
+propertyfoundation verified/noDOMcollectionAPIyet. Bothvariantsall10071/100 unchanged/
+noerrors/Acid2exact; full100/100 remainsplanned/unmet.
+
+## p122 structural prerequisite event (2026-10-01)
+
+[Added p122](../phase122/phase.md) for live HTMLCollection/children/Document.links,
+using cleared p121. Target indexed5 plus real property/owner behavior. Current
+71/100; full100/100 still unmet; snapshots/forms/tables/Range/loading remain.
+[WS summary](../ws.md). No p100 execution or clearance.
+
+## q532 prerequisite clearance (2026-10-01)
+
+[p122](../phase122/phase.md) cleared; original all10072/100, indexed5 newPASS,
+no priorPASS regression/noerrors/Acid2 exact. [Inventory](../phase122/inventory.json).
+Remaining28, full100/100 acceptance unchanged; next form/control/table collections.
+
+## p123 structural prerequisite event (2026-10-01)
+
+[Added p123](../phase123/phase.md) for SameObject Document.forms after live
+collections. Original last result72/100. Form.controls/ownership/RadioNodeList and
+reflection remain separate prerequisites; p100full100/100 unchanged/planned.
+
+## q533 prerequisite clearance (2026-10-01)
+
+[p123](../phase123/phase.md) cleared, all10073/100/indexed98 newPASS/noerrors/
+Acid2 exact, [inventory](../phase123/inventory.json). Remaining27. Form.elements/
+owner/control/RadioNodeList still absent; p100full100/100 unchanged/planned.
+
+## p124 structural prerequisite event (2026-10-01)
+
+[Added p124](../phase124/phase.md) for ordinary live DOM form owner/listed categories
+before native form.controls. Parser-special persisted association/control public
+APIs remain separate work. Last73/100; p100full100/100 acceptance unchanged/planned.
+
+## q534 prerequisite clearance (2026-10-01)
+
+[p124](../phase124/phase.md) ordinary owner/category foundation cleared, all10073/100
+unchanged/noerrors/Acid2 exact. Native controls/RadioNodeList/public form/input APIs
+remain next; known parser-special association scope retained. Full100/100 unchanged.
+
+## q574–q576 prerequisite reconciliation (2026-10-01)
+
+[p158](../phase158/phase.md), [p159](../phase159/phase.md), [p160](../phase160/phase.md)
+introduced and cleared in successive finite automatic Queues. Native source/DOMcache/
+JSwrapper/mutation increments supply actual72 and raise93->94, preserving prior93.
+Current prerequisite evidence above reconciles this Phase's resume state. Source/
+ruleobject/fullSyntax and loading/SVG residuals are explicit; p100 remains planned
+and unselected, no acceptance reduction. [WS](../ws.md) owns addedPhase structures.
+
+## p161 structural prerequisite (2026-10-01)
+
+[Addedp161](../phase161/phase.md) strictUTF8/XMLnamespace owning model precedes
+actualXMLDOMprojection/navigation needed for residual69/74/75/77/79/80. Actual94/89
+unchanged; no p100 execution or changed100/100 acceptance. [WS](../ws.md).
+
+### p162 structural prerequisite introduced (2026-10-02)
+
+Native exact attribute namespace identity prevents losing strict XML parser output
+before DOM projection/loading. [p162](../phase162/phase.md), [WS](../ws.md).
+Current actual94/all90both/Acid2exact; p100 acceptance unchanged/planned/unselected.
+
+### p163 structural prerequisite introduced (2026-10-02)
+
+[Native PI/CDATA](../phase163/phase.md) supplies exact XML node identity/ownership,
+then separately queued public category integration/projection/loading. [WS](../ws.md).
+Actual94/all91/Acid2exact; p100 remains planned/unselected, acceptance unchanged.
+
+### p164 structural prerequisite introduced (2026-10-02)
+
+[PI/CDATA integration](../phase164/phase.md) supplies actual public node identity
+and existing operation categories before XML DOM projection/navigation. [WS](../ws.md).
+Actual94/all92/Acid2exact; p100 planned/unselected, acceptance unchanged.
+
+### p165 structural prerequisite introduced (2026-10-02)
+
+[Native XML DOM projection](../phase165/phase.md) follows verified parser/native
+categories before response navigation/loading/SVG. [WS](../ws.md). Actual94/all93/
+Acid2exact; p100 remains planned/unselected, acceptance unchanged.
+
+### p166 structural prerequisite introduced (2026-10-02)
+
+[Response metadata](../phase166/phase.md) retains actual URL/MIME/status and
+declared document-kind selection before native child navigation. [WS](../ws.md).
+Actual94/all94/Acid2exact; p100 planned/unselected and100 criterion unchanged.
+
+### p167 structural prerequisite introduced (2026-10-02)
+
+[Native data URL repair](../phase167/phase.md) fixes BUG-132 exposed by p166 before
+unchanged metadata retry/child navigation. [Origin](../phase166/phase.md), [WS](../ws.md).
+p100 planned/unselected/100 acceptance unchanged; last originalq58194/all94.
+
+### q584 prerequisite clearance (2026-10-02)
+
+p166 unchanged retry cleared afterp167; native101/all96/actual94/Acid2exact.
+Latest prerequisites above; q582 failure retained. Next actualnavigation/SVG,
+p100100 own criteria remain unmet and unselected. [WS](../ws.md).
+
+### p168 structural prerequisite introduced (2026-10-02)
+
+[Actual child loading](../phase168/phase.md) follows verified XML/response/realm
+outputs; native src reflection/task events/XML gating/object Documents required
+before remaining SVG75/77. FullWindowProxy/crossorigin/fullnavigation beyond
+scoped partial core remain limits; no p100 execution/acceptance change. [WS](../ws.md).
+
+## q585 prerequisite result — 2026-10-02
+
+p168 cleared actual normal child loading/native46/all97both/original94.
+Headless timer-only virtual settle cannot yet consume new child network responses;
+separate finite scheduler Phase must verify that integration, then SVG75/77.
+This updates prerequisite order, not this Phase's full100 criteria or selection.
+[Origin](../phase168/phase.md), [WS](../ws.md).
+
+## Headless scheduler prerequisite introduced — 2026-10-02 / q586
+
+[New p169](../phase169/phase.md) follows verified nativep168: actual headless virtual
+clock omitted real newly started network work. Need69/74/79/80 verified viaactual
+original runner afternative timer/network integration, thenSVG75/77. p100 planned/
+unselected/full100 acceptance unchanged. [Origin](../phase168/phase.md), [WS](../ws.md).
+
+## q586 prerequisite cleared — 2026-10-02
+
+p169 actual headless timer/network integration cleared/native52/all97both/original98.
+Loading69/74/79/80 now verified, SVG75/77 remain; thissamep100 remainsplanned,
+full100 unchanged/unselected. [Evidence](../phase169/verification.md), [WS](../ws.md).
+
+## SVG text prerequisite introduced — 2026-10-02 / q587
+
+[New p170](../phase170/phase.md) addresses actual missing77 with native SVG text
+classes/live whitespace-normalized UTF16 count. p169original98 verified; SVG75
+width follows separately. Thissamep100planned/unselected/full100 unchanged.
+[WS](../ws.md).
+
+## q587 prerequisite cleared — 2026-10-02
+
+p170 native SVG text cleared/native42/all98both/original99;77pass,75width remains.
+This samep100 remainsplanned/full100 unchanged/unselected.
+[Evidence](../phase170/verification.md), [WS](../ws.md).
+
+## p171 structural prerequisite — 2026-10-02
+
+Added [p171](../phase171/phase.md) native width/actual scalar length reflection,
+lastactual75 after original99/p170clear. Samep100planned/unselected/full100 criteria
+unchanged; select after actual feature clearance. [WS](../ws.md).
+
+## q588 prerequisite cleared — 2026-10-02
+
+p171 native scalar width cleared/native60/all99both/original100/all100PASS/noerrors/
+Acid2exact. This samep100 remainsplanned until explicit finite acceptance Queue.
+[Evidence](../phase171/verification.md), [WS](../ws.md).
+
+## q589 exact finite acceptance revision / approved snapshot — 2026-10-02
+
+User autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation2026-10-02
+approve this samep100 finite final acceptance, base8571f398/q588. p099/p102/
+p103/p104/p105/p106 and actual latest feature outputs p161–p171 checkedcleared,
+all100 original indexedPASS/all99both/currentfinalsource verified, no unknown
+prerequisite or outstanding original numeric failure. Root/browser2 sole executor,
+no concurrent/completed p100attempt/cancellation/localunpublished/no push.
+
+Scope: no product code generation. Verify pinned unmodified original Acid3
+100/100/completes/status0/noUncaught/crash/sanitizer/runnererror/timeout, all100PASS
+inventory equalplain+ASan and consistent withoriginal score, preserveAcid2exact,
+all99groupsPASSboth. Reuse already completed q588 final-code artifacts after hash
+and Git/source freshness verification rather than rerun unchanged successful tests.
+Record standalone fullreports/regressions/source+program+artifact hashes/current
+suitecommit/currentdiff/fullchangedSVGfeature manual C1–14 review and style result.
+Final screenshot must visibly100/100; equal screenshot hashes let the inspected
+plain rendering cover both variants. Pixel37.04%/visibleFAILlabels are an explicit
+independent diagnostic under the unchanged existing acceptance, not full visual
+Acid3 or browser standards conformance. Verify actual metadata/artifacts before
+clearing, archive exact approved snapshot/outcomes, reconcile Master/WS/fg011 and
+PastLog. No new APIs/renderer/CSS2/ESmodules/OS/HAL/push/publication. Sameacceptance
+100/100 retained, no criterion waived. Finite evidence/freshness/manualreview cycle;
+any mismatch endsuncleared without claiming fullacceptance. Graphp171(external)->
+p100, acyclic; p101/p098 unselected and p044/fullWS incomplete.
+
+Full changed SVG sources/native fixtures/selected registry+opaqueDOMtrace reviewed
+against full C1–14, with C-required callback forward declarations before immutable
+native descriptor tables and existing untouched legacy ordering explicitly retained.
+Formatter absent/manual; no massformatting or fullWSsourceconformance claim.
+
+## q589 outcome / uncleared — 2026-10-02
+
+Full manual C section3 review found nine one-line SVGLength callback definitions
+and the new native collection callback: function name and every argument must occupy
+separate lines. style-check.py reports empty because its current coverage does not
+check this rule. Original100/all99both/noerrors/Acid2exact remain actual numeric
+behavior evidence; full changed-source conformance required by p171 was incorrectly
+reported clear. No product source edited in q589; final acceptance cannot clear.
+Invalidate current p171 clearance (retain original q588 cleared attempt/history),
+repair routine signature formatting within same native width scope and revalidate
+p171 in a new finite Queue, then retry this samep100. No human decision or scope/
+acceptance waiver; standing autonomous consent permits these necessary Queues.
+
+[WS](../ws.md), [p171 correction](../phase171/phase.md). Root released/localunpublished.
+
+## q590 prerequisite retry design — 2026-10-02
+
+Samep171 bounded routine source formatting and full final-code revalidation now
+selected; addresses manual section3 blocker from q589, no product logic change.
+This samep100 remainsuncleared/unselected until p171 re-clears, then new acceptance
+attempt with unchanged100/100/noerrors/Acid2exact. [p171](../phase171/phase.md),[WS](../ws.md).
+
+## q590 prerequisite re-cleared — 2026-10-02
+
+p171 routine formatting and finalbothbuilds/native60/all99/original100/noerrors/
+Acid2exact verified. Manual section3 blocker fromq589 resolved; select new samep100
+acceptance attempt, retain earlieruncleared outcome. [Final evidence](../phase171/verification-q590.md),[WS](../ws.md).
+
+## q591 exact samep100 acceptance retry / approved snapshot — 2026-10-02
+
+User standing autonomousAcid3 goal/automaticfiniteQueues2026-09-30 and continuation
+2026-10-02 approve finite samep100 final acceptance after q590/p171re-cleared.
+Baseaa39c4b7; root/browser2 soleexecutor, no concurrent/completed/canceledattempt.
+Mandatory function-definition layout defect from q589 is fixed with exact
+whitespace-only changes; fullbothbuilds/native60/all99both/original100/all100PASS/
+noerrors/Acid2exact on finalsource verified. Original q589 uncleared kept historically.
+
+No product code edits. Bounded final source/Git/program/artifact freshness checks,
+pinned WPT unmodified revision verification, standalone complete reused q590 reports/
+all99results/source+binary+artifact hashes and fullchangedSVGfeature C1–14 manual
+review. Reuse completed successful final checks only after exact source/program/
+artifact hash equality; no redundant rerun on unchanged source. Original historical
+Acid3 must100/100/complete/status0/noUncaught/crash/sanitizer/runnererror/timeout;
+all100indexedPASS/equalboth/originalscoreconsistent; Acid2exact and all99PASSboth.
+Both screenshots equal inspected native rendering displaying100/100; visibleFAIL
+labels/pixel37.04% independent diagnostic under original unchanged criterion, full
+visual Acid3 conformance remains unmet. No fullbrowser/fullSVG/fullWS claim.
+Any actual criterion/hash/prerequisite mismatch endsuncleared without waiver.
+Archive exact approved snapshot+outcomes and reconcile p100/WS/Master/fg011/PastLog.
+Then autonomous fg011 scope achieved; no automatic CSS2/ESmodules/renderer/otherWS/
+OS/HAL/push/publication. Graphp171(external)->p100,acyclic; p044/WS incomplete.
+
+## q591 samep100 clearance / fg011 achieved — 2026-10-02
+
+The pinned unmodified historical Acid3 now finishes at100/100 in both plain and
+ASan builds, with all100 indexed testsPASS and equal inventories consistent with
+the original score. Complete/status0/noUncaught/crash/sanitizer/runnererror/timeout;
+Acid2 exact100%/different_pixels0. All99 native/browser regression groupsPASSboth,
+including actual childload52, SVGtext42 and SVGlength60 native observations.
+Current final source/program/artifact hashes equal the completed q590 verification;
+product Git diff empty and pinnedWPT commit/diff verified. No code changes or
+redundant runtime rerun in this acceptance Queue. C-token equality proves q590
+signature/condition changes were formatting only; manual C1–14 review explicitly
+checks section3 layout omitted by styletool. Styleempty/finalbothbuildswarning0,
+formatter absent/manual; existing untouched legacy ordering retained. Standalone
+JSON stores complete actual reports/all99results/fullcurrent source/program/suite/
+artifact hashes, not just references. Both screenshot hashes equal the inspected
+native rendering displaying100/100; visibleFAILlabels and37.04% pixel agreement
+remain independent diagnostics. This clears the existing numeric p100 criterion,
+not full visual Acid3/browser/SVG standards conformance. Partial SVG relative
+geometry/otherAPIs/animation/rendering/XML/CSS/WindowProxy/crossorigin limitations
+remain. Previous q589uncleared preserved; q590 repairs and re-clears its prerequisite.
+fg011 autonomous goal achieved; no automatic next Queue. p101CSS2/p098ESmodules/
+p044fullWS conformance and broaderWS acceptance remain unselected/incomplete.
+Rootreleased/localunpublished/no push/no remoteIssueclose claimed.
+
+[Final evidence](verification.md),[complete artifacts](verification.json),[WS](../ws.md).

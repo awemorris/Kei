@@ -20,9 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 
-/* The deepest tree cloneNode copies. */
-#define NODE_CLONE_DEPTH	512
-
 static int node_type_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int node_name_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int node_value_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -46,7 +43,6 @@ static int node_has_child_nodes(struct vm_realm *realm, vm_value this_value, con
 static int node_contains(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int node_clone(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int node_link(struct vm_realm *realm, vm_value this_value, struct dom_node *linked, vm_value *result);
-static int node_clone_tree(struct vm_realm *realm, struct dom_node *node, int deep, int depth, struct dom_node **clone);
 static int node_prototype_index(const struct dom_node *node);
 
 /*
@@ -119,6 +115,11 @@ bind_wrap(
 	vm_value *value)
 {
 	struct vm_object *wrapper;
+	struct vm_object *prototype;
+	struct vm_heap *heap;
+	struct vm_cell *node_root;
+	vm_value snapshot;
+	int status;
 	int index;
 
 	/* A node keeps its object once it has one. */
@@ -127,11 +128,53 @@ bind_wrap(
 		return 0;
 	}
 
+	/* Callee ownership retains the actual node, target and Document through wrapper allocation. */
+	heap = node->document->heap;
+	node_root = &node->cell;
+	status = vm_heap_add_root(heap, &node_root);
+	if (status != 0)
+		return status;
+
+	/* A borrowed method still creates wrappers in the Document's owning realm. */
+	if (node->document->view != NULL)
+		window = node->document->view;
+
 	/* The object, with the prototype of the node's most specific interface. */
 	index = node_prototype_index(node);
-	wrapper = vm_object_create(window->realm->heap, window->prototypes[index]);
-	if (wrapper == NULL)
+
+	/* XML factory nodes use a traced snapshot even through another realm's method. */
+	if (node->document->binding_prototypes != NULL) {
+		status = vm_object_get(node->document->binding_prototypes, vm_value_int32(index), &snapshot);
+		if (status != 0) {
+			vm_heap_remove_root(heap, &node_root);
+			return status;
+		}
+
+		/* Only the private snapshot's object entries can supply a native prototype. */
+		if (snapshot == VM_VALUE_UNDEFINED) {
+			vm_heap_remove_root(heap, &node_root);
+			return EINVAL;
+		}
+
+		/* The retained owning snapshot supplies this exact native interface prototype. */
+		prototype = (struct vm_object *)vm_value_as_cell(snapshot);
+	} else {
+		/* Ordinary parser nodes still require their existing live binding owner. */
+		if (window == NULL) {
+			vm_heap_remove_root(heap, &node_root);
+			return EINVAL;
+		}
+
+		/* Ordinary owning Windows expose the same interface table identities. */
+		prototype = window->prototypes[index];
+	}
+
+	/* Allocates in the shared owning heap without a raw Window lifetime dependency. */
+	wrapper = vm_object_create(heap, prototype);
+	if (wrapper == NULL) {
+		vm_heap_remove_root(heap, &node_root);
 		return ENOMEM;
+	}
 
 	/* It stands for the node, and the node keeps it. */
 	wrapper->kind = VM_KIND_PLATFORM;
@@ -140,6 +183,7 @@ bind_wrap(
 
 	/* Succeeded: the value is the node's object. */
 	*value = vm_value_cell(wrapper);
+	vm_heap_remove_root(heap, &node_root);
 	return 0;
 }
 
@@ -265,7 +309,7 @@ bind_text_content(
 
 	/* Walks the descendants in tree order. */
 	for (walk = bind_following(node, node); walk != NULL; walk = bind_following(walk, node)) {
-		if (walk->type != DOM_TEXT)
+		if (walk->type != DOM_TEXT && walk->type != DOM_CDATA_SECTION)
 			continue;
 		text = (const struct dom_character_data *)walk;
 		error = wb_units_append(units, text->data.data, text->data.length);
@@ -292,52 +336,26 @@ bind_insert(
 {
 	struct bind_window *window;
 	struct dom_node *child;
-	struct dom_element *existing;
-	int ancestor;
 	int status;
 
-	/* The window's host observes successful insertions. */
+	/* Validate the whole operation before adoption, host resolution or fragment splicing. */
+	status = bind_validate_insert(realm, parent, node, reference);
+	if (status != 0)
+		return status;
+
+	/* The actual parent Document's host observes even borrowed-method insertions. */
 	window = bind_window_of(realm);
-
-	/* Only a document, a fragment or an element has children. */
-	if (parent->type != DOM_DOCUMENT &&
-	    parent->type != DOM_DOCUMENT_FRAGMENT &&
-	    parent->type != DOM_ELEMENT) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "The parent cannot have children.");
-		return status;
-	}
-
-	/* A node cannot go inside itself. */
-	ancestor = dom_is_inclusive_ancestor(node, parent);
-	if (ancestor) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "The new child contains the parent.");
-		return status;
-	}
-
-	/* The reference must be the parent's child. */
-	if (reference != NULL && reference->parent != parent) {
-		status = bind_throw_dom(realm, "NotFoundError", "The node before which the new node is to be inserted is not a child of this node.");
-		return status;
-	}
-
-	/* A document cannot be inserted, text cannot go into a document, and a DOCTYPE only into one. */
-	if (node->type == DOM_DOCUMENT ||
-	    (node->type == DOM_TEXT && parent->type == DOM_DOCUMENT) ||
-	    (node->type == DOM_DOCUMENT_TYPE && parent->type != DOM_DOCUMENT)) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "Nodes of this type cannot be inserted here.");
-		return status;
-	}
-
-	/* A document has one element child at most. */
-	existing = bind_first_element_child(parent);
-	if (parent->type == DOM_DOCUMENT && node->type == DOM_ELEMENT && existing != NULL) {
-		status = bind_throw_dom(realm, "HierarchyRequestError", "Only one element on document allowed.");
-		return status;
-	}
+	if (parent->document->view != NULL)
+		window = parent->document->view;
 
 	/* Inserting a node before itself inserts it before its next sibling. */
 	if (reference == node)
 		reference = node->next;
+
+	/* Checked adoption preserves original removal notifications and updates all current owners first. */
+	status = dom_adopt(parent->document, node);
+	if (status != 0)
+		return status;
 
 	/* A fragment's children move, in order; the fragment is left empty. */
 	if (node->type == DOM_DOCUMENT_FRAGMENT) {
@@ -521,10 +539,18 @@ node_name_get(
 		return 0;
 	}
 
+	/* Processing instructions report their actual immutable native target. */
+	if (node->type == DOM_PROCESSING_INSTRUCTION) {
+		*result = vm_value_cell(((struct dom_character_data *)node)->target);
+		return 0;
+	}
+
 	/* The others have the names of their kinds. */
 	name = "#document-fragment";
 	if (node->type == DOM_TEXT) {
 		name = "#text";
+	} else if (node->type == DOM_CDATA_SECTION) {
+		name = "#cdata-section";
 	} else if (node->type == DOM_COMMENT) {
 		name = "#comment";
 	} else if (node->type == DOM_DOCUMENT) {
@@ -562,7 +588,10 @@ node_value_get(
 		return status;
 
 	/* Only character data has a value. */
-	if (node->type != DOM_TEXT && node->type != DOM_COMMENT) {
+	if (node->type != DOM_TEXT &&
+	    node->type != DOM_CDATA_SECTION &&
+	    node->type != DOM_PROCESSING_INSTRUCTION &&
+	    node->type != DOM_COMMENT) {
 		*result = VM_VALUE_NULL;
 		return 0;
 	}
@@ -599,7 +628,10 @@ node_value_set(
 		return status;
 
 	/* Only character data has a value to set. */
-	if (node->type != DOM_TEXT && node->type != DOM_COMMENT)
+	if (node->type != DOM_TEXT &&
+	    node->type != DOM_CDATA_SECTION &&
+	    node->type != DOM_PROCESSING_INSTRUCTION &&
+	    node->type != DOM_COMMENT)
 		return 0;
 
 	/* The new text (null is the empty string). */
@@ -647,7 +679,10 @@ node_text_content_get(
 		return status;
 
 	/* Character data reports its data, as nodeValue does. */
-	if (node->type == DOM_TEXT || node->type == DOM_COMMENT) {
+	if (node->type == DOM_TEXT ||
+	    node->type == DOM_CDATA_SECTION ||
+	    node->type == DOM_PROCESSING_INSTRUCTION ||
+	    node->type == DOM_COMMENT) {
 		status = node_value_get(realm, this_value, args, count, result);
 		return status;
 	}
@@ -697,7 +732,10 @@ node_text_content_set(
 	window = bind_window_of(realm);
 
 	/* Character data sets its data, as nodeValue does. */
-	if (node->type == DOM_TEXT || node->type == DOM_COMMENT) {
+	if (node->type == DOM_TEXT ||
+	    node->type == DOM_CDATA_SECTION ||
+	    node->type == DOM_PROCESSING_INSTRUCTION ||
+	    node->type == DOM_COMMENT) {
 		status = node_value_set(realm, this_value, args, count, result);
 		return status;
 	}
@@ -1270,7 +1308,7 @@ node_contains(
 	return 0;
 }
 
-/* Copies the node, and with a true argument its descendants (cloneNode). */
+/* Copies a complete native graph and retains the result through actual owner wrapping. */
 static int
 node_clone(
 	struct vm_realm *realm,
@@ -1282,33 +1320,57 @@ node_clone(
 	struct bind_window *window;
 	struct dom_node *node;
 	struct dom_node *clone;
+	struct vm_cell *source_root;
+	struct vm_cell *copy_root;
 	int deep;
 	int status;
 
-	/* The node and whether the copy is deep. */
+	/* Native receiver validation precedes allocation or unsupported-kind errors. */
 	window = bind_window_of(realm);
 	status = bind_this_node(realm, this_value, &node);
 	if (status != 0)
 		return status;
 	deep = vm_to_boolean(js_argument(args, count, 0));
 
-	/* A document is not copied in this pass. */
-	if (node->type == DOM_DOCUMENT) {
-		status = bind_throw_dom(realm, "NotSupportedError", "Cloning a document is not supported.");
+	/* Callee roots cover direct embedding invocations without an outer VM receiver frame. */
+	source_root = &node->cell;
+	copy_root = NULL;
+	status = vm_heap_add_root(realm->heap, &source_root);
+	if (status != 0)
+		return status;
+	status = vm_heap_add_root(realm->heap, &copy_root);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &source_root);
 		return status;
 	}
 
-	/* The copy. */
-	status = node_clone_tree(realm, node, deep, 0, &clone);
-	if (status != 0)
+	/* Document cloning remains outside the existing supported node kinds. */
+	if (node->type == DOM_DOCUMENT) {
+		status = bind_throw_dom(realm, "NotSupportedError", "Cloning a document is not supported.");
+		vm_heap_remove_root(realm->heap, &copy_root);
+		vm_heap_remove_root(realm->heap, &source_root);
 		return status;
+	}
 
-	/* Its object. */
+	/* The checked shared helper publishes only a complete native copy. */
+	status = bind_clone_node(realm, node, deep, &clone);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &copy_root);
+		vm_heap_remove_root(realm->heap, &source_root);
+		return status;
+	}
+
+	/* Retain the native result across wrapper allocation. */
+	copy_root = &clone->cell;
+
+	/* Current native ownership determines the wrapper even through a borrowed method. */
 	status = bind_wrap(window, clone, result);
+	vm_heap_remove_root(realm->heap, &copy_root);
+	vm_heap_remove_root(realm->heap, &source_root);
 	if (status != 0)
 		return status;
 
-	/* Succeeded: the copy is reported. */
+	/* Succeeded: the caller receives an independent complete node graph. */
 	return 0;
 }
 
@@ -1335,99 +1397,14 @@ node_link(
 	return 0;
 }
 
-/* Copies a node (not a document) and, when deep, its descendants below a depth limit. */
-static int
-node_clone_tree(
-	struct vm_realm *realm,
-	struct dom_node *node,
-	int deep,
-	int depth,
-	struct dom_node **clone)
-{
-	struct dom_element *element;
-	struct dom_element *copy;
-	struct dom_character_data *text;
-	struct dom_doctype *doctype;
-	struct dom_node *child;
-	struct dom_node *child_copy;
-	struct dom_node *contents;
-	size_t index;
-	int status;
-
-	/* The copy of the node itself, by its kind. */
-	*clone = NULL;
-	switch (node->type) {
-	case DOM_ELEMENT:
-		element = (struct dom_element *)node;
-		copy = dom_element_create(node->document, element->ns, element->local_name, element->prefix);
-		if (copy == NULL)
-			return ENOMEM;
-		for (index = 0; index < element->attribute_count; index++) {
-			status = dom_element_add_attribute(copy, element->attributes[index].ns, element->attributes[index].prefix,
-			    element->attributes[index].name, element->attributes[index].value);
-			if (status != 0)
-				return status;
-		}
-
-		/* The copy with its attributes. */
-		*clone = &copy->node;
-		break;
-	case DOM_TEXT:
-		text = (struct dom_character_data *)node;
-		*clone = dom_text_create(node->document, text->data.data, text->data.length);
-		break;
-	case DOM_COMMENT:
-		text = (struct dom_character_data *)node;
-		*clone = dom_comment_create(node->document, text->data.data, text->data.length);
-		break;
-	case DOM_DOCUMENT_TYPE:
-		doctype = (struct dom_doctype *)node;
-		*clone = dom_doctype_create(node->document, doctype->name, doctype->public_id, doctype->system_id);
-		break;
-	default:
-		*clone = dom_fragment_create(node->document);
-		break;
-	}
-
-	/* Any of them may have run out of memory. */
-	if (*clone == NULL)
-		return ENOMEM;
-
-	/* A shallow copy, or one at the depth limit, has no children. */
-	if (!deep || depth >= NODE_CLONE_DEPTH)
-		return 0;
-
-	/* A deep copy copies each child in order. */
-	for (child = node->first_child; child != NULL; child = child->next) {
-		status = node_clone_tree(realm, child, deep, depth + 1, &child_copy);
-		if (status != 0)
-			return status;
-		dom_append_child(*clone, child_copy);
-	}
-
-	/* A template's copy gets copies of its contents' children too. */
-	if (node->type == DOM_ELEMENT && ((struct dom_element *)node)->content != NULL) {
-		status = bind_template_contents((struct dom_element *)*clone, &contents);
-		if (status != 0)
-			return status;
-		for (child = ((struct dom_element *)node)->content->first_child; child != NULL; child = child->next) {
-			status = node_clone_tree(realm, child, deep, depth + 1, &child_copy);
-			if (status != 0)
-				return status;
-			dom_append_child(contents, child_copy);
-		}
-	}
-
-	/* Succeeded: the copy is made. */
-	return 0;
-}
-
 /* Reports the interface whose prototype a node's object gets. */
 static int
 node_prototype_index(
 	const struct dom_node *node)
 {
 	const struct dom_element *element;
+	int form;
+	const char *table_name;
 
 	/* The kind of node decides, and an element's namespace. */
 	switch (node->type) {
@@ -1435,18 +1412,125 @@ node_prototype_index(
 		element = (const struct dom_element *)node;
 		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_IMG)
 			return BIND_HTML_IMAGE_ELEMENT;
+		/* Inline style wrappers preserve exact local case in XML-owned HTML nodes. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_STYLE) {
+			form = vm_string_equal_ascii(element->local_name, "style");
+			if (form)
+				return BIND_HTML_STYLE_ELEMENT;
+		}
+
+		/* Script elements retain their existing native interface. */
 		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_SCRIPT)
 			return BIND_HTML_SCRIPT_ELEMENT;
 		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_TEMPLATE)
 			return BIND_HTML_TEMPLATE_ELEMENT;
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_IFRAME)
+			return BIND_HTML_IFRAME_ELEMENT;
+		/* Reflected HTML attributes live on their exact tagged interfaces. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_BUTTON)
+			return BIND_HTML_BUTTON_ELEMENT;
+
+		/* Labels expose the for content attribute through their htmlFor alias. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_LABEL)
+			return BIND_HTML_LABEL_ELEMENT;
+
+		/* Metadata keeps the http-equiv alias separate from arbitrary expandos. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_META)
+			return BIND_HTML_META_ELEMENT;
+
+		/* Objects expose data through their own reflected URL interface. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_OBJECT)
+			return BIND_HTML_OBJECT_ELEMENT;
+
+		/* Inputs use exact local identity independently of XML's folded internal tag. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_INPUT) {
+			form = vm_string_equal_ascii(element->local_name, "input");
+			if (form)
+				return BIND_HTML_INPUT_ELEMENT;
+		}
+
+		/* Form interfaces require exact local case even in an XML Document. */
+		if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_FORM) {
+			form = vm_string_equal_ascii(element->local_name, "form");
+			if (form)
+				return BIND_HTML_FORM_ELEMENT;
+		}
+
+		/* Table-family prototypes require exact local names even in factory XML documents. */
+		if (element->ns == DOM_NS_HTML &&
+		    (element->tag == DOM_TAG_TABLE ||
+		     element->tag == DOM_TAG_THEAD ||
+		     element->tag == DOM_TAG_TBODY ||
+		     element->tag == DOM_TAG_TFOOT ||
+		     element->tag == DOM_TAG_TR ||
+		     element->tag == DOM_TAG_CAPTION)) {
+			table_name = dom_tag_name(element->tag);
+			form = vm_string_equal_ascii(element->local_name, table_name);
+			if (form) {
+				/* Different table roots expose distinct branded live collection getters. */
+				switch (element->tag) {
+				case DOM_TAG_TABLE:
+					return BIND_HTML_TABLE_ELEMENT;
+				case DOM_TAG_CAPTION:
+					return BIND_HTML_TABLE_CAPTION_ELEMENT;
+				case DOM_TAG_THEAD:
+				case DOM_TAG_TBODY:
+				case DOM_TAG_TFOOT:
+					return BIND_HTML_TABLE_SECTION_ELEMENT;
+				case DOM_TAG_TR:
+					return BIND_HTML_TABLE_ROW_ELEMENT;
+				default:
+					break;
+				}
+			}
+		}
+
+		/* Select-family identities retain exact local case in XML factory Documents. */
+		if (element->ns == DOM_NS_HTML &&
+		    (element->tag == DOM_TAG_SELECT ||
+		     element->tag == DOM_TAG_OPTION ||
+		     element->tag == DOM_TAG_OPTGROUP)) {
+			table_name = dom_tag_name(element->tag);
+			form = vm_string_equal_ascii(element->local_name, table_name);
+			if (form) {
+				/* Each exact native identity supplies its own inherited prototype. */
+				switch (element->tag) {
+				case DOM_TAG_SELECT:
+					return BIND_HTML_SELECT_ELEMENT;
+				case DOM_TAG_OPTION:
+					return BIND_HTML_OPTION_ELEMENT;
+				case DOM_TAG_OPTGROUP:
+					return BIND_HTML_OPT_GROUP_ELEMENT;
+				default:
+					break;
+				}
+			}
+		}
+
+		/* Canonical SVG namespace and exact local case select actual native text interfaces. */
+		if (element->ns == DOM_NS_SVG) {
+			form = bind_svg_node_interface(element);
+			return form;
+		}
+
+		/* All other HTML elements retain the ordinary HTMLElement interface. */
 		if (element->ns == DOM_NS_HTML)
 			return BIND_HTML_ELEMENT;
 		return BIND_ELEMENT;
 	case DOM_TEXT:
 		return BIND_TEXT;
+	case DOM_CDATA_SECTION:
+		return BIND_CDATA_SECTION;
+	case DOM_PROCESSING_INSTRUCTION:
+		return BIND_PROCESSING_INSTRUCTION;
 	case DOM_COMMENT:
 		return BIND_COMMENT;
 	case DOM_DOCUMENT:
+		/* XML factory Documents have their own inherited Document interface. */
+		if (node->document->content != DOM_CONTENT_HTML)
+			return BIND_XML_DOCUMENT;
+
+		/* Parser-created HTML documents retain their existing interface. */
 		return BIND_DOCUMENT;
 	case DOM_DOCUMENT_TYPE:
 		return BIND_DOCUMENT_TYPE;

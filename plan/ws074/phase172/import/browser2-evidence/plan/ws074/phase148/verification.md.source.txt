@@ -1,0 +1,33 @@
+# q561 / p148 verification — 2026-10-01
+
+CLEARED. Genuine native Range.extractContents index16/arity0/current owner Fragment.
+Exact UTF16 partial Text/Comment copies and deletion; partial native Element shells;
+fully contained original identities moved into output, actual weak repair/frame
+teardown/source owner child-list notices; doctype preflight, collapse before mutation.
+Checked iterative frames freeze first/after-last selected source siblings before
+moving nodes, avoiding renumbering errors for both zero and nonzero start offsets.
+Original endpoints/source graph, output and unlinked current node rooted through
+allocations/publication. No recursion cutoff, visible boundary reads or JS shim.
+
+Page22 PASS plain+ASan, including nonzero parent interval1..3, original indexed9
+partial shells and moved t3, empty partial shell, unpaired UTF16, Comment, collapsed,
+doctype refusal, deep640, templates, observer/live Range, adopted/borrowed/saved XML.
+Native14/14 direct genuine registered method with stack scanning disabled/no outer
+receiver frame: 1800 moved original identities, source partial data, output shells,
+observer FIFO records, private collapse tuple, real mid-extraction allocation GC and
+post-release node/private state collectibility. ASan error/leak0.
+
+Original pinned Acid3 90/100 both, new indexed7 and9; prior88 preserved, full100
+inventory equivalent, completeTrue/status0/exceptions[]/runerrors[]; Acid2 exact100%.
+Final68 regression groups PASS both, Page22/native14; builds warning0, style-check
+changed C output empty, diff check clean. Full changed C manual review against
+Guardrail/full coding-style sections1–14; clang-format absent/manual; cc14.2.0,
+Python3.13.5. Within-attempt sibling-index defects corrected and full final runs
+repeated; no known residual from them. Hashes and reports in verification.json.
+
+Host native evidence only. No fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregate check/push/GitHub publication. >UINT32 graphs excluded; shared clone helper
+allocation error evidence reused, no new extraction OOM fault injection. Late source
+mutation/observer errors retain actual partial mutation, no rollback claim.
+Exact pre-generation snapshot archived. Next actual surroundContents then CSS/SVG/
+loading. p100/p044/WS incomplete; local unpublished/root released/no push.

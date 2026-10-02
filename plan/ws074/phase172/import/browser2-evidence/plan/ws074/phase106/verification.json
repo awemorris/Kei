@@ -1,0 +1,34 @@
+{
+  "baseline": "f39fdea9",
+  "plain_asan": {
+    "Acid2": "exact100%",
+    "Acid3": "40/100, all100 unchanged, Uncaught0",
+    "DOM": "23/23",
+    "interp": "45/45",
+    "object": "100/100",
+    "ownership": "27/27",
+    "realms": "30/30"
+  },
+  "reports": [
+    "build/ws074-acid-p106-plain/report.json",
+    "build/ws074-acid-p106-asan/report.json"
+  ],
+  "sources": {
+    "plan/ws074/tests/host-context-ownership.c": "f23a4e65c42acbf45a38c0ba01037b47bc39e382d69613441e8b7b2b68d5c476",
+    "userland/desktop/browser/bind/bind.h": "4c8a6504eef24aa47d764d7500d7275cc8861e55de3b31142ab140a2f930c313",
+    "userland/desktop/browser/bind/environment.c": "ba514856820d612d319903798f1ec9daad6049fabc8cd50cb5080a0d4573d0db",
+    "userland/desktop/browser/bind/internal.h": "61229aa483bb64fba7fb7c77d4e72ce90092aa3915153427fb5583cebc9a47fb",
+    "userland/desktop/browser/bind/timer.c": "ae045eb841960a865515c182557a7d960acfd0a2207644c762aeb4be6a05b95c",
+    "userland/desktop/browser/bind/window.c": "9f272c22e1519b99ff80424123adca8f39edf5a9777a3f40dff52f78f73672bf",
+    "userland/desktop/browser/dom/dom.h": "9d489fd7ead5f26f7906948db13d7feef9ce70c706ee945520e1708c71a5f5f3",
+    "userland/desktop/browser/dom/node.c": "1467ff268a521094d02e243b40f2e98f788a5eb55860c834f93496e368ee077a",
+    "userland/desktop/browser/vm/function.c": "75b34ab916c6cb870073889510f72d9c8a93b6beb1249453a8a972be2ecf7051",
+    "userland/desktop/browser/vm/realm.c": "f840fa0b68b82019508199f4bb7bb10fea4b83bfc59d991e3927bda1c9aeaad1",
+    "userland/desktop/browser/vm/vm.h": "0d65065adb3257b15133ed531bf3fcab7a97f9d55b401d11387072a1589e8e94"
+  },
+  "tools": {
+    "clang-format": "unavailable",
+    "compiler": "cc14.2.0",
+    "python": "3.13.5"
+  }
+}

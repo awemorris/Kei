@@ -1,0 +1,36 @@
+<!-- awesome-plan project=zedbsd record=q529 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q528](queue-q528.md), exact archive verified.
+
+## q529
+
+Purpose: weak DOM pre-removal subscription prerequisite for NodeIterator, WS074/fg011.
+Timebox one finite Phase. Approval currentuser2026-09-30 autonomousAcid3/automatic
+Queues plus2026-10-01 continuation; exact [p119scope](../ws074/phase119/phase.md) saved
+before source generation. No NodeIterator API/collections/Range/controls/loading.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q529-i01 | [ws074-p119](../ws074/phase119/phase.md) | cleared | p118b744f662 +actual pre-remove/GC evidence; no weak registry yet |
+
+Criteria real callback/oldlinks/weak GC/any finalizationorder/wholeheap teardown,
+selected prior regression plain+ASanPASS, all10068 preserved/noerrors/Acid2exact,
+warning0/fullstandard/style/diff/evidence. Graph p118(external) → p119 → future
+NodeIterator(external) → p100(external); acyclic. Onlyp119 authorized.
+
+## Upcoming Work Outlook
+
+NodeIterator actual reference/candidate correction and next/previous/filter for1–3;
+livecollections/controls/Range/CSS/loading/SVG following finiteQueues. p100 unchanged,
+p044 remains. Local unpublished/no push.
+
+## q529 outcome (2026-10-01)
+
+[p119](../ws074/phase119/phase.md) cleared, [evidence](../ws074/phase119/verification.md).
+Weak subscription19/19 plus all selected plain/ASan regressions PASS; Acid3 all100
+68/100 unchanged/noerrors/Acid2exact. Next NodeIterator API uses verified foundation.
+Root executor released; local unpublished.

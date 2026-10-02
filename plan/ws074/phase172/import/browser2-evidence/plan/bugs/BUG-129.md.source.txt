@@ -1,0 +1,32 @@
+# BUG-129: browser UTF16 geometric reserve can overflow allocated bytes
+
+Reproduction: unknown (static arithmetic evidence only,2026-10-01)
+Disposition: tracking
+Origin: [ws074-p143 / q555](../ws074/phase143/phase.md), baseline802e509f
+Component: userland/desktop/browser/base/buffer.c wb_units_reserve/buffer_grown
+Handling: future finite browser buffer bounds Phase if selected; not q555 repair.
+
+Expected: a huge representable UTF16 unit request whose rounded capacity cannot fit
+bytes fails ENOMEM before realloc/copy or publication. Observed static code:
+wb_units_reserve validates needed<=SIZE_MAX/2, but buffer_grown doubles to a power of2;
+capacity*sizeof(uint16_t) can overflow even when needed*sizeof(uint16_t) is representable.
+For64bit size_t, initially empty buffer, extra=2^62+1: unit check accepts,
+rounded capacity=2^63, byte multiplication wraps0. Realloc(0) behavior and any following
+copy are not tested here; do not claim runtime reproduction or sanitizer evidence.
+
+Potential impact: reported capacity may exceed actually allocated storage; callers
+such as existing append/full data replacement can then write beyond allocation on
+extreme native requests. Native size inputs/shared helpers affected; no practical
+public JS exploit or ordinary Acid regression asserted. New p143 replacement avoids
+this dependency using exact checked allocation; p143 has no criterion to fix shared
+geometric reserve, and no bug transfer/clearance exception is used.
+
+Search: current Bug Board and active/archived plan/bugs+plan/history for
+wb_units_reserve/buffer_grown/UTF16 capacity overflow found no canonical match.
+Bounds: source arithmetic read-back only, no huge allocations/realloc0/runtime injection,
+no exhaustive byte-buffer/control vector audit. Host cc14.2.0/Linux64bit,
+Python3.13.5 static integer reasoning; code unchanged. Reinvestigate when a finite
+buffer bounds Phase is selected, a large native request fails incorrectly, or platform
+size arithmetic changes. Fix must check rounded capacity bytes or cap growth and verify
+bounded overflow requests without reading huge invalid input, ordinary buffer semantics,
+caller preservation and sanitizer behavior. Local unpublished; no remote close/sync.

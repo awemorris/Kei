@@ -1,0 +1,114 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-02)
+Finished Queue: q588
+Last finished Queue: [q587](queue-q587.md), exact archive verified; p170cleared.
+Executor root/browser2/onefinitePhase/localunpublished.
+
+## Exact q588 scope and approval
+
+User autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation2026-10-02
+approve exact p171 pre-generation snapshot. Native scalar SVGRectElement.width/
+SVGAnimatedLength/baseVal+readonlyanimVal/SVGLength readwrite scalar attribute
+profile, actual privatebrands/SameObject/cachetracing/GC/coercion, declaredpartial
+relativeunit conversions NotSupported/otherSVG APIs absent. New bind/svg-length.c/
+selected registry/rectdispatch/opaqueDOMcachetrace/Makefileonce/native fixture.
+Prior98+native1=99both/original100/allprior99+72/equal100/noerrors/Acid2exact.
+No newrelativegeometry/animation/CSSoverride/VM/net/parser/DOMalgorithms/renderer/
+load/OS/HAL/.internal/aggregate/push/publication. Finiteimplementation+verification;
+unknownprereqendsuncleared. Actual p170cleared/source/evidence verified; no known
+cancellation/concurrent/completedattempt. p100/p044/WS incomplete.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q588-i01 | [ws074-p171](../ws074/phase171/phase.md) | cleared | p170cleared; remaining actual75 native scalar width |
+
+Graphp170(external)->p171->p100(external), acyclic.
+
+## Upcoming Work Outlook
+
+Samep100 actual full100 acceptance and final feature standards/verification scope;
+select exact finite scope after actual native width criteria clear.
+
+## q588 outcome
+
+p171cleared/native60/all99both/original100/all100PASS/noerrors/Acid2exact.
+[Evidence](../ws074/phase171/verification.md). Pixel37.04%/visualFAILlabels remain
+independent diagnostic; no full visual conformance. Allselectedterminal/rootreleased/
+localunpublished/no push. Selectsamep100acceptance; p044/WS incomplete.
+
+## Exact approved p171 snapshot before generation
+
+```markdown
+<!-- awesome-plan project=zedbsd record=ws074-p171 -->
+
+# ws074-p171: native SVG rect width and live scalar length reflection
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q588 / q588-i01
+Base7cfe12cd/q587 cleared/native42/all98both/actual99/Acid2exact.
+Current user autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation
+2026-10-02 approve this exact finite necessary width feature before generation.
+Root/browser2 sole executor/writer/localunpublished/no push/no concurrentattempt.
+Guardrail/full C1–14/automation/native interface registry/DOM trace/CSSOM typed
+state/actual owner prototype snapshots/exception and number conversion read.
+
+## Exact finite scope / criteria
+
+Canonical exact SVG rect receives native SVGRectElement→SVGGeometryElement→
+SVGGraphicsElement→SVGElement. Native branded width is SameObject actual
+SVGAnimatedLength with distinct SameObject baseVal/animVal actual SVGLength.
+Private traced state owns actual native rect and all three wrappers, cached via
+one traced opaque dom_element.svg_width field. No public property storage or
+hardcoded numeric result. Live native unnamespaced width attribute is authoritative;
+clone has independent new cache; saved length retains actual owner/creator graph
+through precise-only GC; lastreleasecollects. Wrongnamespace/case/prototype/private
+platform and borrowed wronginterfaces reject; borrowed native genuine wrappers work.
+
+Finite scalar length profile exposes SVGLength unitType/value/valueInSpecifiedUnits/
+valueAsString and specified0–10constants, illegal constructors. Numeric and absolute
+NUMBER/px/cm/mm/in/pt/pc values convert at96CSSpx/in, parse finite signed decimal/
+exponent grammar and serialize real values back to native width. Numeric .value
+setter makes unitlessNUMBER; .valueInSpecifiedUnits preserves current supported unit;
+.valueAsString setter validates supported finite scalar length then serializes.
+Actual percentage/em/ex retain recognized unitType/specification/string, but user
+unit conversion .value throws explicit NotSupportedError: full viewport/font relative
+SVG geometry is still absent, no guessed scale. Relative string writes are retained
+as parsed attribute values; numeric specified-unit writes preserve that unit.
+Missing/invalid width uses actual initial scalar0; live valid negative numeric values
+are preserved in DOM reflection (rendering validation outside scope).
+animVal tracks actual nonanimated base attribute and is read-only with genuine
+NoModificationAllowedError; readonly unitType/baseVal/animVal/width remain accessor
+contracts. No animation/CSS override/fullSVG rendering claim. NewValueSpecifiedUnits/
+convertToSpecifiedUnits/other rect geometry attributes remain absent, not stubs.
+CSScomments/escapes/calc/newunits/auto geometry not expanded in this bounded numeric
+attribute profile. Native mutators protect state/owner across actual coercion,
+GC/reentrancy; errors never publish partial cache or stale conversions.
+
+New bind/svg-length.c registeredonce; selected bind/internal.h/window.c/svg-text.c
+for registry/rect dispatch only; dom/dom.h/node.c for opaque cache tracing only,
+existing native DOM attribute APIs for writes. No DOM algorithm/VM/net/style/parser/
+renderer/load/OS/HAL/.internal/aggregate/push/publication. New host-svg-length.c
+realPage/fonts actual rects, scalar grammar/unit conversion/livewrites/readonly/
+brands/clone/borrowedactualchild wrappers/GC/reentrantcoercion/lastrelease.
+Both full plain/ASan builds finish beforetests/warning0/styleempty/manual changed
+full C1–14/diffclean/sourcehashes/toolversions/clang-format absent/manual.
+Prior98+newnative1=99groupsPASSboth; original100/actual75/allprior99+72/equal100,
+complete/status0/noUncaught/crash/sanitizer/runnererror/timeouts/Acid2exact.
+Finite implementation+verificationcycle; unexpectedprereqendsuncleared before
+redesign. Graphp170(external)->p171->p100(external), acyclic. p100 has its own
+acceptance Queue next; p044/fullWS incomplete. No goal/criteria waiver.
+
+## Primary standards consulted — 2026-10-02
+
+https://www.w3.org/TR/SVG2/shapes.html#InterfaceSVGRectElement
+https://www.w3.org/TR/SVG2/types.html#InterfaceSVGAnimatedLength
+https://www.w3.org/TR/SVG2/types.html#InterfaceSVGLength
+Native SameObject/scalar attribute reflection/readonly animated handle and specified
+unit identities guide this declared partial profile. Other methods/geometry and
+relative conversion are explicit remaining SVG work, not full SVG conformance.
+```

@@ -1,0 +1,52 @@
+# ws074-p135 / q547 retry verification — 2026-10-01
+
+Outcome: cleared against the explicitly revised clone criterion. q546 remains
+historical uncleared with [preserved evidence](verification-q546.md).
+
+Actual pinned Acid3 plain/ASan85/100, prior85 preserved/equal all100 inventories/
+completeTrue/run_status0/exceptions/run_errors empty; indexed58 added inq546 and
+preserved here, Acid2exact100%. WS/p100/p044 remain incomplete, remaining15.
+
+- sh plan/ws074/tests/host-build.sh plain|asan: exit0, warning0. Final source
+  differs from tested source only by one required paragraph blank line; final
+  rebuild confirms compile/link. No behavior changes after46-group validation.
+- python3 build/ws074-q547-regressions.py plain|asan: all46 groupsPASS. Owned option
+  fixture73; real numeric conversion/target+argument roots/error cleanup20/20;
+  child option native getter after manual primary destruction133/133; prior44
+  groups preserved (native select72/addGC78/cache12/table62/rowGC75/etc).
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q547-VARIANT: full reports embedded. Acid3 aggregateFAIL
+  remains expected until100; no overall Acid3/WS acceptance claimed.
+- ASAN_OPTIONS=detect_stack_use_after_return=0 is the established conservative GC
+  contract. No sanitizer diagnostics. Native setter called through actual registry
+  without an outer VM receiver frame; real conversion callback excludes all C
+  stacks, collects target/argument/member graph; EIO exits release both slots.
+  Owned chosen consumer matches new selected state, last root release reclaims
+  option owner/cache cycles. Actual managed child owner released exactly once.
+- python3 plan/tools/style-check.py full changed production C/header/host scope:
+  no findings. git diff --checkPASS. Full manual C standards review across final
+  p135 changes from208ef29f covers file order/ANSI declarations/forwards/comments/
+  guarded conversions/errors/allocation/roots/exact identities/trace/DOM ordering/
+  clone and parser scope. Existing binding registry exception retained. Manual
+  format; clang-format unavailable; cc14.2.0/Python3.13.5. Source hashes embedded.
+
+Selection is native owned selectedness/dirtiness, independent of reflected defaults.
+Current live membership supplies native first selected index; explicit bad index
+clears all without fallback. Actual DOM attribute/insertion/removal hooks repair
+single-selection and current owners. Multiple, size, option/group disabling,
+ordinary moves/blocked/nested/XML/adoption tested. Current owner cache traced;
+no raw realm stored. Paint/form chosen consumer uses same first selected state.
+Clone uses ordinary cloned attributes/fresh clean selectedness, preserving no
+invented script state. Invalid/absent/default displays and negative zero parsed
+without arbitrary-length overflow. Other features excluded in revised Phase.
+
+Chromium153.0.8010.52 CLI semantic comparison74 messages: all revised clone cases
+agree; five differences remain (huge size, option enabling/disabling/group enabling,
+negative-zero/zero display fallback). Current primary algorithms explicitly require
+attribute reset and nonnegative parsing/size1-only fallback; implementation follows
+those algorithms, not those Chromium differences. No full engine equivalence
+claimed. Known scoped comparison limits do not violate this acceptance criterion.
+Primary [HTML selection](https://html.spec.whatwg.org/multipage/form-elements.html),
+[DOM clone](https://dom.spec.whatwg.org/#concept-node-clone),
+[nonnegative parser](https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#rules-for-parsing-non-negative-integers).
+No fullWPT/fuzz/OS/guest/boot/GPU/publication/push. Local unpublished.

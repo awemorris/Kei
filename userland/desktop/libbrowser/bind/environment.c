@@ -155,6 +155,7 @@ static int environment_observer_size(struct vm_realm *realm, double width, doubl
 static int environment_mutation_add(struct bind_window *window, struct vm_object *observer, vm_value callback);
 static struct environment_mutation_observer *environment_mutation_find(struct bind_window *window, vm_value observer);
 static void environment_mutation_clear(struct bind_window *window, struct environment_mutation_observer *observer);
+static int environment_root(struct bind_window *window, struct vm_cell **slot);
 static int environment_mutation_options(struct vm_realm *realm, vm_value options, int *child_list, int *subtree);
 static int environment_mutation_record(struct bind_window *window, struct environment_mutation_observer *observer, struct dom_node *parent, struct dom_node *added, struct dom_node *removed);
 static int environment_node_list(struct bind_window *window, struct dom_node *node, vm_value *result);
@@ -344,6 +345,50 @@ const struct bind_interface bind_location_interface = {
 };
 
 /*
+ * Marks observer state retained by a window rather than by permanent roots.
+ */
+void
+bind_environment_trace(
+	struct vm_heap *heap,
+	struct bind_window *window)
+{
+	struct environment_mutation_observer *observer;
+
+	/* Managed observer cycles are collectible with their detached context. */
+	for (observer = window->mutation_observers;
+	     observer != NULL;
+	     observer = observer->next) {
+		vm_heap_mark(heap, observer->observer);
+		vm_heap_mark(heap, observer->callback);
+		vm_heap_mark(heap, observer->target);
+		vm_heap_mark(heap, observer->records);
+	}
+
+	/* Succeeded: every registered observer's references are visible. */
+	return;
+}
+
+/*
+ * Disconnects pending observer deliveries without invalidating saved objects.
+ */
+void
+bind_environment_disconnect(
+	struct bind_window *window)
+{
+	struct environment_mutation_observer *observer;
+
+	/* Saved observer objects can still inspect or change their backend later. */
+	for (observer = window->mutation_observers;
+	     observer != NULL;
+	     observer = observer->next) {
+		environment_mutation_clear(window, observer);
+	}
+
+	/* Succeeded: there are no pending targets or records to deliver. */
+	return;
+}
+
+/*
  * Makes the window's environment: navigator, screen, performance,
  * location, the Image constructor and the window's plain properties.
  */
@@ -465,8 +510,13 @@ bind_location_part(
 	/* The host writes the part. */
 	wb_buffer_init(&text);
 	error = 0;
-	if (window->host.location != NULL)
+	if (window->owned) {
+		error = bind_frame_location(window, part, &text);
+	} else if (window->host.location != NULL) {
 		error = window->host.location(window->host.context, part, &text);
+	}
+
+	/* A failed owned URL or host component cannot publish partial text. */
 	if (error != 0) {
 		wb_buffer_release(&text);
 		return error;
@@ -1130,17 +1180,13 @@ environment_install_window(
 	if (error != 0)
 		return error;
 
-	/* A page without frames is its own top, parent and frames, and nothing opened it. */
-	self = vm_value_cell(global);
-	error = js_builtin_value(realm, global, "top", self, VM_PROPERTY_ENUMERABLE);
-	if (error == 0)
-		error = js_builtin_value(realm, global, "parent", self, VM_PROPERTY_DEFAULT);
-	if (error == 0)
-		error = js_builtin_value(realm, global, "frames", self, VM_PROPERTY_DEFAULT);
-	if (error == 0)
-		error = js_builtin_value(realm, global, "opener", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
-	if (error == 0)
-		error = js_builtin_value(realm, global, "length", vm_value_int32(0), VM_PROPERTY_DEFAULT);
+	/* Browsing-context relatives are live accessors on Window's prototype. */
+	error = js_builtin_value(realm, global, "opener", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+	if (error != 0)
+		return error;
+
+	/* Frame enumeration remains outside the initial-context interface. */
+	error = js_builtin_value(realm, global, "length", vm_value_int32(0), VM_PROPERTY_DEFAULT);
 	if (error != 0)
 		return error;
 
@@ -1148,8 +1194,8 @@ environment_install_window(
 	error = bind_string(realm, "", &self);
 	if (error == 0)
 		error = js_builtin_value(realm, global, "name", self, VM_PROPERTY_DEFAULT);
-	if (error == 0)
-		error = js_builtin_value(realm, global, "closed", VM_VALUE_FALSE, VM_PROPERTY_DEFAULT);
+
+	/* A failed name allocation or definition ends environment installation. */
 	if (error != 0)
 		return error;
 
@@ -2353,7 +2399,8 @@ environment_observer_observe(
 		/* A second observe call replaces this minimal observer's prior target. */
 		environment_mutation_clear(bind_window_of(realm), observer);
 		observer->target = vm_value_as_cell(target);
-		status = vm_heap_add_root(realm->heap, &observer->target);
+		window = bind_window_of(realm);
+		status = environment_root(window, &observer->target);
 		if (status != 0) {
 			observer->target = NULL;
 			return status;
@@ -2423,6 +2470,27 @@ environment_observer_records(
 	return js_builtin_array(realm, NULL, 0, result);
 }
 
+/* Keeps primary observers rooted and managed observers in their window graph. */
+static int
+environment_root(
+	struct bind_window *window,
+	struct vm_cell **slot)
+{
+	int status;
+
+	/* The owned window's trace supplies reachability without a permanent root. */
+	if (window->realm->managed)
+		return 0;
+
+	/* Explicit primary ownership retains its existing observer-root contract. */
+	status = vm_heap_add_root(window->realm->heap, slot);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the primary observer reference remains globally rooted. */
+	return 0;
+}
+
 /* Retains one newly constructed MutationObserver and its callback. */
 static int
 environment_mutation_add(
@@ -2440,9 +2508,9 @@ environment_mutation_add(
 		return ENOMEM;
 	made->observer = &observer->cell;
 	made->callback = vm_value_as_cell(callback);
-	status = vm_heap_add_root(window->realm->heap, &made->observer);
+	status = environment_root(window, &made->observer);
 	if (status == 0)
-		status = vm_heap_add_root(window->realm->heap, &made->callback);
+		status = environment_root(window, &made->callback);
 	if (status != 0) {
 		if (made->observer != NULL)
 			vm_heap_remove_root(window->realm->heap, &made->observer);
@@ -2604,7 +2672,7 @@ bind_environment_checkpoint(
 	return 0;
 }
 
-/* Appends one childList MutationRecord to an observer's pending array. */
+/* Appends a completely constructed childList record while retaining every native participant. */
 static int
 environment_mutation_record(
 	struct bind_window *window,
@@ -2616,67 +2684,157 @@ environment_mutation_record(
 	struct vm_realm *realm;
 	struct vm_object *array;
 	struct vm_object *record;
+	struct vm_cell *roots[7];
 	vm_value added_nodes;
 	vm_value removed_nodes;
 	vm_value target;
 	vm_value type;
 	vm_value records;
+	unsigned index;
+	unsigned registered;
 	int status;
 
-	/* The first change starts the rooted array for this checkpoint. */
+	/* Retain inputs before even the pending-array allocation can trigger collection. */
 	realm = window->realm;
-	if (observer->records == NULL) {
-		status = js_builtin_array(realm, NULL, 0, &records);
+	memset(roots, 0, sizeof(roots));
+	roots[0] = &parent->cell;
+	if (added != NULL)
+		roots[1] = &added->cell;
+
+	/* A removed node has no parent edge and needs its own construction owner. */
+	if (removed != NULL)
+		roots[2] = &removed->cell;
+
+	/* Empty newborn slots acquire objects immediately after each successful allocation. */
+	registered = 0;
+	status = 0;
+	for (index = 0; index < 7U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
 		if (status != 0)
-			return status;
-		observer->records = vm_value_as_cell(records);
-		status = vm_heap_add_root(realm->heap, &observer->records);
-		if (status != 0) {
-			observer->records = NULL;
-			return status;
-		}
+			break;
+		registered++;
 	}
 
-	/* The record has the changed parent and NodeList-shaped added and removed sequences. */
-	status = bind_wrap(window, parent, &target);
-	if (status == 0)
-		status = environment_node_list(window, added, &added_nodes);
-	if (status == 0)
-		status = environment_node_list(window, removed, &removed_nodes);
-	if (status == 0)
-		status = bind_string(realm, "childList", &type);
-	if (status != 0)
-		return status;
-	record = vm_object_create(realm->heap, realm->object_prototype);
-	if (record == NULL)
-		return ENOMEM;
-	status = js_builtin_value(realm, record, "type", type, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "target", target, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "addedNodes", added_nodes, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "removedNodes", removed_nodes, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "previousSibling", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "nextSibling", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "attributeName", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "attributeNamespace", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, record, "oldValue", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+	/* Every construction failure follows the same bounded root-release path. */
+	if (status == 0) {
+		do {
+			/* The pending array retains the existing primary or managed observer ownership. */
+			if (observer->records == NULL) {
+				status = js_builtin_array(realm, NULL, 0, &records);
+				if (status != 0)
+					break;
+				observer->records = vm_value_as_cell(records);
+				status = environment_root(window, &observer->records);
+				if (status != 0) {
+					observer->records = NULL;
+					break;
+				}
+			}
+
+			/* The rooted native parent retains the target wrapper produced here. */
+			status = bind_wrap(window, parent, &target);
+			if (status != 0)
+				break;
+
+			/* Retain the added list before construction of the independent removed list. */
+			status = environment_node_list(window, added, &added_nodes);
+			if (status != 0)
+				break;
+			roots[3] = vm_value_as_cell(added_nodes);
+
+			/* Retain the removed list before the type string and record allocations. */
+			status = environment_node_list(window, removed, &removed_nodes);
+			if (status != 0)
+				break;
+			roots[4] = vm_value_as_cell(removed_nodes);
+
+			/* Keep the type string alive while the record object is allocated. */
+			status = bind_string(realm, "childList", &type);
+			if (status != 0)
+				break;
+			roots[5] = vm_value_as_cell(type);
+
+			/* The newborn record remains unpublished through all fallible property definitions. */
+			record = vm_object_create(realm->heap, realm->object_prototype);
+			if (record == NULL) {
+				status = ENOMEM;
+				break;
+			}
+
+			/* Property-key allocation may collect before the complete record reaches the array. */
+			roots[6] = &record->cell;
+
+			/* Describe the existing child-list mutation kind. */
+			status = js_builtin_value(realm, record, "type", type, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Retain the actual changed parent wrapper. */
+			status = js_builtin_value(realm, record, "target", target, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Publish the independent completed added-node sequence. */
+			status = js_builtin_value(realm, record, "addedNodes", added_nodes, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Publish the independent completed removed-node sequence. */
+			status = js_builtin_value(realm, record, "removedNodes", removed_nodes, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Preserve the existing minimal previous-sibling field. */
+			status = js_builtin_value(realm, record, "previousSibling", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Preserve the existing minimal next-sibling field. */
+			status = js_builtin_value(realm, record, "nextSibling", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Child-list records carry no attribute name. */
+			status = js_builtin_value(realm, record, "attributeName", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Child-list records carry no attribute namespace. */
+			status = js_builtin_value(realm, record, "attributeNamespace", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Child-list records carry no previous character or attribute value. */
+			status = js_builtin_value(realm, record, "oldValue", VM_VALUE_NULL, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Only the complete record is appended to the observer-owned array. */
+			array = (struct vm_object *)observer->records;
+			status = vm_object_define(
+				realm->heap,
+				array,
+				vm_value_int32((int32_t)array->length),
+				vm_value_cell(record),
+				VM_PROPERTY_DEFAULT);
+		} while (0);
+	}
+
+	/* Temporary ownership ends whether construction or final publication failed or succeeded. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Preserve the precise allocation or property-publication failure. */
 	if (status != 0)
 		return status;
 
-	/* The pending record is kept by the rooted array. */
-	array = (struct vm_object *)observer->records;
-	return vm_object_define(realm->heap, array, vm_value_int32((int32_t)array->length),
-	    vm_value_cell(record), VM_PROPERTY_DEFAULT);
+	/* Succeeded: the observer owns the complete record and its independent lists. */
+	return 0;
 }
 
-/* Makes a zero- or one-item array whose constructor name is NodeList. */
+/* Makes a complete zero- or one-item NodeList-shaped array under explicit temporary ownership. */
 static int
 environment_node_list(
 	struct bind_window *window,
@@ -2686,33 +2844,88 @@ environment_node_list(
 	struct vm_realm *realm;
 	struct vm_object *constructor;
 	struct vm_object *list;
+	struct vm_cell *roots[4];
+	vm_value sequence;
 	vm_value item;
 	vm_value name;
+	unsigned index;
+	unsigned registered;
 	int status;
 
-	/* A MutationRecord uses a NodeList even when it contains no node. */
+	/* Native ownership retains a newly wrapped node without relying on caller stack scanning. */
 	realm = window->realm;
-	if (node == NULL) {
-		status = js_builtin_array(realm, NULL, 0, result);
-	} else {
-		status = bind_wrap(window, node, &item);
-		if (status == 0)
-			status = js_builtin_array(realm, &item, 1, result);
+	memset(roots, 0, sizeof(roots));
+	if (node != NULL)
+		roots[0] = &node->cell;
+
+	/* Empty slots retain every newborn before the next VM allocation. */
+	registered = 0;
+	status = 0;
+	for (index = 0; index < 4U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			break;
+		registered++;
 	}
 
-	/* An allocation failure leaves no usable list. */
+	/* List publication is delayed until every constructor decoration succeeds. */
+	if (status == 0) {
+		do {
+			/* Empty and single-node sequences preserve the existing array-shaped collection model. */
+			if (node == NULL) {
+				status = js_builtin_array(realm, NULL, 0, &sequence);
+			} else {
+				status = bind_wrap(window, node, &item);
+				if (status != 0)
+					break;
+				status = js_builtin_array(realm, &item, 1, &sequence);
+			}
+
+			/* No partial sequence may escape an allocation failure. */
+			if (status != 0)
+				break;
+			list = (struct vm_object *)vm_value_as_cell(sequence);
+			roots[1] = &list->cell;
+
+			/* The constructor object is protected before its name is allocated. */
+			constructor = vm_object_create(realm->heap, realm->object_prototype);
+			if (constructor == NULL) {
+				status = ENOMEM;
+				break;
+			}
+
+			/* A fallible name or property-key allocation cannot reclaim either collection object. */
+			roots[2] = &constructor->cell;
+			status = bind_string(realm, "NodeList", &name);
+			if (status != 0)
+				break;
+			roots[3] = vm_value_as_cell(name);
+
+			/* The existing observer collection exposes its constructor's name. */
+			status = js_builtin_value(realm, constructor, "name", name, VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+
+			/* Attach the complete constructor before publishing the decorated list. */
+			status = js_builtin_value(realm, list, "constructor", vm_value_cell(constructor), VM_PROPERTY_DEFAULT);
+			if (status != 0)
+				break;
+			*result = sequence;
+		} while (0);
+	}
+
+	/* Release every slot actually registered, including allocation-failure paths. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Report why no complete collection could be published. */
 	if (status != 0)
 		return status;
-	list = (struct vm_object *)vm_value_as_cell(*result);
-	constructor = vm_object_create(realm->heap, realm->object_prototype);
-	if (constructor == NULL)
-		return ENOMEM;
-	status = bind_string(realm, "NodeList", &name);
-	if (status == 0)
-		status = js_builtin_value(realm, constructor, "name", name, VM_PROPERTY_DEFAULT);
-	if (status == 0)
-		status = js_builtin_value(realm, list, "constructor", vm_value_cell(constructor), VM_PROPERTY_DEFAULT);
-	return status;
+
+	/* Succeeded: the caller receives one fully decorated independent collection. */
+	return 0;
 }
 
 /* Makes the initial IntersectionObserver or ResizeObserver entry for a target. */

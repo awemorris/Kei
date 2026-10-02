@@ -1,0 +1,1659 @@
+<!-- awesome-plan project=zedbsd record=ws074 -->
+
+# WS074: zedBSD の Web ブラウザ（`userland/desktop/browser`）
+
+<!-- awesome-plan-current:start -->
+Status: incomplete
+Primary Milestone: MG006
+Related Milestones: MG002
+Objectives: O1, O2
+Parent: [Master](../master.md)
+Queue: q591 finished（p100 cleared / fg011 achieved）
+Resume point: fg011達成、自走終了。p101/CSS2→p098/modulesは未選択。Actual100/all99、pixel37.04% diagnostic、WS incomplete。
+<!-- awesome-plan-current:end -->
+
+## デモの目標（2026-09-28 ユーザー、同日に amazon.co.jp へ変更）
+
+**変更**: ユーザー「…amazon.co.jpに変更しましょう。」→ デモの目標は amazon.co.jp（トップの page と検索、限定的な CSS・基本的な JS、WebGL・動画なし）。以下の Google の記述は経緯として残す。
+
+- 調査（[p067](phase067/phase.md)、2026-09-28）: 目標の版・足りない機能・Phase の列は [amazon-goal.md](amazon-goal.md)。私たちの UA に
+  desktop の版が challenge なしに返り、配置は CSS だけで決まる（JS なしの Chromium でもほぼ同じ）。検索は普通の GET の form。
+  **デモの順**: p032 → p068 → p061 → p069 → p035 → p060 → p062 → p070 → p071 → p037 → p072 → p027・p065 の一部。下の Google の順と
+  「実行の順」より優先する。
+
+
+「Googleの検索トップページと検索が、レイアウトを崩さずに表示できたら、ゴールにしましょう！限定的なCSSと、基本的なJS、WebGLなし、ビデオなしです。」
+- 完了の目安: Google の検索のトップの page と検索の結果の page が、レイアウトを崩さずに表示される。検索の box に文字を入れて検索でき、結果の link を開ける。
+- 範囲: 限定的な CSS、基本的な JS。WebGL・動画は無し。インタラクション: link・戻る/進む・scroll・検索の box と form への入力・JS を動かす button。
+- touch の慣性の scroll 等は [WS081](../ws081/ws.md)。
+- 注意（main）: Google は User-Agent・cookie（同意の画面）・JS の有無で返す HTML を変える。p031・p032 の前に、今の browser が受け取る
+  HTML と足りない機能（form・CSS・JS の API）を調べる Phase を置く。
+- 調査（[p059](phase059/phase.md)、2026-09-28）: 目標の版・足りない機能・Phase の列は [google-goal.md](google-goal.md)。home は私たちの UA に返る
+  基本の HTML の版、結果は SearchGuard の JS の challenge を通った後の page（基本の HTML の結果はもう無い）。**デモの順**:
+  p032 → p060 → p037（最小）→ p027 → p065 → p066 → p035 → p061 → p062 → p063 → p031 → p064（Google の目標の順。amazon.co.jp への変更で上の順に置き換えた）。
+
+## 目標
+
+2026-09-27 ユーザー:「新しいWSを作ります。Webブラウザを作成します。userland/desktop/browserです。
+HTML5のレイアウトエンジンを大まかに作ったあと、JavaScript実行エンジンをあまり最適化にこだわらないで作成し、接続します。そのあと、CSSの互換性を、
+標準準拠テストで100%に近づけつつ、-webkitの拡張などはChromeと実際のレンダリング結果を比較しながら100%に近づけていきます。ただし、レイアウトを
+100％準拠にするのは無理だし、Chromeと100％互換にするのも無理ですので、目標値を徐々に上げるのがいいと思います。また、JavaScript実行エンジンは、
+Wasm実行エンジンと共通化することで、あとでJITコンパイルを導入するときにやりやすくなると思います。libpngは直接使わず、libpng-compatを使います。
+JPEGもlibjpeg-compatを作りましょう。WebPはあとで対応します。SSLは、まずはOpenSSLのライブラリでいいですが、最終的には、libsslやlibcryptoの
+互換品をbase/に入れます。動画再生はまだドライバがないので後回しでいいです。音声はogg vorbisくらいなら互換ライブラリをlibvorbis-compatとかとして
+作れそうですが、これも後回しでいいです。」
+
+zdesktop（Wayland）の上で動く、zedBSD 自前の Web ブラウザ。HTML5 の parser と DOM、CSS、layout と描画、network、画像、JavaScript と
+Wasm を base の中に自前で書く（外部の browser engine は取り込まない）。
+
+## 方針（ユーザーの指示から）
+
+1. **順序**: HTML5 の layout engine を大まかに → JavaScript の実行 engine（最適化にこだわらない）を作って接続 → CSS の互換性を上げる。
+2. **CSS の互換性**: 標準の準拠試験（WPT の CSS の部分集合など）の通過率を 100% に近づける。`-webkit-` の拡張などは Chrome の実際の描画と
+   比べて近づける。100% は無理なので、**目標値を段階的に上げる**（Phase ごとに通過率・一致率の目標を決める）。
+3. **JavaScript と Wasm の実行 engine を共通化**（共通の中間表現・bytecode・値の表現・GC・呼び出し規約）し、後の JIT の導入を容易にする。
+4. **画像**: PNG は libpng を直接使わず `libpng-compat`（WS035 p041 の範囲、WS071 p010 で作る予定）。JPEG は `libjpeg-compat` を新しく作る。
+   WebP は後。
+5. **TLS**: 最初は OpenSSL のライブラリ（既存の package）。最終的に base に libssl・libcrypto の互換品を入れる（別の Phase か WS）。
+6. **後回し**: 動画（driver が無い）、音声（ogg vorbis なら `libvorbis-compat` で作れそう）、WebP、JIT。
+
+## 完了の条件（p001 で確定）
+
+- zdesktop で browser が起動し、URL を開き、HTML・CSS・画像・JavaScript を含む一般的な静的・動的な page を描いて操作できる
+  （使える page の目安は [design.md](design.md) §15）。
+- CSS の準拠試験と Chrome との描画の比較で、段階 M4 までの目標値（design.md §15）を満たす。M5 以降の数は後の WS か Phase で決める。
+- JavaScript と Wasm が共通の実行 engine（値・GC・bytecode・interpreter・呼び出し規約、design.md §11）の上で動く。
+- `libjpeg-compat` が base の library として入り、browser が使う。
+- 変更した source の規約の全文の確認（最後の Phase）。
+
+## 制約と依存
+
+- 新しい code は `plan/coding-style.md` の全文。外部の試験 suite（WPT、html5lib-tests、test262、Wasm の spec test）は source tree に
+  取り込まず、commit の SHA を固定して取得・検証して使う（ライセンスを確認、design.md §14.2）。Chrome の参照の描画は host の Debian の
+  `chromium`（2026-09-27 に導入、153.0.8010.52）。
+- 画面・窓: zdesktop の titlebar（WS070 の CONTROLS、ws070-p011 の後は TABS）。提示は wl_shm（design.md §8.4）。
+- 画像: `libpng-compat`・`libz-compat`（ws071-p010、ws035-p040）、`libjpeg-compat`（この WS）。
+- 関係: WS035 の p029〜p032（Chromium の port の計画）とは別の到達目標（自前の engine）。両方を残す。
+
+## 判断が要る点（既定で進めた）
+
+design.md §17 の D1〜D11（process の構成、TLS の `dlopen`、titlebar、仕様・Unicode の表の commit、GIF の置き場、wl_shm、
+libpng-compat の `from_memory`、libtruetype の拡張、libjpeg-compat の API、既定の font、段階の目標値）。どれも戻せる既定で進める。
+2026-09-28 ユーザー:「ブラウザは、現在の方法で進めてください。文字の表は、生成した表をコミットしていいてす。」→ D1〜D3・D5・D9〜D11 は
+今の既定のまま。D4 は生成した表を commit する（2026-09-28 に切り替えた、p030 の phase.md）。
+
+## 2026-09-30 ラップアップと次の作業
+
+- [p097](phase097/phase.md) と q506 は cleared。固定WPT commit `2d66b9b7998bb58c336138c178323ddee857b586`で、
+  CSS2 reftestの固定sampleは44/100、Acid2はexact pixel不合格・90.56%、Acid3は9/100・pixel agreement 40.35%。
+  数値は [results/acid.txt](results/acid.txt) と [results/wpt-reftest.txt](results/wpt-reftest.txt) に残した。
+- Amazonのscript有効なguest版は、plain objectの疎な数値keyをdense arrayの`length`として扱っていたVMの不具合を直し、
+  70秒後までprocess生存・追加SIGSEGVなしを確認した。最後の実装修正はcommit `6184fb12`。
+- q507 で [p099](phase099/phase.md) を cleared。Acid2 は同じ固定条件で
+  90.56% から byte-identical な 100.00% になり、plain/ASan と focused
+  regression が通った。
+- q508 で [p102](phase102/phase.md) を cleared。Acid3 の途中停止を修正し、100件の診断は32 pass / 68 fail。
+  p100 の完全合格に向け、[p103](phase103/phase.md) の document.write を次に選んだ。
+- q509 で p103 を cleared。Acid3 は40/100、Uncaught 0、plain/ASanでAcid2 exactを維持。
+  p104 の initial iframe contexts の計画を次に選んだ。
+- q510 で [p104](phase104/phase.md) は uncleared。realm 間の関数・例外の前提を8件中5 failで再現。
+  [p105](phase105/phase.md)（q511 proposal）→[p106](phase106/phase.md)（GC所有権）を先行させてp104へ戻る。
+  active Queue は無い。production変更なし、Acid3は今回は未再測定。
+
+1. **ws074-p099: Acid2 100% — cleared（q507）**。p097 と同じ harness、viewport、font、固定 WPT 版で
+   `exact-pixel-pass 1`、pixel agreement 100.00%、crash・timeout 0。差分を一般化した focused regression を残した。
+2. **ws074-p100: Acid3 100%** — p099の後。履歴的Acid3が画面上で100/100を返し、Uncaught・crash・timeoutが無いことを
+   完了条件にする。pixel agreementは補助診断として同時に記録する。
+3. **ws074-p101: WPT CSS2 reftest 100%** — p100の後。固定commitで現runnerが列挙するscriptなしCSS2 reftest全5904件を
+   対象にし、sample 100件ではなく全件でpass 100%、error 0を完了条件にする。manifestと分母を着手時に固定し、
+   WPT metadataに基づかない任意の除外はしない。長時間実行はshard・途中再開・失敗cluster別のreportを使う。
+
+既存のp098（ES module script）は削除・再採番せずp101の後へ延期する。p036のCSS2全件部分はp101へ分け、
+p036はその後のflexbox・backgrounds・values・selectorsの拡張suiteに絞る。p047（DOM testharness）も今回の3 Phaseの後まで候補のまま残す。
+
+## Phase 一覧
+
+p001 で分け直した（2026-09-27。p002〜p013 の案は実行前の案だったので、同じ番号を新しい分割に使う）。各 Phase は 1〜3 時間を目標にし、
+着手の時に大きすぎれば分ける。
+
+**実行の順**（2026-09-27 ユーザー「正常系でワンパス通すのを優先する」、design.md §18）: p005 → p007 → p010 → p011 → p012 → p014（窓に
+実際の page）→ p045（URL の欄と link）→ p022 → p023 → p024 → p025 → p026 → p046 → p030（JS の接続）→ p013 → p048 → p049 → p015 → p016 → p017 → p019 → p020 → p051 → p021 → p053 → p052 → p050 → p058 → p054 → p055 → p056 → p057 → p006 → p008 →
+p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 → p034 → p035 以降。各 Phase は最小の範囲で通し、残りは phase.md の「後回し」へ。
+
+| Phase | 内容 | Status | 依存 |
+| --- | --- | --- | --- |
+| [ws074-p001](phase001/phase.md) | 全体の設計（[design.md](design.md)）、Chromium の導入、Phase の分割 | cleared | — |
+| [ws074-p002](phase002/phase.md) | 骨組み: directory、build の登録（amd64）、`base/`（arena・配列・文字列 buffer・UTF-8/16・hash）、headless の mode の入口、host の build（ASan の組）、suite の取得の script（固定 SHA とライセンスの確認） | cleared | p001 |
+| [ws074-p003](phase003/phase.md) | GC heap の核（非移動の mark-sweep、大きさの class の block、保守的な stack の走査、trace）、VM の string と atom | cleared | p002 |
+| [ws074-p004](phase004/phase.md) | HTML tokenizer（全状態、文字参照の表の生成）、html5lib の tokenizer の runner。目標 ≥ 98% | cleared | p003 |
+| [ws074-p005](phase005/phase.md) | DOM の核（GC の cell の Node・Element・Text・Comment・Document・DocumentType、属性）と tree builder 1（initial〜in body、adoption agency）、html5lib の tree の runner | cleared | p004 |
+| ws074-p006 | tree builder 2（table・select・template・frameset・foreign content）、fragment parsing、serializer。目標 script-off ≥ 90% | planned | p005 |
+| [ws074-p007](phase007/phase.md) | CSS の最小（ワンパス）: tokenizer・parser、selector（type・class・id・子孫・子・属性の基本）、cascade（origin・specificity・継承）、約 30 の property、UA stylesheet、`<style>`・`style` 属性 | cleared | p003 |
+| ws074-p008 | CSS 2（後回し）: selector の残り（構造・状態・`:is`/`:not`/`:has`、pseudo-element）、rule の索引 | planned | p006、p007 |
+| ws074-p009 | CSS 3（後回し）: property の表の拡張、`var()`・`calc()`、`@media`、file の `<link>`、shorthand の全部 | planned | p008 |
+| [ws074-p010](phase010/phase.md) | font と text の最小: font の一覧（Inter、日本語は Droid の fallback）、libtruetype（関数を足すなら main に先に伝える）、advance、空白と CJK での改行 | cleared | p002 |
+| [ws074-p011](phase011/phase.md) | layout の最小: box tree（anonymous box）、block（幅・高さ・margin の基本）、inline（line box・text run・baseline）、`--dump=layout` | cleared | p009、p010 |
+| [ws074-p012](phase012/phase.md) | 描画の最小: display list（背景・border の solid・text）、CPU の参照の描画、`--render`（PPM → PNG）、画面の撮影 | cleared | p011 |
+| [ws074-p013](phase013/phase.md) | layout 2a: position（relative・absolute・fixed）、offset、z-index の描画の順と hit test（2026-09-28 に float を p048、overflow を p049 へ分けた。list と marker は p011、単位は p007、replaced の大きさは p021） | cleared | p012 |
+| [ws074-p048](phase048/phase.md) | layout 2b: float と clear（行の箱を float の横で短くする、block formatting context） | cleared | p013 |
+| [ws074-p049](phase049/phase.md) | layout 2c: overflow と clip（display list の clip、CPU と GPU の描画）、overflow が作る block formatting context | cleared | p013 |
+| [ws074-p014](phase014/phase.md) | 窓: Wayland と Vulkan（swapchain、display list の GPU の描画: instance の四角と glyph の atlas）、scroll、guest で実際の page を表示。GPU と CPU の描画の比較の試験（2026-09-27 に URL の欄と link を p045 へ分けた） | cleared | p012（p013 は後回しの順） |
+| [ws074-p015](phase015/phase.md) | URL（WHATWG）、`data:`、WPT の urltestdata の runner（896/896、data-urls 72/72） | cleared | p002 |
+| [ws074-p016](phase016/phase.md) | HTTP/1.1 の同期の client（chunked、redirect）、cookie、http の page と script、host の test server、guest の http（2026-09-28 に非同期の loader・resolver の thread・持続接続・memory の cache を p050 へ分けた） | cleared | p014、p015 |
+| [ws074-p017](phase017/phase.md) | TLS（OpenSSL の `dlopen`、D2）、https、自前の CA の host の server、guest で実在の site（BUG-083 の rtld の dlopen の修正を含む） | cleared | p016 |
+| ws074-p018 | encoding: 判定（BOM・HTTP・meta の prescan）、UTF-16・legacy の single-byte、Shift_JIS・EUC-JP・ISO-2022-JP（表の生成、D4） | planned | p006 |
+| [ws074-p019](phase019/phase.md) | `libjpeg-compat` 1: baseline（huffman、任意の subsampling、restart、grayscale・YCbCr）、library の登録、host の試験（Pillow と比較）。2026-09-28 に base の group・全 platform、libpng-compat の header を `compat/png/` へ | cleared | p002 |
+| [ws074-p020](phase020/phase.md) | `libjpeg-compat` 2: progressive、CMYK/YCCK、`jpeg_save_markers`（EXIF の向き）（`JCS_EXT_BGRA` は p019 で済み） | cleared | p019 |
+| [ws074-p051](phase051/phase.md) | `libgif-compat`（2026-09-28 ユーザー、D5 の変更）: `userland/base/libgif-compat`、`include/libc/compat/gif_lib.h`（giflib 5.2 の decode の部分集合）、全 platform | cleared | p002 |
+| [ws074-p021](phase021/phase.md) | browser の画像: `<img>`（replaced box）、JPEG・PNG・GIF（base の compat の library）、画像の表、CPU と GPU の描画（2026-09-28 に CSS の背景画像を p052 へ分けた） | cleared | p016、p020、p051、ws071-p010 |
+| [ws074-p052](phase052/phase.md) | CSS の背景画像（p021 から分けた）: `background-image: url()`、repeat、position、size、`background` の shorthand、canvas の背景画像 | cleared | p021 |
+| [ws074-p053](phase053/phase.md) | 部品としての browser の設計（design.md §19）: engine と shell・Wayland の依存の棚卸し、C API（create・destroy・load・resize・呼ぶ側の VkImage への描画・入力の event・callback）の header の案（[browser_view.h](phase053/browser_view.h)）。.so の分割はまだしない。shell の bind・net への直接の依存を page の API に | cleared | p021 |
+| [ws074-p022](phase022/phase.md) | VM の核 2: 値（NaN-boxing）、object と shape、配列の elements、関数、realm の骨組み | cleared | p003 |
+| [ws074-p023](phase023/phase.md) | 共通の bytecode と interpreter、呼び出し規約、例外の unwind、native 関数（手で組んだ JS 型と Wasm 型の命令の試験） | cleared | p022 |
+| [ws074-p024](phase024/phase.md) | JS の lexer と parser（ES2024 の構文 → AST）、test262 の構文の試験（parse だけ。46876/47792） | cleared | p023 |
+| [ws074-p025](phase025/phase.md) | JS の compiler（ES5 の核）、`--js` の shell、test262 の runner。最初の数（4992/47792、ES5 1457/8087） | cleared | p024 |
+| [ws074-p026](phase026/phase.md) | 組み込み 1a: Object・Function（bind・Function の構築子）・Error の類（engine の誤りも object に）・Boolean・Number（自前の最短の十進表記と十進の読み取り、toFixed 等）・Math・global の関数、native の構築子（2026-09-28 に Array・String・JSON を p046 へ分けた。9327/47792、ES5 4822/8087） | cleared | p025 |
+| [ws074-p027](phase027/phase.md) | RegExp の engine と String の regex の method | cleared（2026-09-29。自前の backtracking の engine、RegExp と String の match・replace・replaceAll・search・split。test262 14255 → 15762、ES5 6786 → 7592。v flag・`\p`・modifier・matchAll・Symbol の差し替えは残り） | p026 |
+| ws074-p028 | ES2015 の意味 1（2026-09-29 に let・const・TDZ・arrow・template を p078 へ、destructuring・default・rest・spread・optional chaining を p079 へ、class を p085 へ、Symbol・iterator・for-of・Map・Set・Weak* を p087 へ分けた）: 残りは WeakMap・WeakSet の弱さ（collector の ephemeron）、Set の ES2025 の method、iterator helper | planned | p026、p087 |
+| ws074-p029 | ES2015 の意味 2（2026-09-29 に generator・Promise・async function を p086 へ分けた）: async generator と for await、`yield*`、Proxy・Reflect、TypedArray・ArrayBuffer・DataView、BigInt | planned | p028、p086 |
+| [ws074-p030](phase030/phase.md) | DOM の binding（interface の表、生成器は後回し）、window・document・Node・Element・Event の基本、console、`<script>` の実行、timer、event loop と microtask の queue（2026-09-28 に WPT の testharness の runner を p047 へ分けた） | cleared | p014、p046（p029 から縮めた: microtask の queue はこの Phase で作った） |
+| [ws074-p031](phase031/phase.md) | Amazon の script が要る DOM の API（2026-09-29 に絞った）: querySelector・querySelectorAll・matches・closest、getBoundingClientRect・getClientRects・DOMRect・client/offset/scroll の大きさ・scrollX/Y（問われた時に layout）、classList・dataset、inline style（CSSStyleDeclaration）。getComputedStyle・innerHTML・offsetTop/Left・scrollTo は残り | cleared（2026-09-29。Amazon top の DOM の Uncaught 4 → 0、DOM の試験 4 つを追加、guest 12/12） | p030 |
+| [ws074-p032](phase032/phase.md) | form（2026-09-28 に範囲を絞った。fetch・XHR・Location・History・localStorage は p064 へ。p067 で `<select>` の最小と `box-sizing` を足した）: `<input>`（text・submit・hidden・button・checkbox）・`<button>`・`<textarea>`・`<select>` の最小の描画、focus と caret、文字の入力と編集、Enter と submit による送信（GET・POST の urlencoded、page の encoding）、script が有効なときの `noscript` を隠す | cleared | p017、p056（focus と key の入力。p031 は要らない） |
+| ws074-p033 | Wasm: decoder・validator・共通 bytecode への compiler、JS API、spec test の runner（wabt の wast2json） | planned | p029 |
+| ws074-p034 | Wasm の MVP の後: bulk memory、reference types、multi-value、sign-ext、非 trap の変換、SIMD。**M2 の計測** | planned | p033、p032 |
+| [ws074-p035](phase035/phase.md) | flexbox（最小） | cleared（2026-09-29。ASan・guest（QEMU、live の Amazon の検索）を通し、入れ子の flex の測定で % の幅が測定の幅になる不具合を直した） | p013 |
+| ws074-p036 | CSS の段階 M3-1（2026-09-30にCSS2全件をp101へ分割）: WPT flexbox・backgrounds・values・selectorsの拡張suiteを測り、失敗の多い塊を直す | planned（p101後） | p034、p035、p101 |
+| [ws074-p037](phase037/phase.md) | table の layout（最小。CSS2 の auto layout、border-collapse は近似） | cleared（2026-09-29、amazon-goal の「最小」の範囲。test page 60/73 box、Amazon のトップの footer が Chromium と同じ 4 列。rowspan・fixed・collapse の解決・column の box は残り） | p036（デモの列の判断で先に最小） |
+| ws074-p038 | transform（2D）、transition・animation、gradient、box-shadow、角丸の clip、opacity、`@font-face`（TTF/OTF） | planned | p036 |
+| ws074-p039 | grid | planned | p036 |
+| ws074-p040 | Chrome との比較の拡大（corpus と実在の site の保存、box と画素の指標）、`-webkit-` の表（別名、`-webkit-box`、`-webkit-line-clamp` 等）。**M3 の計測** | planned | p037〜p039 |
+| ws074-p041 | shell 2: TABS の titlebar と窓の中の toolbar、System Menu、context menu、履歴、ページ内検索、zoom、view-source | planned | p032、ws070-p011 |
+| ws074-p042 | CSS の段階 M4: 失敗の塊から機能を選んで直す | planned | p040 |
+| ws074-p043 | JS・Chrome の段階 M4: test262 と比較の失敗の塊を直す。**M4 の計測** | planned | p042 |
+| ws074-p044 | 変更した source の規約の全文との照合、fuzz（時間を区切って）、回帰、boot test（最後） | planned | 全て |
+| [ws074-p046](phase046/phase.md) | 組み込み 1b（p026 から分けた）: Array・String（正規表現の要らない method、UCD 16.0.0 から生成する大文字・小文字の表）・JSON（14255/47792、ES5 6786/8087） | cleared | p026 |
+| [ws074-p045](phase045/phase.md) | 窓 2（p014 から分けた）: CONTROLS の titlebar の URL の欄、link の click（`file:`）、戻る・進む・再読み込み | cleared | p014 |
+| [ws074-p050](phase050/phase.md) | 非同期の loader の核（p016 から分けた）: non-blocking な socket と TLS、resolver の thread、redirect、page の画像と shell の navigation の非同期化、Esc の中止。部品化の手順 4（`page_net_*`、p053）。2026-09-28 に持続接続と cache を p058 へ分けた | cleared | p016、p017、p053 |
+| [ws074-p058](phase058/phase.md) | 持続接続と memory の cache（p050 から分けた）: host ごとの接続の pool（6 本まで）、長さ・chunked での応答の終わり、Cache-Control（max-age・no-store）、ETag と If-None-Match の再検証、304 | cleared | p050 |
+| [ws074-p054](phase054/phase.md) | 部品化 1（p053 の手順 1）: view の型。scroll・履歴・timer・題名の変化を shell から engine の view へ、shell と main の headless の mode は view の API だけを呼ぶ。headless の settle・CPU の描画・dump も view に（2026-09-28） | cleared | p053、p050 |
+| [ws074-p055](phase055/phase.md) | 部品化 2（p053 の手順 2）: GPU の描画を `browser_target` と `_record`・`_draw` の形に（view 内の image view ごとの framebuffer）、present.c は swapchain と同期だけ。`--render-gpu` は engine の offscreen に `_draw` | cleared | p054 |
+| [ws074-p056](phase056/phase.md) | 部品化 3（p053 の手順 3）: 入力を DOM の key・code・text の形に（evdev の変換は shell）、scroll・link・focus の既定の動作を engine へ。KeyboardEvent・WheelEvent・FocusEvent、Tab の focus と ring。form の欄は無い（p032） | cleared | p055 |
+| [ws074-p057](phase057/phase.md) | 部品化 4（p053 の手順 5）: `libbrowser.so` への分割、公開の header `include/libc/browser.h`、2 つ目の使い手 `browser-probe`（Wayland なしで PPM に描く） | cleared | p056 |
+| ws074-p047 | WPT の testharness の runner（p030 から分けた: testharness.js は arrow・let・const・class と Promise を使う）、WPT dom/nodes の計測（M2 の目標 ≥ 40%） | planned | p028、p029、p030 |
+| [ws074-p059](phase059/phase.md) | Google の調査（デモの目標の前提）: 返る HTML の版（UA ごと）、Chromium との比較、足りない機能、目標の版と Phase の列（[google-goal.md](google-goal.md)） | cleared | p057 |
+| [ws074-p060](phase060/phase.md) | `inline-block` を atomic な inline に（shrink-to-fit、baseline、`vertical-align` の top・middle・bottom・baseline） | cleared（2026-09-29。検索の結果が 4 列の card に。`direction: rtl` の不足を発見） | p032 |
+| [ws074-p061](phase061/phase.md) | CSS の値と selector（p008・p009 から Google が使う部分）: `@media`、`var()`、`calc()`、`!important`、`:not()`・`:hover`・`:active`・`:focus`・`:visited`、`::before`・`::after`、`box-sizing`、`-webkit-` の別名、`text-overflow`、`letter-spacing`、`text-transform` | cleared（値の部分: var・calc・@media・@supports・論理 property。selector と pseudo-element は p069、`box-sizing` は p032） | p007 |
+| [ws074-p062](phase062/phase.md) | 描画（p038 から）: `border-radius`（CPU と GPU）、`opacity`、`box-shadow`、`outline` | cleared（2026-09-29。display list の矩形で表し CPU と GPU が一致、`clip-path: inset()` を足した。gradient・object-fit は残り） | p014 |
+| ws074-p063 | （デモの列から外した: Amazon は sprite の PNG）inline の SVG の最小（`svg`・`path`・`circle`・`rect`、`viewBox`、`fill`・`currentColor`） | planned | p012 |
+| ws074-p064 | fetch・XHR（same-origin・CORS）、Location・History、localStorage（p032 から分けた） | planned | p031、p032 |
+| ws074-p065 | （Google の目標のため。デモの列から外した、2026-09-28）Google の challenge と ES5 bundle の JS の環境（2026-09-29 に `Date` を p076 へ、`navigator`・`screen`・`performance`・`location` の読み取り・`document.cookie` を p077 へ分けた）: `Date`・`Promise`・`Symbol`・`Map`・`Set`・`WeakMap`・typed array の最小、`encodeURIComponent` の類、`Error.stack`、`atob`・`btoa`、`navigator`・`screen`・`performance`・`sessionStorage`・`CustomEvent`、`document.cookie` の書き込み、`location.replace`。保存した challenge の page が `SG_SS` を置いて開き直すまで | planned | p027 |
+| ws074-p066 | （Google の目標のため。デモの列から外した）Google の結果の page: 保存（`build/` だけ）、Chromium との比較、足りない CSS と DOM の直し（取得後に分ける） | planned | p065 |
+| [ws074-p067](phase067/phase.md) | amazon.co.jp の調査（デモの目標の変更）: UA ごとの HTML、Chromium との比較、足りない機能、Phase の列（[amazon-goal.md](amazon-goal.md)） | cleared | p059 |
+| [ws074-p068](phase068/phase.md) | 外の stylesheet（`<link rel=stylesheet>`・`@import`、非同期の loader、読み終えてからの再計算）と rule の索引（最右の id・class・tag） | cleared | p032 |
+| [ws074-p069](phase069/phase.md) | selector と pseudo-element: `:not()`・`:is()`・`:where()`・`:has()` の最小、`:root`、構造の pseudo-class、`:hover`・`:focus`・`:disabled`・`:checked`、`::before`・`::after` の `content` | cleared | p068 |
+| [ws074-p070](phase070/phase.md) | `@font-face`（WOFF、libz-compat）と Amazon Ember | cleared（2026-09-29。WOFF・TrueType の web font、WOFF2 は残り） | p068 |
+| [ws074-p071](phase071/phase.md) | 大きな page の速さ（1.4 MB の HTML、2 MB の CSS）: 測って直す | cleared（2026-09-29。class の atom と計算した style の cache、sheet の到着をまとめる。guest の live の検索が 90 s → 30 s で揃う） | p068、p061 |
+| [ws074-p072](phase072/phase.md) | grid の最小（`repeat(N,1fr)`、`grid-column`） | cleared（2026-09-29。test page 44/44 box、トップ 34.16% → 34.72%） | p035 |
+| [ws074-p073](phase073/phase.md) | direction の最小（rtl の flex row と `text-align: start`）。2026-09-29 main の判断で追加（Amazon の検索の本体の行が rtl） | cleared（2026-09-29。検索 画素 68.83% → 77.16%、ink 20.06% → 34.68%） | p035 |
+| [ws074-p074](phase074/phase.md) | block の幅の intrinsic の keyword（`max-content`・`min-content`・`fit-content`）。2026-09-29 main の判断で追加（Amazon のトップの carousel `.gwm-window-wrapper`） | cleared（2026-09-29。calc の入れ子の clamp、並ぶ float の max-content も。トップ 画素 34.72% → 79.12%、ink 24.43% → 75.06%） | p060 |
+| [ws074-p075](phase075/phase.md) | container query の単位（`container-type: inline-size` の container の幅で cqi・cqw 等、要れば `@container` の最小）。2026-09-29 main の判断で追加（Amazon のトップの card の `143cqi`） | cleared（2026-09-29。前の layout の container の大きさで解決し、変われば layout をやり直す。トップ 画素 79.12% → 80.40%） | p061 |
+| [ws074-p076](phase076/phase.md) | JS の `Date`（p065 から分けた。amazon-goal の 12 の一部、Amazon の script の最初の blocker）: 構築子・`now`・`parse`（ISO と legacy の形）・`UTC`、local と UTC の getter と setter、文字列の形、`toJSON`、Annex B | cleared（2026-09-29。test262 15762 → 16393、ES5 7592 → 7732、`built-ins/Date` 480/618。Amazon の top の `Date is not defined` 24 → 0。`Symbol.toPrimitive`・Temporal・Intl は残り） | p026、p046 |
+| [ws074-p077](phase077/phase.md) | Amazon が要る window の環境の最小（p065 から分けた）: Uncaught の位置（bytecode の位置の表）、`navigator`・`screen`・`performance`・`location`（読むだけ）・`Image` と `HTMLImageElement`・`document.cookie`・`URL`・`hidden` 等、window の plain な property | cleared（2026-09-29。AUI の `P` が定義され、Amazon の top の Uncaught 49 → 10、search 44 → 15、search 画素 72.92% → 76.04%。location の移動は p064） | p030、p076 |
+| [ws074-p078](phase078/phase.md) | ES2015 の構文 1a（p028 から分けた）: let・const（block scope、TDZ、反復ごとの binding、script 間の global の lexical な record）、arrow function、template literal（tagged を含む）、Uncaught の早期の誤り（二重の宣言） | cleared（2026-09-29。test262 16393 → 17190、Amazon の Uncaught top 10 → 7、search 15 → 9） | p025、p077 |
+| [ws074-p079](phase079/phase.md) | ES2015 の構文 1b（p028 から分けた）: destructuring（宣言・代入・引数・catch・for-in）、default・rest の引数、spread（配列・呼び出し・new・object）、optional chaining。反復は配列・arguments・文字列だけ（Symbol.iterator は p028） | cleared（2026-09-29。test262 17190 → 18558。Amazon の default・rest・optional chaining の誤り 0、次は async・for-of・class） | p078 |
+| [ws074-p080](phase080/phase.md) | Encoding API（TextEncoder・TextDecoder、UTF-8）と Web Storage（Storage・sessionStorage・localStorage、origin ごと、localStorage は file に保存、5 MiB の上限）。bind/・page/ の側（p031 の後の Amazon の blocker） | cleared（2026-09-29。Amazon の TextEncoder・sessionStorage の Uncaught 0、guest の live の top は Uncaught 0、DOM の試験 2 つを追加） | p030、p031 |
+| [ws074-p081](phase081/phase.md) | HTML の断片の parse と直列化（innerHTML・outerHTML・insertAdjacentHTML・insertAdjacentElement・insertAdjacentText）。Amazon の script での使用が最も多い DOM の API（調べは phase.md） | cleared（2026-09-29。html5lib の fragment 206/206、template.content・namespaceURI、DOM の試験 markup を追加、host 15/15・guest 15/15。Amazon の画素は不変） | p005、p030、p031 |
+| [ws074-p082](phase082/phase.md) | getComputedStyle（resolved value、73 の property、live、読むだけ）、offsetParent・offsetTop・offsetLeft、window の scrollTo・scroll・scrollBy と Element の scrollIntoView・scrollTo・scrollBy・root の scrollTop（page が clamp、view が移す）。box の索引（node → 最初の box） | cleared（2026-09-29。DOM の試験 computed を追加、host 16/16・guest 16/16。Amazon の Uncaught と画素は不変） | p031、p081 |
+| [ws074-p083](phase083/phase.md) | DOMException（interface・name・code、bind_throw_dom を DOMException に、試験の頁の期待値の見直し）。main の指示（2026-09-29） | cleared（2026-09-29。name・code・instanceof が Chromium と一致、DOM の試験 exception を追加し 5 つの頁を name で見るように、host 18/18・guest 18/18） | p030、p081、p082 |
+| [ws074-p084](phase084/phase.md) | Amazon の画素の差の原因の調べ（DOM・layout）と Phase の案。flex の row の item の自動の最小の大きさ（min-width:auto）と凍らせる縮みを直した | uncleared（2026-09-29、wrap up。調べと案は済み: 動的な script が走らない（top の約 10〜13 点）、百分率の高さ、太字の幅ほか。flex の変更の ASan・guest・boot が残り） | p031、p082 |
+| [ws074-p085](phase085/phase.md) | class（p028 から分けた。p080〜p084 は DOM の側と衝突しないように空けた）: 宣言と式、constructor（既定を含む）、method・accessor・static、extends・super・new.target、public と private の field・method、static block | **cleared**（2026-09-29。test262 18558 → 21806、新しく落ちた 0。ASan・guest の js・dom の試験・boot 済み。Amazon の class の SyntaxError 2 → 0、Uncaught top 2・search 7、画素は不変） | p078、p079 |
+| [ws074-p086](phase086/phase.md) | async function と、それに要る generator・Promise（p029 から分けた）: generator function と yield（`yield*` を除く）、Promise と組み合わせ、microtask の反応、未処理の reject の報告、async function と await | **cleared**（2026-09-29。test262 21806 → 24995、新しく落ちた 0。Amazon の async の誤り top 1・search 4 → 0、Uncaught search 7 → 3） | p030、p085 |
+| [ws074-p087](phase087/phase.md) | Symbol・iterator の protocol・for-of と Map・Set・WeakMap・WeakSet（p028 から分けた）、symbol を使う操作（toPrimitive・hasInstance・toStringTag・species・RegExp の委譲）、URI の関数 | **cleared**（2026-09-29。test262 24995 → 28381、新しく落ちた 0。Amazon の for-of・`Set`・`encodeURIComponent` の誤り 0、search の Uncaught 0） | p079、p086 |
+| [ws074-p088](phase088/phase.md) | 動的に挿入された `<script src>` の取得と実行、script の load・error の event（bind/・page/・dom/）。Amazon の AUI（`P.load.js` が 41 本を挿入）が初めて走る。p084 の調べの案 1（top で約 10〜13 点の見込み、新しい Uncaught と XMLHttpRequest（p064）の不足が出る見込み） | **cleared**（2026-09-30。dynamic top 69.23%/ink 61.20%、Web API不足をp092へ） | p084 |
+| [ws074-p089](phase089/phase.md) | 百分率の高さ（`height`・`max-height` の %、layout 全体で「高さが定まっているか」を渡す。float・inline-block・grid の `1fr` の中を含む）。p084 の案 2 | **cleared**（2026-09-30。top 82.96%→84.06%、ink 79.01%→80.56%。search 75.85%→76.32%、ink 32.97%→34.48%） | p084 |
+| ws074-p090 | 合成の太字（Latin）の advance を Chromium に合わせる（約 9% 広い）。p084 の案 3（1 点前後） | planned | — |
+| ws074-p091 | flex の残り（overflow で隠れる項目の自動の最小、blockification、column の最小）と CSSOM の小さな不足（`cssFloat` など）。p084 の案 4・5 | planned | p084 |
+| [ws074-p092](phase092/phase.md) | Amazonの後続scriptが使うWeb API: `fetch`・observer・`document.elementsFromPoint`・`atob`/`btoa`と有界なheadless settle | **cleared**（2026-09-30。非同期fetch、MutationObserver、sign-in tooltipの幅とstacking order。top 71.81%/ink 64.58%、約32秒・Uncaught 4） | p087、p088 |
+| ws074-p093 | JS: 型付き配列（ArrayBuffer・TypedArray・DataView） | planned | p087 |
+| [ws074-p094](phase094/phase.md) | Chromiumとの再現可能な比較手順: 固定capture、隔離profile、入力・環境・出力のhash、JSON reportとbaseline回帰 | **cleared**（2026-09-30。top 82.96%/ink 79.01%、search 75.85%/ink 32.97%） | p067 |
+| [ws074-p095](phase095/phase.md) | Amazon検索欄の文字の位置: flex itemのcross-axisのbox sizing、form controlの`text-indent` | **cleared**（2026-09-30。検索文字の範囲がChromiumと同じ`x=435..574, y=22..36`） | p035、p032、p092 |
+| [ws074-p096](phase096/phase.md) | 公開サイトの固定比較corpus: Mozilla日本語topから同一originのpageをたどり、固定Chrome User-AgentでChromiumと比較して一般化できる差を最大2件修正 | **cleared**（2026-09-30。4 page、`@supports`、button空白。top 78.23%/ink 69.54%） | p094、p095 |
+| [ws074-p097](phase097/phase.md) | 指定10公開siteの画像・box・DOM tree比較、阿部寛のホームページのguest full-screenデモ、WPT reftestとAcid、一般化できる差を最大4件修正 | **cleared**（2026-09-30。WPT 44/100、Acid2 90.56%、Acid3 9/100。`postMessage`、table rowspan、presentational hint、intrinsic auto margin） | p094、p096 |
+| ws074-p098 | ES module scriptのgraph取得・link・評価、`import`・`export`、GitHubのhydration比較 | planned（2026-09-30ユーザー指定によりp101後へ延期） | p087、p088、p097 |
+| [ws074-p099](phase099/phase.md) | Acid2 100%: 固定harnessでexact pixel一致、crash・timeout 0 | **cleared**（2026-09-30、q507。90.56% → 100.00%、plain/ASan） | p097 |
+| [ws074-p100](phase100/phase.md) | Acid3 100%: 履歴的Acid3で100/100、Uncaught・crash・timeout 0 | cleared（q591、q589 uncleared履歴保持） | p171 cleared / currentall100 |
+| ws074-p101 | WPT CSS2 reftest 100%: 固定commitのscriptなし全5904件でpass 100%、error 0 | planned（p100の次） | p100 |
+| [ws074-p102](phase102/phase.md) | Acid3 の完走と100件の診断。p100 の目標を保ち、headless の有界な実行を先に直す | **cleared**（q508、100件の診断） | p099 |
+| [ws074-p103](phase103/phase.md) | parser-time document.write/writeln、入力位置への挿入とscript順。子documentは別Phase | **cleared**（q509、20 Chromium checks、plain/ASan） | p102 |
+| [ws074-p104](phase104/phase.md) | initial about:blank HTML iframe子context。Document/Windowのidentity・親子関係・寿命。URL/XMLは後続 | cleared（q515、q510/q513 uncleared履歴保持） | p103 cleared、p105/p106 |
+| [ws074-p105](phase105/phase.md) | realm 間の関数・constructor の実行、例外の受け渡し。BUG-126 | cleared（q511、BUG-126 resolved） | 既存 realm API、p104 の再現証拠 |
+| [ws074-p106](phase106/phase.md) | 到達可能性に従う子contextのGC所有権、saved referenceと回収・teardown | cleared（q514再検証、q512/q513履歴保持） | p105 cleared |
+| [ws074-p107](phase107/phase.md) | createElementの要素名検証とInvalidCharacterError。Acid3 20/22 | cleared（q516、Acid3 20/22 PASS） | p104/p083 cleared |
+| [ws074-p108](phase108/phase.md) | createElementNS・URI/prefix/localNameと例外。clone/GC | cleared（q517、Acid3 21/23/76 PASS） | p104/p107 cleared |
+| [ws074-p124](phase124/phase.md) | ordinary live form owner/listed-control C基盤 | cleared（q534） | p1235e27e7ff verified |
+| [ws074-p125](phase125/phase.md) | live form.elements/length・重複名indexed NodeList基盤 | cleared（q535） | p124 aa158bf7 verified |
+| [ws074-p126](phase126/phase.md) | input reflection/text-password dirty value/clone | cleared（q536） | p125 df81469a verified |
+| [ws074-p127](phase127/phase.md) | native checkedness/group setter/RadioNodeList.value | cleared（q537） | p126 f32314fe verified |
+| [ws074-p128](phase128/phase.md) | script click checkbox/radio preactivation/cancel/disabled/recursion/GC | cleared（q538） | p12731d9ed14 verified |
+| [ws074-p129](phase129/phase.md) | input submit-button native SubmitEvent/guard/GC | cleared（q539） | p1286a9badbf verified |
+| [ws074-p130](phase130/phase.md) | native live table bodies/ordered rows/section rows/cells | cleared（q540） | p129 c0120928/native collection verified |
+| [ws074-p131](phase131/phase.md) | Native typed table caption/head/foot accessors/create/delete、owner callbacks/roots | cleared（q543; q541 uncleared retained） | p130/p132 cleared |
+| [ws074-p132](phase132/phase.md) | Checked subtree Document adoption/weak iterator subscription migration | cleared（q542） | p131 scoped API output verified; p119/p120 |
+| [ws074-p133](phase133/phase.md) | Native table/section row mutations/row indices/createTBody/current ownership | cleared（q544） | p131/p132 cleared |
+| [ws074-p134](phase134/phase.md) | Native select options membership / typed addition / current ownership | cleared（q545） | p121/p122/p132 cleared |
+| [ws074-p135](phase135/phase.md) | Owned option selectedness/defaultSelected/selectedIndex/hooks/clone | cleared（q547; q546 uncleared retained） | p134 cleared |
+| [ws074-p136](phase136/phase.md) | Native Range boundary foundation/factories/typed setters/roots | cleared（q548） | p117/p132 cleared |
+| [ws074-p137](phase137/phase.md) | Native Range live removal/weak subscription/current-owner repair | cleared（q549） | p119/p132/p136 cleared |
+| [ws074-p138](phase138/phase.md) | Native Range clone/comparison/Text stringification and owner/GC | cleared（q550） | p136/p137 cleared |
+| [ws074-p139](phase139/phase.md) | Native reusable pre-insert validation/Document constraints | cleared（q551） | p132/p138 cleared |
+| [ws074-p140](phase140/phase.md) | Live native insertion/existing CharacterData repair | cleared（q552） | p137/p138/p139 cleared |
+| [ws074-p141](phase141/phase.md) | Actual native Text split and Range insert | cleared（q553） | p132/p139/p140 cleared |
+| [ws074-p142](phase142/phase.md) | Checked rooted reusable native Node cloning | cleared（q554） | p132/p135/p141 cleared |
+| [ws074-p143](phase143/phase.md) | Checked partial native CharacterData replacement/deletion | cleared（q555） | p140/p141/p142 cleared |
+| [ws074-p144](phase144/phase.md) | Actual native Range.cloneContents | cleared（q556） | p136/p138/p142/p143 cleared |
+| [ws074-p145](phase145/phase.md) | Rooted native child-list MutationRecord construction | cleared（q559 retry; q557 uncleared retained） | p106/p144 cleared |
+| [ws074-p146](phase146/phase.md) | VM object/Array factory callee GC ownership | cleared（q558） | p106/p144 cleared; BUG-130 |
+| [ws074-p147](phase147/phase.md) | Actual native Range.deleteContents | cleared（q560） | p136/p140/p143/p145/p146 cleared |
+| [ws074-p148](phase148/phase.md) | Actual native Range.extractContents | cleared（q561） | p136/p140/p142/p143/p144/p145/p147 cleared |
+| [ws074-p149](phase149/phase.md) | Actual native Range.surroundContents | cleared（q562） | p136/p140/p141/p142/p143/p145/p148 cleared |
+| [ws074-p150](phase150/phase.md) | CSS text-transform computed/numeric color media | cleared（q565 retry、q563 uncleared保持） | CSS/computed/p109/p151/q562 verified |
+| [ws074-p151](phase151/phase.md) | Actual iframe content viewport for child CSS | cleared（q564） | p104/p106/p109+q563 scoped computed/media |
+| [ws074-p152](phase152/phase.md) | Managed child HTML parser lifetime | collectible owned parser prerequisite for original71 | cleared（q566） | HTML/p104/p106 |
+| [ws074-p153](phase153/phase.md) | Managed child HTML replacement streams | actual original71 Document open/write/close | cleared（q567） | HTML/p104/p106/p152 |
+| [ws074-p154](phase154/phase.md) | Native live Document.images | actual72 HTML img collection prerequisite | cleared（q568） | p122/p153 |
+| [ws074-p155](phase155/phase.md) | Child native geometry/rendered image dimensions | actual72 content-box prerequisite | cleared（q571; q569uncleared preserved） | p109/p151/p153/p154/p156 |
+| [ws074-p156](phase156/phase.md) | Zero definite image sizes/empty fragment bounds | missing p155 real layout outputs | cleared（q570） | p155 scoped q569 output verified |
+| [ws074-p157](phase157/phase.md) | Native top-level CSS source model | structural live CSSOM prerequisite | cleared（q573; q572clearance invalidated） | p155 |
+| [ws074-p158](phase158/phase.md) | Native inline source association/rendering bridge | traced models/DOM cache lifecycle before public CSSOM | cleared（q574） | p155/p157 |
+| [ws074-p159](phase159/phase.md) | Native inline sheet/list wrappers | actual source identity/live indexed sheet query/rule count/GC | cleared（q575） | p158 |
+| [ws074-p160](phase160/phase.md) | Native ordinary JS stylesheet mutations | genuine model/livecount/renderer edits to clear actual72 | cleared（q576） | p159 |
+| [ws074-p161](phase161/phase.md) | Strict native UTF8/XML model | wellformed/exactnamespace output before XMLDOM/loading | cleared（q577） | p160 context |
+| [ws074-p162](phase162/phase.md) | exact native attribute namespace identity | cleared（q578） | p161 |
+| [ws074-p163](phase163/phase.md) | native XML PI/CDATA identity and ownership | cleared（q579） | p162 |
+| [ws074-p164](phase164/phase.md) | PI/CDATA native wrappers and existing categories | cleared（q580） | p163 |
+| [ws074-p165](phase165/phase.md) | strict XML model to owning native DOM | cleared（q581） | p164 |
+| [ws074-p166](phase166/phase.md) | owned response metadata/declared document MIME | cleared（q584; q582 uncleared retained） | p165 / p167 cleared |
+| [ws074-p167](phase167/phase.md) | BUG-132 data URL body failure routing | cleared（q583） | q582 reproduction |
+| [ws074-p168](phase168/phase.md) | actual same-origin child navigation/task events/XML script gating | cleared（q585） | p165 / p166 / p167 |
+| [ws074-p169](phase169/phase.md) | headless virtual clock actual child network progress | cleared（q586） | p168 |
+| [ws074-p170](phase170/phase.md) | native SVG text/live UTF16 addressable character count | cleared（q587） | p168 / p169 |
+| [ws074-p171](phase171/phase.md) | native SVG rect width / scalar length reflection | cleared（q590再検証、q588/q589履歴保持） | p170 |
+| [ws074-p123](phase123/phase.md) | SameObject live Document.forms | cleared（q533） | p122971eb319 verified |
+| [ws074-p122](phase122/phase.md) | live HTMLCollection/children/Document.links | cleared（q532） | p12109d65c75 verified |
+| [ws074-p121](phase121/phase.md) | native動的ownproperty/keys/guard/error/GC基盤 | cleared（q531） | p120e21136d0 verified |
+| [ws074-p120](phase120/phase.md) | NodeIterator reference/candidate/削除補正/filter/GC、1–3 | cleared（q530、1–3 PASS） | p119f5d31b7f/p118 verified |
+| [ws074-p119](phase119/phase.md) | weak pre-removal登録/通知/GC破棄順基盤 | cleared（q529） | p118b744f662 verified |
+| [ws074-p118](phase118/phase.md) | TreeWalker全method/NodeFilter/mutation/GC、6 | cleared（q528、6 PASS） | p117/p104/p106 verified |
+| [ws074-p117](phase117/phase.md) | DOMImplementation/XMLDocument/doctype/contentkind/GC、26/27 | cleared（q527、26/27 PASS） | p108/p104/p106 verified、p116 inventory |
+| [ws074-p116](phase116/phase.md) | createEvent/initEvent/initUIEvent・view/detail、30 | cleared（q526、30/73 PASS） | p115inventory/existingevents/GC verified |
+| [ws074-p115](phase115/phase.md) | HTMLObjectElement.data URL reflection、64 | cleared（q525、64 PASS） | p112 reflection/p114 inventory/existingURLparser |
+| [ws074-p114](phase114/phase.md) | CSS predefined cursor・inheritance/computed、47 | cleared（q524、47 PASS） | p109/p110 cleared/p113 inventory |
+| [ws074-p113](phase113/phase.md) | uint32 array.length metadata・bounded sparse storage、95 | cleared（q523、95 PASS） | p112 inventory/existing VM verified |
+| [ws074-p112](phase112/phase.md) | button.type/value、label.htmlFor、meta.httpEquivと専用class | cleared（q522、59/62 PASS） | p109/p110/p111 cleared |
+| [ws074-p111](phase111/phase.md) | :lang継承・ASCII比較、:emptyの空text/comment | cleared（q521、34/38 PASS） | p109/p110 cleared |
+| [ws074-p110](phase110/phase.md) | invalid compoundの間に実際のcombinatorを要求、BUG-128 | cleared（q519、44復旧） | q518 verified scoped CSS output |
+| [ws074-p109](phase109/phase.md) | child Documentのcomputed CSSとselectors。既存cascade/inheritance・owner・GC | cleared（q520、q518 uncleared保持） | p104/p106/p108/p110 cleared |
+
+## 後の WS・Future Work の候補
+
+- base の libssl・libcrypto の互換品（OpenSSL の置き換え）。
+- WebP、`libvorbis-compat`（ogg vorbis）と音声、動画（driver の後）、JS・Wasm の JIT。
+
+## ユーザーの判断（2026-09-29 に master から移した）
+
+| 項目 | 決定 | 記録先 |
+| --- | --- | --- |
+| 部品としての browser（2026-09-28） | ユーザー:「…libbrowser.soというファイルに将来的に分割できるようにして、コンポーネントにしましょう。ブラウザの構造体へのポインタをハンドルにして、Vulkanレンダリングターゲットを指定してイベントも送ってやるとと描画してくれて、Wayland依存はない、みたいなのがいいと思います！これはいきなり実現しなくても、徐々にそういう設計に変えていきましょう。」→ [WS074 design §19](ws074/design.md)（engine と shell の分離、不透明な handle、Vulkan の描画の先、将来の libbrowser.so） |
+| ブラウザのデモの目標と touch（2026-09-28） | ユーザー:「Googleの検索トップページと検索が、レイアウトを崩さずに表示できたら、ゴールにしましょう！限定的なCSSと、基本的なJS、WebGLなし、ビデオなしです。インタラクションはそれでいいです。」→ WS074 のデモの目標。「タッチについては…スクロールの操作みたいに余韻のあるやつとかも実装が必要で…HIDドライバ、Waylandコンポジタ、ブラウザの3つに渡る…計画は1カ所で…タッチのfpsが低い廉価な機種でも、ある程度数式で補間して利用できるようにすることを目標に」→ [WS081](ws081/ws.md) |
+| ブラウザのデモの目標の変更（2026-09-28） | Google の検索の結果の page のボットの判定（/sorry）の件でユーザー:「それはuser agentを正直に回答したせいであって、Chromeのものを使えばまず問題ないと思うのですが、amazon.co.jpに変更しましょう。」→ WS074 のデモの目標を **amazon.co.jp** に変更（Google は目標から外す）。p059 の Google の調査と form 等の Phase は流用 |
+
+## 2026-09-30 Acid3 design refinement
+
+Current user 「では、取り組んでください。」 authorized the proposed subdivision.
+p100 keeps its full acceptance; introduced p102 supplies complete diagnosis before
+feature implementation. p101 stays dependent on full p100 clearance. WS103 work
+was stopped by the user. This is local planning and execution, not GitHub publication.
+
+### q508 result and next dependency (2026-09-30)
+
+p102 cleared: plain/ASan both Acid2 exact, Acid3 complete 32/100 with one
+Uncaught, diagnostic 100 indexed results and zero missing. Added planned p103
+for document.write, because missing body fixtures obstruct subsequent DOM/CSSOM
+analysis. p100/p101 acceptance is preserved, full-WS conformance p044 remains
+planned. q509 is proposed only; no further implementation is authorized.
+Evidence: [p102](phase102/phase.md), [inventory](phase102/inventory.json),
+[next design](phase103/phase.md). Local records only, no GitHub publication.
+
+### q509 activation (2026-09-30)
+
+Current user instructed executing the next Queue. p103 is active after parser
+lifetime/design confirmation. Parser-time write/writeln, partial tokens and
+nested script order are in scope; late document replacement and open/close are
+explicitly deferred. p100/p101 acceptance and external child-context dependencies
+are unchanged. See p103's design revision and q509 exact membership.
+
+### q509 result / prerequisite refinement (2026-09-30)
+
+p103 cleared, q509 finished: parser writes restore Acid3 fixtures, 32 → 40/100
+with Uncaught 1 → 0 and zero regressed cases, Acid2 exact in plain/ASan.
+Fatal script allocation errors now reach the parser; initial/nested failure
+cases verify ENOMEM stays visible. Added planning p104 for genuine initial
+iframe contexts. Late write replacement/open/close and loaded child documents
+remain later work. Full p100/p101 and p044 obligations remain intact. q510 is
+proposed only; local records are unpublished. Evidence: p103 and inventory.json.
+
+### q510 activation (2026-09-30)
+
+Current user approved executing the standing next Queue. p104 initial HTML iframe
+contexts is the sole item; p103 output is verified. Before production edits,
+check distinct-realm calls and lifetime in one bounded host investigation;
+missing prerequisites end the attempt uncleared. Other feature scope is unchanged.
+
+### q510 result / dependency redesign (2026-09-30)
+
+[p104](phase104/phase.md) ended **uncleared** after bounded pre-implementation
+investigation. Five of eight shared-heap two-realm assertions fail identically in
+plain/ASan; no sanitizer diagnostic. Existing host-object stays 100/100. Added
+[BUG-126](../bugs/BUG-126.md) scheduled to new [p105](phase105/phase.md) for callee
+execution/exception transport. New [p106](phase106/phase.md) isolates context
+ownership readiness; it remains planning. Chromium passes 17 lifecycle reference
+checks, but no zedBSD iframe implementation or acceptance is claimed.
+
+Changed order/dependencies: p105 → p106 → p104 → p100; p103 remains cleared.
+Each new Phase and p100 records its own change and origin. p104 retains ID,
+uncleared attempt, initial-context acceptance and URL/XML exclusions. No prior
+single-realm acceptance is invalidated. [q510 archive](../history/queue-q510.md)
+and [evidence](phase104/investigation.md) preserve the exact scope/outcomes.
+q511 proposes only p105, unauthorized. Production source unchanged; last actual
+Acid3 remains p103 40/100, Uncaught 0. p100/p101/p098/p044 obligations are intact.
+Local records/bug events remain unpublished, no push or remote lifecycle action.
+
+### Autonomous Acid3 goal / q511 activation (2026-09-30)
+
+Current user: 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」.
+fg011 is p100's existing acceptance, preserving Acid2 exact. Needed finite Queues
+may now be selected/executed automatically after recording scope and readiness.
+q511/p105 is active; p106 ownership and p104 iframe contexts follow verified
+outputs. No lower acceptance, unrelated WS or post-p100 CSS2/modules is implied.
+
+### q511 result (2026-09-30)
+
+[p105](phase105/phase.md) cleared, BUG-126 resolved. Both variants pass baseline
+8/8, new realm30/30, object100/100, interp45/45, DOM23/23. Acid2 exact, Acid3
+40/100 Uncaught0 and all100 results unchanged. Full changed-source review/style
+pass, no formatter available. [Evidence](phase105/verification.md). Ownership
+[p106](phase106/phase.md) remains planning and precedes p104. WS incomplete;
+p100100/100, p044 and later gates remain unmet. Local records unpublished.
+
+### p106 design / q512 activation (2026-09-30)
+
+[p106](phase106/phase.md) now defines cell-backed managed realms, function/global/
+Document retention, owned Window trace/finalize, managed observer tracing and
+idempotent detached-task cancellation. Explicit primary ownership stays intact;
+managed hosts refuse async fetch pending verified cancellation. Saved-reference,
+reclamation/failure/teardown tests precede p104. q512 selects only this foundation
+under standing autonomous consent; initial HTML iframe APIs remain p104.
+
+### q512 result (2026-09-30)
+
+[p106](phase106/phase.md) cleared: managed realms/Window/Document/functions,
+observer cycles and detached tasks are verified plain/ASan27/27. Existing realm/
+VM/DOM pass, Acid2 exact and Acid3 all100 unchanged40/100 Uncaught0. Full changed
+source standards/style/diff PASS; formatter absent. [Evidence](phase106/verification.md).
+p104 may now resume with both prerequisites verified; no iframe API is yet
+supplied. WS incomplete, p100100/100 acceptance intact. Local unpublished.
+
+### p104 design / q513 resumption (2026-09-30)
+
+Both prerequisite outputs are verified. [p104](phase104/phase.md) q513 revision
+adds a registered bind/frame.c module for separate managed blank contexts,
+receiver/Document owner-aware wrappers and relationships, DOM removal hooks and
+nested retirement/reinsert behavior. Initial load tasks/loading/WindowProxy/
+sandbox/enumeration remain later; unsupported sandbox reveals no child objects.
+Saved Chromium17/17 and new GC/error regressions gate this scope. q510 remains
+uncleared history, WS incomplete. Standing autonomous consent supplies q513;
+all100 p100 acceptance and p044 remain intact. Local events unpublished.
+
+### q513 outcome / p106 invalidation (2026-09-30)
+
+Initial iframe plain17/17, production progress retained. GC teardown probe
+reproduces [BUG-127](../bugs/BUG-127.md), ASan UAF in p106 function trace after
+primary realm destruction. [Evidence](phase104/retirement-investigation.md).
+p104/q513 uncleared; p106 clearance invalidated (q512 history retained) and
+redesigned to cache a managed-owner cell at function creation. Repair/revalidate
+p106 first, then resume p104 in a new finite Queue. p105 and BUG-126 unaffected;
+last measured Acid3q51240/100Uncaught0, no fresh q513 Acid claim. User standing
+autonomous consent continues, no permission gate. Local unpublished, no push.
+
+### q514 activation (2026-09-30)
+
+[p106](phase106/phase.md) repairs cached managed function-owner references and
+revalidates BUG-127 under standing automatic Queue consent. p104 implementation
+progress stays unchanged and uncleared; its17/17 is a regression check here.
+All100 Acid inventory must retain accurate source/feature attribution.
+
+### q514 outcome / prerequisite recovery (2026-10-01)
+
+p106 recleared and BUG-127 resolved; [revalidation](phase106/revalidation-q514.md).
+Retirement/ownership/realms/VM/DOM and saved frame17/17 plain+ASan pass. Acid2
+exact; Acid3 all10042/100, Uncaught0, no errors/regression. Gains44/78 are retained
+q513 iframe output; p104 remains uncleared until separate GC/error/teardown/full
+source standards checks. Next finite Queue resumes p104 under standing consent.
+WS remains incomplete, p100100/100 acceptance unchanged; local unpublished.
+
+### q515 activation (2026-10-01)
+
+[p104](phase104/phase.md) resumes remaining initial-context GC/error/teardown and
+full changed-source validation, with in-scope repairs if needed. p105/p106 output
+verified in8dd06539, q514 archive verified; standing autonomous consent applies.
+No loading/navigation expansion; p100 acceptance unchanged.
+
+### q515 outcome (2026-10-01)
+
+[p104](phase104/phase.md) cleared, [evidence](phase104/verification.md): initial
+HTML blank child contexts, owner wrappers/relations/removal/reinsert/nesting and
+parent teardown accepted. Plain/ASan lifetime24/24, Chromium17/17, safety14/14,
+VM/DOM regressions PASS; Acid2 exact, Acid3 all10042/100/Uncaught0/no regression.
+Remaining58 tests need separate DOM/Traversal/Range/CSSOM/loading/VM phases;
+p100 acceptance unchanged and WS incomplete. Full p104 source review PASS;
+local unpublished/no push. q510/q513 historical attempts preserved.
+
+### p107 introduction / q516 activation (2026-10-01)
+
+Added [p107](phase107/phase.md): createElement local-name validation and existing
+DOM exceptions for indexed20/22. Current DOM algorithm inspected, API remains
+within binding; namespace creation/Traversal/loading are distinct later work.
+p104 verified, q515 archived; standing consent authorizes this finite Queue.
+p100 acceptance unchanged, WS incomplete, local unpublished/no push.
+
+### q516 outcome (2026-10-01)
+
+[p107](phase107/phase.md) cleared; [verification](phase107/verification.md).
+createElement name validation and existing DOM exception31/31 plain/ASan;
+Acid2 exact, Acid3 all10044/100,20/22 PASS/no regressions/Uncaught0. Remaining56
+features need finite phases, namespace creation next candidate. WS incomplete,
+p100 unchanged, local unpublished/no push.
+
+### p108 introduction / q517 activation (2026-10-01)
+
+Added [p108](phase108/phase.md) for indexed21/23 namespaced element creation,
+exact URI/prefix identity and namespace errors, clone/GC retention. Existing
+namespace classification stays; custom URIs get distinct internal representation.
+p107 local-name helper extends ASCII-case acceptance for this API, existing
+createElement behavior revalidated. p100 criterion unchanged; q516 archive
+verified, standing consent applies. Local unpublished/no push.
+
+### q517 outcome (2026-10-01)
+
+[p108](phase108/phase.md) cleared; [verification](phase108/verification.md).
+createElementNS exact namespace/qualified identities and errors38/38, clone/
+GC12/12 plain/ASan; existing name/DOM/frame/realm preserved. Acid2 exact,
+Acid3 all10047/100,21/23/76 newPASS/no regression/Uncaught0. Next child Document
+computed CSS foundation candidate; remaining53 require finite phases. WS
+incomplete/p100 criterion unchanged, local unpublished/no push.
+
+### p109 introduction / q518 activation (2026-10-01)
+
+Added [p109](phase109/phase.md): initial child CSS context/owner routing and
+existing selectors/cascade/inheritance/media/live declarations, cssFloat alias.
+Window owns C context; no new permanent child root, finalizer does not read DOM
+cells. Existing CSS engine API/primary host path preserved. New grammar/CSSOM
+APIs/loading/layout remain later. p100 criterion unchanged, q517 archive verified,
+standing autonomous consent applies; local unpublished/no push.
+
+### q518 outcome / prerequisite discovery (2026-10-01)
+
+[p109](phase109/phase.md) uncleared, retained child CSS foundation30/30+GC/viewport
+33/33 plain/ASan. Acid347→55 but9 newPASS and44 regression violates acceptance;
+[BUG-128](../bugs/BUG-128.md) requires separate selector grammar Phase, followed
+by p109 revalidation. [Evidence](phase109/verification.md). p100100/100 unchanged,
+all100/no Uncaught/no errors/Acid2 exact, full changed C standard/style/diff PASS.
+No CSS grammar fixes silently added to q518; local unpublished/no push.
+
+### p110 introduction / q519 activation (2026-10-01)
+
+Added [p110](phase110/phase.md) to repair missing selector combinators exposed by
+p109. Uses q518 scoped verified CSS output, not nonexistent wholep109clearance.
+p109 requires p110 repair then its own revalidation; p100100/100 unchanged.
+Finite grammar-only scope/no silent pseudo-class or HTML control expansion.
+
+### q519 outcome (2026-10-01)
+
+[p110](phase110/phase.md) cleared/BUG-128resolved, grammar37/37 plain/ASan,
+Acid356/100/all100/44 restored/no other changes/Uncaught0/Acid2exact.
+[Evidence](phase110/verification.md). p109revalidation next; p100100/100 unchanged.
+
+### q520 revalidation activation (2026-10-01)
+
+[p109](phase109/phase.md) resumes same criteria after verifiedp110repair, no scope
+expansion. q518historical uncleared preserved; q520revalidateschildCSS/GC/owner/
+VM/DOM/Acid against final sources. p100 unchanged.
+
+### q520 outcome (2026-10-01)
+
+[p109](phase109/phase.md) cleared afterp110actualfix. [Revalidation](phase109/revalidation-q520.md):
+childCSS30/30/GC+viewport33/33/ownerVM+DOM plain+ASanPASS, all10056/100/no prior
+pass regression/44PASS/Uncaught0/Acid2exact. q518history preserved, p100 not yet met.
+Next lang/empty and indexed44 gaps in finite Queues, localunpublished/nopush.
+
+### p111 introduction / q521 activation (2026-10-01)
+
+Added [p111](phase111/phase.md), bounded :lang/:empty semantics for34/38 after
+childCSSfoundation/grammar accepted. Existing p109 criteria unchanged, p100100/100
+unchanged. No HTML control or new CSS property/media expansion.
+
+### q521 outcome (2026-10-01)
+
+[p111](phase111/phase.md) cleared; [evidence](phase111/verification.md). Language/
+empty32/32 plus grammar/childCSS/GC/DOM/selector golden plain+ASanPASS, all10058/100
+solely34/38newPASS/no regression/Uncaught0/Acid2exact. Remaining42features in finite
+Queues, p100100/100 unchanged. Localunpublished/nopush.
+
+### p112 introduction / q522 activation (2026-10-01)
+
+Added [p112](phase112/phase.md) for59/62 taggedHTMLreflection, ordinary registry
+classes/currentbuttonAuto semantics. Input/form activation/collections remain
+separate. p100100/100 unchanged, [p111](phase111/phase.md) output verified.
+
+### q522 outcome (2026-10-01)
+
+[p112](phase112/phase.md) cleared; [evidence](phase112/verification.md). Reflection
+40/40/ownerVM+DOM plain+ASanPASS, all10060/100/59+62newPASS/no regression/Uncaught0/
+Acid2exact. Remaining40features in finite Queues, p100 unchanged. Localunpublished.
+
+### p113 introduction / q523 activation (2026-10-01)
+
+Added [p113](phase113/phase.md) for legaluint32length95, numericvalidation and
+boundedexisting sparse storage. No highatomindex representation/allarrayconformance
+claim; p100100/100 unchanged, other remaining40 features continue finite planning.
+
+### q523 outcome (2026-10-01)
+
+[p113](phase113/phase.md) cleared; [evidence](phase113/verification.md). uint32
+length39/39/capacity4/4 plus VM/JS/DOM plain+ASanPASS, all10061/100/95newPASS/
+no regression/Uncaught0/Acid2exact. Remaining39features; p100 unchanged.
+Local unpublished/no push.
+
+### p114 introduction / q524 activation (2026-10-01)
+
+Added [p114](phase114/phase.md) for cursor47,36 keyword parser/style/computed
+inheritance after verifiedchildCSS. No URL/platformcursor expansion. p100 unchanged.
+
+### q524 outcome (2026-10-01)
+
+[p114](phase114/phase.md) cleared; [evidence](phase114/verification.md). cursor54/54
+plus childCSS/GC/DOM/selectors plain+ASanPASS, all10062/100/47newPASS/no regression/
+Uncaught0/Acid2exact. Remaining38features; p100 unchanged. Localunpublished/nopush.
+
+### p115 introduction / q525 activation (2026-10-01)
+
+Added [p115](phase115/phase.md) for object.data64, brandedUSVURLreflection/own
+docURL/firstbase. Blankabout-base snapshot knownseparatefuturefoundation, noURL
+loading expansion; p100100/100 unchanged.
+
+### q525 outcome (2026-10-01)
+
+[p115](phase115/phase.md) cleared; [evidence](phase115/verification.md). objectURL44/44
+plus reflection/DOM/GC/100WPTURL plain+ASanPASS, all10063/100/64newPASS/no regression/
+Uncaught0/Acid2exact. Remaining37features plusknownblankbase foundation; p100 unchanged.
+Localunpublished/nopush.
+
+### p116 introduction / q526 activation (2026-10-01)
+
+Added [p116](phase116/phase.md) for missinglegacyfactory/initializer30, tracedUI
+view and existingdispatchstate. Othereventinterfaces/architecture notexpanded;
+p100100/100 unchanged.
+
+### q526 outcome (2026-10-01)
+
+[p116](phase116/phase.md) cleared; [evidence](phase116/verification.md). legacy56/56
+plus frame38/owner27/DOM23 plain+ASanPASS, all10065/100/30+73newPASS/no regression/
+Uncaught0/Acid2exact. Remaining35features; p100 unchanged. Localunpublished/nopush.
+
+### p117 introduction / q527 activation (2026-10-01)
+
+Added [p117](phase117/phase.md) XML creation and prototype/GC ownership for26/27.
+Existing namespace helper reused, HTML/XML case and content kind made explicit;
+collections/loading/general adoption remain later. p100100/100 unchanged.
+
+### q527 outcome (2026-10-01)
+
+[p117](phase117/phase.md) cleared; [evidence](phase117/verification.md). XML62/62/
+GC16/16/frame48/48 plus namespace/VM/DOM/JS/childCSS plain+ASanPASS. All10067/100,
+26+27newPASS/no regression/Uncaught0/Acid2exact. Remaining33features/p100100/100
+unmet; fullWSconformance p044 remains. Localunpublished/nopush.
+
+### p118 introduction / q528 activation (2026-10-01)
+
+Added [p118](phase118/phase.md) TreeWalker/filter/state/GC for6. NodeIterator requires
+separatepre-removeregistry;1/5needadditionalAPIs. p100100/100 unchanged.
+
+### q528 / p118 clearance (2026-10-01)
+
+[p118](phase118/phase.md) cleared; [evidence](phase118/verification.md). TreeWalker70/70,
+GC5/5/frame53/53 plus all selected plain/ASan regressions PASS. Acid3 all10068/100,
+6newPASS/prior67preserved/Uncaught0, Acid2exact. Next NodeIterator pre-removestate/
+weakregistry, collections/control/Range/CSS/loading/SVG; remaining32, WS incomplete.
+
+### p119 introduction / q529 activation (2026-10-01)
+
+[p119](phase119/phase.md) adds weak pre-removal subscription/lifetime foundation;
+subsequent NodeIterator API uses it to repair reference and candidate positions.
+Document does not root subscribers, separatelyrefcounted C tokens prevent GC
+finalization-order UAF. No NodeIterator API yet; p100 remains unmet. p118 unchanged.
+
+### q529 / p119 clearance (2026-10-01)
+
+[p119](phase119/phase.md) cleared, [evidence](phase119/verification.md). Weak removals
+19/19 and all selected plain/ASan regressions PASS, unchanged68/100/noerrors/Acid2exact.
+NodeIterator implementation next uses verified token/notification/GC lifetime output.
+WS incomplete; p100full100/100 unchanged.
+
+### p120 introduction / q530 activation (2026-10-01)
+
+[p120](phase120/phase.md) NodeIterator actual reference/candidate/removal/filter/GC
+for1–3 uses clearedp119weaksubscriptions. Shares callback operation conversion with
+p118 without changing TreeWalkercriteria; preserve70/70+GC regression. p119 unchanged.
+Nocollections/controls/Range/loading; p100 full100/100 unchanged.
+
+### q530 / p120 clearance (2026-10-01)
+
+[p120](phase120/phase.md) cleared,[evidence](phase120/verification.md). NodeIterator60/
+TreeWalker70/GC9/frame58/removal19/allselectedplain+ASanregressionsPASS. Acid3all100
+71/100,1–3newPASS/prior68preserved/Uncaught0/Acid2exact. p118sharedhelper70/70/6
+revalidated/clearancevalid. Remaining29,p100unchanged; nextlivecollections.
+
+### p121 introduction / q531 activation (2026-10-01)
+
+[p121](phase121/phase.md) adds genericnativeproperty/errorprotocol needed for live
+HTMLCollection; legacyindex/name/visibilitypolicy belongs subsequentDOMPhase. Current
+arraysnapshotcannot provide savedcollection liveindices/descriptors. No p120change;
+p100100/100 unchanged. Ordinary VM semantics preserve and errorcallsiteaudit required.
+
+### q531 / p121 clearance (2026-10-01)
+
+[p121](phase121/phase.md) cleared,[evidence](phase121/verification.md). Nativeproperties
+65/65/allselectedplain+ASanregressionsPASS, originalall10071/100 unchanged/noerrors/
+Acid2exact. VM nativeownproperty/keys/guards/erroroutput readyforDOMlivecollection
+policy. Remaining29/p100unchanged; nextHTMLCollection/document.links.
+
+### p122 introduction / q532 activation (2026-10-01)
+
+[p122](phase122/phase.md) introduces branded live HTMLCollection and SameObject
+children/links using verified p121 native policy. Keep existing getElementsBy*
+snapshots for subsequent scoped work. Root/owner GC and legacy property policy
+required; indexed5 target. p100 full100/100 and p044 unchanged, WS incomplete.
+
+### q532 / p122 clearance (2026-10-01)
+
+[p122](phase122/phase.md) cleared,[evidence](phase122/verification.md). Live
+HTMLCollection104/GC13/frame63/all selected regressionsPASS both variants.
+Acid3all10072/100/indexed5 newPASS/noerrors/Acid2 exact, remaining28.
+Next form/control/table collections; p100full100/100 and p044 remain, WS incomplete.
+
+### p123 introduction / q533 activation (2026-10-01)
+
+[p123](phase123/phase.md) adds bounded SameObject Document.forms using cleared
+p122. Form elements ownership/RadioNodeList/control reflection known later work;
+no stub implementation of those interfaces here. p100full100/100/p044 unchanged.
+
+### q533 / p123 clearance (2026-10-01)
+
+[p123](phase123/phase.md) cleared,[evidence](phase123/verification.md). Forms35/
+collection104/GC16/frame68/all selected regressionsPASS both variants. Original
+all10073/100/indexed98 newPASS/prior72 preserved/noerrors/Acid2 exact. Remaining27;
+form controls/ownership/RadioNodeList known next, p100full100/100/p044 unchanged.
+
+### p124 introduction / q534 activation (2026-10-01)
+
+[p124](phase124/phase.md) defines allocation-free ordinary DOM owner/listed-member
+foundation before controls. Parser-special persisted associations/custom elements
+outside this bounded prerequisite remain explicit residual; public JS APIs later.
+p100 full100/100 and p044 unchanged, WS incomplete.
+
+### q534 / p124 clearance (2026-10-01)
+
+[p124](phase124/phase.md) cleared,[evidence](phase124/verification.md). Ordinary owner
+56/56/all selected regressionsPASS both variants, original all10073/100 unchanged/
+noerrors/Acid2 exact. Native controls/RadioNodeList/form/input APIs next; known
+parser-special/custom association residual retained, p100full100/100/p044 unchanged.
+
+### p125 introduction / q535 activation (2026-10-01)
+
+[p125](phase125/phase.md) introduces native controls/duplicate indexed lists using
+verified p124 owner predicates. Radio.value/checkedness, NodeList iterables/form own
+maps/parser magic/input activation stay explicit later scope; p100/p044 unchanged.
+
+### q535 / p125 clearance (2026-10-01)
+
+[p125](phase125/phase.md) cleared,[evidence](phase125/verification.md). Native
+controls100/GC11/frame78/all selected plain+ASan regressionsPASS; original all100
+75/100/indexed4+52newPASS/prior73 preserved/noerrors/Acid2exact. Remaining25; input
+reflection/checkedness/radio value next. Known NodeList/form/parser residuals kept,
+p100100/100/p044 unchanged. Root released/local unpublished/no push.
+
+### p126 introduction / q536 activation (2026-10-01)
+
+[p126](phase126/phase.md) selects input reflection/text-password dirty values for
+indexed53. Cross-mode type hooks/checkedness/radio/activation/advanced sanitization
+remain explicit subsequent scope; p100/p044 unchanged.
+
+### q536 / p126 clearance (2026-10-01)
+
+[p126](phase126/phase.md) cleared, [evidence](phase126/verification.md).
+Native input reflection/text-password dirty values/clone; input94/GC12/frame83/all
+selected regressionsPASS plain+ASan. Original all10076/100/indexed53newPASS/prior75
+preserved/equal/noerrors/Acid2exact. Remaining24; next checkedness/radio value/group.
+Known type-transition/advanced-input/NodeList/form/parser residuals retained.
+p100100/100/p044 unchanged; root executor released/local unpublished/no push.
+
+### p127 introduction / q537 activation (2026-10-01)
+
+[p127](phase127/phase.md) selects explicit checkedness/group/clone/Radio.value for
+indexed56. Automatic mutation/connection group repair, type value hooks/activation
+remain subsequent scope; p100/p044 unchanged.
+
+### q537 / p127 clearance (2026-10-01)
+
+[p127](phase127/phase.md) cleared, [evidence](phase127/verification.md).
+Native explicit checkedness/group/clone and RadioNodeList.value; radio73/native12/
+GC13/frame88/all selected regressionsPASS both variants. Original all10077/100/
+indexed56newPASS/prior76 preserved/equal/noerrors/Acid2exact. Remaining23; next
+click activation/submission. Known automatic mutation/group/type/advanced input/
+NodeList/form/parser residuals retained. p100/p044 unchanged; root released/local
+unpublished/no push.
+
+## p128 introduction / q538 (2026-10-01, local unpublished)
+
+[p128](phase128/phase.md) adds finite script checkbox/radio click activation and
+explicit callback roots; known submit/host protocol remains next separate scope.
+WS acceptance unchanged; current verified77/100.
+
+### q538 / p128 clearance (2026-10-01)
+
+[p128](phase128/phase.md) cleared, [evidence](phase128/verification.md).
+Script checkbox/radio activation/cancel/disabled/recursion/indeterminate clone and
+explicit callback roots; click57/GC10/frame93/all32 selected regressionsPASS both
+variants. Original all10078/100/indexed43newPASS/prior77 preserved/equal/noerrors/
+Acid2exact. Remaining22; next submit-button submission event/known host navigation
+boundary. Other click/input/automatic mutation residuals retained; p100/p044
+unchanged. Root released/local unpublished/no push.
+
+### p129 introduction / q539 (2026-10-01, local unpublished)
+
+[p129](phase129/phase.md) selects finite native submission-event stage for input
+Submit .click and SubmitEvent/GC; known host navigation and complete submission
+remain subsequent scope. Current verified78/100, p100/p044 unchanged.
+
+### q539 / p129 clearance (2026-10-01)
+
+[p129](phase129/phase.md) cleared, [evidence](phase129/verification.md).
+Actual input Submit .click native submission-event stage/current owner/guard,
+SubmitEvent constructor/traced submitter/composed getter/roots. Submit56/GC13/
+frame98/all34 selected regressionsPASS both variants. Original all10079/100/
+indexed54newPASS/prior78 preserved/equal/noerrors/Acid2exact. Remaining21; next
+native table collections/accessors, then structural methods. Known actual host
+navigation/complete submission/composed path and other residuals retained;
+p100/p044 unchanged. Root released/local unpublished/no push.
+
+### p130 introduction / q540 (2026-10-01, local unpublished)
+
+[p130](phase130/phase.md) selects live table collections/actual ordering/cache/GC,
+then structural API prerequisites49–51 in later scope. WS acceptance unchanged;
+current79/100/p100/p044 unchanged.
+
+### q540 / p130 clearance (2026-10-01)
+
+[p130](phase130/phase.md) cleared, [evidence](phase130/verification.md).
+Native SameObject live table bodies/ordered rows/section rows/row cells;
+actual HTML namespace/exact-case brands, current direct membership/logical order,
+clone-independent traced caches and actual XML/managed-child owner prototypes.
+Table71/GC25/frame108/all36 selected regressionsPASS both variants. Original
+all10080/100/indexed29newPASS/prior79 preserved/equal/noerrors/Acid2exact.
+Remaining20; next table caption/head/foot structural APIs, then row/cell methods.
+Other recorded residuals/p100/p044 unchanged. Root released/local unpublished/no push.
+
+### p131 introduction / q541 activation (2026-10-01)
+
+[p131](phase131/phase.md) adds finite typed table structural APIs; p130 collection interfaces/acceptance unchanged. Actual insertion helper chooses parent owner for callbacks; caller exceptions retained. Row/cell methods remain separate next work.
+
+### q541 / p131 uncleared (2026-10-01)
+
+[p131](phase131/phase.md) **uncleared**, [evidence](phase131/verification.md).
+Native table caption/head/foot get/set/create/delete + Caption interface implemented;
+actual81/100/indexed49new/prior80/equal/noerrors/Acid2exact. Initial structure67/
+GC42/frame113/all38 groupsPASS, then final added ownership assertion reproduces
+cross-Document setter adoption failure (67PASS/1FAIL) plain+ASan. Existing
+bind_insert/dom_insert_before lacks subtree Document adoption, unknown prerequisite
+ends this attempt without clearance. Retain useful partial outputs; next select
+finite adoption dependency, then new p131 attempt and row/cell APIs. Remaining19;
+p100/p044 unchanged/root released/local unpublished/no push.
+
+### Adoption dependency redesign / p132 introduction (2026-10-01)
+
+[p131 origin](phase131/phase.md) remains uncleared; new [p132](phase132/phase.md) supplies current Document/weak token ownership before p131 retry. p131 criteria unchanged, graph scoped API output→p132→p131 retry, no whole-Phase cycle. Previous p119/p120 acceptance remains unchanged; new increment extends adoption behavior only.
+
+### q542 / p132 clearance (2026-10-01)
+
+[p132](phase132/phase.md) cleared, [evidence](phase132/verification.md).
+Checked subtree/current Document adoption, optional weak iterator root token
+migration/preflight/native identity/lifetime. Adoption26/final p131 structure68/
+weak migration+finalization37/frame118/all39 groupsPASS both variants. Original
+all10081/100/all prior81/equal/noerrors/Acid2exact; remaining19. p131 q541 remains
+uncleared, next new finite p131 validation attempt using verified adoption output.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+
+### q543 / p131 retry activation (2026-10-01)
+
+Verified [p132 adoption output](phase132/verification.md) resolves known prerequisite; [p131 new attempt](phase131/phase.md) revalidates original unchanged criteria. q541 remains historical uncleared, no automatic clearance from p132.
+
+### q543 / p131 clearance (2026-10-01)
+
+[p131](phase131/phase.md) cleared in new q543 attempt, [evidence](phase131/verification.md).
+p13249b0ee70 adoption prerequisite verified; original typed native table caption/
+head/foot APIs acceptance unchanged. Fresh structure68/adoption26/nativeGC42/
+frame118PASS both variants; reused matching final q54239 regression/build outputs.
+Original all10081/100/prior81/equal/noerrors/Acid2exact; remaining19. q541 historical
+uncleared and exact failure evidence preserved. Next finite row APIs/indices, then
+cell APIs/select/option/Range/CSS/loading/SVG. p100/p044 unchanged/root released/
+local unpublished/no push.
+
+### p133 introduction / q544 activation (2026-10-01)
+
+[p133](phase133/phase.md) adds finite row mutations and indices needed by50/51 using verified native order/adoption. Earlier table/iterator Phases acceptance/criteria unchanged; cell APIs/layout remain excluded.
+
+### q544 / p133 clearance (2026-10-01)
+
+[p133](phase133/phase.md) cleared, [evidence](phase133/verification.md).
+Native table/section row insertion/deletion/createTBody/rowIndex/sectionRowIndex,
+exact long conversion/current order/parent/owner/roots. Row62/GC75/frame123/all41
+selected groupsPASS both variants. Original all10083/100/indexed50+51newPASS/
+prior81 preserved/equal/noerrors/Acid2exact. Remaining17; next select/option.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+
+### p134 introduction / q545 activation (2026-10-01)
+
+[p134](phase134/phase.md) adds scoped native options membership/addition using cleared
+collection/adoption outputs; indexed57 and root lifetime acceptance. Selectedness
+is a separate known increment; WS/p100 remain incomplete.
+
+### q545 / p134 clearance (2026-10-01)
+
+[p134](phase134/phase.md) cleared, [evidence](phase134/verification.md).
+Native select options membership/SameObject collection/exact interfaces/select.add
+conversion/current ancestry/owner/adoption/roots. Direct72/nativeGC78/cache12/
+frame128/all44 selected groupsPASS both variants. Original all10084/100/indexed57
+newPASS/prior83 preserved/equal/noerrors/Acid2exact. Remaining16; next selectedness58.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+
+### p135 introduction / q546 activation (2026-10-01)
+
+[p135](phase135/phase.md) adds owned option clean/dirty selectedness and current index
+using p134 native membership. Attribute/tree hooks and existing chosen consumer
+are explicitly included; other reflections/UI/reset remain scoped increments.
+
+### q546 / p135 uncleared outcome (2026-10-01)
+
+[p135](phase135/phase.md) uncleared, [evidence](phase135/verification.md).
+Owned selectedness/native index/attrs/tree/chosen consumer yields actual85/100/new58,
+prior84 preserved/equal/noerrors/Acid2exact/all46 groupsPASS/option70/GC20/frame133.
+Approved clone state propagation criterion conflicts with ordinary primary clone
+semantics; no clearance claimed. Revise clone criterion/implementation and parser
+negative-zero edge in next finite attempt, retain original scope/outcome/evidence.
+Other current-standard vs Chromium differences disclosed. Remaining15; p100/p044
+and WS incomplete/local unpublished/root released/no push.
+
+### p135 redesign / q547 retry (2026-10-01)
+
+[p135 revised contract](phase135/phase.md) corrects unsupported option clone-state
+propagation to ordinary cloned content-attribute initialization, plus parser -0.
+Other criteria unchanged. q546 uncleared/evidence retained; no foreign Phase or
+WS acceptance altered. New finite retry under delegated autonomy is authorized.
+
+### q547 / p135 cleared outcome (2026-10-01)
+
+[p135](phase135/phase.md) cleared in q547 retry, [evidence](phase135/verification.md).
+Correct ordinary clone initialization and negative-zero parsing; owned native
+selectedness/defaultSelected/selectedIndex/DOM hooks/consumer/roots verified.
+Original85/100/prior85 preserved/equal/noerrors/Acid2exact/all46 groupsPASS/option73/
+GC20/frame133. q546 historical uncleared preserved separately. Chromium clone
+agreement/current-primary comparison limits recorded. Remaining15; next Range/CSS/
+loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p136 introduction / q548 activation (2026-10-01)
+
+[p136](phase136/phase.md) adds native boundary foundation for indexed8 using verified
+XML/prototype/DOM/root outputs. Live repair/content algorithms are known separate
+increments; no full Range or p100 acceptance claimed. Prior Phase criteria unchanged.
+
+### q548 / p136 cleared outcome (2026-10-01)
+
+[p136](phase136/phase.md) cleared in q548, [evidence](phase136/verification.md).
+Native AbstractRange/Range/factories/readonly descriptors/boundaries/typed setters/
+selection/current ancestry/uint32 conversion/GC/creator/XML ownership verified.
+Original86/100/newindexed8/prior85 preserved/equal/noerrors/Acid2exact/all48 groups
+PASS/range80/nativeGC40/frame138. Remaining14. Next native live removal repair,
+then insertion/CharacterData/comparison/stringification/contents, CSS/loading/SVG.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p137 introduction / q549 activation (2026-10-01)
+
+[p137](phase137/phase.md) adds native weak live removal repair using verified p136
+boundaries/p119 registry/p132 adoption. Indexed13 requires ancestor-removal collapse;
+creation/current endpoint owner remain distinct. Insertion/data/contents deferred.
+
+### q549 / p137 cleared outcome (2026-10-01)
+
+[p137](phase137/phase.md) cleared in q549, [evidence](phase137/verification.md).
+Native weak live removal repair/checked current-owner boundary commits/token root
+association/adoption migration/finalizer/GC verified. Original87/100/newindexed13/
+prior86 preserved/equal/noerrors/Acid2exact/all49 groupsPASS/removal33/boundary80/
+nativeGC49/frame143. Remaining13; next Range clone/comparison/stringification,
+live insertion/data/content algorithms, CSS/loading/SVG. p100/p044/WS incomplete;
+root released/local unpublished/no push.
+
+### p138 introduction / q550 activation (2026-10-01)
+
+[p138](phase138/phase.md) supplies actual clone/comparison/Text stringification
+prerequisites to remaining Range7/9/11/12. New score progress is not expected until
+content/insertion algorithms; finite native semantics/ownership/GC evidence required.
+
+### q550 / p138 cleared outcome (2026-10-01)
+
+[p138](phase138/phase.md) cleared in q550, [evidence](phase138/verification.md).
+Native independent clone/source prototype+creator/weak subscriptions, rooted
+unsignedshort boundary comparison/current point conversion/error order/constants,
+Text-only UTF16 stringification/coercion/descriptor flags/GC verified. Original87/
+prior87 preserved/newnone/equal/noerrors/Acid2exact/all50 groupsPASS/core59/nativeGC89/
+frame148. Remaining13; next live insertion/Text split/data/content algorithms,
+CSS/loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p139 introduction / q551 activation (2026-10-01)
+
+[p139](phase139/phase.md) adds pure pre-insert validity before native Text split/
+Range insertion: current bind_insert intertwines validation/mutation and lacks
+Document order/Fragment checks. Exact prerequisite selected before source edits;
+replacement atomicity/fullDOM remain outside acceptance.
+
+### q551 / p139 cleared outcome (2026-10-01)
+
+[p139](phase139/phase.md) cleared in q551, [evidence](phase139/verification.md).
+Pure reusable native DOM pre-insertion validity/extracted bind_insert checks,
+Document Text/element/doctype/order/whole Fragment validation before mutation,
+original owner/generation/host/removal/root ownership/error priority verified.
+Original87/prior87 preserved/newnone/equal/noerrors/Acid2exact/all52 groupsPASS/
+preinsert64/native29. Remaining13; next live insertion/Textsplit/data/Range content,
+CSS/loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p140 introduction / q552 activation (2026-10-01)
+
+[p140](phase140/phase.md) extends weak native callbacks for actual insertion and existing
+CharacterData full replacement/append repair, with alias-safe checked preparation.
+Known prerequisite before split/Rangeinsert; 87/all52 baseline, no acceptance relaxation.
+
+### q552 / p140 cleared outcome (2026-10-01)
+
+[p140](phase140/phase.md) cleared in q552, [evidence](phase140/verification.md).
+Actual weak native insertion/CharacterData callbacks/current-owner Range boundary
+repair/atomic alias-safe full data replacement/checked failure/FIFO/generic exclusion/
+GC+Document-first cleanup verified. Original87/prior87 preserved/newnone/equal/noerrors/
+Acid2exact/all54 groupsPASS/mutationPage36/native36; existingRangecore59/GC89/frame148.
+Remaining13; next Textsplit/Rangeinsert/content/CSS/loading/SVG. p100/p044/WS incomplete/
+root released/local unpublished/no push.
+
+### p141 introduction / q553 activation (2026-10-01)
+
+[p141](phase141/phase.md) implements actual native Textsplit/Rangeinsert now that pure
+validity/live insertion/data repair are verified; special weak split repair and rooted
+current conversion/host callbacks, expectedoriginal88/new12. No acceptance relaxation.
+
+### q553 / p141 cleared outcome (2026-10-01)
+
+[p141](phase141/phase.md) cleared in q553, [evidence](phase141/verification.md).
+Actual rooted Textsplit/Rangeinsert/prevalidate-before-split/weak special split repair/
+allocation-free suffix truncation/current uint32 conversion/prototypes/current-owner
+hooks/actual post-insert collapse/error+GC ownership verified. Original88/newindexed12/
+prior87 preserved/equal/noerrors/Acid2exact/all56 groupsPASS/insertPage59/native92;
+existingRangecore59/GC89/frame148. Remaining12; next Range contents/CSS/loading/SVG.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p142 introduction / q554 activation (2026-10-01)
+
+[p142](phase142/phase.md) replaces silent bounded recursion with checked rooted native
+cloning for subsequent Range contents. Existing supported states preserved; no prior
+Phase criteria changed. Exact finite scope saved before source generation.
+
+### q554 / p142 cleared outcome (2026-10-01)
+
+[p142](phase142/phase.md) cleared in q554, [evidence](phase142/verification.md).
+Registered checked iterative rooted native cloning/no silent depth cutoff/complete-only
+publication/existing control+template/native namespace state/current owner wrapping/
+actual allocation GC+ENOMEM/source preservation/collectibility verified. Original88/
+no new or lost indexed passes/prior88 preserved/equal/noerrors/Acid2exact/all58PASS/
+Page27/native26. Remaining12; next partial native data deletion then Range contents.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p143 introduction / q555 activation (2026-10-01)
+
+[p143](phase143/phase.md) supplies checked partial native data replacement/allocation-free
+deletion for subsequent content operations. Existing Phase criteria remain unchanged.
+Exact finite scope recorded before generation.
+
+### q555 / p143 cleared outcome (2026-10-01)
+
+[p143](phase143/phase.md) cleared in q555, [evidence](phase143/verification.md).
+Checked native partial CharacterData replacement/allocation-free deletion/exact atomic
+alias-safe buffers/interval FIFO callbacks/current owner adoption/private Range+clone
+repair/failed operation preservation/weak collectibility verified. Original88/no new
+or lost passes/prior88/equal/noerrors/Acid2exact/all59PASS/native100. Remaining12.
+Static shared geometric reserve concern tracked as BUG-129, runtime reproduction unknown;
+new helper avoids that dependency; no bug transfer/repair claim. Next Range contents.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p144 introduction / q556 activation (2026-10-01)
+
+[p144](phase144/phase.md) implements complete native cloneContents with actual partial
+shells/checked iterative traversal/rooted graph lifetime. Mutating contents are later
+finite Phases, no earlier criteria revised. Snapshot saved before generation.
+
+### q556 / p144 cleared outcome (2026-10-01)
+
+[p144](phase144/phase.md) cleared in q556, [evidence](phase144/verification.md).
+Actual private Range.cloneContents/iterative partial shells/complete contained subtrees/
+exact UTF16/doctype preflight/current owner prototype/rooted graph+actual mid-clone GC/
+source and independent output lifetime verified. Original88/no new or lost indexed
+passes/prior88/equal/noerrors/Acid2exact/all61PASS/Page32/native15. Remaining12.
+Next actual Range delete/extract/surround contents; p100/p044/WS incomplete/root released/
+local unpublished/no push.
+
+### p145 introduction / q557 activation (2026-10-01)
+
+[p145](phase145/phase.md) isolates existing child-list record/list temporary GC ownership
+before actual Range deletion/extraction. Prior phases and WS acceptance unchanged;
+all61 and original88 remain mandatory, plus Page/native allocation-GC probes.
+
+### q557 / p145 uncleared outcome (2026-10-01)
+
+p145 uncleared in q557: existing record/list roots implemented, Page13/prior61 pass;
+native allocation-GC14/16 fails added identity/cardinality, ASan64-byte leak. Original
+88/prior88/equal/noerrors/Acid2exact preserved. Unknown unpublished VM Array factory
+prerequisite [BUG-130](../bugs/BUG-130.md) scheduled; finite factory ownership Phase then
+unchanged p145 retry. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Evidence](phase145/verification.md).
+
+### p146 introduction / q558 activation (2026-10-01)
+
+[p146](phase146/phase.md) repairs unpublished VM factory callee ownership found by
+[p145/q557](phase145/verification.md). BUG-130 scheduled; p145 acceptance awaits retry.
+
+### q558 / p146 cleared outcome (2026-10-01)
+
+[p146](phase146/phase.md) cleared in q558, [evidence](phase146/verification.md).
+VM object/Array/builtin factory callee GC ownership verified native20/20; q557 native
+record repro16/16 both and ASan leak0, BUG-130 resolved. Original Acid3 88/no indexed
+regression/equal/noerrors/Acid2exact/all64PASS plain+ASan. p145 historical q557
+uncleared pending separate retry; p100/p044/WS incomplete/root released/local
+unpublished/no push.
+
+### p145 q559 retry activation (2026-10-01)
+
+[p145](phase145/phase.md) resumes after BUG-130/p146 verified factory ownership.
+Original criteria unchanged, q557 result retained; fresh tests on same source.
+
+### q559 / p145 cleared retry outcome (2026-10-01)
+
+[p145](phase145/phase.md) cleared in q559 retry, [evidence](phase145/verification-q559.md).
+Original p145 child-list roots/Page13/native16 actual GC now verified plain+ASan after
+p146 BUG-130 repair; q557 prior uncleared preserved. Original Acid3 88/prior88/equal/
+noerrors/Acid2exact/all64PASS. Next actual Range delete/extract/surround; p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+### p147 introduction / q560 activation (2026-10-01)
+
+[p147](phase147/phase.md) implements native deleteContents after verified weak repair,
+allocation-free data deletion and child-list record GC. Earlier criteria unchanged.
+
+### q560 / p147 cleared outcome (2026-10-01)
+
+[p147](phase147/phase.md) cleared in q560, [evidence](phase147/verification.md).
+Actual Range.deleteContents topmost native removal/collapse-before-mutation/partial
+UTF16/doctype/weak repair/iframe teardown/owner child-list notices and actual mid-
+delete GC verified. Original Acid3 88/no lost indexed/equal/noerrors/Acid2exact,
+all66PASS plain+ASan/Page17/native11. Test7 next needs extract; p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+### p148 introduction / q561 activation (2026-10-01)
+
+[p148](phase148/phase.md) adds native extraction with cloned partial branches and moved
+contained identities after p147 actual removal/observer GC verified.
+
+### q561 / p148 cleared outcome (2026-10-01)
+
+[p148](phase148/phase.md) cleared in q561, [evidence](phase148/verification.md).
+Actual extractContents preserves moved native identities/partial shells/UTF16/live
+repair/owner notices through actual GC. Acid3 90/100, new7/9/prior88 preserved/full100
+same/noerrors/Acid2exact; all68PASS plain+ASan/Page22/native14. Next surroundContents,
+CSS/SVG/loading; p100/p044/WS incomplete/local unpublished/root released/no push.
+
+### p149 introduction / q562 activation (2026-10-01)
+
+[p149](phase149/phase.md) adds native surround as finite successor to q561 extraction;
+prerequisites verified90/all68/Acid2exact. Prior acceptance unchanged; p100/p044/WS
+incomplete/root sole executor/local unpublished.
+
+### q562 / p149 cleared outcome (2026-10-01)
+
+[p149](phase149/phase.md) cleared in q562, [evidence](phase149/verification.md).
+Native surround normative error/mutation order/private roots verified at real GC;
+Page24/native16/all70PASS plain+ASan. Original91/100/new11/prior90/equal100/noerrors/
+Acid2exact. Next CSS/media/text-transform, XML loading/SVG; p100/p044/WS incomplete/
+root released/local unpublished/no push.
+
+### p150 introduction / q563 activation (2026-10-01)
+
+[p150](phase150/phase.md) adds finite computed text-transform and numeric media
+features at original91/all70. Transform rendering follow-up remains explicit;
+prior Phase criteria unchanged. p100/p044/WS incomplete/root/local unpublished.
+
+### q563 / p150 uncleared outcome (2026-10-01)
+
+[p150](phase150/phase.md) uncleared in q563, [evidence](phase150/verification.md).
+Computed text-transform and numeric color media native29/29 verified; Page36PASS/
+2FAIL and original46 reaches y1. Unknown child viewport dependency [BUG-131](../bugs/BUG-131.md)
+ends attempt; finite repair then unchanged retry. Original91/prior91/equal100/
+noerrors/Acid2exact/prior70PASS. Transform rendering pending; p150/p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+### p151 introduction / q564 activation (2026-10-01)
+
+[p151](phase151/phase.md) repairs [BUG-131](../bugs/BUG-131.md), discovered by
+[p150](phase150/phase.md) q563. Scoped p150 CSS outputs ready; whole criteria unchanged,
+retry after viewport repair. Prior p109 explicitly excluded this output. p100/p044/WS
+incomplete/root sole/local unpublished.
+
+### p151 validation fixture reconciliation (2026-10-01)
+
+[p151](phase151/phase.md) fixes child content viewport; legacy [p109](phase109/phase.md)
+embedded-media smoke uses nonnegative0px threshold instead of assuming parent size.
+New12Page/10native cover actual0/100 content and conditional cache, no criteria
+removed. Exact first approval preserved, test-data adjustment under delegated scope.
+
+### q564 / p151 cleared outcome (2026-10-01)
+
+[p151](phase151/phase.md) cleared in q564, [evidence](phase151/verification.md).
+BUG-131 actual iframe content viewport repaired, Page12/native10 actual callback GC/
+retirement/all74PASS plain+ASan including unchanged p150 Page38/native29. Original92/
+new46/prior91/equal100/noerrors/Acid2exact. Next separately selected p150 retry;
+p150/p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### q565 / p150 retry activation (2026-10-01)
+
+[p150](phase150/phase.md) original criteria retried after [p151](phase151/phase.md)
+verified actual viewport/BUG-131 resolved. No source generation, exact snapshot and
+hash-verified q564 reuse plus focused repeated Page/native. q563 history retained.
+
+### q565 / p150 cleared retry outcome (2026-10-01)
+
+[p150](phase150/phase.md) cleared in q565 retry, [evidence](phase150/verification-q565.md).
+Unchanged CSS/media Page38/native29 pass both after p151/BUG-131 repair; q563
+uncleared retained. Exact source hashes verify q564 actual92/full74/equal100/
+noerrors/Acid2exact reuse. No source generation; transform rendering pending;
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p152 introduction / q566 (2026-10-01)
+
+[p152](phase152/phase.md) selected finite ownership prerequisite before child stream
+bindings. Parser standalone tracer forms Document/realm retention cycle; owned
+trace/finalization and native GC verification required. p100/p044/WS incomplete.
+
+### q566 / p152 cleared outcome (2026-10-01)
+
+[p152](phase152/phase.md) cleared in q566, [evidence](phase152/verification.md).
+Owned child parser tracing/finalization verified native8 real GC/hidden removed
+stacks/resume/unfinished retirement/collectibility/standalone preservation both.
+All75PASS/plain+ASan/original92/prior92/equal100/noerrors/Acid2exact. Next managed
+Document streams; p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p153 introduction / q567 (2026-10-01)
+
+[p153](phase153/phase.md) consumes verified p152 owned parser output for actual
+child HTML open/write/close and native inline scripts. Primary replacement/full
+dynamic-markup omitted semantics remain explicit follow-up, no broad compliance
+claim. p100/p044/WS incomplete/local unpublished.
+
+### q567 / p153 cleared outcome (2026-10-01)
+
+[p153](phase153/phase.md) cleared in q567, [evidence](phase153/verification.md).
+Actual child Document HTML replacement/inline nested writes/EOF/owner GC implemented;
+Page36/native9/all77PASS plain+ASan. Original93/new71/prior92/equal100/noerrors/
+Acid2exact. Next images/CSSOM/native dimensions and XML loading/SVG; full dynamic
+markup subset limits retained. p100/p044/WS incomplete/root released/local unpublished.
+
+### p154 introduction / q568 (2026-10-01)
+
+[p154](phase154/phase.md) selected finite images collection prerequisite after
+real HTML replacement93. Native layout/CSSOM remain separate future selection;
+p100/p044/WS incomplete/local unpublished.
+
+### q568 / p154 cleared outcome (2026-10-01)
+
+[p154](phase154/phase.md) cleared in q568, [evidence](phase154/verification.md).
+Native live SameObject Document.images implemented; Page23/native10 real GC/
+collection-only retirement/collectibility/all79PASS both. Original93/prior93/
+equal100/noerrors/Acid2exact. Actual72 reaches missing native rendered height,
+known separately selected geometry/CSSOM work. p100/p044/WS incomplete/root released/
+local unpublished/no push.
+
+### p155 introduction / q569 (2026-10-01)
+
+[p155](phase155/phase.md) selects real child transient layout using Page resources
+and child native CSS/viewport, plus rendered image content dimensions. Existing
+primary layout preserved; CSSOM/child loading/painting separate. p100/p044/WS incomplete.
+
+### q569 / p155 uncleared outcome (2026-10-01)
+
+[p155](phase155/phase.md) uncleared in q569, [evidence](phase155/verification.md).
+Transient child layout/native content image dimensions implemented; native10/10
+real GC/retirement/collectibility both. Prior79 pass; new Page21/22 has exact-zero
+percentage failure. Original93/prior93/full100 same/noerrors/Acid2exact. Existing
+layout rejects zero percentage bases and drops empty inline rectangles, so original72
+still height0. Separate layout dependency repair then same p155 acceptance revalidation;
+CSSOM/loading/SVG remain. Root released; p100/p044/WS incomplete/local unpublished.
+
+### p155 design revision / p156 introduction / q570 (2026-10-01)
+
+[p155](phase155/phase.md) adds [p156](phase156/phase.md) native layout prerequisites
+before separately authorized same acceptance revalidation. Earlier q569 outcome
+remains uncleared. Actual zero content CSS size and empty native fragment observation
+are repaired independently; no CSSOM/full rendering/WS acceptance reduction.
+
+### q570 / p156 cleared outcome (2026-10-01)
+
+[p156](phase156/phase.md) cleared in q570, [evidence](phase156/verification.md).
+Actual zero percentage bases/first empty fragment bounds repaired. Native10/Page15/
+all83PASS both; p155 Page22/native10 nowpass. Original93/prior93/equal100/noerrors/
+Acid2exact. Actual72 now passes native height10 and reaches missing CSSOM. Next
+same p155 acceptance revalidation then CSSOM/loading/SVG. p100/p044/WS incomplete/
+root released/local unpublished/no push; q569 uncleared history preserved.
+
+### p155 resumption / q571 (2026-10-01)
+
+[p156](phase156/phase.md) actual zero/empty layout outputs verified; [p155](phase155/phase.md)
+resumes same whole acceptance/full affected source review in q571. Earlier q569
+uncleared preserved. CSSOM/loading still separate; p100/p044/WS incomplete.
+
+### q571 / p155 cleared outcome (2026-10-01)
+
+[p155](phase155/phase.md) cleared in q571, [evidence](phase155/verification-q571.md).
+Same acceptance revalidated after independent p156 outputs. Native10/Page22/all83
+PASS both; original93/prior93/equal100/noerrors/Acid2exact. Actual72 obtains rendered
+height10 and reaches missing CSSOM. Full affected-source review/semantic comments
+complete. Earlier q569 uncleared/evidence retained. Next CSSOM/loading/SVG;
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p157 introduction / q572 (2026-10-01)
+
+[p157](phase157/phase.md) pureCSS structural source model/transactional ordinary rule
+insertion/deletion/stable immutable entries precedes DOM CSSOM association/wrappers.
+No native DOM-text mutation or flattened cascade count pretending CSSRuleList;
+rendering integration and full CSSOM remain separately selected. p100/p044/WS incomplete.
+
+### q572 / p157 cleared outcome (2026-10-01)
+
+[p157](phase157/phase.md) cleared in q572, [evidence](phase157/verification.md).
+Native structural source model/immutable stable handles/transactional qualified rule
+insert/delete implemented; native33/all84PASS both/actual93/prior93/equal100/noerrors/
+Acid2exact. No DOMwrites or CSSOM shim; ordinary cascade verified10->20->40->20.
+Next native sheet association/live CSSOM wrappers and rendering integration, then
+XMLloading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p157 clearance invalidation / design revision / q573 (2026-10-01)
+
+[p157](phase157/phase.md) read-only native accepted-EOF/insertion/cascade probe34/35
+invalidates currentclearance; q572 original33/84passing evidence/archive retained.
+SamePhase resumes finite implicitblock/import source closures, preserving raw immutable
+sources and allowncriteria before future DOMassociation/wrappers. No acceptance
+reduction or new WS scope. p100/p044/WS incomplete.
+
+### q573 / p157 cleared outcome (2026-10-01)
+
+[p157](phase157/phase.md) cleared in q573, [evidence](phase157/verification-q573.md).
+SamePhase accepted EOF block/import closure repair revalidated native44/all84PASS
+both/original93/prior93/equal100/noerrors/Acid2exact. Source addresses/IDs/raw units
+preserved; real cascade append effects verified. q572 original archive/evidence plus
+later invalidation retained. Next native association/live wrappers/rendering integration
+then XMLloading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+### p158 introduction / q574 (2026-10-01)
+
+[p158](phase158/phase.md) traced native source state/shared Page+childrendering bridge/
+DOM-driven same-text and tree-change retirement before public CSSOM wrappers. No
+DOMtext mutation for modelinsert or fullstyleassociation claim; current native state
+alone contributes changedmodel to rendering. p100/p044/WS incomplete.
+
+### q574 / p158 cleared outcome (2026-10-01)
+
+[p158](phase158/phase.md) cleared in q574, [evidence](phase158/verification.md).
+Traced native inline source models/sharedprimary+childrendering/actualDOMidentity
+retirement verified; native21/all85bothPASS/actual93/prior93/equal100/noerrors/
+Acid2exact. Genuine native edits render10->20->40->20 withoutDOMwrites/records;
+owner-only/saved-state-only retired child graph GC and lastrelease verified.
+Next public native sheet/rule lists and edits then loading/SVG. p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+### p159 introduction / q575 (2026-10-01)
+
+[p159](phase159/phase.md) genuine inline sheet/list wrappers and live rule counts follow
+verified [p158](phase158/verification.md). Public ruleobjects/JSmutation separately
+selected; ownerrealm/nativebrands/GC remain actual. p100/p044/WS incomplete.
+
+### q575 / p159 cleared outcome (2026-10-01)
+
+[p159](phase159/phase.md) cleared in q575, [evidence](phase159/verification.md).
+Actual native inline sheet/list/livecount wrappers preserve source identity and
+relevant realm; Page22/native12/all87bothPASS/actual93/prior93/equal100/noerrors/
+Acid2exact. Genuine Cmodel edit observable through savedJSrulecount and realheight;
+callerroot-free threshold construction GC/savedruleview-only retirement verified.
+Next native ordinary JSinsert/delete to clear actual72 then loading/SVG. Ruleobjects
+and other partialcore limits remain recorded; p100/p044/WS incomplete/local unpublished.
+
+### p160 introduction / q576 (2026-10-01)
+
+[p160](phase160/phase.md) nativeordinaryJSinsert/delete follows verified
+[p159](phase159/verification.md) wrappers/counts/GC. Actualrenderer/list effects
+required for actual72; unsupportedat-rules/ruleobjects recorded aspartialcore.
+p100/p044/WS incomplete; onefinitePhase/rootexecutor.
+
+### q576 / p160 cleared outcome (2026-10-01)
+
+[p160](phase160/phase.md) cleared in q576, [evidence](phase160/verification.md).
+Native ordinary CSSStyleSheet insertRule/deleteRule with actualsource/argument/
+convertedstring roots, errorprecedence/importhierarchy/reentrantretirement verified.
+Page23/native12/all89bothPASS; actual94/100 including72/prior93/equal100/noerrors/
+Acid2exact. Actualmodel/list/renderedheight update withoutDOMwrites orObserverrecords;
+callerroot-free threshold+conversionGC/obsoleteonlyedit/lastrelease verified.
+Remaining69/74/75/77/79/80 need SVG/loading/XML. PartialCSSOM/ruleobject/fullSyntax
+limits retained; p100/p044/WS incomplete/rootreleased/localunpublished/no push.
+
+### q576 Master/p100 projection reconciliation (2026-10-01)
+
+Master WS registry/resume/outlook now reflects actual94/89 and automaticQueue
+approval already supplied by user. [p100](phase100/phase.md) currentprerequisites
+and q574–q576 structural evidence updated; same full100/100/Acid2 acceptance and
+unselected planned status preserved. Earlier historical outcomes unchanged.
+
+### p161 introduction / q577 (2026-10-01)
+
+[p161](phase161/phase.md) nativeowningXML model validates UTF8/wellformedness/exact
+namespace before separate actualDOMprojection/loading. ActualPI/CDATA/attributeURI
+representation prerequisites known and retained for later; parseronly output cannot
+claim events/notifications/scoregain. Actual94/89, p100/p044/WS incomplete.
+
+### q577 / p161 cleared outcome (2026-10-02)
+
+[p161](phase161/phase.md) cleared in q577, [evidence](phase161/verification.md).
+Strict owning native XML model: real namespaces/Unicode/normalization/CDATA/PI,
+full parse before publication, malformed pinned resources reject with NULL.
+Native236/all90PASSboth; actual94 including72/prior94/equal100/noerrors/Acid2exact.
+Pure C parser only, no score gain expected. Finite UTF8/XML1.0/DTD exclusions retained.
+Next native arbitrary attribute namespaces/PI/CDATA, then DOM projection/loading/SVG.
+p100/p044/WS incomplete; root released/local unpublished/no push.
+
+### p162 introduction / q578 (2026-10-02)
+
+Exact arbitrary attribute URI identity/tracing/cloning before XML DOM projection.
+[Phase scope](phase162/phase.md); p161 output verified; PI/CDATA/loading remain future
+prerequisites, no acceptance relaxation. Current user automatic finite Queue authority.
+
+### q578 / p162 cleared outcome (2026-10-02)
+
+[p162](phase162/phase.md) cleared in q578, [evidence](phase162/verification.md).
+Exact traced attribute URI/add/find/duplicate rollback/both clone paths verified.
+Native25/all91PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Source-only/clone-only/lastrelease GC verified with non-atom URI and actual owner.
+Native storage prerequisite only; full Attr/JS NS APIs remain excluded.
+Next native PI/CDATA then XML DOM/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+
+### p163 introduced / q579 (2026-10-02)
+
+Native PI/CDATA identity/target tracing/rooted C factories/clone before public binding
+category integration and XML DOM loading. [Scope](phase163/phase.md). Known future
+Range/render/public interfaces remain explicit; no JS exposure/full acceptance claim.
+
+### q579 / p163 cleared outcome (2026-10-02)
+
+[p163](phase163/phase.md) cleared in q579, [evidence](phase163/verification.md).
+Actual native CDATA4/PI7/target tracing/rooted C factories/buffer operations/clone.
+Native32/all92PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Caller-root-free real threshold GC/result-only/clone-only/lastrelease ownership verified.
+Native representation only; known public category/binding integration before JS/DOM
+projection/loading/SVG. p100/p044/WS incomplete; root released/local unpublished/no push.
+
+### p164 introduced / q580 (2026-10-02)
+
+[Native wrapper/category integration](phase164/phase.md) follows verified native
+identity; actual Node/CharacterData/Text/insertion/Range/render/HTML serialization
+semantics before XML DOM projection. Partial interface/factory/PI attributes/full
+XML serialization limits retained; p100 full100 acceptance unchanged.
+
+### q580 / p164 cleared outcome (2026-10-02)
+
+[p164](phase164/phase.md) cleared in q580, [evidence](phase164/verification.md).
+Actual PI/CDATA wrappers/prototypes/callee roots/Node/CharacterData/Text/Range/
+insertion/render/HTML serialization categories verified on genuine native XML nodes.
+Native34/all93PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Actual threshold wrapper GC/saved-only/lastrelease; CDATA native text/CSS/script
+and Range subtype semantics verified. Partial XML node core limits retained.
+Next native XML DOM projection/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+
+### p165 introduced / q581 (2026-10-02)
+
+[Strict XML DOM projection](phase165/phase.md) copies verified model into real owning
+native Documents with exact expanded names/type/data and temporary collector roots.
+Response navigation/Window pairing/errorDocument/events/script gating remain known
+future work; no activation or acceptance relaxation.
+
+### q581 / p165 cleared outcome (2026-10-02)
+
+[p165](phase165/phase.md) cleared in q581, [evidence](phase165/verification.md).
+Strict immutable XML model now projects into actual owning native DOM Documents;
+exact namespace/case/expanded attributes/PI/CDATA/data, iterative full tree copy,
+NULL output/error root unwind. Native54/all94PASSboth; actual94/prior94/72/
+equal100/noerrors/Acid2exact. Natural 30000-element threshold GC, subtree-only/
+lastrelease and real heap-limit failure verified after source/model destruction.
+Next actual MIME/child response navigation/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+
+### p166 introduced / q582 (2026-10-02)
+
+[Owned response metadata](phase166/phase.md) follows actual XML DOM output; real
+URL/status/MIME must select parsers before child navigation. No navigation or
+full MIME/Fetch claim. p100100 acceptance unchanged; all94/actual94 verified.
+
+### q582 / p166 uncleared outcome (2026-10-02)
+
+[p166](phase166/phase.md) uncleared in q582, [evidence](phase166/verification.md).
+Real native fixture99/101both; [BUG-132](../bugs/BUG-132.md) body decoding error
+is erased by existing MIME fallback. Actual metadata/type implementation saved;
+net repair outside q582 scope. All95/original skipped after mandatory native failure;
+last verified q581 actual94/all94/Acid2exact, no new score claim. Next finite native
+data URL error preservation then unchanged p166 retry; p100/WS incomplete.
+Root released/local unpublished/no push.
+
+### p167 introduced / q583 dependency redesign (2026-10-02)
+
+[Originp166](phase166/phase.md) native99/101 exposes [BUG-132](../bugs/BUG-132.md).
+[Newp167](phase167/phase.md) repairs real body failure routing before separate
+unchanged p166 retry. p166 criteria/interface/source unchanged, dependency revised;
+p100100 acceptance remains unchanged. No auto-clearance of origin or broaderAPI.
+
+### q583 / p167 cleared outcome (2026-10-02)
+
+[p167](phase167/phase.md) cleared in q583, [evidence](phase167/verification.md).
+[BUG-132](../bugs/BUG-132.md) resolved: only MIME-parser EINVAL gets default MIME;
+real body failure remains failure with complete cleanup. Native68/p166native101/
+all96PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact. p166 remains
+uncleared until separate exact unchanged retry. Next metadata retry then actual
+child navigation/SVG. p100/p044/WS incomplete. Root released/local unpublished.
+
+### q584 / p166 unchanged retry cleared (2026-10-02)
+
+[p166](phase166/phase.md) cleared in q584 unchanged retry,
+[evidence](phase166/verification-q584.md). Actual response URL/status/MIME/body
+ownership and declared document MIME selection verified on same source after
+p167 body-error repair. Native101/all96both/actual94/prior94/72/equal100/noerrors/
+Acid2exact; reused actual q583 final artifacts/hash equality, no redundant rerun.
+q58299/101 remains uncleared immutable history. Next actual child navigation/
+events/script gating/object ownership/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+
+### p168 introduced / q585 (2026-10-02)
+
+[Actual child loading](phase168/phase.md) integrates verified metadata/XML owning
+DOM with existing managed contexts and native nonblocking loader/task events.
+Exact scoped same-origin partial navigation, known fullWindowProxy/CSP/external
+script/PI effects limitations retained; no fullHTML or fake native claims. Original80
+needs actual selectors iframe reload event then XHTML notifications, not image event.
+p100 full100 acceptance unchanged. Previous96groups/actual94 remain obligations.
+
+### q585 / p168 clearance — 2026-10-02
+
+[Child loading](phase168/verification.md) actual native46/all97both/original94/
+prior94+72/equal100/noerrors/Acid2exact. Normal nonblocking loader→Page task event
+loop and strict XML/script/actual metadata/managed lifetime verified. Original
+headless runner's timer-only virtual settle needs separate finite network polling
+integration; no original score gain claimed. Remaining SVG75/77/p100 full100 and
+p044/WS acceptance unchanged. [Exact history](../history/queue-q585.md).
+
+### p169 introduced / q586 — 2026-10-02
+
+[Headless scheduler](phase169/phase.md) connects actual pending p168 child requests
+with headless virtual timer progress. p168 own normal loader criteria verified;
+new integration verifies original69/74/79/80 before SVG75/77/p100 full100.
+[Origin](phase168/phase.md), [p100 prerequisite](phase100/phase.md).
+
+### q586 / p169 clearance — 2026-10-02
+
+[Headless scheduler](phase169/verification.md) native52/all97both/original98.
+New69/74/79/80pass/prior94+72/equal100/noerrors/Acid2exact. Actual native child
+loading now progresses during virtual headless timers; next finite SVG75 width/
+77 character count APIs before samep100full100. p044/fullWS incomplete.
+[Exact history](../history/queue-q586.md).
+
+### p170 introduced / q587 — 2026-10-02
+
+[Native SVG text](phase170/phase.md) supplies actual missing77 text interface/count
+using actual receiver, live DOM and existing CSS context/UTF16. Prior98 retained;
+SVG75 width remains next separate feature, thensamep100full100. Profile/fullSVG/
+WindowProxy/renderer/CSS limits retained. [p100](phase100/phase.md).
+
+### q587 / p170 clearance — 2026-10-02
+
+[Native SVG text](phase170/verification.md) native42/all98both/original99.
+New77pass/prior98+72/equal100/noerrors/Acid2exact. Actual text/CDATA count and
+owner GC verified; remaining nativeSVG75width before samep100full100. Partial
+SVG/CSS/XMLspace/painting limits retained; p044/fullWS incomplete.
+[Exact history](../history/queue-q587.md).
+
+### p171 introduced / q588 — 2026-10-02
+
+[Native scalar width](phase171/phase.md) selected after actual99/p170clear, remaining75.
+Actual SameObject branded length handles reflect native attributes and retain owner
+GC graph. Relative userunit conversions/otherSVG APIs remain explicitpartialscope.
+Graphp170->p171->p100, samefull100 unchanged; p044/WS incomplete.
+
+### q588 / p171 clearance — 2026-10-02
+
+[Native width/scalar length](phase171/verification.md) native60/all99both/original100,
+all100PASS/noerrors/Acid2exact. Last75passes; actual SameObject/native attribute
+reflection/readonly/GC verified. Pixel37.04%/visualFAILlabels remain independent
+rendering diagnostic; partial relativegeometry/otherSVG APIs retained. Samep100
+acceptance next; p044/WS incomplete. [Exact history](../history/queue-q588.md).
+
+### Samep100 acceptance revision / q589 — 2026-10-02
+
+[Samep100](phase100/phase.md) selected for finite final acceptance after actual
+p171clear/original100/all99both/Acid2exact. Reuse unchanged final successful evidence
+with source/program/artifact freshness hashes, manual changed SVGfeature standards
+review, actual100/100 screenshot (visualFAILlabels/pixel37.04%independent diagnostic).
+No new code/acceptance waiver; p044/WS incomplete, p101/p098 unselected.
+
+### q589 p100 uncleared / p171 clearance invalidated — 2026-10-02
+
+Full manual C section3 review found nine one-line SVGLength callback definitions
+and the new native collection callback: function name and every argument must occupy
+separate lines. style-check.py reports empty because its current coverage does not
+check this rule. Original100/all99both/noerrors/Acid2exact remain actual numeric
+behavior evidence; full changed-source conformance required by p171 was incorrectly
+reported clear. No product source edited in q589; final acceptance cannot clear.
+Invalidate current p171 clearance (retain original q588 cleared attempt/history),
+repair routine signature formatting within same native width scope and revalidate
+p171 in a new finite Queue, then retry this samep100. No human decision or scope/
+acceptance waiver; standing autonomous consent permits these necessary Queues.
+
+[Origin p100](phase100/phase.md), [changed p171](phase171/phase.md), [exact history](../history/queue-q589.md).
+
+### p171 formatting retry / q590 — 2026-10-02
+
+Samep171 exact feature/criteria unchanged; ordinary callback definition/compound
+condition formatting and finalbothbuilds/native60/all99/original100/Acid2revalidation.
+[p171](phase171/phase.md) records revised manual section3 check. Originp100 remains
+uncleared until samep171clear then acceptance retry; previous outcomes preserved.
+
+### q590 samep171 re-clearance — 2026-10-02
+
+Routine formatting corrected nine new native SVGLength callback definitions and
+one fixture collection callback to put names/arguments on separate lines, plus
+one three-clause decision. Actual logic/API/ownership unchanged. Manual full C1–14
+review now explicitly checks section3 definition layout omitted by style-check;
+all four SVG source/fixture files have zero single-line function definitions.
+Both final full builds finished beforetests/warning0/styleempty/diffclean. Native
+length60/60both and prior98+native1=99groupsPASSboth on final changed source.
+Original unchanged pinned Acid3 completes100/100; equal100indexedPASS/status0/
+noUncaught/crash/sanitizer/runnererrors/timeouts; Acid2exact100%/different_pixels0.
+Screenshot hashes equalboth and equal the already inspected q588 plain100/100
+rendering. VisualFAILlabels/pixel37.04% remain independent diagnostic; full visual
+conformance not claimed. Partial SVG relativegeometry/otherAPIs/rendering limits
+remain. cc14.2.0/Python3.13.5/clang-format absent/manual; C-required callback
+forward declarations before immutable descriptors/unchanged legacy ordering
+retained; no full-WS p044 claim. Priorq588 numeric evidence retained, q589clearance
+invalidation and unclearedp100 preserved. Samep171 current criteria now re-clear;
+then samep100 acceptance retry. Rootreleased/localunpublished/no push.
+
+[Final evidence](phase171/verification-q590.md), [history](../history/queue-q590.md).
+
+### Samep100 final acceptance retry / q591 — 2026-10-02
+
+[p100](phase100/phase.md) selected after p171q590re-clear/fullfinalbothbuilds/native60/
+all99/original100/noerrors/Acid2exact. No code edits; current exact evidence hashes/
+pinned suite/changedSVG full manual standards reviewed before clearance. Prior
+q589uncleared retained, fullnumeric100 criterion unchanged. Rendering37.04%/FAIL
+labels remain independent diagnostic; p044/WS incomplete, no nextQueueaftergoal.
+
+### q591 samep100 clearance / fg011 achieved — 2026-10-02
+
+The pinned unmodified historical Acid3 now finishes at100/100 in both plain and
+ASan builds, with all100 indexed testsPASS and equal inventories consistent with
+the original score. Complete/status0/noUncaught/crash/sanitizer/runnererror/timeout;
+Acid2 exact100%/different_pixels0. All99 native/browser regression groupsPASSboth,
+including actual childload52, SVGtext42 and SVGlength60 native observations.
+Current final source/program/artifact hashes equal the completed q590 verification;
+product Git diff empty and pinnedWPT commit/diff verified. No code changes or
+redundant runtime rerun in this acceptance Queue. C-token equality proves q590
+signature/condition changes were formatting only; manual C1–14 review explicitly
+checks section3 layout omitted by styletool. Styleempty/finalbothbuildswarning0,
+formatter absent/manual; existing untouched legacy ordering retained. Standalone
+JSON stores complete actual reports/all99results/fullcurrent source/program/suite/
+artifact hashes, not just references. Both screenshot hashes equal the inspected
+native rendering displaying100/100; visibleFAILlabels and37.04% pixel agreement
+remain independent diagnostics. This clears the existing numeric p100 criterion,
+not full visual Acid3/browser/SVG standards conformance. Partial SVG relative
+geometry/otherAPIs/animation/rendering/XML/CSS/WindowProxy/crossorigin limitations
+remain. Previous q589uncleared preserved; q590 repairs and re-clears its prerequisite.
+fg011 autonomous goal achieved; no automatic next Queue. p101CSS2/p098ESmodules/
+p044fullWS conformance and broaderWS acceptance remain unselected/incomplete.
+Rootreleased/localunpublished/no push/no remoteIssueclose claimed.
+
+[Final evidence](phase100/verification.md),[exact history](../history/queue-q591.md).

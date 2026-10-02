@@ -1,0 +1,60 @@
+<!-- awesome-plan project=zedbsd record=ws074-p154 -->
+
+# ws074-p154: native live Document.images collection
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q568 / q568-i01
+Prerequisites p122 HTMLCollection and p153 replacement streams cleared/actual output
+verified; base9f6f0baf clean/original93/all77/Acid2exact. Root sole executor.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation, exact finite snapshot saved BEFORE generation/no cancellation.
+
+## Exact scope / design / criteria
+
+Actual original72 first dependency Document.images absent. Add readonly native
+Document.images returning SameObject live HTMLCollection rooted at actual Document,
+filter HTML namespace and exact local_name img, tree order/descendants, no foreign
+img/uppercase XML name/template contents/detached nodes. Existing actual collection
+private brand/native indexed and named properties/item/namedItem/descriptors reused;
+no Array or snapshot/expando imitation. Cache in actual dom_document, trace cache
+from Document and Document from collection state, no permanent roots. Borrowed getter
+uses receiver's native Document and relevant prototype; XML Documents also expose
+HTML namespace img collection. Add at stable enum/table tail, preserve existing APIs.
+Affected dom/dom.h,dom/node.c,bind/collection.c,bind/document.c,bind/internal.h;
+new Page/native fixtures in WS tests/auto-discovered build.
+HTML Living Standard2026-09-29 https://html.spec.whatwg.org/multipage/dom.html#dom-document-images
+read2026-10-01, Document SameObject live HTMLCollection of img descendants.
+
+Page native collection identity/prototype/index/name/empty/bounds/insertion/removal/
+reordering/adoption/current id-name/namespace/exact XML case/template exclusion/
+illegal brand/read-only/child owner and saved list through actual Document.open.
+Native actual GC with conservative stack disabled: cache remains SameObject,
+saved collection alone retains retired child Document/realm/member graph, release
+allows entire cache cycle collection; direct native getter brand/caches/bounded
+real pressure. Prior77+new2=79 plain+ASan; original>=93/prior93 preserved/full100
+same/complete/status0/no Uncaught/crash/runnererrors/Acid2exact. Original72 may now
+reach next missing actual rendered image dimension; no CSSOM/layout scope expansion.
+Runner60sec/bounded collections. Full changed C Guardrail/coding-style1–14/automation,
+style output inspected/manual formatting clang-format absent/diff/build warning0/
+sanitizer0/hashes. Unknown prerequisite ends uncleared before redesign.
+Graph p122+p153(external)->p154->future image dimensions/CSSOM+p100(external), acyclic.
+Exclusions image decoding/layout/CSSOM/network/SVG/other Document collections/full
+WPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub.
+p100/p044/WS incomplete/local unpublished.
+
+## Introduction / q568 activation (2026-10-01)
+
+Original71 actual parser passes at93; actual72 can now use real img tree but lacks
+native images collection. Isolate already understood collection dependency before
+CSSOM/geometry. Existing per-document native collection cache ownership reused.
+
+## q568 cleared outcome (2026-10-01)
+
+[p154](phase.md) cleared in q568, [evidence](verification.md).
+Native live SameObject Document.images implemented; Page23/native10 real GC/
+collection-only retirement/collectibility/all79PASS both. Original93/prior93/
+equal100/noerrors/Acid2exact. Actual72 reaches missing native rendered height,
+known separately selected geometry/CSSOM work. p100/p044/WS incomplete/root released/
+local unpublished/no push.

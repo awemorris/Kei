@@ -629,7 +629,7 @@ box_build_children(
 		}
 
 		/* Only text nodes are rendered among the others. */
-		if (child->type != DOM_TEXT)
+		if (child->type != DOM_TEXT && child->type != DOM_CDATA_SECTION)
 			continue;
 		text = (const struct dom_character_data *)child;
 		if (text->data.length == 0)

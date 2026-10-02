@@ -507,6 +507,10 @@ function_bound_length(
 	if (key == VM_VALUE_EMPTY)
 		return ENOMEM;
 	found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(target), key, &descriptor);
+	if (found < 0)
+		return -found;
+
+	/* A missing descriptor follows the absence path after errors have been excluded. */
 	if (!found)
 		return 0;
 

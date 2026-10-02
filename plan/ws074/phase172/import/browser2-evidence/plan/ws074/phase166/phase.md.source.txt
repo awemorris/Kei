@@ -1,0 +1,113 @@
+<!-- awesome-plan project=zedbsd record=ws074-p166 -->
+
+# ws074-p166: owned response metadata and declared document MIME foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q584 / q584-i01; q582 / q582-i01 remains uncleared history
+Base f9d31097/q581 cleared/native54/all94both/actual94/Acid2exact.
+Current user autonomous Acid3 automatic finite Queues2026-09-30 +continuation
+2026-10-02 authorize exact prerequisite before generation. Root/browser2 sole
+executor/writer; local unpublished/no push/cancellation/concurrent attempt.
+Guardrail/full coding-style1–14/automation/page link/net URL/data/HTTP ownership
+read; p165 actual owning XML DOM output verified. No policy or architecture gate.
+
+## Exact scope / design / criteria
+
+New page_fetch_response(base,href,&net_response) resolves using the same native
+URL parser as page_fetch and returns actual owned final URL/status/Content-Type/
+body (plus HTTP caching fields). Empty initialized response on every failed call;
+caller passes fresh storage, releases result via existing net_response_release.
+HTTP/HTTPS delegates existing actual GET/redirect/header/body implementation,
+no invented filename/root metadata. Data uses genuine net_data MIME/body and
+actual resolved URL, status200 only on success. File uses actual decoded path
+bytes plus ordinary generic local extension metadata (.html/.htm/.xhtml/.xht/
+.xml/.svg; case-insensitive) and application/octet-stream otherwise; not WPT
+sidecars/test resource names. Unsupported schemes reject without partial output.
+Existing page_fetch behavior/callers unchanged. No host binding or navigation yet.
+
+New page/resource.c page_document_content(mime,length,&content) validates declared
+MIME type/subtype essence (HTTP whitespace/HTTP tokens/one slash/ASCII lowercase
+comparison); parameters do not change essence. Supports text/html -> HTML,
+application/xhtml+xml -> XHTML, image/svg+xml -> SVG, text/xml/application/xml/
+other valid +xml subtype -> XML. Missing/malformed type EINVAL, valid unsupported
+ENOTSUP, output modified only on success. No body/URL/root sniffing or default
+HTML recovery. MIME Sniffing Living2026-07-17 sections4.4/4.6/7 read2026-10-02:
+https://mimesniff.spec.whatwg.org/#parsing-a-mime-type and #xml-mime-type.
+This declared-type partial foundation is not complete MIME Sniffing/Fetch or
+navigation/CSP/origin/encoding/downgrade/header-duplicates conformance.
+New module once in libbrowser Makefile, public native declaration in page.h,
+new response function and private helper in page/link.c only. No net/VM/DOM edits.
+
+New native host-resource.c plus small ordinary Python loopback resource server
+fixture: exact data MIME/body/default/base64/fragment/invalid cleanup; local real
+files generic extension/path percent decoding/query/fragment/relative final URL;
+missing/unsupported/invalid args empty outputs. Native declared-type matrix incl
+case/whitespace/parameters/valid suffix/invalid tokens/slash/NUL/unknown types and
+unchanged output on failure. Actual ephemeral loopback HTTP metadata, redirects,
+404 actual status/body and misleading extension/namespace vs declared MIME;
+legacy page_fetch still reads same body/finalURL. No fake HTTP responses in engine.
+Bounded server/subprocess timeout60sec, no outbound service or custom certificates.
+Prior94+native1=95groups both PASS/original>=94/prior94/72/equal100/complete/status0/
+noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact; bothfull builds before
+anytests/warning0/style empty or no new baseline findings/manual affected full C/
+diff/sourcehashes/evidence/tool versions/skips. Unknown dependency ends uncleared
+before redesign; no endless investigation.
+
+Finite one Phase, graph p165(external)->p166->actual child navigation/SVG/p100
+(external), acyclic. Actual child Doc Window realm/retirement/errorDocument/
+queued load tasks/namespace-wellformedness-gated scripts/object ownership remain
+next finite work; metadata alone gives no score gain. Public fetch/XHR changes/
+HTML primary navigation/fullMIME/fullFetch/sniffing/fullWPT/fuzz/OS/guest/boot/GPU/
+HAL/toolchain/.internal/aggregatecheck/push/GitHub publication excluded.
+p100/p044/WS incomplete, no changed acceptance or claim of actual navigation.
+
+## Introduction (2026-10-02)
+
+Actual XML graph output is now verified. Preserve real response metadata before
+selecting parser/Window activation; file/root names cannot substitute for HTTP
+Content-Type. Ordinary native URL/GET/data ownership remains source of evidence.
+
+## q582 uncleared outcome (2026-10-02)
+
+[p166](phase.md) uncleared in q582, [evidence](verification.md).
+Real native fixture99/101both; [BUG-132](../../bugs/BUG-132.md) body decoding error
+is erased by existing MIME fallback. Actual metadata/type implementation saved;
+net repair outside q582 scope. All95/original skipped after mandatory native failure;
+last verified q581 actual94/all94/Acid2exact, no new score claim. Next finite native
+data URL error preservation then unchanged p166 retry; p100/WS incomplete.
+Root released/local unpublished/no push.
+
+## Dependency revision after q582 (2026-10-02)
+
+Added [p167](../phase167/phase.md) native BUG-132 body error-preservation prerequisite
+before unchanged exact p166 retry. Cause confirmed in existing net_data_parse;
+new owning metadata code forwards false native success. No p166 interface/source/
+criteria expansion or nonblocking bug transfer. Resume after native repair/full
+regression evidence, then separate finite retry. [WS](../ws.md).
+
+## q584 exact unchanged retry authorization (2026-10-02)
+
+Current autonomous Acid3 automatic finite Queues +continuation authorize this
+one finite exact p166 retry after verified p167/BUG-132 clearance. Original p166
+scope/source/interface/criteria unchanged; all six p166 source SHA256 equal q582
+and q583 dependency hashes. No implementation edits selected. Review actual final
+source and reuse q583 completed bothfull builds/native101/all96/original94/Acid2
+artifacts against same final source/heap decoder fix. Existing verified96superset
+satisfies original95 regression obligation; no unnecessary repeated builds/tests
+without changed code or unresolved failure. Earlierq58299/101 and skipped runs
+remain immutable historical outcome; latest retry evidence gets separate q584
+files. Exact snapshot saved before execution/reconciliation. Root/browser2 sole
+executor/local unpublished/no cancellation. p100/WS remain incomplete.
+
+## q584 cleared unchanged retry (2026-10-02)
+
+[p166](phase.md) cleared in q584 unchanged retry,
+[evidence](verification-q584.md). Actual response URL/status/MIME/body
+ownership and declared document MIME selection verified on same source after
+p167 body-error repair. Native101/all96both/actual94/prior94/72/equal100/noerrors/
+Acid2exact; reused actual q583 final artifacts/hash equality, no redundant rerun.
+q58299/101 remains uncleared immutable history. Next actual child navigation/
+events/script gating/object ownership/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.

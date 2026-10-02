@@ -1,0 +1,50 @@
+<!-- awesome-plan project=zedbsd record=ws074-p114 -->
+
+# ws074-p114: CSS predefined cursor values and computed inheritance
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q524 / q524-i01
+Prerequisites: p109/p110 childCSS/grammar cleared, p113 inventory ee552efa61/100.
+Executor root only. Approval: currentuser2026-09-30 autonomousAcid3/automaticQueue
+instruction,2026-10-01continuation. One finite Phase/keyword cascade verification.
+
+## Saved exact scope / design / criteria
+
+Indexed47 computed.cursor is undefined: no cursor property in CSSparser/style/
+binding. Add CSS_PROP_CURSOR, css_cursor enum with all36 current predefined
+keywords (32historical plusgrab/grabbing/zoom-in/out), style scalar initialauto,
+parsed IDENT only through existing keyword table, ASCIIcasefold existing parser,
+inherit by default and CSS-wide inherit/unset/initial using existing pipeline.
+Existing value tables and computed keyword serializer expose cursor in ordinary
+CSSStyleDeclaration accessors/getPropertyValue. Parent/child style ownership is
+unchanged, nonew module/dependency. Applicable Guardrail/full coding-style loaded.
+[CSS UI4 §cursor](https://drafts.csswg.org/css-ui-4/#cursor), editor draft read
+2026-10-01: initialauto/inheritedyes and predefined grammar. This finite foundation
+does not implement cursor images/URL/hotspots/fetch or platform pointer rendering/
+hit testing; no claim fullCSS UI conformance. No text-transform/media/iframeviewport,
+HTML/VM/Traversal/Range/SVG/HAL/toolchain/API changes.
+
+Affected css/css.h, css/internal.h, css/values.c, css/cascade.c, bind/computed.c.
+Focused childcontext fixture tests36 keywords, initial/invalid/extra tokens/string,
+casecanonical, inherited/own/initial/unset/inherit, rule and inline priority,
+mutation/removal/read-only computed declaration. Existing childCSS30/GCframe33/
+DOM23/selector golden must PASS plain+ASan; all100 inventories preserveprevious61,
+47PASS/Uncaught0/errors0/completeTrue/run_status0, Acid2exact/warnings0/sanitizer0.
+Review full changed-source standard, style-check.py C/diff, source hashes/tools/
+logs/skippedchecks. clang-formatunavailable, manualformatting. Bounded cases, no
+exhaustive URL/image/failurefuzz or OS/guest/boot/GPU testing. Unknown prerequisite
+endsuncleared before replanning. Localunpublished/nopush.
+
+## Introduction / q524 activation (2026-10-01)
+
+Missing computed property47 can use verifiedp109context and existingCSS value/
+cascade infrastructure. No material architecture or human risk decision remains.
+[WS summary](../ws.md); p100100/100 unchanged.
+
+## q524 outcome (2026-10-01)
+
+q524-i01 cleared; [verification](verification.md) satisfies saved finite criteria.
+54/54 bothvariants,47newPASS/all10062/100/no regression/Uncaught0/Acid2exact.
+Remaining38features/p100 acceptance unmet. [WS](../ws.md). Local unpublished.

@@ -1,0 +1,109 @@
+<!-- awesome-plan project=zedbsd record=q544 -->
+
+# q544 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q544](history/queue-q544.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q544
+
+Purpose WS074/fg011 native table/section row mutations and row indices.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p133 scope](ws074/phase133/phase.md) saved before source generation.
+Timebox one finite Phase; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q544-i01 | [ws074-p133](ws074/phase133/phase.md) | cleared | p13157b37012/p13249b0ee70 cleared, native table order/adoption; indexed50/51 |
+
+Wholep133 createTBody/table+section insertRow/deleteRow/rowIndex/sectionRowIndex,
+exact native brands/current logical membership/long conversion/owner/roots/GC,
+plain+ASan regressions/prior81/new50+51/equal/noerrors/Acid2exact/fullC/evidence.
+Exclude cell APIs/Cellclass/obsolete attrs/layout/parser and other recorded residuals.
+Graph p131+p132(external)->p133->p100(external), acyclic. Unknown dependency ends
+uncleared before redesign. Whole original p131 acceptance remains satisfied.
+
+## Upcoming Work Outlook
+
+Select/option (57–58), Range/CSS/loading/SVG, final p100/p044. Cell APIs remain
+known separate table compatibility increment, not automatically selected here.
+Outlook supplies no authorization.
+
+## q544 outcome (2026-10-01)
+
+[p133](ws074/phase133/phase.md) cleared, [evidence](ws074/phase133/verification.md).
+Native table/section row insertion/deletion/createTBody/rowIndex/sectionRowIndex,
+exact long conversion/current order/parent/owner/roots. Row62/GC75/frame123/all41
+selected groupsPASS both variants. Original all10083/100/indexed50+51newPASS/
+prior81 preserved/equal/noerrors/Acid2exact. Remaining17; next select/option.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p133 -->
+
+# ws074-p133: native table/section row mutations and row indices
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q544 / q544-i01
+Prerequisites p13157b37012/p13249b0ee70 cleared; actual table/section/row native
+brands, logical live collections, checked insertion/adoption/weak notification
+and current owner prototypes verified. Prior81/original equal/noerrors/Acid2exact,
+last39 regression groups PASS. Root sole executor/one finite Phase.
+User2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation approve
+exact scope saved before code generation. Timebox one finite Phase/bounded tests.
+
+## Exact scope / design / criteria
+
+Native table.createTBody always creates fresh actual HTML tbody in current node
+Document, immediately after last actual direct tbody or append. Native table and
+section insertRow(optional long=-1)/deleteRow(required long) use current native
+membership after exactly one WebIDL signed long conversion; receiver brand before
+conversion, undefined insertion uses default -1, missing deletion TypeError,
+invalid range IndexSizeError before allocation/mutation. Return inserted native tr
+or undefined on deletion; empty delete(-1) no-op. No calls to script-visible rows/
+methods or cached snapshots. Optional conversion may mutate/adopt/remove target;
+explicit root slots protect owner/argument/new row/body/parent/reference through
+conversion and actual host callbacks. Current owner re-evaluated after conversion.
+
+Table insertion uses logical table row order: zero rows/no actual tbody builds
+new tbody+tr then inserts complete body; zero rows/existing bodies appends row to
+last direct tbody; -1 or length appends to parent of last logical row; other index
+inserts before indexed logical row in its actual parent. Section insertion/deletion
+only direct actual HTML tr; nested/foreign/uppercase excluded. Reuse native logical
+iterator through internal pure bridge in collection.c; static public table getter
+ownership unchanged. New bind/table-row.c registered production source list.
+Native rowIndex uses direct actual table or actual section with direct actual
+parent table; sectionRowIndex uses direct table logical list or direct actual
+section list; otherwise -1. Native exact namespace/local case and forged receiver
+rejection. Readonly indices immediately follow moves/deletion/adoption.
+
+All allocations checked before partial new-body publication; unpublished body+row
+link uses pure DOM before one checked insert/host notification of complete subtree.
+Regular mutations reuse bind_insert and DOM/environment removal notifications.
+Root slots unwind on conversion/root/DOM/host errors; result uses current actual
+Document snapshot/view. Native output survives callback removal/GC and final-root
+release reclaims cycles. No raw realm/Window lifetime state stored on objects.
+
+Excluded insertCell/deleteCell/cellIndex/Cellclass/obsolete attrs/layout/parser/
+full table/custom reactions, prior recorded input/form/radio/template/Range/CSS/
+loading/SVG residuals. p100/p044 unchanged. Scope needed by indexed50/51; expected
+83/100/new50+51/prior81 preserved/equal/complete/status0/noerrors/Acid2exact.
+Plain+ASan direct filtering/logical order/multiplicity/insertion parents/ranges/
+required+optional conversion/reentrancy/native brands/indices/XML/borrowed child/
+GC and actual host failure cleanup, prior39 regressions plus fixtures. Full changed
+C/manual format/style/diff/build warning0/sanitizer0/hashes/evidence. No fullWPT/
+fuzz/OS/guest/boot/GPU. Guardrail/full coding-style loaded/no concise. Primary
+WHATWG table algorithms read2026-10-01 https://html.spec.whatwg.org/multipage/tables.html.
+Unknown prerequisite ends uncleared. Graph p131+p132(external)->p133->p100(external),
+acyclic. Local unpublished/no push.
+
+## Introduction / q544 activation (2026-10-01)
+
+Indexed50 needs native section.insertRow/indices; indexed51 needs table.insertRow
+with current logical ordering. Implement reusable complete row mutation increment
+using proven table collection/adoption foundation; cell APIs remain separate.

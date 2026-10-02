@@ -1,0 +1,62 @@
+<!doctype html><html><head><title>Native table structure</title></head><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function raises(fn,name){try{fn();return false;}catch(e){return e.name===name;}}
+function el(tag,parent){var e=document.createElement(tag);if(parent)parent.appendChild(e);return e;}
+var t=el('table'),rows=t.rows,bodies=t.tBodies;
+check(t.caption===null&&t.tHead===null&&t.tFoot===null,'empty accessors return null');
+var c=t.createCaption(),h=t.createTHead(),f=t.createTFoot();
+check(c instanceof HTMLTableCaptionElement&&c instanceof HTMLElement,'native caption inheritance');
+check(h instanceof HTMLTableSectionElement&&f instanceof HTMLTableSectionElement,'native created section classes');
+check(c===t.caption&&h===t.tHead&&f===t.tFoot,'created members exposed');
+check(t.firstChild===c&&c.nextSibling===h&&h.nextSibling===f,'canonical creation order');
+check(t.createCaption()===c&&t.createTHead()===h&&t.createTFoot()===f,'repeated create identity');
+check(t.createCaption.length===0&&t.deleteTHead.length===0,'native method lengths');
+check(raises(function(){new HTMLTableCaptionElement();},'TypeError'),'caption direct construction illegal');
+t.caption=c;t.tHead=h;t.tFoot=f;check(t.childNodes.length===3&&t.caption===c&&t.tHead===h&&t.tFoot===f,'self replacement identity and count');
+check(t.rows===rows&&t.tBodies===bodies&&rows.length===0&&bodies.length===0,'structural operations preserve collection caches');
+check(t.deleteCaption()===undefined&&t.caption===null,'delete caption return and effect');
+check(t.deleteTHead()===undefined&&t.tHead===null,'delete head return and effect');
+check(t.deleteTFoot()===undefined&&t.tFoot===null,'delete foot return and effect');
+t.deleteCaption();t.deleteTHead();t.deleteTFoot();check(t.childNodes.length===0,'empty deletion is noop');
+var text=document.createTextNode('before'),comment=document.createComment('middle');t.appendChild(text);var col=el('colgroup',t);t.appendChild(comment);var b=el('tbody',t);var tail=document.createTextNode('tail');t.appendChild(tail);
+h=t.createTHead();check(t.firstChild===text&&col.nextSibling===comment&&comment.nextSibling===h&&h.nextSibling===b,'head skips non-elements and prefix colgroup');
+c=t.createCaption();check(t.firstChild===c&&c.nextSibling===text,'caption precedes first non-element node');
+f=t.createTFoot();check(t.lastChild===f&&tail.nextSibling===f,'foot appended after final text');
+var r=el('tr',h),br=el('tr',b),fr=el('tr',f);check(rows.length===3&&rows[0]===r&&rows[1]===br&&rows[2]===fr,'structural children feed logical live rows');
+var h2=el('thead',t),r2=el('tr',h2),c2=el('caption',t),f2=el('tfoot',t),fr2=el('tr',f2);
+check(t.tHead===h&&t.caption===c&&t.tFoot===f,'first matching getter with duplicates');
+t.deleteTHead();check(t.tHead===h2&&h.parentNode===null&&rows[0]===r2,'delete first head only and live rows');
+t.deleteCaption();check(t.caption===c2&&c.parentNode===null,'delete first caption only');
+t.deleteTFoot();check(t.tFoot===f2&&f.parentNode===null&&rows[rows.length-1]===fr2,'delete first foot only');
+var nc=el('caption'),nh=el('thead'),nf=el('tfoot');t.caption=nc;t.tHead=nh;t.tFoot=nf;
+check(t.firstChild===nc&&t.caption===nc&&c2.parentNode===null,'caption setter replacement position');
+check(t.tHead===nh&&nh.nextSibling===b&&h2.parentNode===null,'head setter canonical replacement');
+check(t.lastChild===nf&&t.tFoot===nf&&f2.parentNode===null,'foot setter canonical replacement');
+t.caption=undefined;t.tHead=null;t.tFoot=undefined;check(t.caption===null&&t.tHead===null&&t.tFoot===null,'nullable undefined/null setters remove');
+var prefix=el('table');prefix.appendChild(document.createTextNode('a'));el('caption',prefix);el('colgroup',prefix);prefix.appendChild(document.createComment('z'));var ph=prefix.createTHead();check(prefix.lastChild===ph,'all prefix head appended');
+var wrap=el('div',t);el('caption',wrap);el('thead',wrap);el('tfoot',wrap);check(t.caption===null&&t.tHead===null&&t.tFoot===null,'nested child accessors excluded');
+var wrong=document.createElement('tbody');h=t.createTHead();f=t.createTFoot();c=t.createCaption();
+check(raises(function(){t.tHead=wrong;},'HierarchyRequestError')&&t.tHead===h,'wrong genuine section throws before head removal');
+check(raises(function(){t.tFoot=h;},'HierarchyRequestError')&&t.tFoot===f,'wrong genuine section throws before foot removal');
+[{},document,el('div'),el('tr'),el('table'),5,'caption',Object.create(HTMLTableCaptionElement.prototype)].forEach(function(n,i){check(raises(function(){t.caption=n;},'TypeError')&&t.caption===c,'typed caption conversion '+i);});
+check(raises(function(){t.tHead=c;},'TypeError')&&t.tHead===h,'typed section conversion rejects caption');
+var attrs=['caption','tHead','tFoot'];attrs.forEach(function(n,i){var d=Object.getOwnPropertyDescriptor(HTMLTableElement.prototype,n);check(raises(function(){d.get.call({});},'TypeError'),'getter object brand '+i);check(raises(function(){d.set.call(el('div'),null);},'TypeError'),'setter other element brand '+i);});
+['createCaption','deleteCaption','createTHead','deleteTHead','createTFoot','deleteTFoot'].forEach(function(n,i){check(raises(function(){HTMLTableElement.prototype[n].call(Object.create(HTMLTableElement.prototype));},'TypeError'),'method forged receiver '+i);});
+var holder=el('caption'),cycle=el('table',holder),old=cycle.createCaption();check(raises(function(){cycle.caption=holder;},'HierarchyRequestError')&&old.parentNode===null&&cycle.caption===null,'cycle error preserves specified old removal');
+var other=el('table'),moving=other.createCaption();t.caption=moving;check(other.caption===null&&t.caption===moving&&moving.parentNode===t,'move member from another table');
+var xd=document.implementation.createDocument('http://www.w3.org/1999/xhtml','table'),xt=xd.documentElement;
+var xc=xt.createCaption(),xh=xt.createTHead(),xf=xt.createTFoot();check(xc.ownerDocument===xd&&xc.namespaceURI==='http://www.w3.org/1999/xhtml'&&xc instanceof HTMLTableCaptionElement,'factory creates exact HTML caption in actual XML owner');
+check(xh.ownerDocument===xd&&xh instanceof HTMLTableSectionElement&&xf===xt.tFoot,'XML section creation and native accessors');
+var uc=xd.createElementNS('http://www.w3.org/1999/xhtml','CAPTION'),fc=xd.createElementNS('urn:foreign','caption');xt.insertBefore(uc,xc);xt.insertBefore(fc,xc);check(xt.caption===xc&&!(uc instanceof HTMLTableCaptionElement)&&!(fc instanceof HTMLTableCaptionElement),'uppercase/foreign caption filtering and prototypes');
+check(raises(function(){xt.caption=uc;},'TypeError')&&xt.caption===xc,'uppercase caption setter rejected');check(raises(function(){xt.caption=fc;},'TypeError')&&xt.caption===xc,'foreign caption setter rejected');
+var uh=xd.createElementNS('http://www.w3.org/1999/xhtml','THEAD');check(raises(function(){xt.tHead=uh;},'TypeError')&&xt.tHead===xh,'uppercase section setter rejected');
+var upperTable=xd.createElementNS('http://www.w3.org/1999/xhtml','TABLE');check(raises(function(){HTMLTableElement.prototype.createCaption.call(upperTable);},'TypeError'),'uppercase table method rejected');
+xt.deleteCaption();check(xt.caption===null&&uc.parentNode===xt&&fc.parentNode===xt,'deletion preserves foreign/uppercase children');
+var foreignPrefix=xd.createElementNS('urn:foreign','colgroup'),ft=xd.createElementNS('http://www.w3.org/1999/xhtml','table');ft.appendChild(foreignPrefix);var fh=ft.createTHead();check(ft.firstChild===fh&&fh.nextSibling===foreignPrefix,'foreign colgroup is head anchor');
+var clone=t.cloneNode(true);check(clone.caption!==t.caption&&clone.caption instanceof HTMLTableCaptionElement,'clone native caption independent');clone.deleteCaption();check(t.caption===moving,'clone structural operations independent');
+var frame=el('iframe',document.body),cw=frame.contentWindow,cd=frame.contentDocument,ct=cd.createElement('table');cd.body.appendChild(ct);var cc=HTMLTableElement.prototype.createCaption.call(ct),ch=HTMLTableElement.prototype.createTHead.call(ct);
+check(cc instanceof cw.HTMLTableCaptionElement&&cc.ownerDocument===cd,'borrowed create caption uses actual child realm');check(ch instanceof cw.HTMLTableSectionElement&&ct.tHead===ch,'borrowed create head uses actual child realm');
+frame.remove();ct.deleteCaption();var cc2=ct.createCaption();check(cc2 instanceof cw.HTMLTableCaptionElement&&cc2.ownerDocument===cd,'saved child creates after frame removal');
+var cross=xd.createElementNS('http://www.w3.org/1999/xhtml','caption'),crossDesc=xd.createElementNS('http://www.w3.org/1999/xhtml','span');cross.appendChild(crossDesc);ct.caption=cross;check(cross.ownerDocument===cd&&crossDesc.ownerDocument===cd,'cross-Document setter adopts complete subtree');
+console.log('table structure probe done');
+</script></body></html>

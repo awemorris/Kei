@@ -1,0 +1,59 @@
+# q531 / p121 verification — 2026-10-01
+
+Outcome: cleared. Plain/ASan fixed original Acid3 all10071/100 exactinventory unchanged,
+zero formerPASS regression/Uncaught/exceptions/errors, completeTrue/runstatus0;
+Acid2exact100%. No score increase criterion for this prerequisite. p100full100/100 unmet.
+
+Optional immutable C nativeoperations preserve NULLdefault ordinaryobjects. Ownlookup
+returns missing0/found1/negativeerrno; virtualvalues use caller-ownedproperty.temporary,
+never callbackstack pointers or fake slots. Dynamic ownkeys prefix merges ordinary
+storage with first-occurrence deduplication (onlynativeobjects, preserving ordinary
+cost/order). Native define/delete policy may refuse/handle/fallthrough; extensions
+refusal precedes flag/descriptormutation, freeze/seal honor refusal. Raw C define
+remains ordinary storage primitive; heaplevelassignment provides NULLrealm to Cpolicy.
+Native callbacks cannot execute JS; existing internalvalue trace retains owner state.
+
+44noncore property calls durably audited in callsite-audit.json plus3corefind/get/set.
+Negative outcomes propagate via positive errno status or negative lookup contract;
+resource-owning loops break through cleanup. Windowbrand/private/lexical/arraymetadata
+reads explicitly bypass virtualdispatch via vm_object_get_own_ordinary. Object integrity
+inspection no longer swallows native enumeration/descriptor error as false. Binding
+window identity still verifies actual Document-globalassociation. No JSProxy language
+or legacyHTMLcollectionpolicy yet; futurebinding owns namevisibility/index rules.
+
+Both variants ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: finalwarning/error0.
+- host-native-properties65/65: changingindex/count/name/emptyview, virtualdata and
+  virtualaccessor descriptors/receiver/prototype/ordinaryaccessor, in/hasOwn/keys/
+  ownnames/descriptors/forin/assign/spread/JSON/ordinarybypass, readonly/unsupported
+  index/set/define/deleteguards/expandofallback/preventextensions/seal/freezerefusal,
+  ordinaryintegrityunchanged, exact native errno through Cget/find/scriptget/prototype/
+  descriptors/loops/JSONreviver/keys/write/delete/define/integrity/errorrecovery.
+  RealGCstackscanoffretains internalowner/payload/accessor viaordinarywrapper; last
+  rootdrop reclaims actualowner+payload addresses. Test registers a normal Cpolicy,
+  supportedcallbackerrors tested directly; no productionenvironmentfaultswitch.
+- NodeIterator60/60/TreeWalker70/70/GC9/9/frame58/58/removal19/19/XML62/62+GC16/16/
+  namespace38/38+GC12/12/names31/31/iframe17/17/legacy56/56/childCSS30/30/owner27/27/
+  realm30/30/object100/interp45/DOM23/23/JS14/14/selectorsstylegolden identical.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/<variant>/browser --out build/ws074-acid-q531-<variant>`: abovecomplete100entryinventory.
+- `python3 plan/tools/style-check.py` changed C/tests: no findings; `git diff --check`
+  PASS. ManualfullCreview covers changedheadercontent/callers/publicorder/ANSIlocals/
+  staticforwards/comments/paragraphs/checkedallocation/cleanup/pointerlifetime/error
+  channels/trace/prototypefallback. vm.h baseline inlinehelpers273/275/343 still have
+  three preexisting call-in-condition findings, outside changed declarations/content;
+  no new headerfinding. Enumerations now allocate/check each temporary separately.
+
+Initial automated insertion expanded one formerly unbraced conditional lookup; build
+caught misleadingindentation, corrected braces to preserve absence behavior before
+finalbuild. Resource-free spread-copy errors returndirectly rather than falling out
+of its loop; resource-owning paths retain cleanup. Added actual virtualaccessor and
+integrityerror observations after initial55checkrun; final65allPASS bothvariants.
+Final whitespace/purposecomments aftertests change no semantics. No waiver/reducedgoal.
+
+Compilercc14.2.0/Python3.13.5/clang-format absent/manualformat. Sourcehashes
+verification.json; logsbuild/ws074-q531-build/style/native/final/acid-*. Fixed WPT
+revision2d66b9b7998bb58c336138c178323ddee857b586 unchanged. No fullWebIDL/DOMcollection/
+WPT/fuzz, OS/guest/boot/GPU claim. NextliveHTMLCollection/document.links/children/
+tagqueries, controls/tablequeries/Range/CSS/loading/SVG later. WS incomplete,
+29remaining/p100criteria unchanged. Localunpublished/no push.

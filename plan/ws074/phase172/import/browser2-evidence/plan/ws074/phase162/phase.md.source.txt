@@ -1,0 +1,69 @@
+<!-- awesome-plan project=zedbsd record=ws074-p162 -->
+
+# ws074-p162: exact native attribute namespace identity for XML projection
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q578 / q578-i01
+Base ae974f2a/q577 cleared/native236/all90both/actual94/prior94/Acid2exact.
+Current user 2026-09-30 automatic Acid3 Queues +2026-10-02 continuation authorize
+this exact finite prerequisite before generation. Root sole executor/writer,
+checkout browser2, no cancellation/concurrent attempt; local unpublished/no push.
+Guardrail/full coding-style1–14/automation/native DOM attributes and both clone
+paths reviewed. DOM Living Standard 2026-09-24 verified 2026-10-02:
+https://dom.spec.whatwg.org/#concept-attribute-namespace and XML Namespaces1.0.
+
+## Exact scope / criteria / procedure
+
+Extend native dom_attribute with traced exact namespace_uri VM string, initialized
+NULL by all legacy built-in attribute creation. Keep existing enum fast paths for
+HTML/SVG/XML/XMLNS/XLink consumers. New DOM attribute C add/find URI helpers accept
+already validated native name/prefix/value strings: NULL/empty URI means absent;
+exact canonical URI classification preserves built-ins; distinct arbitrary URIs
+remain distinct despite shared DOM_NS_OTHER class. Exact lookup compares full URI
+and local-name characters, not prefix or URI object identity; builtin legacy attrs
+without explicit URI remain discoverable through their canonical namespace URI.
+New add rejects duplicate expanded names with EEXIST before mutation, preserving
+attribute count/generation/values; no VM allocation or JS callbacks during helper.
+Legacy enum-only find must not alias DOM_NS_OTHER URIs: returns NULL for OTHER,
+requiring exact URI helper. Caller supplies validated names/native ownership;
+no JS get/setAttributeNS or Attr wrappers are claimed or silently invented.
+
+Element trace retains attribute URI, ordinary attribute array moves/removal preserve
+it, bind_clone_node and HTML formatting clone copy it before any next allocation.
+New dom/attribute.c registered once in libbrowser Makefile; relevant dom.h/node.c/
+bind/cloning.c/html/parser.c changes only. No parser rules/DOM projection/loading/
+PI/CDATA/SVG/event/script activation or namespace validation changes here.
+New host-attribute-namespace.c verifies distinct custom URI+same local coexistence,
+exact value lookup with independently allocated equal URI/name, prefix alias duplicate
+rejection and atomic generation/count, absent namespace distinct from same local
+custom and built-in namespaces, legacy builtin lookup, enum OTHER refuses ambiguity,
+array growth/remove/shifts, clone identity, actual source-only and clone-only GC
+retention of non-atom custom URI/owner graph, last root release collection.
+Native lifetime uses real heap/roots and no conservative stack during tested collection.
+
+Prior90+newnative1=91 groups PASS both; original>=94/prior94/72PASS/equal100 inventory/
+complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact. Bothfull
+builds finish before tests; warning0/style output empty/fullmanual affected C/diff/
+hashes. Finite one-Phase Queue, unknown prerequisite ends uncleared before redesign.
+Graph p161(external)->p162->XML DOM projection/loading/SVG/p100(external), acyclic.
+No score gain expected. Full Attr/NS DOM API/full XML conformance/fullWPT/fuzz/OS/
+guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/publication excluded.
+p100/p044/WS incomplete. PI/CDATA representation remains next prerequisite.
+
+## Introduction (2026-10-02)
+
+Strict XML output preserves arbitrary attribute namespaces; current native DOM
+attributes have only enum classification. Add exact owned identity before selecting
+XML DOM projection so aliases cannot silently lose semantic information.
+
+## q578 cleared outcome (2026-10-02)
+
+[p162](phase.md) cleared in q578, [evidence](verification.md).
+Exact traced attribute URI/add/find/duplicate rollback/both clone paths verified.
+Native25/all91PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Source-only/clone-only/lastrelease GC verified with non-atom URI and actual owner.
+Native storage prerequisite only; full Attr/JS NS APIs remain excluded.
+Next native PI/CDATA then XML DOM/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.

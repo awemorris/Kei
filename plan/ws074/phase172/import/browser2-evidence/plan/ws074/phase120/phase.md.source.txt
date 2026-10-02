@@ -1,0 +1,67 @@
+<!-- awesome-plan project=zedbsd record=ws074-p120 -->
+
+# ws074-p120: NodeIterator reference/candidate traversal
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q530 / q530-i01
+Prerequisites: p119f5d31b7f weakpre-remove19/19 and p118b744f662 TreeWalker70/70/
+GC5/5 verified in current code. Currentuser2026-09-30 Acid3autonomous/automaticQueue
++2026-10-01 continuation authorizes this exact finite scope. Root sole writer/executor.
+Timebox one NodeIterator Phase; q529 exact archive verified before rotation.
+
+## Exact scope / design / criteria
+
+Add dedicated branded collectible NodeIterator cell/wrapper and Document factory.
+root/referenceNode/pointerBeforeReferenceNode/whatToShow/filter readonly; no public
+constructor. nextNode/previousNode traverse current live preorder (root included),
+reverse includes same reference when pointer flips. REJECT and SKIP both descend.
+Defaultmask unsignedall, ToUint32 once; nullable function/objectfilter, dynamicmethod/
+receiver/callablecheck/ushort/exactexceptions/activeguard; detach branded noop.
+Prototype follows receiverDocument relevantrealm/privateXMLsnapshot (root may be
+otherdoc). Weak token subscribes root.document, actualGC finalizer unsubscribes;
+state traces root/reference/candidate/pendingoriginalfilterargument/filter graph.
+
+Pre-removal C callback adjusts bothreference and activecandidate: ifremovedincludes
+position butnotroot, beforepointer prefers followingoutside removedsubtree inside
+root; otherwise precedingdeepest orparent, afterpointer. Root oritsancestor removal
+leavesiteratorpositions unchanged. During filter mutation originalacceptednode may
+be returned detached while savedreference commits adjustedcandidate. Exceptions
+clearcandidate/pending/active but preserve permanent removal-adjustedreference;
+nested traversal must reject without destroying outercandidate. No flat snapshot,
+Documentstronglist, rawWindowstate, heappermanentroots orNodeTypefilterpruning.
+
+Share existing traversal callback-interface invocation as publicinternal C helper
+in traversal.c/internal.h, preserving every TreeWalkerbehavior. New bind/iterator.c
+registered libbrowser; interface registry/window/header/Document operation changes.
+No registry redesign/VMcollector/adoption/collections/control/Range/loading/CSS/SVG/
+HAL/toolchain. Test4requiresformcollections,5links; full1–3PASS expected, remaining
+p100 criteria unchanged. Full DOMTraversal/WPT conformance not claimed.
+
+Plain+ASan focused API/coercion/brands/prototypes/readonly/filter/masks/forward+reverse/
+root/detach/REJECTdescends/exceptionrecovery/reentry, both before/after pre-removal/
+ancestor/move/currentcandidate removal/accepted-detached/reject/throw/infinite
+regrafting; realGC originalfiltercandidate afterunlink retained, rootdroppermits
+reclaim whileDoclive, savedchilditerator survivesparentdestroy/exactoncecleanup.
+Existing removal19/TreeWalker70+GC5/frame53/XML62+GC16/namespace/DOM23/JS14/owner27/
+VM/childCSS regressions PASS; all100prior68preserved/1–3PASS/equal inventories/
+Uncaught0/errors0/completeTrue/runstatus0/Acid2exact/buildwarning0/ASan0/fullstandard/
+style/diff/hashes/evidence. Unknown dependency endsuncleared before newQueue;
+bounded focused+fixedsuite investigation. OS/guest/boot/GPU untested.
+Guardrail/fullCstandard loaded. [DOM NodeIterator](https://dom.spec.whatwg.org/#interface-nodeiterator)
+read2026-10-01, includes currentcandidate-reference adjustment algorithm.
+Local unpublished/no push.
+
+## Introduction / q530 activation (2026-10-01)
+
+Verified p119token APIs and finalizer order in production. Separate this API/algorithm
+implementation afterfoundation. Shares callback conversion, preserving p118criteria;
+p119unchanged. p100 updated prerequisite; WS goal/full100/100 not reduced.
+
+## q530 result (2026-10-01)
+
+Cleared; [evidence](verification.md). BothvariantsNodeIterator60/60/TreeWalker70/70/
+GC9/9/frame58/58/removal19/19 andallselectedregressionsPASS. Acid3all10071/100,
+1–3newPASS/prior68preserved/Uncaught0, Acid2exact. Next liveHTMLCollectionfoundation
+for4/5/tables/forms. Full100/100 unchanged, noBugtransfer/waiver.

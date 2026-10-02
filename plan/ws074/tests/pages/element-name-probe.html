@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) {
+  console.log((condition ? "PASS " : "FAIL ") + label);
+}
+var invalid = ["", "<div>", "0div", "di v", "-div", ".div", "form\0div",
+               "di\tv", "di\nv", "di\fv", "di\rv", "di/v", "di>v", "_bad!", "\u00E9bad!"];
+for (var i = 0; i < invalid.length; i++) {
+  var error = null;
+  var before = document.childNodes.length;
+  try { document.createElement(invalid[i]); } catch (caught) { error = caught; }
+  check("invalid name " + i, error instanceof DOMException && error.name === "InvalidCharacterError" && error.code === 5 && document.childNodes.length === before);
+}
+var valid = ["DIV", "my-widget", "_name.2", ":name", "\u00E9-name", "\uD801\uDC00-name", "a<b", "a!b"];
+for (var i = 0; i < valid.length; i++) {
+  var element = document.createElement(valid[i]);
+  check("valid name " + i, element.localName === valid[i].replace(/[A-Z]/g, function(c) { return c.toLowerCase(); }));
+}
+check("null argument string", document.createElement(null).localName === "null");
+check("undefined argument string", document.createElement().localName === "undefined");
+var conversions = 0;
+check("convert name once", document.createElement({toString: function() { conversions++; return "SPAN"; }}).localName === "span" && conversions === 1);
+var sentinel = {};
+var same = false;
+try { document.createElement({toString: function() { throw sentinel; }}); } catch (error) { same = error === sentinel; }
+check("string conversion exception identity", same);
+same = false;
+try { document.createElement(Symbol()); } catch (error) { same = error instanceof TypeError; }
+check("symbol string conversion exception", same);
+var frame = document.createElement("iframe");
+document.body.appendChild(frame);
+var child = frame.contentWindow;
+var doc = frame.contentDocument;
+var make = Document.prototype.createElement;
+check("borrowed child wrapper realm", make.call(doc, "div") instanceof child.HTMLElement);
+same = false;
+try { make.call(doc, "-invalid"); } catch (error) { same = error instanceof DOMException && error.code === 5; }
+check("borrowed method exception realm", same);
+same = false;
+try { doc.createElement("-invalid"); } catch (error) { same = error instanceof child.DOMException && error.code === 5; }
+check("child method exception realm", same);
+</script>

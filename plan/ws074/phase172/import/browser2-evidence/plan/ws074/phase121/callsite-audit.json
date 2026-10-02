@@ -1,0 +1,266 @@
+[
+  {
+    "path": "userland/desktop/browser/bind/frame.c",
+    "function": "frame_window_this",
+    "call": "found = vm_object_get_own(object, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/bind/event.c",
+    "function": "event_window_value",
+    "call": "found = vm_object_get_own(object, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/class.c",
+    "function": "vm_define_method",
+    "call": "found = vm_object_get_own(object, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/class.c",
+    "function": "vm_get_super",
+    "call": "found = vm_object_find(object, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/class.c",
+    "function": "vm_private_copy",
+    "call": "found = vm_object_get_own(holder, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/class.c",
+    "function": "vm_private_in",
+    "call": "found = vm_object_get_own((struct vm_object *)vm_value_as_cell(object), key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/class.c",
+    "function": "class_private_find",
+    "call": "*found = vm_object_get_own((struct vm_object *)vm_value_as_cell(object), key, property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/spread.c",
+    "function": "spread_copy",
+    "call": "present = vm_get_own_descriptor(object, key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_get",
+    "call": "found = vm_object_find(holder, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_set",
+    "call": "found = vm_object_find(object, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_in",
+    "call": "found = vm_object_find((struct vm_object *)vm_value_as_cell(object), property_key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_define_accessor",
+    "call": "found = vm_object_get_own(target, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_get_global",
+    "call": "found = vm_object_get_own(realm->lexicals, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_get_global",
+    "call": "found = vm_object_find(realm->global, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_put_global",
+    "call": "found = vm_object_get_own(realm->lexicals, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_put_global",
+    "call": "found = vm_object_find(realm->global, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_define_global_var",
+    "call": "found = vm_object_get_own(realm->global, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_define_global_function",
+    "call": "found = vm_object_get_own(realm->global, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_delete_global",
+    "call": "found = vm_object_get_own(realm->lexicals, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_define_global_lexical",
+    "call": "found = vm_object_get_own(realm->lexicals, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_init_global_lexical",
+    "call": "found = vm_object_get_own(realm->lexicals, key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_get_own_descriptor",
+    "call": "found = vm_object_get_own(object, key, &property);",
+    "action": "propagate found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_define_own_property",
+    "call": "found = vm_get_own_descriptor(object, key, &current);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "vm_for_in_next",
+    "call": "found = vm_object_find((struct vm_object *)vm_value_as_cell(state->object), candidate, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "access_collect",
+    "call": "found = vm_object_get_own(object, key, &property);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "access_set_primitive",
+    "call": "found = vm_object_find(prototype, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/vm/access.c",
+    "function": "access_get_length_attributes",
+    "call": "found = vm_object_get_own(array, length_key, &property);",
+    "action": "explicit ordinary private/brand/storage bypass"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_json.c",
+    "function": "json_internalize",
+    "call": "found = vm_get_own_descriptor(object, element, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_json.c",
+    "function": "json_serialize_object",
+    "call": "found = vm_get_own_descriptor(source, key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_function.c",
+    "function": "function_bound_length",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(target), key, &descriptor);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_symbol.c",
+    "function": "js_builtin_install_tags",
+    "call": "found = vm_object_get_own(realm->global, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_symbol.c",
+    "function": "js_builtin_install_tags",
+    "call": "found = vm_object_get_own(realm->global, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_symbol.c",
+    "function": "symbol_for",
+    "call": "found = vm_object_get_own(registry, key, &property);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_assign",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(source), key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_define_properties",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(properties), key, &own);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_get_own_property_descriptor",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_get_own_property_descriptors",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_has_own",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_has_own_property",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_property_is_enumerable",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);",
+    "action": "propagate -found"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_list",
+    "call": "found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_set_integrity",
+    "call": "found = vm_get_own_descriptor(object, key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_test_integrity",
+    "call": "found = vm_get_own_descriptor(object, key, &descriptor);",
+    "action": "cleanup via status and loop break"
+  },
+  {
+    "path": "userland/desktop/browser/js/builtin_object.c",
+    "function": "object_lookup_half",
+    "call": "found = vm_get_own_descriptor(walk, key, &descriptor);",
+    "action": "propagate -found"
+  }
+]

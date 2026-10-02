@@ -1,0 +1,128 @@
+<!doctype html><html><head><title>Live form control collections</title></head><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function raises(fn,name){try{fn();return false;}catch(e){return e.name===name;}}
+function control(tag,id,name){var e=document.createElement(tag);if(id!==undefined)e.id=id;if(name!==undefined)e.setAttribute('name',name);return e;}
+var f=document.createElement('form'),es=f.elements;f.id='owner';
+check(f instanceof HTMLFormElement&&f instanceof HTMLElement,'form actual interface');
+check(es===f.elements&&es!==f,'elements SameObject separate from form');
+check(es instanceof HTMLFormControlsCollection&&es instanceof HTMLCollection,'controls inheritance');
+check(Object.getPrototypeOf(es)===HTMLFormControlsCollection.prototype,'controls specific prototype');
+check(f.length===0&&es.length===0&&es[0]===undefined&&es.item(0)===null,'empty detached form');
+check(es.namedItem('')===null&&es.namedItem('absent')===null&&es.absent===undefined,'missing names');
+var a=control('input','alpha','one'),b=control('button','beta','two'),c=control('textarea','gamma','three');
+f.appendChild(a);f.appendChild(b);f.appendChild(c);
+check(f.length===3&&es.length===3&&es[0]===a&&es[2]===c,'detached direct membership');
+check(es.alpha===a&&es.one===a&&es.namedItem('two')===b,'ids and names');
+check(es.item(4294967296)===a&&es.item(-1)===null&&es.item(1.9)===b,'unsigned item conversion');
+check(es['01']===undefined&&es['2147483648']===undefined,'canonical large indices not aliases');
+var desc=Object.getOwnPropertyDescriptor(es,'0');check(desc.value===a&&desc.enumerable&&desc.configurable&&!desc.writable,'controls index descriptor');
+desc=Object.getOwnPropertyDescriptor(es,'one');check(desc.value===a&&!desc.enumerable&&desc.configurable&&!desc.writable,'controls named descriptor');
+check(Object.keys(es).join(',')==='0,1,2','controls enumerable indices');
+check(Object.getOwnPropertyNames(es).join(',')==='0,1,2,alpha,one,beta,two,gamma,three','controls keys id before name');
+check(!(delete es[0])&&delete es[30]&&!(delete es.one),'controls delete supported and unsupported');
+es[0]=b;es.one=7;check(es[0]===a&&es.one===a,'controls member writes refused');
+check(raises(function(){Object.defineProperty(es,'900',{value:a});},'TypeError'),'controls unsupported index definition refuses');
+check(raises(function(){Object.defineProperty(es,'one',{value:9});},'TypeError'),'controls named definition refuses');
+check(raises(function(){Object.preventExtensions(es);},'TypeError')&&Object.isExtensible(es),'controls preventExtensions refuses');
+check(raises(function(){Object.freeze(es);},'TypeError')&&Object.isExtensible(es),'controls freeze refuses before mutation');
+f.appendChild(control('div','nonlisted','bad'));f.appendChild(control('img','image','bad'));f.appendChild(control('option','option','bad'));
+check(es.length===3&&es.bad===undefined,'nonlisted img and option excluded');
+var field=control('fieldset','field'),out=control('output','out'),sel=control('select','sel'),obj=control('object','obj');
+f.appendChild(field);field.appendChild(out);field.appendChild(sel);f.appendChild(obj);
+check(es.length===7&&es[3]===field&&es[4]===out&&es[5]===sel&&es[6]===obj,'fieldset output select object descendants');
+a.setAttribute('type','image');check(es.length===6&&es.alpha===undefined,'image input excluded live');
+a.setAttribute('type','ImAgE');check(es.length===6,'image keyword ASCII case insensitive');
+a.setAttribute('type',' image ');check(es.length===7&&es[0]===a,'invalid image keyword remains member');
+a.setAttribute('type','hidden');a.setAttribute('disabled','');a.setAttribute('name','');check(es.length===7&&es.alpha===a&&es.namedItem('')===null,'hidden disabled unnamed retained');
+var inner=document.createElement('form'),inn=control('input','nested');inner.appendChild(inn);f.appendChild(inner);
+check(es.length===7&&inner.length===1&&es.nested===undefined,'nested script form owns nearest controls');
+inner.appendChild(b);check(es.length===6&&inner.elements[1]===b&&es.beta===undefined,'moving control changes owner live');
+f.insertBefore(b,a);check(es.length===7&&es[0]===b&&inner.length===1,'moving control back changes order');
+var outer=document.createElement('div'),before=control('input','before'),after=control('input','after');before.setAttribute('form','owner');after.setAttribute('form','owner');
+outer.appendChild(before);outer.appendChild(f);outer.appendChild(after);
+check(es.length===7,'explicit outside association requires connected Document root');
+document.body.appendChild(outer);check(es.length===9&&es[0]===before&&es[8]===after,'connected external controls in tree order');
+check(f.length===es.length,'form length same membership as elements');
+b.setAttribute('form','missing');check(es.length===8&&es.beta===undefined,'connected explicit miss suppresses ancestor');
+b.removeAttribute('form');check(es.length===9&&es[1]===b,'removing explicit reference restores ancestor');
+f.id='renamedOwner';check(es.length===7&&es.before===undefined,'form id mutation changes outside members');
+f.id='owner';check(es.length===9&&es.before===before,'form id restoration reconnects members');
+var blocker=control('div','owner');outer.insertBefore(blocker,before);check(es.length===7,'first duplicate nonform id blocks external association');
+outer.removeChild(blocker);check(es.length===9,'duplicate nonform removal restores association');
+var foreign=document.createElementNS('urn:foreign','input');foreign.id='foreign';f.appendChild(foreign);check(es.length===9&&es.foreign===undefined,'foreign control excluded');
+var templ=document.createElement('template');templ.innerHTML='<input name="templated">';f.appendChild(templ);check(es.length===9&&es.templated===undefined,'independent template content excluded');
+var frag=document.createDocumentFragment();frag.appendChild(outer);check(es.length===7&&es.before===undefined,'fragment root disconnects external references');
+check(es.beta===b,'detached explicit control uses nearest ancestor');
+document.body.appendChild(frag);check(es.length===9&&es.before===before,'fragment insertion reconnects external controls');
+var other=document.createElement('form');other.id='other';outer.appendChild(other);after.setAttribute('form','other');check(es.length===8&&other.elements[0]===after,'external control reassigns form');
+outer.removeChild(f);check(es.length===7&&f.elements===es&&es[0]===b,'saved collection follows detached form root');
+outer.insertBefore(f,after);after.setAttribute('form','owner');check(es.length===9,'saved collection follows reinserted form');
+// Duplicate lists count nodes once and preserve a live filter independent of subsequent lookups.
+a.id='dupe';a.setAttribute('name','dupe');b.setAttribute('name','dupe');
+var list=es.dupe;
+check(list instanceof RadioNodeList&&list instanceof NodeList&&!(list instanceof HTMLCollection),'duplicate actual NodeList interface');
+check(Object.getPrototypeOf(list)===RadioNodeList.prototype&&Object.getPrototypeOf(RadioNodeList.prototype)===NodeList.prototype,'duplicate prototype inheritance');
+check(list.length===2&&list[0]===b&&list[1]===a,'duplicate id and name same member counted once');
+check(es.namedItem('dupe')!==list&&es.dupe!==list,'duplicate lookups create separate live lists');
+check(HTMLCollection.prototype.namedItem.call(es,'dupe')===b,'borrowed base namedItem returns first member');
+check(list.item(0)===b&&list.item(3)===null&&list[3]===undefined,'duplicate indexed method and property absence');
+check(Object.keys(list).join(',')==='0,1'&&Object.getOwnPropertyNames(list).join(',')==='0,1','duplicate indices without named properties');
+check(list.dupe===undefined&&list.alpha===undefined&&!('dupe' in list),'duplicate no virtual names');
+desc=Object.getOwnPropertyDescriptor(list,'0');check(desc.value===b&&desc.enumerable&&desc.configurable&&!desc.writable,'duplicate readonly indexed descriptor');
+list.dupe=17;check(list.dupe===17&&delete list.dupe&&list.dupe===undefined,'duplicate matching name remains ordinary expando');
+list[0]=c;check(list[0]===b&&!(delete list[0])&&delete list[8],'duplicate readonly index and deletion');
+check(raises(function(){Object.defineProperty(list,'20',{value:c});},'TypeError'),'duplicate unsupported indexed definition refuses');
+check(raises(function(){Object.preventExtensions(list);},'TypeError')&&Object.isExtensible(list),'duplicate integrity refuses');
+f.insertBefore(a,b);check(list[0]===a&&list[1]===b,'saved duplicate list sees reorder');
+b.setAttribute('name','two');check(list.length===1&&list[0]===a&&es.dupe===a,'saved list stays list when lookup becomes single');
+a.id='alpha';check(list.length===1,'remaining name matches after id mutation');
+a.setAttribute('name','one');check(list.length===0&&list.item(0)===null&&es.dupe===undefined,'saved duplicate empties after rename');
+c.setAttribute('name','dupe');check(list.length===1&&list[0]===c&&es.dupe===c,'saved duplicate accepts newly named member');
+b.id='dupe';check(list.length===2&&list[0]===b&&list[1]===c,'saved duplicate includes new id matches');
+inner.appendChild(b);check(list.length===1&&list[0]===c,'saved duplicate reacts to different owner');
+f.appendChild(b);check(list.length===2&&list[0]===c&&list[1]===b,'saved duplicate current order after return');
+f.removeChild(c);check(list.length===1&&list[0]===b,'saved duplicate removal');
+f.appendChild(c);check(list.length===2&&list[0]===b&&list[1]===c,'saved duplicate reinsertion');
+// Prototype visibility does not invoke accessors or change the namedItem algorithm.
+var reads=0;Object.defineProperty(HTMLFormControlsCollection.prototype,'dupe',{get:function(){reads++;return 19;},configurable:true});
+check(!es.hasOwnProperty('dupe')&&reads===0,'prototype hides duplicate virtual name without invoking getter');
+check(es.dupe===19&&reads===1&&es.namedItem('dupe').length===2,'prototype hides property but not method lookup');
+delete HTMLFormControlsCollection.prototype.dupe;check(es.dupe.length===2,'prototype removal exposes duplicate name');
+es.future=21;out.id='future';sel.id='future';check(es.future===21&&es.namedItem('future').length===2,'old expando hides later duplicated name');
+check(delete es.future&&es.future.length===2,'expando deletion exposes duplicate list');
+var sym=Symbol('member');es[sym]=23;list[sym]=24;check(es[sym]===23&&list[sym]===24,'symbol expandos supported');
+check(Object.getOwnPropertySymbols(es)[0]===sym&&Object.getOwnPropertySymbols(list)[0]===sym,'symbols append to native own keys');
+var one=control('input','single','single');other.appendChild(one);check(other.elements.namedItem('single')===one,'single identical id and name returns Element');
+// Brand and conversion ordering are independently checked for both native families.
+var conv=0,key={toString:function(){conv++;return 'dupe';}},idx={valueOf:function(){conv++;return 0;}};
+check(es.namedItem(key).length===2&&conv===1,'controls string conversion once');
+conv=0;check(list.item(idx)===b&&conv===1,'duplicate unsigned conversion once');
+conv=0;check(raises(function(){HTMLFormControlsCollection.prototype.namedItem.call(document.children,key);},'TypeError')&&conv===0,'specific controls brand before conversion');
+check(raises(function(){HTMLCollection.prototype.item.call(list,idx);},'TypeError')&&conv===0,'HTMLCollection excludes NodeList brand');
+check(raises(function(){NodeList.prototype.item.call(es,idx);},'TypeError')&&conv===0,'NodeList excludes HTMLCollection brand');
+check(raises(function(){NodeList.prototype.item.call({},idx);},'TypeError')&&conv===0,'NodeList rejects ordinary prototype lookalike');
+check(raises(function(){list.item();},'TypeError')&&raises(function(){es.namedItem();},'TypeError'),'required arguments');
+check(raises(function(){list.item(Symbol());},'TypeError')&&raises(function(){es.namedItem(Symbol());},'TypeError'),'symbol conversion errors propagate');
+var savedError={marker:1};try{es.namedItem({toString:function(){throw savedError;}});check(false,'controls conversion exception');}catch(e){check(e===savedError,'controls conversion exception');}
+try{list.item({valueOf:function(){throw savedError;}});check(false,'duplicate conversion exception');}catch(e){check(e===savedError,'duplicate conversion exception');}
+var got=es.namedItem({toString:function(){b.id='moved';return 'dupe';}});check(got===c&&list.length===1,'controls lookup observes conversion-time rename');
+check(list.item({valueOf:function(){c.setAttribute('name','gone');return 0;}})===null&&list.length===0,'duplicate lookup observes conversion-time removal');
+var eg=Object.getOwnPropertyDescriptor(HTMLFormElement.prototype,'elements').get,lg=Object.getOwnPropertyDescriptor(HTMLFormElement.prototype,'length').get;
+check(raises(function(){eg.call(a);},'TypeError')&&raises(function(){lg.call(document);},'TypeError'),'form getters reject other nodes');
+check(raises(function(){eg.call(Object.create(HTMLFormElement.prototype));},'TypeError'),'form getter rejects prototype lookalike');
+check(raises(function(){HTMLFormElement();},'TypeError')&&raises(function(){HTMLFormControlsCollection();},'TypeError')&&raises(function(){RadioNodeList();},'TypeError')&&raises(function(){NodeList();},'TypeError'),'illegal native constructors');
+// XML namespace/case and borrowed accessors preserve actual relevant prototypes.
+var xml=document.implementation.createDocument(null,'Root'),xf=xml.createElementNS('http://www.w3.org/1999/xhtml','form');xml.documentElement.appendChild(xf);
+var xi=xml.createElementNS('http://www.w3.org/1999/xhtml','input'),xu=xml.createElementNS('http://www.w3.org/1999/xhtml','INPUT'),xn=xml.createElement('input');xf.appendChild(xi);xf.appendChild(xu);xf.appendChild(xn);
+check(xf instanceof HTMLFormElement&&xf.elements.length===1&&xf.elements[0]===xi,'XML actual lowercase HTML form and control');
+var upper=xml.createElementNS('http://www.w3.org/1999/xhtml','FORM'),ff=xml.createElementNS('urn:foreign','form');check(!(upper instanceof HTMLFormElement)&&!(ff instanceof HTMLFormElement),'XML uppercase and foreign form interface excluded');
+check(raises(function(){eg.call(upper);},'TypeError')&&raises(function(){eg.call(ff);},'TypeError'),'XML uppercase and foreign form brands rejected');
+check(Object.getPrototypeOf(xf.elements)===HTMLFormControlsCollection.prototype,'XML controls private prototype snapshot');
+var frame=document.createElement('iframe');document.body.appendChild(frame);var w=frame.contentWindow,doc=frame.contentDocument,cf=doc.createElement('form');doc.body.appendChild(cf);
+cf.innerHTML='<input name="pair"><input id="pair">';var ce=eg.call(cf),cl=ce.pair,meth=w.NodeList.prototype.item;
+check(Object.getPrototypeOf(ce)===w.HTMLFormControlsCollection.prototype&&ce===cf.elements,'borrowed form getter relevant owner');
+check(Object.getPrototypeOf(cl)===w.RadioNodeList.prototype&&cl.length===2,'duplicate list relevant managed child owner');
+check(HTMLCollection.prototype.item.call(ce,0)===ce[0]&&NodeList.prototype.item.call(cl,1)===ce[1],'cross realm borrowed collection methods');
+document.body.removeChild(frame);frame=null;w=null;doc=null;cf=null;check(meth.call(cl,1)===ce[1]&&ce.length===2,'retired managed controls and list remain callable');
+console.log('form controls probe done');
+</script></body></html>

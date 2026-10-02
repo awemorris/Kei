@@ -1,0 +1,51 @@
+# p129 / q539 verification — 2026-10-01
+
+Cleared finite native input Submit .click event stage: current ordinary owner,
+connected current input type, disabled recheck, click cancellation, actual native
+SubmitEvent/traced submitter/form guard/event realm. Native constructor type,
+nullable dictionary/HTMLElement validation, ordered booleans/composed/submitter,
+readonly native brand, explicit converted-type/dictionary/submitter roots.
+
+Fixed WPT2d66b9b7998bb58c336138c178323ddee857b586 original all100 **79/100**
+both variants, indexed54 newPASS/all prior78 preserved/equal inventories/complete/
+status0/Uncaught/run_errors/crash/runner timeout0. Acid2 exact100% both. Remaining21.
+
+Commands plain and asan (ASAN_OPTIONS=detect_stack_use_after_return=0):
+- sh plan/ws074/tests/host-build.sh VARIANT: cc14.2.0, warning/error0.
+- browser --run tests/pages/submit-event-probe.html: 56 PASS, no FAIL/Uncaught.
+- host-submit: 13/13, native submit callback removes form and submitter then GC
+  with stack_base=NULL; actual event/form guard/submitter survive and later
+  unrooted cells reclaimed. Constructor dictionary getters collect after converting
+  a temporary type, final constructed Event exposes correct type/flags. Sole Event
+  keeps detached submitter alive through native tracing then releases it.
+- host-frame-lifetime: 98/98, sole child SubmitEvent retains actual native submitter
+  and getter after manual primary destruction, last retained child releases once.
+- python3 build/ws074-q539-regressions.py VARIANT: all34 groups PASS, full commands/
+  results in verification.json; prior click57/GC10/radio73/native12/input94/controls100/
+  owner56/forms35/collection104/GC13/iterator60/walker70 and selected other JS/DOM/
+  XML/realm/CSS regressions preserved. No final sanitizer diagnostic.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q539-VARIANT: real reports saved verbatim in JSON;
+  aggregate goalFAIL until100 expected.
+- python3 plan/tools/style-check.py generated/modified C/header files: 0 findings.
+  Full C manual review and manual format (clang-format unavailable), ANSI locals,
+  declarations/native table exception, checked errors, paragraph comments,
+  root-slot unwind, subclass/HTMLElement branding, target Window lifetime reviewed.
+- git diff --check PASS. Base6a9badbf/source hashes in verification.json.
+
+Known preselected host boundary: no bind_host submission/navigation callback.
+Only event stage implemented. Uncanceled script submission prints unsupported
+navigation diagnostic; canceled submit has no encoding/fetch/navigation side effect.
+Existing GUI GET/page_submit_form unchanged. Does not claim full form submission,
+validation/no-validate, buttons/images/implicit submit, requestSubmit/submit,
+formdata/GET/POST/history/action reflection. Event.composed native field initialized
+for new SubmitEvent, defaults false for existing interfaces; other constructors'
+composed option and click/input composed propagation/shadow path remain recorded
+subsequent work. Other prior input/radio/parser/NodeList residuals unchanged.
+No forced calloc failure; allocation/root unwind/guard exits manually reviewed.
+No full WPT/fuzz/OS/guest/boot/GPU, host semantics only. p100/p044 unchanged;
+local unpublished/no push.
+
+Primary algorithms read2026-10-01:
+[Submission and SubmitEvent](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm),
+[Input activation](https://html.spec.whatwg.org/multipage/input.html#the-input-element).

@@ -1,0 +1,75 @@
+<!-- awesome-plan project=zedbsd record=ws074-p117 -->
+
+# ws074-p117: DOMImplementation and XML Document creation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q527 / q527-i01
+Prerequisites: p108 namespace creation and p104/p106 ownership verified;
+p116 commit5e6457f5 all10065/100. Root sole writer/executor.
+Approval: currentuser2026-09-30 Acid3 autonomous/automaticQueue instruction,
+2026-10-01 continuation. Timebox one finite document-creation Phase.
+
+## Exact scope / design / criteria
+
+Indexed26/27 lack document.implementation.createDocument. Add branded traced
+DOMImplementation, per-Document SameObject getter, createDocument(namespace,
+qualifiedName, nullable optional DocumentType), createDocumentType(name,publicId,
+systemId). XMLDocument interface inherits Document. Add explicit document content
+kind HTML/XML/XHTML/SVG: current parser documents remain HTML, created XMLs no
+browsing context/defaultView and about:blank URL; expose readonly contentType.
+createElement preserves XML case; namespace null except XHTML content uses HTML;
+HTML documents retain folding. XML HTML namespace tagName/nodeName preserve case,
+existing tag queries choose folding only HTML document. Existing collections are
+snapshots; live collections remain separate prerequisite, not claimed here.
+
+Extract existing internal namespaced element creation into checked helper taking
+already-converted strings, reused by createElementNS/factory without invoking
+mutable JS methods. Preserve p108 names/errors/order. Factory converts arguments
+once left-to-right, branding first, LegacyNullToEmptyString qualifiedName, nullable
+actual DocumentType; name/namespace failure cannot detach supplied doctype. Allocate
+full result and wrapper before moving doctype; move/adopt only this single doctype
+with removal hook and ownerDocument update, then append root. General adoption,
+Document constructors/clone/import/adoptNode, createHTMLDocument/hasFeature, XML
+parsing/loading/serialization, origin/security model, collections/Traversal/Range,
+SVG APIs/rendering, CSS/HAL/toolchain are out of scope.
+
+A dedicated managed state cell brands implementation and traces associated
+Document and immutable internal prototype snapshot. Document caches wrapper and
+prototype snapshot; DOM trace marks both. Script-created XML nodes wrap using
+that snapshot, independent of current caller and raw C Window lifetime; managed
+owner context remains traced, view stays null. No permanent roots. Factory in a
+borrowed call uses receiver implementation's prototype identities. New module
+bind/implementation.c registered libbrowser/Makefile; affected DOM headers/trace,
+bind/document.c/internal.h/window.c/node.c/element.c/mixin.c, WS focused tests.
+Guardrail and full C standard loaded (no concise version); manual format/style.
+[DOMImplementation](https://dom.spec.whatwg.org/#interface-domimplementation),
+[document kind/createElement](https://dom.spec.whatwg.org/#dom-document-createelement)
+current primary specification read2026-10-01 (doctype name allows empty, forbids
+NULL/ASCIIwhitespace/>). No full DOM conformance claim.
+
+Plain+ASan focused API/brand/conversion/order/exceptions/namespace/case/doctype
+identity+adoption/empty-root/contentType/defaultView/URL/crossrealm identity PASS;
+production GC stack-scan-disabled saved connected/detached XML nodes and sole
+implementation retention survive, dropping roots frees graph, managed child
+retention/finalization once. Existing namespace38/name31/DOM23/frame38/owner27
+and suitable VM regressions PASS. All100 prior65 preserved,26+27PASS, no Uncaught/
+errors/crash/runner timeout, completeTrue/runstatus0, Acid2 exact, warning0/ASan0.
+Record source hashes, commands/tools/logs/full-standard review/skipped checks.
+Investigation bounded to API/GC plus full fixed Acid; unknown dependency ends
+uncleared before separately planning repair. OS/guest/boot/GPU not run here.
+Local unpublished/no push.
+
+## Introduction / q527 activation (2026-10-01)
+
+Missing XML creation prevents ownership tests and later DOM work. This finite
+foundation does not require or supply XML loading/live collections. p100 retains
+100/100 and p044 full-WS conformance. [WS](../ws.md).
+
+## q527 outcome (2026-10-01)
+
+q527-i01 cleared; [verification](verification.md) and [hashes](verification.json).
+XML62/62/GC16/16/frame48/48+allselectedregressions plain+ASanPASS. Originalall100
+67/100 solely26+27newPASS/no regression/Uncaught0/Acid2exact. Remaining33/p100
+unmet; fullchangedsource standard/style/diffPASS. [WS](../ws.md), localunpublished.

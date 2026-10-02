@@ -1,0 +1,37 @@
+# q578 / p162 exact native attribute namespaces — 2026-10-02
+
+CLEARED. Native attributes retain traced exact URI strings beside established
+built-in enum classifications. New C add/find URI helpers normalize NULL/empty
+namespace absence, classify only exact canonical URIs, compare actual URI/local
+characters, and reject duplicate expanded names before count/generation/value
+mutation. Prefix aliases do not alter identity. Legacy built-in records remain
+findable by canonical URI; enum-only OTHER lookup refuses arbitrary URI ambiguity.
+Add helper performs no VM allocation/callback; legacy creation initializes URI NULL.
+Element trace retains URI, C array growth/removal shifts full records; native bind
+clone and HTML formatting clone copy URI before the next allocation.
+
+Native25/25 both: same local with different custom URIs, independently allocated
+equal name/URI lookup, prefix alias duplicate rollback, legacy canonical XML lookup,
+absence/empty/custom/built-in distinction, real array growth/removal, clone full
+ordered records. Stack disabled during actual GC: source-only root retains non-atom
+URI/owner; clone-only root releases detached original and retains exact copied URI/
+value/owner; last release collects non-atom URI and Document. Every early setup/
+verification failure returns through owning heap/root/realm cleanup.
+
+All91groupsPASSboth; actual94/prior94/72/equal100inventory/complete/status0/noUncaught/
+crash/sanitizer/runnererrors/timeouts/Acid2exact100%. Remaining69/74/75/77/79/80 require
+loading/SVG; internal retrytime failures distinct from completed runner. Acid3 pixel
+agreement remains separately diagnostic. Both full builds complete before tests,
+warning0/style output empty/diff clean/manual full affected C review against Guardrail/
+coding-style1–14/automation. clang-format absent/manual; cc14.2.0/Python3.13.5.
+JSON holds source SHA256/full original reports/all91. Commands host-build.sh both;
+host-attribute-namespace both; build/ws074-q578-regressions.py both;
+ASAN_OPTIONS=detect_stack_use_after_return=0 run-acid-tests.py original both;
+style-check.py affected C; git diff --check.
+
+Native exact storage prerequisite only; validated names and same native heap are
+embedding preconditions. JS get/setAttributeNS, Attr wrappers/full DOM namespace
+validation, XML DOM projection/PI/CDATA/loading/SVG/events/script activation remain
+separate Queues. No full Attr/XML/DOM conformance claim. FullWPT/fuzz/OS/guest/boot/
+GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHub publication not performed.
+p100/p044/WS incomplete. Next native XML CharacterData representation.

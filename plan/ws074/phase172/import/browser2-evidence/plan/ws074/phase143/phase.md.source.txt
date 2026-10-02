@@ -1,0 +1,87 @@
+<!-- awesome-plan project=zedbsd record=ws074-p143 -->
+
+# ws074-p143: checked partial native CharacterData replacement and deletion
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q555 / q555-i01
+Prerequisites p140 native weak data repair/p141 allocation-free suffix/p142 cloning
+cleared; base802e509f actual88/all58/Acid2exact. Root sole executor/no conflict.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact finite scope saved before source generation, no open product/risk choice.
+
+## Scope / design / criteria
+
+Range deletion/extraction needs native prefix/interior deletion, not only full replace/
+suffix truncation. Add internal DOM-layer dom_text_replace(node,offset,count,units,length)
+in dom/node.c and dom.h. Genuine existing Text/Comment only; null/wrongkind/missing
+nonempty units/offset>currentlength EINVAL before mutation, count clamps to remaining
+length without offset+count overflow. Checked final UTF16 size prevents arithmetic/
+buffer-byte overflow before reading replacement units. No native VM allocation,
+script/environment/host callbacks; caller retains node under usual DOM helper contract.
+
+Deletion length0 uses allocation-free in-place suffix memmove after interval validation,
+then length commit. Replacement/insertion length>0 prepares independent full buffer:
+checked exact byte allocation before any copy, original prefix/replacement/current suffix copied while
+old buffer remains alive (aliased replacement input safe); publish only complete buffer.
+Notify existing p140 weak data callback with exact clamped offset/count/added AFTER
+committed full data, then generation++; old replacement buffer released after callback.
+Failure leaves data/storage/owners/tree/ranges/generation/notifications unchanged.
+Native Range offset rules and weak owner registry unchanged. Existing efficient append,
+full setter and split suffix truncate remain their verified paths, no public JS data
+API/coercion/descriptor changes or full setter refactor. Existing >UINT32 Range graph
+exclusion remains; native data sizes use checked size_t.
+
+New native fixture uses genuine script Range/private native endpoints and direct helper
+calls with stack scanning disabled. Verify prefix/interior/suffix/full/empty/end/clamped
+SIZE_MAX count/noop/Comment/exact UTF16/insertion/replacement/aliased old units. Multiple
+independent Range and clone/detach points before/equal/interior/end/strictly-after shift
+per native interval, current XML/adopted owner registry preserved. Pure configured
+observer sees complete characters/exact interval/FIFO and removal-only observer receives
+no data delivery. Invalid offset/kind/null and oversized replacement fail before data/
+nonzero points/notifications/generation change; real checked size failure, no fabricated
+allocator fault-injection coverage. Final weak tokens do not retain nodes/Document,
+post-release collection/token cleanup checked. No production test switch.
+
+One finite Phase; new native group +all58 existing groups plain/ASan (59 total), original
+pinned Acid3>=88/prior88 preserved/full100 equivalent/complete/no Uncaught/crash/runner
+timeout/Acid2exact; no new indexed passes expected. Build warning0/sanitizer0/style
+output inspected/full changed C manual review/diff/hashes/evidence/durable history.
+Each runner60sec; unknown dependency ends uncleared before redesign, no endless retry.
+Guardrail/full coding-style/automation loaded/no concise standard available/manual
+format clang-format unavailable. DOM Living24Sept2026 replace-data4327-4349 read:
+https://dom.spec.whatwg.org/#concept-cd-replace . Existing observer subset excludes
+MutationObserver/PI/childrenchanged environment hooks; Range contents owns later hooks.
+No clone/delete/extract/surround public methods, CharacterData JSAPI/newRootarchitecture,
+fullDOM/WPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/push/GitHub publication expansion.
+p100/p044/WS incomplete. Graph p140+p141+p142(external)->p143->contents/p100(external),
+acyclic; no prior Phase acceptance materially changed.
+
+## Introduction / q555 activation (2026-10-01)
+
+p142 verifies rooted complete cloning. Prefix/interior native deletion is the remaining
+known primitive needed before actual Range contents; this Phase supplies it with
+checked interval semantics and actual live Range repair, without public API expansion.
+
+## Internal design refinement (2026-10-01, q555 in progress)
+
+Read-back of wb_units_reserve/buffer_grown shows geometric capacity can round a
+representable huge unit count to a capacity whose UTF16 byte multiplication overflows.
+New partial replacement uses checked total<=SIZE_MAX/sizeof(uint16_t), exact malloc
+size/capacity and independent complete buffer instead of depending on that geometric
+reserve. Ordinary internal choice, same API/criteria/source scope/dependencies and
+no changed foreign Phase. Existing full/append helper broad repair is excluded and
+tracked as [BUG-129](../../bugs/BUG-129.md); this new helper has no geometric-growth dependency. Deletion
+remains allocation-free. No huge-memory runtime proof claimed from static review.
+
+## q555 result (2026-10-01)
+
+[p143](phase.md) cleared in q555, [evidence](verification.md).
+Checked native partial CharacterData replacement/allocation-free deletion/exact atomic
+alias-safe buffers/interval FIFO callbacks/current owner adoption/private Range+clone
+repair/failed operation preservation/weak collectibility verified. Original88/no new
+or lost passes/prior88/equal/noerrors/Acid2exact/all59PASS/native100. Remaining12.
+Static shared geometric reserve concern tracked as BUG-129, runtime reproduction unknown;
+new helper avoids that dependency; no bug transfer/repair claim. Next Range contents.
+p100/p044/WS incomplete/root released/local unpublished/no push.

@@ -1,0 +1,37 @@
+# q529 / p119 verification — 2026-10-01
+
+Outcome: cleared. Weak C pre-removal tokens and registry use independent ownership
+counts; no observer is traced by its Document. Document finalizer drops only its C
+registry reference; subscriber finalizer unlinks only C tokens, so any GC finalize
+order and wholeheap teardown avoid reclaimed GC storage. dom_remove notifies before
+frame retirement/unlink, while detached removal stays silent. Callbacks are synchronous
+C repair only (no allocation/GC/script/tree or registry mutation). Ordinary register
+checks EINVAL/EBUSY/overflow and allocation failure rollback. NULL token release safe.
+
+Plain+ASan, ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: final warning/error0.
+- host-removal19/19: FIFO multiplecallbacks/originalparent+bothsiblings, detached/
+  unrelatedDoc silence, unregister/null/appendmove/no callback afterlasttoken,
+  invalidregistration no output, actualGCstackscanoffobserverdieswithDocrooted,
+  Docdieswithobserverrooted, latercleanup/repeatedGC, multiple GC neighbours in
+  normal/largeallocation wholeheap teardown each finalize exactlyonce.
+- TreeWalker70/70+GC5/5/frame53/53, XML62/62+GC16/16, namespace38/38+GC12/12,
+  names31/31/iframe17/17/legacy56/56/childCSS30/30/ownership27/27/realm30/30,
+  object100/interp45/DOM23/23/JS14/14/selectors golden identical.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/<variant>/browser --out build/ws074-acid-q529-<variant>`: 68/100 unchanged exact100entry
+  inventory bothvariants/noUncaught/exceptions/errors/completeTrue/runstatus0;
+  Acid2exact100%. No score improvement criterion for this prerequisite foundation.
+- `python3 plan/tools/style-check.py` changed C/header/test: no findings;
+  `git diff --check` PASS; fullCstandard/manualformat review ANSIdecls/forwards/
+  publicorder/purposeparagraphs/checkedallocation/rollback/weakownership/finalizers.
+
+Initial test used nonexistent dom_append spelling; compile rejected it, corrected
+fixture to actual dom_append_child; no production workaround. Two final prose-only
+comments add initialization/success explanation after final behavioral checks; no
+semantic changes. Allocationfailure/overflow branches manually reviewed; no injected
+C allocator failure test. No hidden production env switches or VM collector changes.
+Compilercc14.2.0/Python3.13.5/clang-format absent. Logs build/ws074-q529-build/style/
+final/acid-*; sourcehashes verification.json. No OS/guest/boot/GPU/exhaustiveWPT/fuzz
+claim. NodeIterator/API/candidate/filter follows finiteQueue. p100100/100 unchanged,
+WS incomplete,32remaining. Local unpublished/no push.

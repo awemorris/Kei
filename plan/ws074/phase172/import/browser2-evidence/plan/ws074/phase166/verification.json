@@ -1,0 +1,24 @@
+{
+  "base": "f9d31097",
+  "queue": "q582",
+  "attempt": "q582-i01",
+  "outcome": "uncleared",
+  "native": {
+    "plain": "FAIL invalid data decoding rejects successful response status\nFAIL invalid data leaves empty owned response\nnative resource metadata: 99/101 passed\n",
+    "asan": "FAIL invalid data decoding rejects successful response status\nFAIL invalid data leaves empty owned response\nnative resource metadata: 99/101 passed\n"
+  },
+  "source_sha256": {
+    "userland/desktop/browser/page/link.c": "4da7ba93b718b55c1c59bf7dd1bbf36af4e658e39de297aec191c9c94e4400b5",
+    "userland/desktop/browser/page/resource.c": "8c5face9daf4219a2fb3b5d022da5ee346f47203ccf6a5d4ab2bd8dd1da264c9",
+    "userland/desktop/browser/page/page.h": "3f8a1095063dc96c18925d4b824442b4f8a397f875cb85f1bae84614913402ca",
+    "userland/desktop/libbrowser/Makefile": "2a43c69f87ce087286a71ff8ad1a5fed2ebb3c7169e5710333e71dfd5a464b54",
+    "plan/ws074/tests/host-resource.c": "ac4419c5b331a3930c59296335967628dd87e88d8443f1cda880d4c6965f57f9",
+    "plan/ws074/tests/run-resource-tests.py": "d03c65650139b6bada83c2a90205e2f9c3f944b48b63231ef8881fe269f3afd4"
+  },
+  "bug": "BUG-132",
+  "skipped": [
+    "all95 regression groups",
+    "original Acid3/Acid2 after native failure"
+  ],
+  "last_verified_original": "q581 actual94 / all94 / Acid2 exact"
+}

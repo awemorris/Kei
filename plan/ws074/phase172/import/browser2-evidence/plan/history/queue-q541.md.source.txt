@@ -1,0 +1,110 @@
+<!-- awesome-plan project=zedbsd record=q541 -->
+
+# q541 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q541](history/queue-q541.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q541
+
+Purpose WS074/fg011 native table caption/head/foot typed structural APIs.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p131 scope](ws074/phase131/phase.md) saved before source generation.
+Timebox one finite Phase; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q541-i01 | [ws074-p131](ws074/phase131/phase.md) | uncleared | p130 d8f33a7a/native table collections+DOM mutation verified; indexed49 |
+
+Wholep131 typed caption/head/foot getters/setters/create/delete/Caption nativeclass,
+actual canonical insert/remove/owner callbacks/roots/lifetime, plain+ASan selected
+regressions/prior80/new49/equal/noerrors/Acid2exact/fullC/evidence. Exclude row/cell
+methods/indices/Cellclass/layout/parser and other recorded residuals.
+Graph p130(external)->p131->future row/cell APIs(external)->p100(external), acyclic.
+Unknown dependency ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Table createTBody/row/cell insert/delete/indices (50–51), select/option, Range/CSS/
+loading/SVG, final p100/full conformance p044. No authorization from Outlook.
+
+## q541 outcome (2026-10-01)
+
+[p131](ws074/phase131/phase.md) **uncleared**, [evidence](ws074/phase131/verification.md).
+Native table caption/head/foot get/set/create/delete + Caption interface implemented;
+actual81/100/indexed49new/prior80/equal/noerrors/Acid2exact. Initial structure67/
+GC42/frame113/all38 groupsPASS, then final added ownership assertion reproduces
+cross-Document setter adoption failure (67PASS/1FAIL) plain+ASan. Existing
+bind_insert/dom_insert_before lacks subtree Document adoption, unknown prerequisite
+ends this attempt without clearance. Retain useful partial outputs; next select
+finite adoption dependency, then new p131 attempt and row/cell APIs. Remaining19;
+p100/p044 unchanged/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p131 -->
+
+# ws074-p131: native table caption/head/foot operations
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q541 / q541-i01
+Prerequisite p130 d8f33a7a cleared; actual native table/section prototypes,
+ordered live collections/DOM clone/weak removal hooks/checked bind_insert and
+child mutation environment outputs verified, prior80/36 regressions PASS.
+Root sole executor, one finite Phase. User2026-09-30 autonomous Acid3/automatic
+Queues +2026-10-01 continuation authorize exact scope saved before source generation.
+Timebox one finite Phase / bounded fixtures and fixed suites.
+
+## Exact scope / design / criteria
+
+HTMLTableElement native caption/tHead/tFoot nullable typed getters/setters and
+createCaption/deleteCaption/createTHead/deleteTHead/createTFoot/deleteTFoot.
+First actual direct HTML caption/head/foot only, exact namespace/local case.
+Typed caption setter requires actual caption; section setter accepts native
+section conversion then wrong section tag throws HierarchyRequestError BEFORE
+old removal. Forged/foreign/uppercase/other nodes TypeError, no coercion.
+Null/undefined remove only first eligible child. Caption inserts first node;
+head before first element neither actual caption nor colgroup, else append;
+foot appends. Reusing existing members returns identity; setters remove/reinsert
+same node according to algorithm, duplicate/nested/foreign children preserved.
+Insert cycle checks/errors retain specified remove-before-insert side effects.
+
+Add illegal native HTMLTableCaptionElement : HTMLElement; actual node prototype
+and XML Document snapshots/managed child relevant realm. Keep existing table
+interface/collection getters in collection.c and add native bridge functions
+implemented in new bind/table.c (registered production libbrowser source list).
+Reuse checked bind_insert and DOM weak-removal/environment notifications.
+Known helper adjustment: bind_insert chooses actual parent Document.view for
+host/environment callbacks, while exception realm remains native caller; XML
+without view falls back to caller. No unrelated removal API changes.
+Explicit root slots retain owner/old/new/reference across environment/host GC,
+allocation fails checked, wrappers published after complete mutation.
+
+EXCLUDED createTBody/row/cell insert/delete/indices/HTMLTableCellElement, obsolete
+attributes/layout/parser/foster parenting/custom element reactions/shadow paths,
+other WS input/form/radio/Range/CSS/loading/SVG residuals. These are known later
+increments; no goal/acceptance reduction. p100/p044 remain unmet.
+
+Guardrail/full coding-style loaded, no concise; standard source
+https://html.spec.whatwg.org/multipage/tables.html read2026-10-01.
+Plain+ASan dedicated structure/order/identity/errors/duplicate/filter/typed brand/
+XML/borrowed child prototype/lifetime tests, actual host callback GC and callback
+failure root cleanup, prior36 regression groups plus new fixtures; original
+all100 prior80 preserved/equal/complete/status0/noerrors/new49 expected/Acid2exact,
+warning0/sanitizer0/full changed C/manual format/style/diff/hashes/evidence.
+No fullWPT/fuzz/OS/guest/boot/GPU claim. Unknown dependency ends uncleared.
+Graph p130(external)->p131->future row/cell APIs(external)->p100(external), acyclic.
+Local event records unpublished/no push.
+
+## Introduction / q541 activation (2026-10-01)
+
+Indexed49 requires native caption/head/foot operations absent from actual engine.
+Finite reusable typed structural APIs chosen before independent row/cell methods.
+
+## Dated follow-up — 2026-10-01 / q543
+
+Original q541 remains uncleared. Exact original failure evidence preserved at [q541 evidence](../ws074/phase131/verification-q541.md); [later q543 clearance](queue-q543.md) follows separate p132 adoption prerequisite.

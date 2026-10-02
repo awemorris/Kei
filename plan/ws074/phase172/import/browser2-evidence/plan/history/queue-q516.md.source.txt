@@ -1,0 +1,43 @@
+<!-- awesome-plan project=zedbsd record=queue-q516 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q515](queue-q515.md), archive verified.
+
+## q516
+
+Purpose: createElement name validation/DOM exceptions, WS074 / fg011.
+Timebox: one finite Phase, bounded validation and preservation checks.
+Approval: current user2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」; 2026-10-01 「続けてください」.
+Exact scope: [p107 saved revision](../ws074/phase107/phase.md), static UTF-16 local
+name validation in bind/document.c with existing InvalidCharacterError/code5,
+argument conversion/folding/owner preservation, focused fixtures/full standards.
+No NS creation/parser/attributes/Traversal/Range/loading/CSSOM/HAL/toolchain.
+
+| Attempt | Phase | Status | Dependencies / reason |
+| --- | --- | --- | --- |
+| q516-i01 | [ws074-p107](../ws074/phase107/phase.md) | cleared | p104 cleared fd64d63c; all100 inventory20/22 invalid-name failures, exception mechanism available |
+
+Criteria: focused names/conversion/foreign realm PASS plain+ASan, DOM23/23,
+frame17/17/realms30/30, warning-free/no sanitizer; Acid2 exact, all100 Acid3
+no regression from42, tests20/22 pass, Uncaught0/no errors; full changed-source
+standards/style/diff and durable evidence.
+Graph: p104+p083 (external cleared) → q516-i01/p107 → p100 (external planned).
+No cycle; other nodes are context, not implementation authority.
+
+## Upcoming Work Outlook
+
+Remaining indexed namespace/Traversal/Range/CSSOM/HTML/loading/VM features need
+separate finite phases. p100 retains100/100 zero Uncaught/crash/timeout, Acid2
+exact. p101/p098 outside this goal, p044 full WS conformance remains.
+
+## q516 terminal outcome (2026-10-01)
+
+q516-i01/p107 cleared. Name validation31/31 plain+ASan, DOM23/23, frame17/17,
+realm30/30, no warnings/sanitizer; Acid2 exact, Acid3 all10044/100,20/22 nowPASS,
+no regressions/Uncaught0/no errors. [Evidence](../ws074/phase107/verification.md).
+Full changed-source standards/style/diff PASS; formatter absent, guest/OS/boot/
+GPU not run. Remaining56 indexed features need new finite phases. Local
+unpublished/no push; p100 acceptance unchanged.

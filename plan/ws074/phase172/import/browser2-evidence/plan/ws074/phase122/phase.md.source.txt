@@ -1,0 +1,82 @@
+<!-- awesome-plan project=zedbsd record=ws074-p122 -->
+
+# ws074-p122: live HTMLCollection, children and Document.links
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q532 / q532-i01
+Prerequisite: p121 cleared / 09d65c75 native properties65/65, all10071/100,
+all selected plain+ASan regressions verified. q531 archive present/read.
+Approval: current user 2026-09-30 autonomous Acid3/automatic Queues instruction,
+renewed 2026-10-01 continuation. Root sole executor, one finite Phase timebox.
+Exact scope saved before source generation; no later cancellation/conflicting edit.
+
+## Scope, design and acceptance
+
+Add branded illegal-constructor HTMLCollection interface with readonly length,
+item(unsigned long), namedItem(DOMString). Actual receiver branding before single
+argument conversion; methods missing required argument throw TypeError. Native
+state traces root, with no raw Window/realm owner. Every read traverses actual DOM
+links, never cached member arrays. SameObject node.children (Document, Element,
+DocumentFragment) and Document.links wrappers cached and traced through their
+actual DOM owner. Collection prototype follows receiver node Document's relevant
+view or XML private prototype snapshot. A retained collection keeps its root and
+managed child owner usable after detachment/primary embedding teardown.
+
+Children contains only direct element children. Links contains descendant HTML
+namespace a/area with a no-namespace href attribute present, even empty; excludes
+SVG/foreign/name-only/link tags, root itself, template contents and removed nodes.
+Length/index/item/namedItem update immediately on insertion/removal/reorder and
+href/id/name attribute mutation. Named matching first tree-order id or HTML-name,
+case-sensitive and nonempty, unique supported names ordered id then name per item.
+
+Use verified VM native property hooks: readonly enumerable configurable indexed
+virtual data descriptors, readonly nonenumerable configurable visible named data;
+ordinary expandos and prototype own properties hide names (no OverrideBuiltIns).
+An unsupported canonical array index does not resolve a numeric named member;
+namedItem still can. All indexed define operations refuse without indexed setter,
+supported named definition refuses when no ordinary own expando exists; unsupported
+properties retain ordinary storage/descriptors/symbol behavior. Deleting supported
+indices/visible names refuses regardless configurable virtual descriptor, deleting
+unsupported index succeeds. Legacy preventExtensions refuses before flag/descriptor
+mutation; Object.preventExtensions/seal/freeze throw. Own keys prefix numeric order,
+then visible unique supported names, then ordinary strings/symbols; real lookup,
+hasOwn/in/descriptor/keys/enumeration/assign/JSON must see current native properties.
+No new VM foundation or Proxy language. Known named assignment refusal is compatible
+with no named setter; existing ordinary expando and hidden prototype setter behavior
+must be preserved. No generic new getElementsBy* policies in this Phase.
+
+Affected: new bind/collection.c registration libbrowser/Makefile; bind/internal.h,
+window.c, document.c, mixin.c; dom/dom.h and node.c solely cache tracing. Focused
+HTML fixture, real GC host fixture, existing frame lifetime extension if necessary.
+No controls/forms/table/Range/CSS/loading/SVG/HAL/toolchain changes. Consult actual
+full C coding-style/Guardrail; no concise standard exists. Primary DOM HTMLCollection,
+WebIDL legacy platform objects and HTML Document.links read 2026-10-01.
+
+Plain and ASan focused checks cover live saved lists, order/filter/names/attributes,
+prototype/expando collisions, descriptors/enumeration/write/define/delete/integrity,
+branding/conversion/errors, XML and two realms. Real GC with C stack scanning off
+proves SameObject cache/root retention and last root drop reclamation; a collection
+from a managed child remains usable after primary host teardown. Previous native65,
+NodeIterator60/TreeWalker70/traversal9/removal19/frame58/XML62+GC16/namespace38+GC12/
+names31/iframe17/legacy56/childCSS30/owner27/realms30/object100/interp45/DOM23/JS14/
+selectors golden remain PASS. Fixed all100 Acid3 prior71 preserved and indexed5
+passes, zero Uncaught/errors/crash/runner timeout, Acid2 exact. Warning0, ASan0,
+manual full changed-source standard review/style-check/diff/hashes/evidence.
+Bounded selected fixtures and fixed suite; unknown prerequisite ends uncleared
+before redesign. No exhaustive WPT/fuzz/OS/guest/boot/GPU claim. p100 full100/100
+and p044 final conformance obligations unchanged. Records local/unpublished/no push.
+
+## Introduction / q532 activation (2026-10-01)
+
+p121 generic protocol is verified. Introduce DOM collection policy and two bounded
+SameObject accessors; snapshots in existing getElementsBy* remain later work. This
+adds a necessary feature prerequisite before p100, without reducing its acceptance.
+
+## q532 result (2026-10-01)
+
+Cleared; [verification](verification.md). Both variants104/104, GC13/13,
+frame63/63/all selected regressionsPASS. Acid3all10072/100/indexed5 newPASS/
+prior71 preserved/noerrors/Acid2 exact. Native live collection output ready;
+remaining28/p100 full acceptance unmet. Local unpublished, no push.

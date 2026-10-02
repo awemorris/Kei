@@ -1,0 +1,27 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) { console.log((condition ? 'PASS ' : 'FAIL ') + label); }
+var f = document.createElement('iframe'); document.body.appendChild(f);
+var w = f.contentWindow, d = f.contentDocument;
+d.body.className = 'test';
+var p = d.createElement('p'); p.className = 'test'; p.id = 'target'; d.body.appendChild(p);
+var sheet = d.createElement('style'); sheet.textContent = 'body,p { z-index:0; } html*.test { z-index:1; } p { color:red; }'; d.head.appendChild(sheet);
+check('invalid compound author ignored body', w.getComputedStyle(d.body).zIndex === '0');
+check('invalid compound author ignored child', w.getComputedStyle(p).zIndex === '0');
+check('following valid rule survives', w.getComputedStyle(p).color === 'rgb(255, 0, 0)');
+var invalid = ['html*.test', 'p*', '**', '*p', '.test*', '#target*', '[id]*', ':root*', 'body/**/p', 'body>'];
+for (var i = 0; i < invalid.length; i++) {
+  var thrown = false;
+  try { d.querySelector(invalid[i]); } catch (e) { thrown = e.name === 'SyntaxError'; }
+  check('invalid query ' + i, thrown);
+  thrown = false;
+  try { p.matches(invalid[i]); } catch (e) { thrown = e.name === 'SyntaxError'; }
+  check('invalid matches ' + i, thrown);
+}
+var valid = ['p.test', '*.test', 'body p', 'body>p', 'body > p', 'head+body p', 'head~body p', 'body/**/ p', 'p/**/.test', 'body\np', 'p,div', ':is(p,div)'];
+for (var i = 0; i < valid.length; i++) check('valid selector ' + i, d.querySelector(valid[i]) !== null);
+sheet.textContent = 'body,p {z-index:0;} p, html*.test {z-index:3;} p {color:blue;}';
+check('invalid ordinary list drops entire rule', w.getComputedStyle(p).zIndex === '0');
+check('valid rule after invalid list retained', w.getComputedStyle(p).color === 'rgb(0, 0, 255)');
+</script>

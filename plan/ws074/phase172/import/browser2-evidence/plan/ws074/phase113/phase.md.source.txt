@@ -1,0 +1,61 @@
+<!-- awesome-plan project=zedbsd record=ws074-p113 -->
+
+# ws074-p113: Unsigned array-length metadata without dense growth
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q523 / q523-i01
+Prerequisites: p112cleared52a76648,60/100 inventory, existing VM numeric conversion
+and sparse named-slot storage. Rootsoleexecutor; standing2026-09-30 autonomous
+Acid3/automaticQueue instruction and2026-10-01continuation supply exactapproval.
+
+## Objective / finite scope / inspected design
+
+Indexed95 rejects legal `a.length="2147483648"` because assignment/descriptor/
+constructor paths impose signedint32 cap. Existing vm_object.length is uint32,
+vm_array_set_length grows metadata without allocating dense storage, and sync
+writes vm_value_number. Remove artificial signed cap for valid uint32 lengths,
+preserve ToUint32 then ToNumber comparison/order (two user conversions for
+ArraySetLength), RangeError for fractional/out-of-range/NaN/Infinity, constructor
+numeric argument uses safe existing conversion rather than undefined C cast.
+Assignment expression keeps original RHS unchanged through existing bytecode.
+
+Allow already-normalized numeric lengths at C vm_object_define boundary and
+retain requested length attributes for read-only descriptor updates. Keep density
+bounded by actual element_capacity+SPARSE_GAP in widened arithmetic, not possibly
+huge logical length; existing int32 indices can stay sparse after length growth.
+No new property-key representation: indices >=2^31 still have existing atom-key
+limitations; this Phase does not claim full uint32 index, all array method, or
+nonconfigurable shrinking conformance. No interpreter/compiler/API/ABI redesign,
+BigInt/typedarray/p100 other features/HAL/toolchain/module changes.
+Affected vm/access.c, vm/object.c, js/builtin_array.c; focusedJS+hostcapacity cases,
+existingobject/interp/realm/JS/DOM/Acid. ApplyGuardrail/fullCstandard/VMownership.
+[ArraySetLength](https://tc39.es/ecma262/multipage/ordinary-and-exotic-objects-behaviours.html#sec-arraysetlength)
+and [Array constructor](https://tc39.es/ecma262/multipage/indexed-collections.html#sec-array)
+ECMAScript2027draft read2026-10-01. Ordinary extension of existing uint32 metadata.
+
+## Criteria / bounded verification
+
+Focused legal boundary/max lengths/string assignment expression identity/ToNumber
+order/error/constructor/descriptor+readonly/grow-shrink/available sparse-index
+checks PASS plain+ASan; hostC capacity remains bounded after huge logical growth.
+95PASS, object100/interp45/realm30/JSselected/DOM23 existing preservation,
+warningfree/no sanitizer; all100 noformer60passregression/Uncaught0/errors0/
+Acid2exact; fullchangedsource standard/style/diff/evidence/hashes/tools/skips.
+Bounded metadata and existing-index cases, no iteration of billions, OOM fuzz,
+large atom-index redesign, exhaustive array conformance. Unknown prerequisite
+endsattemptuncleared before replanning, no scope expansion. Localunpublished/nopush.
+
+## Introduction / q523 activation (2026-10-01)
+
+Origin p112inventory95. Metadata cap is independent of DOM/CSS remaining work;
+existing sparse shape storage supplies bounded allocation without architecture
+change. [WS summary](../ws.md), p100100/100 unchanged.
+
+## q523 outcome (2026-10-01)
+
+q523-i01 cleared; [verification](verification.md) satisfies finite criteria.
+Unsigned metadata plus sparse storage verified both variants,95PASS/all10061/100,
+no regression/Uncaught0/Acid2exact. Remaining39features and p100 acceptance stay
+unmet. [WS outcome](../ws.md). Local unpublished/no remote closure/no push.

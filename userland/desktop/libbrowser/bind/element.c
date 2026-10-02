@@ -14,11 +14,14 @@
 #include "bind/internal.h"
 
 #include <errno.h>
+#include <limits.h>
+#include <math.h>
 #include <string.h>
 
 static int element_this(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
 static int element_tag_name(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int element_namespace_uri(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int element_prefix(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int element_local_name(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int element_id_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int element_id_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -44,6 +47,7 @@ static int image_height_get(struct vm_realm *realm, vm_value this_value, const v
 static int image_height_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int image_complete(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int image_natural_size(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int image_rendered_dimension(struct vm_realm *realm, struct dom_element *element, const char *name, int *available, vm_value *result);
 static int image_dimension(struct vm_realm *realm, vm_value this_value, const char *name, vm_value *result);
 static int script_src_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int script_src_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -62,6 +66,7 @@ static const struct bind_attribute element_attributes[] = {
 	{ "tagName", element_tag_name, NULL },
 	{ "localName", element_local_name, NULL },
 	{ "namespaceURI", element_namespace_uri, NULL },
+	{ "prefix", element_prefix, NULL },
 	{ "id", element_id_get, element_id_set },
 	{ "className", element_class_name_get, element_class_name_set },
 	{ "children", bind_children, NULL },
@@ -290,7 +295,7 @@ element_this(
 	return 0;
 }
 
-/* Reports the element's tag name (tagName): an HTML element's qualified name in upper case. */
+/* Reports a qualified name, uppercasing HTML elements only within HTML Documents. */
 static int
 element_tag_name(
 	struct vm_realm *realm,
@@ -326,8 +331,13 @@ element_tag_name(
 	if (status == 0)
 		status = vm_string_append_units(element->local_name, &units);
 
-	/* An HTML element's is in ASCII upper case. */
-	for (index = 0; status == 0 && element->ns == DOM_NS_HTML && index < units.length; index++) {
+	/* Only an HTML Document uppercases the qualified name of an HTML element. */
+	for (index = 0;
+	     status == 0 &&
+	     element->ns == DOM_NS_HTML &&
+	     element->node.document->content == DOM_CONTENT_HTML &&
+	     index < units.length;
+	     index++) {
 		unit = units.data[index];
 		if (unit >= 'a' && unit <= 'z')
 			units.data[index] = (uint16_t)(unit - 0x20U);
@@ -394,7 +404,13 @@ element_namespace_uri(
 	if (status != 0)
 		return status;
 
-	/* An element has one of the three namespaces, or none (null). */
+	/* Script-created elements retain their exact namespace URI, including custom ones. */
+	if (element->namespace_uri != NULL) {
+		*result = vm_value_cell(element->namespace_uri);
+		return 0;
+	}
+
+	/* Parser-created elements retain their existing built-in namespace mapping. */
 	if (element->ns >= sizeof(urls) / sizeof(urls[0]) || urls[element->ns] == NULL) {
 		*result = VM_VALUE_NULL;
 		return 0;
@@ -404,6 +420,35 @@ element_namespace_uri(
 	status = bind_string(realm, urls[element->ns], result);
 	if (status != 0)
 		return status;
+	return 0;
+}
+
+/* Reports an element's namespace prefix, or null when its name has no prefix. */
+static int
+element_prefix(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_element *element;
+	int status;
+
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* A borrowed getter still requires an actual Element receiver. */
+	status = element_this(realm, this_value, &element);
+	if (status != 0)
+		return status;
+
+	/* The stored prefix is part of identity rather than a parsed attribute. */
+	*result = VM_VALUE_NULL;
+	if (element->prefix != NULL)
+		*result = vm_value_cell(element->prefix);
+
+	/* Succeeded: the receiver's exact prefix or its absence is reported. */
 	return 0;
 }
 
@@ -741,7 +786,7 @@ element_has_attribute(
 	return 0;
 }
 
-/* Dispatches a click event at the element, as a click with the mouse would (click). */
+/* Performs a synthetic script click through native activation and event dispatch. */
 static int
 element_click(
 	struct vm_realm *realm,
@@ -752,8 +797,6 @@ element_click(
 {
 	struct bind_window *window;
 	struct dom_element *element;
-	struct bind_mouse mouse;
-	int canceled;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -766,9 +809,10 @@ element_click(
 	if (status != 0)
 		return status;
 
-	/* A click at no particular place with the main button. */
-	memset(&mouse, 0, sizeof(mouse));
-	status = bind_fire_mouse_event(window, &element->node, "click", &mouse, &canceled);
+	/* Use the target document realm when a method is borrowed across windows. */
+	if (element->node.document->view != NULL)
+		window = element->node.document->view;
+	status = bind_click(window, element);
 	if (status != 0)
 		return status;
 
@@ -1144,7 +1188,100 @@ image_natural_size(
 	return 0;
 }
 
-/* Reads a size attribute's leading digits as a number of pixels (0 without digits). */
+/* Observes actual native content dimensions while retaining every callback participant. */
+static int
+image_rendered_dimension(
+	struct vm_realm *realm,
+	struct dom_element *element,
+	const char *name,
+	int *available,
+	vm_value *result)
+{
+	struct dom_document *document;
+	struct bind_window *window;
+	struct bind_box box;
+	struct vm_cell *roots[2];
+	double pixels;
+	unsigned index;
+	int connected;
+	int found;
+	int same;
+	int finite;
+	int status;
+
+	/* A detached image or inactive owner has only its existing attribute fallback. */
+	*available = 0;
+	document = element->node.document;
+	window = document->view;
+	if (window == NULL ||
+	    window->detached ||
+	    window->host.node_box == NULL)
+		return 0;
+	connected = dom_is_inclusive_ancestor(&document->node, &element->node);
+	if (!connected)
+		return 0;
+
+	/* Both native target and actual owner survive GC even if the host retires the child. */
+	roots[0] = &element->node.cell;
+	roots[1] = &window->realm->cell;
+	for (index = 0; index < 2U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0) {
+			/* Release only earlier registrations if a root slot cannot be installed. */
+			while (index != 0) {
+				index--;
+				vm_heap_remove_root(realm->heap, &roots[index]);
+			}
+
+			/* Allocation failure never publishes an unprotected host observation. */
+			return status;
+		}
+	}
+
+	/* The native host provides actual layout, never a CSS string or author width getter. */
+	memset(&box, 0, sizeof(box));
+	found = window->host.node_box(window->host.context, &element->node, &box);
+	status = 0;
+	if (found &&
+	    !window->detached &&
+	    element->node.document == document &&
+	    document->view == window) {
+		/* Revalidate connection after callbacks that may remove the queried image. */
+		connected = dom_is_inclusive_ancestor(&document->node, &element->node);
+		if (connected) {
+			/* Image IDL dimensions exclude actual used borders and padding on each axis. */
+			same = strcmp(name, "width");
+			if (same == 0) {
+				pixels = box.width - box.border_left - box.border_right - box.padding_left - box.padding_right;
+			} else {
+				pixels = box.height - box.border_top - box.border_bottom - box.padding_top - box.padding_bottom;
+			}
+
+			/* Checked nonnegative fixed-unit sizes fit the existing integer image IDL result. */
+			finite = isfinite(pixels);
+			if (!finite || pixels > INT_MAX) {
+				status = EOVERFLOW;
+			} else {
+				/* Negative content extents have zero unsigned image size. */
+				if (pixels < 0)
+					pixels = 0;
+				*result = vm_value_int32((int32_t)pixels);
+				*available = 1;
+			}
+		}
+	}
+
+	/* Every host outcome releases the target and owner roots before returning. */
+	for (index = 0; index < 2U; index++)
+		vm_heap_remove_root(realm->heap, &roots[index]);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: available distinguishes rendered dimensions from attribute fallback. */
+	return 0;
+}
+
+/* Reads a rendered image size or its nonrendered content attribute fallback. */
 static int
 image_dimension(
 	struct vm_realm *realm,
@@ -1153,11 +1290,31 @@ image_dimension(
 	vm_value *result)
 {
 	const struct vm_string *text;
+	struct dom_element *element;
+	int available;
+	int same;
 	vm_value attribute;
 	uint16_t unit;
 	size_t index;
 	int32_t pixels;
 	int status;
+
+	/* Width and height accessors belong only to actual HTML namespace img elements. */
+	status = element_this(realm, this_value, &element);
+	if (status != 0)
+		return status;
+	same = vm_string_equal_ascii(element->local_name, "img");
+	if (element->ns != DOM_NS_HTML || !same) {
+		status = bind_throw_illegal(realm);
+		return status;
+	}
+
+	/* Rendered content dimensions precede the nonrendered content-attribute fallback. */
+	status = image_rendered_dimension(realm, element, name, &available, result);
+	if (status != 0)
+		return status;
+	if (available)
+		return 0;
 
 	/* The attribute's text. */
 	status = element_reflect_get(realm, this_value, name, &attribute);

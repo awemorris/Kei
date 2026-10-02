@@ -1,0 +1,37 @@
+# q564 / p151 verification — 2026-10-01
+
+CLEARED. Actual active managed child viewport derives parent host layout content
+box; borders/padding subtracted, exact0/no-box0 retained, numeric bounds checked,
+retirement verified before publication. Existing Window.frame/parent graph traced;
+two temporary child-realm/frame roots through callback GC, all released on every
+path. Child CSS and own inner dimensions refresh current parent geometry, invalidating
+same child style cache. Primary viewport and no-layout explicit child setter contract
+preserved; no new host API, child renderer or permanent managed roots.
+
+Page12 PASS plain+ASan with pinned Inter/JetBrainsMono/Droid fonts:0->100->0,
+saved computed declaration/conditional media/borrowed owner/author class/inline
+mutation/removal/border-box90/displaynone/re-render/primary isolation/retired values.
+Native10/10 both:0, content100, absent box0, primary800x600, explicit fallback400x300,
+negative extent clamp, out-of-int refusal, actual callback GC with stack scanning
+disabled, removal inside callback and child collectibility afterward. ASanerror/leak0.
+Initial Page CLI lacked layout fonts and returned no boxes; corrected command uses
+same checked-in fonts as actual Acid runner, no core workaround. Legacy p109 media
+smoke assumed positive parent viewport; threshold1->0 now verifies nested screen
+media for legal zero child sizes, with dimensions independently covered by new tests.
+Reconciliation on p151/p109/WS; earlier approval and outcomes unchanged.
+
+Actual pinned original92/100 both/new46/prior91 preserved/full100 same/complete/
+status0/exceptions[]/runerrors[]/Acid2 exact100%. Final74 groups PASS both, unchanged
+p150 Page38/native29 now pass and legacy childCSS30/30. Builds warning0, full affected
+C style-check empty/diff clean/manual review Guardrail/full coding-style1–14 and
+automation. clang-format unavailable/manual, cc14.2.0/Python3.13.5. Final formatting
+change rebuilt both and repeated production Acid and full74 before recording.
+
+BUG-131 resolved by actual output. p150 remains uncleared until separately selected
+unchanged retry; q563 failure history preserved. Exact approval plus validation
+reconciliation archived, source hashes/reports JSON. Host native only/no fullWPT/
+fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub publication.
+Integer viewport contract preserved; fractional pixels truncated; nested hosts with
+no layout callback retain explicit supplied dimensions, no child layout claim.
+Transform rendering still awaits selected follow-up. p100/p044/WS incomplete/root
+released/local unpublished/no push.

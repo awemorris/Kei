@@ -1,0 +1,65 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Parser document writes</title>
+<script>
+function check(name, actual, expected) {
+    console.log(name + ' ' + (actual === expected ? 'PASS' : 'FAIL ' + JSON.stringify(actual)));
+}
+var sequence = [];
+</script>
+<body>
+<div id="order"><span id="before">before</span><script id="writer">
+check('return', document.write('<i id="first">', 'text', 7, '</i>'), undefined);
+check('immediate', document.getElementById('first').textContent, 'text7');
+check('source-not-read', document.getElementById('after'), null);
+document.write('<b id="par');
+document.write('t">partial</b>');
+check('partial-tag', document.getElementById('part').textContent, 'partial');
+document.write('<em id="entity">&am');
+document.write('p;</em>');
+check('partial-reference', document.getElementById('entity').textContent, '&');
+document.write('<span id="utf16">\uD83D');
+document.write('\uDE00</span>');
+check('partial-surrogate', document.getElementById('utf16').textContent, '\uD83D\uDE00');
+document.writeln('<pre id="lines">line');
+document.writeln();
+document.write('end</pre>');
+check('writeln', document.getElementById('lines').textContent, 'line\n\nend');
+document.write('<pre id="breaks">one\r');
+document.write('\ntwo\r\nthree\rfour</pre>');
+check('carriage-returns', document.getElementById('breaks').textContent, 'one\ntwo\nthree\nfour');
+sequence.push('outer-before');
+document.write('<script>sequence.push("inner-before");document.write("<u id=inner>inner</u>");sequence.push("inner-after");<\/script><i id="nested-tail">tail</i>');
+sequence.push('outer-after');
+check('nested-order', sequence.join(','), 'outer-before,inner-before,inner-after,outer-after');
+check('nested-dom', document.getElementById('inner').textContent, 'inner');
+check('nested-tail', document.getElementById('nested-tail').textContent, 'tail');
+document.write('<small id="later-write">later</small>');
+check('later-write', document.getElementById('later-write').textContent, 'later');
+try {
+    document.write('<i id="atomic">', {toString: function () { throw new Error('conversion'); }}, '</i>');
+} catch (error) {
+    check('conversion-error', error.message, 'conversion');
+}
+check('conversion-atomic', document.getElementById('atomic'), null);
+check('empty-write', document.write(), undefined);
+try { document.write.call({}, 'bad'); }
+catch (error) { check('receiver', error.name, 'TypeError'); }
+document.write('<script>document.write("<b id=nested-part");<\/script>>nested partial</b>');
+check('nested-partial', document.getElementById('nested-part').textContent, 'nested partial');
+</script><span id="after">after</span></div>
+<script>
+check('source-resumed', document.getElementById('after').textContent, 'after');
+var ids = [];
+var children = document.getElementById('order').children;
+for (var index = 0; index < children.length; index++) {
+    if (children[index].tagName !== 'SCRIPT') ids.push(children[index].id);
+}
+check('document-order', ids.join(','), 'before,first,part,entity,utf16,lines,breaks,inner,nested-tail,later-write,nested-part,after');
+</script>
+<script>document.write('<pre id="boundary">end\r');</script>
+rest</pre>
+<script>
+check('source-crlf-boundary', document.getElementById('boundary').textContent, 'end\nrest');
+</script>
+</body>

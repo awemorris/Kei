@@ -1,0 +1,119 @@
+<!-- awesome-plan project=zedbsd record=q546 -->
+
+# q546 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q546](history/queue-q546.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q546
+
+Purpose WS074/fg011 owned option selectedness/native selected index.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p135](ws074/phase135/phase.md) scope saved before generation.
+One finite Phase/bounded tests; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q546-i01 | [ws074-p135](ws074/phase135/phase.md) | uncleared | p134208ef29f cleared/native membership/owner; indexed58 |
+
+Exact p135 whole owned clean/dirty selectedness/native option selected/defaultSelected,
+select.selectedIndex/DOM attribute+subtree hooks/clone/current chosen consumer/
+conversion roots/actual GC/plain+ASan/all44/new58/prior84/noerrors/Acid2exact/fullC.
+Excluded reflections/UI/reset/mutable options/other scoped residuals retained.
+Graph p134(external)->p135->p100(external), acyclic; unknown dependency endsuncleared.
+
+## Upcoming Work Outlook
+
+Range/CSS/loading/SVG remaining15 after expected58; final p100/p044. Outlook is
+forecast only and supplies no authorization.
+
+## q546 outcome (2026-10-01)
+
+[p135](ws074/phase135/phase.md) uncleared, [evidence](ws074/phase135/verification.md).
+Owned selectedness/native index/attrs/tree/chosen consumer yields actual85/100/new58,
+prior84 preserved/equal/noerrors/Acid2exact/all46 groupsPASS/option70/GC20/frame133.
+Approved clone state propagation criterion conflicts with ordinary primary clone
+semantics; no clearance claimed. Revise clone criterion/implementation and parser
+negative-zero edge in next finite attempt, retain original scope/outcome/evidence.
+Other current-standard vs Chromium differences disclosed. Remaining15; p100/p044
+and WS incomplete/local unpublished/root released/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p135 -->
+
+# ws074-p135: owned option selectedness and native selected index
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q546 / q546-i01
+Prerequisites p134208ef29f cleared: native select/option/options/current ownership;
+p132 adoption cleared; q54584/equal/noerrors/Acid2exact/all44 regressions.
+Approval user2026-09-30 autonomous Acid3/automatic Queues plus2026-10-01 continuation.
+Root sole executor; exact scope saved before source generation. One finite Phase,
+bounded tests60sec per command; unknown prerequisite ends uncleared before redesign.
+
+## Exact scope / design / acceptance
+
+Embed allocation-free native option selectedness/dirtiness and traced current select
+owner in dom_element. Initial false; parser/no-namespace selected attribute addition
+or removal affects selectedness only while clean, presence reflection independent
+of owned state. Native option.defaultSelected boolean attribute getter/setter and
+option.selected owned getter/setter with boolean conversion/no user callbacks;
+selected setter dirties and enforces single-select exclusivity then normalizes.
+Native select.selectedIndex getter current first selected or -1; setter signed long
+conversion once after brand, root target+argument through reentrant conversion,
+then clears current native list/all flags, sets selected match and only its dirtiness;
+no automatic fallback after this explicit setter. Root cleanup every failure path.
+
+DOM insertion/removal hooks update option owner for complete current ordinary
+subtree after links consistent, preserve actual old/new owners across pure no-GC
+normalization, and normalize affected lists. Moving selected option or group gives
+last selected incoming subtree member precedence in a single select. Nearest-owner
+membership shared p134; nested select/blocking containers/templates unchanged.
+No raw realm or script-visible collections. Multiple preserves multiple states;
+removing multiple retains first selected. Size attribute changes normalize current
+list using unsigned nonnegative parsing; default single display1/invalid fallback1,
+zero display handled against normative algorithm. First enabled option fallback
+only no selected/single/display1; disabled own attr or nearest actual optgroup,
+select disabling does not disable its options. Relevant option/group disabled
+attribute changes normalize; selected attr value replacement never dirties or
+reselects an already present clean attribute. General attribute add/update/remove
+hooks apply only actual HTML exact tag and no namespace/exact local attr name.
+Clone copies option selectedness/dirtiness after attrs without copying owner/cache;
+subtree insertion establishes new owners. dom_select_chosen paint/form consumer
+reads first actual selected option, no attribute-based/lazy fallback discrepancy.
+Native state changes update generation. Preserve existing form submit painter API;
+no multi-select submission/UI feature claim.
+
+Exclude option/select value/text/index/form/name/disabled/multiple/size reflected
+IDL additions, selectedOptions/options.selectedIndex, Option factory/mutable options
+length/index/add/remove/select mirrors/reset event/UI/custom/shadow/selectedcontent/
+inert template Documents/full select/parser conformance; tests use content attrs
+for multiple/size/disabled. Prior known residuals retained; p100/p044 unchanged.
+Native selectedness tested directly, clean/dirty attrs/parser/clones/moves/blocked
+and nested owners/multiple/size/disabled/reentrant adoption/brands/XML, actual GC
+conversion/root cleanup and child lifetime plain+ASan. All44 prior groupsPASS;
+pinned original85/100/new58/prior84 preserved/equal/complete/status0/noerrors/
+Acid2exact/fullchanged C/manual format/style/diff/build warning0/sanitizer0/hashes/
+durable evidence. No fullWPT/fuzz/OS/guest/boot/GPU/local unpublished/no push.
+Guardrail/fullcoding-style/automation loaded; primary WHATWG form-elements option
+selectedness/setting/reset/display size/index algorithms read2026-10-01:
+https://html.spec.whatwg.org/multipage/form-elements.html. Graph p134(external)->p135
+->p100(external), acyclic. Earlier selected Phase criteria unchanged.
+
+## Introduction / q546 activation (2026-10-01)
+
+Indexed58 requires actual defaultSelected attribute/owned selectedness and native
+selectedIndex. Existing dom_select_chosen is attribute-only; replace its consumer
+with the shared owned state while keeping paint/form APIs. Native state mutation
+hooks and clean/dirty selection are explicitly included before code generation.
+
+## Dated follow-up — 2026-10-01 / q547
+
+[Revised p135](../ws074/phase135/phase.md) cleared in a new [q547 attempt](queue-q547.md),
+with ordinary cloned-attribute state and negative-zero parser criterion corrected.
+Original q546 approval/uncleared outcome/evidence retained above; not rewritten.

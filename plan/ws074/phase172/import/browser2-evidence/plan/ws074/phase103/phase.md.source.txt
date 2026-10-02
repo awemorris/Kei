@@ -1,0 +1,159 @@
+<!-- awesome-plan project=zedbsd record=ws074-p103 -->
+
+# ws074-p103: Parser insertion for document.write
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q509-i01
+
+## Purpose and prerequisite
+
+Restore parser-time document.write/writeln so scripts can insert real HTML at
+that point in the document. p102's [inventory](../phase102/inventory.json)
+shows that the original Acid3 body cannot create its map, forms, table, or
+iframes. This is a prerequisite, not a promise of full Acid3 clearance.
+p102 must clear before selection. Child browsing contexts remain separate work.
+
+## Bounded scope and design
+
+Use the existing parser script hook, UTF-16 input stream and DOM bindings.
+Introduce insertion into the active parser's current input position; do not
+append an independently parsed fragment at the end of body. Support multiple
+arguments, writeln's newline, partial tokens across calls, and nested inline
+scripts with bounded recursion and preserved script execution order. Propagate
+allocation/parse failures through existing page/binding error paths.
+
+Before selection, inspect the active parser's ownership and lifetime through
+page_parse/script hooks. Specify the behavior outside an active parser and its
+relationship to document.open/close in a plan revision; do not silently provide
+a fragment substitute. If this requires a major architecture decision, stop the
+dependent implementation and record options. Existing design §3 already intends
+parser insertion; ordinary implementation details remain delegated.
+
+Affected scope: browser html/, bind/, page/ and focused WS074 tests. Apply
+[Guardrail](../../guardrail.md), full [C standard](../../coding-style.md),
+[design](../design.md) §§3,4,14. No iframe, XML, Range/Traversal, CSSOM, rendering
+exceptions, HAL, toolchain, or ES-module changes.
+
+## Acceptance and verification
+
+- Focused fixtures verify document order, argument concatenation/newlines,
+  partial-token insertion and nested script order, compared to Chromium.
+- Inserted markup is parsed through the production parser and visible to the
+  next script; allocation/failure handling and GC lifetime are reviewed.
+- The original Acid3's document.write call succeeds and its structural fixtures
+  exist. Record all 100 cases and remaining failures without changing assertions.
+- Acid2 stays exact; plain/ASan host builds and focused fixtures pass, with full
+  changed-source standards review, style check and diff check.
+- Investigation stops at parser insertion. Child-document and other missing
+  APIs become explicit subsequent prerequisites for p100, not hidden expansion.
+
+## Design event (2026-09-30)
+
+Introduced from p102's completed diagnosis. p100 retains 100/100 and zero
+Uncaught/crash/timeout; p101 stays after p100. This Phase is not cleared by the
+p102 inventory and has no selected Queue attempt. Local event only; GitHub
+publication was not requested.
+
+## Authorized design revision (2026-09-30)
+
+Current user: 「次のqueueを実行してください。」 authorizes q509 / p103.
+The initial parser is owned by page_load_html until feed/finish return, and its
+script hook runs synchronously. Publish that parser only for this lifetime and
+clear the pointer before destruction. The parser owns a scoped insertion point
+for each script; preserve the outer point when inserted scripts recurse.
+
+During write, keep the unread suffix in a temporary owned buffer, append the
+written UTF-16 units at the insertion point, run only the available prefix with
+EOF disabled, then restore the suffix. Preserve tokenizer state across calls,
+including partial tags, references and surrogate pairs. Bound nested writes to
+32 and propagate memory/parse errors. A lazy CR/LF fold covers raw written units
+without applying network append normalization to insertion text.
+
+Outside an active parser (and for foreign documents), return an explicit
+NotSupportedError: script-created parsers and implicit/explicit document.open /
+close are deferred to a later Phase. This is an advertised limitation, not a
+claim of conforming late writes or a fragment fallback. No open/close methods
+are introduced here. No acceptance change: this Phase covers parser insertion.
+
+Reference: [WHATWG HTML dynamic markup insertion](https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#document.write()).
+The standard's late-write replacement requires the deferred script-created
+parser lifecycle; the supported parser-time path follows its input insertion
+and synchronous token processing model. Compare supported fixtures to Chromium
+and separately verify the explicit unsupported-call behavior.
+
+## Outcome and verification (2026-09-30)
+
+q509-i01 cleared. The production Document binding now concatenates the arguments
+and inserts write/writeln text at the active parser's scoped input boundary.
+Unread source is kept in an owned suffix buffer while the inserted prefix runs;
+partial tokenizer state survives writes, nested scripts restore the enclosing
+boundary, and raw written CR/LF is folded when read. A page borrows its parser
+only during feed/finish and clears the pointer before destruction.
+
+The internal parser script hook now returns zero/ENOMEM. Fatal inline or
+external-script allocation failures stop parsing, including failure during a
+nested write; ordinary JS exceptions continue through existing console behavior.
+The parser refuses further writes after failure and guards nesting at 32.
+This small hook-contract revision stays inside the p103 components and preserves
+the approved error-propagation criterion. Late writes explicitly throw
+NotSupportedError; script-created parser/open/close lifecycle remains deferred.
+
+Chromium 153.0.8010.52 supplies all 20 expected console checks in the new
+[document-write fixture](../tests/dom/document-write.html). They cover immediate
+visibility, no consumption of future source, argument/return behavior, partial
+tag/reference/surrogate, writeln, CR/LF across calls/source, nested script/DOM
+order, partial nested writes, conversion exceptions and receivers. No Chromium
+expected result was changed to match the implementation.
+
+Environment: Debian cc 14.2.0, Python 3.13.5, fixed WPT
+2d66b9b7998bb58c336138c178323ddee857b586 and checked-in comparison fonts.
+Source at start: 2ffc2d97. Commands/results (plain and ASan with
+ASAN_OPTIONS=detect_stack_use_after_return=0):
+
+- sh plan/ws074/tests/host-build.sh plain / asan: PASS, zero warnings.
+- run-dom-tests.py --program build/ws074-host/<variant>/browser: 23/23 PASS,
+  including the 20-check fixture and existing GC/dynamic-script/geometry tests.
+- run-write-tests.py --program ...: late-call refusal and retained document,
+  finite recursive-write RangeError with resumed source, and 80 writes across
+  24000 temporary-node allocations all PASS.
+- host-write: 2 fatal callback cases PASS, initial and nested; feed, finish and
+  subsequent write all preserve ENOMEM. No hidden production fault switch.
+- run-settle-tests.py --program ...: 14 runtime + 8 diagnostic checks PASS.
+- run-acid-tests.py --program ... --out build/ws074-acid-p103-<variant>:
+  Acid2 exact 100%, Acid3 completes 40/100, Uncaught 0, no process crash or
+  overall runner timeout; inventory 100/100, 40 pass / 60 fail, no missing.
+- Python byte compilation, style-check.py on all 11 changed engine C/headers
+  plus host-write.c, and git diff --check: PASS. Full coding standard §§1..14
+  manually reviewed across those changes: declarations/prototypes/comments,
+  input ownership, GC lifetime, recursion/error exits and module boundaries.
+  clang-format is unavailable; automatic formatting is skipped, .clang-format
+  guidance, manual review and automated style checks pass.
+
+The DOM runner initially omitted fonts because the old staged directory was
+absent, producing 4 geometry-related failures. It now uses the checked-in font
+fallback and requires all three fonts; the corrected plain/ASan runs pass 23/23.
+This fixes verification configuration, not browser geometry or expected results.
+
+Acid2 test/reference PNG SHA-256 in both builds:
+`d4bc344146d44577143ff678d2044fdfd8218468391b2c90feee95c3d2c05f25`.
+Original Acid3's map/form/table/selectors iframe fixtures are now present.
+New passing indices: 14,15,16,17,48,55,63,65; zero formerly passing cases regress.
+[Full indexed evidence](inventory.json) preserves all 100 results/source hash.
+Acid3 pixel agreement changed 41.92% → 38.59% as previously absent fixtures
+appeared; it remains an independent diagnostic, not p103 acceptance. Test 69
+still exhausts its own retry timeout. Full p100 acceptance remains unmet.
+
+No whole-OS/guest/boot, full CSS2 or unrelated JS suite was run: these changes
+were verified in the host production engine, with no guest-only/HAL/toolchain
+path changed. Full-WS conformance p044 remains planned. No push or GitHub
+publication; local records/evidence are unpublished.
+
+## Design reconciliation / next work
+
+Added [p104](../phase104/phase.md) for the initial HTML iframe context foundation;
+it is planning and q510 is only proposed. Loaded child URLs, script-created
+parser/open/close, XML/SVG/object documents and remaining DOM/CSSOM/JS behavior
+need later finite Phases. p100 retains 100/100 and zero Uncaught/crash/timeout;
+p101 remains dependent on full p100 clearance. WS074 stays incomplete.

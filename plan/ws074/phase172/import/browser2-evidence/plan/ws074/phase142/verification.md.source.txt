@@ -1,0 +1,57 @@
+# q554 / p142 verification — 2026-10-01
+
+Base0cda7ad9. Original pinned Acid3 plain/ASan88/100, no new or lost indexed passes,
+prior88 preserved/all100 outcomes exactly equal/completeTrue/runstatus0/exceptions[]/
+runerrors[]. Acid2 exact100% both. Remaining12 unchanged; p100/p044/WS incomplete.
+
+All58 regression groups PASS both; new Page27/native26. Original56 groups retained,
+noFAIL/Uncaught/sanitizer/runtimeerror. Initial Page used unimplemented public
+setAttributeNS/getAttributeNS: corrected fixture to existing attribute API; supported
+namespaced attributes tested directly through real native factories and cloned fields.
+No production capability expansion or acceptance relaxation. Final full58 groups
+use final Page/native source. No later source changes invalidate these outcomes.
+
+Registered reusable bind_clone_node uses checked iterative frames, explicit source/
+top-copy/pending-unlinked roots, complete-only publication and exact cleanup. Ordinary
+native graphs and separate nested template graphs are complete beyond former512
+truncation. Namespace/prefix/URI/native attributes/UTF16/existing input and radio clone
+state/ordinary default option initialization preserved. No wrappers/expandos/listeners
+copied. Public Node.cloneNode keeps result rooted through actual owner wrapper creation;
+borrowed/adopted/saved child XML snapshot cases pass. Existing Document NotSupported
+remains explicit. Existing conservative generation increments retained.
+
+Native fixture directly invokes helper with conservative stack scanning disabled and
+without outer VM receiver frame.6000 native Element/Text pairs plus an inert ordinary
+7MiB allocation cross the unchanged production8MiB collector threshold during clone;
+heap collection count increases, every source/copy link and UTF16 unit survives,
+native namespace and attribute fields retain identity. Supported separately finite
+320KiB heap/512 Element+Text pairs cause real ENOMEM during cloning, output sentinel
+unchanged, source graph intact. All temporary roots unwind: source graph collectible,
+success copy alone retains Document, failure partial graph/Document reclaimable,
+all post-call output participants collectible after final explicit root release.
+Unsupported Document internal kind/null/missing output checks preserve publication.
+No allocator alteration or test-only production switch; no arbitrary fault injection
+coverage claimed. No source-owner environment or host hooks run during cloning.
+
+Commands:
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: both awaited before tests,
+  production registered source list; final warning/error0.
+- `python3 build/ws074-q554-regressions.py VARIANT`: all58 PASS; every command60sec
+  bounded, exact command/results in verification.json. New Page27/native26.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+  --program build/ws074-host/VARIANT/browser --out build/ws074-acid-q554-VARIANT`:
+  original88/equal/prior88/noerrors/Acid2exact; aggregate Acid3FAIL preserved until100.
+- `python3 plan/tools/style-check.py userland/desktop/browser/bind/cloning.c
+  userland/desktop/browser/bind/node.c userland/desktop/browser/bind/internal.h
+  plan/ws074/tests/host-node-cloning.c`: output inspected empty.
+- `git diff --check`: PASS. cc14.2.0/Python3.13.5; clang-format unavailable/manual.
+
+Full changed C/header manually reviewed against plan/coding-style.md: ANSI leading
+locals/public-before-static/one-line forwards/established binding table exception,
+paragraph/decision/loop/return comments and spacing, checked fallible calls/no calls
+in conditions/initializers, checked C vector lifetime, actual graph trace/root ownership,
+copy pending initialization/source preservation/ENOMEM cleanup/current owner wrapper.
+Source SHA256/reports/regressions retained. Header/Makefile registration reviewed.
+Host native semantics only; no fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregate check/push/GitHub publication. Exact approved snapshot/history preserved.
+Next finite partial native data replacement/deletion, then Range content algorithms.

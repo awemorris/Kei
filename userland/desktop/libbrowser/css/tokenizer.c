@@ -33,6 +33,8 @@ struct css_lexer {
 	const uint16_t *units;
 	size_t length;
 	size_t position;
+	/* The current token begins after skipped comments and before any token consumption. */
+	size_t token_start;
 	struct wb_arena *arena;
 	struct wb_vector tokens;
 	struct wb_units scratch;
@@ -369,6 +371,7 @@ lex_token(
 
 	/* Comments go without a token. */
 	lex_comments(lexer);
+	lexer->token_start = lexer->position;
 
 	/* The end of the input. */
 	c = lex_peek(lexer, 0);
@@ -629,6 +632,8 @@ lex_emit(
 	/* Fills the token. */
 	memset(&token, 0, sizeof(token));
 	token.type = type;
+	token.source_start = lexer->token_start;
+	token.source_end = lexer->position;
 	token.number = number;
 	token.integer = integer;
 	token.delim = delim;

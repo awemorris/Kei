@@ -1,0 +1,22 @@
+# q559 / p145 retry verification — 2026-10-01
+
+CLEARED against unchanged q557 exact whole-Phase criteria after q558/p146 resolved
+BUG-130. Native actual allocation-triggered GC child-list record16/16 plain+ASan:
+parent/added/removed retained, independent complete NodeList-shaped arrays, exact
+native identities, null fields, zero/one lengths, record publication, release after
+caller returns. Page child-list probe13PASS both. No ASan leak/error. Existing primary/
+managed observer ownership and callback delivery unchanged. q557 native14/16 and
+historical uncleared attempt remain intact; q559 is a separate successful attempt.
+
+Pinned original Acid3 88/100 both, prior88 preserved/all100 inventory equivalent,
+completeTrue/runstatus0/exceptions[]/runerrors[]; Acid2 exact100% both. All current64
+groups PASS both, including original61, q557 Page/native and q558 direct factory20/20.
+Plain+ASan production binaries from q558 were reused after matching SHA256 of every
+q557/q558 changed production+fixture source; q558 builds warning0 and no source edit
+since. Fresh q559 Page/native/all64/Acid runs; changed environment C style-check empty,
+full applicable coding-style manually reviewed at q557 and q559. cc14.2.0/Python3.13.5;
+clang-format unavailable/manual. No OS/guest/boot/GPU/fullWPT/fuzz performed.
+
+Exact approved retry snapshot archived with q559. Original Range mutation dependency
+now verified; next actual delete/extract/surround contents. p100/p044/WS incomplete,
+root released/local unpublished/no push.

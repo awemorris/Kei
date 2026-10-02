@@ -1,0 +1,50 @@
+<!doctype html><html><head><title>Live Document.forms contracts</title></head><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function raises(fn,name){try{fn();return false;}catch(e){return e.name===name;}}
+var forms=document.forms;
+check(forms===document.forms,'forms SameObject');
+check(forms instanceof HTMLCollection&&Object.getPrototypeOf(forms)===HTMLCollection.prototype,'forms native collection prototype');
+check(forms.length===0&&forms[0]===undefined&&forms.item(0)===null,'empty saved forms');
+var host=document.createElement('div');document.body.appendChild(host);
+var a=document.createElement('form'),b=document.createElement('form'),other=document.createElement('div');
+a.id='first';a.setAttribute('name','alpha');b.id='second';b.setAttribute('name','beta');other.setAttribute('name','form');
+host.appendChild(a);host.appendChild(other);host.appendChild(b);
+check(forms.length===2&&forms[0]===a&&forms[1]===b,'saved forms sees HTML form insertion');
+check(forms.first===a&&forms.alpha===a&&forms.second===b&&forms.beta===b,'form ids and content names visible');
+check(forms.namedItem('alpha')===a&&forms.namedItem('ALPHA')===null,'exact form namedItem');
+check(forms.item(2)===null&&forms[2]===undefined,'form missing method and property');
+check(Object.keys(forms).join(',')==='0,1','form indices enumerable');
+check(Object.getOwnPropertyNames(forms).join(',')==='0,1,first,alpha,second,beta','form supported keys ordered');
+var d=Object.getOwnPropertyDescriptor(forms,'0');check(d.value===a&&!d.writable&&d.enumerable&&d.configurable,'forms index descriptor');
+d=Object.getOwnPropertyDescriptor(forms,'alpha');check(d.value===a&&!d.writable&&!d.enumerable&&d.configurable,'forms named descriptor');
+host.insertBefore(b,a);check(forms[0]===b&&forms[1]===a,'saved forms sees reorder');
+host.removeChild(b);check(forms.length===1&&forms[0]===a&&forms.second===undefined,'saved forms sees removal');
+var nested=document.createElement('div');nested.appendChild(b);host.appendChild(nested);check(forms.length===2&&forms[1]===b,'forms includes descendant subtree');
+a.id='changed';a.setAttribute('name','renamed');check(forms.changed===a&&forms.renamed===a&&forms.first===undefined&&forms.alpha===undefined,'form name and id updates immediate');
+a.setAttribute('name','second');check(forms.namedItem('second')===a,'earlier form name wins later id');
+a.id='item';check(typeof forms.item==='function'&&forms.namedItem('item')===a&&!forms.hasOwnProperty('item'),'forms method hides legacy member');
+forms.future=7;a.id='future';check(forms.future===7&&forms.namedItem('future')===a,'ordinary expando hides later named form');
+check(delete forms.future&&forms.future===a,'ordinary deletion exposes named form');
+check(!(delete forms.future)&&!(delete forms[0]),'named form and index deletion refuse');
+forms[0]=b;forms.future=9;check(forms[0]===a&&forms.future===a,'forms writes refuse readonly members');
+check(raises(function(){Object.defineProperty(forms,'200',{value:a});},'TypeError'),'unsupported forms index definition refuses');
+check(raises(function(){Object.preventExtensions(forms);},'TypeError')&&Object.isExtensible(forms),'forms remains extensible');
+var foreign=document.createElementNS('http://www.w3.org/2000/svg','form');foreign.id='foreign';host.appendChild(foreign);check(forms.length===2&&forms.foreign===undefined,'foreign namespace form excluded');
+var template=document.createElement('template');template.innerHTML='<form id="templated"></form>';host.appendChild(template);check(forms.length===2&&forms.templated===undefined,'template form content excluded');
+var formChild=document.createElement('form');formChild.id='nestedForm';a.appendChild(formChild);check(forms.length===3&&forms[1]===formChild&&forms[2]===b,'script inserted nested forms retained in tree order');
+var x=document.implementation.createDocument(null,'Root'),xf=x.forms;
+check(xf===x.forms&&xf.length===0&&Object.getPrototypeOf(xf)===HTMLCollection.prototype,'XML forms SameObject relevant prototype');
+var lower=x.createElementNS('http://www.w3.org/1999/xhtml','form'),upper=x.createElementNS('http://www.w3.org/1999/xhtml','FORM'),none=x.createElement('form');lower.id='xmlForm';x.documentElement.appendChild(lower);x.documentElement.appendChild(upper);x.documentElement.appendChild(none);
+check(xf.length===1&&xf[0]===lower&&xf.xmlForm===lower,'XML form namespace and case preserved');
+var getter=Object.getOwnPropertyDescriptor(Document.prototype,'forms').get;
+check(raises(function(){getter.call(a);},'TypeError'),'forms getter rejects Element');
+check(raises(function(){getter.call({});},'TypeError'),'forms getter rejects ordinary object');
+var frame=document.createElement('iframe');document.body.appendChild(frame);var child=frame.contentDocument,win=frame.contentWindow,cf=getter.call(child);
+check(Object.getPrototypeOf(cf)===win.HTMLCollection.prototype&&cf===child.forms,'borrowed forms getter follows actual owner');
+var childForm=child.createElement('form');childForm.id='childForm';child.body.appendChild(childForm);check(cf[0]===childForm&&cf.childForm===childForm,'saved child forms sees insertion');
+var method=win.HTMLCollection.prototype.item;document.body.removeChild(frame);frame=null;child=null;win=null;
+check(method.call(cf,0)===childForm&&cf.childForm===childForm,'retired managed forms remains callable');
+document.body.removeChild(host);check(forms.length===0&&forms.future===undefined,'whole form subtree removal empties saved Document.forms');
+check(xf.length===1&&cf.length===1,'different Document collections remain independent');
+console.log('Document.forms probe done');
+</script></body></html>

@@ -56,7 +56,6 @@ static const struct control_type control_types[] = {
 
 static int control_equal_folded(const struct vm_string *string, const char *ascii);
 static int control_text_of(const struct dom_node *node, struct wb_units *out);
-static struct dom_node *control_next(struct dom_node *node, const struct dom_node *root);
 
 /*
  * Tells which kind of form control an element is: an <input> by its type
@@ -275,42 +274,26 @@ dom_control_label(
 }
 
 /*
- * Finds a select's chosen option: its last option marked selected, or its
- * first option (NULL when it has none).  The user cannot change it yet.
+ * Finds the first actual selected option for painting and ordinary form value consumption.
  */
 struct dom_element *
 dom_select_chosen(
 	struct dom_element *select)
 {
 	struct dom_node *node;
-	struct dom_element *first;
-	struct dom_element *chosen;
-	struct vm_string *selected;
-	int is_option;
+	struct dom_element *option;
 
-	/* The options in tree order (through optgroups). */
-	first = NULL;
-	chosen = NULL;
-	node = select->node.first_child;
+	/* The consumer observes owned state without changing a script's explicit empty selection. */
+	node = dom_select_option_next(&select->node, NULL);
 	while (node != NULL) {
-		is_option = dom_element_is(node, DOM_NS_HTML, DOM_TAG_OPTION);
-		if (is_option) {
-			/* The first option, and the last one marked selected. */
-			if (first == NULL)
-				first = (struct dom_element *)node;
-			selected = dom_attribute_ascii((struct dom_element *)node, "selected");
-			if (selected != NULL)
-				chosen = (struct dom_element *)node;
-		}
-
-		/* The next node inside the select. */
-		node = control_next(node, &select->node);
+		option = (struct dom_element *)node;
+		if (option->option_selected)
+			return option;
+		node = dom_select_option_next(&select->node, node);
 	}
 
-	/* The one marked selected, else the first. */
-	if (chosen != NULL)
-		return chosen;
-	return first;
+	/* No current option is selected, including an explicitly cleared single-select list. */
+	return NULL;
 }
 
 /*
@@ -388,8 +371,9 @@ dom_control_checked(
 {
 	struct vm_string *attribute;
 
-	/* Checkedness the user set. */
-	if (element->control != NULL && element->control->checked_dirty)
+	/* Current initialized group state and dirty script state both override defaults. */
+	if (element->control != NULL &&
+	    (element->control->checked_dirty || element->control->checked_initialized))
 		return element->control->checked;
 
 	/* Otherwise the attribute's presence. */
@@ -447,6 +431,79 @@ dom_attribute_ascii(
 	return NULL;
 }
 
+/* Prepares input text before changing the control's owned value or dirty flag. */
+int
+dom_input_set_value(
+	struct dom_element *element,
+	const uint16_t *units,
+	size_t length)
+{
+	struct dom_control *control;
+	struct wb_units prepared;
+	struct wb_units previous;
+	int status;
+
+	/* The old value stays intact if preparing complete replacement storage fails. */
+	wb_units_init(&prepared);
+	status = wb_units_append(&prepared, units, length);
+	if (status != 0) {
+		wb_units_release(&prepared);
+		return status;
+	}
+
+	/* The element publishes new owned state only after all required storage exists. */
+	control = dom_control_of(element);
+	if (control == NULL) {
+		wb_units_release(&prepared);
+		return ENOMEM;
+	}
+
+	/* Publish complete owned text with its matching dirty flag and caret. */
+	previous = control->value;
+	control->value = prepared;
+	control->dirty = 1;
+	control->caret = length;
+	wb_units_release(&previous);
+
+	/* Painting and submission must observe a script's new dirty text value. */
+	element->node.document->generation++;
+
+	/* Succeeded: replacement storage is owned by the input and the old value is released. */
+	return 0;
+}
+
+/* Copies only dirty input value state, leaving visual geometry and caches independent. */
+int
+dom_input_clone_value(
+	struct dom_element *destination,
+	const struct dom_element *source)
+{
+	int input;
+	int status;
+
+	/* Other elements retain their established clone semantics. */
+	if (source->ns != DOM_NS_HTML || source->tag != DOM_TAG_INPUT)
+		return 0;
+	input = vm_string_equal_ascii(source->local_name, "input");
+	if (!input)
+		return 0;
+
+	/* Clean inputs follow copied content attributes without allocating dirty state. */
+	if (source->control == NULL || !source->control->dirty)
+		return 0;
+	status = dom_input_set_value(destination, source->control->value.data, source->control->value.length);
+	if (status != 0)
+		return status;
+
+	/* Caret is an offset into owned text, never a copied display coordinate. */
+	destination->control->caret = source->control->caret;
+	if (destination->control->caret > destination->control->value.length)
+		destination->control->caret = destination->control->value.length;
+
+	/* Succeeded: the clone owns an independent dirty value buffer. */
+	return 0;
+}
+
 /* Tells whether a string is an ASCII word in any case (the word is in lower case). */
 static int
 control_equal_folded(
@@ -473,27 +530,6 @@ control_equal_folded(
 
 	/* The same word. */
 	return 1;
-}
-
-/* Finds the node after another in tree order within a root (NULL at the end). */
-static struct dom_node *
-control_next(
-	struct dom_node *node,
-	const struct dom_node *root)
-{
-	/* The first child, when there is one. */
-	if (node->first_child != NULL)
-		return node->first_child;
-
-	/* Otherwise the next sibling of the node or of the nearest ancestor that has one. */
-	while (node != NULL && node != root) {
-		if (node->next != NULL)
-			return node->next;
-		node = node->parent;
-	}
-
-	/* The end of the root. */
-	return NULL;
 }
 
 /* Appends the text of a node's text children (a textarea's default value). */

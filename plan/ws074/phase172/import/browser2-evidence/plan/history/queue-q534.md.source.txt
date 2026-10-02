@@ -1,0 +1,39 @@
+<!-- awesome-plan project=zedbsd record=q534 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q533](queue-q533.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q534
+
+Purpose ordinary live DOM form ownership/listed-control prerequisites for WS074/fg011.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact [p124 scope](../ws074/phase124/phase.md) saved before generation.
+Timebox one finite Phase; no later cancellation/conflicting edit.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q534-i01 | [ws074-p124](../ws074/phase124/phase.md) | cleared | p1235e27e7ff verified; control collections need actual owner/category predicates |
+
+Wholep124 ordinary-tree C predicates/owner/query fixture, all selected plain+ASan
+regressions/all100prior73 preserved/noerrors/Acid2exact/warning0/fullC/evidence.
+No parser-special persisted associations/custom elements/public control APIs/
+RadioNodeList/activation/table/Range/CSS/loading/SVG. Graph p123(external) → p124 →
+futurecontrols(external) → p100(external), acyclic. Onlyp124 authorized, no score
+increase criterion for foundation. Unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Native controls collection/RadioNodeList then HTMLFormElement/input reflection,
+remaining table/Range/CSS/loading/SVG. Parser-special association residual explicitly
+tracked; p100100/100 and p044 full-standard acceptance unchanged.
+
+## q534 outcome (2026-10-01)
+
+[p124](../ws074/phase124/phase.md) cleared,[evidence](../ws074/phase124/verification.md).
+Ordinary owner56/56/all selected plain+ASan regressionsPASS. Original all10073/100
+unchanged/noerrors/Acid2 exact, remaining27. Known native controls/RadioNodeList/
+parser-special scope retained; p100 unchanged. Root executor released, local unpublished/no push.

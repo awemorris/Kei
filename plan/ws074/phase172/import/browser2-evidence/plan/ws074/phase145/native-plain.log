@@ -1,0 +1,3 @@
+FAIL added record preserves exact native node identity
+FAIL zero and one entry NodeList-shaped sequences retain exact lengths
+native mutation record GC: 14/16 passed

@@ -1,0 +1,69 @@
+<!-- awesome-plan project=zedbsd record=ws074-p126 -->
+
+# ws074-p126: HTMLInputElement reflection and text/password value
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q536 / q536-i01
+Prerequisite p125 df81469a cleared; controls100/GC11/frame78/all10075/100/
+noerrors/Acid2exact, exact q535 archive verified. Root sole executor.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues plus2026-10-01
+continuation; one finite Phase, exact scope before generation.
+
+## Exact scope / design / criteria
+
+Native HTMLInputElement actual HTML namespace/exact local input, not XML uppercase
+or foreign; native prototype and illegal constructor. name DOMString content
+reflection, type enumerated canonical current22 keywords/ASCII case insensitive/
+missing-invalid text default, setter raw DOMString reflection. defaultValue raw
+value content attribute reflection. form readonly ordinary p124 owner query/wrapper
+from actual Document realm. All brands precede one conversion, thrown/Symbol errors
+propagate and conversion-time DOM changes observed. No script stubs.
+
+Value incremental selected semantics: text/password/search/tel CR+LF stripping,
+existing production dom_control dirty value storage/caret, clean reads follow value
+attribute, dirty script value leaves default attribute untouched, changing default
+attribute cannot overwrite dirty value, text/password transition preserves dirty
+value, [LegacyNullToEmptyString] null setter empty, exact UTF16 including lone
+surrogates. Current default-mode hidden/submit/image/reset/button value reflection
+and checkbox/radio default-on attribute reads/writes, file empty-only setter
+InvalidStateError/no selected-file service. For other known types preserve current
+raw value storage baseline; date/time/number/range/color/email/url sanitization and
+validation are explicit later scope. Cross-value-mode type transitions (including
+unobserved multiple attribute changes), checkedness/radio group hooks/activation/
+submission/selection/caret-specific transition algorithms remain explicit later
+scope. Do not claim full HTMLInputElement/type transition conformance.
+
+Clone text dirty value state without copying visual geometry/cache/realm: actual
+input clone copies owned units and dirty value flag/caret; fallible cloning checked.
+New scoped binding html-input.c registered existing libbrowser source list; internal/
+window/node prototype, DOM control value setter strong allocation preparation and
+clone helper as needed. Do not change unrelated textarea/other control semantics.
+No DOM type-attribute/move/checked hooks in this increment.
+
+Verify dedicated plain+ASan parsed/script/clean-dirty/default name and type reflection/
+text-password mutation live controls+duplicate names/22 canonical keywords/brands/
+conversions/errors/UTF16/null/newline/clone independent states/XML case/relevant child/
+retired child, GC actual ownership. All p12527 selected regressionsPASS; original
+all100 prior75 preserved/equal/noerrors/complete/status0, indexed53 newPASS expected,
+Acid2exact. Warning0/ASan0/full changed-source C/style/diff/hashes/evidence. Bounded
+fixed suite/fixtures, no full WPT/fuzz/OS/guest/boot/GPU. Unknown prerequisite ends
+uncleared before redesign. Guardrail/full C loaded (no concise), primary HTML input
+read2026-10-01. p100/p044 unchanged/local unpublished/no push. Graph p125(external)
+-> p126 -> future input state/radio(external) -> p100(external), acyclic.
+
+## Introduction / q536 activation (2026-10-01)
+
+Indexed53 needs actual input reflection and text/password dirty-value semantics.
+Known broad input state transitions/radio behavior kept as a subsequent finite
+increment, preserving p100 full acceptance and prior form collection obligations.
+
+## q536 result (2026-10-01)
+
+[p126](phase.md) cleared, [evidence](verification.md).
+Native input reflection/text-password dirty values/clone; input94/GC12/frame83/all
+selected regressionsPASS plain+ASan. Original all10076/100/indexed53newPASS/prior75
+preserved/equal/noerrors/Acid2exact. Remaining24; next checkedness/radio value/group.
+Known type-transition/advanced-input/NodeList/form/parser residuals retained.
+p100100/100/p044 unchanged; root executor released/local unpublished/no push.

@@ -1337,6 +1337,24 @@ interpreter_call(
 		return status;
 	}
 
+	/* A foreign function enters its own realm and transports any thrown value. */
+	if (function->realm != run->realm) {
+		status = vm_call(
+		    run->realm,
+		    callee,
+		    registers[words[3]],
+		    &registers[words[4]],
+		    words[5],
+		    &value);
+		if (status != 0)
+			return status;
+
+		/* Continues the caller after the foreign stack has unwound. */
+		registers[words[1]] = value;
+		run->pc = next;
+		return 0;
+	}
+
 	/* A generator or an async function runs from C, which keeps its frame apart when it suspends (ws074-p086). */
 	suspendable = vm_code_is_suspendable(function);
 	if (suspendable) {
@@ -1362,10 +1380,14 @@ interpreter_call(
 		return 0;
 	}
 
-	/* A native function runs now, in its own realm (which tells it which function it is). */
-	function->realm->callee = callee;
-	function->realm->new_target = VM_VALUE_UNDEFINED;
-	status = function->native(function->realm, registers[words[3]], &registers[words[4]], words[5], &value);
+	/* Uses the shared native call boundary to preserve reentrant callee state. */
+	status = vm_call(
+	    run->realm,
+	    callee,
+	    registers[words[3]],
+	    &registers[words[4]],
+	    words[5],
+	    &value);
 	if (status != 0)
 		return status;
 
@@ -1403,8 +1425,26 @@ interpreter_construct(
 		return status;
 	}
 
-	/* A bytecode constructor: the new object (none for a derived class's), then its frame, marked as a construction. */
+	/* Constructs in a foreign realm without putting its code on our stack. */
 	function = (struct vm_function *)vm_value_as_cell(callee);
+	if (function->realm != run->realm) {
+		status = vm_construct(
+		    run->realm,
+		    callee,
+		    &registers[words[4]],
+		    words[5],
+		    registers[words[3]],
+		    &value);
+		if (status != 0)
+			return status;
+
+		/* Continues the caller with the foreign constructor's object. */
+		registers[words[1]] = value;
+		run->pc = next;
+		return 0;
+	}
+
+	/* A bytecode constructor: the new object (none for a derived class's), then its frame, marked as a construction. */
 	if (function->code != NULL) {
 		this_value = VM_VALUE_EMPTY;
 		if ((function->code->flags & VM_CODE_DERIVED) == 0U) {
@@ -1425,10 +1465,14 @@ interpreter_construct(
 		return 0;
 	}
 
-	/* A native constructor runs now and makes its own object from new.target. */
-	function->realm->callee = callee;
-	function->realm->new_target = registers[words[3]];
-	status = function->construct(function->realm, VM_VALUE_UNDEFINED, &registers[words[4]], words[5], &value);
+	/* Uses the shared native constructor boundary with scoped new.target. */
+	status = vm_construct(
+	    run->realm,
+	    callee,
+	    &registers[words[4]],
+	    words[5],
+	    registers[words[3]],
+	    &value);
 	if (status != 0)
 		return status;
 

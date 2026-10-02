@@ -193,6 +193,8 @@ static const struct values_name values_names[] = {
 	{ "text-align", CSS_PROP_TEXT_ALIGN },
 	{ "text-indent", CSS_PROP_TEXT_INDENT },
 	{ "white-space", CSS_PROP_WHITE_SPACE },
+	{ "text-transform", CSS_PROP_TEXT_TRANSFORM },
+	{ "cursor", CSS_PROP_CURSOR },
 	{ "text-decoration-line", CSS_PROP_TEXT_DECORATION_LINE },
 	{ "list-style-type", CSS_PROP_LIST_STYLE_TYPE },
 	{ "top", CSS_PROP_TOP },
@@ -561,6 +563,56 @@ static const struct values_keyword values_text_align[] = {
 	{ "justify", CSS_TEXT_ALIGN_JUSTIFY },
 	{ "end", CSS_TEXT_ALIGN_END },
 	{ "-webkit-center", CSS_TEXT_ALIGN_CENTER },
+	{ NULL, 0 }
+};
+
+/* The supported predefined cursor keywords, shared by ordinary and inline declarations. */
+static const struct values_keyword values_cursor[] = {
+	{ "auto", CSS_CURSOR_AUTO },
+	{ "default", CSS_CURSOR_DEFAULT },
+	{ "none", CSS_CURSOR_NONE },
+	{ "context-menu", CSS_CURSOR_CONTEXT_MENU },
+	{ "help", CSS_CURSOR_HELP },
+	{ "pointer", CSS_CURSOR_POINTER },
+	{ "progress", CSS_CURSOR_PROGRESS },
+	{ "wait", CSS_CURSOR_WAIT },
+	{ "cell", CSS_CURSOR_CELL },
+	{ "crosshair", CSS_CURSOR_CROSSHAIR },
+	{ "text", CSS_CURSOR_TEXT },
+	{ "vertical-text", CSS_CURSOR_VERTICAL_TEXT },
+	{ "alias", CSS_CURSOR_ALIAS },
+	{ "copy", CSS_CURSOR_COPY },
+	{ "move", CSS_CURSOR_MOVE },
+	{ "no-drop", CSS_CURSOR_NO_DROP },
+	{ "not-allowed", CSS_CURSOR_NOT_ALLOWED },
+	{ "e-resize", CSS_CURSOR_E_RESIZE },
+	{ "n-resize", CSS_CURSOR_N_RESIZE },
+	{ "ne-resize", CSS_CURSOR_NE_RESIZE },
+	{ "nw-resize", CSS_CURSOR_NW_RESIZE },
+	{ "s-resize", CSS_CURSOR_S_RESIZE },
+	{ "se-resize", CSS_CURSOR_SE_RESIZE },
+	{ "sw-resize", CSS_CURSOR_SW_RESIZE },
+	{ "w-resize", CSS_CURSOR_W_RESIZE },
+	{ "ew-resize", CSS_CURSOR_EW_RESIZE },
+	{ "ns-resize", CSS_CURSOR_NS_RESIZE },
+	{ "nesw-resize", CSS_CURSOR_NESW_RESIZE },
+	{ "nwse-resize", CSS_CURSOR_NWSE_RESIZE },
+	{ "col-resize", CSS_CURSOR_COL_RESIZE },
+	{ "row-resize", CSS_CURSOR_ROW_RESIZE },
+	{ "all-scroll", CSS_CURSOR_ALL_SCROLL },
+	{ "grab", CSS_CURSOR_GRAB },
+	{ "grabbing", CSS_CURSOR_GRABBING },
+	{ "zoom-in", CSS_CURSOR_ZOOM_IN },
+	{ "zoom-out", CSS_CURSOR_ZOOM_OUT },
+	{ NULL, 0 }
+};
+
+/* The native computed text-transform keywords accepted by the CSS2 property. */
+static const struct values_keyword values_text_transform[] = {
+	{ "none", CSS_TEXT_TRANSFORM_NONE },
+	{ "capitalize", CSS_TEXT_TRANSFORM_CAPITALIZE },
+	{ "uppercase", CSS_TEXT_TRANSFORM_UPPERCASE },
+	{ "lowercase", CSS_TEXT_TRANSFORM_LOWERCASE },
 	{ NULL, 0 }
 };
 
@@ -1580,6 +1632,13 @@ values_single(
 		break;
 	case CSS_PROP_BORDER_COLLAPSE:
 		table = values_border_collapse;
+		break;
+	case CSS_PROP_CURSOR:
+		table = values_cursor;
+		break;
+	case CSS_PROP_TEXT_TRANSFORM:
+		/* Use the exact four native computed transform keywords. */
+		table = values_text_transform;
 		break;
 	case CSS_PROP_WHITE_SPACE:
 		table = values_white_space;

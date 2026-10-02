@@ -1,0 +1,35 @@
+# q560 / p147 verification — 2026-10-01
+
+CLEARED. Actual native Range.deleteContents registered index15/arity0/private state.
+Collapsed no-op; same Text/Comment exact UTF16 deletion; checked topmost contained
+node snapshot; normative collapse before partial start suffix/removals/end prefix;
+actual doctype removal, weak live Range/iterator repair, frame teardown and source
+owner child-list observer notification in tree order. Original points/source root and
+current detached node explicitly rooted through actual notification allocations;
+checked collection failure leaves source unchanged. Mid-mutation observer failure
+reports partial real mutation with collapsed/current Range, no rollback claim.
+No source JS-visible point access or recursion/depth cutoff.
+
+Page17 PASS plain+ASan: private descriptor/brand, collapsed Document, exact Text/
+Comment/UTF16, whole siblings, original indexed9 partial suffix+contained t3,
+ancestor/end prefix, doctype removal, deep640, other live Range repair, observer
+identity, adopted/borrowed/saved child XML and actual Range iframe teardown.
+Native11/11 both directly invokes genuine registered method with stack scanning
+disabled/no outer receiver frame. 1800 native children and child-list records retain
+exact FIFO detached identity, real allocation GC mid-delete, post-call private
+start/end container+offset0, full source mutation, detached node/private state
+collectible after record/source release. No ASan leak/error or production test switch.
+
+Pinned original Acid3 88/100 plain+ASan, prior88 preserved/full100 equivalent,
+completeTrue/runstatus0/exceptions[]/runerrors[]; Acid2 exact100% both. All66
+regression groups PASS; final Page edit for iframe teardown re-ran both full regression
+sets, production source unchanged so original Acid runs remain current. Host builds
+plain+ASan warning0; style-check changed C empty, diff check clean, full changed C
+manual review against Guardrail/full coding-style sections1–14; clang-format absent/
+manual, cc14.2.0/Python3.13.5. Host native only; no fullWPT/fuzz/OS/guest/boot/GPU/
+HAL/toolchain/.internal/aggregate check/push/GitHub publication. >UINT32 graphs excluded.
+
+Exact approved snapshot archived with q560; hashes/reports in verification.json.
+Test7 still awaits extractContents, so score increase was not required. Next actual
+Range.extractContents then surroundContents; p100/p044/WS incomplete/root released/
+local unpublished/no push.
