@@ -24,7 +24,9 @@ qemu-system-x86_64 -machine q35 -m 8G -smp 4 -cpu max -enable-kvm \
   -monitor none > "$D/qemu.log" 2>&1 &
 echo $! > "$D/qemu.pid"
 trap 'kill "$(cat "$D/qemu.pid")" 2>/dev/null || true' EXIT
-sleep 2
+# QEMU opens a snapshot=on drive before it makes the serial socket; on a busy host that takes 8–12 s (ws115-p005).
+i=0
+while [ ! -S "$D/serial.sock" ] && [ $i -lt 600 ]; do sleep 0.1; i=$((i + 1)); done
 S="python3 plan/tools/guest/serial.py --socket $D/serial.sock --timeout ${TIMEOUT:-180}"
 $S expect 'login: ' > /dev/null
 echo "amd64: login prompt"
