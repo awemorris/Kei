@@ -48,6 +48,8 @@ Queue: q598 / q598-i01（P1、中断）
   `ue1` は 5 秒以内に生えて `ue1 static online` と表示されたが、30 秒の間 route は `169.254.0.0/16 link UC ue1` だけで、10.0.5.x の DHCP の address を
   得なかった（link-local への後退。WS033 の設計の「DHCP が取れなければ MAC から 169.254.x.y」）。その間に一度、SSH が `Connection timed out during
   banner exchange`。原因（後挿しの DHCP の timeout 10 秒の間に link/carrier が上がっていない、slirp の DHCP の応答、再試行の有無）は未調査。
+- 止める直前の `ifconfig ue1`: `flags=UP,RUNNING`、`inet 169.254.1.0`、**RX packets 0**・TX packets 0（後挿しの ue1 は一つも送受信していない。
+  DHCP の前の段、CDC ECM の data interface か bulk の開始を疑う、未調査）。
 - L1 の fetch・抜去（L1/L2 の 2）・`set_link`（3）・`networking.wait`（4）は未実施。`lan-hotplug.sh` は未作成。
 - 再開の手順: 同じ器で、`device_add` の後に `ifconfig ue1`（flags の RUNNING）と `net dhcp ue1 --timeout=20` を手で試し、managed-lan の後挿しの経路
   （RTM_IFINFO → PENDING → dhcp の timeout → 169.254）を読む。
