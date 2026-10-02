@@ -24,3 +24,6 @@ Next（予約）: ws005-p024（起動時の自動再接続）→ q601（ws118-p0
 | P1-006 | q601 途中 | c3103cdd4・ce94725fb（前回 c26fb2c78） | ws118 の config・script・phase001 | integrated 03d75d732 |
 | q599 / q599-i03 | ws005-p019 | generation2: networkd・UI・B3 の実装、QEMU・passthrough | user 承認 | 4h | finished / uncleared（AP の資格情報待ち） |
 | P1-007 | q599-i03 | ff357e48c..c662d6e33 | networkd・network.c・settings/network.c・plan/ws005・BUG-138 | integrated 364ea5f22 |
+| q599 / q599-i04 | ws005-p019 | 実 AP の join の試験 | user の資格情報 | 2h | finished / uncleared（permission の拒否） |
+| P1-008 | q599-i04・q601 途中 | fa2289544・c47e5e499（head c2b561542） | plan/ws005/phase019・plan/ws118 | integrated fd09a68c7 |
+| q607 / q607-i01 | ws005-p024 | 起動時の自動再接続 | user | 3h | in-progress |
