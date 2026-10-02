@@ -7,9 +7,10 @@
 
 | q596 / q596-i01 | [ws005-p018](../../ws005/phase018/phase.md) | WiFi の利用者の流れの調査と契約 | 継続 dispatch（user 2026-10-02） | 3 時間 | finished / cleared |
 
-| q598 / q598-i01 | [ws033-p001](../../ws033/phase001/phase.md) | USB の LAN の hotplug を QEMU で | 継続 dispatch | 3 時間 | in-progress |
+| q598 / q598-i01 | [ws033-p001](../../ws033/phase001/phase.md) | USB の LAN の hotplug を QEMU で | 継続 dispatch | 3 時間 | finished / uncleared（WiFi 優先で中断） |
+| q599 / q599-i01 | [ws005-p019](../../ws005/phase019/phase.md) | BUG-138 WiFi menu・利用者の join の実装 | 2026-10-02 user「実装をお願いします。優先度高いです。」 | 4 時間 | in-progress |
 
-Next（予約）: ws118-p001 → ws005-p019（方式の判断後）
+Next（予約）: ws033-p001 再投入 → ws118-p001
 
 ## Merge requests
 

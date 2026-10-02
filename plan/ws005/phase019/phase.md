@@ -1,12 +1,17 @@
 <!-- awesome-plan project=zedbsd record=ws005-p019 -->
 # ws005-p019: ベータ1 の WiFi の流れの実装
 
-Status: planning（p018 の案とユーザーの判断を待つ）
+Status: in-progress（q599-i01）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Focused goal: fg019（ベータ1）
 Queue: none
 目安: 3〜4h
+
+## 2026-10-02 のユーザーの指示と採用した方式
+
+ユーザー（5330 実機の後）:「画面右上のWiFiメニューについて、WiFiオンオフボタンがクリックしても実装されていませんでした。個別のWiFi APを選んでもパスワード入力や接続ができませんでした。実装をお願いします。優先度高いです。」（[BUG-138](../../bugs/BUG-138.md)）。
+範囲に system bar の WiFi menu の on/off と、AP の選択 → 鍵の入力 → 接続を含める（p018 の判断 2 はユーザーの要求で「入れる」）。方式は p018 の推奨 **A＋A′**（login で利用者として enable、未所有なら join の前に enable、logout で root へ）、有線と WiFi は**有線を優先し route と DNS は networkd が一か所で決める**、複数の利用者の間では A′ の取り上げを許す（ベータ1）を既定として進める。ユーザーが異を唱えたら直す。実 radio の確認は AX211 の 5330 passthrough（BUG-134 解決済み）で行う。
 
 ## 範囲
 
