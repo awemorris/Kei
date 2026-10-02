@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Live scalar SVG rect width handles own a traced native graph and reflect actual content attributes. */
+/*
+ * Live scalar SVG rect width handles own a traced native graph and reflect actual content attributes.
+ */
 
 #include "bind/internal.h"
 

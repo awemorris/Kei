@@ -13,8 +13,8 @@
 #include "html/html.h"
 
 /* The line feed and carriage return code units. */
-#define INPUT_LF	0x0aU
-#define INPUT_CR	0x0dU
+#define INPUT_LF 0x0aU
+#define INPUT_CR 0x0dU
 
 /*
  * Prepares an empty, open input stream.
@@ -23,12 +23,21 @@ void
 html_input_init(
 	struct html_input *input)
 {
-	/* Nothing read, nothing appended, more to come. */
+	/* Prepare empty unit storage and start the tokenizer before the first input unit. */
 	wb_units_init(&input->units);
 	input->position = 0;
+
+	/* An open stream asks the tokenizer to wait for incomplete tokens instead of reporting EOF. */
 	input->closed = 0;
+
+	/* No preceding CR can suppress the first appended LF in a new stream. */
 	input->after_cr = 0;
+
+	/* The sentinel tells tokenizer-side inserted-text normalization that no CR is pending. */
 	input->inserted_cr = (size_t)-1;
+
+	/* Succeeded: appends and tokenizer reads share an empty open stream. */
+	return;
 }
 
 /*
@@ -69,7 +78,7 @@ html_input_append(
 			input->after_cr = 1;
 		}
 
-		/* Stores the unit; the room was reserved above. */
+		/* Publish one normalized unit to the tokenizer within the capacity reserved above. */
 		input->units.data[input->units.length] = unit;
 		input->units.length++;
 	}
@@ -87,6 +96,9 @@ html_input_close(
 {
 	/* The tokenizer may now report end of file. */
 	input->closed = 1;
+
+	/* Succeeded: the already appended units remain readable through the stream's end. */
+	return;
 }
 
 /*
@@ -96,7 +108,12 @@ void
 html_input_release(
 	struct html_input *input)
 {
-	/* Frees the units and leaves an empty, open stream. */
+	/* Release the owned normalized text before resetting the tokenizer protocol state. */
 	wb_units_release(&input->units);
+
+	/* Restore the reusable stream to its empty open state. */
 	html_input_init(input);
+
+	/* Succeeded: no normalized input storage remains owned by the stream. */
+	return;
 }
