@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Loaded child owners retain actual resource metadata and collectible independent realms. */
+/*
+ * Loaded child owners retain actual resource metadata and collectible independent realms.
+ */
 
 #include "bind/internal.h"
 #include "net/net.h"
@@ -97,16 +99,28 @@ bind_frame_location(
 		break;
 	}
 
-	/* Parse a C copy; no primary Page pointer is needed for a saved loaded owner. */
+	/* Prepare owned URL text separately from the independently released parsed record. */
 	wb_buffer_init(&text);
+
+	/* A zeroed URL can be released even when obtaining its source text fails. */
 	memset(&url, 0, sizeof(url));
+
+	/* Copy this Document's URL before parsing or selecting a location component. */
 	error = bind_document_url(window->document, 0, &text);
+
+	/* Parse only a complete source copy; a saved loaded owner needs no primary Page. */
 	if (error == 0)
 		error = net_url_parse(wb_buffer_string(&text), text.length, NULL, &url);
+
+	/* Append the requested component only when the complete URL parsed successfully. */
 	if (error == 0)
 		error = net_url_component(&url, component, out);
+
+	/* Both independent C records are released regardless of which operation failed. */
 	net_url_release(&url);
 	wb_buffer_release(&text);
+
+	/* The caller must not treat partial component text as a successful location. */
 	if (error != 0)
 		return error;
 
@@ -136,15 +150,21 @@ bind_frame_install(
 	unsigned registered;
 	int error;
 
-	/* No allocation can happen before the actual parent, frame and Document are protected. */
+	/* Failed construction never exposes a partially created child owner. */
 	*window = NULL;
+
+	/* Prepare root slots before any allocation can collect the parent, frame or Document. */
 	heap = parent->realm->heap;
 	roots[0] = &parent->document->node.cell;
 	roots[1] = &element->node.cell;
 	roots[2] = &document->node.cell;
 	roots[3] = NULL;
 	registered = 0;
+
+	/* Keep inherited blank-base text in independent C storage until ownership is copied. */
 	wb_buffer_init(&base);
+
+	/* Register each root slot before allocation; registered counts the holds to unwind. */
 	error = 0;
 	for (index = 0; index < 4U; index++) {
 		error = vm_heap_add_root(heap, &roots[index]);
@@ -168,8 +188,11 @@ bind_frame_install(
 
 	/* Share well-known symbols while allocating independent intrinsic objects. */
 	if (error == 0) {
+		/* Preserve agent-wide symbol identities in the newly collectible child realm. */
 		for (index = 0; index < VM_SYMBOLS; index++)
 			realm->symbols[index] = parent->realm->symbols[index];
+
+		/* Allocate the child realm's own intrinsic graph only after symbol sharing is ready. */
 		error = js_install_builtins(realm);
 	}
 
@@ -181,6 +204,8 @@ bind_frame_install(
 		host.node_box = parent->host.node_box;
 		host.user_agent = parent->host.user_agent;
 		host.checkpoint = parent->host.checkpoint;
+
+		/* Construct the independently retained owner with this complete abstract host adapter. */
 		error = bind_window_create(realm, document, &host, &made);
 	}
 
@@ -200,8 +225,12 @@ bind_frame_install(
 		made->top_global = parent->top_global;
 		if (made->top_global == NULL)
 			made->top_global = parent->realm->global;
+
+		/* This depth bounds descendants, while the frame edge names the owning native element. */
 		made->frame = element;
 		made->context_depth = parent->context_depth + 1U;
+
+		/* Initialize the child with the parent's current viewport and timer origin before publication. */
 		bind_window_set_viewport(made, parent->viewport_width, parent->viewport_height);
 		bind_window_set_time(made, parent->now);
 
@@ -222,6 +251,8 @@ bind_frame_install(
 
 	/* Unwind only successfully registered temporary roots on every exit. */
 	wb_buffer_release(&base);
+
+	/* Remove each registered slot in reverse order; zero means no temporary owner remains rooted. */
 	while (registered != 0) {
 		registered--;
 		vm_heap_remove_root(heap, &roots[registered]);

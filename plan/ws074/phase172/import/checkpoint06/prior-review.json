@@ -1,0 +1,45 @@
+{
+  "previous_reviewed": [
+    {
+      "path": "userland/desktop/libbrowser/dom/adopt.c",
+      "sha256": "489a4fe605ac61302bbb4ea8dacf8a8f36298c834e9e3ce745b6eea25505170c",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/attribute.c",
+      "sha256": "1b2b2de7965d0b326321255048dfb5da826cf0c7b54975d1491165912293f1d6",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/form.c",
+      "sha256": "487599bbefee3151b763351f3696619360109689d38e91c238760ca08ac53d3f",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/radio.c",
+      "sha256": "039588e67f37ce93680e1abddbe8bed5a12d99377514bdc98438cf728b1592d1",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/select.c",
+      "sha256": "7ae91d25ce984782915d9a6c771b89b030f942775751fb21c9bf48f2f29fcc2a",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/xml.c",
+      "sha256": "7ff0f9fed4c25029e267406e497deeefc2594c29b73c6611642ef765fbc3cd7c",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/dom.h",
+      "sha256": "5284bcb14d9b6bc56edf1c05509460004c9e70a56c0a02388721d2b1469d44de",
+      "prior": "checkpoint04/review-inventory.json"
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/xml.h",
+      "sha256": "646511b012cb5bfb84c367d6edf38099d072b02233d4ee359e5e94072c20ea06",
+      "prior": "checkpoint04/review-inventory.json"
+    }
+  ],
+  "unchanged_count": 8
+}

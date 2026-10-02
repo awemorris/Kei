@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Owns traced inline CSS sources independently of primary or managed-child C engines. */
+/*
+ * Owns traced inline CSS sources independently of primary or managed-child C engines.
+ */
 
 #include "bind/internal.h"
 #include "css/css.h"
@@ -33,7 +35,7 @@ bind_style_sheet_get(
 	struct wb_units units;
 	int same;
 	int connected;
-	int status;
+	int error;
 
 	/* Only genuine connected HTML style elements can have a current inline source. */
 	*sheet = NULL;
@@ -55,27 +57,29 @@ bind_style_sheet_get(
 	/* The actual owner graph survives parser atoms and state allocation even without native stack roots. */
 	heap = element->node.document->heap;
 	root = &element->node.cell;
-	status = vm_heap_add_root(heap, &root);
-	if (status != 0)
-		return status;
+	error = vm_heap_add_root(heap, &root);
+	if (error != 0)
+		return error;
+
+	/* Copy the direct DOM text while its native owner remains temporarily rooted. */
 	wb_units_init(&units);
-	status = sheet_original(element, &units);
-	if (status != 0) {
+	error = sheet_original(element, &units);
+	if (error != 0) {
 		wb_units_release(&units);
 		vm_heap_remove_root(heap, &root);
-		return status;
+		return error;
 	}
 
 	/* The pure CSS model owns copied source entries independently of these original DOM units. */
 	model = NULL;
-	status = css_rule_model_create(&model, heap, units.data, units.length);
-	if (status != 0) {
+	error = css_rule_model_create(&model, heap, units.data, units.length);
+	if (error != 0) {
 		wb_units_release(&units);
 		vm_heap_remove_root(heap, &root);
-		return status;
+		return error;
 	}
 
-	/* Publish only a complete state after all fallible parser work succeeded. */
+	/* Allocate traced source storage only after all fallible parser work succeeded. */
 	made = vm_heap_alloc(heap, &sheet_type, sizeof(*made));
 	if (made == NULL) {
 		css_rule_model_destroy(model);
@@ -88,9 +92,15 @@ bind_style_sheet_get(
 	made->owner = element;
 	made->model = model;
 	made->original = units;
+
+	/* Unchanged source retains the original DOM text until a native CSSOM edit is observed. */
 	made->changed = 0;
+
+	/* Wrapper identities are created lazily and are traced from this retained source state. */
 	made->wrapper = NULL;
 	made->rules = NULL;
+
+	/* Publish the fully initialized source before dropping its temporary owner hold. */
 	element->style_sheet = &made->cell;
 	*sheet = made;
 	vm_heap_remove_root(heap, &root);
@@ -108,25 +118,25 @@ bind_style_sheet_source(
 	struct wb_units *units)
 {
 	struct bind_style_sheet *sheet;
-	int status;
+	int error;
 
 	/* Rendering never borrows native model pointers beyond this synchronous copied source query. */
-	status = bind_style_sheet_get(element, &sheet);
-	if (status != 0)
-		return status;
+	error = bind_style_sheet_get(element, &sheet);
+	if (error != 0)
+		return error;
 
 	/* Existing non-associated source handling keeps its original rendering semantics. */
 	if (sheet == NULL) {
-		status = sheet_original(element, units);
+		error = sheet_original(element, units);
 	} else if (sheet->changed) {
-		status = css_rule_model_text(sheet->model, units);
+		error = css_rule_model_text(sheet->model, units);
 	} else {
-		status = wb_units_append(units, sheet->original.data, sheet->original.length);
+		error = wb_units_append(units, sheet->original.data, sheet->original.length);
 	}
 
 	/* Any source-copy failure prevents a partially updated style engine. */
-	if (status != 0)
-		return status;
+	if (error != 0)
+		return error;
 
 	/* Succeeded: the existing stylesheet parser receives actual current source units. */
 	return 0;
@@ -142,11 +152,15 @@ bind_style_sheet_changed(
 	struct dom_element *owner;
 	int connected;
 
-	/* A saved old model can change independently without changing the owner's current association. */
+	/* Source queries now serialize the edited native model instead of the original DOM text. */
 	sheet->changed = 1;
+
+	/* A saved old model can change independently without changing the owner's current association. */
 	owner = sheet->owner;
 	if (owner->style_sheet != &sheet->cell)
 		return;
+
+	/* Detached owners must not invalidate the rendering generation of a current Document. */
 	connected = dom_is_inclusive_ancestor(&owner->node.document->node, &owner->node);
 	if (!connected)
 		return;
@@ -166,16 +180,21 @@ sheet_original(
 {
 	struct dom_node *child;
 	struct dom_character_data *text;
-	int status;
+	int error;
 
 	/* Direct Text content is the same original stylesheet source the existing Page parser consumed. */
-	for (child = element->node.first_child; child != NULL; child = child->next) {
+	for (child = element->node.first_child;
+	     child != NULL;
+	     child = child->next) {
+		/* Comments and descendants are excluded from the direct stylesheet source. */
 		if (child->type != DOM_TEXT && child->type != DOM_CDATA_SECTION)
 			continue;
+
+		/* Append this direct text node without lending its owned units to the renderer. */
 		text = (struct dom_character_data *)child;
-		status = wb_units_append(units, text->data.data, text->data.length);
-		if (status != 0)
-			return status;
+		error = wb_units_append(units, text->data.data, text->data.length);
+		if (error != 0)
+			return error;
 	}
 
 	/* Succeeded: the caller owns a copy of the actual original Text content. */
@@ -197,6 +216,8 @@ sheet_trace(
 	/* Public wrapper identity belongs to this actual source even after DOM retires it. */
 	if (sheet->wrapper != NULL)
 		vm_heap_mark(heap, &sheet->wrapper->cell);
+
+	/* A lazily created rule collection retains its identity through the same native source. */
 	if (sheet->rules != NULL)
 		vm_heap_mark(heap, &sheet->rules->cell);
 
