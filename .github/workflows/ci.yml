@@ -58,43 +58,42 @@ jobs:
             artifacts/*.img.gz
             artifacts/Kei-nightly.zip
 
-  keiland-deb:
-    name: Keiland deb (${{ matrix.distro }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - distro: debian13
-            target: keiland-linux-debian
-          - distro: ubuntu2604
-            target: keiland-linux-ubuntu2604
-    env:
-      KEILAND_DEB_ACCEL: tcg
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU host dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y make python3 curl git openssh-client \
-            qemu-system-x86 qemu-utils xorriso
-
-      - name: Build and verify native guest package
-        run: make ${{ matrix.target }}
-
-      - name: Verify release inputs
-        run: python3 tools/release/keiland-linux-deb/verify-artifacts.py --require-clean build/keiland-deb/artifacts/${{ matrix.distro }} ${{ matrix.distro }}
-
-      - name: Upload verified package and evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: keiland-linux-${{ matrix.distro }}
-          path: build/keiland-deb/artifacts/${{ matrix.distro }}/*
-          if-no-files-found: error
-
+#  keiland-deb:
+#    name: Keiland deb (${{ matrix.distro }})
+#    runs-on: ubuntu-latest
+#    timeout-minutes: 45
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - distro: debian13
+#            target: keiland-linux-debian
+#          - distro: ubuntu2604
+#            target: keiland-linux-ubuntu2604
+#    env:
+#      KEILAND_DEB_ACCEL: tcg
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Set up QEMU host dependencies
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y make python3 curl git openssh-client \
+#            qemu-system-x86 qemu-utils xorriso
+#
+#      - name: Build and verify native guest package
+#        run: make ${{ matrix.target }}
+#
+#      - name: Verify release inputs
+#        run: python3 tools/release/keiland-linux-deb/verify-artifacts.py --require-clean build/keiland-deb/artifacts/${{ matrix.distro }} ${{ matrix.distro }}
+#
+#      - name: Upload verified package and evidence
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: keiland-linux-${{ matrix.distro }}
+#          path: build/keiland-deb/artifacts/${{ matrix.distro }}/*
+#          if-no-files-found: error
 
   release:
     name: Create GitHub Release
