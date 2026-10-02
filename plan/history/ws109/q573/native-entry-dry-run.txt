@@ -1,0 +1,14 @@
+make -f userland/desktop/keiland-freebsd.mk all
+mkdir -p build/keiland-freebsd/etc/keiland/
+sed 's|@PREFIX@|/opt/keiland|g' userland/desktop/wayland/freebsd/apps.conf.in > build/keiland-freebsd/etc/keiland/apps.conf.tmp
+mv build/keiland-freebsd/etc/keiland/apps.conf.tmp build/keiland-freebsd/etc/keiland/apps.conf
+python3 userland/desktop/wallpapers/generate.py build/keiland-freebsd/share/keiland/wallpapers
+mkdir -p build/keiland-freebsd/share/keiland/
+cp build/keiland-freebsd/share/keiland/wallpapers/Aurora.ppm build/keiland-freebsd/share/keiland/wallpaper.ppm
+mkdir -p build/keiland-freebsd/share/kei/ime/ja/
+test "$(sha256 -q build/distfiles/remacs-1a724393053e.tar.gz)" = "419d03a195e18875e4761f4d81992905d4130697b72a5fc87849f0228a2f1507"
+tar -xOf build/distfiles/remacs-1a724393053e.tar.gz 'REmacs-1a724393053e18c4e1f502ecc5ca8ce07d99287a/dict/SKK-JISYO.X' > build/keiland-freebsd/share/kei/ime/ja/SKK-JISYO.X.tmp
+test "$(sha256 -q build/keiland-freebsd/share/kei/ime/ja/SKK-JISYO.X.tmp)" = "73819384159330a0c822915d0fd211c3e21dea77f2cfd2083273ac1ffd121ab9"
+mv build/keiland-freebsd/share/kei/ime/ja/SKK-JISYO.X.tmp build/keiland-freebsd/share/kei/ime/ja/SKK-JISYO.X
+mkdir -p build/keiland-freebsd/share/kei/ime/ja/
+cp userland/desktop/ime/dict/SKK-JISYO.kei build/keiland-freebsd/share/kei/ime/ja/SKK-JISYO.kei

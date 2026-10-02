@@ -1,0 +1,6 @@
+--- keiland-freebsd ---
+env -u MAKEFLAGS -u MFLAGS gmake -j 8 -f userland/desktop/keiland-freebsd.mk all CC=cc KEILAND_PREFIX=/opt/keiland
+env -u MAKEFLAGS -u MFLAGS gmake -j 1 -f userland/desktop/keiland-freebsd.mk install DESTDIR=/tmp/a\ stage
+make keiland-freebsd: build with the native FreeBSD compiler
+sudo make keiland-freebsd-install: install under /opt/keiland
+Other project targets require GNU make (gmake).

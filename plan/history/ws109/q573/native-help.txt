@@ -1,0 +1,22 @@
+zedBSD build interface
+
+ make Build a disk image
+ make menuconfig Configure the build in config.mk
+ make disk-image Build a disk image
+ make world Build vmunix and rootfs
+ make rootfs Build rootfs
+ make vmunix Build the kernel
+ make run Build a disk image and start QEMU
+ make download Acquire all declared external userland inputs
+ make patch Extract and patch every declared external input
+ make toolchain-cache Install the pinned rev-0 LLVM cache (x86_64 Linux)
+ make toolchain Build the toolchain
+ make keiland-linux Build Keiland for Linux with the host compiler
+ make keiland-linux-install Install Keiland under DESTDIR/opt/keiland
+ make keiland-linux-install-session Install the gdm session file
+ make keiland-linux-clean Remove Linux build outputs, retaining guest images
+ make keiland-linux-debian Build and verify a Debian 13 deb in QEMU
+ make keiland-linux-ubuntu2604 Build and verify an Ubuntu 26.04 deb in QEMU
+ make keiland-freebsd Build the native FreeBSD desktop (no target toolchain)
+ sudo make keiland-freebsd-install Install the FreeBSD desktop under /opt/keiland
+ make help Show this summary

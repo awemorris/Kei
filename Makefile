@@ -43,6 +43,7 @@ ZEDBSD_CONFIG ?= config.mk
 # saved. Every build target requires the target information from config.mk.
 ZEDBSD_CONFIG_OPTIONAL_GOALS := menuconfig help list-user-programs \
 	keiland-linux keiland-linux-install keiland-linux-install-session keiland-linux-clean \
+	keiland-freebsd keiland-freebsd-install \
 	menuconfig-host-test rtl8822b-firmware-fixture-cache \
 	intelax211-firmware-fixture-cache i915-firmware-fixture-cache \
 	download toolchain \
@@ -444,6 +445,13 @@ keiland-linux-install-session:
 keiland-linux-clean:
 	$(MAKE) -f userland/desktop/keiland-linux.mk clean
 
+# FreeBSD also has a BSD make entry; GNU make uses the same independent native rules.
+.PHONY: keiland-freebsd keiland-freebsd-install
+keiland-freebsd:
+	$(MAKE) -f userland/desktop/keiland-freebsd.mk all
+keiland-freebsd-install:
+	$(MAKE) -f userland/desktop/keiland-freebsd.mk install
+
 # Distribution packages are built and installed in isolated native QEMU guests.
 .PHONY: keiland-linux-debian keiland-linux-ubuntu2604
 keiland-linux-debian:
@@ -477,6 +485,8 @@ help:
  ' make keiland-linux-clean Remove Linux build outputs, retaining guest images' \
  ' make keiland-linux-debian Build and verify a Debian 13 deb in QEMU' \
  ' make keiland-linux-ubuntu2604 Build and verify an Ubuntu 26.04 deb in QEMU' \
+ ' make keiland-freebsd Build the native FreeBSD desktop (no target toolchain)' \
+ ' sudo make keiland-freebsd-install Install the FreeBSD desktop under /opt/keiland' \
  ' make help Show this summary'
 
 list-targets:

@@ -93,3 +93,7 @@ User waives physical-machine tests; actual native FreeBSD QEMU Venus replaces th
 ## WS109 final native GPU coverage / 2026-10-02
 
 [Retainednativeprobes](../tools/keiland-freebsd/README.md): systemheader/object/privateELF audit; realpipe/closedfd/output/borrowedownership and realGPU zeroaccesssync boundary; properxdgtoplevel/Vulkan positiveframes; actualVT/nativeleases/reacquisition/QMPUSBinput; sevenmainapps/fileopens and kernel→Wayland→PTYkeyboard. Manual fullC covers semanticparagraphs/function/declorder/ownership, formatter19.1.7 and stylechecker remain auxiliary (permitted forwardcleanup gotos are candidates, not violations). q566 unchangedsource/Linux/zedBSD receipts retained by hashes, q569..q572 nativeonly additions finalreviewed. Userselectedi915 replaces missingnativeVenusroute; physicalWiFi waived, WPApeer staysmockwire evidence. Source-only testmoves retain fullreview/evidence, WSspecifictests removed at completion perAGENTS.
+
+## 2026-10-02 / ws109-physical-build-install
+
+最新ユーザー: awe@10.0.30.3 ~/zedBSD実機の全操作を事前承認、make keiland-freebsd / sudo make keiland-freebsd-install / /opt/keiland直接起動を希望。最後のGUI受け入れはユーザーの実操作確認。先の実機waiverをこの受け入れについて置換、q572 evidenceは歴史として保存。SSH hostkey変更はユーザーが新ED25519指紋を確認済み、task専用known_hostsで接続。WIP commitに続く開発host pushとFreeBSD pullも追加指示で今回承認（従前push禁止のscope例外）。非force pushのみ、remote人間変更を保つ。native compiler/base libcと既存packages、seatd/video設定を利用、make toolchain不要。FreeBSD GDMはportのWayland制限説明後ユーザーが撤回、対象外。全newsourceの全文規約確認をp007で実行。Issue/Project/comment公開承認とは区別しoutboxを保つ。

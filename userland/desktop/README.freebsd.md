@@ -12,20 +12,22 @@ gmake 4.4.1, Python 3.11.16, Meson 1.10.2, Ninja 1.13.2, Vulkan loader/headers
 and runtime prerequisites on the FreeBSD machine:
 
 ```sh
-pkg install gmake python311 meson ninja vulkan-headers vulkan-loader libdrm mesa-dri seatd
+sudo pkg install gmake python3 meson ninja vulkan-headers vulkan-loader libdrm mesa-dri seatd
 ```
 
-From the repository root, build and review a staged installation:
+From the repository root, build with the host compiler and install:
 
 ```sh
-gmake -j16 -f userland/desktop/keiland-freebsd.mk all CC=cc
-gmake -j16 -f userland/desktop/keiland-freebsd.mk install CC=cc DESTDIR=/tmp/keiland-stage
+make -j8 keiland-freebsd
+sudo make keiland-freebsd-install
 ```
 
-Install the reviewed build as root:
+Neither `make toolchain` nor a zedBSD `config.mk` is required. FreeBSD's base
+`make` forwards these native targets to the installed `gmake`; GNU make can
+also run the same targets directly. A staged installation is optional:
 
 ```sh
-gmake -f userland/desktop/keiland-freebsd.mk install CC=cc
+make keiland-freebsd-install DESTDIR=/tmp/keiland-stage
 ```
 
 The default prefix is `/opt/keiland`; its private RUNPATH supplies the libraries.
@@ -33,7 +35,14 @@ No global `LD_LIBRARY_PATH`, standard library replacement or Python alias is
 needed. `KEILAND_PREFIX`, `KEILAND_FREEBSD_BUILD`, `KEILAND_FREEBSD_LOCALBASE` and
 `KEILAND_FREEBSD_PYTHON` can select another prefix/build/localbase/interpreter.
 Use the same selections for build and install. The default interpreter is
-`python3.11`; this must match the installed native Meson/Python tools.
+`python3`; this must match the installed native Meson/Python tools. The `python3`
+package supplies that command. Set `KEILAND_FREEBSD_PYTHON=python3.11` for the
+earlier verified environment if it has only the versioned interpreter.
+
+Linux likewise uses the host compiler: `make keiland-linux`, then
+`sudo make keiland-linux-install`. Linux GDM registration is a separate step:
+`sudo make keiland-linux-install-session`. FreeBSD GDM launch is outside the
+accepted scope; use the local VT procedure below.
 
 The build independently fetches and verifies the pinned MIT seatd client source,
 Noto emoji font and Japanese dictionary. The private seat client enables only
@@ -80,8 +89,14 @@ export XDG_RUNTIME_DIR="$HOME/.cache/keiland-runtime"
 export WAYLAND_DISPLAY=wayland-keiland
 export KEILAND_SEAT=seatd
 export KEILAND_DRM_DEVICE=/dev/dri/card0
-/opt/keiland/bin/wayland
+/opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
 ```
+
+`--session` keeps the desktop running until Log Out or normal termination.
+Without it the existing development mode stops after 150 seconds. Run as the
+ordinary session user from a local console, after logging in again following
+the `video` group change. An SSH shell is for building/installing, and does not
+supply the local active VT needed by seatd.
 
 Select the actual DRM primary node when it differs from `/dev/dri/card0`.
 A standard Vulkan loader's normal device/ICD configuration selects the GPU;

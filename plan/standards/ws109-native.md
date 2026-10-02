@@ -55,3 +55,7 @@ IOMMUgroup0 GPUalone, no other QEMU. Use4GiB guest, owned disk copy/overlay/endp
 GPU unbinding/reboot/kernel/library replacement or unrelated VM/process changes. Existing
 native i915/drm-kmod may be installed in own guest under prior permission. New driver port
 still excluded. Actual native Vulkan/DRM/provider/render/lease checks required where possible.
+
+## 2026-10-02 / ws109-physical-build-install
+
+最新ユーザー: awe@10.0.30.3 ~/zedBSD実機の全操作を事前承認、make keiland-freebsd / sudo make keiland-freebsd-install / /opt/keiland直接起動を希望。最後のGUI受け入れはユーザーの実操作確認。先の実機waiverをこの受け入れについて置換、q572 evidenceは歴史として保存。SSH hostkey変更はユーザーが新ED25519指紋を確認済み、task専用known_hostsで接続。WIP commitに続く開発host pushとFreeBSD pullも追加指示で今回承認（従前push禁止のscope例外）。非force pushのみ、remote人間変更を保つ。native compiler/base libcと既存packages、seatd/video設定を利用、make toolchain不要。FreeBSD GDMはportのWayland制限説明後ユーザーが撤回、対象外。全newsourceの全文規約確認をp007で実行。Issue/Project/comment公開承認とは区別しoutboxを保つ。
