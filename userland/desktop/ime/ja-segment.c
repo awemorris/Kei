@@ -1096,7 +1096,7 @@ segment_add_joined(
  *
  * The sources, in order: 0 is the user's and the engine's own words and
  * 来る; then each dictionary, with the verbs written in kana (います,
- * ありません) just before the last one, the system dictionary, so that the
+ * ありません, します) just before the last one, the system dictionary, so that the
  * supplement's words come before them and the system dictionary's after.
  * A dictionary's words are a noun that is the whole word, a verb or an
  * adjective whose okurigana ends it (the longest stem first), and a noun
@@ -1162,6 +1162,14 @@ segment_add_tier(
 		kana_stem = ja_inflect_kana_verb_stem(text, start, core_end);
 		if (kana_stem != start)
 			(void)ja_segment_add_candidate(segment, start_bytes, text->offsets[end] - text->offsets[start]);
+
+		/* A form of する alone is written in kana as well (します rather than 知ます, する rather than 刷る). */
+		memset(ends, 0, sizeof(ends));
+		ja_inflect_suru_ends(text, start, ends);
+		if (ends[core_end])
+			(void)ja_segment_add_candidate(segment, start_bytes, text->offsets[end] - text->offsets[start]);
+
+		/* The verbs written in kana are this source's only words. */
 		return;
 	}
 

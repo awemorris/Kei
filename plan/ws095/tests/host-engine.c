@@ -51,6 +51,7 @@ static void test_dict_reader(void);
 static void test_dict_x(void);
 static void test_inflect(void);
 static void test_conjugation(void);
+static void test_suru_kuru(void);
 static void test_split(void);
 static void test_user(void);
 static void test_engine_keys(void);
@@ -59,6 +60,7 @@ static void romaji_case(const char *typed, const char *expected);
 static void inflect_case(const char *reading, size_t stem_end, char consonant, size_t end, int expected);
 static void conjugated_case(const char *reading, size_t stem_end, char consonant, enum ja_conjugation conjugation, size_t end, int expected);
 static void conjugation_of(const struct ja_dict *dict, const char *key, size_t index, const char *word, enum ja_conjugation expected);
+static void irregular_case(const char *reading, bool kuru, size_t end, int expected);
 static void annotated_split_case(const char *system, const char *supplement, const char *reading, const char *expected);
 static void split_case(struct ja_core *core, const char *reading, const char *expected);
 static size_t set_reading(struct ja_core *core, const char *reading);
@@ -106,6 +108,7 @@ main(
 	test_dict_x();
 	test_inflect();
 	test_conjugation();
+	test_suru_kuru();
 	test_split();
 	test_user();
 	test_engine_keys();
@@ -416,6 +419,8 @@ test_conjugation(void)
 	error = write_file("conjugation-system.dict",
 			   ";; system dictionary of the host tests\n"
 			   "かr /借/狩/\n"
+			   "しr /知/\n"
+			   "すr /刷/\n"
 			   "なs /成/\n"
 			   "とうきょう /東京/\n",
 			   system,
@@ -460,6 +465,99 @@ test_conjugation(void)
 
 	/* Of two splits into as many segments, the one of the supplement's words (not 友達とは|成しました). */
 	annotated_split_case(system, supplement, "ともだちとはなしました", "友達と|話しました");
+
+	/* A form of する alone comes before a system dictionary's verb read alike (not 知ますか, 刷る). */
+	annotated_split_case(system, supplement, "しますか", "しますか");
+	annotated_split_case(system, supplement, "する", "する");
+	annotated_split_case(system, supplement, "しらない", "知らない");
+}
+
+/*
+ * The forms of する and 来る (ws095-p012): the stems し, き and こ take
+ * only the endings each really takes.
+ */
+static void
+test_suru_kuru(void)
+{
+	/* する. */
+	irregular_case("します", false, 3, 1);
+	irregular_case("しよう", false, 3, 1);
+	irregular_case("しない", false, 3, 1);
+	irregular_case("しろ", false, 2, 1);
+	irregular_case("していた", false, 4, 1);
+	irregular_case("すれば", false, 3, 1);
+	irregular_case("される", false, 3, 1);
+	irregular_case("しる", false, 2, 0);
+	irregular_case("しれば", false, 3, 0);
+
+	/* 来る. */
+	irregular_case("きます", true, 3, 1);
+	irregular_case("きた", true, 2, 1);
+	irregular_case("きてください", true, 6, 1);
+	irregular_case("こない", true, 3, 1);
+	irregular_case("こよう", true, 3, 1);
+	irregular_case("こい", true, 2, 1);
+	irregular_case("くる", true, 2, 1);
+	irregular_case("きる", true, 2, 0);
+	irregular_case("ころ", true, 2, 0);
+	irregular_case("こます", true, 3, 0);
+	irregular_case("きない", true, 3, 0);
+}
+
+/*
+ * Checks where a form of する or 来る beginning a reading ends.
+ */
+static void
+irregular_case(
+	const char *reading,
+	bool kuru,
+	size_t end,
+	int expected)
+{
+	struct ja_unit units[JA_UNITS_MAX];
+	struct ja_text *text;
+	bool ends[JA_UNITS_MAX + 1U];
+	size_t position;
+	size_t count;
+	size_t used;
+	uint32_t code;
+	int ended;
+
+	/* The segmenter's view of the reading, every character a kana. */
+	text = malloc(sizeof(*text));
+	if (text == NULL) {
+		check(0, "irregular %s: no memory", reading);
+		return;
+	}
+
+	count = 0;
+	position = 0;
+	while (reading[position] != '\0') {
+		used = ja_utf8_decode(reading + position, strlen(reading + position), &code);
+		memset(&units[count], 0, sizeof(units[count]));
+		units[count].code = code;
+		units[count].kind = JA_UNIT_KANA;
+		count++;
+		position += used;
+	}
+
+	ja_text_build(text, units, count);
+
+	/* Marks the ends of the verb's forms and compares the one asked about. */
+	memset(ends, 0, sizeof(ends));
+	if (kuru) {
+		ja_inflect_kuru_ends(text, 0, ends);
+	} else {
+		ja_inflect_suru_ends(text, 0, ends);
+	}
+
+	ended = 0;
+	if (ends[end])
+		ended = 1;
+
+	check(ended == expected, "irregular %s (%s) %s at %zu", reading, kuru ? "来る" : "する",
+	      expected ? "ends" : "does not end", end);
+	free(text);
 }
 
 /*
