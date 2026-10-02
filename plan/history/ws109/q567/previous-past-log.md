@@ -2,11 +2,11 @@
 
 # Past Log
 
-Last finished Queue: [q567](queue-q567.md)（WS109 p003 uncleared）
+Last finished Queue: [q566](queue-q566.md)（WS109 p005 uncleared）
 
-## 最新: q567 /WS109 p003
+## 最新: q566 /WS109 p005
 
-item uncleared /Phase uncleared。Actual Venus-configured FreeBSD QEMU boots, but native DRM/Venus ICD absent and latest upstream virtio driver lacks HOST_VISIBLE. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q567/result.md). Kernel/driver port outside WS109; concrete acceptance/scope decision requested, physical tests waived.
+item cleared /Phase uncleared。Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.
 
 WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免除、FreeBSD QEMU Venus acceptanceは未確認。
 
@@ -14,6 +14,7 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 
 | Queue | Outcome |
 | --- | --- |
+| [q537](queue-q537.md) | ws105-p010 cleared |
 | [q538](queue-q538.md) | ws105-p011 cleared |
 | [q539](queue-q539.md) | ws106p001 cleared |
 | [q540](queue-q540.md) | ws106p002 partial cleared / whole uncleared、ime-probe回答待ち |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 | [q564](queue-q564.md) | WS109 p002 item cleared /Phase uncleared |
 | [q565](queue-q565.md) | WS109 p002 item cleared /Phase cleared |
 | [q566](queue-q566.md) | WS109 p005 item cleared /Phase uncleared |
-| [q567](queue-q567.md) | WS109 p003 item uncleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

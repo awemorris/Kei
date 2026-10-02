@@ -1,0 +1,108 @@
+drm-515-kmod-5.15.160.1500068_10
+drm-61-kmod-6.1.128.1500068_10
+drm-66-kmod-6.6.25.1500068_10
+drm-kmod-20260508
+drm_info-2.10.0
+libdrm-2.4.133,1
+linux-c7-libdrm-2.4.97
+linux-rl9-libdrm-2.4.123
+nvidia-drm-515-kmod-595.84.1500068_1
+nvidia-drm-515-kmod-580-580.173.02.1500068_1
+nvidia-drm-515-kmod-devel-610.43.02.1500068_1
+nvidia-drm-61-kmod-595.84.1500068_1
+nvidia-drm-61-kmod-580-580.173.02.1500068_1
+nvidia-drm-61-kmod-devel-610.43.02.1500068_1
+nvidia-drm-66-kmod-595.84.1500068_1
+nvidia-drm-66-kmod-580-580.173.02.1500068_1
+nvidia-drm-66-kmod-devel-610.43.02.1500068_1
+nvidia-drm-kmod-595.84
+nvidia-drm-kmod-580-580.173.02
+nvidia-drm-kmod-devel-610.43.02
+py312-drmaa-0.4b3_2
+drm-515-kmod-5.15.160.1501000_9
+drm-61-kmod-6.1.128.1501000_8
+drm-66-kmod-6.6.25.1501000_8
+drm-latest-kmod-6.9.1501000_1
+virtio-gpu-qemu-kmod-0.2.1500068_1
+/boot/kernel/virtio.ko
+/boot/kernel/virtio_balloon.ko
+/boot/kernel/virtio_blk.ko
+/boot/kernel/virtio_console.ko
+/boot/kernel/virtio_p9fs.ko
+/boot/kernel/virtio_pci.ko
+/boot/kernel/virtio_random.ko
+/boot/kernel/virtio_scsi.ko
+mesa-dri-26.1.3
+Name           : mesa-dri
+Version        : 26.1.3
+Installed on   : Thu Oct  1 19:18:00 2026 UTC
+Origin         : graphics/mesa-dri
+Architecture   : FreeBSD:15:amd64
+Prefix         : /usr/local
+Categories     : graphics
+Licenses       : MIT
+Maintainer     : x11@FreeBSD.org
+WWW            : https://www.mesa3d.org/
+Comment        : OpenGL hardware acceleration drivers for DRI2+
+Options        :
+	WAYLAND        : on
+	X11            : on
+	ZSTD           : on
+	anv            : on
+	crocus         : on
+	i915           : on
+	iris           : on
+	llvmpipe       : on
+	r300           : on
+	r600           : on
+	radeonsi       : on
+	radv           : on
+	svga           : on
+	swrast_vk      : on
+Shared Libs required:
+	libLLVM.so.19.1
+	libX11-xcb.so.1
+	libc++.so.1
+	libc.so.7
+	libcxxrt.so.1
+	libdisplay-info.so.3
+	libdrm.so.2
+	libdrm_amdgpu.so.1
+	libelf.so.2
+	libexpat.so.1
+	libgbm.so.1
+	libgcc_s.so.1
+	libm.so.5
+	libthr.so.3
+	libwayland-client.so.0
+	libxcb-dri3.so.0
+	libxcb-present.so.0
+	libxcb-randr.so.0
+	libxcb-shm.so.0
+	libxcb-sync.so.1
+	libxcb-xfixes.so.0
+	libxcb.so.1
+	libxshmfence.so.1
+	libz.so.6
+	libzstd.so.1
+Shared Libs provided:
+	libvulkan_intel.so
+	libvulkan_lvp.so
+	libvulkan_radeon.so
+Annotations    :
+	FreeBSD_version: 1500068
+	build_timestamp: 2026-08-27T20:30:59+0000
+	built_by       : poudriere-git-3.4.8-1-g8f99bac1
+	port_checkout_unclean: no
+	port_git_hash  : e9e40e40c5d926e4d17c156665b69e8073cc863b
+	ports_top_checkout_unclean: no
+	ports_top_git_hash: af852d55eb7dcc704a7626891a4320fad4fee3b4
+	repo_type      : binary
+	repository     : FreeBSD-ports
+Flat size      : 54.9MiB
+Description    :
+This package contains the current stable release of the client drivers for DRI2+
+
+With a X Server configured for DRI, they allow direct rendering of hardware-
+accelerated OpenGL. This package also includes the software renderer, either
+llvmpipe or classic SWrast.

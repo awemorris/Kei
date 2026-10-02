@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q566 finished）
-Resume point: p005 uncleared; Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.
+Queue: なし（q567 finished）
+Resume point: p003 uncleared; Actual Venus-configured FreeBSD QEMU boots, but native DRM/Venus ICD absent and latest upstream virtio driver lacks HOST_VISIBLE. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q567/result.md). Kernel/driver port outside WS109; concrete acceptance/scope decision requested, physical tests waived.
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -48,7 +48,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | --- | --- | --- | --- | --- |
 | [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | cleared / q565 | p001 |
-| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q559 | p002 L1 verified output |
+| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q567 | p002 L1 verified output |
 | [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
 | [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | uncleared / q566 | p002 F2 verified + p003/p004 implementation outputs for subset; QEMU Venus gate for whole |
 
@@ -154,3 +154,7 @@ Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/
 Queue supplement and docs; remote decision/structural events pending publication.
 
 2026-10-02T00:22:28.923483+00:00 / ws109-q566-cleared: p005 uncleared。Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.
+
+ws109-q567-design: p003 bounded actual native QEMU Venus investigation replaces former physical waiting; actual kernel/ICD prerequisites checked, q566 conformance subset cleared. No kernel port authorization.
+
+2026-10-02T00:26:10.544991+00:00 / ws109-q567-uncleared: p003 uncleared。Actual Venus-configured FreeBSD QEMU boots, but native DRM/Venus ICD absent and latest upstream virtio driver lacks HOST_VISIBLE. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q567/result.md). Kernel/driver port outside WS109; concrete acceptance/scope decision requested, physical tests waived.

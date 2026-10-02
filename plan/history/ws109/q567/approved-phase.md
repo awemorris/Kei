@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q567 / q567-i01
+Queue / Attempt: q559 / q559-i01
 
 ## 目的・範囲
 
@@ -184,9 +184,3 @@ ends affected attempt uncleared with concrete evidence/scope options; no endless
 Whole F3 requires actual native Venus path and existing lifecycle/renderer obligations. p005 consumes
 verified Venus output after its final conformance subset q566, not host-only capabilities. This is
 internal p003 procedure refinement, unchanged p005 output/dependency commitment. WS event recorded.
-
-## Result / q567-i01 / 2026-10-02T00:26:10.543066+00:00
-
-Queue item uncleared /whole Phase uncleared。Actual Venus-configured FreeBSD QEMU boots, but native DRM/Venus ICD absent and latest upstream virtio driver lacks HOST_VISIBLE. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q567/result.md). Kernel/driver port outside WS109; concrete acceptance/scope decision requested, physical tests waived.
-
-Event ws109-q567-uncleared: local evidence/outcome saved; remote comment (no Phase close) pending.
