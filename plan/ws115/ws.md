@@ -13,6 +13,7 @@ Resume point（2026-10-02 q597）: p001 cleared。[移植契約](port-contract.m
 2026-10-02 user の判断: D-VER = **GTK 4.18.6**（「GTK 4.18.6でOKです。あとで4.24.1以降にアップデートする旨を記録します。」→ [F-066](../future-work.md)）。L1 = **libc に `sys/poll.h` を足す**（「sys/poll.hを足してください。」、main が `include/libc/sys/poll.h` を追加）。L2（libc に関数を足さない）・R1（Cairo → GL → Vulkan）・P1（portal・D-Bus を入れない）は推奨のまま、ユーザーの異論待ち。
 2026-10-02 user:「portalはなしにしましょう。D-BusがないとGTK4が動かないということはないはずです。WindowsでもMacでも動きますよね。D-Busも実装しません。」 → P1（portal・D-Bus）は**入れない**で確定。xdg-desktop-portal と D-Bus の daemon は移植・実装しない。ファイルダイアログは GTK 組み込みの GtkFileChooserDialog。GtkApplication の session bus が無いときの挙動（一意性・起動の warning）は p010 で確かめ、必要なら build option や環境で抑える。
 2026-10-02 user:「Keilandネイティブのfile chooserを呼び出すlibkeilandの関数呼び出しを、GTK4に追加してもOKです。」→ 新 [p011](phase011/phase.md)（p010 の後）。portal 無しで、GTK のファイルダイアログを Keiland の共有の file chooser で出す。
+2026-10-02 user:「GtkApplication が、session bus が無いと警告を出す件は、該当コードを無効化するパッチをお願いします。」→ p010 の範囲に追加（glib/GTK の patch）。
 <!-- awesome-plan-current:end -->
 
 ## Objective / scope

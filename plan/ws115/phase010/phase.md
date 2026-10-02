@@ -31,3 +31,8 @@ demo app が zedBSD QEMU で window を表示し、p001 の代表操作が通る
 [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、[scoped方針](../../standards/ws114-gtk-qt-learning.md)、[automation](../../standards/automation.md)、[license audit](../../tools/packages/audit-licenses.sh) を実装前に確認する。外部 package は公式 tarball を取得・検証して patch し、source tree へ取り込まない（AGENTS.md）。新コードは全文規約。toolchain（`toolchain/`・`lang/clang`・`devel/libcxx`・共有 `build/llvm` 等）は変更・build しない。共有 `build/` は読取専用、自分の worktree の `build/` を使う。全体の `make check` は禁止。具体コマンド/版/結果/commit/環境/成果物/skip/制限は未実施（計画のみ）。各PhaseはQueueの個別scope承認後に実行する。前提未達・判断待ちならattemptをunclearedとして証拠/再開条件を残す。
 
 Event ws115-beta1-plan-20261002: 2026-10-02 計画担当が依存 package の移植 Phase として作成。版・option は p001 の移植契約で確定する。planning/Queue none。GitHub publication pending。
+
+
+## 2026-10-02 user の追加
+
+「GtkApplication が、session bus が無いと警告を出す件は、該当コードを無効化するパッチをお願いします。」→ この Phase の範囲に含める: GtkApplication（と下の GApplication の session bus の接続）が zedBSD で session bus を探さず警告を出さないよう、該当コードを `__ZEDBSD__` で無効化する patch を `userland/packages/desktop/gtk4/`（または glib 側なら glib の package）に置く。一意性（single instance）は無効のまま、app は通常どおり起動・終了する。gtk4-demo・widget-factory の起動で警告が出ないことを確かめる。
