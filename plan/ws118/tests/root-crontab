@@ -1,0 +1,6 @@
+# ws118-p001: root's crontab on the remote-log images.  Every minute the
+# kernel's message buffer is copied to the disk, so that after a hang the
+# USB stick read on another machine (plan/ws031/tests/ufs-cat.py) holds the
+# kernel's messages up to the last minute before it; syslogd keeps them only
+# in /run (tmpfs).  A hang before cron starts leaves nothing here.
+* * * * * dmesg > /var/log/dmesg.cron.tmp && mv /var/log/dmesg.cron.tmp /var/log/dmesg.cron && sync
