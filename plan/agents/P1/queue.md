@@ -3,6 +3,9 @@
 | Queue / attempt | Phase | Scope | Approval | Timebox | State |
 | --- | --- | --- | --- | --- | --- |
 | q590 / q590-i01 | [ws004-p051](../../ws004/phase051/phase.md) | BUG-134: AX211 の passthrough での再現・解析・driver の修正と確認（phase.md の範囲） | 2026-10-02 user「PCIパススルーでQEMUを起動してデバッグしておいてほしいです。これは最初に取り組みましょう！」 | 4 時間 | finished / uncleared（実機試験待ち） |
+| q594 / q594-i01 | [ws129-p009](../../ws129/phase009/phase.md) | デモの image を CI 設定の土台に、boot-test の timeout | 2026-10-02 user「デモのイメージはCI設定をベースに変更しましょう。」 | 3 時間 | in-progress |
+
+Next（予約）: ws005-p018 → ws033-p001 → ws118-p001
 
 ## Merge requests
 
