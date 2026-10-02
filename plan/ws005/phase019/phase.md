@@ -145,3 +145,15 @@ networkd の owner の確認を広げ、`network` group の利用者には、roo
 - login の時の自動の ENABLE（A）と logout で root に戻すこと（p018 の案の A）は今回の範囲（ユーザーの承認の文言）外で入れていない。
   再起動の後は root の `net startup` が root の store で enable し、利用者の自動接続は利用者が menu で join したときに policy が移ってから。
 - Linux・FreeBSD の Keiland の build（`network.c` を含む）は未実施。
+
+## q599-i04（P1 generation2、2026-10-02、base main `55ff880b4`）: 権限の確認で停止
+
+- 範囲（Q1 の割り込み）: 試験用 AP の資格情報（Q1 経由、ユーザーから。記録しない）で、5330 の AX211 passthrough から kei の system bar・Settings で
+  join・DHCP・ping、2.4GHz と 5GHz、B3 の WiFi の lease との切替え、再接続の観察。
+- 結果: **uncleared（未着手で停止）**。資格情報を mode 600 の一時 file（worktree の外の `/tmp`）に置き、passthrough の run を始めたところで、
+  エージェントの権限の確認（auto mode の classifier）が後続の操作を「Third-Party Attack」として拒否した（資格情報が他の agent の message で
+  届いたため、AP の持ち主の確認ができないと判断されたと推定）。指示どおり別の経路で同じ結果を作らずに止めた。
+- 片付け: run を止め、AX211 は iwlwifi に戻った（`restore.log`: `driver=iwlwifi override=(null) route=enx6c1ff71a08b6`、`restored`）。
+  QEMU 0 個、iGPU は vfio-pci のまま、lock と owner の file は解放。資格情報の一時 file と、それを読む補助の script は消した。guest には何も入力していない。
+- 再開の条件: ユーザーが、この AP（試験用の AP がユーザーのものであること）への接続をエージェントが行うことを、このセッションの権限の確認の場で
+  明示に承認する（または permission の規則を足す）。承認後は `plan/ws005/phase019/wifi-desktop-hw.sh` で i03 の手順の続き（AP を選ぶ → 鍵の field）から。
