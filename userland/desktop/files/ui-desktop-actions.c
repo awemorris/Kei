@@ -77,6 +77,9 @@ fm_desktop_action(
 		fm_ui_action(app, action);
 		break;
 	}
+
+	/* Succeeded: the chosen action has been dispatched. */
+	return;
 }
 
 /*
@@ -169,6 +172,9 @@ fm_desktop_rename_end(
 	/* Its place under the new name. */
 	error = fm_desktop_layout_rename(&app->desk, old_name, new_name);
 	fm_log("DESKTOP rename from=%s to=%s error=%d", old_name, new_name, error);
+
+	/* Succeeded: the saved-place rename has been reported. */
+	return;
 }
 
 /*
@@ -207,6 +213,9 @@ desktop_show_in_files(
 	arguments[2] = NULL;
 	error = fm_apps_spawn(arguments);
 	fm_log("DESKTOP show-in-files path=%s error=%d", folder, error);
+
+	/* Succeeded: the Files launch has been reported. */
+	return;
 }
 
 /* Puts the items back in order (Clean Up): the places the user gave are forgotten and the items laid out by name. */
@@ -220,6 +229,9 @@ desktop_clean_up(
 	error = fm_desktop_clean_up(&app->desk);
 	if (error != 0)
 		fm_ui_message(app, "Couldn't clean up the desktop");
+
+	/* Succeeded: any layout-write failure has been shown. */
+	return;
 }
 
 /* Opens Settings on its wallpaper's page. */
@@ -235,6 +247,9 @@ desktop_change_wallpaper(void)
 	arguments[2] = NULL;
 	error = fm_apps_spawn(arguments);
 	fm_log("DESKTOP change-wallpaper error=%d", error);
+
+	/* Succeeded: the Settings launch has been reported. */
+	return;
 }
 
 /* Finds the folder the desktop shows (the tab's place). */
@@ -249,4 +264,7 @@ desktop_folder(
 	/* The place the tab shows now. */
 	tab = fm_ui_tab(app);
 	snprintf(folder, size, "%s", tab->history[tab->history_index].location.path);
+
+	/* Succeeded: the caller has the desktop folder path. */
+	return;
 }

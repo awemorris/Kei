@@ -1,7 +1,7 @@
 # Agent B1 Queue q587
 
 Status: active
-Attempt: q587-i01 / in-progress（user開始共有）
+Attempt: q587-i01 / in-progress
 Owner: Agent B / B1 GTK executor
 Approval: current user / 2026-10-02、[Phaseに保存した追加CSD指示](../../ws114/phase007/phase.md)。具体実装と確認の追加実行を承認。Agent Aがq587を予約。
 Timebox: 最大3時間 / 1 Phase
@@ -17,3 +17,7 @@ Upcoming Work Outlook: 残る機能行はp002判断後に個別選定。p005/p00
 Sync: GitHub publication保留。WIP commitのみ、pushなし。Agent Aが共有投影を所有。
 
 2026-10-02 / A-projection-start: userがB checkpoint df66db5eのp007/q587開始を共有。checkpoint時のlane pending/Phase planned草稿を保存した上で、共有canonical attemptをin-progressへ投影。A435a62126で資料統合、source実装/試験の結果はBの後続MRを待つ。
+
+Start receipt: 2026-10-02 07:41 UTC、snapshot照合とB main FFを確認。実行担当は同じcontextで継続。
+
+Scope amendment01 / 2026-10-02: [GTK4 release correction](../../ws114/phase007/q587-scope-amendment-01.md), SHA256 `30d8b4d7b2730648518f5aeb7a60d1395135c715e086d5f840dd026f9eaf766f`。実検証で元基準が失敗したためseat.c/toplevel.cと最小lifecycle stateへ技術scopeを具体化。ユーザーのGTK4実操作確認指示内、元snapshot/timebox/criteriaを保持。10:41:58 UTC deadline。

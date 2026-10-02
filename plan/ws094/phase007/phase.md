@@ -2,10 +2,10 @@
 
 # ws094-p007: 全文の規約と回帰（WS094 の最後）
 
-Status: planned（2026-10-01 に phase.md を作った。手順は下）
+Status: in-progress（q588 source/host/build partial、whole基準は未達）
 Disposition: normal
 Parent: [WS094](../ws.md)
-Queue: なし
+Queue: q588-i01（source/host/build partial、全guestと実機gateは保持）
 依存: main が選んだ最後の段の Phase（今の見込み: p011、p012。ws.md「段」と guide.md §3）
 実行者の目安: phase-runner（Files と compositor の両方を見る）
 
@@ -53,3 +53,5 @@ format・style・build・試験を流し、範囲の中の違反を直す。新�
 - host 4 本 PASS、guest の `files-desktop-guest: PASS`（全ての手順）、`desktop-guest: PASS`（2 回とも）、`desktop-p010: PASS`、`files-regress: PASS`、
   C9 の results.txt が全て PASS、`boot-test: PASS`（PNG をユーザーに見せる）。
 - cleared の後、main が WS094 を完了の形に書き直す（guide.md §1.2）。
+
+2026-10-02 / b2-q588-partial-dispatch: ユーザー連続Queue指示により[q588 exact partial scope](q588-approved-scope.md)を投入。p011実出力clear後にsource inventory/全文reviewとhost/buildを先行。B1所有waylandは読取reviewのみ。whole p007の実機/最終guest条件は保持、partial item clearanceと区別する。

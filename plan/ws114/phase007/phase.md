@@ -3,7 +3,7 @@
 # ws114-p007: GTK4 CSDとKeiland SSDの選択を実装・検証する
 
 Parent: [WS114](../ws.md)
-Status: in-progress（userのB開始共有）
+Status: in-progress
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
 Queue / attempts: q587-i01
@@ -45,3 +45,7 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の具体実装とGTK4確認を追加指示。p007へ分離し、p002/p003の重複scopeを除き、p005にp007成果を追加。WS acceptanceは他行判断・引継ぎ・最終conformanceを含め未達のまま。[WS summary](../ws.md)。
 
 2026-10-02 / A-q587-start-projection: current userがBでのp007開始を共有。df66db5e内のexact scope/承認原文/snapshotを保持し、A canonicalでin-progressへ投影。実装・runtime結果のclearanceはBの後続checkpointで別に確認する。
+
+2026-10-02 07:41 UTC / q587 B1 start: approved snapshot verified and B main322d127a fast-forwarded. Implementation/build starts; QEMU grant pending.
+
+2026-10-02 / q587-scope-amendment01: Current CSD runtimeでGTK4 move release欠落を再現。GTK4実操作の元基準を満たす最小[追加scope](q587-scope-amendment-01.md)をB mainが具体化し、seat/toplevelと元client operation state/lifecycleを所有へ追加。元snapshotと3h期限を保持、基準を緩和しない。

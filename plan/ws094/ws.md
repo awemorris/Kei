@@ -9,7 +9,7 @@ Related Milestones: MG006
 Objectives: O2
 Parent: [Master](../master.md)
 Queue: q582 / q582-i01（Agent B2、worktree `/home/awe/zedBSD-worktrees/b2`、branch `codex/b2-ws094`）
-Resume point: L3 の計測（p008）は 2026-09-30 に cleared。基準値は (a) 2908 ms（目標 1500）・(b) 1094 ms（2500）・(c) 95 ms（50）・SLOW-FRAME 0。p009 は 2026-09-30 に uncleared: (a) 1954 ms（画面に出るまで 2973）、(c) 90 ms、(b) 1344、SLOW-FRAME 0。残りは zdesktop の import（WS035）と QEMU の Venus の呼び出し 1 回約 10 ms で、進め方は main の判断待ち（phase009 の「残り」）。p013（jpg・gif の thumbnail）は 2026-09-30 に cleared（Image Viewer と共有の decoder `userland/desktop/picture/`）。段の計画は下の「段（L1〜L5）」
+Resume point: p011（L4b）はq582でcleared（2026-10-02、host/build/guest/boot PASS）。次はp012の実機gateとp007の全文規約/全WS回帰。L3 の計測（p008）は 2026-09-30 に cleared。基準値は (a) 2908 ms（目標 1500）・(b) 1094 ms（2500）・(c) 95 ms（50）・SLOW-FRAME 0。p009 は 2026-09-30 に uncleared: (a) 1954 ms（画面に出るまで 2973）、(c) 90 ms、(b) 1344、SLOW-FRAME 0。残りは zdesktop の import（WS035）と QEMU の Venus の呼び出し 1 回約 10 ms で、進め方は main の判断待ち（phase009 の「残り」）。p013（jpg・gif の thumbnail）は 2026-09-30 に cleared（Image Viewer と共有の decoder `userland/desktop/picture/`）。段の計画は下の「段（L1〜L5）」
 <!-- awesome-plan-current:end -->
 作業の手引き（2026-10-01）: [guide.md](guide.md)
 
@@ -34,7 +34,7 @@ Resume point: L3 の計測（p008）は 2026-09-30 に cleared。基準値は (a
 | [ws094-p009](phase009/phase.md) | L3b: 100 項目で L3 の数値目標に入れる | uncleared（2026-09-30、QEMU。(a) 1954・(c) 90 ms で超過。残りは zdesktop の import と Venus の 10 ms、main の判断待ち） | p008 |
 | [ws094-p013](phase013/phase.md) | L3c: jpg と gif の thumbnail（`fm_image_load` が PPM・PGM・PNG だけ。Image Viewer と同じ libjpeg-compat（EXIF の向き）・libgif-compat（最初の frame）で読む）。100 項目の画像に jpg・gif を混ぜて thumbnail が出る | cleared（2026-09-30、host と QEMU。decoder を `userland/desktop/picture/` に共有） | p009 |
 | [ws094-p010](phase010/phase.md) | L4a: 長い名前（2 行、中を省く）と画面の大きさの変更 | cleared（2026-09-30: 統合の試験 demo-s8-s9.sh で合格（ユーザーの指示）、Terminal と p088 は未切り分け、実機は未実施） | p006 |
-| [ws094-p011](phase011/phase.md) | L4b: 置き場の溢れ（grid より多い項目）と、無い名前の保存の行の掃除 | in-progress（q582-i01） | p010 |
+| [ws094-p011](phase011/phase.md) | L4b: 置き場の溢れ（grid より多い項目）と、無い名前の保存の行の掃除 | cleared（2026-10-02、q582-i01） | p010 |
 | ws094-p012 | L5: 実機（5330）での L1〜L3 の確認 | planned | p009、実機 |
 | ws094-p007 | 全文の規約と回帰（WS の最後。選んだ段の Phase の後） | planned | 最後の段の Phase |
 
@@ -78,4 +78,6 @@ WS の完了の条件（design §7 の受け入れ）は L1・L2 で満たした
 
 ## q582 / B2 checkpoint（2026-10-02）
 
-p011を有限Queueで実行中。hidden/prune・失敗listingからの復帰のhost試験とwarning0 target buildがPASS。guest/bootは資源待ちで未実施。WSはincompleteのまま、p007/p012とp009の判定はこのQueueに含めない。[詳細](phase011/q582-result.md)。
+p011を有限Queueでcleared。hidden/prune・失敗listingからの復帰のhost試験、warning0 target build、prune/L1/drag/menu guest回帰、最終staged imageのboot-testがPASS。fresh full-image生成はtoolchain制限のため未実施、B main指定fixtureを独立コピーして現行desktop binary/libraryを導入した。WSはincompleteのまま、p007/p012とp009の判定はこのQueueに含めない。[詳細](phase011/q582-result.md)。
+
+2026-10-02 / b2-q588-partial-dispatch: p011/q582 clear後、[p007のsource/host/build部分](phase007/q588-approved-scope.md)を同じB2へ投入。全WS sourceはinventory/review、wayland等の所有外は編集せずfindingsを渡す。実機p012と最終guest/C9/bootを受け入れから除かず、WS incompleteを保持。

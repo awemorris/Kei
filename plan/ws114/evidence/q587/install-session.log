@@ -1,0 +1,15 @@
+04df6ef98607fada8b77e55134ea5db508dfdee2a27ccba4fd97f54a87e3f58d  /opt/keiland/bin/wayland
+3bbbaf8fc544f18b64da44657548858bf68d6b45794a1a973762f951d3a44274  /opt/keiland/bin/terminal
+96a8a0a083954e29221fbd195d37ac9f7306a43fbcafd6a53eb72ee69892852d  /opt/keiland/bin/files
+7d62d1a3637445a5c4aad7cf9c46977d55e51a9c8a8a71e363b0f26c5ba80aa1  /opt/keiland/bin/textedit
+bash: line 1: file: command not found
+	linux-vdso.so.1 (0x00007f9edda4f000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x00007f9edd96e000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x00007f9edd966000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x00007f9edd960000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x00007f9edd93d000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f9edd841000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f9edd64d000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x00007f9edd62d000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x00007f9edd627000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f9edda51000)

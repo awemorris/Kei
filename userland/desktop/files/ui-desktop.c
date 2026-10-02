@@ -221,14 +221,186 @@ fm_desktop_draw(
 	/* What the cells were drawn with, for the next frame; the frame is drawn. */
 	desktop_painted_keep(app, canvas);
 	app->dirty = 0;
+
+	/* Succeeded: the canvas holds the complete desktop frame. */
+	return;
 }
 
-/* Forgets the frame kept in the canvas: the next frame is drawn whole (a new canvas). */
+/*
+ * Forgets the frame kept in the canvas: the next frame is drawn whole (a new canvas).
+ */
 void
 fm_desktop_repaint(
 	struct fm_desktop *desk)
 {
 	desk->painted = 0;
+
+	/* Succeeded: the next frame must repaint the whole canvas. */
+	return;
+}
+
+/*
+ * Takes an input on the desktop: a button, a motion (the rubber band) or
+ * a key.
+ */
+void
+fm_desktop_event(
+    struct fm_app *app,
+    const struct fm_event *event)
+{
+	struct fm_desktop *desk;
+	struct fm_tab *tab;
+	int dragging;
+	int first;
+
+	/* A drag and drop over the desktop, or the end of its own (ui-desktop-drag.c). */
+	desk = &app->desk;
+	switch (event->type) {
+	case FM_EVENT_DROP_ENTER:
+	case FM_EVENT_DROP_MOTION:
+	case FM_EVENT_DROP_LEAVE:
+	case FM_EVENT_DROP:
+	case FM_EVENT_DROP_ACTION:
+	case FM_EVENT_DRAG_DONE:
+		fm_desktop_drop_event(app, event);
+		return;
+	default:
+		break;
+	}
+
+	/* A question takes the pointer and the keys until it is answered (its card is the file manager's). */
+	if (app->dialog != FM_DIALOG_NONE && event->type != FM_EVENT_ACTION) {
+		fm_ui_event(app, event);
+		return;
+	}
+
+	/* The pointer's place, for the rubber band. */
+	desk->pointer_x = event->x;
+	desk->pointer_y = event->y;
+
+	/* Each kind of input. */
+	switch (event->type) {
+	case FM_EVENT_BUTTON:
+		/* The right button: the context menu of what it is on. */
+		if (event->button == FM_BUTTON_RIGHT) {
+			if (event->pressed)
+				desktop_context(app, event);
+			break;
+		}
+
+		/* The left button: a press selects, opens or starts a band; its release ends the band. */
+		if (event->button != FM_BUTTON_LEFT)
+			break;
+
+		/* A press, the release of a press on an item, or of a band. */
+		if (event->pressed) {
+			desktop_press(app, event);
+		} else if (desk->pressing) {
+			fm_desktop_drag_release(app);
+		} else if (desk->band) {
+			desk->band = 0;
+			app->dirty = 1;
+			tab = fm_ui_tab(app);
+			first = fm_select_first(tab);
+			fm_log("DESKTOP band end first=%d", first);
+		}
+
+		/* Nothing more for a button. */
+		break;
+	case FM_EVENT_MOTION:
+		/* A press held on an item may become a drag. */
+		dragging = fm_desktop_drag_motion(app, event->x, event->y);
+		if (dragging)
+			break;
+
+		/* A band follows the pointer and selects what it touches. */
+		if (desk->band) {
+			desktop_band_select(app);
+			app->dirty = 1;
+		}
+
+		/* Nothing more for a motion. */
+		break;
+	case FM_EVENT_KEY:
+		/* A key press. */
+		if (event->pressed)
+			desktop_key(app, event);
+		break;
+	case FM_EVENT_ACTION:
+		/* A choice of the context menu. */
+		fm_desktop_action(app, event->action);
+		break;
+	default:
+		break;
+	}
+
+	/* Succeeded: the input has been dispatched. */
+	return;
+}
+
+/*
+ * Opens the selected items (no more than DESKTOP_OPEN_MAX): each file
+ * with its default way, each folder in a new Files window.
+ */
+void
+fm_desktop_open_selected(
+    struct fm_app *app)
+{
+	struct fm_tab *tab;
+	size_t index;
+	int opened;
+
+	/* Each selected item. */
+	tab = fm_ui_tab(app);
+	opened = 0;
+	for (index = 0; index < tab->listing.count; index++) {
+		/* An item not selected, or one too many. */
+		if (tab->listing.entries[index].selected == 0)
+			continue;
+		if (opened == DESKTOP_OPEN_MAX)
+			break;
+
+		/* It opens. */
+		desktop_open(app, (int)index);
+		opened++;
+	}
+
+	/* Succeeded: the bounded selection has been opened. */
+	return;
+}
+
+/*
+ * Finds the item whose cell is at a point of the desktop; -1 for none.
+ */
+int
+fm_desktop_item_at(
+    struct fm_app *app,
+    int x,
+    int y)
+{
+	struct fm_desktop *desk;
+	struct fm_rect cell;
+	size_t index;
+	int placed;
+
+	/* Each placed item's cell. */
+	desk = &app->desk;
+	for (index = 0; index < desk->place_count; index++) {
+		/* An item without a cell. */
+		placed = fm_desktop_cell_rect(desk->places[index].column, desk->places[index].row, desk->width, desk->height, &cell);
+		if (!placed)
+			continue;
+
+		/* The point in its cell. */
+		if (x >= cell.x &&
+		    x < cell.x + cell.width &&
+		    y >= cell.y &&
+		    y < cell.y + cell.height)
+			return (int)index;
+	}
+
+	/* No item there. */
+	return -1;
 }
 
 /*
@@ -241,7 +413,9 @@ desktop_over(
 	const struct fm_app *app)
 {
 	/* The band, the desktop's own drag, a drop over it. */
-	if (app->desk.band || app->desk.dragging || app->drop_active)
+	if (app->desk.band ||
+	    app->desk.dragging ||
+	    app->drop_active)
 		return 1;
 
 	/* A question, or a name being changed. */
@@ -340,8 +514,13 @@ desktop_painted_record(
 	painted->cut = entry->cut;
 
 	/* A picture's thumbnail, once made (fm_grid_entry_icon draws it). */
-	if (entry->folder == 0 && entry->path != NULL && entry->mime->category == FM_CATEGORY_IMAGE)
+	if (entry->folder == 0 &&
+	    entry->path != NULL &&
+	    entry->mime->category == FM_CATEGORY_IMAGE)
 		painted->thumb = fm_thumb_get(app, entry->path, entry->modified);
+
+	/* Succeeded: the record describes this cell. */
+	return;
 }
 
 /*
@@ -387,6 +566,9 @@ desktop_painted_keep(
 	desk->painted_count = tab->listing.count;
 	desk->painted_modified = desk->laid_modified;
 	desk->painted_names = desk->laid_names;
+
+	/* Succeeded: the records describe the retained canvas. */
+	return;
 }
 
 /* Makes a rectangle of the canvas clear (transparent), within the canvas. */
@@ -423,157 +605,9 @@ desktop_clear_rect(
 		row = canvas->pixels + (size_t)y * canvas->stride;
 		memset(row + left, 0, sizeof(row[0]) * (size_t)(right - left));
 	}
-}
 
-/*
- * Takes an input on the desktop: a button, a motion (the rubber band) or
- * a key.
- */
-void
-fm_desktop_event(
-	struct fm_app *app,
-	const struct fm_event *event)
-{
-	struct fm_desktop *desk;
-	int dragging;
-
-	/* A drag and drop over the desktop, or the end of its own (ui-desktop-drag.c). */
-	desk = &app->desk;
-	switch (event->type) {
-	case FM_EVENT_DROP_ENTER:
-	case FM_EVENT_DROP_MOTION:
-	case FM_EVENT_DROP_LEAVE:
-	case FM_EVENT_DROP:
-	case FM_EVENT_DROP_ACTION:
-	case FM_EVENT_DRAG_DONE:
-		fm_desktop_drop_event(app, event);
-		return;
-	default:
-		break;
-	}
-
-	/* A question takes the pointer and the keys until it is answered (its card is the file manager's). */
-	if (app->dialog != FM_DIALOG_NONE && event->type != FM_EVENT_ACTION) {
-		fm_ui_event(app, event);
-		return;
-	}
-
-	/* The pointer's place, for the rubber band. */
-	desk->pointer_x = event->x;
-	desk->pointer_y = event->y;
-
-	/* Each kind of input. */
-	switch (event->type) {
-	case FM_EVENT_BUTTON:
-		/* The right button: the context menu of what it is on. */
-		if (event->button == FM_BUTTON_RIGHT) {
-			if (event->pressed)
-				desktop_context(app, event);
-			break;
-		}
-
-		/* The left button: a press selects, opens or starts a band; its release ends the band. */
-		if (event->button != FM_BUTTON_LEFT)
-			break;
-
-		/* A press, the release of a press on an item, or of a band. */
-		if (event->pressed) {
-			desktop_press(app, event);
-		} else if (desk->pressing) {
-			fm_desktop_drag_release(app);
-		} else if (desk->band) {
-			desk->band = 0;
-			app->dirty = 1;
-			fm_log("DESKTOP band end first=%d", fm_select_first(fm_ui_tab(app)));
-		}
-
-		/* Nothing more for a button. */
-		break;
-	case FM_EVENT_MOTION:
-		/* A press held on an item may become a drag. */
-		dragging = fm_desktop_drag_motion(app, event->x, event->y);
-		if (dragging)
-			break;
-
-		/* A band follows the pointer and selects what it touches. */
-		if (desk->band) {
-			desktop_band_select(app);
-			app->dirty = 1;
-		}
-
-		/* Nothing more for a motion. */
-		break;
-	case FM_EVENT_KEY:
-		/* A key press. */
-		if (event->pressed)
-			desktop_key(app, event);
-		break;
-	case FM_EVENT_ACTION:
-		/* A choice of the context menu. */
-		fm_desktop_action(app, event->action);
-		break;
-	default:
-		break;
-	}
-}
-
-/*
- * Opens the selected items (no more than DESKTOP_OPEN_MAX): each file
- * with its default way, each folder in a new Files window.
- */
-void
-fm_desktop_open_selected(
-	struct fm_app *app)
-{
-	struct fm_tab *tab;
-	size_t index;
-	int opened;
-
-	/* Each selected item. */
-	tab = fm_ui_tab(app);
-	opened = 0;
-	for (index = 0; index < tab->listing.count; index++) {
-		/* An item not selected, or one too many. */
-		if (tab->listing.entries[index].selected == 0)
-			continue;
-		if (opened == DESKTOP_OPEN_MAX)
-			break;
-
-		/* It opens. */
-		desktop_open(app, (int)index);
-		opened++;
-	}
-}
-
-/*
- * Finds the item whose cell is at a point of the desktop; -1 for none.
- */
-int
-fm_desktop_item_at(
-	struct fm_app *app,
-	int x,
-	int y)
-{
-	struct fm_desktop *desk;
-	struct fm_rect cell;
-	size_t index;
-	int placed;
-
-	/* Each placed item's cell. */
-	desk = &app->desk;
-	for (index = 0; index < desk->place_count; index++) {
-		/* An item without a cell. */
-		placed = fm_desktop_cell_rect(desk->places[index].column, desk->places[index].row, desk->width, desk->height, &cell);
-		if (!placed)
-			continue;
-
-		/* The point in its cell. */
-		if (x >= cell.x && x < cell.x + cell.width && y >= cell.y && y < cell.y + cell.height)
-			return (int)index;
-	}
-
-	/* No item there. */
-	return -1;
+	/* Succeeded: the canvas rectangle is transparent. */
+	return;
 }
 
 /*
@@ -684,6 +718,9 @@ desktop_layout(
 	desk->laid_names = names_hash;
 	desk->laid_error = tab->listing.error;
 	desk->logged = 0;
+
+	/* Succeeded: the cached places match this listing and size. */
+	return;
 }
 
 /*
@@ -705,6 +742,7 @@ desktop_log_moved(
 
 	/* Each item with a known place. */
 	for (index = 0; index < count; index++) {
+		/* Finds the first saved or previously shown place of this name. */
 		for (other = 0; other < known_count; other++) {
 			same = strcmp(known[other].name, names[index]);
 			if (same == 0)
@@ -718,9 +756,17 @@ desktop_log_moved(
 		/* Where it was and where it is now, when they differ. */
 		if (known[other].column == desk->places[index].column && known[other].row == desk->places[index].row)
 			continue;
-		fm_log("DESKTOP moved name=%s from=%d,%d to=%d,%d saved=%d", names[index], known[other].column, known[other].row,
-		       desk->places[index].column, desk->places[index].row, other < desk->saved_count);
+		fm_log("DESKTOP moved name=%s from=%d,%d to=%d,%d saved=%d",
+		       names[index],
+		       known[other].column,
+		       known[other].row,
+		       desk->places[index].column,
+		       desk->places[index].row,
+		       other < desk->saved_count);
 	}
+
+	/* Succeeded: all changed known placements have been logged. */
+	return;
 }
 
 /* Draws one item in its cell: the ground of a selected one, its icon, centred at the top, and its name under it. */
@@ -745,7 +791,9 @@ desktop_item(
 
 	/* The icon, faded when the item is cut or dragged. */
 	fm_grid_entry_icon(app, canvas, entry, left, top, (float)DESKTOP_ICON);
-	if (entry->cut != 0 || (app->desk.dragging && entry->selected != 0))
+	if (entry->cut != 0 ||
+	    (app->desk.dragging &&
+	     entry->selected != 0))
 		fm_canvas_round(canvas, left, top, (float)DESKTOP_ICON, (float)DESKTOP_ICON, 8.0f, FM_RGBA(0xffffff, 150));
 
 	/* The name under it, or the field of the name being changed. */
@@ -755,6 +803,9 @@ desktop_item(
 	} else {
 		desktop_name(app, canvas, entry->name, cell, entry->selected);
 	}
+
+	/* Succeeded: the item and its name are drawn. */
+	return;
 }
 
 /*
@@ -818,6 +869,9 @@ desktop_name(
 	desktop_name_line(app, canvas, first, cell, baseline, available, selected);
 	if (lines == 2)
 		desktop_name_line(app, canvas, second, cell, baseline + DESKTOP_TEXT_LINE, available, selected);
+
+	/* Succeeded: the fitted name is drawn under its icon. */
+	return;
 }
 
 /* Draws one line of a name centred across a cell: white on the pill when selected, otherwise dark over its halo. */
@@ -850,6 +904,7 @@ desktop_name_line(
 
 	/* The halo: the text a pixel off in each direction. */
 	for (dy = -1; dy <= 1; dy++) {
+		/* Draws the neighboring halo offsets along this row. */
 		for (dx = -1; dx <= 1; dx++) {
 			/* The centre is the text itself, drawn last. */
 			if (dx == 0 && dy == 0)
@@ -860,6 +915,9 @@ desktop_name_line(
 
 	/* The text over it. */
 	(void)fm_text_draw_fit(app->text, canvas, left, baseline, line, DESKTOP_TEXT, 0, available, DESKTOP_TEXT_COLOR);
+
+	/* Succeeded: the name is drawn over its halo. */
+	return;
 }
 
 /* Draws the field of the name being changed under an item's icon: white, with the accent's edge, as wide as the name (up to two cells). */
@@ -893,6 +951,9 @@ desktop_field(
 	field.x += 5;
 	field.width -= 10;
 	fm_field_draw(app, canvas, &app->rename, &field, DESKTOP_TEXT, NULL);
+
+	/* Succeeded: the rename field is drawn in place. */
+	return;
 }
 
 /* Draws the file manager's message, or else a running operation's progress, in a dark pill at the bottom of the desktop. */
@@ -924,6 +985,9 @@ desktop_message(
 	fm_canvas_shadow(canvas, (float)x, (float)y + 2.0f, (float)width, (float)DESKTOP_PILL_HEIGHT, 14.0f, 8.0f, FM_COLOR_SHADOW);
 	fm_canvas_round(canvas, (float)x, (float)y, (float)width, (float)DESKTOP_PILL_HEIGHT, 14.0f, FM_RGBA(0x2a3345, 225));
 	(void)fm_text_draw(app->text, canvas, x + 16, fm_text_center(DESKTOP_PILL_TEXT_SIZE, y, DESKTOP_PILL_HEIGHT), text, strlen(text), DESKTOP_PILL_TEXT_SIZE, 0, FM_RGB(0xffffff));
+
+	/* Succeeded: the desktop message is visible. */
+	return;
 }
 
 /* Hashes the names of the tab's listing in their order (FNV-1a, with a zero byte after each name). */
@@ -950,7 +1014,7 @@ desktop_names_hash(
 		hash *= 16777619U;
 	}
 
-	/* The listing's hash. */
+	/* Succeeded: reports the listing's ordered-name hash. */
 	return hash;
 }
 
@@ -971,7 +1035,7 @@ desktop_renaming(
 	if (differs != 0)
 		return 0;
 
-	/* It is this item's name. */
+	/* Succeeded: this item owns the active rename field. */
 	return 1;
 }
 
@@ -1018,6 +1082,9 @@ desktop_context(
 	app->context_where = FM_CONTEXT_EMPTY;
 	app->request = FM_REQUEST_CONTEXT;
 	fm_log("DESKTOP context empty x=%d y=%d", event->x, event->y);
+
+	/* Succeeded: the empty desktop menu is requested. */
+	return;
 }
 
 /* Works out the rubber band's rectangle, from where it started to the pointer. */
@@ -1041,6 +1108,9 @@ desktop_band_rect(
 		rect->y = desk->pointer_y;
 		rect->height = -rect->height;
 	}
+
+	/* Succeeded: the band rectangle covers either pointer direction. */
+	return;
 }
 
 /* Selects the items whose cells the rubber band touches, and only those. */
@@ -1074,6 +1144,9 @@ desktop_band_select(
 		if (meets)
 			tab->listing.entries[index].selected = 1;
 	}
+
+	/* Succeeded: selection matches the touched cells. */
+	return;
 }
 
 /* Handles a left press: a double click opens, a click selects, a press where no item is starts a rubber band. */
@@ -1156,6 +1229,9 @@ desktop_press(
 	/* A press held on a selected item may become a drag of the selection. */
 	if (tab->listing.entries[index].selected != 0)
 		fm_desktop_drag_press(app, index, event->x, event->y);
+
+	/* Succeeded: the selected item may become a drag. */
+	return;
 }
 
 /* Handles a key: Enter opens, the arrows move, Ctrl+A selects all, Esc nothing. */
@@ -1217,6 +1293,9 @@ desktop_key(
 	default:
 		break;
 	}
+
+	/* Succeeded: the key has been dispatched. */
+	return;
 }
 
 /*
@@ -1282,6 +1361,9 @@ desktop_arrow(
 		fm_select_only(tab, best);
 		fm_log("DESKTOP select name=%s selected=1 via=arrow", tab->listing.entries[best].name);
 	}
+
+	/* Succeeded: any nearest item has been selected. */
+	return;
 }
 
 /* Opens one item: a folder in a new Files window, a file with its default way (WS093). */
@@ -1311,6 +1393,9 @@ desktop_open(
 	arguments[2] = NULL;
 	error = fm_apps_spawn(arguments);
 	fm_log("DESKTOP open-folder path=%s error=%d", entry->path, error);
+
+	/* Succeeded: the folder launch has been reported. */
+	return;
 }
 
 /* Tells whether two rectangles overlap. */
@@ -1327,7 +1412,7 @@ desktop_rects_meet(
 	if (a->y + a->height <= b->y || b->y + b->height <= a->y)
 		return 0;
 
-	/* They meet. */
+	/* Succeeded: the rectangles overlap. */
 	return 1;
 }
 
@@ -1362,6 +1447,8 @@ desktop_newest_age(
 	error = clock_gettime(CLOCK_REALTIME, &now);
 	if (error != 0)
 		return -1;
+
+	/* Succeeded: reports the newest item's age in milliseconds. */
 	return (long long)now.tv_sec * 1000LL + (long long)(now.tv_nsec / 1000000L) - newest;
 }
 
@@ -1376,5 +1463,7 @@ desktop_clock(void)
 	error = clock_gettime(CLOCK_MONOTONIC, &now);
 	if (error != 0)
 		return 0U;
+
+	/* Succeeded: reports the monotonic sample in milliseconds. */
 	return (uint64_t)now.tv_sec * 1000U + (uint64_t)now.tv_nsec / 1000000U;
 }
