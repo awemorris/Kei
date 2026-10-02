@@ -23,9 +23,14 @@
  * answers the last one when pressed again.  Every event is one line:
  * POPUPPROBE <what> ..., with the surface named window, menu or submenu.
  *
- *   popup-probe [--wide] [--wm-probe] [--timeout-s=N] [--token=NAME]
+ *   popup-probe [--wide] [--wm-probe] [--request-delay-ms=N] [--timeout-s=N] [--token=NAME]
  *     --wide      menus 360 pixels wide, so that a submenu near the output's
  *                 right edge must flip to the left
+ *     --request-delay-ms=N
+ *                 answers a press in the move strip or a resize edge N ms
+ *                 late (1 to 5000), as a busy client would: the move or the
+ *                 resize request leaves while the pointer has gone on
+ *                 (ws099-p020, BUG-125)
  *     --wm-probe  checks xdg_wm_base.destroy (WS035 p132, BUG-112) and exits:
  *                 a second binding with no xdg_surface of its own is destroyed
  *                 while the window (of the first) lives, which must not be an
@@ -155,6 +160,7 @@ struct probe {
 	uint32_t reposition_token;
 	const char *token;
 	int wm_probe;
+	unsigned request_delay_ms;
 };
 
 static int probe_options(int count, char **arguments, struct probe *probe, unsigned *timeout);
@@ -170,6 +176,7 @@ static void probe_reposition_menu(struct probe *probe);
 static void probe_close_popup(struct probe *probe, struct probe_surface *surface);
 static void probe_window_press(struct probe *probe, uint32_t serial);
 static void probe_toggle_pong(struct probe *probe);
+static void probe_request_delay(struct probe *probe);
 static struct probe_surface *probe_surface_of(struct probe *probe, struct wl_surface *surface);
 static const char *probe_name(const struct probe_surface *surface);
 static uint64_t probe_clock(void);
@@ -276,7 +283,7 @@ main(
 	memset(&probe, 0, sizeof(probe));
 	error = probe_options(count, arguments, &probe, &timeout);
 	if (error != 0) {
-		fprintf(stderr, "usage: popup-probe [--wide] [--wm-probe] [--timeout-s=N] [--token=NAME]\n");
+		fprintf(stderr, "usage: popup-probe [--wide] [--wm-probe] [--request-delay-ms=N] [--timeout-s=N] [--token=NAME]\n");
 		return 2;
 	}
 
@@ -331,7 +338,7 @@ main(
 	return 0;
 }
 
-/* Reads the options: --wide, --wm-probe, --timeout-s=N (default 120) and --token=NAME. */
+/* Reads the options: --wide, --wm-probe, --request-delay-ms=N, --timeout-s=N (default 120) and --token=NAME. */
 static int
 probe_options(
 	int count,
@@ -362,6 +369,16 @@ probe_options(
 		same = strcmp(arguments[index], "--wm-probe");
 		if (same == 0) {
 			probe->wm_probe = 1;
+			continue;
+		}
+
+		/* How late a move or a resize is asked for. */
+		same = strncmp(arguments[index], "--request-delay-ms=", 19);
+		if (same == 0) {
+			value = strtoul(arguments[index] + 19, &end, 10);
+			if (*end != '\0' || value == 0UL || value > 5000UL)
+				return -1;
+			probe->request_delay_ms = (unsigned)value;
 			continue;
 		}
 
@@ -778,6 +795,7 @@ probe_window_press(
 {
 	/* The top strip: a move. */
 	if (probe->pointer_y < PROBE_MOVE_STRIP) {
+		probe_request_delay(probe);
 		xdg_toplevel_move(probe->window.toplevel, probe->seat, serial);
 		printf("POPUPPROBE move\n");
 		fflush(stdout);
@@ -787,6 +805,7 @@ probe_window_press(
 	/* The bottom-right corner: a resize from it. */
 	if (probe->pointer_x >= probe->window.width - PROBE_RESIZE_CORNER &&
 	    probe->pointer_y >= probe->window.height - PROBE_RESIZE_CORNER) {
+		probe_request_delay(probe);
 		xdg_toplevel_resize(probe->window.toplevel, probe->seat, serial, PROBE_EDGE_BOTTOM_RIGHT);
 		printf("POPUPPROBE resize bottom-right\n");
 		fflush(stdout);
@@ -795,6 +814,7 @@ probe_window_press(
 
 	/* The left edge: a resize from it. */
 	if (probe->pointer_x < PROBE_RESIZE_EDGE) {
+		probe_request_delay(probe);
 		xdg_toplevel_resize(probe->window.toplevel, probe->seat, serial, PROBE_EDGE_LEFT);
 		printf("POPUPPROBE resize left\n");
 		fflush(stdout);
@@ -803,6 +823,25 @@ probe_window_press(
 
 	/* Elsewhere the menu opens. */
 	probe_open_menu(probe);
+}
+
+/* Waits the --request-delay-ms time before a move or a resize is asked for, as a busy client would. */
+static void
+probe_request_delay(
+	struct probe *probe)
+{
+	struct timespec delay;
+
+	/* Without the option the request leaves at once. */
+	if (probe->request_delay_ms == 0U)
+		return;
+
+	/* Nothing is read from the compositor meanwhile, so the pointer goes on without the probe. */
+	delay.tv_sec = (time_t)(probe->request_delay_ms / 1000U);
+	delay.tv_nsec = (long)(probe->request_delay_ms % 1000U) * 1000000L;
+	(void)nanosleep(&delay, NULL);
+	printf("POPUPPROBE delayed ms=%u\n", probe->request_delay_ms);
+	fflush(stdout);
 }
 
 /* Stops answering pings, or starts again and answers the last one. */

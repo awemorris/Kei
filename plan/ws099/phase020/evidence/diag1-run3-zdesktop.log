@@ -1,0 +1,119 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=211
+ZWL STARTUP step=vulkan-objects-arrow ms=264
+ZWL STARTUP step=wallpaper-picture ms=26
+ZWL STARTUP step=wallpaper ms=263
+ZWL STARTUP step=glyphs-text ms=27
+ZWL STARTUP step=glyphs-icons ms=12
+ZWL STARTUP step=glyphs-mark ms=23
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=165
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=983 at_ms=869728
+ZWL INPUT device=/dev/input/event0 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event1 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL STARTUP step=input ms=1 at_ms=869729
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=869729
+ZWL STARTUP step=socket ms=0 at_ms=869729
+ZWL IME none program=/usr/libexec/keiland-ime errno=6
+ZWL READY socket=/tmp/wayland-0 width=1280 height=800 timeout_ms=400000 pid=1724
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL STARTUP step=output-display ms=0
+ZWL STARTUP step=output-pipelines ms=161
+ZWL STARTUP step=output-swapchain ms=381
+ZWL STARTUP step=output-targets ms=90
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=632 at_ms=870372
+ZWL GLASS desktops x=830 step=46 width=40
+ZWL NETWORK icon x=1074 y=3 width=30 height=28
+ZWL VOLUME icon x=1041 y=3 width=30 height=28
+ZWL HOME skip name=Image Viewer missing=/bin/imageview
+ZWL HOME skip name=Text Editor missing=/bin/textedit
+ZWL HOME skip name=Browser missing=/bin/browser
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=ue0 wifi=absent ssid=
+ZWL CLIENT client=1 fd=17
+ZWL CONFIGURE client=1 surface=8 serial=1 width=0 height=0 fullscreen=0
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=1 pointer=1 keyboard=1 touch=0
+ZWL DECORATION applied client=1 surface=8 mode=1
+ZWL MAP client=1 surface=8 x=440 y=293
+ZWL PERF 7680ms: passes=50 timeouts=37 | poll 5.5% work 19.9%
+ZWL PERF compose frames=4 draw_ms=135.49 (acquire 35.70 submit+present 77.12) frame_ms=146.51
+ZWL PERF shm copies=1 copy_ms=0.840
+ZWL DIAG button state=1 at_us=878306000
+ZWL DIAG create at_us=878306000
+ZWL POPUP create client=1 popup=19 surface=17 parent=8 x=60 y=60 width=360 height=180
+ZWL POPUP grab popup=19 surface=17
+ZWL DIAG configure at_us=878307000
+ZWL POPUP configure surface=17 serial=7 x=60 y=60 width=360 height=180
+ZWL PING pong client=1 serial=6
+ZWL POPUP map surface=17 x=500 y=353 grab=1
+ZWL DIAG map surface=17 at_us=878308000
+ZWL DIAG compose frame=7 windows=1 popups=1 partial=0 at_us=878603000
+ZWL DIAG shown frame=7 at_us=878614000
+ZWL DIAG button state=0 at_us=878614000
+ZWL PERF 6989ms: passes=366 timeouts=355 | poll 52.7% work 7.7%
+ZWL PERF compose frames=3 draw_ms=91.13 (acquire 0.29 submit+present 70.17) frame_ms=101.46
+ZWL PERF shm copies=1 copy_ms=1.356
+ZWL DIAG button state=1 at_us=885195000
+ZWL DIAG create at_us=885196000
+ZWL POPUP create client=1 popup=25 surface=23 parent=17 x=360 y=120 width=360 height=120
+ZWL POPUP grab popup=25 surface=23
+ZWL DIAG configure at_us=885196000
+ZWL POPUP configure surface=23 serial=16 x=360 y=120 width=360 height=120
+ZWL PING pong client=1 serial=15
+ZWL POPUP map surface=23 x=860 y=473 grab=1
+ZWL DIAG map surface=23 at_us=885197000
+ZWL DIAG compose frame=10 windows=1 popups=2 partial=0 at_us=885490000
+ZWL DIAG shown frame=10 at_us=885500000
+ZWL DIAG button state=0 at_us=885500000
+ZWL DIAG compose frame=11 windows=1 popups=2 partial=0 at_us=887777000
+ZWL DIAG shown frame=11 at_us=887787000
+ZWL DIAG compose frame=12 windows=1 popups=2 partial=0 at_us=887923000
+ZWL DIAG shown frame=12 at_us=887933000
+ZWL DIAG button state=1 at_us=888135000
+ZWL PING pong client=1 serial=24
+ZWL PERF 5006ms: passes=399 timeouts=380 | poll 68.1% work 31.9%
+ZWL PERF compose frames=7 draw_ms=80.83 (acquire 0.24 submit+present 62.55) frame_ms=89.81
+ZWL PERF shm copies=1 copy_ms=0.858
+ZWL PERF 6159ms: passes=20 timeouts=20 | poll 3.2% work 0.0%
+ZWL DIAG button state=1 at_us=896953000
+ZWL DIAG create at_us=896954000
+ZWL POPUP create client=1 popup=31 surface=29 parent=8 x=360 y=60 width=360 height=180
+ZWL POPUP grab popup=31 surface=29
+ZWL DIAG configure at_us=896954000
+ZWL POPUP configure surface=29 serial=35 x=360 y=60 width=360 height=180
+ZWL PING pong client=1 serial=34
+ZWL POPUP map surface=29 x=800 y=353 grab=1
+ZWL DIAG map surface=29 at_us=896955000
+ZWL DIAG compose frame=17 windows=1 popups=1 partial=0 at_us=897230000
+ZWL DIAG shown frame=17 at_us=897240000
+ZWL DIAG button state=0 at_us=897241000
+ZWL DIAG compose frame=18 windows=1 popups=1 partial=0 at_us=898092000
+ZWL DIAG shown frame=18 at_us=898102000
+ZWL DIAG compose frame=19 windows=1 popups=1 partial=0 at_us=898298000
+ZWL DIAG shown frame=19 at_us=898308000
+ZWL DIAG compose frame=20 windows=1 popups=1 partial=0 at_us=898451000
+ZWL DIAG shown frame=20 at_us=898462000
+ZWL DIAG button state=1 at_us=903990000
+ZWL DIAG button state=0 at_us=903990000
+ZWL DIAG create at_us=903991000
+ZWL POPUP create client=1 popup=37 surface=35 parent=29 x=-360 y=120 width=360 height=120
+ZWL POPUP grab popup=37 surface=35
+ZWL DIAG configure at_us=903991000
+ZWL POPUP configure surface=35 serial=45 x=-360 y=120 width=360 height=120
+ZWL PING pong client=1 serial=43
+ZWL PERF 8426ms: passes=238 timeouts=221 | poll 27.6% work 9.5%
+ZWL PERF compose frames=6 draw_ms=89.55 (acquire 0.27 submit+present 68.79) frame_ms=99.51
+ZWL PERF shm copies=1 copy_ms=1.350
+ZWL POPUP map surface=35 x=440 y=473 grab=1
+ZWL DIAG map surface=35 at_us=903992000
+ZWL DIAG compose frame=21 windows=1 popups=2 partial=0 at_us=904268000
+ZWL DIAG shown frame=21 at_us=904279000
+P020_AFTER_CAPTURE

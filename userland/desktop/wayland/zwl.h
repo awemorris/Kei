@@ -939,6 +939,14 @@ struct zwl_server {
 	 */
 	struct zwl_object *press_surface;
 	uint32_t press_button;
+	/*
+	 * Where the pointer was on the output when that press was delivered.  A
+	 * client's move or resize names the press and may arrive after the
+	 * pointer has gone on; it is anchored here, so the motion made while the
+	 * client was answering is not lost (BUG-125).
+	 */
+	int32_t press_x;
+	int32_t press_y;
 	struct zwl_object *interactive_window;
 	struct zwl_object *interactive_surface;
 	uint32_t interactive_button;

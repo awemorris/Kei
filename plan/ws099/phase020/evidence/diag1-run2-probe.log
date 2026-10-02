@@ -1,0 +1,43 @@
+POPUPPROBE configure window width=0 height=0 states=1 resizing=0
+POPUPPROBE ready run=p
+POPUPPROBE focus window
+POPUPPROBE enter window x=200 y=107
+POPUPPROBE button window state=1 x=60 y=60
+POPUPPROBE open menu at=60,60
+POPUPPROBE ping serial=6 answered
+POPUPPROBE configure menu x=60 y=60 width=360 height=180
+POPUPPROBE unfocus window
+POPUPPROBE focus menu
+POPUPPROBE leave window
+POPUPPROBE enter menu x=0 y=0
+POPUPPROBE button menu state=0 x=0 y=0
+POPUPPROBE button menu state=1 x=100 y=130
+POPUPPROBE open submenu row=120
+POPUPPROBE ping serial=15 answered
+POPUPPROBE button menu state=0 x=100 y=130
+POPUPPROBE configure submenu x=360 y=120 width=360 height=120
+POPUPPROBE unfocus menu
+POPUPPROBE focus submenu
+POPUPPROBE leave menu
+POPUPPROBE enter submenu x=98 y=45
+POPUPPROBE button submenu state=1 x=100 y=45
+POPUPPROBE choose submenu row=1
+POPUPPROBE close submenu
+POPUPPROBE close menu
+POPUPPROBE ping serial=24 answered
+POPUPPROBE unfocus other
+POPUPPROBE focus other
+POPUPPROBE leave other
+POPUPPROBE unfocus other
+POPUPPROBE focus window
+POPUPPROBE enter window x=520 y=225
+POPUPPROBE button window state=1 x=360 y=60
+POPUPPROBE open menu at=360,60
+POPUPPROBE ping serial=34 answered
+POPUPPROBE button window state=0 x=360 y=60
+POPUPPROBE button window state=0 x=460 y=190
+POPUPPROBE configure menu x=360 y=60 width=360 height=180
+POPUPPROBE unfocus window
+POPUPPROBE focus menu
+POPUPPROBE leave window
+POPUPPROBE enter menu x=100 y=130

@@ -14,7 +14,9 @@
  * unmaximize or minimize it; it gives the smallest and largest size it can
  * draw (set_min_size, set_max_size), a dialog's parent (set_parent), and
  * asks for the window menu (show_window_menu).  A move or a resize is taken
- * only while the press it names is still held.
+ * only while the press it names is still held, and starts from where that
+ * press was: a client that answers late still gets the pointer's whole
+ * motion since its press (BUG-125).
  *
  * An interactive resize follows the pointer until the button is let go:
  * each new size goes to the client in a configure with the resizing state,
@@ -79,6 +81,8 @@ static int press_held(struct zwl_client *client, uint32_t seat_id, uint32_t seri
 static void window_extent(const struct zwl_object *surface, int32_t *x, int32_t *y, int32_t *width, int32_t *height);
 static void resize_limit(struct zwl_server *server, struct zwl_object *surface, int32_t *width, int32_t *height);
 static void resize_settle(struct zwl_object *surface, int32_t width, int32_t height);
+static void move_anchor(struct zwl_server *server, struct zwl_object *surface);
+static void resize_anchor(struct zwl_server *server);
 static int32_t window_lowest(const struct zwl_server *server);
 static uint32_t toplevel_word(const unsigned char *bytes, size_t offset);
 
@@ -612,6 +616,9 @@ toplevel_move(
 	if (server->drag != surface)
 		return 0;
 
+	/* The move starts from the press, so the window catches up with the motion made since. */
+	move_anchor(server, surface);
+
 	/* Only an accepted client request borrows the original delivered press. */
 	server->interactive_window = surface;
 	server->interactive_surface = server->press_surface;
@@ -670,6 +677,9 @@ toplevel_resize(
 		/* An inert request has no client release ownership to retain. */
 		return 0;
 	}
+
+	/* The resize starts from the press, so the size catches up with the motion made since. */
+	resize_anchor(server);
 
 	/* Only the accepted xdg request borrows the original client press. */
 	server->interactive_window = surface;
@@ -857,6 +867,42 @@ resize_settle(
 
 	/* The log line the tests read. */
 	printf("ZWL RESIZE settled surface=%u x=%d y=%d width=%d height=%d\n", surface->id, surface->x, surface->y, width, height);
+}
+
+/* Starts an accepted move from its press: the window takes the place the pointer's motion since then gives it. */
+static void
+move_anchor(
+	struct zwl_server *server,
+	struct zwl_object *surface)
+{
+	int32_t lowest;
+
+	/* The part of the window that was under the pointer at the press stays under it. */
+	server->drag_dx = server->press_x - surface->x;
+	server->drag_dy = server->press_y - surface->y;
+
+	/* The window follows the motion made while the client was answering; its title bar stays below the system bar. */
+	surface->x = server->pointer_x - server->drag_dx;
+	surface->y = server->pointer_y - server->drag_dy;
+	lowest = window_lowest(server);
+	if (surface->y < lowest)
+		surface->y = lowest;
+
+	/* The output is drawn again with the window in its new place. */
+	server->dirty = 1;
+}
+
+/* Starts an accepted resize from its press: the client is told the size the pointer's motion since then gives. */
+static void
+resize_anchor(
+	struct zwl_server *server)
+{
+	/* The dragged edges are measured from where the press was, not from where the pointer is now. */
+	server->resize_pointer_x = server->press_x;
+	server->resize_pointer_y = server->press_y;
+
+	/* The motion made while the client was answering resizes the window now (a configure when the size changed). */
+	(void)zwl_toplevel_motion(server);
 }
 
 /* Tells the highest a window's image may be: under the glass look's system bar and title bar, or the output's top. */
