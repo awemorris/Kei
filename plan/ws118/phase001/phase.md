@@ -71,3 +71,5 @@ Queue: q601 / q601-i01（P1、中断）
   （syslogd は kernel の buffer を `/run/dmesg.boot`（tmpfs）にだけ書く）。それで root の crontab を足した（確認は未実施）。
 - 未実施（再開点）: crontab 入りの A と C の `qemu-ssh-check.sh`（C も）、`/var/log/dmesg.cron` が stick に残ることの確認、A と C の `boot-test.sh`、
   固定 IP の変種の build と QEMU の確認（例: `C build/p1-rl-cf 10.0.2.50/24 10.0.2.2`）、remote-log.md の見直し。
+- 追記（ラップアップ、2026-10-02）: `qemu-ssh-check.sh` に、collect の後に root の crontab の `/var/log/dmesg.cron` を最大 90 秒待つ段を足した（未実行）。
+  crontab 入りの A・C の SSH の確認はラップアップの指示で途中で止めた（結果無し）。再開点は上の「未実施」のとおり。
