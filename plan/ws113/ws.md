@@ -95,3 +95,5 @@ p008はp002〜p007の実出力を要する。見込みは実装許可ではな�
 2026-10-02 08:42 UTC / ws113-q586-result-20261002-a3-ws113: p001/q586-i01は90分上限でuncleared。D-ATOMIC未決が契約確定を妨げ、artifact/他技術採択/有限fixtureは保存。WS incomplete、p002–009 planned/未承認を保持。p001 resumeはD-ATOMIC採択とexact残scopeの新attempt選定。source/実機成果でclearした意味にはしない。[origin outcome](phase001/phase.md)/[ledger](phase001/evidence.md)。main outcome projection/history/remote delivery pending。同session次指示待機。
 
 2026-10-02 / ws113-beta1-plan: fg019 の計画エージェントがベータ1 の受け入れ M1〜M4（D1〜D5 の測り方）、時間の見積もり、衝突と並列、未決の判断 4 件を追加。Phase の追加・依存の変更・受け入れの緩和は無し。Queue は未投入。
+
+2026-10-02 user（D-ATOMIC）:「WS113は推奨でよいです。」→ **(a) logical owner の同時更新**を受け入れの解釈として採択。pointer の境界で窓の所属を compositor の中で一度に切り替え、最大 1 frame 程度の両画面での見え・不表示は許容。present_wait/present_id の追加と 2 head の同時 latch は要求しない。p001 の残り（0.75h、採択の反映と whole-Phase の契約の確定）を次の attempt で行う。

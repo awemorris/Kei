@@ -35,6 +35,10 @@
  */
 
 #include "ime.h"
+#include "compose.h"
+#include "glass.h"
+#include "extras.h"
+#include "popup.h"
 #include "keymap.h"
 #include "menu.h"
 #include "titlebar.h"
@@ -110,6 +114,22 @@
 #define STATUS_NEXT			0U
 #define STATUS_SELECT			1U
 
+/* zwp_input_method_v2's error for a popup surface that has another role. */
+#define METHOD_ERROR_ROLE		0U
+
+/* The candidate window's gap below the cursor, and its shadow in the glass look. */
+#define IME_POPUP_GAP			4
+#define IME_POPUP_SHADOW		10.0f
+#define IME_POPUP_RADIUS		10.0f
+
+/* The indicator in the system bar: its width, the gap after it, its height, top and text's baseline, and how far past it a click still counts. */
+#define IME_INDICATOR_WIDTH		26
+#define IME_INDICATOR_GAP		12
+#define IME_INDICATOR_HEIGHT		20
+#define IME_INDICATOR_TOP		7
+#define IME_INDICATOR_BASELINE		22
+#define IME_INDICATOR_SLOP		4
+
 /* The keymap formats of wl_keyboard. */
 #define IME_KEYMAP_NO_KEYMAP		0U
 #define IME_KEYMAP_XKB_V1		1U
@@ -135,7 +155,9 @@ static int ime_method_request(struct zwl_object *method, uint32_t opcode, const 
 static int ime_keyboard_request(struct zwl_object *keyboard, uint32_t opcode, const unsigned char *bytes, size_t size);
 static int ime_status_request(struct zwl_object *status, uint32_t opcode, const unsigned char *bytes, size_t size);
 static int ime_grab_keyboard(struct zwl_object *method, uint32_t id);
-static int ime_popup(struct zwl_object *method, uint32_t id);
+static int ime_popup(struct zwl_object *method, uint32_t id, uint32_t surface_id);
+static int ime_popup_place(struct zwl_server *server, struct zwl_object *surface, int32_t *x, int32_t *y);
+static void ime_popup_draw_one(struct zwl_server *server, VkCommandBuffer command, struct zwl_object *surface);
 static void ime_apply(struct zwl_server *server);
 static void ime_activate(struct zwl_server *server, struct zwl_text_input *input);
 static void ime_state(struct zwl_server *server, struct zwl_text_input *input);
@@ -667,6 +689,188 @@ zwl_ime_text_input_gone(
 }
 
 /*
+ * Notes a commit of a surface: a commit of the candidate window's surface
+ * redraws the output (the window appears, changes or goes).
+ */
+void
+zwl_ime_surface_commit(
+	struct zwl_object *surface)
+{
+	struct zwl_ime *ime;
+	unsigned i;
+
+	/* Only the input method's surfaces can be its popups. */
+	ime = surface->client->server->ime;
+	if (ime == NULL)
+		return;
+	if (!surface->client->ime)
+		return;
+
+	/* A popup's surface redraws the output. */
+	for (i = 0; i < sizeof(ime->popups) / sizeof(ime->popups[0]); i++) {
+		if (ime->popups[i] == NULL)
+			continue;
+
+		/* The popup this surface is. */
+		if (ime->popups[i]->surface == surface) {
+			surface->client->server->dirty = 1;
+			return;
+		}
+	}
+}
+
+/*
+ * Draws the candidate windows over everything but the cursor, below the
+ * served text input's cursor rectangle (above it where there is no room),
+ * with the glass look's soft shadow.
+ */
+void
+zwl_ime_popup_draw(
+	struct zwl_server *server,
+	VkCommandBuffer command)
+{
+	struct zwl_ime *ime;
+	unsigned i;
+
+	/* Only while a text input is served. */
+	ime = server->ime;
+	if (ime == NULL)
+		return;
+	if (!ime->activated)
+		return;
+	if (ime->active == NULL)
+		return;
+
+	/* Each popup. */
+	for (i = 0; i < sizeof(ime->popups) / sizeof(ime->popups[0]); i++) {
+		if (ime->popups[i] == NULL)
+			continue;
+
+		ime_popup_draw_one(server, command, ime->popups[i]->surface);
+	}
+}
+
+/*
+ * Gives the width the indicator takes in the system bar: none without an
+ * input method that has told its language.
+ */
+int32_t
+zwl_ime_indicator_width(
+	struct zwl_server *server)
+{
+	struct zwl_ime *ime;
+
+	/* No input method, or none that has told its language. */
+	ime = server->ime;
+	if (ime == NULL)
+		return 0;
+	if (ime->client == NULL)
+		return 0;
+	if (ime->label[0] == '\0')
+		return 0;
+
+	/* Its chip and a gap. */
+	return IME_INDICATOR_WIDTH + IME_INDICATOR_GAP;
+}
+
+/*
+ * Draws the indicator of the language chosen ("A", "あ") in the system bar at
+ * x: bright while a text input is served, pale otherwise.
+ */
+void
+zwl_ime_indicator_draw(
+	struct zwl_server *server,
+	VkCommandBuffer command,
+	int32_t x,
+	const float *ink)
+{
+	struct zwl_ime *ime;
+	float back[4];
+	float color[4];
+	int32_t width;
+
+	/* Nothing without an input method. */
+	ime = server->ime;
+	if (ime == NULL)
+		return;
+
+	/* Nothing while it has told no language (and a click finds nothing). */
+	width = zwl_ime_indicator_width(server);
+	if (width == 0) {
+		ime->indicator_shown = 0;
+		return;
+	}
+
+	/* Where a click chooses the next language (a test reads where it is when it moves). */
+	if (!ime->indicator_shown || ime->indicator_x != x)
+		printf("ZWL IME indicator x=%d label=%s\n", (int)x, ime->label);
+	ime->indicator_x = x;
+	ime->indicator_shown = 1;
+
+	/* The ink, pale while no text input is served. */
+	memcpy(color, ink, sizeof(color));
+	if (!ime->activated)
+		color[3] *= 0.45f;
+
+	/* A chip behind the label. */
+	memcpy(back, ink, sizeof(back));
+	back[3] = 0.10f;
+	glass_draw_solid(server, command, (float)x, (float)IME_INDICATOR_TOP, (float)IME_INDICATOR_WIDTH, (float)IME_INDICATOR_HEIGHT, 6.0f, back);
+
+	/* The label, centred. */
+	width = glass_text_width(server, SIZE_BAR, ime->label);
+	glass_draw_text(server, command, SIZE_BAR, x + (IME_INDICATOR_WIDTH - width) / 2, IME_INDICATOR_BASELINE, ime->label, IME_INDICATOR_WIDTH,
+			color);
+}
+
+/*
+ * Takes a press on the indicator: the input method chooses the next
+ * language.  Its release is taken too.
+ *
+ * Returns nonzero when the button is taken.
+ */
+int
+zwl_ime_indicator_button(
+	struct zwl_server *server,
+	uint32_t button,
+	uint32_t state)
+{
+	struct zwl_ime *ime;
+	int32_t x;
+	int32_t y;
+
+	/* Only the left button on a shown indicator of an input method that hears its status. */
+	ime = server->ime;
+	if (ime == NULL)
+		return 0;
+	if (!ime->indicator_shown)
+		return 0;
+	if (ime->status == NULL)
+		return 0;
+	if (button != ZWL_BUTTON_LEFT)
+		return 0;
+
+	/* The pointer must be on the chip (a little larger than the drawing), in the bar. */
+	x = server->pointer_x;
+	y = server->pointer_y;
+	if (x < ime->indicator_x - IME_INDICATOR_SLOP)
+		return 0;
+	if (x >= ime->indicator_x + IME_INDICATOR_WIDTH + IME_INDICATOR_SLOP)
+		return 0;
+	if (y < 0 || y >= ZWL_GLASS_BAR)
+		return 0;
+
+	/* A press asks for the next language. */
+	if (state != 0U) {
+		ime_emit(ime->status, STATUS_NEXT, NULL, 0);
+		printf("ZWL IME indicator next\n");
+	}
+
+	/* Succeeded: the press (or its release) is the indicator's. */
+	return 1;
+}
+
+/*
  * Starts the input method's program on a socket pair and makes its
  * connection.
  */
@@ -836,7 +1040,9 @@ ime_lost(
 	ime_set_text(&ime->preedit_shown, NULL);
 	ime->client = NULL;
 
-	/* It is started again after a moment. */
+	/* It is started again after a moment; the indicator and the candidate window go meanwhile. */
+	ime->label[0] = '\0';
+	server->dirty = 1;
 	ime->restart_ms = zwl_milliseconds() + IME_RESTART_MS;
 }
 
@@ -995,7 +1201,7 @@ ime_method_request(
 		/* The popup's new ID and its surface. */
 		if (size != 8U)
 			return EPROTO;
-		error = ime_popup(method, ime_word(bytes, 0));
+		error = ime_popup(method, ime_word(bytes, 0), ime_word(bytes, 4));
 		return error;
 	case METHOD_GRAB_KEYBOARD:
 		/* The grab's new ID. */
@@ -1116,9 +1322,11 @@ ime_status_request(
 			return EPROTO;
 		}
 
-		/* The language decides whether keys pass the input method by. */
+		/* The language decides whether keys pass the input method by; its label is the indicator's. */
 		if (ime != NULL && ime->status == status) {
 			snprintf(ime->language, sizeof(ime->language), "%s", id);
+			snprintf(ime->label, sizeof(ime->label), "%s", label);
+			status->client->server->dirty = 1;
 			printf("ZWL IME language=%s\n", ime->language);
 		}
 
@@ -1199,16 +1407,36 @@ ime_grab_keyboard(
 static int
 ime_popup(
 	struct zwl_object *method,
-	uint32_t id)
+	uint32_t id,
+	uint32_t surface_id)
 {
 	struct zwl_ime *ime;
 	struct zwl_object *popup;
+	struct zwl_object *surface;
 	unsigned i;
+	int error;
 
-	/* The popup. */
+	/* The surface must be the input method's own, live and a surface. */
+	surface = zwl_find(method->client, surface_id);
+	if (surface == NULL ||
+	    surface->dead ||
+	    surface->kind != ZWL_SURFACE)
+		return EPROTO;
+
+	/* It must have no role yet. */
+	if (surface->role != NULL ||
+	    surface->cursor_role ||
+	    surface->sub_role != NULL) {
+		error = zwl_error_code(method->client, method->id, METHOD_ERROR_ROLE, "the surface has another role");
+		return error;
+	}
+
+	/* The popup, which names its surface. */
 	popup = zwl_create(method->client, id, ZWL_INPUT_POPUP, method->version);
 	if (popup == NULL)
 		return EPROTO;
+
+	popup->surface = surface;
 
 	/* It takes a free slot; more popups than slots are not told the rectangle. */
 	ime = method->client->server->ime;
@@ -1274,6 +1502,7 @@ ime_activate(
 	ime_emit(ime->method, METHOD_ACTIVATE, NULL, 0);
 	ime_state(server, input);
 	ime_rectangles(server);
+	server->dirty = 1;
 	printf("ZWL IME activate client=%llu\n", (unsigned long long)input->object->client->number);
 }
 
@@ -1334,6 +1563,7 @@ ime_deactivate(
 	ime->active = NULL;
 	ime->activated = 0;
 	ime_set_text(&ime->preedit_shown, NULL);
+	server->dirty = 1;
 	printf("ZWL IME deactivate\n");
 }
 
@@ -1356,6 +1586,118 @@ ime_rectangles(
 		if (ime->popups[i] != NULL)
 			ime_emit(ime->popups[i], POPUP_TEXT_INPUT_RECTANGLE, ime->active->rectangle, sizeof(ime->active->rectangle));
 	}
+}
+
+/*
+ * Draws one candidate window: its surface's image by the cursor, blended
+ * (its corners are transparent), with the glass look's soft shadow.
+ */
+static void
+ime_popup_draw_one(
+	struct zwl_server *server,
+	VkCommandBuffer command,
+	struct zwl_object *surface)
+{
+	const struct zwl_import *image;
+	struct zwl_import alpha;
+	struct glass_shape shape;
+	uint32_t width;
+	uint32_t height;
+	int32_t x;
+	int32_t y;
+	int placed;
+
+	/* A live surface with an image (an empty one hides the window). */
+	if (surface == NULL)
+		return;
+	if (surface->dead)
+		return;
+
+	image = zwl_compose_surface_image(surface);
+	if (image == NULL)
+		return;
+
+	/* Its place by the cursor. */
+	placed = ime_popup_place(server, surface, &x, &y);
+	if (!placed)
+		return;
+
+	/* Its size, the image's when the surface has none of its own. */
+	zwl_surface_size(surface, &width, &height);
+	if (width == 0U || height == 0U) {
+		width = image->width;
+		height = image->height;
+	}
+
+	/* The glass look gives it a soft shadow. */
+	if (server->glass) {
+		glass_shape_init(&shape, (float)x, (float)y + 3.0f, (float)width, (float)height);
+		shape.quad[0] -= 2.0f * IME_POPUP_SHADOW;
+		shape.quad[1] -= 2.0f * IME_POPUP_SHADOW;
+		shape.quad[2] += 4.0f * IME_POPUP_SHADOW;
+		shape.quad[3] += 4.0f * IME_POPUP_SHADOW;
+		shape.mode = MODE_SHADOW;
+		shape.radius = IME_POPUP_RADIUS;
+		shape.soft = IME_POPUP_SHADOW;
+		shape.color[0] = 0.05f;
+		shape.color[1] = 0.08f;
+		shape.color[2] = 0.16f;
+		shape.color[3] = 0.28f;
+		glass_shape_draw(server, command, &shape);
+	}
+
+	/* The image, blended. */
+	alpha = *image;
+	alpha.draw = ZWL_DRAW_ALPHA;
+	zwl_compose_surface_quad(server, command, surface, &alpha, x, y);
+}
+
+/*
+ * Places a candidate window below the served text input's cursor rectangle,
+ * or above it where it would pass the output's bottom, and within the
+ * output's left and right edges.
+ *
+ * Returns zero when the served text input has no surface on the output.
+ */
+static int
+ime_popup_place(
+	struct zwl_server *server,
+	struct zwl_object *surface,
+	int32_t *x,
+	int32_t *y)
+{
+	struct zwl_text_input *input;
+	struct zwl_object *window;
+	uint32_t width;
+	uint32_t height;
+	int32_t below;
+	int32_t above;
+
+	/* The text input's surface, where the rectangle is. */
+	input = server->ime->active;
+	window = input->surface;
+	if (window == NULL || window->dead)
+		return 0;
+
+	/* The popup's size. */
+	zwl_surface_size(surface, &width, &height);
+
+	/* Below the rectangle, at its left. */
+	*x = window->x + input->rectangle[0];
+	below = window->y + input->rectangle[1] + input->rectangle[3] + IME_POPUP_GAP;
+	above = window->y + input->rectangle[1] - IME_POPUP_GAP - (int32_t)height;
+	*y = below;
+	if (below + (int32_t)height > (int32_t)server->height && above >= 0)
+		*y = above;
+
+	/* Within the output's edges. */
+	if (*x + (int32_t)width > (int32_t)server->width)
+		*x = (int32_t)server->width - (int32_t)width;
+	if (*x < 0)
+		*x = 0;
+
+	/* Succeeded: the place. */
+	return 1;
 }
 
 /*

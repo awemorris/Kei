@@ -10,6 +10,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1）
 Queue: none
 Resume point: p001（取得・検証・license 監査と cross build の方針）が planned。すぐ Queue にできる。p004 は ws125-p002（staged tree の image への導入）の成果を待つ。GUI 版の要否はユーザーの判断（下の D1、既定案は端末版だけ）。
+2026-10-02 user:「Emacs はまずターミナル版のみにします。あとでGUIツールキットをどうするか考えます。リリースのイメージに入れます。」→ ベータ1 は `emacs -nw` の端末版のみ、release の image に既定で入れる。GUI は後で toolkit を決める。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー（ベータ1、リリース目標 10/17））

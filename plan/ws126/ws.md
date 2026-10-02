@@ -10,6 +10,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1）
 Queue: none
 Resume point: p001（取得・検証・監査、cross build の方針、module ごとの依存の実測）が planned。すぐ Queue にできる。p004 は module の範囲（下の D1）の判断待ち。p005 は ws125-p002 の成果待ち。
+2026-10-02 user:「Python の module の範囲はまずコアが動くことを目指します。そのあとpipも目指しますが、後回しでいいです。」→ ベータ1 はまず core（外部依存の無い標準 module）で動くこと、release の image に入れる。pip（ensurepip）は後回し。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー（ベータ1、リリース目標 10/17））

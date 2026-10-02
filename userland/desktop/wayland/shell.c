@@ -82,6 +82,7 @@
 #include "panels.h"
 #include "touch.h"
 #include "edit.h"
+#include "ime.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -243,6 +244,7 @@ struct shell_bar {
 	int32_t battery_x;
 	int32_t signal_x;
 	int32_t volume_x;
+	int32_t ime_x;
 	int32_t status_line;
 	int32_t desktops_x;
 	int32_t desktops_width;
@@ -615,6 +617,13 @@ zwl_glass_button(
 	/* A button Home took goes no further. */
 	if (pressed)
 		return 1;
+
+	/* The input method's indicator takes a press on it: the next language (input-method.c). */
+	if (cover == NULL) {
+		pressed = zwl_ime_indicator_button(server, button, state);
+		if (pressed)
+			return 1;
+	}
 
 	/* The volume takes a press on its icon, and every button while its popup is open (volume.c). */
 	open = zwl_volume_is_open();
@@ -2101,7 +2110,10 @@ bar_layout(
 	bar->battery_x = bar->clock_x - 44;
 	bar->signal_x = bar->battery_x - 36;
 	bar->volume_x = bar->signal_x - 34;
-	bar->status_line = bar->volume_x - 16;
+
+	/* The input method's language left of the volume, when there is an input method (input-method.c). */
+	bar->ime_x = bar->volume_x - zwl_ime_indicator_width(server);
+	bar->status_line = bar->ime_x - 16;
 
 	/* The desktops, and a line. */
 	bar->desktops_width = DESKTOPS * DESKTOP_WIDTH + (DESKTOPS - 1) * DESKTOP_GAP + 12;
@@ -3107,6 +3119,9 @@ draw_status(
 
 	/* The volume's speaker, which opens its popup (volume.c, ws100-p004). */
 	zwl_volume_draw_icon(server, command, bar->volume_x, ink);
+
+	/* The input method's language (A, あ), which a click changes (input-method.c). */
+	zwl_ime_indicator_draw(server, command, bar->ime_x, ink);
 }
 
 /*

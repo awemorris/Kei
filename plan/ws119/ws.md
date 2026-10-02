@@ -11,6 +11,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1、2026-10-02 user: WS118 の次）
 Queue: none
 Resume point: [p001](phase001/phase.md)（旧 zedinst・image の構成・base の道具の調査と、要件の案・選択肢をユーザーへ出す、planned）。要件が決まるまで p002 以降は planning。
+2026-10-02 user:「ディスク全体のみ。UEFIのみ。」→ インストーラは導入先の disk 全体を使う（他の OS との共存は無し）、UEFI だけ。他の要件（入力の項目・UI の言語・起動の入口）は p001 で案を出す。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー）

@@ -12,7 +12,7 @@
 | q601 / q601-i01 | [ws118-p001](../../ws118/phase001/phase.md) | 5320 の遠隔 log 用 image | 継続 dispatch | 3 時間 | in-progress（再開） |
 | q599 / q599-i02 | [ws005-p019](../../ws005/phase019/phase.md) | network group の利用者に WiFi の制御を許可し desktop から on/off・join（i02） | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」 | 4 時間 | finished / uncleared（permission の再拒否、ユーザーの直接の許可待ち） |
 
-Next（予約）: ws005-p019 再開（ユーザーの承認後）→ ws033-p001 再投入
+Next（予約）: ws005-p024（起動時の自動再接続）→ q601（ws118-p001）の再開 → ws033-p001 再投入
 
 ## Merge requests
 

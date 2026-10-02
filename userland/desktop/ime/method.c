@@ -25,11 +25,22 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 /* The wl_keyboard key states. */
 #define METHOD_KEY_RELEASED	0U
 #define METHOD_KEY_PRESSED	1U
+
+/* The evdev codes of the keys never repeated: the modifiers, Enter, keypad Enter and Escape. */
+#define METHOD_KEY_LEFTCTRL	29U
+#define METHOD_KEY_LEFTSHIFT	42U
+#define METHOD_KEY_RIGHTSHIFT	54U
+#define METHOD_KEY_LEFTALT	56U
+#define METHOD_KEY_RIGHTCTRL	97U
+#define METHOD_KEY_RIGHTALT	100U
+#define METHOD_KEY_LEFTMETA	125U
+#define METHOD_KEY_RIGHTMETA	126U
 
 static void method_activate(void *data, struct zwp_input_method_v2 *method);
 static void method_deactivate(void *data, struct zwp_input_method_v2 *method);
@@ -45,6 +56,8 @@ static void grab_repeat_info(void *data, struct zwp_input_method_keyboard_grab_v
 static void status_next(void *data, struct keiland_ime_status_v1 *status);
 static void status_select(void *data, struct keiland_ime_status_v1 *status, const char *id);
 static void method_send(struct program *program);
+static void method_press(struct program *program, uint32_t time, uint32_t key, int repeated);
+static int method_repeats(uint32_t key);
 static void method_choose(struct program *program, unsigned index);
 
 /*
@@ -140,6 +153,74 @@ program_announce_language(
 	ops = program->engines[program->current].ops;
 	keiland_ime_status_v1_language(program->status, ops->id, ops->label);
 	printf("KEI-IME LANGUAGE id=%s\n", ops->id);
+}
+
+/*
+ * Gives how long main's loop may wait before a held key's next press is
+ * due, in milliseconds: 0 when it is due, -1 when no key repeats.
+ */
+int
+program_repeat_timeout(
+	const struct program *program,
+	unsigned long long now_ms)
+{
+	unsigned long long left;
+
+	/* No key held, or no repeat. */
+	if (program->repeat.key == 0U)
+		return -1;
+
+	/* Due already. */
+	if (now_ms >= program->repeat.next_ms)
+		return 0;
+
+	/* The time left. */
+	left = program->repeat.next_ms - now_ms;
+	return (int)left;
+}
+
+/*
+ * Presses the held key again when its next press is due, as zdesktop would
+ * repeat a key for an application.
+ */
+void
+program_repeat_due(
+	struct program *program,
+	unsigned long long now_ms)
+{
+	uint32_t interval;
+
+	/* Nothing held, or not yet due. */
+	if (program->repeat.key == 0U)
+		return;
+	if (now_ms < program->repeat.next_ms)
+		return;
+
+	/* The next one after the rate's interval. */
+	interval = 1000U / (uint32_t)program->repeat.rate;
+	program->repeat.next_ms = now_ms + interval;
+	program->repeat.time += interval;
+
+	/* The press again. */
+	method_press(program, program->repeat.time, program->repeat.key, 1);
+}
+
+/*
+ * Gives a steady clock in milliseconds, for the repeat.
+ */
+unsigned long long
+program_clock_ms(void)
+{
+	struct timespec now;
+	int status;
+
+	/* The monotonic clock. */
+	status = clock_gettime(CLOCK_MONOTONIC, &now);
+	if (status != 0)
+		return 0;
+
+	/* Succeeded: the milliseconds. */
+	return (unsigned long long)now.tv_sec * 1000ULL + (unsigned long long)now.tv_nsec / 1000000ULL;
 }
 
 /*
@@ -258,6 +339,10 @@ method_done(
 		program->composing = 0;
 		keiland_ime_status_v1_composing(program->status, 0);
 		printf("KEI-IME %s\n", program->active ? "ACTIVATE" : "DEACTIVATE");
+
+		/* The candidate window goes, and no key repeats into the new text input. */
+		program->repeat.key = 0;
+		program_popup_update(program, program->out);
 	}
 
 	/* A secret field teaches nothing (the engines' content_type). */
@@ -323,16 +408,17 @@ grab_key(
 	uint32_t state)
 {
 	struct program *program;
-	struct ime_engine *engine;
-	struct ime_key typed;
 
 	UNUSED_PARAMETER(grab);
 	UNUSED_PARAMETER(serial);
 
 	program = data;
 
-	/* A release goes back where its press went. */
+	/* A release goes back where its press went, and ends the repeat of its key. */
 	if (state == METHOD_KEY_RELEASED) {
+		if (key == program->repeat.key)
+			program->repeat.key = 0;
+
 		if (key < PROGRAM_KEYS && program->passed[key]) {
 			program->passed[key] = 0;
 			zwp_virtual_keyboard_v1_key(program->keyboard, time, key, METHOD_KEY_RELEASED);
@@ -341,29 +427,8 @@ grab_key(
 		return;
 	}
 
-	/* The key as the engines see it. */
-	typed.code = key;
-	typed.character = program_key_character(key, program->modifiers);
-	typed.modifiers = program_key_modifiers(program->modifiers);
-
-	/* The language chosen acts on it; a key heard while no text input is served goes back. */
-	engine = &program->engines[program->current];
-	if (program->active) {
-		engine->ops->key(engine, &typed, program->out);
-	} else {
-		ime_output_clear(program->out);
-		program->out->pass_key = true;
-	}
-
-	/* What it made (always sent, so that zdesktop hears an answer). */
-	method_send(program);
-
-	/* A key the language does not use goes back to the application. */
-	if (program->out->pass_key) {
-		zwp_virtual_keyboard_v1_key(program->keyboard, time, key, METHOD_KEY_PRESSED);
-		if (key < PROGRAM_KEYS)
-			program->passed[key] = 1;
-	}
+	/* A press. */
+	method_press(program, time, key, 0);
 }
 
 /*
@@ -393,7 +458,8 @@ grab_modifiers(
 }
 
 /*
- * Takes the repeat zdesktop tells, which the program does not use yet.
+ * Keeps the repeat zdesktop tells: presses per second (none when zero) and
+ * the wait before the first.
  */
 static void
 grab_repeat_info(
@@ -402,10 +468,14 @@ grab_repeat_info(
 	int32_t rate,
 	int32_t delay)
 {
-	UNUSED_PARAMETER(data);
+	struct program *program;
+
 	UNUSED_PARAMETER(grab);
-	UNUSED_PARAMETER(rate);
-	UNUSED_PARAMETER(delay);
+
+	/* Kept for the next key held. */
+	program = data;
+	program->repeat.rate = rate;
+	program->repeat.delay = delay;
 }
 
 /*
@@ -484,6 +554,9 @@ method_send(
 		program->composing = composing;
 		keiland_ime_status_v1_composing(program->status, composing);
 	}
+
+	/* The candidate window shows the engine's candidates, or goes (popup.c). */
+	program_popup_update(program, out);
 }
 
 /*
@@ -509,4 +582,95 @@ method_choose(
 	/* The new language, told to zdesktop. */
 	program->current = index;
 	program_announce_language(program);
+}
+
+/*
+ * Gives one pressed key (or a repeat of the held one) to the language
+ * chosen, sends what it made, gives the key back when the language does not
+ * use it, and starts the key's repeat when the language used it.
+ */
+static void
+method_press(
+	struct program *program,
+	uint32_t time,
+	uint32_t key,
+	int repeated)
+{
+	struct ime_engine *engine;
+	struct ime_key typed;
+	int repeats;
+
+	/* The key as the engines see it. */
+	typed.code = key;
+	typed.character = program_key_character(key, program->modifiers);
+	typed.modifiers = program_key_modifiers(program->modifiers);
+
+	/* The language chosen acts on it; a key heard while no text input is served goes back. */
+	engine = &program->engines[program->current];
+	if (program->active) {
+		engine->ops->key(engine, &typed, program->out);
+	} else {
+		ime_output_clear(program->out);
+		program->out->pass_key = true;
+	}
+
+	/* What it made (always sent, so that zdesktop hears an answer). */
+	method_send(program);
+
+	/* A key the language does not use goes back to the application, which repeats it itself. */
+	if (program->out->pass_key) {
+		program->repeat.key = 0;
+		if (repeated)
+			return;
+
+		zwp_virtual_keyboard_v1_key(program->keyboard, time, key, METHOD_KEY_PRESSED);
+		if (key < PROGRAM_KEYS)
+			program->passed[key] = 1;
+		return;
+	}
+
+	/* A repeat goes on at its own pace. */
+	if (repeated)
+		return;
+
+	/* A key the language used repeats while it is held, after the delay. */
+	repeats = method_repeats(key);
+	if (!repeats || program->repeat.rate <= 0) {
+		program->repeat.key = 0;
+		return;
+	}
+
+	program->repeat.key = key;
+	program->repeat.time = time;
+	program->repeat.next_ms = program_clock_ms() + (unsigned long long)program->repeat.delay;
+}
+
+/*
+ * Tells whether a key repeats while held: not a modifier, Enter or Escape.
+ */
+static int
+method_repeats(
+	uint32_t key)
+{
+	/* The keys a held press must not do again. */
+	switch (key) {
+	case METHOD_KEY_LEFTCTRL:
+	case METHOD_KEY_LEFTSHIFT:
+	case METHOD_KEY_RIGHTSHIFT:
+	case METHOD_KEY_LEFTALT:
+	case METHOD_KEY_RIGHTCTRL:
+	case METHOD_KEY_RIGHTALT:
+	case METHOD_KEY_LEFTMETA:
+	case METHOD_KEY_RIGHTMETA:
+	case IME_KEY_ENTER:
+	case IME_KEY_KP_ENTER:
+	case IME_KEY_ESCAPE:
+		/* Never repeated. */
+		return 0;
+	default:
+		break;
+	}
+
+	/* Any other key repeats. */
+	return 1;
 }

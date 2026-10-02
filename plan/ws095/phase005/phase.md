@@ -2,7 +2,7 @@
 
 # ws095-p005: 候補の窓と indicator
 
-Status: uncleared（2026-09-29、ユーザーの指示で中断。2026-10-02 新 attempt を Queue 投入可）
+Status: cleared（q604-i01、2026-10-02、P4。QEMU の Venus で確認、実機の目視はユーザー。判定と記録は Q1）。旧: uncleared（2026-09-29、ユーザーの指示で中断）
 Disposition: normal
 Parent: [WS095](../ws.md)
 Queue: main が割り当て（2026-09-29、worktree `.claude/worktrees/ws095-ime`、branch `wt/ws095`）。Queue の ID は main が記録する
@@ -75,3 +75,36 @@ p004 で変換（kanji → 漢字、確定）まで guest で確かめてある�
 - 未決の判断: なし（表示の文字は英語か日本語だけ）。
 
 2026-10-02 / ws095-beta1-plan-20261002: 次 attempt の範囲・受け入れ・所有 path・衝突を記録。Status は uncleared のまま。
+
+## 結果（q604-i01、2026-10-02、P4、worktree `/home/awe/zedBSD-worktrees/p4`、main eab8635d8 に合わせ `p005-wip.patch` を当ててから）
+
+承認: user「IMEのステータスを画面右上の通知領域に追加してください。」＋継続 dispatch（時限 4h）。
+
+### 変えた file
+
+- compositor（`userland/desktop/wayland/`、最小の差し込み）:
+  - `input-method.c`・`ime.h`: WIP の patch を全文規約に書き直し（複合条件を 1 つずつ、候補の窓の 1 枚の描画を `ime_popup_draw_one()` に分けた）。`zwl_ime_popup_visible()` は使い道（direct scanout）が ws103-p002 で無くなったので消した。indicator の位置が変わった時に `ZWL IME indicator x=… label=…` を出す（試験が click の位置を読む）。
+  - `compose.c`: `compose_record()` の cursor の直前に `zwl_ime_popup_draw()`（plain・glass 共通）と `#include "ime.h"`。
+  - `protocol.c`: role の無い surface の commit の後に `zwl_ime_surface_commit()`（3 行）。
+  - `shell.c`: `struct shell_bar` に `ime_x`、`bar_layout()` で volume の左に indicator の幅、`draw_status()` で描画、button の処理で volume の前に click（system bar の右上の status の並び）。`#include "ime.h"`。
+  - `display.c` は変えていない（direct scanout が無いので全画面も同じ合成の経路）。
+- IME（`userland/desktop/ime/`）: 新しい `popup.c`（input popup surface、wl_shm、libkeiui の canvas と text で 9 個の頁・番号・選択の強調・頁の行。変更ごとに窓の大きさの wl_buffer を作るので影は窓の大きさ）、`program.h`（popup・repeat の状態）、`main.c`（wl_compositor・wl_shm の bind、`main_serve()` の poll の loop に repeat の時刻）、`method.c`（`method_press()` に key の処理を分け、repeat の rate・delay、`program_repeat_*`、送るたびに候補の窓を更新、活性の変化で窓を消す）、Makefile・Makefile.linux・Makefile.freebsd（`popup.c`、libkeiui 等）。
+- `platform/amd64/vmunix.mk` の `keiland-ime` の link の規則（**platform の共有 file**）: libkeiui・libkeiland・libtruetype・libvulkan・libpng-compat・libz-compat を足した（textedit と同じ組）。
+- 試験: `plan/ws095/tests/ime-p005.sh`（新）、`ime-p004.sh` の kill を password の probe の起動時の pid だけに（`$!` を `/tmp/pw.log.pid` に）。
+
+### 確認（QEMU の Venus、console・serial の log は使っていない）
+
+- image `build/p4-ime-p005.img`（`build-ime-textedit-image.sh`、SHA-256 `69d2a8f24d5d44a5f06ce0593044d72807e6b6a3968ae189331c4c4923a6b75d`）、build の warning 0（zedBSD target、`-Werror`）。
+- `GUEST_RUNTIME=build/p4-run sh plan/ws095/tests/ime-p005.sh build/p4-p005d` → **PASS**: 候補の窓が作られ（`KEI-IME POPUP ready=1`）、indicator「A」→ Alt+Space で「あ」、kanji と Space 3 回で caret の下に候補の窓（6 候補、3 番が選択、p013 の `te_app_caret_rect()` の文節の位置）、Enter で確定し窓が消える、
+  `a` を 1.6 秒押し続けると IME が repeat して preedit が「あああああああ」、indicator の click で次の言語（`ZWL IME indicator next`、`language=direct`）。zdesktop の ERROR なし。
+  PNG: `plan/ws095/tests/evidence-p005/`（summary.png: bar の A・あ・click 後の A と候補の窓、candidates・bar-ja・repeat）。
+- `ime-p004.sh`（kill の修正の後）→ status=0。
+- host: `host-engine.sh` 203 passed。
+- Linux: `make -f userland/desktop/keiland-linux.mk KEILAND_LINUX_BUILD=build/p4-linux build/p4-linux/libexec/keiland-ime build/p4-linux/bin/wayland` → 通る（warning 0）。FreeBSD の build は未実施（Makefile.freebsd は Linux と同じ形に直した）。
+- `plan/tools/boot-test.sh build/p4-ime-p005.img` → PASS（`build/p4-boot5/login.png`）。
+
+### 気づき・未実施
+
+- **確定の時に zdesktop の 500 ms の待ちを越える**: Enter の確定の直後に `ZWL IME bypass after_ms=500` が毎回出る（その間の key は IME を通らずに app へ行く）。確定ごとの利用者の辞書の書き込み（`ja-user.c` の fsync と rename）が QEMU の UFS で遅い見込み。直接入力の遅延ではないが、確定の直後の速い入力が IME を素通りしうる。p005 の範囲の外なので直していない（試験は確定の後 2 秒待つ）。Bug Board の候補として報告。
+- 全画面の窓の上の候補: text-input を使う全画面の client が無く、未実施（direct scanout が無いので合成の経路は同じ）。
+- 候補の窓の 1〜9 は選ぶだけで確定しない（engine の今の動き）。実機の目視（5330）はユーザー。

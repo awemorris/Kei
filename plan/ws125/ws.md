@@ -10,6 +10,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1）
 Queue: none
 Resume point: p001（取得・検証・監査・cross build）と p002（staged tree を image に入れる共通の仕組み、WS124・WS126 も使う）が planned。互いに独立で、すぐ Queue にできる。
+2026-10-02 user: packages（Emacs・vim・Python）は「リリースのイメージに入れます」→ vim も release の image に既定で入れる。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー（ベータ1、リリース目標 10/17））

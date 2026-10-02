@@ -61,3 +61,5 @@ Residual / resume: D-ATOMIC採択を要求と検証へ投影し、必要なsourc
 2026-10-02 08:42 UTC / ws113-q586-result-20261002-a3-ws113-p001: q586-i01をunclearedで終了、Phase uncleared/normal。90分内にsource/一次規約と全契約案/影響Phase/有限fixture/次候補を保存したがD-ATOMIC未決でclearance不可。source/build/hardware未実施、他条件の実装成功は主張しない。上記artifact/checkpointとresume conditionを保持。[WS](../ws.md)/[evidence](evidence.md)。mainのoutcome projection/remote delivery pending。同session待機。
 
 2026-10-02 / ws113-beta1-plan-p001: fg019 の計画で、次の attempt を 0.75h（D-ATOMIC の採択の反映と whole-Phase の契約の確定だけ）と見積もった。D-ATOMIC のユーザーの回答までは開始しない。Status は uncleared のまま。
+
+2026-10-02 user（D-ATOMIC）:「WS113は推奨でよいです。」→ **(a) logical owner の同時更新**を受け入れの解釈として採択。pointer の境界で窓の所属を compositor の中で一度に切り替え、最大 1 frame 程度の両画面での見え・不表示は許容。present_wait/present_id の追加と 2 head の同時 latch は要求しない。p001 の残り（0.75h、採択の反映と whole-Phase の契約の確定）を次の attempt で行う。

@@ -11,6 +11,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1、2026-10-17）。2026-10-02 user: ネットワーク（WiFi を含む）＞ WS118 ＞ WS119 ＞ WS112
 Queue: なし
 Resume point: [p018](phase018/phase.md)（ベータ1 の WiFi の利用者の流れの調査と契約、planned）。AX211 の経路は [BUG-134](../bugs/BUG-134.md)（ws004-p051 / q590）の解決が前提。p013〜p015 は WS033 の実装で中身が済んでおり、取消し（canceled、WS033 へ吸収）を main に提案中。
+2026-10-02 user:「ログインしたときにWiFiを再接続してください。ログインというか、networkdが有効になって、net wifi enableされたときですね。コンソール起動でもWiFi接続は自動で行われます。」→ 新 [p024](phase024/phase.md)（起動時の enable で network group の利用者の保存済み profile も候補にして自動接続）。
 <!-- awesome-plan-current:end -->
 
 <!-- beta1-current:start -->
