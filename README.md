@@ -83,15 +83,12 @@ make keiland-linux
 make keiland-linux-install
 ```
 
-Or, one of:
-
-```
-sudo dpkg -i keiland-debian13.deb
-sudo dpkg -i keiland-ubuntu2604.deb
-sudo tar xzf keiland-linux.tar.gz -C /
-```
-
 Then restart your display manager such as GDM.
+To run Keiland manually, type:
+
+```sh
+/opt/keiland/bin/keiland-desktop
+```
 
 ### FreeBSD portion of Keiland Desktop
 
@@ -102,16 +99,10 @@ make keiland-freebsd
 make keiland-freebsd-install
 ```
 
-Or,
+To run Keiland, type:
 
-```
-sudo pkg install keiland-freebsd15.tar.gz -C /
-```
-
-Then, run:
-
-```
-/opt/keiland/bin/wayland
+```sh
+/opt/keiland/bin/keiland-desktop
 ```
 
 ---
