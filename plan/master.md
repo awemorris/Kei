@@ -2,10 +2,10 @@
 
 <!-- awesome-plan-current:start -->
 Active Queues: なし。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=2 から開始（[protocol](agents/protocol.md)）。
-Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg017 — WS074ブラウザ、fg018 — WS114 GTK4 baseline。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。
+Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
-IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared、p172（origin/browser2取込の最終review）が後続browser作業の前提。
-優先順位: fg019 の内容確定後に見直す。それまでは下の「WS の優先順位」の既存順を保持する。
+**WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
+優先順位の調整（2026-10-02 user）: **WS114 を優先**、**IME（WS095）の優先度を上げる**、Linux packaging（WS112）の優先度を下げる。WS095 を人間が作業中という以前の制限を解くかは確認中（解けるまでエージェントに割り当てない）。全体の順位は fg019 確定時に見直す。
 <!-- awesome-plan-current:end -->
 
 # zedBSD Master
@@ -53,7 +53,7 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | --- | --- | --- | --- | --- |
 | **fg019** | **ベータ1のリリース**。含める内容（機能・対象 platform・配布物・品質基準）は2026-10-02からユーザーと議論して決める（draft、受け入れ条件は未定義） | 未定（MG006/MG007 などを内容確定時に決める） | 未定 | 2026-10-02 user「次のFeature Goalはベータ1のリリースにします。ベータ1に含める内容は、一緒に議論して決めましょう！」 |
 | **fg018** | WS114のLinux標準GTK4の動作と不足を機能表で実測し、ユーザー行別採否レビューを経てWS115 upstream移植への前提を整える | MG006 | [WS114](ws114/ws.md) / Agent B B1 | 2026-10-02 userがdesktop次作業をGTK4移植WSへ指定。q580は部分実測でuncleared、改善機能の採否は未決 |
-| **fg017** | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / Agent A A1 | 2026-10-02 ユーザー指示と同日の追加。p172/q579は部分統合・検証後unclearedで、残reviewの再選定が先。Interop対象はp173で固定、Test262の到達率は未指定 |
+| **fg017**（このsessionの対象外、2026-10-02 user: Codex が担当） | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / Agent A A1 | 2026-10-02 ユーザー指示と同日の追加。p172/q579は部分統合・検証後unclearedで、残reviewの再選定が先。Interop対象はp173で固定、Test262の到達率は未指定 |
 
 
 デモの platform は amd64 の実機（Dell Latitude 5330、HDMI + USB、2026-09-28 ユーザーの回答）。開発の試験は QEMU（amd64）で行い、実機の証拠と分けて書く。以前の focus（fg004 インストーラの実機、
