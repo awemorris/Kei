@@ -92,9 +92,9 @@ Event ws115-beta1-plan-20261002: 2026-10-02 計画担当が依存 package の移
 
 - 4 つの tarball に `GNU General Public License|GNU Lesser General Public|SPDX-License-Identifier: *L?GPL` の検索を当てた。
   - harfbuzz: 0 件。
-  - fontconfig: 22 件。autotools と gettext の m4、ABOUT-NLS で、すべて build の道具。
+  - fontconfig: 21 件。autotools と gettext の m4、ABOUT-NLS で、すべて build の道具。
   - freetype: 8 件。autotools と、二重 license の片方の本文 `docs/GPLv2.TXT`。zedBSD は FTL を選び、`docs/FTL.TXT` を配る。
-  - libpng: 26 件。autotools と `contrib/gregbook`（GPL の例の program）。
+  - libpng: 24 件。autotools と `contrib/gregbook`（GPL の例の program）。
 - build の対象: meson の compile_commands（freetype 41、harfbuzz 83、fontconfig 64）にも、libpng の ninja の target にも、contrib の source は無い。配る物に GPL の source は無い。
 - 配る license の本文:
   - libpng: `LICENSE`（Libpng-2.0）
