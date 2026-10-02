@@ -227,19 +227,19 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS113](ws113/ws.md) | MG006 | zedBSD i915 hotplug/Vulkan Displayから複数画面・Settings/libkeiland・窓の全体移動 | incomplete | p001/q586設計調査uncleared、D-ATOMIC未決、A3成果回収/終了。全拡張/全mirror、pointer越境で窓一括移動。実装未投入 |
 | [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | incomplete | [19項目の実測表](ws114/gtk4-compat-matrix.md)。p001/q581調査cleared、G05 user採用のp007/q587を開始。残る行の採否はp002/user |
 | [WS115](ws115/ws.md) | MG002 | upstream GTK4をzedBSD `packages/desktop/gtk4`へ移植し知見を記録 | planning | WS114判断/実測の後。旧WS034 p029移管、Queue none |
-| [WS117](ws117/ws.md) | MG006 | Linux の本物の Qt6 を調査し、素の Qt6 アプリが動くよう compositor を改良（WS115/116 の前） | planning | WS114 p007 の後に p001 |
-| [WS118](ws118/ws.md) | MG003 | Latitude 5320 で Kei を動かす（LCD の制御の不具合、sshd の遠隔 log 用 image、ユーザーと実機） | planning | p001、実機の時期はユーザーに聞く |
-| [WS119](ws119/ws.md) | MG003 | インストーラの作り直し | planning | 要件の議論 |
-| [WS120](ws120/ws.md) | MG006 | 音楽アプリ（fg019） | planning | p001 |
+| [WS117](ws117/ws.md) | MG006 | Linux の本物の Qt6 を調査し、素の Qt6 アプリが動くよう compositor を改良（WS115/116 の前） | planning | p001 planned（WS114 p007 cleared が開始条件） |
+| [WS118](ws118/ws.md) | MG003 | Latitude 5320 で Kei を動かす（LCD の制御の不具合、sshd の遠隔 log 用 image、ユーザーと実機） | planning | p001 planned（遠隔 log の image、実機は使わない） |
+| [WS119](ws119/ws.md) | MG003 | インストーラの作り直し | planning | p001 planned（要件の案） |
+| [WS120](ws120/ws.md) | MG006 | 音楽アプリ（fg019） | planning | p001 planned（設計、D1〜D4） |
 | [WS121](ws121/ws.md) | MG006 | Web ブラウザでのアクセラレーションつきのビデオ再生（fg019） | planning | p001 |
 | [WS122](ws122/ws.md) | MG006 | 動画プレーヤアプリ（fg019） | planning | p001 |
 | [WS123](ws123/ws.md) | MG006 | VA-API のライブラリ | canceled（2026-10-02 user、アプリが Vulkan Video を直接使う） | — |
-| [WS124](ws124/ws.md) | MG002 | GNU Emacs の package（fg019） | planning | p001 |
-| [WS125](ws125/ws.md) | MG002 | vim の package（fg019） | planning | p001 |
-| [WS126](ws126/ws.md) | MG002 | Python 3 の package（fg019） | planning | p001 |
-| [WS127](ws127/ws.md) | MG006 | Files のベータ1 のブラッシュアップ（最重点）（fg019） | planning | p001 |
-| [WS128](ws128/ws.md) | MG006 | 標準アプリ全般のベータ1 のブラッシュアップ（fg019） | planning | p001 |
-| [WS129](ws129/ws.md) | MG007 | ベータ1 のリリース作業（版・release notes・既知の問題・CI の release・最終回帰）（fg019） | planning | p001 |
+| [WS124](ws124/ws.md) | MG002 | GNU Emacs の package（fg019） | planning | p001・p002 planned |
+| [WS125](ws125/ws.md) | MG002 | vim の package（fg019） | planning | p001・p002 planned（p002 は package の tree を image に入れる共通の仕組み） |
+| [WS126](ws126/ws.md) | MG002 | Python 3 の package（fg019） | planning | p001 planned |
+| [WS127](ws127/ws.md) | MG006 | Files のベータ1 のブラッシュアップ（最重点）（fg019） | planning | p001 planned（Files の棚卸し） |
+| [WS128](ws128/ws.md) | MG006 | 標準アプリ全般のベータ1 のブラッシュアップ（fg019） | planning | p001〜p003 planned |
+| [WS129](ws129/ws.md) | MG007 | ベータ1 のリリース作業（版・release notes・既知の問題・CI の release・最終回帰）（fg019） | planning | p001・p002 planned |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
@@ -324,27 +324,18 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 
 ## Upcoming Work Outlook
 
-見込みであって、約束や実行許可ではない（2026-09-30 に整理）。
+見込みであって、約束や実行許可ではない（2026-10-02、fg019 ベータ1 に合わせて書き直し。以前の表は git の履歴）。担当の線（affinity）の案と、各線の Phase の順。
 
-| 候補 | 理由 | 準備 |
+| 線 | 順 | 準備 |
 | --- | --- | --- |
-| 実機の image `build/demo-lcd8` の確認（LCD の takeover、10 app の軽さ、Files → Image Viewer・Text Editor、Settings、デスクトップの icon、Terminal の角、Notes の全画面を解く、USB マウス・sh の履歴・プロンプトの `~`） | デモ | ユーザーが試験 |
-| WS075 p024: C6 の物差し、flag の再利用、host の試験の既存の失敗（p023 は 1 run -28% で cleared） | 窓が多いときの軽さ | 実行中 |
-| fg010 の台本の確定（ユーザー）→ WS099（compositor の基準）・WS100（音量）の p001 | デモ | 台本と基準の案はユーザーの確認待ち |
-| WS073: BUG-030 の受け入れの残り（KVM 2×20・boot test）、BUG-116（EP0 の event の取りこぼし、BUG-036 と同じ系統か） | 安定性 | phase041 |
-| WS094 p004 の残り（保存した場所への配置の guest の確認・回帰・boot test）→ p005〜p007 | デスクトップの icon | phase004 の Resume point |
-| WS090 p004（窓の土台と Text Editor の libkeiui への移行、文字の編集の touch） | 共通の部品 | p003 cleared |
-| [WS074 p172](ws074/phase172/phase.md) → [p100](ws074/phase100/phase.md) → [p174](ws074/phase174/phase.md) → [p175](ws074/phase175/phase.md) → [p173](ws074/phase173/phase.md) → [p176](ws074/phase176/phase.md) / p100→p101（CSS2全件） | P10専任の投入候補順。p172取込が全browser作業のblocking gate、p174共有handle契約がp175の前提 | p172/p100/p173 planned、p174〜p176 planning / Queue未選定。p099 cleared。Interop 100%はbaseline後の改善と最終回帰で判定、Test262数値未指定 |
-| WS095（IME）: 現行 source と p005 の照合 → 候補の窓 → 既定の image | 優先度を上げた（2026-10-02） | 人間の作業完了、エージェントが担当 |
-| WS098（IME のニューラル化）: 学習の corpus と license の判断から | IME の最後の仕上げ | WS095 の辞書の後 |
-| WS080: p001（ld.coff の設計） | デモ critical の後 | spec.md |
-| WS106 p002 → p003 | 残るime-probe移動 → 全文規約・最終build/boot | p001 cleared、29件＋13files移動済み。ime-probe非競合回答が再開条件、次Queue未選定 |
-| WS107 | libbrowser/source所有・品質 | completed、q544/B1〜B5 verified |
-| WS108 | 2 distro native .deb/QEMU/CI release | completed / q549、remote未実行 |
-| [WS112 p001](ws112/phase001/phase.md) | 5OS package/CI release、ad hoc生成可 | uncleared / q585契約証拠保存、D1回答待ち。RPi arm64、CI runtime不要、実装未選定 |
-| [WS113 p001](ws113/phase001/phase.md) | 外部display/拡張・mirror/SettingsとVulkan通知契約 | uncleared / q586契約成果保存、D-ATOMIC回答待ち、A3終了。実機は後続 |
-| [WS114 p001](ws114/phase001/phase.md) → [WS115](ws115/ws.md) → [WS116](ws116/ws.md) | 標準GTK4実測・行別レビュー→zedBSD upstream移植→Qt6範囲判断/移植 | q580で部分実測済み、残測定と採否が未決。Queueなし。独自実装WS097/096へ後で知見を渡し、B1が再開候補を所有 |
-| WS109 p002 L1 | native FreeBSD15 library/build foundation | q551 p001 cleared、native ABI/environment verified。q565全F2とq572全WSをverified、実機gateはuserwaived、実QEMU i915利用。historical L1依存を解消 |
+| ネットワーク・platform（P1） | q590 BUG-134 → [ws005-p018](ws005/phase018/phase.md) WiFi の流れ → [ws033-p001](ws033/phase001/phase.md) → [ws118-p001](ws118/phase001/phase.md) 5320 の遠隔 log の image → ws005-p019〜 → [ws119-p001](ws119/phase001/phase.md) インストーラ | q590 実行中。ws005-p019 と ws033 は networkd を共有するので直列 |
+| compositor・desktop（P2） | [ws099-p020](ws099/phase020/phase.md) BUG-125 → p021 → [ws094-p014](ws094/phase014/phase.md) → ws113（D-ATOMIC 回答後） | wayland/ の shell.c・compose.c・display.c を触る Phase はこの線で直列 |
+| GTK/Qt（P3） | [ws114-p007](ws114/phase007/phase.md) 新 attempt → ws114-p002（ユーザー採否）→ [ws117-p001](ws117/phase001/phase.md) → ws114-p003 / ws117-p003（直列）→ ws115（到達線の判断後） | WS114 p003 と WS117 p003 は同じ file |
+| 標準アプリ・IME（P4） | [ws095-p012](ws095/phase012/phase.md) 辞書 → [ws127-p001](ws127/phase001/phase.md) Files 棚卸し → [ws089-p010](ws089/phase010/phase.md) Settings → ws095-p005（P2 の p020 の merge 後）→ ws128-p002/p003 | Files と Settings は canvas.c 等を共有、同時に流さない |
+| packages・音楽（N を増やす時） | [ws125-p002](ws125/phase002/phase.md) image 導入の仕組み・[ws125-p001](ws125/phase001/phase.md) → ws124-p001 → ws126-p001 → [ws120-p001](ws120/phase001/phase.md) | ws125-p002 は root の Makefile を触る |
+| リリース（N を増やす時） | [ws129-p001](ws129/phase001/phase.md) → p002 license の一覧 → … → 凍結 → RC → 実機 → 公開（ユーザーの指示） | 凍結日は未決（案 10/10 か 10/13） |
+| 別セッション（ユーザー） | WS083 Vulkan Video → WS122 動画プレーヤ → WS121 ブラウザ（drop 可） | このセッションは割り当てない |
+| 対象外 | WS074（Codex） | — |
 
 ## Tools
 

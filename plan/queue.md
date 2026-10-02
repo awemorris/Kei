@@ -24,4 +24,4 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 
 ## Upcoming Work Outlook
 
-fg019（ベータ1のリリース）の内容をユーザーと議論して決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。候補・順序は Master の [Upcoming Work Outlook](master.md#upcoming-work-outlook) と上の残り。どれも承認ではない。
+fg019（ベータ1、2026-10-17）。担当の線と順は Master の [Upcoming Work Outlook](master.md#upcoming-work-outlook)。最初の投入の案（承認待ち）: P2 = ws099-p020、P3 = ws114-p007（新 attempt）、P4 = ws095-p012。P1 は q590 の後 ws005-p018。q593（旧 B2 の WS099 p019 予約）は解放し、ws099-p019 は新しい ID で投入する。どれも承認ではない。

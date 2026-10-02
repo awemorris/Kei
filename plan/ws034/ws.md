@@ -10,6 +10,7 @@ Objectives: O1, O2
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: Phase 表の planning の項目（package の導入と libc/kernel の是正）
+2026-10-02 / fg019 移管: ws034-p008（vim）→ [WS125](../ws125/ws.md)、ws034-p010（emacs）→ [WS124](../ws124/ws.md)、ws034-p025・p026・p027・p028・p034・p038 → [WS115](../ws115/ws.md) の p004〜p009・p001。元の Phase は再選定しない（移管先で実行）。libffi は WS126 p004 と WS115 p005 の共有で、先に着手する側が `userland/packages/libs/libffi` を作り、他方は依存として使う。
 <!-- awesome-plan-current:end -->
 
 ## 単一目標
@@ -148,18 +149,18 @@ WS032と同じ形式（`/usr/share/licenses/<pkg>/`、版・SHA-256・パッチ�
 | [ws034-p017](phase017/phase.md) | curl（libcurl含む）。`--without-libpsl`（またはlibpslを追加） | cleared（q336-i01。q334-i01 は uncleared: kernel の TCP が大きな write を届けず → p042 で直して再実行） | p019, p021, p042 | `packages/network/curl` |
 | ws034-p020 | wget | planning | p019, p021 | `packages/network/wget` |
 | ws034-p009 | git。`NO_RUST=1` でRustを外す（Git 3.0でRust必須の予告あり） | planning | p017, p021 | `packages/development/git` |
-| ws034-p010 | emacs（端末版） | planning | p005 | `packages/editors/emacs` |
-| ws034-p008 | vim | planning | p005 | `packages/editors/vim` |
+| ws034-p010 | emacs（端末版） | planning（2026-10-02 WS124 へ移管） | p005 | `packages/editors/emacs` |
+| ws034-p008 | vim | planning（2026-10-02 WS125 へ移管） | p005 | `packages/editors/vim` |
 | ws034-p011 | binutils と GMP / MPFR / MPC / ISL。GMP/MPFR/MPC/ISLは静的ライブラリ。ターゲット上のbinutilsとbuild機上のクロスbinutilsの両方 | planning | p005 | `packages/development/binutils`、`packages/libs` |
 | ws034-p012 | gcc 16: build上のクロスgcc（x86_64-zedbsd向け、C/C++、libgcc・libstdc++）。build機用のGMP等は同じdistfileからgccのbuildの中で作る | planning | p011 | `packages/lang/gcc-16` |
 | ws034-p022 | gcc 16: ターゲット上で動くgcc/g++（Canadian cross） | planning | p012 | 同上 |
 | ws034-p023 | gcc 16: gfortran（libgfortran・libquadmath） | planning | p022 | 同上 |
 | ws034-p013 | gdb（zedbsdのnative target） | planning | p005, p011, p021 | `packages/development/gdb` |
-| ws034-p025 | meson・ninjaのクロスbuild契約（cross file生成）。GTK系の前提。gperf（host tool、sourceから）、pkg-config wrapper、package prefix、config.sub・libtoolの共通対応、symbol versioningの無効化 | planning | p001 | `packages/tools`、external.mk |
-| ws034-p026 | glib（libffi・pcre2を含む） | planning | p025, p021, p005（iconv） | `packages/libs` |
-| ws034-p027 | フォント系: freetype・harfbuzz・fontconfig（libpngを含む） | planning | p021, p025, p026 | `packages/libs` |
-| ws034-p034 | 独自libwayland（`userland/desktop/libwayland`）を拡張し、GTK・Qtが使うlibwayland-clientのAPIと互換にする（`libwayland-client.so`）。wayland-cursor・wayland-eglの扱いとwayland-scanner（host道具）を含む | planning | p001 | `packages/desktop/libwayland` |
-| ws034-p028 | 描画系: pixman・cairo・pango・fribidi・gdk-pixbuf・libjpeg-turbo・graphene・libepoxy・libxkbcommon。libtiffを加える（GTK4が必須） | planning | p026, p027 | `packages/libs` |
+| ws034-p025 | meson・ninjaのクロスbuild契約（cross file生成）。GTK系の前提。gperf（host tool、sourceから）、pkg-config wrapper、package prefix、config.sub・libtoolの共通対応、symbol versioningの無効化 | planning（2026-10-02 WS115 p004 へ移管） | p001 | `packages/tools`、external.mk |
+| ws034-p026 | glib（libffi・pcre2を含む） | planning（2026-10-02 WS115 p005 へ移管） | p025, p021, p005（iconv） | `packages/libs` |
+| ws034-p027 | フォント系: freetype・harfbuzz・fontconfig（libpngを含む） | planning（2026-10-02 WS115 p006 へ移管） | p021, p025, p026 | `packages/libs` |
+| ws034-p034 | 独自libwayland（`userland/desktop/libwayland`）を拡張し、GTK・Qtが使うlibwayland-clientのAPIと互換にする（`libwayland-client.so`）。wayland-cursor・wayland-eglの扱いとwayland-scanner（host道具）を含む | planning（2026-10-02 WS115 p009 へ移管） | p001 | `packages/desktop/libwayland` |
+| ws034-p028 | 描画系: pixman・cairo・pango・fribidi・gdk-pixbuf・libjpeg-turbo・graphene・libepoxy・libxkbcommon。libtiffを加える（GTK4が必須） | planning（2026-10-02 WS115 p007/p008 へ移管） | p026, p027 | `packages/libs` |
 | ws034-p029 | GTK4（Wayland backend、GSKはVulkanまたはcairo）。2026-10-02、未実行の実装枠を[WS115](../ws115/ws.md)へ移管 | planning / canceled（未実行） | p028, p034, p038の成果はWS115で参照 | `packages/desktop/gtk4` |
 | ws034-p030 | Qt6（qtbase＋qtwayland）。2026-10-02、未実行の実装枠を[WS116](../ws116/ws.md)へ移管。module範囲はGTK4学習後に判断 | planning / canceled（未実行） | p027, p028, p034の成果はWS116で参照 | `packages/desktop/qt6` |
 | ws034-p031 | GTK3（atkを含む）。atkは単体のatk 2.38.0を `packages/desktop/atk` に置く（2026-09-23決定） | planning | p028, p034, WS035-p028 | `packages/desktop/gtk3` |
@@ -174,7 +175,7 @@ WS032と同じ形式（`/usr/share/licenses/<pkg>/`、版・SHA-256・パッチ�
 | [ws034-p036](phase036/phase.md) | rootfsのtree化: host上に `build/<arch>/rootfs` のツリーを正本として作り、UFSのdisk imageはそのツリーから作る（`rootfs.tar.gz` は作らない）。symlinkを扱えるようにする（SONAMEのsymlink等）。開発用ファイル（`/usr/include`、`.so`、`.pc`）をツリーへ入れる | cleared（q323-i03） | WS035のrefactor | Makefile、`tools/build/`、package.mk |
 | [ws034-p039](phase039/phase.md) | menuconfig: 開発用ファイル（`/usr/include`、`.so`、`.pc`）を入れるかのoption（組込み用に外せる。既定は入れる）と、baseのプログラムの既定を全部ONにする | cleared（q349-i01。amd64 専用の 9 個の platform を直し、既定を platform で絞る） | p036 | `tools/menuconfig.py`、config、`userland/base/*/Makefile` |
 | [ws034-p037](phase037/phase.md) | packagesの置き場所を `/usr` へ揃える: WS032のOpenSSL等が `/lib` に置くライブラリを `/usr/lib` へ移し、packageのinstall先の規則を `/usr`（`/usr/bin`、`/usr/lib`、`/usr/include`、`/usr/share`）にする | cleared（q348-i01。openssl の library と remacs の辞書を移した） | p036 | `userland/packages/`（WS032の各package） |
-| ws034-p038 | 調査: GTK4（あわせてGTK3・Qt・Chromium）が、Vulkanだけ（EGL無し）でbuild・起動できるか。buildに要るもの（libepoxy、wayland-egl等）と実行時に要るものを分けて確かめ、EGLを加えるかの判断材料を作る | planning | p001 | 文書 |
+| ws034-p038 | 調査: GTK4（あわせてGTK3・Qt・Chromium）が、Vulkanだけ（EGL無し）でbuild・起動できるか。buildに要るもの（libepoxy、wayland-egl等）と実行時に要るものを分けて確かめ、EGLを加えるかの判断材料を作る | planning（2026-10-02 WS115 p001 へ移管） | p001 | 文書 |
 | ws034-p015 | イメージ統合・menuconfig・ライセンス表示・provenance | planning | 各パッケージ | packages全体 |
 | ws034-p016 | 全文規約確認・回帰・制限整理（必須の最終確認） | planning | 全Phase | 全体 |
 
