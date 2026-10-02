@@ -1,0 +1,21 @@
+ZWL POPUP create client=1 popup=19 surface=17 parent=8 x=60 y=60 width=360 height=180
+ZWL POPUP grab popup=19 surface=17
+ZWL POPUP configure surface=17 serial=7 x=60 y=60 width=360 height=180
+ZWL PING pong client=1 serial=6
+ZWL POPUP map surface=17 x=500 y=353 grab=1
+ZWL POPUP create client=1 popup=25 surface=23 parent=17 x=360 y=120 width=360 height=120
+ZWL POPUP grab popup=25 surface=23
+ZWL POPUP configure surface=23 serial=16 x=360 y=120 width=360 height=120
+ZWL PING pong client=1 serial=15
+ZWL POPUP map surface=23 x=860 y=473 grab=1
+ZWL PING pong client=1 serial=24
+ZWL POPUP create client=1 popup=31 surface=29 parent=8 x=360 y=60 width=360 height=180
+ZWL POPUP grab popup=31 surface=29
+ZWL POPUP configure surface=29 serial=35 x=360 y=60 width=360 height=180
+ZWL PING pong client=1 serial=34
+ZWL POPUP map surface=29 x=800 y=353 grab=1
+ZWL POPUP create client=1 popup=37 surface=35 parent=29 x=-360 y=120 width=360 height=120
+ZWL POPUP grab popup=37 surface=35
+ZWL POPUP configure surface=35 serial=44 x=-360 y=120 width=360 height=120
+ZWL PING pong client=1 serial=43
+ZWL POPUP map surface=35 x=440 y=473 grab=1

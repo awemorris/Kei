@@ -1,0 +1,263 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=211
+ZWL STARTUP step=vulkan-objects-arrow ms=264
+ZWL STARTUP step=wallpaper-picture ms=28
+ZWL STARTUP step=wallpaper ms=261
+ZWL STARTUP step=glyphs-text ms=29
+ZWL STARTUP step=glyphs-icons ms=14
+ZWL STARTUP step=glyphs-mark ms=22
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=167
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=982 at_ms=309327
+ZWL INPUT device=/dev/input/event0 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event1 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL STARTUP step=input ms=2 at_ms=309329
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=309329
+ZWL STARTUP step=socket ms=0 at_ms=309329
+ZWL IME none program=/usr/libexec/keiland-ime errno=6
+ZWL READY socket=/tmp/wayland-0 width=1280 height=800 timeout_ms=400000 pid=1499
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL STARTUP step=output-display ms=5
+ZWL STARTUP step=output-pipelines ms=160
+ZWL STARTUP step=output-swapchain ms=387
+ZWL STARTUP step=output-targets ms=89
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=641 at_ms=309980
+ZWL LAT draw frame=1 at_us=309980000
+ZWL LAT acquired frame=1 at_us=309981000
+ZWL GLASS desktops x=825 step=46 width=40
+ZWL NETWORK icon x=1069 y=3 width=30 height=28
+ZWL VOLUME icon x=1036 y=3 width=30 height=28
+ZWL LAT recorded frame=1 at_us=310002000
+ZWL COMPOSE frame=1 image=0 windows=0 at_ms=310072
+ZWL LAT submit frame=1 at_us=310072000
+ZWL LAT shown frame=1 at_us=310083000
+ZWL HOME skip name=Image Viewer missing=/bin/imageview
+ZWL HOME skip name=Text Editor missing=/bin/textedit
+ZWL HOME skip name=Browser missing=/bin/browser
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=ue0 wifi=absent ssid=
+ZWL LAT draw frame=2 at_us=310085000
+ZWL LAT acquired frame=2 at_us=310218000
+ZWL LAT recorded frame=2 at_us=310239000
+ZWL COMPOSE frame=2 image=1 windows=0 at_ms=310309
+ZWL LAT submit frame=2 at_us=310309000
+ZWL LAT shown frame=2 at_us=310319000
+ZWL CLIENT client=1 fd=17
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=1 pointer=1 keyboard=1 touch=0
+ZWL LAT draw frame=3 at_us=310357000
+ZWL LAT acquired frame=3 at_us=310358000
+ZWL LAT recorded frame=3 at_us=310379000
+ZWL COMPOSE frame=3 image=2 windows=0 at_ms=310449
+ZWL LAT submit frame=3 at_us=310449000
+ZWL LAT shown frame=3 at_us=310459000
+ZWL CONFIGURE client=1 surface=10 serial=1 width=0 height=0 fullscreen=0
+ZWL COMMIT client=1 surface=10 buffer=15 queued=0
+ZWL LAT adopt surface=10 at_us=310462000
+ZWL MAP client=1 surface=10 x=440 y=293
+ZWL SHM_COPY client=1 surface=10 buffer=15 rows=0-300 sum=47199377
+ZWL LAT draw frame=4 at_us=310662000
+ZWL LAT acquired frame=4 at_us=310662000
+ZWL LAT recorded frame=4 at_us=310683000
+ZWL COMPOSE frame=4 image=0 windows=1 at_ms=310753
+ZWL LAT submit frame=4 at_us=310753000
+ZWL LAT shown frame=4 at_us=310763000
+ZWL PERF 5005ms: passes=373 timeouts=362 | poll 84.0% work 33.2%
+ZWL PERF compose frames=4 draw_ms=145.03 (acquire 38.84 submit+present 81.52) frame_ms=156.89
+ZWL PERF shm copies=1 copy_ms=2.922
+ZWL LAT draw frame=5 at_us=315246000
+ZWL LAT acquired frame=5 at_us=315246000
+ZWL LAT recorded frame=5 at_us=315268000
+ZWL COMPOSE frame=5 image=1 windows=1 at_ms=315338
+ZWL LAT submit frame=5 at_us=315338000
+ZWL LAT shown frame=5 at_us=315348000
+ZWL LAT draw frame=6 at_us=315396000
+ZWL LAT acquired frame=6 at_us=315396000
+ZWL LAT recorded frame=6 at_us=315417000
+ZWL COMPOSE frame=6 image=2 windows=1 at_ms=315487
+ZWL LAT submit frame=6 at_us=315487000
+ZWL LAT shown frame=6 at_us=315497000
+ZWL POPUP create client=1 popup=19 surface=17 parent=10 x=60 y=60 width=360 height=180
+ZWL POPUP grab popup=19 surface=17
+ZWL POPUP configure surface=17 serial=7 x=60 y=60 width=360 height=180
+ZWL PING pong client=1 serial=6
+ZWL COMMIT client=1 surface=17 buffer=21 queued=0
+ZWL LAT adopt surface=17 at_us=315684000
+ZWL POPUP map surface=17 x=500 y=353 grab=1
+ZWL SHM_COPY client=1 surface=17 buffer=21 rows=0-180 sum=26c56835
+ZWL LAT draw frame=7 at_us=315888000
+ZWL LAT acquired frame=7 at_us=315888000
+ZWL LAT recorded frame=7 at_us=315910000
+ZWL COMPOSE frame=7 image=0 windows=1 at_ms=315980
+ZWL LAT submit frame=7 at_us=315980000
+ZWL LAT shown frame=7 at_us=315989000
+ZWL PERF 5006ms: passes=453 timeouts=444 | poll 89.0% work 10.9%
+ZWL PERF compose frames=3 draw_ms=91.06 (acquire 0.29 submit+present 69.72) frame_ms=100.90
+ZWL PERF shm copies=1 copy_ms=1.366
+ZWL LAT draw frame=8 at_us=319959000
+ZWL LAT acquired frame=8 at_us=319959000
+ZWL LAT recorded frame=8 at_us=319979000
+ZWL COMPOSE frame=8 image=1 windows=1 at_ms=320049
+ZWL LAT submit frame=8 at_us=320049000
+ZWL LAT shown frame=8 at_us=320059000
+ZWL LAT draw frame=9 at_us=320103000
+ZWL LAT acquired frame=9 at_us=320104000
+ZWL LAT recorded frame=9 at_us=320125000
+ZWL COMPOSE frame=9 image=2 windows=1 at_ms=320195
+ZWL LAT submit frame=9 at_us=320195000
+ZWL LAT shown frame=9 at_us=320205000
+ZWL POPUP create client=1 popup=25 surface=23 parent=17 x=360 y=120 width=360 height=120
+ZWL POPUP grab popup=25 surface=23
+ZWL POPUP configure surface=23 serial=16 x=360 y=120 width=360 height=120
+ZWL PING pong client=1 serial=15
+ZWL COMMIT client=1 surface=23 buffer=27 queued=0
+ZWL LAT adopt surface=23 at_us=320407000
+ZWL POPUP map surface=23 x=860 y=473 grab=1
+ZWL SHM_COPY client=1 surface=23 buffer=27 rows=0-120 sum=0e8510e5
+ZWL LAT draw frame=10 at_us=320610000
+ZWL LAT acquired frame=10 at_us=320610000
+ZWL LAT recorded frame=10 at_us=320631000
+ZWL COMPOSE frame=10 image=0 windows=1 at_ms=320701
+ZWL LAT submit frame=10 at_us=320701000
+ZWL LAT shown frame=10 at_us=320711000
+ZWL LAT draw frame=11 at_us=323956000
+ZWL LAT acquired frame=11 at_us=323956000
+ZWL LAT recorded frame=11 at_us=323977000
+ZWL COMPOSE frame=11 image=1 windows=1 at_ms=324047
+ZWL LAT submit frame=11 at_us=324047000
+ZWL LAT shown frame=11 at_us=324057000
+ZWL LAT draw frame=12 at_us=324101000
+ZWL LAT acquired frame=12 at_us=324101000
+ZWL LAT recorded frame=12 at_us=324122000
+ZWL COMPOSE frame=12 image=2 windows=1 at_ms=324193
+ZWL LAT submit frame=12 at_us=324193000
+ZWL LAT shown frame=12 at_us=324202000
+ZWL PERF 5003ms: passes=441 timeouts=426 | poll 84.8% work 15.2%
+ZWL PERF compose frames=5 draw_ms=90.56 (acquire 0.26 submit+present 69.56) frame_ms=100.43
+ZWL PERF shm copies=1 copy_ms=0.926
+ZWL LAT draw frame=13 at_us=324540000
+ZWL LAT acquired frame=13 at_us=324540000
+ZWL LAT recorded frame=13 at_us=324561000
+ZWL COMPOSE frame=13 image=0 windows=1 at_ms=324632
+ZWL LAT submit frame=13 at_us=324632000
+ZWL LAT shown frame=13 at_us=324643000
+ZWL PING pong client=1 serial=24
+ZWL LAT draw frame=14 at_us=324788000
+ZWL LAT acquired frame=14 at_us=324789000
+ZWL LAT recorded frame=14 at_us=324810000
+ZWL COMPOSE frame=14 image=1 windows=1 at_ms=324880
+ZWL LAT submit frame=14 at_us=324880000
+ZWL LAT shown frame=14 at_us=324890000
+ZWL LAT draw frame=15 at_us=328620000
+ZWL LAT acquired frame=15 at_us=328620000
+ZWL LAT recorded frame=15 at_us=328641000
+ZWL COMPOSE frame=15 image=2 windows=1 at_ms=328711
+ZWL LAT submit frame=15 at_us=328711000
+ZWL LAT shown frame=15 at_us=328721000
+ZWL LAT draw frame=16 at_us=328773000
+ZWL LAT acquired frame=16 at_us=328773000
+ZWL LAT recorded frame=16 at_us=328794000
+ZWL COMPOSE frame=16 image=0 windows=1 at_ms=328864
+ZWL LAT submit frame=16 at_us=328864000
+ZWL LAT shown frame=16 at_us=328874000
+ZWL POPUP create client=1 popup=31 surface=29 parent=10 x=360 y=60 width=360 height=180
+ZWL POPUP grab popup=31 surface=29
+ZWL POPUP configure surface=29 serial=36 x=360 y=60 width=360 height=180
+ZWL PING pong client=1 serial=35
+ZWL COMMIT client=1 surface=29 buffer=33 queued=0
+ZWL LAT adopt surface=29 at_us=329078000
+ZWL POPUP map surface=29 x=800 y=353 grab=1
+ZWL SHM_COPY client=1 surface=29 buffer=33 rows=0-180 sum=26c56835
+ZWL LAT draw frame=17 at_us=329262000
+ZWL LAT acquired frame=17 at_us=329262000
+ZWL LAT recorded frame=17 at_us=329284000
+ZWL COMPOSE frame=17 image=1 windows=1 at_ms=329353
+ZWL LAT submit frame=17 at_us=329354000
+ZWL LAT shown frame=17 at_us=329363000
+ZWL PERF 5011ms: passes=414 timeouts=399 | poll 79.8% work 20.1%
+ZWL PERF compose frames=5 draw_ms=91.57 (acquire 0.37 submit+present 70.17) frame_ms=101.75
+ZWL PERF shm copies=1 copy_ms=1.375
+ZWL LAT draw frame=18 at_us=330824000
+ZWL LAT acquired frame=18 at_us=330825000
+ZWL LAT recorded frame=18 at_us=330846000
+ZWL COMPOSE frame=18 image=2 windows=1 at_ms=330916
+ZWL LAT submit frame=18 at_us=330916000
+ZWL LAT shown frame=18 at_us=330926000
+ZWL LAT draw frame=19 at_us=330978000
+ZWL LAT acquired frame=19 at_us=330978000
+ZWL LAT recorded frame=19 at_us=331000000
+ZWL COMPOSE frame=19 image=0 windows=1 at_ms=331071
+ZWL LAT submit frame=19 at_us=331071000
+ZWL LAT shown frame=19 at_us=331081000
+ZWL POPUP create client=1 popup=37 surface=35 parent=29 x=-360 y=120 width=360 height=120
+ZWL POPUP grab popup=37 surface=35
+ZWL POPUP configure surface=35 serial=45 x=-360 y=120 width=360 height=120
+ZWL PING pong client=1 serial=44
+ZWL COMMIT client=1 surface=35 buffer=39 queued=0
+ZWL LAT adopt surface=35 at_us=331282000
+ZWL POPUP map surface=35 x=440 y=473 grab=1
+ZWL SHM_COPY client=1 surface=35 buffer=39 rows=0-120 sum=0e8510e5
+ZWL LAT draw frame=20 at_us=331465000
+ZWL LAT acquired frame=20 at_us=331465000
+ZWL LAT recorded frame=20 at_us=331486000
+ZWL COMPOSE frame=20 image=1 windows=1 at_ms=331556
+ZWL LAT submit frame=20 at_us=331556000
+ZWL LAT shown frame=20 at_us=331567000
+P017_PROBE_BOUNDARY
+POPUPPROBE configure window width=0 height=0 states=1 resizing=0
+POPUPPROBE ready run=p
+POPUPPROBE focus window
+POPUPPROBE enter window x=200 y=107
+POPUPPROBE button window state=1 x=60 y=60
+POPUPPROBE open menu at=60,60
+POPUPPROBE ping serial=6 answered
+POPUPPROBE configure menu x=60 y=60 width=360 height=180
+POPUPPROBE unfocus window
+POPUPPROBE focus menu
+POPUPPROBE leave window
+POPUPPROBE enter menu x=0 y=0
+POPUPPROBE button menu state=0 x=0 y=0
+POPUPPROBE button menu state=1 x=100 y=130
+POPUPPROBE open submenu row=120
+POPUPPROBE ping serial=15 answered
+POPUPPROBE configure submenu x=360 y=120 width=360 height=120
+POPUPPROBE unfocus menu
+POPUPPROBE focus submenu
+POPUPPROBE button menu state=0 x=100 y=130
+POPUPPROBE leave menu
+POPUPPROBE enter submenu x=98 y=45
+POPUPPROBE button submenu state=1 x=100 y=45
+POPUPPROBE choose submenu row=1
+POPUPPROBE close submenu
+POPUPPROBE close menu
+POPUPPROBE ping serial=24 answered
+POPUPPROBE unfocus other
+POPUPPROBE focus other
+POPUPPROBE leave other
+POPUPPROBE unfocus other
+POPUPPROBE focus window
+POPUPPROBE enter window x=520 y=225
+POPUPPROBE button window state=0 x=520 y=225
+POPUPPROBE button window state=1 x=360 y=60
+POPUPPROBE open menu at=360,60
+POPUPPROBE ping serial=35 answered
+POPUPPROBE configure menu x=360 y=60 width=360 height=180
+POPUPPROBE unfocus window
+POPUPPROBE focus menu
+POPUPPROBE leave window
+POPUPPROBE enter menu x=0 y=0
+POPUPPROBE button menu state=0 x=0 y=0
+POPUPPROBE button menu state=1 x=100 y=130
+POPUPPROBE open submenu row=120
+POPUPPROBE ping serial=44 answered
+POPUPPROBE configure submenu x=-360 y=120 width=360 height=120
+POPUPPROBE unfocus menu
+POPUPPROBE focus submenu
+POPUPPROBE button menu state=0 x=100 y=130

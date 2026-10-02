@@ -1,6 +1,6 @@
 # q583-i01 B3 popup timeline diagnosis
 
-Status: in-progress / scoped diagnosis. Whole ws099-p017 remains uncleared;
+Status: finished / scoped diagnosis criteria satisfied. Whole ws099-p017 remains uncleared;
 BUG-125 remains reproduced / tracking. No product or shared regression changes.
 
 ## Authority and scope
@@ -73,3 +73,13 @@ At preparation, B1 GTK4 QEMU PID 283995 is active. Agent B main instructed B3 to
 hold Venus startup until B1's stop is confirmed. No guest, image copy, shared
 renderer change or secret-key read/output has occurred. Host helper preparation
 continues during that resource hold. p128 and C2 remain separate observations.
+
+## Terminal event / 2026-10-02 07:34 UTC
+
+Event `b3-q583-terminal`: the authorized ten partial observations finished and
+owned runtime was retired. Both symptoms were unreproduced in this finite attempt;
+their original q577 reproduced evidence is preserved. The scoped diagnosis criteria
+are satisfied through the documented non-reproduction outcome. Whole p017 remains
+uncleared and BUG-125 remains tracking. [Terminal result](q583-result.md) and
+[source conformance](q583-conformance.md) contain the commands, images, limitations,
+and resume condition. Agent B/A own Queue/Bug/shared projection and publication.
