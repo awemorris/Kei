@@ -1,0 +1,1372 @@
+===== /home/kei/c10-hw.log
+ZWL PREFERENCES open
+ZWL DISPLAY device=zedBSD i915 (Gen12 Xe) width=1920 height=1080 refresh_mhz=60011
+ZWL STARTUP step=vulkan-device ms=5
+ZWL STARTUP step=vulkan-objects-arrow ms=2
+ZWL STARTUP step=wallpaper-picture ms=37
+ZWL STARTUP step=wallpaper ms=77
+ZWL STARTUP step=glyphs-text ms=5
+ZWL STARTUP step=glyphs-icons ms=6
+ZWL STARTUP step=glyphs-mark ms=11
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=38
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=125 at_ms=5602
+ZWL INPUT device=/dev/input/event0 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event1 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL STARTUP step=input ms=0 at_ms=5602
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=5602
+ZWL STARTUP step=socket ms=0 at_ms=5602
+ZWL IME none program=/usr/libexec/keiland-ime errno=6
+ZWL READY socket=/run/user/1000/wayland-0 width=1920 height=1080 timeout_ms=18446744073709551615 pid=22
+ZWL CORNER zone x=1892 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1892 y=1052 size=28
+ZWL OSK zone kind=qwerty x=0 y=1052 size=28
+ZWL NETWORK state reachable=1 connected=0 kind=none interface= wifi=absent ssid=
+ZWL DESKTOP start pid=29 command=/bin/files --desktop at_ms=5613
+ZWL STARTUP step=output-display ms=0
+ZWL STARTUP step=output-pipelines ms=4
+ZWL HANDOFF go=1 waited_ms=0 at_ms=5618
+ZWL STARTUP step=output-swapchain ms=19
+ZWL STARTUP step=output-targets ms=1
+ZWL OUTPUT open width=1920 height=1080 images=3 format=37
+ZWL MODE window switch_ms=25 at_ms=5638
+ZWL GLASS desktops x=1462 step=46 width=40
+ZWL NETWORK icon x=1706 y=3 width=30 height=28
+ZWL VOLUME icon x=1673 y=3 width=30 height=28
+ZWL HOME skip name=Text Editor missing=/bin/textedit
+ZWL VOLUME reachable=1 device=0
+ZWL CLIENT client=1 fd=15
+ZWL DESKTOP role client=1 surface=8 x=0 y=34 width=1920 height=1046
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=1 pointer=1 keyboard=1 touch=0
+ZFILES DESKTOP configure x=0 y=34 width=1920 height=1046
+ZWL DESKTOP ack serial=1
+ZFILES LOCATION kind=folder path=/home/kei/Desktop items=0 error=0
+ZFILES DESKTOP layout saved=0 error=0
+ZFILES DESKTOP grid width=1920 height=1046 columns=19 rows=9
+ZFILES DESKTOP ready items=0 cells=0 width=1920 height=1046 at_ms=6239 newest_age_ms=-1
+ZWL IMPORT client=1 buffer=20 width=1920 height=1046 bytes=8036352
+ZWL IMPORT client=1 buffer=21 width=1920 height=1046 bytes=8036352
+ZWL IMPORT client=1 buffer=22 width=1920 height=1046 bytes=8036352
+ZFILES MENU context-only
+ZFILES DESKTOP startup entered_ms=5620 fonts=84 instance=1 window=480 present=46 app=1 canvas=6 draw=1 shown=14 menus=7
+ZFILES READY width=1920 height=1046 token=-
+ZWL DESKTOP drawn at_ms=6263
+ZWL PERF 5003ms: passes=442 timeouts=432 | poll 88.2% work 12.8%
+ZWL PERF compose frames=6 draw_ms=99.27 (acquire 89.72 submit+present 9.35) frame_ms=99.90
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.3%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.3%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.8% work 0.2%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.8% work 0.2%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.3%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL PERF 5008ms: passes=500 timeouts=500 | poll 99.4% work 0.6%
+ZWL PERF compose frames=1 draw_ms=16.08 (acquire 0.02 submit+present 15.88) frame_ms=18.05
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.8% work 0.2%
+ZWL HOME open via=launcher at_ms=73234
+ZWL FIRST_FRAME what=home-open frame=9 request_ms=73234 ms=14
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=73517
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Files pid=30
+ZWL HOME close via=launch at_ms=74886
+ZWL FIRST_FRAME what=home-close frame=28 request_ms=74886 ms=22
+ZWL CLIENT client=2 fd=16
+ZWL BOUNDS client=2 surface=8 width=1896 height=970
+ZWL CONFIGURE client=2 surface=8 serial=2 width=0 height=0 fullscreen=0
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZFILES LOCATION kind=home path=/home/kei items=0 error=0
+ZWL IMPORT client=2 buffer=18 width=1120 height=720 bytes=3227648
+ZWL IMPORT client=2 buffer=19 width=1120 height=720 bytes=3227648
+ZWL IMPORT client=2 buffer=20 width=1120 height=720 bytes=3227648
+ZFILES GLASS on
+ZFILES MENU state selection=0 folder=0 paste=0 undo=0 back=0 view=0 sort=0 openers=0 tags=5
+ZFILES MENU ready items=68
+ZWL MENU commit client=2 menu=28 serial=1 items=108 generation=1
+ZWL MENU set client=2 place=29 menu=28
+ZWL MENU commit client=2 menu=28 serial=2 items=108 generation=2
+ZFILES TITLEBAR state back=0 forward=0 parts=1 last=Home view=0 preview=0 progress=-1 query= focus=0
+ZFILES TITLEBAR ready controls=8
+ZFILES GLASS panels count=2
+ZWL TITLEBAR create client=2 titlebar=33 toplevel=10
+ZWL TITLEBAR commit client=2 titlebar=33 serial=1 mode=1 controls=8 tabs=0 generation=1
+ZWL TITLEBAR commit client=2 titlebar=33 serial=2 mode=1 controls=8 tabs=0 generation=2
+ZWL HOME closed at_ms=75128
+ZFILES READY width=1120 height=720 token=-
+ZWL GLASS client=2 surface=8 panels=2 card:0,0,212,720,16 card:220,0,900,720,16
+ZWL MAP client=2 surface=8 x=400 y=223
+ZWL HOME launched waited_ms=251 at_ms=75137
+ZWL GLASS launch surface=8 from=564,350 to=400,223 size=1120x720
+ZWL GLASS glyph codepoint=U+2026 size=0 face=0 cell=0
+ZWL TITLEBAR control client=2 surface=8 where=floating id=1 x=496 y=178 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=2 x=530 y=178 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=3 x=564 y=178 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=4 x=604 y=178 width=58 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=5 x=1044 y=178 width=220 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=6 x=1268 y=178 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=7 x=1302 y=178 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=8 x=1336 y=178 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=8 where=floating id=0 x=1376 y=178 width=30 height=30 shown=1
+ZWL PERF 5004ms: passes=475 timeouts=453 | poll 85.5% work 14.5%
+ZWL PERF compose frames=44 draw_ms=15.96 (acquire 0.62 submit+present 14.78) frame_ms=17.23
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL HOME open via=launcher at_ms=83190
+ZWL FIRST_FRAME what=home-open frame=54 request_ms=83190 ms=16
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=83477
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Notes pid=31
+ZWL HOME close via=launch at_ms=84843
+ZWL FIRST_FRAME what=home-close frame=63 request_ms=84843 ms=22
+ZWL CLIENT client=3 fd=17
+ZWL INSET create client=3 inset=20 toplevel=16
+ZWL EDIT create client=3 edit=24 toplevel=16
+ZWL BOUNDS client=3 surface=14 width=1896 height=970
+ZWL CONFIGURE client=3 surface=14 serial=6 width=0 height=0 fullscreen=0
+ZWL SEAT client=3 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=3 pointer=1 keyboard=1 touch=0
+NOTES TABLET seat
+ZWL TABLET seat client=3
+ZWL MENU commit client=3 menu=35 serial=1 items=18 generation=1
+ZWL MENU set client=3 place=36 menu=35
+NOTES START width=1024 height=768 fullscreen=0 pages=1 strokes=0 path=/home/kei/Documents/Notes/note-20261002-050823.pdf
+NOTES LAYOUT window=1024x768 page=275,84,472,668 scale=0.7935
+NOTES BUTTONS 1:18,16,52,36 2:72,16,77,36 3:151,16,72,36 14:274,16,71,36 20:361,16,36,36 21:399,16,36,36 22:437,16,36,36 23:475,16,36,36 24:513,16,36,36 30:565,16,36,36 31:603,16,36,36 32:641,16,36,36 8:947,16,77,36 9:1040,16,61,36
+NOTES PICTURE full strokes=0..0
+NOTES FRAME first draws=52
+ZWL IMPORT client=3 buffer=40 width=1024 height=768 bytes=3145728
+ZWL IMPORT client=3 buffer=41 width=1024 height=768 bytes=3145728
+ZWL IMPORT client=3 buffer=42 width=1024 height=768 bytes=3145728
+ZWL EDIT state client=3 edit=24 actions=0xff flags=0xd
+ZWL MENU commit client=3 menu=35 serial=2 items=18 generation=2
+ZWL MAP client=3 surface=14 x=448 y=271
+ZWL HOME launched waited_ms=55 at_ms=84898
+ZWL GLASS launch surface=14 from=708,350 to=448,271 size=1024x768
+ZWL GLASS glyph codepoint=U+2014 size=1 face=0 cell=1
+ZWL HOME closed at_ms=85096
+ZWL MENU bar client=3 surface=14 where=floating item=1 offset=343 top=219 width=46 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=2 offset=391 top=219 width=47 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=3 offset=440 top=219 width=55 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=4 offset=497 top=219 width=52 height=44
+ZWL MENU bar client=3 surface=14 where=floating item=5 offset=551 top=219 width=55 height=44
+ZWL PERF 5005ms: passes=503 timeouts=470 | poll 91.4% work 8.5%
+ZWL PERF compose frames=19 draw_ms=21.48 (acquire 0.05 submit+present 20.84) frame_ms=22.91
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL HOME open via=launcher at_ms=93142
+ZWL FIRST_FRAME what=home-open frame=72 request_ms=93142 ms=19
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=93427
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Settings pid=32
+ZWL HOME close via=launch at_ms=94795
+ZWL FIRST_FRAME what=home-close frame=81 request_ms=94795 ms=23
+ZWL CLIENT client=4 fd=18
+ZWL BOUNDS client=4 surface=8 width=1896 height=970
+ZWL CONFIGURE client=4 surface=8 serial=12 width=0 height=0 fullscreen=0
+ZWL SEAT client=4 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=4 pointer=1 keyboard=1 touch=0
+ZSETTINGS ABOUT kernel=zedBSD 0.0.1 machine=x86_64 cores=4 host=kei
+ZSETTINGS PAGE home
+ZSETTINGS NETWORK open links=1 dns=0 saved=0
+ZSETTINGS LOOK open opacity=100 wallpaper=
+ZSETTINGS SOUND open value=100 muted=0 link=1
+ZWL IMPORT client=4 buffer=17 width=1180 height=800 bytes=3776512
+ZWL IMPORT client=4 buffer=18 width=1180 height=800 bytes=3776512
+ZWL IMPORT client=4 buffer=19 width=1180 height=800 bytes=3776512
+ZSETTINGS GLASS blur=1
+ZSETTINGS GLASS on
+ZSETTINGS MENU state back=0 forward=0 sidebar=1 page=home
+ZSETTINGS MENU ready items=20
+ZWL MENU commit client=4 menu=27 serial=1 items=43 generation=1
+ZWL MENU set client=4 place=28 menu=27
+ZWL MENU commit client=4 menu=27 serial=2 items=43 generation=2
+ZSETTINGS TITLEBAR state back=0 forward=0 parts=1 last=Settings sidebar=1 query= focus=0
+ZSETTINGS TITLEBAR ready controls=6
+ZSETTINGS GLASS panels count=2
+ZSETTINGS READY width=1180 height=800 glass=1 page=home
+ZWL TITLEBAR create client=4 titlebar=32 toplevel=10
+ZWL TITLEBAR commit client=4 titlebar=32 serial=1 mode=1 controls=6 tabs=0 generation=1
+ZWL TITLEBAR commit client=4 titlebar=32 serial=2 mode=1 controls=6 tabs=0 generation=2
+ZWL GLASS client=4 surface=8 blur=1
+ZWL GLASS client=4 surface=8 panels=2 card:0,0,248,800,16 card:256,0,924,800,16
+ZWL MAP client=4 surface=8 x=544 y=252
+ZWL HOME launched waited_ms=98 at_ms=94894
+ZWL GLASS launch surface=8 from=852,350 to=544,252 size=1180x800
+ZSETTINGS NETWORK state reachable=1 connected=0 kind=0 interface= wifi=0 ssid=
+ZSETTINGS SOUND report reachable=1 device=0 value=100 muted=0
+ZWL HOME closed at_ms=95060
+ZWL BACKDROP ready width=240 height=135
+ZWL TITLEBAR control client=4 surface=8 where=floating id=1 x=666 y=207 width=30 height=30 shown=1
+ZWL TITLEBAR control client=4 surface=8 where=floating id=2 x=700 y=207 width=30 height=30 shown=1
+ZWL TITLEBAR control client=4 surface=8 where=floating id=3 x=734 y=207 width=30 height=30 shown=1
+ZWL TITLEBAR control client=4 surface=8 where=floating id=4 x=774 y=207 width=74 height=30 shown=1
+ZWL TITLEBAR control client=4 surface=8 where=floating id=5 x=1316 y=207 width=220 height=30 shown=1
+ZWL TITLEBAR control client=4 surface=8 where=floating id=6 x=1540 y=207 width=30 height=30 shown=1
+ZWL TITLEBAR control client=4 surface=8 where=floating id=0 x=1580 y=207 width=30 height=30 shown=1
+ZWL PERF 5009ms: passes=487 timeouts=466 | poll 90.7% work 9.3%
+ZWL PERF compose frames=18 draw_ms=24.71 (acquire 0.01 submit+present 23.93) frame_ms=26.29
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.3%
+ZWL HOME open via=launcher at_ms=103089
+ZWL FIRST_FRAME what=home-open frame=91 request_ms=103089 ms=23
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=103383
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Terminal pid=33
+ZWL HOME close via=launch at_ms=104742
+ZWL FIRST_FRAME what=home-close frame=100 request_ms=104742 ms=24
+ZWL CLIENT client=5 fd=19
+ZWL INSET create client=5 inset=20 toplevel=16
+ZWL EDIT create client=5 edit=24 toplevel=16
+ZWL BOUNDS client=5 surface=14 width=1896 height=970
+ZWL CONFIGURE client=5 surface=14 serial=18 width=0 height=0 fullscreen=0
+ZWL SEAT client=5 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=5 pointer=1 keyboard=1 touch=0
+ZWL IMPORT client=5 buffer=37 width=916 height=632 bytes=2318336
+ZWL IMPORT client=5 buffer=38 width=916 height=632 bytes=2318336
+ZWL IMPORT client=5 buffer=39 width=916 height=632 bytes=2318336
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZWL MENU commit client=5 menu=43 serial=1 items=30 generation=1
+ZWL MENU set client=5 place=44 menu=43
+ZWL MENU commit client=5 menu=43 serial=2 items=30 generation=2
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZWL TITLEBAR create client=5 titlebar=48 toplevel=16
+ZWL EDIT state client=5 edit=24 actions=0xff flags=0xd
+ZWL TITLEBAR commit client=5 titlebar=48 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL MAP client=5 surface=14 x=592 y=300
+ZWL HOME launched waited_ms=78 at_ms=104820
+ZWL GLASS launch surface=14 from=996,350 to=592,300 size=916x632
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZWL HOME closed at_ms=104985
+ZWL MENU bar client=5 surface=14 where=floating item=1 offset=127 top=248 width=55 height=44
+ZWL MENU bar client=5 surface=14 where=floating item=2 offset=184 top=248 width=47 height=44
+ZWL MENU bar client=5 surface=14 where=floating item=3 offset=233 top=248 width=55 height=44
+ZWL MENU bar client=5 surface=14 where=floating item=4 offset=290 top=248 width=76 height=44
+ZWL MENU bar client=5 surface=14 where=floating item=5 offset=368 top=248 width=53 height=44
+ZWL PERF 5002ms: passes=501 timeouts=462 | poll 89.9% work 10.1%
+ZWL PERF compose frames=19 draw_ms=25.30 (acquire 0.01 submit+present 24.32) frame_ms=26.83
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.3%
+ZWL HOME open via=launcher at_ms=113062
+ZWL FIRST_FRAME what=home-open frame=109 request_ms=113062 ms=25
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=113343
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=PDF Viewer pid=35
+ZWL HOME close via=launch at_ms=114715
+ZWL FIRST_FRAME what=home-close frame=117 request_ms=114715 ms=24
+ZWL CLIENT client=6 fd=20
+ZWL INSET create client=6 inset=20 toplevel=16
+ZWL EDIT create client=6 edit=24 toplevel=16
+ZWL BOUNDS client=6 surface=14 width=1896 height=970
+ZWL CONFIGURE client=6 surface=14 serial=24 width=0 height=0 fullscreen=0
+ZWL SEAT client=6 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=6 pointer=1 keyboard=1 touch=0
+ZWL IMPORT client=6 buffer=31 width=1000 height=760 bytes=3043328
+ZWL IMPORT client=6 buffer=32 width=1000 height=760 bytes=3043328
+ZWL IMPORT client=6 buffer=33 width=1000 height=760 bytes=3043328
+ZWL IMPORT client=6 buffer=34 width=1000 height=760 bytes=3043328
+ZWL IMPORT client=6 buffer=35 width=1000 height=760 bytes=3043328
+ZWL IMPORT client=6 buffer=36 width=1000 height=760 bytes=3043328
+PDFVIEWER MENU ready items=24
+ZWL MENU commit client=6 menu=40 serial=1 items=24 generation=1
+ZWL MENU set client=6 place=41 menu=40
+ZWL MENU commit client=6 menu=40 serial=2 items=24 generation=2
+PDFVIEWER TITLEBAR ready controls=11
+ZWL TITLEBAR create client=6 titlebar=45 toplevel=16
+ZWL TITLEBAR commit client=6 titlebar=45 serial=1 mode=1 controls=11 tabs=0 generation=1
+ZWL TITLEBAR commit client=6 titlebar=45 serial=2 mode=1 controls=11 tabs=0 generation=2
+PDFVIEWER READY width=1000 height=760 pages=0
+ZWL EDIT state client=6 edit=24 actions=0xff flags=0xd
+ZWL MAP client=6 surface=14 x=688 y=292
+ZWL HOME launched waited_ms=121 at_ms=114836
+ZWL GLASS launch surface=14 from=1140,350 to=688,292 size=1000x760
+ZWL GLASS glyph codepoint=U+2212 size=0 face=0 cell=2
+ZWL HOME closed at_ms=114964
+ZWL TITLEBAR control client=6 surface=14 where=floating id=11 x=991 y=247 width=30 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=1 x=837 y=247 width=30 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=2 x=871 y=247 width=30 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=3 x=1025 y=247 width=119 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=4 x=1148 y=247 width=30 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=5 x=1182 y=247 width=30 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=6 x=1216 y=247 width=34 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=7 x=1254 y=247 width=34 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=8 x=1292 y=247 width=87 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=9 x=0 y=247 width=81 height=30 shown=0
+ZWL TITLEBAR control client=6 surface=14 where=floating id=10 x=1383 y=247 width=151 height=30 shown=1
+ZWL TITLEBAR control client=6 surface=14 where=floating id=0 x=1544 y=247 width=30 height=30 shown=1
+ZWL PERF 5009ms: passes=505 timeouts=461 | poll 90.0% work 9.9%
+ZWL PERF compose frames=17 draw_ms=27.65 (acquire 0.01 submit+present 26.63) frame_ms=29.15
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.8% work 0.2%
+ZWL HOME open via=launcher at_ms=123016
+ZWL FIRST_FRAME what=home-open frame=127 request_ms=123016 ms=26
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=123301
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Image Viewer pid=36
+ZWL HOME close via=launch at_ms=124668
+ZWL FIRST_FRAME what=home-close frame=135 request_ms=124668 ms=24
+ZWL CLIENT client=7 fd=21
+ZWL INSET create client=7 inset=20 toplevel=16
+ZWL EDIT create client=7 edit=24 toplevel=16
+ZWL BOUNDS client=7 surface=14 width=1896 height=970
+ZWL CONFIGURE client=7 surface=14 serial=30 width=0 height=0 fullscreen=0
+ZWL SEAT client=7 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=7 pointer=1 keyboard=1 touch=0
+IMAGEVIEW PRESENT smooth=1 max-dimension=16384
+ZWL IMPORT client=7 buffer=31 width=1000 height=720 bytes=2883584
+ZWL IMPORT client=7 buffer=32 width=1000 height=720 bytes=2883584
+ZWL IMPORT client=7 buffer=33 width=1000 height=720 bytes=2883584
+IMAGEVIEW GLASS on
+IMAGEVIEW MENU ready items=24
+ZWL MENU commit client=7 menu=41 serial=1 items=24 generation=1
+ZWL MENU set client=7 place=42 menu=41
+ZWL MENU commit client=7 menu=41 serial=2 items=24 generation=2
+ZWL MENU commit client=7 menu=43 serial=1 items=7 generation=1
+IMAGEVIEW TITLEBAR ready controls=8
+IMAGEVIEW GLASS panels count=1
+IMAGEVIEW READY width=1000 height=720 glass=1 images=0
+ZWL TITLEBAR create client=7 titlebar=47 toplevel=16
+ZWL TITLEBAR commit client=7 titlebar=47 serial=1 mode=1 controls=8 tabs=0 generation=1
+ZWL TITLEBAR commit client=7 titlebar=47 serial=2 mode=1 controls=8 tabs=0 generation=2
+ZWL GLASS client=7 surface=14 panels=1 card:8,8,984,704,18
+ZWL EDIT state client=7 edit=24 actions=0xff flags=0xd
+ZWL MAP client=7 surface=14 x=736 y=332
+ZWL HOME launched waited_ms=106 at_ms=124774
+ZWL GLASS launch surface=14 from=1284,350 to=736,332 size=1000x720
+ZWL HOME closed at_ms=124951
+ZWL TITLEBAR control client=7 surface=14 where=floating id=1 x=902 y=287 width=30 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=2 x=936 y=287 width=30 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=3 x=1187 y=287 width=91 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=4 x=1282 y=287 width=34 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=5 x=1320 y=287 width=34 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=6 x=1358 y=287 width=42 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=7 x=1404 y=287 width=70 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=8 x=1478 y=287 width=104 height=30 shown=1
+ZWL TITLEBAR control client=7 surface=14 where=floating id=0 x=1592 y=287 width=30 height=30 shown=1
+ZWL PERF 5001ms: passes=487 timeouts=459 | poll 89.4% work 10.6%
+ZWL PERF compose frames=18 draw_ms=28.06 (acquire 0.01 submit+present 27.09) frame_ms=29.49
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.7% work 0.2%
+ZWL HOME open via=launcher at_ms=132967
+ZWL FIRST_FRAME what=home-open frame=144 request_ms=132967 ms=41
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=133268
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Browser pid=37
+ZWL HOME close via=launch at_ms=134621
+ZWL FIRST_FRAME what=home-close frame=152 request_ms=134621 ms=25
+ZWL CLIENT client=8 fd=22
+ZWL BOUNDS client=8 surface=7 width=1896 height=970
+ZWL CONFIGURE client=8 surface=7 serial=36 width=0 height=0 fullscreen=0
+ZWL SEAT client=8 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=8 pointer=1 keyboard=1 touch=0
+ZWL TITLEBAR create client=8 titlebar=16 toplevel=9
+ZWL TITLEBAR commit client=8 titlebar=16 serial=1 mode=1 controls=4 tabs=0 generation=1
+ZBROWSER READY width=1024 height=768 document=911
+ZBROWSER NAVIGATE path=/usr/share/browser/start.html title=zedBSD Browser
+ZBROWSER TITLEBAR back=0 forward=0 path=/usr/share/browser/start.html
+ZWL IMPORT client=8 buffer=20 width=1024 height=768 bytes=3145728
+ZWL IMPORT client=8 buffer=21 width=1024 height=768 bytes=3145728
+ZWL IMPORT client=8 buffer=22 width=1024 height=768 bytes=3145728
+ZWL TITLEBAR commit client=8 titlebar=16 serial=2 mode=1 controls=4 tabs=0 generation=2
+ZBROWSER FRAME scroll=0 width=1024 height=768
+ZWL MAP client=8 surface=7 x=832 y=284
+ZWL HOME launched waited_ms=86 at_ms=134707
+ZWL GLASS launch surface=7 from=564,502 to=832,284 size=1024x768
+ZWL HOME closed at_ms=134898
+ZWL TITLEBAR control client=8 surface=7 where=floating id=1 x=1019 y=239 width=30 height=30 shown=1
+ZWL TITLEBAR control client=8 surface=7 where=floating id=2 x=1053 y=239 width=30 height=30 shown=1
+ZWL TITLEBAR control client=8 surface=7 where=floating id=3 x=1669 y=239 width=73 height=30 shown=1
+ZWL TITLEBAR control client=8 surface=7 where=floating id=4 x=1093 y=239 width=290 height=30 shown=1
+ZWL PERF 5009ms: passes=479 timeouts=461 | poll 90.3% work 9.7%
+ZWL PERF compose frames=15 draw_ms=30.83 (acquire 0.01 submit+present 29.64) frame_ms=32.90
+ZWL PERF 5000ms: passes=500 timeouts=500 | poll 99.6% work 0.3%
+ZWL HOME open via=launcher at_ms=142916
+ZWL FIRST_FRAME what=home-open frame=159 request_ms=142916 ms=32
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=143204
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Model viewer pid=38
+ZWL HOME close via=launch at_ms=144569
+ZWL FIRST_FRAME what=home-close frame=167 request_ms=144569 ms=28
+ZWL HOME closed at_ms=144814
+MVIEW START run=manual model=/usr/share/mview/qs40 vertices=25861 triangles=37000 materials=16 textures=13
+ZWL CLIENT client=9 fd=23
+ZWL BOUNDS client=9 surface=7 width=1896 height=970
+ZWL CONFIGURE client=9 surface=7 serial=42 width=0 height=0 fullscreen=0
+MVIEW WINDOW run=manual width=960 height=640 bounds=1896x970
+ZWL SEAT client=9 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=9 pointer=1 keyboard=1 touch=0
+ZWL IMPORT client=9 buffer=16 width=960 height=640 bytes=2457600
+ZWL IMPORT client=9 buffer=17 width=960 height=640 bytes=2457600
+ZWL IMPORT client=9 buffer=18 width=960 height=640 bytes=2457600
+MVIEW FRAME run=manual frame=1 yaw=0.00 pitch=0.00 distance=2.9480 pan=0.0000,0.0000
+ZWL MAP client=9 surface=7 x=880 y=332
+ZWL HOME launched waited_ms=620 at_ms=145189
+ZWL GLASS launch surface=7 from=708,502 to=880,332 size=960x640
+ZBROWSER FRAME scroll=0 width=1024 height=768
+ZWL PERF 5005ms: passes=461 timeouts=444 | poll 86.3% work 13.6%
+ZWL PERF compose frames=20 draw_ms=32.69 (acquire 0.03 submit+present 31.46) frame_ms=34.82
+ZWL PERF 5003ms: passes=470 timeouts=470 | poll 99.7% work 0.3%
+ZWL HOME open via=launcher at_ms=152868
+ZWL FIRST_FRAME what=home-open frame=179 request_ms=152868 ms=47
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=153164
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Gears pid=39
+ZWL HOME close via=launch at_ms=154521
+ZWL FIRST_FRAME what=home-close frame=187 request_ms=154521 ms=25
+ZWL CLIENT client=10 fd=24
+ZWL SEAT client=10 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=10 pointer=1 keyboard=1 touch=0
+ZWL BOUNDS client=10 surface=14 width=1896 height=970
+ZWL CONFIGURE client=10 surface=14 serial=48 width=0 height=0 fullscreen=0
+ZWL IMPORT client=10 buffer=21 width=600 height=480 bytes=1155072
+ZWL IMPORT client=10 buffer=22 width=600 height=480 bytes=1155072
+ZWL IMPORT client=10 buffer=23 width=600 height=480 bytes=1155072
+ZWL MAP client=10 surface=14 x=928 y=380
+ZWL HOME launched waited_ms=146 at_ms=154667
+ZWL GLASS launch surface=14 from=852,502 to=928,380 size=600x480
+ZGEARS START run=gears vendor="Kei" renderer="Kei OpenGL ES on Vulkan" version="1.4 Kei (fixed function on OpenGL ES 2.0 on Vulkan)"
+ZWL CURSOR client=10 shown=1
+ZGEARS CHECK run=gears red=65803 green=16646 blue=13397 black=187257 of=288000 failures=0 glerror=0x0
+ZGEARS SUM run=gears frame=1 sum=03fae0ad red=65803 green=16646 blue=13397
+ZGEARS FRAME run=gears frame=1 draw_ms=33.0 swap_ms=27.0
+ZGEARS SUM run=gears frame=2 sum=ccc7dadf red=66055 green=16251 blue=13198
+ZWL CURSOR client=10 shown=0
+ZGEARS FRAME run=gears frame=2 draw_ms=7.0 swap_ms=17.0
+ZGEARS FRAME run=gears frame=3 draw_ms=1.0 swap_ms=31.0
+ZWL HOME closed at_ms=154804
+ZGEARS FRAME run=gears frame=4 draw_ms=0.0 swap_ms=28.0
+ZGEARS FRAME run=gears frame=5 draw_ms=1.0 swap_ms=25.0
+ZGEARS FRAME run=gears frame=6 draw_ms=1.0 swap_ms=39.0
+ZGEARS FRAME run=gears frame=7 draw_ms=1.0 swap_ms=49.0
+ZGEARS FRAME run=gears frame=8 draw_ms=0.0 swap_ms=35.0
+ZGEARS FRAME run=gears frame=9 draw_ms=0.0 swap_ms=29.0
+ZGEARS FRAME run=gears frame=10 draw_ms=0.0 swap_ms=19.0
+ZWL PERF 5006ms: passes=574 timeouts=376 | poll 79.1% work 20.8%
+ZWL PERF compose frames=41 draw_ms=23.77 (acquire 0.04 submit+present 22.03) frame_ms=24.48
+ZGEARS SUM run=gears frame=50 sum=2920607a red=65985 green=16542 blue=13236
+ZGEARS FPS run=gears frames=100 fps=34.7
+ZGEARS FPS run=gears frames=200 fps=35.1
+ZWL PERF 5002ms: passes=922 timeouts=53 | poll 36.2% work 63.5%
+ZWL PERF compose frames=165 draw_ms=17.97 (acquire 0.05 submit+present 16.22) frame_ms=18.40
+ZWL HOME open via=launcher at_ms=162836
+ZWL FIRST_FRAME what=home-open frame=458 request_ms=162836 ms=29
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=163122
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZGEARS FPS run=gears frames=300 fps=34.7
+ZWL CURSOR client=10 shown=1
+ZWL HOME launch name=X terminal pid=45
+ZWL HOME close via=launch at_ms=164494
+ZWL FIRST_FRAME what=home-close frame=500 request_ms=164494 ms=20
+ZWL BOUNDS client=10 surface=1191 width=1896 height=970
+ZWL CONFIGURE client=10 surface=1191 serial=54 width=0 height=0 fullscreen=0
+ZWL IMPORT client=10 buffer=1198 width=640 height=384 bytes=983040
+ZWL IMPORT client=10 buffer=1199 width=640 height=384 bytes=983040
+ZWL IMPORT client=10 buffer=1200 width=640 height=384 bytes=983040
+ZWL MAP client=10 surface=1191 x=976 y=428
+ZWL HOME launched waited_ms=54 at_ms=164548
+ZWL GLASS launch surface=1191 from=996,502 to=976,428 size=640x384
+ZWL HOME closed at_ms=164735
+ZWL PERF 5000ms: passes=916 timeouts=43 | poll 33.2% work 66.6%
+ZWL PERF compose frames=139 draw_ms=22.52 (acquire 0.04 submit+present 20.75) frame_ms=22.89
+ZGEARS FPS run=gears frames=400 fps=24.6
+ZWL PERF 5031ms: passes=897 timeouts=71 | poll 32.2% work 67.4%
+ZWL PERF compose frames=91 draw_ms=34.73 (acquire 0.04 submit+present 32.81) frame_ms=35.39
+ZWL WISEVIEW opening key at_ms=173137
+ZWL FIRST_FRAME what=wiseview-open frame=652 request_ms=173137 ms=34
+ZWL WISEVIEW open windows=10 at_ms=173339
+ZWL WISEVIEW tile client=10 surface=1191 x=62 y=86 width=422 height=253
+ZWL WISEVIEW tile client=10 surface=14 x=578 y=90 width=305 height=244
+ZWL WISEVIEW tile client=9 surface=7 x=1006 y=90 width=366 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZGEARS FPS run=gears frames=500 fps=15.0
+ZWL WISEVIEW close key at_ms=175327
+ZWL FIRST_FRAME what=wiseview-close frame=709 request_ms=175327 ms=20
+ZWL WISEVIEW closed at_ms=175531
+ZWL PERF 5000ms: passes=699 timeouts=67 | poll 32.9% work 66.7%
+ZWL PERF compose frames=102 draw_ms=30.24 (acquire 0.06 submit+present 28.18) frame_ms=31.03
+ZWL CURSOR client=10 shown=0
+ZWL HOME open via=launcher at_ms=177706
+ZWL FIRST_FRAME what=home-open frame=748 request_ms=177706 ms=61
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=177994
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=179913
+ZWL FIRST_FRAME what=home-close frame=792 request_ms=179913 ms=37
+ZWL HOME closed at_ms=180198
+ZGEARS FPS run=gears frames=600 fps=15.8
+ZWL PERF 5016ms: passes=733 timeouts=74 | poll 32.1% work 67.6%
+ZWL PERF compose frames=89 draw_ms=35.36 (acquire 0.05 submit+present 32.22) frame_ms=36.15
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL HOME open via=launcher at_ms=184791
+ZWL FIRST_FRAME what=home-open frame=870 request_ms=184791 ms=51
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=185079
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL PERF 5003ms: passes=702 timeouts=74 | poll 32.0% work 67.7%
+ZWL PERF compose frames=83 draw_ms=37.88 (acquire 0.05 submit+present 35.07) frame_ms=38.84
+ZWL HOME launch name=Terminal pid=52
+ZWL HOME close via=launch at_ms=186412
+ZWL FIRST_FRAME what=home-close frame=901 request_ms=186412 ms=28
+ZWL CLIENT client=11 fd=25
+ZWL INSET create client=11 inset=20 toplevel=16
+ZWL EDIT create client=11 edit=24 toplevel=16
+ZWL BOUNDS client=11 surface=14 width=1896 height=970
+ZWL CONFIGURE client=11 surface=14 serial=69 width=0 height=0 fullscreen=0
+ZWL SEAT client=11 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=11 pointer=1 keyboard=1 touch=0
+ZWL IMPORT client=11 buffer=37 width=916 height=632 bytes=2318336
+ZWL IMPORT client=11 buffer=38 width=916 height=632 bytes=2318336
+ZWL IMPORT client=11 buffer=39 width=916 height=632 bytes=2318336
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZWL MENU commit client=11 menu=43 serial=1 items=30 generation=1
+ZWL MENU set client=11 place=44 menu=43
+ZWL MENU commit client=11 menu=43 serial=2 items=30 generation=2
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZWL TITLEBAR create client=11 titlebar=48 toplevel=16
+ZWL EDIT state client=11 edit=24 actions=0xff flags=0xd
+ZWL TITLEBAR commit client=11 titlebar=48 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL MAP client=11 surface=14 x=348 y=420
+ZWL HOME launched waited_ms=155 at_ms=186567
+ZWL GLASS launch surface=14 from=996,350 to=348,420 size=916x632
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZWL HOME closed at_ms=186668
+ZWL MENU bar client=11 surface=14 where=floating item=1 offset=127 top=368 width=55 height=44
+ZWL MENU bar client=11 surface=14 where=floating item=2 offset=184 top=368 width=47 height=44
+ZWL MENU bar client=11 surface=14 where=floating item=3 offset=233 top=368 width=55 height=44
+ZWL MENU bar client=11 surface=14 where=floating item=4 offset=290 top=368 width=76 height=44
+ZWL MENU bar client=11 surface=14 where=floating item=5 offset=368 top=368 width=53 height=44
+ZGEARS FPS run=gears frames=700 fps=15.1
+ZWL PERF 5002ms: passes=749 timeouts=66 | poll 31.8% work 67.8%
+ZWL PERF compose frames=78 draw_ms=40.11 (acquire 0.04 submit+present 37.50) frame_ms=40.92
+ZTERM TAB closed run=term id=1 count=0
+ZTERM DONE run=term reason=shell-exited
+ZWL CLIENT gone client=11 reason=flush
+ZWL CLEANUP client=11 objects=35 unread_fds=0
+ZWL HOME ended pid=52 status=0
+ZGEARS FPS run=gears frames=800 fps=13.8
+ZWL PERF 5017ms: passes=720 timeouts=76 | poll 32.3% work 67.3%
+ZWL PERF compose frames=76 draw_ms=41.15 (acquire 0.06 submit+present 38.60) frame_ms=41.96
+ZWL WISEVIEW opening key at_ms=196979
+ZWL FIRST_FRAME what=wiseview-open frame=1060 request_ms=196979 ms=34
+ZWL WISEVIEW open windows=10 at_ms=197197
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL WISEVIEW close key at_ms=199199
+ZWL FIRST_FRAME what=wiseview-close frame=1120 request_ms=199199 ms=22
+ZWL WISEVIEW closed at_ms=199399
+ZWL PERF 5001ms: passes=716 timeouts=73 | poll 32.5% work 67.1%
+ZWL PERF compose frames=104 draw_ms=29.83 (acquire 0.05 submit+present 27.90) frame_ms=30.57
+ZGEARS FPS run=gears frames=900 fps=14.2
+ZWL HOME open via=launcher at_ms=201545
+ZWL FIRST_FRAME what=home-open frame=1160 request_ms=201545 ms=62
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=201825
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=203775
+ZWL FIRST_FRAME what=home-close frame=1202 request_ms=203775 ms=24
+ZWL HOME closed at_ms=204047
+ZWL PERF 5000ms: passes=706 timeouts=67 | poll 32.0% work 67.6%
+ZWL PERF compose frames=87 draw_ms=36.27 (acquire 0.03 submit+present 33.31) frame_ms=36.99
+ZWL GLASS moved surface=7 x=980 y=372
+ZGEARS FPS run=gears frames=1000 fps=15.7
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=208589
+ZWL FIRST_FRAME what=wiseview-open frame=1278 request_ms=208589 ms=49
+ZWL WISEVIEW open windows=10 at_ms=208790
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL PERF 5000ms: passes=734 timeouts=65 | poll 31.6% work 68.0%
+ZWL PERF compose frames=100 draw_ms=31.36 (acquire 0.04 submit+present 29.41) frame_ms=32.27
+ZWL WISEVIEW close key at_ms=210802
+ZWL FIRST_FRAME what=wiseview-close frame=1335 request_ms=210802 ms=21
+ZWL WISEVIEW closed at_ms=211007
+ZWL HOME open via=launcher at_ms=213160
+ZWL FIRST_FRAME what=home-open frame=1374 request_ms=213160 ms=48
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=213459
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZGEARS FPS run=gears frames=1100 fps=14.9
+ZWL HOME close via=escape at_ms=215402
+ZWL FIRST_FRAME what=home-close frame=1421 request_ms=215402 ms=27
+ZWL HOME closed at_ms=215662
+ZWL PERF 5001ms: passes=699 timeouts=61 | poll 31.3% work 68.4%
+ZWL PERF compose frames=93 draw_ms=34.28 (acquire 0.05 submit+present 31.06) frame_ms=34.97
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=220147
+ZWL FIRST_FRAME what=wiseview-open frame=1497 request_ms=220147 ms=38
+ZWL WISEVIEW open windows=10 at_ms=220349
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL PERF 5003ms: passes=746 timeouts=62 | poll 31.8% work 67.8%
+ZWL PERF compose frames=86 draw_ms=36.72 (acquire 0.05 submit+present 34.42) frame_ms=37.51
+ZGEARS FPS run=gears frames=1200 fps=14.6
+ZWL WISEVIEW close key at_ms=222379
+ZWL FIRST_FRAME what=wiseview-close frame=1556 request_ms=222379 ms=28
+ZWL WISEVIEW closed at_ms=222605
+ZWL HOME open via=launcher at_ms=224734
+ZWL FIRST_FRAME what=home-open frame=1595 request_ms=224734 ms=54
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=225031
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL PERF 5001ms: passes=740 timeouts=74 | poll 32.7% work 66.9%
+ZWL PERF compose frames=104 draw_ms=29.79 (acquire 0.05 submit+present 27.59) frame_ms=30.57
+ZWL HOME close via=escape at_ms=226960
+ZWL FIRST_FRAME what=home-close frame=1639 request_ms=226961 ms=24
+ZWL HOME closed at_ms=227202
+ZGEARS FPS run=gears frames=1300 fps=15.9
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL PERF 5031ms: passes=693 timeouts=67 | poll 32.4% work 67.3%
+ZWL PERF compose frames=84 draw_ms=37.66 (acquire 0.05 submit+present 35.08) frame_ms=38.39
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=231705
+ZWL FIRST_FRAME what=wiseview-open frame=1714 request_ms=231705 ms=39
+ZWL WISEVIEW open windows=10 at_ms=231932
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL WISEVIEW close key at_ms=233965
+ZWL FIRST_FRAME what=wiseview-close frame=1774 request_ms=233965 ms=22
+ZWL WISEVIEW closed at_ms=234167
+ZGEARS FPS run=gears frames=1400 fps=13.8
+ZWL PERF 5001ms: passes=720 timeouts=78 | poll 33.3% work 66.3%
+ZWL PERF compose frames=104 draw_ms=29.48 (acquire 0.05 submit+present 27.66) frame_ms=30.30
+ZWL HOME open via=launcher at_ms=236304
+ZWL FIRST_FRAME what=home-open frame=1813 request_ms=236304 ms=51
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=236584
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=238548
+ZWL FIRST_FRAME what=home-close frame=1859 request_ms=238548 ms=29
+ZWL HOME closed at_ms=238791
+ZWL PERF 5019ms: passes=713 timeouts=61 | poll 31.6% work 68.1%
+ZWL PERF compose frames=91 draw_ms=35.09 (acquire 0.05 submit+present 32.14) frame_ms=35.45
+ZWL GLASS moved surface=7 x=980 y=372
+ZGEARS FPS run=gears frames=1500 fps=15.1
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=243332
+ZWL FIRST_FRAME what=wiseview-open frame=1935 request_ms=243332 ms=33
+ZWL WISEVIEW open windows=10 at_ms=243558
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL WISEVIEW close key at_ms=245535
+ZWL FIRST_FRAME what=wiseview-close frame=1991 request_ms=245535 ms=18
+ZWL WISEVIEW closed at_ms=245764
+ZWL PERF 5033ms: passes=688 timeouts=71 | poll 32.5% work 67.2%
+ZWL PERF compose frames=102 draw_ms=30.68 (acquire 0.04 submit+present 28.82) frame_ms=31.80
+ZWL HOME open via=launcher at_ms=247881
+ZWL FIRST_FRAME what=home-open frame=2030 request_ms=247881 ms=39
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=248171
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZGEARS FPS run=gears frames=1600 fps=14.2
+ZWL HOME close via=escape at_ms=250118
+ZWL FIRST_FRAME what=home-close frame=2074 request_ms=250118 ms=30
+ZWL HOME closed at_ms=250364
+ZWL PERF 5017ms: passes=769 timeouts=68 | poll 32.3% work 67.4%
+ZWL PERF compose frames=89 draw_ms=35.36 (acquire 0.04 submit+present 32.46) frame_ms=36.07
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=254909
+ZGEARS FPS run=gears frames=1700 fps=15.2
+ZWL FIRST_FRAME what=wiseview-open frame=2151 request_ms=254909 ms=38
+ZWL WISEVIEW open windows=10 at_ms=255111
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL PERF 5029ms: passes=744 timeouts=60 | poll 31.6% work 68.0%
+ZWL PERF compose frames=90 draw_ms=35.13 (acquire 0.05 submit+present 32.83) frame_ms=36.00
+ZWL WISEVIEW close key at_ms=257104
+ZWL FIRST_FRAME what=wiseview-close frame=2208 request_ms=257104 ms=26
+ZWL WISEVIEW closed at_ms=257341
+ZWL HOME open via=launcher at_ms=259470
+ZWL FIRST_FRAME what=home-open frame=2245 request_ms=259470 ms=54
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=259764
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL PERF 5002ms: passes=732 timeouts=71 | poll 32.5% work 67.1%
+ZWL PERF compose frames=96 draw_ms=32.36 (acquire 0.04 submit+present 29.98) frame_ms=33.18
+ZGEARS FPS run=gears frames=1800 fps=15.0
+ZWL HOME close via=escape at_ms=261706
+ZWL FIRST_FRAME what=home-close frame=2290 request_ms=261706 ms=23
+ZWL HOME closed at_ms=261990
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL PERF 5000ms: passes=765 timeouts=58 | poll 32.1% work 67.5%
+ZWL PERF compose frames=85 draw_ms=36.86 (acquire 0.06 submit+present 34.06) frame_ms=37.74
+ZWL WISEVIEW opening key at_ms=266468
+ZWL FIRST_FRAME what=wiseview-open frame=2366 request_ms=266468 ms=38
+ZWL WISEVIEW open windows=10 at_ms=266674
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL WISEVIEW close key at_ms=268682
+ZWL FIRST_FRAME what=wiseview-close frame=2423 request_ms=268682 ms=21
+ZGEARS FPS run=gears frames=1900 fps=13.8
+ZWL WISEVIEW closed at_ms=268882
+ZWL PERF 5023ms: passes=723 timeouts=66 | poll 32.6% work 67.0%
+ZWL PERF compose frames=101 draw_ms=30.76 (acquire 0.04 submit+present 29.00) frame_ms=31.59
+ZWL HOME open via=launcher at_ms=271016
+ZWL FIRST_FRAME what=home-open frame=2460 request_ms=271016 ms=36
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=271300
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=273262
+ZWL FIRST_FRAME what=home-close frame=2505 request_ms=273262 ms=38
+ZWL HOME closed at_ms=273510
+ZGEARS FPS run=gears frames=2000 fps=15.1
+ZWL PERF 5036ms: passes=722 timeouts=67 | poll 32.5% work 67.2%
+ZWL PERF compose frames=88 draw_ms=35.86 (acquire 0.04 submit+present 32.96) frame_ms=36.54
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=278035
+ZWL FIRST_FRAME what=wiseview-open frame=2580 request_ms=278035 ms=41
+ZWL WISEVIEW open windows=10 at_ms=278245
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL WISEVIEW close key at_ms=280300
+ZWL FIRST_FRAME what=wiseview-close frame=2636 request_ms=280300 ms=24
+ZWL WISEVIEW closed at_ms=280504
+ZWL PERF 5031ms: passes=671 timeouts=68 | poll 32.3% work 67.3%
+ZWL PERF compose frames=101 draw_ms=30.99 (acquire 0.05 submit+present 28.86) frame_ms=31.87
+ZGEARS FPS run=gears frames=2100 fps=14.0
+ZWL HOME open via=launcher at_ms=282669
+ZWL FIRST_FRAME what=home-open frame=2674 request_ms=282669 ms=50
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=282953
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=284889
+ZWL FIRST_FRAME what=home-close frame=2718 request_ms=284889 ms=31
+ZWL HOME closed at_ms=285129
+ZWL PERF 5028ms: passes=705 timeouts=66 | poll 31.8% work 67.8%
+ZWL PERF compose frames=89 draw_ms=35.77 (acquire 0.05 submit+present 32.67) frame_ms=36.49
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZGEARS FPS run=gears frames=2200 fps=15.3
+ZWL WISEVIEW opening key at_ms=289658
+ZWL FIRST_FRAME what=wiseview-open frame=2795 request_ms=289658 ms=39
+ZWL WISEVIEW open windows=10 at_ms=289859
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL PERF 5014ms: passes=713 timeouts=68 | poll 31.4% work 68.2%
+ZWL PERF compose frames=94 draw_ms=33.62 (acquire 0.05 submit+present 31.61) frame_ms=34.47
+ZWL WISEVIEW close key at_ms=291868
+ZWL FIRST_FRAME what=wiseview-close frame=2853 request_ms=291868 ms=19
+ZWL WISEVIEW closed at_ms=292070
+ZWL HOME open via=launcher at_ms=294210
+ZWL FIRST_FRAME what=home-open frame=2891 request_ms=294210 ms=34
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=294524
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZGEARS FPS run=gears frames=2300 fps=14.6
+ZWL PERF 5001ms: passes=721 timeouts=58 | poll 32.2% work 67.5%
+ZWL PERF compose frames=98 draw_ms=32.13 (acquire 0.05 submit+present 29.56) frame_ms=32.58
+ZWL HOME close via=escape at_ms=296451
+ZWL FIRST_FRAME what=home-close frame=2938 request_ms=296451 ms=24
+ZWL HOME closed at_ms=296692
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL PERF 5013ms: passes=718 timeouts=68 | poll 31.8% work 67.8%
+ZWL PERF compose frames=83 draw_ms=37.98 (acquire 0.04 submit+present 35.80) frame_ms=39.11
+ZWL WISEVIEW opening key at_ms=301229
+ZWL FIRST_FRAME what=wiseview-open frame=3014 request_ms=301229 ms=36
+ZWL WISEVIEW open windows=10 at_ms=301447
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZGEARS FPS run=gears frames=2400 fps=14.7
+ZWL WISEVIEW close key at_ms=303460
+ZWL FIRST_FRAME what=wiseview-close frame=3070 request_ms=303460 ms=23
+ZWL WISEVIEW closed at_ms=303680
+ZWL HOME open via=launcher at_ms=305773
+ZWL FIRST_FRAME what=home-open frame=3109 request_ms=305773 ms=48
+ZWL PERF 5001ms: passes=735 timeouts=68 | poll 32.0% work 67.7%
+ZWL PERF compose frames=102 draw_ms=30.62 (acquire 0.04 submit+present 28.62) frame_ms=31.19
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=306062
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=308000
+ZWL FIRST_FRAME what=home-close frame=3155 request_ms=308000 ms=37
+ZWL HOME closed at_ms=308248
+ZGEARS FPS run=gears frames=2500 fps=15.7
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL PERF 5026ms: passes=742 timeouts=70 | poll 31.8% work 67.9%
+ZWL PERF compose frames=90 draw_ms=35.15 (acquire 0.05 submit+present 32.05) frame_ms=36.26
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL HOME open via=launcher at_ms=312857
+ZWL FIRST_FRAME what=home-open frame=3233 request_ms=312857 ms=37
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=313145
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME launch name=Terminal pid=54
+ZWL HOME close via=launch at_ms=314523
+ZWL FIRST_FRAME what=home-close frame=3266 request_ms=314523 ms=27
+ZWL CLIENT client=12 fd=25
+ZWL INSET create client=12 inset=20 toplevel=16
+ZWL EDIT create client=12 edit=24 toplevel=16
+ZWL BOUNDS client=12 surface=14 width=1896 height=970
+ZWL CONFIGURE client=12 surface=14 serial=130 width=0 height=0 fullscreen=0
+ZWL SEAT client=12 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=12 pointer=1 keyboard=1 touch=0
+ZWL IMPORT client=12 buffer=37 width=916 height=632 bytes=2318336
+ZWL IMPORT client=12 buffer=38 width=916 height=632 bytes=2318336
+ZWL IMPORT client=12 buffer=39 width=916 height=632 bytes=2318336
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZWL MENU commit client=12 menu=43 serial=1 items=30 generation=1
+ZWL MENU set client=12 place=44 menu=43
+ZWL MENU commit client=12 menu=43 serial=2 items=30 generation=2
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZWL TITLEBAR create client=12 titlebar=48 toplevel=16
+ZWL EDIT state client=12 edit=24 actions=0xff flags=0xd
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZWL TITLEBAR commit client=12 titlebar=48 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL MAP client=12 surface=14 x=348 y=420
+ZWL HOME launched waited_ms=131 at_ms=314654
+ZWL GLASS launch surface=14 from=996,350 to=348,420 size=916x632
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZWL HOME closed at_ms=314794
+ZWL MENU bar client=12 surface=14 where=floating item=1 offset=127 top=368 width=55 height=44
+ZWL MENU bar client=12 surface=14 where=floating item=2 offset=184 top=368 width=47 height=44
+ZWL MENU bar client=12 surface=14 where=floating item=3 offset=233 top=368 width=55 height=44
+ZWL MENU bar client=12 surface=14 where=floating item=4 offset=290 top=368 width=76 height=44
+ZWL MENU bar client=12 surface=14 where=floating item=5 offset=368 top=368 width=53 height=44
+ZGEARS FPS run=gears frames=2600 fps=14.6
+ZWL PERF 5004ms: passes=748 timeouts=59 | poll 30.6% work 69.0%
+ZWL PERF compose frames=85 draw_ms=37.49 (acquire 0.05 submit+present 34.40) frame_ms=37.82
+ZWL PERF 5015ms: passes=676 timeouts=69 | poll 32.1% work 67.5%
+ZWL PERF compose frames=74 draw_ms=42.44 (acquire 0.06 submit+present 39.81) frame_ms=43.95
+ZTERM TAB closed run=term id=1 count=0
+ZTERM DONE run=term reason=shell-exited
+ZWL CLIENT gone client=12 reason=read
+ZWL CLEANUP client=12 objects=34 unread_fds=0
+ZWL HOME ended pid=54 status=0
+ZGEARS FPS run=gears frames=2700 fps=13.4
+ZWL WISEVIEW opening key at_ms=325031
+ZWL FIRST_FRAME what=wiseview-open frame=3424 request_ms=325031 ms=44
+ZWL WISEVIEW open windows=10 at_ms=325251
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL PERF 5007ms: passes=746 timeouts=61 | poll 31.6% work 68.0%
+ZWL PERF compose frames=89 draw_ms=35.41 (acquire 0.04 submit+present 33.17) frame_ms=36.12
+ZWL WISEVIEW close key at_ms=327259
+ZWL FIRST_FRAME what=wiseview-close frame=3480 request_ms=327259 ms=25
+ZWL WISEVIEW closed at_ms=327472
+ZWL HOME open via=launcher at_ms=329607
+ZWL FIRST_FRAME what=home-open frame=3517 request_ms=329607 ms=35
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=329898
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZGEARS FPS run=gears frames=2800 fps=14.6
+ZWL PERF 5029ms: passes=751 timeouts=81 | poll 32.4% work 67.2%
+ZWL PERF compose frames=97 draw_ms=32.27 (acquire 0.05 submit+present 29.94) frame_ms=33.12
+ZWL HOME close via=escape at_ms=331846
+ZWL FIRST_FRAME what=home-close frame=3564 request_ms=331846 ms=33
+ZWL HOME closed at_ms=332086
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL PERF 5004ms: passes=734 timeouts=59 | poll 31.6% work 68.0%
+ZWL PERF compose frames=85 draw_ms=37.35 (acquire 0.04 submit+present 34.62) frame_ms=38.09
+ZWL WISEVIEW opening key at_ms=336639
+ZWL FIRST_FRAME what=wiseview-open frame=3641 request_ms=336639 ms=35
+ZWL WISEVIEW open windows=10 at_ms=336853
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZGEARS FPS run=gears frames=2900 fps=14.6
+ZWL WISEVIEW close key at_ms=338845
+ZWL FIRST_FRAME what=wiseview-close frame=3697 request_ms=338845 ms=24
+ZWL WISEVIEW closed at_ms=339063
+ZWL PERF 5017ms: passes=691 timeouts=75 | poll 32.6% work 67.0%
+ZWL PERF compose frames=101 draw_ms=30.61 (acquire 0.05 submit+present 28.81) frame_ms=31.42
+ZWL HOME open via=launcher at_ms=341192
+ZWL FIRST_FRAME what=home-open frame=3735 request_ms=341192 ms=49
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=341494
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=343426
+ZWL FIRST_FRAME what=home-close frame=3781 request_ms=343426 ms=32
+ZWL HOME closed at_ms=343671
+ZGEARS FPS run=gears frames=3000 fps=15.0
+ZWL PERF 5038ms: passes=702 timeouts=62 | poll 32.1% work 67.5%
+ZWL PERF compose frames=91 draw_ms=34.73 (acquire 0.05 submit+present 31.64) frame_ms=35.56
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL WISEVIEW opening key at_ms=348226
+ZWL FIRST_FRAME what=wiseview-open frame=3858 request_ms=348226 ms=35
+ZWL WISEVIEW open windows=10 at_ms=348428
+ZWL WISEVIEW tile client=9 surface=7 x=83 y=86 width=380 height=253
+ZWL WISEVIEW tile client=10 surface=1191 x=528 y=90 width=406 height=244
+ZWL WISEVIEW tile client=10 surface=14 x=1036 y=90 width=305 height=244
+ZWL WISEVIEW tile client=8 surface=7 x=1484 y=90 width=325 height=244
+ZWL WISEVIEW tile client=7 surface=14 x=104 y=404 width=338 height=244
+ZWL WISEVIEW tile client=6 surface=14 x=570 y=404 width=321 height=244
+ZWL WISEVIEW tile client=5 surface=14 x=1012 y=404 width=353 height=244
+ZWL WISEVIEW tile client=4 surface=8 x=1467 y=404 width=359 height=244
+ZWL WISEVIEW tile client=3 surface=14 x=568 y=718 width=325 height=244
+ZWL WISEVIEW tile client=2 surface=8 x=999 y=718 width=379 height=244
+ZWL WISEVIEW close key at_ms=350421
+ZWL FIRST_FRAME what=wiseview-close frame=3914 request_ms=350421 ms=20
+ZWL WISEVIEW closed at_ms=350646
+ZWL PERF 5042ms: passes=726 timeouts=70 | poll 32.2% work 67.4%
+ZWL PERF compose frames=103 draw_ms=30.55 (acquire 0.04 submit+present 28.67) frame_ms=31.29
+ZGEARS FPS run=gears frames=3100 fps=13.6
+ZWL HOME open via=launcher at_ms=352849
+ZWL FIRST_FRAME what=home-open frame=3954 request_ms=352849 ms=47
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=353150
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL HOME close via=escape at_ms=355029
+ZWL FIRST_FRAME what=home-close frame=3999 request_ms=355029 ms=24
+ZWL HOME closed at_ms=355269
+ZWL PERF 5035ms: passes=704 timeouts=64 | poll 31.0% work 68.6%
+ZWL PERF compose frames=91 draw_ms=35.20 (acquire 0.05 submit+present 32.02) frame_ms=36.02
+ZGEARS FPS run=gears frames=3200 fps=15.6
+ZWL GLASS moved surface=7 x=980 y=372
+ZWL GLASS moved surface=7 x=880 y=332
+ZWL HOME open via=launcher at_ms=359923
+ZWL FIRST_FRAME what=home-open frame=4078 request_ms=359923 ms=33
+ZWL HOME opened apps=12 pages=1 page=1 at_ms=360252
+ZWL HOME icon name="Files" x=600 y=386
+ZWL HOME icon name="Notes" x=744 y=386
+ZWL HOME icon name="Settings" x=888 y=386
+ZWL HOME icon name="Terminal" x=1032 y=386
+ZWL HOME icon name="PDF Viewer" x=1176 y=386
+ZWL HOME icon name="Image Viewer" x=1320 y=386
+ZWL HOME icon name="Browser" x=600 y=538
+ZWL HOME icon name="Model viewer" x=744 y=538
+ZWL HOME icon name="Gears" x=888 y=538
+ZWL HOME icon name="X terminal" x=1032 y=538
+ZWL HOME icon name="Lock Screen" x=1176 y=538
+ZWL HOME icon name="Log Out" x=1320 y=538
+ZWL PERF 5025ms: passes=728 timeouts=66 | poll 31.7% work 67.9%
+ZWL PERF compose frames=86 draw_ms=36.76 (acquire 0.05 submit+present 34.23) frame_ms=37.57
+ZWL HOME launch name=Terminal pid=56
+ZWL HOME close via=launch at_ms=361574
+ZWL FIRST_FRAME what=home-close frame=4111 request_ms=361574 ms=37
+ZWL CLIENT client=13 fd=25
+ZWL INSET create client=13 inset=20 toplevel=16
+ZWL EDIT create client=13 edit=24 toplevel=16
+ZWL BOUNDS client=13 surface=14 width=1896 height=970
+ZWL CONFIGURE client=13 surface=14 serial=163 width=0 height=0 fullscreen=0
+ZWL SEAT client=13 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=13 pointer=1 keyboard=1 touch=0
+ZWL IMPORT client=13 buffer=37 width=916 height=632 bytes=2318336
+ZWL IMPORT client=13 buffer=38 width=916 height=632 bytes=2318336
+ZWL IMPORT client=13 buffer=39 width=916 height=632 bytes=2318336
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZWL MENU commit client=13 menu=43 serial=1 items=30 generation=1
+ZWL MENU set client=13 place=44 menu=43
+ZWL MENU commit client=13 menu=43 serial=2 items=30 generation=2
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZWL TITLEBAR create client=13 titlebar=48 toplevel=16
+ZWL EDIT state client=13 edit=24 actions=0xff flags=0xd
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZWL TITLEBAR commit client=13 titlebar=48 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL MAP client=13 surface=14 x=348 y=420
+ZWL HOME launched waited_ms=154 at_ms=361728
+ZWL GLASS launch surface=14 from=996,350 to=348,420 size=916x632
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZWL HOME closed at_ms=361816
+ZWL MENU bar client=13 surface=14 where=floating item=1 offset=127 top=368 width=55 height=44
+ZWL MENU bar client=13 surface=14 where=floating item=2 offset=184 top=368 width=47 height=44
+ZWL MENU bar client=13 surface=14 where=floating item=3 offset=233 top=368 width=55 height=44
+ZWL MENU bar client=13 surface=14 where=floating item=4 offset=290 top=368 width=76 height=44
+ZWL MENU bar client=13 surface=14 where=floating item=5 offset=368 top=368 width=53 height=44
+ZGEARS FPS run=gears frames=3300 fps=14.4
+ZWL PERF 5024ms: passes=704 timeouts=63 | poll 31.4% work 68.2%
+ZWL PERF compose frames=76 draw_ms=41.47 (acquire 0.04 submit+present 38.69) frame_ms=42.31
+ZWL PERF 5006ms: passes=747 timeouts=51 | poll 31.2% work 68.3%
+ZWL PERF compose frames=72 draw_ms=43.36 (acquire 0.04 submit+present 40.90) frame_ms=44.25
+ZGEARS FPS run=gears frames=3400 fps=13.2
+C10_HW_SAVED_1790917793

@@ -1,0 +1,5 @@
+hdmi-h4-hw: QEMU started on solaris10-man at 14:06:58
+C10-HW CHECKPOINT rounds=5 elapsed_seconds=71 qemu_pid=22721
+C10-HW CHECKPOINT rounds=10 elapsed_seconds=129 qemu_pid=22721
+C10-HW RESULT rounds=14 minutes=3 elapsed_seconds=187 errors=0 restarts=0
+c10-hw: PASS (inspect saved-live.png for the live Terminal)

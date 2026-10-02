@@ -1,0 +1,13 @@
+===== /var/log/sessiond.log
+1790917624 SESSIOND DISPLAY waited_ms=300
+1790917624 SESSIOND START greeter=/bin/wayland session=/etc/keiland/session pid=14
+1790917624 SESSIOND AUTOLOGIN user=kei
+1790917624 SESSIOND SEAT path=/dev/gpu0 uid=1000 mode=0600
+1790917624 SESSIOND SEAT path=/dev/input/event0 uid=1000 mode=0600
+1790917624 SESSIOND SEAT path=/dev/input/event1 uid=1000 mode=0600
+1790917624 SESSIOND SEAT path=/dev/input/event2 uid=1000 mode=0600
+1790917624 SESSIOND SEAT path=/dev/input/event3 uid=1000 mode=0600
+1790917624 SESSIOND SESSION home=/home/kei made uid=1000
+1790917624 SESSIOND SESSION start user=kei uid=1000 pid=22 runtime=/run/user/1000
+1790917624 SESSIOND HANDOFF session ready=1 waited_ms=151
+1790917624 SESSIOND HANDOFF go written=3 at_ms=5617
