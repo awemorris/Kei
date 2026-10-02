@@ -157,7 +157,14 @@ required host-visible memory feature. Venus remains unverified; the later user
 instruction selected the tested i915 passthrough route. Neither host Venus
 support nor lavapipe is reported as successful native Venus use.
 
-Physical-machine and physical WiFi tests were explicitly waived. Native WiFi
+The earlier QEMU acceptance waived physical-machine and physical WiFi tests.
+The later physical-machine acceptance uses FreeBSD 15.1-RELEASE amd64 on Intel
+Tiger Lake Iris Xe (`8086:9a49`), with the same base Clang 19.1.7, native Python
+3.12 and installed Mesa 26.1.3/drm-66/seatd stack. Native build and installation
+under `/opt/keiland` were verified there. Final physical display/input/application
+acceptance awaits the user's local-console session; GDM launch was withdrawn.
+
+Native WiFi
 ABI/refusal and WPA wire tests use an independent datagram peer; these do not
 prove actual radio scan/association or a system supplicant's persistent storage.
 Only FreeBSD 15.1 amd64 and the named Intel GPU stack were exercised. Other

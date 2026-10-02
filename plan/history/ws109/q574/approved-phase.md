@@ -3,9 +3,9 @@
 # WS109 p007: 実機build/install・最終全文規約
 
 Parent: [WS109](../ws.md)
-Status: in-progress
+Status: planned
 Disposition: normal
-Queue / Attempt: q574 / q574-i01
+Queue / Attempt: none
 
 ## Scope / criteria
 
@@ -23,7 +23,3 @@ p006 cleared actual source。SSH鍵確認済み。GUI合格はユーザーに残
 ## Event history
 
 2026-10-02 / ws109-20261002-physical-reopen-p007: ユーザーの実機受け入れ指示とGDM撤回により追加、p006→p007→p008の依存。既存p001〜p005結果は当時の条件で保存。実機操作・WIP push/pull承認はQueueで具体化。
-
-## Design refinement / q574
-
-実native build/install/header auditはPASS。GNU root entryのdry-runで既存cross-toolchain parseがFreeBSD realpath -mを呼ぶと判明。toolchainは変更せず、GNUmakefileでFreeBSD-only goalsを独立native mkへ直接転送する。BSD make既存entry/外部目標/依存/WS受け入れは同じ。再pull後GNU/BSD入口とinstallを再確認。seatd onestatusはpidfile権限のためsudoでread-back、普通userの失敗をdaemon不在と取り違えない。

@@ -6,8 +6,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q573 finished）
-Resume point: p006 cleared; user local GUI acceptance pending.
+Queue: q574
+Resume point: p007/q574 executing; physical user acceptance pending.
 Prior completion: 2026-10-02 q572 /当時のQEMU受け入れを検証。最新指示で実機受け入れへreopened。
 
 ## 目標と承認
@@ -66,7 +66,7 @@ p001〜p005のclearance/close intentとWScompletion eventはlocal保存済み、
 | ID | 目的 | Status | Dependencies |
 | --- | --- | --- | --- |
 | ws109p006 | [native make入口/直接起動/docs](phase006/phase.md) | cleared / q573 | q572 verified native output |
-| ws109p007 | [実機build/install・最終全文規約](phase007/phase.md) | planned | p006 actual source |
+| ws109p007 | [実機build/install・最終全文規約](phase007/phase.md) | in-progress | p006 actual source |
 | ws109p008 | [ユーザー実機GUI受け入れ](phase008/phase.md) | planned | p007 build/install |
 
 F6: 実機で指定make build/install成功し/optにnative成果物を配置、ユーザーが実際にKeilandを操作して動いたと確認。ユーザーの全実機操作事前承認、今回のWIP push/pull承認を記録。変更済みED25519 SHA256:SU3SAIyuzmOC97UBmW2veciwXDfHLA+C8AAKcZTiysE はユーザー確認済み。Issue再開/新Phase構造イベントはlocal/outbox保存、公開保留。

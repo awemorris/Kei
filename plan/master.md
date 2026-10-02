@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q573 finished、p006 cleared、user実機acceptance待ち）
+Active Queue: q574（WS109 p007 in-progress）
 Current Focused Goal: fg010 — 10/17 demo、fg016 — WS109 native FreeBSD実機build/installとユーザー受け入れ（再開）。
 Next（2026-10-02 更新）: WS109 p006→p007実機build/install→p008ユーザー受け入れ。既存demo順/WS106保留を維持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
