@@ -623,10 +623,16 @@ primary docs for operational syntax:
 
 ## 実行体制と Queue
 
+- **2026-10-02 ユーザー更新（最新、下の項目に優先）**:「エージェントA,Bに分けて実行するルールは採用しません。単一のエージェントセッションであるあなたが、サブエージェントをN個使って作業します。」
+  A/B の2セッション分担（`plan/agents/session-a.md`・`session-b.md`・`two-session-coordination.md`、Master の「一時的な2セッション分担」）は履歴とし、使わない。
+  この checkout（`/home/awe/zedBSD-claude1`、branch `main`）の単一の Claude Code セッションが main（Q1）であり、共有計画・Queue・merge の唯一の書き手。
+  サブエージェントは Claude Code の Agent tool で起動する（定義は `.claude/agents/`。既定は phase-runner、試行の多い WS は phase-runner-mid）。
+  `gpt-6.1-sol`・`codex/` branch の指定は置き換える。N はユーザーが指定し、未指定の間は承認済みで依存を満たす非競合 Queue の数に合わせて main が決める。
+  下の運用契約の Queue・worktree・WIP commit・merge・wrap-up の規則はこの体制でも適用する。
 - **2026-10-02 ユーザー更新**: [サブエージェント別Queueの運用契約](plan/agents/protocol.md)を適用する。固定版Awesome Planの「1 project / 1 active Queue / 1 executor」「次Queueを自動開始しない」と、この節の旧い単一Queue運用は、この範囲で置き換える。main（Q1）は共有計画・同期cacheの唯一の書き手、Queueの割当/依存調整とmergeの担当。各サブエージェントは独立worktreeで担当WS/Phaseの承認済みQueueを最大1つactiveにし、mainから投入済みで承認/依存を満たす次Queueへ継続できる。1Queueは原則1Phase。
-- サブエージェントは`gpt-6.1-sol` / high。希望N=8、実際は実行枠・利用制限・実行可能な非競合Queueで調整する。2026-10-02の環境はmainを含め4枠で、子は同時最大3。過去P1〜P7は履歴、次はP8。可能ならWSを固定して文脈を継続する。
+- （以下2行は旧Codex運用の履歴。モデル・枠は上の最新項目が優先）サブエージェントは`gpt-6.1-sol` / high。希望N=8、実際は実行枠・利用制限・実行可能な非競合Queueで調整する。2026-10-02の環境はmainを含め4枠で、子は同時最大3。過去P1〜P7は履歴、次はP8。可能ならWSを固定して文脈を継続する。
 - サブエージェントはPhaseが終わる前でもコミット可能な小単位で`git commit -m WIP -- <担当path>...`し、mainへSHA/検証/残件とmerge依頼を送る。mainが統合してACKする。通常ラップアップは安全なcommit地点で返却して自発的に終了。urgentは未commit差分をbinary patchと再開情報に保存し、直ちに返して自発的に終了。commit/mergeとPhase clearanceは別の状態。
-- 実行中に未知の依存が分かったPhaseはunclearedとして証拠/再開条件を残す。依存成果が実際にmainへ統合されるまで他WSのdependent Queueを開始しない。旧`.claude/agents/phase-runner*.md`のClaude/単Phase/no-commit設定はこのCodex運用には使用しない。
+- 実行中に未知の依存が分かったPhaseはunclearedとして証拠/再開条件を残す。依存成果が実際にmainへ統合されるまで他WSのdependent Queueを開始しない。`.claude/agents/phase-runner*.md`はこの運用に合わせ、独立worktreeの担当pathだけをWIP commitする（main checkoutは編集しない）。
 - 人間の判断が要る点、計画に無い依存、未達の受け入れ条件は、その場でユーザーへ報告する。
   ユーザーが不在の間の自律実行を指示されたときは、判断が要る Phase を uncleared にして理由と要る判断を記録し、先へ進む。
 

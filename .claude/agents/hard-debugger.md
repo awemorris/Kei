@@ -32,7 +32,7 @@ effort: high
   `build/distfiles`、`build/amd64` などは、再取得・再buildに時間がかかる共有の成果物である。自分のPhaseで
   作ったものでも、開始時に無かったという理由だけで消さない。使い捨ての出力は自分専用の `BUILD=build/<phase>/`
   に置き、片付けるのはその中だけにする。
-- **git commit / push はしない。** コミットは root エージェントがまとめて行う。
+- **push はしない。main の checkout（`/home/awe/zedBSD-claude1`）を編集しない。** main が渡した独立 worktree の中で、担当 path だけを `git commit -m WIP -- <path>...` で小さく commit し、SHA・検証・残件を返す。merge は root（main）が行う（`plan/agents/protocol.md`）。
 - 実行中に計画に無い依存関係が見つかったら、無理に進めず報告する（root がPhaseを uncleared にして計画を直す）。
 - 結果は、実行したコマンド、結果、成果物のパス、未実施の確認、残課題を具体的に報告する。
   観測していないことを成功と書かない。QEMUと実機の証拠を区別する。

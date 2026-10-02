@@ -29,3 +29,5 @@ P8 capacity incident: GPT-6.1 Sol High一時capacityでturn失敗。mainが未�
 Generation2 runtime: P8=/root/p8_bugs_g2、P9=/root/p9_desktop_g2、P10=/root/p10_browser_g2。3人とも指定model/highで稼働確認、main25729c88aから開始。q577/q579期限07:50:43UTC、q580上限3h。
 
 2026-10-02 / two-session-wrap: userの指示で3agentを通常wrap-upし、全commitをmainへ統合・ACK。q577/q579/q580はterminal uncleared、q578 cleared。runtime/owned QEMU/SSH/build processなし。A/B各3laneへの再配属は[Master](../master.md)とsession文書を正本とし、新Queue開始までN_effective=0。
+
+2026-10-02 / single-session-claude-subagents: current user「AGENTS.mdを読んで、オンボーディングしてください。ただし、エージェントA,Bに分けて実行するルールは採用しません。単一のエージェントセッションであるあなたが、サブエージェントをN個使って作業します。」。A/B lane と P8〜P10 は全員終了済みの履歴。新しい担当は Claude Code の Agent tool のサブエージェントで P11 から割り当て、worktree `/home/awe/zedBSD-worktrees/<担当>`・branch `agent/<担当>-<ws>`。現在 N_effective=0、N はユーザー指定待ち。

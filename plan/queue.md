@@ -60,3 +60,5 @@ Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21
 2026-10-02 / final-user-normal-wrap: 全agentを現在の安全なcommit地点で切り上げるuser指示を各A workerへ送付。A3は終了確認、A1/A2は回収中。B checkpoint4b655803をA8f807c73fへ統合しq582終端、q588/q589開始、q587amendment01を投影。q593予約は保持、新Queue無し。B停止実績はB receipt待ち、GitHub/push無し。
 
 2026-10-02 / all-final-integrated: A branch 5d3276cc4 → main31cf408ab、remote B0018bc6c8 → main35a6c8634。全6担当終了。q590〜q593は未投入、次未予約q594。新Queue開始には残scope/承認/依存を照合する。
+
+2026-10-02 / single-session-claude-subagents: current user「AGENTS.mdを読んで、オンボーディングしてください。ただし、エージェントA,Bに分けて実行するルールは採用しません。単一のエージェントセッションであるあなたが、サブエージェントをN個使って作業します。」。A/B分担を廃止し、Q1単一sessionがClaudeサブエージェントへ有限Queueを割り当てる。Active Queueなし、次の未予約ID q594。q590〜q593のID予約は旧A/B laneの候補として保持し、承認ではない。

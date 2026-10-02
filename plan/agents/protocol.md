@@ -1,5 +1,7 @@
 # サブエージェント別 Queue 運用（2026-10-02 ユーザー指示）
 
+**最新（2026-10-02 / single-session-claude-subagents: current user「AGENTS.mdを読んで、オンボーディングしてください。ただし、エージェントA,Bに分けて実行するルールは採用しません。単一のエージェントセッションであるあなたが、サブエージェントをN個使って作業します。」）**: A/B 2セッション分担は採用しない（[session-a](session-a.md)・[session-b](session-b.md)・[協調記録](two-session-coordination.md)は履歴）。`/home/awe/zedBSD-claude1` の `main` の単一 Claude Code セッションが main（Q1）。子は Claude Code の Agent tool のサブエージェント（`.claude/agents/`、既定 phase-runner / 試行の多い WS は phase-runner-mid）で、本文の `gpt-6.1-sol`・`codex/` branch・「子は同時最大3」の指定を置き換える。N はユーザー指定、未指定なら実行可能な非競合 Queue 数で main が決める。worktree は `/home/awe/zedBSD-worktrees/<担当>` に main が作り、branch は `agent/<担当>-<ws>`。Queue・WIP commit・merge・wrap-up・記録の規則は以下を引き続き適用する。担当IDは P11 から（P1〜P10・A1〜A3・B1〜B3 は履歴）。
+
 この文書は[AGENTS.md](../../AGENTS.md)のzedBSD固有規則を具体化する。固定版Awesome Planの「1 project / 1 active Queue / 1 executor」「次Queueを自動開始しない」は、このユーザー指示の範囲で置き換える。実装の権限は**各Queueの承認済みscope**に残る。今回の設計だけでOS実装Queueは開始しない。
 
 ## 役割と並列数

@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: なし。A/B各3担当は全員終了、codex/agent-aとremote codex/agent-b（0018bc6c8）をローカルmainへ統合済み。q584/q585/q586/q587/q589 uncleared、q588部分clear（whole p007 uncleared）。各残作業/判断/証拠はQueue履歴から再開。
+Active Queues: なし。実行体制（2026-10-02 user）: A/B分担は不採用、このsession（Q1）がClaude サブエージェントをN個使う（[protocol](agents/protocol.md)）。A/B各3担当は全員終了、codex/agent-aとremote codex/agent-b（0018bc6c8）をローカルmainへ統合済み。q584/q585/q586/q587/q589 uncleared、q588部分clear（whole p007 uncleared）。各残作業/判断/証拠はQueue履歴から再開。
 Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: user指示で全agentを区切り終了し成果を統合。新Queueは投入しない。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。Aは共有投影/mergeを所有し、Bは自checkoutのGTK/desktop/bugを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
+Next（2026-10-02 更新）: user指示で全agentを区切り終了し成果を統合。新Queueは投入しない。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。A/B所有は廃止、Q1が全WSの割当/共有投影/mergeを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。旧P8/P9/P10は停止・回収済みで、[Queue index](queue.md)にterminal outcomeを保存。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -234,7 +234,9 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 [正本](agents/protocol.md)・[実体台帳](agents/registry.md)。Q1は唯一の共有計画/cache書き手とQueue配布/merge担当。希望 `N_target=8`、子は`gpt-6.1-sol` / high、実行環境/利用制限/依存/競合に応じて `N_effective` を調整する（このsessionの子の同時上限は3）。P1〜P7の旧割当は歴史として保持し、新規実装担当はP8から。各agent最大1 active Queue、全体で複数可。1Queueは原則1Phaseで、mainが起動時Queueと承認済み後続Queueを順に投入する。WS affinityを優先し、WS終了後の再配属も可能。commit可能地点で頻繁にmergeを依頼し、通常/urgentラップアップは正本の手順で自発的に終了する。
 
-### 一時的な2セッション分担（2026-10-02）
+### 一時的な2セッション分担（2026-10-02、**廃止・履歴**）
+
+2026-10-02 / single-session-claude-subagents: current user「AGENTS.mdを読んで、オンボーディングしてください。ただし、エージェントA,Bに分けて実行するルールは採用しません。単一のエージェントセッションであるあなたが、サブエージェントをN個使って作業します。」 により以下の A/B 分担は使わない。lane の WS グループ分けは割当の参考に留め、Q1 が単独で全 WS の Queue を割り当てる。
 
 ユーザー指示によりメインセッションをAgent AとAgent Bに分け、各セッションが最大3サブエージェントを起動する。この表は一時的な実行所有であり、WSの目的・優先順位・依存・Queue承認・保留判断を変更しない。Phase単位の有限Queueを作ってから実行し、単に担当欄に入ったことを実装許可にしない。
 
