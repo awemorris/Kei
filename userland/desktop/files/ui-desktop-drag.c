@@ -61,6 +61,9 @@ fm_desktop_drag_press(
 	desk->press_index = index;
 	desk->press_x = x;
 	desk->press_y = y;
+
+	/* Succeeded: the press is ready for drag tracking. */
+	return;
 }
 
 /*
@@ -144,6 +147,9 @@ fm_desktop_drag_release(
 
 	/* The click is done with. */
 	desk->press_alone = 0;
+
+	/* Succeeded: the click is no longer held. */
+	return;
 }
 
 /*
@@ -238,6 +244,9 @@ fm_desktop_drop_event(
 	default:
 		break;
 	}
+
+	/* Succeeded: the drag event has been dispatched. */
+	return;
 }
 
 /*
@@ -273,6 +282,9 @@ fm_desktop_drop_draw(
 	if (!placed)
 		return;
 	fm_canvas_round_border(canvas, (float)cell.x + 4.0f, (float)cell.y, (float)cell.width - 8.0f, (float)cell.height - 4.0f, 12.0f, 2.0f, DESKTOP_TARGET_RING);
+
+	/* Succeeded: the drop target is highlighted. */
+	return;
 }
 
 /*
@@ -304,7 +316,9 @@ fm_desktop_drop_place(
 
 	/* A drop outside every cell, or without the pressed item, moves nothing. */
 	tab = fm_ui_tab(app);
-	if (desk->drop_column < 0 || desk->press_index < 0 || (size_t)desk->press_index >= desk->place_count) {
+	if (desk->drop_column < 0 ||
+	    desk->press_index < 0 ||
+	    (size_t)desk->press_index >= desk->place_count) {
 		fm_log("DESKTOP move none");
 		return 1;
 	}
@@ -405,6 +419,9 @@ fm_desktop_dropped(
 
 	/* The marks are done with. */
 	free(assigned);
+
+	/* Succeeded: the assigned dropped-item places have been reported. */
+	return;
 }
 
 /*
@@ -474,6 +491,9 @@ drop_find(
 		app->drop_answer = 1;
 		fm_log("DESKTOP drop target=%s", app->drag_folder);
 	}
+
+	/* Succeeded: the compositor will hear any changed target. */
+	return;
 }
 
 /*
@@ -579,7 +599,10 @@ drop_move_item(
 	row = desk->places[item].row + dy;
 
 	/* Off the grid: it stays. */
-	if (column < 0 || column >= columns || row < 0 || row >= rows) {
+	if (column < 0 ||
+	    column >= columns ||
+	    row < 0 ||
+	    row >= rows) {
 		fm_log("DESKTOP move name=%s kept reason=grid", name);
 		return;
 	}
@@ -595,6 +618,9 @@ drop_move_item(
 	assigned[column * rows + row] = 1U;
 	error = fm_desktop_layout_set(desk, name, column, row);
 	fm_log("DESKTOP move name=%s column=%d row=%d error=%d", name, column, row, error);
+
+	/* Succeeded: the saved move has been reported. */
+	return;
 }
 
 /* Finds the desktop's folder (the tab's place). */
@@ -609,4 +635,7 @@ drop_folder_path(
 	/* The place the tab shows now. */
 	tab = fm_ui_tab(app);
 	snprintf(folder, size, "%s", tab->history[tab->history_index].location.path);
+
+	/* Succeeded: the caller has the target folder path. */
+	return;
 }

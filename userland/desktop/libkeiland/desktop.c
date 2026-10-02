@@ -24,6 +24,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Marks protocol callback arguments that this client does not inspect. */
+#define UNUSED_PARAMETER(name) ((void)(name))
+
 /* The version of the protocol this library speaks, and its requests. */
 #define DESKTOP_VERSION		1U
 #define DESKTOP_MANAGER_DESTROY	0U
@@ -54,7 +57,6 @@ struct desktop_proxy_listener {
 	void (*configure)(void *data, struct wl_proxy *proxy, uint32_t serial, int32_t x, int32_t y, int32_t width, int32_t height);
 };
 
-static struct wl_proxy *desktop_bind(struct wl_display *display);
 static void desktop_global(void *data, struct wl_registry *registry, uint32_t name, const char *interface, uint32_t version);
 static void desktop_global_remove(void *data, struct wl_registry *registry, uint32_t name);
 static void desktop_configure(void *data, struct wl_proxy *proxy, uint32_t serial, int32_t x, int32_t y, int32_t width, int32_t height);
@@ -126,6 +128,8 @@ static const struct desktop_proxy_listener desktop_proxy_listener = {
 	desktop_configure
 };
 
+static struct wl_proxy *desktop_bind(struct wl_display *display);
+
 /*
  * Gives a surface the desktop's role with the token the compositor gave
  * the program.  The listener hears configure (where the surface is and its
@@ -172,13 +176,17 @@ keiland_desktop_create(
 
 	/* The protocol object; the binding is not needed after it. */
 	desktop->proxy = wl_proxy_marshal_constructor(manager, DESKTOP_MANAGER_GET, &keiland_desktop_surface_v1_interface, NULL, surface, token);
-	wl_proxy_marshal(manager, DESKTOP_MANAGER_DESTROY);
-	wl_proxy_destroy(manager);
 	if (desktop->proxy == NULL) {
+		wl_proxy_marshal(manager, DESKTOP_MANAGER_DESTROY);
+		wl_proxy_destroy(manager);
 		free(desktop);
 		errno = ENOMEM;
 		return NULL;
 	}
+
+	/* Releases the binding once the new protocol object owns its role request. */
+	wl_proxy_marshal(manager, DESKTOP_MANAGER_DESTROY);
+	wl_proxy_destroy(manager);
 
 	/* The configure comes to the record. */
 	status = wl_proxy_add_listener(desktop->proxy, (void (**)(void))&desktop_proxy_listener, desktop);
@@ -203,6 +211,9 @@ keiland_desktop_ack(
 {
 	/* The request, sent with the next flush. */
 	wl_proxy_marshal(desktop->proxy, DESKTOP_SURFACE_ACK, serial);
+
+	/* Succeeded: the configure acknowledgement is queued. */
+	return;
 }
 
 /*
@@ -220,6 +231,9 @@ keiland_desktop_destroy(
 	wl_proxy_marshal(desktop->proxy, DESKTOP_SURFACE_DESTROY);
 	wl_proxy_destroy(desktop->proxy);
 	free(desktop);
+
+	/* Succeeded: the desktop role and record are released. */
+	return;
 }
 
 /* Binds zdesktop's desktop manager through a registry of the library's own (as glass.c does). */
@@ -297,13 +311,17 @@ desktop_global(
 	struct desktop_search *search;
 	int match;
 
+	UNUSED_PARAMETER(registry);
+	UNUSED_PARAMETER(version);
+
 	/* Only the desktop manager is looked for. */
 	search = data;
-	(void)registry;
-	(void)version;
 	match = strcmp(interface, "keiland_desktop_manager_v1");
 	if (match == 0)
 		search->name = name;
+
+	/* Succeeded: any matching manager name has been recorded. */
+	return;
 }
 
 /* A global going away does not matter to the search. */
@@ -313,10 +331,12 @@ desktop_global_remove(
 	struct wl_registry *registry,
 	uint32_t name)
 {
-	/* Nothing to do. */
-	(void)data;
-	(void)registry;
-	(void)name;
+	UNUSED_PARAMETER(data);
+	UNUSED_PARAMETER(registry);
+	UNUSED_PARAMETER(name);
+
+	/* Succeeded: the completed search needs no removal bookkeeping. */
+	return;
 }
 
 /* Passes a configure on to the program's listener. */
@@ -332,11 +352,15 @@ desktop_configure(
 {
 	struct keiland_desktop *desktop;
 
+	UNUSED_PARAMETER(proxy);
+
 	/* The record the listener was added with. */
 	desktop = data;
-	(void)proxy;
 
 	/* The program's listener, when it has one. */
 	if (desktop->listener != NULL && desktop->listener->configure != NULL)
 		desktop->listener->configure(desktop->data, desktop, serial, x, y, width, height);
+
+	/* Succeeded: any registered listener has received the configure. */
+	return;
 }

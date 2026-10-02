@@ -24,7 +24,7 @@
 #define PICTURE_TIFF_SHORT		3U
 
 /* Marks a parameter a callback has but does not use. */
-#define PICTURE_UNUSED(name)	((void)(name))
+#define UNUSED_PARAMETER(name) ((void)(name))
 
 /* The marker that carries EXIF (APP1). */
 #define PICTURE_JPEG_APP1		(JPEG_APP0 + 1)
@@ -45,7 +45,9 @@ static int picture_too_large(unsigned long width, unsigned long height, unsigned
 static unsigned picture_read16(const unsigned char *data, int big_endian);
 static unsigned long picture_read32(const unsigned char *data, int big_endian);
 
-/* Makes a premultiplied 0xAARRGGBB word of straight components. */
+/*
+ * Makes a premultiplied 0xAARRGGBB word of straight components.
+ */
 uint32_t
 keiland_picture_premultiply(
 	unsigned red,
@@ -64,7 +66,7 @@ keiland_picture_premultiply(
 	word |= (uint32_t)green << 8;
 	word |= (uint32_t)blue;
 
-	/* Reports the premultiplied pixel. */
+	/* Succeeded: the caller has the premultiplied pixel. */
 	return word;
 }
 
@@ -85,7 +87,7 @@ keiland_picture_exif_orientation(
 	unsigned index;
 	unsigned tag;
 	unsigned type;
-	unsigned value;
+	unsigned field_value;
 	int big_endian;
 	int match;
 
@@ -112,8 +114,8 @@ keiland_picture_exif_orientation(
 	}
 
 	/* The magic 42 confirms the header. */
-	value = picture_read16(tiff + 2, big_endian);
-	if (value != 42U)
+	field_value = picture_read16(tiff + 2, big_endian);
+	if (field_value != 42U)
 		return 1;
 
 	/* The first directory, which must hold its count. */
@@ -136,21 +138,21 @@ keiland_picture_exif_orientation(
 		if (tag != PICTURE_EXIF_ORIENTATION)
 			continue;
 
-		/* A SHORT value sits at the start of the entry's value field. */
+		/* A SHORT occupies the start of the EXIF entry's value field. */
 		type = picture_read16(tiff + offset + 2U, big_endian);
 		if (type != PICTURE_TIFF_SHORT)
 			return 1;
 
-		/* The value, which must be one of the eight orientations. */
-		value = picture_read16(tiff + offset + 8U, big_endian);
-		if (value < 1U || value > 8U)
+		/* The stored orientation must name one of the eight transforms. */
+		field_value = picture_read16(tiff + offset + 8U, big_endian);
+		if (field_value < 1U || field_value > 8U)
 			return 1;
 
 		/* Reports the orientation the file gives. */
-		return (int)value;
+		return (int)field_value;
 	}
 
-	/* No orientation: the picture is shown as stored. */
+	/* Succeeded: an absent orientation leaves the picture as stored. */
 	return 1;
 }
 
@@ -191,6 +193,7 @@ keiland_picture_orient(
 
 	/* Each pixel of the turned picture, from where the orientation says it was. */
 	for (y = 0; y < height; y++) {
+		/* Maps this turned row back to the original picture. */
 		for (x = 0; x < width; x++) {
 			/* The source pixel of this orientation. */
 			switch (orientation) {
@@ -393,7 +396,9 @@ keiland_picture_jpeg(
 	return 0;
 }
 
-/* Draws one frame of a GIF onto its screen, leaving its transparent colour's pixels as they are. */
+/*
+ * Draws one frame of a GIF onto its screen, leaving its transparent colour's pixels as they are.
+ */
 void
 keiland_picture_gif_draw(
 	const GifFileType *gif,
@@ -404,7 +409,7 @@ keiland_picture_gif_draw(
 	const SavedImage *frame;
 	const ColorMapObject *map;
 	const GifColorType *colour;
-	unsigned value;
+	unsigned colour_index;
 	int screen_x;
 	int screen_y;
 	int x;
@@ -433,15 +438,18 @@ keiland_picture_gif_draw(
 				continue;
 
 			/* A transparent pixel, or a colour the map lacks, leaves the screen as it is. */
-			value = frame->RasterBits[(size_t)y * (size_t)frame->ImageDesc.Width + (size_t)x];
-			if ((int)value == transparent || (int)value >= map->ColorCount)
+			colour_index = frame->RasterBits[(size_t)y * (size_t)frame->ImageDesc.Width + (size_t)x];
+			if ((int)colour_index == transparent || (int)colour_index >= map->ColorCount)
 				continue;
 
 			/* The map's colour, opaque, onto the screen. */
-			colour = &map->Colors[value];
+			colour = &map->Colors[colour_index];
 			screen[(size_t)screen_y * (size_t)gif->SWidth + (size_t)screen_x] = keiland_picture_premultiply(colour->Red, colour->Green, colour->Blue, 255U);
 		}
 	}
+
+	/* Succeeded: the frame has been composited onto its screen. */
+	return;
 }
 
 /*
@@ -508,9 +516,11 @@ picture_jpeg_quiet(
 	j_common_ptr info,
 	int level)
 {
-	/* A warning changes nothing that is shown, so it is dropped. */
-	PICTURE_UNUSED(info);
-	PICTURE_UNUSED(level);
+	UNUSED_PARAMETER(info);
+	UNUSED_PARAMETER(level);
+
+	/* Succeeded: the warning has been discarded. */
+	return;
 }
 
 /* Reads a JPEG's orientation from its saved APP1 markers (1 when there is none). */
@@ -535,7 +545,7 @@ picture_jpeg_orientation(
 			return orientation;
 	}
 
-	/* The picture as stored. */
+	/* Succeeded: the default orientation keeps the picture as stored. */
 	return 1;
 }
 
@@ -561,7 +571,7 @@ picture_too_large(
 	if (max_pixels != 0UL && width > max_pixels / height)
 		return 1;
 
-	/* A size the program can hold. */
+	/* Succeeded: the dimensions fit the caller's limits. */
 	return 0;
 }
 
@@ -575,7 +585,7 @@ picture_read16(
 	if (big_endian)
 		return ((unsigned)data[0] << 8) | (unsigned)data[1];
 
-	/* Reports the little-endian number. */
+	/* Succeeded: reports the decoded little-endian number. */
 	return ((unsigned)data[1] << 8) | (unsigned)data[0];
 }
 
@@ -591,7 +601,7 @@ picture_read32(
 		    ((unsigned long)data[2] << 8) | (unsigned long)data[3];
 	}
 
-	/* Reports the little-endian number. */
+	/* Succeeded: reports the decoded little-endian number. */
 	return ((unsigned long)data[3] << 24) | ((unsigned long)data[2] << 16) |
 	    ((unsigned long)data[1] << 8) | (unsigned long)data[0];
 }

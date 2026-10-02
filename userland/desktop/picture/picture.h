@@ -37,8 +37,7 @@ struct keiland_picture {
 uint32_t keiland_picture_premultiply(unsigned red, unsigned green, unsigned blue, unsigned alpha);
 int keiland_picture_exif_orientation(const unsigned char *data, size_t size);
 int keiland_picture_orient(struct keiland_picture *picture, int orientation);
-int keiland_picture_jpeg(FILE *file, const unsigned char *data, size_t size, unsigned max_side, unsigned long max_pixels,
-    struct keiland_picture *picture, int *orientation);
+int keiland_picture_jpeg(FILE *file, const unsigned char *data, size_t size, unsigned max_side, unsigned long max_pixels, struct keiland_picture *picture, int *orientation);
 void keiland_picture_gif_draw(const GifFileType *gif, int index, int transparent, uint32_t *screen);
 int keiland_picture_gif_first(GifFileType *gif, unsigned max_side, unsigned long max_pixels, struct keiland_picture *picture);
 

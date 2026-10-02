@@ -61,6 +61,7 @@ fm_present_instance(
 	VkApplicationInfo application;
 	VkInstanceCreateInfo instance;
 	const char *extensions[2];
+	VkResult error;
 
 	/* Nothing is owned yet. */
 	memset(present, 0, sizeof(*present));
@@ -72,13 +73,20 @@ fm_present_instance(
 	application.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	application.pApplicationName = "files";
 	application.apiVersion = VK_API_VERSION_1_0;
+
+	/* Describes the instance that owns the desktop surface. */
 	memset(&instance, 0, sizeof(instance));
 	instance.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	instance.pApplicationInfo = &application;
 	instance.enabledExtensionCount = 2U;
 	instance.ppEnabledExtensionNames = extensions;
 	present->operation = "vkCreateInstance";
-	return vkCreateInstance(&instance, NULL, &present->instance);
+	error = vkCreateInstance(&instance, NULL, &present->instance);
+	if (error != VK_SUCCESS)
+		return error;
+
+	/* Succeeded: the presenter owns the Vulkan instance. */
+	return VK_SUCCESS;
 }
 
 /*
