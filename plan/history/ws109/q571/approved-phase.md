@@ -2,10 +2,10 @@
 
 # ws109p004: audio・network・WiFi の FreeBSD backend
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q571 / q571-i01
+Queue / Attempt: q555 / q555-i01
 
 ## 目的・範囲
 
@@ -105,9 +105,3 @@ Reconcile exact F4 with current backend/probe sourcehashes and actual remoteclon
 identity/settings; classify WPApeer as wiremock, not actualradio/storage. No source semantics or
 hostnetwork/device changes, no unnecessary repeatedstress. If hashes/evidence do not match, preserve
 uncleared and specify changedverification. FinalGPUmainapps/source/docsp005 remains independent.
-
-## Result / q571-i01 / 2026-10-02T01:26:11.768717+00:00
-
-Queue item cleared /whole Phase cleared。F4 verified using unchanged actualOSS/nativewired/radioABI/WPAwire evidence and current nativeguest; physicalradio userwaived, mock correctlyclassified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q571/result.md). F5mainapps/finalreview remains.
-
-Event ws109-q571-cleared: local evidence/outcome saved; remote comment and close intent pending.

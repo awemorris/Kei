@@ -1,0 +1,14 @@
+15.1-RELEASE-p4
+15.1-RELEASE-p4
+vol.volume=0.86:0.86
+vol.mute=off
+vtnet0: flags=1008843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST,LOWER_UP> metric 0 mtu 1500
+	options=880028<VLAN_MTU,JUMBO_MTU,LINKSTATE,HWSTATS>
+	ether 52:54:00:12:34:56
+	inet 10.0.2.15 netmask 0xffffff00 broadcast 10.0.2.255
+	inet6 fe80::5054:ff:fe12:3456%vtnet0 prefixlen 64 scopeid 0x1
+	inet6 fec0::5054:ff:fe12:3456 prefixlen 64 autoconf pltime 14400 vltime 86400
+	media: Ethernet autoselect (10Gbase-T <full-duplex>)
+	status: active
+	nd6 options=23<PERFORMNUD,ACCEPT_RTADV,AUTO_LINKLOCAL>
+hw.snd.default_unit: 0

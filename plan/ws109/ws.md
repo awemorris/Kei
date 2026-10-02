@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q570 finished）
-Resume point: p003 cleared; Actual nativeGPU window/VT asynchronous lease retirement→reacquisition/input/93frames/cleanup PASS; q569 DMAownership/window output retained. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q570/result.md). Whole F3 cleared, F4closure/F5mainapps/finalstandards remain.
+Queue: なし（q571 finished）
+Resume point: p004 cleared; F4 verified using unchanged actualOSS/nativewired/radioABI/WPAwire evidence and current nativeguest; physicalradio userwaived, mock correctlyclassified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q571/result.md). F5mainapps/finalreview remains.
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -49,7 +49,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | cleared / q565 | p001 |
 | [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | cleared / q570 | p002 L1 verified output |
-| [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
+| [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | cleared / q571 | p002 L1 verified output |
 | [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | uncleared / q566 | p002 F2 verified + p003/p004 implementation outputs for subset; actual QEMU i915 GPU output for whole |
 
 
@@ -182,3 +182,5 @@ ws109-q569-native-zeroaccess-capability: p003 native-only recognition of BUG-130
 ws109-q570-native-vt-integration: nativeGPU/VT integration investigation selected after q569 positivewindow but failedleasepause. F3/p005 retain actuallifecycle/input gates; boundedtechnical fixture/native adapter corrections delegated.
 
 2026-10-02T01:24:59.323020+00:00 / ws109-q570-cleared: p003 cleared。Actual nativeGPU window/VT asynchronous lease retirement→reacquisition/input/93frames/cleanup PASS; q569 DMAownership/window output retained. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q570/result.md). Whole F3 cleared, F4closure/F5mainapps/finalstandards remain.
+
+2026-10-02T01:26:11.774458+00:00 / ws109-q571-cleared: p004 cleared。F4 verified using unchanged actualOSS/nativewired/radioABI/WPAwire evidence and current nativeguest; physicalradio userwaived, mock correctlyclassified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q571/result.md). F5mainapps/finalreview remains.
