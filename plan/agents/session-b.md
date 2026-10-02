@@ -70,3 +70,14 @@ earlier attempt outcomes and prepared artifacts. Main verifies the terminal
 submission and maintains pending A-owned shared history/projections. This latest
 direction ends B3 as well as B1/B2 after their respective wrap-ups; no successor
 Queues are dispatched.
+
+## All-agent safe wrap-up / 2026-10-02
+
+Current user:「すべてのエージェントを終了に向かわせます。」「きりのいいところで作業をきりあげてもらいます。」
+
+All B agents received this direction. Current processes finish at a safe boundary;
+new guests, successor Queues and optional repetitions are not started. Preserve
+actual results, uncleared criteria, resume inputs and normal shutdown/readback.
+B main reviews and integrates the final submissions, saves the handoff and ends
+after the three children wrap up. A-owned shared publication/projections remain
+durably pending in the handoff; no push is performed.

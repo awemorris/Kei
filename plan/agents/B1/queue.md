@@ -23,3 +23,7 @@ Scope amendment01 / 2026-10-02: [GTK4 release correction](../../ws114/phase007/q
 MR B1-q587-01: submitted831635c3 / B integrated4b655803 / ACK。Phase startとamendmentの競合は両event保持で解決、source競合無し。wire mode/order PASS、CSD GL画面と入力release欠落証拠をreview。後続release修正・最終runtime/regressionが未達なのでclearanceなし。[checkpoint](../../ws114/phase007/q587-checkpoint-01.md)。
 
 2026-10-02 / user-b1-b2-wrap-up-20261002: userが現在のPhase後のwrap-up/終了を指示。B1は受領し、q587を既存scope/deadlineまでに結果・残作業・cleanup・MRとして保存して終了する。後続Queueは開始しない。
+
+MR B1-q587-02: submitted19452fe8 / B integrated6f04f1a8 / ACK。origin/button ownershipとteardown、exact1 release/frame、他button維持・rightbutton move、GTK各renderer/native部分をreview。source/test/Phase diff check PASS。raw release-review.diffは元diffのcontext空白を証拠として保持。未達を保持、terminal結果は待機。
+
+2026-10-02 / user-all-wrap-up-20261002: userが全agentをきりのいいところで切り上げるよう指示。B1は現Texteditを閉じて正常compositor/guest停止、q587/p007をunclearedで最終保存する方針を受領。未開始boot/追加反復は開始しない。
