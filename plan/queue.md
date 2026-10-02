@@ -2,10 +2,10 @@
 
 # Queue / all-agent index
 
-Active Queues: q607（P1）、q609（P2）、q610（P3）、P4 は待機（利用枠の配分）。
+Active Queues: q611（P1 generation3）、q609（P2）、q610（P3）、P4 は待機（利用枠の配分）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q611。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q613。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
@@ -25,7 +25,9 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 | q608 / q608-i01 | P3 | [ws115-p007](ws115/phase007/phase.md) | pixman・cairo・fribidi・pango、4h | finished / cleared（QEMU で pango の日本語の PNG・boot-test PASS） | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md)、P3 03f00921d → main db8f21553 |
 | q609 / q609-i01 | P2 | [ws099-p023](ws099/phase023/phase.md) | BUG-136 Gears・Notes のタイトルバー、BUG-137 Terminal の遅れ、直す前から落ちる C3/C4/C8/C9 の試験、C9 ×5、4h | in-progress | user 2026-10-02 の実機の指摘＋継続 dispatch、[lane](agents/P2/queue.md) |
 | q610 / q610-i01 | P3 | [ws115-p008](ws115/phase008/phase.md) | gdk-pixbuf・jpeg・tiff・graphene・libepoxy（SONAME の patch）・libxkbcommon、4h | in-progress | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md) |
-| q607 / q607-i01 | P1 | [ws005-p024](ws005/phase024/phase.md) | 起動時の enable で保存済み AP に自動再接続（実装と QEMU の試験。実 AP の試験は承認待ち）、3h | in-progress | 2026-10-02 user「networkdが有効になって、net wifi enableされたとき…コンソール起動でもWiFi接続は自動」「WiFiの自動接続のテストもお願いします。」 |
+| q611 / q611-i01 | P1 | [ws005-p019](ws005/phase019/phase.md) | 実 AP（2.4/5GHz）の join・DHCP・ping・B3 の切替え（5330 AX211 passthrough）、2h | in-progress | user「WiFiの資格情報を利用することを明示的に許可します。」 |
+| q612 / q612-i01 | P1（q611 の後） | [ws005-p024](ws005/phase024/phase.md) | 改訂した設計: 起動時は system の store、login で利用者の store を通知・logout で除去、試験、3h | reserved | user「WiFi自動再接続を明示的に承認します。」と設計の改訂 |
+| q607 / q607-i01 | P1 | [ws005-p024](ws005/phase024/phase.md) | 起動時の enable で保存済み AP に自動再接続（実装と QEMU の試験。実 AP の試験は承認待ち）、3h | finished / uncleared（旧設計が permission で拒否、ユーザーが設計を改訂） | 2026-10-02 user「networkdが有効になって、net wifi enableされたとき…コンソール起動でもWiFi接続は自動」「WiFiの自動接続のテストもお願いします。」 |
 | q601 / q601-i01 | P1 | [ws118-p001](ws118/phase001/phase.md) | 5320 の遠隔 log 用 image（sshd、USB LAN、3 種、手順書）、QEMU で SSH まで、実機は使わない、3h | paused（q599-i04 の割り込み） | 継続 dispatch（user 2026-10-02、5320 は「SSHDを起動してリモート実機でログを取れるようなイメージを作成」）、[lane](agents/P1/queue.md) |
 | q599 / q599-i04 | P1 | [ws005-p019](ws005/phase019/phase.md) | 実際の join（2.4/5GHz）・DHCP・B3 の切替えを 5330 の AX211 passthrough で、2h | finished / uncleared（permission system が「Third-Party Attack」として拒否、ユーザー本人の直接の承認か permission rule 待ち。guest に入力なし、host 復元済み） | user が試験用 AP の資格情報を chat で提供（記録には書かない） |
 | q599 / q599-i02 | P1 | [ws005-p019](ws005/phase019/phase.md) | BUG-138 の続き: networkd で network group の利用者に WiFi の制御を許可、desktop からの on/off・join を AX211 passthrough で確認、有線優先の route/DNS、4h | finished / uncleared（permission system が relayed approval を受け付けず再拒否、ユーザーの直接の許可待ち） | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」、[lane](agents/P1/queue.md) |

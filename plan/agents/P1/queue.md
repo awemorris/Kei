@@ -27,3 +27,5 @@ Next（予約）: ws005-p024（起動時の自動再接続）→ q601（ws118-p0
 | q599 / q599-i04 | ws005-p019 | 実 AP の join の試験 | user の資格情報 | 2h | finished / uncleared（permission の拒否） |
 | P1-008 | q599-i04・q601 途中 | fa2289544・c47e5e499（head c2b561542） | plan/ws005/phase019・plan/ws118 | integrated fd09a68c7 |
 | q607 / q607-i01 | ws005-p024 | 起動時の自動再接続 | user | 3h | in-progress |
+| q607 / q607-i01 | ws005-p024 | 旧設計（member の store を起動時に読む） | — | — | finished / uncleared（permission の拒否、設計はユーザーが改訂） |
+| P1-009 | wrap | b6e5ac6ef・348850406・d108d0a0d | plan/ws005/phase024・plan/ws118 | integrated 14ea3f606（phase024 の衝突は両方を残した） |
