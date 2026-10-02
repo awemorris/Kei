@@ -1,6 +1,6 @@
 # WS113: 能力照合・契約・後続検証
 
-Status: incomplete / p001 in-progress / q586-i01。
+Status: incomplete / p001 uncleared / q586-i01終了（2026-10-02 08:42 UTC、90分上限、D-ATOMIC未決）。
 調査: 2026-10-02、source baseline `0e68854ac`。文書だけを変更し、production source、driver/HAL API、hardware/SSH/host、toolchainを変更していない。
 
 ## p001成果と未決

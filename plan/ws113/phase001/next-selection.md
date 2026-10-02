@@ -35,7 +35,7 @@ Scope/commands/version/fixturesのexact listは実implementation選定時に固�
 
 | prerequisite | 現在の証拠 / まだ必要なもの |
 | --- | --- |
-| p001 cleared | D-ID A2/boot/layout/reconnect/auth/初回fixtureはmain採択。D-ATOMICはuser回答待ち、p001 in-progress。whole-Phase依存を飛ばしてq592開始しない |
+| p001 cleared | D-ID A2/boot/layout/reconnect/auth/初回fixtureはmain採択。D-ATOMICはuser回答待ち、p001/q586-i01は08:42の上限でuncleared。whole-Phase依存を飛ばしてq592開始しない |
 | API ownership | 既存native契約/source不足とsemantic結線は保存済み。exact common GPU/UAPI差分、callback ABIとfull rulesをmain/owner reviewし、HALに触るなら差分事前承認 |
 | hardware execution | historical eDP+HDMIだけで現可用性は未確認。実行器owner、競合Queue、lock、finite操作、許可evidenceをmanifestに記録してから選定 |
 | review/sync | A3 checkpoint→main ACK、p001/WS/foreign Phase eventのpending deliveryとcanonical Queue/Agent lane projectionをmainが照合 |

@@ -7,7 +7,7 @@ Primary Milestone: MG006
 Related Milestones: MG001（GPU/API契約と回帰証拠）
 Parent: [Master](../master.md)
 Queue: q586 / A3（p001契約調査のみ、製品実装は後続）
-Resume point: p001契約/能力20行とfixture設計を保存。D-ID A2/旧boot anchorはmain採択済み、D-ATOMIC user回答/main reviewとoutcome判定。実装順位/次Queueは未指定。
+Resume point: p001/q586-i01 uncleared（90分上限、D-ATOMIC未決）。契約/能力20行/fixture/次候補保存、D-ID A2等main採択済み。D-ATOMIC採択と同p001新attemptのexact approvalを待つ。実装順位/次Queueは未指定。
 
 ## Objective / scope
 
@@ -37,7 +37,7 @@ zedBSD i915で外部ディスプレイの接続/切断をVulkan Display拡張か
 
 | ID/link | Purpose | Goal | Status | Dependencies |
 | --- | --- | --- | --- | --- |
-| [ws113-p001](phase001/phase.md) | 契約・能力と実機fixture | hotplug/複数出力/拡張とmirror/Settings/窓所属の仕様を確定 | in-progress / q586 | 既存WS075/WS089/WS103の実出力を確認（context） |
+| [ws113-p001](phase001/phase.md) | 契約・能力と実機fixture | hotplug/複数出力/拡張とmirror/Settings/窓所属の仕様を確定 | uncleared / q586-i01 | 既存WS075/WS089/WS103の実出力を確認（context） |
 | [ws113-p002](phase002/phase.md) | i915のHPD・複数display出力 | driverからGPU表示イベントを提供し、複数出力を同時に扱う | planned | p001 cleared/driver契約 |
 | [ws113-p003](phase003/phase.md) | Vulkan Displayの列挙・通知 | libvulkanから標準Display API/拡張でhotplugと複数出力を公開 | planned | p002 cleared/実driverイベント |
 | [ws113-p004](phase004/phase.md) | compositorの出力・表示モード | 全拡張または全mirrorで複数outputを描画 | planned | p003 cleared/Vulkanの実複数出力 |
@@ -61,3 +61,5 @@ p008はp002〜p007の実出力を要する。見込みは実装許可ではな�
 2026-10-02 / ws113-local-port-id-20261002-a3-ws113: mainがA2（同machine/local PCI segment:BDF+kind+物理DDI key）をnative name→standard displayNameへ採択。37byte/NUL38例を確認、64byte上限・invalid/unknown/collision拒否・mode/capability再validate・kind/port人向けlabelを契約化。GPU UUIDquery追加と私有Vulkan拡張は必須にしない。旧boot hdmi/edpはpreferred anchorで全connected inventoryを隠さない。p001–p008の影響/foreign eventを保存。D-ATOMICのみuser回答待ち、現physical fixtureは後続readiness未確認。新API/製品実装承認へ拡大無し。main remote delivery/projection pending。
 
 2026-10-02 / ws113-next-selection-20261002-a3-ws113: p001がq592候補/criteria mappingとcheckpoint ledgerを保存。p002追加/依存変更/実装承認は無し。D-ATOMIC回答とp001 outcome判定を待ち、次Queueはmainのexact approval/actual readinessを必要とする。同一agent sessionを保ちcheckpoint後に次指示待機。main delivery/projection pending。
+
+2026-10-02 08:42 UTC / ws113-q586-result-20261002-a3-ws113: p001/q586-i01は90分上限でuncleared。D-ATOMIC未決が契約確定を妨げ、artifact/他技術採択/有限fixtureは保存。WS incomplete、p002–009 planned/未承認を保持。p001 resumeはD-ATOMIC採択とexact残scopeの新attempt選定。source/実機成果でclearした意味にはしない。[origin outcome](phase001/phase.md)/[ledger](phase001/evidence.md)。main outcome projection/history/remote delivery pending。同session次指示待機。
