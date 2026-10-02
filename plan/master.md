@@ -238,6 +238,8 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 ユーザー指示によりメインセッションをAgent AとAgent Bに分け、各セッションが最大3サブエージェントを起動する。この表は一時的な実行所有であり、WSの目的・優先順位・依存・Queue承認・保留判断を変更しない。Phase単位の有限Queueを作ってから実行し、単に担当欄に入ったことを実装許可にしない。
 
+起動時の正本は[Agent A](agents/session-a.md)と[Agent B](agents/session-b.md)。Aは`/home/awe/zedBSD-claude1`の`main`、Bは`/home/awe/zedBSD-claude2`の`codex/agent-b`を使い、同じ`origin/main` handoff commitから開始する。
+
 | Session / lane | 担当WS | 当面の順序と境界 |
 | --- | --- | --- |
 | **Agent A / A1 Browser** | **WS074**（browser固有bugを含む） | p172 whole-clear → p100 Acid3 pixel完全一致 → p174 File System Access → p175 OPFS → p173 Interop 2025 100% → p176 Test262。p101 CSS2も保持。browser/libbrowser sourceとそのbugはAだけが編集する |

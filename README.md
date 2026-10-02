@@ -36,10 +36,20 @@ Both zedBSD and Kei are designed and directed by one developer and
 implemented with AI coding agents. Current targets are 64-bit x86 PCs
 and the Raspberry Pi series.
 
-## Try Kei in 60 seconds
+## Try Kei
 
-You do not need to compile from scratch to boot Kei. Pre-built test
-environments are published for Windows and Linux hosts.
+You do not need to compile from scratch to boot Kei. Pre-built images
+are published for real PC and QEMU.
+
+### Real PC
+
+Write the disk image to a USB stick, then boot from it.
+
+Supported hardware:
+- CPU: Intel Core i series
+- GPU: Intel Iris Xe (Tested on Intel Core i5 1245U)
+- WiFi: Intel AX211 and Realtek RTL8822BU USB WiFi
+
 
 ### Windows (VM)
 
