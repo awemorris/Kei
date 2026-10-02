@@ -1,5 +1,41 @@
 # Agent B → A pending projection checkpoint / 2026-10-02
 
+## Latest wrap-up integration for Agent A
+
+User requested all B agents to stop at safe boundaries, then instructed main to
+wait for their final成果, integrate with WIP commits and push codex/agent-b to
+the same remote branch. This supersedes the earlier no-push instruction for the
+integration branch only. A owns shared Queue/history/Master/registry/Bug/GitHub
+publication; B has retained the required outcomes/events locally.
+
+| Lane | Terminal submission / integration | Outcome / resume |
+| --- | --- | --- |
+| B1 | MR02 19452fe8 → 6f04f1a8; terminal MR pending | q587 CSD and original-client move/resize release implemented; Linux/native partial evidence saved, guest stopped. Final runtime/clipboard/zedBSD boot acceptance pending; uncleared terminal being saved. |
+| B2 | final111b864a → 9323725b; ACK04f05ff1 | q588 partial cleared, whole WS094 p007 uncleared/WS incomplete. 56-path inventory/manual review, host4/private warning0 build/boundary/probe limited negatives saved. All owned processes stopped, B2 ended. |
+| B3 | finald3396117 → 90c124e8; ACK5d29dcfb | q589 uncleared, helper/host negative preparation only; guest5/boot unexecuted. Whole p017 uncleared, BUG125 reproduced/tracking. No owned process, B3 ended. |
+
+Reserved q593/WS099 p019 remains unstarted. The user selected the old blurred
+lake as the 3 OS startup default, preserving existing selectable backgrounds
+and saved-setting precedence. Existing PNG/PPM hashes/provenance and the proposed
+native/zedBSD asset recipes are in [B2's resume note](../ws094/phase007/q593-resume.md).
+The straight abstract variant was not found within the recorded search bounds.
+No wallpaper source/install change was implemented.
+
+Required A projections: q582/q583/q581 prior terminal histories plus latest
+q587/q588/q589 terminal histories and Past Log; shared lane/index ownership ended;
+WS094 p007 partial-vs-whole status; WS114 p007/amendment/changed foreign Phase
+events and dependencies; WS099 p017/BUG125 evidence and new p019/default/resume
+events; Master/registry/Outlook and any pending remote comments/mappings. Preserve
+all prior attempt outcomes; these summaries do not grant new execution authority.
+
+Integration review: no product source conflicts; Phase event/status conflicts
+were reconciled against recorded intent. Main checked source/test/record whitespace
+(raw diff evidence preserved), viewed GTK/native PNGs, checked B2's 19 local
+evidence hashes and B3's four durable artifact hashes. No new guest/whole-image
+test was started during wrap-up; unverified criteria remain explicit below.
+
+Earlier checkpoints below are historical, not the current lane state.
+
 B checkout: /home/awe/zedBSD-claude2 / codex/agent-b.
 Integrate through commit60201ab8 (plus this handoff record). Shared Boards,
 Master, history, registry, Guardrail and remote sync remain A-owned.
