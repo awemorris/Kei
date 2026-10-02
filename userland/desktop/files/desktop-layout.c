@@ -476,6 +476,62 @@ fm_desktop_layout_set(
 }
 
 /*
+ * Forgets saved places whose names are absent from a successful listing.
+ *
+ * Names without a visible cell still keep their saved place. The layout
+ * file changes only when a later placement or rename writes these places.
+ */
+void
+fm_desktop_layout_prune(
+	struct fm_desktop *desk,
+	const char *const *names,
+	size_t count)
+{
+	size_t saved_index;
+	size_t name_index;
+	size_t kept;
+	size_t removed;
+	int differs;
+	int present;
+
+	/* Keep each saved place whose name belongs to the complete listing. */
+	kept = 0U;
+	for (saved_index = 0U; saved_index < desk->saved_count; saved_index++) {
+		/* Find this name among all entries, including overflow entries. */
+		present = 0;
+		for (name_index = 0U; name_index < count; name_index++) {
+			differs = strcmp(desk->saved[saved_index].name, names[name_index]);
+			if (differs == 0) {
+				present = 1;
+				break;
+			}
+		}
+
+		/* Missing entries leave no place in the compacted saved array. */
+		if (!present)
+			continue;
+
+		/* Preserve the retained places in their original order. */
+		desk->saved[kept] = desk->saved[saved_index];
+		kept++;
+	}
+
+	/* Publish the retained count to the next layout-file writer. */
+	removed = desk->saved_count - kept;
+	desk->saved_count = kept;
+
+	/* Record only listings that actually removed stale saved names. */
+	if (removed != 0U) {
+		fm_log("DESKTOP prune removed=%lu kept=%lu",
+		       (unsigned long)removed,
+		       (unsigned long)kept);
+	}
+
+	/* Succeeded: remaining saved places belong to the listing. */
+	return;
+}
+
+/*
  * Forgets every place the user gave (Clean Up): the items are laid out in
  * order again.  Returns 0 or an errno value.
  */
@@ -684,6 +740,7 @@ fm_desktop_label(
 		else
 			space = head;
 	}
+
 	if (space < length && name[space] == ' ' && space > 0U) {
 		wide = fm_text_width(text, name + space + 1U, length - space - 1U, pixels, 0);
 		if (wide <= width) {

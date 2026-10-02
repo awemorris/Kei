@@ -11,6 +11,8 @@
 #   window    a Files window opens over the icons (window.png)
 #   saved     (ws094-p004) the layout file placed before the desktop starts puts notes.txt at column 2 row 3 (its saved
 #             place), the other items in the free cells (saved.png)
+#   prune     (ws094-p011) a stale saved name remains on disk until a drag saves the layout, then disappears;
+#             overflow is counted without showing extra icons (prune.png, overflow.png)
 #   menu      (ws094-p005, after show) the context menus chosen with the pointer: the empty desktop's New Folder named
 #             Plans in its field (the new item in the free cell, kept there under the new name); notes.txt renamed to
 #             todo.txt from its menu (it keeps its cell); photo.png copied and pasted on the empty desktop (the name is
@@ -198,6 +200,33 @@ i=0; while ! grep -aq 'ZFILES READY' /tmp/zdesktop.log && [ \$i -lt 60 ]; do sle
 		shot saved.png
 		guest "grep -a 'ZFILES DESKTOP place' /tmp/zdesktop.log" > "$out/saved-places.txt"
 		guest 'rm -f /tmp/dhome/.config/keiland/desktop-layout' >/dev/null
+		;;
+	prune)
+		# Keep notes.txt at its saved cell, and prune only the name absent from the successful listing.
+		guest "$stop_all" >/dev/null
+		guest 'mkdir -p /tmp/dhome/.config/keiland; printf "notes.txt\t2\t3\nghost.txt\t4\t4\n" > /tmp/dhome/.config/keiland/desktop-layout' >/dev/null
+		guest "export XDG_RUNTIME_DIR=/tmp HOME=/tmp/dhome; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
+/bin/wayland --timeout=900 --width=1280 --height=800 --glass \$picture --desktop-client='/bin/files --desktop' > /tmp/zdesktop.log 2>&1 </dev/null &
+i=0; while ! grep -aq 'ZFILES READY' /tmp/zdesktop.log && [ \$i -lt 60 ]; do sleep 0.5; i=\$((i+1)); done; sleep 2; echo started" >/dev/null
+		expect_log /tmp/zdesktop.log 'ZFILES DESKTOP prune removed=1 kept=1'
+		expect_log /tmp/zdesktop.log 'ZFILES DESKTOP place name=notes.txt column=2 row=3 '
+		expect_log /tmp/zdesktop.log 'ZFILES DESKTOP ready items=5 cells=5 .* hidden=0$'
+		expect_log /tmp/dhome/.config/keiland/desktop-layout '^ghost.txt'
+		# Drag notes.txt from its saved cell 2,3 to 3,3, using the ordinary save path.
+		pointer move 1024 402 sleep 300 down sleep 150 move 1015 402 sleep 100 move 980 400 sleep 100 \
+			move 950 400 sleep 100 move 900 400 sleep 900 up sleep 1500
+		expect_log /tmp/zdesktop.log 'ZFILES DESKTOP move name=notes.txt column=3 row=3 error=0'
+		layout=$(guest 'cat /tmp/dhome/.config/keiland/desktop-layout')
+		printf '%s\n' "$layout" > "$out/pruned-layout.txt"
+		printf '%s\n' "$layout" | grep -q '^ghost.txt' && { echo 'prune: stale saved name remains'; status=1; }
+		expected=$(printf 'notes.txt\t3\t3')
+		printf '%s\n' "$layout" | grep -qx "$expected" || { echo 'prune: moved saved name MISSING'; status=1; }
+		shot prune.png
+		# Exactly 100 items exceed the 13-by-7 grid by nine, with their display policy preserved.
+		guest 'i=0; while [ $i -lt 95 ]; do printf x > /tmp/dhome/Desktop/overflow-$i.txt; i=$((i+1)); done' >/dev/null
+		expect_log /tmp/zdesktop.log 'ZFILES DESKTOP ready items=100 cells=91 .* hidden=9$'
+		shot overflow.png
+		guest "grep -aE 'DESKTOP (prune|ready)' /tmp/zdesktop.log" > "$out/prune-log.txt"
 		;;
 	menu)
 		# The desktop surface is at y=34: a screen point's surface y is 34 less.  Icons from the top right:

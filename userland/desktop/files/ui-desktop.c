@@ -129,6 +129,9 @@ fm_desktop_draw(
 	struct fm_rect band;
 	struct fm_tab *tab;
 	size_t index;
+	size_t hidden;
+	uint64_t ready_at;
+	long long newest_age;
 	int placed;
 	int cells;
 	int logging;
@@ -194,8 +197,24 @@ fm_desktop_draw(
 
 	/* The summary line, once for the layout, with its time and the age of the newest item (ws094-p008). */
 	if (logging) {
-		fm_log("DESKTOP ready items=%lu cells=%d width=%d height=%d at_ms=%llu newest_age_ms=%lld", (unsigned long)tab->listing.count, cells, canvas->width, canvas->height,
-		       (unsigned long long)desktop_clock(), desktop_newest_age(tab));
+		/* Count the listing entries that received no visible grid cell. */
+		hidden = 0U;
+		if (tab->listing.count > (size_t)cells)
+			hidden = tab->listing.count - (size_t)cells;
+
+		/* Sample the timing values without changing the ready-log prefix. */
+		ready_at = desktop_clock();
+		newest_age = desktop_newest_age(tab);
+		fm_log("DESKTOP ready items=%lu cells=%d width=%d height=%d at_ms=%llu newest_age_ms=%lld hidden=%lu",
+		       (unsigned long)tab->listing.count,
+		       cells,
+		       canvas->width,
+		       canvas->height,
+		       (unsigned long long)ready_at,
+		       newest_age,
+		       (unsigned long)hidden);
+
+		/* Remember which listing produced the ready summary. */
 		desk->logged = (int)tab->listing.count + 1;
 	}
 
@@ -614,6 +633,14 @@ desktop_layout(
 	if (names == NULL)
 		return;
 
+	/* Collect all listing names, including entries without a grid cell. */
+	for (index = 0; index < tab->listing.count; index++)
+		names[index] = tab->listing.entries[index].name;
+
+	/* An unreadable directory must retain the user's saved places. */
+	if (tab->listing.error == 0)
+		fm_desktop_layout_prune(desk, names, tab->listing.count);
+
 	/* The places known: the saved ones, then those shown. */
 	known_count = desk->saved_count + desk->shown_count;
 	known = malloc((known_count + 1U) * sizeof(known[0]));
@@ -628,9 +655,7 @@ desktop_layout(
 	if (desk->shown_count != 0U)
 		memcpy(known + desk->saved_count, desk->shown, desk->shown_count * sizeof(known[0]));
 
-	/* The names in the listing's order, placed. */
-	for (index = 0; index < tab->listing.count; index++)
-		names[index] = tab->listing.entries[index].name;
+	/* Place the complete listing using its retained saved places. */
 	fm_desktop_arrange(names, tab->listing.count, known, known_count, width, height, desk->places);
 
 	/* A new size is logged with its grid, and each item that could not keep its place (ws094-p010). */
@@ -638,6 +663,8 @@ desktop_layout(
 		fm_desktop_grid(width, height, &columns, &rows);
 		fm_log("DESKTOP grid width=%d height=%d columns=%d rows=%d", width, height, columns, rows);
 	}
+
+	/* Report changed placements against the saved and previously shown places. */
 	desktop_log_moved(desk, names, tab->listing.count, known, known_count);
 	free(known);
 
@@ -681,6 +708,7 @@ desktop_log_moved(
 			if (same == 0)
 				break;
 		}
+
 		if (other == known_count)
 			continue;
 
