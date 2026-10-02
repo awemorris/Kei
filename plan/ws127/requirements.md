@@ -23,7 +23,32 @@ QEMU の証拠だけ（実機は未実施）。console・serial の log は判�
 
 ### guest の試験（`files-regress.sh` の 14 本）
 
-（未了。2026-10-02 Q1 の一時停止の指示（host の disk の空けの間、新しい QEMU を始めない）で guest を止めた。再開後に記入。）
+guest: `GUEST_RUNTIME=build/p4-run sh plan/tools/files/files-guest.sh start build/p4-files/hdd-image.img`（Venus、lavapipe、KVM）。
+1 回目 `timeout 7000 sh plan/tools/files/files-regress.sh build/p4-files-out/regress`（host の load average 9〜30、他の担当の build・QEMU と同時）、
+2 回目は FAIL の 7 本だけ `files-regress.sh build/p4-files-out/rerun p002 p003 p005 p012 p008 p014 p017`（load 6〜9）。
+
+| 試験 | 1 回目 | 2 回目 | 分類 |
+| --- | --- | --- | --- |
+| p002 窓・移動 | FAIL（窓の位置を読む前に grep: `surface 0 at 0,0`、click がずれる） | PASS | 試験の時間の余裕（負荷） |
+| p003 選択・list・並べ替え | FAIL（同じく位置 0,0、SELECT・SORT の行なし） | FAIL（`SELECT count=3` だけ） | 試験の時間の余裕の疑い（落ちる check が毎回違う）。未確定 |
+| p004 file の操作 | PASS | — | — |
+| p005 tag・検索・favorite | FAIL（FAVORITE add/remove） | FAIL（TAG・SEARCH・Recents・FAVORITE） | 同上、未確定 |
+| p006 ホーム | PASS | — | — |
+| p007 preview・Quick Look | PASS | — | — |
+| p012 開く・情報 | FAIL（double click が 2 回の click になり OPEN なし、Quick Look の OPEN 行は check の後に出た） | PASS | 試験の時間の余裕（負荷） |
+| p008 menu | FAIL（TAG） | FAIL（INFO・TAG・back） | 未確定（落ちる check が毎回違う） |
+| p014 titlebar の操作 | FAIL（多数、SSH の banner の timeout を含む） | FAIL（`GLASS undock` だけ） | **試験の座標が古い**（下） |
+| p013 tab | PASS | — | — |
+| p015 glass | PASS | — | — |
+| p009 context menu | PASS | — | — |
+| p017 glass と dock | FAIL（`GLASS undock`、restored cards） | FAIL（同じ） | **試験の座標が古い**（下） |
+| p010 PNG・DnD | PASS | — | — |
+
+- 基準: 1 回目 7/14 PASS、FAIL の再試験で 9/14。残る 5 本のうち p014・p017 は試験の側の誤り（dock した bar の (190,17) を double click して undock を待つが、
+  今の dock の bar は「Files」の名前・戻る・進むの control が並び (190,17) は **進む** の button。手で確かめた: 名前の所 (120,17) の double click で
+  `ZWL GLASS undock surface=8 via=double-click` が出て戻る。product の誤りではない）。p003・p005・p008 は落ちる check が回ごとに変わり、同じ時間に
+  Files の log に present が 0.4〜2.6 秒の SLOW-FRAME が出ている（host の負荷の時の QEMU の Venus の present の遅れ）。timing の不安定と見るが、
+  負荷の低い時の再試験をしていないので未確定。log と画面: worktree の `build/p4-files-out/regress*`・`rerun*`。
 
 ## 2. spec.md（WS071）との照合
 
@@ -77,12 +102,85 @@ FW の無い差: 「移動」・「共有」の context menu（§15）、「新�
 
 ## 3. 実使用の通し
 
-（未了、guest の再開待ち。）
+道具: `plan/ws127/tests/walk-lib.sh`（zdesktop と files の起動、QMP の pointer と key、VNC の画面、Files の log の grep）。sample home は
+`make-home.sh`、それに guest の中で 1000 項目の folder `Big`（txt・csv・folder・bin を 250 ずつ）と、host で作った jpg・png・gif の 12 枚の `Photos` を足した。
+画面は worktree の `build/p4-files-out/walk/w01〜w13.png`、代表 8 枚を `plan/ws127/tests/evidence/*.jpg` に縮めて保存。
 
-## 4. 速さの基準値
+| 操作 | 結果 | 根拠 |
+| --- | --- | --- |
+| 名前の衝突（Budget.csv を Downloads へ copy） | dialog（Skip・Keep Both・Replace）が出る。Keep Both → `Budget 2.csv`、Skip → 何も copy しない（files=0）、Replace → 古い方は **Trash へ**（中身 old、trashinfo 付き）、Ctrl+Z で古い方が戻り、Ctrl+Shift+Z で再び置き換え | `COLLISION answer=keep/skip/replace`、`TASK done … files=2`、guest の file の中身。w02 |
+| Trash・Empty | Trash の一覧、Empty Trash は確認の dialog（Empty・Cancel）、Enter で 2 項目を削除、Trash の files と info が空 | `DIALOG ask=2`、`TASK done kind=delete files=2`。w04・w05 |
+| undo/redo | 上の Replace と Put Back で確かめた | `TASK done kind=restore` |
+| 1000 項目の folder | 開ける（`items=1000`）、icon の grid、Favorites に足せる（Ctrl+Alt+T） | w06 |
+| 画像の多い folder | jpg・png・gif の thumbnail が全て作られる（256 px、`THUMB error=0` ×12） | w09 |
+| 長い名前・日本語の名前 | 長い名前は 2 行と省略「…」、`会議メモ.txt` は表示される | w01。日本語の名前への**名前の変更**はこの image に IME が無いので未実施 |
+| New Window（Ctrl+N） | 2 つ目の process と窓（+96,+9 にずらして） | `ZWL MAP client=2`、w10 |
+| 窓の間の DnD | 窓 2 の photo00.jpg を窓 1 の sidebar の Big へ落とす → move | `DND dropped`、`DROP operation=move`、`TASK done kind=move`、file が Big に。w11 |
+| dock と undock | 浮いた titlebar の double click で dock、dock の bar の「Files」の名前の double click で戻る | `GLASS dock/undock`。w12・w13 |
+| 検索・tag・preview・Quick Look・tab・rename・新しい folder・context menu・窓の中の DnD | 通しでは行わず、回帰の p004・p007・p009・p010・p013（PASS）と p005（1 回目は TAG・SEARCH が ok）で代える | 1 の表 |
+| Open With・Always Open With | **未実施**（`files-open.sh` は worktree の binary を guest に送る形で、この Queue の時間では行わなかった） | — |
 
-（未了、guest の再開待ち。）
+### 見つけた不具合
 
-## 5. 候補の一覧
+重い（データを失う・止まる）は 0。
 
-（3・4 の後に記入。）
+| # | 重さ | 症状 | 再現 | 見込みの所 |
+| --- | --- | --- | --- | --- |
+| B1 | 中 | Trash の一覧で、同じ名前の 2 つ目が Trash の中の file の名前 `Budget.csv.2` と kind「2」で出る（元の名前 `Budget.csv`・CSV で出るべき） | 同じ名前の file を 2 回 Trash へ（今回は Replace の後の undo/redo）。w05 | `dir.c` の Trash の読み（trashinfo の Path から表示の名前と kind を作っていない） |
+| B2 | 中（QEMU だけで見た） | 起動直後に present が 2.6 秒止まった間に押した Ctrl+C（System Menu の shortcut、`MENU item=1010 action=10`）が、次の sidebar の click の**後**に届いて処理され、選択が無くなっていたので copy されず、続く Ctrl+V は「Nothing to paste」 | 起動直後に select → Ctrl+C → すぐ別の folder へ移動。負荷の高い host の QEMU で 1 回。実機は未確認 | menu の action と pointer の event の順序（zdesktop の menu の経路と files の event loop の present の待ち） |
+| B3 | 軽い | pointer が窓の外へ出ても、最後に指した item の hover の背景が残る | item を click して pointer を desktop の隅へ。w09 の photo01 | `ui-input.c` の pointer の leave |
+| T1 | 試験 | p014・p017 の undock の座標が今の dock の bar の配置と合わない（上） | 毎回 | `plan/tools/files/files-p014.sh:157`・`files-p017.sh:137` |
+| T2 | 試験 | p002・p003・p005・p008・p012 が host の負荷の時に落ちる（窓の位置を読む前の grep、double click の間隔、check の待ち） | 負荷の時 | `plan/tools/files/files-p0*.sh` の待ち |
+
+重い・中（B1・B2）は Bug Board の候補として Q1 に渡す。
+
+### 計画への影響
+
+- **F-050 は済んでいる**: Replace で置き換えた item は Trash へ行き undo で戻る（今回確かめた）。Future Work の表では F-050 は ws035-p110・p115 へ
+  promoted 済み（cut の Esc の clipboard、folder の merge も同じ）。**ws127-p003 の (1)〜(3) は実装済み**で、残りは (4) home の外の volume の
+  `$topdir/.Trash-$uid`（`trash.c` に無い）だけ。
+
+## 4. 速さの基準値（QEMU の値。実機ではない）
+
+QEMU の Venus（lavapipe が host の CPU で描く、egl-headless が scanout を読み返す）、KVM、host の load average 6〜9。Files の log には時刻が無いので、
+(a) は guest の時計（`date +%s%N`）で process の起動から `ZFILES READY`（最初の frame を present した直後に出る）まで、(b)(c) は host の
+`plan/ws127/tests/latency.py`（QMP の button press から、VNC で 2x2 の点を繰り返し読んで期待の色になるまで。QEMU の表示の更新と RFB の往復を含む上限）。
+
+| 項目 | 値（ms） | 中央値 |
+| --- | --- | --- |
+| (a) 起動 → 最初の frame、1000 項目の folder | 1756・1794・2544 | **1794** |
+| (a) 同、6 項目（Documents） | 2449・1692・3002 | 2449 |
+| (a) 同、画像 12 枚（Photos） | 2875・2676・2577 | 2676 |
+| (b) 窓の中で sidebar の click → 1000 項目の icon が画面に出る | 927・660・576・555・563 | **576** |
+| (b) 同、6 項目の folder へ | 405・395・499 | 405 |
+| (c) click → 選択の色が画面に出る、1000 項目の folder | 245・248・273・378・303 | **273** |
+| (c) 同、6 項目の folder | 254・282・413・287・218 | 282 |
+
+- 項目の数はほぼ効かない（(a) は起動の固定の費用、(c) は 1000 でも 6 でも同じ）。遅い frame の内訳（`SLOW-FRAME`）は draw 13〜28 ms・present 406〜2585 ms
+  （queue が大半）で、CPU の描画（F-037 の damage の矩形で減る所）より QEMU の Venus の present の待ちが支配的。
+- F4 の仮の目標（1000 項目を開いて ≤1000 ms、選択 ≤50 ms）に対して、QEMU では開くのは満たし（576 ms）、選択は満たさない（273 ms）。QEMU の present の経路が
+  支配的なので、目標の判定は実機（5330、ws127-p007）で行うのがよい。
+
+## 5. 候補の一覧（ユーザーが採否を選ぶ）
+
+目安は 1 Phase の実装＋回帰の時間。衝突する file は `userland/desktop/files/` の下（WS127 の実装の Phase は互いに直列）。推奨は P4 の案。
+
+| # | 項目 | 価値 | 目安 | 危険 | 依存 | 触る file | 推奨 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | B1 Trash の元の名前と kind の表示 | Trash の中身が分かる（中の不具合） | 1h | 低 | — | `dir.c`（Trash の読み）、`ui-grid.c`・`ui-list.c` の名前 | 入れる（p002） |
+| 2 | B2 起動直後の shortcut の順序の調べと直し | copy が黙って失われない | 2〜3h（実機で再現するかの確認を含む） | 中（zdesktop の menu の経路に及ぶかも） | 実機で再現するか（p007 と一緒に） | `main.c`・`present.c`、場合により `wayland/` の menu（P2・P3 と調整） | 調べは入れる（p002）。直しは再現した時 |
+| 3 | B3 pointer の leave で hover を消す | 見た目 | 0.5h | 低 | — | `ui-input.c` | 入れる（p002） |
+| 4 | T1・T2 回帰の試験の直し（p014・p017 の座標、待ちを log の行で待つ形に） | F1（14 本 PASS）を安定して判定できる | 2h | 低（試験だけ） | — | `plan/tools/files/files-p0*.sh` | 入れる（p002 か p008 の前） |
+| 5 | F-041 の残り `$topdir/.Trash-$uid`（旧 p003 の (4)） | USB 等の volume の file を Trash へ | 2h | 中（別の FS の rename） | mount の一覧 | `trash.c`・`actions.c` | 任意（USB を使う人が増えたら） |
+| 6 | F-035 PDF の 1 頁目の thumbnail と disk の cache（p004） | 書類の folder の見やすさ、大きい画像の folder の再表示 | 3h | 中（libpdf の描画の費用） | libpdf、`picture/` を変えるなら WS128 と直列 | `thumb.c`・`peek.c` | 入れる（見た目の価値が高い） |
+| 7 | F-041 の残り 日本語の UI と rename の IME（p005） | 日本語の利用者 | 4h | 中（Settings と共通の仕組み） | WS095（IME、実機で日本語入力は確認済み）、WS089 p016 | 文言の所・`ui-field.c` | ユーザーの判断（Settings と揃えて） |
+| 8 | F-039 DnD の自動の scroll と spring-loaded（p006） | 1000 項目の folder の中で落とせる | 2h | 低 | — | `ui-drag.c`・`dnd.c`・`ui-grid.c`・`ui-list.c`・`ui-tabs.c` | 入れる |
+| 9 | F-037 描き直しを damage の矩形に（p007 の条件付き） | 実機で遅い時 | 2〜4h | 中 | 実機の計測（今回の QEMU では draw は 13〜28 ms で、遅さは present） | `present.c`・`canvas.c`・`main.c` | 実機で目標に届かない時だけ |
+| 10 | spec の FW の無い差: context menu の「移動」（Move To ▸）と「新しいウィンドウで開く」 | spec §15・§29 | 2h | 低 | — | `ui-context.c`・`actions.c`・`menu.c` | 入れる（小さく価値がある） |
+| 11 | spec の FW の無い差: 「共有」（menu と sidebar）、タグの icon、toolbar の並べ替えの control | spec §8・§15・§20・§3 | 各 2h〜 | 中（共有は先が無い） | 共有の先（network、F-032） | `ui-context.c`・`places.c`・`tags.c`・`titlebar.c` | 入れない（ベータ1 の外） |
+| 12 | F-033 カラム・ギャラリーの表示 | Finder らしさ | 4h 以上 | 中 | — | `ui-grid.c`・`ui-list.c`・新しい表示 | 入れない（ベータ1 の外） |
+| 13 | F-036 装置の unmount・eject | USB の取り外し | 3h | 中 | USB の storage の hotplug の通知 | `places.c`・mount の仕組み | 入れない（hotplug の後） |
+| 14 | F-032 network・クラウド、F-034 indexer、F-040 system の Quick Look | spec §26・§27・§34・§18 | 大 | 高 | network の FS、常駐の索引、compositor | 多数 | 入れない |
+
+WS127 の未決の判断への材料: (1) 上の表。(2) libkeiui への移行（WS090 p009・p010）は、上の 1〜4・6・8・10 がどれも `files/` の今の部品の中で閉じるので、
+ベータ1 の後に回しても妨げにならない。(3) 日本語の UI は 7。(4) F4 の数値は、QEMU では present が支配的で選択が 273 ms なので、目標は実機（p007）で決めるのがよい。
