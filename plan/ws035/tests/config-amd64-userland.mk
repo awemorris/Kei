@@ -28,3 +28,12 @@ CONFIG_DRIVER_LGY98 := n
 ZEDBSD_USER_PROGRAMS := lspci lsusb libkeiland Xzed zshell zterm zwm admin ar at awk basename batch bc blkid cal cat cflow chgrp chmod chown cksum cmp comm compress cp crontab csplit curses cut cxref date dd delta df dhcpc diff dirname diskpart dmesg du ed expand expr fetch file find fmt fold fuser gencat get getconf gettext grep halt head host hostname iconv id ifconfig infocmp ipcrm ipcs join kill less link ln locale localedef logger login logname lp lpr ls m4 mailx mesg mkdir mkfifo mkfs mkswap more msgfmt mv newgrp ngettext nice nl nm noct nohup nslookup ntpdate od paste patch pathchk pax ping poweroff pr prs ps readlink realpath reboot renice rm rmdel rmdir route sact sccs sed service shutdown sleep sort split stat strings stty swapoff swapon tabs tail talk tee terminfo-extra terminfo tic time timeout top touch tput tr truncate tsort tty uname uncompress unexpand unget uniq unlink uudecode uuencode val wc what who wifi write xargs zcat sync echo false printf test true seq tac whoami egrep fgrep env make which
 
 # Exercise the public Noct installer in the maintained amd64 profile.
+
+# ws129-p010 (2026-10-02 user: every desktop application in the CI and the test configurations, and every base
+# program that is not a test): the base programs this list lacked, and the desktop's applications, daemons and
+# libraries with App Home's X11 Gears.  Test clients stay where each test configuration adds them.
+ZEDBSD_USER_PROGRAMS += audiod base64 install mktemp pwd zedinst \
+	libgif-compat libjpeg-compat libpdf libpng-compat libz-compat \
+	libvulkan libwayland-client libwayland-egl libegl libglesv2 libgl libtruetype libkeiui \
+	wayland sessiond terminal files notes pdfviewer imageview textedit settings browser libbrowser xserver zgears \
+	keiland-ime ime-dict-ja
