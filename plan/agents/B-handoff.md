@@ -41,3 +41,23 @@ Pending A projections: terminal cycle histories/Past Log, shared Queue rotation,
 Master/registry/Outlook, BUG125 evidence link (retain tracking/reproduced), WS/Phase
 remote mappings/comments (ws114 structural event on every changed Phase + WS).
 GitHub publication/push remain deferred. No B edits to shared Boards/cache.
+
+## Follow-up checkpoint / through eea8b913 + current lane update
+
+B1 q587 checkpoint01 submitted831635c3 → B merged4b655803; Phase event conflict
+retains both original start and technical amendment01. No source conflict.
+[Amendment](../ws114/phase007/q587-scope-amendment-01.md) SHA256
+30d8b4d7b2730648518f5aeb7a60d1395135c715e086d5f840dd026f9eaf766f
+adds seat/toplevel origin/button release correction needed by the same GTK4
+operation criterion. Original snapshot/timebox retained; final verification pending.
+B2 q588 checkpoint01 submitted8beb7e31 → B merged71bf741a / lane ACK870eb679;
+full inventory/manual/probe source checks still in progress, no clearance.
+B3 q589 helper submitted0d93e727 → B merged42b08dab; timebox supplementa1c73201
+→ B merged09e0cd83. Preparation5 active minutes / remaining40, guest waits until
+B1's finite deadline10:41:58 UTC, no added runs or parallel load.
+
+User wallpaper instruction recorded as [WS099 p019](../ws099/phase019/phase.md),
+new limited asset goal after old WS035 p061; original history/clearance retained.
+A reserved q593 for B2 after q588, next unreserved q594. Exact paths/install
+checks are in preparation. A needs new structural Phase/WS events, common release
+asset ownership projection and terminal q582 → active q588/q589 updates.

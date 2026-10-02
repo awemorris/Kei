@@ -6,7 +6,7 @@ Parent: [WS099](../ws.md)
 Status: planning
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
-Queue / attempts: Agent Aの後続ID予約待ち
+Queue / attempts: q593予約（Agent A、q588後続。exact snapshot/投入は準備中）
 Owner: B2 / same GPT-6.1 Sol High context
 Purpose / goal: テストだけのgit外資産を回収し、zedBSD/Linux/FreeBSD共通で利用できる背景としてソースとrelease dataに含める。
 Investigation bound: 実装Queue投入時にexact source/criteria・最大3時間を確定。抽象版探索は有限で、見つからなければ探索場所/限界を記録する。
