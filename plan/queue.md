@@ -2,10 +2,10 @@
 
 # Queue / all-agent index
 
-Active Queues: q607（P1）、q609（P2）、q608（P3）、q606（P4）。
+Active Queues: q607（P1）、q609（P2）、q610（P3）、q606（P4）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q610。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q611。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
@@ -22,8 +22,9 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 | q604 / q604-i01 | P4 | [ws095-p005](ws095/phase005/phase.md) | IME の候補の窓、右上の通知領域の IME の status（A／あ）、key repeat、ime-p004.sh の kill の修正、4h | finished / cleared（QEMU、実機の目視はユーザー） | user 2026-10-02「IMEのステータスを画面右上の通知領域に追加してください」＋継続 dispatch、[lane](agents/P4/queue.md)、P4 4ca0b3e80 → main 5634eea24 |
 | q605 / q605-i01 | P3 | [ws115-p006](ws115/phase006/phase.md) | libpng・freetype・harfbuzz（libcxx）・fontconfig、4h | finished / cleared（QEMU の fc-list・text-probe・boot-test PASS） | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md)、P3 cbbc1607f → main 3c33fb259 |
 | q606 / q606-i01 | P4 | [ws129-p010](ws129/phase010/phase.md) | desktop の全 app と試験でない base の全 program を CI と試験の config へ（CI に試験は入れない）、3h | in-progress | user 2026-10-02「CIもテスト用も、desktopのアプリはすべてコンフィグを追加」「テストでないbaseはすべて入れてください」、[lane](agents/P4/queue.md) |
-| q608 / q608-i01 | P3 | [ws115-p007](ws115/phase007/phase.md) | pixman・cairo・fribidi・pango、4h | in-progress | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md) |
+| q608 / q608-i01 | P3 | [ws115-p007](ws115/phase007/phase.md) | pixman・cairo・fribidi・pango、4h | finished / cleared（QEMU で pango の日本語の PNG・boot-test PASS） | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md)、P3 03f00921d → main db8f21553 |
 | q609 / q609-i01 | P2 | [ws099-p023](ws099/phase023/phase.md) | BUG-136 Gears・Notes のタイトルバー、BUG-137 Terminal の遅れ、直す前から落ちる C3/C4/C8/C9 の試験、C9 ×5、4h | in-progress | user 2026-10-02 の実機の指摘＋継続 dispatch、[lane](agents/P2/queue.md) |
+| q610 / q610-i01 | P3 | [ws115-p008](ws115/phase008/phase.md) | gdk-pixbuf・jpeg・tiff・graphene・libepoxy（SONAME の patch）・libxkbcommon、4h | in-progress | 継続 dispatch（user GTK4 移植）、[lane](agents/P3/queue.md) |
 | q607 / q607-i01 | P1 | [ws005-p024](ws005/phase024/phase.md) | 起動時の enable で保存済み AP に自動再接続（実装と QEMU の試験。実 AP の試験は承認待ち）、3h | in-progress | 2026-10-02 user「networkdが有効になって、net wifi enableされたとき…コンソール起動でもWiFi接続は自動」「WiFiの自動接続のテストもお願いします。」 |
 | q601 / q601-i01 | P1 | [ws118-p001](ws118/phase001/phase.md) | 5320 の遠隔 log 用 image（sshd、USB LAN、3 種、手順書）、QEMU で SSH まで、実機は使わない、3h | paused（q599-i04 の割り込み） | 継続 dispatch（user 2026-10-02、5320 は「SSHDを起動してリモート実機でログを取れるようなイメージを作成」）、[lane](agents/P1/queue.md) |
 | q599 / q599-i04 | P1 | [ws005-p019](ws005/phase019/phase.md) | 実際の join（2.4/5GHz）・DHCP・B3 の切替えを 5330 の AX211 passthrough で、2h | finished / uncleared（permission system が「Third-Party Attack」として拒否、ユーザー本人の直接の承認か permission rule 待ち。guest に入力なし、host 復元済み） | user が試験用 AP の資格情報を chat で提供（記録には書かない） |
