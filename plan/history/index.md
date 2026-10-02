@@ -2,9 +2,12 @@
 
 # Past Log
 
-2026-10-02 / current execution: userの全agent区切り終了指示でA1/A2を回収中、A3終了済み。q581/q582/q583部分cleared、q585/q586契約調査uncleared。B q587/q588/q589の停止は未確認。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
+最新: [q584](queue-q584.md) / 2026-10-02 07:12–08:53 UTC。通常終了でuncleared、browser全文97/209・残112件。A1最終成果10e844f23へ統合、209hashes確認。A1/A2/A3すべて終了、未達条件と再開証拠を保存。B停止は最終報告未確認。GitHub publication保留。
 
-Last finished Queue: [q586](queue-q586.md)（WS113 p001契約調査uncleared）
+
+2026-10-02 / current execution: userの全agent区切り終了指示でA1/A2/A3を回収・終了済み。q581/q582/q583部分cleared、q585/q586契約調査uncleared。B q587/q588/q589の停止は未確認。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
+
+Last finished Queue: [q584](queue-q584.md)（browser残全文review / uncleared）
 
 ## 最新: q586と全agent wrap-up（2026-10-02）
 

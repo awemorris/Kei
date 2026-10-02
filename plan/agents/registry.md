@@ -4,7 +4,7 @@
 
 | Agent / generation | Model / effort | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / wrap-up / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | q590 ID保持 / wrap-up後未投入 | wrapping up（user指示） | runtime `/root/a1_browser`、base0e68854ac、A1-001〜008 integrated、last12d34303 → 52c3ee3d7 ACK、review92/209、最終MR待ち |
+| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | q590 ID保持 / wrap-up後未投入 | stopped / wrapped | runtime `/root/a1_browser`、A1-001〜009 integrated、final2f6556750 → 10e844f23、review97/209、残112、clean/process無し |
 | A2 packages / generation1 | `gpt-6.1-sol` / high | WS112 p001 | `/home/awe/zedBSD-worktrees/a2` / `codex/a2-packages` | [q585 finished](A2/queue.md) | q591 ID保持 / p002未投入 | stopped / wrapped | runtime `/root/a2_packages`、base0e68854ac、A2-001〜006 final8b78da1c5 integrated、D1未決/q585uncleared、clean/gpg-agent停止、公開metadata保全 |
 | A3 display / generation1 | `gpt-6.1-sol` / high | WS113 p001 | `/home/awe/zedBSD-worktrees/a3` / `codex/a3-display` | [q586 finished](A3/queue.md) | q592 ID保持 / p002未投入 | stopped / wrapped | runtime `/root/a3_display`、base0e68854ac、A3-001〜006 2ad9c951 → 83b111c63 ACK、q586/p001 uncleared、clean/process無し |
 | B1 GTK / generation1 | `gpt-6.1-sol` / high | WS114 p007 | `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114` | [q587](B1/queue.md) | 残行はp002採否後 | running（B/user開始報告） | q581 cleared、4b655803 → A8f807c73f、q587 checkpoint/amendment01、wrap方針共有・停止未確認 |

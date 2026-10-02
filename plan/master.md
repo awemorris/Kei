@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: A q584/browserは通常wrap-up中。A2 q585とA3 q586は判断未決でfinished/uncleared、A3終了済み。B q587/GTK4・q588/規約・q589/診断はlatest4b655803 → A8f807c73f、全体wrap方針共有/停止実績未確認。q581/q582/q583部分はcleared、whole p017/BUG-125未解決。
+Active Queues: A q584/browser・q585/package・q586/displayはfinished/uncleared、A1/A2/A3終了済み。browser残112全文review、package D1・display D-ATOMIC判断を保存。B q587/GTK4・q588/規約・q589/診断はlatest4b655803 → A8f807c73f、全体wrap方針共有/停止実績未確認。q581/q582/q583部分はcleared、whole p017/BUG-125未解決。
 Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: A/B各3laneの最初の有限Queueを実行。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。Aは共有投影/mergeを所有し、Bは自checkoutのGTK/desktop/bugを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
+Next（2026-10-02 更新）: user指示で全agentを区切り終了し成果を統合。新Queueは投入しない。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。Aは共有投影/mergeを所有し、Bは自checkoutのGTK/desktop/bugを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。旧P8/P9/P10は停止・回収済みで、[Queue index](queue.md)にterminal outcomeを保存。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -555,3 +555,5 @@ Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調�
 2026-10-02 / A-checkpoints-q585-terminal: A1 checkpoint11 reviewed88/209、残121 C/headerと後続gateを維持。A2のq585/p001は入力・形式・環境・CI契約調査を保存してD1 boot適用回答待ちでuncleared、[history](history/queue-q585.md)へexact承認/基準別証拠/再開を保存。A3 p001契約と変更foreign p002–009の設計を統合、製品/hardware未実施。全workerを同runtime/contextで維持、q590〜q592予約は未投入。GitHub publication保留。
 
 2026-10-02 / all-agent-normal-wrap: 最新userが全agentをきりのいいところで切り上げ終了へ指示。A1/A2のPhase完了待ちを置換、A3はfinal2ad9c951 → 83b111c63、q586/p001 uncleared履歴と再開を[archive](history/queue-q586.md)へ保存して終了確認。B checkpoint4b655803 → A8f807c73fを統合、q582 cleared、q588 source partial/q589診断準備/q587amendment01を共有投影。B2背景資産・3 OS収録q593は予約だけで開始しない。全次Queue未投入、B停止未確認、source受け入れ/WS completionを停止に合わせて偽らない。
+
+2026-10-02 / local-main-integration-request: userがサブエージェント結果→codex/agent-a→ローカルmain→リモートcodex/agent-b出現後ローカルmainの順に統合を指示。全commit message WIP、pushなし。A1 final2f6556750を10e844f23へ統合、A2/A3既統合、全A worker停止確認。

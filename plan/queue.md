@@ -2,11 +2,11 @@
 
 # Queue / all-agent index
 
-Active Queues: q584/A1は通常wrap-up中。Bのq587/GTK4、q588/規約、q589/BUG診断は最新報告でactive（全体wrap方針共有、停止実績未確認）。q581/q582/q583はfinished/cleared（q583部分のみ）、q585/q586はfinished/uncleared。
+Active Queues: Aのq584/q585/q586はfinished/uncleared、A1/A2/A3終了済み。Bのq587/GTK4、q588/規約、q589/BUG診断は最新報告でactive（全体wrap方針共有、停止実績未確認）。q581/q582/q583はfinished/cleared（q583部分のみ）、q585/q586はfinished/uncleared。
 Status: active
 Main executor / plan writer: Q1
 Approval: 各lane/snapshotがexact scopeの正本。Aは2026-10-02 user「エージェントA、あなたもN=3で作業を開始してください」、BはuserのB開始指示とcommit991fc890のlaneを確認。A/B各3枠、timeboxはlaneごと。旧P8/P9/P10の承認・終了履歴を現行Queueへ流用しない。
-Last finished Queue: [q586](history/queue-q586.md)（D-ATOMIC未決 / 契約調査uncleared）
+Last finished Queue: [q584](history/queue-q584.md)（通常終了 / 残全文reviewでuncleared）
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,7 @@ Last finished Queue: [q586](history/queue-q586.md)（D-ATOMIC未決 / 契約調�
 | q587 / q587-i01 | B1 | [p007](ws114/phase007/phase.md) | CSD/SSD modeのconfigure/ack/commitと標準GTK4/native SSD回帰、3h | active / in-progress（user開始共有） | [lane](agents/B1/queue.md)、snapshot6de86725 |
 | q588 / q588-i01 | B2 | [p007](ws094/phase007/phase.md) | WS094全文規約のsource/host/build部分のみ、3h。whole p007 uncleared | active / in-progress（B報告、wrap-up指示） | [lane](agents/B2/queue.md)、snapshota1faf483 / checkpoint4b655803 |
 | q589 / q589-i01 | B3 | [p017](ws099/phase017/phase.md) | pre-capture SSHを減らす5run/45min、first verdict維持。guest資源待ち | active / prepared（B報告、wrap-up指示） | [lane](agents/B3/queue.md)、snapshot16005006 |
-| q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md)、A1-008 → 52c3ee3d7 ACK / reviewed92/209 / wrapping up |
+| q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | finished / uncleared | [archive](history/queue-q584.md)、A1-009 → 10e844f23 / reviewed97/209 / stopped |
 | q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | finished / uncleared | [archive](history/queue-q585.md)、D1 user返答待ち |
 | q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | finished / uncleared | [archive](history/queue-q586.md)、final2ad9c951 → 83b111c63 ACK |
 | q577 / q577-i01 | P8 | [phase](ws099/phase017/phase.md) | BUG-125の再現/同期診断、証明された試験raceのみ修正。compositor読取のみ。 | finished / uncleared | [archive](history/queue-q577.md) |
@@ -33,7 +33,7 @@ Dependency graph: C9実出力 → q577; c5-hw/hdmi-h4-hw → q578; WS107実sourc
 WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ。
 [P8 bug](agents/registry.md): [Bug Board](known-bugs.md)の未解決項目を個別のhandling WS/Phaseで消化。最初の候補は[BUG-125](bugs/BUG-125.md)（デモC9のresize不安定）。既存の保留/実機/owner条件を保持、Queue未選定。
 [P9 desktop](agents/desktop-outlook.md): WS099/090/094等の高度化と実機/規約検証を専任で担当。最初の候補は[WS099 p014](ws099/phase014/phase.md)のC10実機1時間。見つけたbugはmainがBoardへ登録しP8へ。Queue未選定。
-[P10 browser / WS074 p172](ws074/phase172/phase.md): origin/browser2取込が全後続browser Phaseのblocking gate。取込後の候補は[p100](ws074/phase100/phase.md) Acid3 pixel完全一致 → [p174](ws074/phase174/phase.md) File System Access → [p175](ws074/phase175/phase.md) OPFS → [p173](ws074/phase173/phase.md) Interop 2025 100% → [p176](ws074/phase176/phase.md) Test262。p101 CSS2全件も保持。A1はq584/p172 reviewを実行中。後続Phaseは未投入。
+[P10 browser / WS074 p172](ws074/phase172/phase.md): origin/browser2取込が全後続browser Phaseのblocking gate。取込後の候補は[p100](ws074/phase100/phase.md) Acid3 pixel完全一致 → [p174](ws074/phase174/phase.md) File System Access → [p175](ws074/phase175/phase.md) OPFS → [p173](ws074/phase173/phase.md) Interop 2025 100% → [p176](ws074/phase176/phase.md) Test262。p101 CSS2全件も保持。A1はq584/p172をunclearedで終了、残112件を保存。後続Phaseは未投入。
 [WS112 p001](ws112/phase001/phase.md): 5OS package/CI配布の契約・入力・形式調査。RPi arm64/buildのみ、CI runtime不要、FreeBSD source-only。q585 finished/uncleared、D1 boot適用回答待ち、q591/p002候補のみ。
 [WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。q586 finished/uncleared、D-ATOMIC未決。A3終了済み、製品実装Queueは未投入。
 [WS114 p001](ws114/phase001/phase.md): Linux標準GTK4の実測と[機能表](ws114/gtk4-compat-matrix.md)の証拠化。B1 q581でbaseline調査cleared、q587/p007装飾モード実装・GTK4確認を開始。他機能の採否レビュー、WS115 upstream GTK4→WS116 Qt6範囲判断/移植→WS097/096書き下ろしは後続未投入。
