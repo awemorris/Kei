@@ -72,3 +72,7 @@ Event ws114-gtk-qt-port-projections-20261002: [WS114](../ws114/ws.md) Linux標�
 ## 運用設計追記 / 2026-10-02（サブエージェント別Queue）
 
 Event subagent-queues-projections-20261002: userの希望N=8/GPT-6.1 Sol High、mainのQueue配布/merge、agent別QueueとWS affinity、commit可能地点での頻繁なmerge要求、積んだ次Queueによる継続、通常/urgentラップアップを[運用契約](../agents/protocol.md)に記録。[台帳](../agents/registry.md)は実装担当なし。現runtime上限で子は同時最大3。固定版Awesome Planの単一executor/Queue既定にはzedBSD固有の最新指示を適用。3人の短時間読取専用調査を使い、product source/Queueは変更なし。q576 finished、GitHub publicationとpushは未実施。
+
+## 計画追記 / 2026-10-02（WS074ブラウザ専任）
+
+Event ws074-dedicated-interop2025-20261002: userが前回3人案のP10を[WS074](../ws074/ws.md)専任に固定。p172 branch統合後の[p100](../ws074/phase100/phase.md) Acid3 100/100・pixel完全一致・fail 0、[p173](../ws074/phase173/phase.md)でInterop 2025公式focus area対象WPTの固定版/baselineを定めて全件PASSへ進む。p101 CSS2全件目標とfg010/全体demo順位は保持。P10はreserved/未起動、q576 finished、実装/Queue/merge/pushなし。Issue/Project publication保留。

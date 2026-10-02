@@ -7,7 +7,7 @@ Disposition: normal
 Parent: [WS074](../ws.md)
 Primary Milestone: MG006（WS074から継承）
 Queue / attempts: none / 実装未承認
-Blocking: このPhaseが**whole-Phase cleared**になり、統合されたブラウザの実出力を確認するまで、WS074の後続のsource・runner・互換性作業は開始不可。p099以前の歴史的cleared状態には遡及適用しない。
+Blocking: このPhaseが**whole-Phase cleared**になり、統合されたブラウザの実出力を確認するまで、WS074の後続のsource・runner・互換性作業は開始不可。p099以前の歴史的cleared状態には遡及適用しない。2026-10-02追加の[p100](../phase100/phase.md) pixel完全一致・[p173](../phase173/phase.md) Interop 2025もこのgateの後。
 
 ## Goal and exact scope
 
@@ -43,3 +43,5 @@ Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queu
 ## Event
 
 2026-10-02 / ws074-browser2-gate-20261002: current userがbranch統合をWS074のblocking Phaseに指定。Phase172を計画し、WS074の全未実行browser作業の前提に追加。GitHub Issue/Projectはpublication保留。
+
+2026-10-02 / ws074-dedicated-interop2025-20261002: userがブラウザ専任P10とp172後のAcid3 pixel完全一致・Interop 2025を追加。p172のimport scope/clearanceは維持。後続p100/p173の新条件は取込だけで達成とみなさず、統合出力を確認してから別Queueで測る。GitHub comment publication保留。

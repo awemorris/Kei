@@ -9,8 +9,10 @@ Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
 Queue: なし（last: q507-i01 cleared）
-Resume point: 2026-09-30: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The next gate is p172 (origin/browser2 integration); p100 → p101 remains the compatibility-work order after p172 and must be re-evaluated against the imported branch evidence. None is currently authorized.
+Resume point: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The next gate is p172 (origin/browser2 integration); then p100 (Acid3 100/100 and exact pixels) → p173 (Interop 2025 baseline and follow-up), with p101 (CSS2 all tests) retained after p100. Reconcile imported branch evidence before each. None is currently authorized.
 <!-- awesome-plan-current:end -->
+
+2026-10-02 ユーザー更新: ブラウザ専任のP10枠を固定。p172の取込が実際に統合・検証された後は、p100でAcid3の100/100とpixel完全一致・fail 0を目指し、p173で公式Interop 2025対象WPTの固定版/分母/runnerとbaselineを定めてから全件PASSを目指す。p101のCSS2全件目標は保持する。P10の予約と目標はQueue実行許可ではない。
 
 ## デモの目標（2026-09-28 ユーザー、同日に amazon.co.jp へ変更）
 
@@ -66,6 +68,8 @@ Wasm を base の中に自前で書く（外部の browser engine は取り込�
 - `libjpeg-compat` が base の library として入り、browser が使う。
 - 変更した source の規約の全文の確認（最後の Phase）。
 
+**追加の互換性目標（2026-10-02 ユーザー）**: origin/browser2の統合後、Acid3の100/100に加え、固定条件の参照画像と出力画像をpixel単位で完全一致させ、fail・crash・timeoutを0にする。次にInterop 2025の公式focus areaに属するWPTを固定commitと選定manifestで測り、全対象テストのPASS、fail・error・crash・timeout・未説明のskipを0にすることを目指す。調査項目はfocus areaの得点対象と混同しない。p173で対象分母と実行環境を確定するまでは達成を主張しない。既存のWS受け入れとp101 CSS2目標を削除しない。
+
 ## 制約と依存
 
 - 新しい code は `plan/coding-style.md` の全文。外部の試験 suite（WPT、html5lib-tests、test262、Wasm の spec test）は source tree に
@@ -96,11 +100,13 @@ libpng-compat の `from_memory`、libtruetype の拡張、libjpeg-compat の API
 
 1. **ws074-p099: Acid2 100% — cleared（q507）**。p097 と同じ harness、viewport、font、固定 WPT 版で
    `exact-pixel-pass 1`、pixel agreement 100.00%、crash・timeout 0。差分を一般化した focused regression を残した。
-2. **ws074-p100: Acid3 100%** — p172の後。p099はcleared。履歴的Acid3が画面上で100/100を返し、Uncaught・crash・timeoutが無いことを
-   完了条件にする。pixel agreementは補助診断として同時に記録する。
+2. **ws074-p100: Acid3 100%とpixel完全一致** — p172の後。p099はcleared。履歴的Acid3が画面上で100/100を返し、
+   固定参照画像との差が0 pixelで、Uncaught・fail・crash・timeoutが無いことを完了条件にする。参照/viewport/font/runnerは着手時に固定する。
 3. **ws074-p101: WPT CSS2 reftest 100%** — p172とp100の後。固定commitで現runnerが列挙するscriptなしCSS2 reftest全5904件を
    対象にし、sample 100件ではなく全件でpass 100%、error 0を完了条件にする。manifestと分母を着手時に固定し、
    WPT metadataに基づかない任意の除外はしない。長時間実行はshard・途中再開・失敗cluster別のreportを使う。
+4. **ws074-p173: Interop 2025** — p172とp100の後。まず公式focus areaの対象WPTを固定版で列挙し、runnerの対応とbaselineを記録する。
+   その結果を基に小さな後続Phaseを設計して全対象PASSへ進める。p101は既存の独立したCSS2全件目標として保持し、専任枠ではInterop 2025の計測・改善を先に配列する。
 
 既存のp098（ES module script）は削除・再採番せずp101の後へ延期する。p036のCSS2全件部分はp101へ分け、
 p036はその後のflexbox・backgrounds・values・selectorsの拡張suiteに絞る。p047（DOM testharness）も今回の3 Phaseの後まで候補のまま残す。
@@ -217,9 +223,10 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p097](phase097/phase.md) | 指定10公開siteの画像・box・DOM tree比較、阿部寛のホームページのguest full-screenデモ、WPT reftestとAcid、一般化できる差を最大4件修正 | **cleared**（2026-09-30。WPT 44/100、Acid2 90.56%、Acid3 9/100。`postMessage`、table rowspan、presentational hint、intrinsic auto margin） | p094、p096 |
 | ws074-p098 | ES module scriptのgraph取得・link・評価、`import`・`export`、GitHubのhydration比較 | planned（2026-09-30ユーザー指定によりp101後へ延期） | p087、p088、p097、p172 |
 | [ws074-p099](phase099/phase.md) | Acid2 100%: 固定harnessでexact pixel一致、crash・timeout 0 | **cleared**（2026-09-30、q507。90.56% → 100.00%、plain/ASan） | p097 |
-| ws074-p100 | Acid3 100%: 履歴的Acid3で100/100、Uncaught・crash・timeout 0 | planned（p172後、p099 cleared） | p099、p172 |
+| [ws074-p100](phase100/phase.md) | Acid3の100/100、固定参照とのpixel完全一致、fail・Uncaught・crash・timeout 0 | planned（p172後、p099 cleared） | p099、p172 |
 | ws074-p101 | WPT CSS2 reftest 100%: 固定commitのscriptなし全5904件でpass 100%、error 0 | planned（p100後、p172も必須） | p100、p172 |
 | [ws074-p172](phase172/phase.md) | origin/browser2のbrowser変更をWS107後のlibbrowser/browser配置へ取込み、関連計画/試験/bugを意味的に照合するblocking gate | planned / Queueなし | WS107の実成果、p099、branch snapshot |
+| [ws074-p173](phase173/phase.md) | Interop 2025の公式focus area対象WPTを固定・baseline化し、全件PASSへ向けた失敗群と後続Phaseを設計 | planned / Queueなし | p172、p100 |
 
 ## 後の WS・Future Work の候補
 
@@ -242,7 +249,7 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 WS074 は incomplete のまま。p099 の既存証拠/clearance、p100→p101 の順と互換性目標は保持する。
 次の WS074 の Queue は新規則と実 source locator/WS107 の移動状況を確認し、同じ source/runner の移行と並行しない。
 engine の new source は libbrowser が所有する設計で生成し、Wayland は shell の abstract input adapter に閉じる。
-p100/p101 の個別 Phase record は現在未作成（WS 表の予定行）。新しい implementation Queue や clearance はこの方針記録から発生しない。
+p100/p101 の個別 Phase record はこの2026-10-01記録時点で未作成だった（p100は2026-10-02追加、p101は未作成）。新しい implementation Queue や clearance はこの方針記録から発生しない。
 2026-10-01 / review-20261001-policy-ws074: 新設 WS107 と policy 改訂/影響をこの WS に保存。GitHub の WS comment は公開保留。
 
 2026-10-02 / ws107-q541-design: [WS107](../ws107/ws.md)の165engine file移行で現役host/guest/list-sources runnerを新rootへ更新する。独立componentの有限quality修正はWS107、p100→p101の既存互換性scope/順/acceptanceは保持。今後はlibbrowserrootの実sourceを使い、移行と同時編集しない。詳細[設計](../ws107/design.md)。公開outbox pending。
@@ -252,3 +259,7 @@ p100/p101 の個別 Phase record は現在未作成（WS 表の予定行）。�
 ## 2026-10-02 / origin/browser2 blocking import
 
 Event ws074-browser2-gate-20261002: ユーザー「GitHubのorigin/browser2を取り込みます。libbrowserへの移動によりストレートには当たらないが、一貫したファイル移動のルールで取込める。Phaseを追加し後続のブラウザ作業をblocking」と指示。[p172](phase172/phase.md)を追加。WS107の[移動inventory](../history/ws107/inventory.json)で旧engine→libbrowser、shellはbrowserと対応させる。branch tip `e53ef03b80113aec959deb67f828cba21d68d4be`を観測、branch Phase IDは171まで使用（p172を選択）。p100→p101の内部順は保持するが、着手の前にp172 whole-Phase cleared/実統合出力が必要。全27 planned行にp172依存を反映、branch取込後の既存/branch Phase結果を証拠で再照合。q507/p099と現在のQueueは履歴のまま、実装/merge/cherry-pick/pushは未実施。GitHub WS/foreign Phase event投稿は保留。
+
+## 2026-10-02 / ブラウザ専任と追加の互換性目標
+
+Event ws074-dedicated-interop2025-20261002: ユーザーが3人案の1人をWS074専任として固定し、branch取込後のAcid3をpixel完全一致・fail 0まで高め、WPT Interop 2025をクリアする目標を追加。P10を未起動の予約枠として[台帳](../agents/registry.md)に記録。p100の受け入れを強化し、新しい[p173](phase173/phase.md)を追加。p101のCSS2全件は保持するが、専任枠での次の互換性計測はp173を先にする。p172→p100→p173、p100→p101。実装Queue/merge/pushは未実施、remote WS/Phase/Project eventはpublication保留。

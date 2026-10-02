@@ -22,7 +22,7 @@ Started UTC: 2026-10-02T02:47:22.972372+00:00
 ## Upcoming Work Outlook
 
 WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ。
-[WS074 p172](ws074/phase172/phase.md): origin/browser2取込。WS107移動表を利用してlibbrowser配置へ対応、全後続browser Phaseのblocking gate。planned/Queue未選定。p100→p101は取込後に証拠を再評価。
+[WS074 p172](ws074/phase172/phase.md): origin/browser2取込。WS107移動表を利用してlibbrowser配置へ対応、全後続browser Phaseのblocking gate。P10をブラウザ専任として予約（未起動）。planned/Queue未選定。取込後は[p100](ws074/phase100/phase.md) Acid3の100/100・pixel完全一致・fail 0 → [p173](ws074/phase173/phase.md) Interop 2025対象WPTの固定/baseline/改善Phase。p101 CSS2全件も保持。いずれもQueue未承認。
 [WS112 p001](ws112/phase001/phase.md): 5OS package/CI配布の契約・入力・形式調査。RPi arm64/buildのみ、CI runtime不要、FreeBSD source-only。planned/未順位、実装Queue未選定。
 [WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。planned/未順位、実装Queue未選定。
 [WS114 p001](ws114/phase001/phase.md): Linux標準GTK4の実測と[機能表](ws114/gtk4-compat-matrix.md)の証拠化。続く採否レビュー後にWS114改善→WS115 upstream GTK4→WS116 Qt6範囲判断/移植→WS097/096書き下ろし。未順位/Queue未選定。
@@ -47,3 +47,5 @@ q576の承認/attempt/outcomeは変更しない。Active Queueなし、次Queue�
 2026-10-02 / ws114-gtk-qt-port-projections-20261002: WS114/115/116をOutlookへ追加。順番は依存関係であり既存demo順位の変更ではない。標準GTK4 guest実行とuser行別判断は未了、Queueなし、q576の承認/結果は不変。
 
 2026-10-02 / subagent-queues-projections-20261002: user指示によりQueueを担当別に拡張。[運用契約](agents/protocol.md)。希望N=8、現在の子枠は最大3、GPT-6.1 Sol High。q576のfinished/承認/結果は不変。実装Queueの選定・起動はこの設計更新では行わず、agent laneは空。
+
+2026-10-02 / ws074-dedicated-interop2025-20261002: userがP10をブラウザ専任枠に固定し、p172取込後のAcid3 pixel完全一致/fail 0とInterop 2025 WPT全件PASSを目標に指定。p100の基準を強化、p173を計画。P10はreserved/未起動。q576 finishedを保持し、新しいactive/proposed実装Queueやattemptは作らない。

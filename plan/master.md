@@ -2,9 +2,9 @@
 
 <!-- awesome-plan-current:start -->
 Active Queue: none（q576 finished、WS111 p002 cleared）
-Current Focused Goal: fg010 — 10/17 demo。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
+Current Focused Goals: fg010 — 10/17 demo、fg017 — WS074ブラウザのp172取込→Acid3 pixel完全一致→Interop 2025。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
 Next（2026-10-02 更新）: WS111共通launcher completed。--login本人確認/PIN交換とWS110/testingは検討のみ、次実装Queue無し。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。WS114 Linux標準GTK4調査/レビュー→WS115 upstream GTK4移植→WS116 Qt6範囲判断/移植を計画し、その知見をWS097/WS096書き下ろしへ渡す。既存demo順/WS106保留保持。
-IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。
+IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。P10をブラウザ専任枠として予約（未起動/Queueなし）。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
 
@@ -52,6 +52,7 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
 | **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新 |
+| **fg017** | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、Interop 2025対象WPTの全件PASSを目指す | MG006 | [WS074](ws074/ws.md) / P10予約 | 2026-10-02 ユーザー指示。既存fg010とデモcriticalの全体順を保持し、WS074の専任laneを並走させる。測定対象はp173で固定、Queue未承認 |
 
 
 デモの platform は amd64 の実機（Dell Latitude 5330、HDMI + USB、2026-09-28 ユーザーの回答）。開発の試験は QEMU（amd64）で行い、実機の証拠と分けて書く。以前の focus（fg004 インストーラの実機、
@@ -182,7 +183,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS071](ws071/ws.md) | MG006 | zedBSD File Manager: Finder 風で zedBSD らしいファイルマネージャ（ホームのダッシュボード、サイドバー、タグ、Quick Look、System Menu）（2026-09-27 ユーザー指示、仕様案は ws071/spec.md） | completed | completed（2026-09-27）: zdesktop-files の最初の版（すりガラスの付箋の pane、タブ、titlebar の CONTROLS、context menu、PNG の thumbnail、DnD、configure_bounds）。残りは Future Work（F-032〜F-041・F-044）、i915 実機は WS075、窓の外への DnD は WS035 |
 | [WS072](ws072/ws.md) | MG004 | write cached の UFS の format の lease（BUG-060）と、NVMe の timeout の後の回復で root の mount が ETIMEDOUT になる（BUG-059）（2026-09-27、サブエージェント） | completed | 2026-09-27 完了（p001 BUG-060: write cached の format の lease、p002 BUG-059: NVMe の timeout の後の再発行） |
 | [WS073](ws073/ws.md) | MG002 | Bug Board の bug の解消（2026-09-27 ユーザー「バグリストに載っているものを解決するサブエージェントを1つ追加しましょう。」）。WS072・WS056（BUG-046）・WS001（BUG-050）の担当と性能の bug（BUG-027・033）を除く | incomplete | 2026-09-29: BUG-100・102（ping）・104（less）・051（signal の frame が amd64 の red zone を壊していた、`src/kern/signal.c`、QEMU で 1092 session 失敗 0）を解決、BUG-105（USB マウスの HID）は実機待ち、BUG-106 は調査中（BUG-051 の現れか）。次: BUG-039・031、BUG-107。BUG-093 は toolchain のため main の許可待ち。2026-09-29 夜: p040（BUG-030）uncleared: `plan/ws073/tests/usb-stress.sh` で起動の途中の BOT CSW の時間切れを再現（TCG 2 回に 1 回）、xHCI の完了の event の取りこぼしを疑う（未確認）。Resume は phase040 の「次にすること」 |
-| [WS074](ws074/ws.md) | MG006 | zedBSD の Web ブラウザ `userland/base/zdesktop-browser`（HTML5 の layout engine → 最適化にこだわらない JavaScript engine の接続 → CSS の準拠と Chrome との比較で目標値を段階的に上げる。JS と Wasm の実行 engine を共通化。画像は libpng-compat・新しい libjpeg-compat、TLS は当面 OpenSSL）（2026-09-27 ユーザー指示） | incomplete | p099 cleared（q507、Acid2 100%）。次はorigin/browser2取込p172がblocking。p100→p101は取込後に証拠を再照合 |
+| [WS074](ws074/ws.md) | MG006 | zedBSD の Web ブラウザ `userland/base/zdesktop-browser`（HTML5 の layout engine → 最適化にこだわらない JavaScript engine の接続 → CSS の準拠と Chrome との比較で目標値を段階的に上げる。JS と Wasm の実行 engine を共通化。画像は libpng-compat・新しい libjpeg-compat、TLS は当面 OpenSSL）（2026-09-27 ユーザー指示） | incomplete | p099 cleared（q507、Acid2 100%）。次はorigin/browser2取込p172がblocking。P10専任予約、p100 Acid3 pixel完全一致→p173 Interop 2025 baseline/全件PASS目標。p101 CSS2も保持 |
 | [WS075](ws075/ws.md) | MG006 | i915 の高度化: 今日のデスクトップ（zdesktop の glass・backdrop のぼかし・タブ）とグラフィックス（GLES 2/3、GL 3.0〜3.2）を Latitude 5330 の i915 のネイティブ実行器で動かす（compiler の inlining・F-022・F-023 の不足、性能と安定）（2026-09-27 ユーザー「OpenGL 3.2が問題なければ、それ以降のOpenGLはいったん保留して、i915の高度化に進んでください。」） | incomplete | 2026-09-30: L1（C6 91.3 ms）と L2（p029: blur は窓ごと、既定は無効・Settings だけ有効、C6 67.3 ms）を満たした。L3 は p030 で計測（文字の draw 約 400 で約 10 ms）。ユーザーの指示で描画の高速化を止め、p031（文字の draw をまとめる）は build まで済んだ patch（`phase031/exp/text-batch.patch`）で保留。再開はユーザーが描画の高速化の再開を言うとき |
 | [WS076](ws076/ws.md) | MG002 | libc の libm を自前で正しく書き直す（src/libc、誤差 1 ulp 以内、fmod 等は正確）（2026-09-28 ユーザー「libmは独自に書いてください。libcのツリーに入れてください。」） | completed | 2026-09-28 完了（`src/libc/math/`、群 B は全件で正しく丸め、BUG-078 解決）。F-046・F-047 へ移管 |
 | [WS077](ws077/ws.md) | MG001 | PC-98 の PCI を有効にする（BUG-024、2026-09-28 ユーザー「Bug024は、PCIを有効にします。」） | planning | **優先度を下げた（2026-09-28 ユーザー「Bug024は優先度を下げます。」）**。p001（調査と設計）。HAL の差分は承認が要る。PC-98 の試験が要るので着手の前に確認 |
@@ -289,7 +290,7 @@ N=0 になったら実装をまとめて計画（master・ws.md・Future Work・
 2026-10-01: 最優先のWS104→WS105/fg012を完了。根拠はWS105 L1〜L9とq538全文規約・回帰。元のユーザー指示と完了履歴を保存し、未完了WSの相対順は変えない。以下は候補の優先順で、実行許可ではない。
 1. **デモ critical の上位**（この順、2026-09-30 夜 ユーザー）: WS099（Keiland の compositor、WS035 の後継）、WS079（Notes・PDF Viewer）、WS090（libkeiui）、
    WS089（Settings）、WS094（デスクトップの icon）、WS100（音量）、WS078（Kei への改名）、WS102（スクリーンキーボード）。
-2. **デモ critical の中位**: WS074（ブラウザ。origin/browser2取込p172がblocking、p100 Acid3はその後）。
+2. **デモ critical の中位**: WS074（ブラウザ。origin/browser2取込p172がblocking、p100 Acid3 pixel完全一致→p173 Interop 2025が専任P10の順）。2026-10-02の専任指定はWS074を上位WSの後まで待たせる意味ではなく、他のdemo workと独立のlaneで並走させる。全体の相対優先順は維持する。
 3. **デモ critical の残り**（ユーザーの順位の指定は無く、Q1 が中位の後に置いた）: WS084（i915 の画面の引き継ぎ）、WS075（i915。描画の高速化は止めたまま）、
    WS081（touch の質。L3 は後ろ）、WS085（Windows の QEMU の Venus。デモの touch の土台）、WS068（GL 3.2 まで。3.3 以降は保留）、
    WS101（GPU の compute。S13 は通った。最適化は「今のまま」で止め、デモ critical の中で一番低い）。
@@ -320,7 +321,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS073: BUG-030 の受け入れの残り（KVM 2×20・boot test）、BUG-116（EP0 の event の取りこぼし、BUG-036 と同じ系統か） | 安定性 | phase041 |
 | WS094 p004 の残り（保存した場所への配置の guest の確認・回帰・boot test）→ p005〜p007 | デスクトップの icon | phase004 の Resume point |
 | WS090 p004（窓の土台と Text Editor の libkeiui への移行、文字の編集の touch） | 共通の部品 | p003 cleared |
-| [WS074 p172](ws074/phase172/phase.md) → p100（Acid3）→ p101（CSS2） | origin/browser2取込が全browser作業のblocking gate | p172 planned / Queue未選定。p099 cleared、branch成果照合待ち |
+| [WS074 p172](ws074/phase172/phase.md) → [p100](ws074/phase100/phase.md)（Acid3 pixel完全一致）→ [p173](ws074/phase173/phase.md)（Interop 2025の対象固定とbaseline）→改善Phase / p100→p101（CSS2全件） | origin/browser2取込が全browser作業のblocking gate。P10専任枠で後続を継続 | p172/p100/p173 planned / Queue未選定。p099 cleared、branch成果照合待ち。Interop達成はbaseline後の改善と最終回帰で判定 |
 | WS095（IME）p005〜: **一時的に人間が作業中** | — | ユーザーが戻すと言うまで |
 | WS098（IME のニューラル化）: 学習の corpus と license の判断から | IME の最後の仕上げ | WS095 の辞書の後 |
 | WS080: p001（ld.coff の設計） | デモ critical の後 | spec.md |
@@ -504,6 +505,8 @@ ws109-20261002-user-i915-passthrough: user selected awe@10.0.10.25 i915 passthro
 2026-10-02 / ws113-multidisplay-plan-20261002: current userの後日実装する複数display WS113と9PhaseをMG006に追加。pointer越境で窓全体移動、拡張時のみ1出力制約、mirrorは全画面複製、zedBSD i915を完了対象とした。fg010・既存demo順位とWS089の過去stub受け入れは保持。未順位/実装Queueなし。GitHub公開保留。
 
 2026-10-02 / ws074-browser2-gate-20261002: WS074へblocking p172を追加。WS107移動表でorigin/browser2の旧engine pathをlibbrowserへ対応。全未実行browser Phaseはp172 wholeclear/実統合出力を前提、既存fg010/ブラウザ中位の相対順位は保持。branch側phase102〜171は取込時にID/証拠を照合し、過去WS/Queue/Projectを丸ごと上書きしない。Issue/Project公開保留。
+
+2026-10-02 / ws074-dedicated-interop2025-20261002: userが前回3人案のブラウザP10をWS074専任として固定し、p172統合後のAcid3 pixel完全一致/fail 0とInterop 2025 WPT全件PASSを指示。[fg017](#current-focused-goals)を既存fg010と並置。WS074はdemo critical中位のまま独立laneで並走し、p172→p100→p173を先に計画、p101 CSS2全件は保持。P10は未起動、実装Queueなし。GitHub publication保留。
 
 ## 2026-10-02 / GTK4・Qt6学習順の追加
 
