@@ -1,6 +1,6 @@
 # q589-i01 low-overhead preparation / B3
 
-Status: in-progress, host preparation complete; guest resource grant pending.
+Status: finished / q589-i01 uncleared, host preparation preserved; guest never started.
 Whole p017: uncleared. BUG-125: reproduced / tracking.
 Preparation start: 2026-10-02 07:49:13 UTC; preparation checkpoint07:53:30 UTC.
 Maximum45 minutes of active work; external resource hold is recorded separately.
@@ -39,3 +39,15 @@ work time and bounds the hold by q587's own deadline. Scope/run limits are uncha
 Preparation used about five active minutes conservatively; at most40 active minutes
 remain after grant. No further helper or host repetitions during the resource hold.
 Preparation source/Markdown whitespace was checked on staged owned paths.
+
+## Terminal event / 2026-10-02 08:45 UTC
+
+Event `b3-q589-user-wrap-20261002`: current user instructed B3 to save its work,
+record uncleared, make it resumable, and end. q589-i01 ends uncleared because
+the required guest observations were not performed before that wrap-up. No guest
+failure was reproduced and no repair was claimed. Whole p017 remains uncleared;
+BUG-125 remains reproduced / tracking. Helper/host checks and ignored image are
+preserved. [Terminal result and resume](q589-result.md),
+[cleanup receipt](evidence/q589/cleanup.txt) and
+[restart asset hashes](evidence/q589/restart-assets.json) record the handoff.
+Main owns B3 lane and Agent A owns shared Queue/history/Bug projections.
