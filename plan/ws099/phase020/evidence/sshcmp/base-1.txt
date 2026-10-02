@@ -1,0 +1,37 @@
+log: POPUPPROBE ready run=p MISSING (found 0)
+window at 0,0
+log: ZWL POPUP grab popup= MISSING (found 0)
+log: ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1 MISSING (found 0)
+log: ZWL PING pong client=1  MISSING (found 0)
+log: POPUPPROBE ping serial=[0-9]+ answered MISSING (found 0)
+log: POPUPPROBE configure menu x=60 y=60 width=360 height=180 MISSING (found 0)
+log: POPUPPROBE focus menu MISSING (found 0)
+check: (160,105) want 4a90e2 got 000000 DIFFERS
+check: build/p2-p020/sshcmp/base-1/menu.png 1920x1072 FAIL
+log: POPUPPROBE button menu state=1 x=100 y=130 MISSING (found 0)
+log: POPUPPROBE configure submenu x=360 y=120 width=360 height=120 MISSING (found 0)
+log: POPUPPROBE focus submenu MISSING (found Connection timed out during banner exchange)
+the keyboard went back to the window while the submenu opened (0)
+check: (520,225) want e2a04a got 000000 DIFFERS
+check: build/p2-p020/sshcmp/base-1/submenu.png 1920x1072 FAIL
+log: POPUPPROBE choose submenu row=1 MISSING (found 0)
+log: POPUPPROBE close menu MISSING (found 0)
+log: POPUPPROBE focus window MISSING (found 0)
+check: (160,105) want 2b3444 got 000000 DIFFERS
+check: build/p2-p020/sshcmp/base-1/chosen.png 1920x1072 FAIL
+log: POPUPPROBE configure submenu x=-360 y=120 width=360 height=120 MISSING (found 0)
+check: (100,225) want e2a04a got 000000 DIFFERS
+check: build/p2-p020/sshcmp/base-1/flipped.png 1920x1072 FAIL
+log: ZWL POPUP dismiss client= MISSING (found 0)
+log: POPUPPROBE done submenu MISSING (found 0)
+log: POPUPPROBE close menu MISSING (found 0)
+check: (380,200) want 2b3444 got 000000 DIFFERS
+check: build/p2-p020/sshcmp/base-1/dismissed.png 1920x1072 FAIL
+log: POPUPPROBE repositioned token=1 MISSING (found Connection timed out during banner exchange)
+log: POPUPPROBE configure menu x=10 y=40 width=360 height=180 MISSING (found 0)
+check: (30,50) want 4a90e2 got 000000 DIFFERS
+check: build/p2-p020/sshcmp/base-1/repositioned.png 1920x1072 FAIL
+log: POPUPPROBE close menu MISSING (found 0)
+request: invalid initial count (Connection timed out during banner exchange)
+/tmp/p.log:POPUPPROBE FAILED run=p setup errno=5
+p076: FAIL

@@ -1,0 +1,8 @@
+ZWL GLASS request move surface=8
+ZWL GLASS moved surface=8 x=540 y=393
+ZWL RESIZE start surface=8 edges=10 width=400 height=300
+ZWL RESIZE end surface=8 width=550 height=400
+ZWL RESIZE settled surface=8 x=540 y=393 width=550 height=400
+ZWL RESIZE start surface=8 edges=4 width=550 height=400
+ZWL RESIZE end surface=8 width=200 height=400
+ZWL RESIZE settled surface=8 x=890 y=393 width=200 height=400

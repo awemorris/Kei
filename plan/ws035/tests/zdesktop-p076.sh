@@ -27,7 +27,24 @@ GUEST_RUNTIME="${GUEST_RUNTIME:-$(pwd)/build/ws035-sq-run}"
 export GUEST_RUNTIME
 out=${1:-build/ws035-p076}
 mkdir -p "$out"
-guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+# Runs a guest command within a host deadline per attempt (seconds); when ssh itself fails (status 255: the guest's
+# sshd did not answer in time, BUG-135), tries again, three attempts in all.  The command's own status is kept.  Each
+# retry is printed (to stderr), so that a harness failure is told from the compositor's (ws099-p020).
+guest_retry() {
+	retry_attempt=1
+	while :; do
+		retry_reply=$(timeout "$1" python3 plan/tools/guest/guest.py run "$2" 2>&1)
+		retry_status=$?
+		[ "$retry_status" -ne 255 ] && break
+		[ "$retry_attempt" -ge 3 ] && break
+		echo "harness: ssh failed, attempt $retry_attempt: $(printf '%s\n' "$retry_reply" | tail -1)" >&2
+		retry_attempt=$((retry_attempt + 1))
+	done
+	[ "$retry_status" -eq 255 ] && echo "harness: ssh failed, attempt $retry_attempt (last): $(printf '%s\n' "$retry_reply" | tail -1)" >&2
+	[ -n "$retry_reply" ] && printf '%s\n' "$retry_reply"
+	return "$retry_status"
+}
+guest() { guest_retry 90 "$1"; }
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -58,9 +75,10 @@ count_log() {
 }
 
 # Requires a new accepted request while the button remains held, within six half-second polls.
-# A ten-second host deadline also bounds a stalled SSH command; an old matching line cannot pass.
+# A ten-second host deadline bounds each SSH attempt (a failed ssh is tried again, guest_retry); an old matching line
+# cannot pass.
 wait_request() {
-	request_reply=$(timeout 10 python3 plan/tools/guest/guest.py run "i=0; n=0; while [ \$i -lt 6 ]; do n=\$(grep -cE '$2' '$1'); if [ \$n -gt $3 ]; then echo P076_REQUEST=\$n; exit 0; fi; sleep 0.5; i=\$((i + 1)); done; echo P076_REQUEST=\$n; exit 1" 2>&1)
+	request_reply=$(guest_retry 10 "i=0; n=0; while [ \$i -lt 6 ]; do n=\$(grep -cE '$2' '$1'); if [ \$n -gt $3 ]; then echo P076_REQUEST=\$n; exit 0; fi; sleep 0.5; i=\$((i + 1)); done; echo P076_REQUEST=\$n; exit 1")
 	request_status=$?
 	request_seen=$(printf '%s\n' "$request_reply" | sed -n 's/^P076_REQUEST=\([0-9][0-9]*\)$/\1/p' | tail -1)
 	if [ "$request_status" -eq 0 ] && [ "${request_seen:-0}" -gt "$3" ]; then
@@ -74,7 +92,7 @@ wait_request() {
 
 # Starts the gesture only after counting accepted requests, so a previous drag cannot satisfy it.
 press_request() {
-	request_before=$(timeout 10 python3 plan/tools/guest/guest.py run "grep -cE '$3' /tmp/zdesktop.log" 2>&1 | tail -1)
+	request_before=$(guest_retry 10 "grep -cE '$3' /tmp/zdesktop.log" | tail -1)
 	case "$request_before" in
 	''|*[!0-9]*) echo "request: invalid initial count ($request_before)"; status=1; return 1 ;;
 	esac

@@ -1,0 +1,9 @@
+wayland /tmp/p020-wayland probe /tmp/p020-popup-probe delay 400
+log: POPUPPROBE ready run=p ok
+window at 440,293
+log: POPUPPROBE delayed ms= ok
+log: ZWL GLASS moved surface=[0-9]+ x=540 y=393 MISSING
+log: ZWL RESIZE end surface=[0-9]+ width=550 height=400 MISSING
+log: ZWL RESIZE end surface=[0-9]+ width=200 height=400 MISSING
+log: ZWL RESIZE settled surface=[0-9]+ x=890 y=393 width=200 height=400 MISSING
+p020-late-request: FAIL
