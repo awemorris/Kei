@@ -1,11 +1,8 @@
 <!-- awesome-plan project=zedbsd record=ws005-p024 -->
 # ws005-p024: WiFi の有効化（起動時の `net wifi enable`）で保存済みの AP に自動で再接続する
 
-<<<<<<< HEAD
 Status: planned（2026-10-02 ユーザーの改訂の設計）
-=======
 Status: uncleared（q607-i01、P1、2026-10-02。実装の最初の変更が権限の確認で拒否され、source は変えずに停止）
->>>>>>> d108d0a0d
 Disposition: normal
 Parent: [WS005](../ws.md)
 
@@ -25,7 +22,6 @@ Parent: [WS005](../ws.md)
 
 `userland/base/networkd/`、`userland/base/net/`、`plan/ws005/`。
 
-<<<<<<< HEAD
 
 ## 2026-10-02 設計の改訂（ユーザー）
 
@@ -39,7 +35,6 @@ Parent: [WS005](../ws.md)
 5. 確認: 本物の networkd の QEMU（system の store だけでの起動時の接続の試み、login の通知での利用者の store の追加、logout での除去）、5330 の AX211 passthrough で再起動後の console の自動接続（system の store）と、login 後の利用者の store での自動接続、logout 後の切り替え。資格情報は記録に書かない。
 
 2026-10-02 user（明示の承認）:「WiFi自動再接続を明示的に承認します。」→ 改訂した設計（起動時は system の store、login で利用者の store を通知して追加、logout で通知して除去）の実装と試験を承認。
-=======
 ## q607-i01（P1 generation2、2026-10-02、base `b6e5ac6ef`）: 権限の確認で停止
 
 - 試みた変更（適用されていない）: `userland/base/networkd/main.c` の `load_policy()` を、所有者が root のとき root の store に加えて `network` group の
@@ -51,4 +46,3 @@ Parent: [WS005](../ws.md)
 - 再開の条件: ユーザー本人が、このセッションの権限の確認の場で、networkd（root）が network group の利用者の store を起動時の自動接続のために読む変更を
   明示に承認する（または permission の規則を足す）。設計は上のとおりで、続きは `wifi_profiles_changed` で root の policy のときに member の通知でも
   起こすこと、状態の行の `owner=`・`profile-owner=`、QEMU の本物の networkd の試験と 5330 の passthrough の試験。
->>>>>>> d108d0a0d
