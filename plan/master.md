@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: なし。q577 BUG-125、q579 browser2、q580 GTK4 baselineは通常wrap-upしuncleared、q578 C10はcleared。
+Active Queues: Agent Aのq584/A1 browser p172残review、q585/A2 WS112 p001契約調査、q586/A3 WS113 p001設計調査。Agent Bは別checkoutで開始済み、lane詳細はBからの投影待ち。
 Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
 Next（2026-10-02 更新）: P8/P9/P10の成果を回収し、A/Bの2 checkoutを同じorigin/mainから開始できる状態へ移行。A1はp172残review、B1はWS114 p001残測定、B3はBUG-125を候補として、それぞれ新しい有限Queueの選定を待つ。--login本人確認/PIN交換とWS110/testingは検討のみ。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。旧P8/P9/P10は停止・回収済みで、[Queue index](queue.md)にterminal outcomeを保存。

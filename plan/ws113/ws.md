@@ -2,11 +2,11 @@
 
 # WS113: Keilandの外部ディスプレイ・複数画面設定
 
-Status: planned
+Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG001（GPU/API契約と回帰証拠）
 Parent: [Master](../master.md)
-Queue: none / あとで実装、実行未承認
+Queue: q586 / A3（p001契約調査のみ、製品実装は後続）
 Resume point: p001の標準Vulkan hotplug能力・出力状態機械・実i915 fixture設計。実装順位は未指定。
 
 ## Objective / scope
@@ -37,7 +37,7 @@ zedBSD i915で外部ディスプレイの接続/切断をVulkan Display拡張か
 
 | ID/link | Purpose | Goal | Status | Dependencies |
 | --- | --- | --- | --- | --- |
-| [ws113-p001](phase001/phase.md) | 契約・能力と実機fixture | hotplug/複数出力/拡張とmirror/Settings/窓所属の仕様を確定 | planned | 既存WS075/WS089/WS103の実出力を確認（context） |
+| [ws113-p001](phase001/phase.md) | 契約・能力と実機fixture | hotplug/複数出力/拡張とmirror/Settings/窓所属の仕様を確定 | in-progress / q586 | 既存WS075/WS089/WS103の実出力を確認（context） |
 | [ws113-p002](phase002/phase.md) | i915のHPD・複数display出力 | driverからGPU表示イベントを提供し、複数出力を同時に扱う | planned | p001 cleared/driver契約 |
 | [ws113-p003](phase003/phase.md) | Vulkan Displayの列挙・通知 | libvulkanから標準Display API/拡張でhotplugと複数出力を公開 | planned | p002 cleared/実driverイベント |
 | [ws113-p004](phase004/phase.md) | compositorの出力・表示モード | 全拡張または全mirrorで複数outputを描画 | planned | p003 cleared/Vulkanの実複数出力 |

@@ -2,14 +2,17 @@
 
 # Queue / all-agent index
 
-Active Queues: なし
-Status: finished（q577/q579/q580の通常wrap-upを完了）
+Active Queues: q584/A1 browser、q585/A2 package契約調査、q586/A3 display契約調査。B側実行はB-owned laneから後で投影。
+Status: active
 Main executor / plan writer: Q1
 Approval: current user / 2026-10-02「では、N=3でしばらく実行を続けてください」。既定専任3枠の最初のscopeを各lane/snapshotに固定。各上限3時間、開始時N_effective=3、利用上限後0/main引継ぎ。
 Last finished Queue: [q580](history/queue-q580.md)
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
+| q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md) |
+| q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | active / in-progress | [lane](agents/A2/queue.md) |
+| q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | active / in-progress | [lane](agents/A3/queue.md) |
 | q577 / q577-i01 | P8 | [phase](ws099/phase017/phase.md) | BUG-125の再現/同期診断、証明された試験raceのみ修正。compositor読取のみ。 | finished / uncleared | [archive](history/queue-q577.md) |
 | q578 / q578-i01 | P9 | [phase](ws099/phase014/phase.md) | C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。 | finished / cleared | [lane](agents/P9/queue.md) |
 | q580 / q580-i01 | P9 | [phase](ws114/phase001/phase.md) | Debian13標準GTK4実測/19行機能表、compositor/GTK source変更なし、3時間 | finished / uncleared | [archive](history/queue-q580.md) |
@@ -18,6 +21,8 @@ Last finished Queue: [q580](history/queue-q580.md)
 Dependency graph: C9実出力 → q577; c5-hw/hdmi-h4-hw → q578; WS107実source/p099/browser2 SHA → q579 → 後続browser（外部context、未投入）。3Queue間のsource依存なし。hardwareはP9のみ、QEMU runtimeは担当別。
 
 ## Upcoming Work Outlook
+
+2026-10-02 A N=3再開: 最新user開始指示を既定A/B分担の最初の有限Phaseへ適用。q584はq579統合source→残review、q585/q586はcontext成果→契約調査で相互のsource依存なし。q581〜q583はB用に予約。全posterior Phase未投入、push/Issue公開保留。
 
 WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ。
 [P8 bug](agents/registry.md): [Bug Board](known-bugs.md)の未解決項目を個別のhandling WS/Phaseで消化。最初の候補は[BUG-125](bugs/BUG-125.md)（デモC9のresize不安定）。既存の保留/実機/owner条件を保持、Queue未選定。

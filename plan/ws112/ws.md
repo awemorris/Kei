@@ -2,11 +2,11 @@
 
 # WS112: Linux 5種類のパッケージ作成とCIリリース配布
 
-Status: planned
+Status: incomplete
 Primary Milestone: MG007
 Related Milestones: MG001（追跡可能なbuild/配布記録）、MG006（既存Keilandの配布）
 Parent: [Master](../master.md)
-Queue: none / 実装未承認
+Queue: q585 / A2（p001契約調査のみ）
 Resume point: p001の契約・公式OS入力・形式確認から。ユーザー「あとで実装」のため今回は計画のみ、実行順位未指定。
 
 ## Objective / scope
@@ -40,7 +40,7 @@ Debian/Ubuntu QEMU buildは継承し、新OS環境/入力/依存/format/pinsをp
 
 | ID / link | Purpose | Goal | Status | Dependencies |
 | --- | --- | --- | --- | --- |
-| [ws112-p001](phase001/phase.md) | 共通契約・対象OS入力・形式を確定 | 5 targetのpayload/CPU/format/依存・build環境・成果物/CI契約を具体化 | planned | なし（WS108/WS105/WS111の実出力をcontextとして照合） |
+| [ws112-p001](phase001/phase.md) | 共通契約・対象OS入力・形式を確定 | 5 targetのpayload/CPU/format/依存・build環境・成果物/CI契約を具体化 | in-progress / q585 | なし（WS108/WS105/WS111の実出力をcontextとして照合） |
 | [ws112-p002](phase002/phase.md) | Debian/Ubuntu package生成を動作試験から分離 | 既存2 targetでbuild/形式検証だけのdeb生成と共通stage/記録契約を提供 | planned | ws112-p001 cleared / 確定したinputsとmanifest |
 | [ws112-p003](phase003/phase.md) | Raspberry Pi OS arm64 deb | make keiland-linux-rpiと実arm64/RPi OS成果物 | planned | ws112-p002 cleared / 共通stage・成果物契約（p001のRPi確定入力を使用） |
 | [ws112-p004](phase004/phase.md) | Fedora 44 rpm | make keiland-linux-fedora44とFedora 44 rpm成果物 | planned | ws112-p002 cleared / 共通stage・成果物契約（p001のFedora確定入力を使用） |

@@ -8,7 +8,7 @@ Primary Milestone: MG006
 Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
-Queue: なし（last: q579-i01 uncleared）
+Queue: q584 / A1（q579の残review、last: q579-i01 uncleared）
 Resume point: p099 cleared. p172 integrated the pinned origin/browser2 changes and retained build/runtime evidence, but q579 ended uncleared with 141 C/header and 60 other imported entries still needing final reconciliation/review. Select a finite p172 continuation before p100, p174, p175, p173, p176 or p101; the downstream gate remains closed.
 <!-- awesome-plan-current:end -->
 
@@ -230,7 +230,7 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p099](phase099/phase.md) | Acid2 100%: 固定harnessでexact pixel一致、crash・timeout 0 | **cleared**（2026-09-30、q507。90.56% → 100.00%、plain/ASan） | p097 |
 | [ws074-p100](phase100/phase.md) | Acid3の100/100、固定参照とのpixel完全一致、fail・Uncaught・crash・timeout 0 | planned（p172後、p099 cleared） | p099、p172 |
 | ws074-p101 | WPT CSS2 reftest 100%: 固定commitのscriptなし全5904件でpass 100%、error 0 | planned（p100後、p172も必須） | p100、p172 |
-| [ws074-p172](phase172/phase.md) | origin/browser2のbrowser変更をWS107後のlibbrowser/browser配置へ取込み、関連計画/試験/bugを意味的に照合するblocking gate | planned / Queueなし | WS107の実成果、p099、branch snapshot |
+| [ws074-p172](phase172/phase.md) | origin/browser2のbrowser変更をWS107後のlibbrowser/browser配置へ取込み、関連計画/試験/bugを意味的に照合するblocking gate | in-progress / q584 A1（q579 unclearedの続き） | WS107の実成果、p099、branch snapshot |
 | [ws074-p173](phase173/phase.md) | Interop 2025の公式focus area対象WPTを固定・baseline化し、全件PASSへ向けた失敗群と後続Phaseを設計 | planned / Queueなし | p172、p100 |
 | [ws074-p174](phase174/phase.md) | File System Access APIの仕様/WPT・権限・picker/handle契約を確定し、機能群ごとの実装Phaseへ分割 | planning / Queueなし | p172、p100 |
 | [ws074-p175](phase175/phase.md) | OPFSのorigin分離・永続保存・handle契約を確定し、機能群ごとの実装Phaseへ分割 | planning / Queueなし | p172、p174の共有契約の実出力 |
