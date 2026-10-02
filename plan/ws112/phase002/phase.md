@@ -17,6 +17,13 @@ tools/release/keiland-linux-debとroot targetの必須経路を整理。native Q
 
 [共通設計](../design.md)の対応節を使用する。自分のPhase以外の受け入れを変更する必要が出たら、依存/foreign Phase/WSを同時に計画修正し、material scopeの同意を確認する。
 
+## Detailed procedure / q585 investigation
+
+[Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
+既存native QEMU buildをruntimeから分離し、共通stageとsource archiveの外側gzip時刻/filename固定を提供。既存2inputを保持、launcher/test app除外・conffiles・native dpkg-shlibdeps/dpkg-debと独立dpkg query/extractionを照合する。
+後続command/証拠: make keiland-linux-debian / make keiland-linux-ubuntu2604、専用outputの各deb+3sidecars、source hash再現、readelf CPU/SONAME/RUNPATH、package展開と共通manifest比較。任意runtimeの入口と過去WS108証拠は保存。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+
 ## Clearance criteria / verification
 
 make keiland-linux-debian / make keiland-linux-ubuntu2604で各debと付随記録を生成、独立format/payload/CPU/ELF依存監査が成立。runtime/PNGなしでもpackage検証が成立し、既存test-only payloadを含まない。
@@ -39,3 +46,5 @@ Resume: prerequisitesの実出力と判断を照合し、当PhaseだけのQueue�
 ## Event history
 
 2026-10-02 / ws112-package-plan-20261002-ws112-p002-created: userの5OS package計画をこの有限Phaseへ分割、Status planned・Queue none。RPi arm64回答を契約に反映。詳細とscopeはWS/design参照。GitHub body/comment/Project公開は保留、local/outboxに記録。
+
+2026-10-02 / ws112-q585-contract-detail: [p001](../phase001/phase.md)の一次資料/実source調査で当Phaseのprocedure/command/証拠を具体化。上記のnative環境/形式/CI契約へ対応づけ、既存prerequisites・受け入れ・Queue none・Status plannedを保持。再開はp001残件と必要な実出力を照合後の当Phaseだけの承認済Queue。[WS要約](../ws.md#event-history)。GitHub deliveryはmain canonical outboxへ。

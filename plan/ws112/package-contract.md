@@ -19,6 +19,8 @@ shared library依存はnative ELFのNEEDED/symbol versionと各OSのpackage DB�
 Encoderは公式package形式を満たす小さな既存toolとして選択。Debian packaging skeleton/Fedora dist-git/mock/Arch devtools/source packageの全面導入は必要としない。
 RPM specはempty`%check`/`--nocheck`、Archはcheck関数なし/`--nocheck`とし、CI runtimeを間接復活させない。
 RPM buildroot postprocessorとArch makepkgのstrip/debug機能が既存stageを変えたら、共通manifestと不一致で失敗させる。必要な抑止設定はp004/p005でnative版に対して確認する。
+RPMはprivate file由来のProvidesを抑止し、Requiresの除外はstageで充足するprivate SONAMEだけに限定する。file全体のRequires除外でlibc等のsystem依存を消さない。
+Archは専用makepkg設定のPKGEXTを`.pkg.tar.zst`に明示し、`!strip !debug`と必要directory保持を確認。圧縮toolとquery/extraction tool版も記録する。
 
 公式一次仕様（2026-10-02閲覧）:
 [dpkg-deb1.22.22](https://manpages.debian.org/trixie/dpkg/dpkg-deb.1.en.html)はroot-owner-groupと形式/query/extraction、

@@ -94,8 +94,47 @@ rootfs抽出はraw partition tableとfilesystemを専用directoryへ扱い、hos
 いずれも全compileは実RPi rootfsのarm64 compiler/system headers/libraryから行い、host cross gccや別Debian sysrootをRPi native buildとして使わない。
 user-modeの場合は`uname -m`だけではkernel/CPU証拠が足りないため、compiler target、gcc ELFのAArch64、出力全ELFのMachine、native dpkg arm64とRPi provenanceを確認する。
 
+## RPi具体案: 既存Debian VM内のarm64 native rootfs
+
+既存Debian13 pinned QEMU guestを外側の隔離に使い、内側で公式RPi rootfsのarm64 userlandをQEMU user-modeで実行する案を技術候補とする。
+hostは既存loopback SSH/QMPだけを用い、source/inputを専用VMへ転送する。RPi kernelをbootしたとは報告しない。
+外側のkernel/OSはDebian13、内側のcompiler/headers/system libc/package DBはRPi OS13 arm64として別fieldに記録する。
+rootfs内のgcc/as/ld/Python/make自体がAArch64 executableであることを確認し、外側Debianのx86_64 compiler/libraryをcompile/linkへ使わない。
+
+| 手順（後続Queueのみ） | Command / 検証契約 |
+| --- | --- |
+| 外側VM準備 | 既存Debian input/hashとSSH/QMP boot証拠を継承。VM内だけで`apt-get install qemu-user qemu-user-binfmt e2fsprogs util-linux`、tool package版・署名由来を記録。Debian trixieではqemu-user-staticはtransition packageなので名前だけを固定しない |
+| raw imageからroot partition選定 | 圧縮/展開hashを確認後、`sfdisk --json IMAGE`からsector size/start/size/typeを読取。root ext4を実確認し、固定sector番号を仮定せずbounds/overlapとraw sizeを検証。`dd`等で専用regular fileへ該当byte rangeのみ抽出 |
+| rootfs展開 | 外側VMの専用pathへ`debugfs -R 'rdump / DESTINATION' ROOT_PARTITION_FILE`等のread-only抽出。原inputに`-w`を付けない。symlink/mode/owner/必要fileを原ext4と照合、unsupported featureや抽出漏れは失敗。`rdump`が必要metadataを保持するかは実入力で確認し、勝手に成功扱いしない |
+| arm64 exec | 外側VM内の`systemd-binfmt`/native package設定でAArch64 handlerとF flag/interpreterを確認、必要時static emulatorを内rootfs専用pathへ配置。`chroot RPI_ROOT /bin/sh`からnative toolsを実行。binfmt登録・mount・privilegeは外側VM内だけ、VM廃棄で解放。host global binfmtを変更しない |
+| rootfsの環境 | guest内のprivate proc、最小dev(null/zero/random/urandom等)、shmとDNS設定だけを提供。host home/keys/workspace全体やblock/GPU devicesをbindしない。RPi apt repo/keyringを保持し、必要packagesをRPi rootfsのaptで導入、service起動はrootfs内policy-rc.d等で抑止 |
+| source/build | allowlisted source archiveをrootfs専用work pathへコピー、既定PATHとclean envを使う。compiler/linker/tool owner+hash/版、native gcc target、全production ELF Machine=AArch64、private SONAME/RUNPATH/system ABIと依存を監査。stage/encoder/queryも内側native toolsで行う |
+| 成果物回収 | package+3sidecarsだけを外側VM経由で回収し、input/rootfsとsource/destinationをmanifestへ残す。guest shutdown/lock/socket/temporary key cleanup。取残しは専用build内に記録し、host user dataを削除しない |
+
+一次資料（2026-10-02閲覧）:
+[Debian QemuUserEmulation](https://wiki.debian.org/QemuUserEmulation)・[trixie qemu-user-static](https://packages.debian.org/stable/qemu-user-static)はqemu-user/qemu-user-binfmtへの移行とstatic user emulatorを確認、公開版は`1:10.0.11+ds-0+deb13u1`。
+[debugfs](https://manpages.debian.org/trixie/e2fsprogs/debugfs.8.en.html)はregular filesystem image/read-only default/rdump/dump-p、
+[update-binfmts](https://manpages.debian.org/trixie/binfmt-support/update-binfmts.8.en.html)はhandler状態とfix-binaryのchroot用途を確認。
+実guestのhandler管理がsystemdの場合に別registryを重ねず、導入packageの実設定を読む。
+
+PRoot代案は[公式manual](https://raw.githubusercontent.com/proot-me/proot/master/doc/proot/manual.rst)の`-r/-q/-0`で無特権のarm64 child execを扱えるが、host-rootfs/mixed executionとhost syscall/device/networkへ届く仕様を持つ。
+PRoot単体をsecurity sandboxとしない。採るなら外側VMの中でrootfs/source/resultsだけを使い、host-rootfs経由の外側compiler実行を禁止・native tool provenanceで検出する。
+plain chrootも外側VMのkernelを共有し、VM内rootを保護するsandboxではない。隔離の境界は専用QEMU VMである。
+
+| 比較 | 外側Debian x86_64 VM + 内RPi QEMU-user | 補助arm64 kernel full-system + 内RPi rootfs |
+| --- | --- | --- |
+| 追加OS input | RPi公式imageと既存Debian pin。別kernel imageの取得なし | virt適合arm64 kernel/initrd/firmware等の版・URL/hash/署名が追加、現在未定義 |
+| source/ABI保証 | RPi compiler/header/libc/ELF/package DBを確認可能。syscallsは外側Debian x86_64 kernelへ変換 | 同じRPi compiler/header/libcを確認可能。syscallsは補助arm64 kernelへ到達、RPi kernel/実機保証にはならない |
+| 起動/transport | 外側は既存Debian方式、内rootfsはprocess実行でbootなし | new ARM guestのvirt/CPU/virtio/block/cloud-init/SSH/画面によるboot確認が必要 |
+| 実装負担と時間 | guest-local extraction/binfmt/chroot追加。外側TCG＋内arm64 emulationの時間は未測定 | ARM guest専用boot/input/transfer管理が追加。TCG時間は未測定 |
+| 保証しない範囲 | RPi kernel、device/GPU/GUI/実機、namespace syscall全機能 | RPi board/kernel/device/GPU/GUI/実機 |
+
+userが要求したnative compiler/真のRPi rootfs/build-onlyを満たすかは上記native provenanceと実buildで検証する。
+この技術候補はscope/CPUを変えず、GPU/GUI試験やhost変更を追加しない。採用のdelegated authority/boot方法はmainが既存決定と照合中。
+90分Phase案やCI45minの達成を推測で保証しない。p003ではmetadata/input/環境準備/compile/encoder/audit別のelapsedを記録し、有限timeboxで止める。
+
 ## 判断と再開
 
 D1: 新3OS build guestの許可されたboot判定/transportをmainが既存承認と照合する。共有Guardrail改訂が必要ならmainが判断元を保存する。
-D2: RPiのsystem guest/補助kernel/rootfs user-mode方式は受け入れ・host境界に影響するため、Agent A2が選択済みとはしない。上表のfactsを判断資料とする。
+D2: RPi方式の具体案/境界は上記へ保存。full方針は新OS環境具体化をp001へ委ね、明示QEMU native指示はDebian/Ubuntuのみ。mainが通常技術選択として採用できるか照合中であり、user判断必須と先に断定しない。
 p001はこれらの未解決人間判断を残したままclearしない。後続Queueは実input取得/起動で成立性を実証し、失敗・不足・経過時間を有限に記録する。

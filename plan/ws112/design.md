@@ -1,6 +1,6 @@
 # WS112: 5種類のLinuxパッケージとCIリリースの設計
 
-Status: 計画。実装・build・CI実行・release公開は未実施。
+Status: q585-i01で契約調査中。実装・build・CI実行・release公開は未実施。
 正本: [WS](ws.md)、[release方針](../standards/ws112-linux-packages.md)。
 
 ## 入力と現状の証拠
@@ -28,7 +28,10 @@ WS108はQEMU内native buildと別fresh guest runtimeを実装済み、completed�
 Debian/UbuntuのQEMU build指示は保持する。新OSもQEMUで対象OSのnative compiler/system librariesを使う案とし、技術的成立性とboot検証ルールの適用をp001で照合する。
 Raspberry Pi OSの実rootfsを使用し、Debian arm64をその名前で出荷しない。board用imageを汎用QEMUでそのまま起動できるとは仮定しない。
 arm64のTCG build時間やnative依存不足が判明したら調査範囲内で記録し、対象OS/CPUを勝手に変更せず計画を見直す。
-追加CPU版・実機GPU/WiFi/audio・FreeBSD packageは含めない。新OS入力の版/URL/hashは未確認の値を書かず、実装時に公式資料とchecksumを確認して固定する。
+追加CPU版・実機GPU/WiFi/audio・FreeBSD packageは含めない。[公式input調査](phase001/survey.md)に5OSの版付きURL/hashと観測結果を記録。
+Ubuntu/Fedora/Archのchecksum署名は小metadataで暗号検証、image本体は未取得。Debian既存pin/公式unsigned cloud入力の限界とRPi image署名の後続検証を[環境契約](native-environments.md)に分けて保存。
+RPiは公式2026-09-15 Lite Trixie arm64 rootfsを候補に固定。既存Debian QEMU VM内でrootfs native arm64 compilerをQEMU user-modeで使う具体案と補助kernel案の境界/負担差を記録、mainが委任された技術判断として採用可否を照合中。
+新OS guestのboot方法は次exact Queueへ判断元/Guardrailの適用を含め、今回未決を解消したと扱わない。
 
 ## 共通payload・形式
 
@@ -45,6 +48,10 @@ configの扱いは形式ごとに保持契約を記録する。package scripts�
 
 各成果物には既存方針のchecksum、payload manifest、Keiland JSON buildinfoを添付する。buildinfoはsource revision/dirty/hash、OS/CPU、入力checksum、compiler/toolsを記録する。
 一時stage/source転送は専用buildディレクトリ、allowlist方式。共有build/toolchain/host /optを変更しない。ホストtoolchainでなく、各対象OSのnative toolchainを使う。
+
+[形式/依存契約](package-contract.md)でnative dpkg-deb/rpmbuild/makepkgと独立query/extraction、config保持・private Vulkanのdlopen依存・native package DB・version案を具体化。
+共通manifestはpath/type/hash/mode/owner/link targetとdirectoryを監査。all5 source archive hash一致は外側gzip headerも決定的にするp002修正を前提とする（現行はmember時刻だけ固定）。
+公開package index版と実guest版を区別し、後続Phaseがnative導入/ELFと照合する。候補表だけで実packageの依存合格としない。
 
 ## CIとrelease
 
@@ -64,5 +71,7 @@ package install/runtimeは今回のCI受け入れ条件にしない。破損・�
 将来のremote Actions実行やrelease公開は実装指示とpublication権限に従う。未実施のremote実行をlocal確認から合格と報告しない。
 
 1 Queueは1 Phase。各Phaseの予定調査上限内で未解決の環境/依存/形式を記録し、endless retryをしない。具体的command/version/input pinsはp001で確定し各Phaseへ反映する。
+
+2026-10-02 / ws112-q585-contract-detail: p001の実source/一次資料調査からinput/環境/encoder/manifest/CI契約を具体化し、p002〜p007のprocedureと再開条件へ反映。Phaseの依存順、受け入れ、runtime除外、Queue権限は変更しない。未決D1/D2とnative実未検証はp001に保持、各foreign PhaseとWSに同eventを記録。
 
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。

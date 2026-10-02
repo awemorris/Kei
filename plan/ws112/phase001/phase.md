@@ -47,3 +47,5 @@ Resume: 07:12〜08:12 UTCの有限調査内で形式/依存/build環境を具体
 2026-10-02 / ws112-q585-survey-checkpoint-1: 承認済みp001調査を開始。既存source gapと5OS input/hash候補を保存、runtime/新OS合格は未実施。新3OS boot例外・RPi実rootfsのbuild環境・署名trust rootを未決としてmainへ報告。Status in-progress、後続Queueなし、GitHub delivery保留。
 
 2026-10-02 / ws112-q585-survey-checkpoint-2: 版付きArch URL、公式checksum署名trust root/実暗号検証、RPi公式.infoのnative inventoryを追加。dpkg/RPM/Arch encoderと独立監査、payload/source gzip/CI全5OS集合の契約を具体化。D1/D2判断と実guest照合は未決、Status in-progress。Scope/外部Phaseのclear条件/Queue許可は変更せず、詳細設計の次反映はWSと各foreign Phaseへ記録予定。
+
+2026-10-02 / ws112-q585-contract-detail: 実source/公式input/package仕様から詳細環境/形式/manifest/CI契約を保存し、foreign p002〜p007それぞれにprocedureとcommand/verification/resumeを追記、WS/designへ同eventを記録。依存順/受け入れ/Queue membershipを変更せず、未実行Phaseはplanned。RPiの外側既存Debian VM+内側native rootfs案をmainのdelegated authority照合へ提出。D1/D2は照合終了まで未決、p001 in-progress。
