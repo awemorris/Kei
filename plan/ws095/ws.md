@@ -10,6 +10,7 @@ Objectives: O2
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: 2026-09-29 ユーザーの指示でブラッシュアップ（p005 の残り・p012 の辞書の拡張・p006〜p011）は後回し、Keiland を優先。IME は p004 で変換（kanji → 漢字、確定）まで guest で動く。再開は p005（phase005 の Resume point、書きかけは plan/ws095/p005-wip.patch）
+2026-10-02 user:「IMEは人間の作業を完了したので、あなたが担当します。」人間の作業中の制限を解除し、優先度を上げる。人間の commit（2026-10-01〜02、`userland/desktop/ime` ほか）で p005 の状態と `p005-wip.patch` が古い可能性があるため、最初の Queue で現行 source と Phase の照合から始める。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-09-29 ユーザー）

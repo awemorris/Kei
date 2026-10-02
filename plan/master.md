@@ -5,7 +5,7 @@ Active Queues: なし。実行体制（2026-10-02 user）: 単一session Q1 が�
 Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
 **WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
-優先順位の調整（2026-10-02 user）: **WS099 を優先**（BUG-125 を WS099 の blocking にし、WS099 の担当が直す。実機の目視確認はユーザーに声をかける）。**WS114 を優先**し、GTK/Qt は WS114 p007（Linux 本物 GTK4 の CSD 完成）→ WS117（Linux 本物 Qt6 調査と compositor 改良）→ WS115 GTK4 / WS116 Qt6 の zedBSD 移植の順。**IME（WS095）の優先度を上げる**（人間が作業中という以前の制限を解くかは確認中）。Linux packaging（WS112）は下げる。WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる。全体の順位は fg019 確定時に見直す。
+優先順位の調整（2026-10-02 user）: **WS099 を優先**（BUG-125 を WS099 の blocking にし、WS099 の担当が直す。実機の目視確認はユーザーに声をかける）。**WS114 を優先**し、GTK/Qt は WS114 p007（Linux 本物 GTK4 の CSD 完成）→ WS117（Linux 本物 Qt6 調査と compositor 改良）→ WS115 GTK4 / WS116 Qt6 の zedBSD 移植の順。**IME（WS095）は人間の作業が完了し、エージェント（Q1 の割当）が担当する**（人間の作業中の制限は解除）。WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる。**複数 display（WS113）は標準アプリの次**。**ネットワーク > 対象 platform（WS118 Latitude 5320）**。**インストーラの作り直し（WS119）> Linux packaging（WS112、下げる）**。全体の順位は fg019 確定時に見直す。
 <!-- awesome-plan-current:end -->
 
 # zedBSD Master
@@ -93,7 +93,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | S14 | スクリーンキーボード | 右下の角の swipe で flick（日本語）、左下の角の swipe で QWERTY と手書きの面、Text Editor に打つ | WS102 |
 | S15 | 終わり | Log Out → greeter、Shut Down | WS099 |
 
-ブラウザ（WS074）はユーザー指示で再開して p099 まで cleared。IME（WS095）は人間が作業中。ブラウザを台本に足すかは引き続き判断待ち。
+ブラウザ（WS074）はユーザー指示で再開して p099 まで cleared。IME（WS095）は2026-10-02に人間の作業が完了しエージェントが担当。ブラウザを台本に足すかは引き続き判断待ち。
 
 ### fg010 に必要な判断（2026-09-30 夜の自走で出たもの。2026-09-30 朝に全て決定）
 
@@ -228,6 +228,8 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | incomplete | [19項目の実測表](ws114/gtk4-compat-matrix.md)。p001/q581調査cleared、G05 user採用のp007/q587を開始。残る行の採否はp002/user |
 | [WS115](ws115/ws.md) | MG002 | upstream GTK4をzedBSD `packages/desktop/gtk4`へ移植し知見を記録 | planning | WS114判断/実測の後。旧WS034 p029移管、Queue none |
 | [WS117](ws117/ws.md) | MG006 | Linux の本物の Qt6 を調査し、素の Qt6 アプリが動くよう compositor を改良（WS115/116 の前） | planning | WS114 p007 の後に p001 |
+| [WS118](ws118/ws.md) | MG003 | Latitude 5320 で Kei を動かす（LCD の制御の不具合、sshd の遠隔 log 用 image、ユーザーと実機） | planning | p001、実機の時期はユーザーに聞く |
+| [WS119](ws119/ws.md) | MG003 | インストーラの作り直し | planning | 要件の議論 |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
@@ -299,7 +301,7 @@ N=0 になったら実装をまとめて計画（master・ws.md・Future Work・
 5. **bug**: P8専任枠で[Bug Board](known-bugs.md)の未解決項目を個別Queueへ選ぶ。まずデモC9のBUG-125を候補とし、既存scheduled owner・toolchain制限・実機待ちを保つ。BUG-027・033の低優先度判断を維持する。デスクトップP9の新規bugはBoardへ登録してP8へ渡す。
 6. **ACPI（WS049〜WS052）と Arm64（WS044・WS048）**: デスクトップが片付くか limit が余るとき。
 7. **WS001** はユーザーが指示したときだけ。WS077（PC-98 の PCI）・WS066（ld.so の最適化）は低い優先度。
-8. **時期がユーザー次第**: WS095（人間が作業中）、WS098（WS095 の後）。
+8. **時期がユーザー次第**: WS098（WS095 の後）。WS095 は2026-10-02に優先度を上げた（上の調整）。
 
 上に無い未完了の WS（WS004・005・007・009・014・017・026〜029・031・033・034・045〜047・061・082・083・088・096・097・114〜116、予約の WS037〜039、保留の WS013・015）は順位を定めていない。WS114→115→116は依存順で、デモ順の変更ではない。
 
@@ -323,7 +325,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS094 p004 の残り（保存した場所への配置の guest の確認・回帰・boot test）→ p005〜p007 | デスクトップの icon | phase004 の Resume point |
 | WS090 p004（窓の土台と Text Editor の libkeiui への移行、文字の編集の touch） | 共通の部品 | p003 cleared |
 | [WS074 p172](ws074/phase172/phase.md) → [p100](ws074/phase100/phase.md) → [p174](ws074/phase174/phase.md) → [p175](ws074/phase175/phase.md) → [p173](ws074/phase173/phase.md) → [p176](ws074/phase176/phase.md) / p100→p101（CSS2全件） | P10専任の投入候補順。p172取込が全browser作業のblocking gate、p174共有handle契約がp175の前提 | p172/p100/p173 planned、p174〜p176 planning / Queue未選定。p099 cleared。Interop 100%はbaseline後の改善と最終回帰で判定、Test262数値未指定 |
-| WS095（IME）p005〜: **一時的に人間が作業中** | — | ユーザーが戻すと言うまで |
+| WS095（IME）: 現行 source と p005 の照合 → 候補の窓 → 既定の image | 優先度を上げた（2026-10-02） | 人間の作業完了、エージェントが担当 |
 | WS098（IME のニューラル化）: 学習の corpus と license の判断から | IME の最後の仕上げ | WS095 の辞書の後 |
 | WS080: p001（ld.coff の設計） | デモ critical の後 | spec.md |
 | WS106 p002 → p003 | 残るime-probe移動 → 全文規約・最終build/boot | p001 cleared、29件＋13files移動済み。ime-probe非競合回答が再開条件、次Queue未選定 |
