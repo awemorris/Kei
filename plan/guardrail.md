@@ -153,3 +153,10 @@ still excluded. Actual native Vulkan/DRM/provider/render/lease checks required w
 ## 2026-10-02 / ws109-physical-build-install
 
 最新ユーザー: awe@10.0.30.3 ~/zedBSD実機の全操作を事前承認、make keiland-freebsd / sudo make keiland-freebsd-install / /opt/keiland直接起動を希望。最後のGUI受け入れはユーザーの実操作確認。先の実機waiverをこの受け入れについて置換、q572 evidenceは歴史として保存。SSH hostkey変更はユーザーが新ED25519指紋を確認済み、task専用known_hostsで接続。WIP commitに続く開発host pushとFreeBSD pullも追加指示で今回承認（従前push禁止のscope例外）。非force pushのみ、remote人間変更を保つ。native compiler/base libcと既存packages、seatd/video設定を利用、make toolchain不要。FreeBSD GDMはportのWayland制限説明後ユーザーが撤回、対象外。全newsourceの全文規約確認をp007で実行。Issue/Project/comment公開承認とは区別しoutboxを保つ。
+
+## Linux 5種類のpackage計画（2026-10-02）
+
+Event ws112-package-plan-20261002: [方針全文](standards/ws112-linux-packages.md)、[WS112](ws112/ws.md)。指定deb3/rpm1/Arch1をCIで作成して全5種類releaseへ添付、ad hoc生成可、CI runtime確認不要。RPi OS arm64はuser回答で確定。FreeBSDはsource install前提でpackage無し。
+既存WS108の歴史とQEMU native build指示は保持し、今後のCI runtime必須方針を置換する。最終全文規約/package形式・metadata/CI artifact整合は必要、C例外は無し。今回は計画のみ、Queue/実装/push/公開承認ではない。
+
+2026-10-02 / ws112-rpi-build-only-20261002: WS112 RPiはuserの追加指示でbuild/deb生成のみの受け入れ、QEMU GPU制約を理由としてGPU/GUI/実機関門は不要。正本はstandards/ws112-linux-packages.md。

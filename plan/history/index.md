@@ -49,3 +49,10 @@ WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。
 
 2026-10-02 /ws111-completed-20261002: p001/p002に加えWS L1〜L3を照合、completed。userのGDM直接entry/pw本人確認→PIN案を保持。--login実装は検討のみ。
+
+## 計画の追記 / 2026-10-02
+
+Event ws112-package-plan-20261002: userの「あとで実装」に従い[WS112](../ws112/ws.md)（5OS package作成/CI全5種類release）をplannedで追加。RPi OS arm64、ad hoc生成可、CI runtime不要、FreeBSD source-only。
+実装・build・Queue実行は無し。q576 finishedと旧WS108/WS111の完了証拠は保持。新実装候補はOutlookのみ、Issue/Projectとrepository pushは未実施。
+
+2026-10-02 / ws112-rpi-build-only-20261002: 追加user決定: RPiはbuildが通ればOK。GPU/GUI確認を要求しないことをWS112とaffected Phase/方針へ反映、計画のみ。

@@ -48,3 +48,9 @@ Phase directoriesはarchive確認後に削除。失敗を後の成功に書き�
 「現在のQueueを完了したら、WS108を実行してください。」を有限1Phase Queueの実行承認として保存。2026-10-01レビュー第3項を具体化し、旧container案とrelease除外を置換。push禁止を保持。
 
 Event ws108-completed-20261002: 全Phase結果に加えWS自身のP1〜P5を検証してcompleted。remote publication/closureは別のpending状態として保持。
+
+## 後続の5OS配布計画 / 2026-10-02
+
+Event ws112-package-plan-20261002-ws108-followup: userは新[WS112](../ws112/ws.md)にDebian13/Ubuntu26.04/RPi OS arm64/Fedora44/Archの指定make・全5種類CI releaseを計画するよう指示。
+今後のCIではpackage導入/GUI等の動作確認は不要となり、WS108のruntime必須gateをWS112 p002/p006で置換する。ad hoc形式生成可、FreeBSD source-only。
+このWSの当時のP1〜P5/実QEMU導入・GUI evidence、completed、q545〜q549履歴は変更しない。WS112はplanned/実装未承認で、現行source/CIはまだ従来の動作確認を実行する。

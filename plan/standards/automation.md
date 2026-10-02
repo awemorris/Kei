@@ -97,3 +97,20 @@ User waives physical-machine tests; actual native FreeBSD QEMU Venus replaces th
 ## 2026-10-02 / ws109-physical-build-install
 
 最新ユーザー: awe@10.0.30.3 ~/zedBSD実機の全操作を事前承認、make keiland-freebsd / sudo make keiland-freebsd-install / /opt/keiland直接起動を希望。最後のGUI受け入れはユーザーの実操作確認。先の実機waiverをこの受け入れについて置換、q572 evidenceは歴史として保存。SSH hostkey変更はユーザーが新ED25519指紋を確認済み、task専用known_hostsで接続。WIP commitに続く開発host pushとFreeBSD pullも追加指示で今回承認（従前push禁止のscope例外）。非force pushのみ、remote人間変更を保つ。native compiler/base libcと既存packages、seatd/video設定を利用、make toolchain不要。FreeBSD GDMはportのWayland制限説明後ユーザーが撤回、対象外。全newsourceの全文規約確認をp007で実行。Issue/Project/comment公開承認とは区別しoutboxを保つ。
+
+## WS112 Linux package coverage (2026-10-02)
+
+Authority: [package方針全文](ws112-linux-packages.md)、[WS112](../ws112/ws.md)。Event ws112-package-plan-20261002。
+既存WS108のruntime coverageは歴史として保持する。下表は将来のautomation計画であり未実装/未実行。
+
+| 必須契約 | 予定verification / command | 限界・担当 |
+| --- | --- | --- |
+| 5OS native package生成/CPU | 指定5 make targets、input checksum/OS/CPU/buildinfo、対象形式のquery/extraction | p001でcommands/versions固定、p002〜p005実成果物。RPi arm64の実OS確認を含む |
+| payload/依存/license/owner/mode/GDM/launcher | stageと独立package展開のmanifest・ELF参照・metadata監査 | p002〜p005。CI runtime無し、動作を合格と主張しない |
+| 5 artifact全件release/既存job保持 | CI YAML/展開shell/merge検証、欠落・破損・別OS/CPU/source・重複の拒否 | p006。remote Actions/release実行は別途実施有無を記録 |
+| 全変更の全文規約 | git diff --check、Python syntax/shell parse/Makefile/YAML該当検証、full/manual review | p007。新Cは全文＋formatter/style-check、automationだけではsemantic遵守を証明しない |
+| CI runtime不要/FreeBSD package無し | matrix/needs/verifier/release-file規則のmanual確認 | smoke/PNG/fresh install/GUIを必須入力に戻さない。FreeBSD source installは維持 |
+
+対象別formatter/linterの新project-wide設定は追加しない。実装選定前に適用全文/近傍sourceを読む。make check禁止。
+
+2026-10-02 / ws112-rpi-build-only-20261002: WS112 RPi coverageはarm64 native build/deb形式・整合確認のみ。GPU/GUI/実機試験を必須automation/manual関門にしない。
