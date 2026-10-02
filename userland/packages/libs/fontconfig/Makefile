@@ -79,6 +79,10 @@ ZEDBSD_FONTCONFIG_CONF := 10-hinting-slight.conf 10-scale-bitmap-fonts.conf \
 ZEDBSD_FONTCONFIG_CONF_AVAIL := $(ZEDBSD_EXT_fontconfig_STAGEDIR)/usr/share/fontconfig/conf.avail
 ZEDBSD_FONTCONFIG_FONTS_CONF := $(ZEDBSD_EXT_fontconfig_STAGEDIR)/etc/fonts/fonts.conf
 
+# zedBSD's own preference for the generic families, which names the fonts the
+# desktop installs (files/55-zedbsd-families.conf says why).
+ZEDBSD_FONTCONFIG_FAMILIES := $(ZEDBSD_FONTCONFIG_DIR)/files/55-zedbsd-families.conf
+
 # Checks the library and the tools against their contract, and that the
 # stage turned on exactly the configuration files listed above.
 $(ZEDBSD_FONTCONFIG_CHECKED): $(ZEDBSD_FONTCONFIG_STAGED)
@@ -108,8 +112,8 @@ fontconfig: $(ZEDBSD_FONTCONFIG_CHECKED)
 
 # ---------------------------------------------------------------- packaging
 
-# The library under its SONAME, the tools, fonts.conf and the enabled
-# configuration files.  The headers and the .pc file go with the development
+# The library under its SONAME, the tools, fonts.conf, the enabled
+# configuration files and zedBSD's family preference.  The headers and the .pc file go with the development
 # packages of the GTK port (WS115 p002).  The cache directory is not shipped:
 # fc-cache makes /var/cache/fontconfig when root runs it, and every other user
 # gets a cache of their own.
@@ -117,7 +121,7 @@ $(eval $(call ZEDBSD_USERLAND_PACKAGE,fontconfig,Font configuration library,*,n,
 	packages/libs,libs/fontconfig,libs/freetype libs/expat))
 
 ZEDBSD_PACKAGE_INPUTS += $(if $(filter fontconfig,$(ZEDBSD_USER_PROGRAMS)),\
-	$(ZEDBSD_FONTCONFIG_CHECKED) $(ZEDBSD_FONTCONFIG_LICENSE))
+	$(ZEDBSD_FONTCONFIG_CHECKED) $(ZEDBSD_FONTCONFIG_LICENSE) $(ZEDBSD_FONTCONFIG_FAMILIES))
 ZEDBSD_PACKAGE_FILES += $(if $(filter fontconfig,$(ZEDBSD_USER_PROGRAMS)),\
 	--file /usr/lib/$(ZEDBSD_FONTCONFIG_SONAME)=$(ZEDBSD_FONTCONFIG_LIBRARY) \
 	$(foreach tool,$(ZEDBSD_FONTCONFIG_TOOLS),\
@@ -126,4 +130,5 @@ ZEDBSD_PACKAGE_FILES += $(if $(filter fontconfig,$(ZEDBSD_USER_PROGRAMS)),\
 	--file /etc/fonts/fonts.conf=$(ZEDBSD_FONTCONFIG_FONTS_CONF) \
 	$(foreach conf,$(ZEDBSD_FONTCONFIG_CONF),\
 		--file /etc/fonts/conf.d/$(conf)=$(ZEDBSD_FONTCONFIG_CONF_AVAIL)/$(conf)) \
+	--file /etc/fonts/conf.d/55-zedbsd-families.conf=$(ZEDBSD_FONTCONFIG_FAMILIES) \
 	--file /usr/share/licenses/fontconfig/COPYING=$(ZEDBSD_FONTCONFIG_LICENSE))
