@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/layout/replaced.c",
+      "formatted_sha256": "9ed9fb2ee432fc0c1d23bdcff0f6a5c02390536696beeafd94fd6727509f4619",
+      "final_sha256": "799e8c610e4061999359e777d22d8ec96c37af2c3c94a0a483560b0192c0d8b6",
+      "restorations": "Full-standard definition/call argument tabs restored after formatter comparison."
+    },
+    {
+      "path": "userland/desktop/libbrowser/layout/bounds.c",
+      "formatted_sha256": "7d1c65a0f47e4ac8e455f585c69545e82d4ae1de06d3309efdc7eb0856f07efd",
+      "final_sha256": "eff79824a89fe9294998e667c136d3ae5b985f7940dba94af6d96b7e43388dea",
+      "restorations": "Full-standard definition/call argument tabs restored after formatter comparison."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/cloning.c",
+      "formatted_sha256": "42e3ca23d6a71881bfee489f4adff62b4d10b76812982e98a8c07defa7953586",
+      "final_sha256": "102a2fa557759a0ccc04f8fc227f51c9afc3a5950050a990190114a35a5716f6",
+      "restorations": "Full-standard definition/call argument tabs restored after formatter comparison."
+    }
+  ]
+}

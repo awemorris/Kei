@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "build/a1-browser2/plain/host-node-cloning"
+    ],
+    "exit": 0,
+    "stdout": "PASS unsupported native Document kind preserves output\nPASS missing embedding output slot rejected\nPASS clone allocation caused actual collection without stack roots\nPASS callee retained source identity and current owner\nPASS source graph and every UTF16 buffer preserved\nPASS complete copy published after successful allocation\nPASS copied element retains native prefix and arbitrary namespace URI\nPASS copied native attribute retains namespaced identity\nPASS copied native attribute retains prefix local name and value\nPASS every copied child survived allocation collection\nPASS source graph collectible after callee roots released\nPASS complete copy retains creator Document\nPASS post-call root retains copied graph\nPASS creator collectible after all output roots released\nPASS complete copy collectible after output release\nPASS invalid embedding arguments rejected without publication\nPASS unsupported native Document kind preserves output\nPASS missing embedding output slot rejected\nPASS clone allocation caused actual collection without stack roots\nPASS callee retained source identity and current owner\nPASS source graph and every UTF16 buffer preserved\nPASS real ENOMEM preserves unpublished output sentinel\nPASS source graph collectible after callee roots released\nPASS failed partial graph and Document collectible\nPASS creator collectible after all output roots released\nPASS invalid embedding arguments rejected without publication\nnative node cloning: 26 checks, 0 failures\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-image-geometry"
+    ],
+    "exit": 0,
+    "stdout": "native image geometry: 10/10 passed\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-image-zero"
+    ],
+    "exit": 0,
+    "stdout": "native image zero layout: 10/10 passed\n",
+    "stderr": ""
+  }
+]

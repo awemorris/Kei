@@ -1,0 +1,34 @@
+{
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": "cc -std=gnu11 -O1 -g -Wall -Wextra -Werror -D_GNU_SOURCE -fPIC -Iuserland/desktop/libbrowser -Iuserland/desktop/browser -Iplan/ws074/tests -Ibuild/a1-browser2/include -I. -g0 -c SOURCE -o OBJECT",
+  "base": "029ba93330f5b9ec500620269a55cbcadb19db21",
+  "files": [
+    {
+      "path": "userland/desktop/libbrowser/layout/replaced.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "cloning status\u2192error; equivalent trailing void returns",
+      "before_text_sha256": "1bd9c357bced6b28526d5077319ca6487426a82f297a58ebf3af183219ce7a33",
+      "after_text_sha256": "1bd9c357bced6b28526d5077319ca6487426a82f297a58ebf3af183219ce7a33",
+      "text_equal": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/layout/bounds.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "cloning status\u2192error; equivalent trailing void returns",
+      "before_text_sha256": "f13ad40ac1872179ad64934fce90d3fbb9b07e16a997ac47ac4e8f258b8038ff",
+      "after_text_sha256": "f13ad40ac1872179ad64934fce90d3fbb9b07e16a997ac47ac4e8f258b8038ff",
+      "text_equal": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/cloning.c",
+      "compile_warning0": true,
+      "implementation_tokens_equal": true,
+      "normalizations": "cloning status\u2192error; equivalent trailing void returns",
+      "before_text_sha256": "c4449fb0d638dc79f577b914ebff3db84869843252ea6c9a851847221d07f2ff",
+      "after_text_sha256": "c4449fb0d638dc79f577b914ebff3db84869843252ea6c9a851847221d07f2ff",
+      "text_equal": true
+    }
+  ]
+}
