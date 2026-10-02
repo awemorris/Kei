@@ -6,8 +6,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG002（後続の移植知見）
 Parent: [Master](../master.md)
-Queue: q581-i01 cleared（q580-i01 unclearedの履歴を保持）
-Resume point: p001/q581の残主要測定をclearし、[19行機能表](gtk4-compat-matrix.md)を行別採否に渡す。残るoptional経路のskipとbaseline不足を明記。G05はユーザーが個別採用したp007/q587で実装・GTK4検証する。残る行の採否はp002へ。
+Queue: q587-i01 uncleared（q581-i01 cleared / q580-i01 unclearedの履歴を保持。共有Queue投影はmain担当）
+Resume point: p001/q581調査はclear。G05のp007/q587はCSD/明示SSDとclient release修正、部分実検証を保存し、ユーザー終了指示でuncleared。最終runtime/clipboard/Textedit/zedBSD boot等の[残件](phase007/q587-result.md)と[再開条件](phase007/q587-resume.md)を新Queue選定に渡す。残る行の採否はp002、全変更最終conformanceはp006に保持。
 
 ## Objective / scope
 
@@ -36,8 +36,7 @@ WS105 Linux compositorはcontext、WS034 p038のzedBSD Vulkan/EGL横断調査は
 | [ws114-p004](phase004/phase.md) | 選択されたportal/session統合 | planning | p002の採用範囲。不要なら取消判断を記録 |
 | [ws114-p005](phase005/phase.md) | 標準GTK4の再検証と知見の引継ぎ | planning | p003/p004/p007の採用出力 |
 | [ws114-p006](phase006/phase.md) | 全変更の全文規約と最終回帰 | planning | p005実測/最終source |
-
-| [ws114-p007](phase007/phase.md) | G05 CSD/明示SSDの装飾モードとGTK4確認 | planned（q587） | p001実測・G05ユーザー指示 |
+| [ws114-p007](phase007/phase.md) | G05 CSD/明示SSDの装飾モードとGTK4確認 | uncleared（q587 / user安全wrap） | p001実測・G05ユーザー指示 |
 
 Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS115。追加: p001 + G05ユーザー指示 → p007 → p005。選択しない行のPhaseは現状のまま自動clearせず、採否に応じ取消と依存/WS受け入れを改訂する。実装は新Queueの承認が必要。
 
@@ -52,3 +51,5 @@ Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS1
 2026-10-02 / q581-baseline-cleared: p001の残主要操作を測定、全19行の再現証拠/具体skipを保存し調査基準clear。WS acceptanceの採否/改善/引継ぎ/全文最終回帰は未達、WS114はincomplete。q580 uncleared履歴は保持。[q581結果](phase001/q581-result.md)。追加CSD指示のsource実装は新Phase/Queue投入後。
 
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の装飾モード実装・GTK4確認を個別採用。[p007](phase007/phase.md)を追加しq587へ投入。p002は他行の判断を継続、p003はG05を重複実装せず、p005はp007出力を再検証/引継ぎに含める。WS acceptanceとp006最終conformanceは未達。
+
+2026-10-02 / q587-user-wrap-uncleared: p007のCSD/明示SSDとaccepted xdg move/resize matching releaseを実装し、wire・GTK4 GL/Cairo/Vulkan・native Terminal/Filesの部分証拠を保存。userの全agent終了指示で正常停止し、最終source runtime導入、別client clipboard空target一致、Textedit controls、最終zedBSD install/boot PNG等を未達としてuncleared。p005の引継ぎに利用可能な部分成果でありp007出力のclearanceを供給しない。WS114 incomplete、p002他行採否/p006最終conformanceを維持。[結果](phase007/q587-result.md) / [再開](phase007/q587-resume.md)。mainがQueue/共有記録とremote統合を引継ぐ。

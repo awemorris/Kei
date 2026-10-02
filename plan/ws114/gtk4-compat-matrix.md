@@ -28,6 +28,12 @@ q580 / P9 generation2とq581 / B1で、Debian13.7の標準GTK4 **4.18.6+ds-2** �
 | G18 | GNOME固有の全サービス/拡張 | GTK4の通常Wayland windowと別のdesktop機能 | skip: 標準GTK4/demo基本操作のみ、GNOME全サービス/拡張は対象未選定。GTK4起動の一律必須とは判定しない<br>q581: GNOME全サービス/拡張はユーザー方針で網羅目標外。 | 保留案: 網羅目標にしない | 未決 |
 | G19 | Keiland native menubarへのGTK4連携 | [F-045](../future-work.md)に後日案。upstream GTK4の必須Wayland機能ではない | 観測: xdg_menu_manager_v1 global2あり、upstream GTK4 bind無し。GTK内popupでMenuButton表示、native barへのGTK menuは未観測。[PNG](evidence/q580/menu.png)。F-045採否/実装未決<br>q581: global有り・標準GTK bind無しを再確認。[globals](evidence/q581/globals-actual.log)。native barは後日案/採否未決なのでskip。 | 用途依存: 通常windowの互換性とは別に後で判断 | 未決 |
 
+## q587 / G05の追加実装・部分検証（2026-10-02）
+
+p007でobjectなし/unset/CSDをSSDなし、明示SSD/native titlebar opt-inをSSDありに実装し、configure snapshot → ack → commitで適用した。wire mode交渉、GTK4 GL/Cairo/Vulkan表示・入力、GLのmenu/tooltip/modal/move/resize後入力・maximize/fullscreen復帰とnative Terminal/Files SSDを実測。q581の二重装飾・release不足の履歴は上表に保持する。他行の採否/portal実装は追加していない。
+
+ユーザーの終了指示でq587は**uncleared**。最終sourceのguest導入、別client clipboardの正しい空target一致、Textedit全controls、最終zedBSD install/boot PNG等は残る。[結果と実物SHA・証拠](phase007/q587-result.md)、[再開条件](phase007/q587-resume.md)。実際のguest runtimeと最終source buildのSHAは異なり、全基準合格とは主張しない。
+
 ## 検証の順番と判断の材料
 
 1. Debian 13 guest の標準 GTK4 と依存を distro package で導入し、版と `gtk4-demo` 等の対象アプリを固定。`GDK_BACKEND=wayland` で起動し、global bind、stderr、QMP画面、操作結果を取る。使えるrendererを GSK/GTK の診断手段で観測し、通常起動と切替診断を混同しない。
