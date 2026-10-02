@@ -8,8 +8,10 @@ Primary Milestone: MG006
 Related Milestones: MG006
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: q582 / q582-i01（Agent B2、worktree `/home/awe/zedBSD-worktrees/b2`、branch `codex/b2-ws094`）
-Resume point: p011（L4b）はq582でcleared（2026-10-02、host/build/guest/boot PASS）。次はp012の実機gateとp007の全文規約/全WS回帰。L3 の計測（p008）は 2026-09-30 に cleared。基準値は (a) 2908 ms（目標 1500）・(b) 1094 ms（2500）・(c) 95 ms（50）・SLOW-FRAME 0。p009 は 2026-09-30 に uncleared: (a) 1954 ms（画面に出るまで 2973）、(c) 90 ms、(b) 1344、SLOW-FRAME 0。残りは zdesktop の import（WS035）と QEMU の Venus の呼び出し 1 回約 10 ms で、進め方は main の判断待ち（phase009 の「残り」）。p013（jpg・gif の thumbnail）は 2026-09-30 に cleared（Image Viewer と共有の decoder `userland/desktop/picture/`）。段の計画は下の「段（L1〜L5）」
+Focused goal: fg019（ベータ1、2026-10-17）
+Queue: なし（q582 cleared、q588 は p007 の source/host/build の部分だけ cleared、whole p007 uncleared）
+Resume point（2026-10-02 ベータ1の計画）: 2026-10-02 user「WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる」。機能（W1〜W4・L1・L2・L4）は済み。残りは **p014（q588 の所有外の規約の指摘を直す、compositor・Files・Image Viewer）→ p012（5330 の実機、ユーザー）→ p007（全 guest 回帰・C9・最後の boot で WS の締め）**。p009 の扱いは p012 の実機の値で決める（超えたら p015）。下の「ベータ1 の到達目標」。
+<!-- 旧 resume（2026-10-02 前半）: p011（L4b）はq582でcleared。L3 の計測（p008）は 2026-09-30 に cleared。基準値は (a) 2908 ms（目標 1500）・(b) 1094 ms（2500）・(c) 95 ms（50）。p009 は 2026-09-30 に uncleared: (a) 1954 ms、(c) 90 ms、(b) 1344。p013 cleared。 -->
 <!-- awesome-plan-current:end -->
 作業の手引き（2026-10-01）: [guide.md](guide.md)
 
@@ -35,8 +37,24 @@ Resume point: p011（L4b）はq582でcleared（2026-10-02、host/build/guest/boo
 | [ws094-p013](phase013/phase.md) | L3c: jpg と gif の thumbnail（`fm_image_load` が PPM・PGM・PNG だけ。Image Viewer と同じ libjpeg-compat（EXIF の向き）・libgif-compat（最初の frame）で読む）。100 項目の画像に jpg・gif を混ぜて thumbnail が出る | cleared（2026-09-30、host と QEMU。decoder を `userland/desktop/picture/` に共有） | p009 |
 | [ws094-p010](phase010/phase.md) | L4a: 長い名前（2 行、中を省く）と画面の大きさの変更 | cleared（2026-09-30: 統合の試験 demo-s8-s9.sh で合格（ユーザーの指示）、Terminal と p088 は未切り分け、実機は未実施） | p006 |
 | [ws094-p011](phase011/phase.md) | L4b: 置き場の溢れ（grid より多い項目）と、無い名前の保存の行の掃除 | cleared（2026-10-02、q582-i01） | p010 |
-| ws094-p012 | L5: 実機（5330）での L1〜L3 の確認 | planned | p009、実機 |
-| [ws094-p007](phase007/phase.md) | 全文の規約と回帰（WS の最後。選んだ段の Phase の後） | uncleared（q588 source/host/build部分はcleared、所有外規約/全guest/実機/最終boot未達） | 最後の段の Phase |
+| [ws094-p012](phase012/phase.md) | L5: 実機（5330）での L1〜L3 の確認 | planned（agent 1.5h + ユーザー 20 分。WS099 p012 と同じ回にまとめられる） | p009（QEMU の値まで）、実機とユーザーの時間 |
+| [ws094-p014](phase014/phase.md) | q588 の所有外の規約の指摘（compositor の display.c・menu.c・desktop.c、Files の thumb.c・ui-context.c、Image Viewer の image.c）を直す | planned（2h） | q588 の review、WS099 p020・p021 と compositor の file を重ねない |
+| ws094-p015（条件つき） | p012 で (a)(c) が目標を超えたとき: Files の frame の Vulkan の呼び出しの削減（image ごとの command buffer の事前の記録、phase009「残り」の 3）。触る file: `files/present.c`・`main.c` | planning（p012 の実機の値と main の判断が要る） | p012 |
+| [ws094-p007](phase007/phase.md) | 全文の規約と回帰（WS の最後。選んだ段の Phase の後） | uncleared（q588 source/host/build部分はcleared、所有外規約/全guest/実機/最終boot未達）。次の attempt は p014・p012 の後（3h） | p014・p012（と p015 を行うならその後） |
+
+## ベータ1 の到達目標（2026-10-02 計画、fg019）
+
+現行の設計（J1: Files が desktop の層の client）のまま、WS の完了まで持っていく。新しい機能は足さない（溢れた icon は「今のまま」）。
+
+| # | 受け入れ | 測り方 | Phase |
+| --- | --- | --- | --- |
+| D-B1 | q588 の review の所有外の指摘（WS094 が持ち込んだ規約の違反）が 0。既存の例外（main.c 2・picture.c の setjmp 1）は記録 | `style-check.py`・`style-extra.py`・全文の目視 | p014 |
+| D-B2 | 5330 で L1 の操作が働き、L3 の (a) ≤ 1500 ms・(c) ≤ 50 ms・SLOW-FRAME 0（3 回の中央値） | ユーザーの操作と SSH の log | p012（超えたら p015） |
+| D-B3 | `files-desktop-guest.sh` の全手順・desktop-guest（probe）2 回・p010・Files の 14 本・C9・最後の boot test が同じ image で PASS | QEMU の Venus | p007 |
+| — | 完了の処理（試験を `plan/tools/files/` へ、Phase の directory の削除）は Q1。WS094 の完了は WS090 p009（Files の libkeiui への移行）の前提 | — | — |
+
+source の衝突: p014 は compositor の `display.c`・`menu.c`・`desktop.c` を触る → WS099 p020・p021、WS113 p004 以降と直列。Files の `thumb.c`・`ui-context.c` → WS127 の Files の Phase と直列。
+`imageview/image.c` → WS128 の Image Viewer の Phase と直列。p007 は source を変えない見込み（回帰で直しが要れば所有を Q1 に確かめる）。p012 は 5330 と i915 の lock を使う。
 
 注（p006）: `desktop-guest.sh` の restart の手順で、試験用の probe（`--timeout-s=3`）が時々終わらず、起動の上限の行が出ないことがある（p002 で 1 回観察、
 p006 で 2 回再現、別の 2 回は再現せず）。compositor は role と ack を正しく扱っている。p006 は Files だけを変えており、compositor は p005 と同じ。
@@ -83,3 +101,5 @@ p011を有限Queueでcleared。hidden/prune・失敗listingからの復帰のhos
 2026-10-02 / b2-q588-partial-dispatch: p011/q582 clear後、[p007のsource/host/build部分](phase007/q588-approved-scope.md)を同じB2へ投入。全WS sourceはinventory/review、wayland等の所有外は編集せずfindingsを渡す。実機p012と最終guest/C9/bootを受け入れから除かず、WS incompleteを保持。
 
 2026-10-02 / b2-q588-terminal: [p007部分結果](phase007/q588-result.md)をB main9323725bへ統合/ACK、source conformance partial item cleared。whole p007は所有外規約/実機/全guest/C9/最終boot未達でuncleared、WS incompleteを維持。19原ログhashを照合、同時進行B1 source後のinventory再照合は最終conformanceで必要。user指示でB2終了、背景q593は未実装/再開資料保存。
+
+2026-10-02 / ws094-beta1-plan: fg019 の計画エージェントが「現行設計のまま実装しきる」（user）をベータ1 の到達目標 D-B1〜D-B3 にし、p014（所有外の規約の指摘）と条件つきの p015 を追加。順は p014 → p012 → p007。既存の Phase の結果は不変。Queue は未投入。

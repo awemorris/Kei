@@ -8,8 +8,9 @@ Primary Milestone: MG006
 Related Milestones: MG003
 Objectives: O2
 Parent: [Master](../master.md)
-Queue: なし
-Resume point: p002（C5）cleared（2026-09-30 P6、5330 で最大 55 ms）。次は L2 の残り（C1 の実機・BUG-119）
+Focused goal: fg019（ベータ1、2026-10-17）
+Queue: なし（q589 で p017 は uncleared で終端）
+Resume point（2026-10-02 ベータ1の計画）: **最初は p020（BUG-125 の原因の特定と compositor の直し、blocking）**。並行して p019（湖の壁紙の既定、build の file だけ）と p012（5330 の目視、ユーザーの時間）。p020 の後に p021（C2 の geometry と BUG-127）、最後に p022（全文規約と回帰）。下の「ベータ1 の到達目標」。
 2026-10-02 user: WS099 の優先度を上げる。**BUG-125 は WS099 の blocking**、WS099 を担当するエージェントが直す。C1 などの実機の目視確認はユーザーに依頼する（Q1 が声をかける）。
 <!-- awesome-plan-current:end -->
 作業の手引き（2026-10-01）: [guide.md](guide.md)
@@ -59,21 +60,46 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 | [ws099-p007](phase007/phase.md) | BUG-118: client の cursor（隠す・surface・shape）をその client の窓の本体の上だけに、他は矢印（cursor.c・compose.c）。試験 cursor-owner.sh を C9 に | cleared（2026-09-30: 変更前 FAIL・変更後 PASS、C8・C9 PASS） | p001 |
 | [ws099-p008](phase008/phase.md) | BUG-119: Shut Down で電源が切れない。QEMU の monitor で確認（VM running、CPU は全て HLT）、原因（init が poweroff を HALT にし、PC の kernel に ACPI の S5 が無い）と直し方の案（UAPI・system-device・platform・ACPI の driver・init、HAL の API は変えない）、greeter の「Shutting down…」の案 | cleared（2026-09-30、確認と案まで。実装は別に割り当て） | p004 |
 | [ws099-p009](phase009/phase.md) | greeter の Shut Down・Restart で「Shutting down...」「Restarting...」と spinner を出し、その絵の後に POWER を送る。c1-boot-shutdown.sh に最後の絵の判定と QEMU の終わりの判定（今は WARN） | cleared（2026-09-30: 変更前 FAIL・変更後 PASS、C9 PASS（p076 は 1 回の不安定さの後 2 回 PASS）） | p008 |
-| ws099-p006（案） | C6: 実機（5330）の pointer の遅延の計測（WS075 の measure-apps.sh）。WS075 の p023 と合わせる | planning | p001・WS075 |
+| ws099-p006（案） | C6: 実機（5330）の pointer の遅延の計測（WS075 の measure-apps.sh）。WS075 の p023 と合わせる。ベータ1 では記録だけ（2026-09-30 午後 user の速さの優先の引き下げ） | planning（要る判断: C6 50 ms を 10/10 に保つか見直すか、user） | p001・WS075 |
 | [ws099-p010](phase010/phase.md) | BUG-122: compositor が落ちた後に greeter が 3 回の失敗で文字の console に落ちる。sessiond の起こし直しを延ばす（6 回、待ちを 1〜16 秒に伸ばす）、失敗の理由を sessiond の log に。試験 `bug122-recovery.sh` | cleared（2026-09-30: `bug122-recovery.sh` 直しの前 FAIL・後 PASS、C1 PASS、boot PASS。5330 は未確認） | p001 |
 | [ws099-p011](phase011/phase.md) | BUG-121: 窓の角の drag で窓が消える。試験 `resize-stress.sh`（QEMU、角の drag 100 回）・`resize-hw.sh`（5330 の passthrough、20 回）。原因は上の窓の frame の帯の press を下の窓の title bar の control が取って下の窓を前に出したこと（`titlebar-shell.c`）と、端の帯が frame を覆う置き場所（`shell.c`）。client を外す log `ZWL CLIENT gone` | cleared（2026-09-30: 5330 直しの前 20 回中 6 回消失 → 後 0、QEMU Model viewer・wlshm 各 100 回 0、C2・C9 PASS、boot PASS。QEMU の Venus の swapchain の失敗は別件） | p010 |
 | [ws099-p015](phase015/phase.md) | 全画面を常に合成する（全画面の直の scanout（`display.c` の fullscreen mode）を消す）、全画面の窓を下の端から上への swipe で窓に戻す（pointer と touch。全画面の間は下の端の swipe を Wiseview より先に全画面の解除に使う。下の左右の角は WS102 の keyboard のまま）。C3 の試験に swipe の解除を足す | cleared（2026-09-30: P6 の実装と `c3-swipe-back.sh` PASS、demo-s8-s9 PASS（page の frame 最長 139→135 ms）、pen の遅れの中央値 74→117 ms・frame の間隔 107→113 ms（QEMU、1 frame の合成の費用の分）。P6 の uncleared の理由だった他の WS の試験 3 本（p010・p052・p053、消した直の scanout を前提）は、Q1 が P6 の差分を当てた。P6 が同じ差分の複写で最後の image で PASS を確かめている。5330 は未実施） | p010 |
 | [ws099-p016](phase016/phase.md) | zdesktop の buffer の import の短縮（ws094-p009 の発見: 1 枚約 210 ms、うち layout の変更の submit と `vkQueueWaitIdle` が 100 ms。次の合成の command buffer の barrier にまとめる）。app の起動から最初の frame まで（C5 と WS094 の (a')）を前後で測る。QEMU と 5330 | cleared（2026-09-30、QEMU: WS094 (a') 2977 → 2652 ms、App Home → Files の最初の frame 2655 → 2407 ms、Model viewer 4439 → 4182 ms。C9・WS079-p010・boot PASS。5330 は lock が使用中で未実施） | —（p015 と file を分ける: import.c・compose.c の周り。display.c・shell.c・seat.c・backdrop.c は他の Phase が作業中） |
+| [ws099-p012](phase012/phase.md) | C1 の 5330 の目視（ユーザー）と、5330 での BUG-119（電源断）・BUG-122 の確かめ。B4 | planned（agent 1h + ユーザー 15 分。WS094 p012 などと同じ回にまとめられる） | p004・p009・p010、ws073-p043、ユーザーの時間 |
 | [ws099-p014](phase014/phase.md) | C10 i915 passthroughの60分連続操作。試験script/短時間試走とsoak | cleared（q578、i915 passthrough: 3602秒/278周、errors0/restarts0、main最終確認） | p001/p002/WS075 hdmi-h4の実出力 |
 | [ws099-p017](phase017/phase.md) | BUG-125のmove/resize再現と試験同期の切り分け。実compositor defectは別Phaseへ | uncleared（q577 FAIL保持、q583部分診断cleared/非再現、q589準備のみunclearedで終端） | p003/p007のC9実出力 |
-| [ws099-p019](phase019/phase.md) | ユーザー追加: 白樺・湖と発見された抽象版を共通source/3 OS release dataへ。ぼやけた湖を起動default、既存背景の選択を維持 | planning（q593予約/未着手、user wrap-upにより再開待ち） | 旧p061資産・q588安全な終端 |
+| [ws099-p019](phase019/phase.md) | ユーザー追加: 白樺・湖と発見された抽象版を共通source/3 OS release dataへ。ぼやけた湖を起動default、既存背景の選択を維持 | planned（2026-10-02 ベータ1の計画で再開可に。user の決定は済み、exact scope は [再開資料](../ws094/phase007/q593-resume.md)。3h。q593 の予約 ID の扱いは Q1） | 旧p061資産・q588安全な終端 |
+| [ws099-p020](phase020/phase.md) | **BUG-125（blocking）**: p076 の popup の 2 症状と left resize の settle の原因を guest で弁別し、compositor（と必要なら試験の同期）を直す。B1 | planned（4h、P の新しい attempt） | p017 の資産（q589 の helper）、Venus の renderer |
+| [ws099-p021](phase021/phase.md) | C2 の geometry（q538: top-right の増分 20、bottom-left/left の settle）と BUG-127（最小化の直後に窓が残る）。B2 | planned（3h） | p020 cleared（同じ shell.c の周り） |
+| [ws099-p022](phase022/phase.md) | WS099 の全文規約と回帰（WS の最後）。B5 | planning（最後。p019〜p021 の後） | p019・p020・p021、p012 |
+
+## ベータ1 の到達目標（2026-10-02 計画、fg019）
+
+期限の目安: 実装は 2026-10-10 ごろまで、その後は bug の修正と実機の調整だけ（凍結日は未確定、master の fg019）。C1〜C10 の基準は変えない。
+
+| # | 受け入れ（ベータ1） | 測り方 | Phase |
+| --- | --- | --- | --- |
+| B1 | BUG-125 が resolved: 同じ image で `zdesktop-p076.sh` の単独 20 回と `criteria.sh … C9` の 5 回で FAIL 0。原因を log・画面の証拠で示し、試験の待ちで隠していない | QEMU の Venus、p017 の資産（`p076-framed.sh`・`tests/p017-popup-low-overhead.py`） | p020 |
+| B2 | C2 が PASS（q538 の top-right の増分・left の settle の FAIL が 0）、BUG-127（最小化の直後の画像）が resolved か、原因つきの tracking でユーザーが非阻害を決めた | `criteria.sh … C2 C9` を 3 回 | p021 |
+| B3 | ベータ1 の既定の壁紙がぼかした湖、既存の背景を Settings で選べ、保存済みの設定が優先（3 OS の data） | p019 の受け入れ | p019 |
+| B4 | 5330（USB の素の起動）で C1 の黒・文字の画面 0 枚、Shut Down から電源断 10 秒以内、`SESSIOND GREETER failed` 0 | ユーザーの目視と SSH の log | p012 |
+| B5 | `criteria.sh` の C1〜C5・C7〜C10 が同じ最終の image で全て PASS、変えた source の全文規約、boot test | QEMU の Venus | p022 |
+| — | C6（50 ms）は記録だけ（p006）。2026-09-30 の決定「10/10 に見直す」の時点でユーザーに判断を求める | WS075 の `c6.py` | p006 |
+
+### source の衝突（他の WS との並列の注意）
+
+- p020・p021 は `userland/desktop/wayland/` の shell.c・popup.c・menu.c・toplevel.c・seat.c の周りを変える。同じ directory を変える WS094 p014（display.c・menu.c・desktop.c）、
+  WS113 p004・p005・p007、WS102 p022（keyboard.c）、WS114・WS095 の compositor の Phase と同時に流さない（file が別なら Q1 の判断で並列可、`compose.c`・`shell.c` を触る組は直列）。
+- p019 は `userland/desktop/wallpapers/`・`keiland-linux.mk`・`keiland-freebsd.mk`・root の Makefile の data の行・compositor の既定の壁紙の 1 行（backdrop.c か preferences.c）。p020 とは file が別で並列可。
+  root の Makefile は WS112・WS129 と重なりうる。
+- p012 と WS094 p012・WS089 の 5330 の確かめ・WS079 の S8/S9・WS100 の A7 は、同じ demo の image の 1 回のユーザーの時間にまとめられる（Q1 が声をかける）。
 
 ## 段の計画（2026-09-30 main 経由のユーザーの方針「広く浅く」: まず動く段をそろえ、磨き込みは段ごとの数値目標の小さな Phase）
 
 | 段 | 内容 | Phase | 数値目標 | 測り方 |
 | --- | --- | --- | --- | --- |
 | **L1（まず動く、QEMU）** | 基準の QEMU で測れる分と、落ちた後の回復 | p001・p003・p004・p005・p007・p009（cleared）、**p010（BUG-122）** | `criteria.sh` の C1〜C4・C7〜C10 が全て PASS。compositor（session・greeter）が 5 回続けて落ちても graphical の login に戻り、console に落ちない | `plan/ws099/tests/criteria.sh`、`bug122-recovery.sh`（QEMU の Venus） |
-| L2（実機でそろう） | 実機の不具合と C5 | p011: BUG-121（窓の角の drag で窓が消える）の切り分け（QEMU の resize の stress 100 回、実機の passthrough 20 回）と直し<br>p002: C5 の実機の計測と短縮<br>p012: C1 の実機の目視<br>p013: BUG-119 の電源断の実装（p008 の案） | BUG-121: resize 100 回で窓の消失 0。C5: App Home・Wiseview の開閉の最初の frame まで 100 ms 以内（窓 10 個、5330）。C1: 黒・文字の画面 0 枚（5330）。BUG-119: Shut Down から電源断まで 10 秒以内（QEMU の終了、5330） | stress の script、WS075 の計測、ユーザーの目視、QEMU の終了の時刻 |
+| L2（実機でそろう） | 実機の不具合と C5 | p011: BUG-121（窓の角の drag で窓が消える）の切り分け（QEMU の resize の stress 100 回、実機の passthrough 20 回）と直し<br>p002: C5 の実機の計測と短縮<br>p012: C1 の実機の目視<br>p013: BUG-119 の電源断の実装（p008 の案）→ ws073-p043 で済んだので不要（2026-10-02 計画で確認、5330 の確かめは p012） | BUG-121: resize 100 回で窓の消失 0。C5: App Home・Wiseview の開閉の最初の frame まで 100 ms 以内（窓 10 個、5330）。C1: 黒・文字の画面 0 枚（5330）。BUG-119: Shut Down から電源断まで 10 秒以内（QEMU の終了、5330） | stress の script、WS075 の計測、ユーザーの目視、QEMU の終了の時刻 |
 | L3（磨き込み、実機） | 実機の応答と長時間 | p006: C6 の実機（WS075 の p023 と）<br>p014: C10 の実機の 1 時間 | C6: 窓 10 個で pointer の移動から表示まで中央値 50 ms 以内（5330）。C10: 実機で 1 時間、zdesktop が落ちず `ZWL ERROR` 0 | WS075 の `measure-apps.sh`、`c10-soak.sh` を実機で |
 | L4（後） | 基準の外（Future Work） | — | — | — |
 
@@ -111,3 +137,5 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 2026-10-02 / user-lake-default-20261002: userが旧画像のぼやけた湖を起動defaultとし、収録済み背景を切り替えで維持するよう追加決定。[p019](phase019/phase.md)のcriteriaへ反映、保存済み設定の優先も維持する。予約済みq593のsnapshot準備に含め、同じB2へ受領を確認。既存C1〜C10/実機/最終conformance条件とq588のscopeは維持。
 
 2026-10-02 / b3-q589-user-wrap-20261002: [p017 q589終端結果](phase017/q589-result.md)を回収、準備/hostチェックのみでguest実測未実行のためattemptとwhole p017はuncleared。user指示でB3終了、BUG-125 tracking/WS incomplete維持。証拠と再開手順は保存済み。p019は最新user全agent終了指示により未着手で再開待ち。
+
+2026-10-02 / ws099-beta1-plan: fg019 の計画エージェントがベータ1 の到達目標 B1〜B5 と p020（BUG-125 の直し、blocking）・p021（C2・BUG-127）・p022（全文規約と回帰）を追加。p019 は既存の user の決定と q593 の再開資料で planned に。p013 は ws073-p043 で不要と注記。C1〜C10 と既存の Phase の結果は不変。Queue は未投入。

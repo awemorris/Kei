@@ -59,3 +59,5 @@ Residual / resume: D-ATOMIC採択を要求と検証へ投影し、必要なsourc
 2026-10-02 / ws113-next-selection-20261002-a3-ws113-p001: checkpoint evidence ledgerとq592候補のexact scope/criteria/readinessを保存。既存p002全scopeの選定材料で、implementation権限を新設しない。D-ATOMIC user回答待ち、first-pixel/native NEXT_REFRESHは未実証。strict F1/F2案を短い比較材料として追記したがmandatory処理/APIには採択しない。in-progress/q586期限を保持しmain reviewへ。
 
 2026-10-02 08:42 UTC / ws113-q586-result-20261002-a3-ws113-p001: q586-i01をunclearedで終了、Phase uncleared/normal。90分内にsource/一次規約と全契約案/影響Phase/有限fixture/次候補を保存したがD-ATOMIC未決でclearance不可。source/build/hardware未実施、他条件の実装成功は主張しない。上記artifact/checkpointとresume conditionを保持。[WS](../ws.md)/[evidence](evidence.md)。mainのoutcome projection/remote delivery pending。同session待機。
+
+2026-10-02 / ws113-beta1-plan-p001: fg019 の計画で、次の attempt を 0.75h（D-ATOMIC の採択の反映と whole-Phase の契約の確定だけ）と見積もった。D-ATOMIC のユーザーの回答までは開始しない。Status は uncleared のまま。

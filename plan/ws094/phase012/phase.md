@@ -65,3 +65,5 @@ root の password は `root`、kei は `kei`。）
 - (a) の中央値 ≤ 1500 ms、(c) の中央値 ≤ 50 ms、`SLOW-FRAME` 0。超えたら uncleared にし、値と内訳（`DESKTOP startup` の行、`select-frame` の `submit=`・`queue=`・`wait=`）を
   記録して main に報告する（新しい Phase の判断は main）。
 - 実機で見つけた不具合は bug の起票を main に頼む（subagent は Bug Board の新しい行を作らない）。
+
+2026-10-02 / ws094-beta1-plan-p012: fg019 の計画で planned を維持。WS099 p012（C1 の目視）・WS089 の S7・WS079 の S8/S9・WS100 の A7 と同じ demo の image・同じユーザーの時間にまとめることを Q1 に提案。結果で p009 の扱い（以内なら follow-up で clear、超えたら p015）を決める。

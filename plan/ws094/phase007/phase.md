@@ -57,3 +57,5 @@ format・style・build・試験を流し、範囲の中の違反を直す。新�
 2026-10-02 / b2-q588-partial-dispatch: ユーザー連続Queue指示により[q588 exact partial scope](q588-approved-scope.md)を投入。p011実出力clear後にsource inventory/全文reviewとhost/buildを先行。B1所有waylandは読取reviewのみ。whole p007の実機/最終guest条件は保持、partial item clearanceと区別する。
 
 2026-10-02 / b2-q588-terminal: [部分結果](q588-result.md)と[56-path inventory](q588-inventory.json)・[全文manual判定/所有外残件](q588-review.md)を保存。editable違反修正、host4本、対象4build warning0、境界C1–C5/L1–L5、probe compile/必要host負例を確認。部分Queue itemのcriteriaは満たすがmain review/ACKは別に待つ。whole Phaseはuncleared、WS094 incompleteのまま、所有外source conformance/実機p012/全guest/probe2回/p010/Files14/C9/最終bootを次の承認scopeで再開。ユーザー最新指示により現行q588のラップアップ後B2終了、予約q593は実装せず[背景再開資料](q593-resume.md)へ引き継ぐ。
+
+2026-10-02 / ws094-beta1-plan-p007: fg019 の計画で、q588 の所有外の指摘は [p014](../phase014/phase.md) に分けた。次の attempt（3h 目安）は p014 cleared と p012 の結果の後に、guide.md の全 guest 回帰・desktop-guest 2 回・p010・Files の 14 本・C9・最後の boot と、q588 以後の source の inventory の再照合を行う。受け入れは不変。
