@@ -229,6 +229,35 @@ fgetc(FILE *stream)
 	return getc(stream);
 }
 
+/*
+ * The *_unlocked forms (POSIX) may be called whether or not the caller holds
+ * the stream's lock.  The lock is recursive, so the locked forms are correct
+ * in both cases.
+ */
+int
+getc_unlocked(FILE *stream)
+{
+	return getc(stream);
+}
+
+int
+getchar_unlocked(void)
+{
+	return getchar();
+}
+
+int
+putc_unlocked(int character, FILE *stream)
+{
+	return putc(character, stream);
+}
+
+int
+putchar_unlocked(int character)
+{
+	return putchar(character);
+}
+
 int ferror(FILE *stream) { int value; if (stream == NULL) return 1; flockfile(stream); value = stream->error; funlockfile(stream); return value; }
 int feof(FILE *stream) { int value; if (stream == NULL) return 0; flockfile(stream); value = stream->eof; funlockfile(stream); return value; }
 void

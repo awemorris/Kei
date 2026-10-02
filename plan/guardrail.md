@@ -176,3 +176,11 @@ Event ws114-gtk-qt-port-projections-20261002: user指定の順序は[全文](sta
 ## WiFi の制御の権限（2026-10-02）
 
 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」 → networkd は `network` group の利用者に WiFi の policy の操作（on/off・join・key）を許可する。group 外は従来どおり。秘密の鍵は利用者の store に残す（networkd に鍵を渡さない境界は不変）。[ws005-p019](ws005/phase019/phase.md)。
+
+## i386 の build と試験（2026-10-02）
+
+ユーザー「i386はしばらくテストもビルドもしなくていいです。」→ pcat・pc98 などの i386 の build と試験を当面行わない（受け入れの関門から外す）。i386 の sysroot は作り直さない。
+
+## libc の追加（2026-10-02）
+
+ユーザー「alloca(),getc_unlocked()は実装できるなら実装してほしいです。」「<alloca.h> に #define alloca(size) __builtin_alloca(size) を置くだけでいいです。」→ Q1 が `include/libc/alloca.h` と stdio の `getc_unlocked`・`getchar_unlocked`・`putc_unlocked`・`putchar_unlocked`（POSIX、lock は再帰なので locked 版を呼ぶ）を追加。
