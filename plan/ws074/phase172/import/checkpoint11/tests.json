@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "build/a1-browser2/plain/host-data-url"
+    ],
+    "exit": 0,
+    "stdout": "native data URL error routing: 68/68 passed\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-image-zero"
+    ],
+    "exit": 0,
+    "stdout": "native image zero layout: 10/10 passed\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-namespace"
+    ],
+    "exit": 0,
+    "stdout": "namespace GC checks: 12/12 passed\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-radio-state"
+    ],
+    "exit": 0,
+    "stdout": "radio state checks: 12/12 passed\n",
+    "stderr": ""
+  }
+]

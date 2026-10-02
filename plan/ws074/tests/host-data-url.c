@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Observes real body-decoding errors independently of unrelated native MIME fallback. */
+/*
+ * Observes real body-decoding errors independently of unrelated native MIME fallback.
+ */
 
 #include "page/page.h"
 #include "net/net.h"
@@ -24,6 +26,7 @@ struct data_case {
 
 /* Count independent body, MIME and response observations. */
 static unsigned checks;
+
 /* Preserve every failed observation while ordinary C cleanup continues. */
 static unsigned failures;
 
@@ -40,17 +43,23 @@ int
 main(
 	void)
 {
-	int status;
+	int error;
 	int printed;
 
 	/* The same real native parser supplies valid and invalid-body observations. */
-	status = data_cases();
-	if (status != 0)
+	error = data_cases();
+	if (error != 0)
 		return 2;
+
+	/* Metadata and byte-only consumers must refuse the same native body error. */
 	data_consumers();
+
+	/* Reports all completed body, MIME and consumer observations. */
 	printed = printf("native data URL error routing: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Any failed native observation rejects this regression. */
 	if (failures != 0)
 		return 1;
 
@@ -66,14 +75,19 @@ data_check(
 {
 	int printed;
 
-	/* Earlier failures remain in the final bounded fixture result. */
+	/* Counts this independent observation in the final fixture total. */
 	checks++;
+
+	/* Counts named failures while preserving later independent observations. */
 	if (!condition) {
 		failures++;
 		printed = fprintf(stderr, "FAIL %s\n", name);
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: this observation and any lost failure report were counted. */
+	return;
 }
 
 /* Covers actual forbidden characters, padding and partial decode alongside unchanged valid defaults. */
@@ -81,6 +95,7 @@ static int
 data_cases(
 	void)
 {
+	/* Immutable URL/body/MIME expectations belong to this one corpus traversal. */
 	const struct data_case tests[] = {
 		{ "data:application/xml;base64,!", EINVAL, "", "" },
 		{ "data:application/xml;base64,A", EINVAL, "", "" },
@@ -102,13 +117,13 @@ data_cases(
 		{ "data:TEXT/HTML,%3Cp%3E#fragment", 0, "<p>", "text/html" }
 	};
 	size_t index;
-	int status;
+	int error;
 
 	/* Each independent case owns and releases its genuine URL and native decoded result. */
 	for (index = 0; index < sizeof(tests) / sizeof(tests[0]); index++) {
-		status = data_case_run(&tests[index]);
-		if (status != 0)
-			return status;
+		error = data_case_run(&tests[index]);
+		if (error != 0)
+			return error;
 	}
 
 	/* Succeeded: no earlier case supplied parser state or accidental output to another case. */
@@ -123,22 +138,39 @@ data_case_run(
 	struct net_url url;
 	struct net_data decoded;
 	size_t length;
-	int status;
+	int error;
 	int same;
+	int observed;
 
 	/* The native URL parser and genuine data processor receive ordinary independent input. */
 	length = strlen(test->url);
-	status = net_url_parse(test->url, length, NULL, &url);
-	if (status != 0)
-		return status;
-	status = net_data_parse(&url, &decoded);
-	data_check(status == test->error, test->url);
+	error = net_url_parse(test->url, length, NULL, &url);
+	if (error != 0)
+		return error;
+
+	/* Decodes the actual body independently of MIME fallback classification. */
+	error = net_data_parse(&url, &decoded);
+
+	/* The native error must equal this independent case expectation. */
+	observed = 0;
+	if (error == test->error)
+		observed = 1;
+	data_check(observed, test->url);
+
+	/* Complete owned body bytes must match, including empty failed-decode storage. */
 	same = data_bytes(&decoded.body, test->body);
 	data_check(same, "actual native body bytes or empty failed decode");
+
+	/* MIME fallback may change the media type without concealing a body error. */
 	same = data_bytes(&decoded.mime, test->mime);
 	data_check(same, "actual native MIME or empty failed body outcome");
-	if (status != 0) {
-		data_check(decoded.body.data == NULL && decoded.mime.data == NULL, "failed decode releases partial native C allocations");
+
+	/* Failed decoding must relinquish both partial output allocations. */
+	if (error != 0) {
+		observed = 0;
+		if (decoded.body.data == NULL && decoded.mime.data == NULL)
+			observed = 1;
+		data_check(observed, "failed decode releases partial native C allocations");
 	}
 
 	/* Both failed and successful native outputs support ordinary idempotent release. */
@@ -162,12 +194,20 @@ data_bytes(
 	length = strlen(expected);
 	if (bytes->length != length)
 		return 0;
+
+	/* Equal empty outputs require no dereference of absent byte storage. */
 	if (length == 0)
 		return 1;
+
+	/* A complete byte comparison distinguishes content from equal-sized storage. */
 	same = memcmp(bytes->data, expected, length);
 
-	/* Succeeded: complete native bytes determine the comparison. */
-	return same == 0;
+	/* Different native bytes refuse the expected body or MIME result. */
+	if (same != 0)
+		return 0;
+
+	/* Succeeded: every expected byte agrees with the owned native result. */
+	return 1;
 }
 
 /* Confirms both actual metadata and existing byte-only resource consumers reject a malformed body. */
@@ -177,19 +217,40 @@ data_consumers(
 {
 	struct net_response response;
 	struct wb_buffer bytes;
-	int status;
+	int error;
+	int observed;
 
 	/* New metadata ownership cannot publish an invented status200 for a genuine decoding failure. */
-	status = page_fetch_response("https://example.invalid/base", "data:application/xml;base64,!", &response);
-	data_check(status == EINVAL && response.status == 0, "metadata consumer preserves body EINVAL");
-	data_check(response.body.length == 0 && response.content_type.length == 0, "metadata consumer has no partial body or MIME");
-	data_check(response.url.length == 0 && response.body.data == NULL, "metadata consumer releases failed response allocations");
+	error = page_fetch_response("https://example.invalid/base", "data:application/xml;base64,!", &response);
+
+	/* Metadata consumer preserves body EINVAL. */
+	observed = 0;
+	if (error == EINVAL && response.status == 0)
+		observed = 1;
+	data_check(observed, "metadata consumer preserves body EINVAL");
+
+	/* Metadata consumer has no partial body or MIME. */
+	observed = 0;
+	if (response.body.length == 0 && response.content_type.length == 0)
+		observed = 1;
+	data_check(observed, "metadata consumer has no partial body or MIME");
+
+	/* Metadata consumer releases failed response allocations. */
+	observed = 0;
+	if (response.url.length == 0 && response.body.data == NULL)
+		observed = 1;
+	data_check(observed, "metadata consumer releases failed response allocations");
 	net_response_release(&response);
 
 	/* Existing consumers receive the same real decoder failure without a synthetic successful empty body. */
 	wb_buffer_init(&bytes);
-	status = page_fetch("https://example.invalid/base", "data:application/xml;base64,!", &bytes, NULL);
-	data_check(status == EINVAL && bytes.length == 0, "legacy byte-only consumer preserves body EINVAL");
+	error = page_fetch("https://example.invalid/base", "data:application/xml;base64,!", &bytes, NULL);
+
+	/* Legacy byte-only consumer preserves body EINVAL. */
+	observed = 0;
+	if (error == EINVAL && bytes.length == 0)
+		observed = 1;
+	data_check(observed, "legacy byte-only consumer preserves body EINVAL");
 	wb_buffer_release(&bytes);
 
 	/* Succeeded: ordinary actual consumers share the repaired native failure semantics. */

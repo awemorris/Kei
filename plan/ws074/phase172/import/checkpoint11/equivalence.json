@@ -1,0 +1,25 @@
+{
+  "base": "78e9b0a5477bee1b8127b6df74d71ca867da4670",
+  "files": [
+    "plan/ws074/tests/host-data-url.c",
+    "plan/ws074/tests/host-radio-state.c"
+  ],
+  "normalized_tokens_equal": true,
+  "normalizations": [
+    "status local names to error, excluding response.status",
+    "Boolean argument expressions to explicit zero/if/one decisions with identical operands and short-circuit order",
+    "equivalent trailing void success returns",
+    "data_bytes explicit mismatch refusal then success1",
+    "radio construction failure cleanup branches equivalent to original cleanup then refusal"
+  ],
+  "script_literals_equal": true,
+  "new_fault_outcomes": {
+    "host-image-zero.c": "NULL width/height atoms refuse fixture construction with2 before calling setter; production engine unchanged",
+    "host-namespace.c": "fprintf result stored and negative immediately returns from already-failed assertion; no additional failure count"
+  },
+  "unexecuted_failure_paths": [
+    "new atom-allocation NULL guards",
+    "negative fixture failure-report fprintf"
+  ],
+  "initial_build_failure": "split-call layout edit matched a delimiter inside a JS string; corrected with quote-aware call scan; final build and exact script-token comparison pass"
+}

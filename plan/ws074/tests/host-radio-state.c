@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Checks native dirty checkedness independently of observable checked attributes. */
+/*
+ * Checks native dirty checkedness independently of observable checked attributes.
+ */
 
 #include "bind/internal.h"
 
@@ -13,11 +15,13 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Assertions accumulate across callback-driven and embedding-driven collection. */
+/* Counts each native current-state, dirty-flag and clone observation until main reports. */
 static unsigned checks;
+
 /* Failed behavioral checks determine the final exit status. */
 static unsigned failures;
-/* The embedding restores this construction stack boundary after explicit collection. */
+
+/* Borrows main's live stack boundary to protect fixture construction during normal GC. */
 static const void *construction_stack;
 
 static void collection_check(int condition, const char *name);
@@ -25,7 +29,7 @@ static int collection_script(struct vm_realm *realm, const char *source, vm_valu
 static int collection_case(struct vm_heap *heap);
 
 /*
- * Verifies collection caches and collectible DOM cycles through ordinary bindings.
+ * Verifies native radio checkedness and dirty-state independence through ordinary bindings.
  */
 int
 main(
@@ -35,27 +39,33 @@ main(
 	int error;
 	int printed;
 
-	/* The collector uses real construction stacks until a test explicitly excludes them. */
+	/* The collector uses the real live stack throughout ordinary fixture construction. */
 	error = vm_heap_create(&heap, 0);
 	if (error != 0)
 		return 2;
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
+
+	/* Exercises native setters and current group ownership on the ordinary live heap. */
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Releases all test-owned cells after the primary realm has been destroyed. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("radio state checks: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
 
-	/* Every independently observed GC contract must hold. */
+	/* Every independently observed radio-state contract must hold. */
 	if (failures != 0)
 		return 1;
 
-	/* Succeeded: selected collection cache and root graphs survived actual GC. */
+	/* Succeeded: native current state, dirty flags and clone storage obeyed their contracts. */
 	return 0;
 }
 
@@ -124,16 +134,19 @@ collection_case(
 	struct dom_element *clone;
 	vm_value answer;
 	int same;
-	int status;
+	int error;
+	int observed;
 
 	/* The fixture invokes ordinary script over the actual production DOM and bindings. */
-	status = vm_realm_create(heap, &realm);
-	if (status != 0)
-		return status;
-	status = js_install_builtins(realm);
-	if (status != 0) {
+	error = vm_realm_create(heap, &realm);
+	if (error != 0)
+		return error;
+
+	/* The fixture uses ordinary intrinsics before installing Document bindings. */
+	error = js_install_builtins(realm);
+	if (error != 0) {
 		vm_realm_destroy(realm);
-		return status;
+		return error;
 	}
 
 	/* A manual primary owns the fixture; no asynchronous host effects participate. */
@@ -145,78 +158,133 @@ collection_case(
 
 	/* No host task or hidden test-only engine switch affects the fixture. */
 	memset(&host, 0, sizeof(host));
-	status = bind_window_create(realm, document, &host, &window);
-	if (status != 0) {
+	error = bind_window_create(realm, document, &host, &window);
+	if (error != 0) {
 		vm_realm_destroy(realm);
-		return status;
+		return error;
 	}
 
 	/* List value selection changes clean current state without setting either dirty flag. */
-	status = collection_script(realm,
-				   "var form=document.createElement('form');"
-				   "form.innerHTML='<input type=radio name=group value=a checked><input type=radio name=group value=b>';"
-				   "form.elements.group.value='b';form",
-				   &answer);
-	if (status != 0) {
+	error = collection_script(
+		realm,
+		"var form=document.createElement('form');"
+		"form.innerHTML='<input type=radio name=group value=a checked><input type=radio name=group value=b>';"
+		"form.elements.group.value='b';form",
+		&answer);
+	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
-		return status;
+		return error;
 	}
 
-	/* Inspect actual native state after the public script operation completes. */
+	/* Reads the actual current group members and each stored checked state. */
 	node = bind_node_of(answer);
 	a = (struct dom_element *)node->first_child;
 	b = (struct dom_element *)node->last_child;
 	same = dom_control_checked(a);
-	collection_check(!same, "list selection unchecks original clean default radio");
+
+	/* List selection unchecks original clean default radio. */
+	observed = 0;
+	if (!same)
+		observed = 1;
+	collection_check(observed, "list selection unchecks original clean default radio");
 	same = dom_control_checked(b);
 	collection_check(same, "list selection checks target radio");
-	collection_check(a->control->checked_dirty == 0, "group unchecking preserves clean dirty flag");
-	collection_check(b->control->checked_dirty == 0, "list setter preserves target clean dirty flag");
+
+	/* Group unchecking preserves clean dirty flag. */
+	observed = 0;
+	if (a->control->checked_dirty == 0)
+		observed = 1;
+	collection_check(observed, "group unchecking preserves clean dirty flag");
+
+	/* List setter preserves target clean dirty flag. */
+	observed = 0;
+	if (b->control->checked_dirty == 0)
+		observed = 1;
+	collection_check(observed, "list setter preserves target clean dirty flag");
 
 	/* A dirty IDL setter and a later direct list assignment have independent flag effects. */
-	status = collection_script(realm,
-				   "form.elements[1].checked=false;form.elements.group.value='b';true", &answer);
-	if (status != 0) {
+	error = collection_script(
+		realm,
+		"form.elements[1].checked=false;form.elements.group.value='b';true",
+		&answer);
+	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
-		return status;
+		return error;
 	}
 
-	/* Inspect the independently observable native dirty-state protocol. */
-	collection_check(b->control->checked_dirty == 1, "IDL checked setter establishes target dirty flag");
-	collection_check(a->control->checked_dirty == 0, "IDL target change leaves other dirty flag clean");
+	/* The target becomes dirty while group peers retain their existing clean state. */
+
+	/* IDL checked setter establishes target dirty flag. */
+	observed = 0;
+	if (b->control->checked_dirty == 1)
+		observed = 1;
+	collection_check(observed, "IDL checked setter establishes target dirty flag");
+
+	/* IDL target change leaves other dirty flag clean. */
+	observed = 0;
+	if (a->control->checked_dirty == 0)
+		observed = 1;
+	collection_check(observed, "IDL target change leaves other dirty flag clean");
 	same = dom_control_checked(b);
 	collection_check(same, "list setter preserves existing target dirty flag while checking");
 
 	/* Cloning a clean current group-unchecked radio copies current state without dirtying it. */
-	status = collection_script(realm,
-				   "var clone=form.elements[0].cloneNode(false);clone", &answer);
-	if (status != 0) {
+	error = collection_script(
+		realm,
+		"var clone=form.elements[0].cloneNode(false);clone",
+		&answer);
+	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
-		return status;
+		return error;
 	}
 
-	/* Inspect actual native state after the public script operation completes. */
+	/* The clone copies clean current checkedness into independently owned storage. */
 	node = bind_node_of(answer);
 	clone = (struct dom_element *)node;
 	same = dom_control_checked(clone);
-	collection_check(!same, "clean group-unchecked clone retains current false state");
-	collection_check(clone->control->checked_dirty == 0, "clean current-state clone remains clean");
-	collection_check(clone->control != a->control, "clone checked storage independent from source");
+
+	/* Clean group-unchecked clone retains current false state. */
+	observed = 0;
+	if (!same)
+		observed = 1;
+	collection_check(observed, "clean group-unchecked clone retains current false state");
+
+	/* Clean current-state clone remains clean. */
+	observed = 0;
+	if (clone->control->checked_dirty == 0)
+		observed = 1;
+	collection_check(observed, "clean current-state clone remains clean");
+
+	/* Clone checked storage independent from source. */
+	observed = 0;
+	if (clone->control != a->control)
+		observed = 1;
+	collection_check(observed, "clone checked storage independent from source");
 
 	/* Selecting the originally clean radio preserves its own clean flag and other's dirty flag. */
-	status = collection_script(realm, "form.elements.group.value='a';true", &answer);
-	if (status != 0) {
+	error = collection_script(realm, "form.elements.group.value='a';true", &answer);
+	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
-		return status;
+		return error;
 	}
 
-	/* Inspect the independently observable native dirty-state protocol. */
-	collection_check(a->control->checked_dirty == 0, "list selection preserves original clean flag");
-	collection_check(b->control->checked_dirty == 1, "group unchecking preserves other existing dirty flag");
+	/* Switching the selected member preserves both original dirty-state histories. */
+
+	/* List selection preserves original clean flag. */
+	observed = 0;
+	if (a->control->checked_dirty == 0)
+		observed = 1;
+	collection_check(observed, "list selection preserves original clean flag");
+
+	/* Group unchecking preserves other existing dirty flag. */
+	observed = 0;
+	if (b->control->checked_dirty == 1)
+		observed = 1;
+	collection_check(observed, "group unchecking preserves other existing dirty flag");
 
 	/* Every owned control buffer and realm graph is released through normal finalizers. */
 	bind_window_destroy(window);
