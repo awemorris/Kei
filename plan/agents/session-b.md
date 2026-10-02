@@ -81,3 +81,13 @@ actual results, uncleared criteria, resume inputs and normal shutdown/readback.
 B main reviews and integrates the final submissions, saves the handoff and ends
 after the three children wrap up. A-owned shared publication/projections remain
 durably pending in the handoff; no push is performed.
+
+## Integration and push authorization / 2026-10-02
+
+Current user:「各エージェントの成果を待って、統合してください。-m WIPでコミットしたら、統合結果のこのブランチを、リモートに同じ名前でpushしてください。エージェントAが取り込む予定です。」
+
+Main waits for B1/B2/B3's final submissions, reviews and integrates them on
+codex/agent-b, and commits with WIP. This explicitly authorizes a normal push to
+origin's same-named codex/agent-b branch, superseding the previous no-push limit
+for this integration. No force push or main-branch push is authorized. A will
+integrate the branch and owns shared planning publication/projections.
