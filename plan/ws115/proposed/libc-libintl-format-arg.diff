@@ -1,0 +1,122 @@
+diff --git a/include/libc/libintl.h b/include/libc/libintl.h
+index 14a5f29f2..c15a44640 100644
+--- a/include/libc/libintl.h
++++ b/include/libc/libintl.h
+@@ -17,6 +17,14 @@ extern "C" {
+ 
+ #define TEXTDOMAINMAX	TEXTDOMAIN_MAX
+ 
++/*
++ * The translation functions return a message in place of a msgid.  Each is
++ * marked format_arg for the msgid arguments, so a compiler checks a call
++ * such as printf(gettext("%d files"), count) against the msgid's format, as
++ * it would the literal itself; without the mark it sees a format that is
++ * not a string literal.
++ */
++
+ char *
+ bind_textdomain_codeset(
+ 	const char *domainname,
+@@ -31,14 +39,16 @@ char *
+ dcgettext(
+ 	const char *domainname,
+ 	const char *msgid,
+-	int category);
++	int category)
++	__attribute__((__format_arg__(2)));
+ 
+ char *
+ dcgettext_l(
+ 	const char *domainname,
+ 	const char *msgid,
+ 	int category,
+-	locale_t locale);
++	locale_t locale)
++	__attribute__((__format_arg__(2)));
+ 
+ char *
+ dcngettext(
+@@ -46,7 +56,8 @@ dcngettext(
+ 	const char *msgid1,
+ 	const char *msgid2,
+ 	unsigned long int n,
+-	int category);
++	int category)
++	__attribute__((__format_arg__(2))) __attribute__((__format_arg__(3)));
+ 
+ char *
+ dcngettext_l(
+@@ -55,25 +66,29 @@ dcngettext_l(
+ 	const char *msgid2,
+ 	unsigned long int n,
+ 	int category,
+-	locale_t locale);
++	locale_t locale)
++	__attribute__((__format_arg__(2))) __attribute__((__format_arg__(3)));
+ 
+ char *
+ dgettext(
+ 	const char *domainname,
+-	const char *msgid);
++	const char *msgid)
++	__attribute__((__format_arg__(2)));
+ 
+ char *
+ dgettext_l(
+ 	const char *domainname,
+ 	const char *msgid,
+-	locale_t locale);
++	locale_t locale)
++	__attribute__((__format_arg__(2)));
+ 
+ char *
+ dngettext(
+ 	const char *domainname,
+ 	const char *msgid1,
+ 	const char *msgid2,
+-	unsigned long int n);
++	unsigned long int n)
++	__attribute__((__format_arg__(2))) __attribute__((__format_arg__(3)));
+ 
+ char *
+ dngettext_l(
+@@ -81,29 +96,34 @@ dngettext_l(
+ 	const char *msgid1,
+ 	const char *msgid2,
+ 	unsigned long int n,
+-	locale_t locale);
++	locale_t locale)
++	__attribute__((__format_arg__(2))) __attribute__((__format_arg__(3)));
+ 
+ char *
+ gettext(
+-	const char *msgid);
++	const char *msgid)
++	__attribute__((__format_arg__(1)));
+ 
+ char *
+ gettext_l(
+ 	const char *msgid,
+-	locale_t locale);
++	locale_t locale)
++	__attribute__((__format_arg__(1)));
+ 
+ char *
+ ngettext(
+ 	const char *msgid1,
+ 	const char *msgid2,
+-	unsigned long int n);
++	unsigned long int n)
++	__attribute__((__format_arg__(1))) __attribute__((__format_arg__(2)));
+ 
+ char *
+ ngettext_l(
+ 	const char *msgid1,
+ 	const char *msgid2,
+ 	unsigned long int n,
+-	locale_t locale);
++	locale_t locale)
++	__attribute__((__format_arg__(1))) __attribute__((__format_arg__(2)));
+ 
+ char *
+ textdomain(
