@@ -23,23 +23,7 @@
 #include "base/base.h"
 
 /* How many parse errors a tokenizer remembers by kind (it counts them all). */
-#define HTML_ERRORS_KEPT	64U
-
-/*
- * The text a parser reads, in UTF-16 code units.
- *
- * Network carriage returns are normalized as text is appended; raw inserted
- * text is normalized when the tokenizer reads it. CR LF and lone CR become LF.
- * position is how far the tokenizer has read; closed says the source has ended.
- */
-struct html_input {
-	struct wb_units units;
-	size_t position;
-	int closed;
-	int after_cr;
-	/* The read position after a raw inserted CR, or SIZE_MAX when none waits. */
-	size_t inserted_cr;
-};
+#define HTML_ERRORS_KEPT 64U
 
 /*
  * The kinds of token the tokenizer hands out.
@@ -68,6 +52,23 @@ enum html_tokenizer_start {
 	HTML_TOKENIZE_SCRIPT_DATA,
 	HTML_TOKENIZE_PLAINTEXT,
 	HTML_TOKENIZE_CDATA_SECTION
+};
+
+/*
+ * The text a parser reads, in UTF-16 code units.
+ *
+ * Network carriage returns are normalized as text is appended; raw inserted
+ * text is normalized when the tokenizer reads it. CR LF and lone CR become LF.
+ * position is how far the tokenizer has read; closed says the source has ended.
+ * after_cr suppresses an LF following the last appended network CR.
+ */
+struct html_input {
+	struct wb_units units;
+	size_t position;
+	int closed;
+	int after_cr;
+	/* The read position after a raw inserted CR, or SIZE_MAX when none waits. */
+	size_t inserted_cr;
 };
 
 /*

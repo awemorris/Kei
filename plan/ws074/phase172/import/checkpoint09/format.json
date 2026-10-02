@@ -1,0 +1,30 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/html/html.h",
+      "formatted_sha256": "83d5c84a1fb0820a3733ce64c9a61d202231a6be1aa78f65a287b7a0444fa38e",
+      "final_sha256": "83d5c84a1fb0820a3733ce64c9a61d202231a6be1aa78f65a287b7a0444fa38e",
+      "restorations": "none; full reviewed formatter output retained"
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/parser.h",
+      "formatted_sha256": "23652c927e85b42ec6f9ea87b01156b6b7e7ea34d1651011217dec4e8021eaae",
+      "final_sha256": "23652c927e85b42ec6f9ea87b01156b6b7e7ea34d1651011217dec4e8021eaae",
+      "restorations": "none; full reviewed formatter output retained"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/bind.h",
+      "formatted_sha256": "2cfb6d9950f496d35327d954e17d4e276d87de5cb8b88bbee44d3224d01a0404",
+      "final_sha256": "2cfb6d9950f496d35327d954e17d4e276d87de5cb8b88bbee44d3224d01a0404",
+      "restorations": "none; full reviewed formatter output retained"
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/page.h",
+      "formatted_sha256": "037bcde8a08753a4a896aad4f9e3245e711ba83b31b98b179c76d3003c131c40",
+      "final_sha256": "037bcde8a08753a4a896aad4f9e3245e711ba83b31b98b179c76d3003c131c40",
+      "restorations": "none; full reviewed formatter output retained"
+    }
+  ]
+}
