@@ -143,3 +143,14 @@ Authority: [package方針全文](ws112-linux-packages.md)、[WS112](../ws112/ws.
 | Final source conformance | Full coding-style.md, clang-format/style-check/manual review, targeted build and guest regression | No C style exception; tool versions/commands/results recorded per approved Phase |
 
 [Scoped rule](ws114-gtk-qt-learning.md); [review table](../ws114/gtk4-compat-matrix.md). This is planned coverage, not executed checks.
+
+## サブエージェント別Queueの運用確認（2026-10-02）
+
+| 契約 | 確認方法 | 限界 |
+| --- | --- | --- |
+| Queue ID/agent/attemptと承認 | mainがQueue Board、agent lane、PhaseのID・承認文面・scope hash/版を突合 | 暫定の表や優先順位は承認にならない |
+| 依存・所有・並列枠 | dispatch前にmainが統合SHA/必要成果/試験、重複Phaseとsource、QEMU/build資源、N上限を点検 | branch上だけのcommitは他WSの依存を解除しない |
+| WIP checkpointとmerge | `git status --short`、`git log`/merge-base、担当pathのdiffと有限試験、merge request/ACKのSHA突合 | commitとPhase clearanceは別状態、mainがレビューする |
+| urgent回収 | `git diff --binary HEAD`、未追跡/ignored assetの一覧とhash、base SHA、worktree保持 | patchは未検証で自動統合しない |
+
+[運用契約](../agents/protocol.md)。未実装Queueのため実行結果ではなく事前チェックの設計。

@@ -68,3 +68,7 @@ Event ws074-browser2-gate-20261002: [WS074 p172](../ws074/phase172/phase.md)をo
 ## 計画追記 / 2026-10-02（GTK4/Qt6 upstream学習）
 
 Event ws114-gtk-qt-port-projections-20261002: [WS114](../ws114/ws.md) Linux標準GTK4の[19項目表](../ws114/gtk4-compat-matrix.md)と行別採否→選択したXDG-shell/portal改善、[WS115](../ws115/ws.md) zedBSD upstream GTK4移植、[WS116](../ws116/ws.md) GTK4学習後のQt6範囲判断/移植を計画。WS034 p029/p030は未実行のまま移管。WS096/097完全書き下ろしは保持し、upstream知見を後で渡す。GTK4 guest実測/機能採否/Qt6範囲は未了。q576 finished/Queueなし、source変更なし。Issue/Project publicationとpushは未実施。
+
+## 運用設計追記 / 2026-10-02（サブエージェント別Queue）
+
+Event subagent-queues-projections-20261002: userの希望N=8/GPT-6.1 Sol High、mainのQueue配布/merge、agent別QueueとWS affinity、commit可能地点での頻繁なmerge要求、積んだ次Queueによる継続、通常/urgentラップアップを[運用契約](../agents/protocol.md)に記録。[台帳](../agents/registry.md)は実装担当なし。現runtime上限で子は同時最大3。固定版Awesome Planの単一executor/Queue既定にはzedBSD固有の最新指示を適用。3人の短時間読取専用調査を使い、product source/Queueは変更なし。q576 finished、GitHub publicationとpushは未実施。

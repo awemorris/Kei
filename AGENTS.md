@@ -623,12 +623,10 @@ primary docs for operational syntax:
 
 ## 実行体制と Queue
 
-- メインのエージェントが計画の書き手と merge を担う。サブエージェントの禁止は 2026-09-29 にユーザーが解除した
-  （worktree の branch で Phase を実行させ、数と停止は master の「WS の優先順位」の運用に従う。修正可能範囲は下の「禁止と承認」）。
-  長い処理（build・QEMU・取得）は background で走らせて待つ。commit は自分の path だけ（`git commit -m WIP -- <path>...`）。
-- Queue に入れる Phase は 1 つ。依存を満たし、人間の判断が要らないことを確かめて入れる。大きすぎる Phase は計画の段階で分ける。
-- Phase が終わったら結果を記録し（phase.md、ws.md の表、queue、history、master の Active Queue）、`git commit -m WIP` して次の Queue を作る。
-- 実行中に未知の依存が分かった Phase は uncleared で終え、Queue の後に計画を直す。
+- **2026-10-02 ユーザー更新**: [サブエージェント別Queueの運用契約](plan/agents/protocol.md)を適用する。固定版Awesome Planの「1 project / 1 active Queue / 1 executor」「次Queueを自動開始しない」と、この節の旧い単一Queue運用は、この範囲で置き換える。main（Q1）は共有計画・同期cacheの唯一の書き手、Queueの割当/依存調整とmergeの担当。各サブエージェントは独立worktreeで担当WS/Phaseの承認済みQueueを最大1つactiveにし、mainから投入済みで承認/依存を満たす次Queueへ継続できる。1Queueは原則1Phase。
+- サブエージェントは`gpt-6.1-sol` / high。希望N=8、実際は実行枠・利用制限・実行可能な非競合Queueで調整する。2026-10-02の環境はmainを含め4枠で、子は同時最大3。過去P1〜P7は履歴、次はP8。可能ならWSを固定して文脈を継続する。
+- サブエージェントはPhaseが終わる前でもコミット可能な小単位で`git commit -m WIP -- <担当path>...`し、mainへSHA/検証/残件とmerge依頼を送る。mainが統合してACKする。通常ラップアップは安全なcommit地点で返却して自発的に終了。urgentは未commit差分をbinary patchと再開情報に保存し、直ちに返して自発的に終了。commit/mergeとPhase clearanceは別の状態。
+- 実行中に未知の依存が分かったPhaseはunclearedとして証拠/再開条件を残す。依存成果が実際にmainへ統合されるまで他WSのdependent Queueを開始しない。旧`.claude/agents/phase-runner*.md`のClaude/単Phase/no-commit設定はこのCodex運用には使用しない。
 - 人間の判断が要る点、計画に無い依存、未達の受け入れ条件は、その場でユーザーへ報告する。
   ユーザーが不在の間の自律実行を指示されたときは、判断が要る Phase を uncleared にして理由と要る判断を記録し、先へ進む。
 
@@ -651,7 +649,7 @@ primary docs for operational syntax:
   `userland/packages/devel/libcxx`、共有の `build/llvm`・`build/llvm-source`・`build/llvm-build`・`build/NoctLang` を指す。subagent はこれらを変更・build・
   install しない。必要なら main に理由を送って許可を得る。共有の toolchain の tree は `plan/tools/toolchain-lock.sh lock` で directory を読み取り専用に
   してあり、main が許可した変更の間だけ `unlock` し、終わったら `lock` する。
-- **subagent の修正可能範囲**（2026-09-28 ユーザー）: 割り当てられた WS・Phase の source と、その WS の `plan/wsNNN/`（phase.md・ws.md・試験）、
+- **subagent の修正可能範囲**（2026-09-28 ユーザー、2026-10-02の複数Queue運用でも維持）: 割り当てられた WS・Phase の source と、その WS の `plan/wsNNN/`（phase.md・ws.md・試験）、
   指示された bug の ticket と Bug Board の該当の行、自分の worktree の中の `build/`。それ以外（`AGENTS.md`・`plan/master.md`・`plan/queue.md`・
   `plan/guardrail.md`・`plan/coding-style.md`・`plan/history/`、他の WS の source と plan、HAL の API、toolchain、main の checkout の `build/`）は
   読むだけにし、変更が要るなら main に依頼する。main の checkout の共有の `build/` からは、読み取り専用の symlink か複写で使う。

@@ -228,6 +228,12 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
+## サブエージェント運用（2026-10-02 ユーザー更新）
+
+[正本](agents/protocol.md)・[実体台帳](agents/registry.md)。Q1は唯一の共有計画/cache書き手とQueue配布/merge担当。希望 `N_target=8`、子は`gpt-6.1-sol` / high、実行環境/利用制限/依存/競合に応じて `N_effective` を調整する（このsessionの子の同時上限は3）。P1〜P7の旧割当は歴史として保持し、新規実装担当はP8から。各agent最大1 active Queue、全体で複数可。1Queueは原則1Phaseで、mainが起動時Queueと承認済み後続Queueを順に投入する。WS affinityを優先し、WS終了後の再配属も可能。commit可能地点で頻繁にmergeを依頼し、通常/urgentラップアップは正本の手順で自発的に終了する。
+
+Event subagent-queues-projections-20261002: 以前のN=0〜9/Claude Opus High・Mid/Phaseごと返却の運用記述は下に履歴として保持し、今回の新指示で置換。旧secondary queueの2026-09-26削除も履歴として保持。現在はq576 finished、実装Queue/実装担当は未選定。設計調査だけで優先順位、fg010、WS scopeを変えない。
+
 ## WS の優先順位
 
 ### WS109 の実行優先（2026-10-02）

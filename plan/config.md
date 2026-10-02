@@ -19,7 +19,7 @@
 
 ## Record locations
 
-Master `master.md`; Queue `queue.md`; Guardrail `guardrail.md`; Future
+Master `master.md`; all-agent Queue Board `queue.md` and per-agent lanes `agents/P<番号>/queue.md` (created on assignment); Guardrail `guardrail.md`; Future
 `future-work.md`; Bug Board `known-bugs.md`（tickets `bugs/BUG-NNN.md`）; Past Log `history/index.md`
 （Queue history `history/queue-qNNN.md`）. WS `wsXXX/ws.md`; Phase `wsXXX/phaseYYY/phase.md`;
 Phase-specific tests in the owning WS `tests/`; shared regression tools in `tools/`
@@ -43,8 +43,7 @@ report local records as synchronized.
 Queue item, after decisions/outcomes, handoff, and meaningful checkpoints.
 No daemon/background synchronization is installed. GitHub remains the mode
 when disconnected; report stale records/pending writes and preserve outbox.
-One cache writer and one Queue executor. Record session ownership in
-`.sync/owner.json`; on takeover verify the previous executor stopped.
+One shared-cache writer (main). Multiple subagents may execute one active Queue each under the [scoped protocol](agents/protocol.md); main owns the canonical Queue Board and GitHub sync. Record main cache ownership and per-agent worktree/Queue ownership in `.sync/owner.json` and [registry](agents/registry.md). On takeover verify the previous executor stopped.
 Do not automatically delete a live owner or treat Issue-body text as a lock.
 
 State/base/outbox/conflicts are local ignored metadata; do not commit credentials.

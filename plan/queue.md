@@ -2,7 +2,8 @@
 
 # Queue
 
-Active Queue: なし
+Active Queue: なし（各担当laneにも製品実装のactive Queueなし）
+Agent Queue index: [registry](agents/registry.md) / [protocol](agents/protocol.md)。q577以降はmainが全体一意に採番し、担当laneへ投影する。
 Last finished Queue: q576
 Status: finished
 Cycle: q576
@@ -44,3 +45,5 @@ q576の承認/attempt/outcomeは変更しない。Active Queueなし、次Queue�
 2026-10-02 / ws074-browser2-gate-20261002: WS074 p172をOutlookへ追加。q576 finished/Active Queueなし。追加は計画のみでbranch実装取込を開始しない。
 
 2026-10-02 / ws114-gtk-qt-port-projections-20261002: WS114/115/116をOutlookへ追加。順番は依存関係であり既存demo順位の変更ではない。標準GTK4 guest実行とuser行別判断は未了、Queueなし、q576の承認/結果は不変。
+
+2026-10-02 / subagent-queues-projections-20261002: user指示によりQueueを担当別に拡張。[運用契約](agents/protocol.md)。希望N=8、現在の子枠は最大3、GPT-6.1 Sol High。q576のfinished/承認/結果は不変。実装Queueの選定・起動はこの設計更新では行わず、agent laneは空。

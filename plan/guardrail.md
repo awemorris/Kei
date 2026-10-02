@@ -9,7 +9,7 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
 
 - 作業は承認された Phase の範囲の中で行う。kernel（`src/`・`include/`）、bootloader、libc（`src/libc/`・`include/libc/`）、
   userland、platform、build/config、tools は所有が違う。file の追加や module の境界の変更の前に、現行のコードと Phase を確かめる。
-- secondary queue は 2026-09-26 ユーザー指示で削除した（うまく実行できず、作業中のデータや成果は無い）。
+- 2026-09-26の旧secondary queueは削除済み（当時の作業中データ/成果は無い）。2026-10-02ユーザー指示による新しいサブエージェント別Queueは別設計であり、[運用契約](agents/protocol.md)に従う。mainだけが共有Board/cacheとmergeを所有し、agent別の承認済みQueueを並列に実行できる。
 - HAL: **API の変更（`include/hal/hal.h` の宣言・契約・HAL の責務）は具体的な差分ごとの事前承認**が要る。`src/hal/` の実装の変更
   （既存宣言の実装の修正・補完・最適化、arch 内部の header と struct）は承認なしで行ってよい
   （2026-09-25 ユーザー「HALの実装は勝手に修正してください。APIの変更のみ許可が必要です」。2026-09-12 の「HALの改変には許可が必要です」を
