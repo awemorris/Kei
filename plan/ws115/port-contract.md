@@ -212,4 +212,8 @@ Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h
 | glib の fuzz の `fuzz_resolver` が record の parser（0003 で外した）を呼ぶ | 上の nameser の結果 | glib（fuzzing/meson.build） | glib の patch 0005（`arpa/nameser.h` が無ければその target だけ外す） |
 | harfbuzz（C++）が libc++ の header を要る | toolchain の package（devel/libcxx） | harfbuzz | upstream の既定（`with_libstdcxx=false`）で C の linker で link するので、実行時に libc++ は要らない（NEEDED と未定義の C++ の symbol が無いことを確かめた）。header は `ZEDBSD_EXT_harfbuzz_DEPENDS` の `libcxx` の stage から `-nostdinc++ -isystem <view>/usr/include/c++/v1`（lang/clang と同じ形）。subagent の worktree では main の stage の複写を使い、make に `-o <libcxx の stage>/.zedbsd-staged` を渡す（p006） |
 | fontconfig の `additional-fonts-dirs=yes` が build の機械の X11 の font の directory を調べる | cross の build の道具 | fontconfig | `no` にし、`default-fonts-dirs=/usr/share/fonts`（p006） |
+| `<alloca.h>` が無く、alloca の宣言がどこにも無い | libc の header | cairo（cairo-colr-glyph-render.c） | cairo の patch 0001（header が無ければ `__builtin_alloca`）。libc に `alloca.h` を足すかは別の判断（記録だけ。p007） |
+| `getc_unlocked()` が無い（POSIX。flockfile・funlockfile はある） | libc | pango（pango-utils.c） | pango の patch 0001（meson の検査と getc への fallback）。libc に足すかは別の判断（記録だけ。p007） |
+| LLVM 23 の clang が `-Wunused-but-set-variable` の群に `-Wunused-but-set-global` を含め、G_DEFINE_TYPE の parent_class を報告する | toolchain の版 | pango（`-Werror=unused-but-set-variable`）。glib・cairo などでは warning だけ | pango の patch 0001（その診断だけ `-Wno-error`）（p007） |
+| pixman が TLS を使い `__tls_get_addr` を呼ぶ | link の契約（glib と同じ） | pixman | `-Db_lundef=false` を package ごとに指定（glib と pixman の 2 つ。external.mk の共通化はしていない。p007） |
 | `config.sub` と libtool が zedbsd を知らない | 外部の build 道具 | libffi（autotools だけ） | libffi の patch 0001（OpenSSH の先例と同じ形） |

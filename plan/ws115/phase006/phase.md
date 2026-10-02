@@ -3,7 +3,7 @@
 # ws115-p006: libpng・freetype・harfbuzz・fontconfig
 
 Parent: [WS115](../ws.md)
-Status: in-progress（q605-i01、P3。作業と受け入れの証拠は揃った。clearance の確定は Q1）
+Status: cleared（2026-10-02 Q1。q605-i01、cbbc1607f まで main に統合）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
 Queue / attempts: q605-i01（P3、継続 dispatch、時限 4h、base main 55ff880b4）
