@@ -1,0 +1,30 @@
+image: build/p9-q580/resume/gtk-baseline.qcow2
+file format: qcow2
+virtual size: 8 GiB (8589934592 bytes)
+disk size: 934 MiB
+cluster_size: 65536
+backing file: /home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img
+backing file format: raw
+Format specific information:
+    compat: 1.1
+    compression type: zlib
+    lazy refcounts: false
+    refcount bits: 16
+    corrupt: false
+    extended l2: false
+Child node '/file':
+    filename: build/p9-q580/resume/gtk-baseline.qcow2
+    protocol type: file
+    file length: 934 MiB (979566592 bytes)
+    disk size: 934 MiB
+
+image: /home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img
+file format: raw
+virtual size: 8 GiB (8589934592 bytes)
+disk size: 1.05 GiB
+Child node '/file':
+    filename: /home/awe/zedBSD-claude1/build/keiland-linux/guest/guest.img
+    protocol type: file
+    file length: 8 GiB (8589934592 bytes)
+    disk size: 1.05 GiB
+be71aa00133e080c84e74088c38d390ecdc25c9db3217f8537eeebef10be209c  build/p9-q580/resume/gtk-baseline.qcow2

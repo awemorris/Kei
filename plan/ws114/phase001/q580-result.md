@@ -1,0 +1,24 @@
+# q580 / P9 generation2 terminal checkpoint
+
+Outcome: **uncleared** / user requested all subagents wrap-up for Agent A/B handoff. Full p001 clearance is not claimed. Base `25729c88a`, first checkpoint `c0d5855d5`, main ACK `eac915a47`; final checkpoint is the commit containing this record. Canonical Queue/WS/Master/history reconciliation belongs to main. GitHub publication remains deferred, no push.
+
+Debian13.7/kernel6.12.107 guest; standard GTK4/demo4.18.6+ds-2, system libgtk/libwayland/EGL/Mesa, no private GTK patches. Keiland package/source b0e1eaf972e1 frozen by [package hash](../evidence/q580/compositor-package.sha256). Dedicated root/direct KVM guest, software Mesa EGL/llvmpipe and GskGLRenderer, real wl_shm buffers. This does not certify physical GPU, dmabuf import, current HEAD or zedBSD GTK4. [Versions/ELF](../evidence/q580/environment.log), [final state](../evidence/q580/final-state.log), [provenance](../evidence/q580/provenance.md).
+
+Measured: GTK4 demo/independent API probe mapping and configure/ack/ping/pong, popover menu action, modal/transient dialog/close, same-client Unicode copy/paste, keyboard path input, ordinary FileDialog file selection, maximize/fullscreen and scale1. [19-row review table](../gtk4-compat-matrix.md) links exact logs/PNG and explicit skips; user adoption remains undecided in every row.
+
+Environment findings: initial apt host wrapper timed out210s, guest dpkg completed; subsequent dpkg audit empty and separate demo/schema installs returned0. First FileDialog crashed because GSettings schemas were absent; standard gsettings-desktop-schemas48.0-1 repaired that environment dependency and the ordinary chooser selected `/tmp/q580-marker.txt`. No portal frontend/backend was installed. D-Bus traces contain FileChooser/Settings/Inhibit Properties.Get and host portal Registry.Register requests, answered with missing-name errors. Ordinary chooser success is not portal success. Accessibility bus service absent; no AT-SPI acceptance claim.
+
+Unresolved baseline observations sent to main for existing-Bug comparison; no ticket decision or fix:
+
+- G05: GTK CSD and Keiland SSD are both visible in [initial PNG](../evidence/q580/probe-initial.png) and [dialog PNG](../evidence/q580/dialog.png). Source diff b0→baseHEAD for decoration.c/toplevel.c/protocol.c/popup.c/titlebar.c was empty, but shared wire/backend changes exist. Current runtime still untested.
+- G04: initial surface buffer728×489; maximize restore configured728×489 then GTK produced buffer756×518 with window geometry728×489. Fullscreen restore configured756×518 then buffer784×547 with geometry756×518. [probe2.trace](../evidence/q580/probe2.trace) preserves exact requests/events. This suggests the shadow/surface/window-geometry boundaries merit inspection; causal identity with G05 or another ticket is unproven.
+
+Pending baseline observations: effective interactive move/resize, wheel/touch, cross-client clipboard transfer (demo setup only), tooltip/reposition edges, D&D/PRIMARY transfer, alternative Vulkan/Cairo renderer, scale changes and Japanese IME. Pointer drag at999,682→1160,748 selected/scrolled TextView and sent no resize request; `resized.png` is an attempted-resize artifact, not a successful resize proof. Optional G12–G19 have observations or explicit skip reasons; no adopted scope, backend or new compositor implementation.
+
+Commands/checks: guest-control uses existing guest.sh with dedicated SSH2249/run directory; apt package installation and gtk4-demo/API probe invocations are in [resume/actions](../tests/README.md). New non-C test helper Python syntax compile, shell `sh -n`, manual review and `git diff --check` PASS. No C source generated; full C rules were read, no C conformance exception. No main/toolchain/sharedbuild mutation or build, other guest stop, host install or aggregate make check. QMP screenshots inspected include boot/desktop/probe/menu/dialog/filechooser/maximize/fullscreen/attempted-resize/console-restored; logs are application SSH/D-Bus/Wayland, not serial/console acceptance.
+
+Owned guest shutdown: SIGTERM to probe5950/demo and compositor2793; compositor final frames328/error0/cleanup_failed0. Console PNG returned to Debian login. Dedicated QEMU251216 powered off normally, process absent, SSH2249 listener absent, [stop receipt](../evidence/q580/stop.log). Saved qcow2 overlay stays in ignored build, [image metadata/hash](../evidence/q580/resume-image.log), private SSH keys remain ignored and unshared.
+
+Resume requires an assigned B checkout/executor and approved remaining baseline attempt with intact saved image/backing/key assets. Follow [README](../tests/README.md); re-establish fresh session D-Bus/socket and verify SSH/QMP PNG. Do not start p002 selection or source changes automatically. Main owns further Bug registration and projections.
+
+Terminal record UTC: 2026-10-02T06:55:27.931708+00:00

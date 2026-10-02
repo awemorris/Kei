@@ -1,0 +1,16 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  gsettings-desktop-schemas
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 700 kB of archives.
+After this operation, 5826 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian trixie/main amd64 gsettings-desktop-schemas all 48.0-1 [700 kB]
+Fetched 700 kB in 0s (12.6 MB/s)
+Selecting previously unselected package gsettings-desktop-schemas.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 32912 files and directories currently installed.)
+Preparing to unpack .../gsettings-desktop-schemas_48.0-1_all.deb ...
+Unpacking gsettings-desktop-schemas (48.0-1) ...
+Setting up gsettings-desktop-schemas (48.0-1) ...
+Processing triggers for libglib2.0-0t64:amd64 (2.84.4-3~deb13u5) ...

@@ -16,6 +16,8 @@ Primary references checked on 2026-10-02:
 - [Gtk.FileDialog](https://docs.gtk.org/gtk4/class.FileDialog.html): asynchronous dialog API.
 - [Portal system integration](https://flatpak.github.io/xdg-desktop-portal/docs/system-integration.html): D-Bus session/backend selection, distinct from compositor protocols.
 - [Portal FileChooser](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.FileChooser.html) and [Settings](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Settings.html): interface contracts.
-- [Upstream xdg-shell protocol XML](https://gitlab.freedesktop.org/wayland/wayland-protocols/-/blob/main/stable/xdg-shell/xdg-shell.xml): role/configure/popup lifecycle contract. Installed guest protocol XML will also be available for exact packaged version.
+- [Upstream xdg-shell protocol XML](https://gitlab.freedesktop.org/wayland/wayland-protocols/-/blob/main/stable/xdg-shell/xdg-shell.xml): web access was denied by Anubis. The packaged guest XML at `/usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml` was read instead; its SHA256 is in `environment.log`. The XML is diagnostic reference and is not copied into the repository.
 
 All measured/failed/skipped outcomes will remain distinct. User adoption decisions remain pending p002.
+
+Initial apt SSH wrapper exceeded210s and returned124; guest dpkg continued and finished. Subsequent `dpkg --audit` was empty, installed package versions were queried, and `gtk-4-examples` and `gsettings-desktop-schemas` installation commands returned0. The first FileDialog attempt terminated for absent GSettings schemas; original trace retained. After the standard schema package, the ordinary chooser selected `/tmp/q580-marker.txt` successfully without a portal frontend/backend.

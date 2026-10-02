@@ -1,0 +1,4 @@
+guest: stopped
+guest: stopped
+State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+QEMU PID251216 absent

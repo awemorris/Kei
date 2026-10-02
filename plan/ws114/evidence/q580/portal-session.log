@@ -1,0 +1,10 @@
+5976
+org.gnome.desktop.a11y
+org.gnome.desktop.a11y.applications
+org.gnome.desktop.a11y.interface
+org.gnome.desktop.a11y.keyboard
+org.gnome.desktop.a11y.magnifier
+org.gnome.desktop.a11y.mouse
+org.gnome.desktop.app-folders
+org.gnome.desktop.background
+Error: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.portal.Desktop was not provided by any .service files

@@ -1,0 +1,314 @@
+[3358482.327] {Default Queue}  -> wl_display#1.get_registry(new id wl_registry#2)
+[3358482.361] {Default Queue}  -> wl_display#1.sync(new id wl_callback#3)
+[3358482.475] {Default Queue} wl_registry#2.global(1, "wl_compositor", 4)
+[3358482.492] {Default Queue}  -> wl_registry#2.bind(1, "wl_compositor", 4, new id [unknown]#4)
+[3358482.498] {Default Queue} wl_registry#2.global(2, "xdg_wm_base", 4)
+[3358482.503] {Default Queue} wl_registry#2.global(3, "zwp_linux_dmabuf_v1", 3)
+[3358482.519] {Default Queue} wl_registry#2.global(4, "wl_output", 4)
+[3358482.522] {Default Queue}  -> wl_registry#2.bind(4, "wl_output", 3, new id [unknown]#5)
+[3358482.583] {Default Queue}  -> wl_display#1.sync(new id wl_callback#6)
+[3358482.588] {Default Queue} wl_registry#2.global(5, "wl_seat", 5)
+[3358482.591] {Default Queue} wl_registry#2.global(6, "wl_shm", 1)
+[3358482.594] {Default Queue}  -> wl_registry#2.bind(6, "wl_shm", 1, new id [unknown]#7)
+[3358482.597] {Default Queue} wl_registry#2.global(7, "xdg_menu_manager_v1", 2)
+[3358482.600] {Default Queue} wl_registry#2.global(8, "wl_subcompositor", 1)
+[3358482.603] {Default Queue}  -> wl_registry#2.bind(8, "wl_subcompositor", 1, new id [unknown]#8)
+[3358482.607] {Default Queue} wl_registry#2.global(9, "wl_data_device_manager", 3)
+[3358482.610] {Default Queue}  -> wl_registry#2.bind(9, "wl_data_device_manager", 3, new id [unknown]#9)
+[3358482.613] {Default Queue} wl_registry#2.global(10, "zxdg_decoration_manager_v1", 1)
+[3358482.616] {Default Queue} wl_registry#2.global(11, "wp_cursor_shape_manager_v1", 1)
+[3358482.619] {Default Queue}  -> wl_registry#2.bind(11, "wp_cursor_shape_manager_v1", 1, new id [unknown]#10)
+[3358482.622] {Default Queue} wl_registry#2.global(12, "wp_viewporter", 1)
+[3358482.625] {Default Queue}  -> wl_registry#2.bind(12, "wp_viewporter", 1, new id [unknown]#11)
+[3358482.628] {Default Queue} wl_registry#2.global(13, "zwp_text_input_manager_v3", 1)
+[3358482.631] {Default Queue} wl_registry#2.global(16, "keiland_titlebar_manager_v1", 3)
+[3358482.633] {Default Queue} wl_registry#2.global(17, "keiland_glass_manager_v1", 2)
+[3358482.636] {Default Queue} wl_registry#2.global(18, "zwp_primary_selection_device_manager_v1", 1)
+[3358482.639] {Default Queue}  -> wl_registry#2.bind(18, "zwp_primary_selection_device_manager_v1", 1, new id [unknown]#12)
+[3358482.664] {Display Queue} wl_display#1.delete_id(3)
+[3358482.667] {Default Queue} wl_registry#2.global(19, "zwp_tablet_manager_v2", 1)
+[3358482.670] {Default Queue}  -> wl_registry#2.bind(19, "zwp_tablet_manager_v2", 1, new id [unknown]#13)
+[3358482.673] {Default Queue} wl_registry#2.global(21, "keiland_desktop_manager_v1", 1)
+[3358482.675] {Default Queue} wl_registry#2.global(22, "keiland_keyboard_inset_manager_v1", 1)
+[3358482.678] {Default Queue} wl_registry#2.global(23, "keiland_edit_manager_v1", 1)
+[3358482.681] {Default Queue} wl_callback#3.done(331100)
+[3358482.733] {Default Queue}  -> wl_shm#7.create_pool(new id wl_shm_pool#3, fd 8, 2304)
+[3358482.739] {Default Queue}  -> wl_registry#2.bind(5, "wl_seat", 5, new id [unknown]#14)
+[3358486.359] {Default Queue}  -> zwp_primary_selection_device_manager_v1#12.get_device(new id zwp_primary_selection_device_v1#15, wl_seat#14)
+[3358486.372] {Default Queue}  -> wl_data_device_manager#9.get_data_device(new id wl_data_device#16, wl_seat#14)
+[3358486.425] {Default Queue}  -> wl_compositor#4.create_surface(new id wl_surface#17)
+[3358486.429] {Default Queue}  -> wp_viewporter#11.get_viewport(new id wp_viewport#18, wl_surface#17)
+[3358486.432] {Default Queue}  -> zwp_tablet_manager_v2#13.get_tablet_seat(new id zwp_tablet_seat_v2#19, wl_seat#14)
+[3358486.438] {Default Queue}  -> wl_display#1.sync(new id wl_callback#20)
+[3358486.484] {Display Queue} wl_display#1.delete_id(6)
+[3358486.490] {Default Queue} wl_output#5.geometry(0, 0, 0, 0, 0, "Unknown", "Unknown", 0)
+[3358486.516] {Default Queue} wl_output#5.mode(3, 1280, 800, 74994)
+[3358486.521] {Default Queue} wl_output#5.scale(1)
+[3358486.524] {Default Queue} wl_output#5.done()
+[3358486.527] {Default Queue} wl_callback#6.done(331101)
+[3358486.530] {Default Queue} wl_shm#7.format(0)
+[3358486.543] {Default Queue} wl_shm#7.format(1)
+[3358486.591] {Display Queue} wl_display#1.delete_id(20)
+[3358486.595] {Default Queue} wl_seat#14.capabilities(3)
+[3358486.597] {Default Queue}  -> wl_seat#14.get_pointer(new id wl_pointer#6)
+[3358486.605] {Default Queue}  -> wp_cursor_shape_manager_v1#10.get_pointer(new id wp_cursor_shape_device_v1#21, wl_pointer#6)
+[3358486.609] {Default Queue}  -> wl_seat#14.get_keyboard(new id wl_keyboard#22)
+[3358486.613] {Default Queue} wl_seat#14.name("seat0")
+[3358486.617] {Default Queue} wl_callback#20.done(331105)
+[3358486.620] {Default Queue}  -> wl_registry#2.bind(2, "xdg_wm_base", 4, new id [unknown]#20)
+
+(gtk4-demo:5823): Gtk-WARNING **: 06:38:36.570: Unable to acquire the address of the accessibility bus: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files. If you are attempting to run GTK without a11y support, GTK_A11Y should be set to 'none'.
+[3358527.834] {Default Queue}  -> wl_compositor#4.create_surface(new id wl_surface#23)
+[3358527.845] {Default Queue}  -> wp_viewporter#11.get_viewport(new id wp_viewport#24, wl_surface#23)
+[3358559.878] {mesa egl display queue}  -> wl_display#1.get_registry(new id wl_registry#25)
+[3358559.889] {mesa egl display queue}  -> wl_display#1.sync(new id wl_callback#26)
+[3358560.151] {mesa egl display queue} wl_registry#25.global(1, "wl_compositor", 4)
+[3358560.160] {mesa egl display queue} wl_registry#25.global(2, "xdg_wm_base", 4)
+[3358560.184] {mesa egl display queue} wl_registry#25.global(3, "zwp_linux_dmabuf_v1", 3)
+[3358560.190] {mesa egl display queue}  -> wl_registry#25.bind(3, "zwp_linux_dmabuf_v1", 3, new id [unknown]#27)
+[3358560.195] {mesa egl display queue} wl_registry#25.global(4, "wl_output", 4)
+[3358560.199] {mesa egl display queue} wl_registry#25.global(5, "wl_seat", 5)
+[3358560.203] {mesa egl display queue} wl_registry#25.global(6, "wl_shm", 1)
+[3358560.208] {mesa egl display queue} wl_registry#25.global(7, "xdg_menu_manager_v1", 2)
+[3358560.212] {mesa egl display queue} wl_registry#25.global(8, "wl_subcompositor", 1)
+[3358560.238] {mesa egl display queue} wl_registry#25.global(9, "wl_data_device_manager", 3)
+[3358560.243] {mesa egl display queue} wl_registry#25.global(10, "zxdg_decoration_manager_v1", 1)
+[3358560.247] {mesa egl display queue} wl_registry#25.global(11, "wp_cursor_shape_manager_v1", 1)
+[3358560.252] {mesa egl display queue} wl_registry#25.global(12, "wp_viewporter", 1)
+[3358560.256] {mesa egl display queue} wl_registry#25.global(13, "zwp_text_input_manager_v3", 1)
+[3358560.260] {mesa egl display queue} wl_registry#25.global(16, "keiland_titlebar_manager_v1", 3)
+[3358560.265] {mesa egl display queue} wl_registry#25.global(17, "keiland_glass_manager_v1", 2)
+[3358560.269] {mesa egl display queue} wl_registry#25.global(18, "zwp_primary_selection_device_manager_v1", 1)
+[3358560.273] {mesa egl display queue} wl_registry#25.global(19, "zwp_tablet_manager_v2", 1)
+[3358560.278] {mesa egl display queue} wl_registry#25.global(21, "keiland_desktop_manager_v1", 1)
+[3358560.282] {mesa egl display queue} wl_registry#25.global(22, "keiland_keyboard_inset_manager_v1", 1)
+[3358560.287] {mesa egl display queue} wl_registry#25.global(23, "keiland_edit_manager_v1", 1)
+[3358560.291] {mesa egl display queue} wl_callback#26.done(331178)
+[3358560.296] {mesa egl display queue}  -> wl_display#1.sync(new id wl_callback#28)
+[3358560.307] {Display Queue} wl_display#1.delete_id(26)
+[3358560.331] {mesa egl display queue} zwp_linux_dmabuf_v1#27.format(875713089)
+[3358560.335] {mesa egl display queue} zwp_linux_dmabuf_v1#27.modifier(875713089, 0, 0)
+[3358560.349] {mesa egl display queue} zwp_linux_dmabuf_v1#27.format(875713112)
+[3358560.353] {mesa egl display queue} zwp_linux_dmabuf_v1#27.modifier(875713112, 0, 0)
+[3358560.400] {Display Queue} wl_display#1.delete_id(28)
+[3358560.404] {mesa egl display queue} wl_callback#28.done(331178)
+[3358560.409] {mesa egl display queue}  -> zwp_linux_dmabuf_v1#27.destroy()
+[3358560.420] {mesa egl swrast display queue}  -> wl_display#1.get_registry(new id wl_registry#28)
+[3358560.437] {mesa egl swrast display queue}  -> wl_display#1.sync(new id wl_callback#26)
+[3358560.530] {Display Queue} wl_display#1.delete_id(27)
+[3358560.533] {mesa egl swrast display queue} wl_registry#28.global(1, "wl_compositor", 4)
+[3358560.536] {mesa egl swrast display queue} wl_registry#28.global(2, "xdg_wm_base", 4)
+[3358560.547] {mesa egl swrast display queue} wl_registry#28.global(3, "zwp_linux_dmabuf_v1", 3)
+[3358560.550] {mesa egl swrast display queue}  -> wl_registry#28.bind(3, "zwp_linux_dmabuf_v1", 3, new id [unknown]#27)
+[3358560.553] {mesa egl swrast display queue} wl_registry#28.global(4, "wl_output", 4)
+[3358560.556] {mesa egl swrast display queue} wl_registry#28.global(5, "wl_seat", 5)
+[3358560.559] {mesa egl swrast display queue} wl_registry#28.global(6, "wl_shm", 1)
+[3358560.561] {mesa egl swrast display queue}  -> wl_registry#28.bind(6, "wl_shm", 1, new id [unknown]#29)
+[3358560.577] {mesa egl swrast display queue} wl_registry#28.global(7, "xdg_menu_manager_v1", 2)
+[3358560.580] {mesa egl swrast display queue} wl_registry#28.global(8, "wl_subcompositor", 1)
+[3358560.582] {mesa egl swrast display queue} wl_registry#28.global(9, "wl_data_device_manager", 3)
+[3358560.585] {mesa egl swrast display queue} wl_registry#28.global(10, "zxdg_decoration_manager_v1", 1)
+[3358560.588] {mesa egl swrast display queue} wl_registry#28.global(11, "wp_cursor_shape_manager_v1", 1)
+[3358560.590] {mesa egl swrast display queue} wl_registry#28.global(12, "wp_viewporter", 1)
+[3358560.593] {mesa egl swrast display queue} wl_registry#28.global(13, "zwp_text_input_manager_v3", 1)
+[3358560.604] {mesa egl swrast display queue} wl_registry#28.global(16, "keiland_titlebar_manager_v1", 3)
+[3358560.606] {mesa egl swrast display queue} wl_registry#28.global(17, "keiland_glass_manager_v1", 2)
+[3358560.609] {mesa egl swrast display queue} wl_registry#28.global(18, "zwp_primary_selection_device_manager_v1", 1)
+[3358560.612] {mesa egl swrast display queue} wl_registry#28.global(19, "zwp_tablet_manager_v2", 1)
+[3358560.614] {mesa egl swrast display queue} wl_registry#28.global(21, "keiland_desktop_manager_v1", 1)
+[3358560.617] {mesa egl swrast display queue} wl_registry#28.global(22, "keiland_keyboard_inset_manager_v1", 1)
+[3358560.625] {Display Queue} wl_display#1.delete_id(26)
+[3358560.628] {mesa egl swrast display queue} wl_registry#28.global(23, "keiland_edit_manager_v1", 1)
+[3358560.630] {mesa egl swrast display queue} wl_callback#26.done(331179)
+[3358560.633] {mesa egl swrast display queue}  -> wl_display#1.sync(new id wl_callback#26)
+[3358560.672] {mesa egl swrast display queue} zwp_linux_dmabuf_v1#27.format(875713089)
+[3358560.676] {mesa egl swrast display queue} zwp_linux_dmabuf_v1#27.modifier(875713089, 0, 0)
+[3358560.685] {mesa egl swrast display queue} zwp_linux_dmabuf_v1#27.format(875713112)
+[3358560.688] {mesa egl swrast display queue} zwp_linux_dmabuf_v1#27.modifier(875713112, 0, 0)
+[3358560.690] {mesa egl swrast display queue} wl_shm#29.format(0)
+[3358560.699] {Display Queue} wl_display#1.delete_id(26)
+[3358560.702] {mesa egl swrast display queue} wl_shm#29.format(1)
+[3358560.704] {mesa egl swrast display queue} wl_callback#26.done(331179)
+[3358560.707] {mesa egl swrast display queue}  -> wl_display#1.sync(new id wl_callback#26)
+[3358560.748] {Display Queue} wl_display#1.delete_id(26)
+[3358560.751] {mesa egl swrast display queue} wl_callback#26.done(331179)
+[3358560.755] {mesa egl swrast display queue}  -> zwp_linux_dmabuf_v1#27.destroy()
+[3358560.759] {mesa egl swrast display queue}  -> wl_display#1.get_registry(new id wl_registry#26)
+[3358560.761] {mesa egl swrast display queue}  -> wl_display#1.sync(new id wl_callback#30)
+[3358560.799] {Display Queue} wl_display#1.delete_id(27)
+[3358560.802] {mesa egl swrast display queue} wl_registry#26.global(1, "wl_compositor", 4)
+[3358560.812] {mesa egl swrast display queue} wl_registry#26.global(2, "xdg_wm_base", 4)
+[3358560.815] {mesa egl swrast display queue} wl_registry#26.global(3, "zwp_linux_dmabuf_v1", 3)
+[3358560.820] {mesa egl swrast display queue} wl_registry#26.global(4, "wl_output", 4)
+[3358560.830] {mesa egl swrast display queue} wl_registry#26.global(5, "wl_seat", 5)
+[3358560.833] {mesa egl swrast display queue} wl_registry#26.global(6, "wl_shm", 1)
+[3358560.836] {mesa egl swrast display queue}  -> wl_registry#26.bind(6, "wl_shm", 1, new id [unknown]#27)
+[3358560.839] {mesa egl swrast display queue} wl_registry#26.global(7, "xdg_menu_manager_v1", 2)
+[3358560.841] {mesa egl swrast display queue} wl_registry#26.global(8, "wl_subcompositor", 1)
+[3358560.855] {mesa egl swrast display queue} wl_registry#26.global(9, "wl_data_device_manager", 3)
+[3358560.858] {mesa egl swrast display queue} wl_registry#26.global(10, "zxdg_decoration_manager_v1", 1)
+[3358560.860] {mesa egl swrast display queue} wl_registry#26.global(11, "wp_cursor_shape_manager_v1", 1)
+[3358560.863] {mesa egl swrast display queue} wl_registry#26.global(12, "wp_viewporter", 1)
+[3358560.866] {mesa egl swrast display queue} wl_registry#26.global(13, "zwp_text_input_manager_v3", 1)
+[3358560.868] {mesa egl swrast display queue} wl_registry#26.global(16, "keiland_titlebar_manager_v1", 3)
+[3358560.878] {mesa egl swrast display queue} wl_registry#26.global(17, "keiland_glass_manager_v1", 2)
+[3358560.881] {mesa egl swrast display queue} wl_registry#26.global(18, "zwp_primary_selection_device_manager_v1", 1)
+[3358560.883] {mesa egl swrast display queue} wl_registry#26.global(19, "zwp_tablet_manager_v2", 1)
+[3358560.886] {mesa egl swrast display queue} wl_registry#26.global(21, "keiland_desktop_manager_v1", 1)
+[3358560.889] {mesa egl swrast display queue} wl_registry#26.global(22, "keiland_keyboard_inset_manager_v1", 1)
+[3358560.897] {Display Queue} wl_display#1.delete_id(30)
+[3358560.899] {mesa egl swrast display queue} wl_registry#26.global(23, "keiland_edit_manager_v1", 1)
+[3358560.902] {mesa egl swrast display queue} wl_callback#30.done(331179)
+[3358560.904] {mesa egl swrast display queue}  -> wl_display#1.sync(new id wl_callback#30)
+[3358560.939] {mesa egl swrast display queue} wl_shm#27.format(0)
+[3358560.942] {mesa egl swrast display queue} wl_shm#27.format(1)
+[3358560.950] {Display Queue} wl_display#1.delete_id(30)
+[3358560.952] {mesa egl swrast display queue} wl_callback#30.done(331179)
+EGL API version 1.5 found
+ - Vendor: Mesa Project
+ - Version: 1.5
+ - Device: unknown, 0 0
+ - Client APIs: OpenGL OpenGL_ES 
+ - Extensions:
+	EGL_ANDROID_blob_cache
+	EGL_ANDROID_native_fence_sync
+	EGL_EXT_buffer_age
+	EGL_EXT_config_select_group
+	EGL_EXT_create_context_robustness
+	EGL_EXT_image_dma_buf_import
+	EGL_EXT_image_dma_buf_import_modifiers
+	EGL_EXT_pixel_format_float
+	EGL_EXT_present_opaque
+	EGL_EXT_query_reset_notification_strategy
+	EGL_EXT_surface_compression
+	EGL_EXT_swap_buffers_with_damage
+	EGL_KHR_cl_event2
+	EGL_KHR_config_attribs
+	EGL_KHR_context_flush_control
+	EGL_KHR_create_context
+	EGL_KHR_create_context_no_error
+	EGL_KHR_fence_sync
+	EGL_KHR_get_all_proc_addresses
+	EGL_KHR_gl_colorspace
+	EGL_KHR_gl_renderbuffer_image
+	EGL_KHR_gl_texture_2D_image
+	EGL_KHR_gl_texture_3D_image
+	EGL_KHR_gl_texture_cubemap_image
+	EGL_KHR_image_base
+	EGL_KHR_no_config_context
+	EGL_KHR_reusable_sync
+	EGL_KHR_surfaceless_context
+	EGL_KHR_swap_buffers_with_damage
+	EGL_KHR_wait_sync
+	EGL_MESA_configless_context
+	EGL_MESA_gl_interop
+	EGL_MESA_image_dma_buf_export
+	EGL_MESA_query_driver
+	EGL_MESA_x11_native_visual_id
+ - Selected fbconfig: R8G8B8A8, depth 0, stencil 0
+          high depth: none
+Creating EGL context version 3.0 (debug:no, forward:no, legacy:no, es:yes)
+Using OpenGL backend EGL
+OpenGL ES version: 3.2 (core)
+GLSL version: OpenGL ES GLSL ES 3.20
+Max texture size: 16384
+Enabled features (use GDK_GL_DISABLE env var to disable):
+    debug: ✓
+    base-instance: ✓
+    buffer-storage: ✓
+Not using GL: renderer is llvmpipe
+Creating EGL context version 3.0 (debug:no, forward:no, legacy:no, es:yes)
+OpenGL ES version: 3.2 (core)
+GLSL version: OpenGL ES GLSL ES 3.20
+Max texture size: 16384
+Enabled features (use GDK_GL_DISABLE env var to disable):
+    debug: ✓
+    base-instance: ✓
+    buffer-storage: ✓
+Using renderer 'GskGLRenderer' for surface 'GdkWaylandToplevel'
+** Message: 06:38:36.685: For syntax highlighting, install the “highlight” program
+[3358667.194] {Default Queue}  -> xdg_wm_base#20.get_xdg_surface(new id xdg_surface#30, wl_surface#23)
+[3358667.234]  -> xdg_surface#30.get_toplevel(new id xdg_toplevel#31)
+[3358667.245]  -> xdg_toplevel#31.set_parent(nil)
+[3358667.254]  -> xdg_toplevel#31.set_title("GTK Demo")
+[3358667.262]  -> xdg_toplevel#31.set_app_id("org.gtk.Demo4")
+[3358667.271]  -> wl_surface#23.commit()
+[3358713.718] {Default Queue}  -> wl_compositor#4.create_surface(new id wl_surface#32)
+[3358713.731] {Default Queue}  -> wp_viewporter#11.get_viewport(new id wp_viewport#33, wl_surface#32)
+Not using GL: renderer is llvmpipe
+Creating EGL context version 3.0 (debug:no, forward:no, legacy:no, es:yes)
+OpenGL ES version: 3.2 (core)
+GLSL version: OpenGL ES GLSL ES 3.20
+Max texture size: 16384
+Enabled features (use GDK_GL_DISABLE env var to disable):
+    debug: ✓
+    base-instance: ✓
+    buffer-storage: ✓
+Using renderer 'GskGLRenderer' for surface 'GdkWaylandToplevel'
+[3358730.158] {Default Queue}  -> xdg_wm_base#20.get_xdg_surface(new id xdg_surface#34, wl_surface#32)
+[3358730.168]  -> xdg_surface#34.get_toplevel(new id xdg_toplevel#35)
+[3358730.173]  -> xdg_toplevel#35.set_parent(nil)
+[3358730.176]  -> xdg_toplevel#35.set_title("Clipboard")
+[3358730.180]  -> xdg_toplevel#35.set_app_id("gtk4-demo")
+[3358730.183]  -> wl_surface#32.commit()
+[3358730.818]  -> xdg_toplevel#35.set_parent(xdg_toplevel#31)
+[3358731.560]  -> xdg_toplevel#31.destroy()
+[3358731.570]  -> xdg_surface#30.destroy()
+[3358731.579]  -> wl_surface#23.attach(nil, 0, 0)
+[3358731.583]  -> wl_surface#23.commit()
+[3358731.640] {Default Queue} wl_keyboard#22.keymap(1, fd 9, 6896)
+[3358732.234] {Default Queue} wl_keyboard#22.repeat_info(25, 400)
+[3358733.095] discarded [unknown]#31.[event 2](0 fd, 16 byte)
+[3358733.101] discarded [unknown]#31.[event 0](0 fd, 24 byte)
+[3358733.103] discarded [unknown]#30.[event 0](0 fd, 12 byte)
+[3358733.162] {Display Queue} wl_display#1.delete_id(31)
+[3358733.169] {Display Queue} wl_display#1.delete_id(30)
+[3358733.173] xdg_toplevel#35.configure_bounds(1256, 690)
+[3358733.176] xdg_toplevel#35.configure(0, 0, array[4])
+[3358733.180] xdg_surface#34.configure(77)
+[3358733.195]  -> xdg_surface#34.ack_configure(77)
+[3358740.689]  -> xdg_toplevel#35.set_min_size(379, 252)
+[3358740.699]  -> xdg_toplevel#35.set_max_size(0, 0)
+[3358745.744] {mesa egl swrast display queue}  -> wl_shm#27.create_pool(new id wl_shm_pool#30, fd 15, 384048)
+[3358745.758] {mesa egl surface queue}  -> wl_shm_pool#30.create_buffer(new id wl_buffer#31, 0, 381, 252, 1524, 0)
+[3358745.764] {mesa egl surface queue}  -> wl_shm_pool#30.destroy()
+[3358878.022]  -> xdg_toplevel#35.set_min_size(351, 223)
+[3358878.035]  -> xdg_toplevel#35.set_max_size(0, 0)
+[3358878.039]  -> xdg_surface#34.set_window_geometry(14, 12, 353, 223)
+[3358878.044] {Default Queue}  -> wl_compositor#4.create_region(new id wl_region#36)
+[3358878.049] {Default Queue}  -> wl_region#36.add(14, 20, 353, 215)
+[3358878.053]  -> wl_surface#32.set_opaque_region(wl_region#36)
+[3358878.056] {Default Queue}  -> wl_region#36.destroy()
+[3358878.059] {Default Queue}  -> wl_compositor#4.create_region(new id wl_region#37)
+[3358878.062] {Default Queue}  -> wl_region#37.add(2, 0, 377, 247)
+[3358878.065]  -> wl_surface#32.set_input_region(wl_region#37)
+[3358878.067] {Default Queue}  -> wl_region#37.destroy()
+[3358878.071] {Default Queue}  -> wp_viewport#33.set_destination(381, 252)
+[3358878.074]  -> wl_surface#32.frame(new id wl_callback#38)
+[3358878.107] {mesa egl surface queue}  -> wl_surface#32.attach(wl_buffer#31, 0, 0)
+[3358878.112] {mesa egl surface queue}  -> wl_surface#32.damage_buffer(0, 0, 381, 252)
+[3358878.480] {mesa egl surface queue}  -> wl_surface#32.commit()
+[3358878.484] {mesa egl surface queue}  -> wl_display#1.sync(new id wl_callback#39)
+[3358891.517] {Display Queue} wl_display#1.delete_id(30)
+[3358891.531] {Display Queue} wl_display#1.delete_id(36)
+[3358891.540] {Display Queue} wl_display#1.delete_id(37)
+[3358891.542] {Display Queue} wl_display#1.delete_id(39)
+[3358906.259] {Display Queue} wl_display#1.delete_id(38)
+[3358906.312] {Default Queue} wl_data_device#16.selection(nil)
+[3358906.378] {Default Queue} zwp_primary_selection_device_v1#15.selection(nil)
+[3358906.392] {Default Queue} wl_keyboard#22.enter(78, wl_surface#32, array[0])
+[3358906.414] {Default Queue} wl_keyboard#22.modifiers(79, 0, 0, 0, 0)
+[3358906.462] {Default Queue} wl_pointer#6.enter(80, wl_surface#32, 0.00000000, 102.00000000)
+[3358906.479] {Default Queue} wl_pointer#6.frame()
+[3358906.515] {Default Queue}  -> wp_cursor_shape_device_v1#21.set_shape(80, 1)
+[3358906.527] {Default Queue} wl_callback#38.done(331523)
+[3358908.329] {mesa egl surface queue} wl_callback#39.done(331497)
+[3358908.346] {mesa egl surface queue} wl_buffer#31.release()
+[3358908.593]  -> wl_surface#32.frame(new id wl_callback#39)
+[3358908.619] {mesa egl surface queue}  -> wl_surface#32.attach(wl_buffer#31, 0, 0)
+[3358908.627] {mesa egl surface queue}  -> wl_surface#32.damage_buffer(26, 189, 70, 34)
+[3358908.928] {mesa egl surface queue}  -> wl_surface#32.commit()
+[3358908.941] {mesa egl surface queue}  -> wl_display#1.sync(new id wl_callback#38)
+[3358909.039] {Display Queue} wl_display#1.delete_id(38)
+[3358930.572] {Display Queue} wl_display#1.delete_id(39)
+[3358930.582] {Default Queue} wl_callback#39.done(331545)
