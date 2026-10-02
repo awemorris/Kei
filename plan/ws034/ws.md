@@ -160,8 +160,8 @@ WS032と同じ形式（`/usr/share/licenses/<pkg>/`、版・SHA-256・パッチ�
 | ws034-p027 | フォント系: freetype・harfbuzz・fontconfig（libpngを含む） | planning | p021, p025, p026 | `packages/libs` |
 | ws034-p034 | 独自libwayland（`userland/desktop/libwayland`）を拡張し、GTK・Qtが使うlibwayland-clientのAPIと互換にする（`libwayland-client.so`）。wayland-cursor・wayland-eglの扱いとwayland-scanner（host道具）を含む | planning | p001 | `packages/desktop/libwayland` |
 | ws034-p028 | 描画系: pixman・cairo・pango・fribidi・gdk-pixbuf・libjpeg-turbo・graphene・libepoxy・libxkbcommon。libtiffを加える（GTK4が必須） | planning | p026, p027 | `packages/libs` |
-| ws034-p029 | GTK4（Wayland backend、GSKはVulkanまたはcairo） | planning | p028, p034, p038, WS035-p028 | `packages/desktop/gtk4` |
-| ws034-p030 | Qt6（qtbase＋qtwayland） | planning | p027, p028, p034, WS035-p028 | `packages/desktop/qt6` |
+| ws034-p029 | GTK4（Wayland backend、GSKはVulkanまたはcairo）。2026-10-02、未実行の実装枠を[WS115](../ws115/ws.md)へ移管 | planning / canceled（未実行） | p028, p034, p038の成果はWS115で参照 | `packages/desktop/gtk4` |
+| ws034-p030 | Qt6（qtbase＋qtwayland）。2026-10-02、未実行の実装枠を[WS116](../ws116/ws.md)へ移管。module範囲はGTK4学習後に判断 | planning / canceled（未実行） | p027, p028, p034の成果はWS116で参照 | `packages/desktop/qt6` |
 | ws034-p031 | GTK3（atkを含む）。atkは単体のatk 2.38.0を `packages/desktop/atk` に置く（2026-09-23決定） | planning | p028, p034, WS035-p028 | `packages/desktop/gtk3` |
 | ws034-p032 | Qt5（5.15、qtbase＋qtwayland）。qtsvgを加える（VLCのQt GUIが必須） | planning | p027, p028, p034, WS035-p028 | `packages/desktop/qt5` |
 | ws034-p024 | FFmpeg（LGPL構成） | planning | p005 | `packages/multimedia/ffmpeg` |
@@ -356,3 +356,7 @@ VLCの署名は鍵が得られず未検証（公開SHA-256とは一致）。
 | git の package | `NO_RUST=1` でよい | ws034-p009 |
 | `FD_SETSIZE` | 1024 | ws034-p048 |
 | 動かない試験 | 書き直さず削除する | ws034-p049 |
+
+## 2026-10-02 / GTK4・Qt6移植枠の移管
+
+Event ws114-gtk-qt-port-projections-20261002: ユーザーの新しい順序（Linux標準GTK4調査/レビュー→compositor改善→zedBSD upstream GTK4→Qt6範囲判断→後の独自実装）により、未実行のp029/p030をcanceled扱いとしてWS115/WS116へ移管。旧ID/依存/目標は上表に保持。WS034の全アプリ到達点は新WSの成果を参照して判断し、p028/p034/p038とGTK3/Qt5の目的を維持する。p029/p030は元々Phase file未作成の計画行だけで、実行attemptは無い。GitHub Issue/Project publication pending。

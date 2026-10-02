@@ -3,7 +3,7 @@
 <!-- awesome-plan-current:start -->
 Active Queue: none（q576 finished、WS111 p002 cleared）
 Current Focused Goal: fg010 — 10/17 demo。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: WS111共通launcher completed。--login本人確認/PIN交換とWS110/testingは検討のみ、次実装Queue無し。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。既存demo順/WS106保留保持。
+Next（2026-10-02 更新）: WS111共通launcher completed。--login本人確認/PIN交換とWS110/testingは検討のみ、次実装Queue無し。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。WS114 Linux標準GTK4調査/レビュー→WS115 upstream GTK4移植→WS116 Qt6範囲判断/移植を計画し、その知見をWS097/WS096書き下ろしへ渡す。既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -38,11 +38,11 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | Milestone | Objective | 受け入れの核 | 進捗 | Primary WS |
 | --- | --- | --- | --- | --- |
 | **MG001** 継続開発できる基盤 | O4, O5 | 文書化した環境で build でき、設計境界・規約・試験・制限を追跡できる | toolchain（WS021）・build tool（WS010）・x86 HAL の規約（WS023）は完了。文書（WS009）と試験資産の整理（WS026）が残る。テスト配置の整理はWS106で計画。vmunix の LTO（WS053）は完了 | WS009, WS010, WS021, WS023, WS026, WS047, WS053, WS106 |
-| **MG002** UNIX アプリケーションの実行基盤 | O1 | process・memory・libc・loader/TLS の対応範囲を互換性台帳と代表アプリで確認できる | TLS（WS022）と外部 package の導入（WS032）は完了。base の utility の POSIX 化（WS043）は完了。POSIX 台帳（WS001）、アプリ導入（WS034）、sh（WS042）が進行中 | WS001, WS022, WS032, WS034, WS042, WS043, WS045, WS046, WS061 |
+| **MG002** UNIX アプリケーションの実行基盤 | O1 | process・memory・libc・loader/TLS の対応範囲を互換性台帳と代表アプリで確認できる | TLS（WS022）と外部 package の導入（WS032）は完了。base の utility の POSIX 化（WS043）は完了。POSIX 台帳（WS001）、アプリ導入（WS034）、sh（WS042）が進行中 | WS001, WS022, WS032, WS034, WS042, WS043, WS045, WS046, WS061, WS115, WS116 |
 | **MG003** 対象機へ導入して単独起動 | O2, O4 | 合意した機種・媒体でインストール後の単独起動と login を確認できる。実機と QEMU の証拠を分ける | インストーラ（WS019）と Intel Mac（WS020）は完了。4 機種の実機受け入れ（WS028）が残る | WS003, WS004, WS019, WS020, WS028 |
 | **MG004** データの保持とメモリ/ストレージの実用 | O1, O2 | 永続化、低メモリ時の進行、媒体世代、既定構成の性能を確認できる | swap（WS016）、UFS（WS024）、I/O・cache（WS025）は完了。実機の性能の一部は未測定。UFS の directory は 12 block まで育つ（WS054、完了） | WS016, WS024, WS025, WS054, WS057, WS058, WS059, WS060 |
 | **MG005** 一貫したネットワーク/サービス管理 | O1, O2, O3 | networkd・netconf・service の責務・設定・操作が一貫し、永続化と失敗後の復旧を確認できる | サービス（WS002）、net console（WS011）、service console（WS012）は完了。有線 LAN の常駐管理（WS005・WS033）が残る | WS002, WS005, WS011, WS012, WS033 |
-| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。WS109 nativeFreeBSD15.1/実i915/主要app/backend/全文規約がq572でverified、q574実機build/installとp008ユーザー実操作でF6受け入れ合格。WS113複数displayは計画のみ。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105, WS107, WS109, WS113 |
+| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。WS109 nativeFreeBSD15.1/実i915/主要app/backend/全文規約がq572でverified、q574実機build/installとp008ユーザー実操作でF6受け入れ合格。WS113複数displayとWS114 Linux標準GTK4互換性は計画のみ。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105, WS107, WS109, WS113, WS114 |
 | **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。WS105独立/opt build・installとWS108の2OS native deb/QEMU検証・CI/release定義をverified、WS109 nativeFreeBSD独立build/install/privateprefixもverified、5OS package/CI配布はWS112で計画のみ、MG007全体は未充足 | WS013, WS015, WS108, WS112 |
 | **MG008** 最小 HAL の移植契約と異種機での実証 | O4 | HAL 契約・移植手順と異種/レトロ機での実証を公開する | source の所有の整理（WS018）と時間の単位（WS040）は完了。他 platform への反映（WS036、aarch64 を含む）と PowerPC（WS027）、rpi4 の開発環境（WS044）が残る | WS018, WS027, WS036, WS040, WS044 |
 | **MG009** AI 活用 OSS 開発の知見の公開 | O5 | 設計権限・レビュー・変更追跡・失敗からの回復の事例と根拠を公開する | 担う作業が未定義 | なし |
@@ -222,6 +222,9 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS111](ws111/ws.md) | MG006 | Linux/FreeBSD共通console keiland-desktop、GDMはdirect維持 | completed | q575/q576: 共通console launcher/両native install/全source確認、GDMdirect不変。--login検討のみ |
 | [WS112](ws112/ws.md) | MG007 | Linux5種類のbinary packageを指定make/CIで作成しreleaseへ添付 | planned | p001契約/入力から。RPi arm64確定、CI runtime不要、FreeBSD source-only。あとで実装、未順位/Queue none |
 | [WS113](ws113/ws.md) | MG006 | zedBSD i915 hotplug/Vulkan Displayから複数画面・Settings/libkeiland・窓の全体移動 | planned | p001から。全拡張/全mirror、pointer越境で窓一括移動。あとで実装、未順位/Queue none |
+| [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | planning | [19項目の暫定表](ws114/gtk4-compat-matrix.md)。実測/採否未決、Queue none |
+| [WS115](ws115/ws.md) | MG002 | upstream GTK4をzedBSD `packages/desktop/gtk4`へ移植し知見を記録 | planning | WS114判断/実測の後。旧WS034 p029移管、Queue none |
+| [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
@@ -290,7 +293,7 @@ N=0 になったら実装をまとめて計画（master・ws.md・Future Work・
 7. **WS001** はユーザーが指示したときだけ。WS077（PC-98 の PCI）・WS066（ld.so の最適化）は低い優先度。
 8. **時期がユーザー次第**: WS095（人間が作業中）、WS098（WS095 の後）。
 
-上に無い未完了の WS（WS004・005・007・009・014・017・026〜029・031・033・034・045〜047・061・082・083・088・096・097、予約の WS037〜039、保留の WS013・015）は順位を定めていない。
+上に無い未完了の WS（WS004・005・007・009・014・017・026〜029・031・033・034・045〜047・061・082・083・088・096・097・114〜116、予約の WS037〜039、保留の WS013・015）は順位を定めていない。WS114→115→116は依存順で、デモ順の変更ではない。
 
 ### 新しいレビュー対象（2026-10-01）
 
@@ -320,6 +323,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS108 | 2 distro native .deb/QEMU/CI release | completed / q549、remote未実行 |
 | [WS112 p001](ws112/phase001/phase.md) | 5OS package/CI release、ad hoc生成可 | planned / 契約・公式入力/形式調査から。RPi arm64、CI runtime不要。未順位/実装Queue未選定 |
 | [WS113 p001](ws113/phase001/phase.md) | 外部display/拡張・mirror/SettingsとVulkan通知契約 | planned / zedBSD i915優先。実機fixture/通知契約の調査、未順位/Queue未選定 |
+| [WS114 p001](ws114/phase001/phase.md) → [WS115](ws115/ws.md) → [WS116](ws116/ws.md) | 標準GTK4実測・行別レビュー→zedBSD upstream移植→Qt6範囲判断/移植 | WS114暫定機能表、runtime未実測・採否未決。未順位/Queueなし。独自実装WS097/096へ後で知見を渡す |
 | WS109 p002 L1 | native FreeBSD15 library/build foundation | q551 p001 cleared、native ABI/environment verified。q565全F2とq572全WSをverified、実機gateはuserwaived、実QEMU i915利用。historical L1依存を解消 |
 
 ## Tools
@@ -494,3 +498,7 @@ ws109-20261002-user-i915-passthrough: user selected awe@10.0.10.25 i915 passthro
 2026-10-02 / ws113-multidisplay-plan-20261002: current userの後日実装する複数display WS113と9PhaseをMG006に追加。pointer越境で窓全体移動、拡張時のみ1出力制約、mirrorは全画面複製、zedBSD i915を完了対象とした。fg010・既存demo順位とWS089の過去stub受け入れは保持。未順位/実装Queueなし。GitHub公開保留。
 
 2026-10-02 / ws074-browser2-gate-20261002: WS074へblocking p172を追加。WS107移動表でorigin/browser2の旧engine pathをlibbrowserへ対応。全未実行browser Phaseはp172 wholeclear/実統合出力を前提、既存fg010/ブラウザ中位の相対順位は保持。branch側phase102〜171は取込時にID/証拠を照合し、過去WS/Queue/Projectを丸ごと上書きしない。Issue/Project公開保留。
+
+## 2026-10-02 / GTK4・Qt6学習順の追加
+
+Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調査/行別レビュー→選択したcompositor/portal改善→zedBSD upstream GTK4移植→Qt6実装範囲の検討/移植→後の独自実装、という順序をWS114/115/116に投影。WS034 p029/p030は未実行のまま移管、p028/p034/p038は維持。WS096/097の書き下ろし方針とfg010/デモ順位は保持。新WSは未順位の依存順候補でQueue外、GTK4機能の採否とQt6範囲は未決。GitHub publication pending。

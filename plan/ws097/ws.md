@@ -24,3 +24,7 @@ Resume point: p001（設計）から
 | Phase | 目的 | Status | 依存 |
 | --- | --- | --- | --- |
 | ws097-p001 | 設計 | planning | — |
+
+## 2026-10-02 / upstream学習との関係
+
+Event ws114-gtk-qt-port-projections-20261002: ユーザー回答「書き下ろし計画も残す」および追加指示により、完全書き下ろし/zlib/API interfaceのみ/デモ後の方針を保持。[WS114](../ws114/ws.md)のLinux標準GTK4互換性実測と[WS115](../ws115/ws.md)のzedBSD upstream移植で要るOS API・ライブラリ・Wayland/描画/portalの知見を得てからp001を再設計する。GTK upstream sourceをこのWSへ転用しない。Queue none、実装なし。

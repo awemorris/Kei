@@ -24,6 +24,7 @@ WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ�
 [WS074 p172](ws074/phase172/phase.md): origin/browser2取込。WS107移動表を利用してlibbrowser配置へ対応、全後続browser Phaseのblocking gate。planned/Queue未選定。p100→p101は取込後に証拠を再評価。
 [WS112 p001](ws112/phase001/phase.md): 5OS package/CI配布の契約・入力・形式調査。RPi arm64/buildのみ、CI runtime不要、FreeBSD source-only。planned/未順位、実装Queue未選定。
 [WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。planned/未順位、実装Queue未選定。
+[WS114 p001](ws114/phase001/phase.md): Linux標準GTK4の実測と[機能表](ws114/gtk4-compat-matrix.md)の証拠化。続く採否レビュー後にWS114改善→WS115 upstream GTK4→WS116 Qt6範囲判断/移植→WS097/096書き下ろし。未順位/Queue未選定。
 
 Outcome: q576-i01 /Phase cleared。L1〜L3: 両OS shell/native build/install、FreeBSD/opt script0755、LinuxGDM direct entry unchanged、全source review PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q576/result.md)。--loginは本人確認/PIN交換案のみ、WS110/testing未実装。
 Finished UTC: 2026-10-02T02:51:00.579101+00:00
@@ -41,3 +42,5 @@ q576の承認/attempt/outcomeは変更しない。Active Queueなし、次Queue�
 2026-10-02 / ws113-multidisplay-plan-20261002: WS113は後日候補のみ。q576 finished/Active Queueなし、既存承認とdemo順位は変更しない。
 
 2026-10-02 / ws074-browser2-gate-20261002: WS074 p172をOutlookへ追加。q576 finished/Active Queueなし。追加は計画のみでbranch実装取込を開始しない。
+
+2026-10-02 / ws114-gtk-qt-port-projections-20261002: WS114/115/116をOutlookへ追加。順番は依存関係であり既存demo順位の変更ではない。標準GTK4 guest実行とuser行別判断は未了、Queueなし、q576の承認/結果は不変。

@@ -47,7 +47,7 @@ zedBSD の貢献の規則と標準の索引。Queue・backlog・実行許可で�
 - kernel の実装を userland の build の依存へ写さない。`mkfs` などの tool は単独で使える形を保つ。
 - base system の実装とライセンスの境界: [設計方針](master-design-policy.md)。
 - 外部 package（`userland/packages/`）はソースツリーへ取り込まず、tarball を取得・検証して patch する。ライセンスは
-  [provenance](ws032/provenance.md) と `plan/tools/packages/audit-licenses.sh` で監査する。
+  [provenance](ws032/provenance.md) と `plan/tools/packages/audit-licenses.sh` で監査する。GTK4/Qt6の先行upstream移植から後のzlib独自実装へ学ぶ順序とsource境界は[WS114–116方針](standards/ws114-gtk-qt-learning.md)。
 - WS は一つの具体的な到達目標を持つ（2026-09-12 ユーザー指示）。完了・終了した WS を再利用して別の目標を足さない。
   WS の終了時は子 Phase を全件照合し、未完了は完了にせず、指定の保留先か別の WS へ引き継いで元の Phase を閉じる。
 
@@ -164,3 +164,7 @@ Event ws112-package-plan-20261002: [方針全文](standards/ws112-linux-packages
 ## WS113 複数displayの新しい契約（2026-10-02）
 
 Event ws113-multidisplay-plan-20261002: current userのi915接続通知/Vulkan Display拡張→compositor、Settings→libkeiland→compositor拡張、全拡張/全mirror、配置drag/窓全体移動の指示。3追加回答（pointerが隣画面へ入った時に切替、単一出力は拡張時、zedBSD i915をまず受け入れ）を[全文](standards/ws113-display.md)・[WS113](ws113/ws.md)に記録。GPU UAPIのcompositor直接ioctl禁止、OS module境界、HAL承認/C全文規約は維持。計画のみ、実装/Queue許可は無し。
+
+## GTK4/Qt6 upstream移植と独自実装（2026-10-02）
+
+Event ws114-gtk-qt-port-projections-20261002: user指定の順序は[全文](standards/ws114-gtk-qt-learning.md)。Linux標準GTK4の実測・機能表のユーザーレビュー、採用範囲のXDG-shell/portal改善、zedBSD upstream GTK4/Qt6移植で知見を得てから独自書き下ろしWS097/WS096へ渡す。外部source/license境界とC全文規約は不変。WS034 p029/p030は新WSへ移管、p028/p034/p038は維持。採否未決の機能実装、Qt6詳細実装は選定しない。

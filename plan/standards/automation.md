@@ -132,3 +132,14 @@ Authority: [package方針全文](ws112-linux-packages.md)、[WS112](../ws112/ws.
 ## WS074 origin/browser2 integration coverage (2026-10-02)
 
 [blocking p172](../ws074/phase172/phase.md)に既存[component全文](browser-component.md)/[C全文](../coding-style.md)を適用。実行は未承認。WS107 inventory.jsonのbefore→afterとbranch差分を機械的に照合し、shell/新規fileだけ所有を分類。path/hashes/適用結果・public ABI/Wayland境界・build source登録を検査。host/guest/browser regressionsとp099の既存証拠を再確認。format/style-checkは補助であり、semanticなmerge conflict/全変更source規約の判断はfull/manual review。WS107の限定移動style例外は流用しない。branchの計画/テスト資産はID/結果を根拠で照合し、Master/Queue/履歴を機械上書きしない。
+
+## WS114–116 GTK4/Qt6 learning coverage (2026-10-02)
+
+| Contract | Planned check | Limit |
+| --- | --- | --- |
+| Linux standard GTK4 and compositor | Guest distro GTK4 version, GDK Wayland globals/log, QMP PNG and real input/menu/dialog/clipboard; renderer observation | Source presence is not runtime acceptance; each G01–G18 reviewed separately |
+| Portal integration | D-Bus frontend/backend selection, GTK4 app call/result and chosen desktop/session environment | Portal is a session service; only user-selected interfaces are implementation scope |
+| zedBSD external GTK4/Qt6 | external.mk tarball/hash/patch, license audit, ELF check, target build/install and QEMU/Venus GUI | Linux success does not prove target; Qt6 scope deferred until GTK4 learning |
+| Final source conformance | Full coding-style.md, clang-format/style-check/manual review, targeted build and guest regression | No C style exception; tool versions/commands/results recorded per approved Phase |
+
+[Scoped rule](ws114-gtk-qt-learning.md); [review table](../ws114/gtk4-compat-matrix.md). This is planned coverage, not executed checks.

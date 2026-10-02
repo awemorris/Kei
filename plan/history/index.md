@@ -64,3 +64,7 @@ Event ws113-multidisplay-plan-20261002: [WS113](../ws113/ws.md)をMG006のplanne
 ## 計画追記 / 2026-10-02（WS074 branch gate）
 
 Event ws074-browser2-gate-20261002: [WS074 p172](../ws074/phase172/phase.md)をorigin/browser2取込のblocking Phaseとして追加。WS107移動表による旧engine→libbrowser対応とbranch側Phase/test/bugの意味的照合を計画。全未実行browser Phaseはp172全体clearまで実行不可。branch tip e53ef03b8をread-only fetchで観測、merge/patch実行なし。q576とp099の歴史的結果は保持、Issue/Project公開保留。
+
+## 計画追記 / 2026-10-02（GTK4/Qt6 upstream学習）
+
+Event ws114-gtk-qt-port-projections-20261002: [WS114](../ws114/ws.md) Linux標準GTK4の[19項目表](../ws114/gtk4-compat-matrix.md)と行別採否→選択したXDG-shell/portal改善、[WS115](../ws115/ws.md) zedBSD upstream GTK4移植、[WS116](../ws116/ws.md) GTK4学習後のQt6範囲判断/移植を計画。WS034 p029/p030は未実行のまま移管。WS096/097完全書き下ろしは保持し、upstream知見を後で渡す。GTK4 guest実測/機能採否/Qt6範囲は未了。q576 finished/Queueなし、source変更なし。Issue/Project publicationとpushは未実施。
