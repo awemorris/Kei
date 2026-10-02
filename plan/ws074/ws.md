@@ -9,10 +9,10 @@ Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
 Queue: なし（last: q507-i01 cleared）
-Resume point: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The next gate is p172 (origin/browser2 integration); the dedicated P10 lane then targets p100 (Acid3 exact pixels), p174 (File System Access), p175 (OPFS), p173 (Interop 2025 100%), and p176 (Test262). p101 (CSS2 all tests) remains planned. Reconcile imported branch evidence before each. None is currently authorized.
+Resume point: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The next gate is p172 (origin/browser2 integration); the dedicated P10 lane then targets p100 (Acid3 exact pixels), p174 (File System Access), p175 (OPFS), p173 (Interop 2025 100%), and p176 (Test262). p101 (CSS2 all tests) remains planned. Reconcile imported branch evidence before each. p172 is now executing in q579/P10; subsequent phases await its whole-Phase clearance.
 <!-- awesome-plan-current:end -->
 
-2026-10-02 ユーザー更新: ブラウザ専任のP10枠を固定。p172の取込が実際に統合・検証された後は、p100でAcid3の100/100とpixel完全一致・fail 0を目指す。追加指示によりFile System Access API・OPFS・Interop 2025の100%・JavaScript Test262をこの専任枠に積む。p101のCSS2全件目標は保持する。P10の予約と目標はQueue実行許可ではない。
+2026-10-02 ユーザー更新: ブラウザ専任のP10枠を固定。p172の取込が実際に統合・検証された後は、p100でAcid3の100/100とpixel完全一致・fail 0を目指す。追加指示によりFile System Access API・OPFS・Interop 2025の100%・JavaScript Test262をこの専任枠に積む。p101のCSS2全件目標は保持する。最新のN=3実行指示でp172/q579をP10に投入。後続目標はp172のwhole-Phase clearance後に有限Queueへ選定する。
 
 ## デモの目標（2026-09-28 ユーザー、同日に amazon.co.jp へ変更）
 
@@ -95,7 +95,7 @@ libpng-compat の `from_memory`、libtruetype の拡張、libjpeg-compat の API
   70秒後までprocess生存・追加SIGSEGVなしを確認した。最後の実装修正はcommit `6184fb12`。
 - q507 で [p099](phase099/phase.md) を cleared。Acid2 は同じ固定条件で
   90.56% から byte-identical な 100.00% になり、plain/ASan と focused
-  regression が通った。active Queue は無い。次はblocking p172。全体clear/実出力確認後にp100→p101とbranch側Phaseを再評価し、
+  regression が通った。現在blocking p172をq579/P10で実行中。全体clear/実出力確認後にp100→p101とbranch側Phaseを再評価し、
   一つずつQueueへ選ぶ。
 
 1. **ws074-p099: Acid2 100% — cleared（q507）**。p097 と同じ harness、viewport、font、固定 WPT 版で

@@ -8,7 +8,7 @@
 | P9（Keilandデスクトップ高度化専任、generation 1） | `gpt-6.1-sol` / high | [desktop outlook](desktop-outlook.md)のWS099/090/094/113/114等を順に担当 | `/home/awe/zedBSD-worktrees/p9` / `codex/p9` | [q578](P9/queue.md) | [WS099 p014](../ws099/phase014/phase.md)など、依存と実機/ユーザー時間に応じてmainが選定 | running / generation 1 | 2026-10-02 ユーザー指示。発見したdesktopのバグはmainがBug Boardへ登録しP8へ渡す。 |
 | P10（ブラウザ専任、generation 1） | `gpt-6.1-sol` / high | [WS074](../ws074/ws.md) 固定 | `/home/awe/zedBSD-worktrees/p10` / `codex/p10` | [q579](P10/queue.md) | [p172](../ws074/phase172/phase.md) → [p100](../ws074/phase100/phase.md) → [p174](../ws074/phase174/phase.md) → [p175](../ws074/phase175/phase.md) → [p173](../ws074/phase173/phase.md) → [p176](../ws074/phase176/phase.md) を候補として検討 | running / generation 1 | 2026-10-02 ユーザー追加目標。p101 CSS2も保持。commit/merge/Phase clearanceごとにmainが次Queueを投入する。 |
 
-この表は活動実体と明示的な専任予約の記録。reservedはactive agent/Queueを意味しない。希望数だけで8人を「active」と記載しない。設計調査者3人は一時的な読取専用参加で、P8以降の実装担当IDやQueueを占有しない。P8/P9/P10はユーザーの3枠固定指示を記録した予約で、実際のagent/Queueが配属された時だけmainが個別laneを作り、終了/再開の世代とworktreeを保存する。GitHubへの共有は未同期。
+この表は活動実体と明示的な専任予約の記録。reservedはactive agent/Queueを意味しない。希望数だけで8人を「active」と記載しない。設計調査者3人は一時的な読取専用参加で、P8以降の実装担当IDやQueueを占有しない。P8/P9/P10はgeneration1稼働中。mainが個別laneで終了/再開の世代とworktreeを保存する。GitHubへの共有は未同期。
 
 2026-10-02 / n3-execution-start: latest userがN=3継続実行を承認。runtime IDはspawn後に追記。main checkout所有Q1、publication保留、pushなし。
 

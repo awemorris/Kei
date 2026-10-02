@@ -18,3 +18,5 @@ Outcome: 実行準備、未検証。
 Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
 
 Pinned source read-only fetch 2026-10-02: tip e53ef03b80113aec959deb67f828cba21d68d4be、common493b6eea90c45b3c1f393c0c62a0f7882b43621c、approval snapshotと一致。browser92files/28137insertions/770deletions。
+
+main baseline（import前）: BROWSER_HOST_BUILD=build/main-n3-browser-component sh plan/tools/browser-component/run.sh plain → component83checks PASS。log /tmp/zedbsd-main-n3-component.log、source118f094cb（ブラウザsourceはbaseline41aac4fc7と同一）。import後の検証の代用ではない。
