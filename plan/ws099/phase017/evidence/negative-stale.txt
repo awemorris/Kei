@@ -1,0 +1,3 @@
+negative: stopped clients, stale resize-start count expected to remain 3
+request: ^ZWL RESIZE start surface= MISSING new count (before 3, found 3, status 1)
+p076: FAIL

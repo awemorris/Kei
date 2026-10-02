@@ -40,3 +40,15 @@ q538の元 `plan/history/ws105/q538/evidence/criteria/c9-p076/zdesktop.log` はc
 - mainの05:04 UTC通知: 現行main `5ac9b753d` のfresh passthrough-demo build warning0、wayland hash `2cf785aea72e344ba1f957ba481328d87afcdb62d01f130ddf65fa7bc47a5732` が今回imageのbinaryと一致。対象compositorのcurrent build一致を支持するが、kernel/config/image全体の証明には使わない。
 
 次: held中の新規requestを有限に待ち、timeout時はreleaseしてFAIL終了する診断に整える。追加注入なしでgeometry基準を保った比較を行う。mainの追加指示によりrequest handshakeはq577内のharness同期候補、製品sourceは読取だけ。単独20/C9 5はまだ未実施。
+
+## request handshakeの変更と有限負例
+
+mainの追加指示（held中のnew request-count確認、timeoutはreleaseしてFAIL、scope内のharness同期）に基づき、共有p076のpress/move/resizeだけを変更した。press前にaccepted requestのcountを採り、button down後にcountが増えるまで待つ。拒否されたmove行はaccepted patternに含めない。resize startは前の操作の行で成功しない。guest内のpollは0.5秒×6、count採取とpollのSSHにはそれぞれ10秒のhost deadlineを付けた。
+
+missing/invalid countはstatus=1、held中のtimeoutはupを送り、finishで元の証拠を保存してFAIL終了する。drag motionは送らない。既存400→550→200→800幅、right-edge anchor、move/settled log、各画素の期待は変更していない。pixelの再撮影は追加していない。製品source/binary、toolchain、HALは変更無し。
+
+[最初の全p076](evidence/fixed-1.txt)はPASS（新規request countはmove0→1、resize0→1→2→3）。以後のcount採取にもhost10秒deadlineを適用したので最終版20単独/5C9は別に実行する。
+
+[実guestのstale-count負例](evidence/negative-stale.txt): client停止後の古いresize-start3件が残るlog上でdesktop40,700をpress。3→3のまま6pollでFAIL（exit1）。[QMP呼出し](evidence/negative-stale-pointer.txt)はapproach/downの後にupだけで、dragの3motionは無い。old startで成功する回帰と、timeout後にdragを続ける回帰を実入力で否定した。shared scriptのhelpersをそのまま抽出しpointer呼出しを記録するhost側観測を追加した。fixture準備時の構文不備2回は実guest操作前のsh-nで拒否、成功fixture結果とは分ける。
+
+全文review: 最終変更のshared shellと診断shellにAGENTS/Guardrail/automationの適用範囲と既存shell慣例を確認。C source変更無し、C-specific formatter/style-check/buildは対象外。sh-n/git diff-check PASS。source意味は新規count/拒否行除外/timeout release+abort/既存geometryを手で確認した。Phaseはin-progress、BUG-125はtracking、20/5/実機は未実施。

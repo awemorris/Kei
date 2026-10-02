@@ -1,0 +1,2 @@
+move 38 700 sleep 150 move 40 700 sleep 300 down sleep 200
+up
