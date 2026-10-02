@@ -1,0 +1,24 @@
+cc -O2 -g -std=gnu17 -Wall -Wextra -Werror -Wno-format-truncation -fPIC -D_GNU_SOURCE -DKEILAND_BINDIR='"/opt/keiland/bin"' -DKEILAND_LIBEXECDIR='"/opt/keiland/libexec"' -DKEILAND_DATADIR='"/opt/keiland/share"' -DKEILAND_SYSCONFDIR='"/opt/keiland/etc"'  -I. -Iuserland/desktop/keiland -Ibuild/b1-q587/linux/include  -MMD -MP -c userland/desktop/wayland/objects.c -o build/b1-q587/linux/obj/userland/desktop/wayland/objects.o
+cc -O2 -g -std=gnu17 -Wall -Wextra -Werror -Wno-format-truncation -fPIC -D_GNU_SOURCE -DKEILAND_BINDIR='"/opt/keiland/bin"' -DKEILAND_LIBEXECDIR='"/opt/keiland/libexec"' -DKEILAND_DATADIR='"/opt/keiland/share"' -DKEILAND_SYSCONFDIR='"/opt/keiland/etc"'  -I. -Iuserland/desktop/keiland -Ibuild/b1-q587/linux/include  -MMD -MP -c userland/desktop/wayland/seat.c -o build/b1-q587/linux/obj/userland/desktop/wayland/seat.o
+cc -O2 -g -std=gnu17 -Wall -Wextra -Werror -Wno-format-truncation -fPIC -D_GNU_SOURCE -DKEILAND_BINDIR='"/opt/keiland/bin"' -DKEILAND_LIBEXECDIR='"/opt/keiland/libexec"' -DKEILAND_DATADIR='"/opt/keiland/share"' -DKEILAND_SYSCONFDIR='"/opt/keiland/etc"'  -I. -Iuserland/desktop/keiland -Ibuild/b1-q587/linux/include  -MMD -MP -c userland/desktop/wayland/toplevel.c -o build/b1-q587/linux/obj/userland/desktop/wayland/toplevel.o
+userland/desktop/wayland/seat.c:1338:1: error: conflicting types for ‘pointer_button’; have ‘uint32_t(struct zwl_object *, uint32_t,  uint32_t,  uint32_t)’ {aka ‘unsigned int(struct zwl_object *, unsigned int,  unsigned int,  unsigned int)’}
+ 1338 | pointer_button(
+      | ^~~~~~~~~~~~~~
+userland/desktop/wayland/seat.c:92:17: note: previous declaration of ‘pointer_button’ with type ‘uint32_t(struct zwl_object *, uint32_t,  uint32_t,  uint32_t,  unsigned int)’ {aka ‘unsigned int(struct zwl_object *, unsigned int,  unsigned int,  unsigned int,  unsigned int)’}
+   92 | static uint32_t pointer_button(struct zwl_object *target, uint32_t time, uint32_t button, uint32_t state, unsigned complete);
+      |                 ^~~~~~~~~~~~~~
+userland/desktop/wayland/seat.c: In function ‘pointer_button’:
+userland/desktop/wayland/seat.c:1373:21: error: ‘complete’ undeclared (first use in this function)
+ 1373 |                 if (complete && object->version >= POINTER_FRAME_VERSION)
+      |                     ^~~~~~~~
+userland/desktop/wayland/seat.c:1373:21: note: each undeclared identifier is reported only once for each function it appears in
+userland/desktop/wayland/seat.c: At top level:
+userland/desktop/wayland/seat.c:92:17: error: ‘pointer_button’ used but never defined [-Werror]
+   92 | static uint32_t pointer_button(struct zwl_object *target, uint32_t time, uint32_t button, uint32_t state, unsigned complete);
+      |                 ^~~~~~~~~~~~~~
+userland/desktop/wayland/seat.c:1338:1: error: ‘pointer_button’ defined but not used [-Werror=unused-function]
+ 1338 | pointer_button(
+      | ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make: *** [userland/desktop/keiland-linux.mk:37: build/b1-q587/linux/obj/userland/desktop/wayland/seat.o] Error 1
+make: *** Waiting for unfinished jobs....

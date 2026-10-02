@@ -1,0 +1,10 @@
+{"event": "gtk-version", "pid": 1162, "version": "4.18.6"}
+{"event": "focus", "pid": 1162, "active": true}
+{"event": "snapshot", "pid": 1162, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "scroll", "pid": 1162, "value": 33.856663005926926, "upper": 540.0, "page": 197.0}
+{"event": "target-text", "pid": 1162, "text": "z"}
+[1224661.236] {Default Queue} wl_pointer#6.button(7, 1556179, 272, 1)
+[1225108.712]  -> xdg_toplevel#30.move(wl_seat#14, 7)
+[1225948.593] {Default Queue} wl_pointer#6.button(9, 1557466, 272, 0)
+[1226179.642] {Default Queue} wl_pointer#6.button(10, 1557692, 272, 1)
+[1226224.331] {Default Queue} wl_pointer#6.button(12, 1557741, 272, 0)

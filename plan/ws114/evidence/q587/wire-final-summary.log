@@ -1,0 +1,7 @@
+exit=0
+PASS no decoration object
+PASS mode events/configure serials/commit boundaries
+PASS native opt-in and withdrawal
+PASS explicit CSD takes precedence over native opt-in
+PASS expected duplicate protocol error
+PASS expected invalid protocol error

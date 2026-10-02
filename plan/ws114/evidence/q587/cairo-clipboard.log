@@ -1,0 +1,4 @@
+{"event": "gtk-version", "pid": 1503, "version": "4.18.6"}
+{"event": "focus", "pid": 1503, "active": true}
+{"event": "snapshot", "pid": 1503, "renderer": "GskCairoRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "source-text", "pid": 1503, "text": "q581 clipboaq587 clipboard Ω 日本語rd Ω 日本語"}

@@ -473,7 +473,9 @@ decoration_create(
 	/* Version one requires decoration negotiation before buffer content was committed. */
 	surface = toplevel->surface;
 	if (surface != NULL) {
-		if (surface->current != NULL || surface->queued != NULL || surface->pending != NULL) {
+		if (surface->current != NULL ||
+		    surface->queued != NULL ||
+		    surface->pending != NULL) {
 			error = zwl_error_code(manager->client, manager->id, DECORATION_ERROR_UNCONFIGURED_BUFFER, "the toplevel already has content");
 			if (error != 0)
 				return error;

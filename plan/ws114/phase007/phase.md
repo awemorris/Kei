@@ -47,3 +47,5 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 2026-10-02 07:41 UTC / q587 B1 start: approved snapshot verified and B main322d127a fast-forwarded. Implementation/build starts; QEMU grant pending.
 
 2026-10-02 / q587-scope-amendment01: Current CSD runtimeでGTK4 move release欠落を再現。GTK4実操作の元基準を満たす最小[追加scope](q587-scope-amendment-01.md)をB mainが具体化し、seat/toplevelと元client operation state/lifecycleを所有へ追加。元snapshotと3h期限を保持、基準を緩和しない。
+
+2026-10-02 / q587 checkpoint02: amendment01のclient move/resize release修正と有限Linux/native検証を提出。[checkpoint](q587-checkpoint-02.md)。未達確認を保持し、Phaseはin-progress。
