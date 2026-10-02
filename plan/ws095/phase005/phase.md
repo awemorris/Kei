@@ -7,6 +7,8 @@ Disposition: normal
 Parent: [WS095](../ws.md)
 Queue: main が割り当て（2026-09-29、worktree `.claude/worktrees/ws095-ime`、branch `wt/ws095`）。Queue の ID は main が記録する
 
+2026-10-02 user:「IMEのステータスを画面右上の通知領域に追加してください。日本語入力はできることを確認しましたので、ステータスがあればいいと思いました。」→ indicator を system bar の右上の通知領域に置くことをこの Phase の必須にする。
+
 ## 範囲
 
 [design.md](../design.md) §4.3・§8・§13 の p005:

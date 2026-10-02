@@ -34,7 +34,7 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 
 ## Upcoming Work Outlook
 
-2026-10-02 追加の予約: P2 → q591 の後 ws099-p023（BUG-136 Gears・BUG-137 Terminal のタイトルバー）→ ws099-p021。P4 → q595 の後 ws129-p010（全 desktop app を CI と試験の config へ）→ ws089-p010。P1 → q599 の後 ws033-p001 を再投入 → ws118-p001。
+2026-10-02 追加の予約: P2 → q591 の後 ws099-p023（BUG-136 Gears・BUG-137 Terminal のタイトルバー）→ ws099-p021。P4 → q595 の後 ws095-p013（BUG-139）→ ws095-p005（IME の status を右上の通知領域に）→ ws129-p010（全 desktop app を CI と試験の config へ）→ ws089-p010。P1 → q599 の後 ws033-p001 を再投入 → ws118-p001。
 
 継続の dispatch（2026-10-02 user「N=4で週次利用制限に達するまで作業してください」「作業を開始しましょう。」）: Q1 は Master の Outlook の fg019 の planned Phase を各担当の線に順に投入する。ユーザーの判断が要る Phase（planning）は投入しない。
 
