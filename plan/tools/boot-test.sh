@@ -12,6 +12,9 @@
 #   IMAGE          disk image to boot, as the operand or in the environment
 #                  (default build/amd64/hdd-image.img)
 #   OUTPUT         where the screenshot and logs go (default build/boot-test)
+#   BOOT_TEST_WORK where the emulator's working files go: the stick's copy, the
+#                  firmware variables, the monitor socket and the screen
+#                  frames (default a new directory under TMPDIR, else /tmp)
 #   BOOT_TIMEOUT   seconds to wait for the login prompt (default 180)
 #   QEMU           emulator to run (default depends on BOOT_MODE)
 #   BOOT_MODE      uefi-nvme (default), uefi-usb, bios-ide or raspi4b
@@ -69,9 +72,20 @@ done
 
 rm -rf "$output"
 mkdir -p "$output"
-disk=$output/stick.img
-nvram=$output/uefi-vars.fd
-monitor=$output/qmp.sock
+
+# The emulator's working files live on a scratch file system, normally the
+# tmpfs /tmp, not beside the output.  The emulator writes the guest's disk and
+# each screen frame from its main loop; on a full or busy disk those writes
+# stall it for tens of seconds and the monitor stops answering (ws129-p009:
+# QMP screendump took over 30 s with the stick in build/ and 0.02 s with it
+# in /tmp, for the same image).
+work_parent=${BOOT_TEST_WORK:-${TMPDIR:-/tmp}}
+mkdir -p "$work_parent"
+work=$(mktemp -d "$work_parent/boot-test.XXXXXX")
+disk=$work/stick.img
+nvram=$work/uefi-vars.fd
+monitor=$work/qmp.sock
+frame=$work/screen.ppm
 screenshot=$output/login.png
 
 # The guest writes to the stick it booted from, so it is given a copy, and the
@@ -87,7 +101,7 @@ cleanup()
 		kill "$pid" 2>/dev/null || true
 		wait "$pid" 2>/dev/null || true
 	fi
-	rm -f -- "$disk" "$monitor"
+	rm -rf -- "$work"
 }
 trap cleanup EXIT INT TERM
 
@@ -130,7 +144,7 @@ pid=$!
 # the stick and then photographs the screen; the login prompt is the first
 # quiet point after the boot, and the picture shows whether that is what it is.
 python3 "$root/plan/tools/boot-test.py" \
-	--monitor "$monitor" --screenshot "$screenshot" \
+	--monitor "$monitor" --screenshot "$screenshot" --frame "$frame" \
 	--timeout "$boot_timeout"
 status=$?
 
