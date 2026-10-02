@@ -79,3 +79,5 @@ WS の完了の条件（design §7 の受け入れ）は L1・L2 で満たした
 ## q582 / B2 checkpoint（2026-10-02）
 
 p011を有限Queueでcleared。hidden/prune・失敗listingからの復帰のhost試験、warning0 target build、prune/L1/drag/menu guest回帰、最終staged imageのboot-testがPASS。fresh full-image生成はtoolchain制限のため未実施、B main指定fixtureを独立コピーして現行desktop binary/libraryを導入した。WSはincompleteのまま、p007/p012とp009の判定はこのQueueに含めない。[詳細](phase011/q582-result.md)。
+
+2026-10-02 / b2-q588-partial-dispatch: p011/q582 clear後、[p007のsource/host/build部分](phase007/q588-approved-scope.md)を同じB2へ投入。全WS sourceはinventory/review、wayland等の所有外は編集せずfindingsを渡す。実機p012と最終guest/C9/bootを受け入れから除かず、WS incompleteを保持。
