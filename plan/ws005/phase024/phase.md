@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p024 -->
 # ws005-p024: WiFi の有効化（起動時の `net wifi enable`）で保存済みの AP に自動で再接続する
 
-Status: planned
+Status: planned（2026-10-02 ユーザーの改訂の設計）
 Disposition: normal
 Parent: [WS005](../ws.md)
 
@@ -20,3 +20,15 @@ Parent: [WS005](../ws.md)
 ## 所有 path
 
 `userland/base/networkd/`、`userland/base/net/`、`plan/ws005/`。
+
+
+## 2026-10-02 設計の改訂（ユーザー）
+
+ユーザー:「ログインしていない利用者の鍵を接続に使うのはおかしいです。システムのストアに保存されるWiFi情報と、ユーザのストアに保存されるものを、分離して実装済みですよね。networkdには、ログイン後にユーザのストアの位置を通知して利用可能にするのがいいです。ログアウト時も通知が必要ですね。」
+
+上の範囲 1・2（起動時に network group の全利用者の `~/.wifi.conf` を読む）は**取り消し**。改訂した範囲:
+1. 起動時（`net startup`／`net wifi enable`、root）は **system の store だけ**で、見えている保存済みの AP に自動接続する（console の起動でも）。
+2. 利用者の login（sessiond の session の開始）で、session が networkd に**その利用者の store の位置を通知**し、networkd はその利用者の store を候補に加えて、保存済みの AP に自動接続する（p019 の policy の移動の仕組みと整合）。
+3. logout（session の終了）で、session が networkd に**通知**し、networkd はその利用者の store を候補から外す（その store の profile で張った接続は切り、system の store の候補へ戻る）。
+4. 通知は既存の networkd の socket の protocol の要求として足す（network group の利用者だけ、要求者自身の store だけを登録できる）。鍵は利用者の store に残し、networkd に鍵を渡さない境界は不変。
+5. 確認: 本物の networkd の QEMU（system の store だけでの起動時の接続の試み、login の通知での利用者の store の追加、logout での除去）、5330 の AX211 passthrough で再起動後の console の自動接続（system の store）と、login 後の利用者の store での自動接続、logout 後の切り替え。資格情報は記録に書かない。
