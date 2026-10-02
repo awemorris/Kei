@@ -7,7 +7,7 @@ Primary Milestone: MG007
 Related Milestones: MG001（追跡可能なbuild/配布記録）、MG006（既存Keilandの配布）
 Parent: [Master](../master.md)
 Queue: q585 / A2（p001契約調査のみ）
-Resume point: q585-i01/p001 uncleared（有限契約調査終了、D1 Fedora/Arch boot適用のuser返答待ち）。5OS input/署名/形式契約とRPi採用環境を保存。D1判断元/共有Guardrail反映後p001再評価、q591/p002は候補のみ、実装未承認。
+Resume point: **ベータ1（fg019）で優先度は最下位（2026-10-02 user）**。q585-i01/p001 uncleared（有限契約調査終了、D1 Fedora/Arch boot適用のuser返答待ち）。5OS input/署名/形式契約とRPi採用環境を保存。D1判断元/共有Guardrail反映後p001再評価、q591/p002は候補のみ、実装未承認。
 
 ## Objective / scope
 
