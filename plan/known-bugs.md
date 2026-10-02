@@ -1,6 +1,6 @@
 # zedBSD known bugs
 
-Last updated: 2026-10-01
+Last updated: 2026-10-02
 
 This ledger records observed defects and their explicit active or deferred
 owner. A listed item is not silently treated as a failure of an unrelated
@@ -9,6 +9,7 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-130](bugs/BUG-130.md) | FreeBSD drm-kmod DMA-BUF のaccess flags | reproduced / tracking | WS109 q568、live fdのsync ioctlがEBADF、Vulkan window acquire失敗 | native能力分類＋実GPU window所有権検証。driver自体は未修正 |
 | [BUG-129](bugs/BUG-129.md) | package menu に Fonts 分類が無い | reproduced / tracking | WS106 q540、移動前rowsでもMAC-T001 noto-color-emojiでFAIL | package/menu整備時。今回未修正、BUG-080は関連する別条件 |
 | [BUG-128](bugs/BUG-128.md) | Terminal menu初期化でNULL screenを読む | reproduced / resolved（WS105 p008） | source 7dd3ad9e、Linux / zedBSDで起動・文字・終了PASS | startup再発時にreopen、実機未実施 |
 | [BUG-127](bugs/BUG-127.md) | zedBSD window最小化直後の画像 | reproduced / tracking | q532 C9 p072、minimize log後に青い窓が残る。復元・desktop移動はPASS。ユーザーがtrackingでclearを許可 | window操作のQueueでframe待ちを含むbounded調査。修正未実施 |

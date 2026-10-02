@@ -1,0 +1,284 @@
+drm-66-kmod-6.6.25.1501000_8
+gpu-firmware-intel-kmod-alderlake-20260519.1500068
+vulkan-tools-1.4.356
+drm-66-kmod-6.6.25.1501000_8:
+	/boot/modules/amdgpu.ko
+	/boot/modules/dmabuf.ko
+	/boot/modules/drm.ko
+	/boot/modules/i915kms.ko
+	/boot/modules/radeonkms.ko
+	/boot/modules/ttm.ko
+	/usr/local/share/licenses/drm-66-kmod-6.6.25.1501000_8/BSD2CLAUSE
+	/usr/local/share/licenses/drm-66-kmod-6.6.25.1501000_8/GPLv2
+	/usr/local/share/licenses/drm-66-kmod-6.6.25.1501000_8/LICENSE
+	/usr/local/share/licenses/drm-66-kmod-6.6.25.1501000_8/MIT
+	/usr/local/share/licenses/drm-66-kmod-6.6.25.1501000_8/catalog.mk
+total 0
+crw-rw----  1 root video  0x3b Oct  2 00:40 0
+crw-rw----  1 root video  0x3f Oct  2 00:40 1
+crw-rw----  1 root video  0x82 Oct  2 00:40 10
+crw-rw----  1 root video  0xdc Oct  2 00:40 100
+crw-rw----  1 root video  0xdd Oct  2 00:40 101
+crw-rw----  1 root video  0xde Oct  2 00:40 102
+crw-rw----  1 root video  0xdf Oct  2 00:40 103
+crw-rw----  1 root video  0xe0 Oct  2 00:40 104
+crw-rw----  1 root video  0xe1 Oct  2 00:40 105
+crw-rw----  1 root video  0xe2 Oct  2 00:40 106
+crw-rw----  1 root video  0xe3 Oct  2 00:40 107
+crw-rw----  1 root video  0xe4 Oct  2 00:40 108
+crw-rw----  1 root video  0xe5 Oct  2 00:40 109
+crw-rw----  1 root video  0x83 Oct  2 00:40 11
+crw-rw----  1 root video  0xe6 Oct  2 00:40 110
+crw-rw----  1 root video  0xe7 Oct  2 00:40 111
+crw-rw----  1 root video  0xe8 Oct  2 00:40 112
+crw-rw----  1 root video  0xe9 Oct  2 00:40 113
+crw-rw----  1 root video  0xea Oct  2 00:40 114
+crw-rw----  1 root video  0xeb Oct  2 00:40 115
+crw-rw----  1 root video  0xec Oct  2 00:40 116
+crw-rw----  1 root video  0xed Oct  2 00:40 117
+crw-rw----  1 root video  0xee Oct  2 00:40 118
+crw-rw----  1 root video  0xef Oct  2 00:40 119
+crw-rw----  1 root video  0x84 Oct  2 00:40 12
+crw-rw----  1 root video  0xf0 Oct  2 00:40 120
+crw-rw----  1 root video  0xf1 Oct  2 00:40 121
+crw-rw----  1 root video  0xf2 Oct  2 00:40 122
+crw-rw----  1 root video  0xf3 Oct  2 00:40 123
+crw-rw----  1 root video  0xf4 Oct  2 00:40 124
+crw-rw----  1 root video  0xf5 Oct  2 00:40 125
+crw-rw----  1 root video  0xf6 Oct  2 00:40 126
+crw-rw----  1 root video  0xf7 Oct  2 00:40 127
+crw-rw----  1 root video  0xf8 Oct  2 00:40 128
+crw-rw----  1 root video  0xf9 Oct  2 00:40 129
+crw-rw----  1 root video  0x85 Oct  2 00:40 13
+crw-rw----  1 root video  0xfa Oct  2 00:40 130
+crw-rw----  1 root video  0xfb Oct  2 00:40 131
+crw-rw----  1 root video  0xfc Oct  2 00:40 132
+crw-rw----  1 root video  0xfd Oct  2 00:40 133
+crw-rw----  1 root video  0xfe Oct  2 00:40 134
+crw-rw----  1 root video  0xff Oct  2 00:40 135
+crw-rw----  1 root video 0x100 Oct  2 00:40 136
+crw-rw----  1 root video 0x101 Oct  2 00:40 137
+crw-rw----  1 root video 0x102 Oct  2 00:40 138
+crw-rw----  1 root video 0x103 Oct  2 00:40 139
+crw-rw----  1 root video  0x86 Oct  2 00:40 14
+crw-rw----  1 root video 0x104 Oct  2 00:40 140
+crw-rw----  1 root video 0x105 Oct  2 00:40 141
+crw-rw----  1 root video 0x106 Oct  2 00:40 142
+crw-rw----  1 root video 0x107 Oct  2 00:40 143
+crw-rw----  1 root video 0x108 Oct  2 00:40 144
+crw-rw----  1 root video 0x109 Oct  2 00:40 145
+crw-rw----  1 root video 0x10a Oct  2 00:40 146
+crw-rw----  1 root video 0x10b Oct  2 00:40 147
+crw-rw----  1 root video 0x10c Oct  2 00:40 148
+crw-rw----  1 root video 0x10d Oct  2 00:40 149
+crw-rw----  1 root video  0x87 Oct  2 00:40 15
+crw-rw----  1 root video 0x10e Oct  2 00:40 150
+crw-rw----  1 root video 0x10f Oct  2 00:40 151
+crw-rw----  1 root video 0x110 Oct  2 00:40 152
+crw-rw----  1 root video 0x111 Oct  2 00:40 153
+crw-rw----  1 root video 0x112 Oct  2 00:40 154
+crw-rw----  1 root video 0x113 Oct  2 00:40 155
+crw-rw----  1 root video 0x114 Oct  2 00:40 156
+crw-rw----  1 root video 0x115 Oct  2 00:40 157
+crw-rw----  1 root video 0x116 Oct  2 00:40 158
+crw-rw----  1 root video 0x117 Oct  2 00:40 159
+crw-rw----  1 root video  0x88 Oct  2 00:40 16
+crw-rw----  1 root video 0x118 Oct  2 00:40 160
+crw-rw----  1 root video 0x119 Oct  2 00:40 161
+crw-rw----  1 root video 0x11a Oct  2 00:40 162
+crw-rw----  1 root video 0x11b Oct  2 00:40 163
+crw-rw----  1 root video 0x11c Oct  2 00:40 164
+crw-rw----  1 root video 0x11d Oct  2 00:40 165
+crw-rw----  1 root video 0x11e Oct  2 00:40 166
+crw-rw----  1 root video 0x11f Oct  2 00:40 167
+crw-rw----  1 root video 0x120 Oct  2 00:40 168
+crw-rw----  1 root video 0x121 Oct  2 00:40 169
+crw-rw----  1 root video  0x89 Oct  2 00:40 17
+crw-rw----  1 root video 0x122 Oct  2 00:40 170
+crw-rw----  1 root video 0x123 Oct  2 00:40 171
+crw-rw----  1 root video 0x124 Oct  2 00:40 172
+crw-rw----  1 root video 0x125 Oct  2 00:40 173
+crw-rw----  1 root video 0x126 Oct  2 00:40 174
+crw-rw----  1 root video 0x127 Oct  2 00:40 175
+crw-rw----  1 root video 0x128 Oct  2 00:40 176
+crw-rw----  1 root video 0x129 Oct  2 00:40 177
+crw-rw----  1 root video 0x12a Oct  2 00:40 178
+crw-rw----  1 root video 0x12b Oct  2 00:40 179
+crw-rw----  1 root video  0x8a Oct  2 00:40 18
+crw-rw----  1 root video 0x12c Oct  2 00:40 180
+crw-rw----  1 root video 0x12d Oct  2 00:40 181
+crw-rw----  1 root video 0x12e Oct  2 00:40 182
+crw-rw----  1 root video 0x12f Oct  2 00:40 183
+crw-rw----  1 root video 0x130 Oct  2 00:40 184
+crw-rw----  1 root video 0x131 Oct  2 00:40 185
+crw-rw----  1 root video 0x132 Oct  2 00:40 186
+crw-rw----  1 root video 0x133 Oct  2 00:40 187
+crw-rw----  1 root video 0x134 Oct  2 00:40 188
+crw-rw----  1 root video 0x135 Oct  2 00:40 189
+crw-rw----  1 root video  0x8b Oct  2 00:40 19
+crw-rw----  1 root video 0x136 Oct  2 00:40 190
+crw-rw----  1 root video 0x137 Oct  2 00:40 191
+crw-rw----  1 root video 0x138 Oct  2 00:40 192
+crw-rw----  1 root video 0x139 Oct  2 00:40 193
+crw-rw----  1 root video 0x13a Oct  2 00:40 194
+crw-rw----  1 root video 0x13b Oct  2 00:40 195
+crw-rw----  1 root video 0x13c Oct  2 00:40 196
+crw-rw----  1 root video 0x13d Oct  2 00:40 197
+crw-rw----  1 root video 0x13e Oct  2 00:40 198
+crw-rw----  1 root video 0x13f Oct  2 00:40 199
+crw-rw----  1 root video  0x40 Oct  2 00:40 2
+crw-rw----  1 root video  0x8c Oct  2 00:40 20
+crw-rw----  1 root video 0x140 Oct  2 00:40 200
+crw-rw----  1 root video 0x141 Oct  2 00:40 201
+crw-rw----  1 root video 0x142 Oct  2 00:40 202
+crw-rw----  1 root video 0x143 Oct  2 00:40 203
+crw-rw----  1 root video 0x144 Oct  2 00:40 204
+crw-rw----  1 root video 0x145 Oct  2 00:40 205
+crw-rw----  1 root video 0x146 Oct  2 00:40 206
+crw-rw----  1 root video 0x147 Oct  2 00:40 207
+crw-rw----  1 root video 0x148 Oct  2 00:40 208
+crw-rw----  1 root video 0x149 Oct  2 00:40 209
+crw-rw----  1 root video  0x8d Oct  2 00:40 21
+crw-rw----  1 root video 0x14a Oct  2 00:40 210
+crw-rw----  1 root video 0x14b Oct  2 00:40 211
+crw-rw----  1 root video 0x14c Oct  2 00:40 212
+crw-rw----  1 root video 0x14d Oct  2 00:40 213
+crw-rw----  1 root video 0x14e Oct  2 00:40 214
+crw-rw----  1 root video 0x14f Oct  2 00:40 215
+crw-rw----  1 root video 0x150 Oct  2 00:40 216
+crw-rw----  1 root video 0x151 Oct  2 00:40 217
+crw-rw----  1 root video 0x152 Oct  2 00:40 218
+crw-rw----  1 root video 0x153 Oct  2 00:40 219
+crw-rw----  1 root video  0x8e Oct  2 00:40 22
+crw-rw----  1 root video 0x154 Oct  2 00:40 220
+crw-rw----  1 root video 0x155 Oct  2 00:40 221
+crw-rw----  1 root video 0x156 Oct  2 00:40 222
+crw-rw----  1 root video 0x157 Oct  2 00:40 223
+crw-rw----  1 root video 0x158 Oct  2 00:40 224
+crw-rw----  1 root video 0x159 Oct  2 00:40 225
+crw-rw----  1 root video 0x15a Oct  2 00:40 226
+crw-rw----  1 root video 0x15b Oct  2 00:40 227
+crw-rw----  1 root video 0x15c Oct  2 00:40 228
+crw-rw----  1 root video 0x15d Oct  2 00:40 229
+crw-rw----  1 root video  0x8f Oct  2 00:40 23
+crw-rw----  1 root video 0x15e Oct  2 00:40 230
+crw-rw----  1 root video 0x15f Oct  2 00:40 231
+crw-rw----  1 root video 0x160 Oct  2 00:40 232
+crw-rw----  1 root video 0x161 Oct  2 00:40 233
+crw-rw----  1 root video 0x162 Oct  2 00:40 234
+crw-rw----  1 root video 0x163 Oct  2 00:40 235
+crw-rw----  1 root video 0x164 Oct  2 00:40 236
+crw-rw----  1 root video 0x165 Oct  2 00:40 237
+crw-rw----  1 root video 0x166 Oct  2 00:40 238
+crw-rw----  1 root video 0x167 Oct  2 00:40 239
+crw-rw----  1 root video  0x90 Oct  2 00:40 24
+crw-rw----  1 root video 0x168 Oct  2 00:40 240
+crw-rw----  1 root video 0x169 Oct  2 00:40 241
+crw-rw----  1 root video 0x16a Oct  2 00:40 242
+crw-rw----  1 root video 0x16b Oct  2 00:40 243
+crw-rw----  1 root video 0x16c Oct  2 00:40 244
+crw-rw----  1 root video 0x16d Oct  2 00:40 245
+crw-rw----  1 root video 0x16e Oct  2 00:40 246
+crw-rw----  1 root video 0x16f Oct  2 00:40 247
+crw-rw----  1 root video 0x170 Oct  2 00:40 248
+crw-rw----  1 root video 0x171 Oct  2 00:40 249
+crw-rw----  1 root video  0x91 Oct  2 00:40 25
+crw-rw----  1 root video 0x172 Oct  2 00:40 250
+crw-rw----  1 root video 0x173 Oct  2 00:40 251
+crw-rw----  1 root video 0x174 Oct  2 00:40 252
+crw-rw----  1 root video 0x175 Oct  2 00:40 253
+crw-rw----  1 root video 0x176 Oct  2 00:40 254
+crw-rw----  1 root video 0x177 Oct  2 00:40 255
+crw-rw----  1 root video  0x92 Oct  2 00:40 26
+crw-rw----  1 root video  0x93 Oct  2 00:40 27
+crw-rw----  1 root video  0x94 Oct  2 00:40 28
+crw-rw----  1 root video  0x95 Oct  2 00:40 29
+crw-rw----  1 root video  0x41 Oct  2 00:40 3
+crw-rw----  1 root video  0x96 Oct  2 00:40 30
+crw-rw----  1 root video  0x97 Oct  2 00:40 31
+crw-rw----  1 root video  0x98 Oct  2 00:40 32
+crw-rw----  1 root video  0x99 Oct  2 00:40 33
+crw-rw----  1 root video  0x9a Oct  2 00:40 34
+crw-rw----  1 root video  0x9b Oct  2 00:40 35
+crw-rw----  1 root video  0x9c Oct  2 00:40 36
+crw-rw----  1 root video  0x9d Oct  2 00:40 37
+crw-rw----  1 root video  0x9e Oct  2 00:40 38
+crw-rw----  1 root video  0x9f Oct  2 00:40 39
+crw-rw----  1 root video  0x6e Oct  2 00:40 4
+crw-rw----  1 root video  0xa0 Oct  2 00:40 40
+crw-rw----  1 root video  0xa1 Oct  2 00:40 41
+crw-rw----  1 root video  0xa2 Oct  2 00:40 42
+crw-rw----  1 root video  0xa3 Oct  2 00:40 43
+crw-rw----  1 root video  0xa4 Oct  2 00:40 44
+crw-rw----  1 root video  0xa5 Oct  2 00:40 45
+crw-rw----  1 root video  0xa6 Oct  2 00:40 46
+crw-rw----  1 root video  0xa7 Oct  2 00:40 47
+crw-rw----  1 root video  0xa8 Oct  2 00:40 48
+crw-rw----  1 root video  0xa9 Oct  2 00:40 49
+crw-rw----  1 root video  0x6f Oct  2 00:40 5
+crw-rw----  1 root video  0xaa Oct  2 00:40 50
+crw-rw----  1 root video  0xab Oct  2 00:40 51
+crw-rw----  1 root video  0xac Oct  2 00:40 52
+crw-rw----  1 root video  0xad Oct  2 00:40 53
+crw-rw----  1 root video  0xae Oct  2 00:40 54
+crw-rw----  1 root video  0xaf Oct  2 00:40 55
+crw-rw----  1 root video  0xb0 Oct  2 00:40 56
+crw-rw----  1 root video  0xb1 Oct  2 00:40 57
+crw-rw----  1 root video  0xb2 Oct  2 00:40 58
+crw-rw----  1 root video  0xb3 Oct  2 00:40 59
+crw-rw----  1 root video  0x70 Oct  2 00:40 6
+crw-rw----  1 root video  0xb4 Oct  2 00:40 60
+crw-rw----  1 root video  0xb5 Oct  2 00:40 61
+crw-rw----  1 root video  0xb6 Oct  2 00:40 62
+crw-rw----  1 root video  0xb7 Oct  2 00:40 63
+crw-rw----  1 root video  0xb8 Oct  2 00:40 64
+crw-rw----  1 root video  0xb9 Oct  2 00:40 65
+crw-rw----  1 root video  0xba Oct  2 00:40 66
+crw-rw----  1 root video  0xbb Oct  2 00:40 67
+crw-rw----  1 root video  0xbc Oct  2 00:40 68
+crw-rw----  1 root video  0xbd Oct  2 00:40 69
+crw-rw----  1 root video  0x7f Oct  2 00:40 7
+crw-rw----  1 root video  0xbe Oct  2 00:40 70
+crw-rw----  1 root video  0xbf Oct  2 00:40 71
+crw-rw----  1 root video  0xc0 Oct  2 00:40 72
+crw-rw----  1 root video  0xc1 Oct  2 00:40 73
+crw-rw----  1 root video  0xc2 Oct  2 00:40 74
+crw-rw----  1 root video  0xc3 Oct  2 00:40 75
+crw-rw----  1 root video  0xc4 Oct  2 00:40 76
+crw-rw----  1 root video  0xc5 Oct  2 00:40 77
+crw-rw----  1 root video  0xc6 Oct  2 00:40 78
+crw-rw----  1 root video  0xc7 Oct  2 00:40 79
+crw-rw----  1 root video  0x80 Oct  2 00:40 8
+crw-rw----  1 root video  0xc8 Oct  2 00:40 80
+crw-rw----  1 root video  0xc9 Oct  2 00:40 81
+crw-rw----  1 root video  0xca Oct  2 00:40 82
+crw-rw----  1 root video  0xcb Oct  2 00:40 83
+crw-rw----  1 root video  0xcc Oct  2 00:40 84
+crw-rw----  1 root video  0xcd Oct  2 00:40 85
+crw-rw----  1 root video  0xce Oct  2 00:40 86
+crw-rw----  1 root video  0xcf Oct  2 00:40 87
+crw-rw----  1 root video  0xd0 Oct  2 00:40 88
+crw-rw----  1 root video  0xd1 Oct  2 00:40 89
+crw-rw----  1 root video  0x81 Oct  2 00:40 9
+crw-rw----  1 root video  0xd2 Oct  2 00:40 90
+crw-rw----  1 root video  0xd3 Oct  2 00:40 91
+crw-rw----  1 root video  0xd4 Oct  2 00:40 92
+crw-rw----  1 root video  0xd5 Oct  2 00:40 93
+crw-rw----  1 root video  0xd6 Oct  2 00:40 94
+crw-rw----  1 root video  0xd7 Oct  2 00:40 95
+crw-rw----  1 root video  0xd8 Oct  2 00:40 96
+crw-rw----  1 root video  0xd9 Oct  2 00:40 97
+crw-rw----  1 root video  0xda Oct  2 00:40 98
+crw-rw----  1 root video  0xdb Oct  2 00:40 99
+sh: modetest: not found
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-claude1/build/ws109-control/passthrough.py", line 14, in <module>
+    if sys.argv[1]=='guest':guest(sys.argv[2],timeout=int(sys.argv[3]) if len(sys.argv)>3 else 120)
+                            ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/awe/zedBSD-claude1/build/ws109-control/passthrough.py", line 9, in guest
+    return subprocess.run(['ssh','-J',HOST,'-i',KEY,'-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null','-o','LogLevel=ERROR','-o','BatchMode=yes','-o','ConnectTimeout=5','-p','47969','root@127.0.0.1',script],check=True,timeout=timeout,**kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['ssh', '-J', 'awe@10.0.10.25', '-i', '/home/awe/zedBSD-claude1/build/ws109-control/guest/id_ed25519', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', '-p', '47969', 'root@127.0.0.1', 'pkg info -x "drm-66|gpu-firmware-intel|vulkan-tools"; pkg info -l drm-66-kmod | head -20; ls -l /dev/drm; modetest -M i915 -c -p']' returned non-zero exit status 127.

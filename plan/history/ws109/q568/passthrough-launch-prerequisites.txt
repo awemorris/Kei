@@ -1,0 +1,7 @@
+  rombar=<int32>         -  (default: -1)
+  x-igd-gms=<uint32>     - Override IGD data stolen memory size (32MiB units) (default: 0)
+  x-igd-legacy-mode=<OnOffAuto> - on/off/auto (default: auto)
+  x-igd-lpc=<bool>       - on/off (default: off)
+  x-igd-opregion=<bool>  - Expose host IGD OpRegion to guest (default: off)
+crw------- 1 root root 240, 0 Sep 30 18:52 /dev/vfio/0
+ 09:29:56 up 1 day, 14:37,  1 user,  load average: 0.00, 0.00, 0.00

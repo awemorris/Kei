@@ -89,3 +89,17 @@ WS109's agreed scope. Current q566 standards/regression/docs subset stays author
 configuration/implementation is selected separately after q566. No automatic WS/Phase clearance.
 Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/scoped standard,
 Queue supplement and docs; remote decision/structural events pending publication.
+
+## 2026-10-02 / ws109-20261002-user-i915-passthrough
+
+Current user chat reply: 「awe@10.0.10.25 でi915をPCIパススルーして、FreeBSDゲストを実行してみましょう。」
+This authorizes SSH to that specified host and an owned FreeBSD QEMU guest with existing
+IrisXe0000:00:02.0 passthrough. The prior loopback-only rule has a scoped host-control exception;
+guest SSH remains via remote127.0.0.1 forward, QMP PNG and real native observations, no serial
+logs. Physical WiFi/user-supplied-machine request remains waived. Try this explicit native i915
+GPU route to address q567 Venus prerequisite; boot alone does not clear F3/F5 or claim Venus.
+Remote survey: chaos/Linux6.19.13/QEMU10.0.11/7.4GiBmemory; GPU8086:46a8 alreadyvfio-pci,
+IOMMUgroup0 GPUalone, no other QEMU. Use4GiB guest, owned disk copy/overlay/endpoint. No host
+GPU unbinding/reboot/kernel/library replacement or unrelated VM/process changes. Existing
+native i915/drm-kmod may be installed in own guest under prior permission. New driver port
+still excluded. Actual native Vulkan/DRM/provider/render/lease checks required where possible.

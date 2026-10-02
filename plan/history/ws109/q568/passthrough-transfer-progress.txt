@@ -1,0 +1,3 @@
+-rw-r--r-- 1 awe awe 3.0G Oct  2 09:37 /home/awe/ws109-freebsd-fixture/native.qcow2
+awe        16964 bash -c ls -lh /home/awe/ws109-freebsd-fixture/native.qcow2; ps -eo user,pid,args | rg "ws109-freebsd|qemu-system" | head -5
+awe        16970 rg ws109-freebsd|qemu-system

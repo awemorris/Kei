@@ -1,0 +1,50 @@
+kern.osrelease: 15.1-RELEASE-p4
+Id Refs Address                Size Name
+ 1   42 0xffffffff80200000  23520a8 kernel
+ 2    1 0xffffffff82c18000     21e8 hms.ko
+ 3    1 0xffffffff82c1b000     30a8 hidmap.ko
+ 4    1 0xffffffff82c1f000     4250 ichsmb.ko
+ 5    1 0xffffffff82c24000     2178 smbus.ko
+ 6    1 0xffffffff82e00000   210318 i915kms.ko
+ 7    2 0xffffffff82c27000    8a190 drm.ko
+ 8    1 0xffffffff82cb2000     22b8 iic.ko
+ 9    2 0xffffffff82cb5000     4120 linuxkpi_video.ko
+10    3 0xffffffff82cba000     7360 dmabuf.ko
+11    3 0xffffffff82cc2000     3378 lindebugfs.ko
+12    1 0xffffffff82cc6000     b480 ttm.ko
+total 0
+lrwxr-xr-x  1 root wheel  8 Oct  2 00:40 card0 -> ../drm/0
+lrwxr-xr-x  1 root wheel 10 Oct  2 00:40 renderD128 -> ../drm/128
+sysctl_add_oid: can't re-use a leaf (hw.dri.debug)!
+hw.dri.timestamp_precision: 20
+hw.dri.vblank_offdelay: 5000
+hw.dri.0.modesetting: 1
+hw.dri.0.busid: pci:0000:00:02.0
+hw.dri.0.vblank: 
+hw.dri.0.clients: 
+hw.dri.0.name: i915 0x3b
+hw.dri.dp_aux_i2c_transfer_size: 16
+hw.dri.dp_aux_i2c_speed_khz: 10
+hw.dri.sched_policy: 1
+hw.dri.drm_fbdev_overalloc: 100
+hw.dri.fbdev_emulation: 1
+hw.dri.timestamp_precision_usec: 20
+hw.dri.vblankoffdelay: 5000
+hw.dri.poll: 1
+hw.dri.debug: 0
+hw.dri.drm_debug_persist: 0
+hw.dri.skip_ddb: 0
+hw.dri.__drm_debug: 0
+hw.dri.edid_fixup: 6
+dev.drmn.1.%iommu: 
+dev.drmn.1.%parent: vgapci1
+dev.drmn.1.%pnpinfo: 
+dev.drmn.1.%location: 
+dev.drmn.1.%driver: drmn
+dev.drmn.1.%desc: drmn
+dev.drmn.%parent: 
+dev.drm.0.PCI_ID: 8086:46a8
+dev.drm.128.PCI_ID: 8086:46a8
+dev.drm.drm_debug_persist: 0
+dev.drm.skip_ddb: 0
+dev.drm.__drm_debug: 0

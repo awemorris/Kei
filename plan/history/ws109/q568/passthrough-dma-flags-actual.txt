@@ -1,0 +1,2 @@
+native-queries fdflags=1 access=ffffffff errno=0 fstat=0
+native-buffer fd=12 fdflags=1 access=ffffffff mode=3 type=10000 size=12 sync=-1 errno=9 output=999

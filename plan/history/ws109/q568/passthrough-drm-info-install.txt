@@ -1,0 +1,32 @@
+Updating FreeBSD-ports repository catalogue...
+FreeBSD-ports repository is up to date.
+Updating FreeBSD-ports-kmods repository catalogue...
+FreeBSD-ports-kmods repository is up to date.
+Updating FreeBSD-base repository catalogue...
+FreeBSD-base repository is up to date.
+All repositories are up to date.
+The following 4 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	drm_info: 2.10.0 [FreeBSD-ports]
+	json-c: 0.19_1 [FreeBSD-ports]
+	libpci: 3.15.0 [FreeBSD-ports]
+	pciids: 20260630 [FreeBSD-ports]
+
+Number of packages to be installed: 4
+
+The process will require 2 MiB more space.
+477 KiB to be downloaded.
+[1/4] Fetching pciids-20260630: .......... done
+[2/4] Fetching json-c-0.19_1: .......... done
+[3/4] Fetching drm_info-2.10.0: .... done
+[4/4] Fetching libpci-3.15.0: .......... done
+Checking integrity... done (0 conflicting)
+[1/4] Installing json-c-0.19_1...
+[1/4] Extracting json-c-0.19_1: .......... done
+[2/4] Installing pciids-20260630...
+[2/4] Extracting pciids-20260630: ..... done
+[3/4] Installing libpci-3.15.0...
+[3/4] Extracting libpci-3.15.0: .......... done
+[4/4] Installing drm_info-2.10.0...
+[4/4] Extracting drm_info-2.10.0: ..... done

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-claude1/build/ws109-control/passthrough.py", line 14, in <module>
+    if sys.argv[1]=='guest':guest(sys.argv[2],timeout=int(sys.argv[3]) if len(sys.argv)>3 else 120)
+                            ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/awe/zedBSD-claude1/build/ws109-control/passthrough.py", line 9, in guest
+    return subprocess.run(['ssh','-J',HOST,'-i',KEY,'-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null','-o','LogLevel=ERROR','-o','BatchMode=yes','-o','ConnectTimeout=5','-p','47969','root@127.0.0.1',script],check=True,timeout=timeout,**kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['ssh', '-J', 'awe@10.0.10.25', '-i', '/home/awe/zedBSD-claude1/build/ws109-control/guest/id_ed25519', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', '-p', '47969', 'root@127.0.0.1', 'cd /root/keiland-src && cc -std=gnu17 -Wall -Wextra -Werror -I. -Iuserland/desktop/keiland -Ibuild/native-final/include -I/usr/local/include /root/dmabuf-native-flags.c userland/desktop/libvulkan-compat/freebsd/sync-freebsd.c -L/root/keiland-stage-final/opt/keiland/lib -Wl,-rpath-link,/root/keiland-stage-final/opt/keiland/lib -l:libwayland-client.so -l:libvulkan.so.1 -o /root/ws109-dma-flags && env VK_DRIVER_FILES=/usr/local/share/vulkan/icd.d/intel_icd.x86_64.json LD_LIBRARY_PATH=/root/keiland-stage-final/opt/keiland/lib /root/ws109-dma-flags']' returned non-zero exit status 1.

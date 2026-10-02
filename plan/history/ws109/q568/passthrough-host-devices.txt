@@ -1,0 +1,35 @@
+/sys/kernel/iommu_groups/7/devices/0000:00:0d.0
+/sys/kernel/iommu_groups/7/devices/0000:00:0d.2
+/sys/kernel/iommu_groups/15/devices/0000:00:1f.0
+/sys/kernel/iommu_groups/15/devices/0000:00:1f.5
+/sys/kernel/iommu_groups/15/devices/0000:00:1f.3
+/sys/kernel/iommu_groups/15/devices/0000:00:1f.4
+/sys/kernel/iommu_groups/5/devices/0000:00:07.1
+/sys/kernel/iommu_groups/13/devices/0000:00:16.0
+/sys/kernel/iommu_groups/3/devices/0000:00:06.0
+/sys/kernel/iommu_groups/11/devices/0000:00:14.3
+/sys/kernel/iommu_groups/1/devices/0000:00:00.0
+/sys/kernel/iommu_groups/8/devices/10000:e0:06.0
+/sys/kernel/iommu_groups/8/devices/0000:00:0e.0
+/sys/kernel/iommu_groups/8/devices/10000:e1:00.0
+/sys/kernel/iommu_groups/16/devices/0000:71:00.0
+/sys/kernel/iommu_groups/6/devices/0000:00:08.0
+/sys/kernel/iommu_groups/14/devices/0000:00:1d.0
+/sys/kernel/iommu_groups/4/devices/0000:00:07.0
+/sys/kernel/iommu_groups/12/devices/0000:00:15.1
+/sys/kernel/iommu_groups/12/devices/0000:00:15.0
+/sys/kernel/iommu_groups/2/devices/0000:00:04.0
+/sys/kernel/iommu_groups/10/devices/0000:00:14.2
+/sys/kernel/iommu_groups/10/devices/0000:00:14.0
+/sys/kernel/iommu_groups/0/devices/0000:00:02.0
+/sys/kernel/iommu_groups/9/devices/0000:00:12.0
+BOOT_IMAGE=/boot/vmlinuz-6.19.13+deb13-amd64 root=UUID=034701e3-f60d-42db-9cc5-4ca6296c7cb7 ro quiet
+ls: cannot access '/dev/dri/by-path': No such file or directory
+Specified filename /dev/dri/* does not exist.
+Specified filename /dev/dri/by-path/* does not exist.
+ls: cannot access '/home/awe/zedBSD*': No such file or directory
+QEMU emulator version 10.0.11 (Debian 1:10.0.11+ds-0+deb13u1)
+Copyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers
+sudo: virsh: command not found
+/sys/bus/pci/devices/0000:00:02.0/reset
+/sys/bus/pci/devices/0000:00:02.0/reset_method

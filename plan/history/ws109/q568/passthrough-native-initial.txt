@@ -1,0 +1,67 @@
+kern.osrelease: 15.1-RELEASE-p4
+hostb0@pci0:0:0:0:	class=0x060000 rev=0x00 hdr=0x00 vendor=0x8086 device=0x29c0 subvendor=0x1af4 subdevice=0x1100
+    vendor     = 'Intel Corporation'
+    device     = '82G33/G31/P35/P31 Express DRAM Controller'
+    class      = bridge
+    subclass   = HOST-PCI
+vgapci0@pci0:0:2:0:	class=0x030000 rev=0x0c hdr=0x00 vendor=0x8086 device=0x46a8 subvendor=0x1028 subdevice=0x0b02
+    vendor     = 'Intel Corporation'
+    device     = 'Alder Lake-UP3 GT2 [Iris Xe Graphics]'
+    class      = display
+    subclass   = VGA
+vgapci1@pci0:0:3:0:	class=0x030000 rev=0x02 hdr=0x00 vendor=0x1234 device=0x1111 subvendor=0x1af4 subdevice=0x1100
+    class      = display
+    subclass   = VGA
+virtio_pci0@pci0:0:4:0:	class=0x010000 rev=0x00 hdr=0x00 vendor=0x1af4 device=0x1001 subvendor=0x1af4 subdevice=0x0002
+    vendor     = 'Red Hat, Inc.'
+    device     = 'Virtio block device'
+    class      = mass storage
+    subclass   = SCSI
+xhci0@pci0:0:5:0:	class=0x0c0330 rev=0x01 hdr=0x00 vendor=0x1b36 device=0x000d subvendor=0x1af4 subdevice=0x1100
+    vendor     = 'Red Hat, Inc.'
+    device     = 'QEMU XHCI Host Controller'
+    class      = serial bus
+    subclass   = USB
+virtio_pci1@pci0:0:6:0:	class=0x020000 rev=0x00 hdr=0x00 vendor=0x1af4 device=0x1000 subvendor=0x1af4 subdevice=0x0001
+    vendor     = 'Red Hat, Inc.'
+    device     = 'Virtio network device'
+    class      = network
+    subclass   = ethernet
+hdac0@pci0:0:7:0:	class=0x040300 rev=0x01 hdr=0x00 vendor=0x8086 device=0x2668 subvendor=0x1af4 subdevice=0x1100
+    vendor     = 'Intel Corporation'
+    device     = '82801FB/FBM/FR/FW/FRW (ICH6 Family) High Definition Audio Controller'
+    class      = multimedia
+    subclass   = HDA
+isab0@pci0:0:31:0:	class=0x060100 rev=0x02 hdr=0x00 vendor=0x8086 device=0x2918 subvendor=0x1af4 subdevice=0x1100
+    vendor     = 'Intel Corporation'
+    device     = '82801IB (ICH9) LPC Interface Controller'
+    class      = bridge
+    subclass   = PCI-ISA
+ahci0@pci0:0:31:2:	class=0x010601 rev=0x02 hdr=0x00 vendor=0x8086 device=0x2922 subvendor=0x1af4 subdevice=0x1100
+    vendor     = 'Intel Corporation'
+    device     = '82801IR/IO/IH (ICH9R/DO/DH) 6 port SATA Controller [AHCI mode]'
+    class      = mass storage
+    subclass   = SATA
+ichsmb0@pci0:0:31:3:	class=0x0c0500 rev=0x02 hdr=0x00 vendor=0x8086 device=0x2930 subvendor=0x1af4 subdevice=0x1100
+    vendor     = 'Intel Corporation'
+    device     = '82801I (ICH9 Family) SMBus Controller'
+    class      = serial bus
+    subclass   = SMBus
+Id Refs Address                Size Name
+ 1   15 0xffffffff80200000  23520a8 kernel
+ 2    1 0xffffffff82c18000     21e8 hms.ko
+ 3    1 0xffffffff82c1b000     30a8 hidmap.ko
+ 4    1 0xffffffff82c1f000     4250 ichsmb.ko
+ 5    1 0xffffffff82c24000     2178 smbus.ko
+ls: /dev/dri: No such file or directory
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-claude1/build/ws109-control/passthrough.py", line 14, in <module>
+    if sys.argv[1]=='guest':guest(sys.argv[2],timeout=int(sys.argv[3]) if len(sys.argv)>3 else 120)
+                            ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/awe/zedBSD-claude1/build/ws109-control/passthrough.py", line 9, in guest
+    return subprocess.run(['ssh','-J',HOST,'-i',KEY,'-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null','-o','LogLevel=ERROR','-o','BatchMode=yes','-o','ConnectTimeout=5','-p','47969','root@127.0.0.1',script],check=True,timeout=timeout,**kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['ssh', '-J', 'awe@10.0.10.25', '-i', '/home/awe/zedBSD-claude1/build/ws109-control/guest/id_ed25519', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', '-p', '47969', 'root@127.0.0.1', 'sysctl kern.osrelease; pciconf -lv | head -50; kldstat; ls /dev/dri']' returned non-zero exit status 1.

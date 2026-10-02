@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q567 finished、WS109 p003 uncleared）
+Active Queue: なし（q568 finished、WS109 p003 uncleared）
 Current Focused Goal: fg016 — WS109 FreeBSD15 native Keiland移植。fg015達成、fg010/fg013の未達を保持。
 Next（2026-10-02 に更新）: WS109 native guest/ABIを確認しbuild/backend移植を先行。実機検証はユーザー免除、FreeBSD QEMU Venusの実使用を新関門とする。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
@@ -217,7 +217,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | q540 partial cleared、p002 uncleared（ime-probe回答待ち）、p003未実行。 |
 | [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | completed | B1〜B5 verified / q544、API v2/public Vulkan client/最終boot。GitHub deferred |
 | [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | completed | P1〜P5 / q549、2OS native deb＋QEMU runtime、CI/release定義。remote未実施 |
-| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | incomplete | p003 uncleared/q567; FreeBSD QEMU Venus pending |
+| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | incomplete | p003 uncleared/q568; actual FreeBSD QEMU graphics pending (user-selected i915 passthrough) |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
@@ -470,3 +470,5 @@ WS109's agreed scope. Current q566 standards/regression/docs subset stays author
 configuration/implementation is selected separately after q566. No automatic WS/Phase clearance.
 Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/scoped standard,
 Queue supplement and docs; remote decision/structural events pending publication.
+
+ws109-20261002-user-i915-passthrough: user selected awe@10.0.10.25 i915 passthrough FreeBSD guest as next WS109 verification route. FG016/priority unchanged; q567 missing Venus remains historical, no falseclear.

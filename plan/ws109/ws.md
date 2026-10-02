@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q567 finished）
-Resume point: p003 uncleared; Actual Venus-configured FreeBSD QEMU boots, but native DRM/Venus ICD absent and latest upstream virtio driver lacks HOST_VISIBLE. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q567/result.md). Kernel/driver port outside WS109; concrete acceptance/scope decision requested, physical tests waived.
+Queue: なし（q568 finished）
+Resume point: p003 uncleared; Native i915/Intel Vulkan1MiB/offscreen and realunpriv compositor-shm PASS; liveDMA_BUF zeroaccessflags block ioctl/Vulkanwindow. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q568/result.md) / [BUG-130](/home/awe/zedBSD-claude1/plan/bugs/BUG-130.md). Nextbounded native capability adaptation; no driverpatch/falseclear. Own remoteVMrunning, baselineVFIOretained.
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -32,11 +32,11 @@ system の graphics stack に LinuxKPI/DRM がある場合も、GPL が無いと
 
 ## WS 自身の完了条件
 
-- F1: 固定 FreeBSD15 version/amd64、QEMU Venus device/driver、検証環境、license、native ABI の対応表を確定。
+- F1: 固定 FreeBSD15 version/amd64、ユーザー指定の QEMU i915 PCI passthrough device/driver、検証環境、license、native ABI の対応表を確定。
 - F2: 独立 native build/DESTDIR install が warning 0、標準公開 header と ELF/後段 Vulkan の symbol chain が利用可能。
-- F3: FreeBSD QEMUで実Venusを使用し、共通描画/入力/同期/sessionの利用可能な経路を確認。実機関門は2026-10-02ユーザーにより免除。
+- F3: ユーザー指定の FreeBSD QEMU i915 PCI passthroughで実GPUを使用し、共通描画/入力/同期/sessionの利用可能な経路を確認。元の実機準備・WiFi実機関門はユーザー免除、bootだけでclearとしない。
 - F4: audioの列挙/音量/mute、network/有線をQEMU実backendで確認。WiFi backendのnativeABI/拒否/WPAwireを確認し、mockを実WiFiから区別。実機radio操作はユーザー免除。
-- F5: FreeBSD QEMU Venusで主なapp/操作、Linux/zedBSD影響範囲の回帰、全文規約/運用文書を確認。実機検証はユーザー免除。
+- F5: FreeBSD QEMU i915 PCI passthroughで主なapp/操作、Linux/zedBSD影響範囲の回帰、全文規約/運用文書を確認。Venus未実行を成功としない。
 
 ## 依存・所有
 
@@ -48,9 +48,9 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | --- | --- | --- | --- | --- |
 | [ws109p001](phase001/phase.md) | FreeBSD15 の graphics/OS 契約と環境を調査 | F1 と port の対応表/実現可能な F2〜F5 手順。Linux DMA_BUF sync と同等の能力が無ければ別方式の影響と選択をユーザーに提示してから dependent 実装を選定。 | cleared / q551 | WS105 output（context） |
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | cleared / q565 | p001 |
-| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q567 | p002 L1 verified output |
+| [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q568 | p002 L1 verified output |
 | [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
-| [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | uncleared / q566 | p002 F2 verified + p003/p004 implementation outputs for subset; QEMU Venus gate for whole |
+| [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | uncleared / q566 | p002 F2 verified + p003/p004 implementation outputs for subset; actual QEMU i915 GPU output for whole |
 
 
 依存は表の prerequisite → dependent。context は選定された作業ではない。
@@ -158,3 +158,19 @@ Queue supplement and docs; remote decision/structural events pending publication
 ws109-q567-design: p003 bounded actual native QEMU Venus investigation replaces former physical waiting; actual kernel/ICD prerequisites checked, q566 conformance subset cleared. No kernel port authorization.
 
 2026-10-02T00:26:10.544991+00:00 / ws109-q567-uncleared: p003 uncleared。Actual Venus-configured FreeBSD QEMU boots, but native DRM/Venus ICD absent and latest upstream virtio driver lacks HOST_VISIBLE. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q567/result.md). Kernel/driver port outside WS109; concrete acceptance/scope decision requested, physical tests waived.
+
+## 2026-10-02 / ws109-20261002-user-i915-passthrough
+
+Current user chat reply: 「awe@10.0.10.25 でi915をPCIパススルーして、FreeBSDゲストを実行してみましょう。」
+This authorizes SSH to that specified host and an owned FreeBSD QEMU guest with existing
+IrisXe0000:00:02.0 passthrough. The prior loopback-only rule has a scoped host-control exception;
+guest SSH remains via remote127.0.0.1 forward, QMP PNG and real native observations, no serial
+logs. Physical WiFi/user-supplied-machine request remains waived. Try this explicit native i915
+GPU route to address q567 Venus prerequisite; boot alone does not clear F3/F5 or claim Venus.
+Remote survey: chaos/Linux6.19.13/QEMU10.0.11/7.4GiBmemory; GPU8086:46a8 alreadyvfio-pci,
+IOMMUgroup0 GPUalone, no other QEMU. Use4GiB guest, owned disk copy/overlay/endpoint. No host
+GPU unbinding/reboot/kernel/library replacement or unrelated VM/process changes. Existing
+native i915/drm-kmod may be installed in own guest under prior permission. New driver port
+still excluded. Actual native Vulkan/DRM/provider/render/lease checks required where possible.
+
+2026-10-02T01:05:38.624771+00:00 / ws109-q568-uncleared: p003 uncleared。Native i915/Intel Vulkan1MiB/offscreen and realunpriv compositor-shm PASS; liveDMA_BUF zeroaccessflags block ioctl/Vulkanwindow. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q568/result.md) / [BUG-130](/home/awe/zedBSD-claude1/plan/bugs/BUG-130.md). Nextbounded native capability adaptation; no driverpatch/falseclear. Own remoteVMrunning, baselineVFIOretained.

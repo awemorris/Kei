@@ -5,7 +5,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q568 / q568-i01
+Queue / Attempt: q567 / q567-i01
 
 ## 目的・範囲
 
@@ -212,9 +212,3 @@ compatible official FreeBSD drm-kmod/i915 firmware and Vulkan probe tools in own
 kernel node/physical GPU Vulkan properties and command/render chain if usable. Existing shared
 WSI and seat lifecycle unchanged. Ordinary fixture configuration discretion delegated. Missing
 planned prerequisites or new kernel port need end uncleared with evidence; no endless resets.
-
-## Result / q568-i01 / 2026-10-02T01:05:38.622984+00:00
-
-Queue item uncleared /whole Phase uncleared。Native i915/Intel Vulkan1MiB/offscreen and realunpriv compositor-shm PASS; liveDMA_BUF zeroaccessflags block ioctl/Vulkanwindow. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q568/result.md) / [BUG-130](/home/awe/zedBSD-claude1/plan/bugs/BUG-130.md). Nextbounded native capability adaptation; no driverpatch/falseclear. Own remoteVMrunning, baselineVFIOretained.
-
-Event ws109-q568-uncleared: local evidence/outcome saved; remote comment (no Phase close) pending.

@@ -1,0 +1,30 @@
+crw-rw---- 1 root kvm   10, 232 Oct  1 02:07 /dev/kvm
+crw------- 1 root root 240,   0 Sep 30 18:52 /dev/vfio/0
+flr pm
+/usr/bin/rsync
+/usr/bin/qemu-img
+/usr/share/OVMF:
+OVMF_CODE_4M.fd
+OVMF_CODE_4M.ms.fd
+OVMF_CODE_4M.secboot.fd
+OVMF_CODE_4M.secboot.strictnx.fd
+OVMF_CODE_4M.snakeoil.fd
+OVMF_VARS_4M.fd
+OVMF_VARS_4M.ms.fd
+OVMF_VARS_4M.snakeoil.fd
+
+/usr/share/ovmf:
+OVMF.fd
+PkKek-1-snakeoil.key
+PkKek-1-snakeoil.pem
+
+/usr/share/qemu:
+OVMF.fd
+QEMU,VGA.bin
+QEMU,cgthree.bin
+QEMU,tcx.bin
+bamboo.dtb
+binfmt.d
+canyonlands.dtb
+efi-e1000.rom
+efi-e1000e.rom

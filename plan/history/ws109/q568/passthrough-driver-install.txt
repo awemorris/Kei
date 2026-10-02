@@ -1,0 +1,48 @@
+Updating FreeBSD-ports repository catalogue...
+FreeBSD-ports repository is up to date.
+Updating FreeBSD-ports-kmods repository catalogue...
+FreeBSD-ports-kmods repository is up to date.
+Updating FreeBSD-base repository catalogue...
+FreeBSD-base repository is up to date.
+All repositories are up to date.
+The following 3 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	drm-66-kmod: 6.6.25.1501000_8 [FreeBSD-ports-kmods]
+	gpu-firmware-intel-kmod-alderlake: 20260519.1500068 [FreeBSD-ports]
+	vulkan-tools: 1.4.356 [FreeBSD-ports]
+
+Number of packages to be installed: 3
+
+The process will require 22 MiB more space.
+5 MiB to be downloaded.
+[1/3] Fetching drm-66-kmod-6.6.25.1501000_8: .......... done
+[2/3] Fetching gpu-firmware-intel-kmod-alderlake-20260519.1500068: .......... done
+[3/3] Fetching vulkan-tools-1.4.356: .......... done
+Checking integrity... done (0 conflicting)
+[1/3] Installing drm-66-kmod-6.6.25.1501000_8...
+[1/3] Extracting drm-66-kmod-6.6.25.1501000_8: .......... done
+[2/3] Installing gpu-firmware-intel-kmod-alderlake-20260519.1500068...
+[2/3] Extracting gpu-firmware-intel-kmod-alderlake-20260519.1500068: .......... done
+[3/3] Installing vulkan-tools-1.4.356...
+[3/3] Extracting vulkan-tools-1.4.356: ...... done
+=====
+Message from drm-66-kmod-6.6.25.1501000_8:
+
+--
+The drm-66-kmod port can be enabled for amdgpu (for AMD
+GPUs starting with the HD7000 series / Tahiti) or i915kms (for Intel
+APUs starting with HD3000 / Sandy Bridge) through kld_list in
+/etc/rc.conf. radeonkms for older AMD GPUs can be loaded and there are
+some positive reports if EFI boot is NOT enabled.
+
+For amdgpu: kld_list="amdgpu"
+For Intel: kld_list="i915kms"
+For radeonkms: kld_list="radeonkms"
+
+Please ensure that all users requiring graphics are members of the
+"video" group.
+
+Please note that this package was built for FreeBSD 15.1.
+If this is not your current running version, please rebuild
+it from ports to prevent panics when loading the module.
