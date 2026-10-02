@@ -9,7 +9,8 @@
 
 | q598 / q598-i01 | [ws033-p001](../../ws033/phase001/phase.md) | USB の LAN の hotplug を QEMU で | 継続 dispatch | 3 時間 | finished / uncleared（WiFi 優先で中断） |
 | q599 / q599-i01 | [ws005-p019](../../ws005/phase019/phase.md) | BUG-138 WiFi menu・利用者の join の実装 | 2026-10-02 user「実装をお願いします。優先度高いです。」 | 4 時間 | finished / uncleared（networkd の owner 変更がユーザーの明示の承認待ち） |
-| q601 / q601-i01 | [ws118-p001](../../ws118/phase001/phase.md) | 5320 の遠隔 log 用 image | 継続 dispatch | 3 時間 | in-progress |
+| q601 / q601-i01 | [ws118-p001](../../ws118/phase001/phase.md) | 5320 の遠隔 log 用 image | 継続 dispatch | 3 時間 | paused（q599-i02 の割り込み） |
+| q599 / q599-i02 | [ws005-p019](../../ws005/phase019/phase.md) | network group の利用者に WiFi の制御を許可し desktop から on/off・join | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」 | 4 時間 | in-progress |
 
 Next（予約）: ws005-p019 再開（ユーザーの承認後）→ ws033-p001 再投入
 
