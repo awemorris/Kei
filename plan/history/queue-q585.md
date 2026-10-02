@@ -79,3 +79,5 @@ Resume: prerequisitesの実出力と判断を照合し、当PhaseだけのQueue�
 
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。
 ```
+
+2026-10-02 / session wrap-up follow-up: latest userの全agent区切り終了指示でA2終了を確認。HEAD8b78da1c5、clean/専用gpg-agent停止、owned process無し。未決D1と当時unclearedを保持、公開metadataをroot ignored recoveryへ保全し[manifest](../ws112/phase001/q585-recovery-manifest.json)を保存。q591未投入。

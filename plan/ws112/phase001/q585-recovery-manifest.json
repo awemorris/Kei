@@ -1,0 +1,83 @@
+{
+  "source_worktree": "/home/awe/zedBSD-worktrees/a2/plan/ws112/temp/metadata-probe",
+  "retained_ignored": "plan/ws112/temp/q585-metadata-recovery",
+  "files": [
+    {
+      "name": "Fedora-Cloud-44-1.7-x86_64-CHECKSUM",
+      "size": 2301,
+      "sha256": "a436186ff0e930d77637d03e6f357206b686c4ef3fcde234b6f1da63041d4b32"
+    },
+    {
+      "name": "arch-key.asc",
+      "size": 811,
+      "sha256": "950fd1530dc70ab4201d3a78f563775251df0cad77c86a1add08f5894e20845c"
+    },
+    {
+      "name": "arch-readme.md",
+      "size": 2258,
+      "sha256": "d653cf803ed35d08223eb285f49ac9456df750fe9f4bdbcd51f528a6c2497fa6"
+    },
+    {
+      "name": "arch-versioned.SHA256",
+      "size": 115,
+      "sha256": "2b936d2310399a8d1483d11719aa66f47ea9ddf1d3bebf6711b6408d46fe31af"
+    },
+    {
+      "name": "arch-versioned.SHA256.sig",
+      "size": 119,
+      "sha256": "da4378502768b6ea95a9b1fd815eb8bff0449db6bd0b2e3c040b469b2b1d9efa"
+    },
+    {
+      "name": "arch.SHA256",
+      "size": 115,
+      "sha256": "2b936d2310399a8d1483d11719aa66f47ea9ddf1d3bebf6711b6408d46fe31af"
+    },
+    {
+      "name": "arch.SHA256.sig",
+      "size": 119,
+      "sha256": "da4378502768b6ea95a9b1fd815eb8bff0449db6bd0b2e3c040b469b2b1d9efa"
+    },
+    {
+      "name": "checkpoint-4-results.json",
+      "size": 2958,
+      "sha256": "387c041dc5cba374c63c6acbcbecb0fd2b793b3afd4e12b71ff739e93908982a"
+    },
+    {
+      "name": "fedora.gpg",
+      "size": 4704,
+      "sha256": "3b8a3660cca4851a67f67f56819e37e2f6b37ac8e905cb571b25d2127d1b7618"
+    },
+    {
+      "name": "results.json",
+      "size": 3174,
+      "sha256": "de75cb30c2fad2c19f4c90c6803a9e1218d7f14730cea2b52c151fd3fe53c6ff"
+    },
+    {
+      "name": "rpi-image-signature.sig",
+      "size": 833,
+      "sha256": "3a9e0653b16ba186a80fb5f09342a415cf4ceb3d71cbb0fce84d298f483792e4"
+    },
+    {
+      "name": "rpi-key.asc",
+      "size": 3199,
+      "sha256": "cb9fa1da1a39eaf4830b32edd7d915911421e83c12a0af60bbb9720b89212e50"
+    },
+    {
+      "name": "ubuntu-checksum-signature.sig",
+      "size": 833,
+      "sha256": "8198e369b296ebdb0df24197d82039c257773662bd624e153f693aeca1e6a96a"
+    },
+    {
+      "name": "ubuntu-key.asc",
+      "size": 3325,
+      "sha256": "927138de292fac4d861105a052cf56e9c5921987da385c844d88f34d19b39ab0"
+    },
+    {
+      "name": "ubuntu.SHA256SUMS",
+      "size": 8788,
+      "sha256": "1a644c553529b2a00771f425928592ce3fc2d9b8b636d8ba53811b85b019e7a5"
+    }
+  ],
+  "excluded": "gnupg local keyring/trust database directory; no OS image or credentials copied",
+  "bytes": 33652
+}

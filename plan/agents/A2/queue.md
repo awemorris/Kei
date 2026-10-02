@@ -18,3 +18,5 @@ Sync: GitHub publication保留。commitはWIP、pushなし。
 2026-10-02 / q585 terminal: 08:11 UTC調査終了、outcome uncleared。D1 Fedora/Arch boot適用のuser返答未受領、基準別evidence/resumeを[archive](../../history/queue-q585.md)へ保存。A2-002〜004 cumulative4642a7d68 → root104304cb1、A2-005 dff4b7401 → ed6d2d3c7、A2-006 8b78da1c統合。native guest/build未実施、same session/contextで待機。
 
 2026-10-02 / wrap-up-request: userのPhase完了時終了指示を、最新全agent区切り終了指示で置換。D1回答待ちのp001/q585 uncleared成果を保持し、新Queue無しでnormal wrap-up/終了を依頼。最終clean/process receipt回収待ち。
+
+2026-10-02 / wrap-up-complete: final receipt HEAD8b78da1c5/root ACK3b1064c7d、worktree clean/未commit・未追跡なし。worker確認public metadata18files/43929bytes、専用gpg-agent停止、owned process無し。rootはtop-level公開input/resultsだけをignored q585-metadata-recoveryへhash照合コピーし、[manifest](../../ws112/phase001/q585-recovery-manifest.json)を保存（gnupg cache除外）。q585/p001 unclearedとD1再開条件を維持、agent終了確認、q591未投入。
