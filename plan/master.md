@@ -1,10 +1,10 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: q577 BUG-125、q579 browser2（children利用上限停止、main引継ぎ）。q578 C10 finished/cleared。
-Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: WS111共通launcher completed。P8 bug/P9 desktop/P10 browserのgeneration1実行中。共有計画/統合はQ1。[desktop作業一覧](agents/desktop-outlook.md)を作成。--login本人確認/PIN交換とWS110/testingは検討のみ。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。WS114 Linux標準GTK4調査/レビュー→WS115 upstream GTK4移植→WS116 Qt6範囲判断/移植を計画し、その知見をWS097/WS096書き下ろしへ渡す。既存demo順/WS106保留保持。
-IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。P8 bug・P9 desktop・P10 browserの3専任枠は起動済み、[Queue index](queue.md)で各scopeを管理。
+Active Queues: q577/P8 BUG-125、q579/P10 browser2、q580/P9 GTK4 baseline（generation2）。q578 C10 finished/cleared。
+Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
+Next（2026-10-02 更新）: WS111共通launcher completed。P8/P9/P10は利用上限回復後generation2で再起動。P9の次はWS114 GTK4実測。共有計画/統合はQ1。[desktop作業一覧](agents/desktop-outlook.md)を作成。--login本人確認/PIN交換とWS110/testingは検討のみ。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。WS114 Linux標準GTK4調査/レビュー→WS115 upstream GTK4移植→WS116 Qt6範囲判断/移植を計画し、その知見をWS097/WS096書き下ろしへ渡す。既存demo順/WS106保留保持。
+IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。P8 bug・P9 GTK4/desktop・P10 browserの3専任枠を再起動、[Queue index](queue.md)で各scopeを管理。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
 
@@ -52,7 +52,8 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
 | **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新 |
-| **fg017** | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / P10稼働 | 2026-10-02 ユーザー指示と同日の追加。既存fg010とデモcriticalの全体順を保持し、WS074の専任laneを並走させる。Interop対象はp173で固定、Test262の到達率は未指定、現在p172/q579のみ実行中 |
+| **fg018** | WS114のLinux標準GTK4の動作と不足を機能表で実測し、ユーザー行別採否レビューを経てWS115 upstream移植への前提を整える | MG006 | [WS114](ws114/ws.md) / P9専任 | 2026-10-02 userがdesktop次作業をGTK4移植WSへ指定。q580はp001 baselineのみ、改善機能の採否は未決 |
+| **fg017** | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / P10専任 | 2026-10-02 ユーザー指示と同日の追加。既存fg010とデモcriticalの全体順を保持し、WS074の専任laneを並走させる。Interop対象はp173で固定、Test262の到達率は未指定、現在p172/q579のみ実行中 |
 
 
 デモの platform は amd64 の実機（Dell Latitude 5330、HDMI + USB、2026-09-28 ユーザーの回答）。開発の試験は QEMU（amd64）で行い、実機の証拠と分けて書く。以前の focus（fg004 インストーラの実機、
@@ -223,7 +224,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS111](ws111/ws.md) | MG006 | Linux/FreeBSD共通console keiland-desktop、GDMはdirect維持 | completed | q575/q576: 共通console launcher/両native install/全source確認、GDMdirect不変。--login検討のみ |
 | [WS112](ws112/ws.md) | MG007 | Linux5種類のbinary packageを指定make/CIで作成しreleaseへ添付 | planned | p001契約/入力から。RPi arm64確定、CI runtime不要、FreeBSD source-only。あとで実装、未順位/Queue none |
 | [WS113](ws113/ws.md) | MG006 | zedBSD i915 hotplug/Vulkan Displayから複数画面・Settings/libkeiland・窓の全体移動 | planned | p001から。全拡張/全mirror、pointer越境で窓一括移動。あとで実装、未順位/Queue none |
-| [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | planning | [19項目の暫定表](ws114/gtk4-compat-matrix.md)。実測/採否未決、Queue none |
+| [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | incomplete | [19項目の暫定表](ws114/gtk4-compat-matrix.md)。p001/q580で実測、採否はp002/user |
 | [WS115](ws115/ws.md) | MG002 | upstream GTK4をzedBSD `packages/desktop/gtk4`へ移植し知見を記録 | planning | WS114判断/実測の後。旧WS034 p029移管、Queue none |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
@@ -330,7 +331,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS108 | 2 distro native .deb/QEMU/CI release | completed / q549、remote未実行 |
 | [WS112 p001](ws112/phase001/phase.md) | 5OS package/CI release、ad hoc生成可 | planned / 契約・公式入力/形式調査から。RPi arm64、CI runtime不要。未順位/実装Queue未選定 |
 | [WS113 p001](ws113/phase001/phase.md) | 外部display/拡張・mirror/SettingsとVulkan通知契約 | planned / zedBSD i915優先。実機fixture/通知契約の調査、未順位/Queue未選定 |
-| [WS114 p001](ws114/phase001/phase.md) → [WS115](ws115/ws.md) → [WS116](ws116/ws.md) | 標準GTK4実測・行別レビュー→zedBSD upstream移植→Qt6範囲判断/移植 | WS114暫定機能表、runtime未実測・採否未決。未順位/Queueなし。独自実装WS097/096へ後で知見を渡す |
+| [WS114 p001](ws114/phase001/phase.md) → [WS115](ws115/ws.md) → [WS116](ws116/ws.md) | 標準GTK4実測・行別レビュー→zedBSD upstream移植→Qt6範囲判断/移植 | WS114暫定機能表、runtime未実測・採否未決。未順位/Queueなし。独自実装WS097/096へ後で知見を渡す。P9次作業/q580を優先 |
 | WS109 p002 L1 | native FreeBSD15 library/build foundation | q551 p001 cleared、native ABI/environment verified。q565全F2とq572全WSをverified、実機gateはuserwaived、実QEMU i915利用。historical L1依存を解消 |
 
 ## Tools
@@ -517,3 +518,5 @@ Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調�
 2026-10-02 / n3-execution-start: current userのN=3継続指示。P8 q577 BUG-125/p017、P9 q578 C10/p014、P10 q579 browser2/p172を有限3時間で開始。既存focus/順位を保持、browser後続はp172 whole-Phase clearance待ち。[Queue](queue.md)を参照。GitHub publication保留。
 
 2026-10-02 / q578-cleared-and-main-takeover: C10 L3 passthroughを[p014結果](ws099/phase014/q578-result.md)で確認。WS099 incomplete維持。P8/P9/P10は指定model利用上限で終了、N_target3/現在N_effective0、mainがq577/q579検証/保全を継続。後続browserはp172 whole-clear待ち、既存scope不変、push/GitHub公開なし。
+
+2026-10-02 / desktop-next-gtk4-priority: user指示によりfocused goal fg018とP9 lane優先を同時追加。P9の次はWS114 p001/q580、既存WS090/094候補より先。GTK4移植WS115はWS114実測/採否/選択改善が前提。他lane/デモ全体相対順は保持。利用上限回復のuser確認により同model GPT-6.1 Sol Highでgeneration2へ。

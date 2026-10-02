@@ -2,7 +2,7 @@
 
 # Queue / all-agent index
 
-Active Queues: q577 (main/P8 takeover), q579 (main/P10 takeover)
+Active Queues: q577 (P8 generation2), q579 (P10 generation2), q580 (P9 generation2)
 Status: active
 Main executor / plan writer: Q1
 Approval: current user / 2026-10-02「では、N=3でしばらく実行を続けてください」。既定専任3枠の最初のscopeを各lane/snapshotに固定。各上限3時間、開始時N_effective=3、利用上限後0/main引継ぎ。
@@ -12,6 +12,7 @@ Last finished Queue: [q578](history/queue-q578.md)（archive存在確認済み�
 | --- | --- | --- | --- | --- | --- |
 | q577 / q577-i01 | P8 | [phase](ws099/phase017/phase.md) | BUG-125の再現/同期診断、証明された試験raceのみ修正。compositor読取のみ。 | active / in-progress | [lane](agents/P8/queue.md) |
 | q578 / q578-i01 | P9 | [phase](ws099/phase014/phase.md) | C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。 | finished / cleared | [lane](agents/P9/queue.md) |
+| q580 / q580-i01 | P9 | [phase](ws114/phase001/phase.md) | Debian13標準GTK4実測/19行機能表、compositor/GTK source変更なし、3時間 | active / in-progress | [lane](agents/P9/queue.md) |
 | q579 / q579-i01 | P10 | [phase](ws074/phase172/phase.md) | pinned origin/browser2のmanifest/path対応/競合分類とブラウザ差分統合。ABI/所有境界維持。後続Phase開始不可。 | active / in-progress | [lane](agents/P10/queue.md) |
 
 Dependency graph: C9実出力 → q577; c5-hw/hdmi-h4-hw → q578; WS107実source/p099/browser2 SHA → q579 → 後続browser（外部context、未投入）。3Queue間のsource依存なし。hardwareはP9のみ、QEMU runtimeは担当別。
@@ -32,3 +33,5 @@ WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ�
 Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21d68d4be/common493b6eea90c45b3c1f393c0c62a0f7882b43621c不変。toolchain4trees writable dirs0。P9 solaris10-man SSH可、他QEMU/lockなし、GPU既存vfio-pci。P8既存image/renderer実在、geometry差の診断を優先。P10 manifest/classification開始。
 
 2026-10-02 / q578-finished: C10 hardware60分cleared、[archive](history/queue-q578.md)保存確認。3children利用上限終了、mainがq577/q579の既存範囲を引継ぎ。後続Queueは未投入。
+
+2026-10-02 / n3-restart-gtk4: userが利用上限回復と再起動許可。3枠同指定modelでgeneration2へ。q577/q579は元の3時間deadline維持、q580はdesktop次作業の新しい有限baseline Queue。全共有記録/mergeはQ1、pushなし。

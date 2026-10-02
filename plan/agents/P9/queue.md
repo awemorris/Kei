@@ -1,30 +1,17 @@
-# P9 Queue q578
-Status: finished
-Attempt: q578-i01 / cleared
-Owner: Q1 main（canonical記録） / P9 generation 1（isolated executor）
-Approval: current user / 2026-10-02 chat「では、N=3でしばらく実行を続けてください」、直前の専任3枠と最初の候補に基づく。
-Started UTC: 2026-10-02T04:50:43.686853+00:00
+# P9 Queue q580
+Status: active
+Attempt: q580-i01 / in-progress
+Owner: Q1 canonical / P9 generation2 executor
+Approval: current user / 2026-10-02 chat GTK4をdesktop次作業へ指定、利用上限回復後再起動許可。既存WS114 p001実測scopeを保持。
+Started UTC: 2026-10-02T06:30:07.702259+00:00
 Timebox: 最大3時間 / 1Phase
-Phase: [phase](../../ws099/phase014/phase.md)
-Snapshot: [q578-approved-phase.md](q578-approved-phase.md) / SHA256 `6b7a2e619fe882e5e9a3feee6dc6445206c81680cbd800374fe958a6ee6008d8`
-Exact scope: C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。
-Dependencies: approved Phaseにある実出力を開始時に検証。未検証依存は実行せずmainへ返す。
-Worktree: /home/awe/zedBSD-worktrees/p9
-Branch: codex/p9
-Checks/criteria: snapshotのwhole-Phase基準を保持。部分commit/Queue結果とPhase clearanceを区別。
-Ordered next Queues: 未投入。mainが結果/依存確認後に明示dispatch。
-Merge requests / ACK: none
-Outcome: cleared。実3602秒/278周/errors0/restarts0、main画面・receipt・cleanup確認。
-Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
-
-Preflight: fixture host solaris10-man（chaos）SSH可、他QEMU/owner/lock無し、GPU既にvfio-pci。mainが所有lockを取得した専用fixtureの使用を許可。rebind/reboot/他VM停止はしない。source freshnessを確認してimageを選ぶ。
-
-MR P9-q578-01: requested4bdd9224f/base41aac4fc7。main review: sh-n/diff-check PASS、exact owner/QEMU PID cleanup、有限elapsed、fresh receipt、error/restart判定を確認。試験script統合checkpointのみ、短試走/60分/10窓/実open-closeの画面確認は未実施。古いimageで現行clearanceを主張しない。
-
-MR P9-q578-02: requested21042cf4ebc25cb529f30b3ccb51959a45fe3962、ACK済4bdd9224f以降、script atomic checkpoint/5round進捗追加のみ。sh-n/diff-check/main review PASS。旧short exec session外部中断143、owner/PID照合してfixture/log救出し正常返却。旧shortはPASSなし、fresh fixtureをsetsid nohupで継続。
-
-MR P9-q578-03: requested992b6de86、ACK済21042cf4e以後のPhase checkpoint/旧short3PNG/disk events。main provenance/中断の限界/ownercleanup/PNG証拠の範囲/diff-check reviewPASS。旧short結果でclearanceなし、現行freshshort進行中。
-
-MR P9-q578-04: requested7d82da63a、lastACK992b6de86。freshshort14round/187秒/errors0/restarts0/exitstatus0、session receiptとlive Terminal/実open-close PNGの耐久証拠をmain review。whole60minは継続中、short結果でclearanceなし。script source変更なし、diff-check PASS。
-
-2026-10-02 / q578-terminal: P9 model usage limitで停止後、mainが最終判定を引継ぎ。whole-Phase cleared、[result](../../ws099/phase014/q578-result.md)。60分criteriaを満たす。次Queueは未投入。GitHub close/comment未公開。
+Phase: [ws114-p001](../../ws114/phase001/phase.md)
+Snapshot: [approved phase](q580-approved-phase.md) / SHA256 `2204afc8e4ba60ff500ee5fac2fe02717fb44b21fb76cef0c28687bf801baec7`
+Exact scope: Debian13標準GTK4/gtk4-demoをLinux Keilandで実測。G01–G11基本window/入力/clipboard/renderer経路、G12–G19の観測と未試験理由。機能表にstdout/stderr/QMP PNG/版/再現手順。compositor/GTKソース変更なし、portal実装なし、採否決定なし。
+Dependencies: WS105/WS108 guestとLinux compositor実出力を確認。専用clone/overlay/runtimeのみ、既存guest停止/共有build消去なし。
+Criteria: 全19行に測定またはskip理由とreview材料を保存。実行不能ならuncleared/再開条件。部分成果をwhole-clearにしない。
+Worktree: /home/awe/zedBSD-worktrees/p9 / codex/p9
+Ordered next Queues: なし。p002採否レビューが後続実装のgate。
+Last Queue: [q578 finished/cleared](../../history/queue-q578.md)
+Merge requests / ACK: generation2 baseは起動時main HEAD
+Sync: GitHub publication保留、pushなし、all commit -m WIP

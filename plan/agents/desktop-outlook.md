@@ -17,3 +17,7 @@
 | [WS114](../ws114/ws.md) GTK4互換 | Linux標準GTK4をKeilandで実測し[機能表](../ws114/gtk4-compat-matrix.md)をユーザーへ行別レビュー。その後、採用されたXDG-shell/portal経路だけ改善 | p001の実測前。採否はユーザー。続く[WS115](../ws115/ws.md) upstream GTK4移植→[WS116](../ws116/ws.md) Qt6範囲判断/移植→WS097/096独自実装の順。P9がWS114のcompositor部分を担う候補 |
 
 最初のP9 Queue候補はWS099 p014の試験script/短時間試走/60分実機試験。i915設備が取れない場合は、別sourceで進められるWS090 p015かWS094 p011をmainが選ぶ。いずれもPhaseのscope/承認と回帰資源を確認してから投入する。P8の最初のbug候補は[BUG-125](../bugs/BUG-125.md)で、P9のWS099 sourceやC9 harnessと重なる時はmainが調整する。
+
+## 最新指定 / 2026-10-02
+
+ユーザーがP9の次作業をGTK4移植のWSに指定。q578 C10はcleared。次は[q580 / WS114 p001](P9/queue.md)でLinux標準GTK4実測/機能表の証拠化、その後ユーザー行別レビュー→採用compositor/portal改善→WS115 upstream移植。WS090/094等を先に実行する旧候補順をこのlaneでは置き換える。既存demo全体の相対優先順は保持。
