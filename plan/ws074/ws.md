@@ -9,7 +9,7 @@ Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
 Queue: なし（last: q507-i01 cleared）
-Resume point: 2026-09-30: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The fixed order remains p100 → p101; neither is currently authorized.
+Resume point: 2026-09-30: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The next gate is p172 (origin/browser2 integration); p100 → p101 remains the compatibility-work order after p172 and must be re-evaluated against the imported branch evidence. None is currently authorized.
 <!-- awesome-plan-current:end -->
 
 ## デモの目標（2026-09-28 ユーザー、同日に amazon.co.jp へ変更）
@@ -91,14 +91,14 @@ libpng-compat の `from_memory`、libtruetype の拡張、libjpeg-compat の API
   70秒後までprocess生存・追加SIGSEGVなしを確認した。最後の実装修正はcommit `6184fb12`。
 - q507 で [p099](phase099/phase.md) を cleared。Acid2 は同じ固定条件で
   90.56% から byte-identical な 100.00% になり、plain/ASan と focused
-  regression が通った。active Queue は無い。次は p100 から順を変えず、
-  一つずつ Queue へ選ぶ。
+  regression が通った。active Queue は無い。次はblocking p172。全体clear/実出力確認後にp100→p101とbranch側Phaseを再評価し、
+  一つずつQueueへ選ぶ。
 
 1. **ws074-p099: Acid2 100% — cleared（q507）**。p097 と同じ harness、viewport、font、固定 WPT 版で
    `exact-pixel-pass 1`、pixel agreement 100.00%、crash・timeout 0。差分を一般化した focused regression を残した。
-2. **ws074-p100: Acid3 100%** — p099の後。履歴的Acid3が画面上で100/100を返し、Uncaught・crash・timeoutが無いことを
+2. **ws074-p100: Acid3 100%** — p172の後。p099はcleared。履歴的Acid3が画面上で100/100を返し、Uncaught・crash・timeoutが無いことを
    完了条件にする。pixel agreementは補助診断として同時に記録する。
-3. **ws074-p101: WPT CSS2 reftest 100%** — p100の後。固定commitで現runnerが列挙するscriptなしCSS2 reftest全5904件を
+3. **ws074-p101: WPT CSS2 reftest 100%** — p172とp100の後。固定commitで現runnerが列挙するscriptなしCSS2 reftest全5904件を
    対象にし、sample 100件ではなく全件でpass 100%、error 0を完了条件にする。manifestと分母を着手時に固定し、
    WPT metadataに基づかない任意の除外はしない。長時間実行はshard・途中再開・失敗cluster別のreportを使う。
 
@@ -106,6 +106,8 @@ libpng-compat の `from_memory`、libtruetype の拡張、libjpeg-compat の API
 p036はその後のflexbox・backgrounds・values・selectorsの拡張suiteに絞る。p047（DOM testharness）も今回の3 Phaseの後まで候補のまま残す。
 
 ## Phase 一覧
+
+**Blocking gate（2026-10-02）**: [p172](phase172/phase.md)のwhole-Phase clearanceと実際の統合出力を、全ての未実行WS074 source/runner/互換性Phaseの共通の前提にする。下表のplanned行の依存欄に明示した。旧cleared成果に遡及しない。branch側phase100・phase102〜171の同じ論理IDは取込時に証拠を照合し、勝手にrenumber/clearしない。
 
 p001 で分け直した（2026-09-27。p002〜p013 の案は実行前の案だったので、同じ番号を新しい分割に使う）。各 Phase は 1〜3 時間を目標にし、
 着手の時に大きすぎれば分ける。
@@ -121,10 +123,10 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p003](phase003/phase.md) | GC heap の核（非移動の mark-sweep、大きさの class の block、保守的な stack の走査、trace）、VM の string と atom | cleared | p002 |
 | [ws074-p004](phase004/phase.md) | HTML tokenizer（全状態、文字参照の表の生成）、html5lib の tokenizer の runner。目標 ≥ 98% | cleared | p003 |
 | [ws074-p005](phase005/phase.md) | DOM の核（GC の cell の Node・Element・Text・Comment・Document・DocumentType、属性）と tree builder 1（initial〜in body、adoption agency）、html5lib の tree の runner | cleared | p004 |
-| ws074-p006 | tree builder 2（table・select・template・frameset・foreign content）、fragment parsing、serializer。目標 script-off ≥ 90% | planned | p005 |
+| ws074-p006 | tree builder 2（table・select・template・frameset・foreign content）、fragment parsing、serializer。目標 script-off ≥ 90% | planned | p005、p172 |
 | [ws074-p007](phase007/phase.md) | CSS の最小（ワンパス）: tokenizer・parser、selector（type・class・id・子孫・子・属性の基本）、cascade（origin・specificity・継承）、約 30 の property、UA stylesheet、`<style>`・`style` 属性 | cleared | p003 |
-| ws074-p008 | CSS 2（後回し）: selector の残り（構造・状態・`:is`/`:not`/`:has`、pseudo-element）、rule の索引 | planned | p006、p007 |
-| ws074-p009 | CSS 3（後回し）: property の表の拡張、`var()`・`calc()`、`@media`、file の `<link>`、shorthand の全部 | planned | p008 |
+| ws074-p008 | CSS 2（後回し）: selector の残り（構造・状態・`:is`/`:not`/`:has`、pseudo-element）、rule の索引 | planned | p006、p007、p172 |
+| ws074-p009 | CSS 3（後回し）: property の表の拡張、`var()`・`calc()`、`@media`、file の `<link>`、shorthand の全部 | planned | p008、p172 |
 | [ws074-p010](phase010/phase.md) | font と text の最小: font の一覧（Inter、日本語は Droid の fallback）、libtruetype（関数を足すなら main に先に伝える）、advance、空白と CJK での改行 | cleared | p002 |
 | [ws074-p011](phase011/phase.md) | layout の最小: box tree（anonymous box）、block（幅・高さ・margin の基本）、inline（line box・text run・baseline）、`--dump=layout` | cleared | p009、p010 |
 | [ws074-p012](phase012/phase.md) | 描画の最小: display list（背景・border の solid・text）、CPU の参照の描画、`--render`（PPM → PNG）、画面の撮影 | cleared | p011 |
@@ -135,7 +137,7 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p015](phase015/phase.md) | URL（WHATWG）、`data:`、WPT の urltestdata の runner（896/896、data-urls 72/72） | cleared | p002 |
 | [ws074-p016](phase016/phase.md) | HTTP/1.1 の同期の client（chunked、redirect）、cookie、http の page と script、host の test server、guest の http（2026-09-28 に非同期の loader・resolver の thread・持続接続・memory の cache を p050 へ分けた） | cleared | p014、p015 |
 | [ws074-p017](phase017/phase.md) | TLS（OpenSSL の `dlopen`、D2）、https、自前の CA の host の server、guest で実在の site（BUG-083 の rtld の dlopen の修正を含む） | cleared | p016 |
-| ws074-p018 | encoding: 判定（BOM・HTTP・meta の prescan）、UTF-16・legacy の single-byte、Shift_JIS・EUC-JP・ISO-2022-JP（表の生成、D4） | planned | p006 |
+| ws074-p018 | encoding: 判定（BOM・HTTP・meta の prescan）、UTF-16・legacy の single-byte、Shift_JIS・EUC-JP・ISO-2022-JP（表の生成、D4） | planned | p006、p172 |
 | [ws074-p019](phase019/phase.md) | `libjpeg-compat` 1: baseline（huffman、任意の subsampling、restart、grayscale・YCbCr）、library の登録、host の試験（Pillow と比較）。2026-09-28 に base の group・全 platform、libpng-compat の header を `compat/png/` へ | cleared | p002 |
 | [ws074-p020](phase020/phase.md) | `libjpeg-compat` 2: progressive、CMYK/YCCK、`jpeg_save_markers`（EXIF の向き）（`JCS_EXT_BGRA` は p019 で済み） | cleared | p019 |
 | [ws074-p051](phase051/phase.md) | `libgif-compat`（2026-09-28 ユーザー、D5 の変更）: `userland/base/libgif-compat`、`include/libc/compat/gif_lib.h`（giflib 5.2 の decode の部分集合）、全 platform | cleared | p002 |
@@ -148,23 +150,23 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p025](phase025/phase.md) | JS の compiler（ES5 の核）、`--js` の shell、test262 の runner。最初の数（4992/47792、ES5 1457/8087） | cleared | p024 |
 | [ws074-p026](phase026/phase.md) | 組み込み 1a: Object・Function（bind・Function の構築子）・Error の類（engine の誤りも object に）・Boolean・Number（自前の最短の十進表記と十進の読み取り、toFixed 等）・Math・global の関数、native の構築子（2026-09-28 に Array・String・JSON を p046 へ分けた。9327/47792、ES5 4822/8087） | cleared | p025 |
 | [ws074-p027](phase027/phase.md) | RegExp の engine と String の regex の method | cleared（2026-09-29。自前の backtracking の engine、RegExp と String の match・replace・replaceAll・search・split。test262 14255 → 15762、ES5 6786 → 7592。v flag・`\p`・modifier・matchAll・Symbol の差し替えは残り） | p026 |
-| ws074-p028 | ES2015 の意味 1（2026-09-29 に let・const・TDZ・arrow・template を p078 へ、destructuring・default・rest・spread・optional chaining を p079 へ、class を p085 へ、Symbol・iterator・for-of・Map・Set・Weak* を p087 へ分けた）: 残りは WeakMap・WeakSet の弱さ（collector の ephemeron）、Set の ES2025 の method、iterator helper | planned | p026、p087 |
-| ws074-p029 | ES2015 の意味 2（2026-09-29 に generator・Promise・async function を p086 へ分けた）: async generator と for await、`yield*`、Proxy・Reflect、TypedArray・ArrayBuffer・DataView、BigInt | planned | p028、p086 |
+| ws074-p028 | ES2015 の意味 1（2026-09-29 に let・const・TDZ・arrow・template を p078 へ、destructuring・default・rest・spread・optional chaining を p079 へ、class を p085 へ、Symbol・iterator・for-of・Map・Set・Weak* を p087 へ分けた）: 残りは WeakMap・WeakSet の弱さ（collector の ephemeron）、Set の ES2025 の method、iterator helper | planned | p026、p087、p172 |
+| ws074-p029 | ES2015 の意味 2（2026-09-29 に generator・Promise・async function を p086 へ分けた）: async generator と for await、`yield*`、Proxy・Reflect、TypedArray・ArrayBuffer・DataView、BigInt | planned | p028、p086、p172 |
 | [ws074-p030](phase030/phase.md) | DOM の binding（interface の表、生成器は後回し）、window・document・Node・Element・Event の基本、console、`<script>` の実行、timer、event loop と microtask の queue（2026-09-28 に WPT の testharness の runner を p047 へ分けた） | cleared | p014、p046（p029 から縮めた: microtask の queue はこの Phase で作った） |
 | [ws074-p031](phase031/phase.md) | Amazon の script が要る DOM の API（2026-09-29 に絞った）: querySelector・querySelectorAll・matches・closest、getBoundingClientRect・getClientRects・DOMRect・client/offset/scroll の大きさ・scrollX/Y（問われた時に layout）、classList・dataset、inline style（CSSStyleDeclaration）。getComputedStyle・innerHTML・offsetTop/Left・scrollTo は残り | cleared（2026-09-29。Amazon top の DOM の Uncaught 4 → 0、DOM の試験 4 つを追加、guest 12/12） | p030 |
 | [ws074-p032](phase032/phase.md) | form（2026-09-28 に範囲を絞った。fetch・XHR・Location・History・localStorage は p064 へ。p067 で `<select>` の最小と `box-sizing` を足した）: `<input>`（text・submit・hidden・button・checkbox）・`<button>`・`<textarea>`・`<select>` の最小の描画、focus と caret、文字の入力と編集、Enter と submit による送信（GET・POST の urlencoded、page の encoding）、script が有効なときの `noscript` を隠す | cleared | p017、p056（focus と key の入力。p031 は要らない） |
-| ws074-p033 | Wasm: decoder・validator・共通 bytecode への compiler、JS API、spec test の runner（wabt の wast2json） | planned | p029 |
-| ws074-p034 | Wasm の MVP の後: bulk memory、reference types、multi-value、sign-ext、非 trap の変換、SIMD。**M2 の計測** | planned | p033、p032 |
+| ws074-p033 | Wasm: decoder・validator・共通 bytecode への compiler、JS API、spec test の runner（wabt の wast2json） | planned | p029、p172 |
+| ws074-p034 | Wasm の MVP の後: bulk memory、reference types、multi-value、sign-ext、非 trap の変換、SIMD。**M2 の計測** | planned | p033、p032、p172 |
 | [ws074-p035](phase035/phase.md) | flexbox（最小） | cleared（2026-09-29。ASan・guest（QEMU、live の Amazon の検索）を通し、入れ子の flex の測定で % の幅が測定の幅になる不具合を直した） | p013 |
-| ws074-p036 | CSS の段階 M3-1（2026-09-30にCSS2全件をp101へ分割）: WPT flexbox・backgrounds・values・selectorsの拡張suiteを測り、失敗の多い塊を直す | planned（p101後） | p034、p035、p101 |
+| ws074-p036 | CSS の段階 M3-1（2026-09-30にCSS2全件をp101へ分割）: WPT flexbox・backgrounds・values・selectorsの拡張suiteを測り、失敗の多い塊を直す | planned（p101後） | p034、p035、p101、p172 |
 | [ws074-p037](phase037/phase.md) | table の layout（最小。CSS2 の auto layout、border-collapse は近似） | cleared（2026-09-29、amazon-goal の「最小」の範囲。test page 60/73 box、Amazon のトップの footer が Chromium と同じ 4 列。rowspan・fixed・collapse の解決・column の box は残り） | p036（デモの列の判断で先に最小） |
-| ws074-p038 | transform（2D）、transition・animation、gradient、box-shadow、角丸の clip、opacity、`@font-face`（TTF/OTF） | planned | p036 |
-| ws074-p039 | grid | planned | p036 |
-| ws074-p040 | Chrome との比較の拡大（corpus と実在の site の保存、box と画素の指標）、`-webkit-` の表（別名、`-webkit-box`、`-webkit-line-clamp` 等）。**M3 の計測** | planned | p037〜p039 |
-| ws074-p041 | shell 2: TABS の titlebar と窓の中の toolbar、System Menu、context menu、履歴、ページ内検索、zoom、view-source | planned | p032、ws070-p011 |
-| ws074-p042 | CSS の段階 M4: 失敗の塊から機能を選んで直す | planned | p040 |
-| ws074-p043 | JS・Chrome の段階 M4: test262 と比較の失敗の塊を直す。**M4 の計測** | planned | p042 |
-| ws074-p044 | 変更した source の規約の全文との照合、fuzz（時間を区切って）、回帰、boot test（最後） | planned | 全て |
+| ws074-p038 | transform（2D）、transition・animation、gradient、box-shadow、角丸の clip、opacity、`@font-face`（TTF/OTF） | planned | p036、p172 |
+| ws074-p039 | grid | planned | p036、p172 |
+| ws074-p040 | Chrome との比較の拡大（corpus と実在の site の保存、box と画素の指標）、`-webkit-` の表（別名、`-webkit-box`、`-webkit-line-clamp` 等）。**M3 の計測** | planned | p037〜p039、p172 |
+| ws074-p041 | shell 2: TABS の titlebar と窓の中の toolbar、System Menu、context menu、履歴、ページ内検索、zoom、view-source | planned | p032、ws070-p011、p172 |
+| ws074-p042 | CSS の段階 M4: 失敗の塊から機能を選んで直す | planned | p040、p172 |
+| ws074-p043 | JS・Chrome の段階 M4: test262 と比較の失敗の塊を直す。**M4 の計測** | planned | p042、p172 |
+| ws074-p044 | 変更した source の規約の全文との照合、fuzz（時間を区切って）、回帰、boot test（最後） | planned | 全て、p172 |
 | [ws074-p046](phase046/phase.md) | 組み込み 1b（p026 から分けた）: Array・String（正規表現の要らない method、UCD 16.0.0 から生成する大文字・小文字の表）・JSON（14255/47792、ES5 6786/8087） | cleared | p026 |
 | [ws074-p045](phase045/phase.md) | 窓 2（p014 から分けた）: CONTROLS の titlebar の URL の欄、link の click（`file:`）、戻る・進む・再読み込み | cleared | p014 |
 | [ws074-p050](phase050/phase.md) | 非同期の loader の核（p016 から分けた）: non-blocking な socket と TLS、resolver の thread、redirect、page の画像と shell の navigation の非同期化、Esc の中止。部品化の手順 4（`page_net_*`、p053）。2026-09-28 に持続接続と cache を p058 へ分けた | cleared | p016、p017、p053 |
@@ -173,15 +175,15 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p055](phase055/phase.md) | 部品化 2（p053 の手順 2）: GPU の描画を `browser_target` と `_record`・`_draw` の形に（view 内の image view ごとの framebuffer）、present.c は swapchain と同期だけ。`--render-gpu` は engine の offscreen に `_draw` | cleared | p054 |
 | [ws074-p056](phase056/phase.md) | 部品化 3（p053 の手順 3）: 入力を DOM の key・code・text の形に（evdev の変換は shell）、scroll・link・focus の既定の動作を engine へ。KeyboardEvent・WheelEvent・FocusEvent、Tab の focus と ring。form の欄は無い（p032） | cleared | p055 |
 | [ws074-p057](phase057/phase.md) | 部品化 4（p053 の手順 5）: `libbrowser.so` への分割、公開の header `include/libc/browser.h`、2 つ目の使い手 `browser-probe`（Wayland なしで PPM に描く） | cleared | p056 |
-| ws074-p047 | WPT の testharness の runner（p030 から分けた: testharness.js は arrow・let・const・class と Promise を使う）、WPT dom/nodes の計測（M2 の目標 ≥ 40%） | planned | p028、p029、p030 |
+| ws074-p047 | WPT の testharness の runner（p030 から分けた: testharness.js は arrow・let・const・class と Promise を使う）、WPT dom/nodes の計測（M2 の目標 ≥ 40%） | planned | p028、p029、p030、p172 |
 | [ws074-p059](phase059/phase.md) | Google の調査（デモの目標の前提）: 返る HTML の版（UA ごと）、Chromium との比較、足りない機能、目標の版と Phase の列（[google-goal.md](google-goal.md)） | cleared | p057 |
 | [ws074-p060](phase060/phase.md) | `inline-block` を atomic な inline に（shrink-to-fit、baseline、`vertical-align` の top・middle・bottom・baseline） | cleared（2026-09-29。検索の結果が 4 列の card に。`direction: rtl` の不足を発見） | p032 |
 | [ws074-p061](phase061/phase.md) | CSS の値と selector（p008・p009 から Google が使う部分）: `@media`、`var()`、`calc()`、`!important`、`:not()`・`:hover`・`:active`・`:focus`・`:visited`、`::before`・`::after`、`box-sizing`、`-webkit-` の別名、`text-overflow`、`letter-spacing`、`text-transform` | cleared（値の部分: var・calc・@media・@supports・論理 property。selector と pseudo-element は p069、`box-sizing` は p032） | p007 |
 | [ws074-p062](phase062/phase.md) | 描画（p038 から）: `border-radius`（CPU と GPU）、`opacity`、`box-shadow`、`outline` | cleared（2026-09-29。display list の矩形で表し CPU と GPU が一致、`clip-path: inset()` を足した。gradient・object-fit は残り） | p014 |
-| ws074-p063 | （デモの列から外した: Amazon は sprite の PNG）inline の SVG の最小（`svg`・`path`・`circle`・`rect`、`viewBox`、`fill`・`currentColor`） | planned | p012 |
-| ws074-p064 | fetch・XHR（same-origin・CORS）、Location・History、localStorage（p032 から分けた） | planned | p031、p032 |
-| ws074-p065 | （Google の目標のため。デモの列から外した、2026-09-28）Google の challenge と ES5 bundle の JS の環境（2026-09-29 に `Date` を p076 へ、`navigator`・`screen`・`performance`・`location` の読み取り・`document.cookie` を p077 へ分けた）: `Date`・`Promise`・`Symbol`・`Map`・`Set`・`WeakMap`・typed array の最小、`encodeURIComponent` の類、`Error.stack`、`atob`・`btoa`、`navigator`・`screen`・`performance`・`sessionStorage`・`CustomEvent`、`document.cookie` の書き込み、`location.replace`。保存した challenge の page が `SG_SS` を置いて開き直すまで | planned | p027 |
-| ws074-p066 | （Google の目標のため。デモの列から外した）Google の結果の page: 保存（`build/` だけ）、Chromium との比較、足りない CSS と DOM の直し（取得後に分ける） | planned | p065 |
+| ws074-p063 | （デモの列から外した: Amazon は sprite の PNG）inline の SVG の最小（`svg`・`path`・`circle`・`rect`、`viewBox`、`fill`・`currentColor`） | planned | p012、p172 |
+| ws074-p064 | fetch・XHR（same-origin・CORS）、Location・History、localStorage（p032 から分けた） | planned | p031、p032、p172 |
+| ws074-p065 | （Google の目標のため。デモの列から外した、2026-09-28）Google の challenge と ES5 bundle の JS の環境（2026-09-29 に `Date` を p076 へ、`navigator`・`screen`・`performance`・`location` の読み取り・`document.cookie` を p077 へ分けた）: `Date`・`Promise`・`Symbol`・`Map`・`Set`・`WeakMap`・typed array の最小、`encodeURIComponent` の類、`Error.stack`、`atob`・`btoa`、`navigator`・`screen`・`performance`・`sessionStorage`・`CustomEvent`、`document.cookie` の書き込み、`location.replace`。保存した challenge の page が `SG_SS` を置いて開き直すまで | planned | p027、p172 |
+| ws074-p066 | （Google の目標のため。デモの列から外した）Google の結果の page: 保存（`build/` だけ）、Chromium との比較、足りない CSS と DOM の直し（取得後に分ける） | planned | p065、p172 |
 | [ws074-p067](phase067/phase.md) | amazon.co.jp の調査（デモの目標の変更）: UA ごとの HTML、Chromium との比較、足りない機能、Phase の列（[amazon-goal.md](amazon-goal.md)） | cleared | p059 |
 | [ws074-p068](phase068/phase.md) | 外の stylesheet（`<link rel=stylesheet>`・`@import`、非同期の loader、読み終えてからの再計算）と rule の索引（最右の id・class・tag） | cleared | p032 |
 | [ws074-p069](phase069/phase.md) | selector と pseudo-element: `:not()`・`:is()`・`:where()`・`:has()` の最小、`:root`、構造の pseudo-class、`:hover`・`:focus`・`:disabled`・`:checked`、`::before`・`::after` の `content` | cleared | p068 |
@@ -205,18 +207,19 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p087](phase087/phase.md) | Symbol・iterator の protocol・for-of と Map・Set・WeakMap・WeakSet（p028 から分けた）、symbol を使う操作（toPrimitive・hasInstance・toStringTag・species・RegExp の委譲）、URI の関数 | **cleared**（2026-09-29。test262 24995 → 28381、新しく落ちた 0。Amazon の for-of・`Set`・`encodeURIComponent` の誤り 0、search の Uncaught 0） | p079、p086 |
 | [ws074-p088](phase088/phase.md) | 動的に挿入された `<script src>` の取得と実行、script の load・error の event（bind/・page/・dom/）。Amazon の AUI（`P.load.js` が 41 本を挿入）が初めて走る。p084 の調べの案 1（top で約 10〜13 点の見込み、新しい Uncaught と XMLHttpRequest（p064）の不足が出る見込み） | **cleared**（2026-09-30。dynamic top 69.23%/ink 61.20%、Web API不足をp092へ） | p084 |
 | [ws074-p089](phase089/phase.md) | 百分率の高さ（`height`・`max-height` の %、layout 全体で「高さが定まっているか」を渡す。float・inline-block・grid の `1fr` の中を含む）。p084 の案 2 | **cleared**（2026-09-30。top 82.96%→84.06%、ink 79.01%→80.56%。search 75.85%→76.32%、ink 32.97%→34.48%） | p084 |
-| ws074-p090 | 合成の太字（Latin）の advance を Chromium に合わせる（約 9% 広い）。p084 の案 3（1 点前後） | planned | — |
-| ws074-p091 | flex の残り（overflow で隠れる項目の自動の最小、blockification、column の最小）と CSSOM の小さな不足（`cssFloat` など）。p084 の案 4・5 | planned | p084 |
+| ws074-p090 | 合成の太字（Latin）の advance を Chromium に合わせる（約 9% 広い）。p084 の案 3（1 点前後） | planned | p172 |
+| ws074-p091 | flex の残り（overflow で隠れる項目の自動の最小、blockification、column の最小）と CSSOM の小さな不足（`cssFloat` など）。p084 の案 4・5 | planned | p084、p172 |
 | [ws074-p092](phase092/phase.md) | Amazonの後続scriptが使うWeb API: `fetch`・observer・`document.elementsFromPoint`・`atob`/`btoa`と有界なheadless settle | **cleared**（2026-09-30。非同期fetch、MutationObserver、sign-in tooltipの幅とstacking order。top 71.81%/ink 64.58%、約32秒・Uncaught 4） | p087、p088 |
-| ws074-p093 | JS: 型付き配列（ArrayBuffer・TypedArray・DataView） | planned | p087 |
+| ws074-p093 | JS: 型付き配列（ArrayBuffer・TypedArray・DataView） | planned | p087、p172 |
 | [ws074-p094](phase094/phase.md) | Chromiumとの再現可能な比較手順: 固定capture、隔離profile、入力・環境・出力のhash、JSON reportとbaseline回帰 | **cleared**（2026-09-30。top 82.96%/ink 79.01%、search 75.85%/ink 32.97%） | p067 |
 | [ws074-p095](phase095/phase.md) | Amazon検索欄の文字の位置: flex itemのcross-axisのbox sizing、form controlの`text-indent` | **cleared**（2026-09-30。検索文字の範囲がChromiumと同じ`x=435..574, y=22..36`） | p035、p032、p092 |
 | [ws074-p096](phase096/phase.md) | 公開サイトの固定比較corpus: Mozilla日本語topから同一originのpageをたどり、固定Chrome User-AgentでChromiumと比較して一般化できる差を最大2件修正 | **cleared**（2026-09-30。4 page、`@supports`、button空白。top 78.23%/ink 69.54%） | p094、p095 |
 | [ws074-p097](phase097/phase.md) | 指定10公開siteの画像・box・DOM tree比較、阿部寛のホームページのguest full-screenデモ、WPT reftestとAcid、一般化できる差を最大4件修正 | **cleared**（2026-09-30。WPT 44/100、Acid2 90.56%、Acid3 9/100。`postMessage`、table rowspan、presentational hint、intrinsic auto margin） | p094、p096 |
-| ws074-p098 | ES module scriptのgraph取得・link・評価、`import`・`export`、GitHubのhydration比較 | planned（2026-09-30ユーザー指定によりp101後へ延期） | p087、p088、p097 |
+| ws074-p098 | ES module scriptのgraph取得・link・評価、`import`・`export`、GitHubのhydration比較 | planned（2026-09-30ユーザー指定によりp101後へ延期） | p087、p088、p097、p172 |
 | [ws074-p099](phase099/phase.md) | Acid2 100%: 固定harnessでexact pixel一致、crash・timeout 0 | **cleared**（2026-09-30、q507。90.56% → 100.00%、plain/ASan） | p097 |
-| ws074-p100 | Acid3 100%: 履歴的Acid3で100/100、Uncaught・crash・timeout 0 | planned（p099の次） | p099 |
-| ws074-p101 | WPT CSS2 reftest 100%: 固定commitのscriptなし全5904件でpass 100%、error 0 | planned（p100の次） | p100 |
+| ws074-p100 | Acid3 100%: 履歴的Acid3で100/100、Uncaught・crash・timeout 0 | planned（p172後、p099 cleared） | p099、p172 |
+| ws074-p101 | WPT CSS2 reftest 100%: 固定commitのscriptなし全5904件でpass 100%、error 0 | planned（p100後、p172も必須） | p100、p172 |
+| [ws074-p172](phase172/phase.md) | origin/browser2のbrowser変更をWS107後のlibbrowser/browser配置へ取込み、関連計画/試験/bugを意味的に照合するblocking gate | planned / Queueなし | WS107の実成果、p099、branch snapshot |
 
 ## 後の WS・Future Work の候補
 
@@ -245,3 +248,7 @@ p100/p101 の個別 Phase record は現在未作成（WS 表の予定行）。�
 2026-10-02 / ws107-q541-design: [WS107](../ws107/ws.md)の165engine file移行で現役host/guest/list-sources runnerを新rootへ更新する。独立componentの有限quality修正はWS107、p100→p101の既存互換性scope/順/acceptanceは保持。今後はlibbrowserrootの実sourceを使い、移行と同時編集しない。詳細[設計](../ws107/design.md)。公開outbox pending。
 
 2026-10-02 / ws107-completed: engine165の新root/Makefile/header/ELF/clientをverified、host-view59/Acid2差0/goldens81/native shell PASS。DOM golden position/valuesのfixture追記漏れ2件のみ修正、旧build/newbuild出力一致。WS074のp100→p101/互換性scopeと順は不変。[WS107結果](../history/ws107/conformance.md)。GitHub comment deferred。
+
+## 2026-10-02 / origin/browser2 blocking import
+
+Event ws074-browser2-gate-20261002: ユーザー「GitHubのorigin/browser2を取り込みます。libbrowserへの移動によりストレートには当たらないが、一貫したファイル移動のルールで取込める。Phaseを追加し後続のブラウザ作業をblocking」と指示。[p172](phase172/phase.md)を追加。WS107の[移動inventory](../history/ws107/inventory.json)で旧engine→libbrowser、shellはbrowserと対応させる。branch tip `e53ef03b80113aec959deb67f828cba21d68d4be`を観測、branch Phase IDは171まで使用（p172を選択）。p100→p101の内部順は保持するが、着手の前にp172 whole-Phase cleared/実統合出力が必要。全27 planned行にp172依存を反映、branch取込後の既存/branch Phase結果を証拠で再照合。q507/p099と現在のQueueは履歴のまま、実装/merge/cherry-pick/pushは未実施。GitHub WS/foreign Phase event投稿は保留。

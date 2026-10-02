@@ -128,3 +128,7 @@ Authority: [package方針全文](ws112-linux-packages.md)、[WS112](../ws112/ws.
 | GPU境界/全文C | `plan/tools/gpu-boundary/v1-check.sh`、該当build/format/style-check/manual/boot | p009。C全文の意味/所有はtoolだけでは保証しない |
 
 `make check`は使わない。source生成時にGuardrailと全文を再読し、最終変更の範囲・command/version/skipを記録。
+
+## WS074 origin/browser2 integration coverage (2026-10-02)
+
+[blocking p172](../ws074/phase172/phase.md)に既存[component全文](browser-component.md)/[C全文](../coding-style.md)を適用。実行は未承認。WS107 inventory.jsonのbefore→afterとbranch差分を機械的に照合し、shell/新規fileだけ所有を分類。path/hashes/適用結果・public ABI/Wayland境界・build source登録を検査。host/guest/browser regressionsとp099の既存証拠を再確認。format/style-checkは補助であり、semanticなmerge conflict/全変更source規約の判断はfull/manual review。WS107の限定移動style例外は流用しない。branchの計画/テスト資産はID/結果を根拠で照合し、Master/Queue/履歴を機械上書きしない。

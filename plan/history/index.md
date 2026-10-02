@@ -60,3 +60,7 @@ Event ws112-package-plan-20261002: userの「あとで実装」に従い[WS112](
 ## 計画追記 / 2026-10-02（WS113）
 
 Event ws113-multidisplay-plan-20261002: [WS113](../ws113/ws.md)をMG006のplannedとして追加。i915→標準Vulkan Display通知、Settings→libkeiland→compositor拡張、全拡張/全mirror、配置drag、拡張時の窓単一出力/pointer越境切替を保存。zedBSD i915を完了の対象とし、9Phaseを計画。実装/Queue/実機試験なし。q576とWS089の過去証拠を保持。Issue/Project公開とpushは未実施。
+
+## 計画追記 / 2026-10-02（WS074 branch gate）
+
+Event ws074-browser2-gate-20261002: [WS074 p172](../ws074/phase172/phase.md)をorigin/browser2取込のblocking Phaseとして追加。WS107移動表による旧engine→libbrowser対応とbranch側Phase/test/bugの意味的照合を計画。全未実行browser Phaseはp172全体clearまで実行不可。branch tip e53ef03b8をread-only fetchで観測、merge/patch実行なし。q576とp099の歴史的結果は保持、Issue/Project公開保留。

@@ -21,6 +21,7 @@ Started UTC: 2026-10-02T02:47:22.972372+00:00
 ## Upcoming Work Outlook
 
 WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ。
+[WS074 p172](ws074/phase172/phase.md): origin/browser2取込。WS107移動表を利用してlibbrowser配置へ対応、全後続browser Phaseのblocking gate。planned/Queue未選定。p100→p101は取込後に証拠を再評価。
 [WS112 p001](ws112/phase001/phase.md): 5OS package/CI配布の契約・入力・形式調査。RPi arm64/buildのみ、CI runtime不要、FreeBSD source-only。planned/未順位、実装Queue未選定。
 [WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。planned/未順位、実装Queue未選定。
 
@@ -38,3 +39,5 @@ q576の承認/attempt/outcomeは変更しない。Active Queueなし、次Queue�
 2026-10-02 / ws112-rpi-build-only-20261002: OutlookのWS112 RPi候補はbuild/deb生成で受け入れ、GPU/GUI関門なし。Active Queueなし、q576履歴不変。
 
 2026-10-02 / ws113-multidisplay-plan-20261002: WS113は後日候補のみ。q576 finished/Active Queueなし、既存承認とdemo順位は変更しない。
+
+2026-10-02 / ws074-browser2-gate-20261002: WS074 p172をOutlookへ追加。q576 finished/Active Queueなし。追加は計画のみでbranch実装取込を開始しない。
