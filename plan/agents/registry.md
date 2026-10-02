@@ -4,9 +4,9 @@
 
 | Agent / generation | Model / effort | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / wrap-up / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | 未投入、p172 whole-clearまで後続禁止 | running | runtime `/root/a1_browser`、base0e68854ac、A1-001 4da5eb2e5 → c2743455c ACK、review12/209 |
-| A2 packages / generation1 | `gpt-6.1-sol` / high | WS112 p001 | `/home/awe/zedBSD-worktrees/a2` / `codex/a2-packages` | [q585](A2/queue.md) | 未投入 | running | runtime `/root/a2_packages`、base0e68854ac、A2-001 67c78c0e → 5acb47a9c ACK、調査継続 |
-| A3 display / generation1 | `gpt-6.1-sol` / high | WS113 p001 | `/home/awe/zedBSD-worktrees/a3` / `codex/a3-display` | [q586](A3/queue.md) | 未投入 | running | runtime `/root/a3_display`、base0e68854ac、A3-001 6e34d1bb9 → 8021bc210 ACK、調査継続 |
+| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | q590 ID予約 / whole p172-clear前は後続禁止 | running | runtime `/root/a1_browser`、base0e68854ac、A1-001〜006 integrated、last029ba933 → 5c0817c60 ACK、review88/209 |
+| A2 packages / generation1 | `gpt-6.1-sol` / high | WS112 p001 | `/home/awe/zedBSD-worktrees/a2` / `codex/a2-packages` | [q585 finished](A2/queue.md) | q591 ID予約 / p002候補のみ | waiting in same session | runtime `/root/a2_packages`、base0e68854ac、A2-001〜006 integrated、D1返答待ちでq585/p001 uncleared、guest/build未実施 |
+| A3 display / generation1 | `gpt-6.1-sol` / high | WS113 p001 | `/home/awe/zedBSD-worktrees/a3` / `codex/a3-display` | [q586](A3/queue.md) | q592 ID予約 / exact scope未投入 | running | runtime `/root/a3_display`、base0e68854ac、A3-001〜003 addd2583 → 8cf8a8ea6 ACK、D-ATOMIC返答待ち・調査継続 |
 | B1 GTK / generation1 | `gpt-6.1-sol` / high | WS114 p001 | `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114` | [q587](B1/queue.md) | 残行はp002採否後 | running（B/user開始報告） | q581 cleared、df66db5e → A435a62126、p007開始投影 |
 | B2 desktop / generation1 | `gpt-6.1-sol` / high | WS094 p011 | `/home/awe/zedBSD-worktrees/b2` / `codex/b2-ws094` | [q582](B2/queue.md) | q588 ID予約 / WS094最終全文規約レビュー | running（B報告） | source/build checkpoint df66db5e → A435a62126、guest/boot未完 |
 | B3 bugs / generation1 | `gpt-6.1-sol` / high | WS099 p017 / BUG-125 | `/home/awe/zedBSD-worktrees/b3` / `codex/b3-bug125` | [q583 finished](B3/queue.md) | q589 ID予約 / BUG-125追加切り分け | waiting in same session（B/user報告） | 部分item cleared、whole p017 uncleared。df66db5e → A435a62126 |

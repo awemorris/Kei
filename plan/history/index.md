@@ -2,9 +2,16 @@
 
 # Past Log
 
-2026-10-02 / current execution: Aのq584〜q586とBのq581〜q583を各3laneへ投入。現在は実行中で終了結果は未確定。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
+2026-10-02 / current execution: A q584/browserとq586/display、B q582/desktopとq587/GTK装飾は実行中。q581調査・q583部分診断はcleared、q585契約調査はD1回答待ちでuncleared。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
 
-Last finished Queue: [q580](queue-q580.md)（WS114 p001 uncleared / GTK4部分実測）
+Last finished Queue: [q585](queue-q585.md)（WS112 p001契約調査uncleared）
+
+## 最新: q585 / native package契約調査（2026-10-02）
+
+[Archive](queue-q585.md)に承認lane/Phase snapshotと結果を保存。5OS入力・metadata署名・native環境・形式/依存・共通payload/source/CI成果物と後続commandを具体化。D2 RPi方式は委任技術判断で採用、Fedora/Arch boot適用D1 user回答待ちでq585-i01/p001 uncleared。実image/guest/build/package/runtime/CI/remoteは未実施。same-session待機、q591/p002は候補のみ。
+
+q581/p001 GTK調査clearとq583部分診断clearをB df66db5e→A435a62126から投影し、q587/p007装飾を開始。whole p017/BUG-125は未解決、q588 B2最終規約・q589 B3追加切り分けを予約。A1 checkpoint11 reviewed88/209、A3契約を統合・ACK、後続gate保持。全WIP、pushなし、GitHub publication pending。
+
 
 ## 最新: q577/q579/q580 wrap-up（2026-10-02）
 
