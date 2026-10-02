@@ -204,11 +204,12 @@ traversal_case(
 
 	/* The IIFE leaves no global candidate variable or external registered Node root. */
 	error = traversal_script(realm,
-		"var walker=(function(){var d=document.implementation.createDocument(null,'Root');"
-		"d.documentElement.appendChild(d.createElement('Candidate'));"
-		"return d.createTreeWalker(d.documentElement,1,collectCandidate);})();"
-		"var selected=walker.nextNode();"
-		"selected.tagName==='Candidate' && selected.parentNode===null && walker.currentNode===selected", &answer);
+				 "var walker=(function(){var d=document.implementation.createDocument(null,'Root');"
+				 "d.documentElement.appendChild(d.createElement('Candidate'));"
+				 "return d.createTreeWalker(d.documentElement,1,collectCandidate);})();"
+				 "var selected=walker.nextNode();"
+				 "selected.tagName==='Candidate' && selected.parentNode===null && walker.currentNode===selected",
+				 &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -223,13 +224,14 @@ traversal_case(
 
 	/* Iterator repair changes its candidate position while the original filter argument stays alive. */
 	error = traversal_script(realm,
-		"var iterator=(function(){var d=document.implementation.createDocument(null,'Root');"
-		"d.documentElement.appendChild(d.createElement('Candidate'));"
-		"return d.createNodeIterator(d.documentElement,1,function(n){"
-		"if(n.tagName==='Root')return 3;return collectCandidate(n);});})();"
-		"var iterated=iterator.nextNode();"
-		"iterated.tagName==='Candidate' && iterated.parentNode===null && "
-		"iterator.referenceNode.tagName==='Root' && !iterator.pointerBeforeReferenceNode", &answer);
+				 "var iterator=(function(){var d=document.implementation.createDocument(null,'Root');"
+				 "d.documentElement.appendChild(d.createElement('Candidate'));"
+				 "return d.createNodeIterator(d.documentElement,1,function(n){"
+				 "if(n.tagName==='Root')return 3;return collectCandidate(n);});})();"
+				 "var iterated=iterator.nextNode();"
+				 "iterated.tagName==='Candidate' && iterated.parentNode===null && "
+				 "iterator.referenceNode.tagName==='Root' && !iterator.pointerBeforeReferenceNode",
+				 &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -244,8 +246,9 @@ traversal_case(
 
 	/* A live Document must not retain a discarded actual iterator through its weak token. */
 	error = traversal_script(realm,
-		"var liveDocument=document.implementation.createDocument(null,'Live');"
-		"var discarded=liveDocument.createNodeIterator(liveDocument.documentElement,1,null);discarded", &answer);
+				 "var liveDocument=document.implementation.createDocument(null,'Live');"
+				 "var discarded=liveDocument.createNodeIterator(liveDocument.documentElement,1,null);discarded",
+				 &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -274,9 +277,10 @@ traversal_case(
 
 	/* Later mutation cannot notify the reclaimed iterator through a stale weak token. */
 	error = traversal_script(realm,
-		"liveDocument.documentElement.appendChild(liveDocument.createElement('After'));"
-		"liveDocument.documentElement.removeChild(liveDocument.documentElement.firstChild);"
-		"liveDocument.documentElement.firstChild===null", &answer);
+				 "liveDocument.documentElement.appendChild(liveDocument.createElement('After'));"
+				 "liveDocument.documentElement.removeChild(liveDocument.documentElement.firstChild);"
+				 "liveDocument.documentElement.firstChild===null",
+				 &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -291,12 +295,13 @@ traversal_case(
 
 	/* A primary-created walker retains a different child solely through currentNode. */
 	error = traversal_script(realm,
-		"document.appendChild(document.createElement('html'));"
-		"document.documentElement.appendChild(document.createElement('body'));"
-		"var frame=document.createElement('iframe');document.body.appendChild(frame);"
-		"var child=frame.contentDocument;var held=document.createTreeWalker(document.body,1,null);"
-		"held.currentNode=child.body;document.body.removeChild(frame);frame=null;child=null;"
-		"walker=null;selected=null;iterator=null;iterated=null;held.currentNode", &answer);
+				 "document.appendChild(document.createElement('html'));"
+				 "document.documentElement.appendChild(document.createElement('body'));"
+				 "var frame=document.createElement('iframe');document.body.appendChild(frame);"
+				 "var child=frame.contentDocument;var held=document.createTreeWalker(document.body,1,null);"
+				 "held.currentNode=child.body;document.body.removeChild(frame);frame=null;child=null;"
+				 "walker=null;selected=null;iterator=null;iterated=null;held.currentNode",
+				 &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -317,7 +322,7 @@ traversal_case(
 
 	/* The original primary walker getter still returns the intact child-owned Node. */
 	error = traversal_script(realm,
-		"held.currentNode.nodeName==='BODY' && held.currentNode.ownerDocument.defaultView===null", &answer);
+				 "held.currentNode.nodeName==='BODY' && held.currentNode.ownerDocument.defaultView===null", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

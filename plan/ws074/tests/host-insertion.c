@@ -84,7 +84,7 @@ main(
 		vm_heap_destroy(heap);
 		return 2;
 	}
-	
+
 	/* Observe validation separately from actual mutation with explicit caller ownership. */
 	status = insertion_case(realm, &observer, __builtin_frame_address(0));
 	bind_window_destroy(window);
@@ -239,11 +239,11 @@ insertion_case(
 		destination_root = vm_value_as_cell(answer);
 		destination = bind_node_of(answer);
 		status = insertion_script(realm,
-			"(function(){var d=document.implementation.createDocument(null,null,null);"
-			"var p=d.createElement('parent'),f=d.createDocumentFragment();"
-			"f.appendChild(d.createElement('one'));p.appendChild(f.firstChild);"
-			"p.appendChild(d.createElement('two'));return p;})()",
-			&answer);
+					  "(function(){var d=document.implementation.createDocument(null,null,null);"
+					  "var p=d.createElement('parent'),f=d.createDocumentFragment();"
+					  "f.appendChild(d.createElement('one'));p.appendChild(f.firstChild);"
+					  "p.appendChild(d.createElement('two'));return p;})()",
+					  &answer);
 		if (status != 0)
 			break;
 		source_root = vm_value_as_cell(answer);

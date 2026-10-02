@@ -229,8 +229,9 @@ stream_case(
 
 	/* Ordinary DOM methods provide the genuine child Window and native Document wrapper. */
 	status = stream_script(realm,
-	    "var root=document.createElement('div');document.appendChild(root);"
-	    "var f=document.createElement('iframe');root.appendChild(f);f.contentDocument;f", &answer);
+			       "var root=document.createElement('div');document.appendChild(root);"
+			       "var f=document.createElement('iframe');root.appendChild(f);f.contentDocument;f",
+			       &answer);
 	if (status != 0)
 		return status;
 	frame = bind_node_of(answer);
@@ -269,8 +270,9 @@ stream_case(
 	stream_check(fixture->collections == 1U && fixture->exceptions == 0, "actual inline child callback collects without Uncaught");
 	stream_check(child->document_parser == NULL && child->document_parser_depth == 0, "reentrant close releases parser only after outer native parse returns");
 	status = stream_script(child_realm,
-	    "nativeMark===5&&document.getElementById('nested').textContent==='N'"
-	    "&&document.getElementById('tail').textContent==='T'", &answer);
+			       "nativeMark===5&&document.getElementById('nested').textContent==='N'"
+			       "&&document.getElementById('tail').textContent==='T'",
+			       &answer);
 	if (status != 0)
 		return status;
 	stream_check(answer == VM_VALUE_TRUE, "actual child realm state and nested insertion survive callback GC");

@@ -161,10 +161,11 @@ collection_case(
 
 	/* Only the XML Document variable keeps the two observed SameObject caches. */
 	error = collection_script(realm,
-		"var xml=document.implementation.createDocument(null,'Root');"
-		"var member=xml.createElementNS('http://www.w3.org/1999/xhtml','a');"
-		"member.setAttribute('href','');xml.documentElement.appendChild(member);"
-		"xml.documentElement.children;xml.links;xml.forms;member=null;xml.documentElement", &answer);
+				  "var xml=document.implementation.createDocument(null,'Root');"
+				  "var member=xml.createElementNS('http://www.w3.org/1999/xhtml','a');"
+				  "member.setAttribute('href','');xml.documentElement.appendChild(member);"
+				  "xml.documentElement.children;xml.links;xml.forms;member=null;xml.documentElement",
+				  &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -341,7 +342,7 @@ collection_case(
 
 	/* The member can acquire its original XML-realm wrapper after explicit GC. */
 	error = collection_script(realm,
-		"saved.length===1 && saved[0].localName==='a' && saved.item(0)===saved[0]", &answer);
+				  "saved.length===1 && saved[0].localName==='a' && saved.item(0)===saved[0]", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

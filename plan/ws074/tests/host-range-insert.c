@@ -331,9 +331,9 @@ split_cases(
 			observer.failure = kind;
 			if (mode == 0) {
 				status = split_script(realm,
-					"(function(){var d=document.implementation.createDocument(null,null,null);"
-					"return d.createTextNode('abcdef');})()",
-					&receiver);
+						      "(function(){var d=document.implementation.createDocument(null,null,null);"
+						      "return d.createTextNode('abcdef');})()",
+						      &receiver);
 				if (status != 0)
 					break;
 				node = bind_node_of(receiver);
@@ -346,10 +346,10 @@ split_cases(
 			} else {
 				/* Native Range endpoints own an otherwise detached XML parent and creator. */
 				status = split_script(realm,
-					"(function(){var d=document.implementation.createDocument(null,null,null);"
-					"var p=d.createElement('parent'),t=d.createTextNode('12345');p.appendChild(t);"
-					"var r=d.createRange();r.setStart(t,2);r.setEnd(t,3);return r;})()",
-					&receiver);
+						      "(function(){var d=document.implementation.createDocument(null,null,null);"
+						      "var p=d.createElement('parent'),t=d.createTextNode('12345');p.appendChild(t);"
+						      "var r=d.createRange();r.setStart(t,2);r.setEnd(t,3);return r;})()",
+						      &receiver);
 				if (status != 0)
 					break;
 				wrapper = (struct vm_object *)vm_value_as_cell(receiver);
@@ -362,9 +362,9 @@ split_cases(
 				observer.creator = (uintptr_t)node->document;
 				observer.parent = (uintptr_t)node->parent;
 				status = split_script(realm,
-					"(function(){var d=document.implementation.createDocument(null,null,null);"
-					"var f=d.createDocumentFragment();f.appendChild(d.createTextNode('ABCDE'));return f;})()",
-					&argument);
+						      "(function(){var d=document.implementation.createDocument(null,null,null);"
+						      "var f=d.createDocumentFragment();f.appendChild(d.createTextNode('ABCDE'));return f;})()",
+						      &argument);
 				if (status != 0)
 					break;
 				node = bind_node_of(argument);

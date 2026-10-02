@@ -230,9 +230,10 @@ collection_case(
 
 	/* The IIFE leaves no global script object holding the form or either radio. */
 	status = collection_script(realm,
-		"(function(){var f=document.createElement('form');"
-		"f.innerHTML='<input type=radio name=pair checked><input type=radio name=pair>';"
-		"f.elements[1].onclick=collectClick;document.appendChild(f);return f;})()", &answer);
+				   "(function(){var f=document.createElement('form');"
+				   "f.innerHTML='<input type=radio name=pair checked><input type=radio name=pair>';"
+				   "f.elements[1].onclick=collectClick;document.appendChild(f);return f;})()",
+				   &answer);
 	if (status != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);

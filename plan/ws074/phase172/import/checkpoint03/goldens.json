@@ -1,0 +1,1298 @@
+[
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/acid-features.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "fed459c929161f300804102e252e4d44aff14dcfbb2c73d19529d46e40613b1f",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/acid-features.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "bfab9930b370e5236a37935ee5aba9239ac2e60746425f9b78ba1b9fb3c5c815",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/acid-features.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "4291e6b48bd12dc36b35b4765e7b17127a06703c4d4aa7cefb40d76fd08df72f",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/blocks.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "432bea682229ee3663316840c52863f52e9b3d2c9662f9efd524849f6e3ca03d",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/blocks.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "8fe458b77525bc2431dd7aa08144c0133c3814b3f7e10d6eb56c3c0b36a2d9ab",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/blocks.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "b08325b4c550ccdcb928e08bef82d2b237c1b161d54ea4d30860df8ee6757cc5",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/blocks.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "87e69cea12897467a906bf680d7109c0d81d740277055afa1906aea4ed3cf069",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/button-whitespace.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "ebb42059b3c609163f7bf81f53488a2edee70bd07f6570eb850ea15975a344ef",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/container.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9864c69b43e59901dde6b7d4f014671dfff0a815b60af69c8faf0e5a1b7c2c20",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/container.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0e9244644e9f21a2aab59e5bca55d996de74a2d3d8dc19c32783bbf8d7a1ca74",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/container.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "470eeac4b5a8f3857db869f54ce600cbc20018a1545dd9177072bd0314198da4",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/container.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7cbf95ea71b525acfad1c33e7fa15324599a116d187c0df07739a8d510b6cde6",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/decoration.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cb6d6c09c81dc763de11a524f727aebb9f7a3861a45cd9dc8f6da12a55a5f507",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/decoration.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f62f7ec9f965bd11d663259bdc3b14c69989824be1d4171af789d44612ded5c8",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/decoration.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "84342b634ef9b470b5aee5318b23e3d59593ac0e7f6cd4b72f2ed1db2b84aff8",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/decoration.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7ca8ebcd341dde3ee69879d80515bec43b96d8abf8b3fcc5de844797fc1bd062",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/direction.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "760da6af5963cb89f67be33156d3bf2d2fdaf05eef7e7d98a046e033e739ff80",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/direction.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "aa18f87da663b64bda3563869bf1237c195ff35fb15c9c546e9881c79d7fa243",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/direction.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "e9157690452cf96e97cbd0f280079833f8d257eb7f0e70c493e3cdaacdfef9a3",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/direction.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "a7fe9ce47451710f86d181da532f4a9f9a9e25f3ecc2adb7ea6bc8943e8d22de",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/first.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "93a7db792d9fd7e7f3bbfb18fea54b725099cf7c94dd86b2dd2c34c3f8dc62a1",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/first.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "92c295f2818bb5ff46edff05d393f39e75c8e03e44480e59ad7e3ff8a0c0a8ea",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/first.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "564099b022548be504a8e6f4531e7b0ff468a21411c73e109979c23acdd8d23f",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/first.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0bbc3beb905ca96de062ce2c719cbdbffee91d022648281cea716522f0989057",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/flex.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0e4ee14c84450398a5b5738b5c35bede6a06ae2c9fabb6a6c5d6793b88027f3c",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/flex.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5eea7490fd36e7718a3f015424a28984126be58b63c23e22d4f4dd31e0e9305d",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/flex.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "fc03d306b02cc8501d0afc55bbf05627a3371ab7cdd23c8b00f048ff1d43b43d",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/flex.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f9c1696995baf35145f734a6dd7e06a8ed09fcf6e10570e8e6043fe6981b32d6",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/floats.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "91ca5e0e10e7795be563413c042c7a47131425211e45848be126a48d3075c37d",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/floats.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9a94f2438e19c0500a4214f0784dad3f4e21f40f00fea381e058e31d0500b030",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/floats.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "fb9469f3587402d8fa7a635cdb13dd9124afd2b61ab491d41063faaa67a55fcf",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/floats.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "907fae219a064d0eb3363ad22f462dcf010631b2ddf96082ced6070cb5040f9e",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/grid.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5f513aca6da189be010ab88ba3780b39b32daf613951404e9b1a2571781a8653",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/grid.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "e96bd2846475a3aab573ef134b1a0ebecebdb0c16dbd492120746d22ff63a320",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/grid.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0218e1c0f5694932bd2a3e13fdb2941e69302cb3df0b14327e77cedbd657c57a",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/grid.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5dd0fe03f2baf7179ccfbf1f60cab4ae293bdcafeec0d8c9a7fe2daf4008eafa",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/inline-block.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9a095043dc73b1ec681759a0b5ff8b55b9280e6e08dc69720dbd2bd251605601",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/inline-block.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0b1eb8d94f7fd629a50c49b5937155212c1417c33d271a6e7eb4a930671f10bd",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/inline-block.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "44f610b3e3d730d695c823a068a4acad4c8b815bcfbe328a873b664c0d545946",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/inline-block.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "03c7e9a6d1e622b393edc3e1de277aa14341060bdafb54c2ca1763d020ecfb38",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/intrinsic.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0c020e42d40d84860c1fee6a8282f3ff4574b3046d0cc1de1d2f95e0a1598f6f",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/intrinsic.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "02bf779558a61e6207e484735096cdb370a019efbb2da0f4fb1051f6f363f0ca",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/intrinsic.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cf25c2069d6f16f37b256fdeb1796f8e5a61f3f7e44cff5f654320b06eab98f4",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/intrinsic.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5ed1d527b488518b23a5b1a6448b5fecccb8288dc3df8aecb66079c7d99489c9",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/keys.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "caeb494b3876e303c950a55703092d5926f59c2ed594f0ad10b1ddc37b394339",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/keys.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "03e2479cd6596214bceeca3881f5d7ba452278114fd6fb27dee04f6df5f53ec2",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/keys.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "a2921ae0428d259ddd4b53e7a079366d0a4dd730162339b8ecca67eba4a97d85",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/keys.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7915f282cabf4f81f8f37ac7e8a0f4df1319970e7a6b9bb8415ff41049ff2378",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/overflow.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7993f8be5703f049894b5581dc961a5990a042e86d8169f861878a770374eb00",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/overflow.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "d2800094b75abd7c569e184406754f3ff4ade78eee9017d3a8b599e5cd67ed73",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/overflow.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "eefc6229e195ea823c859f96734d16ba62289f70009f0af9a2ff284c8b71cc4e",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/overflow.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cf79433c07455d3ac7787a3496afeebb2170adb896fe67b9038fe3e5a0ad001d",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/percentage-height.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "86046ad3af433e0ec582169807cbde943b827f0f61c087b7b6fe9cda4731b12c",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/position.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "d11c4a97b7f3565c59b645dd3e46cac7211a505c60c861e65df772036d2f5526",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/position.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9c6e7415aeef6bae8b4b08efa360bdc4ad3e8f93c980e853fadba86066a46b17",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/position.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "1378e9a6e12097ac90d34190ea5bf0995f406c1363b4d788b494bf2be4634cc9",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/position.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9efd515c187c26649c2d1f67be69ed070f5a2a2b433dc7443b2602796e817857",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/script.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7db2c5500541d4665c25f5cb91a9d0be1a1fa916f81a08734645b5ebf8977919",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/script.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "a4667b4f1e471ab75647c062bf1e33691d6af308996e683407e515cb27dc1555",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/script.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "c5f77c2b94f520c1e861e6e06d5e2cab7f99cc725aad7105030338dba81fecfe",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/script.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "931674aabcc3ffec070957190de6896ca69b2e0aaf5bed83523efc3fc8d2cfb8",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/second.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "1848667d30730d28b6f7a98c571f79f2b65e104e95be40aa57cbfb2cbdc14d68",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/second.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "aeceb0ae99d247b8e4deccc80e50d4986ed910a1f221f8e527dc3fef6b9e9920",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/second.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f15ad26e9d134a1796cec8d3fae12f98b12e137d012afbb9da93ee45f70103df",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/second.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cf871f0d12f39ddef7f19f9e97032f03b915e1be20cb23746f003c3f862a13b0",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/selectors.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "60884b50961bb3ed6856feae3c40d8ad5844128ce11ea67eed39d012b9123b95",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/selectors.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7854960170540765a1d9ffeba30f992755664e9476981b4d4f483bfa74b66e65",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/selectors.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "4b46ff31b9682e735748cea93a1924f3ebf8631478ea40b7b340f0358743f4a4",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/selectors.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "e2b36d4f5ee0ca30cfada72afbb2b33753d3bf76cd4329b77e99de4d0d1858db",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/sheets.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "90ea61e027678d7ea7fbc6821002d153b09fd4639481d38ba20b9ed3bb983ff7",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/sheets.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "692f815d95aaee8d5aeb177dda2b3b0bb964d819c1762e68bd32f98feac6d691",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/sheets.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "b26da52f24fa81c186fa3b977c458b71344ebc2469cc5fc21d93093bffc8e8b8",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/sheets.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7599173b6aeeb7b72be628f8a8cc3e2befe3cf302f3ee6453ca5de2200581e63",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/tables.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "00911aa2bcea4426d9e27a0438de0605cf659d4eb1cc01f2bc5b6e05776f3462",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/tables.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "6e966d47b67ed25f39d032fd4ba905dd52eb36cd2c3e5842b0a02b2363f2c545",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/tables.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "15adf78029313281eeaf0b640916d0cf8327dcda377c31523bb36e4ecd651455",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/tables.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "03a14282411b2123d361d35e472c1af69681aecb1dd3e9268e5c13f9ef3f7c3d",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/values.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "8cad0a128915546ab4807a4af01362de934ce06b5523f5538c71f4bd8613ac3b",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/values.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f2f94207ad999bbd05a945e07f8445ff6d5c055a94690e75ca92d540c1f4a033",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/values.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "8e4f6ab4fa4a171ccdc5258be6f3f132e394a63aa46be041328e2057fb473bc8",
+    "stderr": ""
+  },
+  {
+    "variant": "plain",
+    "golden": "plan/ws074/tests/golden/values.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "d94d37e81ba019b6ce23521b365845e339c641bb6a73f4e5d2f544682b41518f",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/acid-features.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "fed459c929161f300804102e252e4d44aff14dcfbb2c73d19529d46e40613b1f",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/acid-features.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "bfab9930b370e5236a37935ee5aba9239ac2e60746425f9b78ba1b9fb3c5c815",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/acid-features.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "4291e6b48bd12dc36b35b4765e7b17127a06703c4d4aa7cefb40d76fd08df72f",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/blocks.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "432bea682229ee3663316840c52863f52e9b3d2c9662f9efd524849f6e3ca03d",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/blocks.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "8fe458b77525bc2431dd7aa08144c0133c3814b3f7e10d6eb56c3c0b36a2d9ab",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/blocks.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "b08325b4c550ccdcb928e08bef82d2b237c1b161d54ea4d30860df8ee6757cc5",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/blocks.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "87e69cea12897467a906bf680d7109c0d81d740277055afa1906aea4ed3cf069",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/button-whitespace.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "ebb42059b3c609163f7bf81f53488a2edee70bd07f6570eb850ea15975a344ef",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/container.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9864c69b43e59901dde6b7d4f014671dfff0a815b60af69c8faf0e5a1b7c2c20",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/container.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0e9244644e9f21a2aab59e5bca55d996de74a2d3d8dc19c32783bbf8d7a1ca74",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/container.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "470eeac4b5a8f3857db869f54ce600cbc20018a1545dd9177072bd0314198da4",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/container.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7cbf95ea71b525acfad1c33e7fa15324599a116d187c0df07739a8d510b6cde6",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/decoration.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cb6d6c09c81dc763de11a524f727aebb9f7a3861a45cd9dc8f6da12a55a5f507",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/decoration.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f62f7ec9f965bd11d663259bdc3b14c69989824be1d4171af789d44612ded5c8",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/decoration.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "84342b634ef9b470b5aee5318b23e3d59593ac0e7f6cd4b72f2ed1db2b84aff8",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/decoration.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7ca8ebcd341dde3ee69879d80515bec43b96d8abf8b3fcc5de844797fc1bd062",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/direction.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "760da6af5963cb89f67be33156d3bf2d2fdaf05eef7e7d98a046e033e739ff80",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/direction.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "aa18f87da663b64bda3563869bf1237c195ff35fb15c9c546e9881c79d7fa243",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/direction.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "e9157690452cf96e97cbd0f280079833f8d257eb7f0e70c493e3cdaacdfef9a3",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/direction.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "a7fe9ce47451710f86d181da532f4a9f9a9e25f3ecc2adb7ea6bc8943e8d22de",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/first.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "93a7db792d9fd7e7f3bbfb18fea54b725099cf7c94dd86b2dd2c34c3f8dc62a1",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/first.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "92c295f2818bb5ff46edff05d393f39e75c8e03e44480e59ad7e3ff8a0c0a8ea",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/first.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "564099b022548be504a8e6f4531e7b0ff468a21411c73e109979c23acdd8d23f",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/first.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0bbc3beb905ca96de062ce2c719cbdbffee91d022648281cea716522f0989057",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/flex.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0e4ee14c84450398a5b5738b5c35bede6a06ae2c9fabb6a6c5d6793b88027f3c",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/flex.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5eea7490fd36e7718a3f015424a28984126be58b63c23e22d4f4dd31e0e9305d",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/flex.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "fc03d306b02cc8501d0afc55bbf05627a3371ab7cdd23c8b00f048ff1d43b43d",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/flex.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f9c1696995baf35145f734a6dd7e06a8ed09fcf6e10570e8e6043fe6981b32d6",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/floats.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "91ca5e0e10e7795be563413c042c7a47131425211e45848be126a48d3075c37d",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/floats.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9a94f2438e19c0500a4214f0784dad3f4e21f40f00fea381e058e31d0500b030",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/floats.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "fb9469f3587402d8fa7a635cdb13dd9124afd2b61ab491d41063faaa67a55fcf",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/floats.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "907fae219a064d0eb3363ad22f462dcf010631b2ddf96082ced6070cb5040f9e",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/grid.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5f513aca6da189be010ab88ba3780b39b32daf613951404e9b1a2571781a8653",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/grid.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "e96bd2846475a3aab573ef134b1a0ebecebdb0c16dbd492120746d22ff63a320",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/grid.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0218e1c0f5694932bd2a3e13fdb2941e69302cb3df0b14327e77cedbd657c57a",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/grid.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5dd0fe03f2baf7179ccfbf1f60cab4ae293bdcafeec0d8c9a7fe2daf4008eafa",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/inline-block.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9a095043dc73b1ec681759a0b5ff8b55b9280e6e08dc69720dbd2bd251605601",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/inline-block.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0b1eb8d94f7fd629a50c49b5937155212c1417c33d271a6e7eb4a930671f10bd",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/inline-block.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "44f610b3e3d730d695c823a068a4acad4c8b815bcfbe328a873b664c0d545946",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/inline-block.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "03c7e9a6d1e622b393edc3e1de277aa14341060bdafb54c2ca1763d020ecfb38",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/intrinsic.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "0c020e42d40d84860c1fee6a8282f3ff4574b3046d0cc1de1d2f95e0a1598f6f",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/intrinsic.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "02bf779558a61e6207e484735096cdb370a019efbb2da0f4fb1051f6f363f0ca",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/intrinsic.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cf25c2069d6f16f37b256fdeb1796f8e5a61f3f7e44cff5f654320b06eab98f4",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/intrinsic.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "5ed1d527b488518b23a5b1a6448b5fecccb8288dc3df8aecb66079c7d99489c9",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/keys.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "caeb494b3876e303c950a55703092d5926f59c2ed594f0ad10b1ddc37b394339",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/keys.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "03e2479cd6596214bceeca3881f5d7ba452278114fd6fb27dee04f6df5f53ec2",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/keys.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "a2921ae0428d259ddd4b53e7a079366d0a4dd730162339b8ecca67eba4a97d85",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/keys.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7915f282cabf4f81f8f37ac7e8a0f4df1319970e7a6b9bb8415ff41049ff2378",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/overflow.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7993f8be5703f049894b5581dc961a5990a042e86d8169f861878a770374eb00",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/overflow.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "d2800094b75abd7c569e184406754f3ff4ade78eee9017d3a8b599e5cd67ed73",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/overflow.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "eefc6229e195ea823c859f96734d16ba62289f70009f0af9a2ff284c8b71cc4e",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/overflow.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cf79433c07455d3ac7787a3496afeebb2170adb896fe67b9038fe3e5a0ad001d",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/percentage-height.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "86046ad3af433e0ec582169807cbde943b827f0f61c087b7b6fe9cda4731b12c",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/position.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "d11c4a97b7f3565c59b645dd3e46cac7211a505c60c861e65df772036d2f5526",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/position.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9c6e7415aeef6bae8b4b08efa360bdc4ad3e8f93c980e853fadba86066a46b17",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/position.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "1378e9a6e12097ac90d34190ea5bf0995f406c1363b4d788b494bf2be4634cc9",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/position.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "9efd515c187c26649c2d1f67be69ed070f5a2a2b433dc7443b2602796e817857",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/script.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7db2c5500541d4665c25f5cb91a9d0be1a1fa916f81a08734645b5ebf8977919",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/script.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "a4667b4f1e471ab75647c062bf1e33691d6af308996e683407e515cb27dc1555",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/script.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "c5f77c2b94f520c1e861e6e06d5e2cab7f99cc725aad7105030338dba81fecfe",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/script.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "931674aabcc3ffec070957190de6896ca69b2e0aaf5bed83523efc3fc8d2cfb8",
+    "stderr": "console: loaded complete\nconsole: tick 1\nconsole: tick 2\nconsole: tick 3\nconsole: tick 4\nconsole: tick 5\n"
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/second.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "1848667d30730d28b6f7a98c571f79f2b65e104e95be40aa57cbfb2cbdc14d68",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/second.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "aeceb0ae99d247b8e4deccc80e50d4986ed910a1f221f8e527dc3fef6b9e9920",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/second.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f15ad26e9d134a1796cec8d3fae12f98b12e137d012afbb9da93ee45f70103df",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/second.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "cf871f0d12f39ddef7f19f9e97032f03b915e1be20cb23746f003c3f862a13b0",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/selectors.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "60884b50961bb3ed6856feae3c40d8ad5844128ce11ea67eed39d012b9123b95",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/selectors.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7854960170540765a1d9ffeba30f992755664e9476981b4d4f483bfa74b66e65",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/selectors.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "4b46ff31b9682e735748cea93a1924f3ebf8631478ea40b7b340f0358743f4a4",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/selectors.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "e2b36d4f5ee0ca30cfada72afbb2b33753d3bf76cd4329b77e99de4d0d1858db",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/sheets.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "90ea61e027678d7ea7fbc6821002d153b09fd4639481d38ba20b9ed3bb983ff7",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/sheets.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "692f815d95aaee8d5aeb177dda2b3b0bb964d819c1762e68bd32f98feac6d691",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/sheets.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "b26da52f24fa81c186fa3b977c458b71344ebc2469cc5fc21d93093bffc8e8b8",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/sheets.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "7599173b6aeeb7b72be628f8a8cc3e2befe3cf302f3ee6453ca5de2200581e63",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/tables.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "00911aa2bcea4426d9e27a0438de0605cf659d4eb1cc01f2bc5b6e05776f3462",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/tables.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "6e966d47b67ed25f39d032fd4ba905dd52eb36cd2c3e5842b0a02b2363f2c545",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/tables.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "15adf78029313281eeaf0b640916d0cf8327dcda377c31523bb36e4ecd651455",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/tables.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "03a14282411b2123d361d35e472c1af69681aecb1dd3e9268e5c13f9ef3f7c3d",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/values.dom",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "8cad0a128915546ab4807a4af01362de934ce06b5523f5538c71f4bd8613ac3b",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/values.layout",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "f2f94207ad999bbd05a945e07f8445ff6d5c055a94690e75ca92d540c1f4a033",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/values.paint",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "8e4f6ab4fa4a171ccdc5258be6f3f132e394a63aa46be041328e2057fb473bc8",
+    "stderr": ""
+  },
+  {
+    "variant": "asan",
+    "golden": "plan/ws074/tests/golden/values.style",
+    "equal": true,
+    "exit": 0,
+    "output_sha256": "d94d37e81ba019b6ce23521b365845e339c641bb6a73f4e5d2f544682b41518f",
+    "stderr": ""
+  }
+]

@@ -188,12 +188,13 @@ extract_case(
 		do {
 			/* Native first/last Text boundaries enclose1800 original complete children. */
 			status = extract_script(realm,
-			    "var root=document.createElement('div');document.appendChild(root);"
-			    "var left=document.createElement('b'),leftText=document.createTextNode('AB');left.appendChild(leftText);root.appendChild(left);"
-			    "for(var i=0;i<1800;i++){var child=document.createElement('i');child.setAttribute('data-id',String(i));root.appendChild(child);}"
-			    "var right=document.createElement('b'),rightText=document.createTextNode('XYZ');right.appendChild(rightText);root.appendChild(right);"
-			    "var observer=new MutationObserver(function(){});observer.observe(root,{childList:true});"
-			    "var r=document.createRange();r.setStart(leftText,1);r.setEnd(rightText,2);r", &receiver);
+						"var root=document.createElement('div');document.appendChild(root);"
+						"var left=document.createElement('b'),leftText=document.createTextNode('AB');left.appendChild(leftText);root.appendChild(left);"
+						"for(var i=0;i<1800;i++){var child=document.createElement('i');child.setAttribute('data-id',String(i));root.appendChild(child);}"
+						"var right=document.createElement('b'),rightText=document.createTextNode('XYZ');right.appendChild(rightText);root.appendChild(right);"
+						"var observer=new MutationObserver(function(){});observer.observe(root,{childList:true});"
+						"var r=document.createRange();r.setStart(leftText,1);r.setEnd(rightText,2);r",
+						&receiver);
 			if (status != 0)
 				break;
 			wrapper = (struct vm_object *)vm_value_as_cell(receiver);
@@ -291,9 +292,10 @@ extract_case(
 			if (status != 0)
 				break;
 			status = extract_script(realm,
-			    "var frag=extracted,good=frag.childNodes.length===1802&&frag.firstChild.localName==='b'&&"
-			    "frag.firstChild.firstChild.data==='B'&&frag.lastChild.firstChild.data==='XY';"
-			    "for(var i=0;i<1800;i++){var n=frag.childNodes[i+1];if(n.localName!=='i'||n.getAttribute('data-id')!==String(i))good=false;}good", &answer);
+						"var frag=extracted,good=frag.childNodes.length===1802&&frag.firstChild.localName==='b'&&"
+						"frag.firstChild.firstChild.data==='B'&&frag.lastChild.firstChild.data==='XY';"
+						"for(var i=0;i<1800;i++){var n=frag.childNodes[i+1];if(n.localName!=='i'||n.getAttribute('data-id')!==String(i))good=false;}good",
+						&answer);
 			if (status != 0)
 				break;
 			truth = vm_to_boolean(answer);
@@ -301,10 +303,11 @@ extract_case(
 
 			/* Source notifications retain every moved identity in the original order. */
 			status = extract_script(realm,
-			    "var records=observer.takeRecords(),good=records.length===1800;"
-			    "for(var i=0;i<records.length;i++){var x=records[i];"
-			    "if(x.type!=='childList'||x.target!==root||x.addedNodes.length!==0||x.removedNodes.length!==1||"
-			    "x.removedNodes[0]!==frag.childNodes[i+1])good=false;}good", &answer);
+						"var records=observer.takeRecords(),good=records.length===1800;"
+						"for(var i=0;i<records.length;i++){var x=records[i];"
+						"if(x.type!=='childList'||x.target!==root||x.addedNodes.length!==0||x.removedNodes.length!==1||"
+						"x.removedNodes[0]!==frag.childNodes[i+1])good=false;}good",
+						&answer);
 			if (status != 0)
 				break;
 			truth = vm_to_boolean(answer);
@@ -312,8 +315,9 @@ extract_case(
 
 			/* Releasing output, records, source and observer makes temporary graphs collectible. */
 			status = extract_script(realm,
-			    "observer.disconnect();observer=null;records=null;x=null;frag=null;extracted=null;document.removeChild(root);"
-			    "root=null;left=null;right=null;leftText=null;rightText=null;child=null;n=null", &answer);
+						"observer.disconnect();observer=null;records=null;x=null;frag=null;extracted=null;document.removeChild(root);"
+						"root=null;left=null;right=null;leftText=null;rightText=null;child=null;n=null",
+						&answer);
 			if (status != 0)
 				break;
 			roots[1] = NULL;

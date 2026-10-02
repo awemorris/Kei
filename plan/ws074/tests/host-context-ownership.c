@@ -187,9 +187,9 @@ ownership_sample(
 	/* Each kind checks a distinct traced path into the same lifetime record. */
 	if (kind == 0) {
 		error = ownership_source(
-			realm,
-			"var marker=42; function saved(){collect();return marker;} saved",
-			&answer);
+		    realm,
+		    "var marker=42; function saved(){collect();return marker;} saved",
+		    &answer);
 		if (error != 0)
 			return error;
 		*root = vm_value_as_cell(answer);
@@ -205,9 +205,9 @@ ownership_sample(
 		*root = &document->node.cell;
 	} else {
 		error = ownership_source(
-			realm,
-			"function* suspended(){yield 1;collect();yield 42;} var g=suspended();g.next();g",
-			&answer);
+		    realm,
+		    "function* suspended(){yield 1;collect();yield 42;} var g=suspended();g.next();g",
+		    &answer);
 		if (error != 0)
 			return error;
 		*root = vm_value_as_cell(answer);
@@ -406,9 +406,9 @@ ownership_window(
 	if (error != 0)
 		return error;
 	error = ownership_source(
-		realm,
-		"var deliveries=0;var observer=new MutationObserver(function(){deliveries++;});observer.observe(document,{childList:true});setTimeout(function(){deliveries++;},0);queueMicrotask(function(){deliveries++;});",
-		&answer);
+	    realm,
+	    "var deliveries=0;var observer=new MutationObserver(function(){deliveries++;});observer.observe(document,{childList:true});setTimeout(function(){deliveries++;},0);queueMicrotask(function(){deliveries++;});",
+	    &answer);
 	if (error != 0) {
 		vm_heap_remove_root(heap, &root);
 		return error;
@@ -441,13 +441,13 @@ ownership_window(
 
 	/* Saved observer objects and Documents remain callable and identifiable. */
 	error = ownership_source(
-		realm,
-		"var late=new MutationObserver(function(){deliveries++;});"
-		"late.observe(document,{childList:true});"
-		"queueMicrotask(function(){deliveries++;});"
-		"deliveries===0 && observer.takeRecords().length===0 "
-		"&& document.nodeType===9",
-		&answer);
+	    realm,
+	    "var late=new MutationObserver(function(){deliveries++;});"
+	    "late.observe(document,{childList:true});"
+	    "queueMicrotask(function(){deliveries++;});"
+	    "deliveries===0 && observer.takeRecords().length===0 "
+	    "&& document.nodeType===9",
+	    &answer);
 	if (error != 0) {
 		vm_heap_remove_root(heap, &root);
 		return error;
@@ -724,9 +724,9 @@ ownership_failure(
 
 	/* Connected observer state remains alive until the whole tab is destroyed. */
 	error = ownership_source(
-		realm,
-		"var o=new MutationObserver(function(){});o.observe(document,{childList:true});setTimeout(function(){},0)",
-		&answer);
+	    realm,
+	    "var o=new MutationObserver(function(){});o.observe(document,{childList:true});setTimeout(function(){},0)",
+	    &answer);
 	if (error != 0) {
 		vm_heap_destroy(heap);
 		return error;

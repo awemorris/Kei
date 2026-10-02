@@ -168,8 +168,9 @@ image_case(
 
 	/* A real child HTML stream and cascade create the queried native image. */
 	status = image_script(page->realm,
-	    "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
-	    "var d=f.contentDocument;d.open();d.write('<style>html,body{margin:0;height:100%}img{display:block;width:50%;height:25%}</style><img height=7>');d.close();d.images[0]", &receiver);
+			      "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
+			      "var d=f.contentDocument;d.open();d.write('<style>html,body{margin:0;height:100%}img{display:block;width:50%;height:25%}</style><img height=7>');d.close();d.images[0]",
+			      &receiver);
 	if (status != 0)
 		return status;
 	node = bind_node_of(receiver);

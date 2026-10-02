@@ -319,10 +319,11 @@ collection_case(
 		/* The actual child host must be selected through a borrowed primary row operation. */
 		if (kind == 2) {
 			status = collection_script(realm,
-				"document.appendChild(document.createElement('html'));"
-				"document.documentElement.appendChild(document.createElement('body'));"
-				"(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
-				"var t=f.contentDocument.createElement('table');f.remove();return t;})()", &receiver);
+						   "document.appendChild(document.createElement('html'));"
+						   "document.documentElement.appendChild(document.createElement('body'));"
+						   "(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
+						   "var t=f.contentDocument.createElement('table');f.remove();return t;})()",
+						   &receiver);
 			if (status != 0)
 				break;
 			table = bind_node_of(receiver);
@@ -332,8 +333,9 @@ collection_case(
 		/* Body creation anchors after the last current tbody and before the existing footer. */
 		if (kind == 4) {
 			status = collection_script(realm,
-				"(function(){var t=document.createElement('table');"
-				"t.innerHTML='<tbody></tbody><tfoot></tfoot>';return t;})()", &receiver);
+						   "(function(){var t=document.createElement('table');"
+						   "t.innerHTML='<tbody></tbody><tfoot></tfoot>';return t;})()",
+						   &receiver);
 			if (status != 0)
 				break;
 			table = bind_node_of(receiver);

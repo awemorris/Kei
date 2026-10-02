@@ -187,8 +187,9 @@ parser_case(
 
 	/* Ordinary DOM and contentWindow access install a genuine managed child. */
 	status = parser_script(realm,
-	    "var root=document.createElement('div');document.appendChild(root);"
-	    "var f=document.createElement('iframe');root.appendChild(f);f.contentWindow;f", &answer);
+			       "var root=document.createElement('div');document.appendChild(root);"
+			       "var f=document.createElement('iframe');root.appendChild(f);f.contentWindow;f",
+			       &answer);
 	if (status != 0)
 		return status;
 	frame = bind_node_of(answer);
@@ -261,7 +262,7 @@ parser_case(
 
 	/* A standalone parser still independently traces its open subtree until destruction. */
 	status = parser_script(realm,
-	    "var g=document.createElement('iframe');root.appendChild(g);g.contentWindow;g", &answer);
+			       "var g=document.createElement('iframe');root.appendChild(g);g.contentWindow;g", &answer);
 	if (status != 0)
 		return status;
 	frame = bind_node_of(answer);

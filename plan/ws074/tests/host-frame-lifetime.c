@@ -415,10 +415,11 @@ frame_sample(
 
 	/* Creates a connected iframe and obtains its genuine managed child. */
 	error = frame_source(realm,
-		"document.appendChild(document.createElement('html'));"
-		"document.documentElement.appendChild(document.createElement('body'));"
-		"var f=document.createElement('iframe');document.body.appendChild(f);"
-		"var w=f.contentWindow;var d=f.contentDocument;f", &answer);
+			     "document.appendChild(document.createElement('html'));"
+			     "document.documentElement.appendChild(document.createElement('body'));"
+			     "var f=document.createElement('iframe');document.body.appendChild(f);"
+			     "var w=f.contentWindow;var d=f.contentDocument;f",
+			     &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -435,8 +436,9 @@ frame_sample(
 	/* Observes the second managed owner in an actual nested context graph. */
 	if (kind == 4) {
 		error = frame_source(realm,
-			"var nested=d.createElement('iframe');d.body.appendChild(nested);"
-			"var saved=nested.contentWindow;nested", &answer);
+				     "var nested=d.createElement('iframe');d.body.appendChild(nested);"
+				     "var saved=nested.contentWindow;nested",
+				     &answer);
 		if (error != 0) {
 			bind_window_destroy(window);
 			vm_realm_destroy(realm);
@@ -453,8 +455,9 @@ frame_sample(
 	/* A second independent child becomes the adopted subtree's current Document owner. */
 	if (kind == 22 || kind == 27) {
 		error = frame_source(realm,
-			"var g=document.createElement('iframe');document.body.appendChild(g);"
-			"var gd=g.contentDocument;g", &answer);
+				     "var g=document.createElement('iframe');document.body.appendChild(g);"
+				     "var gd=g.contentDocument;g",
+				     &answer);
 		if (error != 0) {
 			bind_window_destroy(window);
 			vm_realm_destroy(realm);
@@ -470,8 +473,9 @@ frame_sample(
 
 	/* Builds real child CSS C caches before exercising collection or heap teardown. */
 	error = frame_source(realm,
-		"var sheet=d.createElement('style');sheet.textContent='body {color:red;}';"
-		"d.head.appendChild(sheet);w.getComputedStyle(d.body).color", &answer);
+			     "var sheet=d.createElement('style');sheet.textContent='body {color:red;}';"
+			     "d.head.appendChild(sheet);w.getComputedStyle(d.body).color",
+			     &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -487,7 +491,7 @@ frame_sample(
 		/* A connected frame remains reachable through the primary Document tracer. */
 		vm_heap_collect(heap);
 		error = frame_source(realm,
-			"w.getComputedStyle(d.body).color==='rgb(255, 0, 0)'", &answer);
+				     "w.getComputedStyle(d.body).color==='rgb(255, 0, 0)'", &answer);
 		if (error != 0) {
 			bind_window_destroy(window);
 			vm_realm_destroy(realm);
@@ -503,8 +507,9 @@ frame_sample(
 		/* A fixed media rule exercises both sides of the inherited viewport contract. */
 		bind_window_set_viewport(child->host, 400, 300);
 		error = frame_source(realm,
-			"sheet.textContent='body {z-index:1;} @media (min-width:500px) {body {z-index:2;}}';"
-			"w.getComputedStyle(d.body).zIndex==='1'", &answer);
+				     "sheet.textContent='body {z-index:1;} @media (min-width:500px) {body {z-index:2;}}';"
+				     "w.getComputedStyle(d.body).zIndex==='1'",
+				     &answer);
 		if (error != 0) {
 			bind_window_destroy(window);
 			vm_realm_destroy(realm);
@@ -520,7 +525,7 @@ frame_sample(
 		/* The same Document generation must invalidate styles when the width changes. */
 		bind_window_set_viewport(child->host, 800, 300);
 		error = frame_source(realm,
-			"w.getComputedStyle(d.body).zIndex==='2'", &answer);
+				     "w.getComputedStyle(d.body).zIndex==='2'", &answer);
 		if (error != 0) {
 			bind_window_destroy(window);
 			vm_realm_destroy(realm);
@@ -537,78 +542,87 @@ frame_sample(
 	/* Selects one graph while discarding the other script-held child references. */
 	if (kind == 0) {
 		error = frame_source(realm,
-			"var saved=w.Function('return document.body.nodeName===\"BODY\" && document.defaultView===null;');"
-			"document.body.removeChild(f);w=null;d=null;f=null;saved", &answer);
+				     "var saved=w.Function('return document.body.nodeName===\"BODY\" && document.defaultView===null;');"
+				     "document.body.removeChild(f);w=null;d=null;f=null;saved",
+				     &answer);
 	} else if (kind == 1) {
 		error = frame_source(realm,
-			"var saved=d;document.body.removeChild(f);w=null;d=null;f=null;saved", &answer);
+				     "var saved=d;document.body.removeChild(f);w=null;d=null;f=null;saved", &answer);
 	} else if (kind == 5) {
 		error = frame_source(realm,
-			"var saved=w.getComputedStyle(d.body);"
-			"document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=w.getComputedStyle(d.body);"
+				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 6) {
 		error = frame_source(realm,
-			"var saved=document.createEvent('UIEvents');saved.initUIEvent('held',false,false,w,7);"
-			"document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=document.createEvent('UIEvents');saved.initUIEvent('held',false,false,w,7);"
+				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 7) {
 		error = frame_source(realm,
-			"var xml=d.implementation.createDocument('urn:held','Root');"
-			"var saved=xml.createElement('Held');xml.documentElement.appendChild(saved);"
-			"document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var xml=d.implementation.createDocument('urn:held','Root');"
+				     "var saved=xml.createElement('Held');xml.documentElement.appendChild(saved);"
+				     "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 22) {
 		/* The iterator's creator realm and root's new owner are different actual children. */
 		error = frame_source(realm,
-			"var table=d.createElement('table');var row=d.createElement('tr');table.appendChild(row);"
-			"var saved=d.createNodeIterator(table,1);saved.nextNode();saved.nextNode();"
-			"gd.body.appendChild(table);document.body.removeChild(f);document.body.removeChild(g);"
-			"table=null;row=null;w=null;d=null;f=null;g=null;gd=null;sheet=null;saved", &answer);
+				     "var table=d.createElement('table');var row=d.createElement('tr');table.appendChild(row);"
+				     "var saved=d.createNodeIterator(table,1);saved.nextNode();saved.nextNode();"
+				     "gd.body.appendChild(table);document.body.removeChild(f);document.body.removeChild(g);"
+				     "table=null;row=null;w=null;d=null;f=null;g=null;gd=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 28) {
 		/* Only the independent clone survives; the original weak subscriber must become collectible. */
 		error = frame_source(
-			realm,
-			"var original=d.createRange();var text=d.createTextNode('held');original.selectNodeContents(text);"
-			"var saved=original.cloneRange();document.body.removeChild(f);"
-			"original=null;text=null;w=null;d=null;f=null;sheet=null;saved",
-			&answer);
+		    realm,
+		    "var original=d.createRange();var text=d.createTextNode('held');original.selectNodeContents(text);"
+		    "var saved=original.cloneRange();document.body.removeChild(f);"
+		    "original=null;text=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 27) {
 		/* A detached subtree adoption preserves the Range's endpoints while moving its weak token. */
 		error = frame_source(
-			realm,
-			"var p=d.createElement('p');var text=d.createTextNode('held');p.appendChild(text);"
-			"var saved=d.createRange();saved.selectNodeContents(text);gd.body.appendChild(p);"
-			"document.body.removeChild(f);document.body.removeChild(g);"
-			"p=null;text=null;w=null;d=null;f=null;g=null;gd=null;sheet=null;saved",
-			&answer);
+		    realm,
+		    "var p=d.createElement('p');var text=d.createTextNode('held');p.appendChild(text);"
+		    "var saved=d.createRange();saved.selectNodeContents(text);gd.body.appendChild(p);"
+		    "document.body.removeChild(f);document.body.removeChild(g);"
+		    "p=null;text=null;w=null;d=null;f=null;g=null;gd=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 26) {
 		/* Only the native state, endpoints and child prototypes retain the original creator. */
 		error = frame_source(
-			realm,
-			"var saved=d.createRange();var text=d.createTextNode('held');saved.selectNodeContents(text);"
-			"document.body.removeChild(f);text=null;w=null;d=null;f=null;sheet=null;saved",
-			&answer);
+		    realm,
+		    "var saved=d.createRange();var text=d.createTextNode('held');saved.selectNodeContents(text);"
+		    "document.body.removeChild(f);text=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 25) {
 		/* Only the actual native option and its creator prototypes retain the child owner. */
 		error = frame_source(realm,
-			"var saved=d.createElement('option');saved.selected=true;document.body.removeChild(f);"
-			"w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=d.createElement('option');saved.selected=true;document.body.removeChild(f);"
+				     "w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 24) {
 		/* Neither the select nor its child global remains an independent script root. */
 		error = frame_source(realm,
-			"var select=d.createElement('select');var option=d.createElement('option');option.id='held';"
-			"select.add(option);var saved=select.options;document.body.removeChild(f);"
-			"select=null;option=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var select=d.createElement('select');var option=d.createElement('option');option.id='held';"
+				     "select.add(option);var saved=select.options;document.body.removeChild(f);"
+				     "select=null;option=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 21 || kind == 23) {
 		/* Only the native table retains its actual managed child. */
 		error = frame_source(realm,
-			"var saved=d.createElement('table');document.body.removeChild(f);"
-			"w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=d.createElement('table');document.body.removeChild(f);"
+				     "w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 19 || kind == 20) {
 		/* Neither the table nor frame remains as an independent script root. */
 		error = frame_source(realm,
-			"var table=d.createElement('table');d.body.appendChild(table);"
-			"table.innerHTML='<tbody><tr><td id=held></td></tr></tbody>';"
-			"var saved=table.rows;table=null;document.body.removeChild(f);"
-			"w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var table=d.createElement('table');d.body.appendChild(table);"
+				     "table.innerHTML='<tbody><tr><td id=held></td></tr></tbody>';"
+				     "var saved=table.rows;table=null;document.body.removeChild(f);"
+				     "w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 
 		/* The second sample keeps only the child row's cells collection instead. */
 		if (error == 0 && kind == 20)
@@ -616,74 +630,84 @@ frame_sample(
 	} else if (kind == 18) {
 		/* Only the native Event's submitter edge retains the detached child input. */
 		error = frame_source(realm,
-			"var saved=new w.SubmitEvent('submit',{submitter:d.createElement('input')});"
-			"document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=new w.SubmitEvent('submit',{submitter:d.createElement('input')});"
+				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 17) {
 		/* The saved child input must select its retained actual child event owner. */
 		error = frame_source(realm,
-			"var saved=d.createElement('input');saved.type='checkbox';d.body.appendChild(saved);"
-			"saved.onclick=w.Function('e','this.value=e.isTrusted ? \"bad\" : \"owned\";');"
-			"document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=d.createElement('input');saved.type='checkbox';d.body.appendChild(saved);"
+				     "saved.onclick=w.Function('e','this.value=e.isTrusted ? \"bad\" : \"owned\";');"
+				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 16) {
 		/* Only the native duplicate list survives with its actual group's current state. */
 		error = frame_source(realm,
-			"var form=d.createElement('form');d.body.appendChild(form);"
-			"form.innerHTML='<input type=radio name=pair value=owned><input type=radio name=pair value=other>';"
-			"form.elements[0].checked=true;var saved=form.elements.pair;"
-			"document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var form=d.createElement('form');d.body.appendChild(form);"
+				     "form.innerHTML='<input type=radio name=pair value=owned><input type=radio name=pair value=other>';"
+				     "form.elements[0].checked=true;var saved=form.elements.pair;"
+				     "document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 15) {
 		/* Only the actual input remains after its frame and primary owner retire. */
 		error = frame_source(realm,
-			"var saved=d.createElement('input');saved.value='owned';d.body.appendChild(saved);"
-			"document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=d.createElement('input');saved.value='owned';d.body.appendChild(saved);"
+				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 13 || kind == 14) {
 		/* Neither a form nor a separate child global survives as an independent script root. */
 		error = frame_source(realm,
-			"var form=d.createElement('form');d.body.appendChild(form);"
-			"form.innerHTML='<input name=Next><input id=Next>';"
-			"var saved=form.elements;", &answer);
+				     "var form=d.createElement('form');d.body.appendChild(form);"
+				     "form.innerHTML='<input name=Next><input id=Next>';"
+				     "var saved=form.elements;",
+				     &answer);
 		if (error == 0 && kind == 14)
 			error = frame_source(realm, "saved=saved.Next", &answer);
 		if (error == 0) {
 			error = frame_source(realm,
-				"document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+					     "document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved", &answer);
 		}
 	} else if (kind == 12) {
 		/* The sole live forms collection has no independent child Window variable. */
 		error = frame_source(realm,
-			"var form=d.createElement('form');form.id='Next';d.body.appendChild(form);"
-			"var saved=d.forms;document.body.removeChild(f);"
-			"form=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var form=d.createElement('form');form.id='Next';d.body.appendChild(form);"
+				     "var saved=d.forms;document.body.removeChild(f);"
+				     "form=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 11) {
 		/* A live child collection is the sole surviving DOM binding graph. */
 		error = frame_source(realm,
-			"var xml=d.implementation.createDocument(null,'Held');"
-			"xml.documentElement.appendChild(xml.createElement('Next'));"
-			"var saved=xml.documentElement.children;"
-			"document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var xml=d.implementation.createDocument(null,'Held');"
+				     "xml.documentElement.appendChild(xml.createElement('Next'));"
+				     "var saved=xml.documentElement.children;"
+				     "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 10) {
 		/* A consumed root leaves the child iterator ready to traverse to Next. */
 		error = frame_source(realm,
-			"var xml=d.implementation.createDocument(null,'Held');"
-			"xml.documentElement.appendChild(xml.createElement('Next'));"
-			"var saved=xml.createNodeIterator(xml.documentElement,1,w.Function('return true;'));"
-			"saved.nextNode();document.body.removeChild(f);"
-			"xml=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var xml=d.implementation.createDocument(null,'Held');"
+				     "xml.documentElement.appendChild(xml.createElement('Next'));"
+				     "var saved=xml.createNodeIterator(xml.documentElement,1,w.Function('return true;'));"
+				     "saved.nextNode();document.body.removeChild(f);"
+				     "xml=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 8) {
 		error = frame_source(realm,
-			"var saved=d.implementation;"
-			"document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var saved=d.implementation;"
+				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 9) {
 		error = frame_source(realm,
-			"var xml=d.implementation.createDocument(null,'Held');"
-			"xml.documentElement.appendChild(xml.createElement('Next'));"
-			"var saved=xml.createTreeWalker(xml.documentElement,1,w.Function('return true;'));"
-			"document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+				     "var xml=d.implementation.createDocument(null,'Held');"
+				     "xml.documentElement.appendChild(xml.createElement('Next'));"
+				     "var saved=xml.createTreeWalker(xml.documentElement,1,w.Function('return true;'));"
+				     "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
+				     &answer);
 	} else if (kind == 4) {
 		error = frame_source(realm, "w=null;d=null;f=null;nested=null;saved", &answer);
 	} else {
 		error = frame_source(realm,
-			"var saved=w;w=null;d=null;f=null;saved", &answer);
+				     "var saved=w;w=null;d=null;f=null;saved", &answer);
 	}
 
 	/* A failed fixture must not publish an arbitrary cell as a saved reference. */

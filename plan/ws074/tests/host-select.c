@@ -304,8 +304,9 @@ collection_case(
 		/* A grouped reference supplies an independent parent and insertion anchor. */
 		if (kind == 1) {
 			status = collection_script(realm,
-				"(function(){var s=document.createElement('select'),g=document.createElement('optgroup');"
-				"s.appendChild(g);g.appendChild(document.createElement('option'));return s;})()", &receiver);
+						   "(function(){var s=document.createElement('select'),g=document.createElement('optgroup');"
+						   "s.appendChild(g);g.appendChild(document.createElement('option'));return s;})()",
+						   &receiver);
 			if (status != 0)
 				break;
 			table = bind_node_of(receiver);
@@ -315,10 +316,11 @@ collection_case(
 		/* A borrowed primary method must notify the actual retained child's host. */
 		if (kind == 2) {
 			status = collection_script(realm,
-				"document.appendChild(document.createElement('html'));"
-				"document.documentElement.appendChild(document.createElement('body'));"
-				"(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
-				"var s=f.contentDocument.createElement('select');f.remove();return s;})()", &receiver);
+						   "document.appendChild(document.createElement('html'));"
+						   "document.documentElement.appendChild(document.createElement('body'));"
+						   "(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
+						   "var s=f.contentDocument.createElement('select');f.remove();return s;})()",
+						   &receiver);
 			if (status != 0)
 				break;
 			table = bind_node_of(receiver);
@@ -328,8 +330,9 @@ collection_case(
 		/* An incoming group retains its complete option subtree through callback collection. */
 		if (kind == 5) {
 			status = collection_script(realm,
-				"(function(){var g=document.createElement('optgroup');"
-				"g.appendChild(document.createElement('option'));return g;})()", &incoming);
+						   "(function(){var g=document.createElement('optgroup');"
+						   "g.appendChild(document.createElement('option'));return g;})()",
+						   &incoming);
 		} else {
 			status = collection_script(realm, "document.createElement('option')", &incoming);
 		}

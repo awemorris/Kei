@@ -166,9 +166,10 @@ images_case(
 
 	/* Genuine child bindings install the cache and discard all direct script references. */
 	status = images_script(realm,
-	    "var root=document.createElement('div');document.appendChild(root);"
-	    "var f=document.createElement('iframe');root.appendChild(f);"
-	    "var d=f.contentDocument;d.open();d.write('<img id=member>');d.close();d.images;f", &answer);
+			       "var root=document.createElement('div');document.appendChild(root);"
+			       "var f=document.createElement('iframe');root.appendChild(f);"
+			       "var d=f.contentDocument;d.open();d.write('<img id=member>');d.close();d.images;f",
+			       &answer);
 	if (status != 0)
 		return status;
 	frame = bind_node_of(answer);

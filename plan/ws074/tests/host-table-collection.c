@@ -155,12 +155,13 @@ collection_case(
 
 	/* Only the table remains globally reachable after all four native caches have been created. */
 	error = collection_script(realm,
-		"var xml=document.implementation.createDocument('http://www.w3.org/1999/xhtml','table');"
-		"var table=xml.documentElement;var body=xml.createElementNS('http://www.w3.org/1999/xhtml','tbody');"
-		"var row=xml.createElementNS('http://www.w3.org/1999/xhtml','tr');"
-		"var cell=xml.createElementNS('http://www.w3.org/1999/xhtml','td');cell.id='held';"
-		"table.appendChild(body);body.appendChild(row);row.appendChild(cell);"
-		"table.tBodies;table.rows;body.rows;row.cells;xml=null;body=null;row=null;cell=null;table", &answer);
+				  "var xml=document.implementation.createDocument('http://www.w3.org/1999/xhtml','table');"
+				  "var table=xml.documentElement;var body=xml.createElementNS('http://www.w3.org/1999/xhtml','tbody');"
+				  "var row=xml.createElementNS('http://www.w3.org/1999/xhtml','tr');"
+				  "var cell=xml.createElementNS('http://www.w3.org/1999/xhtml','td');cell.id='held';"
+				  "table.appendChild(body);body.appendChild(row);row.appendChild(cell);"
+				  "table.tBodies;table.rows;body.rows;row.cells;xml=null;body=null;row=null;cell=null;table",
+				  &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
@@ -221,7 +222,7 @@ collection_case(
 
 	/* Public native methods remain live after collection, using the original XML prototype snapshot. */
 	error = collection_script(realm,
-		"saved.length===1&&saved.item(0).id==='held'&&saved.namedItem('held')===saved[0]", &answer);
+				  "saved.length===1&&saved.item(0).id==='held'&&saved.namedItem('held')===saved[0]", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
