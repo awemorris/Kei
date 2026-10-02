@@ -2,10 +2,10 @@
 
 # Queue / all-agent index
 
-Active Queues: q599-i03（P1 generation2）、q591（P2）、q600（P3）、q595（P4）。
+Active Queues: q599-i03（P1 generation2）、q591（P2）、q602（P3）、q595（P4）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q602。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q603。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,8 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 | q597 / q597-i01 | P3 | [ws115-p001](ws115/phase001/phase.md) | 素の GTK4 の zedBSD 移植の契約（版・依存・libc の不足・host 道具・libwayland ABI・renderer・demo app）、3〜4h | finished / cleared | user 2026-10-02「まずは素のGTK4を移植してください」＋継続 dispatch、[lane](agents/P3/queue.md)、P3 be587f8ae → main 408a31586（[port-contract](ws115/port-contract.md)、判断 D-VER/L1/L2/R1/P1 はユーザーへ） |
 | q598 / q598-i01 | P1 | [ws033-p001](ws033/phase001/phase.md) | USB の LAN の後挿し・抜去・carrier・networking.wait を QEMU で通す、3h | finished / uncleared（2026-10-02 user の WiFi 優先の指示で中断、q599 の後に再投入） | 継続 dispatch（user 2026-10-02、ネットワーク優先）、[lane](agents/P1/queue.md) |
 | q599 / q599-i01 | P1 | [ws005-p019](ws005/phase019/phase.md) | BUG-138: system bar の WiFi menu の on/off・AP 選択→鍵→接続、利用者の owner（A＋A′）、有線優先の route/DNS、AX211 passthrough で確認、4h | finished / uncleared（networkd の owner の変更は permission system が "Security Weaken" として拒否、ユーザーの明示の承認待ち。system bar の鍵の入力と待ちの slot は実装済み） | 2026-10-02 user「実装をお願いします。優先度高いです。」、[lane](agents/P1/queue.md)、P1 c26fb2c78 → main b67aa0f88 |
-| q600 / q600-i01 | P3 | [ws115-p004](ws115/phase004/phase.md) | meson の cross 契約（cross file の生成）と host 道具（gperf 3.3）。版に依らない範囲、4h | in-progress | 継続 dispatch（user 2026-10-02「まずは素のGTK4を移植してください」）、[lane](agents/P3/queue.md) |
+| q600 / q600-i01 | P3 | [ws115-p004](ws115/phase004/phase.md) | meson の cross 契約（cross file の生成）と host 道具（gperf 3.3）。版に依らない範囲、4h | finished / cleared | 継続 dispatch（user 2026-10-02「まずは素のGTK4を移植してください」）、[lane](agents/P3/queue.md)、P3 503b94c80 → main 81f77738d |
+| q602 / q602-i01 | P3 | [ws115-p005](ws115/phase005/phase.md) | libffi・pcre2・glib 2.84.4 の package（D-Bus を前提にしない構成、GApplication の session bus 警告の出所の確認と patch）、4h | in-progress | 継続 dispatch（user 2026-10-02 GTK4 移植）、[lane](agents/P3/queue.md) |
 | q601 / q601-i01 | P1 | [ws118-p001](ws118/phase001/phase.md) | 5320 の遠隔 log 用 image（sshd、USB LAN、3 種、手順書）、QEMU で SSH まで、実機は使わない、3h | paused（P1 の再起動のため中断、c3103cdd4 まで統合済み） | 継続 dispatch（user 2026-10-02、5320 は「SSHDを起動してリモート実機でログを取れるようなイメージを作成」）、[lane](agents/P1/queue.md) |
 | q599 / q599-i02 | P1 | [ws005-p019](ws005/phase019/phase.md) | BUG-138 の続き: networkd で network group の利用者に WiFi の制御を許可、desktop からの on/off・join を AX211 passthrough で確認、有線優先の route/DNS、4h | finished / uncleared（permission system が relayed approval を受け付けず再拒否、ユーザーの直接の許可待ち） | 2026-10-02 user（明示の承認）:「WiFiの制御は、networkグループに入っているユーザには許可する、でどうですか？」、[lane](agents/P1/queue.md) |
 | q599 / q599-i03 | P1（generation2） | [ws005-p019](ws005/phase019/phase.md) | networkd で network group の利用者に WiFi の制御を許可、desktop からの on/off・join、AX211 passthrough、有線優先 route/DNS、4h | in-progress | 2026-10-02 user「WiFiの制御は、networkグループに入っているユーザには許可する」「networkdについて承認しますので、権限確認は表示されたら再度承認します。」 |
