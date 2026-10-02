@@ -10,6 +10,7 @@ Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1、2026-10-17）
 Queue: none
 Resume point（2026-10-02 計画）: **p001（棚卸し・回帰の取り直し・候補、source は変えない）** と、明白な欠落の直し **p002（Notes の Open）・p003（Text Editor の Replace）** はすぐ投入できる（互いに file が別で並列可）。p004〜p006 は p001 のユーザーの選択待ち。既存の WS（WS079・WS090・WS100・WS102）の残りは下の照合表のとおり、その WS で実行する。
+2026-10-02 user: スクロールバーは macOS 風の重ね表示（ws127 で libkeiui の共通部品にする）。各 app もこの部品に揃える。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー（ベータ1、リリース目標 10/17））
