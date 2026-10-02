@@ -40,3 +40,5 @@
 現時点: q576 finished、製品実装のactive Queue なし。この設計調査のための3つの読取専用サブエージェントは実装Queueを開始していない。
 
 2026-10-02 最新実行指示: current user「では、N=3でしばらく実行を続けてください」。当面N_target=3、有限QueueをP8/P9/P10へ投入し、mainがcheckpointを継続レビューする。上記「未起動」は設計時点の履歴。
+
+2026-10-02 / continuous-worker-user-direction: current user「サブエージェントは終了せずに、次々とqueueを送り込んで、長時間稼働させてください」。Queueを有限で完了/終了することとagent sessionを終了することを分離する。mainは同じruntime/WS/contextにordered next Queueを積む。Queue終端ではworkerがcheckpointと結果を返し、次の承認済みQueueがあれば依存/ACKを確認して継続する。未投入なら同sessionでmainの指示待ちに入り、自発的final/終了をしない。explicit通常/urgent wrap-up、利用限界、回復不能障害では従来の保存/回収を行う。有限timeboxと製品判断/Queue権限を緩和せず、指示待ちを新Queueの実行と記録しない。既読contextを毎Queue全文再投入せず、差分規則/新規scopeだけを補足する。
