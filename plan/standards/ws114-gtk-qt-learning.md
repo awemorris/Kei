@@ -12,3 +12,5 @@ User指示: Linux Keiland上の標準ビルドGTK4を先に実測し、XDG-shell
 - codeを作るPhaseはQueue選定/承認後に開始。全WSに最終sourceの全文規約/formatter/static検査/build/runtime Phaseを持つ。Qt6のmodule/代表操作/portal範囲はGTK4の移植後にユーザーが決める。
 
 This is a scoped design/ownership rule, not a C coding-style exception. [Full C style](../coding-style.md) and checked-in formatting remain authoritative.
+
+**portal と D-Bus（2026-10-02）**: 2026-10-02 user:「portalはなしにしましょう。D-BusがないとGTK4が動かないということはないはずです。WindowsでもMacでも動きますよね。D-Busも実装しません。」 → GTK4・Qt6 の移植と Keiland の compositor の改良で xdg-desktop-portal・D-Bus を前提にしない。

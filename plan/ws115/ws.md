@@ -11,6 +11,7 @@ Queue: none（q597-i01 cleared（P3）。共有 Queue の投影は main）
 Resume point（2026-10-02 q597）: p001 cleared。[移植契約](port-contract.md)の §8 の判断（D-VER・L1・R1 など）を待ちながら、次は p004（meson の cross 契約と host 道具）。以前の記述: 依存 package の移植を含む Phase 表を作成（p004〜p010 を追加）。2026-10-02 user の順序では WS114 p007 → WS117 の後に移植へ進む。**ベータ1に zedBSD 上の GTK4 を入れるなら、依存 library の Phase（p001・p004〜p009。compositor を触らない）を WS117 と並行して始める判断がユーザーに要る**（下の「ベータ1の選択肢」）。到達点は WS117 の調査の後にユーザーが決める（2026-10-02 user「まず調査して…から決めます」）。
 順序（2026-10-02 user（作業開始の指示））: WS114 p007 の後、WS117 を待たずに着手する。ベータ1 で素の GTK4 の移植を進め、移植できない所を記録する。
 2026-10-02 user の判断: D-VER = **GTK 4.18.6**（「GTK 4.18.6でOKです。あとで4.24.1以降にアップデートする旨を記録します。」→ [F-066](../future-work.md)）。L1 = **libc に `sys/poll.h` を足す**（「sys/poll.hを足してください。」、main が `include/libc/sys/poll.h` を追加）。L2（libc に関数を足さない）・R1（Cairo → GL → Vulkan）・P1（portal・D-Bus を入れない）は推奨のまま、ユーザーの異論待ち。
+2026-10-02 user:「portalはなしにしましょう。D-BusがないとGTK4が動かないということはないはずです。WindowsでもMacでも動きますよね。D-Busも実装しません。」 → P1（portal・D-Bus）は**入れない**で確定。xdg-desktop-portal と D-Bus の daemon は移植・実装しない。ファイルダイアログは GTK 組み込みの GtkFileChooserDialog。GtkApplication の session bus が無いときの挙動（一意性・起動の warning）は p010 で確かめ、必要なら build option や環境で抑える。
 <!-- awesome-plan-current:end -->
 
 ## Objective / scope

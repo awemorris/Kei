@@ -9,6 +9,7 @@ Related Milestones: MG002（後続の移植知見）
 Parent: [Master](../master.md)
 Queue: none（q592-i01 cleared（P3）/ q587-i01 uncleared / q581-i01 cleared / q580-i01 unclearedの履歴を保持。共有Queue投影はmain担当）
 Resume point（2026-10-02 q592）: **p007 cleared**（[q592 結果](phase007/q592-result.md)）。CSD の完成（B1/B2）は QEMU と Linux guest で達成。並行して p002 の行別採否をユーザーに提示する（[推奨案](phase002/phase.md)、WS117 p002 と同じ席で決めると速い）。p007 cleared が WS117 p001 の開始条件（2026-10-02 user の順序）。p003〜p006 は p002 の採否待ち。
+2026-10-02 user:「portalはなしにしましょう。D-BusがないとGTK4が動かないということはないはずです。WindowsでもMacでも動きますよね。D-Busも実装しません。」 → portal（ws114-p004 など）は取り消し、D-Bus は実装しない。
 <!-- awesome-plan-current:end -->
 
 ## ベータ1（fg019、2026-10-17）までの到達目標（2026-10-02 計画、ユーザー確認待ち）
