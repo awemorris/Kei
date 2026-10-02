@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p017 -->
 # ws099-p017: BUG-125 move/resizeの再現・試験同期の切り分け
 
-Status: in-progress
+Status: uncleared
 Disposition: normal
 Parent: [WS099](../ws.md)
 Queue: q577 / q577-i01 / P8
@@ -20,9 +20,11 @@ Queue: q577 / q577-i01 / P8
 
 Dependencies: WS099 p003/p007の現行C9、WS035 p076試験、Venus QEMU image。結果の実在を開始時に照合する。
 Standards: [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、AGENTS.md、[automation](../../standards/automation.md)。make check、HAL API/toolchain変更禁止。共有toolchain read-only、担当別runtime/port/socket。
-Evidence/commands/versions/results: 未実施。mainが統合checkpointと結果を追記する。
+Evidence/commands/versions/results: [初代診断](diagnosis.md)、[generation2回復](recovery.md)、[最終結果/再開条件](q577-result.md)、[全文規約レビュー](conformance.md)。q577-i01はuncleared。mainが共有Queue/WS/Bugへ投影する。
 Resume: finite Queueの証拠と原因判定を確認して次attemptを選定する。
 
 ## Event
 
 2026-10-02 / n3-start-ws099-p017: guideの提案を正式Phaseにし、BUG-125の試験同期診断だけをP8へ割当。compositor修正は別Queueへ。GitHub publication保留。
+
+2026-10-02 / p8-q577-terminal-wrap: userの全subagent停止指示で06:47UTCに補完C9を安全な境界で終了。単独20/全C9×5のFAIL0は未達、whole-Phaseはuncleared。held request同期修正の部分成果を保持し、popupのmapped-but-invisible症状とmap前click症状、別p128 launch失敗を未修正として区別する。[結果/再開条件](q577-result.md)。製品source変更無し、owned2runtime/全QEMU/processは停止済み。共有Board/WS/Bugとremote publicationはmain所有、公開保留。新Queue未開始。

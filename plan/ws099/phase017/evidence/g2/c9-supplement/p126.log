@@ -1,0 +1,18 @@
+log: SESSIOND HANDOFF go written=3 (1) ok
+log: SESSIOND GREETER adopt pid= (1) ok
+frames: logout-1: 71 pictures, text 0, black 0, black time 0 ms
+log: SESSIOND AUTH ok user=kei (1) ok
+log: SESSIOND HANDOFF go written=3 (2) ok
+frames: login-1: 71 pictures, text 0, black 0, black time 0 ms
+log: SESSIOND GREETER adopt pid= (2) ok
+frames: logout-2: 77 pictures, text 0, black 0, black time 0 ms
+log: SESSIOND AUTH ok user=kei (2) ok
+log: SESSIOND HANDOFF go written=3 (3) ok
+frames: login-2: 72 pictures, text 0, black 0, black time 0 ms
+log: SESSIOND GREETER adopt pid= (3) ok
+frames: logout-3: 80 pictures, text 0, black 0, black time 0 ms
+log: SESSIOND AUTH ok user=kei (3) ok
+log: SESSIOND HANDOFF go written=3 (4) ok
+frames: login-3: 75 pictures, text 0, black 0, black time 0 ms
+black pictures in all hand-overs: 0
+zdesktop-p126: status=0
