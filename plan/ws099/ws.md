@@ -65,7 +65,7 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 | [ws099-p016](phase016/phase.md) | zdesktop の buffer の import の短縮（ws094-p009 の発見: 1 枚約 210 ms、うち layout の変更の submit と `vkQueueWaitIdle` が 100 ms。次の合成の command buffer の barrier にまとめる）。app の起動から最初の frame まで（C5 と WS094 の (a')）を前後で測る。QEMU と 5330 | cleared（2026-09-30、QEMU: WS094 (a') 2977 → 2652 ms、App Home → Files の最初の frame 2655 → 2407 ms、Model viewer 4439 → 4182 ms。C9・WS079-p010・boot PASS。5330 は lock が使用中で未実施） | —（p015 と file を分ける: import.c・compose.c の周り。display.c・shell.c・seat.c・backdrop.c は他の Phase が作業中） |
 | [ws099-p014](phase014/phase.md) | C10 i915 passthroughの60分連続操作。試験script/短時間試走とsoak | cleared（q578、i915 passthrough: 3602秒/278周、errors0/restarts0、main最終確認） | p001/p002/WS075 hdmi-h4の実出力 |
 | [ws099-p017](phase017/phase.md) | BUG-125のmove/resize再現と試験同期の切り分け。実compositor defectは別Phaseへ | uncleared（q577のFAIL保持、q583部分診断cleared/非再現） | p003/p007のC9実出力 |
-| [ws099-p019](phase019/phase.md) | ユーザー追加: 白樺・湖と発見された抽象版を共通source/3 OS release dataへ | planning（B2後続ID予約待ち） | 旧p061資産・q588安全な終端 |
+| [ws099-p019](phase019/phase.md) | ユーザー追加: 白樺・湖と発見された抽象版を共通source/3 OS release dataへ。ぼやけた湖を起動default、既存背景の選択を維持 | planning（B2後続q593予約済み、exact snapshot準備中） | 旧p061資産・q588安全な終端 |
 
 ## 段の計画（2026-09-30 main 経由のユーザーの方針「広く浅く」: まず動く段をそろえ、磨き込みは段ごとの数値目標の小さな Phase）
 
@@ -106,3 +106,5 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 2026-10-02 / b3-q583-terminal-diagnosis: [p017部分結果](phase017/q583-result.md)をB mainが統合。original5/handshake5で残2症状非再現、計測overhead/非並列の限界を保存。whole p017とWS acceptanceは未達、BUG-125 tracking。部分itemのclearanceは全Phase clearanceではない。次Queueは新しい弁別条件を選定後。
 
 2026-10-02 / user-common-wallpapers-20261002: userがテスト背景のsource/zedBSD・Linux・FreeBSD共通収録をB2へ追加指示。[p019](phase019/phase.md)をWS035後継として追加しasset goalをscopeへ加える。C1〜C10と実機/最終conformance条件は保持、asset追加だけでWS acceptanceを満たしたとしない。q588後に有限Queueで実行、現時点は読取調査。
+
+2026-10-02 / user-lake-default-20261002: userが旧画像のぼやけた湖を起動defaultとし、収録済み背景を切り替えで維持するよう追加決定。[p019](phase019/phase.md)のcriteriaへ反映、保存済み設定の優先も維持する。予約済みq593のsnapshot準備に含め、同じB2へ受領を確認。既存C1〜C10/実機/最終conformance条件とq588のscopeは維持。

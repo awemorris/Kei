@@ -61,3 +61,12 @@ new limited asset goal after old WS035 p061; original history/clearance retained
 A reserved q593 for B2 after q588, next unreserved q594. Exact paths/install
 checks are in preparation. A needs new structural Phase/WS events, common release
 asset ownership projection and terminal q582 → active q588/q589 updates.
+
+## User default decision / 2026-10-02
+
+User explicitly selected the old blurred lake image as the startup default and
+required already included backgrounds to remain selectable. B2 acknowledged in
+the existing session. [p019](../ws099/phase019/phase.md) and WS099 now retain the
+exact instruction, default criteria and saved-setting precedence. Include this
+decision in q593's exact snapshot; q588's conformance scope is unchanged. A's
+shared planning projection is pending with the same wallpaper handoff.
