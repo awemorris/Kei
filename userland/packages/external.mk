@@ -23,6 +23,10 @@ ZEDBSD_EXTERNAL_MK := $(lastword $(MAKEFILE_LIST))
 # ZEDBSD_REPO_ROOT instead.
 ZEDBSD_EXTERNAL_ROOT := $(if $(ZEDBSD_TOPLEVEL_BUILD),$(CURDIR),$(ZEDBSD_REPO_ROOT))
 ZEDBSD_EXTERNAL_TOOLS := $(abspath $(ZEDBSD_EXTERNAL_ROOT)/userland/packages/tools)
+
+# How many jobs a nested build tool (cmake, ninja) may run; the top-level
+# build reads the same file, and a standalone package build gets it here.
+include $(ZEDBSD_EXTERNAL_ROOT)/build-jobs.mk
 ZEDBSD_EXTERNAL_ARCHIVE_SH := $(ZEDBSD_EXTERNAL_TOOLS)/archive.sh
 
 # Archives are architecture-independent, so every configured build shares one
@@ -99,6 +103,126 @@ $(ZEDBSD_EXTERNAL_CROSS_STAMP): $(ZEDBSD_EXTERNAL_CROSS_INPUTS) \
 .PHONY: packages-cross-toolchain
 packages-cross-toolchain: $(ZEDBSD_EXTERNAL_CROSS_STAMP)
 	@:
+
+# ---------------------------------------------------------------- Meson
+
+# Meson is given the same wrappers through a cross file, a native file for
+# the programs that run during the build, and a pkg-config that sees only the
+# packages a build declares (gen-meson-cross.sh says why each is the way it
+# is).  They are written beside the other entry points.
+ZEDBSD_EXTERNAL_GEN_MESON := $(ZEDBSD_EXTERNAL_TOOLS)/gen-meson-cross.sh
+ZEDBSD_EXTERNAL_MESON_CROSS := $(ZEDBSD_EXTERNAL_CROSS_DIR)/meson-cross.ini
+ZEDBSD_EXTERNAL_MESON_NATIVE := $(ZEDBSD_EXTERNAL_CROSS_DIR)/meson-native.ini
+ZEDBSD_EXTERNAL_PKG_CONFIG := $(ZEDBSD_EXTERNAL_CROSS_DIR)/bin/zedbsd-pkg-config
+ZEDBSD_EXTERNAL_MESON_STAMP := $(ZEDBSD_EXTERNAL_CROSS_DIR)/.zedbsd-meson-cross
+
+# The Meson and Ninja that run the builds.  The build machine's own are the
+# default; a package set that needs a newer Meson names one here (for
+# example `python3 <meson-src>/meson.py`) without changing any package.
+ZEDBSD_EXTERNAL_MESON_PROGRAM ?= meson
+ZEDBSD_EXTERNAL_NINJA_PROGRAM ?= ninja
+
+# Directories of build-machine programs built from source (gperf, for
+# example) that Meson builds find on PATH.  A host tool's Makefile adds its
+# directory here and its program to ZEDBSD_EXT_<name>_HOST_TOOLS of the
+# packages that run it.
+ZEDBSD_EXTERNAL_HOST_BIN_DIRS :=
+
+# A single space, for joining a list with no separator.
+ZEDBSD_EXTERNAL_EMPTY :=
+ZEDBSD_EXTERNAL_SPACE := $(ZEDBSD_EXTERNAL_EMPTY) $(ZEDBSD_EXTERNAL_EMPTY)
+
+$(ZEDBSD_EXTERNAL_MESON_STAMP): $(ZEDBSD_EXTERNAL_CROSS_STAMP) $(ZEDBSD_EXTERNAL_GEN_MESON)
+	$(ZEDBSD_EXTERNAL_GEN_MESON) '$(ZEDBSD_EXTERNAL_TRIPLE)' \
+		'$(ZEDBSD_EXTERNAL_CROSS_DIR)'
+	@touch '$@'
+
+.PHONY: packages-meson-cross
+packages-meson-cross: $(ZEDBSD_EXTERNAL_MESON_STAMP)
+	@:
+
+# The packages a package builds against, with the packages they build
+# against in turn, each once.  $(1) = package names.  Every external package
+# names its own in ZEDBSD_EXT_<name>_DEPENDS (none means none), so a package
+# declares what it uses directly and the rest follows.
+ZEDBSD_EXTERNAL_CLOSURE = $(if $(strip $(1)),$(sort $(1) $(call \
+	ZEDBSD_EXTERNAL_CLOSURE,$(foreach dependency,$(1),$(ZEDBSD_EXT_$(dependency)_DEPENDS)))))
+
+# Builds the view a package sees its dependencies through: one directory
+# whose usr/ holds a symbolic link to every file the dependencies staged.
+# $(1) = the view, $(2) = package names.  Two packages that stage the same
+# file make cp fail, which is the conflict it is.
+define ZEDBSD_EXTERNAL_VIEW
+	@rm -rf '$(1)'
+	@mkdir -p '$(1)/usr'
+	@set -eu; for dependency in $(2); do \
+		cp -as '$(ZEDBSD_EXTERNAL_WORKROOT)/'"$$dependency"'/stage/usr/.' '$(1)/usr/'; \
+	done
+endef
+
+# A Meson package after ZEDBSD_EXTERNAL_SOURCE.  $(1) = package name.  It reads
+#
+#   ZEDBSD_EXT_<name>_MAKEFILE       the package's Makefile (its options live there)
+#   ZEDBSD_EXT_<name>_MESON_OPTIONS  -D options, in addition to the common ones
+#   ZEDBSD_EXT_<name>_DEPENDS        names of the external packages it builds
+#                                    against directly
+#   ZEDBSD_EXT_<name>_HOST_TOOLS     build-machine programs it runs (files)
+#
+# and gives ZEDBSD_EXT_<name>_CONFIGURED and ZEDBSD_EXT_<name>_STAGED, the
+# stamps of a configured build tree and of the staged install
+# (<stage>/usr/...).  Every package's stage carries its stamp at
+# <stage>/.zedbsd-staged, which is what a dependent waits for.  The package
+# itself checks what it staged (check-dynamic-elf.py) and packages it.
+define ZEDBSD_EXTERNAL_MESON
+
+ZEDBSD_EXT_$(1)_CONFIGURED := $$(ZEDBSD_EXT_$(1)_BUILDDIR)/.zedbsd-configured
+ZEDBSD_EXT_$(1)_STAGED := $$(ZEDBSD_EXT_$(1)_STAGEDIR)/.zedbsd-staged
+ZEDBSD_EXT_$(1)_VIEW := $$(ZEDBSD_EXT_$(1)_WORKDIR)/view
+# The prerequisites are the direct dependencies, whose own stamps wait for
+# theirs; the view is made from the whole closure, which is complete only
+# once every package Makefile has been read, so it is computed in the recipe.
+ZEDBSD_EXT_$(1)_ALL_DEPENDS = $$(call ZEDBSD_EXTERNAL_CLOSURE,$$(ZEDBSD_EXT_$(1)_DEPENDS))
+ZEDBSD_EXT_$(1)_DEPENDS_STAGED := $$(foreach dependency,$$(ZEDBSD_EXT_$(1)_DEPENDS),\
+	$$(ZEDBSD_EXTERNAL_WORKROOT)/$$(dependency)/stage/.zedbsd-staged)
+
+# What every Meson command of this package runs with: its view for
+# pkg-config, and the host tools ahead of the build machine's own programs.
+ZEDBSD_EXT_$(1)_MESON_ENV = env \
+	ZEDBSD_PKG_CONFIG_VIEW='$$(ZEDBSD_EXT_$(1)_VIEW)' \
+	PATH="$$(subst $$(ZEDBSD_EXTERNAL_SPACE),,$$(foreach directory,$$(ZEDBSD_EXTERNAL_HOST_BIN_DIRS),$$(directory):))$$$$PATH"
+
+# A changed option, dependency or cross file configures the tree again from
+# nothing, so no option survives from an earlier configuration.  The view's
+# lib/ is also given to the linker as the place to resolve the libraries the
+# direct dependencies themselves need (-rpath-link records nothing in the
+# output).
+$$(ZEDBSD_EXT_$(1)_CONFIGURED): $$(ZEDBSD_EXT_$(1)_SRCSTAMP) \
+	$$(ZEDBSD_EXTERNAL_MESON_STAMP) $$(ZEDBSD_EXT_$(1)_MAKEFILE) \
+	$$(ZEDBSD_EXT_$(1)_DEPENDS_STAGED) $$(ZEDBSD_EXT_$(1)_HOST_TOOLS)
+	@rm -rf '$$(ZEDBSD_EXT_$(1)_BUILDDIR)'
+	$$(call ZEDBSD_EXTERNAL_VIEW,$$(ZEDBSD_EXT_$(1)_VIEW),$$(ZEDBSD_EXT_$(1)_ALL_DEPENDS))
+	$$(ZEDBSD_EXT_$(1)_MESON_ENV) $$(ZEDBSD_EXTERNAL_MESON_PROGRAM) setup \
+		'$$(ZEDBSD_EXT_$(1)_BUILDDIR)' '$$(ZEDBSD_EXT_$(1)_SRCDIR)' \
+		--cross-file '$$(ZEDBSD_EXTERNAL_MESON_CROSS)' \
+		--native-file '$$(ZEDBSD_EXTERNAL_MESON_NATIVE)' \
+		--prefix=/usr --libdir=lib --buildtype=release \
+		--wrap-mode=nodownload -Ddefault_library=shared \
+		'-Dc_link_args=-Wl,-rpath-link,$$(ZEDBSD_EXT_$(1)_VIEW)/usr/lib' \
+		'-Dcpp_link_args=-Wl,-rpath-link,$$(ZEDBSD_EXT_$(1)_VIEW)/usr/lib' \
+		$$(ZEDBSD_EXT_$(1)_MESON_OPTIONS)
+	@touch '$$@'
+
+# The stage is replaced as a whole, so nothing from an earlier install stays.
+$$(ZEDBSD_EXT_$(1)_STAGED): $$(ZEDBSD_EXT_$(1)_CONFIGURED)
+	@rm -rf '$$(ZEDBSD_EXT_$(1)_STAGEDIR)'
+	$$(ZEDBSD_EXT_$(1)_MESON_ENV) $$(ZEDBSD_EXTERNAL_NINJA_PROGRAM) \
+		-C '$$(ZEDBSD_EXT_$(1)_BUILDDIR)' -j $$(ZEDBSD_BUILD_JOBS)
+	$$(ZEDBSD_EXT_$(1)_MESON_ENV) $$(ZEDBSD_EXTERNAL_MESON_PROGRAM) install \
+		-C '$$(ZEDBSD_EXT_$(1)_BUILDDIR)' --no-rebuild --quiet \
+		--destdir '$$(ZEDBSD_EXT_$(1)_STAGEDIR)'
+	@touch '$$@'
+
+endef
 
 # ------------------------------------------------------- the LLVM source tree
 
