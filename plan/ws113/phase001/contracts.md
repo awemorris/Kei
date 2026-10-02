@@ -3,7 +3,7 @@
 Revision: 2026-10-02 / q586-i01 / A3 / source baseline `0e68854ac`。
 Status: 設計調査。製品sourceの変更・実機実行は無し。
 Authority: [WS全文方針](../../standards/ws113-display.md)とcurrent userの二択・pointer境界切替・zedBSD i915受け入れ。下記の通常技術設計を後続Phaseの入力とし、**未決表の選択を採択済みとして扱わない**。
-Source evidence: [能力/source照合](source-audit.md)、[fixtureと検証](fixtures.md)。
+Source evidence: [能力/source照合](source-audit.md)、[ID/完了保証の詳細比較](identity-completion.md)、[fixtureと検証](fixtures.md)。
 
 ## 1. 所有と境界
 
@@ -34,7 +34,7 @@ Source evidence: [能力/source照合](source-audit.md)、[fixtureと検証](fix
 
 `VkDisplayPropertiesKHR.displayName`はNULLも許される名称で、通常EDID由来、instance中不変のUTF-8 string。[一次仕様](https://docs.vulkan.org/refpages/latest/refpages/source/VkDisplayPropertiesKHR.html)には一意・再起動後永続・同一monitor識別の保証が無い。EDID名の一致、VkDisplayKHR値、ordinal、`/dev/gpuN`名を保存用IDにしない。
 
-D-ID候補Aはimplementation policyとしてdisplayNameにversion付きconnector keyを載せる方式。追加Vulkan API無しだが、通常のEDID名称とのcompatibility、同じportでmonitor交換してもnameを変えられない寿命、native name[64]制限、GPU安定identity、UI用human labelの別表現を設計する必要がある。認識済みscheme/一意性検査に合格した場合だけpersistableとする。候補Bは明示的typed identityの私有Vulkan拡張であり、**既定契約として採択していない**。別途architecture承認とABI/runtime/他OSの扱いが必要。
+D-ID候補Aはstandard properties2KHRのdeviceUUID（実query能力を確認後）とdisplayName内の短いversion付きport keyを組むimplementation policy。GPU UUIDはconnectorを識別せず、通常のEDID名称とのcompatibility、同じportでmonitor交換してもnameを変えられない寿命、native name[64]制限、UI用human labelの別表現を設計する必要がある。現i915 native opcode148は未実装であり、wrapperの存在だけでは利用可能ではない。認識済みscheme/一意性検査に合格した場合だけpersistableとする。候補Bは明示的typed identityの私有Vulkan拡張であり、**既定契約として採択していない**。別途architecture承認とABI/runtime/他OSの扱いが必要。[詳細比較](identity-completion.md#1-session内識別と保存mapping)を参照。
 
 ## 3. i915 HPDとnative ACK
 
@@ -44,9 +44,13 @@ HPD IRQの到着そのものではinventoryを変更しない。既存HPD worker
 
 複数output化は単一`rd`/lease/planeからconnectorごとの状態へ分ける。pipe/PLL/plane/bandwidth割当を全接続集合でvalidateし、他outputが使用中の資源を奪わない。2台を列挙しただけでは2台同時claim/present可能と主張しない。現在のmode validateはnative timingへのscaleだけで、retiming/複数refresh選択は未実装。対応modeだけを列挙し、要求だけを受けた偽成功を返さない。
 
+native inventoryは既知の物理connector slotを切断時も保持し、CONNECTED flagだけ変える案。KHR_display側で接続displayだけを列挙する。global Vulkan plane indexはphysical device全体のindexなので、接続済みlistを詰め直して別planeへ再解釈しない。現wsi.cはoutput毎plane_countの連結なので、固定slot/plane mappingとmode/surface生成前後のcoherent inventoryをp003で監査する。native count0とconnected count0を混同しない。
+
 ## 4. Vulkan device event fenceと独立consumer
 
 [VK_EXT_display_control](https://docs.vulkan.org/refpages/latest/refpages/source/VK_EXT_display_control.html)はdevice revision 1で、依存はinstance `VK_EXT_display_surface_counter`とdevice `VK_KHR_swapchain`。4 entry（device event、display event、power、counter）がある。hotplugだけを実装して拡張全体を広告しない。surface counter側は`vkGetPhysicalDeviceSurfaceCapabilities2EXT`を含める。counter bitは実際に提供できるもののみ（0も可能）。power/first-pixel-outも能力と結果をsource/実機で検証する。
+
+現在GPU display UAPIにpower/next-first-pixel/vblankcounter操作は無い。lease-owned WAITをidle display eventへ代用しない。p002/p003で標準entry全体に必要なnative能力の差分設計を提示し、共有/HAL APIの所有・事前承認を守る。新APIを本設計で採択した扱いにしない。
 
 [vkRegisterDeviceEventEXT](https://docs.vulkan.org/refpages/latest/refpages/source/vkRegisterDeviceEventEXT.html)は新しいVkFenceを返す。DISPLAY_HOTPLUGはplug/unplug時の再列挙の契機であり、native seqやACKをapplicationへ公開するAPIではない。[イベント定義](https://docs.vulkan.org/refpages/latest/refpages/source/VkDeviceEventTypeEXT.html)を適用する。
 
@@ -80,7 +84,7 @@ p003は維持header、API-PROVENANCE、api-commands.tsv、dispatch/gating、inst
 | 1 | 1outputで描く。選んだextended/mirror preferenceを保持し、見た目が同じでも二択を勝手に変更しない |
 | 2以上 | 全接続outputを選択modeに参加させる。資源不足/unsupportedを成功扱いで無視しない。既存working outputを維持し、degradedと原因を通知する |
 
-output内部状態はdetected→validated→claimed→active、切断/失敗でretiring→gone。render schedulingを停止してから古いsurface/swapchain/leaseを退役させる。再接続は新generationでvalidate/claimし、保存配置の適用可否を再検査する。再接続しただけで退避済み窓を奪い戻さない案（D-REC参照）。0台→最初の1台でparkした窓を一つのownerへ復帰。
+output内部状態はdetected→validated→claimed→active、切断/失敗でretiring→gone。render schedulingを停止してから古いsurface/swapchain/leaseを退役させる。再接続は新generationでvalidate/claimし、保存配置の適用可否を再検査する。再接続しただけで退避済み窓を奪い戻さない（main通常技術採択D-REC）。0台→最初の1台でparkした窓を一つのownerへ復帰。
 
 設定transactionはexpected topology_serial/config_serialと全接続output_token+generationを含む。modeはEXTENDED/MIRRORのみ。接続集合の欠落/重複、stale token、座標overflow、不支持modeは副作用前に拒否する。compositorが唯一のwriterで、並行applyはbusyまたはstaleを返す。
 
@@ -92,7 +96,7 @@ stageでmode/資源/配置をvalidateし必要allocationを準備、topologyを�
 
 1論理desktopの全内容を各outputのnative supported modeへGPUでaspect-fitする。各outputで独立swapchain/画像extentを持ち、共通解像度やdriver scaler/retimingを必須にしない。黒いletterbox/pillarboxをopaqueに塗り、切り捨てcropをしない。source W×Hに対しscale=min(outputW/W, outputH/H)、整数viewportは範囲内へ丸め、正の寸法を検査する。四隅markerと文字が全outputで見えることを実機で確認する。
 
-logical desktopのanchor/sizeは保存anchor、無ければ起動policy（D-BOOT）で選ぶ。anchor切断で新anchorへ1回reconfigureし、残る窓とpointerをclamp。全displayは同じ論理contentとcursorを表示するが、refresh/flipは独立であり同時vblankは保証しない。touch/absolute inputはoutput viewportの逆変換を使い、black bar入力は境界へclampする。
+logical desktopのanchor/sizeは保存anchor、無ければmain通常技術採択D-BOOT（初回extended、internal anchor）で選ぶ。anchor切断で新anchorへ1回reconfigureし、残る窓とpointerをclamp。全displayは同じ論理contentとcursorを表示するが、refresh/flipは独立であり同時vblankは保証しない。touch/absolute inputはoutput viewportの逆変換を使い、black bar入力は境界へclampする。
 
 [VK_KHR_display_swapchain](https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_display_swapchain.html)はsrc/dst rectangleとshared swapchainを提供するが、異寸法の全head同時latch保証ではない。compositor自体のGPU transformを基本案とし、共有imageが必要な場合は標準の同一format/extent等の条件を別途満たす。
 
@@ -100,7 +104,7 @@ logical desktopのanchor/sizeは保存anchor、無ければ起動policy（D-BOOT
 
 logical座標はsigned global origin、各outputはhalf-open `[x,x+w) × [y,y+h)`、scale=1を初期範囲とする。負のoriginを許し、寸法/加算はint64で検査してprotocol int32へ収める。outputlocal=global-outputorigin、client local座標はcontentrelative。DPI設定の追加はこのWSで決めていない。
 
-配置draftは矩形が重ならず、辺の正の長さで連結する形へsnapする案。cornerだけの接触と隙間を横断可能な隣接として扱わない。例えば1920×1080@(0,0)、1920×1280@(1920,0)ではx=1919は左、x=1920/y<1080は右、y=1100の水平移動は共有edgeがなく左境界へclamp。drag configurationがこの形を強制するかはD-LAYOUT未決。
+配置draftは矩形が重ならず、辺の正の長さで連結する形へsnapする（main通常技術採択D-LAYOUT）。cornerだけの接触と隙間を横断可能な隣接として扱わない。例えば1920×1080@(0,0)、1920×1280@(1920,0)ではx=1919は左、x=1920/y<1080は右、y=1100の水平移動は共有edgeがなく左境界へclamp。drag configurationのvalidateもこの非重複/辺連結を強制する。
 
 input.cの単一width/height clampをoutput集合の境界に置換し、相対motionの線分が通過するshared edgeを順に処理する。大きいdeltaで飛び越す場合も対象を一意に決め、空白領域へのteleportをしない。absolute inputの属する物理outputが判明しない場合はnative input契約を調査し、2台touch対応を仮定しない。
 
@@ -110,7 +114,7 @@ top-level rootにoutput_tokenとownership_epochを持たせ、subsurface、popup
 
 drag開始でglobal pointerとroot positionのgrab offsetを保存する。motionでpointerがshared edgeを越えた時、motion dispatch内でtree全体のownerと位置を一度に更新し、旧/新outputをdamageし、wl_surface enter/leaveと必要configureを整合させてからbutton処理へ進む。新local root位置はglobalPointer-grabOffset-newOrigin。targetが小さい時はtitle/grab pointへのアクセスを保ち、client resize未完了でも旧bufferを単一output内にclipし、隣へ部分描画しない。drag中の高速往復はepochで古いrender workを識別する。
 
-disconnect中は当該ownerへの新描画を先に止める。残るpreferred output、無ければstable keyの一定順でroot treeを退避し、title/grab pointを範囲内へclamp、popupのparent関係を保つ。残るoutput無しならtreeをparkし、client buffer referenceを安全に保持。単なる接続復帰は保存layoutを戻すがwindowの退避先を勝手に戻さない案。切断中dragはgrabをcancelまたは新owner上で再baseし、stale pointer/sourceを次buttonへ渡さない。
+disconnect中は当該ownerへの新描画を先に止める。残るpreferred output、無ければstable keyの一定順でroot treeを退避し、title/grab pointを範囲内へclamp、popupのparent関係を保つ。残るoutput無しならtreeをparkし、client buffer referenceを安全に保持。単なる接続復帰は保存layoutを戻すがwindowの退避先を勝手に戻さない（main通常技術採択D-REC）。切断中dragはgrabをcancelまたは新owner上で再baseし、stale pointer/sourceを次buttonへ渡さない。
 
 ### 7.1 logical ownershipと物理scanoutの差
 
@@ -118,7 +122,7 @@ disconnect中は当該ownerへの新描画を先に止める。残るpreferred o
 
 D-ATOMICの厳格な単一物理出力案は、旧ownerの窓無しsceneをsubmit→**そのpresentの表示完了を確認**→新ownerで窓をsubmitの順にする。旧ownerの既にqueuedな窓有りsceneも先行順序をdrainし、新しいepochのsceneで置換する。瞬間的な不表示期間を伴う。render fence、FIRST_PIXEL_OUT単独、queue idleを消去frameの証明へ代用しない。
 
-completion候補は標準[VK_KHR_present_wait](https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_present_wait.html)と[VK_KHR_present_id](https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_present_id.html)。この追加は未採択。features/依存、presentID→native sequence mapping、実latch、切断時のout-of-dateと成功の意味をp003で設計する。[vkWaitForPresentKHR](https://docs.vulkan.org/refpages/latest/refpages/source/vkWaitForPresentKHR.html)の退役swapchain制約/切断結果を満たし、失敗したsourceを正常消去と扱わない。両headのrefresh境界を同時にするなら別の下層commit能力が必要で、現在確認できていない。
+completion候補は標準[VK_KHR_present_wait](https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_present_wait.html)と[VK_KHR_present_id](https://docs.vulkan.org/refpages/latest/refpages/source/VK_KHR_present_id.html)。この追加は未採択。features/依存、presentID→native sequence mapping、実latch、切断時のout-of-dateと成功の意味をp003で設計する。[vkWaitForPresentKHR](https://docs.vulkan.org/refpages/latest/refpages/source/vkWaitForPresentKHR.html)は表示時刻との精密関係を要求せず、OUT_OF_DATEでも表示された可能性でSUCCESSを許す。latch/start scanoutは全旧pixels消去と別で、このAPIの存在だけでstrict物理無重複を主張しない。[追加保証/失敗/timeoutの詳細](identity-completion.md#2-standard-present-completionと厳格移動の限界)を適用する。両headのrefresh境界を同時にするなら別の下層commit能力が必要で、現在確認できていない。
 
 ## 8. 専用Wayland管理拡張 / public libkeiland
 
@@ -135,7 +139,7 @@ completion候補は標準[VK_KHR_present_wait](https://docs.vulkan.org/refpages/
 
 64bit値はprotocolでhi/lo uint32等の固定表現を決め、native pointer/lease/GPU fdを送らない。string/count/座標/mode数をboundedにし、checked allocation/overflowを行う。libkeilandはcallback snapshotの寿命を明記し、UIがApply中のdraftをcloneして保持できるAPIを提供する。現在の固定1 wl_output registryからoutputごとのglobalにし、registry remove/addとgeometry/mode/scale/doneを一致させる。
 
-権限案はactive desktop sessionのUIDとUnix socket peer credential一致。現在のacceptはその検査無し。公開`getpeereid()`とunix-socket SO_PEERCREDが実装済みなので、OS-specific backendで取得し、application名による信頼にしない。greeter/seat非active/credential取得失敗では管理applyを拒否する。照会と変更の権限を分ける。**同UIDの別clientも設定可能にする権限範囲はD-AUTH未決**であり、既存desktop-role tokenを許可根拠へ転用しない。
+権限案はactive desktop sessionのUIDとUnix socket peer credential一致。現在のacceptはその検査無し。公開`getpeereid()`とunix-socket SO_PEERCREDが実装済みなので、OS-specific backendで取得し、application名による信頼にしない。greeter/seat非active/credential取得失敗では管理applyを拒否する。照会と変更の権限を分ける。main通常技術採択D-AUTHとしてactive session同UIDの別clientも変更を許可し、Settings限定secret認証を追加しない。既存desktop-role tokenを許可根拠へ転用しない。
 
 Settingsは通知で現在値を更新し、ユーザーdragはdraftだけを変更する。表示mode二択、拡張時のoutputカードedge snap、Apply/取り消し、stale時の再読込、unsupported時の具体原因を提供する。drag毎のhardware modesetを避け、Apply後にresult/snapshotで確定する。mirror時は配置dragを無効化し、native output別のmode/scale状態を案内する。
 
@@ -145,19 +149,19 @@ compositorがdisplay設定の保存を所有し、既存desktop.confとは別の
 
 保存内容はmode、採択済みpersistent connector keyごとのextended origin、mirror anchor。generation/token/leaseは保存しない。切断したentryは保持し、temporary unplugで既定配置へ上書きしない。起動時に不在portを除いた有効subsetを検査し、初出力/新connectorにはdeterministic fallbackを適用、無効/旧version/一意性無しなら現working配置を保持して理由を通知する。保存データの復元も通常transactionと同じvalidateを通す。
 
-## 10. 人の判断が必要な選択材料
+## 10. 未決と通常提案の選択材料
 
 | ID | 未決内容 / 選択肢 | 事実と影響 / 待つ後続 |
 | --- | --- | --- |
 | D-ID | port-based永続identityをstandard displayName implementation policyで運ぶ / 私有typed Vulkan APIを別承認 / 永続範囲をsession内へ変更 | 標準はpersistent ID無し。最後の案は保存・再起動目標の範囲判断。p002/p003/p005 |
 | D-ATOMIC | logical ownerの同時更新を受入解釈 / 物理重複無しで短い不表示期間を許容しsource completionを追加 / 物理2head同時latchを追加要求 | 現標準/driverには同時latch保証無し。p003/p004/p007/p008 |
-| D-BOOT | 初回は全接続extended+internal anchor案 / 全mirror案。既存`auto/hdmi/edp`起動選択をどう扱うか | 現在autoはexternalのみ。all-connected目標とoverride互換性。p002/p004/p005 |
-| D-PORT | 最初の実fixtureをeDP+HDMIへ限定 / Type-C/DP/MSTも今回必須 | Type-C/DP/MST検出は未移植。2台eDP+HDMIの歴史証拠は有るが現fixture不明。p002/p008 |
-| D-LAYOUT | edge snapで重なり/隙間無しの連結配置 / 任意配置にgap traversal policyを追加 | pointerが隣画面へ入る定義とUI drag自由度。p004/p006/p007 |
-| D-REC | unplug退避した窓はそのまま / reconnectで元portへ戻す | saved output layout復元とは別のwindow placement policy。p007/p008 |
-| D-AUTH | active session同UIDのclientに変更を許可 / Settings専用capabilityを別設計 | 既存credential API有り、acceptでは未検査。tokenを自動転用しない。p005 |
+| D-BOOT | main通常技術採択: 保存優先、初回全接続extended+internal anchor | 旧`auto/hdmi/edp`起動overrideをdesktopでどう読むかのcompatibilityだけ残る。p002/p004/p005 |
+| D-PORT | main通常技術採択: 最初の受け入れfixtureはeDP+HDMI | 全接続要件から他portを削除した判断ではない。Type-C/DP/MSTの未移植/後続不足を明記し成功を主張しない。現fixture不明。p002/p008 |
+| D-LAYOUT | main通常技術採択: edge snap、非重複、辺で連結 | signed origin/half-open/shared edgeを検証。p004/p006/p007 |
+| D-REC | main通常技術採択: output layoutだけ復元、退避窓は現ownerに保持 | 0台park→1台復帰を含む。p007/p008 |
+| D-AUTH | main通常技術採択: active session同UID変更許可、nonactive/greeter拒否、Settings限定secret無し | OS-specific credential検査を実装。既存tokenを転用しない。p005 |
 
-mainへ材料を送付済み。これらの未決を勝手に受け入れ条件の緩和で埋めず、parent WS/Phase eventとapproval源を記録して解決する。
+Authority: 2026-10-02 mainから本agentへの通常技術設計採択message（D-BOOT/LAYOUT/REC/AUTH/PORT）。D-IDはstandard短port key案を詳細化し、私有Vulkan拡張はmainが不採用。D-ATOMICはuser回答待ちで未採択。mainへ材料を送付済み。[裁量境界](identity-completion.md#3-main技術裁量へ渡す通常提案)を参照。全7件をuser必須選択にはしない。material architecture/要求解釈/受け入れ範囲は既存authorityと照合し、main技術裁量の通常採択はsourceを記録する。未決を受け入れ条件の緩和で埋めない。
 
 ## 一次仕様の確認時点とvalidity
 
