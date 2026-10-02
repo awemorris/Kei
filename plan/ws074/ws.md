@@ -8,8 +8,8 @@ Primary Milestone: MG006
 Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
-Queue: なし（last: q507-i01 cleared）
-Resume point: p099 cleared. The pinned Acid2 result improved from 90.56% to a byte-identical 100.00% match through general CSS, layout, object-image/Adam7, paint-order, border, and compositing corrections. Plain and ASan host builds and focused regressions pass. The next gate is p172 (origin/browser2 integration); the dedicated P10 lane then targets p100 (Acid3 exact pixels), p174 (File System Access), p175 (OPFS), p173 (Interop 2025 100%), and p176 (Test262). p101 (CSS2 all tests) remains planned. Reconcile imported branch evidence before each. p172 is now executing in q579/P10; subsequent phases await its whole-Phase clearance.
+Queue: なし（last: q579-i01 uncleared）
+Resume point: p099 cleared. p172 integrated the pinned origin/browser2 changes and retained build/runtime evidence, but q579 ended uncleared with 141 C/header and 60 other imported entries still needing final reconciliation/review. Select a finite p172 continuation before p100, p174, p175, p173, p176 or p101; the downstream gate remains closed.
 <!-- awesome-plan-current:end -->
 
 2026-10-02 ユーザー更新: ブラウザ専任のP10枠を固定。p172の取込が実際に統合・検証された後は、p100でAcid3の100/100とpixel完全一致・fail 0を目指す。追加指示によりFile System Access API・OPFS・Interop 2025の100%・JavaScript Test262をこの専任枠に積む。p101のCSS2全件目標は保持する。最新のN=3実行指示でp172/q579をP10に投入。後続目標はp172のwhole-Phase clearance後に有限Queueへ選定する。
@@ -95,7 +95,7 @@ libpng-compat の `from_memory`、libtruetype の拡張、libjpeg-compat の API
   70秒後までprocess生存・追加SIGSEGVなしを確認した。最後の実装修正はcommit `6184fb12`。
 - q507 で [p099](phase099/phase.md) を cleared。Acid2 は同じ固定条件で
   90.56% から byte-identical な 100.00% になり、plain/ASan と focused
-  regression が通った。現在blocking p172をq579/P10で実行中。全体clear/実出力確認後にp100→p101とbranch側Phaseを再評価し、
+  regression が通った。blocking p172のq579は部分統合・検証を保存してuncleared。全体clear/実出力確認後にp100→p101とbranch側Phaseを再評価し、
   一つずつQueueへ選ぶ。
 
 1. **ws074-p099: Acid2 100% — cleared（q507）**。p097 と同じ harness、viewport、font、固定 WPT 版で
@@ -275,5 +275,7 @@ Event ws074-dedicated-interop2025-20261002: ユーザーが3人案の1人をWS07
 Event ws074-browser-next-goals-20261002: ユーザーが専任P10の次の目標としてFile System Access API、OPFS、Interop 2025 100%、JavaScript Test262を指定。新しい[p174](phase174/phase.md)・[p175](phase175/phase.md)・[p176](phase176/phase.md)を追加し、p173の数値目標を全対象PASS 100%と明示。専任の投入候補順はp172→p100→p174→p175→p173→p176。p101 CSS2全件は独立候補として保持。Phaseの最初のbaseline/design clearanceは製品目標達成を意味しない。実装Queue/agent起動/merge/pushは未実施、GitHub publication保留。
 
 2026-10-02 / n3-execution-start: current userのN=3継続指示。P8 q577 BUG-125/p017、P9 q578 C10/p014、P10 q579 browser2/p172を有限3時間で開始。既存focus/順位を保持、browser後続はp172 whole-Phase clearance待ち。[Queue](../queue.md)を参照。GitHub publication保留。
+
+2026-10-02 / q579-wrap-uncleared: p172のbranch統合と広い回帰証拠を保存したが、全209対象の最終reviewは8完了、C/header残141、その他残60。userのagent停止指示でq579をuncleared終了。A1が再開候補を所有し、後続browser Phaseは引き続きblocked。GitHub publication保留。
 
 2026-10-02 / c-table-forward-order-20261002: [p172](phase172/phase.md)全文レビューによりC§2の定数callback tableと先行宣言のcompile矛盾を確認、userが必要宣言だけ先行させる例外を承認。全文標準/Guardrail/automationに記録。import gate/他の全文条件/後続依存は不変。GitHub comment未公開。

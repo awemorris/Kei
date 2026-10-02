@@ -1,6 +1,6 @@
 # P9 Queue q580
-Status: active
-Attempt: q580-i01 / in-progress
+Status: finished
+Attempt: q580-i01 / uncleared
 Owner: Q1 canonical / P9 generation2 executor
 Approval: current user / 2026-10-02 chat GTK4をdesktop次作業へ指定、利用上限回復後再起動許可。既存WS114 p001実測scopeを保持。
 Started UTC: 2026-10-02T06:30:07.702259+00:00
@@ -15,3 +15,5 @@ Ordered next Queues: なし。p002採否レビューが後続実装のgate。
 Last Queue: [q578 finished/cleared](../../history/queue-q578.md)
 Merge requests / ACK: generation2 baseは起動時main HEAD
 Sync: GitHub publication保留、pushなし、all commit -m WIP
+
+Outcome: [terminal result](../../ws114/phase001/q580-result.md)。GTK4 4.18.6の部分実測と19行表を保存。move/resize、cross-client clipboard、wheel/touch、D&D/PRIMARY、renderer/scale/IME等が未測定でPhaseはuncleared。専用QEMU/SSHは停止、overlayは再開用に保全。

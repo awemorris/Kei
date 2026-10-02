@@ -1,6 +1,6 @@
 # P10 Queue q579
-Status: active
-Attempt: q579-i01 / in-progress
+Status: finished
+Attempt: q579-i01 / uncleared
 Owner: Q1 main（canonical記録） / P10 generation 1（isolated executor）
 Approval: current user / 2026-10-02 chat「では、N=3でしばらく実行を続けてください」、直前の専任3枠と最初の候補に基づく。
 Started UTC: 2026-10-02T04:50:43.686853+00:00
@@ -28,3 +28,5 @@ MR P10-q579-02: requested95835ef85d1e253229830501fd8089b11a5ea447、last ACKd07b
 Correction MR02: main git diff --check --cachedはhost-insertion.c:87 trailing whitespaceとraw .source.txt3files(queue-q508/509/564)末尾blankを検出。workerのworking-tree checkはuntrackedを含まず全importPASSではなかった。code whitespaceを次checkpointで修正、原本はhashのため保持しcode/newdoc checkからraw原本を除外して結果を明記。whole clearanceなし。
 
 MR P10-q579-03 / main recovery: stopped P10 worktreeの未commit成果を保全後、b5c4875dbをmainがWIP commit/統合。32Cの変更は字句token同一（31testのsplit-call書式とsvg-length purpose commentsのみ）。Python runnerはfinite900秒/途中report/runner-error保持をreview、JSON全parse/差分whitespace PASS。ABI167engine/377include/39exports、C89/C++11、ASan残2group補完、plain/ASan goldens81ずつPASS。main target build/boot/nativep014 PASSはmain-target.md参照。全文manual remainderの完了前はwhole-clearしない。
+
+MR P10-q579-05 / terminal wrap: requested db6a5b336、main ACK 2f37ca98e。svg-lengthの必要なtable callback宣言だけを先行する規約例外へ適合し、GCC -Werror/object text同一/style-check0/diff-check PASS。全209対象のうちmanual review完了8、C/header残141、その他残60のためwhole Phaseはuncleared。owned build/test/QEMU processはなく、後続browser gateは閉じたまま。

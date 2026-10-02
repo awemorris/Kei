@@ -2,11 +2,11 @@
 
 # ws074-p172: origin/browser2 を libbrowser 配置へ取り込む
 
-Status: in-progress
+Status: uncleared
 Disposition: normal
 Parent: [WS074](../ws.md)
 Primary Milestone: MG006（WS074から継承）
-Queue / attempts: q579 / q579-i01 / P10
+Queue / attempts: q579 / q579-i01 / P10（finished / uncleared）
 Blocking: このPhaseが**whole-Phase cleared**になり、統合されたブラウザの実出力を確認するまで、WS074の後続のsource・runner・互換性作業は開始不可。p099以前の歴史的cleared状態には遡及適用しない。2026-10-02追加の[p100](../phase100/phase.md) pixel完全一致・[p173](../phase173/phase.md) Interop 2025もこのgateの後。
 
 ## Goal and exact scope
@@ -51,3 +51,5 @@ Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queu
 2026-10-02 / n3-start-P10: current user「では、N=3でしばらく実行を続けてください」により最初の有限Queue q579を承認・開始。上限3時間、既存whole-Phase基準を保持。部分commitはclearanceではない。GitHub publication保留。
 
 2026-10-02 / c-table-forward-order-20261002: full/manual review identified §2 vars-before-forward order conflicts with ANSI C callback-table initializers (bind/xml.c and svg-length.c). main asked user, who approved only necessary function prototypes before constant tables. Full C §2/Guardrail/automation updated; irrelevant prototypes remain normal block. This resolves the local policy question without weakening other conformance/whole-clear criteria or authorizing downstream work. Other manual review remains in-progress. GitHub decision comment pending publication.
+
+2026-10-02 / q579-wrap-uncleared: userの全agent停止指示で通常wrap-up。branch差分の現行libbrowser配置への統合、ABI/境界、plain/ASan buildと既存回帰、target boot/native p014までの証拠は保存した。[checkpoint05](import/checkpoint05/README.md)時点で全209対象のmanual reviewは8完了、C/header 141とその他60が未完了。whole-Phaseはuncleared、後続browser gateは閉じたまま。再開は残りreviewを有限Queueへ再選定する。

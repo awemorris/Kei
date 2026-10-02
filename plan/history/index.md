@@ -2,9 +2,13 @@
 
 # Past Log
 
-Last finished Queue: [q578](queue-q578.md)（WS111 p002 cleared）
+Last finished Queue: [q580](queue-q580.md)（WS114 p001 uncleared / GTK4部分実測）
 
-## 最新: q578 / C10 hardware cleared（2026-10-02）
+## 最新: q577/q579/q580 wrap-up（2026-10-02）
+
+ユーザーの2セッション移行前の停止指示によりP8/P9/P10を通常wrap-upした。[q577](queue-q577.md) BUG-125、[q579](queue-q579.md) browser2統合、[q580](queue-q580.md) GTK4 baselineはいずれも部分成果・未達基準・再開条件を保存してuncleared。q578 clearedは維持。全worker成果をmainへ統合し、owned runtimeを停止した。A/B分担は新Queueを自動承認しない。
+
+## q578 / C10 hardware cleared（2026-10-02）
 
 [Archive](queue-q578.md)、[結果](../ws099/phase014/q578-result.md)。i915 passthroughで実3602秒/278周/errors0/restarts0、final live Terminal/disk receipt/cleanup確認。WS099はincomplete、USB素実機は範囲外。補助framebuffer boot timeoutは別記。P9利用上限終了後mainが判定。q577/q579はmain継続中、3children停止後、ユーザー利用上限回復確認でgeneration2再起動/N_effective3、全WIP/pushなし/GitHub公開保留。
 
@@ -54,6 +58,9 @@ WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認
 | [q575](queue-q575.md) | WS111 p001 cleared |
 | [q576](queue-q576.md) | WS111 p002 cleared |
 | [q578](queue-q578.md) | WS099 p014 cleared / C10 passthrough60分 |
+| [q577](queue-q577.md) | WS099 p017 uncleared / BUG-125有限診断 |
+| [q579](queue-q579.md) | WS074 p172 uncleared / browser2統合と最終review残 |
+| [q580](queue-q580.md) | WS114 p001 uncleared / GTK4部分実測 |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。
 

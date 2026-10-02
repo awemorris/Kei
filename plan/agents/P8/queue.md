@@ -1,6 +1,6 @@
 # P8 Queue q577
-Status: active
-Attempt: q577-i01 / in-progress
+Status: finished
+Attempt: q577-i01 / uncleared
 Owner: Q1 main（canonical記録） / P8 generation 1（isolated executor）
 Approval: current user / 2026-10-02 chat「では、N=3でしばらく実行を続けてください」、直前の専任3枠と最初の候補に基づく。
 Started UTC: 2026-10-02T04:50:43.686853+00:00
@@ -14,7 +14,7 @@ Branch: codex/p8
 Checks/criteria: snapshotのwhole-Phase基準を保持。部分commit/Queue結果とPhase clearanceを区別。
 Ordered next Queues: 未投入。mainが結果/依存確認後に明示dispatch。
 Merge requests / ACK: none
-Outcome: 実行準備、未検証。
+Outcome: [terminal result](../../ws099/phase017/q577-result.md)。16回のwhole p076は15 PASS/1 FAIL、C9は完全1回10/10 PASSと不完全な補足5 PASS/1 FAIL。BUG-125はtracking、Phaseはuncleared。owned runtimeは停止済み。
 Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
 
 Preflight: 専用loopback SSH55747/gdb37895、image SHA256992e83f498cda2a1d506bb6ad7975b3c4592069fcb6493eca707e0d84403ac37。boot-test PASS、login PNG main目視/ユーザー提示済み。過去q538にRESIZE refused reason=no-pressがあり、試験のimplicit grab同期を診断中。

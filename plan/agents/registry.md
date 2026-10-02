@@ -1,12 +1,12 @@
 # サブエージェント台帳
 
-[運用契約](protocol.md)。2026-10-02のユーザー指示: `N_target=8`、`gpt-6.1-sol` / high。現在のruntime上限は子3（メインを含め4枠）。`N_effective`は実際の空き枠・利用制限・実行可能Queueに応じて調整する。P1〜P7の以前の担当は[Master](../master.md)に履歴として残す。最新指示「N=3でしばらく実行を続けてください」によりN_target=3（開始時N_effective=3、回復後3）、generation 1を開始する。
+[運用契約](protocol.md)。2026-10-02のユーザー指示: `N_target=8`、`gpt-6.1-sol` / high。runtime上限は各メインsessionにつき子3（メインを含め4枠）。旧P8/P9/P10 generation2は通常wrap-up済みで、現在`N_effective=0`。A/Bの各3laneは担当予約であり、Queue選定後に新しいagentを起動する。
 
 | Agent / generation | Model / effort | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / wrap-up / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| P8（バグ修正専任、generation 2） | `gpt-6.1-sol` / high | [Bug Board](../known-bugs.md)の未解決項目を個別のhandling WS/Phaseで担当 | `/home/awe/zedBSD-worktrees/p8` / `codex/p8` | [q577](P8/queue.md) | [BUG-125](../bugs/BUG-125.md)を最初の候補、次はデモ影響と再現性でmainが選定 | running / generation 2 | fb8732b93 → mainb9afcdbe8、main引継ぎ: 単独15PASS後run16 popup画素FAIL、C9有限検証中 |
-| P9（Keilandデスクトップ高度化専任、generation 2） | `gpt-6.1-sol` / high | [desktop outlook](desktop-outlook.md)のWS099/090/094/113/114等を順に担当 | `/home/awe/zedBSD-worktrees/p9` / `codex/p9` | [q580](P9/queue.md) | [WS099 p014](../ws099/phase014/phase.md)など、依存と実機/ユーザー時間に応じてmainが選定 | running / generation 2 | 7d82da63a → mainc503330b8、q578 cleared、次q580 WS114 GTK4 baseline |
-| P10（ブラウザ専任、generation 2） | `gpt-6.1-sol` / high | [WS074](../ws074/ws.md) 固定 | `/home/awe/zedBSD-worktrees/p10` / `codex/p10` | [q579](P10/queue.md) | [p172](../ws074/phase172/phase.md) → [p100](../ws074/phase100/phase.md) → [p174](../ws074/phase174/phase.md) → [p175](../ws074/phase175/phase.md) → [p173](../ws074/phase173/phase.md) → [p176](../ws074/phase176/phase.md) を候補として検討 | running / generation 2 | 95835ef85 → maindebb5bd23、mainが未commit patch保全、32C token同一、全文manual残り |
+| P8（バグ修正専任、generation 2） | `gpt-6.1-sol` / high | [Bug Board](../known-bugs.md)の未解決項目を個別のhandling WS/Phaseで担当 | `/home/awe/zedBSD-worktrees/p8` / `codex/p8` | [q577](P8/queue.md) | BUG-125はAgent B B3の再開候補 | stopped / wrapped | final23065bf05 → main c1487ae3f。q577 uncleared、runtime cleanup済み |
+| P9（Keilandデスクトップ高度化専任、generation 2） | `gpt-6.1-sol` / high | [desktop outlook](desktop-outlook.md)のWS099/090/094/113/114等を順に担当 | `/home/awe/zedBSD-worktrees/p9` / `codex/p9` | [q580](P9/queue.md) | WS114 p001はAgent B B1の再開候補 | stopped / wrapped | final8556185a3 → main ff0522115。q580 uncleared、QEMU/SSH cleanup済み |
+| P10（ブラウザ専任、generation 2） | `gpt-6.1-sol` / high | [WS074](../ws074/ws.md) 固定 | `/home/awe/zedBSD-worktrees/p10` / `codex/p10` | [q579](P10/queue.md) | p172はAgent A A1の再開候補 | stopped / wrapped | final db6a5b336 → main2f37ca98e。q579 uncleared、owned processなし |
 
 この表は活動実体と明示的な専任予約の記録。reservedはactive agent/Queueを意味しない。希望数だけで8人を「active」と記載しない。設計調査者3人は一時的な読取専用参加で、P8以降の実装担当IDやQueueを占有しない。generation1は利用上限で停止、ユーザー回復確認によりgeneration2へ。mainが個別laneで終了/再開の世代とworktreeを保存する。GitHubへの共有は未同期。
 
@@ -21,3 +21,5 @@ P8 capacity incident: GPT-6.1 Sol High一時capacityでturn失敗。mainが未�
 2026-10-02 / n3-generation2: current userが利用上限回復/再起動を許可。mainのintegration HEADへ各clean worktreeをfast-forward後、同model/highの3枠へ再dispatch。P9=q580 WS114 p001、P8=q577残範囲、P10=q579残全文manual。前attempt deadlineを延長しない。
 
 Generation2 runtime: P8=/root/p8_bugs_g2、P9=/root/p9_desktop_g2、P10=/root/p10_browser_g2。3人とも指定model/highで稼働確認、main25729c88aから開始。q577/q579期限07:50:43UTC、q580上限3h。
+
+2026-10-02 / two-session-wrap: userの指示で3agentを通常wrap-upし、全commitをmainへ統合・ACK。q577/q579/q580はterminal uncleared、q578 cleared。runtime/owned QEMU/SSH/build processなし。A/B各3laneへの再配属は[Master](../master.md)とsession文書を正本とし、新Queue開始までN_effective=0。
