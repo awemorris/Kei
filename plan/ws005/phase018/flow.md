@@ -37,7 +37,7 @@
 4. Settings は EPERM に「Wi-Fi was turned on by another account. Turn it off and on to join」を出す（`settings/network.c:424`）。
 5. しかし kei の「off」（`NETWORKD_OP_WIFI_DISABLE`）も `owner_allowed` で EPERM（同じ理由）。スイッチは状態が auto-searching の間「on」に見え
    （`network-zedbsd.c:881-888`、system bar も `wayland/network.c:615-617` で on のとき off を送る）、利用者は ENABLE を送る操作を持たない。
-   **結論（読み）: 起動直後の利用者は、Settings・system bar から自分の鍵で join できず、案内の「off して on」も off で拒まれる。** B1 を満たさない。
+   **結論（読み、5 で CLI により QEMU で確認）: 起動直後の利用者は、Settings・system bar から自分の鍵で join できず、案内の「off して on」も off で拒まれる。** B1 を満たさない。
    - 抜け道（読み）: CLI の `net wifi enable` を kei として打つと、ENABLE は所有者の検査を受けないので（`main.c:3339-3341`）所有者が kei に移り、kei の store で動く。
 6. 偽の networkd を使った ws035-p013・ws089-p003 の試験は所有者を模していないので、この不一致を捉えない。
 
@@ -115,9 +115,19 @@ networkd が一つの所で決める形が筋（WS033 と共有）。
 
 ## 5. 確かめたこと・未検証
 
-- 疑い（1.2 の EPERM）は **未検証**（source の読みだけ）。2026-10-02 の Q1 の一時停止（main の build/ の整理のため新しい build・QEMU を止める）で、
-  本物の networkd と偽の `wifi` の子の QEMU の試験はこの Queue では行わなかった。手順は 4 の最初の 2 行の試験。CLI での簡易の確かめ（kei で
-  `net wifi set-key S K auto` → `net wifi connect S` が EPERM、`net wifi enable` の後は通る）でも足りる。
+- 疑い（1.2 の EPERM）は **QEMU の本物の networkd で確かめた**（[owner-check.sh](owner-check.sh)、Settings・system bar と同じ networkd の request を
+  `net` の CLI で送る。radio 無し、KVM、image は `plan/ws001/tests/config-amd64-lean-guest.mk` を `BUILD=build/p1-net` で build、serial の対話）。
+  起動の `net startup`（root）の後、kei（uid 1000、`network` group）で:
+  - `net wifi list` → `wifi state=auto-searching`（root が所有）。
+  - `net wifi set-key P018-FAKE-SSID p018-fake-passphrase auto` → 0（kei の store に保存、`PROFILES_CHANGED` は成功の返事）。
+  - `net wifi connect P018-FAKE-SSID` → `net: Wi-Fi policy owner: Operation not permitted`、exit=1。
+  - `net wifi disable`（Settings の案内の「off」）→ 同じ EPERM。
+  - `net wifi enable` → 0（所有者が kei に移る）。続く `net wifi connect P018-FAKE-SSID` → `net: no WLAN radio: No such device`
+    （所有者の検査と kei の store の profile の探索を通り、radio が無いところで止まる。期待どおり）。
+  - SSID と passphrase は試験用の偽の固定値。
+  - 付記: kei の home が無いと `set-key` は `wifi.conf: select credential store: No such file or directory` で失敗する（desktop の login では sessiond が
+    home を作る。この image では root が作ってから試した）。
+  - Settings の画面そのもの（偽の networkd でない desktop の join）は走らせていない。CLI と UI は同じ opcode を同じ euid で送る（1.2・1.3）。
 - host の試験は走らせていない（`owner_allowed` は networkd の `main.c` の static で、host で単独に build する器が無い）。
 - B3 の route の振る舞い（2 つの default の並び、device の消滅で route が消えるか）は kernel の source の読みだけ。
 

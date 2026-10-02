@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p018 -->
 # ws005-p018: ベータ1 の WiFi の利用者の流れの調査と契約
 
-Status: cleared（q596-i01、P1、2026-10-02。調査と案。疑い 1 は source の読みだけで未検証。方式はユーザーの判断待ち）
+Status: cleared（q596-i01、P1、2026-10-02。調査と案。疑い 1 は QEMU の本物の networkd で確認。方式はユーザーの判断待ち）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Focused goal: fg019（ベータ1）
@@ -56,6 +56,8 @@ Queue: q596 / q596-i01（P1）
   login の時に利用者の store を有効にする仕組みが無く、再起動の後に自動で戻らない（B2）。有線と WiFi の default route は metric 無しで並び、
   resolver は後勝ちで WiFi の切断で消えうる（B3）。
 - 推奨: login 時に利用者として ENABLE（logout で root へ）＋ join の前に必要なら ENABLE（A＋A'）。有線優先と networkd による route/resolver の一元化。
-- 確かめ: 疑い 1 は **未検証**。Q1 の一時停止（2026-10-02、main の build/ の整理で新しい build・QEMU を止める）のため、本物の networkd と偽の
-  `/sbin/wifi` の子の QEMU の試験はしていない。host の試験も無し（`owner_allowed` は networkd の static で、host の器が無い）。手順は flow.md の 4・5。
+- 確かめ: 疑い 1 は Q1 の再開の後に **QEMU（KVM、radio 無し）の本物の networkd で確認**（`plan/ws005/phase018/owner-check.sh build/p1-net/hdd-image.img`、
+  image は `plan/ws001/tests/config-amd64-lean-guest.mk`、serial の対話）: kei の `net wifi connect` と `net wifi disable` は `Wi-Fi policy owner: EPERM`、
+  kei の `net wifi enable` の後の connect は所有者と profile の検査を通って `no WLAN radio` で止まる。Settings の画面での join と本物の radio は未実施（p019・p020）。
+  host の試験は無し（`owner_allowed` は networkd の static）。
 - ユーザーの判断: flow.md の 6（方式 A/A'/B/C、system bar の鍵の入力、有線優先、複数利用者で接続を奪ってよいか）。
