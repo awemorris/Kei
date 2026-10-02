@@ -1650,6 +1650,10 @@ te_app_caret_rect(
 {
 	struct kui_rect caret;
 	struct te_rect text;
+	size_t row;
+	size_t column;
+	size_t offset;
+	unsigned cells;
 
 	/* The caret in the text's content, then moved by the view's place and scroll. */
 	app_view_caret((void *)app, app->cursor, &caret);
@@ -1658,6 +1662,48 @@ te_app_caret_rect(
 	rect->y = text.y + caret.y - (int)app->scroll_y;
 	rect->width = caret.width;
 	rect->height = caret.height;
+
+	/* While text is composed, the place the input method's candidates go under: its segment or its caret. */
+	if (app->preedit[0] == '\0')
+		return;
+
+	te_layout_place((struct te_layout *)&app->layout, &app->buffer, app->cursor, &row, &column);
+	offset = strlen(app->preedit);
+	if (app->preedit_begin >= 0 && (size_t)app->preedit_begin < offset)
+		offset = (size_t)app->preedit_begin;
+	cells = te_app_preedit_cells(app, (unsigned)column, offset);
+	rect->x += (int)cells * app->cell;
+}
+
+/*
+ * Counts the cells the composed text's first bytes take in the body when it
+ * starts at a column (wide characters two, tabs to the next stop, as the
+ * body's own characters).
+ */
+unsigned
+te_app_preedit_cells(
+	const struct te_app *app,
+	unsigned column,
+	size_t bytes)
+{
+	uint32_t codepoint;
+	size_t length;
+	size_t index;
+	unsigned cells;
+
+	/* Each character before the byte asked about. */
+	length = strlen(app->preedit);
+	if (bytes > length)
+		bytes = length;
+	cells = 0;
+	index = 0;
+	while (index < bytes) {
+		codepoint = te_utf8_next(app->preedit, length, &index);
+		cells += te_layout_cells(codepoint, column + cells, app->layout.tab);
+	}
+
+	/* The cells they take. */
+	return cells;
 }
 
 /*

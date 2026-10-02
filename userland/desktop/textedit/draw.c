@@ -35,6 +35,9 @@
 #define DRAW_MATCH		0xfffde68aU
 #define DRAW_MATCH_NOW		0xfffbbf24U
 #define DRAW_CURSOR		0xff2563ebU
+#define DRAW_PREEDIT_LINE	0xff64748bU
+#define DRAW_PREEDIT_FOCUS	0xffcfe3ffU
+#define DRAW_PREEDIT_FOCUS_LINE	0xff2563ebU
 #define DRAW_SCROLL		0x50334155U
 #define DRAW_CHIP		0xecffffffU
 #define DRAW_CHIP_EDGE		0x1f334155U
@@ -54,7 +57,9 @@ static void draw_rows(struct te_app *app, struct te_canvas *canvas, const struct
 static void draw_row(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text, size_t row, int top, size_t start, size_t end);
 static void draw_span(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text, int top, size_t row_start, size_t row_end, size_t from, size_t to, int newline, uint32_t color);
 static void draw_matches(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text, int top, size_t start, size_t end);
-static void draw_glyphs(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text, int top, size_t start, size_t end);
+static void draw_glyphs(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text, int top, size_t start, size_t end, int composing);
+static unsigned draw_preedit(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text, int top, unsigned column);
+static void draw_glyph(struct te_app *app, struct te_canvas *canvas, int x, int baseline, uint32_t codepoint, unsigned cells, uint32_t color);
 static void draw_numbers(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text);
 static void draw_cursor(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text);
 static void draw_scroll(struct te_app *app, struct te_canvas *canvas, const struct te_rect *text);
@@ -151,6 +156,7 @@ draw_row(
 	size_t line_end;
 	uint32_t color;
 	int newline;
+	int composing;
 
 	/* The cursor's row is tinted when nothing is selected. */
 	te_edit_selection(app, &selection_start, &selection_end);
@@ -174,8 +180,11 @@ draw_row(
 	/* The places the find text occurs. */
 	draw_matches(app, canvas, text, top, start, end);
 
-	/* The characters. */
-	draw_glyphs(app, canvas, text, top, start, end);
+	/* The characters, with the text being composed in the cursor's row. */
+	composing = 0;
+	if (cursor_row == row && app->preedit[0] != '\0')
+		composing = 1;
+	draw_glyphs(app, canvas, text, top, start, end, composing);
 }
 
 /*
@@ -257,7 +266,12 @@ draw_matches(
 	}
 }
 
-/* Draws the characters of a row in their cells (wide ones centred in two, controls as ^X). */
+/*
+ * Draws the characters of a row in their cells (wide ones centred in two,
+ * controls as ^X).  In the cursor's row while text is composed, the
+ * composed text takes cells at the cursor and the characters after it move
+ * on by as many.
+ */
 static void
 draw_glyphs(
 	struct te_app *app,
@@ -265,7 +279,8 @@ draw_glyphs(
 	const struct te_rect *text,
 	int top,
 	size_t start,
-	size_t end)
+	size_t end,
+	int composing)
 {
 	uint32_t codepoint;
 	size_t position;
@@ -274,7 +289,6 @@ draw_glyphs(
 	unsigned cells;
 	int baseline;
 	int x;
-	int advance;
 
 	/* The baseline in the row. */
 	baseline = top + app->ascent;
@@ -283,6 +297,12 @@ draw_glyphs(
 	column = 0;
 	position = start;
 	while (position < end) {
+		/* The composed text goes in before the character at the cursor. */
+		if (composing && position == app->cursor) {
+			column += draw_preedit(app, canvas, text, top, (unsigned)column);
+			composing = 0;
+		}
+
 		codepoint = te_buffer_char(&app->buffer, position, &next);
 		cells = te_layout_cells(codepoint, (unsigned)column, app->layout.tab);
 		x = text->x + (int)((double)column * (double)app->cell - app->scroll_x);
@@ -291,24 +311,108 @@ draw_glyphs(
 		if (x > text->x + text->width)
 			break;
 
-		/* A control character as ^ and its letter, faint. */
-		if (codepoint < 0x20U && codepoint != '\t') {
-			te_text_draw_char(app->body, canvas, x, baseline, '^', app->pixels, DRAW_CONTROL);
-			te_text_draw_char(app->body, canvas, x + app->cell, baseline, codepoint + 0x40U, app->pixels, DRAW_CONTROL);
-		} else if (codepoint == 0x7fU) {
-			te_text_draw_char(app->body, canvas, x, baseline, '^', app->pixels, DRAW_CONTROL);
-			te_text_draw_char(app->body, canvas, x + app->cell, baseline, '?', app->pixels, DRAW_CONTROL);
-		} else if (codepoint != '\t' && codepoint != ' ') {
-			/* A character centred in its cells. */
-			advance = te_text_advance(app->body, codepoint, app->pixels);
-			if (cells == 2U && advance > 0)
-				x += (2 * app->cell - advance) / 2;
-			te_text_draw_char(app->body, canvas, x, baseline, codepoint, app->pixels, DRAW_TEXT);
-		}
+		/* The character in its cells. */
+		draw_glyph(app, canvas, x, baseline, codepoint, cells, DRAW_TEXT);
 
 		/* The next cell. */
 		column += cells;
 		position = next;
+	}
+
+	/* A cursor at the row's end has the composed text after the last character. */
+	if (composing)
+		(void)draw_preedit(app, canvas, text, top, (unsigned)column);
+}
+
+/*
+ * Draws the text being composed from a column of a row in the body's cells
+ * and size, underlined, its segment being converted on the selection's
+ * tint with a thicker line; gives the cells it takes.
+ */
+static unsigned
+draw_preedit(
+	struct te_app *app,
+	struct te_canvas *canvas,
+	const struct te_rect *text,
+	int top,
+	unsigned column)
+{
+	uint32_t codepoint;
+	size_t length;
+	size_t index;
+	size_t before;
+	unsigned cells;
+	unsigned used;
+	int baseline;
+	int focused;
+	int x;
+
+	/* The baseline in the row. */
+	baseline = top + app->ascent;
+
+	/* Each character of the composed text, in the cells it takes after the ones before it. */
+	length = strlen(app->preedit);
+	used = 0;
+	index = 0;
+	while (index < length) {
+		before = index;
+		codepoint = te_utf8_next(app->preedit, length, &index);
+		cells = te_layout_cells(codepoint, column + used, app->layout.tab);
+		x = text->x + (int)((double)(column + used) * (double)app->cell - app->scroll_x);
+
+		/* The segment being converted is the bytes from the preedit's cursor's begin to its end. */
+		focused = 0;
+		if (app->preedit_begin >= 0 && app->preedit_begin < app->preedit_end) {
+			if ((int32_t)before >= app->preedit_begin && (int32_t)before < app->preedit_end)
+				focused = 1;
+		}
+
+		if (focused) {
+			/* The segment: the selection's tint and a line two pixels thick. */
+			te_canvas_fill(canvas, x, top, (int)cells * app->cell, app->row_height, DRAW_PREEDIT_FOCUS);
+			te_canvas_fill(canvas, x, top + app->row_height - 3, (int)cells * app->cell, 2, DRAW_PREEDIT_FOCUS_LINE);
+		} else {
+			/* The rest: the row's ground and a thin line. */
+			te_canvas_fill(canvas, x, top, (int)cells * app->cell, app->row_height, DRAW_ROW_NOW);
+			te_canvas_fill(canvas, x, top + app->row_height - 2, (int)cells * app->cell, 1, DRAW_PREEDIT_LINE);
+		}
+
+		draw_glyph(app, canvas, x, baseline, codepoint, cells, DRAW_TEXT);
+		used += cells;
+	}
+
+	/* The cells the composed text takes. */
+	return used;
+}
+
+/* Draws one character in its cells: a control as ^ and its letter, faint; a wide one centred in two. */
+static void
+draw_glyph(
+	struct te_app *app,
+	struct te_canvas *canvas,
+	int x,
+	int baseline,
+	uint32_t codepoint,
+	unsigned cells,
+	uint32_t color)
+{
+	int advance;
+
+	/* The kind of character decides how it shows. */
+	if (codepoint < 0x20U && codepoint != '\t') {
+		/* A control character as ^ and its letter, faint. */
+		te_text_draw_char(app->body, canvas, x, baseline, '^', app->pixels, DRAW_CONTROL);
+		te_text_draw_char(app->body, canvas, x + app->cell, baseline, codepoint + 0x40U, app->pixels, DRAW_CONTROL);
+	} else if (codepoint == 0x7fU) {
+		/* Delete as ^?, faint. */
+		te_text_draw_char(app->body, canvas, x, baseline, '^', app->pixels, DRAW_CONTROL);
+		te_text_draw_char(app->body, canvas, x + app->cell, baseline, '?', app->pixels, DRAW_CONTROL);
+	} else if (codepoint != '\t' && codepoint != ' ') {
+		/* A character centred in its cells. */
+		advance = te_text_advance(app->body, codepoint, app->pixels);
+		if (cells == 2U && advance > 0)
+			x += (2 * app->cell - advance) / 2;
+		te_text_draw_char(app->body, canvas, x, baseline, codepoint, app->pixels, color);
 	}
 }
 
@@ -368,11 +472,12 @@ draw_cursor(
 {
 	size_t row;
 	size_t column;
+	size_t length;
+	size_t offset;
 	uint64_t since;
+	unsigned cells;
 	int top;
 	int x;
-	int width;
-	int length;
 
 	/* No cursor without the keyboard, or under a dialog or the chooser. */
 	if (!app->focused || app->dialog != TE_DIALOG_NONE || app->choosing)
@@ -384,14 +489,20 @@ draw_cursor(
 	top = text->y + (int)((double)row * (double)app->row_height - app->scroll_y);
 	x = text->x + (int)((double)column * (double)app->cell - app->scroll_x);
 
-	/* Text an input method is composing, underlined at the cursor. */
-	length = (int)strlen(app->preedit);
-	if (length > 0) {
-		width = te_text_width(app->body, app->preedit, (size_t)length, app->pixels, 0);
-		te_canvas_fill(canvas, x, top, width, app->row_height, DRAW_CARD_OPAQUE);
-		(void)te_text_draw(app->body, canvas, x, top + app->ascent, app->preedit, (size_t)length, app->pixels, 0, DRAW_TEXT);
-		te_canvas_fill(canvas, x, top + app->row_height - 2, width, 1, DRAW_TEXT);
-		x += width;
+	/*
+	 * While text is composed (drawn with the row, draw_glyphs), the bar is
+	 * the preedit's caret: none while a segment is being converted, at its
+	 * cursor when it has one, after it when it has none.
+	 */
+	length = strlen(app->preedit);
+	if (length > 0U) {
+		if (app->preedit_begin >= 0 && app->preedit_begin < app->preedit_end)
+			return;
+		offset = length;
+		if (app->preedit_begin >= 0 && (size_t)app->preedit_begin < length)
+			offset = (size_t)app->preedit_begin;
+		cells = te_app_preedit_cells(app, (unsigned)column, offset);
+		x += (int)cells * app->cell;
 	}
 
 	/* The bar, in the shown half of the blink. */

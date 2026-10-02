@@ -136,9 +136,6 @@ static struct te_canvas main_canvas;
 static struct kui_canvas main_handles;
 static int main_handles_made;
 
-/* The text an input method is composing (the text input's preedit, ws090-p013), shown at the caret until it is committed. */
-static char main_preedit[KUI_WINDOW_TEXT_MAX];
-
 /* The interface's font as libkeiui's text, for the chip and the dialog (open when main_widgets_text is 1). */
 static struct kui_text main_widgets;
 static int main_widgets_text;
@@ -171,7 +168,6 @@ static int main_number(const char *text, unsigned maximum, unsigned *value);
 static int main_loop(const struct main_options *options);
 static int main_frame(void);
 static void main_overlay(uint64_t now_us);
-static void main_preedit_draw(const struct kui_style *style);
 static int main_canvas_make(void);
 static void main_state(struct te_state *state);
 static void main_title_refresh(void);
@@ -697,10 +693,6 @@ main_overlay(
 	area.width = card.width;
 	area.height = card.height;
 
-	/* The text being composed, at the caret, underlined. */
-	if (main_preedit[0] != '\0' && main_app.dialog == TE_DIALOG_NONE)
-		main_preedit_draw(&style);
-
 	/* A message, at the bottom middle of the card. */
 	if (main_app.message[0] != '\0')
 		kui_chip(&style, card.x + card.width / 2, card.y + card.height - MAIN_CHIP_BOTTOM, main_app.message);
@@ -723,26 +715,6 @@ main_overlay(
 	/* The answer: the dialog closes and its button is carried out (the next frame shows it). */
 	if (answer >= 0)
 		te_app_dialog_choose(&main_app, answer);
-}
-
-/* Draws the text an input method is composing at the caret: on a white ground, underlined in the accent. */
-static void
-main_preedit_draw(
-	const struct kui_style *style)
-{
-	struct te_rect caret;
-	int width;
-	int baseline;
-
-	/* Its size at the caret. */
-	te_app_caret_rect(&main_app, &caret);
-	width = kui_text_width(style->text, main_preedit, strlen(main_preedit), TE_UI_PIXELS, 0);
-	baseline = kui_text_center(TE_UI_PIXELS, caret.y, caret.height);
-
-	/* The ground, the text and the line under it. */
-	kui_canvas_round(style->canvas, (float)caret.x, (float)caret.y + 1.0f, (float)(width + 6), (float)caret.height - 2.0f, 3.0f, KUI_RGB(0xffffff));
-	(void)kui_text_draw(style->text, style->canvas, caret.x + 3, baseline, main_preedit, strlen(main_preedit), TE_UI_PIXELS, 0, style->theme->text);
-	kui_canvas_line(style->canvas, (float)caret.x + 3.0f, (float)(caret.y + caret.height) - 3.0f, (float)(caret.x + 3 + width), (float)(caret.y + caret.height) - 3.0f, 1.5f, style->theme->accent);
 }
 
 /* Remakes the presenter at the window's size, with a canvas to match; nonzero when it cannot. */
@@ -1157,9 +1129,11 @@ main_window_event(
 		input->button = event->after;
 		break;
 	case KUI_WINDOW_TEXT_PREEDIT:
-		/* The text being composed, shown at the caret. */
-		te_log("TEXT input preedit=%s", event->text);
-		snprintf(main_preedit, sizeof(main_preedit), "%s", event->text);
+		/* The text being composed, drawn in the body at the cursor (draw.c), and its segment or caret. */
+		te_log("TEXT input preedit=%s begin=%d end=%d", event->text, (int)event->begin, (int)event->end);
+		snprintf(main_app.preedit, sizeof(main_app.preedit), "%s", event->text);
+		main_app.preedit_begin = event->begin;
+		main_app.preedit_end = event->end;
 		main_app.dirty = 1;
 		break;
 	case KUI_WINDOW_FOCUS:
