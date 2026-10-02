@@ -70,6 +70,14 @@ echo "qemu-ssh-check: sshd answered=$answered after $(( $(date +%s) - started ))
 [ "$answered" = 1 ] || exit 1
 SSH_PORT=$port plan/ws118/tests/collect-5320.sh 127.0.0.1 "$out/logs"
 
+# Waits up to 90 s for root's crontab to have copied the kernel's messages to the disk.
+for i in $(seq 1 18); do
+	timeout 15 ssh -n -i "$key" -p "$port" -o BatchMode=yes -o StrictHostKeyChecking=no \
+		-o UserKnownHostsFile=/dev/null -o LogLevel=ERROR root@127.0.0.1 \
+		'test -s /var/log/dmesg.cron' 2> /dev/null && break
+	sleep 5
+done
+
 # Flushes the guest's disk before QEMU is quit, for the disk-log check.
 timeout 30 ssh -n -i "$key" -p "$port" -o BatchMode=yes -o StrictHostKeyChecking=no \
 	-o UserKnownHostsFile=/dev/null -o LogLevel=ERROR root@127.0.0.1 \
