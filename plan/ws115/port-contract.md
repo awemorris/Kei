@@ -204,9 +204,10 @@ Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h
 | `<sys/poll.h>` が無い | libc の header | glib（meson が必須にしている） | **libc に追加済み**（main acb5a2da9、L1） |
 | `<arpa/nameser.h>` が無い（定義は `<resolv.h>` にある）。`HEADER` 構造体と `GETSHORT`/`GETLONG` も無い | libc の header | glib（gio の検査、`gthreadedresolver.c`） | glib の patch 0001・0003。record の検索は G_RESOLVER_ERROR_INTERNAL を返す |
 | `string.h` が strcasecmp/strncasecmp を宣言しない（POSIX どおり `strings.h` だけ） | libc の header（名前空間） | glib（glib-init.c、gstrfuncs.c） | glib の patch 0002（`HAVE_STRINGS_H` で `strings.h` を読む） |
-| gettext 系に `format_arg` の属性が無い | libc の header | glib（-Werror=format-nonliteral/-security） | **libc の差分を提案**: plan/ws115/proposed/libc-libintl-format-arg.diff（Q1 が許可。P3 の権限では libc を編集できず、main が入れる） |
-| `CMSG_NXTHDR` が無い（POSIX が要求する） | libc の header | glib（gsocket.c） | **libc の差分を提案**: plan/ws115/proposed/libc-cmsg-nxthdr.diff と host 試験 tests/cmsg-nxthdr-test.c（同上） |
+| gettext 系に `format_arg` の属性が無い | libc の header | glib（-Werror=format-nonliteral/-security） | **libc に追加済み**（P3 150c2f51f、main 871777b34。ユーザーの明示の許可。差分の元は plan/ws115/proposed/libc-libintl-format-arg.diff） |
+| `CMSG_NXTHDR` が無い（POSIX が要求する） | libc の header | glib（gsocket.c） | **libc に追加済み**（同上。差分の元は plan/ws115/proposed/libc-cmsg-nxthdr.diff、host 試験 tests/cmsg-nxthdr-test.c） |
 | `IN_MULTICAST()`・`SOMAXCONN` が無い | libc の header（BSD と POSIX の定数） | glib（ginetaddress.c、gsocket.c） | glib の patch 0004（通常の定義と 128 を置く） |
 | IP 層の socket option（IP_TTL、multicast、group membership、IPv6 版）・`SOCK_SEQPACKET`・`FIONREAD` が無い | kernel（UAPI に無い） | glib（gsocket.c） | glib の patch 0004（G_IO_ERROR_NOT_SUPPORTED、available bytes は -1）。kernel に足すかは別の判断（記録だけ） |
 | `__tls_get_addr` が ld.so にだけあり、link のときには見えない | link の契約 | glib（meson の既定 `--no-undefined`） | glib に `-Db_lundef=false`。p006 以降で同じことが起きたら external.mk の共通規則か、link で ld.so を見せる案で決める（Q1） |
+| glib の fuzz の `fuzz_resolver` が record の parser（0003 で外した）を呼ぶ | 上の nameser の結果 | glib（fuzzing/meson.build） | glib の patch 0005（`arpa/nameser.h` が無ければその target だけ外す） |
 | `config.sub` と libtool が zedbsd を知らない | 外部の build 道具 | libffi（autotools だけ） | libffi の patch 0001（OpenSSH の先例と同じ形） |

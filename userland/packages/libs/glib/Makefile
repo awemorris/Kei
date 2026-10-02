@@ -20,12 +20,13 @@ ZEDBSD_EXT_glib_ARCHIVE := glib-2.84.4.tar.xz
 ZEDBSD_EXT_glib_URL := https://download.gnome.org/sources/glib/2.84/glib-2.84.4.tar.xz
 ZEDBSD_EXT_glib_SIZE := 5618200
 ZEDBSD_EXT_glib_SHA256 := 8a9ea10943c36fc117e253f80c91e477b673525ae45762942858aef57631bb90
-ZEDBSD_EXT_glib_PATCH_LEVEL := zedbsd5
+ZEDBSD_EXT_glib_PATCH_LEVEL := zedbsd7
 ZEDBSD_EXT_glib_PATCHES := \
 	$(ZEDBSD_GLIB_DIR)/patches/0001-accept-nameser-definitions-from-resolv-h.patch \
 	$(ZEDBSD_GLIB_DIR)/patches/0002-include-strings-h-for-strcasecmp.patch \
 	$(ZEDBSD_GLIB_DIR)/patches/0003-refuse-record-lookups-without-arpa-nameser.patch \
-	$(ZEDBSD_GLIB_DIR)/patches/0004-build-without-ip-socket-options.patch
+	$(ZEDBSD_GLIB_DIR)/patches/0004-build-without-ip-socket-options.patch \
+	$(ZEDBSD_GLIB_DIR)/patches/0005-build-resolver-fuzz-target-only-with-arpa-nameser.patch
 
 $(eval $(call ZEDBSD_EXTERNAL_SOURCE,glib))
 
@@ -76,7 +77,9 @@ ZEDBSD_GLIB_NEEDED_gio := libglib-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so
 ZEDBSD_GLIB_SONAME_gmodule := libgmodule-2.0.so.0
 ZEDBSD_GLIB_NEEDED_gmodule := libglib-2.0.so.0 libc.so
 ZEDBSD_GLIB_SONAME_gthread := libgthread-2.0.so.0
-ZEDBSD_GLIB_NEEDED_gthread := libglib-2.0.so.0 libc.so
+# libgthread is an empty compatibility library that calls nothing in the C
+# library, so --as-needed leaves libc.so out of it.
+ZEDBSD_GLIB_NEEDED_gthread := libglib-2.0.so.0
 ZEDBSD_GLIB_REALNAME = $(ZEDBSD_GLIB_LIBDIR)/$(ZEDBSD_GLIB_SONAME_$(1)).8400.4
 
 # Checks every library against its contract once the stage exists.

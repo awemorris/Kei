@@ -3,10 +3,10 @@
 # ws115-p005: libffi・pcre2・glib
 
 Parent: [WS115](../ws.md)
-Status: in-progress（q602-i01、P3。2026-10-02 の再起動のためのラップアップで中断。glib は build の途中、下の再開点）
+Status: in-progress（q602-i01、P3 generation2。作業と受け入れの証拠は揃った。clearance の確定は Q1）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
-Queue / attempts: q602-i01（P3、中断。未完了）
+Queue / attempts: q602-i01（P3 generation1 が中断、generation2 が継続して完了）
 Purpose / goal: GLib（gobject・gio・gmodule）を zedBSD target へ移植する。
 Prerequisites: p004（meson の契約）、libc の不足の判断（p001）
 Investigation bound: timebox 4h。libc の大きな不足が出たら uncleared で一覧を返す
@@ -57,10 +57,72 @@ Event ws115-beta1-plan-20261002: 2026-10-02 計画担当が依存 package の移
   - 再起動後の P3 が 2 つの差分を適用する（Q1）。
 - libc と kernel の差の一覧は [port-contract §11](../port-contract.md) に残した。
 
-### 未完了と再開点
+### 未完了と再開点（generation1 の時点。下の結果で済んだ）
 
-1. 2 つの libc 差分を適用する（`include/libc/libintl.h`、`include/libc/sys/socket.h`）。`make sysroot-amd64` を走らせ、disk-image の build で warning 0 を確かめる。cmsg の host 試験も走らせる（compile の方法は試験の file の先頭）。
-2. `make <vars> glib` を通す。check-dynamic-elf の NEEDED の契約（Makefile の `ZEDBSD_GLIB_NEEDED_*`）と実物を照合し、違えば直す。library の版の名前（`.8400.4`）も確かめる。
-3. `sh plan/ws115/tests/glib-probe.sh <cross> build/packages <work>` で probe を作り、`plan/ws115/tests/config-amd64-glib.mk` と出力された `ZEDBSD_TEST_EXTRA_FILES` で test image を作る。`plan/tools/guest/amd64-serial.sh <image> 'glib-probe /usr/share/glib-probe/schemas /tmp/glib-probe.txt'` で `glib-probe: PASS` を確かめる。最後に `boot-test.sh` で起動を確かめる。
-4. license の記録（glib の LICENSES/ と GPL を含む file の分類）と全文規約の確認をし、phase.md を cleared にするか判断する。
-- 使う vars: `ZEDBSD_CONFIG=build/p3-q592/config.mk BUILD=build/p3-q592/zedbsd ZEDBSD_LLVM_SOURCE=/home/awe/zedBSD-claude1/build/llvm-source`（`build/p3-q600/vars`）。glib の probe と test image は未試験。
+1〜4 は下の「q602-i01 の継続の結果」で済んだ。
+
+## q602-i01 の継続の結果（2026-10-02、P3 generation2）
+
+承認: Q1 の継続 dispatch（q602）。libc の 2 つの差分はユーザーの明示の許可（このセッションのユーザーの発言「libcへの変更をあなたに明示的に許可します。」）。base は main 798ad97bc。vars は `build/p3-q600/vars`（`ZEDBSD_CONFIG=build/p3-q592/config.mk BUILD=build/p3-q592/zedbsd ZEDBSD_LLVM_SOURCE=/home/awe/zedBSD-claude1/build/llvm-source`）。
+
+### commit
+
+- 150c2f51f: libc の 2 差分（`include/libc/libintl.h`、`include/libc/sys/socket.h`）。`plan/ws115/proposed/` の差分のとおりに当てた。main が 871777b34 に統合（ACK 済み）。
+- 31155f84d・6ca63b326: glib。patch 0004 の改訂、patch 0005 の追加、libgthread の NEEDED の契約、PATCH_LEVEL zedbsd7。
+- 本 commit: probe の書き直し、cmsg の試験の compile の方法、port-contract §11、この記録。
+
+### libc
+
+- host 試験 `tests/cmsg-nxthdr-test.c`: gcc と clang の両方で exit 0（compile の方法は file の先頭。`-DKERN_UAPI_NATIVE -nostdinc -isystem include/libc -isystem include`）。
+- `make <vars> sysroot-amd64`: exit 0。sysroot の `usr/include/libintl.h` に format_arg が 13 か所、`sys/socket.h` に CMSG_NXTHDR が入った。
+- `make <vars> -j disk-image`: exit 0。libc と base を含めて 826 の compile、すべて `-Werror`。compiler の warning は upstream の NoctLang `interpreter.c:2395 -Wreturn-type` の 1 件だけで、この header とは関係が無い（toolchain の範囲で、触らない）。check-amd64-native-image OK。
+
+### glib 2.84.4
+
+- 初回の `make <vars> glib` は fuzz の `fuzz_resolver` の link で止まった。この target は record の parser `g_resolver_records_from_res_query` を呼ぶが、0003 がその parser を外している。**patch 0005**: `arpa/nameser.h` が無ければ、`fuzzing/meson.build` でこの target だけ外す（`have_arpa_nameser_h` は 0001 が決める）。
+- 次は check-dynamic-elf で止まった。libgthread の実物の NEEDED は libglib-2.0.so.0 だけ。libc の symbol を使わないので、`--as-needed` で libc.so が外れる。**契約を実物に合わせた**（`ZEDBSD_GLIB_NEEDED_gthread`）。ほかの 4 つは契約どおり（glib: pcre2-8・c、gobject: glib・ffi・c、gio: glib・gobject・gmodule・z・c、gmodule: glib・c）。SONAME はどれも `lib*-2.0.so.0`、実体は `.so.0.8400.4`。
+- **patch 0004 の改訂**: 0004 のせいで gsocket.c に warning が 7 件出ていた。
+  - getter 3 つの `-Wuninitialized`: option が無いときは `value = 0` にする。
+  - group membership の local 3 つが unused: その宣言を `G_SOCKET_HAVE_IP_OPTIONS` で囲む。
+  - `g_socket_get_adapter_ipv4_addr` が unused: 条件に `G_SOCKET_HAVE_IP_OPTIONS` を足した。option がある platform では元の条件と同じになる。
+  - 改訂後、patch を当てた file（gsocket.c・ginetaddress.c・gthreadedresolver.c・glib-init.c・gstrfuncs.c・fuzzing）の warning は 0。残りの約 50 件は upstream の物（G_DEFINE_TYPE の parent_class、gtestutils の format、gnulib）。
+- 最終の `make <vars> glib`: exit 0、`.zedbsd-checked` ができた（`build/p3-q602/glib5.log`）。libgirepository-2.0 も build されるが、package には入れない。
+
+### 試験 program（QEMU）
+
+- `tests/glib-probe/glib-probe.c`: generation1 の版は compile されていなかった。`g_memory_settings_backend_new` には `G_SETTINGS_ENABLE_BACKEND` と `gio/gsettingsbackend.h` が要る。parent_class は使われていなかった。そこで全文規約に合わせて step ごとの関数に書き直した。call の結果を直接 return しない、finalize は parent に chain up する、失敗した GLib の call は GError の message を出す。
+- `sh plan/ws115/tests/glib-probe.sh build/amd64/packages/toolchain build/packages build/p3-q602/probe`: exit 0。probe の NEEDED は check-dynamic-elf を通った。schema は host の glib-compile-schemas 2.84.4（Debian 2.84.4-3~deb13u3）で `--strict` で compile した。
+- test image: `ZEDBSD_CONFIG=plan/ws115/tests/config-amd64-glib.mk BUILD=build/p3-q602/img ZEDBSD_TEST_IMAGE_TAG=glibprobe ZEDBSD_TEST_EXTRA_FILES=<probe の出力>` で disk-image を作り、exit 0。rootfs に 5 つの library、libffi・pcre2・zlib、probe、schema、`/usr/share/licenses/{glib,libffi,pcre2,zlib}` が入った。
+- guest（QEMU q35・KVM・8 GiB、serial で操作）: `glib-probe /usr/share/glib-probe/schemas /tmp/glib-probe.txt; echo status=$?` の結果は `glib-probe: PASS glib 2.84.4` と `status=0`。`cat /tmp/glib-probe.txt` は `zedBSD GIO`。確かめたもの: GObject の signal（libffi の generic marshaller）、GMainLoop と timeout、GIO の file の書き込みと読み戻し、GRegex（PCRE2）、GSettings の memory backend（default の 7 と、書いた 9）、GThread。判定は probe の stdout で、console の log は読んでいない。
+  - 道具の問題: `plan/tools/guest/amd64-serial.sh` は固定の `sleep 2` の後に serial の socket へつなぐ。この host では `snapshot=on` の drive の open に 8〜11.5 秒かかり（`-S` で測った）、socket がまだ無くて失敗した。共有の道具は main の所有なので変えず、scratch の写しの `sleep 2` を「socket ができるまで最大 60 秒待つ」に置き換えて走らせた（ほかは同じ）。道具の修正は Q1 に依頼する。
+- `plan/tools/boot-test.sh`（uefi-nvme）を 2 つの image で走らせた。`BOOT_TEST_WORK` を scratchpad にすると QMP の socket の path が 108 byte を超えたので、`/tmp/p3bt` を使った。
+  - 通常の image（libc を変えた物、`build/p3-q592/zedbsd/hdd-image.img`）: PASS、`build/p3-q602/boot-test-main/login.png`。
+  - glib の test image: PASS、`build/p3-q602/boot-test-glib/login.png`。
+  - どちらの PNG も login prompt が出ていることを目で確かめた。
+
+### license
+
+- `plan/tools/packages/audit-licenses.sh` は openssl と openssh の tarball だけを見る（main の道具）。glib・pcre2・libffi は同じ検索（`GNU General Public License|SPDX-License-Identifier: *GPL`）を 3 つの tarball に当て、手で分類した。
+  - glib の 11 件: LICENSES/ の本文 3、build の時の script（gen-unicode-tables.pl、tests の gen-case*.py、glib-genmarshal.in、glib-mkenums.in、po2tbl.sed.in、glib-gettextize.in）、`glib/valgrind.h`（その file だけ BSD 型だと明記してある）。
+  - libffi の 34 件と pcre2 の 12 件: autotools の生成物と道具（config.guess・ltmain.sh・m4 など。例外付きで、build にしか使わない）、libffi の testsuite、ChangeLog.old、LICENSE-BUILDTOOLS。
+  - どれも配る library には入らない。
+- 配る glib の 5 library に compile された source（compile_commands.json）の分類: SPDX が LGPL-2.1-or-later の物が 334。tag の無い物が 8 で、本文が LGPL-2.1-or-later（ggtknotificationbackend.c、gallocator.c、guuid.c、gmarshal.c）、gdbus-codegen と glib-mkenums の生成物（LGPL と、同じ license という明記）、notice の無い gmodule-deprecated.c（project の COPYING が LGPL-2.1-or-later）。GPL の物は無い。
+- 配布物: glib は COPYING（LGPL-2.1）、libffi は LICENSE（MIT）、pcre2 は LICENCE.md（BSD-3-Clause と例外）を `/usr/share/licenses/` に入れる。LGPL の library は共有 library として配り、置き換えられる。
+
+### 範囲の一点
+
+- 範囲の「同じ版の native の glib 道具を host 用に作る」は、p004 の契約（port-contract §4 の host 道具の表と §9 の p004 の行）で「作らない。host の 2.84.4 を使う」に決まっている。schema の compile は host の 2.84.4 で行った。
+
+### 受け入れの判定（P3 の評価。確定は Q1）
+
+- 3 package が build・install され、license の確認を通った: 満たす。ただし audit-licenses.sh はこの 3 つの tarball を見ないので、同じ検索と手での分類で代えた。道具を広げるかは Q1 が決める。
+- guest で試験 program が期待どおりに動いた: 満たす（QEMU。serial の操作と probe の PASS）。
+- boot-test.sh の起動の確認: 満たす（QEMU。2 つの image）。
+- 実機: 未実施。
+
+### 残り・申し送り
+
+- `amd64-serial.sh` の socket を待つ処理（main の道具）。
+- `audit-licenses.sh` を GTK の依存の tarball に広げるか（main の道具）。
+- FIONREAD と IP の socket option を kernel に足すか、`-Db_lundef=false` を共通の規則にするか（§11。別の判断）。
+- `plan/ws115/proposed/` の 2 つの差分は適用済みで、記録として残した。
