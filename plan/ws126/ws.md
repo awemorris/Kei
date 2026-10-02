@@ -16,7 +16,7 @@ Resume point: p001（要件・設計）。
 
 「userland/packages/python3 を追加」
 
-- 外部 package として CPython 3 を build/install する（標準 library の拡張 module の範囲は p001）。置き場所は `userland/packages/lang/python3` を提案（確認待ち）。
+- 外部 package として CPython 3 を build/install する（標準 library の拡張 module の範囲は p001）。置き場所は `userland/packages/lang/python3`（2026-10-02 user 承認）。
 
 ## Phase
 

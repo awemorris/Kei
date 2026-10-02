@@ -10,7 +10,7 @@ Objectives: O1
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: p001（設計）から。OSC のデモ（fg010）には必須ではない
-2026-10-02 user: fg019（ベータ1、10/17）に入れる。「Vulkanのビデオ再生拡張をIntel Xe-LPで実装する。H.264を最初のターゲットとする。」VA-API（WS123）・動画プレーヤ（WS122）・ブラウザ（WS121）の土台。
+2026-10-02 user: fg019（ベータ1、10/17）に入れる。「Vulkanのビデオ再生拡張をIntel Xe-LPで実装する。H.264を最初のターゲットとする。」動画プレーヤ（WS122）・ブラウザ（WS121）の土台（VA-API の WS123 は canceled、アプリが Vulkan Video を直接使う）。**別セッションでユーザーと進める。このセッションは割り当てない。ベータ1 では drop 可の努力目標。**
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-09-28 ユーザー）

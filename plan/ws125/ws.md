@@ -16,7 +16,7 @@ Resume point: p001（要件・設計）。
 
 「userland/packages/vim を追加」
 
-- 外部 package として vim を build/install する。置き場所は `userland/packages/editors/vim` を提案（確認待ち）。
+- 外部 package として vim を build/install する。置き場所は `userland/packages/editors/vim`（2026-10-02 user 承認）。
 
 ## Phase
 

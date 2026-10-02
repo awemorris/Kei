@@ -3,7 +3,7 @@
 # WS123: VA-API のライブラリ
 
 <!-- awesome-plan-current:start -->
-Status: planning
+Status: planning（canceled、2026-10-02 user「va-apiはキャンセルします。アプリからVulkan Videoを使ってもらいます。」）
 Primary Milestone: MG006
 Objectives: O2
 Parent: [Master](../master.md)

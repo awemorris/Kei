@@ -626,7 +626,7 @@ primary docs for operational syntax:
 - **体制（2026-10-02 ユーザー）**: この checkout（`/home/awe/zedBSD-claude1`、branch `main`）の単一の Claude Code セッションが main（Q1）。
   Q1 は共有計画・同期 cache の唯一の書き手で、Queue の割当・依存調整・merge を担う。
   サブエージェントは固定名 **P1〜P8** の8つで、Claude Code の Agent tool で起動する（定義は `.claude/agents/`。既定は phase-runner、試行の多い WS は phase-runner-mid）。
-  一度コンテキストを埋めた担当はなるべく長く動かし、Q1 が次の仕事を絶え間なく依頼・予約する。同時に動かす数 N はユーザーが指定する（2026-10-02 は N=2）。
+  一度コンテキストを埋めた担当はなるべく長く動かし、Q1 が次の仕事を絶え間なく依頼・予約する。同時に動かす数 N はユーザーが指定する（2026-10-02 は N=4）。
   詳細は[サブエージェント別Queueの運用契約](plan/agents/protocol.md)。固定版Awesome Planの「1 project / 1 active Queue / 1 executor」「次Queueを自動開始しない」はこの範囲で置き換える。
   各担当は独立worktreeで承認済みQueueを最大1つactiveにし、Q1が投入済みで承認/依存を満たす次Queueへ継続できる。1Queueは原則1Phase。
 - サブエージェントはPhaseが終わる前でもコミット可能な小単位で`git commit -m WIP -- <担当path>...`し、mainへSHA/検証/残件とmerge依頼を送る。mainが統合してACKする。通常ラップアップは安全なcommit地点で返却して自発的に終了。urgentは未commit差分をbinary patchと再開情報に保存し、直ちに返して自発的に終了。commit/mergeとPhase clearanceは別の状態。

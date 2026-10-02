@@ -16,7 +16,7 @@ Resume point: p001（要件・設計）。
 
 「userland/packages/emacs (GNU Emacs)を追加」
 
-- 外部 package として GNU Emacs を取得・検証・patch して build/install する（tarball、license 監査。GPL は package の境界の中）。置き場所は既存の分類に合わせ `userland/packages/editors/emacs` を提案（ユーザーの確認待ち）。
+- 外部 package として GNU Emacs を取得・検証・patch して build/install する（tarball、license 監査。GPL は package の境界の中）。置き場所は `userland/packages/editors/emacs`（2026-10-02 user 承認）。
 
 ## Phase
 

@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: q590（P1、BUG-134 AX211）。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=2 から開始（[protocol](agents/protocol.md)）。
+Active Queues: q590（P1、BUG-134 AX211）。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=4（2026-10-02 user）（[protocol](agents/protocol.md)）。
 Current Focused Goals: **fg019 — ベータ1のリリース（2026-10-17、内容は Current Focused Goals の表）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
 **WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
@@ -51,7 +51,7 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
-| **fg019** | **ベータ1 のリリース（目標 2026-10-17）**。内容（2026-10-02 user と議論して決定）: 最初に BUG-134（AX211）／デスクトップの基盤 WS099（BUG-125 blocking）・WS094／GTK4・Qt6（WS114 p007 → WS117 → WS115・WS116、奥は WS097・WS096）／IME 日本語 WS095／標準アプリをまんべんなく（Files 最重点 WS127、Settings 重点 WS089、他 WS128）／複数 display WS113／ネットワーク（WiFi を含む）／Latitude 5320 WS118／Wayland で動くインストーラ WS119／音楽アプリ WS120／Vulkan Video の H.264 decode を Intel Xe-LP で WS083／VA-API の library WS123／動画プレーヤ WS122／ブラウザの accelerated video WS121／packages: GNU Emacs WS124・vim WS125・python3 WS126／Linux packaging WS112（最後）。対象 platform は Latitude 5330・5320 | MG003・MG006・MG002 | WS は左の一覧 | 2026-10-02 user「次のFeature Goalはベータ1のリリースにします」「リリース目標は10/17です」「ここまでがベータ1です。」 |
+| **fg019** | **ベータ1 のリリース（目標 2026-10-17）**。内容（2026-10-02 user と議論して決定）: 最初に BUG-134（AX211）／デスクトップの基盤 WS099（BUG-125 blocking）・WS094／GTK4・Qt6（WS114 p007 → WS117 → WS115・WS116、奥は WS097・WS096）／IME 日本語 WS095／標準アプリをまんべんなく（Files 最重点 WS127、Settings 重点 WS089、他 WS128）／複数 display WS113／ネットワーク（WiFi を含む）／Latitude 5320 WS118／Wayland で動くインストーラ WS119／音楽アプリ WS120／**動画（努力目標、drop 可、別セッションでユーザーと）**: Vulkan Video の H.264 decode を Intel Xe-LP で WS083・動画プレーヤ WS122・ブラウザの accelerated video WS121（VA-API WS123 は canceled、アプリが Vulkan Video を直接使う）／ベータ1 のリリース作業 WS129／packages: GNU Emacs WS124・vim WS125・python3 WS126／Linux packaging WS112（最後）。対象 platform は Latitude 5330・5320 | MG003・MG006・MG002 | WS は左の一覧 | 2026-10-02 user「次のFeature Goalはベータ1のリリースにします」「リリース目標は10/17です」「ここまでがベータ1です。」 |
 | **fg018** | WS114のLinux標準GTK4の動作と不足を機能表で実測し、ユーザー行別採否レビューを経てWS115 upstream移植への前提を整える | MG006 | [WS114](ws114/ws.md) / Agent B B1 | 2026-10-02 userがdesktop次作業をGTK4移植WSへ指定。q580は部分実測でuncleared、改善機能の採否は未決 |
 | **fg017**（このsessionの対象外、2026-10-02 user: Codex が担当） | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / Agent A A1 | 2026-10-02 ユーザー指示と同日の追加。p172/q579は部分統合・検証後unclearedで、残reviewの再選定が先。Interop対象はp173で固定、Test262の到達率は未指定 |
 
@@ -233,19 +233,20 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS120](ws120/ws.md) | MG006 | 音楽アプリ（fg019） | planning | p001 |
 | [WS121](ws121/ws.md) | MG006 | Web ブラウザでのアクセラレーションつきのビデオ再生（fg019） | planning | p001 |
 | [WS122](ws122/ws.md) | MG006 | 動画プレーヤアプリ（fg019） | planning | p001 |
-| [WS123](ws123/ws.md) | MG006 | VA-API のライブラリ（fg019） | planning | p001 |
+| [WS123](ws123/ws.md) | MG006 | VA-API のライブラリ | canceled（2026-10-02 user、アプリが Vulkan Video を直接使う） | — |
 | [WS124](ws124/ws.md) | MG002 | GNU Emacs の package（fg019） | planning | p001 |
 | [WS125](ws125/ws.md) | MG002 | vim の package（fg019） | planning | p001 |
 | [WS126](ws126/ws.md) | MG002 | Python 3 の package（fg019） | planning | p001 |
 | [WS127](ws127/ws.md) | MG006 | Files のベータ1 のブラッシュアップ（最重点）（fg019） | planning | p001 |
 | [WS128](ws128/ws.md) | MG006 | 標準アプリ全般のベータ1 のブラッシュアップ（fg019） | planning | p001 |
+| [WS129](ws129/ws.md) | MG007 | ベータ1 のリリース作業（版・release notes・既知の問題・CI の release・最終回帰）（fg019） | planning | p001 |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
 ## サブエージェント運用（2026-10-02 ユーザー更新）
 
-[正本](agents/protocol.md)・[台帳](agents/registry.md)。このcheckoutの単一 Claude Code セッション Q1 が唯一の共有計画/cache書き手とQueue配布/merge担当。サブエージェントは固定名 P1〜P8（Agent tool、`.claude/agents/`）。一度コンテキストを埋めた担当をなるべく長く動かし、Q1 が次々に Queue を依頼・予約する。N はユーザー指定（2026-10-02 N=2 から開始）。各担当 active Queue 最大1、1Queueは原則1Phase。
+[正本](agents/protocol.md)・[台帳](agents/registry.md)。このcheckoutの単一 Claude Code セッション Q1 が唯一の共有計画/cache書き手とQueue配布/merge担当。サブエージェントは固定名 P1〜P8（Agent tool、`.claude/agents/`）。一度コンテキストを埋めた担当をなるべく長く動かし、Q1 が次々に Queue を依頼・予約する。N はユーザー指定（2026-10-02 N=4）。各担当 active Queue 最大1、1Queueは原則1Phase。
 
 ## WS の優先順位
 
