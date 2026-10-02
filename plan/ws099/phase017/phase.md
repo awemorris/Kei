@@ -4,7 +4,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS099](../ws.md)
-Queue: q577 / q577-i01 / P8（uncleared履歴）、q583 / q583-i01 / B3（部分診断cleared）
+Queue: q577 / q577-i01 / P8（uncleared履歴）、q583 / q583-i01 / B3（部分診断cleared）、q589 / q589-i01 / B3（uncleared、準備のみ）
 
 ## 承認と有限範囲
 
@@ -32,3 +32,5 @@ Resume: finite Queueの証拠と原因判定を確認して次attemptを選定�
 2026-10-02 / b3-q583-terminal-diagnosis: q583部分診断を完了、[結果](q583-result.md)と[適用規約review](q583-conformance.md)をB mainが3ed1834cへ統合。original5/handshake5の全部分PASS、残2症状は今回非再現。診断 overhead/非並列条件の限界を保持し、修正・whole基準達成と扱わない。whole Phase uncleared、BUG-125 trackingのまま。owned runtime停止。新しい弁別条件を具体化した別Queueまで追加反復しない。
 
 2026-10-02 / b3-q589-dispatch: ユーザー継続Queue指示により[q589 partial scope](q589-approved-scope.md)を投入。q583のcapture前snapshot overheadを減らす有限診断、製品/共有試験変更なし。whole Phase基準とBUG dispositionは維持。B1停止後の資源grantで5回まで実測。
+
+2026-10-02 / b3-q589-user-wrap-20261002: userが状況保存/uncleared/再開可能化/終了を指示。[終端結果](q589-result.md)をB main90c124e8へ統合しq589-i01をunclearedで終了。helper/host検証は完了、資源待ちのguest/5回実測は未実施。資産hash/準備shell/有限再開手順/未起動cleanupを保存。whole Phase uncleared、BUG-125 tracking維持、修正・新FAIL・取消と扱わない。B3終了、再開には新attemptの有限Queueと資源grantが必要。

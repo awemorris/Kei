@@ -1,0 +1,17 @@
+[
+  {
+    "path": "/home/awe/zedBSD-worktrees/b3/build/b3-q589/criteria.img",
+    "bytes": 2216689664,
+    "sha256": "992e83f498cda2a1d506bb6ad7975b3c4592069fcb6493eca707e0d84403ac37"
+  },
+  {
+    "path": "/home/awe/zedBSD-worktrees/b3/build/b3-q589/prepare/observe.sh",
+    "bytes": 10352,
+    "sha256": "ef20cf0277f3ab04a89c258680533eb90868390e2478b02573c83cbac6a6551b"
+  },
+  {
+    "path": "/home/awe/zedBSD-worktrees/b3/plan/ws099/tests/p017-popup-low-overhead.py",
+    "bytes": 5769,
+    "sha256": "e0d0e6b3b369725c705b5582c87eba5b91d33262e0e6fb329fb44ab48e35511f"
+  }
+]

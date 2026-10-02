@@ -45,3 +45,49 @@ and resource ownership. Existing rules need only changed sections and the next
 scope's missing material reloaded. User wrap-up/stop still takes effect promptly.
 No context reload or agent replacement is required solely because a Queue ends;
 actual runtime/context limits are reported accurately when observed.
+
+## Wrap-up instruction / 2026-10-02
+
+Current user:「B1,B2に現在のphaseを完了したらラップアップして終了するようにお伝えください。B3に作業状況を説明するようにお伝えください。」
+
+This supersedes continuous successor dispatch for B1 and B2. B1 finishes the
+current WS114 p007/q587 attempt within its approved bounds, records outcomes and
+cleanup, then ends. B2 finishes the current scoped WS094 p007/q588 attempt,
+preserves whole-Phase residual obligations, records outcomes and cleanup, then
+ends. Neither lane starts a successor Queue. Reserved q593/WS099 p019 remains
+unstarted with its authorized wallpaper decisions and design preserved for a
+later resume; this is not Phase cancellation. B3 was asked for a status report;
+its existing finite q589 scope/resource wait remains unchanged.
+
+## B3 wrap-up instruction / 2026-10-02
+
+Current user:「了解、B3には作業状況を保存してもらい、unclearedで記録してもらい、再開できるようにした上で、終了してもらってください。」
+
+B3 must not start the waiting q589 guest runs. Save preparation, verification,
+remaining work and resume requirements; end q589-i01 uncleared and wrap up.
+Whole WS099 p017 remains uncleared and BUG-125 remains tracking. Preserve all
+earlier attempt outcomes and prepared artifacts. Main verifies the terminal
+submission and maintains pending A-owned shared history/projections. This latest
+direction ends B3 as well as B1/B2 after their respective wrap-ups; no successor
+Queues are dispatched.
+
+## All-agent safe wrap-up / 2026-10-02
+
+Current user:「すべてのエージェントを終了に向かわせます。」「きりのいいところで作業をきりあげてもらいます。」
+
+All B agents received this direction. Current processes finish at a safe boundary;
+new guests, successor Queues and optional repetitions are not started. Preserve
+actual results, uncleared criteria, resume inputs and normal shutdown/readback.
+B main reviews and integrates the final submissions, saves the handoff and ends
+after the three children wrap up. A-owned shared publication/projections remain
+durably pending in the handoff; no push is performed.
+
+## Integration and push authorization / 2026-10-02
+
+Current user:「各エージェントの成果を待って、統合してください。-m WIPでコミットしたら、統合結果のこのブランチを、リモートに同じ名前でpushしてください。エージェントAが取り込む予定です。」
+
+Main waits for B1/B2/B3's final submissions, reviews and integrates them on
+codex/agent-b, and commits with WIP. This explicitly authorizes a normal push to
+origin's same-named codex/agent-b branch, superseding the previous no-push limit
+for this integration. No force push or main-branch push is authorized. A will
+integrate the branch and owns shared planning publication/projections.

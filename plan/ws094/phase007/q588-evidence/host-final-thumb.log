@@ -1,0 +1,18 @@
+jpeg rgb: ok error=0 size=48x32 worst=0
+jpeg grey: ok error=0 size=48x32 worst=0
+jpeg cmyk: ok error=0 size=48x32 worst=0
+jpeg exif 1: ok error=0 size=48x32 worst=0
+jpeg exif 2: ok error=0 size=48x32 worst=0
+jpeg exif 3: ok error=0 size=48x32 worst=0
+jpeg exif 4: ok error=0 size=48x32 worst=0
+jpeg exif 5: ok error=0 size=32x48 worst=0
+jpeg exif 6: ok error=0 size=32x48 worst=0
+jpeg exif 7: ok error=0 size=32x48 worst=0
+jpeg exif 8: ok error=0 size=32x48 worst=0
+gif still, transparent colour: ok error=0 size=48x32 worst=0
+gif animated, first frame: ok error=0 size=48x32 worst=0
+jpeg cut short refused: ok error=22
+jpeg of garbage refused: ok error=22
+gif of garbage refused: ok error=22
+gif without a frame refused: ok error=22
+host-thumb: PASS

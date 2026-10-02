@@ -165,8 +165,12 @@ fm_desktop_rename_end(
 	*slash = '\0';
 	snprintf(new_path, sizeof(new_path), "%s/%s", old_path, new_name);
 	old_there = lstat(app->rename_path, &status);
+	if (old_there == 0)
+		return;
+
+	/* Only an existing new path can receive the old saved place. */
 	new_there = lstat(new_path, &status);
-	if (old_there == 0 || new_there != 0)
+	if (new_there != 0)
 		return;
 
 	/* Its place under the new name. */

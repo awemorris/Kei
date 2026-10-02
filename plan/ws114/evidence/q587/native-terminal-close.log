@@ -1,0 +1,9 @@
+ZTERM TABS count=2 active=2 mode=2
+ZTERM TAB active id=1
+ZTERM TABS count=2 active=1 mode=2
+ZTERM RESIZE run=term columns=126 rows=33 window=1280x762
+ZTERM RESIZE run=term columns=90 rows=28 window=916x632
+ZTERM DONE run=term reason=closed
+ZTERM TAB closed run=term id=2 count=1
+ZTERM TAB closed run=term id=1 count=0
+    PID COMMAND

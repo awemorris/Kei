@@ -237,8 +237,19 @@ zwl_toplevel_surface_gone(
 	/* Its sheets have no parent any more (sheet.c). */
 	zwl_sheet_surface_gone(surface);
 
-	/* Only the window being resized has anything to end. */
+	/* Retire borrowed client-operation ownership before this window disappears. */
 	server = surface->client->server;
+	if (server->interactive_window == surface) {
+		server->interactive_window = NULL;
+		server->interactive_surface = NULL;
+		server->interactive_button = 0U;
+	}
+
+	/* A client move cannot continue after its window's role disappears. */
+	if (server->drag == surface)
+		server->drag = NULL;
+
+	/* Only the window being resized has a resize to end. */
 	if (server->resize != surface)
 		return;
 
@@ -590,9 +601,23 @@ toplevel_move(
 		return 0;
 	}
 
-	/* Succeeded: the glass look moves the window until the button is let go. */
-	if (server->glass)
-		zwl_glass_toplevel_request(server, surface, ZWL_TOPLEVEL_MOVE);
+	/* A busy operation or a look without interactive moves leaves this request inert. */
+	if (!server->glass ||
+	    server->drag != NULL ||
+	    server->resize != NULL)
+		return 0;
+
+	/* The shell decides whether this shown window can begin moving. */
+	zwl_glass_toplevel_request(server, surface, ZWL_TOPLEVEL_MOVE);
+	if (server->drag != surface)
+		return 0;
+
+	/* Only an accepted client request borrows the original delivered press. */
+	server->interactive_window = surface;
+	server->interactive_surface = server->press_surface;
+	server->interactive_button = server->press_button;
+
+	/* Succeeded: the matching release will return to its original client. */
 	return 0;
 }
 
@@ -639,10 +664,19 @@ toplevel_resize(
 
 	/* A window that cannot be resized now leaves the request without effect. */
 	error = zwl_toplevel_resize_start(server, surface, edges);
-	if (error != 0)
+	if (error != 0) {
 		printf("ZWL RESIZE refused surface=%u reason=state\n", surface->id);
 
-	/* Succeeded: the request was taken, whether or not the window could be resized. */
+		/* An inert request has no client release ownership to retain. */
+		return 0;
+	}
+
+	/* Only the accepted xdg request borrows the original client press. */
+	server->interactive_window = surface;
+	server->interactive_surface = server->press_surface;
+	server->interactive_button = server->press_button;
+
+	/* Succeeded: the matching release will return to its original client. */
 	return 0;
 }
 
@@ -690,16 +724,38 @@ press_held(
 {
 	struct zwl_server *server;
 	struct zwl_object *seat;
+	uint32_t bit;
 
 	/* The seat must be the client's. */
 	seat = zwl_find(client, seat_id);
 	if (seat == NULL || seat->kind != ZWL_SEAT)
 		return -1;
 
-	/* A button must be down, and the serial must be of the press the client was sent last. */
+	/* Popup, drag-and-drop and lock ownership cannot be overridden by a window request. */
 	server = client->server;
-	if (server->buttons_down == 0U)
+	if (server->locked ||
+	    server->dnd_active ||
+	    server->pointer_grabbed)
 		return 0;
+
+	/* The authorization belongs only to the original live client of the delivered press. */
+	if (server->press_surface == NULL || server->press_surface->dead)
+		return 0;
+
+	/* Other clients cannot reuse the globally shared input serial. */
+	if (server->press_surface->client != client)
+		return 0;
+
+	/* Only the actual initiating button being held authorizes a move or resize. */
+	if (server->press_button < ZWL_BUTTON_LEFT || server->press_button - ZWL_BUTTON_LEFT >= 32U)
+		return 0;
+
+	/* Tests the held bit for this physical button rather than any other button. */
+	bit = 1U << (server->press_button - ZWL_BUTTON_LEFT);
+	if ((server->buttons_down & bit) == 0U)
+		return 0;
+
+	/* The serial must be the exact event delivered to this origin. */
 	if (serial == 0U || serial != server->press_serial)
 		return 0;
 

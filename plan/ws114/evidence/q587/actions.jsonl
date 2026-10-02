@@ -107,3 +107,321 @@
 {"utc": "2026-10-02T08:11:00Z", "action": "button", "down": false, "kind": "left"}
 {"utc": "2026-10-02T08:11:00Z", "action": "screenshot", "name": "gl-modal-closed.png"}
 {"utc": "2026-10-02T08:11:01Z", "action": "ssh", "command": "cat /tmp/q587-gl2.stdout", "evidence": "gl2-states.log"}
+{"utc": "2026-10-02T08:21:45Z", "action": "ssh", "command": "kill $(cat /tmp/q587-gl2.pid); pkill -TERM -f \"^/opt/keiland/bin/wayland --socket=/run/b1-q587/wayland-q587\"; sleep 1; tail -5 /tmp/q587-compositor.log", "evidence": "first-compositor-stop.log"}
+{"utc": "2026-10-02T08:21:47Z", "action": "ssh", "command": "sh /tmp/q587-start-session.sh; sha256sum /opt/keiland/bin/wayland", "evidence": "release-runtime-install.log"}
+{"utc": "2026-10-02T08:21:49Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer python3 /tmp/gtk4-baseline.py > /tmp/q587-release.stdout 2> /tmp/q587-release.trace < /dev/null & echo $! > /tmp/q587-release.pid", "evidence": "release-start.log"}
+{"utc": "2026-10-02T08:21:51Z", "action": "point", "x": 500, "y": 232}
+{"utc": "2026-10-02T08:21:51Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:21:51Z", "action": "point", "x": 506, "y": 236}
+{"utc": "2026-10-02T08:21:51Z", "action": "point", "x": 512, "y": 240}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 518, "y": 244}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 524, "y": 248}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 530, "y": 252}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 536, "y": 256}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 542, "y": 260}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 548, "y": 264}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 554, "y": 268}
+{"utc": "2026-10-02T08:21:52Z", "action": "point", "x": 560, "y": 272}
+{"utc": "2026-10-02T08:21:52Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:21:53Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:21:53Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:21:53Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:21:54Z", "action": "point", "x": 450, "y": 406}
+{"utc": "2026-10-02T08:21:54Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:21:54Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:21:54Z", "action": "key", "keys": ["x"]}
+{"utc": "2026-10-02T08:21:54Z", "action": "screenshot", "name": "release-move.png"}
+{"utc": "2026-10-02T08:21:54Z", "action": "ssh", "command": "cat /tmp/q587-release.stdout; grep -E 'xdg_toplevel.*move|wl_pointer.*(button|axis)' /tmp/q587-release.trace | tail -14", "evidence": "release-move.log"}
+{"utc": "2026-10-02T08:22:32Z", "action": "ssh", "command": "sed -i 's/openvt -c/openvt -f -c/' /tmp/q587-start-session.sh; pgrep -f '^/opt/keiland/bin/wayland --socket=/run/b1-q587/wayland-q587' || true; sh /tmp/q587-start-session.sh", "evidence": "release-compositor-restart.log"}
+{"utc": "2026-10-02T08:22:34Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer python3 /tmp/gtk4-baseline.py > /tmp/q587-release.stdout 2> /tmp/q587-release.trace < /dev/null & echo $! > /tmp/q587-release.pid", "evidence": "release-client-restart.log"}
+{"utc": "2026-10-02T08:22:36Z", "action": "point", "x": 500, "y": 232}
+{"utc": "2026-10-02T08:22:36Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:22:36Z", "action": "point", "x": 506, "y": 236}
+{"utc": "2026-10-02T08:22:36Z", "action": "point", "x": 512, "y": 240}
+{"utc": "2026-10-02T08:22:36Z", "action": "point", "x": 518, "y": 244}
+{"utc": "2026-10-02T08:22:36Z", "action": "point", "x": 524, "y": 248}
+{"utc": "2026-10-02T08:22:37Z", "action": "point", "x": 530, "y": 252}
+{"utc": "2026-10-02T08:22:37Z", "action": "point", "x": 536, "y": 256}
+{"utc": "2026-10-02T08:22:37Z", "action": "point", "x": 542, "y": 260}
+{"utc": "2026-10-02T08:22:37Z", "action": "point", "x": 548, "y": 264}
+{"utc": "2026-10-02T08:22:37Z", "action": "point", "x": 554, "y": 268}
+{"utc": "2026-10-02T08:22:37Z", "action": "point", "x": 560, "y": 272}
+{"utc": "2026-10-02T08:22:37Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:22:38Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:22:38Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:22:38Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:22:38Z", "action": "point", "x": 450, "y": 406}
+{"utc": "2026-10-02T08:22:38Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:22:38Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:22:38Z", "action": "key", "keys": ["x"]}
+{"utc": "2026-10-02T08:22:39Z", "action": "screenshot", "name": "release-move.png"}
+{"utc": "2026-10-02T08:22:39Z", "action": "ssh", "command": "cat /tmp/q587-release.stdout; grep -E 'xdg_toplevel.*move|wl_pointer.*(button|axis)' /tmp/q587-release.trace | tail -14", "evidence": "release-move.log"}
+{"utc": "2026-10-02T08:24:13Z", "action": "point", "x": 1048, "y": 714}
+{"utc": "2026-10-02T08:24:13Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:24:13Z", "action": "point", "x": 1055, "y": 718}
+{"utc": "2026-10-02T08:24:13Z", "action": "point", "x": 1062, "y": 722}
+{"utc": "2026-10-02T08:24:13Z", "action": "point", "x": 1069, "y": 726}
+{"utc": "2026-10-02T08:24:13Z", "action": "point", "x": 1076, "y": 730}
+{"utc": "2026-10-02T08:24:14Z", "action": "point", "x": 1083, "y": 734}
+{"utc": "2026-10-02T08:24:14Z", "action": "point", "x": 1090, "y": 738}
+{"utc": "2026-10-02T08:24:14Z", "action": "point", "x": 1097, "y": 742}
+{"utc": "2026-10-02T08:24:14Z", "action": "point", "x": 1104, "y": 746}
+{"utc": "2026-10-02T08:24:14Z", "action": "point", "x": 1111, "y": 750}
+{"utc": "2026-10-02T08:24:14Z", "action": "point", "x": 1118, "y": 754}
+{"utc": "2026-10-02T08:24:14Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:24:15Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:24:15Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:24:15Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:24:16Z", "action": "point", "x": 500, "y": 406}
+{"utc": "2026-10-02T08:24:16Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:24:16Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:24:16Z", "action": "key", "keys": ["y"]}
+{"utc": "2026-10-02T08:24:16Z", "action": "screenshot", "name": "release-resize.png"}
+{"utc": "2026-10-02T08:24:16Z", "action": "ssh", "command": "cat /tmp/q587-release.stdout; grep -E 'xdg_toplevel.*(move|resize)|wl_pointer.*button' /tmp/q587-release.trace | tail -12; grep 'RESIZE' /tmp/q587-compositor.log | tail -8", "evidence": "release-resize.log"}
+{"utc": "2026-10-02T08:26:08Z", "action": "ssh", "command": "kill $(cat /tmp/q587-release.pid); pkill -TERM -f \"^/opt/keiland/bin/wayland --socket=/run/b1-q587/wayland-q587\"; sleep 1; tail -3 /tmp/q587-compositor.log", "evidence": "release-v1-stop.log"}
+{"utc": "2026-10-02T08:26:09Z", "action": "ssh", "command": "sh /tmp/q587-start-session.sh; sha256sum /opt/keiland/bin/wayland", "evidence": "release-final-runtime.log"}
+{"utc": "2026-10-02T08:26:11Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer python3 /tmp/gtk4-baseline.py > /tmp/q587-finalgl.stdout 2> /tmp/q587-finalgl.trace < /dev/null & echo $! > /tmp/q587-finalgl.pid", "evidence": "finalgl-start.log"}
+{"utc": "2026-10-02T08:26:13Z", "action": "point", "x": 500, "y": 232}
+{"utc": "2026-10-02T08:26:13Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:26:14Z", "action": "point", "x": 530, "y": 252}
+{"utc": "2026-10-02T08:26:14Z", "action": "button", "down": true, "kind": "right"}
+{"utc": "2026-10-02T08:26:14Z", "action": "button", "down": false, "kind": "right"}
+{"utc": "2026-10-02T08:26:14Z", "action": "point", "x": 560, "y": 272}
+{"utc": "2026-10-02T08:26:14Z", "action": "screenshot", "name": "multiple-button-drag.png"}
+{"utc": "2026-10-02T08:26:14Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:26:14Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:26:15Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:26:15Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:26:15Z", "action": "point", "x": 450, "y": 406}
+{"utc": "2026-10-02T08:26:15Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:26:15Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:26:15Z", "action": "key", "keys": ["z"]}
+{"utc": "2026-10-02T08:26:15Z", "action": "ssh", "command": "cat /tmp/q587-finalgl.stdout; grep -E 'xdg_toplevel.*move|wl_pointer.*button' /tmp/q587-finalgl.trace | tail -10", "evidence": "multiple-button-move.log"}
+{"utc": "2026-10-02T08:26:15Z", "action": "point", "x": 1048, "y": 714}
+{"utc": "2026-10-02T08:26:15Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1055, "y": 718}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1062, "y": 722}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1069, "y": 726}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1076, "y": 730}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1083, "y": 734}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1090, "y": 738}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1097, "y": 742}
+{"utc": "2026-10-02T08:26:16Z", "action": "point", "x": 1104, "y": 746}
+{"utc": "2026-10-02T08:26:17Z", "action": "point", "x": 1111, "y": 750}
+{"utc": "2026-10-02T08:26:17Z", "action": "point", "x": 1118, "y": 754}
+{"utc": "2026-10-02T08:26:17Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:26:17Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:26:17Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:26:17Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:26:17Z", "action": "point", "x": 450, "y": 406}
+{"utc": "2026-10-02T08:26:18Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:26:18Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:26:18Z", "action": "key", "keys": ["r"]}
+{"utc": "2026-10-02T08:26:18Z", "action": "screenshot", "name": "final-resize.png"}
+{"utc": "2026-10-02T08:26:18Z", "action": "ssh", "command": "cat /tmp/q587-finalgl.stdout; grep -E 'xdg_toplevel.*resize|wl_pointer.*button' /tmp/q587-finalgl.trace | tail -10; grep RESIZE /tmp/q587-compositor.log | tail -5", "evidence": "final-resize.log"}
+{"utc": "2026-10-02T08:29:13Z", "action": "point", "x": 1030, "y": 702}
+{"utc": "2026-10-02T08:29:13Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1037, "y": 706}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1044, "y": 710}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1051, "y": 714}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1058, "y": 718}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1065, "y": 722}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1072, "y": 726}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1079, "y": 730}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1086, "y": 734}
+{"utc": "2026-10-02T08:29:14Z", "action": "point", "x": 1093, "y": 738}
+{"utc": "2026-10-02T08:29:15Z", "action": "point", "x": 1100, "y": 742}
+{"utc": "2026-10-02T08:29:15Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:29:15Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:29:15Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:29:15Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:29:15Z", "action": "point", "x": 450, "y": 394}
+{"utc": "2026-10-02T08:29:15Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:29:15Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:29:15Z", "action": "key", "keys": ["s"]}
+{"utc": "2026-10-02T08:29:16Z", "action": "screenshot", "name": "final-resize-correct.png"}
+{"utc": "2026-10-02T08:29:16Z", "action": "ssh", "command": "cat /tmp/q587-finalgl.stdout; grep -E 'xdg_toplevel.*resize|wl_pointer.*button' /tmp/q587-finalgl.trace | tail -10; grep RESIZE /tmp/q587-compositor.log | tail -5", "evidence": "final-resize-correct.log"}
+{"utc": "2026-10-02T08:29:16Z", "action": "point", "x": 500, "y": 252}
+{"utc": "2026-10-02T08:29:17Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:29:17Z", "action": "point", "x": 540, "y": 272}
+{"utc": "2026-10-02T08:29:17Z", "action": "point", "x": 570, "y": 292}
+{"utc": "2026-10-02T08:29:18Z", "action": "ssh", "command": "grep \"request move\" /tmp/q587-compositor.log | tail -2; kill $(cat /tmp/q587-finalgl.pid); sleep .5; tail -8 /tmp/q587-compositor.log", "evidence": "destroy-moving.log"}
+{"utc": "2026-10-02T08:29:18Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:29:18Z", "action": "point", "x": 640, "y": 400}
+{"utc": "2026-10-02T08:29:19Z", "action": "screenshot", "name": "destroy-moving.png"}
+{"utc": "2026-10-02T08:29:19Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer WS114_PROBE_TEXT=\"q587 clipboard \u03a9 \u65e5\u672c\u8a9e\" python3 /tmp/gtk4-baseline.py > /tmp/q587-check.stdout 2> /tmp/q587-check.trace < /dev/null & echo $! > /tmp/q587-check.pid", "evidence": "destroy-recovery-start.log"}
+{"utc": "2026-10-02T08:29:21Z", "action": "point", "x": 450, "y": 374}
+{"utc": "2026-10-02T08:29:21Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:29:21Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:29:21Z", "action": "key", "keys": ["d"]}
+{"utc": "2026-10-02T08:29:21Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:29:21Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:29:21Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:29:21Z", "action": "ssh", "command": "cat /tmp/q587-check.stdout; tail -8 /tmp/q587-compositor.log", "evidence": "destroy-recovery.log"}
+{"utc": "2026-10-02T08:33:17Z", "action": "ssh", "command": "kill $(cat /tmp/q587-check.pid); pkill -TERM -f \"^/opt/keiland/bin/wayland --socket=/run/b1-q587/wayland-q587\"; sleep 1; tail -3 /tmp/q587-compositor.log", "evidence": "release-v2-stop.log"}
+{"utc": "2026-10-02T08:33:19Z", "action": "ssh", "command": "sh /tmp/q587-start-session.sh; sha256sum /opt/keiland/bin/wayland", "evidence": "final-runtime-install.log"}
+{"utc": "2026-10-02T08:33:22Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup python3 /tmp/interactive-wire.py resize > /tmp/q587-bounded.log 2>&1 < /dev/null & echo $! > /tmp/q587-bounded.pid", "evidence": "bounded-start.log"}
+{"utc": "2026-10-02T08:33:23Z", "action": "screenshot", "name": "bounded-initial.png"}
+{"utc": "2026-10-02T08:33:23Z", "action": "ssh", "command": "tail -2 /tmp/q587-bounded.log", "evidence": "bounded-ready.log"}
+{"utc": "2026-10-02T08:34:25Z", "action": "point", "x": 640, "y": 430}
+{"utc": "2026-10-02T08:34:25Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:34:25Z", "action": "point", "x": 1100, "y": 740}
+{"utc": "2026-10-02T08:34:25Z", "action": "screenshot", "name": "bounded-outside-hold.png"}
+{"utc": "2026-10-02T08:34:26Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:34:26Z", "action": "ssh", "command": "tail -10 /tmp/q587-bounded.log; grep RESIZE /tmp/q587-compositor.log | tail -5", "evidence": "bounded-result.log"}
+{"utc": "2026-10-02T08:34:27Z", "action": "ssh", "command": ". /tmp/q587-session.env; python3 /tmp/decoration-wire.py > /tmp/q587-wire-final.log 2>&1; echo exit=$?; grep PASS /tmp/q587-wire-final.log", "evidence": "wire-final-summary.log"}
+{"utc": "2026-10-02T08:35:50Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup python3 /tmp/interactive-wire.py move > /tmp/q587-rightmove.log 2>&1 < /dev/null &", "evidence": "rightmove-start.log"}
+{"utc": "2026-10-02T08:35:51Z", "action": "point", "x": 640, "y": 430}
+{"utc": "2026-10-02T08:35:51Z", "action": "button", "down": true, "kind": "right"}
+{"utc": "2026-10-02T08:35:51Z", "action": "point", "x": 700, "y": 470}
+{"utc": "2026-10-02T08:35:52Z", "action": "button", "down": false, "kind": "right"}
+{"utc": "2026-10-02T08:35:52Z", "action": "ssh", "command": "tail -5 /tmp/q587-rightmove.log; grep \"GLASS moved\" /tmp/q587-compositor.log | tail -2", "evidence": "rightmove-result.log"}
+{"utc": "2026-10-02T08:35:52Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer WS114_PROBE_TEXT=\"q587 clipboard \u03a9 \u65e5\u672c\u8a9e\" python3 /tmp/gtk4-baseline.py > /tmp/q587-final.stdout 2> /tmp/q587-final.trace < /dev/null & echo $! > /tmp/q587-final.pid", "evidence": "gl-final-start.log"}
+{"utc": "2026-10-02T08:35:54Z", "action": "point", "x": 450, "y": 374}
+{"utc": "2026-10-02T08:35:54Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:35:54Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:35:54Z", "action": "key", "keys": ["f"]}
+{"utc": "2026-10-02T08:35:54Z", "action": "point", "x": 335, "y": 232}
+{"utc": "2026-10-02T08:35:54Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:35:55Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:35:55Z", "action": "screenshot", "name": "final-menu.png"}
+{"utc": "2026-10-02T08:35:55Z", "action": "point", "x": 348, "y": 279}
+{"utc": "2026-10-02T08:35:55Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:35:55Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:35:55Z", "action": "point", "x": 335, "y": 232}
+{"utc": "2026-10-02T08:35:57Z", "action": "screenshot", "name": "final-tooltip.png"}
+{"utc": "2026-10-02T08:35:57Z", "action": "point", "x": 350, "y": 422}
+{"utc": "2026-10-02T08:35:57Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:35:57Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:35:58Z", "action": "screenshot", "name": "final-modal.png"}
+{"utc": "2026-10-02T08:35:58Z", "action": "point", "x": 640, "y": 478}
+{"utc": "2026-10-02T08:35:58Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:35:58Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:35:59Z", "action": "point", "x": 565, "y": 422}
+{"utc": "2026-10-02T08:35:59Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:35:59Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:36:00Z", "action": "screenshot", "name": "final-max.png"}
+{"utc": "2026-10-02T08:36:04Z", "action": "screenshot", "name": "final-max-restore.png"}
+{"utc": "2026-10-02T08:36:04Z", "action": "point", "x": 667, "y": 422}
+{"utc": "2026-10-02T08:36:04Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:36:04Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:36:06Z", "action": "screenshot", "name": "final-full.png"}
+{"utc": "2026-10-02T08:36:09Z", "action": "screenshot", "name": "final-full-restore.png"}
+{"utc": "2026-10-02T08:36:09Z", "action": "ssh", "command": "cat /tmp/q587-final.stdout", "evidence": "gl-final-state.log"}
+{"utc": "2026-10-02T08:36:46Z", "action": "point", "x": 600, "y": 500}
+{"utc": "2026-10-02T08:36:47Z", "action": "point", "x": 335, "y": 232}
+{"utc": "2026-10-02T08:36:49Z", "action": "screenshot", "name": "final-tooltip-hover.png"}
+{"utc": "2026-10-02T08:36:49Z", "action": "ssh", "command": "grep -E 'get_popup|set_window_geometry|reposition' /tmp/q587-final.trace | tail -12", "evidence": "tooltip-wire.log"}
+{"utc": "2026-10-02T08:36:49Z", "action": "ssh", "command": "cat /tmp/q587-compositor.log", "evidence": "compositor-final-check.log"}
+{"utc": "2026-10-02T08:37:44Z", "action": "point", "x": 450, "y": 326}
+{"utc": "2026-10-02T08:37:44Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:37:44Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:37:44Z", "action": "key", "keys": ["ctrl", "a"]}
+{"utc": "2026-10-02T08:37:44Z", "action": "key", "keys": ["ctrl", "c"]}
+{"utc": "2026-10-02T08:37:45Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer GSK_RENDERER=cairo WS114_PROBE_ID=org.zedbsd.WS114Cairo WS114_PROBE_TITLE=\"WS114 Cairo CSD\" python3 /tmp/gtk4-baseline.py > /tmp/q587-cairo.stdout 2> /tmp/q587-cairo.trace < /dev/null & echo $! > /tmp/q587-cairo.pid", "evidence": "cairo-start.log"}
+{"utc": "2026-10-02T08:37:46Z", "action": "point", "x": 450, "y": 374}
+{"utc": "2026-10-02T08:37:46Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:37:46Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:37:46Z", "action": "key", "keys": ["ctrl", "v"]}
+{"utc": "2026-10-02T08:37:47Z", "action": "screenshot", "name": "cairo-clipboard.png"}
+{"utc": "2026-10-02T08:37:47Z", "action": "ssh", "command": "cat /tmp/q587-cairo.stdout", "evidence": "cairo-clipboard.log"}
+{"utc": "2026-10-02T08:37:47Z", "action": "key", "keys": ["c"]}
+{"utc": "2026-10-02T08:37:47Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:37:48Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:37:48Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:37:48Z", "action": "ssh", "command": "cat /tmp/q587-cairo.stdout; kill $(cat /tmp/q587-cairo.pid)", "evidence": "cairo-input.log"}
+{"utc": "2026-10-02T08:37:48Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer GSK_RENDERER=vulkan WS114_PROBE_ID=org.zedbsd.WS114Vulkan WS114_PROBE_TITLE=\"WS114 Vulkan CSD\" python3 /tmp/gtk4-baseline.py > /tmp/q587-vulkan.stdout 2> /tmp/q587-vulkan.trace < /dev/null & echo $! > /tmp/q587-vulkan.pid", "evidence": "vulkan-start.log"}
+{"utc": "2026-10-02T08:37:50Z", "action": "point", "x": 450, "y": 374}
+{"utc": "2026-10-02T08:37:50Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:37:51Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:37:51Z", "action": "key", "keys": ["v"]}
+{"utc": "2026-10-02T08:37:51Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:37:51Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:37:51Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:37:51Z", "action": "screenshot", "name": "vulkan-input.png"}
+{"utc": "2026-10-02T08:37:51Z", "action": "ssh", "command": "cat /tmp/q587-vulkan.stdout; kill $(cat /tmp/q587-vulkan.pid); kill $(cat /tmp/q587-final.pid)", "evidence": "vulkan-input.log"}
+{"utc": "2026-10-02T08:37:52Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client /opt/keiland/bin/terminal > /tmp/q587-terminal.stdout 2> /tmp/q587-terminal.trace < /dev/null & echo $! > /tmp/q587-terminal.pid", "evidence": "native-terminal-start.log"}
+{"utc": "2026-10-02T08:37:53Z", "action": "screenshot", "name": "native-terminal.png"}
+{"utc": "2026-10-02T08:39:22Z", "action": "key", "keys": ["ctrl", "shift", "t"]}
+{"utc": "2026-10-02T08:39:23Z", "action": "screenshot", "name": "native-terminal-tabs.png"}
+{"utc": "2026-10-02T08:39:23Z", "action": "point", "x": 336, "y": 97}
+{"utc": "2026-10-02T08:39:23Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:39:23Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:39:23Z", "action": "screenshot", "name": "native-terminal-menu.png"}
+{"utc": "2026-10-02T08:39:24Z", "action": "ssh", "command": "tail -20 /tmp/q587-terminal.stdout; tail -12 /tmp/q587-compositor.log", "evidence": "native-terminal-tabs-menu.log"}
+{"utc": "2026-10-02T08:40:03Z", "action": "point", "x": 969, "y": 97}
+{"utc": "2026-10-02T08:40:03Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:40:03Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:40:04Z", "action": "screenshot", "name": "native-terminal-overflow.png"}
+{"utc": "2026-10-02T08:40:04Z", "action": "point", "x": 620, "y": 300}
+{"utc": "2026-10-02T08:40:04Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:40:04Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:40:04Z", "action": "point", "x": 1038, "y": 97}
+{"utc": "2026-10-02T08:40:04Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:40:04Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:40:05Z", "action": "screenshot", "name": "native-terminal-max.png"}
+{"utc": "2026-10-02T08:40:05Z", "action": "point", "x": 724, "y": 17}
+{"utc": "2026-10-02T08:40:05Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:40:05Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:40:06Z", "action": "screenshot", "name": "native-terminal-restore.png"}
+{"utc": "2026-10-02T08:40:06Z", "action": "ssh", "command": "tail -10 /tmp/q587-terminal.stdout; grep -E \"GLASS (dock|undock)|TITLEBAR.*overflow|MENU open\" /tmp/q587-compositor.log | tail -12", "evidence": "native-terminal-controls.log"}
+{"utc": "2026-10-02T08:42:52Z", "action": "point", "x": 1072, "y": 97}
+{"utc": "2026-10-02T08:42:52Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:42:52Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:42:52Z", "action": "screenshot", "name": "native-terminal-close.png"}
+{"utc": "2026-10-02T08:42:53Z", "action": "ssh", "command": "tail -8 /tmp/q587-terminal.stdout; ps -p $(cat /tmp/q587-terminal.pid) -o pid,args || true", "evidence": "native-terminal-close.log"}
+{"utc": "2026-10-02T08:42:53Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup /opt/keiland/bin/files /tmp > /tmp/q587-files.stdout 2> /tmp/q587-files.trace < /dev/null & echo $! > /tmp/q587-files.pid", "evidence": "native-files-start.log"}
+{"utc": "2026-10-02T08:42:54Z", "action": "screenshot", "name": "native-files.png"}
+{"utc": "2026-10-02T08:45:05Z", "action": "point", "x": 800, "y": 69}
+{"utc": "2026-10-02T08:45:05Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:05Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:05Z", "action": "key", "keys": ["q"]}
+{"utc": "2026-10-02T08:45:05Z", "action": "key", "keys": ["5"]}
+{"utc": "2026-10-02T08:45:05Z", "action": "key", "keys": ["8"]}
+{"utc": "2026-10-02T08:45:05Z", "action": "key", "keys": ["7"]}
+{"utc": "2026-10-02T08:45:06Z", "action": "screenshot", "name": "native-files-search.png"}
+{"utc": "2026-10-02T08:45:06Z", "action": "key", "keys": ["ctrl", "a"]}
+{"utc": "2026-10-02T08:45:06Z", "action": "key", "keys": ["backspace"]}
+{"utc": "2026-10-02T08:45:06Z", "action": "point", "x": 995, "y": 69}
+{"utc": "2026-10-02T08:45:06Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:06Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:07Z", "action": "screenshot", "name": "native-files-list.png"}
+{"utc": "2026-10-02T08:45:07Z", "action": "point", "x": 1071, "y": 69}
+{"utc": "2026-10-02T08:45:07Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:07Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:07Z", "action": "screenshot", "name": "native-files-menu.png"}
+{"utc": "2026-10-02T08:45:07Z", "action": "point", "x": 640, "y": 400}
+{"utc": "2026-10-02T08:45:07Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:07Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:07Z", "action": "point", "x": 1139, "y": 69}
+{"utc": "2026-10-02T08:45:07Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:07Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:08Z", "action": "screenshot", "name": "native-files-max.png"}
+{"utc": "2026-10-02T08:45:08Z", "action": "ssh", "command": "grep 'GLASS dock' /tmp/q587-compositor.log | tail -1", "evidence": "native-files-dock.log"}
+{"utc": "2026-10-02T08:45:09Z", "action": "point", "x": 722, "y": 17}
+{"utc": "2026-10-02T08:45:09Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:09Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:09Z", "action": "screenshot", "name": "native-files-restore.png"}
+{"utc": "2026-10-02T08:45:10Z", "action": "point", "x": 1173, "y": 69}
+{"utc": "2026-10-02T08:45:10Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:45:10Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:45:10Z", "action": "screenshot", "name": "native-files-close.png"}
+{"utc": "2026-10-02T08:45:10Z", "action": "ssh", "command": "ps -p $(cat /tmp/q587-files.pid) -o pid,args || true; grep -E \"TITLEBAR.*(text|activated)|GLASS (dock|undock)\" /tmp/q587-compositor.log | tail -15", "evidence": "native-files-controls.log"}
+{"utc": "2026-10-02T08:45:11Z", "action": "ssh", "command": "printf \"q587 Textedit test\\n\" > /tmp/q587-note.txt; . /tmp/q587-session.env; nohup /opt/keiland/bin/textedit /tmp/q587-note.txt > /tmp/q587-textedit.stdout 2> /tmp/q587-textedit.trace < /dev/null & echo $! > /tmp/q587-textedit.pid", "evidence": "native-textedit-start.log"}
+{"utc": "2026-10-02T08:45:12Z", "action": "screenshot", "name": "native-textedit.png"}
+{"utc": "2026-10-02T08:50:04Z", "action": "point", "x": 1063, "y": 73}
+{"utc": "2026-10-02T08:50:04Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:50:04Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "ps -p $(cat /tmp/q587-textedit.pid) -o pid,args || true; tail -6 /tmp/q587-textedit.stdout", "evidence": "native-textedit-close.log"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "cat /tmp/q587-final.trace", "evidence": "gtk-gl-final.trace"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "cat /tmp/q587-cairo.trace", "evidence": "gtk-cairo.trace"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "cat /tmp/q587-vulkan.trace", "evidence": "gtk-vulkan.trace"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-wire-final.log", "evidence": "wire-final.log"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-bounded.log", "evidence": "bounded-wire.log"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-rightmove.log", "evidence": "rightmove-wire.log"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-compositor.log", "evidence": "compositor-before-stop.log"}
+{"utc": "2026-10-02T08:50:07Z", "action": "ssh", "command": "compositor_pid=$(pgrep -f \"^/opt/keiland/bin/wayland --socket=/run/b1-q587/wayland-q587\"); printf \"owned compositor pid=%s\\n\" \"$compositor_pid\"; test -n \"$compositor_pid\"; kill -TERM \"$compositor_pid\"; sleep 1; tail -8 /tmp/q587-compositor.log; ps -p \"$compositor_pid\" -o pid,args || true", "evidence": "compositor-stop.log"}
+{"utc": "2026-10-02T08:50:08Z", "action": "ssh", "command": "cat /tmp/q587-compositor.log", "evidence": "compositor-complete.log"}
+{"utc": "2026-10-02T08:50:08Z", "action": "key", "keys": ["ctrl", "alt", "f1"]}
+{"utc": "2026-10-02T08:50:08Z", "action": "screenshot", "name": "linux-final-console.png"}
+{"utc": "2026-10-02T08:50:08Z", "action": "poweroff", "qemu_pid": 327367}

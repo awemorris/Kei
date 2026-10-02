@@ -1,0 +1,12 @@
+{"event": [14, 5], "payload_hex": ""}
+{"event": [19, 0], "payload_hex": ""}
+{"event": [10, 0], "payload_hex": "68010000c80000000400000004000000"}
+{"event": [9, 0], "payload_hex": "09000000"}
+{"request": [9, 4], "payload": [9]}
+{"request": [8, 6], "payload": []}
+{"event": [14, 3], "payload_hex": "0a00000057431f001001000000000000"}
+PASS one matching release [(272, 1), (272, 0)]
+{"event": [14, 5], "payload_hex": ""}
+PASS release frame
+ZWL RESIZE start surface=8 edges=10 width=300 height=180
+ZWL RESIZE end surface=8 width=360 height=200

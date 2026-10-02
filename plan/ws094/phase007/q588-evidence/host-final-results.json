@@ -1,0 +1,22 @@
+[
+  {
+    "check": "desktop",
+    "command": "sh plan/ws094/tests/host-desktop.sh",
+    "exit": 0
+  },
+  {
+    "check": "thumb",
+    "command": "sh plan/ws094/tests/host-thumb.sh build/b2-ws094-p007/host-thumb",
+    "exit": 0
+  },
+  {
+    "check": "model",
+    "command": "sh plan/tools/files/host-model.sh",
+    "exit": 0
+  },
+  {
+    "check": "imageview",
+    "command": "sh plan/tools/imageview/run-host.sh build/b2-ws094-p007/imageview-host",
+    "exit": 0
+  }
+]

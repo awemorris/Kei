@@ -676,16 +676,10 @@ zwl_glass_button(
 		if (server->drag == NULL)
 			return 0;
 
-		/* Let go in the system bar, the window docks; it comes back to where the move started. */
-		surface = server->drag;
-		server->drag = NULL;
-		if (server->pointer_y < ZWL_GLASS_BAR) {
-			window_dock(server, surface, server->drag_start_x, server->drag_start_y, "drag");
-			return 1;
-		}
+		/* The accepted move finishes without another widget receiving its release. */
+		zwl_glass_toplevel_move_end(server, server->drag);
 
-		/* Otherwise it stays where it was moved. */
-		printf("ZWL GLASS moved surface=%u x=%d y=%d\n", surface->id, surface->x, surface->y);
+		/* The release belonged to this server-owned move. */
 		return 1;
 	}
 
@@ -1559,6 +1553,34 @@ zwl_glass_toplevel_request(
 	default:
 		break;
 	}
+}
+
+/*
+ * Ends an accepted move without dispatching its release through unrelated widgets.
+ */
+void
+zwl_glass_toplevel_move_end(
+    struct zwl_server *server,
+    struct zwl_object *surface)
+{
+	/* Only the borrowed window currently moving can complete this operation. */
+	if (surface == NULL || server->drag != surface)
+		return;
+
+	/* Retires the moving identity before docking or emitting diagnostics. */
+	server->drag = NULL;
+	if (server->pointer_y < ZWL_GLASS_BAR) {
+		window_dock(server, surface, server->drag_start_x, server->drag_start_y, "drag");
+
+		/* The system bar keeps the previous position as the restore point. */
+		return;
+	}
+
+	/* A move ending elsewhere retains the last position reached by its motion. */
+	printf("ZWL GLASS moved surface=%u x=%d y=%d\n", surface->id, surface->x, surface->y);
+
+	/* Succeeded: no button, regardless of its physical code, remains a move owner. */
+	return;
 }
 
 /*
@@ -3312,7 +3334,10 @@ window_hit(
 	body_rect(server, surface, &body);
 	parent = zwl_sheet_parent(surface);
 	if (parent != NULL) {
-		if (x >= body.x && x < body.x + body.width && y >= body.y && y < body.y + body.height)
+		if (x >= body.x &&
+		    x < body.x + body.width &&
+		    y >= body.y &&
+		    y < body.y + body.height)
 			return HIT_BODY;
 		return HIT_NONE;
 	}
@@ -3320,7 +3345,10 @@ window_hit(
 	/* A CSD surface has no hidden titlebar or server resize band to consume input. */
 	decorated = zwl_decoration_server(surface);
 	if (!decorated) {
-		if (x >= body.x && x < body.x + body.width && y >= body.y && y < body.y + body.height)
+		if (x >= body.x &&
+		    x < body.x + body.width &&
+		    y >= body.y &&
+		    y < body.y + body.height)
 			return HIT_BODY;
 
 		/* The client owns only its surface extent. */
@@ -4944,7 +4972,9 @@ draw_tile(
 
 	/* Only an SSD title bar fades as its window goes to a tile. */
 	decorated = zwl_decoration_server(surface);
-	if (decorated && !surface->maximized && progress < 1.0f) {
+	if (decorated &&
+	    !surface->maximized &&
+	    progress < 1.0f) {
 		floating_title(tile, &panel);
 		draw_title_bar(server, command, surface, &panel, 1.0f - progress, 1.0f - progress, 0);
 	}

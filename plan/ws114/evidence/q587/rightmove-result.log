@@ -1,0 +1,6 @@
+{"event": [14, 5], "payload_hex": ""}
+{"event": [14, 3], "payload_hex": "21000000d69220001101000000000000"}
+PASS one matching release [(273, 1), (273, 0)]
+{"event": [14, 5], "payload_hex": ""}
+PASS release frame
+ZWL GLASS moved surface=8 x=550 y=393

@@ -1,0 +1,19 @@
+ZTERM PRIMARY offer text=0
+ZTERM MENU item=13 action=19 serial=167
+ZTERM TAB active id=2
+ZTERM TAB new run=term id=2 count=2
+ZTERM ACTION run=term action=19
+ZTERM TABS count=2 active=2 mode=2
+ZTERM TAB active id=1
+ZTERM TABS count=2 active=1 mode=2
+ZTERM RESIZE run=term columns=126 rows=33 window=1280x762
+ZTERM RESIZE run=term columns=90 rows=28 window=916x632
+ZWL GLASS dock surface=23 via=request buttons=769,723,677 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=23 via=request x=276 y=198
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=overflow x=954 y=82 width=30 height=30
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=overflow x=954 y=82 width=30 height=30
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=overflow x=954 y=82 width=30 height=30
+ZWL MENU open client=16 surface=14 item=0 depth=1 x=950 y=125 width=200 height=162
+ZWL GLASS dock surface=14 via=button buttons=768,722,676 title=65 x=0 y=38 w=1280 h=762
+ZWL TITLEBAR strip client=16 surface=14 where=docked button=overflow x=624 y=3 width=28 height=28
+ZWL GLASS undock surface=14 via=button x=182 y=127

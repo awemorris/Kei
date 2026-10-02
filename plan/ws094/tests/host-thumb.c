@@ -19,7 +19,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Reads the picture and writes what was read. */
+/*
+ * Reads the picture and writes what was read.
+ */
 int
 main(
 	int argc,
@@ -28,6 +30,9 @@ main(
 	struct fm_image image;
 	FILE *out;
 	size_t written;
+	size_t row_written;
+	size_t expected;
+	int close_error;
 	int error;
 	int y;
 
@@ -52,13 +57,34 @@ main(
 
 	/* Each row's pixels (the stride may be longer than a row). */
 	written = 0;
-	for (y = 0; y < image.height; y++)
-		written += fwrite(image.pixels + (size_t)y * image.stride, sizeof(uint32_t), (size_t)image.width, out);
-	fclose(out);
+	expected = (size_t)image.width * (size_t)image.height;
+	for (y = 0; y < image.height; y++) {
+		/* A short row cannot supply a complete reference image. */
+		row_written = fwrite(image.pixels + (size_t)y * image.stride, sizeof(uint32_t), (size_t)image.width, out);
+		if (row_written != (size_t)image.width) {
+			fclose(out);
+			fm_image_release(&image);
+			return 1;
+		}
+
+		/* Counts complete rows toward the expected reference image size. */
+		written += row_written;
+	}
+
+	/* Flushes the output before releasing the decoded pixel storage. */
+	close_error = fclose(out);
+	if (close_error != 0) {
+		fm_image_release(&image);
+		return 1;
+	}
+
+	/* The complete output no longer needs the decoded image. */
 	fm_image_release(&image);
 
-	/* Succeeded when every pixel was written. */
-	if (written != (size_t)image.width * (size_t)image.height)
+	/* Refuses an incomplete reference image. */
+	if (written != expected)
 		return 1;
+
+	/* Succeeded: every decoded pixel was written. */
 	return 0;
 }

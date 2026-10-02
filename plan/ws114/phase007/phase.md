@@ -3,7 +3,7 @@
 # ws114-p007: GTK4 CSDとKeiland SSDの選択を実装・検証する
 
 Parent: [WS114](../ws.md)
-Status: in-progress
+Status: uncleared
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
 Queue / attempts: q587-i01
@@ -40,7 +40,7 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 
 ## Evidence / event / resume
 
-実装・試験未実施。q581は旧baseline測定であり本Phaseの成功証拠に流用しない。GitHub publicationはAgent Aによる投影待ち。
+q587-i01はユーザーの全agent終了指示により安全な区切りで終端し、未達基準を残してuncleared。CSD/明示SSDとclient move/resize releaseを実装し、wire・GTK4の3 renderer・native Terminal/Filesを部分検証した。最終sourceのguest導入、正しい空targetへの別client clipboard、Textedit全controls、最終zedBSD install/boot PNGは未達。[結果](q587-result.md) / [再開条件と資産](q587-resume.md)。q581は旧baseline測定であり本Phaseの成功証拠に流用しない。Queue/共有Board/remote publicationはmainへ引継ぐ。
 
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の具体実装とGTK4確認を追加指示。p007へ分離し、p002/p003の重複scopeを除き、p005にp007成果を追加。WS acceptanceは他行判断・引継ぎ・最終conformanceを含め未達のまま。[WS summary](../ws.md)。
 
@@ -49,3 +49,7 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 2026-10-02 07:41 UTC / q587 B1 start: approved snapshot verified and B main322d127a fast-forwarded. Implementation/build starts; QEMU grant pending.
 
 2026-10-02 / q587-scope-amendment01: Current CSD runtimeでGTK4 move release欠落を再現。GTK4実操作の元基準を満たす最小[追加scope](q587-scope-amendment-01.md)をB mainが具体化し、seat/toplevelと元client operation state/lifecycleを所有へ追加。元snapshotと3h期限を保持、基準を緩和しない。
+
+2026-10-02 / q587 checkpoint02: amendment01のclient move/resize release修正と有限Linux/native検証を提出。[checkpoint](q587-checkpoint-02.md)。未達確認を保持し、Phaseはin-progress。
+
+2026-10-02 08:50:10 UTC / q587-user-wrap-uncleared: user「すべてのエージェントを終了に向かわせます」「きりのいいところで作業をきりあげてもらいます」に従い、専用compositor error=0/cleanup_failed=0、QEMU PID327367消滅、SSH2249 listenerなしを保存。3時間deadlineより前の安全停止であり、残基準を免除しない。Phase disposition normal、WS114 incomplete、p006最終conformanceを保持。MR01/MR02の実装と採取済み証拠を残し、追加guest/反復を開始せず結果・再開資料を最終MRへ提出する。[停止](../evidence/q587/stop-proof.json) / [WS event](../ws.md)。

@@ -89,6 +89,8 @@ static void set_cursor(struct zwl_server *server, struct zwl_client *client, str
 static void send_enter(struct zwl_object *surface);
 static void report_seat(struct zwl_client *client);
 static int keyboard_keymap(struct zwl_object *keyboard);
+static uint32_t pointer_button(struct zwl_object *target, uint32_t time, uint32_t button, uint32_t state, unsigned complete);
+static void interactive_clear(struct zwl_server *server);
 
 /*
  * Reserves the next nonzero event serial shared by configure and input events.
@@ -338,9 +340,32 @@ zwl_seat_surface_gone(
 	struct zwl_object *surface)
 {
 	struct zwl_server *server;
+	struct zwl_object *window;
+
+	/* Borrowed press and interactive origins cannot outlive this surface. */
+	server = surface->client->server;
+	if (server->press_surface == surface) {
+		server->press_surface = NULL;
+		server->press_button = 0U;
+	}
+
+	/* The operation is canceled when either its window or its press origin goes. */
+	if (server->interactive_surface == surface || server->interactive_window == surface) {
+		window = server->interactive_window;
+		if (server->drag == window)
+			server->drag = NULL;
+
+		/* An origin subsurface may retire while its window still survives. */
+		if (window != NULL && server->resize == window) {
+			server->resize = NULL;
+			window->resize_edges = 0U;
+		}
+
+		/* Neither a later release nor a later motion reuses the retired origin. */
+		interactive_clear(server);
+	}
 
 	/* The surface the pointer is on: its pointers hear leave while the surface is still named. */
-	server = surface->client->server;
 	if (server->pointer_surface == surface) {
 		zwl_seat_pointer_move(server, surface, NULL);
 		server->pointer_surface = NULL;
@@ -509,6 +534,8 @@ zwl_seat_motion_shell(
 			/* Elsewhere its windows' moves, screens, gestures and menus. */
 			taken = zwl_glass_motion(server);
 		}
+
+		/* A shell operation consumed this event before ordinary client delivery. */
 		if (taken)
 			return 1;
 	}
@@ -585,6 +612,8 @@ zwl_seat_button_shell(
 	uint32_t button,
 	uint32_t state)
 {
+	struct zwl_object *origin;
+	struct zwl_object *window;
 	uint32_t bit;
 	int fullscreen;
 	int taken;
@@ -602,17 +631,58 @@ zwl_seat_button_shell(
 		server->buttons_down &= ~bit;
 	}
 
+	/* A matching physical release retires the authorization for future requests. */
+	if (state == 0U && button == server->press_button) {
+		server->press_surface = NULL;
+		server->press_button = 0U;
+	}
+
+	/* Canceled operations retain no client release destination. */
+	window = server->interactive_window;
+	if (window != NULL &&
+	    server->drag != window &&
+	    server->resize != window)
+		interactive_clear(server);
+
 	/* The lock screen takes every button (ws035-p102). */
 	server->lock_input_ms = zwl_milliseconds();
 	if (server->locked) {
+		/* The lock owns this input; retire any client operation destination. */
+		interactive_clear(server);
 		(void)zwl_greeter_button(server, button, state);
 		return 1;
 	}
 
 	/* A drag and drop takes the buttons; the release of the last one ends it (data.c). */
 	if (server->dnd_active) {
+		/* Drag-and-drop ownership supersedes a previous window operation. */
+		interactive_clear(server);
 		if (state == 0U && server->buttons_down == 0U)
 			zwl_data_drag_release(server);
+		return 1;
+	}
+
+	/* Only the initiating button can end a client-requested window operation. */
+	window = server->interactive_window;
+	if (window != NULL) {
+		if (state != 0U || button != server->interactive_button)
+			return 1;
+
+		/* Keep the live origin locally and retire ownership before any emission. */
+		origin = server->interactive_surface;
+		interactive_clear(server);
+
+		/* The original resize or move finishes through its existing shell contract. */
+		if (server->resize == window) {
+			taken = zwl_toplevel_button(server, state);
+		} else {
+			zwl_glass_toplevel_move_end(server, window);
+		}
+
+		/* The matching release reaches the original client even outside its window. */
+		(void)pointer_button(origin, time, button, state, 1U);
+
+		/* Consumed: ordinary hit-based delivery must not duplicate the release. */
 		return 1;
 	}
 
@@ -636,6 +706,8 @@ zwl_seat_button_shell(
 			/* Elsewhere the title bars, the frames and the desktop. */
 			taken = zwl_glass_button(server, button, state);
 		}
+
+		/* A shell operation consumed this event before ordinary client delivery. */
 		if (taken)
 			return 1;
 	}
@@ -654,33 +726,25 @@ zwl_seat_button_deliver(
 	uint32_t button,
 	uint32_t state)
 {
-	struct zwl_object *object;
 	struct zwl_object *target;
-	uint32_t words[4];
+	uint32_t serial;
 
-	/* The button goes to the surface under the pointer; without one it reaches nobody. */
+	/* The ordinary event goes to the current pointer surface. */
 	zwl_seat_pointer_update(server);
 	target = server->pointer_surface;
 	if (target == NULL)
 		return;
 
-	/* The button event carries a new serial, the time, the Linux BTN_ code and the state. */
-	words[0] = zwl_next_serial(server);
-	words[1] = time;
-	words[2] = button;
-	words[3] = state;
-	for (object = target->client->objects; object != NULL; object = object->next) {
-		/* Only live pointer objects receive buttons. */
-		if (object->kind != ZWL_POINTER || object->dead)
-			continue;
+	/* Reuses the same event payload and serial ownership as interactive release. */
+	serial = pointer_button(target, time, button, state, 0U);
+	if (serial == 0U)
+		return;
 
-		/* Queue the button for this pointer. */
-		deliver(object->client, object->id, POINTER_BUTTON, words, sizeof(words));
-	}
-
-	/* A press names the serial a move or a resize must give, and pings its client (toplevel.c). */
+	/* A delivered press authorizes requests from this live client's actual button. */
 	if (state != 0U) {
-		server->press_serial = words[0];
+		server->press_serial = serial;
+		server->press_surface = target;
+		server->press_button = button;
 		zwl_ping_send(target->client);
 	}
 
@@ -1288,3 +1352,62 @@ set_cursor(
 	server->cursor_hidden = 0;
 }
 
+/* Sends one button directly to a live origin and returns its nonzero serial. */
+static uint32_t
+pointer_button(
+    struct zwl_object *target,
+    uint32_t time,
+    uint32_t button,
+    uint32_t state,
+    unsigned complete)
+{
+	struct zwl_object *object;
+	struct zwl_client *client;
+	struct zwl_server *server;
+	uint32_t words[4];
+
+	/* Teardown or a failed connection has no live pointer destination. */
+	if (target == NULL || target->dead)
+		return 0U;
+
+	/* The origin's client owns its pointer objects throughout this dispatch. */
+	client = target->client;
+	if (client->fatal)
+		return 0U;
+
+	/* The existing pointer protocol carries serial, time, physical button and state. */
+	server = client->server;
+	words[0] = zwl_next_serial(server);
+	words[1] = time;
+	words[2] = button;
+	words[3] = state;
+	for (object = client->objects; object != NULL; object = object->next) {
+		/* Dead objects and interfaces other than wl_pointer receive no event. */
+		if (object->kind != ZWL_POINTER || object->dead)
+			continue;
+
+		/* Reuses the established buffered delivery and failure contract. */
+		deliver(client, object->id, POINTER_BUTTON, words, sizeof(words));
+
+		/* A direct release closes its origin's group even if ordinary focus moved. */
+		if (complete && object->version >= POINTER_FRAME_VERSION)
+			deliver(client, object->id, POINTER_FRAME, NULL, 0);
+	}
+
+	/* Succeeded: this event owns exactly one serial. */
+	return words[0];
+}
+
+/* Retires borrowed client-operation identities before any later input delivery. */
+static void
+interactive_clear(
+    struct zwl_server *server)
+{
+	/* The compositor owns these links, never the objects they borrow. */
+	server->interactive_window = NULL;
+	server->interactive_surface = NULL;
+	server->interactive_button = 0U;
+
+	/* No later release can reuse the retired destination. */
+	return;
+}
