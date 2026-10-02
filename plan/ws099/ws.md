@@ -10,6 +10,7 @@ Objectives: O2
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: p002（C5）cleared（2026-09-30 P6、5330 で最大 55 ms）。次は L2 の残り（C1 の実機・BUG-119）
+2026-10-02 user: WS099 の優先度を上げる。**BUG-125 は WS099 の blocking**、WS099 を担当するエージェントが直す。C1 などの実機の目視確認はユーザーに依頼する（Q1 が声をかける）。
 <!-- awesome-plan-current:end -->
 作業の手引き（2026-10-01）: [guide.md](guide.md)
 

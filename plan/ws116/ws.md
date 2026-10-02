@@ -7,7 +7,7 @@ Primary Milestone: MG002
 Related Milestones: MG006（GUI動作、compositor互換性）
 Parent: [Master](../master.md)
 Queue: none / 計画のみ
-Resume point: WS115のGTK4移植で得た知見の後、p001でQt6の実装範囲をユーザーと検討する。
+Resume point: WS117（Linux 本物 Qt6 の調査と compositor 改良）と WS115 の後、p001 で Qt6 の実装範囲をユーザーと検討する（2026-10-02 user の順序）。
 
 ## Objective / scope
 

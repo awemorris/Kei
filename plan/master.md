@@ -5,7 +5,7 @@ Active Queues: なし。実行体制（2026-10-02 user）: 単一session Q1 が�
 Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
 **WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
-優先順位の調整（2026-10-02 user）: **WS114 を優先**、**IME（WS095）の優先度を上げる**、Linux packaging（WS112）の優先度を下げる。WS095 を人間が作業中という以前の制限を解くかは確認中（解けるまでエージェントに割り当てない）。全体の順位は fg019 確定時に見直す。
+優先順位の調整（2026-10-02 user）: **WS099 を優先**（BUG-125 を WS099 の blocking にし、WS099 の担当が直す。実機の目視確認はユーザーに声をかける）。**WS114 を優先**し、GTK/Qt は WS114 p007（Linux 本物 GTK4 の CSD 完成）→ WS117（Linux 本物 Qt6 調査と compositor 改良）→ WS115 GTK4 / WS116 Qt6 の zedBSD 移植の順。**IME（WS095）の優先度を上げる**（人間が作業中という以前の制限を解くかは確認中）。Linux packaging（WS112）は下げる。WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる。全体の順位は fg019 確定時に見直す。
 <!-- awesome-plan-current:end -->
 
 # zedBSD Master
@@ -227,6 +227,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS113](ws113/ws.md) | MG006 | zedBSD i915 hotplug/Vulkan Displayから複数画面・Settings/libkeiland・窓の全体移動 | incomplete | p001/q586設計調査uncleared、D-ATOMIC未決、A3成果回収/終了。全拡張/全mirror、pointer越境で窓一括移動。実装未投入 |
 | [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | incomplete | [19項目の実測表](ws114/gtk4-compat-matrix.md)。p001/q581調査cleared、G05 user採用のp007/q587を開始。残る行の採否はp002/user |
 | [WS115](ws115/ws.md) | MG002 | upstream GTK4をzedBSD `packages/desktop/gtk4`へ移植し知見を記録 | planning | WS114判断/実測の後。旧WS034 p029移管、Queue none |
+| [WS117](ws117/ws.md) | MG006 | Linux の本物の Qt6 を調査し、素の Qt6 アプリが動くよう compositor を改良（WS115/116 の前） | planning | WS114 p007 の後に p001 |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。

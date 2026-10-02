@@ -7,7 +7,7 @@ Primary Milestone: MG002
 Related Milestones: MG006（GUI動作、compositor互換性）
 Parent: [Master](../master.md)
 Queue: none / 計画のみ
-Resume point: WS114で承認した機能とLinux実測を入力にp001の移植契約を作る。
+Resume point: （2026-10-02 user の順序: WS114 p007 の CSD 完成 → WS117 Linux Qt6 調査と compositor 改良の後に着手）WS114で承認した機能とLinux実測を入力にp001の移植契約を作る。
 
 ## Objective / scope
 
