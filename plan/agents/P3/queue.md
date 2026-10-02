@@ -25,4 +25,6 @@ Next（予約）: ws115-p006（libpng・freetype・harfbuzz・fontconfig）〜
 | P3-010 | q605 | 19de99f8e..cbbc1607f（前回 958b6c060） | packages/libs/{libpng,freetype,harfbuzz,fontconfig}・plan/ws115 | integrated 3c33fb259 |
 | q608 / q608-i01 | ws115-p007 | pixman・cairo・fribidi・pango | 継続 dispatch | 4h | finished / cleared |
 | P3-011 | q608 | 53b5dbe6b..03f00921d（前回 cbbc1607f） | packages/libs/{pixman,fribidi,cairo,pango}・plan/ws115 | integrated db8f21553 |
-| q610 / q610-i01 | ws115-p008 | gdk-pixbuf・jpeg・tiff・graphene・libepoxy・libxkbcommon | 継続 dispatch | 4h | in-progress |
+| q610 / q610-i01 | ws115-p008 | gdk-pixbuf・jpeg・tiff・graphene・libepoxy・libxkbcommon | 継続 dispatch | 4h | finished / cleared |
+| P3-012 | q610 | 8fe02c02b..581021c3e（前回 03f00921d） | packages/libs/{gdk-pixbuf,libjpeg-turbo,libtiff,graphene,libepoxy,libxkbcommon,xkeyboard-config}・plan/ws115 | integrated 8f4dcb417 |
+| q613 / q613-i01 | ws115-p009 | libwayland-client ABI 互換・wayland-protocols | 継続 dispatch | 4h | in-progress |
