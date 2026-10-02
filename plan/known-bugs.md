@@ -11,6 +11,9 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-142](bugs/BUG-142.md) | Files: 起動直後の停止中の Ctrl+C が遅れて処理 | reproduced once（QEMU） / tracking | ws127-p001 | 実機で再現したら ws127-p002 |
+| [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | reproduced / tracking | ws127-p001 | ws127-p002 |
+| [BUG-140](bugs/BUG-140.md) | Files: Trash の同名の 2 つ目の名前と種類 | reproduced / tracking | ws127-p001 | ws127-p002 |
 | [BUG-139](bugs/BUG-139.md) | Text Editor の IME の変換中の文字が小さい | reproduced / scheduled（ws095-p013） | ユーザー実機、UI/UX の要 | p013 |
 | [BUG-138](bugs/BUG-138.md) | system bar の WiFi の on/off・AP 接続が未実装 | reproduced / scheduled（ws005-p019、高） | ユーザー実機 | p019 |
 | [BUG-137](bugs/BUG-137.md) | Terminal の初回起動でタイトルバーが数秒遅れる | reproduced / scheduled（ws099-p023） | ユーザー実機 | p023 |
