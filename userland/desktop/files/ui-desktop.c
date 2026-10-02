@@ -709,6 +709,7 @@ desktop_log_moved(
 				break;
 		}
 
+		/* A new item has no earlier place to compare against. */
 		if (other == known_count)
 			continue;
 

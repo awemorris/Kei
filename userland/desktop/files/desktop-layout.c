@@ -741,6 +741,7 @@ fm_desktop_label(
 			space = head;
 	}
 
+	/* Prefer a word boundary when the remaining text fits on the second line. */
 	if (space < length && name[space] == ' ' && space > 0U) {
 		wide = fm_text_width(text, name + space + 1U, length - space - 1U, pixels, 0);
 		if (wide <= width) {
