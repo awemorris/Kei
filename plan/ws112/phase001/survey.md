@@ -1,6 +1,6 @@
 # q585-i01: Linux package契約調査
 
-Status: in-progress / 契約調査の部分証拠。実装・OS image取得・guest起動・package生成は未実施。
+Status: uncleared / q585-i01契約調査の終端証拠、D1 user返答待ち。実装・OS image取得・guest起動・package生成は未実施。
 Observation: 2026-10-02 UTC、Agent A2、base `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。調査上限は07:12〜08:12 UTC。
 Approval / scope: [A2 Queue](../../agents/A2/queue.md)、[p001](phase.md)。
 
@@ -89,4 +89,4 @@ host Python3.13.5/git2.47.3/curl8.14.1/GnuPG2.4.7/QEMU10.0.11を読取確認。i
 | D3 | Ubuntu/Fedora/Archのchecksum署名trust rootは実検証済み。RPi image署名はfull image未取得、Debian現行SUMS署名は提供されない。versioned Arch URL/repo snapshotは確認済み | 既存Debian pin契約を保持。後続Queueで実imageのhash/利用可能な署名を確認、公式input消失なら明示pin改訂へ戻す。将来保持を保証しない |
 | D4 | native encoder/依存計算/query/extraction commandを定義。公式package index名/版とRPi.info inventoryを確認、実guest/実ELF未確認 | 後続Queueでnative DBと実ELF依存を照合し、候補名や公開inventoryを実native build合格としない |
 
-p001は全基準を実証するまでin-progress。未知を後続Phaseへ押し付けてclearしない。
+p001/q585-i01は2026-10-02 08:11 UTCにuncleared。D1の判断元と共有Guardrail反映後、[基準別証拠](criteria.md)で全criteriaを再評価する。未知を後続Phaseへ押し付けてclearしない。

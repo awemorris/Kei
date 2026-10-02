@@ -1,6 +1,6 @@
 # q585-i01 / p001 criteriaと実証範囲
 
-Status: 2026-10-02、D1返答待ちの終端準備。Phase正本は[phase.md](phase.md)。
+Status: 2026-10-02 08:11 UTC、q585-i01/p001 uncleared。D1返答待ち。Phase正本は[phase.md](phase.md)。
 Scope: 07:12〜08:12 UTCの契約調査。実sourceと一次資料から設計/後続commandを具体化し、実環境取得/buildをこのattemptで行わない。
 
 | p001基準 | evidence / 2026-10-02判定 |
@@ -21,7 +21,7 @@ bounded metadata: Python3 urllib、timeout10〜20s、body上限200000/500000 byt
 signature: isolated GnuPG2.4.7 keyring、Ubuntu/Fedora/Archの公式fingerprintと`VALIDSIG`一致/exit0、版付きArch SUMSも実検証。RPi publickey fingerprint/packet issuer一致だけ、full image署名未検証。Debian現行unsigned cloud入力を署名済みとしない。
 tools: Python3.13.5/git2.47.3/curl8.14.1/GnuPG2.4.7/QEMU10.0.11を読取。guest/compiler版は未観測、公開index/.info版と区別。
 manual: 非C近傍Markdown形式、scope/受け入れ/依存順/IDsと変更Phaseごとのorigin/foreign/WS events、公式URLの支持範囲、取得metadata・署名と未取得imageの区別をreview。
-local links: 全WS112 tracked Markdownの相対path存在をPythonで確認（小checkpoint-4時133件/0error、最終変更後の件数はPhase evidenceへ）。remote URLの将来保持/リンクfragmentの全自動検証は保証しない。
+local links: 全WS112 tracked Markdownの相対path存在をPythonで確認（最終148件/0error）。remote URLの将来保持/リンクfragmentの全自動検証は保証しない。
 `git diff --check`: 各小checkpoint PASS。git commitsはWIP、全差分plan/ws112内のみ、mainへA2-001〜004 MRとSHA/path/checks/remainingを提出。
 
 Skipped: OS image本体取得/rootfs展開、guest boot、production/CI source編集、host install/build、native package生成/導入・runtime、GPU/GUI/実機、push/remote Actions/release/Issues。

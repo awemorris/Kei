@@ -3,7 +3,7 @@
 # ws112-p001: 共通契約・対象OS入力・形式を確定
 
 Parent: [WS112](../ws.md)
-Status: in-progress
+Status: uncleared
 Disposition: normal
 Primary Milestone: MG007（WSから継承）
 Queue / attempts: q585 / q585-i01 / A2（契約調査のみ）
@@ -33,11 +33,13 @@ push/remote release/Issues公開は本計画では承認されていない。
 
 ## Evidence / findings / resume
 
-q585-i01実行中。[調査証拠と未決](survey.md)へ実source gap、5OS input候補、公式checksum/index/catalog照合、共通payloadを記録。base `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。
+q585-i01終了、outcome uncleared。2026-10-02 07:12〜08:11 UTC（約59分、60分上限内）。[調査証拠と未決](survey.md)へ実source gap、5OS input候補、公式checksum/index/catalog照合、共通payloadを記録。base `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。
 [環境/署名/後続command](../native-environments.md)と[形式/依存/CI成果物契約](../package-contract.md)を追加。Ubuntu/Fedora/Arch checksum署名は小metadataで実検証、image本体は未検証。
 [基準別証拠/commands/results/limits](criteria.md)を保存。D1だけが未解決人間判断、他の実image/native ELF/tool版/経過時間は後続実装verification契約と区別する。
 Skipped: OS image取得、image本体署名/hash検証、implementation/build/guest/CI/release/導入・runtime。
-Resume: 07:12〜08:12 UTCの有限調査。5OS input/形式/依存/source/payload/CI契約と後続commandを定義。D2はmainのdelegated判断で既存Debian VM内公式RPi arm64 rootfs/QEMU-user方式を採用、D1 Fedora/Arch boot適用はuser返答待ち。未決のままclearしない。
+Checks: final local links148件/0error、git diff --check PASS、非C近傍形式/full package方針/manual scope・source/一次資料・dependency/event review PASS。全変更はplan/ws112内、C/production source変更無し。
+Commits: A2-001 `67c78c0e6`、A2-002 `dbcd3afa9`、A2-003 `79e889209`、A2-004 `4642a7d68`、A2-005 `dff4b7401`（全WIP、main ACK `ed6d2d3c7`まで統合）。終端commit SHAはmain MR/outcome記録へ渡す。
+Reason / resume: D1 Fedora/Arch loopback SSH/QMP PNG方式適用がuser返答待ちで「未解決人間判断なし」の基準を満たさない。mainが判断元・共有Guardrailを保存後にp001の全契約を再評価する。D2は委任技術判断で採用済み、実input/guest/ABI/encoderの未検証は後続Phaseの実verificationへ保持。q591は候補のまま、whole p001 clearanceと新exact Queueなしに開始しない。
 
 ## Event history
 
@@ -56,3 +58,5 @@ Resume: 07:12〜08:12 UTCの有限調査。5OS input/形式/依存/source/payloa
 2026-10-02 / ws112-q591-p002-candidate: main指示で後続p002 scope/command/verification候補を[文書](../phase002/queue-candidate.md)へ準備、p002/WSにもevent保存。p001残件やQueue承認を代替せず、後続実装は開始しない。
 
 2026-10-02 / ws112-q585-evidence-checkpoint: D2選択後のcurrent procedure参照を更新、source識別version契約とnative parser検証を明示。既存WS108にelapsed未保存/新OS方式未実測の限界を保存、基準別evidence/commands/results/skips/resumeをcriteriaへ追加。D1返答待ちのためin-progress保持、終端clearはまだ宣言しない。
+
+2026-10-02 08:11 UTC / ws112-q585-outcome: q585-i01/p001 uncleared。有限契約調査は終了、5OS inputs/署名/環境/形式/依存/共通payload/source/CI契約と後続commandを保存、mainへ5小checkpoint統合済み。D1 user返答未受領により人間判断の残件を解除しない。実image/guest/build/package/runtime/CI/公開は未実施、理由/基準別証拠/再開はcriteriaと上記。p002〜007 planned、WS incomplete、q591候補だけを保持し同sessionでmain次指示を待機。Phase event/GitHubとQueue/共有投影のcanonical反映はmainへ依頼。
