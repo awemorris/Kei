@@ -70,3 +70,13 @@ the existing session. [p019](../ws099/phase019/phase.md) and WS099 now retain th
 exact instruction, default criteria and saved-setting precedence. Include this
 decision in q593's exact snapshot; q588's conformance scope is unchanged. A's
 shared planning projection is pending with the same wallpaper handoff.
+
+## Latest wrap-up direction / 2026-10-02
+
+User instructed B1/B2 to wrap up and end after their current Phase, and requested
+B3's status explanation. Messages were delivered to all three existing agents.
+B1 q587 and B2 scoped q588 retain their finite scope/verification; no successors
+will be dispatched. q593/p019 stays reserved and unstarted, with wallpaper/default
+decisions preserved for resume. No Phase is canceled by this direction. B3 q589
+continues under its existing resource/time bounds and is preparing a status reply.
+A's shared outlook/ownership projection is pending.

@@ -21,3 +21,5 @@ Start receipt: 2026-10-02 07:41 UTC、snapshot照合とB main FFを確認。実�
 Scope amendment01 / 2026-10-02: [GTK4 release correction](../../ws114/phase007/q587-scope-amendment-01.md), SHA256 `30d8b4d7b2730648518f5aeb7a60d1395135c715e086d5f840dd026f9eaf766f`。実検証で元基準が失敗したためseat.c/toplevel.cと最小lifecycle stateへ技術scopeを具体化。ユーザーのGTK4実操作確認指示内、元snapshot/timebox/criteriaを保持。10:41:58 UTC deadline。
 
 MR B1-q587-01: submitted831635c3 / B integrated4b655803 / ACK。Phase startとamendmentの競合は両event保持で解決、source競合無し。wire mode/order PASS、CSD GL画面と入力release欠落証拠をreview。後続release修正・最終runtime/regressionが未達なのでclearanceなし。[checkpoint](../../ws114/phase007/q587-checkpoint-01.md)。
+
+2026-10-02 / user-b1-b2-wrap-up-20261002: userが現在のPhase後のwrap-up/終了を指示。B1は受領し、q587を既存scope/deadlineまでに結果・残作業・cleanup・MRとして保存して終了する。後続Queueは開始しない。

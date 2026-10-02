@@ -45,3 +45,16 @@ and resource ownership. Existing rules need only changed sections and the next
 scope's missing material reloaded. User wrap-up/stop still takes effect promptly.
 No context reload or agent replacement is required solely because a Queue ends;
 actual runtime/context limits are reported accurately when observed.
+
+## Wrap-up instruction / 2026-10-02
+
+Current user:「B1,B2に現在のphaseを完了したらラップアップして終了するようにお伝えください。B3に作業状況を説明するようにお伝えください。」
+
+This supersedes continuous successor dispatch for B1 and B2. B1 finishes the
+current WS114 p007/q587 attempt within its approved bounds, records outcomes and
+cleanup, then ends. B2 finishes the current scoped WS094 p007/q588 attempt,
+preserves whole-Phase residual obligations, records outcomes and cleanup, then
+ends. Neither lane starts a successor Queue. Reserved q593/WS099 p019 remains
+unstarted with its authorized wallpaper decisions and design preserved for a
+later resume; this is not Phase cancellation. B3 was asked for a status report;
+its existing finite q589 scope/resource wait remains unchanged.

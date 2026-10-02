@@ -6,7 +6,7 @@ Parent: [WS099](../ws.md)
 Status: planning
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
-Queue / attempts: q593予約（Agent A、q588後続。exact snapshot/投入は準備中）
+Queue / attempts: q593予約（Agent A、未実行。最新user wrap-up指示により後続投入を停止し、再開待ち）
 Owner: B2 / same GPT-6.1 Sol High context
 Purpose / goal: テストだけのgit外資産を回収し、zedBSD/Linux/FreeBSD共通で利用できる背景としてソースとrelease dataに含める。ぼやけた湖を初回起動のdefaultにし、収録済み背景の選択と保存済み設定を維持する。
 Investigation bound: 実装Queue投入時にexact source/criteria・最大3時間を確定。抽象版探索は有限で、見つからなければ探索場所/限界を記録する。
@@ -34,3 +34,5 @@ mainが旧v2-soft-b.pngを目視確認。既存wallpaper.ppm（1280x800、SHA256
 2026-10-02 / user-common-wallpapers-20261002: userの既存背景source/3 OS収録指示から新Phaseを計画。旧p061とWS099 summaryに関連eventを保存、Agent Aが共有Queue/registryと必要なpackaging projectionを所有。未実装。
 
 2026-10-02 / user-lake-default-20261002: 実装前の追加指示により起動defaultと既存背景選択維持を受け入れ条件へ追加。q593のexact snapshotへ含める。q588のsource conformance scopeは変更しない。WS099 summaryへ投影し、共有記録の投影はAgent Aへのhandoff対象。
+
+2026-10-02 / user-b1-b2-wrap-up-20261002: userがB1/B2へ現在のPhase後のラップアップ/終了を指示。B2の現在の実行はq588であり、q593/p019はまだ開始していないため後続投入を停止する。背景収録/defaultの決定と調査成果を保持し、Phaseはplanning/normalのまま。取り消しや実装完了を意味しない。

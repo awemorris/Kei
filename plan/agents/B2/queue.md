@@ -20,4 +20,4 @@ Start receipt: 2026-10-02 07:52:18 UTC、snapshot照合とB main FFを確認。�
 
 MR B2-q588-01: base60201ab8 / submitted8beb7e31 / B integrated71bf741a / ACK。挙動を保持する規約差分とhost4/warning0 build/boundary PASSをreview。inventory/full manual tableは進行中、item/whole clearanceをまだ主張しない。[checkpoint](../../ws094/phase007/q588-checkpoint1.md)。
 
-Ordered next Queue: q593予約 / [WS099 p019](../../ws099/phase019/phase.md)、ユーザー追加背景source/3 OS収録。q588 terminal/ACKとexact asset/recipe/snapshot確定後に同じB2へdispatch。予約だけでは実装を開始しない。
+Ordered next Queue: q593予約 / [WS099 p019](../../ws099/phase019/phase.md)、ユーザー追加背景source/3 OS収録。2026-10-02の最新user wrap-up指示により後続投入を停止、未実行で保持。q588終端後はB2終了。将来の再開時にexact asset/recipe/snapshotを確定する。
