@@ -96,18 +96,26 @@ dom_form_owner(
 	/* Only listed built-ins and historical images participate in this scoped model. */
 	if (element == NULL)
 		return NULL;
+
+	/* Determine form association from native categories rather than script properties. */
 	listed = dom_form_listed(element);
 	associated = listed;
 	if (!associated)
 		associated = form_html(element, DOM_TAG_IMG);
+
+	/* Ordinary elements have no form owner even when nested inside a form. */
 	if (!associated)
 		return NULL;
 
 	/* Connected means the actual tree root is a Document, including XML Documents. */
 	root = form_root((struct dom_node *)&element->node);
 	reference = NULL;
+
+	/* Only listed controls honor an explicit form attribute. */
 	if (listed)
 		reference = dom_attribute_ascii(element, "form");
+
+	/* Resolve a connected explicit reference without falling back to ancestry. */
 	if (reference != NULL && root->type == DOM_DOCUMENT) {
 		/* An empty explicit attribute has no matching nonempty ID and never falls back. */
 		if (reference->length == 0)
@@ -116,9 +124,12 @@ dom_form_owner(
 		/* The first matching ID wins even when it belongs to a non-form or foreign node. */
 		node = root;
 		while (node != NULL) {
+			/* Only elements can supply the first matching ID in tree order. */
 			if (node->type == DOM_ELEMENT) {
 				candidate = (struct dom_element *)node;
 				id = dom_attribute_ascii(candidate, "id");
+
+				/* Empty or absent IDs cannot match the nonempty explicit reference. */
 				if (id != NULL && id->length != 0) {
 					same = vm_string_equal(id, reference);
 					if (same) {
@@ -141,9 +152,14 @@ dom_form_owner(
 	}
 
 	/* Detached explicit references and nonlisted images use ordinary live ancestry. */
-	for (node = element->node.parent; node != NULL; node = node->parent) {
+	for (node = element->node.parent;
+	     node != NULL;
+	     node = node->parent) {
+		/* Non-element ancestors cannot supply an HTML form identity. */
 		if (node->type != DOM_ELEMENT)
 			continue;
+
+		/* Return the nearest actual HTML form rather than a folded-tag lookalike. */
 		candidate = (struct dom_element *)node;
 		actual = form_html(candidate, DOM_TAG_FORM);
 		if (actual)
@@ -166,6 +182,8 @@ form_html(
 	/* Neither a foreign namespace nor another built-in tag can implement this HTML role. */
 	if (element->ns != DOM_NS_HTML || element->tag != tag)
 		return 0;
+
+	/* Require the exact local name because XML elements preserve letter case. */
 	name = dom_tag_name(tag);
 	same = vm_string_equal_ascii(element->local_name, name);
 	if (!same)
@@ -200,8 +218,11 @@ form_next(
 
 	/* Climb until a sibling appears, stopping before leaving the original tree. */
 	while (node != root) {
+		/* A sibling starts the next subtree before another ancestor is visited. */
 		if (node->next != NULL)
 			return node->next;
+
+		/* Search the current parent without crossing the original traversal root. */
 		node = node->parent;
 	}
 
@@ -222,6 +243,8 @@ form_image(
 	/* Only actual listed HTML input elements can have the historical image exclusion. */
 	if (element->tag != DOM_TAG_INPUT)
 		return 0;
+
+	/* The image keyword must occupy the complete actual type attribute. */
 	type = dom_attribute_ascii(element, "type");
 	if (type == NULL || type->length != 5U)
 		return 0;
@@ -229,9 +252,12 @@ form_image(
 	/* ASCII case-insensitive enumerated matching does not trim invalid content values. */
 	keyword = "image";
 	for (index = 0; index < 5U; index++) {
+		/* Fold only ASCII uppercase units without accepting locale-dependent aliases. */
 		unit = vm_string_at(type, index);
 		if (unit >= 'A' && unit <= 'Z')
 			unit = (uint16_t)(unit + ('a' - 'A'));
+
+		/* Reject the first unit which differs from the canonical image spelling. */
 		if (unit != (unsigned char)keyword[index])
 			return 0;
 	}

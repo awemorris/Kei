@@ -27,9 +27,13 @@ dom_input_is_radio(
 	/* A folded internal tag cannot make an uppercase XML or foreign input a radio. */
 	if (element == NULL || element->ns != DOM_NS_HTML)
 		return 0;
+
+	/* Require the exact HTML local name rather than a parser-folded tag identity. */
 	input = vm_string_equal_ascii(element->local_name, "input");
 	if (!input)
 		return 0;
+
+	/* Derive the current Radio state from the native input type. */
 	kind = dom_control_kind(element);
 	if (kind != DOM_CONTROL_RADIO)
 		return 0;
@@ -57,14 +61,18 @@ dom_input_checked_radio(
 	checked = dom_control_checked(element);
 	if (checked)
 		return element;
+
+	/* An unnamed target has no other radio peer to restore during activation. */
 	name = dom_attribute_ascii(element, "name");
 	if (name == NULL || name->length == 0)
 		return NULL;
 
-	/* The complete current tree includes externally associated controls. */
+	/* Find the current tree root, including controls associated from outside the form subtree. */
 	root = &element->node;
 	while (root->parent != NULL)
 		root = root->parent;
+
+	/* Compare every candidate with the target's current ordinary form owner. */
 	owner = dom_form_owner(element);
 
 	/* Select the first actual checked peer without observing script properties. */
@@ -104,9 +112,13 @@ dom_input_same_radio_group(
 	/* A missing or changed-type prior selection cannot be restored as a group peer. */
 	if (second == NULL)
 		return 0;
+
+	/* The activation target must still have its actual Radio type. */
 	radio = dom_input_is_radio(first);
 	if (!radio)
 		return 0;
+
+	/* The saved selection must also remain a genuine native radio. */
 	radio = dom_input_is_radio(second);
 	if (!radio)
 		return 0;
@@ -114,23 +126,31 @@ dom_input_same_radio_group(
 	/* A radio which was already selected can restore itself without a named peer. */
 	if (first == second)
 		return 1;
+
+	/* Distinct radios require a nonempty group name. */
 	name = dom_attribute_ascii(first, "name");
 	if (name == NULL || name->length == 0)
 		return 0;
 
-	/* Moving either element can change the group even when names and owners stay equal. */
+	/* Find the activation target's current tree independently of its ownerDocument. */
 	first_root = &first->node;
 	while (first_root->parent != NULL)
 		first_root = first_root->parent;
+
+	/* Find the saved selection's tree after listeners may have moved it. */
 	second_root = &second->node;
 	while (second_root->parent != NULL)
 		second_root = second_root->parent;
+
+	/* Separate ordinary trees isolate otherwise matching radio names and form owners. */
 	if (first_root != second_root)
 		return 0;
 
 	/* The existing group predicate checks exact names, actual type and ordinary owner. */
 	owner = dom_form_owner(first);
 	matches = radio_group_member(&second->node, first, owner, name);
+
+	/* Succeeded: report current membership after all native group constraints were compared. */
 	return matches;
 }
 
@@ -166,16 +186,25 @@ dom_input_set_checked(
 	    !radio ||
 	    name == NULL ||
 	    name->length == 0) {
+		/* Current-state accessors now use this value instead of deriving it from content. */
 		control->checked = checked;
 		control->checked_initialized = 1;
+
+		/* Script assignment prevents later checked-attribute changes from replacing this state. */
 		if (dirty)
 			control->checked_dirty = 1;
+
+		/* Invalidate generation-based Document observers after the native state change. */
 		element->node.document->generation++;
+
+		/* Succeeded: a non-group assignment updates only this control. */
 		return 0;
 	}
 
-	/* The actual current tree, rather than ownerDocument or id, bounds the radio group. */
+	/* Resolve the live form association before selecting ordinary-tree peers. */
 	owner = dom_form_owner(element);
+
+	/* Find the actual current tree rather than using ownerDocument or an ID as its bounds. */
 	root = &element->node;
 	while (root->parent != NULL)
 		root = root->parent;
@@ -185,6 +214,7 @@ dom_input_set_checked(
 	while (node != NULL) {
 		matches = radio_group_member(node, element, owner, name);
 		if (matches) {
+			/* Unselected peers need no mutable storage during the later commit. */
 			other = (struct dom_element *)node;
 			current = dom_control_checked(other);
 			if (current) {
@@ -203,9 +233,11 @@ dom_input_set_checked(
 	while (node != NULL) {
 		matches = radio_group_member(node, element, owner, name);
 		if (matches) {
+			/* Preserve unselected peers and each peer's independent dirty flag. */
 			other = (struct dom_element *)node;
 			current = dom_control_checked(other);
 			if (current) {
+				/* Native readers use the committed value and Document observers see its new generation. */
 				other_control = other->control;
 				other_control->checked = 0;
 				other_control->checked_initialized = 1;
@@ -217,11 +249,15 @@ dom_input_set_checked(
 		node = radio_next(node, root);
 	}
 
-	/* Target script assignment marks it dirty; list-value assignment preserves that flag. */
+	/* Native readers use the committed target value instead of deriving it from content. */
 	control->checked = checked;
 	control->checked_initialized = 1;
+
+	/* Script assignment overrides later content changes; list-value assignment preserves this flag. */
 	if (dirty)
 		control->checked_dirty = 1;
+
+	/* Invalidate generation-based Document observers after committing target checkedness. */
 	element->node.document->generation++;
 
 	/* Succeeded: target and every affected radio now expose consistent current checkedness. */
@@ -242,6 +278,8 @@ dom_input_clone_checked(
 	/* Cloning another element must not allocate or modify form-control state. */
 	if (source->ns != DOM_NS_HTML || source->tag != DOM_TAG_INPUT)
 		return 0;
+
+	/* Reject XML case lookalikes even when their parser tag was folded to Input. */
 	input = vm_string_equal_ascii(source->local_name, "input");
 	if (!input)
 		return 0;
@@ -249,15 +287,19 @@ dom_input_clone_checked(
 	/* A clean, uninitialized input still derives checkedness from copied attributes. */
 	if (source->control == NULL)
 		return 0;
+
+	/* Default state needs no independent clone storage before its first native observation. */
 	if (!source->control->checked_initialized &&
 	    !source->control->checked_dirty &&
 	    !source->control->indeterminate)
 		return 0;
+
+	/* Allocate destination state before publishing any copied current or dirty flags. */
 	control = dom_control_of(destination);
 	if (control == NULL)
 		return ENOMEM;
 
-	/* Only these current-state fields participate; geometry and ownership stay independent. */
+	/* Preserve native observed state and the dirty flag which prevents content from overwriting it. */
 	control->checked = source->control->checked;
 	control->checked_initialized = source->control->checked_initialized;
 	control->checked_dirty = source->control->checked_dirty;
@@ -279,8 +321,11 @@ radio_next(
 
 	/* Climb only within this group tree until a following sibling appears. */
 	while (node != root) {
+		/* A sibling supplies the next subtree before the traversal climbs farther. */
 		if (node->next != NULL)
 			return node->next;
+
+		/* Search this parent's following subtree without leaving the group tree. */
 		node = node->parent;
 	}
 
@@ -305,6 +350,8 @@ radio_group_member(
 	/* The target itself is committed separately from other group members. */
 	if (node == &target->node || node->type != DOM_ELEMENT)
 		return 0;
+
+	/* A peer must be an actual current radio rather than an ordinary element. */
 	element = (struct dom_element *)node;
 	radio = dom_input_is_radio(element);
 	if (!radio)
@@ -314,6 +361,8 @@ radio_group_member(
 	actual_name = dom_attribute_ascii(element, "name");
 	if (actual_name == NULL || actual_name->length == 0)
 		return 0;
+
+	/* Compare complete case-sensitive native names to preserve independent radio groups. */
 	same = vm_string_equal(name, actual_name);
 	if (!same)
 		return 0;

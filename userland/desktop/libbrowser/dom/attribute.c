@@ -11,7 +11,7 @@
 
 #include <errno.h>
 
-/* Legacy parser namespace classes have these exact canonical identities. */
+/* Immutable process-lifetime URIs preserve the legacy parser's exact namespace classes. */
 static const char *const attribute_uris[] = {
 	NULL,
 	"http://www.w3.org/1999/xhtml",
@@ -55,6 +55,8 @@ dom_element_add_attribute_uri(
 	existing = dom_element_find_attribute_uri(element, uri, name);
 	if (existing != NULL)
 		return EEXIST;
+
+	/* Allocate the native attribute using its compatible parser namespace class. */
 	ns = attribute_namespace_id(uri);
 	status = dom_element_add_attribute(element, ns, prefix, name, value);
 	if (status != 0)
@@ -84,6 +86,8 @@ dom_element_find_attribute_uri(
 	/* Optional missing arguments cannot identify an actual attribute. */
 	if (element == NULL || name == NULL)
 		return NULL;
+
+	/* Normalize empty namespace strings to the same absence used by insertion. */
 	if (uri != NULL) {
 		if (uri->length == 0)
 			uri = NULL;
@@ -92,9 +96,12 @@ dom_element_find_attribute_uri(
 	/* Classification narrows built-in lookups while exact strings distinguish all arbitrary namespaces. */
 	ns = attribute_namespace_id(uri);
 	for (index = 0; index < element->attribute_count; index++) {
+		/* Skip parser classes which cannot denote the requested namespace. */
 		attribute = &element->attributes[index];
 		if (attribute->ns != ns)
 			continue;
+
+		/* Compare the local name before inspecting arbitrary namespace identities. */
 		same = vm_string_equal(attribute->name, name);
 		if (!same)
 			continue;
@@ -102,8 +109,12 @@ dom_element_find_attribute_uri(
 		/* Ordinary parser attributes have implicit canonical identities for their built-in classes. */
 		if (ns != DOM_NS_OTHER)
 			return attribute;
+
+		/* A foreign-class record without its exact URI cannot satisfy this lookup. */
 		if (attribute->namespace_uri == NULL)
 			continue;
+
+		/* Distinguish foreign namespaces which share the parser's catch-all class. */
 		same = vm_string_equal(attribute->namespace_uri, uri);
 		if (same)
 			return attribute;
