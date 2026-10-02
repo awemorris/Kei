@@ -15,3 +15,8 @@ Parent: [WS129](../ws.md)
 ## 所有 path
 
 `config/ci/`、`config.mk`（desktop の app の行だけ）、試験とデモの config、`plan/ws129/phase010/`。
+
+
+## 2026-10-02 user の追加
+
+「/bin/testを入れてください。というか、テストでないbaseはすべて入れてください。」→ 範囲に追加: `userland/base/` の試験でない program（`/bin/test` を含む）をすべて CI と試験用の config に入れる。`userland/tests/` の試験は CI に入れない。追加した program の一覧と、root partition・inode に収まるかを記録する。
