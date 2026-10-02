@@ -1,3 +1,7 @@
+## 2026-10-02 並列実行開始（結果は未確定）
+
+P8 q577、P9 q578、P10 q579をlatest userのN=3継続指示で開始。[Queue index](../queue.md)。既存q576結果は保持。merge/終了証拠は各laneへ追記。GitHub publication保留。
+
 <!-- awesome-plan project=zedbsd record=past-log -->
 
 # Past Log

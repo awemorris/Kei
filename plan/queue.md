@@ -1,23 +1,20 @@
 <!-- awesome-plan project=zedbsd record=queue -->
 
-# Queue
+# Queue / all-agent index
 
-Active Queue: なし（各担当laneにも製品実装のactive Queueなし）
-Agent Queue index: [registry](agents/registry.md) / [protocol](agents/protocol.md)。q577以降はmainが全体一意に採番し、担当laneへ投影する。
-Last finished Queue: q576
-Status: finished
-Cycle: q576
-Approval: current user /2026-10-02 chat「起動コマンドが長いので、/opt/keiland/bin/keiland-desktop でシェルスクリプトにまとめておいてもらえますか。LinuxでもFreeBSDでも使えるように。LinuxではGDMも引き続き対応。」＋correction「GDMはスクリプトを通さない方がいいです」。共通launcher実装/install/verificationを承認、GDMは既存wayland直接起動を保つ。--loginは「追加するのはどうでしょうか」の検討のみ。WS110 --testing/main.c変更は未承認。WIP commit、git push/実機pullは既存の開発host→FreeBSD検証承認を本launcherの同じ環境導入に適用、force pushなし。Issue/Project公開は保留。
-Timebox: 最大30分 /1Phase
-Focus: WS111 console launcher。既存fg010とdemo順保持。
-Snapshot: [Phase](history/ws111/q576/approved-phase.md)、SHA256 f03786ed2f36a6d569747b6df384dfba48c54d0825f1b2b1ba3ab341bd8d5223
+Active Queues: q577 (P8), q578 (P9), q579 (P10)
+Status: active
+Main executor / plan writer: Q1
+Approval: current user / 2026-10-02「では、N=3でしばらく実行を続けてください」。既定専任3枠の最初のscopeを各lane/snapshotに固定。各上限3時間、N_effective=3。
+Last finished Queue: [q576](history/queue-q576.md)（archive存在確認済み）
 
-| Attempt | Phase | Exact scope | Status | Dependencies |
-| --- | --- | --- | --- | --- |
-| q576-i01 | [ws111p002](ws111/phase002/phase.md) | 最終shell/make/docs全文規約確認、Linux/FreeBSD実sh/env/args/execとnative script build/install/mode/byte、GDM direct entryを検証。 | cleared | p001 actual launcher/build/install outputs |
+| Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
+| --- | --- | --- | --- | --- | --- |
+| q577 / q577-i01 | P8 | [phase](ws099/phase017/phase.md) | BUG-125の再現/同期診断、証明された試験raceのみ修正。compositor読取のみ。 | active / in-progress | [lane](agents/P8/queue.md) |
+| q578 / q578-i01 | P9 | [phase](ws099/phase014/phase.md) | C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。 | active / in-progress | [lane](agents/P9/queue.md) |
+| q579 / q579-i01 | P10 | [phase](ws074/phase172/phase.md) | pinned origin/browser2のmanifest/path対応/競合分類とブラウザ差分統合。ABI/所有境界維持。後続Phase開始不可。 | active / in-progress | [lane](agents/P10/queue.md) |
 
-Dependency graph: WS105/WS109 context → p001 → p002。WS110/--login implementationは本Queue外。
-Started UTC: 2026-10-02T02:47:22.972372+00:00
+Dependency graph: C9実出力 → q577; c5-hw/hdmi-h4-hw → q578; WS107実source/p099/browser2 SHA → q579 → 後続browser（外部context、未投入）。3Queue間のsource依存なし。hardwareはP9のみ、QEMU runtimeは担当別。
 
 ## Upcoming Work Outlook
 
@@ -29,27 +26,5 @@ WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ�
 [WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。planned/未順位、実装Queue未選定。
 [WS114 p001](ws114/phase001/phase.md): Linux標準GTK4の実測と[機能表](ws114/gtk4-compat-matrix.md)の証拠化。続く採否レビュー後にWS114改善→WS115 upstream GTK4→WS116 Qt6範囲判断/移植→WS097/096書き下ろし。未順位/Queue未選定。
 
-Outcome: q576-i01 /Phase cleared。L1〜L3: 両OS shell/native build/install、FreeBSD/opt script0755、LinuxGDM direct entry unchanged、全source review PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q576/result.md)。--loginは本人確認/PIN交換案のみ、WS110/testing未実装。
-Finished UTC: 2026-10-02T02:51:00.579101+00:00
 
-WS111 completion: L1〜L3 verified、p001/p002 cleared、completed。次Queue無し。--login/WS110 testingは未承認の実装scopeとして別候補。
-
-## Planning follow-up / 2026-10-02
-
-Event ws112-package-plan-20261002: [WS112](ws112/ws.md)と[候補p001](ws112/phase001/phase.md)をUpcoming Work Outlookへ追加。
-5OS package/CI releaseの計画のみ、RPi arm64、CI runtime不要、FreeBSD source-only。未順位・Queue未選定。
-q576の承認/attempt/outcomeは変更しない。Active Queueなし、次Queueを作らない。既存demo順位/WS106保留を保持。
-
-2026-10-02 / ws112-rpi-build-only-20261002: OutlookのWS112 RPi候補はbuild/deb生成で受け入れ、GPU/GUI関門なし。Active Queueなし、q576履歴不変。
-
-2026-10-02 / ws113-multidisplay-plan-20261002: WS113は後日候補のみ。q576 finished/Active Queueなし、既存承認とdemo順位は変更しない。
-
-2026-10-02 / ws074-browser2-gate-20261002: WS074 p172をOutlookへ追加。q576 finished/Active Queueなし。追加は計画のみでbranch実装取込を開始しない。
-
-2026-10-02 / ws114-gtk-qt-port-projections-20261002: WS114/115/116をOutlookへ追加。順番は依存関係であり既存demo順位の変更ではない。標準GTK4 guest実行とuser行別判断は未了、Queueなし、q576の承認/結果は不変。
-
-2026-10-02 / subagent-queues-projections-20261002: user指示によりQueueを担当別に拡張。[運用契約](agents/protocol.md)。希望N=8、現在の子枠は最大3、GPT-6.1 Sol High。q576のfinished/承認/結果は不変。実装Queueの選定・起動はこの設計更新では行わず、agent laneは空。
-
-2026-10-02 / ws074-dedicated-interop2025-20261002: userがP10をブラウザ専任枠に固定し、p172取込後のAcid3 pixel完全一致/fail 0とInterop 2025 WPT全件PASSを目標に指定。p100の基準を強化、p173を計画。P10はreserved/未起動。q576 finishedを保持し、新しいactive/proposed実装Queueやattemptは作らない。
-
-2026-10-02 / three-dedicated-lanes-and-browser-goals-20261002: userがP8バグ修正・P9デスクトップ高度化・P10ブラウザを固定。desktopで見つけたbugはBoardへ記録してP8へ渡す。P10にFile System Access API、OPFS、Interop 2025 100%、Test262を追加。[担当台帳](agents/registry.md)と[desktop一覧](agents/desktop-outlook.md)へ投影。q576 finishedと既存承認を保持、active/proposed実装Queueやattemptは作らない。
+2026-10-02 / n3-execution-start: reserved3枠を実行に移す。共有計画の上書き・browser2全branch merge・pushなし。成果は小さなWIP commitからmainがレビュー/統合。

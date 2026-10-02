@@ -513,3 +513,5 @@ ws109-20261002-user-i915-passthrough: user selected awe@10.0.10.25 i915 passthro
 ## 2026-10-02 / GTK4・Qt6学習順の追加
 
 Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調査/行別レビュー→選択したcompositor/portal改善→zedBSD upstream GTK4移植→Qt6実装範囲の検討/移植→後の独自実装、という順序をWS114/115/116に投影。WS034 p029/p030は未実行のまま移管、p028/p034/p038は維持。WS096/097の書き下ろし方針とfg010/デモ順位は保持。新WSは未順位の依存順候補でQueue外、GTK4機能の採否とQt6範囲は未決。GitHub publication pending。
+
+2026-10-02 / n3-execution-start: current userのN=3継続指示。P8 q577 BUG-125/p017、P9 q578 C10/p014、P10 q579 browser2/p172を有限3時間で開始。既存focus/順位を保持、browser後続はp172 whole-Phase clearance待ち。[Queue](queue.md)を参照。GitHub publication保留。

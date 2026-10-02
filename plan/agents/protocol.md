@@ -38,3 +38,5 @@
 [Registry](registry.md)は担当ID/世代、model/effort、WS、worktree/branch、current Queue、ordered next Queues、状態、最終checkpoint、wrap-up指示、最終merge ACKを持つ。Queue laneは承認元/範囲/Phase/attempt/依存と結果を持つ。merge requestは上のSHA/検証/残件のほか`requested → integrated / rejected / conflict`を記録する。成果のGit commit、統合、Queue/Phase clearance、WS completionは別イベント。shared cache/outboxはmainだけが書き、GitHub publicationの保留とローカル実行成果を混同しない。
 
 現時点: q576 finished、製品実装のactive Queue なし。この設計調査のための3つの読取専用サブエージェントは実装Queueを開始していない。
+
+2026-10-02 最新実行指示: current user「では、N=3でしばらく実行を続けてください」。当面N_target=3、有限QueueをP8/P9/P10へ投入し、mainがcheckpointを継続レビューする。上記「未起動」は設計時点の履歴。
