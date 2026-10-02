@@ -1,11 +1,11 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: なし。実行体制（2026-10-02 user）: A/B分担は不採用、このsession（Q1）がClaude サブエージェントをN個使う（[protocol](agents/protocol.md)）。A/B各3担当は全員終了、codex/agent-aとremote codex/agent-b（0018bc6c8）をローカルmainへ統合済み。q584/q585/q586/q587/q589 uncleared、q588部分clear（whole p007 uncleared）。各残作業/判断/証拠はQueue履歴から再開。
-Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: user指示で全agentを区切り終了し成果を統合。新Queueは投入しない。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。A/B所有は廃止、Q1が全WSの割当/共有投影/mergeを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
-IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。旧P8/P9/P10は停止・回収済みで、[Queue index](queue.md)にterminal outcomeを保存。
-優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
+Active Queues: なし。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=2 から開始（[protocol](agents/protocol.md)）。
+Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg017 — WS074ブラウザ、fg018 — WS114 GTK4 baseline。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。
+Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
+IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared、p172（origin/browser2取込の最終review）が後続browser作業の前提。
+優先順位: fg019 の内容確定後に見直す。それまでは下の「WS の優先順位」の既存順を保持する。
 <!-- awesome-plan-current:end -->
 
 # zedBSD Master
@@ -51,7 +51,7 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 
 | Goal | 当面の成果 | Milestone | 担当 | 出典 |
 | --- | --- | --- | --- | --- |
-| **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新 |
+| **fg019** | **ベータ1のリリース**。含める内容（機能・対象 platform・配布物・品質基準）は2026-10-02からユーザーと議論して決める（draft、受け入れ条件は未定義） | 未定（MG006/MG007 などを内容確定時に決める） | 未定 | 2026-10-02 user「次のFeature Goalはベータ1のリリースにします。ベータ1に含める内容は、一緒に議論して決めましょう！」 |
 | **fg018** | WS114のLinux標準GTK4の動作と不足を機能表で実測し、ユーザー行別採否レビューを経てWS115 upstream移植への前提を整える | MG006 | [WS114](ws114/ws.md) / Agent B B1 | 2026-10-02 userがdesktop次作業をGTK4移植WSへ指定。q580は部分実測でuncleared、改善機能の採否は未決 |
 | **fg017** | [WS074](ws074/ws.md)のブラウザを専任枠で継続し、origin/browser2取込後にAcid3の100/100・pixel完全一致・fail 0、File System Access API、OPFS、Interop 2025対象WPTの100%、JavaScript Test262へ進む | MG006 | [WS074](ws074/ws.md) / Agent A A1 | 2026-10-02 ユーザー指示と同日の追加。p172/q579は部分統合・検証後unclearedで、残reviewの再選定が先。Interop対象はp173で固定、Test262の到達率は未指定 |
 
@@ -63,6 +63,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 | Goal | 成果 | Milestone | 担当 | 出典/結果 |
 | --- | --- | --- | --- | --- |
+| **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新。**2026-10-02 達成**: user「すでにデモ目標には実装では到達しており、成果物はリリースバイナリとして公開されています」（nightly release: `zedbsd-amd64.img.gz`・`Kei-nightly.zip`） |
 | **fg012** | Keiland の OS の境界を zedBSD の上で整理し、既存の振る舞いを保ってから Linux の build と OS module を実装する。達成は WS104 の A1〜A6、WS105 の既存の受け入れ条件による | MG006 | [WS104](ws104/ws.md) → [WS105](ws105/ws.md) | 2026-10-01 ユーザー「WS104とWS105が、次のあなたの目標です」。同日の WS104 完了までの自律実行指示。WS104 A1〜A6とWS105 L1〜L9/最終conformance verified、2026-10-01達成（q538）。優先順位と同じ指示から反映、fg010 は保持 |
 | **fg013** | WS106 の対象テスト・見本を userland/tests に集約し、既存の選択・実行・デモを保つ | MG001 | [WS106](ws106/ws.md) | 2026-10-01 ユーザー「WS106を実行してください。」。WS106 の既存目標だけをfocusとし、既存fg010は保持 |
 | **fg014** | libbrowserがengineを所有し、標準Vulkanと抽象入力で独立clientから利用できる | MG006 | [WS107](ws107/ws.md) | 2026-10-02 ユーザー「WS107を実行してください。」。B1〜B5 verified/q544で達成、WS106/fg013の未達を保存 |
@@ -232,34 +233,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 ## サブエージェント運用（2026-10-02 ユーザー更新）
 
-[正本](agents/protocol.md)・[実体台帳](agents/registry.md)。Q1は唯一の共有計画/cache書き手とQueue配布/merge担当。希望 `N_target=8`、子は`gpt-6.1-sol` / high、実行環境/利用制限/依存/競合に応じて `N_effective` を調整する（このsessionの子の同時上限は3）。P1〜P7の旧割当は歴史として保持し、新規実装担当はP8から。各agent最大1 active Queue、全体で複数可。1Queueは原則1Phaseで、mainが起動時Queueと承認済み後続Queueを順に投入する。WS affinityを優先し、WS終了後の再配属も可能。commit可能地点で頻繁にmergeを依頼し、通常/urgentラップアップは正本の手順で自発的に終了する。
-
-### 一時的な2セッション分担（2026-10-02、**廃止・履歴**）
-
-2026-10-02 / single-session-claude-subagents: current user「AGENTS.mdを読んで、オンボーディングしてください。ただし、エージェントA,Bに分けて実行するルールは採用しません。単一のエージェントセッションであるあなたが、サブエージェントをN個使って作業します。」 により以下の A/B 分担は使わない。lane の WS グループ分けは割当の参考に留め、Q1 が単独で全 WS の Queue を割り当てる。
-
-ユーザー指示によりメインセッションをAgent AとAgent Bに分け、各セッションが最大3サブエージェントを起動する。この表は一時的な実行所有であり、WSの目的・優先順位・依存・Queue承認・保留判断を変更しない。Phase単位の有限Queueを作ってから実行し、単に担当欄に入ったことを実装許可にしない。
-
-起動時の正本は[Agent A](agents/session-a.md)と[Agent B](agents/session-b.md)。Aは`/home/awe/zedBSD-claude1`の`codex/agent-a`（起動時環境のbranch指定を採用）、Bは`/home/awe/zedBSD-claude2`の`codex/agent-b`を使い、同じ`origin/main` handoff commitから開始した。[協調記録](agents/two-session-coordination.md)にQueue IDとsource所有を保存する。
-
-| Session / lane | 担当WS | 当面の順序と境界 |
-| --- | --- | --- |
-| **Agent A / A1 Browser** | **WS074**（browser固有bugを含む） | p172 whole-clear → p100 Acid3 pixel完全一致 → p174 File System Access → p175 OPFS → p173 Interop 2025 100% → p176 Test262。p101 CSS2も保持。browser/libbrowser sourceとそのbugはAだけが編集する |
-| **Agent A / A2 Package・release・資産整理** | **WS112、WS088、WS106、WS034、WS026** | WS112の5 Linux package/CIを主対象。WS106はime-probe判断待ち、WS088は外部fork/user入力待ちを維持。外部package・CI・test資産の変更をBと重ねない |
-| **Agent A / A3 GPU・display・platform** | **WS014、WS029、WS031、WS051、WS068、WS075、WS083、WS084、WS101、WS113** | 実行可能な依存から選ぶ。複数displayのWS113はSettings/libkeilandも含めてAが一体所有し、Bは同WSを編集しない。WS075の描画最適化停止、WS083のデモ後、WS113の「あとで実装」を維持 |
-| **Agent B / B1 GTK・Qt** | **WS114、WS115、WS116、WS097、WS096** | WS114標準GTK4実測 → ユーザーの行別採否 → 選択したcompositor/portal改善 → WS115 upstream GTK4 → WS116 Qt6 → 後の独自実装WS097/096。採否前の機能実装を始めない |
-| **Agent B / B2 Keiland desktop・UI** | **WS078、WS079、WS081、WS085、WS089、WS090、WS094、WS099、WS100、WS102、WS110** | デモと依存順で有限Queueを選ぶ。WS110は検討のみ、WS079/081/085/100のuser/Windows/実機gateを保持。WS113のSettings/display部分はA所有なので編集しない |
-| **Agent B / B3 Bug fixes** | **WS073とBug Boardから割り当てるhandling WS/Phase** | BUG-125の残りを最初の引継ぎ対象とする。Aのbrowser固有bugとA所有sourceはAへ返す。新しいdesktop bugはticket化してこのlaneへ。ticketだけで修正許可とはしない |
-
-負荷の見積りはAが「browserの大規模互換性」「5 OS package/release」「GPU・複数display」、Bが「GTK/Qt移植」「desktop/UI」「一般bug修正」の3本ずつ。予約・保留・実機待ちを除いた実行可能PhaseだけをQueueに載せる。完了済みWSは証拠/contextであり再割当しない。上表にないlegacy WSは休止を維持し、再開時にA/Bを決める。WS001はユーザーが再開を指示した時だけ、WS013/015はFuture Workから昇格するまで、WS095は人間作業の解除まで、WS098はWS095の後まで実行しない。
-
-共有状態の競合を避けるため、**Agent Aがmaster・Guardrail・全体Queue/Past Log・GitHub syncの単一writer**を続ける。Agent Bは自分のWS/Phase、B用lane Queue、worktreeと証拠を所有し、Master/全体Queueへの投影はcommit可能なcheckpointとしてAへ渡す。同じsourceを両sessionで同時編集しない。A/B間の依存は必要なcommit SHAと検証済み実出力をhandoffし、未mergeのworktreeを依存として扱わない。
-
-移行時点でq577/q579/q580は通常wrap-upを完了し、成果・未達基準・資源cleanupをcommitした。A/Bのcheckoutは同じhandoff commitから開始する。p172はA1、WS114 p001はB1、BUG-125はB3の再開候補だが、担当移行だけでは新しいQueueを承認しない。
-
-Event `two-session-temporary-ownership-20261002`: 最初の案A=browserのみ/B=desktop+bugではAの3サブエージェント枠に対して負荷が小さいというユーザー判断を受け、上の3laneずつへ再配分。既存focusと優先順位を保持し、担当変更そのものは新Queueや実装許可ではない。GitHub publicationは保留。
-
-Event subagent-queues-projections-20261002: 以前のN=0〜9/Claude Opus High・Mid/Phaseごと返却の運用記述は下に履歴として保持し、今回の新指示で置換。旧secondary queueの2026-09-26削除も履歴として保持。現在はq576 finished、実装Queue/実装担当は未選定。設計調査だけで優先順位、fg010、WS scopeを変えない。
+[正本](agents/protocol.md)・[台帳](agents/registry.md)。このcheckoutの単一 Claude Code セッション Q1 が唯一の共有計画/cache書き手とQueue配布/merge担当。サブエージェントは固定名 P1〜P8（Agent tool、`.claude/agents/`）。一度コンテキストを埋めた担当をなるべく長く動かし、Q1 が次々に Queue を依頼・予約する。N はユーザー指定（2026-10-02 N=2 から開始）。各担当 active Queue 最大1、1Queueは原則1Phase。
 
 ## WS の優先順位
 
@@ -546,18 +520,10 @@ Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調�
 
 2026-10-02 / desktop-next-gtk4-priority: user指示によりfocused goal fg018とP9 lane優先を同時追加。P9の次はWS114 p001/q580、既存WS090/094候補より先。GTK4移植WS115はWS114実測/採否/選択改善が前提。他lane/デモ全体相対順は保持。利用上限回復のuser確認により同model GPT-6.1 Sol Highでgeneration2へ。
 
-2026-10-02 / two-session-handoff-ready: P8/P9/P10を通常wrap-upし、q577/q579/q580をunclearedで終了。q578 clearedは維持。A/B分担と起動文書を保存し、旧runtimeは停止、次の実行Queueは未選定。Aが共有計画のsingle writer、Bは割当WS/PhaseとB lane Queueを所有する。
 
-2026-10-02 / two-session-n3-start: userがAもN=3開始を指示。q584/A1 WS074 p172残review、q585/A2 WS112 p001契約調査、q586/A3 WS113 p001設計調査を有限scope/snapshotへ固定し指定model/highで起動。p112/113は初回実行でincomplete、製品実装は未投入。user経由のB記録991fc890（q581/GTK4、q582/desktop、q583/BUG-125部分診断）をc87341a78で統合し全体Queue/registryへ投影。BのPhase/WS開始草稿はB側の次成果commitと照合して投影する。GitHub Issues/Project公開とpushは保留。
 
-2026-10-02 / B-next-q587-reserved: user経由でB1のq581後のWS114装飾モード実装・GTK4確認追加承認とID予約依頼を受領。q587をB1に予約。具体的Phase/scope/承認snapshotはB側の次checkpointで照合し、現q581の状態/基準は変更しない。[協調記録](agents/two-session-coordination.md)。
 
-2026-10-02 / B-df66db5e-integration-and-continuity: user依頼のB checkpointをmain435a62126へ統合。q581調査clearとq583部分診断clearを共有Queue/履歴へ投影、whole p017とBUG-125 trackingを保持。q587の具体Phase/snapshotとuserの開始報告を確認しp007へ投影。q588/B2 WS094最終規約とq589/B3 BUG-125追加切り分けを予約。workerはQueue終端で終了せず、同runtime/contextへ後続を渡す。[協調記録](agents/two-session-coordination.md)。
 
-2026-10-02 / A-checkpoints-q585-terminal: A1 checkpoint11 reviewed88/209、残121 C/headerと後続gateを維持。A2のq585/p001は入力・形式・環境・CI契約調査を保存してD1 boot適用回答待ちでuncleared、[history](history/queue-q585.md)へexact承認/基準別証拠/再開を保存。A3 p001契約と変更foreign p002–009の設計を統合、製品/hardware未実施。全workerを同runtime/contextで維持、q590〜q592予約は未投入。GitHub publication保留。
 
-2026-10-02 / all-agent-normal-wrap: 最新userが全agentをきりのいいところで切り上げ終了へ指示。A1/A2のPhase完了待ちを置換、A3はfinal2ad9c951 → 83b111c63、q586/p001 uncleared履歴と再開を[archive](history/queue-q586.md)へ保存して終了確認。B checkpoint4b655803 → A8f807c73fを統合、q582 cleared、q588 source partial/q589診断準備/q587amendment01を共有投影。B2背景資産・3 OS収録q593は予約だけで開始しない。全次Queue未投入、B停止未確認、source受け入れ/WS completionを停止に合わせて偽らない。
 
-2026-10-02 / local-main-integration-request: userがサブエージェント結果→codex/agent-a→ローカルmain→リモートcodex/agent-b出現後ローカルmainの順に統合を指示。全commit message WIP、pushなし。A1 final2f6556750を10e844f23へ統合、A2/A3既統合、全A worker停止確認。
 
-2026-10-02 / B-final-main-integrated: main35a6c8634へB最終成果を統合。q587装飾/release実装は最終実機物の導入/回帰等未達、q588 source部分clearとwhole条件を区別、q589準備のみでBUG-125 reproduced/tracking維持。WS099 p019/q593背景は計画のみ。B記録のuser決定「従来のぼかした湖を初期背景、既収録背景も選択可能・保存設定優先」をPhaseと再開資料へ保存済み。全次Queue未投入、計画GitHub公開は保留。

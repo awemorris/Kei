@@ -2,7 +2,7 @@
 
 # Past Log
 
-2026-10-02 / single-session-claude-subagents: userがA/B分担を不採用とし、単一session（Q1、main checkout）がClaudeサブエージェントをN個使う体制へ。AGENTS.md・protocol・Master・registry・Queue・`.claude/agents`の実装系commit規則を更新。Queue/実装は開始せず、active Queueなし。
+2026-10-02 / beta1-goal-and-fixed-agents: user判断でfg010（OSCデモ）達成、次のfocus fg019 ベータ1リリース（内容は議論中）。実行体制を単一session Q1＋固定名サブエージェントP1〜P8（N=2開始）に変更、A/B 2セッション分担の記述と lane 記録を削除。Queue/実装は未開始。
 
 最新統合 / 2026-10-02: リモートB0018bc6c8をmain35a6c8634へ統合。全6担当終了、active Queueなし。[q587](queue-q587.md)は実装/部分検証uncleared、[q588](queue-q588.md)はsource/host/build部分cleared・whole未達、[q589](queue-q589.md)は準備のみuncleared。過去の待機/停止未確認の記述は当時の履歴。最終runtime/boot等を未実施のまま保存、GitHub計画publication pending。
 
