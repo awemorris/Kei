@@ -46,7 +46,7 @@ Event ws115-beta1-plan-20261002: 2026-10-02 計画担当が依存 package の移
 | --- | --- | --- | --- | --- | --- |
 | pixman | 0.46.4 | libpixman-1.so.0 → `.0.46.4` | libc.so | なし | pixman-sse2.c の unused 1、driver の `-pthread` |
 | fribidi | 1.0.17 | libfribidi.so.0 → `.0.4.0` | libc.so | なし | fribidi-bidi.c の enum の cast 5 |
-| cairo | 1.18.6 | libcairo.so.2・libcairo-gobject.so.2 → `.11806.6` | cairo: png16・fontconfig・freetype・pixman・c、gobject: cairo・glib・gobject | 0001 | unterminated-string 6、switch-enum 1、colr の return-type 1 |
+| cairo | 1.18.6 | libcairo.so.2・libcairo-gobject.so.2 → `.11806.6` | cairo: png16・fontconfig・freetype・pixman・c、gobject: cairo・glib・gobject | 0001 | unterminated-string 7、switch-enum 1、colr の return-type 1 |
 | pango | 1.56.4 | libpango-1.0・libpangoft2-1.0・libpangocairo-1.0 `.so.0` → `.5600.4` | Makefile の契約のとおり（glib・gobject・gio・fribidi・harfbuzz・fontconfig・freetype・cairo・c） | 0001 | parent_class の unused-but-set-global 11（warning に戻した物）、pangofc-fontmap.c の cast-align 1 |
 
 - 各 option:
