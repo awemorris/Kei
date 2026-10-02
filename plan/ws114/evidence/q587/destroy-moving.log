@@ -1,0 +1,10 @@
+ZWL GLASS request move surface=24
+ZWL GLASS request move surface=24
+ZWL PING pong client=3 serial=48
+ZWL CURSOR shape client=3 shape=1 image=10
+ZWL PING pong client=3 serial=53
+ZWL GLASS request move surface=24
+ZWL CLIENT gone client=3 reason=read
+ZWL CLEANUP client=3 objects=35 unread_fds=0
+ZWL IME deactivate
+KEI-IME DEACTIVATE

@@ -1,0 +1,28 @@
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0
+ZTERM MENU ready items=30
+ZTERM TAB active id=1
+ZTERM TAB new run=term id=1 count=1
+ZTERM START run=term columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZTERM MENU item=13 action=19 serial=167
+ZTERM TAB active id=2
+ZTERM TAB new run=term id=2 count=2
+ZTERM ACTION run=term action=19
+ZTERM TABS count=2 active=2 mode=2
+ZTERM TAB active id=1
+ZTERM TABS count=2 active=1 mode=2
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=new x=509 y=82 width=30 height=30
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=overflow x=954 y=82 width=30 height=30
+ZWL TITLEBAR strip client=16 surface=14 where=floating id=1 x=309 y=82 width=96 height=30 shown=1 flags=4 close=383
+ZWL TITLEBAR strip client=16 surface=14 where=floating id=2 x=409 y=82 width=96 height=30 shown=1 flags=5 close=483
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=new x=509 y=82 width=30 height=30
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=overflow x=954 y=82 width=30 height=30
+ZWL TITLEBAR tab client=16 id=1 event=activated
+ZWL TITLEBAR commit client=16 titlebar=52 serial=3 mode=2 controls=0 tabs=2 generation=3
+ZWL TITLEBAR strip client=16 surface=14 where=floating id=1 x=309 y=82 width=96 height=30 shown=1 flags=5 close=383
+ZWL TITLEBAR strip client=16 surface=14 where=floating id=2 x=409 y=82 width=96 height=30 shown=1 flags=4 close=-1
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=new x=509 y=82 width=30 height=30
+ZWL TITLEBAR strip client=16 surface=14 where=floating button=overflow x=954 y=82 width=30 height=30

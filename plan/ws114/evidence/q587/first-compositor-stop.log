@@ -1,0 +1,5 @@
+DONE reason=disconnected
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=216 error=0 cleanup_failed=0 pid=675 input_events=120 seat_events=187 at_ms=1288854

@@ -45,3 +45,5 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の具体実装とGTK4確認を追加指示。p007へ分離し、p002/p003の重複scopeを除き、p005にp007成果を追加。WS acceptanceは他行判断・引継ぎ・最終conformanceを含め未達のまま。[WS summary](../ws.md)。
 
 2026-10-02 07:41 UTC / q587 B1 start: approved snapshot verified and B main322d127a fast-forwarded. Implementation/build starts; QEMU grant pending.
+
+2026-10-02 / q587 technical amendment01 (B main 2b7ed7d4, hash30d8b4d7…): actual GTK client release failure requires seat/toplevel narrow origin/button ownership and teardown in addition to initial CSD scope. Original snapshot/deadline unchanged; [implementation checkpoint](q587-checkpoint-02.md). Main-owned amendment/projections reconcile on merge.

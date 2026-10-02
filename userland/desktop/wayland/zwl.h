@@ -930,6 +930,19 @@ struct zwl_server {
 	uint32_t buttons_down;
 	uint32_t press_serial;
 	/*
+	 * Borrowed identity and actual button of the last press delivered to a
+	 * client. Surface teardown and that button's release clear this origin.
+	 * Accepted xdg move/resize alone copies the origin into the interactive
+	 * state; server-owned SSD gestures never establish client ownership.
+	 * The window and origin may differ for a subsurface. Both are cleared
+	 * before either identity is freed, or when the operation ends.
+	 */
+	struct zwl_object *press_surface;
+	uint32_t press_button;
+	struct zwl_object *interactive_window;
+	struct zwl_object *interactive_surface;
+	uint32_t interactive_button;
+	/*
 	 * The time of the pointer event being handled (evdev's, in the wrapping
 	 * milliseconds Wayland carries), set by zwl_seat_motion and
 	 * zwl_seat_button before anything hears the event; the corner's swipe
@@ -1198,6 +1211,7 @@ int zwl_volume_is_open(void);
 #define ZWL_TOPLEVEL_UNMAXIMIZE		3
 #define ZWL_TOPLEVEL_MINIMIZE		4
 void zwl_glass_toplevel_request(struct zwl_server *server, struct zwl_object *surface, int request);
+void zwl_glass_toplevel_move_end(struct zwl_server *server, struct zwl_object *surface);
 uint32_t zwl_next_serial(struct zwl_server *server);
 int zwl_seat_bind(struct zwl_object *seat);
 int zwl_seat_request(struct zwl_object *object, uint32_t opcode, const unsigned char *bytes, size_t size);

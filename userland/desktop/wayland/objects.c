@@ -298,6 +298,10 @@ zwl_object_destroy(
 		zwl_touch_object_gone(object);
 	}
 
+	/* Destroying a toplevel role also cancels its borrowed interactive operation. */
+	if (object->kind == ZWL_TOPLEVEL && object->surface != NULL)
+		zwl_toplevel_surface_gone(object->surface);
+
 	/* The popups stop naming this one: a positioner's rules go, a popup's grab ends, a parent's popups close (popup.c). */
 	if (object->kind == ZWL_SURFACE ||
 	    object->kind == ZWL_POSITIONER ||

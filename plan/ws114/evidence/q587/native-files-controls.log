@@ -1,0 +1,14 @@
+    PID COMMAND
+ZWL GLASS dock surface=23 via=request buttons=769,723,677 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=23 via=request x=276 y=198
+ZWL TITLEBAR tab client=16 id=1 event=activated
+ZWL GLASS dock surface=14 via=button buttons=768,722,676 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=14 via=button x=182 y=127
+ZWL TITLEBAR text client=17 id=5 done=0 how=0 length=1
+ZWL TITLEBAR text client=17 id=5 done=0 how=0 length=2
+ZWL TITLEBAR text client=17 id=5 done=0 how=0 length=3
+ZWL TITLEBAR text client=17 id=5 done=0 how=0 length=4
+ZWL TITLEBAR text client=17 id=5 done=0 how=0 length=0
+ZWL TITLEBAR text client=17 id=5 done=1 how=2 length=0
+ZWL GLASS dock surface=8 via=button buttons=768,722,676 title=65 x=0 y=38 w=1280 h=762
+ZWL GLASS undock surface=8 via=button x=80 y=98
