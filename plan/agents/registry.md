@@ -4,7 +4,7 @@
 
 | Agent / generation | Agent type | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| P1 / generation1 | phase-runner（high） | WS004（BUG-134 AX211） | `/home/awe/zedBSD-worktrees/p1` / `agent/p1` | [q590](P1/queue.md) | — | running | — |
+| P1 / generation2（2026-10-02 権限の引き継ぎのため再起動、generation1 は通常 wrap-up） | phase-runner（high） | WS005（WiFi）・WS118 | `/home/awe/zedBSD-worktrees/p1` / `agent/p1` | [q590](P1/queue.md) | — | running | — |
 | P2 / generation1 | phase-runner（high） | WS099（BUG-125） | `/home/awe/zedBSD-worktrees/p2` / `agent/p2` | [q591](P2/queue.md) | lane の Next | running | — |
 | P3 / generation1 | phase-runner（high） | WS114 → WS115 | `/home/awe/zedBSD-worktrees/p3` / `agent/p3` | [q592](P3/queue.md) | lane の Next | running | — |
 | P4 / generation1 | phase-runner（high） | WS095 → WS127/WS089 | `/home/awe/zedBSD-worktrees/p4` / `agent/p4` | [q593](P4/queue.md) | lane の Next | running | — |
