@@ -3,10 +3,10 @@
 # ws115-p007: pixman・cairo・fribidi・pango
 
 Parent: [WS115](../ws.md)
-Status: planning
+Status: in-progress（q608-i01、P3）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
-Queue / attempts: none
+Queue / attempts: q608-i01（P3、継続 dispatch、時限 4h、base main e99a3c589）
 Purpose / goal: GTK4 の text と Cairo renderer の基盤を移植する。
 Prerequisites: p006
 Investigation bound: timebox 4h
