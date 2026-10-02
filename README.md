@@ -1,5 +1,9 @@
 # Kei / zedBSD
 
+<div align="center">
+  <img src="docs/imgs/screenshot1.png" width="80%">
+</div>
+
 Kei is an operating system for computers with touch displays. It is
 built on zedBSD, a BSD-based kernel and base system written from
 scratch, and ships with Keiland, a Wayland desktop made for touch.
