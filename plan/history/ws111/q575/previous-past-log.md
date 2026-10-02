@@ -2,18 +2,19 @@
 
 # Past Log
 
-Last finished Queue: [q575](queue-q575.md)（WS111 p001 cleared）
+Last finished Queue: [q574](queue-q574.md)（WS109 p007 cleared）
 
-## 最新: q575 /WS111 p001
+## 最新: q574 の後続 /WS109実機受け入れ合格
 
-共通scriptと両native install membership/console docsを実装。Linux native/stage/ELF/GDMdirect cmpと両OS shell env/args/exec PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q575/result.md)。最終sourcereview/実機installはp002。
+q574で実機native build/install/最終規約を確認し、2026-10-02にuser「完璧に動作しました」でp008/F6 cleared、WS109 completed/fg016達成。[ユーザーacceptance](ws109/user-acceptance-20261002/phase008.md)。q574当時のuser操作未実施をsuccessへ書き換えず、dated follow-upとして保存。
 
-WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認を利用。Issue/Project公開保留。WS110/testing/--loginは検討のみ。
+FreeBSD GDM撤回、native sessiond/graphicallogin/passwordlock未移植、BUG130/Venus/physicalradio制限を保持。WIP source b49ffa9bまでpush/実機pull verified、Issue/Project同期保留。今回WS110の--testing検討案を保存、source/test changesと新実装Queue無し。
 
 ## Queue history（直近30、古い順）
 
 | Queue | Outcome |
 | --- | --- |
+| [q545](queue-q545.md) | WS108 p001 cleared |
 | [q546](queue-q546.md) | WS108 p002 cleared |
 | [q547](queue-q547.md) | WS108 p003 uncleared |
 | [q548](queue-q548.md) | WS108 p003 cleared |
@@ -44,6 +45,5 @@ WIP commit、今回のlauncher git push/実機pullは既存指定環境の承認
 | [q572](queue-q572.md) | WS109 p005 item cleared /Phase cleared |
 | [q573](queue-q573.md) | WS109 p006 cleared |
 | [q574](queue-q574.md) | WS109 p007 cleared |
-| [q575](queue-q575.md) | WS111 p001 cleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

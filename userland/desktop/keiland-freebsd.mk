@@ -127,6 +127,15 @@ $(KEILAND_FREEBSD_BUILD)/etc/keiland/apps.conf: userland/desktop/wayland/freebsd
 KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/etc/keiland/apps.conf
 KEILAND_FREEBSD_INSTALL += etc/keiland/apps.conf
 
+# The console launcher shares its shell implementation with the Linux build.
+$(KEILAND_FREEBSD_BUILD)/bin/keiland-desktop: userland/desktop/wayland/keiland-desktop.in
+	@mkdir -p $(dir $@)
+	sed 's|@PREFIX@|$(KEILAND_PREFIX)|g' $< > $@.tmp
+	chmod 0755 $@.tmp
+	mv $@.tmp $@
+KEILAND_FREEBSD_ALL += $(KEILAND_FREEBSD_BUILD)/bin/keiland-desktop
+KEILAND_FREEBSD_INSTALL += bin/keiland-desktop
+
 # Bundled gradients are generated outside git; a user's default picture stays outside git too.
 KEILAND_FREEBSD_WALLPAPER_NAMES := Aurora Dawn Lagoon Meadow Twilight
 KEILAND_FREEBSD_WALLPAPERS := $(addprefix $(KEILAND_FREEBSD_BUILD)/share/keiland/wallpapers/,$(addsuffix .ppm,$(KEILAND_FREEBSD_WALLPAPER_NAMES)))

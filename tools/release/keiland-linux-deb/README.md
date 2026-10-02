@@ -35,7 +35,7 @@ Successful outputs are in `artifacts/debian13/` and `artifacts/ubuntu2604/`:
 
 The runtime layout is `/opt/keiland`; system Vulkan/Mesa, libdrm, glibc and seat
 services remain distribution packages. Select **Keiland** in a display manager,
-or run `/opt/keiland/bin/wayland --session --glass` as root from a text console.
+or run `/opt/keiland/bin/keiland-desktop` as root from a text console.
 The Apps configuration is a dpkg conffile. Installation starts no session, and
 removal/purge do not erase files in users' homes.
 

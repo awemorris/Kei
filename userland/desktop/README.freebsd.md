@@ -80,20 +80,22 @@ Do not change evdev permissions to make the compositor run.
 
 ## Launch
 
-As the session user, prepare an owned runtime directory and launch from the VT:
+As the session user, launch from the local VT:
 
 ```sh
-mkdir -p "$HOME/.cache/keiland-runtime"
-chmod 700 "$HOME/.cache/keiland-runtime"
-export XDG_RUNTIME_DIR="$HOME/.cache/keiland-runtime"
-export WAYLAND_DISPLAY=wayland-keiland
-export KEILAND_SEAT=seatd
-export KEILAND_DRM_DEVICE=/dev/dri/card0
-/opt/keiland/bin/wayland --session --glass --wallpaper=/opt/keiland/share/keiland/wallpaper.ppm
+/opt/keiland/bin/keiland-desktop
 ```
 
+The shared Linux/FreeBSD launcher supplies `--session`, the glass appearance,
+installed wallpaper and matching server/client socket. It preserves a supplied
+`XDG_RUNTIME_DIR`; otherwise it creates `$HOME/.cache/keiland-runtime` with mode
+0700. Additional compositor options are passed through, for example
+`keiland-desktop --wallpaper=/path/picture.ppm`. Seat/device selections remain
+under the native backend and caller's environment. Linux GDM continues to run
+`wayland` directly, without this launcher.
+
 `--session` keeps the desktop running until Log Out or normal termination.
-Without it the existing development mode stops after 150 seconds. Run as the
+Direct `wayland` without it still stops after 150 seconds. Run as the
 ordinary session user from a local console, after logging in again following
 the `video` group change. An SSH shell is for building/installing, and does not
 supply the local active VT needed by seatd.

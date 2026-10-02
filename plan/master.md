@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q574 finished、WS109 F6ユーザー実機acceptance合格）
+Active Queue: none（q575 finished、WS111 p001 cleared）
 Current Focused Goal: fg010 — 10/17 demo。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: WS109 completed。WS110の起動modeはユーザー指定で検討のみ、実装Queue無し。既存demo順/WS106保留を維持。
+Next（2026-10-02 更新）: user指定のWS111 console launcher実装を優先。WS110/testingと--loginは検討のみ、既存demo順/WS106保留を維持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -221,6 +221,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 | [WS110](ws110/ws.md) | MG006 | 通常compositor起動を既定にし--testingで試験用有限modeを明示 | planning | ユーザー指定で検討のみ、alias/opt契約案とlaunch候補を保存、実装未承認 |
+| [WS111](ws111/ws.md) | MG006 | Linux/FreeBSD共通console keiland-desktop、GDMはdirect維持 | incomplete | user実装指示。p001→p002。WS110/testing/--login実装は未承認 |
 
 ## WS の優先順位
 
@@ -478,3 +479,5 @@ ws109-20261002-user-i915-passthrough: user selected awe@10.0.10.25 i915 passthro
 2026-10-02 / ws109-20261002-physical-reopen: 同じFreeBSD移植の受け入れを最新指示の実機F6へ更新、WS109/fg016再開と最優先を同時反映。旧QEMU検証は保持。WIP push/pullは今回承認、Issue/Project公開保留。GDMはユーザー撤回。
 
 2026-10-02 / ws109-physical-user-accepted-20261002: WS109 F6合格/completed、fg016達成。WS110は--testing仕様の検討のみ追加、実装優先順位やQueue権限は与えない。既存demo順/WS106保留を維持。
+
+2026-10-02 / ws111-user-console-launcher: 共通scriptは実装指示、GDMは直接waylandという最新correctionを反映。WS111をそのscopeだけ優先、既存fg010/完了fg016は保持。

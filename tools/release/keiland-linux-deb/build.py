@@ -53,7 +53,7 @@ def main():
     shutil.copy2('LICENSE', notice / 'copyright')
     (notice / 'README').write_text(
         'Keiland for ' + args.distro + '\n\n'
-        'Run /opt/keiland/bin/wayland --session --glass as root on a text console,\n'
+        'Run /opt/keiland/bin/keiland-desktop as root on a text console,\n'
         'or select Keiland in a display manager. Vulkan uses the system driver.\n'
         'WiFi uses a system wpa_supplicant control socket; IP configuration is\n'
         'provided by the distribution. Audio uses the kernel ALSA interface.\n'
