@@ -58,3 +58,15 @@ ends. Neither lane starts a successor Queue. Reserved q593/WS099 p019 remains
 unstarted with its authorized wallpaper decisions and design preserved for a
 later resume; this is not Phase cancellation. B3 was asked for a status report;
 its existing finite q589 scope/resource wait remains unchanged.
+
+## B3 wrap-up instruction / 2026-10-02
+
+Current user:「了解、B3には作業状況を保存してもらい、unclearedで記録してもらい、再開できるようにした上で、終了してもらってください。」
+
+B3 must not start the waiting q589 guest runs. Save preparation, verification,
+remaining work and resume requirements; end q589-i01 uncleared and wrap up.
+Whole WS099 p017 remains uncleared and BUG-125 remains tracking. Preserve all
+earlier attempt outcomes and prepared artifacts. Main verifies the terminal
+submission and maintains pending A-owned shared history/projections. This latest
+direction ends B3 as well as B1/B2 after their respective wrap-ups; no successor
+Queues are dispatched.

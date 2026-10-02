@@ -80,3 +80,13 @@ will be dispatched. q593/p019 stays reserved and unstarted, with wallpaper/defau
 decisions preserved for resume. No Phase is canceled by this direction. B3 q589
 continues under its existing resource/time bounds and is preparing a status reply.
 A's shared outlook/ownership projection is pending.
+
+## B3 stop direction / 2026-10-02
+
+After B3's status report, user requested durable status/resume records, an
+uncleared outcome, and termination. B3 was told not to start q589 guest runs,
+to preserve the prepared helper/host checks and finite remaining budget, and
+to submit terminal evidence and cleanup readback. Main is awaiting that
+submission. A should retain whole p017 uncleared/BUG-125 tracking and later
+project q589's actual terminal outcome; this direction does not resolve the bug
+or cancel the Phase.
