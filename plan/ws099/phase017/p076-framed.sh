@@ -1,5 +1,5 @@
 #!/bin/sh
-# ws035-p076: xdg_popup, xdg_positioner, the xdg_toplevel requests and the ping, on the Venus guest,
+# q577 diagnostic, canonical p076 plus frame logging and optional direct geometry path; ws035-p076: xdg_popup, xdg_positioner, the xdg_toplevel requests and the ping, on the Venus guest,
 # with /bin/popup-probe (userland/tests/popup-probe) in wide mode (menus 360 wide).
 # zdesktop --glass runs at 1280x800; the probe's window (400x300, dark, limits 200x150 to 800x600) is centred.
 #  1. A press in the window opens the menu (blue) there, with the grab: the menu gets the keyboard;
@@ -25,7 +25,7 @@ set -u
 cd "$(dirname -- "$0")/../../.."
 GUEST_RUNTIME="${GUEST_RUNTIME:-$(pwd)/build/ws035-sq-run}"
 export GUEST_RUNTIME
-out=${1:-build/ws035-p076}
+out=${1:-build/p8-q577/framed}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
@@ -91,6 +91,7 @@ press_request() {
 finish() {
 	guest 'grep -E "ERROR|FAILED|protocol error" /tmp/zdesktop.log /tmp/p.log' | tee "$out/errors.txt"
 	[ -s "$out/errors.txt" ] && status=1
+	guest 'cat /tmp/zdesktop.log' > "$out/frames.log"
 	guest 'cat /tmp/p.log' > "$out/probe.log"
 	guest 'grep -E "POPUP|PING|RESIZE|GLASS (request|moved|dock|undock|minimize)" /tmp/zdesktop.log' > "$out/zdesktop.log"
 	guest "$stop_all" >/dev/null
@@ -113,13 +114,14 @@ drag() {
 
 guest "$stop_all" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
-/bin/wayland --timeout=400 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
+/bin/wayland --log-frames --timeout=400 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/popup-probe --wide --timeout-s=300 --token=p > /tmp/p.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 expect_log /tmp/p.log 'POPUPPROBE ready run=p'
 set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 wx=${1:-0}; wy=${2:-0}
 echo "window at $wx,$wy"
 
+if [ "${P076_GEOMETRY_ONLY:-0}" != 1 ]; then
 # 1. The menu at a press in the window (window-local 60,60); the press pinged the client.
 click $((wx + 60)) $((wy + 60)) 1200
 expect_log /tmp/zdesktop.log 'ZWL POPUP grab popup='
@@ -171,6 +173,8 @@ expect_log /tmp/p.log 'POPUPPROBE configure menu x=10 y=40 width=360 height=180'
 check "$out/repositioned.png" --expect $((wx + 30)),$((wy + 50)),4a90e2 || status=1
 click 40 700 1200
 expect_log /tmp/p.log 'POPUPPROBE close menu' 3
+
+fi
 
 # 7. A move from the window's top strip.
 press_request $((wx + 200)) $((wy + 10)) '^ZWL GLASS request move surface=[0-9]+$' || finish
