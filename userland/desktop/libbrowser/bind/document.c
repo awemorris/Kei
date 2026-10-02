@@ -11,11 +11,20 @@
  */
 
 #include "bind/internal.h"
+#include "html/html.h"
 
 #include <errno.h>
 #include <string.h>
 
 static int document_this(struct vm_realm *realm, vm_value this_value, struct dom_document **document);
+static int document_write(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_writeln(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_write_text(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result, int newline);
+static int document_open(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_close(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_stream_open(struct bind_window *window);
+static int document_stream_finish(struct bind_window *window);
+static int document_stream_script(void *context, struct dom_element *script);
 static struct dom_element *document_html_child(const struct dom_document *document, int tag);
 static struct dom_node *document_find_title(const struct dom_document *document);
 static int document_element(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -28,6 +37,10 @@ static int document_ready_state(struct vm_realm *realm, vm_value this_value, con
 static int document_default_view(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_get_element_by_id(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_create_element(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_create_element_ns(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_element_name_valid(const struct vm_string *name);
+static int document_prefix_valid(const struct vm_string *prefix);
+static int document_namespace_id(const struct vm_string *uri);
 static int document_create_text_node(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_create_comment(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_create_fragment(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -42,6 +55,7 @@ static int document_referrer(struct vm_realm *realm, vm_value this_value, const 
 static int document_hidden(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_visibility_state(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_compat_mode(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int document_content_type(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_character_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int document_constant_string(struct vm_realm *realm, vm_value this_value, const char *text, vm_value *result);
 static int document_create_character_data(struct vm_realm *realm, vm_value this_value, int type, const vm_value *args, unsigned count, vm_value *result);
@@ -51,6 +65,8 @@ static int document_create_character_data(struct vm_realm *realm, vm_value this_
  * for the life of the program.
  */
 static const struct bind_attribute document_attributes[] = {
+	{ "implementation", bind_document_implementation, NULL },
+	{ "contentType", document_content_type, NULL },
 	{ "documentElement", document_element, NULL },
 	{ "head", document_head, NULL },
 	{ "body", document_body, NULL },
@@ -70,10 +86,14 @@ static const struct bind_attribute document_attributes[] = {
 	{ "charset", document_character_set, NULL },
 	{ "inputEncoding", document_character_set, NULL },
 	{ "defaultView", document_default_view, NULL },
+	{ "forms", bind_document_forms, NULL },
+	{ "links", bind_document_links, NULL },
 	{ "children", bind_children, NULL },
 	{ "firstElementChild", bind_first_element_child_get, NULL },
 	{ "lastElementChild", bind_last_element_child_get, NULL },
 	{ "childElementCount", bind_child_element_count, NULL },
+	{ "images", bind_document_images, NULL },
+	{ "styleSheets", bind_cssom_document_sheets, NULL },
 	{ NULL, NULL, NULL }
 };
 
@@ -82,21 +102,418 @@ static const struct bind_attribute document_attributes[] = {
  * for the life of the program.
  */
 static const struct bind_operation document_operations[] = {
+	{ "write", 0, document_write },
+	{ "writeln", 0, document_writeln },
 	{ "getElementById", 1, document_get_element_by_id },
 	{ "getElementsByTagName", 1, bind_get_elements_by_tag_name },
 	{ "getElementsByClassName", 1, bind_get_elements_by_class_name },
 	{ "createElement", 1, document_create_element },
+	{ "createElementNS", 2, document_create_element_ns },
 	{ "createTextNode", 1, document_create_text_node },
 	{ "createComment", 1, document_create_comment },
 	{ "createDocumentFragment", 0, document_create_fragment },
+	{ "createEvent", 1, bind_document_create_event },
+	{ "createTreeWalker", 1, bind_create_tree_walker },
+	{ "createNodeIterator", 1, bind_create_node_iterator },
+	{ "createRange", 0, bind_create_range },
 	{ "elementFromPoint", 2, document_element_from_point },
 	{ "elementsFromPoint", 2, document_elements_from_point },
 	{ "append", 0, bind_append },
 	{ "prepend", 0, bind_prepend },
 	{ "querySelector", 1, bind_query_selector },
 	{ "querySelectorAll", 1, bind_query_selector_all },
+	{ "open", 0, document_open },
+	{ "close", 0, document_close },
 	{ NULL, 0, NULL }
 };
+
+/*
+ * Creates a namespaced element from already-converted namespace and name strings.
+ *
+ * Both Document creation APIs use the same validation before exposing any node.
+ */
+int
+bind_create_element_ns(
+	struct vm_realm *realm,
+	struct dom_document *document,
+	struct vm_string *uri,
+	struct vm_string *qualified,
+	struct dom_element **created)
+{
+	struct dom_element *element;
+	struct vm_string *prefix;
+	struct vm_string *local;
+	struct wb_units units;
+	size_t colon;
+	int ns;
+	int valid;
+	int xml_prefix;
+	int xmlns_name;
+	int status;
+
+	/* Copies both string representations into checked UTF-16 slice storage. */
+	wb_units_init(&units);
+	status = vm_string_append_units(qualified, &units);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* The first colon separates the prefix from the remaining local name. */
+	prefix = NULL;
+	local = qualified;
+	for (colon = 0; colon < units.length; colon++) {
+		if (units.data[colon] == ':')
+			break;
+	}
+
+	/* Allocates and checks each name slice before consuming its contents. */
+	if (colon < units.length) {
+		prefix = vm_atom_from_units(realm->heap, units.data, colon);
+		if (prefix == NULL) {
+			wb_units_release(&units);
+			return ENOMEM;
+		}
+
+		/* The local name excludes the separator but preserves all later code units. */
+		local = vm_atom_from_units(realm->heap, units.data + colon + 1U, units.length - colon - 1U);
+		if (local == NULL) {
+			wb_units_release(&units);
+			return ENOMEM;
+		}
+	}
+
+	/* Name atoms now own their data independently of temporary slice storage. */
+	wb_units_release(&units);
+
+	/* Prefix syntax errors precede local-name and namespace-binding errors. */
+	if (prefix != NULL) {
+		valid = document_prefix_valid(prefix);
+		if (!valid) {
+			status = bind_throw_dom(realm, "InvalidCharacterError", "The namespace prefix is not valid.");
+			return status;
+		}
+	}
+
+	/* Rejects malformed local names before checking reserved namespace bindings. */
+	valid = document_element_name_valid(local);
+	if (!valid) {
+		status = bind_throw_dom(realm, "InvalidCharacterError", "The local name is not valid.");
+		return status;
+	}
+
+	/* A nonempty prefix cannot be bound to a missing namespace. */
+	ns = document_namespace_id(uri);
+	if (prefix != NULL && ns == DOM_NS_NONE) {
+		status = bind_throw_dom(realm, "NamespaceError", "A prefix requires a namespace.");
+		return status;
+	}
+
+	/* The xml prefix is reserved for the exact XML namespace URI. */
+	xml_prefix = 0;
+	if (prefix != NULL)
+		xml_prefix = vm_string_equal_ascii(prefix, "xml");
+
+	/* A reserved XML prefix cannot name any unrelated namespace. */
+	if (xml_prefix && ns != DOM_NS_XML) {
+		status = bind_throw_dom(realm, "NamespaceError", "The xml prefix requires the XML namespace.");
+		return status;
+	}
+
+	/* The xmlns name or prefix is reserved for the XMLNS namespace URI. */
+	xmlns_name = vm_string_equal_ascii(qualified, "xmlns");
+	if (prefix != NULL) {
+		valid = vm_string_equal_ascii(prefix, "xmlns");
+		if (valid)
+			xmlns_name = 1;
+	}
+
+	/* Namespace declarations cannot be represented in an unrelated namespace. */
+	if (xmlns_name && ns != DOM_NS_XMLNS) {
+		status = bind_throw_dom(realm, "NamespaceError", "The xmlns name requires the XMLNS namespace.");
+		return status;
+	}
+
+	/* The XMLNS namespace is reserved exclusively for xmlns names. */
+	if (ns == DOM_NS_XMLNS && !xmlns_name) {
+		status = bind_throw_dom(realm, "NamespaceError", "The XMLNS namespace requires the xmlns name.");
+		return status;
+	}
+
+	/* Records the complete namespace identity before allocating its wrapper. */
+	element = dom_element_create(document, ns, local, prefix);
+	if (element == NULL)
+		return ENOMEM;
+	element->namespace_uri = uri;
+
+	/* Succeeded: the validated element retains the complete namespace identity. */
+	*created = element;
+	return 0;
+}
+
+/*
+ * The Document interface.
+ */
+const struct bind_interface bind_document_interface = {
+	"Document", BIND_NODE, 0, NULL, document_attributes, document_operations, NULL
+};
+
+/*
+ * The XMLDocument interface shares Document operations and keeps a distinct prototype.
+ */
+const struct bind_interface bind_xml_document_interface = {
+	"XMLDocument", BIND_DOCUMENT, 0, NULL, NULL, NULL, NULL
+};
+
+/*
+ * Executes supported inline classic text in its actual child realm.
+ */
+int
+bind_run_inline_script(
+	struct bind_window *window,
+	struct dom_element *script)
+{
+	struct dom_attribute *attribute;
+	struct dom_node *child;
+	struct dom_character_data *data;
+	struct wb_units text;
+	size_t index;
+	int runs;
+	int same;
+	int status;
+
+	/* Mark parser preparation once, while treating external source as separate loading work. */
+	script->node.flags |= DOM_NODE_SCRIPT_STARTED;
+	runs = 1;
+	for (index = 0; index < script->attribute_count; index++) {
+		attribute = &script->attributes[index];
+		if (attribute->ns != DOM_NS_NONE)
+			continue;
+		same = vm_string_equal_ascii(attribute->name, "src");
+		if (same)
+			return 0;
+		same = vm_string_equal_ascii(attribute->name, "type");
+		if (!same || attribute->value->length == 0)
+			continue;
+
+		/* Supported classic MIME names are checked independently before parsing source. */
+		runs = vm_string_equal_ascii(attribute->value, "text/javascript");
+		if (!runs)
+			runs = vm_string_equal_ascii(attribute->value, "application/javascript");
+		if (!runs)
+			runs = vm_string_equal_ascii(attribute->value, "text/ecmascript");
+		if (!runs)
+			runs = vm_string_equal_ascii(attribute->value, "application/ecmascript");
+	}
+
+	/* Modules and nonclassic data do not execute in this child parser subset. */
+	if (!runs)
+		return 0;
+
+	/* Copy only native text children before script execution can mutate the element. */
+	wb_units_init(&text);
+	status = 0;
+	for (child = script->node.first_child; child != NULL; child = child->next) {
+		if (child->type != DOM_TEXT && child->type != DOM_CDATA_SECTION)
+			continue;
+		data = (struct dom_character_data *)child;
+		status = wb_units_append(&text, data->data.data, data->data.length);
+		if (status != 0)
+			break;
+	}
+
+	/* The actual child interpreter supplies native document globals and nested insertion writes. */
+	if (status == 0)
+		status = bind_run_script(window, text.data, text.length, "(document stream)");
+	wb_units_release(&text);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: this parser hook completed without a fatal execution failure. */
+	return 0;
+}
+
+/* Inserts the arguments into the active document parser. */
+static int
+document_write(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	int status;
+
+	/* The common path concatenates every argument before inserting text. */
+	status = document_write_text(realm, this_value, args, count, result, 0);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: write returns undefined. */
+	return 0;
+}
+
+/* Inserts the arguments and one line feed into the active document parser. */
+static int
+document_writeln(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	int status;
+
+	/* The common path adds the line feed after concatenating the arguments. */
+	status = document_write_text(realm, this_value, args, count, result, 1);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: writeln returns undefined. */
+	return 0;
+}
+
+/* Converts ordered arguments before feeding the receiver's actual HTML parser. */
+static int
+document_write_text(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result,
+	int newline)
+{
+	struct bind_window *window;
+	struct dom_document *document;
+	struct vm_string *string;
+	struct vm_cell *owner;
+	struct wb_units text;
+	unsigned index;
+	int status;
+
+	/* Native receiver and content kind precede any argument conversion side effects. */
+	*result = VM_VALUE_UNDEFINED;
+	status = document_this(realm, this_value, &document);
+	if (status != 0)
+		return status;
+
+	/* XML documents have no HTML insertion stream. */
+	if (document->content != DOM_CONTENT_HTML) {
+		status = bind_throw_dom(realm, "InvalidStateError", "XML documents cannot accept HTML writes.");
+		return status;
+	}
+
+	/* Borrowed methods resolve the native owner rather than the callee's global. */
+	window = document->view;
+	if (window == NULL || window->detached) {
+		status = bind_throw_dom(realm, "NotSupportedError", "No active document owner is available.");
+		return status;
+	}
+
+	/* The owner retains the real Document and parser throughout conversion and inline GC. */
+	owner = &window->realm->cell;
+	status = vm_heap_add_root(realm->heap, &owner);
+	if (status != 0)
+		return status;
+	wb_units_init(&text);
+
+	/* Converts all arguments before any partial string enters the parser. */
+	for (index = 0; index < count; index++) {
+		status = vm_to_string(realm, args[index], &string);
+		if (status != 0) {
+			wb_units_release(&text);
+			vm_heap_remove_root(realm->heap, &owner);
+			return status;
+		}
+
+		/* Copy conversion output before another argument may invoke script or GC. */
+		status = vm_string_append_units(string, &text);
+		if (status != 0) {
+			wb_units_release(&text);
+			vm_heap_remove_root(realm->heap, &owner);
+			return status;
+		}
+	}
+
+	/* Writeln adds exactly one newline after the complete converted argument list. */
+	if (newline) {
+		status = wb_units_append_code_point(&text, 0x0aU);
+		if (status != 0) {
+			wb_units_release(&text);
+			vm_heap_remove_root(realm->heap, &owner);
+			return status;
+		}
+	}
+
+	/* Conversion may retire the child, but may not leave a stale C owner in use. */
+	if (document->view != window || window->detached) {
+		status = bind_throw_dom(realm, "NotSupportedError", "The document owner was retired during conversion.");
+		wb_units_release(&text);
+		vm_heap_remove_root(realm->heap, &owner);
+		return status;
+	}
+
+	/* Existing primary Page writes remain owned by the Page's active source parser. */
+	if (!window->owned) {
+		status = ENOTSUP;
+		if (window->host.document_write != NULL)
+			status = window->host.document_write(window->host.context, text.data, text.length);
+	} else {
+		/* A child write without an input stream starts actual replacement parsing. */
+		if (window->document_parser == NULL) {
+			status = document_stream_open(window);
+			if (status != 0) {
+				wb_units_release(&text);
+				vm_heap_remove_root(realm->heap, &owner);
+				return status;
+			}
+		}
+
+		/* Depth keeps a nested close from freeing the parser on its executing C stack. */
+		window->document_parser_depth++;
+		if (window->document_parser_depth > 1U) {
+			status = html_parser_write(window->document_parser, text.data, text.length);
+		} else {
+			status = html_parser_feed(window->document_parser, text.data, text.length);
+		}
+
+		/* The outer caller becomes eligible to finish or discard parser storage. */
+		window->document_parser_depth--;
+
+		/* Only the outer parse can finish EOF or discard a failed parser safely. */
+		if (window->document_parser_depth == 0) {
+			if (status == 0 && window->document_parser_close)
+				status = document_stream_finish(window);
+			if (status != 0) {
+				html_parser_destroy(window->document_parser);
+				window->document_parser = NULL;
+				window->document_parser_close = 0;
+				window->ready_state = "complete";
+			}
+		}
+	}
+
+	/* Written source is copied by the parser; every outcome releases temporary ownership. */
+	wb_units_release(&text);
+	vm_heap_remove_root(realm->heap, &owner);
+	if (status == ENOTSUP) {
+		status = bind_throw_dom(realm, "NotSupportedError", "Writing outside an active primary parser is not supported.");
+		return status;
+	}
+
+	/* Existing parser insertion bounds remain visible as ordinary RangeError. */
+	if (status == ELOOP) {
+		status = vm_throw_range_error(realm, "Document write nesting limit exceeded.");
+		return status;
+	}
+
+	/* Allocation, conversion and parser failures are never converted to success. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: all converted arguments entered the receiver's own parser. */
+	return 0;
+}
 
 /* Finds the top element at a viewport point, or null when none is there. */
 static int
@@ -154,12 +571,51 @@ document_elements_from_point(
 	return js_builtin_array(realm, &element, 1, result);
 }
 
-/*
- * The Document interface.
- */
-const struct bind_interface bind_document_interface = {
-	"Document", BIND_NODE, 0, NULL, document_attributes, document_operations, NULL
-};
+/* Reports the MIME content kind retained by the actual Document. */
+static int
+document_content_type(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_document *document;
+	const char *mime;
+	int status;
+
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* Only actual Documents expose this content-kind accessor. */
+	status = document_this(realm, this_value, &document);
+	if (status != 0)
+		return status;
+
+	/* Real response metadata takes precedence over factory defaults. */
+	if (document->resource_mime != NULL) {
+		*result = vm_value_cell(document->resource_mime);
+		return 0;
+	}
+
+	/* The current parser always creates HTML; factories retain their XML MIME kind. */
+	mime = "text/html";
+	if (document->content == DOM_CONTENT_XML) {
+		mime = "application/xml";
+	} else if (document->content == DOM_CONTENT_XHTML) {
+		mime = "application/xhtml+xml";
+	} else if (document->content == DOM_CONTENT_SVG) {
+		mime = "image/svg+xml";
+	}
+
+	/* Exposes the chosen MIME type as an ordinary readonly DOMString. */
+	status = bind_string(realm, mime, result);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the receiver's content kind is reported. */
+	return 0;
+}
 
 /* Finds the document a method's this value stands for, throwing a TypeError otherwise. */
 static int
@@ -180,6 +636,189 @@ document_this(
 
 	/* Succeeded: the document is found. */
 	*document = (struct dom_document *)node;
+	return 0;
+}
+
+/* Opens an object-preserving HTML replacement stream on an active managed child. */
+static int
+document_open(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_document *document;
+	struct bind_window *window;
+	struct vm_cell *owner;
+	int status;
+
+	UNUSED_PARAMETER(args);
+
+	/* Genuine Document receivers and XML refusal precede stream access. */
+	status = document_this(realm, this_value, &document);
+	if (status != 0)
+		return status;
+	if (document->content != DOM_CONTENT_HTML) {
+		status = bind_throw_dom(realm, "InvalidStateError", "XML documents cannot open HTML streams.");
+		return status;
+	}
+
+	/* Primary replacement and the separate Window.open overload have no child stream here. */
+	window = document->view;
+	if (count >= 3U ||
+	    window == NULL ||
+	    !window->owned ||
+	    window->detached) {
+		status = bind_throw_dom(realm, "NotSupportedError", "This Document has no managed HTML replacement stream.");
+		return status;
+	}
+
+	/* Parser script execution ignores open without discarding the current insertion point. */
+	*result = this_value;
+	if (window->document_parser_depth != 0)
+		return 0;
+
+	/* Replacement allocations and mutation records retain the actual child owner. */
+	owner = &window->realm->cell;
+	status = vm_heap_add_root(realm->heap, &owner);
+	if (status != 0)
+		return status;
+	status = document_stream_open(window);
+	vm_heap_remove_root(realm->heap, &owner);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: replacement parsing reuses the receiver's actual identity. */
+	return 0;
+}
+
+/* Finishes a child-created stream while keeping executing parser storage alive. */
+static int
+document_close(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_document *document;
+	struct bind_window *window;
+	struct vm_cell *owner;
+	int status;
+
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* XML closing is invalid even when there is no associated stream. */
+	*result = VM_VALUE_UNDEFINED;
+	status = document_this(realm, this_value, &document);
+	if (status != 0)
+		return status;
+	if (document->content != DOM_CONTENT_HTML) {
+		status = bind_throw_dom(realm, "InvalidStateError", "XML documents cannot close HTML streams.");
+		return status;
+	}
+
+	/* No script-created parser makes close an ordinary no-op. */
+	window = document->view;
+	if (window == NULL || window->document_parser == NULL)
+		return 0;
+
+	/* Requested EOF is handled only after the executing parse's outer frame returns. */
+	if (window->document_parser_depth != 0) {
+		window->document_parser_close = 1;
+		return 0;
+	}
+
+	/* EOF scripts and checkpoints may collect or retire the child owner. */
+	owner = &window->realm->cell;
+	status = vm_heap_add_root(realm->heap, &owner);
+	if (status != 0)
+		return status;
+	status = document_stream_finish(window);
+	vm_heap_remove_root(realm->heap, &owner);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the real HTML parser consumed EOF before storage was released. */
+	return 0;
+}
+
+/* Replaces actual children only after checked parser allocation succeeds. */
+static int
+document_stream_open(
+	struct bind_window *window)
+{
+	struct html_parser *parser;
+	struct dom_node *removed;
+	int status;
+
+	/* Prepare the real HTML parser before abandoning any previous input or DOM. */
+	status = html_parser_create(&parser, window->document, 1);
+	if (status != 0)
+		return status;
+	html_parser_set_script_hook(parser, document_stream_script, window);
+	html_parser_destroy(window->document_parser);
+	window->document_parser = parser;
+	html_parser_transfer_ownership(parser);
+	window->document_parser_close = 0;
+	window->ready_state = "loading";
+	window->document->quirks = DOM_NO_QUIRKS;
+
+	/* Native removals repair ranges, iterators and nested frame retirement before notification. */
+	while (window->document->node.first_child != NULL) {
+		removed = window->document->node.first_child;
+		dom_remove(removed);
+		status = bind_environment_child_mutation(window, &window->document->node, NULL, removed);
+		if (status != 0) {
+			html_parser_destroy(window->document_parser);
+			window->document_parser = NULL;
+			window->ready_state = "complete";
+			return status;
+		}
+	}
+
+	/* Succeeded: the preserved child Document now owns an empty HTML input stream. */
+	return 0;
+}
+
+/* Runs EOF under active-parser ownership and releases storage only after return. */
+static int
+document_stream_finish(
+	struct bind_window *window)
+{
+	int status;
+
+	/* Inline EOF scripts observe an active parse and cannot destroy it through close. */
+	window->document_parser_depth++;
+	status = html_parser_finish(window->document_parser);
+	window->document_parser_depth--;
+	html_parser_destroy(window->document_parser);
+	window->document_parser = NULL;
+	window->document_parser_close = 0;
+	window->ready_state = "complete";
+	if (status != 0)
+		return status;
+
+	/* Succeeded: both parser storage and its hidden DOM stack references were released. */
+	return 0;
+}
+
+/* Runs the shared inline preparation through the parser callback contract. */
+static int
+document_stream_script(
+	void *context,
+	struct dom_element *script)
+{
+	int error;
+
+	/* The actual Window owns the parser and its insertion point. */
+	error = bind_run_inline_script(context, script);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the production parser hook executed the supported inline text. */
 	return 0;
 }
 
@@ -502,6 +1141,8 @@ document_ready_state(
 	vm_value *result)
 {
 	struct dom_document *document;
+	struct bind_window *window;
+	const char *state;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -512,8 +1153,12 @@ document_ready_state(
 	if (status != 0)
 		return status;
 
-	/* The state the page gave the window. */
-	status = bind_string(realm, bind_window_of(realm)->ready_state, result);
+	/* Borrowed accessors report the Document's owner, not the callee's Window. */
+	window = document->view;
+	state = "complete";
+	if (window != NULL)
+		state = window->ready_state;
+	status = bind_string(realm, state, result);
 	if (status != 0)
 		return status;
 
@@ -620,6 +1265,7 @@ document_url(
 	vm_value *result)
 {
 	struct dom_document *document;
+	struct bind_window *window;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -630,8 +1276,21 @@ document_url(
 	if (status != 0)
 		return status;
 
-	/* The location's whole URL. */
-	status = bind_location_part(bind_window_of(realm), BIND_LOCATION_HREF, result);
+	/* Loaded metadata follows the actual Document even after retirement. */
+	if (document->resource_url != NULL) {
+		*result = vm_value_cell(document->resource_url);
+		return 0;
+	}
+
+	/* An owning blank child keeps its own URL even through a borrowed accessor. */
+	window = document->view;
+	if (window == NULL) {
+		status = bind_string(realm, "about:blank", result);
+	} else {
+		status = bind_location_part(window, BIND_LOCATION_HREF, result);
+	}
+
+	/* Allocation failures retain the existing getter contract. */
 	if (status != 0)
 		return status;
 
@@ -863,6 +1522,7 @@ document_default_view(
 	vm_value *result)
 {
 	struct dom_document *document;
+	struct bind_window *window;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -873,8 +1533,13 @@ document_default_view(
 	if (status != 0)
 		return status;
 
-	/* Succeeded: the window is the global object. */
-	*result = vm_value_cell(realm->global);
+	/* Inactive and script-created Documents have no browsing-context view. */
+	window = document->view;
+	*result = VM_VALUE_NULL;
+	if (window != NULL && !window->detached)
+		*result = vm_value_cell(window->realm->global);
+
+	/* Succeeded: the actual active owner, or null, is reported. */
 	return 0;
 }
 
@@ -929,7 +1594,7 @@ document_get_element_by_id(
 	return 0;
 }
 
-/* Makes an HTML element with a name, folded to lower case (createElement). */
+/* Creates an element using the owning Document's namespace and case policy. */
 static int
 document_create_element(
 	struct vm_realm *realm,
@@ -941,24 +1606,36 @@ document_create_element(
 	struct dom_document *document;
 	struct dom_element *element;
 	struct vm_string *name;
+	int valid;
+	int lower;
+	int ns;
 	int status;
 
 	/* The document and the name. */
 	status = document_this(realm, this_value, &document);
 	if (status != 0)
 		return status;
-	status = bind_to_atom(realm, js_argument(args, count, 0), 1, &name);
+
+	/* Only HTML documents fold their local names. */
+	lower = 0;
+	if (document->content == DOM_CONTENT_HTML)
+		lower = 1;
+	status = bind_to_atom(realm, js_argument(args, count, 0), lower, &name);
 	if (status != 0)
 		return status;
 
-	/* An empty name is not a name. */
-	if (name->length == 0) {
+	/* Rejects malformed local names before allocating or publishing any node. */
+	valid = document_element_name_valid(name);
+	if (!valid) {
 		status = bind_throw_dom(realm, "InvalidCharacterError", "The tag name provided is not a valid name.");
 		return status;
 	}
 
-	/* The element, in the HTML namespace. */
-	element = dom_element_create(document, DOM_NS_HTML, name, NULL);
+	/* XHTML documents keep the HTML namespace while ordinary XML uses none. */
+	ns = DOM_NS_NONE;
+	if (document->content == DOM_CONTENT_HTML || document->content == DOM_CONTENT_XHTML)
+		ns = DOM_NS_HTML;
+	element = dom_element_create(document, ns, name, NULL);
 	if (element == NULL)
 		return ENOMEM;
 
@@ -969,6 +1646,209 @@ document_create_element(
 
 	/* Succeeded: the element is made. */
 	return 0;
+}
+
+/* Creates an element with an exact namespace, prefix and case-preserving local name. */
+static int
+document_create_element_ns(
+	struct vm_realm *realm,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct dom_document *document;
+	struct dom_element *element;
+	struct vm_string *uri;
+	struct vm_string *qualified;
+	vm_value given;
+	int status;
+
+	/* Receiver branding precedes argument conversion or creation side effects. */
+	status = document_this(realm, this_value, &document);
+	if (status != 0)
+		return status;
+
+	/* Both namespace and qualified name are required by the IDL operation. */
+	if (count < 2) {
+		status = vm_throw_type_error(realm, "createElementNS requires two arguments.");
+		return status;
+	}
+
+	/* Nullable namespace conversion runs before qualified-name conversion. */
+	uri = NULL;
+	given = args[0];
+	if (given != VM_VALUE_NULL && given != VM_VALUE_UNDEFINED) {
+		status = bind_to_string(realm, given, &uri);
+		if (status != 0)
+			return status;
+
+		/* An empty namespace has the same identity as no namespace. */
+		if (uri->length == 0)
+			uri = NULL;
+	}
+
+	/* Namespaced names retain their case instead of applying HTML ASCII folding. */
+	status = bind_to_atom(realm, args[1], 0, &qualified);
+	if (status != 0)
+		return status;
+
+	/* The factory and this API share all validation and reserved namespace rules. */
+	status = bind_create_element_ns(realm, document, uri, qualified, &element);
+	if (status != 0)
+		return status;
+
+	/* Publishes the wrapper only after complete namespace validation. */
+	status = bind_wrap(bind_window_of(realm), &element->node, result);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the owner Document's namespaced element is available. */
+	return 0;
+}
+
+/* Validates an element local name using the DOM name-validation branches. */
+static int
+document_element_name_valid(
+	const struct vm_string *name)
+{
+	size_t index;
+	uint16_t unit;
+	int ascii_letter;
+
+	/* Every element must have at least one name character. */
+	if (name->length == 0)
+		return 0;
+
+	/* ASCII-letter starts use the HTML-compatible forbidden-character branch. */
+	unit = vm_string_at(name, 0);
+	ascii_letter = 0;
+	if (unit >= 'a' && unit <= 'z') {
+		ascii_letter = 1;
+	} else if (unit >= 'A' && unit <= 'Z') {
+		ascii_letter = 1;
+	}
+
+	/* Both cases of ASCII-letter starts use the same complete-string exclusions. */
+	if (ascii_letter) {
+		/* Scans the complete string, including embedded NULL rather than C terminators. */
+		for (index = 0; index < name->length; index++) {
+			unit = vm_string_at(name, index);
+			if (unit == 0 ||
+			    unit == '\t' ||
+			    unit == '\n' ||
+			    unit == '\f' ||
+			    unit == '\r' ||
+			    unit == ' ' ||
+			    unit == '/' ||
+			    unit == '>')
+				return 0;
+		}
+
+		/* Succeeded: an ASCII-letter-start name contains no forbidden character. */
+		return 1;
+	}
+
+	/* Other starts permit only colon, underscore or non-ASCII code points. */
+	if (unit != ':' &&
+	    unit != '_' &&
+	    unit < 0x80U)
+		return 0;
+
+	/* Non-letter starts restrict subsequent ASCII characters to name characters. */
+	for (index = 1; index < name->length; index++) {
+		unit = vm_string_at(name, index);
+		if (unit >= 0x80U)
+			continue;
+
+		/* Lowercase ASCII letters are legal after a non-letter start. */
+		if (unit >= 'a' && unit <= 'z')
+			continue;
+
+		/* Namespaced APIs preserve uppercase ASCII letters as well. */
+		if (unit >= 'A' && unit <= 'Z')
+			continue;
+
+		/* Digits may occur after the first character. */
+		if (unit >= '0' && unit <= '9')
+			continue;
+
+		/* These punctuation characters are allowed in a name's suffix. */
+		if (unit == '-' ||
+		    unit == '.' ||
+		    unit == ':' ||
+		    unit == '_')
+			continue;
+
+		/* Every other ASCII character makes this branch's local name invalid. */
+		return 0;
+	}
+
+	/* Succeeded: all characters meet the non-letter-start name rules. */
+	return 1;
+}
+
+/* Validates the namespace prefix without applying local-name start restrictions. */
+static int
+document_prefix_valid(
+	const struct vm_string *prefix)
+{
+	size_t index;
+	uint16_t unit;
+
+	/* A separator without any preceding prefix is invalid. */
+	if (prefix->length == 0)
+		return 0;
+
+	/* These forbidden characters are checked without NULL-terminated conversion. */
+	for (index = 0; index < prefix->length; index++) {
+		unit = vm_string_at(prefix, index);
+		if (unit == 0 ||
+		    unit == '\t' ||
+		    unit == '\n' ||
+		    unit == '\f' ||
+		    unit == '\r' ||
+		    unit == ' ' ||
+		    unit == '/' ||
+		    unit == '>')
+			return 0;
+	}
+
+	/* Succeeded: this prefix can participate in namespace extraction. */
+	return 1;
+}
+
+/* Classifies known URI identities without aliasing arbitrary URIs to built-ins. */
+static int
+document_namespace_id(
+	const struct vm_string *uri)
+{
+	/* Built-in namespace IDs preserve the parser's established classification. */
+	static const char *const urls[] = {
+		NULL,
+		"http://www.w3.org/1999/xhtml",
+		"http://www.w3.org/2000/svg",
+		"http://www.w3.org/1998/Math/MathML",
+		"http://www.w3.org/1999/xlink",
+		"http://www.w3.org/XML/1998/namespace",
+		"http://www.w3.org/2000/xmlns/"
+	};
+	unsigned index;
+	int same;
+
+	/* No namespace remains distinct from all nonempty URI strings. */
+	if (uri == NULL)
+		return DOM_NS_NONE;
+
+	/* Compares exact, case-sensitive URI strings with the established built-ins. */
+	for (index = DOM_NS_HTML; index <= DOM_NS_XMLNS; index++) {
+		same = vm_string_equal_ascii(uri, urls[index]);
+		if (same)
+			return (int)index;
+	}
+
+	/* Succeeded: an arbitrary namespace keeps generic foreign-element behavior. */
+	return DOM_NS_OTHER;
 }
 
 /* Makes a text node (createTextNode). */

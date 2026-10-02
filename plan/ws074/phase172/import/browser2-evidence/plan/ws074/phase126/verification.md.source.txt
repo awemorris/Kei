@@ -1,0 +1,50 @@
+# q536 / ws074-p126 verification — 2026-10-01
+
+Cleared. Final plain+ASan original Acid3 **76/100**, all100 inventories identical,
+indexed53newPASS/prior75 preserved/completeTrue/run_status0/Uncaught/crash/runner
+timeout0. Acid2 exact100% both. [Full reports/hashes/results](verification.json).
+Remaining24/p100 full100/100 unmet; fixed historical tests unmodified.
+
+- Input fixture94/94 both: parsed/script interface/raw attributes, all22 current
+  keywords/invalid/missing/whitespace fallback, name updates saved controls, ordinary
+  form owner, clean/dirty/defaultValue/attribute mutation independence, text-password
+  preserved values, null/undefined/exactUTF16/lone surrogates/NUL, CRLF sanitation
+  text/password/search/tel, clone/deep-clone independent dirty storage/clean clones,
+  hidden/submit/image/reset/button default modes, checkbox/radio on default, file
+  empty-only/error, brand-before-conversion/one conversion/exceptions/Symbol/no
+  mutation on conversion error, conversion-time type/tree mutation, XML exact case/
+  namespace, private prototypes/managed child/retired getter.
+- Actual host-form-collection12/12 (prior11 + sole duplicate list's dirty input value
+  independent of default attribute after stack-disabled GC); final root removal
+  reclaims member/list/form/cache cycle. Managed frame83/83 (prior78+5): sole native
+  input retains managed child after frame removal/primary destruction and reads
+  owned value through child native getter; last root drop releases owner once.
+- Prior controls100/owner56/forms35/collection104/GC16/NodeIterator60/TreeWalker70/
+  traversal9/removal19/native65/XML62+GC16/namespace38+GC12/names31/iframe17/legacy56/
+  childCSS30/contextowner27/realms30/object100/interp45/DOM23/JS14/selectors golden
+  allPASS,28 selected command groups per variant.
+- Final builds `sh plan/ws074/tests/host-build.sh plain|asan`, warning/error0,
+  final runners `python3 build/ws074-q536-regressions.py <variant>`, fixed Acid runner
+  `--out build/ws074-acid-q536-<variant>`. ASAN_OPTIONS=detect_stack_use_after_return=0
+  maintains real stack scanning; ASan/UBSan0. Build completion checked before each
+  variant's tests; host fixture-only behavior, no production hidden switches.
+- Full changed-source manual C: leading declarations/public-before-static/one-line
+  forwards/native table exception; purpose/loop/paragraph comments; checked fallible
+  conversion/units/allocation/native storage/clone/wrapper APIs; exact namespace/case,
+  raw type vs canonical keywords, brand before conversion and postconversion mode,
+  null-only legacy conversion, complete owned-buffer preparation before dirty-state
+  publication/old buffer release, caret bounded/geometry not copied, generation
+  invalidation, default vs dirty storage, clone-owned buffers, traced actual node/
+  realm ownership and finalization. style-check no findings/git diff --check PASS.
+  cc14.2.0/Python3.13.5, clang-format absent/manual formatting.
+
+Primary [HTML input](https://html.spec.whatwg.org/multipage/input.html#dom-input-value)
+read2026-10-01. This increment excludes cross-value-mode type transitions and
+unobserved multiple type-attribute changes, checkedness/radio-group hooks/activation/
+submission, advanced date/time/number/range/color/email/url sanitation/validation,
+selection/caret transition algorithms/files service, NodeList iterables/form own maps/
+parser magic/custom association. Clean simple-text sanitation is performed by the
+native value getter; broader DOM painting/submission clean-value sanitation remains
+part of input state work. No full HTMLInputElement/WPT/fuzz/OS/guest/boot/GPU claim.
+Pinned WPT2d66b9b7998bb58c336138c178323ddee857b586 unchanged. p100/p044 unchanged,
+local records unpublished/no push.

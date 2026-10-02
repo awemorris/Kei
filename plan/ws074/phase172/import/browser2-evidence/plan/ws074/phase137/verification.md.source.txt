@@ -1,0 +1,47 @@
+# q549 / ws074-p137 verification — 2026-10-01
+
+Native Range live removal repair cleared. Original pinned Acid3 **87/100** plain
+and ASan: indexed **13** newly passes; prior86 preserved; all100 inventory rows
+equal; complete true/run status0/exceptions and run errors empty. Acid2 exact100%.
+No changes to Acid3/harness scores. Remaining13 indexed7/9/11/12/46/69/71/72/74/75/
+77/79/80; full Range insertion/data/content work and p100 acceptance remain pending.
+
+`sh plan/ws074/tests/host-build.sh plain` / `asan`: exit0/warning0, cc14.2.0.
+Actual conservative GC uses `ASAN_OPTIONS=detect_stack_use_after_return=0`.
+49 regression groups each PASS: live removal33 assertions, boundary80, actual native
+conversion/root GC49, managed frame lifetime143, prior48 groups/DOM23/JS14/selector
+style golden. C stacks explicitly excluded during native conversion and post-call
+collection. A sole state preserves original XML creator after endpoint ownership
+moves, while superseded endpoints/failed inputs become collectible. Direct native
+success/EIO/VM_THROWN all unwind roots and weak token lifetime. Sole adopted child
+Range preserves creator plus destination managed owners after manual primary
+teardown; actual destination removal still repairs it; both owners release once.
+Existing removal registry37, traversal/iterator/adoption tests pass unchanged.
+
+Removal delivers while original ancestry/parent/sibling links exist. Inclusive
+removed descendants relocate to old parent/index; following parent offsets lose
+one child. Multiple ranges, start/end independently, equal-index boundaries,
+parentless/no-op, deep ancestor, doctype/Document/Fragment, same-Document move,
+replaceChild/textContent/innerHTML native removal paths, legacy detach, expandos,
+cross-Document setters, detached adoption token migration and attached adoption
+original-parent repair verified. Native state finalizer owns only independently
+allocated C tokens; registry never traces subscriber/context/node. Callback-safe
+root rebind alters association only; existing setter/FIFO/list/refcount policy
+unchanged. Prospective Document subscription allocated before endpoint commit;
+allocation failure preserves original endpoints/token. No VM GC/script/nested
+DOM or subscription-list mutation in removal callbacks.
+
+Primary DOM live-range pre-remove steps read2026-10-01:
+https://dom.spec.whatwg.org/#live-range-pre-remove (and removing-node algorithm).
+Full C manual review covers final changed bind/range.c, dom/removal.c, dom.h and
+native range/frame fixtures: ANSI locals, organization/forwards/definitions,
+purpose paragraphs/guarded calls, checked allocations/roots, strong creator/current
+endpoint trace versus weak tokens, error cleanup and arbitrary finalization order.
+Manual formatting: clang-format unavailable. Style-check exact changed C paths
+no findings; `git diff --check` exit0. Actual command outcomes/reports/source SHA256
+in verification.json. No sanitizer reports. Commands bounded60sec; no fullWPT/
+fuzz/OS/guest/boot/GPU. Native surrounding indices beyonduint32 are explicitly
+excluded, as in p136 representability limits. Live insertion/CharacterData/split/
+normalize, Range clone/comparison/stringification/contents/geometry/Selection/
+StaticRange/custom/shadow remain absent; no stubbed success. p100/p044/WS incomplete.
+Root released after exact Queue archive/read-back; local unpublished/no push.

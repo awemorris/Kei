@@ -1,0 +1,69 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) { console.log((condition ? 'PASS ' : 'FAIL ') + label); }
+var o=document.createElement('object');
+check('actual object interface', o instanceof HTMLObjectElement && o instanceof HTMLElement);
+check('absent is empty', o.data==='' && !o.hasAttribute('data'));
+var url=document.URL, directory=url.slice(0,url.lastIndexOf('/')+1);
+o.data='test.html'; check('relative URL', o.data===directory+'test.html');
+check('setter raw attribute', o.getAttribute('data')==='test.html');
+check('prototype getter not expando', !o.hasOwnProperty('data'));
+o.setAttribute('data','./test.html'); check('dot segment normalized',o.data===directory+'test.html');
+o.data='a/../test.html'; check('parent segment normalized',o.data===directory+'test.html');
+o.data=''; check('present empty resolves',o.data===url && o.hasAttribute('data'));
+o.data='?q=1'; check('relative query',o.data===url+'?q=1');
+o.data='#part'; check('relative fragment',o.data===url+'#part');
+o.data='/root'; check('root path',o.data===url.slice(0,url.indexOf('/',url.indexOf('://')+3))+'/root');
+o.data='https://EXAMPLE.test:443/a/../b?q=1#part';
+check('absolute canonical URL',o.data==='https://example.test/b?q=1#part');
+o.data='http://['; check('invalid raw fallback',o.data==='http://[');
+o.data='http://[\uD800'; check('invalid getter scalar',o.data==='http://[\uFFFD');
+check('setter USVString repairs',o.getAttribute('data')==='http://[\uFFFD');
+o.setAttribute('data','http://[\uDC00'); check('getAttribute raw UTF16 remains',o.getAttribute('data')==='http://[\uDC00');
+check('getter repairs content without mutation',o.data==='http://[\uFFFD' && o.getAttribute('data')==='http://[\uDC00');
+o.data='https://example.test/猫'; check('nonASCII URL encoding',o.data==='https://example.test/%E7%8C%AB');
+o.data='https://example.test/😀'; check('surrogate pair retained',o.data==='https://example.test/%F0%9F%98%80');
+o.data=null; check('null conversion',o.getAttribute('data')==='null');
+o.data=undefined; check('undefined conversion',o.getAttribute('data')==='undefined');
+var calls=0; o.data={toString:function(){calls++;return './test.html';}};
+check('one user conversion',calls===1 && o.data===directory+'test.html');
+var marker={},caught; try {o.data={toString:function(){throw marker;}};}catch(e){caught=e;}
+check('conversion exception identity',caught===marker && o.getAttribute('data')==='./test.html');
+var getter=Object.getOwnPropertyDescriptor(HTMLObjectElement.prototype,'data').get;
+var setter=Object.getOwnPropertyDescriptor(HTMLObjectElement.prototype,'data').set;
+var thrown=false; try {getter.call(document.createElement('div'));}catch(e){thrown=e.name==='TypeError';}
+check('wrong HTML tag rejected',thrown);
+var foreign=document.createElementNS('urn:foreign','object'); thrown=false;
+try {getter.call(foreign);}catch(e){thrown=e.name==='TypeError';}
+check('foreign namespace rejected',thrown);
+var fake=Object.create(HTMLObjectElement.prototype); calls=0; thrown=false;
+try {setter.call(fake,{toString:function(){calls++;return 'x';}});}catch(e){thrown=e.name==='TypeError';}
+check('brand before argument conversion',thrown && calls===0);
+var clone=o.cloneNode(true); check('clone interface and URL',clone instanceof HTMLObjectElement && clone.data===o.data);
+var holder=document.createElement('div'); holder.innerHTML='<object data="./test.html"><param name="x"></object>';
+check('parser object interface',holder.firstChild instanceof HTMLObjectElement && holder.firstChild.data===o.data);
+check('ordinary object children',holder.firstChild.getElementsByTagName('param').length===1);
+var b=document.createElement('base'); b.setAttribute('href','https://first.test/dir/'); document.head.appendChild(b);
+check('first base URL',o.data==='https://first.test/dir/test.html');
+var b2=document.createElement('base'); b2.setAttribute('href','https://second.test/'); document.head.appendChild(b2);
+check('later base ignored',o.data==='https://first.test/dir/test.html');
+b.setAttribute('href','https://changed.test/next/'); check('live base mutation',o.data==='https://changed.test/next/test.html');
+b.setAttribute('href','http://['); check('invalid first blocks later',o.data===directory+'test.html');
+b.setAttribute('href','javascript:alert(1)'); check('javascript base ignored',o.data===directory+'test.html');
+b.setAttribute('href','data:text/plain,x'); check('data base ignored',o.data===directory+'test.html');
+b.removeAttribute('href'); check('base without href skips',o.data==='https://second.test/test.html');
+document.head.removeChild(b2); check('base removal restores document',o.data===directory+'test.html');
+b.setAttribute('href','../'); check('relative base against document',o.data===directory.slice(0,directory.slice(0,-1).lastIndexOf('/')+1)+'test.html');
+document.head.removeChild(b);
+var frame=document.createElement('iframe'); document.body.appendChild(frame);
+var w=frame.contentWindow,d=frame.contentDocument; var co=d.createElement('object');
+var cb=d.createElement('base'); cb.setAttribute('href','https://child.test/'); d.head.appendChild(cb); co.data='child.html';
+check('child object interface',co instanceof w.HTMLObjectElement);
+check('own child explicit base',co.data==='https://child.test/child.html');
+check('borrowed parent getter uses child document',getter.call(co)==='https://child.test/child.html');
+var childgetter=Object.getOwnPropertyDescriptor(w.HTMLObjectElement.prototype,'data').get;
+check('borrowed child getter uses parent document',childgetter.call(o)===directory+'test.html');
+d.body.appendChild(co); d.body.removeChild(co); check('detached node retains document base',co.data==='https://child.test/child.html');
+o.removeAttribute('data'); check('removal returns absent empty',o.data==='');
+</script>

@@ -1,0 +1,38 @@
+<!-- awesome-plan project=zedbsd record=BUG-127 -->
+
+# BUG-127: GC reads a destroyed primary realm through a retained function
+
+Reproduction: reproduced
+Disposition: resolved (q514 / p106 revalidation, 2026-10-01)
+Date: 2026-09-30
+Source: p104 / q513-i01 bounded GC/teardown investigation
+Handling Phase: [ws074-p106](../ws074/phase106/phase.md)
+
+Expected: retaining a function cell for tracing after explicit primary realm
+release is safe; invoking it after release is not requested or claimed.
+Observed: p106 function_trace dereferences function->realm->managed after that
+manual C realm has been freed. ASan reports heap-use-after-free, exit1; plain
+exits0. This invalidates p106's preserved-primary-ownership clearance.
+
+[Probe](../ws074/tests/host-realm-retirement.c), [reproduction/stack](../ws074/phase104/retirement-investigation.md), [hashes](../ws074/phase104/retirement-investigation.json).
+VM source baseline f8c12297, cc14.2.0, shared host heap, explicit native function
+root, vm_realm_destroy then vm_heap_collect, no subsequent function invocation.
+Bounded one run per variant; ASAN_OPTIONS=detect_stack_use_after_return=0.
+
+Searched active/archived bug files and known-bugs for primary realm/GC/UAF:
+no matching condition; BUG-126 concerns foreign call identity and remains resolved.
+Repair cache a separate managed-owner cell when the live function is created;
+trace that reference rather than consulting raw manual realm memory. Revalidate
+both ownership modes and Acid/DOM/VM regressions before resolving. Reopen on any
+retired-primary trace access. No non-blocking waiver or claim of an iframe fix.
+Local events unpublished; no remote lifecycle action.
+
+## Resolution event (2026-10-01)
+
+q514 caches managed-owner cells in native and bytecode functions and traces
+them independently of raw manual realm memory. The unchanged retained-primary
+probe PASS/exit0 in both variants, ASan/UBSan silent. Managed ownership27/27,
+realms30/30, VM/object/DOM and frame17/17 pass; Acid2 exact, Acid3 all10042/100
+without regression or Uncaught. [Evidence](../ws074/phase106/revalidation-q514.md).
+The prior reproduced UAF is preserved above. Reopen if retained-primary tracing
+again reads a retired owner; post-retirement invocation is not supported.

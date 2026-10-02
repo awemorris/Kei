@@ -1,0 +1,73 @@
+<!-- awesome-plan project=zedbsd record=ws074-p134 -->
+
+# ws074-p134: native select options membership and typed addition
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q545 / q545-i01
+Prerequisites p121 native legacy properties, p122 native collections, p132 generic
+adoption49b0ee70, p133 verified83/equal/noerrors/Acid2exact. Root sole executor.
+Approval user2026-09-30 autonomous Acid3/automatic Queue instruction plus2026-10-01
+continuation; exact scope saved before generation. Timebox one finite Phase;
+bounded selected tests/each command60sec; unknown prerequisite ends uncleared.
+
+## Exact scope / design / criteria
+
+Register exact native HTMLSelectElement/HTMLOptionElement/HTMLOptGroupElement
+interfaces and owner/XML snapshot prototypes; constructors reject direct calls.
+select.options SameObject traced cache returns native HTMLOptionsCollection
+subclass of HTMLCollection. Live tree-order option membership follows current
+nearest-ancestor select algorithm: actual HTML namespace and exact case; option,
+datalist/hr ancestors and second optgroup block membership; nested select uses
+its own list; ordinary wrappers allowed, templates not entered. Reuse actual
+native legacy length getter/item/namedItem/index/names/descriptors rather than
+script-visible getters or snapshots. Collection holds actual root, no raw realm.
+
+select.add(required actual option|optgroup, optional nullable HTMLElement|long
+before=null) native brands before conversion. Omitted/undefined/null before
+appends; actual HTMLElement before selects current descendant; other values
+convert signed long exactly once. Current membership and ancestry evaluated
+AFTER conversion. Ancestor incoming throws HierarchyRequestError before reference
+validation; non-descendant element before NotFoundError; same incoming/reference
+no-op; numeric out of range append to select; valid reference inserts in its actual
+parent including optgroup. Reuse checked bind_insert/current Document adoption,
+owner host notifications/caller exception realm. Explicit roots protect receiver,
+incoming, conversion argument, reference/parent through conversion and actual host
+GC/removal/errors. Root registration/allocation/DOM/host failures checked/unwound.
+New dom/select.c pure exact option owner/list traversal and bind/select.c addition
+registered in production libbrowser; collection creation/getter stays collection.c.
+
+Excluded options.add/remove/index setter/mutable length, select legacy indexed
+properties/item/namedItem/length/remove, option selectedness/defaultSelected/
+selectedIndex/value/selectedOptions/Option legacy factory/reflections/reset/UI/
+custom elements/shadow/inert template Document model. These are separate known
+increments, not silently claimed. Existing painter/form chosen behavior untouched.
+Full selectedness is next candidate, p100/p044 acceptance unchanged.
+
+Acceptance direct append/element/numeric/group/reentrancy/brand/foreign/XML/adoption/
+legacy descriptors/cache cases and actual GC/host error cleanup/child lifetime
+plain+ASan; prior41 selected regression groups PASS, pinned actual Acid3 all100
+84/100 with indexed57 newlyPASS/prior83 preserved/equal inventories/complete/
+run_status0/Uncaught-crash-runner timeout0, Acid2 exact. Full changed C/manual
+format/style/diff/build warning0/sanitizer0/source hashes/durable evidence. No
+fullWPT/fuzz/OS/guest/boot/GPU. Guardrail/full coding-style/automation read; no
+concise exists. Primary WHATWG HTML form-elements/options collection algorithms
+read2026-10-01: https://html.spec.whatwg.org/multipage/form-elements.html and
+https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#htmloptionscollection.
+Graph p121+p122+p132(external)->p134->p100(external), acyclic. Local unpublished/no push.
+
+## Introduction / q545 activation (2026-10-01)
+
+Indexed57 requires real typed select.add and current options membership. Existing
+native collection/adoption foundation satisfies prerequisites. Introduce scoped
+membership/addition increment; selectedness remains a distinct next Phase.
+
+## q545 result (2026-10-01)
+
+[p134](phase.md) cleared, [evidence](verification.md).
+Native select options membership/SameObject collection/exact interfaces/select.add
+conversion/current ancestry/owner/adoption/roots. Direct72/nativeGC78/cache12/
+frame128/all44 selected groupsPASS both variants. Original all10084/100/indexed57
+newPASS/prior83 preserved/equal/noerrors/Acid2exact. Remaining16; next selectedness58.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.

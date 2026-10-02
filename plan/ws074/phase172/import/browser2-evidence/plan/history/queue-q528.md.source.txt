@@ -1,0 +1,39 @@
+<!-- awesome-plan project=zedbsd record=q528 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: q528 (this exact cycle). q527 archiveverified.
+
+## q528
+
+Purpose: TreeWalker/NodeFilter6, WS074/fg011. Timebox onefinitePhase.
+Approval currentuser2026-09-30 Acid3autonomous/automaticQueue plus2026-10-01
+continuation. Exact[p118scope](../ws074/phase118/phase.md): allTreeWalkermethods,
+NodeFilterconstants/filtercallback/masks/reentry/mutation/GC/prototype identity.
+NoNodeIterator/collections/Range/control/loading/CSS/SVG/HAL/toolchain scope.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q528-i01 | [ws074-p118](../ws074/phase118/phase.md) | cleared | p117b4e86c12/prototype/GC/DOMtree verified;6missingwalker |
+
+Criteria focusedalgorithms/GC andexistingXML62/GC16/frame48/namespace38/DOM23/owner27/
+VM/JS plain+ASanPASS; all100prior67preserved/6PASS/noUncaught/errors/completeTrue/
+runstatus0/Acid2exact/warning0/ASan0/fullstandard/style/diff/evidence.
+Graph p117/p104/p106(external) → p118 → p100(external); no cycle.
+Onlyp118 implementationauthorized.
+
+## Upcoming Work Outlook
+
+NodeIterator pre-removestate/weakregistry, native liveHTMLcollections/control/
+Range/CSSmedia/loading/SVG/blankabout-base snapshots finiteQueues toward100/100.
+Test1needsNodeIterator,5needsdocument.links. p100 unchanged/p044 remains.
+Localunpublished/nopush.
+
+## q528 outcome (2026-10-01)
+
+[p118](../ws074/phase118/phase.md) cleared; [evidence](../ws074/phase118/verification.md).
+Both variants68/100,6newPASS/prior67preserved/all100/Uncaught0/Acid2exact.
+Focused70/70/GC5/5/frame53/53 plus all selected regressions PASS. Residual32
+tracked p100; next finite Queue NodeIterator. Root executor released; local unpublished.

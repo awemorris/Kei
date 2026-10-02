@@ -1,0 +1,109 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) {console.log((condition ? "PASS " : "FAIL ") + label);}
+function throws(label,f,name) {var caught=null;try{f();}catch(e){caught=e;}check(label,caught!==null && caught.name===name);}
+var doc=document.implementation.createDocument(null,"Root");
+var root=doc.documentElement;
+var a=doc.createElement("A"), b=doc.createElement("B"), c=doc.createElement("C");
+root.appendChild(a);root.appendChild(b);root.appendChild(c);
+var x=doc.createElement("X"), y=doc.createElement("Y");a.appendChild(x);b.appendChild(y);
+var text=doc.createTextNode("words");var comment=doc.createComment("comment");x.appendChild(text);root.appendChild(comment);
+var w=doc.createTreeWalker(root);
+check("default walker state",w instanceof TreeWalker && w.root===root && w.currentNode===root && w.filter===null && w.whatToShow===4294967295);
+check("NodeFilter callback namespace",typeof NodeFilter==="object" && NodeFilter.SHOW_ALL===4294967295 && NodeFilter.SHOW_TEXT===4 && NodeFilter.FILTER_ACCEPT===1 && NodeFilter.FILTER_REJECT===2 && NodeFilter.FILTER_SKIP===3);
+var constants=["SHOW_ELEMENT","SHOW_ATTRIBUTE","SHOW_TEXT","SHOW_CDATA_SECTION","SHOW_ENTITY_REFERENCE","SHOW_ENTITY","SHOW_PROCESSING_INSTRUCTION","SHOW_COMMENT","SHOW_DOCUMENT","SHOW_DOCUMENT_TYPE","SHOW_DOCUMENT_FRAGMENT","SHOW_NOTATION"];
+for(var i=0;i<constants.length;i++){check("unsigned constant "+constants[i],NodeFilter[constants[i]]===(1<<i));}
+check("root parent boundary",w.parentNode()===null && w.currentNode===root);
+check("first child",w.firstChild()===a);
+check("last child",w.lastChild()===x);
+check("text next node",w.nextNode()===text);
+check("preceding parent",w.previousNode()===x);
+check("parent navigation",w.parentNode()===a);
+check("next sibling",w.nextSibling()===b);
+check("previous sibling",w.previousSibling()===a);
+check("last root child",(w.currentNode=root,w.lastChild())===comment);
+check("forward end retains current",w.nextNode()===null && w.currentNode===comment);
+var order=[], n;w.currentNode=root;while((n=w.nextNode())!==null){order.push(n.nodeName);}
+check("complete forward order",order.join(",")==="A,X,#text,B,Y,C,#comment");
+order=[];while((n=w.previousNode())!==null){order.push(n.nodeName);}
+check("complete backward order",order.join(",")==="C,Y,B,#text,X,A,Root");
+check("backward root end",w.currentNode===root && w.previousNode()===null);
+var calls=0;var masked=doc.createTreeWalker(root,NodeFilter.SHOW_TEXT,function(node){calls++;return true;});
+check("mask skips hidden kinds and descends",masked.nextNode()===text && calls===1 && masked.nextNode()===null && calls===1);
+var zero=doc.createTreeWalker(root,null,function(){calls++;return 1;});
+check("null mask zero",zero.whatToShow===0 && zero.nextNode()===null && calls===1);
+check("undefined mask default",doc.createTreeWalker(root,undefined).whatToShow===4294967295);
+check("mask unsigned wrap",doc.createTreeWalker(root,-1).whatToShow===4294967295 && doc.createTreeWalker(root,4294967297).whatToShow===1);
+var coercions=0;doc.createTreeWalker(root,{valueOf:function(){coercions++;return 1;}},null);
+check("mask converts once",coercions===1);
+var reject=doc.createTreeWalker(root,1,function(node){return node===a ? 2 : 1;});
+check("REJECT prunes entire subtree",reject.nextNode()===b && reject.nextNode()===y);
+var skip=doc.createTreeWalker(root,1,function(node){return node===a ? 3 : 1;});
+check("SKIP descends subtree",skip.firstChild()===x);
+check("SKIP parent goes past invisible ancestor",skip.parentNode()===root);
+check("SKIP sibling hierarchy",(skip.currentNode=x,skip.nextSibling())===b);
+check("REJECT child navigation",(reject.currentNode=root,reject.firstChild())===b);
+var object={calls:0,acceptNode:function(node){this.calls++;return 1;}};
+var objwalk=doc.createTreeWalker(root,1,object);
+check("callback object identity and receiver",objwalk.filter===object && objwalk.nextNode()===a && object.calls===1);
+object.acceptNode=function(node){this.calls++;return node===x ? 2 : 1;};
+check("callback operation is read dynamically",objwalk.nextNode()===b && object.calls===3);
+var gets=0;var dynamic={get acceptNode(){gets++;return function(){return 1;};}};
+var dynwalk=doc.createTreeWalker(root,1,dynamic);
+check("acceptNode getter invocation",dynwalk.nextNode()===a && dynwalk.nextNode()===x && gets===2);
+var ushort=doc.createTreeWalker(root,1,function(){return 65537;});
+check("filter ushort conversion",ushort.nextNode()===a);
+var marker={}, first=true;
+var exception=doc.createTreeWalker(root,1,function(){if(first){first=false;throw marker;}return 1;});
+var caught=null;try{exception.nextNode();}catch(e){caught=e;}
+check("filter exception exact identity and current unchanged",caught===marker && exception.currentNode===root);
+check("filter recovers after exception",exception.nextNode()===a);
+var convertFirst=true;
+var conversion=doc.createTreeWalker(root,1,function(){if(convertFirst){convertFirst=false;return {valueOf:function(){throw marker;}};}return 1;});
+caught=null;try{conversion.nextNode();}catch(e){caught=e;}
+check("result conversion exception identity",caught===marker && conversion.currentNode===root);
+check("result conversion clears active state",conversion.nextNode()===a);
+var active=null;var nested=null;
+active=doc.createTreeWalker(root,1,function(){try{active.nextNode();}catch(e){nested=e;}return 1;});
+check("recursive filter throws InvalidStateError",active.nextNode()===a && nested.name==="InvalidStateError");
+check("active flag resets after successful callback",active.nextNode()===x);
+throws("missing acceptNode deferred until traversal",function(){doc.createTreeWalker(root,1,{}).nextNode();},"TypeError");
+throws("primitive filter",function(){doc.createTreeWalker(root,1,4);},"TypeError");
+throws("missing root",function(){doc.createTreeWalker();},"TypeError");
+throws("fake root prototype",function(){doc.createTreeWalker(Object.create(Node.prototype));},"TypeError");
+throws("factory receiver brand",function(){Document.prototype.createTreeWalker.call(root,root);},"TypeError");
+throws("walker method fake prototype",function(){TreeWalker.prototype.nextNode.call(Object.create(TreeWalker.prototype));},"TypeError");
+throws("walker accessor brand",function(){Object.getOwnPropertyDescriptor(TreeWalker.prototype,"root").get.call({});},"TypeError");
+throws("currentNode rejects null",function(){w.currentNode=null;},"TypeError");
+throws("illegal walker constructor",function(){new TreeWalker();},"TypeError");
+throws("NodeFilter is not constructible",function(){new NodeFilter();},"TypeError");
+var outside=doc.createElement("Outside");outside.appendChild(doc.createElement("Child"));w.currentNode=outside;
+check("current outside root is permitted",w.currentNode===outside && w.firstChild()===outside.firstChild);
+check("outside ancestor traversal",w.parentNode()===outside && w.parentNode()===null);
+var f=document.createElement("iframe");document.body.appendChild(f);var win=f.contentWindow;var child=f.contentDocument;
+var foreign=Document.prototype.createTreeWalker.call(child,root,1,null);
+check("borrowed factory receiver prototype",foreign instanceof win.TreeWalker && !(foreign instanceof TreeWalker) && foreign.root===root);
+var xml=child.implementation.createDocument(null,"Foreign");var foreignXML=Document.prototype.createTreeWalker.call(xml,xml.documentElement);
+check("XML snapshot walker prototype",foreignXML instanceof win.TreeWalker && foreignXML.root===xml.documentElement);
+w.currentNode=child.body;
+check("foreign current node accepted",w.currentNode===child.body && w.parentNode()===child.documentElement);
+document.body.removeChild(f);
+check("walker survives iframe removal",foreign.nextNode()===a && foreignXML.root===xml.documentElement);
+var detached=doc.createElement("Detached"), p=doc.createElement("P"), title=doc.createElement("Title");
+var head=doc.createElement("Head"), trunk=doc.createElement("Trunk");head.appendChild(title);trunk.appendChild(head);trunk.appendChild(detached);detached.appendChild(p);
+var regraft=doc.createTreeWalker(detached,0xffffffff,null);
+check("regraft initial last child",regraft.lastChild()===p && regraft.previousNode()===detached);
+trunk.removeChild(detached);
+check("removed current root still traversable",regraft.lastChild()===p && regraft.nextNode()===null);
+trunk.appendChild(p);
+check("outside regrafted current follows actual tree",regraft.previousNode()===title);
+p.appendChild(detached);
+check("walk back into actual root",regraft.nextNode()===p && regraft.nextNode()===detached && regraft.previousNode()===null);
+var mutroot=doc.createElement("MutRoot"), candidate=doc.createElement("Candidate"), last=doc.createElement("Last");mutroot.appendChild(candidate);mutroot.appendChild(last);
+var mut=doc.createTreeWalker(mutroot,1,function(node){if(node===candidate){mutroot.removeChild(candidate);}return 1;});
+check("accepted removed candidate is returned",mut.nextNode()===candidate && mut.currentNode===candidate);
+check("removed candidate has no implicit ancestor",mut.parentNode()===null);
+try{w.root=outside;w.filter={};w.whatToShow=0;NodeFilter.SHOW_ALL=1;}catch(e){}
+check("readonly walker state and constants",w.root===root && w.filter===null && w.whatToShow===4294967295 && NodeFilter.SHOW_ALL===4294967295);
+</script>

@@ -624,6 +624,10 @@ spread_copy(
 		if (status != 0)
 			return status;
 		present = vm_get_own_descriptor(object, key, &descriptor);
+		if (present < 0)
+			return -present;
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!present)
 			continue;
 		if ((descriptor.attributes & VM_PROPERTY_ENUMERABLE) == 0U)

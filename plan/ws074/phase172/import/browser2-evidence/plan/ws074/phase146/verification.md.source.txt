@@ -1,0 +1,24 @@
+# q558 / p146 verification — 2026-10-01
+
+CLEARED. Direct vm_object_create/vm_array_create/js_builtin_array callee roots protect
+prototype, newborn and all builtin element inputs through allocation. Immediate release
+on normal and allocation-failure paths; no permanent/managed root. Native direct factory
+20/20 plain+ASan with actual allocation-triggered GC, exact prototype/length/input
+identity, result-only lifetime and post-release collection. Cold 128-byte heap Array
+root-shape failure safely returns NULL after genuine collection; no fabricated test switch.
+Existing q557 direct child-list reproducer now16/16 both without ASan leak, three shapes,
+actual GC and zero/one NodeList identity; BUG-130 reproduced failure resolved by factory
+ownership. q557 remains historical uncleared, p145 retry still required separately.
+
+Pinned original Acid3 88/100 plain+ASan, all prior88 indexed pass preserved, full100
+inventory equivalent, completeTrue/runstatus0/exceptions[]/runerrors[]; Acid2 exact100%
+both. All64 regression groups PASS each mode, including prior61, q557 Page+native and
+new direct fixture; no FAIL/Uncaught/ASan/runtime errors. Host build plain+ASan warning0.
+Style-check changed C empty; git diff --check clean; full changed C reviewed against
+Guardrail/full coding-style sections1–14; clang-format absent/manual. cc14.2.0,
+Python3.13.5, ASAN_OPTIONS=detect_stack_use_after_return=0 for true native stack GC.
+No OS/guest/boot/GPU/fullWPT/fuzz performed. No Acid3 score increase expected.
+
+Exact approved snapshot archived in queue-q558 before rotation; code source SHA256 in
+verification.json; root executor released/local records unpublished/no push. Next retry
+p145 with unchanged original criteria, then actual Range delete/extract/surround.

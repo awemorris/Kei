@@ -1,0 +1,53 @@
+{
+  "queue": "q528",
+  "baseline": "b4e86c12",
+  "sources": {
+    "userland/desktop/browser/bind/traversal.c": "303f4bf63a7dd477451f75dc5892658840e176250b484afe5daa4d2ba24736d5",
+    "userland/desktop/browser/bind/document.c": "175914c36f3864a99a90f37944e1704608507749cc286cabbbd5a89cb50be935",
+    "userland/desktop/browser/bind/internal.h": "d0eb4338ed905256f53ce7a81935e1e4fe049de51948b6557ee9f3fc050564e7",
+    "userland/desktop/browser/bind/window.c": "e4e2203a6636d5efce5466bbdef389e35b66164774235b74021477b5968be6f4",
+    "userland/desktop/libbrowser/Makefile": "ad9209b63589ac1d5448f3dfbf9cdaee927c61f755af07be73a59e7e88f6ede8",
+    "plan/ws074/tests/host-frame-lifetime.c": "7bf5c2d48c62091a5d93b691f8bfff230d106a272890f157dfd674fa1544aa0c",
+    "plan/ws074/tests/host-traversal.c": "c9dcf276547d8f0f50e94ff0554acd6e6ace767054282ea1a2f4d970af311ef4",
+    "plan/ws074/tests/pages/tree-walker-probe.html": "eac52be6b32ff0c9ee39a0865d1aec42db6594e3c76995a84259849e1686e391"
+  },
+  "changes": [
+    [
+      6,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q528-plain/report.json",
+    "build/ws074-acid-q528-asan/report.json"
+  ],
+  "regressions": [
+    "build/ws074-q528-final-plain.json",
+    "build/ws074-q528-final-asan.json"
+  ],
+  "plain_asan": {
+    "TreeWalker": "70/70",
+    "traversal GC": "5/5",
+    "frame": "53/53",
+    "XML": "62/62+GC16/16",
+    "namespace": "38/38+GC12/12",
+    "names": "31/31",
+    "iframe": "17/17",
+    "legacy": "56/56",
+    "child CSS": "30/30",
+    "owner": "27/27",
+    "realms": "30/30",
+    "VM": "object100/interp45",
+    "DOM": "23/23",
+    "JS": "14/14",
+    "selectors": "golden identical",
+    "Acid3": "68/100 all100,prior67preserved,6newPASS,Uncaught/errors0/completeTrue/runstatus0",
+    "Acid2": "exact100%"
+  },
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

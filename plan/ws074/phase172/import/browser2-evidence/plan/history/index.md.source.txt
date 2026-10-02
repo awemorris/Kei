@@ -1,0 +1,1106 @@
+<!-- awesome-plan project=zedbsd record=past-log -->
+
+<!-- awesome-plan-current:start -->
+Active Queue: none
+Last finished Queue: [q591](queue-q591.md)（p100 cleared / fg011 achieved）
+<!-- awesome-plan-current:end -->
+
+# Past Log
+
+## Latest q591 — 2026-10-02 / WS074 fg011 achieved
+
+[Samep100](../ws074/phase100/phase.md) cleared, [final evidence](../ws074/phase100/verification.md).
+Actual pinned unmodified Acid3 100/100/all100PASS, all99groupsplain+ASanPASS,
+noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact. Finalsource/program/
+artifacts identical to q590; standalone complete reports/hashes retained. Earlier
+q589uncleared and q590 formatting repair/revalidation preserved. NativeSVGtext42/
+length60/childload52verified. Visible100/100; pixel37.04%/FAILlabels remain independent
+rendering diagnostic, fullvisual/browser/SVGconformance not claimed. Autonomous
+fg011goalachieved, no nextQueue. p101/p098 unselected/p044/WS incomplete.
+Rootreleased/localunpublished/no push. [Exact archive](queue-q591.md).
+
+## Latest q590 — 2026-10-02 / WS074 fg011
+
+[Samep171](../ws074/phase171/phase.md) re-cleared after routine definition layout
+repair, [final evidence](../ws074/phase171/verification-q590.md). Native60/all99both/
+original100/all100PASS/noerrors/Acid2exact; signature manual check/styleempty/
+warning0/finalsourcehashes. Priorq588/q589 outcomes retained; samep100 retry next.
+Pixel37.04%/visualFAILlabels independent diagnostic. Rootreleased/localunpublished/
+no push. [Exact archive](queue-q590.md).
+
+## Latest q589 — 2026-10-02 / WS074 fg011
+
+[p100](../ws074/phase100/phase.md) uncleared: full C section3 detects newly added
+length/native callback definition layout violations omitted by style-check tool.
+Current p171 clearance invalidated; original q588 cleared attempt retained.
+Original100/all99both/noerrors/Acid2exact remain numeric evidence. Next samep171
+routine formatting/revalidation, then samep100 retry. No code changes in q589,
+root released/localunpublished/no push. [Exact archive](queue-q589.md).
+
+## Latest q588 — 2026-10-02 / WS074 fg011
+
+[p171](../ws074/phase171/phase.md) cleared actual native width/scalar lengths,
+[evidence](../ws074/phase171/verification.md). Native60/all99both/original100,
+all100PASS/noerrors/Acid2exact. Pixel37.04%/visualFAIL labels remain independent
+diagnostic. Samep100 acceptance next; p044/WS incomplete. Rootreleased/local
+unpublished/no push. [Exact archive](queue-q588.md).
+
+## Latest q587 — 2026-10-02 / WS074 fg011
+
+[p170](../ws074/phase170/phase.md) cleared native SVG text interface/count,
+[evidence](../ws074/phase170/verification.md). Native42/all98both/original99,
+new77pass/prior98+72/equal100/noerrors/Acid2exact. Remaining75 native width;
+p100/p044/WS incomplete. Root released/localunpublished/no push.
+[Exact archive](queue-q587.md).
+
+## Latest q586 — 2026-10-02 / WS074 fg011
+
+[p169](../ws074/phase169/phase.md) cleared actual headless timer/network progress,
+[evidence](../ws074/phase169/verification.md). Native52/all97both/original98,
+new69/74/79/80pass/prior94+72preserved/equal100/noerrors/Acid2exact. Remaining
+SVG75 native width and77 text count; fullp100/p044/WS incomplete. Root released/
+localunpublished/no push. [Exact archive](queue-q586.md).
+
+## Latest q585 — 2026-10-02 / WS074 fg011
+
+[p168](../ws074/phase168/phase.md) cleared, [evidence](../ws074/phase168/verification.md).
+Actual same-origin iframe/object response tasks/XML native Doc realm ownership/
+events/scripts/cancellation/GC verified46native/all97both/original94/prior94+72/
+equal100/noerrors/Acid2exact. Headless virtual settle omits new network work between
+timers; separate finite scheduler integration next, then SVG75/77/fullp100.
+FullWindowProxy/crossorigin/XML profile limits retained; no original gain claimed.
+p100/p044/WS incomplete; root released/local unpublished/no push.
+[Exact archive](queue-q585.md).
+
+## Latest q584 — 2026-10-02 / WS074 fg011
+
+[p166](../ws074/phase166/phase.md) cleared in q584 unchanged retry,
+[evidence](../ws074/phase166/verification-q584.md). Actual response URL/status/MIME/body
+ownership and declared document MIME selection verified on same source after
+p167 body-error repair. Native101/all96both/actual94/prior94/72/equal100/noerrors/
+Acid2exact; reused actual q583 final artifacts/hash equality, no redundant rerun.
+q58299/101 remains uncleared immutable history. Next actual child navigation/
+events/script gating/object ownership/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+[Exact archive](queue-q584.md).
+
+
+## Latest q583 — 2026-10-02 / WS074 fg011
+
+[p167](../ws074/phase167/phase.md) cleared in q583, [evidence](../ws074/phase167/verification.md).
+[BUG-132](../bugs/BUG-132.md) resolved: only MIME-parser EINVAL gets default MIME;
+real body failure remains failure with complete cleanup. Native68/p166native101/
+all96PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact. p166 remains
+uncleared until separate exact unchanged retry. Next metadata retry then actual
+child navigation/SVG. p100/p044/WS incomplete. Root released/local unpublished.
+[Exact archive](queue-q583.md).
+
+
+## Latest q582 — 2026-10-02 / WS074 fg011
+
+[p166](../ws074/phase166/phase.md) uncleared in q582, [evidence](../ws074/phase166/verification.md).
+Real native fixture99/101both; [BUG-132](../bugs/BUG-132.md) body decoding error
+is erased by existing MIME fallback. Actual metadata/type implementation saved;
+net repair outside q582 scope. All95/original skipped after mandatory native failure;
+last verified q581 actual94/all94/Acid2exact, no new score claim. Next finite native
+data URL error preservation then unchanged p166 retry; p100/WS incomplete.
+Root released/local unpublished/no push.
+[Exact archive](queue-q582.md).
+
+
+## Latest q581 — 2026-10-02 / WS074 fg011
+
+[p165](../ws074/phase165/phase.md) cleared in q581, [evidence](../ws074/phase165/verification.md).
+Strict immutable XML model now projects into actual owning native DOM Documents;
+exact namespace/case/expanded attributes/PI/CDATA/data, iterative full tree copy,
+NULL output/error root unwind. Native54/all94PASSboth; actual94/prior94/72/
+equal100/noerrors/Acid2exact. Natural 30000-element threshold GC, subtree-only/
+lastrelease and real heap-limit failure verified after source/model destruction.
+Next actual MIME/child response navigation/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+[Exact archive](queue-q581.md).
+
+
+## Latest q580 — 2026-10-02 / WS074 fg011
+
+[p164](../ws074/phase164/phase.md) cleared in q580, [evidence](../ws074/phase164/verification.md).
+Actual PI/CDATA wrappers/prototypes/callee roots/Node/CharacterData/Text/Range/
+insertion/render/HTML serialization categories verified on genuine native XML nodes.
+Native34/all93PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Actual threshold wrapper GC/saved-only/lastrelease; CDATA native text/CSS/script
+and Range subtype semantics verified. Partial XML node core limits retained.
+Next native XML DOM projection/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+[Exact archive](queue-q580.md).
+
+
+## Latest q579 — 2026-10-02 / WS074 fg011
+
+[p163](../ws074/phase163/phase.md) cleared in q579, [evidence](../ws074/phase163/verification.md).
+Actual native CDATA4/PI7/target tracing/rooted C factories/buffer operations/clone.
+Native32/all92PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Caller-root-free real threshold GC/result-only/clone-only/lastrelease ownership verified.
+Native representation only; known public category/binding integration before JS/DOM
+projection/loading/SVG. p100/p044/WS incomplete; root released/local unpublished/no push.
+[Exact archive](queue-q579.md).
+
+
+## Latest q578 — 2026-10-02 / WS074 fg011
+
+[p162](../ws074/phase162/phase.md) cleared in q578, [evidence](../ws074/phase162/verification.md).
+Exact traced attribute URI/add/find/duplicate rollback/both clone paths verified.
+Native25/all91PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Source-only/clone-only/lastrelease GC verified with non-atom URI and actual owner.
+Native storage prerequisite only; full Attr/JS NS APIs remain excluded.
+Next native PI/CDATA then XML DOM/loading/SVG; p100/p044/WS incomplete.
+Root released/local unpublished/no push.
+[Exact archive](queue-q578.md).
+
+
+## Latest q577 — 2026-10-02 / WS074 fg011
+
+[p161](../ws074/phase161/phase.md) cleared in q577, [evidence](../ws074/phase161/verification.md).
+Strict owning native XML model: real namespaces/Unicode/normalization/CDATA/PI,
+full parse before publication, malformed pinned resources reject with NULL.
+Native236/all90PASSboth; actual94 including72/prior94/equal100/noerrors/Acid2exact.
+Pure C parser only, no score gain expected. Finite UTF8/XML1.0/DTD exclusions retained.
+Next native arbitrary attribute namespaces/PI/CDATA, then DOM projection/loading/SVG.
+p100/p044/WS incomplete; root released/local unpublished/no push.
+[Exact archive](queue-q577.md).
+
+
+## Latest q576 — 2026-10-01 / WS074 fg011
+
+[p160](../ws074/phase160/phase.md) cleared in q576, [evidence](../ws074/phase160/verification.md).
+Native ordinary CSSStyleSheet insertRule/deleteRule with actualsource/argument/
+convertedstring roots, errorprecedence/importhierarchy/reentrantretirement verified.
+Page23/native12/all89bothPASS; actual94/100 including72/prior93/equal100/noerrors/
+Acid2exact. Actualmodel/list/renderedheight update withoutDOMwrites orObserverrecords;
+callerroot-free threshold+conversionGC/obsoleteonlyedit/lastrelease verified.
+Remaining69/74/75/77/79/80 need SVG/loading/XML. PartialCSSOM/ruleobject/fullSyntax
+limits retained; p100/p044/WS incomplete/rootreleased/localunpublished/no push.
+[Exact archive](queue-q576.md).
+
+
+## Latest q575 — 2026-10-01 / WS074 fg011
+
+[p159](../ws074/phase159/phase.md) cleared in q575, [evidence](../ws074/phase159/verification.md).
+Actual native inline sheet/list/livecount wrappers preserve source identity and
+relevant realm; Page22/native12/all87bothPASS/actual93/prior93/equal100/noerrors/
+Acid2exact. Genuine Cmodel edit observable through savedJSrulecount and realheight;
+callerroot-free threshold construction GC/savedruleview-only retirement verified.
+Next native ordinary JSinsert/delete to clear actual72 then loading/SVG. Ruleobjects
+and other partialcore limits remain recorded; p100/p044/WS incomplete/local unpublished.
+[Exact archive](queue-q575.md).
+
+
+## Latest q574 — 2026-10-01 / WS074 fg011
+
+[p158](../ws074/phase158/phase.md) cleared in q574, [evidence](../ws074/phase158/verification.md).
+Traced native inline source models/sharedprimary+childrendering/actualDOMidentity
+retirement verified; native21/all85bothPASS/actual93/prior93/equal100/noerrors/
+Acid2exact. Genuine native edits render10->20->40->20 withoutDOMwrites/records;
+owner-only/saved-state-only retired child graph GC and lastrelease verified.
+Next public native sheet/rule lists and edits then loading/SVG. p100/p044/WS
+incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q574.md).
+
+
+## Latest q573 — 2026-10-01 / WS074 fg011
+
+[p157](../ws074/phase157/phase.md) cleared in q573, [evidence](../ws074/phase157/verification-q573.md).
+SamePhase accepted EOF block/import closure repair revalidated native44/all84PASS
+both/original93/prior93/equal100/noerrors/Acid2exact. Source addresses/IDs/raw units
+preserved; real cascade append effects verified. q572 original archive/evidence plus
+later invalidation retained. Next native association/live wrappers/rendering integration
+then XMLloading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q573.md).
+
+
+## Follow-up 2026-10-01 / p157 current clearance invalidated
+
+Accepted EOFblock +nativeinsert reproduced actual cascade failure34/35. Same p157
+reopened in q573 finite correction; q572 original outcome/evidence not rewritten.
+[Design revision](../ws074/phase157/phase.md). Local unpublished.
+
+## Latest q572 — 2026-10-01 / WS074 fg011
+
+[p157](../ws074/phase157/phase.md) cleared in q572, [evidence](../ws074/phase157/verification.md).
+Native structural source model/immutable stable handles/transactional qualified rule
+insert/delete implemented; native33/all84PASS both/actual93/prior93/equal100/noerrors/
+Acid2exact. No DOMwrites or CSSOM shim; ordinary cascade verified10->20->40->20.
+Next native sheet association/live CSSOM wrappers and rendering integration, then
+XMLloading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q572.md).
+
+
+## Latest q571 — 2026-10-01 / WS074 fg011
+
+[p155](../ws074/phase155/phase.md) cleared in q571, [evidence](../ws074/phase155/verification-q571.md).
+Same acceptance revalidated after independent p156 outputs. Native10/Page22/all83
+PASS both; original93/prior93/equal100/noerrors/Acid2exact. Actual72 obtains rendered
+height10 and reaches missing CSSOM. Full affected-source review/semantic comments
+complete. Earlier q569 uncleared/evidence retained. Next CSSOM/loading/SVG;
+p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q571.md).
+
+
+## Latest q570 — 2026-10-01 / WS074 fg011
+
+[p156](../ws074/phase156/phase.md) cleared in q570, [evidence](../ws074/phase156/verification.md).
+Actual zero percentage bases/first empty fragment bounds repaired. Native10/Page15/
+all83PASS both; p155 Page22/native10 nowpass. Original93/prior93/equal100/noerrors/
+Acid2exact. Actual72 now passes native height10 and reaches missing CSSOM. Next
+same p155 acceptance revalidation then CSSOM/loading/SVG. p100/p044/WS incomplete/
+root released/local unpublished/no push; q569 uncleared history preserved.
+[Exact archive](queue-q570.md).
+
+
+## Latest q569 — 2026-10-01 / WS074 fg011
+
+[p155](../ws074/phase155/phase.md) uncleared in q569, [evidence](../ws074/phase155/verification.md).
+Transient child layout/native content image dimensions implemented; native10/10
+real GC/retirement/collectibility both. Prior79 pass; new Page21/22 has exact-zero
+percentage failure. Original93/prior93/full100 same/noerrors/Acid2exact. Existing
+layout rejects zero percentage bases and drops empty inline rectangles, so original72
+still height0. Separate layout dependency repair then same p155 acceptance revalidation;
+CSSOM/loading/SVG remain. Root released; p100/p044/WS incomplete/local unpublished.
+[Exact archive](queue-q569.md).
+
+
+## Latest q568 — 2026-10-01 / WS074 fg011
+
+[p154](../ws074/phase154/phase.md) cleared in q568, [evidence](../ws074/phase154/verification.md).
+Native live SameObject Document.images implemented; Page23/native10 real GC/
+collection-only retirement/collectibility/all79PASS both. Original93/prior93/
+equal100/noerrors/Acid2exact. Actual72 reaches missing native rendered height,
+known separately selected geometry/CSSOM work. p100/p044/WS incomplete/root released/
+local unpublished/no push.
+[Exact archive](queue-q568.md).
+
+
+## Latest q567 — 2026-10-01 / WS074 fg011
+
+[p153](../ws074/phase153/phase.md) cleared in q567, [evidence](../ws074/phase153/verification.md).
+Actual child Document HTML replacement/inline nested writes/EOF/owner GC implemented;
+Page36/native9/all77PASS plain+ASan. Original93/new71/prior92/equal100/noerrors/
+Acid2exact. Next images/CSSOM/native dimensions and XML loading/SVG; full dynamic
+markup subset limits retained. p100/p044/WS incomplete/root released/local unpublished.
+[Exact archive](queue-q567.md).
+
+
+## Latest q566 — 2026-10-01 / WS074 fg011
+
+[p152](../ws074/phase152/phase.md) cleared in q566, [evidence](../ws074/phase152/verification.md).
+Owned child parser tracing/finalization verified native8 real GC/hidden removed
+stacks/resume/unfinished retirement/collectibility/standalone preservation both.
+All75PASS/plain+ASan/original92/prior92/equal100/noerrors/Acid2exact. Next managed
+Document streams; p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q566.md).
+
+
+## Latest q565 — 2026-10-01 / WS074 fg011
+
+[p150](../ws074/phase150/phase.md) cleared in q565 retry, [evidence](../ws074/phase150/verification-q565.md).
+Unchanged CSS/media Page38/native29 pass both after p151/BUG-131 repair; q563
+uncleared retained. Exact source hashes verify q564 actual92/full74/equal100/
+noerrors/Acid2exact reuse. No source generation; transform rendering pending;
+p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q565.md).
+
+
+## Latest q564 — 2026-10-01 / WS074 fg011
+
+[p151](../ws074/phase151/phase.md) cleared in q564, [evidence](../ws074/phase151/verification.md).
+BUG-131 actual iframe content viewport repaired, Page12/native10 actual callback GC/
+retirement/all74PASS plain+ASan including unchanged p150 Page38/native29. Original92/
+new46/prior91/equal100/noerrors/Acid2exact. Next separately selected p150 retry;
+p150/p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q564.md).
+
+
+## Latest q563 — 2026-10-01 / WS074 fg011
+
+[p150](../ws074/phase150/phase.md) uncleared in q563, [evidence](../ws074/phase150/verification.md).
+Computed text-transform and numeric color media native29/29 verified; Page36PASS/
+2FAIL and original46 reaches y1. Unknown child viewport dependency [BUG-131](../bugs/BUG-131.md)
+ends attempt; finite repair then unchanged retry. Original91/prior91/equal100/
+noerrors/Acid2exact/prior70PASS. Transform rendering pending; p150/p100/p044/WS
+incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q563.md).
+
+
+## Latest q562 — 2026-10-01 / WS074 fg011
+
+[p149](../ws074/phase149/phase.md) cleared in q562, [evidence](../ws074/phase149/verification.md).
+Native surround normative error/mutation order/private roots verified at real GC;
+Page24/native16/all70PASS plain+ASan. Original91/100/new11/prior90/equal100/noerrors/
+Acid2exact. Next CSS/media/text-transform, XML loading/SVG; p100/p044/WS incomplete/
+root released/local unpublished/no push.
+[Exact archive](queue-q562.md).
+
+
+## Latest q561 — 2026-10-01 / WS074 fg011
+
+[p148](../ws074/phase148/phase.md) cleared in q561, [evidence](../ws074/phase148/verification.md).
+Actual extractContents preserves moved native identities/partial shells/UTF16/live
+repair/owner notices through actual GC. Acid3 90/100, new7/9/prior88 preserved/full100
+same/noerrors/Acid2exact; all68PASS plain+ASan/Page22/native14. Next surroundContents,
+CSS/SVG/loading; p100/p044/WS incomplete/local unpublished/root released/no push.
+[Exact archive](queue-q561.md).
+
+
+## Latest q560 — 2026-10-01 / WS074 fg011
+
+[p147](../ws074/phase147/phase.md) cleared in q560, [evidence](../ws074/phase147/verification.md).
+Actual Range.deleteContents topmost native removal/collapse-before-mutation/partial
+UTF16/doctype/weak repair/iframe teardown/owner child-list notices and actual mid-
+delete GC verified. Original Acid3 88/no lost indexed/equal/noerrors/Acid2exact,
+all66PASS plain+ASan/Page17/native11. Test7 next needs extract; p100/p044/WS
+incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q560.md).
+
+
+## Latest q559 — 2026-10-01 / WS074 fg011
+
+[p145](../ws074/phase145/phase.md) cleared in q559 retry, [evidence](../ws074/phase145/verification-q559.md).
+Original p145 child-list roots/Page13/native16 actual GC now verified plain+ASan after
+p146 BUG-130 repair; q557 prior uncleared preserved. Original Acid3 88/prior88/equal/
+noerrors/Acid2exact/all64PASS. Next actual Range delete/extract/surround; p100/p044/WS
+incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q559.md).
+
+
+## Latest q558 — 2026-10-01 / WS074 fg011
+
+[p146](../ws074/phase146/phase.md) cleared in q558, [evidence](../ws074/phase146/verification.md).
+VM object/Array/builtin factory callee GC ownership verified native20/20; q557 native
+record repro16/16 both and ASan leak0, BUG-130 resolved. Original Acid3 88/no indexed
+regression/equal/noerrors/Acid2exact/all64PASS plain+ASan. p145 historical q557
+uncleared pending separate retry; p100/p044/WS incomplete/root released/local
+unpublished/no push.
+[Exact archive](queue-q558.md).
+
+
+## Latest q557 — 2026-10-01 / WS074 fg011
+
+p145 uncleared in q557: existing record/list roots implemented, Page13/prior61 pass;
+native allocation-GC14/16 fails added identity/cardinality, ASan64-byte leak. Original
+88/prior88/equal/noerrors/Acid2exact preserved. Unknown unpublished VM Array factory
+prerequisite [BUG-130](../bugs/BUG-130.md) scheduled; finite factory ownership Phase then
+unchanged p145 retry. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q557.md).
+
+
+## Latest q556 — 2026-10-01 / WS074 fg011
+
+[p144](../ws074/phase144/phase.md) cleared in q556, [evidence](../ws074/phase144/verification.md).
+Actual private Range.cloneContents/iterative partial shells/complete contained subtrees/
+exact UTF16/doctype preflight/current owner prototype/rooted graph+actual mid-clone GC/
+source and independent output lifetime verified. Original88/no new or lost indexed
+passes/prior88/equal/noerrors/Acid2exact/all61PASS/Page32/native15. Remaining12.
+Next actual Range delete/extract/surround contents; p100/p044/WS incomplete/root released/
+local unpublished/no push.
+[Exact archive](queue-q556.md).
+
+
+## Latest q555 — 2026-10-01 / WS074 fg011
+
+[p143](../ws074/phase143/phase.md) cleared in q555, [evidence](../ws074/phase143/verification.md).
+Checked native partial CharacterData replacement/allocation-free deletion/exact atomic
+alias-safe buffers/interval FIFO callbacks/current owner adoption/private Range+clone
+repair/failed operation preservation/weak collectibility verified. Original88/no new
+or lost passes/prior88/equal/noerrors/Acid2exact/all59PASS/native100. Remaining12.
+Static shared geometric reserve concern tracked as BUG-129, runtime reproduction unknown;
+new helper avoids that dependency; no bug transfer/repair claim. Next Range contents.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q555.md).
+
+
+## Latest q554 — 2026-10-01 / WS074 fg011
+
+[p142](../ws074/phase142/phase.md) cleared in q554, [evidence](../ws074/phase142/verification.md).
+Registered checked iterative rooted native cloning/no silent depth cutoff/complete-only
+publication/existing control+template/native namespace state/current owner wrapping/
+actual allocation GC+ENOMEM/source preservation/collectibility verified. Original88/
+no new or lost indexed passes/prior88 preserved/equal/noerrors/Acid2exact/all58PASS/
+Page27/native26. Remaining12; next partial native data deletion then Range contents.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q554.md).
+
+
+## Latest q553 — 2026-10-01 / WS074 fg011
+
+[p141](../ws074/phase141/phase.md) cleared in q553, [evidence](../ws074/phase141/verification.md).
+Actual rooted Textsplit/Rangeinsert/prevalidate-before-split/weak special split repair/
+allocation-free suffix truncation/current uint32 conversion/prototypes/current-owner
+hooks/actual post-insert collapse/error+GC ownership verified. Original88/newindexed12/
+prior87 preserved/equal/noerrors/Acid2exact/all56 groupsPASS/insertPage59/native92;
+existingRangecore59/GC89/frame148. Remaining12; next Range contents/CSS/loading/SVG.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q553.md).
+
+
+## Latest q552 — 2026-10-01 / WS074 fg011
+
+[p140](../ws074/phase140/phase.md) cleared in q552, [evidence](../ws074/phase140/verification.md).
+Actual weak native insertion/CharacterData callbacks/current-owner Range boundary
+repair/atomic alias-safe full data replacement/checked failure/FIFO/generic exclusion/
+GC+Document-first cleanup verified. Original87/prior87 preserved/newnone/equal/noerrors/
+Acid2exact/all54 groupsPASS/mutationPage36/native36; existingRangecore59/GC89/frame148.
+Remaining13; next Textsplit/Rangeinsert/content/CSS/loading/SVG. p100/p044/WS incomplete/
+root released/local unpublished/no push.
+[Exact archive](queue-q552.md).
+
+
+## Latest q551 — 2026-10-01 / WS074 fg011
+
+[p139](../ws074/phase139/phase.md) cleared in q551, [evidence](../ws074/phase139/verification.md).
+Pure reusable native DOM pre-insertion validity/extracted bind_insert checks,
+Document Text/element/doctype/order/whole Fragment validation before mutation,
+original owner/generation/host/removal/root ownership/error priority verified.
+Original87/prior87 preserved/newnone/equal/noerrors/Acid2exact/all52 groupsPASS/
+preinsert64/native29. Remaining13; next live insertion/Textsplit/data/Range content,
+CSS/loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q551.md).
+
+
+## Latest q550 — 2026-10-01 / WS074 fg011
+
+[p138](../ws074/phase138/phase.md) cleared in q550, [evidence](../ws074/phase138/verification.md).
+Native independent clone/source prototype+creator/weak subscriptions, rooted
+unsignedshort boundary comparison/current point conversion/error order/constants,
+Text-only UTF16 stringification/coercion/descriptor flags/GC verified. Original87/
+prior87 preserved/newnone/equal/noerrors/Acid2exact/all50 groupsPASS/core59/nativeGC89/
+frame148. Remaining13; next live insertion/Text split/data/content algorithms,
+CSS/loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q550.md).
+
+
+## Latest q549 — 2026-10-01 / WS074 fg011
+
+[p137](../ws074/phase137/phase.md) cleared in q549, [evidence](../ws074/phase137/verification.md).
+Native weak live removal repair/checked current-owner boundary commits/token root
+association/adoption migration/finalizer/GC verified. Original87/100/newindexed13/
+prior86 preserved/equal/noerrors/Acid2exact/all49 groupsPASS/removal33/boundary80/
+nativeGC49/frame143. Remaining13; next Range clone/comparison/stringification,
+live insertion/data/content algorithms, CSS/loading/SVG. p100/p044/WS incomplete;
+root released/local unpublished/no push.
+[Exact archive](queue-q549.md).
+
+
+## Latest q548 — 2026-10-01 / WS074 fg011
+
+[p136](../ws074/phase136/phase.md) cleared in q548, [evidence](../ws074/phase136/verification.md).
+Native AbstractRange/Range/factories/readonly descriptors/boundaries/typed setters/
+selection/current ancestry/uint32 conversion/GC/creator/XML ownership verified.
+Original86/100/newindexed8/prior85 preserved/equal/noerrors/Acid2exact/all48 groups
+PASS/range80/nativeGC40/frame138. Remaining14. Next native live removal repair,
+then insertion/CharacterData/comparison/stringification/contents, CSS/loading/SVG.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q548.md).
+
+
+## Latest q547 — 2026-10-01 / WS074 fg011
+
+[p135](../ws074/phase135/phase.md) cleared in q547 retry, [evidence](../ws074/phase135/verification.md).
+Correct ordinary clone initialization and negative-zero parsing; owned native
+selectedness/defaultSelected/selectedIndex/DOM hooks/consumer/roots verified.
+Original85/100/prior85 preserved/equal/noerrors/Acid2exact/all46 groupsPASS/option73/
+GC20/frame133. q546 historical uncleared preserved separately. Chromium clone
+agreement/current-primary comparison limits recorded. Remaining15; next Range/CSS/
+loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Exact archive](queue-q547.md).
+
+
+## Latest q546 — 2026-10-01 / WS074 fg011
+
+[p135](../ws074/phase135/phase.md) uncleared, [evidence](../ws074/phase135/verification.md).
+Owned selectedness/native index/attrs/tree/chosen consumer yields actual85/100/new58,
+prior84 preserved/equal/noerrors/Acid2exact/all46 groupsPASS/option70/GC20/frame133.
+Approved clone state propagation criterion conflicts with ordinary primary clone
+semantics; no clearance claimed. Revise clone criterion/implementation and parser
+negative-zero edge in next finite attempt, retain original scope/outcome/evidence.
+Other current-standard vs Chromium differences disclosed. Remaining15; p100/p044
+and WS incomplete/local unpublished/root released/no push.
+[Exact archive](queue-q546.md).
+
+
+## Latest q545 — 2026-10-01 / WS074 fg011
+
+[p134](../ws074/phase134/phase.md) cleared, [evidence](../ws074/phase134/verification.md).
+Native select options membership/SameObject collection/exact interfaces/select.add
+conversion/current ancestry/owner/adoption/roots. Direct72/nativeGC78/cache12/
+frame128/all44 selected groupsPASS both variants. Original all10084/100/indexed57
+newPASS/prior83 preserved/equal/noerrors/Acid2exact. Remaining16; next selectedness58.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+[Exact archive](queue-q545.md).
+
+
+## Latest q544 — 2026-10-01 / WS074 fg011
+
+[p133](../ws074/phase133/phase.md) cleared, [evidence](../ws074/phase133/verification.md).
+Native table/section row insertion/deletion/createTBody/rowIndex/sectionRowIndex,
+exact long conversion/current order/parent/owner/roots. Row62/GC75/frame123/all41
+selected groupsPASS both variants. Original all10083/100/indexed50+51newPASS/
+prior81 preserved/equal/noerrors/Acid2exact. Remaining17; next select/option.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+[Exact archive](queue-q544.md).
+
+
+## Latest q543 — 2026-10-01 / WS074 fg011
+
+[p131](../ws074/phase131/phase.md) cleared in new q543 attempt, [evidence](../ws074/phase131/verification.md).
+p13249b0ee70 adoption prerequisite verified; original typed native table caption/
+head/foot APIs acceptance unchanged. Fresh structure68/adoption26/nativeGC42/
+frame118PASS both variants; reused matching final q54239 regression/build outputs.
+Original all10081/100/prior81/equal/noerrors/Acid2exact; remaining19. q541 historical
+uncleared and exact failure evidence preserved. Next finite row APIs/indices, then
+cell APIs/select/option/Range/CSS/loading/SVG. p100/p044 unchanged/root released/
+local unpublished/no push.
+[Exact archive](queue-q543.md).
+
+
+## Latest q542 — 2026-10-01 / WS074 fg011
+
+[p132](../ws074/phase132/phase.md) cleared, [evidence](../ws074/phase132/verification.md).
+Checked subtree/current Document adoption, optional weak iterator root token
+migration/preflight/native identity/lifetime. Adoption26/final p131 structure68/
+weak migration+finalization37/frame118/all39 groupsPASS both variants. Original
+all10081/100/all prior81/equal/noerrors/Acid2exact; remaining19. p131 q541 remains
+uncleared, next new finite p131 validation attempt using verified adoption output.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+[Exact archive](queue-q542.md).
+
+
+## Latest q541 — 2026-10-01 / WS074 fg011
+
+[p131](../ws074/phase131/phase.md) **uncleared**, [evidence](../ws074/phase131/verification.md).
+Native table caption/head/foot get/set/create/delete + Caption interface implemented;
+actual81/100/indexed49new/prior80/equal/noerrors/Acid2exact. Initial structure67/
+GC42/frame113/all38 groupsPASS, then final added ownership assertion reproduces
+cross-Document setter adoption failure (67PASS/1FAIL) plain+ASan. Existing
+bind_insert/dom_insert_before lacks subtree Document adoption, unknown prerequisite
+ends this attempt without clearance. Retain useful partial outputs; next select
+finite adoption dependency, then new p131 attempt and row/cell APIs. Remaining19;
+p100/p044 unchanged/root released/local unpublished/no push.
+[Exact archive](queue-q541.md).
+
+
+## Latest q540 — 2026-10-01 / WS074 fg011
+
+[p130](../ws074/phase130/phase.md) cleared, [evidence](../ws074/phase130/verification.md).
+Native SameObject live table bodies/ordered rows/section rows/row cells;
+actual HTML namespace/exact-case brands, current direct membership/logical order,
+clone-independent traced caches and actual XML/managed-child owner prototypes.
+Table71/GC25/frame108/all36 selected regressionsPASS both variants. Original
+all10080/100/indexed29newPASS/prior79 preserved/equal/noerrors/Acid2exact.
+Remaining20; next table caption/head/foot structural APIs, then row/cell methods.
+Other recorded residuals/p100/p044 unchanged. Root released/local unpublished/no push.
+[Exact archive](queue-q540.md).
+
+
+## Latest q539 — 2026-10-01 / WS074 fg011
+
+[p129](../ws074/phase129/phase.md) cleared, [evidence](../ws074/phase129/verification.md).
+Actual input Submit .click native submission-event stage/current owner/guard,
+SubmitEvent constructor/traced submitter/composed getter/roots. Submit56/GC13/
+frame98/all34 selected regressionsPASS both variants. Original all10079/100/
+indexed54newPASS/prior78 preserved/equal/noerrors/Acid2exact. Remaining21; next
+native table collections/accessors, then structural methods. Known actual host
+navigation/complete submission/composed path and other residuals retained;
+p100/p044 unchanged. Root released/local unpublished/no push.
+[Exact archive](queue-q539.md).
+
+
+## Latest q538 — 2026-10-01 / WS074 fg011
+
+[p128](../ws074/phase128/phase.md) cleared, [evidence](../ws074/phase128/verification.md).
+Script checkbox/radio activation/cancel/disabled/recursion/indeterminate clone and
+explicit callback roots; click57/GC10/frame93/all32 selected regressionsPASS both
+variants. Original all10078/100/indexed43newPASS/prior77 preserved/equal/noerrors/
+Acid2exact. Remaining22; next submit-button submission event/known host navigation
+boundary. Other click/input/automatic mutation residuals retained; p100/p044
+unchanged. Root released/local unpublished/no push.
+[Exact archive](queue-q538.md).
+
+
+## Latest q537 — 2026-10-01 / WS074 fg011
+
+[p127](../ws074/phase127/phase.md) cleared, [evidence](../ws074/phase127/verification.md).
+Native explicit checkedness/group/clone and RadioNodeList.value; radio73/native12/
+GC13/frame88/all selected regressionsPASS both variants. Original all10077/100/
+indexed56newPASS/prior76 preserved/equal/noerrors/Acid2exact. Remaining23; next
+click activation/submission. Known automatic mutation/group/type/advanced input/
+NodeList/form/parser residuals retained. p100/p044 unchanged; root released/local
+unpublished/no push.
+[Exact archive](queue-q537.md).
+
+
+## Latest q536 — 2026-10-01 / WS074 fg011
+
+[p126](../ws074/phase126/phase.md) cleared, [evidence](../ws074/phase126/verification.md).
+Native input reflection/text-password dirty values/clone; input94/GC12/frame83/all
+selected regressionsPASS plain+ASan. Original all10076/100/indexed53newPASS/prior75
+preserved/equal/noerrors/Acid2exact. Remaining24; next checkedness/radio value/group.
+Known type-transition/advanced-input/NodeList/form/parser residuals retained.
+p100100/100/p044 unchanged; root executor released/local unpublished/no push.
+[Exact archive](queue-q536.md).
+
+
+## Latest q535 — 2026-10-01 / WS074 fg011
+
+Live form.elements/length/controls and indexed duplicate lists, p125 cleared.
+Controls100/GC11/frame78/all selected plain+ASan regressionsPASS. Original all100
+75/100/indexed4+52newPASS/prior73 preserved/noerrors/Acid2 exact.
+[Exact archive](queue-q535.md),[evidence](../ws074/phase125/verification.md).
+Remaining25; next radio value/input reflection/checkedness, then activation/table/
+Range/CSS/loading/SVG. Known NodeList iterables/form own maps/parser-special scope
+retained. p100100/100/p044 unchanged. Root released, local unpublished/no push.
+
+
+## Latest q534 — 2026-10-01 / WS074 fg011
+
+Ordinary DOM form owner/listed-control foundation, p124 cleared. Owner56/56/all
+selected plain+ASan regressionsPASS. Original all10073/100 exact inventory unchanged/
+noerrors/Acid2 exact. [Archive](queue-q534.md),
+[evidence](../ws074/phase124/verification.md). Remaining27; next native controls/
+RadioNodeList and public form/input APIs; parser-special/custom association residual
+explicitly retained. p100100/100/p044 unchanged. One finite Phase, root released,
+standing autonomous approval/local unpublished/no push/no full WPT/OS/guest/boot/GPU.
+
+
+## Latest q533 — 2026-10-01 / WS074 fg011
+
+SameObject live Document.forms, p123 cleared. Forms35/collection104/GC16/frame68/
+all selected plain+ASan regressionsPASS. Original all10073/100, indexed98 newPASS/
+prior72 preserved/noerrors/Acid2 exact. [Exact archive](queue-q533.md),
+[evidence](../ws074/phase123/verification.md). Remaining27, known form owner/controls/
+RadioNodeList then form APIs/table/Range/CSS/loading/SVG; p100100/100/p044 unchanged.
+Standing autonomous approval/one finite Phase/root executor released, local unpublished/
+no push. No full WPT/OS/guest/boot/GPU claim.
+
+
+## Latest q532 — 2026-10-01 / WS074 fg011
+
+Live HTMLCollection/children/Document.links, p122 cleared. Plain+ASan104/104,
+GC13/13/frame63/63/all selected regressionsPASS; original all10072/100/indexed5
+newPASS/prior71 preserved/noerrors/Acid2 exact. [Exact archive](queue-q532.md),
+[evidence](../ws074/phase122/verification.md). Remaining28/p100full100/100 unmet,
+forms/control/table/Range/CSS/loading/SVG follow finite Queues; p044 remains.
+Current-user autonomous scope reused; one Phase, root sole executor. Local records
+unpublished/no push. Compilercc14.2.0/manual format/no full WPT/OS/guest/boot/GPU.
+
+
+## 最新: 2026-10-01 q531
+
+[q531](queue-q531.md): p121 cleared。VM native動的property/descriptor/keys/guard/失敗伝播基盤を実装。plain/ASan専用65/65と全選択回帰PASS。Acid3全10071/100維持・Uncaught0、Acid2exact。次はlive HTMLCollection/document.links。全文手動/style/diff PASS（vm.h既存3件は変更範囲外）、formatter不在、OS/guest/boot/GPU未実施、未公開・pushなし。[証拠](../ws074/phase121/verification.md)。
+
+## 2026-10-01 q530
+
+[q530](queue-q530.md): p120 cleared。NodeIterator保存位置/candidateの削除補正・live走査・filter・GCを実装。plain/ASan専用60/60・TreeWalker70/70・GC9/9・frame58/58・removal19/19と全選択回帰PASS。Acid3全10071/100、1/2/3新PASS・以前68件維持・Uncaught0、Acid2exact。残29件、次はlive HTMLCollection基盤。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施、未公開・pushなし。[証拠](../ws074/phase120/verification.md)。
+
+## 2026-10-01 q529
+
+[q529](queue-q529.md): p119 cleared。weak pre-removal登録/通知と任意GC破棄順で安全なC token所有を実装。plain/ASan19/19と全選択回帰PASS。Acid3全10068/100維持・Uncaught0、Acid2exact。次はNodeIterator APIとreference/candidate補正。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施、未公開・pushなし。[証拠](../ws074/phase119/verification.md)。
+
+## 2026-10-01 q528
+
+[q528](queue-q528.md): p118 cleared。TreeWalker全7method/NodeFilter/filter/mutation/GCを実装。plain/ASan専用70/70・GC5/5・frame53/53と全選択回帰PASS。Acid3全10068/100、6新PASS・以前67件維持・Uncaught0、Acid2 exact。残32件を自走継続。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase118/verification.md)。
+
+## 2026-10-01 q527
+
+[q527](queue-q527.md): p117 cleared。DOMImplementation/XMLDocument/doctype生成、HTML/XML文書種別・名前・prototype所有を実装。plain/ASan XML62/62・GC16/16・frame48/48・namespace38/38・DOM23/23・JS14/14ほか全選択回帰PASS。Acid3全10067/100、26/27新PASS・後退0・Uncaught0、Acid2 exact。残33件を自走継続。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase117/verification.md)。
+
+## 2026-10-01 q526
+
+[q526](queue-q526.md): p116 cleared。createEvent/initEvent/initUIEventとUI view/detail・初期化状態・GC保持を実装。plain/ASan56/56・frame38/38・owner27/27・DOM23/23。Acid3全10065/100、30/73新PASS・後退0・Uncaught0、Acid2 exact。残35件を自走継続。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase116/verification.md)。
+
+## 2026-10-01 q525
+
+[q525](queue-q525.md): p115 cleared。object.data URL属性反映・USVString・文書URL/最初のbaseを実装。plain/ASan44/44・reflection40/40・frame33/33・owner27/27・DOM23/23・WPT URL先頭100/100。Acid3全10063/100、64新PASS・後退0・Uncaught0、Acid2 exact。残37件を自走継続。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase115/verification.md)。
+
+## 2026-10-01 q524
+
+[q524](queue-q524.md): p114 cleared。cursor36キーワードと継承・computed styleを実装。plain/ASan54/54・childCSS30/30・frame33/33・DOM23/23・selector golden一致。Acid3全10062/100、47新PASS・後退0・Uncaught0、Acid2 exact。残38件を自走継続。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase114/verification.md)。
+
+## 2026-10-01 q523
+
+[q523](queue-q523.md): p113 cleared。uint32 array.lengthと安全な数値変換・readonly・容量基準のsparse選択を実装。plain/ASan39/39・容量4/4・object100・interp45・realm30・JS14/14・DOM23/23。Acid3全10061/100、95新PASS・後退0・Uncaught0、Acid2 exact。残39件を自走継続。全文手動/style/diff PASS、formatter不在、OS/guest/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase113/verification.md)。
+
+## 2026-10-01 q522
+
+[q522](queue-q522.md): p112 cleared。button/label/meta専用classと属性反映を実装。plain/ASan40/40・DOM23/23・frame33/33・iframe17/17・owner27/27・realm30/30。Acid3全10060/100、59/62新PASS・後退0・Uncaught0、Acid2 exact。残40件を有限Queueで継続。全文手動/style/diff PASS、formatter不在、guest/OS/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase112/verification.md)。
+
+## 2026-10-01 q521
+
+[q521](queue-q521.md): p111 cleared。:langの継承・ASCII/ハイフン比較・XMLlang、:emptyの空text/commentを整備。plain/ASan32/32・grammar37/37・childCSS30/30・GC33/33・DOM23/23・selector golden一致。Acid3全10058/100、34/38新PASS・後退0・Uncaught0、Acid2 exact。残42件を有限Queueで継続。全文手動/style/diff PASS、formatter不在、guest/OS/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase111/verification.md)。
+
+## 2026-10-01 q520
+
+[q520](queue-q520.md): p109 cleared。BUG-128修正後のchild CSS再検証、plain/ASan30/30・GC/viewport33/33・VM/DOM全選択試験PASS。Acid3全10056/100・以前の47PASS維持・44復旧・Uncaught0、Acid2 exact。q518履歴のunclearedを保持。残44件を有限Queueで継続。全文手動/style/diff PASS、formatter不在、guest/OS/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase109/revalidation-q520.md)。
+
+## 2026-10-01 q519
+
+[q519](queue-q519.md): p110 cleared、BUG-128 resolved。selector compoundの間に実際のcombinatorを要求。plain/ASan grammar37/37、DOM23/23、selectors golden一致、child CSS30/30・frame33/33。Acid3全10056/100、44復旧・他の変化なし・Uncaught0、Acid2 exact。次はp109再検証。全文手動/style/diff PASS、formatter不在、guest/OS/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase110/verification.md)。
+
+## 2026-10-01 q518
+
+[q518](queue-q518.md): p109 uncleared。child CSS30/30、frame GC/viewport33/33、VM/DOM既存試験plain/ASan PASS。Acid3全10055/100（9新PASS・44後退）・Uncaught0、Acid2 exact。既存invalid selector grammar [BUG-128](../bugs/BUG-128.md)が表面化し、別Phaseで修正後p109再検証。実装保持・基準変更なし。全文手動/style/diff PASS、formatter不在。guest/OS/boot/GPU未実施、GitHub未公開・pushなし。[証拠](../ws074/phase109/verification.md)。
+
+## 2026-10-01 q517
+
+[q517](queue-q517.md): p108 cleared。createElementNS・URI/prefix/localName・NamespaceErrorを実装、clone/GCでnamespaceを保持。plain/ASan38/38＋GC12/12、name31/31、DOM23/23、frame17/17、realm30/30。Acid2 exact、Acid3全10047/100・21/23/76新PASS・後退0・Uncaught0。全文手動/style/diff PASS、formatter不在。次はchild Documentのcomputed CSS候補、残53件を有限Phaseへ分割。guest/OS/boot/GPU未実施、GitHub未公開・pushなし。[証拠](../ws074/phase108/verification.md)。
+
+## 2026-10-01 q516
+
+[q516](queue-q516.md): p107 cleared。createElementの要素名検証とInvalidCharacterError/code5を整備。plain/ASan31/31、DOM23/23、iframe17/17、realm30/30。Acid2 exact、Acid3全10044/100・20/22 PASS・後退0・Uncaught0。全文手動/style/diff PASS、formatter不在。残56件を有限Phaseへ分割し続行。guest/OS/boot/GPU未実施、GitHub未公開・pushなし。[証拠](../ws074/phase107/verification.md)。
+
+## 2026-10-01 q515
+
+[q515](queue-q515.md): p104 cleared。initial about:blank iframeの実装を寿命24/24、Chromium17/17、安全性14/14、既存VM/DOMでplain/ASan検証。saved関数/Document/Window・nested graphの保持と回収、親破棄、1MiBでの生成失敗・depth64を確認。Acid2 exact、Acid3全100不変42/100・Uncaught0。全文手動/style/diff PASS、formatter不在。URL/loading等は後続、残58件を有限Phaseに分割し続行。guest/OS/boot/GPU未実施、GitHub未公開・pushなし。[証拠](../ws074/phase104/verification.md)。
+
+## 2026-10-01 q514
+
+[q514](queue-q514.md): p106 recleared、BUG-127 resolved。managed owner cellを独立traceしprimary解放後GCのASan UAFを修正。plain/ASanでretirement PASS、ownership27/27、realm30/30、object100/100、interp45/45、DOM23/23、iframe17/17。Acid2 exact、Acid3全10042/100・Uncaught0・後退0、増分44/78は保持していたq513 iframe実装による。p104の残りのGC/error/teardown/全文規約確認へ戻る。全文手動/style/diff PASS、formatter不在、guest/OS/boot/GPU未実施。GitHub未公開・pushなし。[証拠](../ws074/phase106/revalidation-q514.md)。
+
+## 2026-09-30 q513
+
+[q513](queue-q513.md): p104 uncleared。初期iframe実装はplain17/17を通過し保持。primary realmを解放した後のretained function traceでASan UAFを再現しBUG-127を登録、p106 clearanceをinvalidate。q512履歴を保持し、managed owner cellを生成時に保持する設計へ修正。次の有限Queueでp106を修正・再検証しp104へ戻る。最後のAcid測定はq51240/100・Uncaught0、q513未測定。全iframe/ASan acceptance未達、GitHub未公開・pushなし。[証拠](../ws074/phase104/retirement-investigation.md)。
+
+## 2026-09-30 q512
+
+[q512](queue-q512.md): p106 cleared。子realmをGC cellにし、関数/global/Document/generator・Window host・observerの所有権と回収を実装。取り外しでtaskを停止、親callback内でconnectionを失ってGCしても保持。plain/ASan27/27、realm30/30、object100/100、interp45/45、DOM23/23。Acid2 exact、Acid3全100結果不変40/100・Uncaught0。全文手動規約/style/diff PASS、formatter不在。async fetch hostは拒否、実際のiframe APIはp104へ。OS/guest/boot/GPU未実施、GitHub未公開・pushなし。[証拠](../ws074/phase106/verification.md)。
+
+## 2026-09-30 q511
+
+[q511](queue-q511.md): p105 cleared、BUG-126 resolved。callee realm・例外identity・nativeのcallee/new.targetを修正。plain/ASanで8/8＋30/30、object100/100、interp45/45、DOM23/23。Acid2 exact100%、Acid3 40/100・Uncaught0、全100結果はp103と一致。全文手動規約照合/style/diff PASS、自動formatter不在。次はp106のGC所有権を自走で設計・実装し、p104へ戻る。OS/guest/boot/GPUは未実施、GitHub未公開・pushなし。[証拠](../ws074/phase105/verification.md)。
+
+## 2026-09-30 q510
+
+[q510](queue-q510.md): WS074 p104 **uncleared**。初期 iframe の前提調査で realm 間の関数・例外の未対応を plain/ASan とも8件中5 failで再現（既存host-object 100/100、sanitizer報告なし）。Chromiumの17件は参照としてPASS、zedBSDのiframeは未実装。[証拠](../ws074/phase104/investigation.md)と[BUG-126](../bugs/BUG-126.md)を保存。未知の前提はQueue内で拡張せず、p105（呼び出し・例外、planned）→p106（GC所有権、planning）→p104（uncleared）に計画を修正。q511はp105だけのproposal、未承認。production変更なし、Acid/OS/guest/bootは未再実行、最終Acid3測定はp103の40/100・Uncaught 0。新しい調査Cの全文手動照合・style/Python/diff checks PASS、自動formatter不在。GitHub未公開、pushなし。
+
+## 2026-09-30 q509
+
+[q509](queue-q509.md): WS074 p103 cleared。parser-time document.write/writelnを実装し、部分token・UTF-16・改行・nested script順・入力位置・GC lifetimeを検証。fatal scriptのENOMEMもparserへ伝える。Chromiumの20 checksを含むDOM 23/23、write lifecycle 3 cases、fatal callback 2 cases、settle/diagnostic 22 checksをplain/ASanでPASS。Acid2 byte-identical 100%、Acid3 32→40/100、Uncaught 1→0、診断100件・後退0。pixel agreement 38.59%は独立診断。次はp104 initial HTML iframe contexts（planning、q510 proposed）。late replacement/open/close、URL child loading、全Acid3・CSS2は後続。formatter不在で自動整形は未実施、全文手動照合・style checkはPASS。GitHubへは未公開。
+
+## 2026-09-30 q508
+
+[q508](queue-q508.md): WS074 p102 cleared。headlessの100回での無言の打ち切りを修正し、有界な続行と上限超過のエラー、--settle-msを追加。Acid3は全100件を実行し32 pass / 68 fail、既存Uncaught 1。Acid2 byte-identical 100%をplain/ASanで維持し、14 runtime + 8 diagnostic checksが両方PASS。全件の[indexed evidence](../ws074/phase102/inventory.json)を保存。次はp103 document.write（q509 proposed、未承認）。p100完全合格・p101全CSS2は未達。formatter不在のため自動整形は未実施、style checkと全文の手動照合はPASS。GitHubへは未公開。
+
+## 2026-09-30 q507
+
+[q507](queue-q507.md): WS074 p099 cleared。固定 WPT の Acid2 を 90.56% から byte-identical な 100.00% へ改善。一般化した CSS・layout・object image/Adam7・paint order・border・compositing の修正を plain/ASan と focused regression で確認。Acid3 は p100 に残し、GitHub へは未公開。
+
+## 最新: 2026-09-29〜30 の周期（subagent N=6〜9、worktree の branch を main が merge、Queue の外）
+
+- **実機（Dell Latitude 5330、内蔵 LCD）**: firmware の画面の takeover の不具合（DPLL の読み出し）を直し、Keiland が起動（WS084）。1 fps → RPS（busy の時間の評価）で
+  約 55 flip/s（ws075-p020）、FIFO の先行で 58/s（p019）、compiler の guard（分岐の中の texture の send を IF で飛ぶ）で 10 app の latency 132 → 32 ms（p021）。
+  すりガラスは遅さの主因でないと計測（p023）、ユーザーの決定で分岐の中の ALU を飛ぶ実装へ。実機の image `build/demo-lcd8`（ロゴ無効）。
+- **新しい app と部品**: Image Viewer（WS091、完了）、Text Editor と共有の file chooser（WS092、完了）、Files からの起動と Always Open With（WS093、完了）、
+  Settings 23 頁・検索・生成の壁紙 5 枚（WS089、ブラッシュアップは後回し）、部品の library `libkeiui`（WS090 p001〜p003、文字の編集の touch は 1 本指で選択・2 本指で scroll）、
+  デスクトップの icon（WS094 p001〜p003、Files `--desktop`）、IME（WS095 p001〜p004、Alt+Space で日本語、kanji → 漢字）。
+- **Keiland**: 起動の短縮（p129〜p133）、BUG-112（xdg_wm_base）、Terminal の本体だけ直角（p134・p136）、Notes の全画面を解く配置（BUG-114）。
+- **ブラウザ**（WS074）: JS に class・async・Promise・generator・Symbol・for-of・Map・Set（test262 21806 → 28381）、DOM に innerHTML・getComputedStyle・scroll・DOMException。
+  Amazon の Uncaught は search 0・top 3（DOM の fetch・IntersectionObserver）。画素の差の原因（動的な script・百分率の高さ）を特定し p088〜p093 に計画。
+- **bug**: BUG-030（usb-storage の flush の待ちで 5 秒の時間切れ → command ごとの timeout、TCG 75 回で 0）、BUG-051・102・104〜111、BUG-105（Logi Bolt の HID、host で確認）。
+  新規 BUG-113（試験の誤り、resolved）・BUG-115・BUG-116。
+- **基盤**: venus-win32 の取り込み、Kei-nightly.zip の CI、ls（GNU 形式）・sh（履歴・補完・`~`）の WS086・WS087（完了）。
+- **ユーザーの判断**: master の「有効なユーザーの判断」に要約。IME とブラウザは一時的に人間が作業中。
+- **未実施**: 実機での確認の大半（demo-lcd8 でユーザーが確認）。QEMU の証拠と実機の証拠は各 phase.md で分けている。
+
+## 最新: 2026-09-30 q506
+
+[q506](queue-q506.md): 9公開siteを固定Chrome User-Agentと現実的な2 viewportで画像・box・DOM比較し、Mediumのchallengeを記録。intrinsic auto margin、HTML presentational hint、table rowspan、非同期`postMessage`を修正した。WPT CSS2 reftestは44/100、Acid2は90.56%、Acid3は9/100。GitHubのES module実行はp098候補。GitHubへは未公開。
+
+## 2026-09-30 q505
+
+[q505](queue-q505.md): Mozilla日本語topと直接linkされた3 pageを固定Chrome User-Agentでcaptureし、Chromiumと比較。custom-propertyの`@supports`とbutton内の空白を修正し、topは70.71%/ink 62.52%から78.23%/ink 69.54%へ改善。GitHubへは未公開。
+
+## 2026-09-30 q504
+
+[q504](queue-q504.md): flex itemのcross axisで`box-sizing:border-box`を保ち、Amazon検索欄の高さを55pxから38pxへ修正。form controlの`text-indent`も実装し、検索文字の範囲はChromiumと同じ`x=435..574, y=22..36`。GitHubへは未公開。
+
+## 2026-09-30 q503
+
+[q503](queue-q503.md): Amazonの後続script向けWeb API、非同期fetch、MutationObserver、有界なsettleを実装。sign-in tooltipの幅とstacking orderも修正し、dynamic topは71.81%/ink 64.58%、約32秒・Uncaught 4。GitHubへは未公開。
+
+## 2026-09-30 q502
+
+[q502](queue-q502.md): DOMへ挿入された外部scriptを非同期取得して一度だけ実行し、load/errorを送る。Chromium fixture、DOM 20/20、ASan。dynamic topはAUI後続scriptへ進み、次のWeb API不足をp092へ分けた。GitHubへは未公開。
+
+## 2026-09-30 q501
+
+[q501](queue-q501.md): percentage heightを確定したcontaining blockで解決し、flex/gridへ高さを伝播、gridの`1fr`行を配分。topは84.06%/ink 80.56%、searchは76.32%/ink 34.48%へ改善。GitHubへは未公開。
+
+## 2026-09-30 q500
+
+[q500](queue-q500.md): Amazonの固定captureをbrowserとChromiumで同条件に描き、入力・実行環境・画像のhashと画素・ink指標をJSONへ残す手順を確立。top 82.96%/ink 79.01%、search 75.85%/ink 32.97%。GitHubへは未公開。
+
+## 2026-09-29〜30 q499
+
+[q499](queue-q499.md): Windows版QEMU/virglrendererのVenus表示とFiles起動停止、Noctの旧path混入を修正。表示と通常makeを確認。vendorのcommit/pushはユーザーreview待ち。GitHubへは未公開。
+
+## 最新: 2026-09-29 q498
+
+[q498](queue-q498.md): `toolchain` の Noct smoke 依存を削除。`make toolchain-cache` は既存のホスト用 LLVM を受け入れた。ゲスト用 clang のソースビルドを終え、`make -j16` と通常の `make` が image の検査まで PASS。QEMU・実機は未実施。GitHub へは未公開。
+
+## 最新: 2026-09-29 q497
+
+[q497](queue-q497.md): q496 の修正後、すでに `.nbc` に直した Remacs source への patch 再適用が失敗。patch rule を適用済みなら通すよう修正し、未適用の source と既適用の source の両方で確認。全体の `make` は未実施。GitHub へは未公開。
+
+## 最新: 2026-09-29 q496
+
+[q496](queue-q496.md): Remacs 用の host Noct の build を canonical host Noct に統合し、取得する Remacs source の `.nb` を現行 Noct の `.nbc` に合わせる patch を適用。Noct smoke と Remacs package target は PASS。全体の `make` は clang package の build の途中で中断し、image と boot は未確認。GitHub へは未公開。
+
+## 最新: 2026-09-28 の 3 つの 5 時間の周期（subagent の運用、Queue の外）
+
+- **Kei Operating System への改名**（WS078）: `userland/desktop/`（`/bin/wayland`・`/bin/terminal`・`/bin/files`・`/bin/browser`・`/bin/xserver`・`/sbin/sessiond`・`libkeiland`）、
+  `keiland_*` の protocol、`KERN_` の識別子、画面の Kei、Desktop の menu の分類（BUG-080）、X11 と zedinst を `userland/retro/` へ。
+- **Keiland**（WS035 p101〜p113）: 表示の引き継ぎ・lock・PRIMARY・network の menu と group・configure_bounds・衝突の dialog と Trash・Kei の起動画面（GOP 1920x1080）と spinner・greeter/lock/壁紙/files の Kei の見た目・terminal の選択・sessiond の GPU の待ち。
+- **手書きの Notes と PDF Viewer**（WS079）: USB の pen（筆圧 4096・傾き・消しゴム）と multitouch の kernel、注入の device、`zwp_tablet_manager_v2`・`wl_touch`、
+  右上のスワイプ・三回 click・二本指の flick、libpdf（writer・reader・描画・増分の更新・文字と shading の途中）、Notes（保存・自動保存・journal・他の PDF への書き込み）、PDF Viewer。
+- **ブラウザ**（WS074 p016〜p058）: HTTP・HTTPS・画像・背景画像・非同期の読み込み・keep-alive・cache・DOM の入力・部品 `libbrowser.so`。
+- **i915 と HDMI**（WS075）: stencil・multisample・後退の修正、`display=hdmi`（10 インチの LCD 1920x1280）、demo の image、BUG-091（spin lock）・BUG-092 の修正。
+- **bug**（WS073 ほか）: BUG-075・079〜084・086〜092 を解決、BUG-093・094 を起票。
+- 実機の USB の demo の image: `build/demo-hdmi/hdd-image.img`（main ca74780e、QEMU の boot test PASS、実機はユーザーが試験）。
+- 最後の検証: main 909fb907 の desktop の image の build と boot test PASS（batch111）。
+
+## q443〜q495（2026-09-26〜27）
+
+サブエージェントの運用の再開（2026-09-27 11:52、rate limit の解除の後）: 作業用 N=3（WS071・WS073・WS035）と今回限りの salvage の片付け（WS001・WS056・WS049・WS048・WS068）。[q495](queue-q495.md): ws068-p024 cleared（VAO・buffer の map と copy・instancing・uniform buffer ほか、Venus で egl-p024 PASS）。
+
+[サブエージェントの作業の保全（2026-09-27）](salvage-2026-09-27.md): 8 つのサブエージェントが rate limit で止まった。未 commit の作業を `salvage/<ws>` の 7 branch に保全（未検証、そのまま merge しない）。
+
+2 回目の一括の merge（2026-09-27、サブエージェント）: WS036 p028（Noct の aarch64）・p029（package は LLVM の source を書き換えない）、WS065 completed、WS071 p002（`/bin/zdesktop-files` の骨格）、WS060・WS063 completed、WS064 completed、WS062 completed、WS070 p005（i915 実機の menu）。main の検証で libcxx の source の race（一時の対処の後に p029 で正式に）と stale な Noct の CMake の dir を片付けた。BUG-059〜064 を登録。
+
+WS071 p001 と WS036（p026）・WS044（p002）の merge（2026-09-27、Queue の外、サブエージェント）: File Manager の設計（`zdesktop-files`）。LLVM の AArch64 zedbsd target（patch zedbsd7）、sysroot-arm64、rpi4 の FAT32 の boot partition、rtld の PF_X の重複の修正。main の toolchain を zedbsd7 に切り替えた。
+
+WS049 の merge（2026-09-27、Queue の外、サブエージェント）: kernel の ACPI AML interpreter（host の試験で acpiexec と一致、fuzzing、SCI・GPE・EC の host の模擬、`/dev/acpi`、Global Lock、ECDT）。kernel への統合は HAL の差分の承認待ち。
+
+[q494](queue-q494.md): ws068-p023 cleared。cube map（6 layer の image、cube の束縛と sampler、FBO の面への描画、面ごとの読み戻し、mipmap）。Venus の egl-p023 と回帰 PASS。
+
+[q493](queue-q493.md): ws068-p022 cleared。libGLESv2 の framebuffer object と renderbuffer（texture の level 0 への描画、depth renderbuffer、FBO の readback、GPU の描いた texture の読み戻し）。FBO は GL の行の向きで描く（y を裏返さない vertex module、front face を逆）。Venus の egl-p022 と回帰 PASS。
+
+WS045 の merge（2026-09-27、Queue の外、サブエージェント）: sed・awk・grep ほかの GNU 拡張（p001〜p009）。判断待ち 3 点は ws045/ws.md。
+
+WS068 の GLSL の merge（2026-09-27、Queue の外、サブエージェント）: 自前の GLSL compiler（`userland/base/libglesv2/glsl/`、GLSL ES 1.00・1.10〜1.50・3.30・ES 3.00、SPIR-V は i915 が受ける形）と libGLESv2 の接続、uniform block。main で glsl-host PASS、Venus の x11-p004・p005・egl-p008・p019・p020・zdesktop-p070 PASS。実機は未実施。
+
+[q492](queue-q492.md): ws069-p006 cleared、**WS069 completed**（zdesktop で X11 の app: 単体の rootless の zdesktop-x11server、窓は Vulkan、GLX と固定機能の GL 1.x、BUG-057 の修正）。規約の全文との照合で条件の分割・`--shm`・成功の return を直した。Venus と実機（2 run とも 6 検査）で確認。試験は plan/tools/x11/ へ。
+
+WS048 の merge（2026-09-27、Queue の外、サブエージェント）: Pi 4 の FDT、brcmstb の PCIe、firmware の mailbox と VL805 の firmware、非 coherent の DMA（dma.c）。p004 は hal.h の差分の承認待ち。main で amd64 の image と rpi4 の vmunix の build（warning 0）、boot test（amd64 と QEMU raspi4b）PASS。実機は未実施。
+
+WS070 の merge（2026-09-27、Queue の外、ユーザーの例外の許可でサブエージェントが実行）: System Menu の p001〜p004（protocol、zdesktop の描画と操作、libzdesktop、zdesktop-terminal の menu）。main の Venus で x11-p003〜p005・zdesktop-p068（題名の double click を x+80 に直した）・p070・menu-p003 PASS。p005（実機・規約）は残り。
+
+[q491](queue-q491.md): ws069-p011 cleared。zdesktop-x11server の窓を top-level ごとの Vulkan の swapchain（MAILBOX）で表示し、wl_shm は fallback（`X11SERVER_SHM=1`）。libvulkan の present の worker と同じ接続を読むため、server の Wayland の dispatch を非 blocking に直した。Venus の x11-p003〜p005・zdesktop-p070、実機の run1 が PASS。Venus では Vulkan の道が約 3 倍遅い（F-021）。
+
+[q490](queue-q490.md): ws069-p009 cleared。Xzed を ws069 の前（cc4433d4）へ戻し、amd64 の Wayland 版の build 規則と rootful の試験を消した。std VGA の QEMU で Xzed と zterm。
+
+[q489](queue-q489.md): ws069-p010 cleared。BUG-057 の原因は kernel: `waitq_sleep` の「眠る前の wakeup」の EAGAIN を unix socket の送りの待ちが失敗として返し、blocking の send が失敗して libX11 が要求を打ち切っていた。2 つの待ちを直し、Venus の x11-p005 と実機の zgears 5000 frame で確認。ws069-p008 も追記で clear。
+
+[q488](queue-q488.md): ws069-p008 uncleared。単体の rootless の X server `zdesktop-x11server`（組み込める形、出力の queue、絶対座標の一貫）が Venus と i915 実機で動く。x11-p005 の frame 数だけ BUG-057 で未達。BUG-057 は Venus でも再現し、kernel の unix socket で大きな send の送り手が起きない所まで特定。
+
+[q487](queue-q487.md): ws035-p074 cleared。`Xzed.h` と `zed-gpu-buffer-v1-client-protocol.h` を非公開に（libX11・libwayland の下へ）、libzdesktop の役割を 2 つに。p073 の build の変数の衝突を修正。
+
+[q486](queue-q486.md): ws035-p073 cleared。`userland/base/zwl` を `userland/base/zdesktop`（`/bin/zdesktop`）へ改名（C の識別子と log の `ZWL` は据え置き）。
+
+[q485](queue-q485.md): ws069-p007 uncleared・canceled。BUG-057 は zgears が libGL の中の XGetGeometry の返事を待って止まる所まで特定。libX11 の `XPending` の断片の読み捨てを修正。2026-09-27 ユーザーの判断で X server を単体の zdesktop-x11server に作り直し、Xzed は元に戻す（master の 2026-09-27 の判断）。
+
+[q484](queue-q484.md): ws068-p006 cleared。i915 実機で GLX の zgears（固定機能の GL）が正しく描き約 27 fps、App Home の X terminal、仮想デスクトップ（6 検査 PASS の run あり）。実行器に `vkResetDescriptorPool` と線幅・depth bias・stencil の命令、固定機能の shader を i915 の compiler の制約に、libEGL は pbuffer を最初の pass で clear。zgears の間欠の止まりは BUG-057、zwl の終わり方は BUG-056 に追記。
+
+[q483](queue-q483.md): ws035-p072 cleared。窓の最小化（Wiseview の薄いタイルから戻す）、Wiseview のタイルをバーの絵へ drag・Ctrl+Alt+Shift+←/→ でデスクトップ間の移動。
+
+[q482](queue-q482.md): ws035-p064 cleared。docked の題名を引くと窓が指に追従して縮み、140 px の手前で離すと戻り、越えると元の大きさで外れる。
+
+[q481](queue-q481.md): ws035-p065 cleared。仮想デスクトップ 4 つ（窓はデスクトップごと、バーの絵・Ctrl+Alt+←/→・左右の端の swipe で横に移動）。
+
+[q480](queue-q480.md): ws035-p071 cleared。App Home のページング（drag・ホイール・キー・ドット）、起動した icon から窓が育つ、左上への drag で閉じる、Tab。
+
+[q479](queue-q479.md): ws035-p070 cleared。App Home に X terminal と Gears、`/usr/libexec/zdesktop-x11` が Xzed --rootless を必要なときに 1 つ起動。demo image にも。
+
+[q478](queue-q478.md): ws069-p005 cleared。固定機能の GL 1.x（行列・光源・material・glBegin/glEnd・client 配列・display list、flat の provoking vertex）を libGL の中に。zgears の歯車が Venus の rootless の X の窓で回る（約 4.7 fps）。
+
+[q477](queue-q477.md): ws069-p004 cleared。GLX の核（Xzed の QueryExtension と GLX の問い合わせ、libGL.so = GLES の変換層＋GLX＋libX11、pbuffer に描いて XzedPutImageRGB24）。Venus の zwl＋Xzed rootless で glxtest の窓が GL で描かれ、docked でも追従。
+
+[q476](queue-q476.md): ws068-p010 cleared。EGL の pbuffer（offscreen の color と depth、frame をまたいで中身を保つ、swap で submit と解放）。Venus で 600 frame と 2048x1536 の readback が一致。pbuffer でも 1 frame 約 95 ms（F-021 に追記）。
+
+[q475](queue-q475.md): ws068-p008 cleared。GLES 2.0 の描画の核（SPIR-V の shader binary、gl_Position の書き換え、buffer・texture・blend・depth・stencil・cull・glReadPixels、strip と fan の展開、dynamic uniform）。Venus の display 直接・zwl の窓・docked で画面と glReadPixels が一致。frame を重ねるのは p009。
+
+[q474](queue-q474.md): ws069-p003 cleared。Xzed の rootless（X の top-level ごとに zwl の窓、top-level ごとの合成、enter で raise と focus、configure で resize、close で client を切る）。libX11 は閉じた接続で exit。Venus で X の zterm が Wiseman の窓になり、ドッキングで resize、× で終了。
+
+[q473](queue-q473.md): ws069-p002 cleared。Xzed の Wayland backend（rootful: X の screen を zwl の 1 つの窓に、wl_shm、pointer・keyboard、libtruetype の glyph）。Venus の zwl で X の zterm に打った command の出力が見える。
+
+[q472](queue-q472.md): ws069-p001 cleared。zwl で X11 の app を動かす設計（新 WS069）: 既存の Xzed に Wayland backend（rootful → rootless）、GLX は EGL/GLES の上で DRI3/Present に当たる buffer の受け渡し。
+
+[q471](queue-q471.md): ws068-p002 cleared。EGL 1.5 の核（Wayland・display 直接・surfaceless、config、window surface と swapchain、context、swap）、libwayland-egl、clear だけの libGLESv2、Khronos の header と出典、egltest。Venus で zwl の窓と全画面の clear。
+
+[q470](queue-q470.md): ws068-p001 cleared。EGL/GLES の設計（plan/ws068/design.md）: library の構成、EGL（Wayland・display 直接）、GLES の方式の比較と推奨（B: 自前の変換層＋glslang）。方式の選択はユーザーの判断待ち（p003 の前提）。
+
+[q469](queue-q469.md): ws035-p069 cleared。App Home の PoC（desktop の層が右下へずれて明るい Home が現れる、launcher と左上の角からの drag、6 列の icon、打つと検索、起動、Esc と角で閉じる）。Venus と i915 実機で terminal と mview を起動。実機用の demo image の build script。
+
+[q468](queue-q468.md): ws035-p068 cleared。zdesktop-terminal（zterm の VT100 を移し拡張、libtruetype の等幅 font の atlas、Vulkan の cell 描画、US 配列、key repeat、forkpty、resize）。Venus と i915 実機で shell が動く。Venus の image に git 外の font と壁紙を入れる build script。i915 の 1 回の画面停止は BUG-056（tracking）。
+
+[q467](queue-q467.md): ws031-p050 cleared。i915 の実行器の session の close で、application が破棄しなかった Vulkan の object（command pool と buffer、descriptor pool と set、pipeline と kernel、fence、allocation、その他）を解放。descriptor pool の破棄でその set も解放。host の fixture に残したまま close する試験。実機の zdesktop の scenario に描画中に殺す Vulkan の窓と、mview を × で閉じる段を足し、mview は `reason=closed` で終わり zwl は合成を続けた。
+
+[q466](queue-q466.md): ws035-p067 cleared。5330 の i915（VFIO）で zdesktop に mview（Vulkan の client）の窓を合成し、ドッキング（1920x1042 で描き直し）と Wiseview を capture で確認。i915 の実行器の object 表と blob の対応を session ごとの key に（wire の id が process の間で衝突していた）、allocation の import、libvulkan は allocation の共有の無い node で画像の import へ。F-022 を promoted。
+
+[q465](queue-q465.md): ws035-p066 cleared。5330（10.0.30.3）の i915 を VFIO で渡した実機の GPU で Wiseman Mode（壁紙・すりガラス・文字・浮いたタイトルバー・ドッキング・Wiseview）を capture で確認（wl_shm の窓）。zwl の shader を native compiler に合わせ、fence の fd 無し・descriptor set の再利用・triangle list、libvulkan は画像共有だけの node で外部 memory、i915 の GGTT の窓を 64 MiB・1 GiB に。GPU の client の窓は F-022。
+
+[q464](queue-q464.md): ws035-p063 cleared。Wiseview（ユーザーの設計 [wiseman-design.md](../ws035/wiseman-design.md)、Wiseman = WM、全画面 = ゲームモード、窓 = Wiseman Mode）: 下端からの drag で開き、窓がタイルのグリッドへ、選択・閉じる・背景で閉じる。
+
+[q463](queue-q463.md): ws035-p062 cleared。最大化 = タイトルバーのシステムバーへのドッキング（ダブルクリック・上への drag・button）、解除（バーの題名のダブルクリック・⧉・下への pull で引きずり出す）、220 ms の遷移、仮想デスクトップのハリボテ。shell.c を glass.c から分けた。
+
+[q462](queue-q462.md): ws035-p061 cleared。ユーザーの絵を抽象化した壁紙（`--wallpaper`、PPM、git 外）と、すりガラスで透ける窓（`--window-opacity`）。10 %・60 % の画面。
+
+[q461](queue-q461.md): ws035-p060 cleared。mview に `--windowed`・`--size`。`zwl --glass` の窓で 3D model を Vulkan で描き、drag で回転、最大化で描き直し。spin は窓 8.80 fps・全画面 8.59 fps（Lavapipe 律速）。
+
+[q460](queue-q460.md): ws035-p059 cleared。`zwl --glass`: 本体から離れて浮いたすりガラスのタイトルバー（題名・3 つの button、drag・最大化・閉じる・hover）、角丸と影、上部のバー（ハリボテ）、CPU で描く壁紙と縮小ぼかし（壁紙だけを透かす）、Inter（Google Fonts、git 外）を libtruetype で atlas に。p052〜p054 の回帰 PASS。
+
+[q459](queue-q459.md): ws035-p054 uncleared。`zed_gpu_buffer_v1` version 2 の `set_acquire_fence`（1 commit に 4 つまで）、zwl は fence を poll して終わった commit だけを採る、WSI は fence を付けて先に commit。QEMU で保留の間も他の窓と合成が進み、hold 6000 ms に対し 5991〜6034 ms 待った。`vkQueuePresentKHR` は変更前と同じ 31〜35 ms（元から完了を待たない）で、受け入れ 3 はユーザーの判断で読み替えて cleared（2026-09-26）。libc の `setvbuf(…, NULL, _IOLBF, 0)` を直した（BUG-055）。
+
+[q443](queue-q443.md): ws063-p001 cleared。journal の大きさを mkfs で記録し、mount で `.ufs-journal`（extent）を再利用・再確保・作成する。
+[q444](queue-q444.md): ws061-p008 cleared。libc の同期の system call を減らし、make（直列）12.8〜13.1 秒（host `-j1` 15.2 秒）。
+[q445](queue-q445.md): ws061-p009 uncleared（着手の前に中断: ユーザーの優先の変更）。
+[q446](queue-q446.md): ws061-p010 cleared。system call の入口を `syscall`/`sysret` に（入口の費用 4.65 → 1.54%）、libc の lock の adaptive spin。
+[q447](queue-q447.md): ws061-p009 cleared。loader の symbol の探索（hash を 1 度に、予約の名前、再配置の segment の検査）、`cc`・`ld` を link に、`spin_trylock` の TTAS。`cc t.c -o t` 75〜85 ms（host 83〜85 ms）、configure 9.1〜9.4 秒（host 10.7 秒）。
+[q448](queue-q448.md): ws064-p001 cleared。base の make の `-j`（歩きの更新、job の表、GNU 互換の jobserver、`.WAIT`・`.NOTPARALLEL`）。差分試験 100/100、guest の expat `make -j4` 7.3〜7.8 秒（host 5.06 秒）。
+[q449](queue-q449.md): ws064-p002 cleared。kernel の mutex の速い道、`vfork`（system call と libc）と vfork の posix_spawn、make・sh の posix_spawn、fork・destroy の VM の大域の lock の保持の短縮、逆写像の O(1)。`make -j4` 4.94〜5.00 秒（host 5.14〜5.18 秒）、configure 8.2〜8.9 秒、直列 11.3 秒。
+[q450](queue-q450.md): ws064-p004 cleared。sh の pipeline・command substitution・`unset` の subshell を fork せずに（posix_spawn、shell の中の `echo`・`printf`）。fork: make 1417 → 214、configure 966 → 423。configure 7.1 秒、直列 10.7 秒、`make -j4` 4.2〜4.4 秒。
+[q451](queue-q451.md): ws065-p001 cleared。sh に POSIX が未規定とする bash の構文（`$'...'`、`[[ ]]`、`function`、`(( ))`、`for (( ))`、`\|&`、`<<<`、`>& file`、`<( )`）。BUG-054 を記録。
+[q452](queue-q452.md): ws065-p002 cleared。sh に bash の展開（`${v:o:l}`、`${v/p/r}` の類、`${v^^}`・`${v,,}` の類、`${!v}`）。bash の参照 21/21、dash との差は dash に無い `${x//}` の 1 件だけ増えた。
+[q453](queue-q453.md): ws065-p003 cleared。sh に bash の builtin（`source`、`let`、`test ==`、`declare`・`typeset`、`printf -v`・`%q`、`builtin`、`pushd`・`popd`・`dirs`）。静的 link の効果を測り F-020 に記録（expat で 0〜3%）。
+[q454](queue-q454.md): ws067-p001 cleared。`/dev/fd` を呼んだ process の descriptor に（一覧・lookup・stat）、diff が pipe を中身で比べる。BUG-054 resolved（QEMU）。
+[q455](queue-q455.md): ws067-p002 cleared（規約）。WS067 completed。
+[q456](queue-q456.md): ws062-p003 cleared。amd64 の既定の image を native（ESP・UFS root・swap partition、各 1 GiB の 2 GiB）に、CI は gzip で公開。CI の失敗（toolchain の smoke の消失）と clang の libc.so の依存の退行を直した。
+[q457](queue-q457.md): ws035-p052 cleared。zdesktop（zwl）の 2 つのモード: Vulkan の合成（ウィンドウモード）と全画面の直接 scanout、切替。libvulkan の OPAQUE_FD の import を画像の fd に対応。
+[q458](queue-q458.md): ws035-p053 cleared。`wl_shm`（libwayland の client にも追加）、cursor（矢印・client・非表示）、frame の予定。
+
+## 前: q439〜q442（2026-09-26）
+
+[q439](queue-q439.md): ws061-p006 cleared。UFS を write cached の既定に、`mount -o writethru` で write-through（2026-09-26 ユーザー指示）。configure（`/root`）17〜20 → 12.3 秒。journal の無い volume は電源断で漏れが残ると確かめた。
+[q440](queue-q440.md): ws060-p002 cleared。batch の redo journal（v3）の設計（2026-09-26 ユーザー指示「journal を既定に、無い image は mount の時に作る、`nojournal`」の前提）。
+[q441](queue-q441.md): ws060-p003 cleared。v3 の実装（pin した metadata、1 秒ごとの commit、2 slot の交互、`/.zedjournal`、superblock の locator、replay）、journal の既定化と `nojournal`。200 の作成 20.6 → 0.36 秒、強制終了の試験 4 時点と root で UFS OK、configure 13.0 秒。規約の指摘約 100 件は WS063-p002。
+[q442](queue-q442.md): ws061-p007 cleared。readdir の読み（1 項目ごとに 8 KiB を 2 回 → sector だけ 1 回）と fault の待ちの全 page の走査を直し、configure（`/root`、journal）11.5 秒、host 10.9〜11.2 秒。
+
+## 前: q438（2026-09-25）
+
+[q438](queue-q438.md): ws061-p005 cleared。process の生成と終了の固定費用。新しい thread を作った CPU に置き idle の CPU が盗む、解放した page の LIFO の stack、HAL の `rep stos`/`movs`、`mutex_owned`・`space_op_enter` の lock の除去、destroy の unmap の省略に加え、thread の移動で表に出た race（current task の 2 段の読み、shootdown の送り手、preempt count・exit・switch の CPU の読み、移動の完了と wakeup）と、全 poll を起こす descriptor の通知、reaper と親の VM の mutex の奪い合い、readahead の全 worker の起床、生まれたばかりの子の盗みを直した。page の stack が逼迫時に DMA の確保を失敗させる退行も直した。`true` 3.4 → 1.1 ms、configure（`/root`）35 → 17〜20 秒（host 11.2 秒）、tmpfs 13 秒、make（直列）20〜25 秒（host `-j1` 15.2 秒）。並列の make（F-016）と UFS の delayed write（F-015）はユーザーの判断。amd64 の `defs.h` の未使用の `CLOCK_HZ 100` を削除（tick は 1000 Hz）。QEMU だけ。
+
+## 前: q437（2026-09-25）
+
+[q437](queue-q437.md): ws062-p002 cleared。NVMe の起動の harness、4 GiB の root・swap の image、BUG-053（RAM を超える anonymous memory）の修正（450・900 MiB）、`kern_free` の O(1)。configure（`/root`）の tmpfs との差は UFS の write-through と flush（F-015）。
+
+## 前: q436（2026-09-25）
+
+[q436](queue-q436.md): ws062-p001 cleared。amd64 の native の layout（GPT: ESP に `BOOTX64.EFI`・`vmunix`・`zedbsd.cfg`、UFS の root partition、swap partition、`PARTLABEL=` で指す）を `zedimage-host` と `ZEDBSD_VARIANT=native` で作れるようにし、検査器を足した。QEMU で起動し、root は `/dev/sda2` の UFS（rw）、swap は partition、SSH の harness が通る。kernel と loader は変えていない。
+
+## 前: q435（2026-09-25）
+
+[q435](queue-q435.md): ws061-p003 uncleared。fault-around（object が既に持つ隣の page を 16 page の窓で map）と、amd64 の TLB の invalidation の縮小（map の後の shootdown を削除、小さい範囲は `invlpg`）。file fault 3.2 → 1.4 µs、`clang --version` の fault 5862 → 1891（目標 1/8 は未達）、`cc t.c -o t` 0.21〜0.24 秒、configure 31 秒（tmpfs）・55 秒（overlay）。configure の時間は子の system 23 秒が主（fault は 1〜2 秒）。BUG-051（sshd の子の SIGSEGV 1 回、未再現）、BUG-052（tmpfs 32 MiB）を記録。ユーザー指示で disk の layout を ESP の vmunix・UFS の root partition・swap partition にする WS062 を立てた。回帰 make 91/91・sh 1388/1425・COW・SMP。
+
+## 前: q434（2026-09-25）
+
+[q434](queue-q434.md): ws046-p014 uncleared（kernel の変更は完了）。private の file の mapping（ld.so が map する libLLVM・libclang-cpp の text など）で page cache の page を read-only で map し、書き込みで COW（p011 の差分の当て直し。p011 の失敗の原因の object の寿命は p012 で直っていた）。`mprotect` で書き込み可能にしたとき commit を取らない穴を直した。file fault 8.4 → 3.2 µs、`ffault` 10 → 3 µs/page、`cc t.c -o t` 0.35 → 0.25 秒、configure（tmpfs）35 → 30〜33 秒。expat の make status 0（8 GiB・512 MiB）、runtests 4932/4932。`make check` は base に bash が無く status 2（判断待ち）。回帰 boot・make 91/91（8 GiB・512 MiB）・sh 1388/1425・COW・SMP、3 platform の build。
+
+## 前: q433（2026-09-25）
+
+[q433](queue-q433.md): ws061-p002 uncleared（anon fault の目標は達成、file の fault 8.4 µs と `true` 4〜5 ms は目標に届かず、残りは p003・ws046-p014）。VM object の registry の inode hash（全 object の線形探索が configure の kernel 標本の首位だった）、VM metadata の slab の O(1) の解放、kcrt の word 単位の複写、amd64 HAL の page table の entry 数と direct map の変換の短縮、itimer の tick の 1 回走査。configure 87 → 59〜64 秒（overlay）、59 → 35〜38 秒（tmpfs）、`clang --version` 160 → 80〜100 ms。ユーザーが HAL の規則を「実装は承認不要、API だけ承認」に変えた。BUG-049 は計測の image の誤りで不具合ではない、BUG-050（strerror の穴）を記録。p004（overlay の同期書き）を立てた。回帰 boot・make 91/91・sh 1388/1425・SMP・COW・itimer。
+
+## 前: q432（2026-09-25）
+
+[q432](queue-q432.md): ws061-p001 cleared（fg011）。host の参照: expat の configure 11 秒、`cc t.c -o t` 83〜92 ms、link 48〜57 ms（guest は 91 秒・636 ms・361 ms、7〜8 倍）。guest の時間は page fault に律速（約 30 µs/fault: `clang --version` 5797 fault = 188 ms、`ld.lld` 4547、`true` 306 = 11 ms）。loader の仕事は libLLVM/libclang-cpp の RELATIVE 23 万・relocation の表 5.6 MB。configure 中の kernel 標本: fault 22%、exit の page table 解体 13%、USB の同期 flush 20%。次: p002（fault の固定費用と exit の解体）、p003（fault-around）、ws046-p014（直接 map）。
+
+## 前: q431（2026-09-25）
+
+[q431](queue-q431.md): ws060-p001（journal の commit の費用の実測と設計、BUG-040）を始めた直後にユーザーが再優先付け（「expat の configure と compile を Linux と同等の水準に」を直近の目標に。commit の裏打ちは物理 + swap で決定）したので撤回、uncleared。WS057 は完了。
+
+## 前: q430（2026-09-25）
+
+[q430](queue-q430.md): ws046-p012 cleared（BUG-033 の残り）。VM object cache の追い出しを LRU に、最後の unmap で mapping の object を cache に残す（次の process が同じ file を map すると page が残っている）、dirty も busy も無い object の最後の unmap で全 page の同期 walk を省く。`cc t.o -o t` 0.51〜0.68 → 0.36〜0.38 秒、`libLLVM.so` の file の fault 25 → 15.3 µs/page、configure 91 秒。`KERN_SYSTEM_DROP_CACHES` を `/dev/system` に追加。BUG-045（stress の baseline の間欠）の原因は非同期の後始末との競走と特定（probe: `waitpid` の直後 file +2・vmspace +1、1 秒で戻る）、試験を直して resolved。回帰 boot・sh 1389/1425（1 件改善）・make 91/91（8 GiB・512 MiB）・COW・SMP 6/6。p011 の当て直しは p014 へ。
+
+## 前: q429（2026-09-25）
+
+[q429](queue-q429.md): ws059-p001 cleared、WS059 完了。BUG-047: disk の無い mount（overlay の root・tmpfs・devfs）の `st_dev` が全て 0 だったのを、`mount_device_number()`（disk は disk の番号、bind は source、それ以外は `0x80000000 | (1 + slot)`）で直し、generic・tmpfs・devfs・overlay の getattr が使う。全 mount で `st_dev` が異なり、coreutils の `df` が全 mount を大きさ付きで出す。回帰 boot PASS・sh 1388/1425（同じ集合）・make 91/91・SMP 0。
+
+## 前: q428（2026-09-25）
+
+[q428](queue-q428.md): ws058-p002 cleared（design policy 10）。buffer cache 物理/16 → /8（hash 2^16）、page cache の target 物理/4 → /2、VM object cache 32 → 256、snapshot 192 → 1024、I/O pool 4 → 64 MiB、file 表 192 → 2048、inode cache 512/256 → 2048/512、overlay の inode の表 256 → 4096。最初の大きな値は 2 つの退行を起こし bisect で原因を特定: overlay の固定の表は VFS の inode cache 以上でなければならず、cache の VM object は自分の file handle を開くので file の表を消費する（F-013: 動的確保と hash）。回帰: boot PASS、8 GiB と 512 MiB で make 91/91、sh 1388/1425（同じ集合）、SMP 0。expat の configure 96 → 89 秒、`cc t.c -o t` 1.0 → 0.63 秒。WS058 完了。
+
+## 前: q427（2026-09-25）
+
+[q427](queue-q427.md): ws058-p001 cleared（design policy 10）。8 GiB の guest で実測: buffer cache は物理/16（512 MiB）、page cache の target は物理/4（2 GiB）で比例。固定で小さいのは VM object cache 32、system 全体の open file 表 192、inode cache 512、I/O pool 4 MiB、snapshot 192。p002 で buffer 物理/8、page cache 物理/2、object 1024、file 8192、inode 8192、I/O pool 64 MiB に。
+
+## 前: q426（2026-09-25）
+
+[q426](queue-q426.md): ws057-p002 cleared。BUG-048（`SYSCALL_PAGE_MASK` が 32 bit で mmap などの長さが 4 GiB で切り捨て）を kernel で直し（mask を `uintptr_t` に、vmspace の丸め 5 箇所も）、`MAP_NORESERVE` を定義して受け付けて無視（reserve は無制限、commit は厳密）。probe: 128 GiB の `PROT_NONE` の reserve が commit を増やさず成功、5 GiB の RW の mapping の offset 4 GiB + 4 KiB を触れる、9 GiB は ENOMEM、`mprotect` の長さ超過は失敗。回帰 boot PASS・sh 1388/1425（同じ集合）・make 91/91・SMP 0。残りは p003（commit の裏打ちを swap だけにするかの判断）。
+
+## 前: q425（2026-09-25）
+
+[q425](queue-q425.md): ws057-p001 cleared（design policy 10 の調査）。commit の会計は `vm_commit_reserve/release` にあり、`PROT_NONE` の mapping は課金せず（reserve）、accessible にした時・anonymous private・書ける file private・stack・brk・shared object・fork で課金し、上限超は ENOMEM（over commit しない）。上限は起動時の空き物理 + swap（「swap だけ」にするかはユーザーの判断待ち）。probe で **BUG-048** を発見: `SYSCALL_PAGE_MASK` が 32 bit で `mmap`・`munmap`・`mprotect` の長さが 4 GiB で切り捨てられ、9 GiB の mmap が 1 GiB になる。`MAP_NORESERVE` は未定義で EOPNOTSUPP。修正は p002。
+
+## 前: q424（2026-09-25）
+
+[q424](queue-q424.md): ws046-p013 cleared。libc に glibc 形式の `<mntent.h>`（`setmntent`/`getmntent`/`endmntent`/`hasmntopt`、kernel の `KERN_SYSTEM_GET_MOUNTS` を mtab の形の stream に）を足し、coreutils 9.12 の cross build が gnulib の要求で次々に止まった点を libc で埋めた: `<elf.h>`（System V ABI）と `<link.h>` の `ElfW`、`<stdio_ext.h>`（`__fpending` など）、`<utime.h>`、`fseeko`/`ftello` の関数化、`posix_spawn_file_actions_add{chdir,fchdir}_np`、`<stdio.h>` の `_STDIO_H`、errno の `EPFNOSUPPORT` の独立と POSIX の残り 13 個、`statvfs.f_basetype`（kernel が type 名を入れる）、gnulib の `getlocalename_l` の zedBSD 分岐（patch）。configure・make・install が通り 102 program、guest で `df`・`stat -f`・`ls`・`sort` などが動く。回帰 boot PASS・make 91/91・sh 1388/1425（同じ集合）、`POSIX-R2-REMAINING` 01-12 PASS。新しい bug: BUG-047（disk の無い mount の `st_dev` が 0 で GNU df が root と tmpfs を出さない）。ユーザーの指示（design policy 10: メモリ 4 GB・swap 16 GB の前提、VM の reserve/commit）を記録し WS057・WS058 を planning で作った。
+
+## 前: q423（2026-09-25）
+
+[q423](queue-q423.md): ws056-p001 uncleared（残りは 1 点）。BUG-034（`RTSIG_MAX` 33）、BUG-035（atomic の試験を 8 byte に）、BUG-037（pax の `x`・`g`・`L`・`K`。GNU tar の pax・gnu の archive を guest で展開して host と一致）を直した。`POSIX-R2` の試験が進んで見つけた BUG-042 は真因が kernel の `thread_create(2)` の signal mask の非継承で、kernel と libc（worker・reaper を全 block、wake signal 63 を `__libc_init` で block）で直した。試験の前提の誤り BUG-043・044 も直し `POSIX-R2-REMAINING.ELF` は 01-12 PASS。`POSIX-R2.ELF` は console で timer の試験が EINTR（BUG-046、未特定）。BUG-045（stress の baseline、間欠）を記録。
+
+## 前: q422（2026-09-25）
+
+[q422](queue-q422.md): ws046-p009 cleared。承認された HAL の差分（`amd64_percpu_current()` を `rdmsr` から `%gs:0` の load に）を適用: syscall 1340 → 450 ns、fork+exec 9.1 → 6.5 ms、expat の configure 129 → 96 秒。回帰は amd64 の boot、sh 1388/1425（同じ集合）、make 91/91、対話 41/41、SMP stress 0。BUG-033 の残りは p012 へ。
+
+## 前: q421（2026-09-25）
+
+[q421](queue-q421.md): ws046-p008 uncleared。coreutils を host で zedBSD 向けに cross build: libc の header の誤り 2 つ（`<locale.h>` の include の循環、`WINT_MIN`・`WINT_MAX` が `wint_t` と合わない）を直して進んだが、libc に mount の一覧の API が無く `mountlist.c` で止まった（p013）。
+
+## 前: q420（2026-09-25）
+
+[q420](queue-q420.md): ws046-p011 uncleared。private の file の mapping で page cache の page を map する実装は、compile と link を速くした（1.0 → 0.61 秒）が、expat の configure を 128 → 270 秒と遅くし make を失敗させたので戻した。object の寿命の費用と見て、p012 で設計を直す。
+
+## 前: q419（2026-09-25）
+
+[q419](queue-q419.md): ws046-p010 cleared。`MAP_PRIVATE` の file の region（共有 library）も `MAP_SHARED`・exec の snapshot と同じく object の page を read-only で map し、書き込みで COW にする設計。実装は p011。
+
+## 前: q418（2026-09-25）
+
+[q418](queue-q418.md): ws046-p009 uncleared。guest の configure の 1 check 約 1.3 秒は compile と link（1.2 秒）で、kernel の file の page の fault が主。
+`find_page()` が region の全 page の list をたどっていた（大きな library の fault が 2 乗）のを index に、reclaim の queue の探索を双方向の list にした: file の fault 145 → 25 µs/page、expat の configure 204〜252 → 129 秒。
+残りの最大は HAL の `rdmsr`（kernel の標本の約 24%、差分を plan に置いた、**承認待ち**）と file の fault の複写（p010、設計から）。回帰は前と同じ。
+
+## 直近の 30 Queue
+
+| Queue | 内容 | Status |
+| --- | --- | --- |
+| [q421](queue-q421.md) | coreutils の cross build（ws046-p008 の残り） | finished（2026-09-25。uncleared、p013 へ） |
+| [q420](queue-q420.md) | private の file の mapping で page cache（ws046-p011） | finished（2026-09-25。uncleared、戻した） |
+| [q419](queue-q419.md) | file の fault の複写の設計（ws046-p010） | finished（2026-09-25。cleared） |
+| [q418](queue-q418.md) | guest の configure の遅さ（ws046-p009） | finished（2026-09-25。uncleared、原因 2 つを直した） |
+| [q417](queue-q417.md) | guest で coreutils（ws046-p008 の再開） | finished（2026-09-25。uncleared、範囲の変更） |
+| [q416](queue-q416.md) | WS054 の回帰と規約（ws054-p004） | finished（2026-09-25。cleared。WS054 completed） |
+| [q415](queue-q415.md) | UFS の directory を複数 block に、journal（ws054-p003） | finished（2026-09-25。cleared） |
+| [q414](queue-q414.md) | UFS の directory を複数 block に、journal 無し（ws054-p002） | finished（2026-09-25。cleared） |
+| [q413](queue-q413.md) | UFS の複数 block の directory の設計（ws054-p001） | finished（2026-09-24。cleared） |
+| [q412](queue-q412.md) | 実 package を guest で最後まで（ws046-p008） | finished（2026-09-24。uncleared、coreutils は WS054 を待つ） |
+| [q411](queue-q411.md) | guest の clang の遅さ（ws046-p007 の再開） | finished（2026-09-24。uncleared、主因を直した） |
+| [q410](queue-q410.md) | WS053 の規約と最後の回帰（ws053-p005） | finished（2026-09-24。cleared。WS053 completed） |
+| [q409](queue-q409.md) | i386 の vmunix に LTO（ws053-p004） | finished（2026-09-24。cleared） |
+| [q408](queue-q408.md) | arm64 の vmunix に LTO（ws053-p003） | finished（2026-09-24。cleared） |
+| [q407](queue-q407.md) | amd64 に LTO を既定で適用（ws053-p002） | finished（2026-09-24。cleared） |
+| [q406](queue-q406.md) | vmunix の LTO の調査と設計（ws053-p001） | finished（2026-09-24。cleared） |
+| [q405](queue-q405.md) | guest の clang の遅さ（ws046-p007） | finished（2026-09-24。uncleared、WS053 を優先して中断） |
+| [q404](queue-q404.md) | 実 package を guest で build（ws046-p004） | finished（2026-09-24。cleared、BUG-033 を p007 に引き継ぎ） |
+| [q403](queue-q403.md) | make の GNU の機能（ws046-p003） | finished（2026-09-24。cleared） |
+| [q402](queue-q402.md) | kernel の mkdir の `.`（ws046-p006、BUG-032） | finished（2026-09-24。cleared） |
+| [q401](queue-q401.md) | POSIX make の核（ws046-p002） | finished（2026-09-24。cleared） |
+| [q400](queue-q400.md) | make の調査と設計（ws046-p001） | finished（2026-09-24。cleared） |
+| [q399](queue-q399.md) | WS042 の最後の回帰（ws042-p012） | finished（2026-09-24。cleared。WS042 completed） |
+| [q398](queue-q398.md) | ls の規約（ws042-p011） | finished（2026-09-24。cleared） |
+| [q397](queue-q397.md) | sh の規約（ws042-p010） | finished（2026-09-24。cleared） |
+| [q396](queue-q396.md) | libedit の規約（ws042-p009） | finished（2026-09-24。cleared） |
+| [q395](queue-q395.md) | vi mode の行編集（ws042-p008） | finished（2026-09-24。cleared） |
+| [q394](queue-q394.md) | 対話の回帰（ws042-p007） | finished（2026-09-24。cleared） |
+| [q393](queue-q393.md) | guest の sh の差分試験（ws042-p006） | finished（2026-09-24。cleared） |
+| [q392](queue-q392.md) | configure を guest で（ws042-p005） | finished（2026-09-24。cleared） |
+
+それより前: [全 Queue の一覧](index-all.md)。

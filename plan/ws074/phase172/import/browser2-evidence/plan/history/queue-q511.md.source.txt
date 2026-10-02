@@ -1,0 +1,61 @@
+<!-- awesome-plan project=zedbsd record=queue-q511 -->
+
+# Queue
+
+<!-- awesome-plan-current:start -->
+Status: finished (2026-09-30)
+Active Queue: none
+Last finished Queue: [q511](queue-q511.md)
+<!-- awesome-plan-current:end -->
+
+## q511
+
+Purpose: repair cross-realm execution and exception transport required by
+initial HTML iframe contexts. Focus: WS074 / fg011 (also fg010), current session direction.
+Timebox: one finite Phase; two live realms in one tab heap, call boundaries only.
+Approval: current user, 2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」.
+Standing autonomous authorization is recorded in config.md; this concrete q511
+scope and p105 revision are the first selected item. Prior q510 snapshots and
+outcomes are archived/read back. Executor root, no concurrent attempt.
+
+| Attempt | Phase | Status | Dependency | Selection reason / readiness |
+| --- | --- | --- | --- | --- |
+| q511-i01 | [ws074-p105](../ws074/phase105/phase.md) | cleared | Existing realm APIs verified; q510 two-realm evidence | Five of eight checks fail in plain/ASan. Callee global/exception identity must be correct before child-context ownership or iframe APIs |
+
+Proposed exact scope: same-heap foreign-realm bytecode/native calls and
+constructors, VM API/accessor paths and bounded bidirectional/reentrant checks;
+preserve globals, closures, arguments/results, this/new.target, actual exceptions
+and stack/depth/error unwinding. Plain/ASan builds, saved 8/8 plus focused VM/DOM
+regressions, Acid2 exact and all 100 Acid3 inventory/no-regression checks, full
+changed-source standards review are required. Both realms remain explicitly
+alive; this Phase does not implement child-context ownership.
+
+No iframe Window/Document APIs, GC ownership redesign, URL loading/navigation,
+Window.open, document.write/open/close, modules, CSSOM, HAL or toolchain work.
+Phase p105 owns the detailed plan/acceptance. No other Queue is active.
+
+Dependency graph: `existing realm APIs (external verified) → q511-i01/p105 →
+p106 (external planning) → p104 (external uncleared) → p100 (external planned)`.
+p103 remains an external cleared prerequisite of p104. No cycle; external nodes
+are context, not authorized work. Readiness of p106 must be resolved separately.
+
+## Upcoming Work Outlook
+
+p105 execution/exception repair first; refine and select p106 ownership next,
+then a new authorized p104 attempt for initial about:blank iframe contexts.
+Loaded child HTML and script-created parser/open/close follow in finite Phases,
+along with the indexed DOM/Core/Events, Traversal/Range, HTML, CSSOM/XML/SVG and
+ECMAScript gaps. p100 retains 100/100 and zero Uncaught/crash/timeout, Acid2 exact
+preservation and independent pixel diagnosis. p101 all CSS2 remains after p100,
+then p098 ES modules; p044 full-WS standards conformance remains near completion.
+
+## q511 terminal outcome (2026-09-30)
+
+q511-i01/p105 cleared; BUG-126 resolved. Plain/ASan saved8/8, realm30/30,
+object100/100, interp45/45, DOM23/23. Warning-free, no sanitizer report.
+Acid2 exact100%, Acid3 all100 unchanged40/100, Uncaught0, no crash/timeout.
+[Verification](../ws074/phase105/verification.md), [inventory](../ws074/phase105/inventory.json).
+Full changed-source standards/style/diff PASS, formatter unavailable; OS/guest/
+boot/GPU skipped (no changed path), full WS conformance remains p044.
+Next: refine/select p106 automatically under the standing consent, then p104.
+No next Queue active yet. Local unpublished, no push/remote closure.

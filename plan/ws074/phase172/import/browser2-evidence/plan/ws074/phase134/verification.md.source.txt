@@ -1,0 +1,39 @@
+# ws074-p134 / q545 verification — 2026-10-01
+
+Outcome: cleared. Native select.options SameObject live HTMLOptionsCollection,
+exact select/option/optgroup prototypes, select.add typed union conversion/current
+native ancestry/list/insertion parent/adoption/owner callbacks and temporary roots.
+
+- sh plan/ws074/tests/host-build.sh plain and asan: exit0, compile/link warning0.
+- python3 build/ws074-q545-regressions.py plain and asan: all44 selected groups PASS.
+  select-options-probe72, actual native host-select GC78/78, XML select cache12/12,
+  host-frame-lifetime128/128 (sole child options after manual primary teardown).
+  All41 prior groups remain PASS; table-row62/GC75/table mutation42/removal37;
+  DOM23/JS14/selectors style golden preserved. See embedded command/results JSON.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q545-VARIANT: actual pinned all100 results,84/100 both,
+  new indexed57, prior83 preserved, identical inventories, completeTrue/status0/
+  exceptions/run_errors empty, zero Uncaught/crash/runner timeout; Acid2 exact100%.
+  Aggregate Acid3 FAIL remains expected until100; never claimed overall acceptance.
+- ASAN_OPTIONS=detect_stack_use_after_return=0, the existing conservative GC host
+  stack contract; no sanitizer diagnostics. Native callbacks exclude every C stack
+  and real script argument frames, detach target/incoming/parent/reference, collect
+  during numeric conversion and actual host insertion, propagate actual EIO and
+  reclaim detached graphs after temporary root release. Actual child host.context
+  untouched. Sole XML options/root cache graph and child creator lifetime checked.
+- python3 plan/tools/style-check.py changed production C/header and host scope:
+  no findings. git diff --check: PASS. Manual formatting and complete changed-C
+  review against plan/coding-style.md: file order/leading ANSI locals/forwards/
+  semantic comments/paragraphs/brands/one conversion/error handling/roots/owner/
+  exact identities/native property reuse verified. Existing binding registry table
+  exception retained. clang-format unavailable; no formatter installation or
+  mass formatting. cc14.2.0/Python3.13.5. Hashes in verification.json.
+
+Limits: native options read API and select.add increment only. Mutable options
+length/index setters/add/remove, select mirroring/length/item/namedItem/remove,
+selectedness/defaultSelected/selectedIndex/value/selectedOptions/Option factory,
+reset/UI/custom/shadow/inert-template Document model remain known increments.
+No fullWPT/fuzz/OS/guest/boot/GPU or external publication/push. p100/p044/WS still
+incomplete. Next finite candidate option selectedness/indexed58. Remaining16.
+Primary algorithms read: [select](https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element),
+[options](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#htmloptionscollection).

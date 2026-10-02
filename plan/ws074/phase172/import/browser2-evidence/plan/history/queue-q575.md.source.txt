@@ -1,0 +1,123 @@
+<!-- awesome-plan project=zedbsd record=q575 -->
+
+# q575 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q575](history/queue-q575.md), exact archive verified; p159 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q575
+
+Current user automatic Acid3Queues+continuation approve exact finite p159snapshot
+before generation. p158 source/GC/rendering output verified; no cancellation/conflict.
+Native inline sheet/list wrappers/live rule count core; JSmutation/ruleobjects excluded.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q575-i01 | [ws074-p159](ws074/phase159/phase.md) | cleared | p158 verified; genuine wrapper lifetime before native mutation |
+
+Graph p158(external)->p159->nativeinsertion/ruleinterfaces+p100(external), acyclic.
+Prior85+newPage1+newnative1=87PASSboth/original>=93/prior93/equal100/noerrors/Acid2exact.
+No ruleobjects/nativeJSmutation/CSStext/external sheets/loading/XML/SVG execution.
+Unknown dependency endsuncleared before redesign; p100/p044/WS incomplete.
+
+## Upcoming Work Outlook
+
+Native JS ordinary rule insertion/deletion then SVG/XMLloading; ruleobject and final
+standards increments as needed. Forecast only; actual93 remains before JSinsertRule.
+
+## q575 outcome (2026-10-01)
+
+[p159](ws074/phase159/phase.md) cleared in q575, [evidence](ws074/phase159/verification.md).
+Actual native inline sheet/list/livecount wrappers preserve source identity and
+relevant realm; Page22/native12/all87bothPASS/actual93/prior93/equal100/noerrors/
+Acid2exact. Genuine Cmodel edit observable through savedJSrulecount and realheight;
+callerroot-free threshold construction GC/savedruleview-only retirement verified.
+Next native ordinary JSinsert/delete to clear actual72 then loading/SVG. Ruleobjects
+and other partialcore limits remain recorded; p100/p044/WS incomplete/local unpublished.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p159 -->
+
+# ws074-p159: native inline sheet wrappers and live rule counts
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q575 / q575-i01
+Base01d61f93/q574finished/p158actual21/all85both/original93/Acid2exact.
+Current user 2026-09-30 automatic Acid3Queues and 2026-10-01 continuation approve
+this finite exact scope before generation. Rootonlywriter/executor/no cancellation.
+Guardrail/fullcoding-style1–14/automation/actualDOM/cache/bindwrapper/nativehooks/
+prototype snapshots read. CSSOM2026-08-31/HTML2026-09-29 inlineassociation rules
+verified2026-10-01 https://drafts.csswg.org/cssom/ and
+https://html.spec.whatwg.org/multipage/semantics.html .
+
+## Exact finite scope / acceptance / design
+
+Expose current p158 native inline associations through five native interfaces:
+HTMLStyleElement inherits HTMLElement; StyleSheet/CSSStyleSheet parent chain;
+StyleSheetList length/item/virtual indexed legacy access; CSSRuleList length core.
+Document.styleSheets traced SameObject live descendant query includes connected
+exactHTMLstyle elements in actual tree order; excludes template/foreign namespaces/
+iframechildDocument. style.sheet actualnamespace+localbrand returns current CSSsheet
+or null detached; HTMLStyleElement actualwrapper registry selection. Repeated getters
+reuse native current sheet wrapper; same-text/Textchild/connection changes create new
+source/wrapper identity; oldsheet ownerNode null when retired. Inline href null;
+StyleSheet ownerNode actualassociated owner; CSSStyleSheet.cssRules SameObject traced
+native list whose length reads actual saved source model, including recognized false
+media/groups as one topLevelrule. Saved old rulelist remains its own source, not current
+DOM source. No synthetic rulecount/CSStext serialization/expando/prototype brands.
+
+New bind/cssom.c private VMstate {cell,kind,actualDocument,source}; source state caches
+sheet/rules wrappers and traces them, Document caches live sheetlist and traces it.
+Nativewrapper.kind PLATFORM/internal private typed state/native operations table;
+all getters/methods validate genuine table+celltype+kind, reject prototype lookalikes/
+wronginterface, allow borrowed getters and changed wrapper prototypes. Constructors
+illegal through existing tablebinding (no CSSStyleSheet construction this increment).
+Factories root actualDoc/source before prototype lookup/allocation, then initialize/
+root private state through VMobjectallocation; checked failures remove all roots,
+publish cache only fullybuilt. Relevant ownerDocument prototype snapshot/nativeWindow
+supplies prototype rather than callerrealm. State tracing actual source+Document;
+no permanent roots, rawWindow/relevantrealmownership or Cborrowedmodel pointers.
+
+StyleSheetList supported uint32indices current own configurable/enumerable readonly
+virtual properties before expandos; ownkeys numericprefix, symbols ordinary, strict
+set/define refused canonicalnumericindices, supportedindex delete false/missingtrue;
+preventExtensions refused, ordinarystringexpandos preserved, item WebIDL uint32
+conversion with reentrant source/treechange observed after conversion, missing null.
+Ownhook indexedvalue factory roots actualsource and actualDoc/list across GC.
+Rulelist numeric ruleobjects/item/iterables are explicitly absent until subsequent
+finite native ruleinterface work; this partial core exposes only authoritative live
+length and no fake CSSRule/cssText. Insert/delete methods separately selected after
+wrapper lifetime verified; actual72 still pending insertRule, no scoregainclaim.
+
+Affected domdom.h/node.c newDoccachetrace; bindinternal.h/window.c/node.c/document.c/
+style-sheet.c/newcssom.c; libbrowserMakefile; newPageprobe+nativefixture. Source model/
+DOMassociation/rendering policy unchanged. Pageprobe true sheet/list identity, indexed
+order/currentDOMinsert/remove/sameTextreplacement, oldownerNodeNull/oldcssRulesstable,
+emptyDocument, foreignnamespace/template exclusions, exactbrands/getterborrowing/
+realmprototypes, descriptors/keys/expandos/strictindexrefusal/delete/preventExtensions.
+Native ordinary managedchild Page: genuine Cmodeledit reflected saved/current JS
+rulelistlength and real height while DOMText untouched; owner/current wrapper caches
+survive actualGC; savedJSrulelist-only after retirement retains original actualmodel/
+childDocument/realm, then lastrootreleasecollectsall with conservative stack disabled.
+Native pressure/checkedrootconstruction and actualbrand/prototypeGC review.
+
+Prior85+newPage1+newnative1=87groups allPASSplain+ASan/original>=93/prior93/full100same/
+complete/noUncaught/crash/sanitizer/runnererror/timeout/Acid2exact; both builds complete
+before tests, runner60sec, buildwarning0/styleoutputempty/manualfullaffectedC/diff/hashes.
+Graph p158(externalcleared)->p159->nativeinsertion/ruleinterfaces+p100(external), acyclic.
+Unknown prerequisites enduncleared before redesign. Excludes external/link/import
+sheet wrappers, MIME/type/CSP/stylesets/disabled/media setters/styleload, constructed
+stylesheets/adoptedShadow/replace, ruleobjects/item/iterable/nativeJSmutation/
+canonicalCSStext/fullCSSSyntax/loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregatecheck/push/GitHubpublication. p100/p044/WS incomplete.
+
+## Introduction / q575 (2026-10-01)
+
+p158 source ownership/rendered effects/GC verified before exposing genuine JS sheet
+and list identities. Public wrapper/count core precedes separately authorized rule
+object and mutation increments; excluded members absent rather than fabricated.

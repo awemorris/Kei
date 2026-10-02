@@ -1,0 +1,167 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-02)
+Finished Queue: q585
+Last finished Queue: [q584](queue-q584.md), exact archive verified; p166 cleared.
+Executor root / browser2 checkout / one finite Phase / local unpublished.
+
+## q585 exact scope and approval
+
+Current autonomous Acid3 automatic finite Queues +continuation approve exact
+p168 snapshot before generation. Actual response metadata/XML owning DOM/native
+managed child context dependencies verified; original94/all96/Acid2exact.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q585-i01 | [ws074-p168](../ws074/phase168/phase.md) | cleared | p165/p166/p167 cleared; real iframe/object response navigation/tasks/script gating unlock loading failures |
+
+Exact p168 native src reflection/actual same-origin HTTP child loading via existing
+nonblocking loader, owning native Doc Window realm pair/retirement/metadata/XML
+errorDoc/queued actual events/native script namespace gating/object interfaces.
+Page-owned cancelable temporary request roots/source epochs/stale checks, local
+ordinaryprofile, no fake API/events/test branching. Known fullWindowProxy/initial
+blank reuse/crossorigin/CSP/external scripts/PI resource/full navigation limitations
+retained explicitly. New page/frame-load.c+bind/frame-resource.c/selected page/bind/
+dom fields and ordinary native loopback fixtures only; no VM/net/parser/renderer.
+Prior96+native1=97both/original>=94/prior94/72/equal100/noerrors/Acid2exact.
+Graphp165/p166/p167(external)->p168->remainingSVG75/77/p100(external), acyclic.
+One bounded implementation+verification cycle; unknown prerequisite ends uncleared.
+p100/p044/WS incomplete; actual score gain only after real original result.
+
+## Upcoming Work Outlook
+
+Remaining actual SVG length/text APIs, original100 and full acceptance/conformance.
+FullWindowProxy/crossorigin/full navigation beyond this scope remain known separate
+limitations; Outlook is forecast only, no unbounded execution permission.
+
+## q585 result
+
+p168 cleared native46/all97both/original94/prior94+72/equal100/noerrors/Acid2exact.
+[Evidence](../ws074/phase168/verification.md). Normal actual child loading verified;
+headless virtual settle misses newly started network polls, requiring a separate
+finite scheduler Phase before SVG75/77/p100. No original score gain claimed.
+All selected items terminal, no concurrent attempt. Root released/local unpublished.
+
+## Exact approved p168 snapshot before source generation
+
+```markdown
+<!-- awesome-plan project=zedbsd record=ws074-p168 -->
+
+# ws074-p168: actual same-origin child response loading, XML activation and task events
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q585 / q585-i01
+Basefb78848a/q584 p166cleared afterp167/BUG-132, p165 realXMLDOM verified.
+Original94/all96both/Acid2exact. Current autonomous Acid3 automatic finite Queues
+2026-09-30 +continuation2026-10-02 authorize this exact bounded feature before
+source generation. Root/browser2 sole executor/writer/local unpublished/no push/
+cancellation/concurrent attempt. Guardrail/full coding-style1–14/automation/
+browser design1/4/9/14/existing frame/managed realms/tasks/page loader/event/
+HTML stream/native XML projection/URL/MIME/DOM traces read. Native dependencies
+verified; ordinary scoped integration follows existing one heap/agent per tab.
+
+## Exact finite scope / design / criteria
+
+Actual connected HTML iframe src and object data navigation uses real native
+content attributes, response URL/MIME/status/body and parsed owning Documents.
+Add native branded iframe.src USVString URL reflection by sharing existing object
+URL reflection helpers; existing data/getters/firstbase/coercion behavior preserved.
+Native object.contentDocument and iframe/object.getSVGDocument report actual
+current child owner Document, cached wrappers/SameObject, SVG only actual MIME
+content kind. No truthy placeholder or native tag guessed from test identity.
+
+Page-owned child load records retain embedding native nodes with precise temporary
+roots while actual requests/tasks are pending. Actual HTTP/HTTPS uses existing
+nonblocking loader/real response metadata; local file/data uses p166 owning response
+fetch helper where supported. Resolve from actual owning child URL/inherited blank
+base/firstHTMLbase, not root Page aliases. Pre-fetch and final redirect URL must
+have verified same native HTTP origin (or ordinary local file profile); unsupported
+foreign/opaque data/sandbox sources never expose foreign normal DOM/global or run
+scripts. This is a scoped same-origin implementation, not full cross-origin security/
+WindowProxy/origin/CSP/navigation conformance. No test-conditioned response handling.
+
+Existing initial about:blank iframe context remains synchronously accessible.
+A genuinely completed blank navigation schedules one real load task. Changed src/
+data produces a new actual child Document/managed realm/global pair; old managed
+context is retired with saved refs collectible/quiet, independently owning old
+Document. Existing binding exposes actual globals, no WindowProxy abstraction;
+stable WindowProxy identity/initialblank same-Window reuse/full replacement history
+remain known interface limitations, not claimed native outputs. No copied parent
+Document or modified immutable global document property. Runtime load source/epoch
+stored in traced native element state; source changes, removal/adoption/reinsertion
+invalidate prior response/tasks. Clone copies DOM data, not runtime child state.
+
+Completed response is copied into C task storage before callback bytes expire.
+Callbacks never run scripts/events directly; finite Page checkpoint task drain
+with reentry protection, request snapshot boundaries and source/connection/epoch
+recheck. Real network request cancellation and root removal on stale/removal/Page
+release; no permanent navigation roots or asynchronous callback into freed Page.
+Pending tasks queued by callback remain native scheduling work; no synthetic timers
+or unconditional onload. Child readiness/DOMContentLoaded/Window load/embedding
+load reflect actual completed supported parse, including genuine XML error Doc.
+Nested child traversal uses existing finite64 context-depth bound, normal DOM
+preorder iterative within each Document. Initial HTML/Document stream semantics
+and existing page timer/microtask execution stay intact.
+
+HTML uses production native parser/UTF8 path and existing supported inline classic
+script hook, actual child globals/parent/top/native document.write insertion point.
+XML/XHTML/SVG uses strict p161 parse +p165 owning projection after entire input
+well-formed; true malformed XML publishes explicit private parsererror Document
+with actual error offset/status, never recovered partial HTML/scripts. NativeDoc
+owns actual URL/declared MIME metadata strings with tracing, getters consult these
+before existing factory/host fallback. Actual XML HTML-namespace lowercase script
+nodes alone run supported inline classic code in child realm; wrong URI/case/
+malformed/nonclassic/unsupported external scripts do not execute. No added external
+script loader/modules/PI stylesheet resource effects/full XML metadata/encoding.
+Existing child inline stream helper shared rather than changing ECMAScript.
+
+New page/frame-load.c and bind/frame-resource.c modules registered once; selected
+areas page/page.[ch]/script.c, bind/frame.c/html-reflection.c/document.c/window.c/
+environment.c/internal.h/bind.h/node.c as needed for actual context interfaces and
+lifecycle, dom/dom.h/node.c for traced native runtime/metadata fields. No VM/net/
+parser algorithms/renderer/SVG length/text APIs/.internal changes. Existing host
+callbacks remain safe after retirement; actual owner supplies native location,
+not a new host reference pointing into a released child/Page.
+
+New ordinary host-frame-load.c +loopback Python driver/fixtures (not pinned suite
+modification): real delayedHTTP resources/headers/redirects/MIME-vs-extension/
+validXML+PI+CDATA+attrs/HTML/XHTML scripts/wrongURI/case/malformed input/errorDoc/
+blank/reload/object/getSVGDocument/URL/contentType/parent/top/ownrealm/queued event
+order/count/unchanged iframe initial access. Native source change/removal/adoption/
+Page teardown before arrival, no stale callback/event/global; actual threshold GC
+inside install with caller stack disabled, pending-only roots, saved-only loaded
+Doc/target/URI and lastrelease; no fake constructors or scoring code. Fixture
+server/subprocess timeouts60sec, bounded poll, no outbound services. Prior96 +new
+native driver1=97groupsPASSboth/original>=94/prior94/72/equal100inventory/complete/
+status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact. Expected native
+loading may unlock69/74/79/80; score not assumed or replaced by diagnostics.
+Bothfull builds before anytests/warning0/styleempty or no new baseline findings/
+manual all changed full C/diff/sourcehashes/toolversions/skips.
+
+Finite one Phase/timebox one bounded implementation and verification cycle;
+unexpected prerequisite ends uncleared before redesign, not endless retries.
+Graph p165/p166/p167(external)->p168->remainingSVG75/77/p100(external), acyclic.
+SVGRectElement.width/text character APIs/painting/fullWindowProxy/crossorigin/
+fullFetch/fullMIME/CSP/network stress/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/
+aggregatecheck/push/GitHub publication excluded. Explicit scoped partial iframe/
+object/XML activation, not complete browser navigation/HTML conformance.
+p100/p044/WS incomplete until own criteria actually verified.
+
+## Standards / introduction (2026-10-02)
+
+HTML Living2026-09-29 loading XML/HTML/iframe events/native declared metadata read:
+https://html.spec.whatwg.org/multipage/document-lifecycle.html#read-xml
+https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element
+DOM2026-09-24/XML1.0/Namespaces1.0/MIME2026-07-17 references fromp161–p167 apply.
+XML parse errors can be reported via actual error Document mutation; native strict
+whole-input gating supplies no fake script success. Investigation corrected next
+work understanding: original80 waits for selectors iframe reload event (not image
+onload), then exact XHTML notifications. Actual src reflection/response tasks are
+needed for earlier selector iframe reload as well as seven dynamically connected
+resources. Previously accepted initial blank/DOM/CSS behavior remains regression
+obligation; full WindowProxy is disclosed unresolved interface scope, not assumed.
+```

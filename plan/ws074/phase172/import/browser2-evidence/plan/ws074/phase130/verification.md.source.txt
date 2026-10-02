@@ -1,0 +1,43 @@
+# p130 / q540 verification — 2026-10-01
+
+Cleared native readonly SameObject table.tBodies/table.rows/section.rows/row.cells.
+Actual HTML namespace/exact case table/section/row brands; current direct filters,
+all head rows then mixed direct/body rows then all foot rows. Reuses legacy native
+HTMLCollection indexing/names/guards and relevant Document prototypes. Independent
+traced caches survive sole root/collection ownership and clones start independent.
+
+Original fixed WPT2d66b9b7998bb58c336138c178323ddee857b586 Acid3 all100 **80/100**
+plain+ASan; indexed29 newPASS, all prior79 preserved, equal complete inventories,
+status0/exceptions/run_errors/crash/runner timeout0. Acid2 exact100% both.
+
+Commands plain and asan (ASAN_OPTIONS=detect_stack_use_after_return=0):
+- sh plan/ws074/tests/host-build.sh VARIANT: cc14.2.0, warning/error0.
+- browser --run plan/ws074/tests/pages/table-collection-probe.html: 71 PASS.
+  Multiple/misplaced sections, direct filters, nested tables/wrappers/template,
+  XML/foreign/uppercase brands, SameObject/live keys/names/guards, moves/removal,
+  clone whitespace/caches and child-frame retention covered.
+- host-table-collection: 25/25 PASS. Actual stack_base=NULL GC with sole table,
+  sole cells collection and final-root release observes actual seven cells/cache
+  cycle survival/reclamation, XML relevant prototypes and live member removal.
+- host-frame-lifetime: 108/108 PASS. Sole child table rows and row cells wrappers
+  retain actual child/relevant member prototypes after manual primary destruction,
+  and last retained child releases once.
+- python3 build/ws074-q540-regressions.py VARIANT: all36 groups PASS; commands,
+  counts and results in verification.json. Final host-table-collection output label
+  corrected and both variants rebuilt/rerun; corresponding result string read
+  back from real rerun, unchanged semantics need no repeat of other groups.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q540-VARIANT: original reports embedded verbatim in JSON.
+  Aggregate goalFAIL until100 remains expected.
+- python3 plan/tools/style-check.py modified production C/header and host tests:
+  0 findings. Full C manual review/manual formatting (clang-format unavailable),
+  checked cache publication/tracing/exact brand/order/readonly/clone lifetimes.
+- git diff --check PASS. Base c0120928/source SHA256 in verification.json.
+
+Structural accessors/methods/indices/Caption/Cell classes, parser/table foster
+parenting/obsolete attributes/layout excluded by saved scope; selected later.
+No forced allocation failure; checked error/publication paths manually reviewed.
+No full WPT/fuzz/OS/guest/boot/GPU checks; host semantics only. p100/p044 unmet,
+other form/input/radio/Range/CSS/loading/SVG residuals preserved. Local unpublished,
+no push. Primary algorithms read2026-10-01:
+[WHATWG tables](https://html.spec.whatwg.org/multipage/tables.html).

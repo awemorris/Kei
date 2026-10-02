@@ -1,0 +1,45 @@
+# q576 / p160 native ordinary CSSStyleSheet mutations — 2026-10-01
+
+CLEARED. Public native insertRule/deleteRule operate genuine saved inline source
+models. Actual table/privatecell/kind brand before conversion; requiredarguments,
+ordinary CSSOMString and uint32default0. Actual source/inputargument/returnedstring/
+indexargument slots rooted before ToString/index conversions; exactUTF16 copied,
+allpartialregistration/error/sourcebuffer roots released. NativeDOMexception creation
+runs while ownergraph rooted. Reentrant Textreset/ownerretirement keeps receiver's
+actual savedmodel, never redirects to new currentDOMsource. Puretemporarymodel
+validates singleordinaryrule first, then actual bounds/hierarchy before atomicnative
+insert; syntaxbeforeIndexSizeError; unsupportedat-rule NotSupportedError partialcore;
+ordinarybeforefollowingactualimport HierarchyRequestError. Successfulmodel edits
+alone invalidate currentownerDocgeneration; noDOMTextwrite/Observerrecord.
+
+Page23/23/native12/12 both. Page native realheight10->20->40->20/default0/end/delete/
+precedence/savedlistliveness/unchangedText/noObserverrecords/syntax+multi+empty/bounds/
+unsupportedrollback/requiredargs/nativebrands/conversionorder/uint32wrap/Unicode/
+reentrantTextreset oldmodelonly/borrowedchildmethods+actualcascade/isolation/
+EOFblockappend/importhierarchy/retiredchildmodelmutable. Native directcallee has no
+caller source/argument/stack roots: actual8MBthresholdGC during allocatingToString,
+then nativeindexcallback sameTextreset/frameDOMremove/explicitGC; convertedstring
+survives secondGC, oldmodelinsert2/newmodel1, obsoleteinsert doesn'tchange replacement
+Docgeneration; savedreceiveralone retainsactualoldsource, directdeleteundefined/
+count1; lastrelease collectsmodel/Document/realm ASanquiet. Root/code review includes
+partialregistration/conversionthrow/errorcreation/buffer/allocation unwind.
+
+All89groupsPASSboth; original94/100 includingactual72; prior93 preserved/full100
+inventoryidentical/complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts;
+Acid2exact100%. Remainingactual69/74/75/77/79/80; internal69/80retrytimeout remains
+inventory failure, distinct from completed runner/no run_errors. Pixel37.026875%
+diagnostic separately. Bothfullbuilds finish beforetests; buildwarning0/styleoutput
+empty/diffclean/manualfullaffectedC Guardrail/coding-style1–14/automation,
+clang-format absent/manual, cc14.2.0/Python3.13.5. JSONhashes/fullreports/89.
+sh plan/ws074/tests/host-build.sh plain|asan; python3 build/ws074-q576-regressions.py
+plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0 python3
+plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q576-VARIANT; style-check affectedC; git diff --check.
+
+Nativepuremodel validation doubleparse is bounded and preserves public syntax error
+precedence/hierarchy beforecommit without changing p157pureCAPI. At-ruleinsertion,
+namespace/layer/fullCSSSyntax/ruleobjects/index/item/iterables/canonicalcssText,
+external/link/importwrappers/originflags/MIME/CSP/stylesets/disabled/media setters/
+constructed/adoptedShadow/replace/loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregatecheck/push/GitHubpublication excluded. Partial CSSOM
+core only; no fullconformanceclaim. p100/p044/WS incomplete; loading/SVG next.

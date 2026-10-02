@@ -1,0 +1,33 @@
+# q583 / p167 native data URL failure routing — 2026-10-02
+
+CLEARED; BUG-132 resolved. MIME fallback now handles only data_mime EINVAL inside
+successful prior-body path. Existing real decoder failure/other errno continues
+to original cleanup and failure return. No rewritten forgiving decoder, MIME
+parser, URL algorithm or valid/default processing. New native68/68 both: actual
+invalid characters/remainder/padding/decoded NUL/partial decoding/invalid-body+
+invalid-MIME/missing comma produce exactEINVAL/emptyNULL owned MIME/body;
+valid padded/unpadded/whitespace/emptybody/invalidMIME-only/default/charset/fragment
+retain actual expected bytes and MIME. Metadata and unchanged legacy consumers
+both preserve invalid body failure and cleanup. Original p166 native101/101both
+unchanged now passes, actual ephemeralHTTP/redirect/404/misleading names vs MIME/
+local files/declared type tests. p166 stays uncleared until separate exact retry;
+q582 original99/101 outcome retained, no nonblocking Bug transfer or erased history.
+
+All96groupsPASSboth; actual94/prior94/72/equal100inventory/complete/status0/
+noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact100%. Remaining69/74/75/
+77/79/80 actual loading/SVG. Internal retrytime inventory failures separate from
+complete runner; pixel37.03% diagnostic. Bothfull builds beforetests/warning0/
+styleempty/manual changed full C1–14/Guardrail/automation/diffclean. cc14.2.0/
+Python3.13.5/clang-format absent manual. JSON actual hashes/fullreports/all96,
+p166 dependency source hashes for unchanged subsequent retry. Commands:
+host-build.sh both; host-data-url both; run-resource-tests.py --program
+build/ws074-host/VARIANT/host-resource both; q583-regressions.py both; original
+run-acid-tests.py both (ASAN_OPTIONS=detect_stack_use_after_return=0), style-check.py
+net/data.c/native fixture, git diff --check. No new API/config/test switches.
+
+Fetch data URL body vs MIME-only error routing references retained in Phase/Bug.
+FullFetch/MIME/sniffing/navigation/WindowProxy/CSP/SVG/WPT/fuzz/OS/guest/boot/GPU/
+HAL/toolchain/.internal/aggregate/push/publication not performed. p100/p044/WS
+incomplete; error repair alone does not claim score gain. Root released/local
+unpublished/no push. Reopen BUG-132 if a forbidden body succeeds or valid MIME
+fallback regresses. Native decoder can be tested independently of child loading.

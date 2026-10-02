@@ -1,0 +1,27 @@
+# q523 evidence — 2026-10-01
+
+p113 cleared: length metadata accepts the full uint32 range without allocating
+holes. Assignment/descriptor ToUint32 then ToNumber order, original RHS identity,
+RangeErrors and safe numeric constructor conversion, readonly descriptor flags,
+capacity-based dense selection and existing int32 sparse contraction verified.
+
+Both variants: focused39/39, actual host capacity4/4 (1MiB heap), object100/100,
+interp45/45, realm30/30, JS14/14, DOM23/23. All100 equal inventories60→61 solely
+95newPASS, no former pass lost, Uncaught0/completeTrue/run_status0/run_errors[],
+Acid2 exact/different_pixels0, warningfree/no sanitizer. Visual38.49979166666667%
+is a separate diagnostic; score100/100 remains unmet.
+
+Commands: host-build.sh plain/asan; browser --js array-length-probe.js;
+host-array-length/host-object/host-interp/host-realms; run-js-tests.py;
+run-dom-tests.py; run-acid-tests.py --out build/ws074-acid-q523-<variant>.
+ASAN_OPTIONS=detect_stack_use_after_return=0 enables the ordinary real-stack GC.
+Logs build/ws074-q523-*. Initial host fixture misread vm_object_get's status as a
+presence flag; corrected it to vm_object_get_own before final checks. No production
+prerequisite or policy change. Full changed source manually reviewed against the
+full C standard (locals/paragraphs/casts/range/order/ownership/checked operations),
+style-check.py on three source C files and host fixture, git diff --check PASS.
+clang-format unavailable/manual formatting, cc14.2.0/Python3.13.5.
+[Hashes/reports](verification.json), [inventory](inventory.json). No high atom-key
+index redesign, billion-element iteration, exhaustive array methods/shrink
+nonconfigurable/failure fuzz, OS/guest/boot/GPU checks. Remaining39 features proceed
+in finite Queues. Local unpublished/no push; WIP commit supplies record revision.

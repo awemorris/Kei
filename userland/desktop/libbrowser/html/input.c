@@ -28,6 +28,7 @@ html_input_init(
 	input->position = 0;
 	input->closed = 0;
 	input->after_cr = 0;
+	input->inserted_cr = (size_t)-1;
 }
 
 /*

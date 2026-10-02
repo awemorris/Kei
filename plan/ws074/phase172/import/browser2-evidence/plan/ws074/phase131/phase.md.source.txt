@@ -1,0 +1,101 @@
+<!-- awesome-plan project=zedbsd record=ws074-p131 -->
+
+# ws074-p131: native table caption/head/foot operations
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q543 / q543-i01 (prior q541-i01 uncleared retained)
+Prerequisite p130 d8f33a7a cleared; actual native table/section prototypes,
+ordered live collections/DOM clone/weak removal hooks/checked bind_insert and
+child mutation environment outputs verified, prior80/36 regressions PASS.
+Root sole executor, one finite Phase. User2026-09-30 autonomous Acid3/automatic
+Queues +2026-10-01 continuation authorize exact scope saved before source generation.
+Timebox one finite Phase / bounded fixtures and fixed suites.
+
+## Exact scope / design / criteria
+
+HTMLTableElement native caption/tHead/tFoot nullable typed getters/setters and
+createCaption/deleteCaption/createTHead/deleteTHead/createTFoot/deleteTFoot.
+First actual direct HTML caption/head/foot only, exact namespace/local case.
+Typed caption setter requires actual caption; section setter accepts native
+section conversion then wrong section tag throws HierarchyRequestError BEFORE
+old removal. Forged/foreign/uppercase/other nodes TypeError, no coercion.
+Null/undefined remove only first eligible child. Caption inserts first node;
+head before first element neither actual caption nor colgroup, else append;
+foot appends. Reusing existing members returns identity; setters remove/reinsert
+same node according to algorithm, duplicate/nested/foreign children preserved.
+Insert cycle checks/errors retain specified remove-before-insert side effects.
+
+Add illegal native HTMLTableCaptionElement : HTMLElement; actual node prototype
+and XML Document snapshots/managed child relevant realm. Keep existing table
+interface/collection getters in collection.c and add native bridge functions
+implemented in new bind/table.c (registered production libbrowser source list).
+Reuse checked bind_insert and DOM weak-removal/environment notifications.
+Known helper adjustment: bind_insert chooses actual parent Document.view for
+host/environment callbacks, while exception realm remains native caller; XML
+without view falls back to caller. No unrelated removal API changes.
+Explicit root slots retain owner/old/new/reference across environment/host GC,
+allocation fails checked, wrappers published after complete mutation.
+
+EXCLUDED createTBody/row/cell insert/delete/indices/HTMLTableCellElement, obsolete
+attributes/layout/parser/foster parenting/custom element reactions/shadow paths,
+other WS input/form/radio/Range/CSS/loading/SVG residuals. These are known later
+increments; no goal/acceptance reduction. p100/p044 remain unmet.
+
+Guardrail/full coding-style loaded, no concise; standard source
+https://html.spec.whatwg.org/multipage/tables.html read2026-10-01.
+Plain+ASan dedicated structure/order/identity/errors/duplicate/filter/typed brand/
+XML/borrowed child prototype/lifetime tests, actual host callback GC and callback
+failure root cleanup, prior36 regression groups plus new fixtures; original
+all100 prior80 preserved/equal/complete/status0/noerrors/new49 expected/Acid2exact,
+warning0/sanitizer0/full changed C/manual format/style/diff/hashes/evidence.
+No fullWPT/fuzz/OS/guest/boot/GPU claim. Unknown dependency ends uncleared.
+Graph p130(external)->p131->future row/cell APIs(external)->p100(external), acyclic.
+Local event records unpublished/no push.
+
+## Introduction / q541 activation (2026-10-01)
+
+Indexed49 requires native caption/head/foot operations absent from actual engine.
+Finite reusable typed structural APIs chosen before independent row/cell methods.
+
+## q541 outcome / unknown prerequisite (2026-10-01)
+
+[p131](phase.md) **uncleared**, [evidence](verification-q541.md).
+Native table caption/head/foot get/set/create/delete + Caption interface implemented;
+actual81/100/indexed49new/prior80/equal/noerrors/Acid2exact. Initial structure67/
+GC42/frame113/all38 groupsPASS, then final added ownership assertion reproduces
+cross-Document setter adoption failure (67PASS/1FAIL) plain+ASan. Existing
+bind_insert/dom_insert_before lacks subtree Document adoption, unknown prerequisite
+ends this attempt without clearance. Retain useful partial outputs; next select
+finite adoption dependency, then new p131 attempt and row/cell APIs. Remaining19;
+p100/p044 unchanged/root released/local unpublished/no push.
+
+## Design revision after q541 uncleared (2026-10-01)
+
+[New p132](../phase132/phase.md) supplies checked generic subtree adoption and weak iterator subscription migration missing from existing insertion. p131 acceptance/scope retained; add p132 verified output prerequisite before next attempt. Resume requires final ownership assertion and original structural/GC/regressions PASS. [WS summary](../ws.md).
+
+## q543 new attempt / activation (2026-10-01)
+
+Prerequisite p13249b0ee70 cleared, current adoption output/final cross-Document
+assertion verified in working code. Whole original p131 scope/criteria unchanged;
+q541 outcome preserved. User2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation authorize exact finite validation attempt saved before tests.
+No source change planned. Revalidate p131 structure68/adoption26/nativeGC42/
+frame118 and original all100 both variants; reuse just-final p13239 regression
+results/build0warnings matching unchanged source hashes, full native table + new
+adoption applicable C manual/style/diff. Goal prior81 preserved/equal/complete/
+status0/noerrors/Acid2exact. No unnecessary full repeated suite beyond unresolved
+p131 scope. Graph p132(external)->p131 attempt->future row/cell APIs(external),
+acyclic; unknown prerequisite ends uncleared, finite selected checks only.
+
+## q543 clearance (2026-10-01)
+
+[p131](phase.md) cleared in new q543 attempt, [evidence](verification.md).
+p13249b0ee70 adoption prerequisite verified; original typed native table caption/
+head/foot APIs acceptance unchanged. Fresh structure68/adoption26/nativeGC42/
+frame118PASS both variants; reused matching final q54239 regression/build outputs.
+Original all10081/100/prior81/equal/noerrors/Acid2exact; remaining19. q541 historical
+uncleared and exact failure evidence preserved. Next finite row APIs/indices, then
+cell APIs/select/option/Range/CSS/loading/SVG. p100/p044 unchanged/root released/
+local unpublished/no push.

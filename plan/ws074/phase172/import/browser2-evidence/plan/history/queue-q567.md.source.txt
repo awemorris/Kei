@@ -1,0 +1,109 @@
+<!-- awesome-plan project=zedbsd record=q567 -->
+
+# q567 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q567](history/queue-q567.md), exact archive verified; p153 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q567
+
+WS074/fg011 actual child HTML replacement streams. Current user2026-09-30 automatic
+Acid3 Queues +2026-10-01 continuation; [p153](ws074/phase153/phase.md) exact scope/
+criteria saved before generation. One finite Phase/runner60sec/bounded actual GC.
+
+| Attempt | Phase | Status | Dependencies / reason |
+| --- | --- | --- | --- |
+| q567-i01 | [ws074-p153](ws074/phase153/phase.md) | cleared | HTML+p104+p106+p152 verified; original71 missing real open/close |
+
+Graph HTML+p104+p106+p152(external)->p153->future CSSOM/loading+p100(external),
+acyclic. Active owned HTML children, ordinary primary parser writes preserved;
+full dynamic-markup/network semantics explicit exclusions. Prior75+new2=77 both,
+original>=92/prior92/equal100/noerrors/Acid2exact/full C standards. Unknown dependency
+ends uncleared. q566 archive read-back verified before rotation.
+
+## Upcoming Work Outlook
+
+CSSOM/native image observation; XML support loading; SVG native APIs; dynamic
+markup omitted semantics/transform rendering; final p100/p044. Forecast not authority.
+
+## q567 outcome (2026-10-01)
+
+[p153](ws074/phase153/phase.md) cleared in q567, [evidence](ws074/phase153/verification.md).
+Actual child Document HTML replacement/inline nested writes/EOF/owner GC implemented;
+Page36/native9/all77PASS plain+ASan. Original93/new71/prior92/equal100/noerrors/
+Acid2exact. Next images/CSSOM/native dimensions and XML loading/SVG; full dynamic
+markup subset limits retained. p100/p044/WS incomplete/root released/local unpublished.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p153 -->
+
+# ws074-p153: active managed child HTML replacement streams
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q567 / q567-i01
+Prerequisites real HTML parser and managed child p104/p106/p152 cleared/verified;
+base98744750 clean, actual92/all75/Acid2exact. Root sole executor, no cancellation.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact finite snapshot saved BEFORE generation.
+
+## Exact scope / design / criteria
+
+Actual original71 child HTML Document open/write/close. Append operations20open/
+21close preserving stable indexes. Genuine native Document brand, XML InvalidState11
+before stream access; active owned child resolves receiver's native owner/view,
+not borrowed method callee. Open returns same actual Document and retains Window/
+Document/realm identity, allocates replacement parser before removing old children,
+uses actual dom_remove weak Range/iterator/frame repairs and owner child-list
+notifications; quirks reset/default parser determines doctype mode; readinessloading.
+Repeated idle open abandons old parser safely; close no stream no-op, real parser
+EOF/finish/destroy/complete. Only child streams introduced; primary Page active
+parser write callback contract preserved, primary replacement/open and three-arg
+Window.open overload unsupported9. Factory/inactive HTML stream unsupported9.
+
+Use p152 Window-owned parser tracing/release; temporary actual owner realm root
+through conversion, parsing, inline scripts/GC/retirement. Ordered checked argument
+conversion + writeln LF before actual feed; implicit child open when no stream.
+Inline classic absent/empty type or text/javascript/application/javascript/
+text/ecmascript/application/ecmascript executes actual bind_run_script in child
+realm at parser hook; src/module/other data remains inert in this finite subset.
+Nested writes use existing checked parser insertion-point/write_depth32 bound.
+Open inside active parser is ignored; close while parser stack active defers EOF/
+destruction until outer parse unwinds. No parser freed on executing C stack.
+Fatal parser allocation/error retained; failed stream released at safe outer bound.
+No fake HTML parsing, score fixture shim, hidden switches or permanent child roots.
+Affected bind/document.c,internal.h; new Page/native fixture. Existing owned parser
+Window trace/finalization unchanged. Real inline script errors reported through
+existing console/Uncaught path, not suppressed for score.
+
+Page actual71 full structural/doctype cases and final image/style tree, split
+writes/entities/writeln/implicit/repeated open, native identity/ready state,
+borrowed methods/XML/illegal receiver/primarywrite preserved, nested child scripts/
+reentrant open+close/fatal conversion atomicity/source trailing order/retirement.
+Native direct bindings with stack scanning disabled: actual inline console GC,
+child owner identity/parser graph retained, nested writes/close release and
+retirement during script; forgotten stream/child collectible. Prior75+new2=77
+groups plain+ASan, original>=92/prior92/full100equal/complete/status0/no Uncaught/
+crash/runnererrors/Acid2exact; original71 expected real pass. Runner60sec/bounded GC.
+Guardrail/full coding-style1–14/automation, style output inspected/manual formatting
+clang-format unavailable/diff/build warning0/sanitizer0/source hashes. Unknown
+prerequisite ends uncleared before redesign. Graph HTML+p104+p106+p152(external)
+->p153->CSSOM/support loading+p100(external), acyclic.
+
+Exclusions primary replacement/full dynamic-markup compliance (event handler erasure,
+origin/history updates, aggregate MutationRecords/readiness/load event dispatch,
+all classic MIME aliases/external or module script loading), child navigation/XML
+network/SVG/CSSOM/image layout/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregate check/push/GitHub. Limits retained as follow-up; p100/p044/WS incomplete.
+
+## Introduction / q567 activation (2026-10-01)
+
+p152 actual collectible ownership output verified. Read HTML dynamic insertion
+https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html (2026-09-29;
+read2026-10-01): object-preserving replacement, HTML parser stream and reentrant
+open ignored. Finite structural child stream subset supplies original71; omitted
+full dynamic insertion semantics remain explicit follow-up before broad claims.

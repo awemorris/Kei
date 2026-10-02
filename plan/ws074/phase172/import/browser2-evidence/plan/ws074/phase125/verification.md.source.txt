@@ -1,0 +1,51 @@
+# q535 / ws074-p125 verification — 2026-10-01
+
+Cleared. Final plain+ASan original Acid3 **75/100**/completeTrue/run_status0,
+Uncaught/crash/runner timeout0, all100 inventories identical, prior73 preserved,
+indexed4+52 newlyPASS. Acid2 exact100% both. Full reports/sourceSHA/27 selected
+regressions per variant in [verification.json](verification.json). p100 remains
+unmet; remaining25 failures, no assertion/test-source changes.
+
+- Native controls fixture100/100 both: form brand/SameObject/inheritance/length,
+  direct/nested/detached/connected outside/duplicate ID/explicit attributes/form ID/
+  tree-root changes/fragment/image keyword/foreign/XML case/templates, id+name counted
+  once, duplicate zero-one-many/current order/owner mutations, readonly descriptors/
+  ordered keys/deletion/definition/integrity/expandos/prototype getter visibility,
+  uint32 conversion/brand-before-conversion/required arguments/exception identity/
+  conversion-time mutation/relevant XML+managed child prototypes/retired native calls.
+- New host-form-collection11/11: actual GC with stack roots disabled, form-only
+  cache retention and SameObject identity, sole duplicate list retains form/member/
+  cache/original dynamic name/private XML prototypes; remains live after mutation;
+  final root removal reclaims list/form/member/cache cycle. Existing collection16/16.
+- Managed iframe fixture78/78 (prior68+two independent5-check graphs): sole controls
+  and sole duplicate list survive iframe removal/manual primary destruction and
+  invoke child native indexed API afterward; actual child finalizer runs once after
+  last root removal. Existing full-heap teardown and error-boundary cases preserved.
+- Owner56/forms35/collection104/NodeIterator60/TreeWalker70/traversal9/removal19/
+  native65/XML62+GC16/namespace38+GC12/names31/iframe17/legacy56/childCSS30/owner27/
+  realms30/object100/interp45/DOM23/JS14/selectors style golden allPASS both.
+- Commands `sh plan/ws074/tests/host-build.sh plain|asan`; final build logs
+  `build/ws074-q535-build-<variant>.log`, warnings/errors0. Final selected runners
+  `python3 build/ws074-q535-regressions.py <variant>` and Acid runner with
+  `--out build/ws074-acid-q535-<variant>`. ASAN_OPTIONS=detect_stack_use_after_return=0
+  preserves actual conservative stack contract; ASan/UBSan0. No concurrent rebuild
+  of the variant under test. Dedicated fixture uses production bindings/ordinary
+  script with no hidden switch/stubs.
+- Full changed-source C manual review: leading declarations/one-line forwards/
+  public-before-static/native-table exception, purpose/loop/paragraph comments,
+  checked fallible native conversion/allocation/key/wrapper APIs, exact namespace/
+  local case, current tree bounds/owner identity, separate NodeList/HTMLCollection
+  brands, id/name one-per-element, virtual property and ordinary expando precedence,
+  no JS in native table callbacks, traced form+name/cache cycles, actual realm/XML
+  prototypes, failure before cache publication. style-check has no findings;
+  git diff --check PASS. cc14.2.0/Python3.13.5, clang-format absent/manual format.
+
+Primary HTML [controls collections](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#htmlformcontrolscollection)
+and [form elements](https://html.spec.whatwg.org/multipage/forms.html#dom-form-elements)
+read2026-10-01; DOM indexed collection core reused. Incremental NodeList indexed
+core only: iterable/forEach and existing query snapshots, RadioNodeList.value/radio
+checkedness/grouping, form own indexed/named/past names, public input reflection/
+activation/submission, parser-magic/custom association remain explicit later work.
+No full HTMLFormElement/NodeList/RadioNodeList/full WPT/fuzz/OS/guest/boot/GPU claim.
+Pinned WPT2d66b9b7998bb58c336138c178323ddee857b586 unchanged. p044 final standard
+and p100 full100/100 acceptance unchanged. Local records unpublished/no push.

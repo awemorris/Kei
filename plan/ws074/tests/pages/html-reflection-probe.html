@@ -1,0 +1,84 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) { console.log((condition ? 'PASS ' : 'FAIL ') + label); }
+var button = document.createElement('button'), label = document.createElement('label'), meta = document.createElement('meta');
+check('button interface identity', button instanceof HTMLButtonElement && button instanceof HTMLElement);
+check('label interface identity', label instanceof HTMLLabelElement && label instanceof HTMLElement);
+check('meta interface identity', meta instanceof HTMLMetaElement && meta instanceof HTMLElement);
+check('unrelated element no special property', !('type' in document.createElement('div')) && !('htmlFor' in document.createElement('div')) && !('httpEquiv' in document.createElement('div')));
+check('button missing type', button.type === 'submit' && !button.hasAttribute('type'));
+button.setAttribute('type','BuTtOn');
+check('canonical button raw content', button.type === 'button' && button.getAttribute('type') === 'BuTtOn');
+button.type = 'RESET';
+check('button setter raw reflection', button.type === 'reset' && button.getAttribute('type') === 'RESET');
+button.type = 'invalid';
+check('button invalid type Auto', button.type === 'submit' && button.getAttribute('type') === 'invalid');
+button.type = ' reset ';
+check('keyword whitespace not trimmed', button.type === 'submit');
+button.removeAttribute('type');
+check('removed type restores default', button.type === 'submit');
+button.setAttribute('command','');
+check('Auto command context', button.type === 'button');
+button.type = 'submit';
+check('explicit submit overrides command context', button.type === 'submit');
+button.removeAttribute('type'); button.removeAttribute('command'); button.setAttribute('commandfor','target');
+check('Auto commandfor context', button.type === 'button');
+button.removeAttribute('commandfor');
+var select = document.createElement('select'); select.appendChild(button);
+check('Auto select parent context', button.type === 'button');
+select.removeChild(button);
+check('Auto removed select context', button.type === 'submit');
+button.appendChild(document.createTextNode('label'));
+check('missing button value independent of label', button.value === '');
+button.setAttribute('value','apple');
+check('button value from content', button.value === 'apple');
+button.value = 'banana';
+check('button value writes content', button.getAttribute('value') === 'banana' && button.textContent === 'label');
+button.removeAttribute('value');
+check('button value removed', button.value === '');
+check('missing alias values empty', label.htmlFor === '' && meta.httpEquiv === '');
+label.htmlFor = 'jars';
+check('label property reflects for', label.getAttribute('for') === 'jars' && !label.hasAttribute('htmlFor'));
+label.setAttribute('for','pots');
+check('label content reflects property', label.htmlFor === 'pots');
+check('label for expando distinct', !('for' in label));
+label['for'] = 'oil';
+check('label expando cannot change reflection', label.htmlFor === 'pots');
+meta.httpEquiv = 'Refresh';
+check('meta property preserves raw content', meta.getAttribute('http-equiv') === 'Refresh' && !meta.hasAttribute('httpEquiv'));
+meta.setAttribute('http-equiv','boxes');
+check('meta content reflects property', meta.httpEquiv === 'boxes');
+check('meta expando name distinct', !('http-equiv' in meta));
+meta['http-equiv'] = 'oil';
+check('meta expando cannot change reflection', meta.httpEquiv === 'boxes');
+var calls = 0;
+label.htmlFor = {toString:function() { calls++; return 'converted'; }};
+check('DOMString conversion once', calls === 1 && label.getAttribute('for') === 'converted');
+label.htmlFor = null;
+check('DOMString null literal', label.htmlFor === 'null');
+var sentinel = {}, same = false;
+try { label.htmlFor = {toString:function() { throw sentinel; }}; } catch(e) { same = e === sentinel; }
+check('conversion exception preserves content', same && label.htmlFor === 'null');
+same = false; try { label.htmlFor = Symbol(); } catch(e) { same = e instanceof TypeError; }
+check('Symbol conversion rejected', same && label.htmlFor === 'null');
+var setter = Object.getOwnPropertyDescriptor(HTMLLabelElement.prototype,'htmlFor').set;
+calls = 0; same = false;
+try { setter.call(button, {toString:function() { calls++; return 'bad'; }}); } catch(e) { same = e instanceof TypeError; }
+check('receiver brand before conversion', same && calls === 0);
+var getter = Object.getOwnPropertyDescriptor(HTMLButtonElement.prototype,'type').get;
+same = false; try { getter.call(document.createElementNS('urn:custom','button')); } catch(e) { same = e instanceof TypeError; }
+check('foreign namespace cannot borrow button brand', same);
+var clone = label.cloneNode(true);
+check('clone interface and attribute preserved', clone instanceof HTMLLabelElement && clone.htmlFor === 'null');
+var holder = document.createElement('div'); holder.innerHTML = '<button type="BUTTON" value="parsed"></button><label for="parsed"></label><meta http-equiv="Parsed">';
+check('parser chooses specialized button', holder.firstChild instanceof HTMLButtonElement && holder.firstChild.type === 'button' && holder.firstChild.value === 'parsed');
+check('parser chooses specialized label meta', holder.childNodes[1] instanceof HTMLLabelElement && holder.childNodes[1].htmlFor === 'parsed' && holder.lastChild instanceof HTMLMetaElement && holder.lastChild.httpEquiv === 'Parsed');
+var f = document.createElement('iframe'); document.body.appendChild(f);
+var child = f.contentWindow, d = f.contentDocument, cb = d.createElement('button'), cl = d.createElement('label');
+check('child interface owner', cb instanceof child.HTMLButtonElement && !(cb instanceof HTMLButtonElement) && cl instanceof child.HTMLLabelElement);
+setter.call(cl,'borrowed');
+check('borrowed child receiver writes own DOM', cl.getAttribute('for') === 'borrowed');
+same = false; try { Object.getOwnPropertyDescriptor(child.HTMLButtonElement.prototype,'type').get.call(cl); } catch(e) { same = e instanceof child.TypeError; }
+check('child getter exception realm', same);
+</script>

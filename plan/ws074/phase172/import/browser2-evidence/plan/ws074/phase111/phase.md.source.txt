@@ -1,0 +1,56 @@
+<!-- awesome-plan project=zedbsd record=ws074-p111 -->
+
+# ws074-p111: Language inheritance and empty-text selector semantics
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q521 / q521-i01
+Prerequisites: p109/p110cleared f47a5062,56/100/all100 inventory; root sole executor.
+Approval: standing2026-09-30 autonomous Acid3/automatic Queue instruction and
+2026-10-01 continuation. Exact scope and bounded criteria below.
+
+## Objective / scope / design
+
+Indexed34 fails because :lang() is absent;38 treats zero-length text as nonempty.
+Implement single nonempty CSS identifier argument :lang(C) in shared CSS parser,
+class specificity, interned parameter. Match inherited nearest HTMLlang or XML
+namespacedlang, XMLlang takes precedence, explicit empty overrides inheritance;
+ASCII case-insensitive exact or C followed by hyphen, not arbitrary prefix.
+No document HTTP/meta language exists in current engine; unprovided language
+matches nothing. Existing attribute |= stays case-sensitive unless already
+specified otherwise. No strings/multiple/extended wildcard language-range syntax.
+
+:empty ignores comments and zero-length DOM_TEXT nodes but still rejects any
+element (including foreign namespace) or nonempty text, including whitespace.
+Mutations remain handled by existing DOMgeneration/invalidation; no ownership/API
+change. Shared query and cascade paths, focused JS fixture and CSS/DOM/Acid tests.
+Affected css/parser.c, css/internal.h, css/cascade.c only plus tests. No HTML
+control/type/radio state, new CSS properties/media, resource/loading/Traversal/
+Range/VM/HAL/toolchain. Full Guardrail/C standard/browserCSS boundaries apply.
+[Selectors3 language](https://www.w3.org/TR/selectors-3/#lang-pseudo) and
+[empty](https://www.w3.org/TR/selectors-3/#empty-pseudo), Recommendation2018-11-06,
+read2026-10-01; historical Acid3 target uses these semantics. No full Selectors4 claim.
+
+## Criteria / bounds
+
+Focused inheritance/hyphen/case/emptyoverride/XMLlang/mutation/cascade/query and
+comment/emptytext/nonemptytext/foreign child checks PASS plain+ASan;34/38PASS.
+Existing grammar37/37/childCSS30/30/GC33/33/DOM23/23/selectors golden preserve;
+warningfree/no sanitizer, all100Acid3 no former56passregression/no Uncaught/errors,
+Acid2exact; fullchangedsource standard/style/diff/hashes/commands/tools/skips.
+Finite representative semantics, no exhaustive locale/range/fuzz/failure suite.
+Unknown prerequisite ends attempt uncleared before replan, no silent extra scope.
+
+## Introduction / q521 activation (2026-10-01)
+
+Origin q520 remaining44 feature inventory, not a change to earlier p109 acceptance.
+Two bounded shared-selector semantics; [WS summary](../ws.md)/p100100/100 unchanged.
+Localunpublished/nopush.
+
+## q521-i01 clearance / local closure (2026-10-01)
+
+[Evidence](verification.md): focused32/32 and existing selected regressions
+plain+ASanPASS,34/38newPASS/all10058/100/no regression/Uncaught0/Acid2exact.
+Fullchanged C rules/style/diff PASS; remaining42features get finite Phases.
+Localclearanceonly/remoteclosureandpublicationnotperformed. [WS](../ws.md).

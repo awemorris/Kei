@@ -1,0 +1,111 @@
+<!-- awesome-plan project=zedbsd record=q579 -->
+
+# q579 exact Queue scope and outcome
+
+Status: finished (2026-10-02)
+Active Queue: none
+Last finished Queue: [q578](history/queue-q578.md), exact archive verified; p162 cleared.
+Executor root / browser2 checkout / one finite Phase / local unpublished.
+
+## q579 exact scope and approval
+
+Current user automatic Acid3 Queues + continuation approve exact finite p163 snapshot
+before generation. Native PI/CDATA identity/lifetime prerequisite; actual94/all91both/
+Acid2exact verified; no cancellation/concurrent attempt.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q579-i01 | [ws074-p163](ws074/phase163/phase.md) | cleared | p162 cleared; strict XML model PI/CDATA lack native DOM identity |
+
+Exact p163 native types/tracer/rooted C factories/CharacterData operations/clone/native
+fixture only; prior91+native1=92both/original>=94/prior94/72/equal100/noerrors/Acid2exact.
+Graph p162(external)->p163->bindings integration/XML DOM/loading/SVG/p100(external),
+acyclic. Public category/range/render integration known future work before exposing
+new kinds to JS. Unknown prerequisite ends uncleared before redesign. One finite
+Phase; p100/p044/WS incomplete; no score gain expected.
+
+## Upcoming Work Outlook
+
+Native public PI/CDATA interfaces/category integration, then XML DOM projection,
+actual MIME/child navigation/events/SVG. Full standard acceptance after actual100.
+Forecast only.
+
+## q579 outcome (2026-10-02)
+
+[p163](ws074/phase163/phase.md) cleared in q579, [evidence](ws074/phase163/verification.md).
+Actual native CDATA4/PI7/target tracing/rooted C factories/buffer operations/clone.
+Native32/all92PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact.
+Caller-root-free real threshold GC/result-only/clone-only/lastrelease ownership verified.
+Native representation only; known public category/binding integration before JS/DOM
+projection/loading/SVG. p100/p044/WS incomplete; root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p163 -->
+
+# ws074-p163: native XML CDATA and ProcessingInstruction owning nodes
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q579 / q579-i01
+Base8c981664/q578 cleared/native25/all91both/actual94/prior94/Acid2exact.
+Current user 2026-09-30 automatic Acid3 Queues +2026-10-02 continuation authorize
+this exact finite prerequisite before generation. Root sole executor/writer,
+browser2 checkout, no cancellation/concurrent attempt/local unpublished/no push.
+Guardrail/full coding-style1–14/automation/actual DOM nodes/CharacterData lifecycle/
+clone/range/binding category guards reviewed; DOM Standard2026-09-24 verified
+2026-10-02 https://dom.spec.whatwg.org/#interface-cdatasection and
+https://dom.spec.whatwg.org/#interface-processinginstruction .
+
+## Exact finite scope / design / criteria
+
+Add native node kinds CDATA4 and ProcessingInstruction7, character-data target
+VM string traced by dedicated character-data tracer calling ordinary node tracer.
+All existing Text/Comment have NULL target via zeroed VM allocation; their data
+finalizer remains C buffer only. New dom/xml.c C factories dom_cdata_create and
+ dom_pi_create return checked errno +created pointer, fully initialized before
+publish; native already validated target/data inputs, exact UTF16 including lone
+surrogate buffers as permitted in native CharacterData, actual Document owner.
+No XML parser/DOM validation bypass in public API: these are native C factories
+only, not JS constructors or Document factory methods. Temporarily root actual
+Document and PI target before any allocating node factory; all registration failure
+and allocation exits release slots; source data belongs to caller C storage, no
+borrowed unrooted VM buffer. Copied C data ownership with existing character_data
+factory, retag before any further VM allocation and publication, target attached
+before callee roots released. NULLout on failure, invalid input rejects without
+publishing node. Register new module once in libbrowser Makefile.
+
+Native dom_is_character_data and dom_is_text classifiers distinguish Text+CDATA
+from Comment+PI; checked native replace/truncate accept all real CharacterData,
+append/set retain exact owned UTF16; style reset uses Text+CDATA category while PI
+remains non-text. Native bind_clone_node preserves CDATA/PI type and PI target,
+not Text conversion. Source/clone roots protect actual graph during clone allocation.
+Affected dom.h/node.c/dom/xml.c/bind/cloning.c/Makefile/new host-xml-node.c only.
+No broad rewriting of public bindings/range/render/HTML serializer yet.
+
+Native fixture independently verifies nodeType4/7, target/data/owner identity,
+actual mutable C source copied, native append/set/replace/truncate including empty
+and bounds rollback, detached/rooted tree/clone kinds+target, PI vs text category.
+Real heap collection with conservative stack disabled: unrooted caller Document/
+non-atom PI target survive inside callee during actual8MiB threshold GC; result-only
+root keeps target/Document; clone-only retains copied kind/target/owner after original
+released; last release collects target/Document; failure inputs NULLout/no roots.
+Prior91+newnative1=92groupsPASSboth/original>=94/prior94/72/equal100/complete/status0/
+noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact; bothfull builds complete
+beforetests/warning0/style output empty/manual full affected C/diff/hashes.
+Finite one-Phase Queue; unknown prerequisite ends uncleared before redesign.
+
+Graph p162(external)->p163->native bindings/category integration->XML DOMprojection/
+loading/SVG/p100(external), acyclic. Known future public interface/factory/nodeName/
+nodeValue/textContent/CharacterData brand/insertion/Range/Text.split/render category/
+serialization integration must be implemented before exposing these new kinds to
+JS or XML navigation; not silently claimed here. Current old APIs produce no new
+kinds. Full current DOM PI attributes/new constructors/XML processor/DTD validation,
+loading/SVG/events/script/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregatecheck/push/publication excluded. p100/p044/WS incomplete/no score gain expected.
+
+## Introduction (2026-10-02)
+
+Strict XML model already distinguishes PI and CDATA. Preserve real node identity and
+GC ownership natively before selecting public category integration and DOM projection.

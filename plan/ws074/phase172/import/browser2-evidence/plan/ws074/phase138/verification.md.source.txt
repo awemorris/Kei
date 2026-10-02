@@ -1,0 +1,57 @@
+# q550 / ws074-p138 verification — 2026-10-01
+
+Native Range cloning, boundary comparison and Text stringification cleared.
+Original pinned Acid3 remains **87/100** plain and ASan as approved: all prior87
+pass, newpass none, all100 inventory rows equal, complete true/status0/exceptions
+and run errors empty. Acid2 exact100%. Remaining13 indexed7/9/11/12/46/69/71/72/74/
+75/77/79/80 require later finite Queues. Missing content/insert operations remain
+absent, not stubbed. Native semantics prerequisite output, no score edits.
+
+`sh plan/ws074/tests/host-build.sh plain` / `asan`: exit0/warning0, cc14.2.0.
+Real collector uses `ASAN_OPTIONS=detect_stack_use_after_return=0`.
+50 regression groups PASS each: Range core59, removal33, boundary80, direct native
+GC/root conversion89, actual child frame lifetime148; prior49/DOM23/JS14/selector
+style golden all pass. Numeric comparison direct registry calls have no outer VM
+receiver frame. C stacks explicitly excluded inside conversion; actual receiver
+state, second Range state, endpoint graphs, XML creator and numeric value survive.
+Success observes correct historical mode order; EIO/VM_THROWN preserve outcomes;
+both states/creator/endpoints/value become collectible after roots unwind.
+Sole cloned Range preserves actual child native getter/creator/text after manual
+primary teardown while original range is dropped; final managed release once.
+
+Clone creates distinct native points/state/weak subscription with source relevant
+prototype, preserving source creator independently of current endpoint adoption.
+Ordinary and borrowed child/primary methods, XML snapshots, setters/removals and
+saved child clones verified. Chromium153.0.8010.52 bounded actual headless reference
+confirms source child/primary/XML prototype choices, including borrowed methods
+and adopted endpoints; no full Chromium equivalence claim. Command:
+`timeout 20 chromium --headless --no-sandbox --disable-gpu --disable-dev-shm-usage
+--dump-dom file:///home/awe/zedBSD-codex/build/ws074-q550-reference.html`.
+
+Comparison constants0..3 exact flags, required args/method lengths/descriptor flags,
+unsignedshort modulo/fraction/nonfinite, receiver/type/conversion/algorithm-error
+order, unsupportedhow9 before differentroot4, current source changed in valueOf,
+one conversion, source private brand and actual native root/point order verified.
+Native stringifier returns selected Text UTF16, partial/same Text, high/low unpaired
+surrogates, comments/tags excluded, Script/Style Text included, Fragment/XML/
+Document/mixed/deep600/native ordinary traversal, template content exclusion,
+String/default coercion, copied independent units, visible data/text/point expando
+isolation and no native mutation. Copy bounds/arithmetic/allocation checked.
+Scoped Range method enumerable refinement preserves native values/other flags;
+existing non-Range interface behavior unchanged, p136 readonly attrs preserved.
+
+Primary Range algorithms read2026-10-01:
+https://dom.spec.whatwg.org/#dom-range-clonerange
+https://dom.spec.whatwg.org/#dom-range-compareboundarypoints
+https://dom.spec.whatwg.org/#dom-range-stringifier
+Full C manual review of final changed range.c/window.c/native range/frame fixtures:
+ANSI leading locals, existing binding registry table exception, one-line forwards,
+public/static organization, purpose paragraphs, checked allocations/root slots/
+fallible callbacks/string publication, native strong/weak lifetime separation and
+error unwind. Manual formatting: clang-format unavailable. Exact hashes and actual
+reports/command outcomes in verification.json. Style-check changed C no findings;
+`git diff --check` exit0. No ASan/UBSan reports. Bounded60sec commands, no fullWPT/
+fuzz/OS/guest/boot/GPU. Live insertion/data/split/normalize/content/geometry/
+Selection/StaticRange/custom/shadow remain excluded, including stale data-offset
+reads (checked EINVAL rather than out-of-bounds memory access). p100/p044/WS remain
+incomplete. Exact Queue archived/read back; root released/local unpublished/no push.

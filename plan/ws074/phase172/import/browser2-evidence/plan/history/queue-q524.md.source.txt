@@ -1,0 +1,38 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none; finished Queue: q524 (root sole executor)
+Last finished Queue: [q523](history/queue-q523.md), exact archive verified.
+
+## q524
+
+Purpose: CSS predefined cursor47, WS074/fg011. Timebox: one finitePhase/keyword
+cascade and focusedregressions. Approval: currentuser2026-09-30 autonomousAcid3/
+automaticQueue instruction plus2026-10-01continuation. Exact savedscope/criteria:
+[p114](ws074/phase114/phase.md),36predefinedkeywords/initialauto/inheritance/
+parser/computed/ordinary CSS accessors; no URL/images/platformrender/media/HTML/VM/
+Traversal/Range/SVG/HAL/toolchain scope.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q524-i01 | [ws074-p114](ws074/phase114/phase.md) | cleared | p109/p110 cleared/p113 ee552efa61 inventory;47missingcursor |
+
+Criteria: focusedkeyword/cascade/invalid/mutation/read-only PASS plain+ASan,
+childCSS30/frame33/DOM23/selector golden, all100previous61preserved/47PASS/
+Uncaught0/errors0/completeTrue/runstatus0/Acid2exact/warningfree/noASan/fullstandard/
+style/diff/evidence. Graph: verifiedexistingchildCSS+CSS parser(external) → p114
+→ p100(external). No cycle, onlyp114 authorized.
+
+## Upcoming Work Outlook
+
+RemainingHTMLcontrols/collections/activation/CSS/media/Traversal/Range/loading/SVG
+in finite Queues toward100/100. No automaticp101/p098. FullWSconformancep044 remains.
+Localunpublished/nopush.
+
+## Outcome
+
+q524-i01/p114 cleared,54/54/CSS+DOM regressions PASS both variants,
+all10062/100/47newPASS/no regression/Uncaught0/Acid2exact.
+[Evidence](ws074/phase114/verification.md). Remaining38features.

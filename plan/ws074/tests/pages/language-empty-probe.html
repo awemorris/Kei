@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) { console.log((condition ? 'PASS ' : 'FAIL ') + label); }
+var f = document.createElement('iframe'); document.body.appendChild(f);
+var w = f.contentWindow, d = f.contentDocument;
+var parent = d.createElement('div'); parent.setAttribute('lang','en-GB'); parent.setAttribute('class','widget-tree'); d.body.appendChild(parent);
+var p = d.createElement('p'); parent.appendChild(p);
+var sheet = d.createElement('style'); sheet.textContent = 'p {z-index:0;} :lang(en) {z-index:1;} :empty {color:red;}'; d.head.appendChild(sheet);
+check('language direct and inherited', parent.matches(':lang(en)') && p.matches(':lang(en)'));
+check('language hyphen exact', p.matches(':lang(en-GB)'));
+check('ASCII case insensitive range', p.matches(':lang(EN-gb)'));
+check('ASCII case insensitive declaration', (parent.setAttribute('lang','EN-gB'), p.matches(':lang(en)')));
+check('arbitrary prefix rejected', !p.matches(':lang(e)') && !p.matches(':lang(english)'));
+check('cascade language applies', w.getComputedStyle(p).zIndex === '1');
+check('query language inheritance', d.querySelector('p:lang(en)') === p);
+check('attribute dash remains exact-case', parent.matches('[class|=widget]') && !parent.matches('[class|=WIDGET]'));
+p.setAttribute('lang','fr-CA');
+check('own language overrides ancestor', p.matches(':lang(fr)') && !p.matches(':lang(en)'));
+check('live language cascade mutation', w.getComputedStyle(p).zIndex === '0');
+p.setAttribute('lang','');
+check('empty language stops inheritance', !p.matches(':lang(en)') && !p.matches(':lang(fr)'));
+p.removeAttribute('lang');
+check('removed declaration restores inheritance', p.matches(':lang(en)'));
+parent.setAttribute('lang','english');
+check('hyphen boundary required', !p.matches(':lang(en)'));
+parent.setAttribute('lang','de');
+check('live ancestor language change', p.matches(':lang(de)') && !p.matches(':lang(en)'));
+var invalid = [':lang()', ':lang(en fr)', ':lang(en,fr)', ':lang(123)', ':lang(en'];
+for (var i=0; i<invalid.length; i++) {
+  var thrown = false; try { p.matches(invalid[i]); } catch(e) { thrown = e.name === 'SyntaxError'; }
+  check('invalid language argument ' + i, thrown);
+}
+var xml = d.createElement('div'); xml.innerHTML = '<svg xml:lang="fr-CA"><g id="foreign"><rect></rect></g></svg>'; d.body.appendChild(xml);
+var foreign = d.getElementById('foreign');
+check('XML namespaced language inheritance', foreign.matches(':lang(fr)'));
+check('foreign language query', d.querySelector('#foreign:lang(FR-ca)') === foreign);
+check('empty element matches', p.matches(':empty'));
+p.appendChild(d.createComment('comment'));
+check('comment ignored by empty', p.matches(':empty'));
+var text = d.createTextNode(''); p.appendChild(text);
+check('zero-length text ignored', p.matches(':empty'));
+p.appendChild(d.createTextNode(''));
+check('multiple empty text ignored', p.matches(':empty'));
+check('empty cascade applies', w.getComputedStyle(p).color === 'rgb(255, 0, 0)');
+text.data = ' ';
+check('whitespace text is content', !p.matches(':empty'));
+check('live nonempty cascade mutation', w.getComputedStyle(p).color !== 'rgb(255, 0, 0)');
+text.data = '';
+check('empty text mutation restores empty', p.matches(':empty'));
+var child = d.createElementNS('urn:custom','child'); p.appendChild(child);
+check('foreign element makes parent nonempty', !p.matches(':empty'));
+p.removeChild(child);
+check('foreign removal restores empty', p.matches(':empty'));
+check('empty text nodes preserved', p.childNodes.length === 3);
+</script>

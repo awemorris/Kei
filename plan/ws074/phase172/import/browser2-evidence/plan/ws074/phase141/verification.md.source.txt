@@ -1,0 +1,65 @@
+# q553 / p141 verification — 2026-10-01
+
+Base f0ef3fb7. Pinned original Acid3 plain/ASan88/100/newindexed12, prior87 preserved,
+no lost passes, all100 indexed results exactly equal, completeTrue/runstatus0/
+exceptions[]/runerrors[]. Acid2 exact100% both; Acid3pixel38.30% diagnostic only.
+Remaining12: indexed7,9,11,46,69,71,72,74,75,77,79,80. p100/p044/WS acceptance incomplete.
+
+All56 regression groups PASS both; new Page59/native92, existingmutation36/native36,
+preinsert64/native29, Rangecore59/boundary80/removal33/nativeGC89/frame148 unchanged.
+NoFAIL/Uncaught/sanitizer/runtimeerror. Page initially58; full56 group run passed;
+final review added already-scoped adoption during one numeric conversion, targeted
+final Page59 passed both. Only that group's latest outcome/log refreshed; unrelated
+passing groups did not need repetition. Production source semantics unchanged.
+
+Actual native Text.splitText/Range.insertNode, weak split callbacks, allocation-free
+suffix truncate, checked current owner/environment/host mutation path and IDL flags.
+Text split validates current data after one uint32 conversion; attached splits transfer
+strictly following Text points and equal parent trailing points, detached splits clamp
+original suffix points. Range insert checks actual prevalidation BEFORE split, uses
+checked adoption for original removal before current index/count, inserts actual node/
+Fragment, tests collapse AFTER native repair; full real indexed12 tree/string passes.
+Native primitive brands and relevant/current-owner prototypes survive saved child/XML/
+borrowed method/expando scenarios. No clone/delete/extract/surround shim or test-specific
+production path introduced.
+
+Native direct registered method fixture explicitly disables conservative stack scanning
+inside actual valueOf and insertion host callback. Three outcomes each: success/EIO/
+VM_THROWN. Numeric conversion preserves original Text/current creator/argument, native
+suffix uses post-conversion updated UTF16 data, callee temporary roots unwind and only
+explicit suffix retains creator. Range host collection preserves genuine private state/
+creator/original snapshot/parent/incoming Fragment/new suffix reference without an
+outer VM receiver/Node argument frame, including EMPTY incoming Fragment during its
+last host delivery. Original incoming foreign creator retained before adoption then
+collectible after current-owner transfer. Already committed split prefix/boundaries
+remain inspectable after hook errors; no rollback asserted. All released cells reclaim,
+weak tokens finalize safely. 92 independent lifetime/status/content observations PASS.
+
+Commands:
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`, production list, awaited both before
+  tests, final warning/error0. Initial fixture republishing typo used a nonexistent
+  vm_object.platform field; corrected to actual VM_KIND_PLATFORM kind as existing native
+  fixtures/API; no production interface or behavior relaxed.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 build/ws074-host/VARIANT/browser --run
+  plan/ws074/tests/pages/range-insert-probe.html` and `host-range-insert`: PASS.
+- `python3 build/ws074-q553-regressions.py VARIANT`: all56 PASS each60sec bound; full
+  exact command/outcome JSON retained. Targeted final Page adoption case passed59 each.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+  --program build/ws074-host/VARIANT/browser --out build/ws074-acid-q553-VARIANT`:
+  original88/new12/prior87/equal/noerrors/Acid2exact. Overall Acid3FAIL retained until100.
+- `python3 plan/tools/style-check.py userland/desktop/browser/bind/text.c
+  userland/desktop/browser/bind/range.c userland/desktop/browser/bind/window.c
+  userland/desktop/browser/dom/node.c userland/desktop/browser/dom/removal.c
+  plan/ws074/tests/host-range-insert.c`: output inspected empty.
+- `git diff --check`: PASS. cc14.2.0/Python3.13.5; clang-format unavailable, manual format.
+
+Full plan/coding-style.md manual review of final affected C/header: ANSI declarations,
+checked fallible calls/no calls in conditions/initializers, public-before-static/
+one-line declarations and established binding registry table exception, paragraph/
+if/loop/return comments/blanklines/compound conditions/descriptor values, actual root
+lifetimes/error propagation/current owner/weak callback purity/cleanup and allocation-
+free data suffix commit. Source SHA256/reports/regressions in verification.json.
+Host native behavior only, no fullWPT/fuzz/OS/guest/boot/GPU acceptance, aggregate check/
+HAL/toolchain/.internal/push/remote publication. Bounds and exact approved snapshot
+retained; no arbitrary host-reentrant transaction, >UINT32 graphs or fullDOM claim.
+Next finite Range content algorithms/CSS/loading/SVG; final p100/p044 conformance.

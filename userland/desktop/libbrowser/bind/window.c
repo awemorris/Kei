@@ -13,6 +13,7 @@
  */
 
 #include "bind/internal.h"
+#include "html/html.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -23,6 +24,7 @@
 #define WINDOW_CONSOLE_MAX	(64U * 1024U)
 
 static int window_make_interface(struct bind_window *window, int index, struct vm_function **constructors);
+static int window_enumerate_dom_member(struct vm_realm *realm, struct vm_object *prototype, const char *name);
 static int window_define_globals(struct bind_window *window);
 static int window_make_console(struct bind_window *window);
 static int window_console_write(struct vm_realm *realm, int level, const vm_value *args, unsigned count, vm_value *result);
@@ -39,12 +41,18 @@ static int window_inner_height(struct vm_realm *realm, vm_value this_value, cons
 static void window_report_job(struct vm_realm *realm, vm_value exception, void *context);
 static void window_report_exception(struct bind_window *window, vm_value exception, const char *name);
 static void window_trace(struct vm_heap *heap, void *context);
+static void window_release(void *context);
 
 /*
  * The attributes of Window's prototype.  The table is constant for the
  * life of the program.
  */
 static const struct bind_attribute window_attributes[] = {
+	{ "parent", bind_frame_parent, NULL },
+	{ "top", bind_frame_top, NULL },
+	{ "frames", bind_frame_self, NULL },
+	{ "closed", bind_frame_closed, NULL },
+	{ "frameElement", bind_frame_element, NULL },
 	{ "innerWidth", window_inner_width, NULL },
 	{ "innerHeight", window_inner_height, NULL },
 	{ "scrollX", bind_window_scroll_x, NULL },
@@ -92,8 +100,12 @@ static const struct bind_interface *const window_interfaces[BIND_INTERFACES] = {
 	&bind_node_interface,
 	&bind_character_data_interface,
 	&bind_text_interface,
+	&bind_cdata_interface,
+	&bind_pi_interface,
 	&bind_comment_interface,
 	&bind_document_interface,
+	&bind_xml_document_interface,
+	&bind_dom_implementation_interface,
 	&bind_document_type_interface,
 	&bind_document_fragment_interface,
 	&bind_element_interface,
@@ -121,7 +133,47 @@ static const struct bind_interface *const window_interfaces[BIND_INTERFACES] = {
 	&bind_text_decoder_interface,
 	&bind_storage_interface,
 	&bind_html_template_element_interface,
-	&bind_dom_exception_interface
+	&bind_dom_exception_interface,
+	&bind_html_iframe_element_interface,
+	&bind_html_button_element_interface,
+	&bind_html_label_element_interface,
+	&bind_html_meta_element_interface,
+	&bind_html_object_element_interface,
+	&bind_tree_walker_interface,
+	&bind_node_iterator_interface,
+	&bind_html_collection_interface,
+	&bind_html_form_element_interface,
+	&bind_html_form_controls_collection_interface,
+	&bind_node_list_interface,
+	&bind_radio_node_list_interface,
+	&bind_html_input_element_interface,
+	&bind_submit_event_interface,
+	&bind_html_table_element_interface,
+	&bind_html_table_section_element_interface,
+	&bind_html_table_row_element_interface,
+	&bind_html_table_caption_element_interface,
+	&bind_html_select_element_interface,
+	&bind_html_option_element_interface,
+	&bind_html_opt_group_element_interface,
+	&bind_html_options_collection_interface,
+	&bind_abstract_range_interface,
+	&bind_range_interface,
+	&bind_html_style_element_interface,
+	&bind_style_sheet_interface,
+	&bind_css_style_sheet_interface,
+	&bind_style_sheet_list_interface,
+	&bind_css_rule_list_interface,
+	&bind_svg_element_interface,
+	&bind_svg_graphics_element_interface,
+	&bind_svg_text_content_element_interface,
+	&bind_svg_text_positioning_element_interface,
+	&bind_svg_text_element_interface,
+	&bind_svg_tspan_element_interface,
+	&bind_svg_text_path_element_interface,
+	&bind_svg_geometry_element_interface,
+	&bind_svg_rect_element_interface,
+	&bind_svg_animated_length_interface,
+	&bind_svg_length_interface
 };
 
 /*
@@ -141,8 +193,18 @@ bind_window_create(
 	struct bind_window *made;
 	int error;
 
-	/* Allocates the window's record. */
+	/* Collectible hosts cannot leave asynchronous callbacks in the embedder. */
 	*window = NULL;
+	if (realm->managed && host->fetch != NULL)
+		return ENOTSUP;
+
+	/* A managed realm and document belong to exactly one live window. */
+	if (realm->managed && realm->host != NULL)
+		return EINVAL;
+	if (realm->managed && document->context != NULL)
+		return EINVAL;
+
+	/* Allocates the window's record before publishing any host state. */
 	made = calloc(1, sizeof(*made));
 	if (made == NULL)
 		return ENOMEM;
@@ -172,6 +234,18 @@ bind_window_create(
 		return error;
 	}
 
+	/* Transfers permanent tracing to the collectible realm only after install. */
+	if (realm->managed) {
+		made->owned = 1;
+		realm->host_trace = window_trace;
+		realm->host_release = window_release;
+		document->context = &realm->cell;
+		vm_heap_remove_tracer(realm->heap, window_trace, made);
+	}
+
+	/* Installs opaque Document view/removal hooks after complete construction. */
+	bind_frames_attach(made);
+
 	/* Succeeded: the global object is the document's window. */
 	*window = made;
 	return 0;
@@ -184,19 +258,43 @@ void
 bind_window_destroy(
 	struct bind_window *window)
 {
-	/* A NULL window is nothing to destroy. */
-	if (window == NULL)
+	/* A missing window has no resources; owned windows are finalized by GC. */
+	if (window == NULL || window->owned)
 		return;
 
-	/* The realm no longer has a window, and the heap no longer traces it. */
-	bind_environment_release(window);
-	if (window->realm->host == window)
-		window->realm->host = NULL;
-	vm_heap_remove_tracer(window->realm->heap, window_trace, window);
+	/* Retires child contexts while the primary Document cells are still live. */
+	bind_frames_release(window);
 
-	/* Frees the timers and the record. */
-	wb_vector_release(&window->timers);
-	free(window);
+	/* Releases the explicitly owned primary record. */
+	window_release(window);
+
+	/* Succeeded: the primary host no longer retains any cells. */
+	return;
+}
+
+/*
+ * Cancels a detached context's queued work while keeping saved objects usable.
+ */
+void
+bind_window_detach(
+	struct bind_window *window)
+{
+	/* Repeated retirement must not free state twice. */
+	if (window == NULL || window->detached)
+		return;
+
+	/* Detached contexts no longer deliver tasks, jobs or observer callbacks. */
+	window->detached = 1;
+	bind_frames_detach(window);
+
+	/* This context no longer delivers its own queued tasks. */
+	window->timers.count = 0;
+	window->realm->jobs.count = 0;
+	window->realm->rejections.count = 0;
+	bind_environment_disconnect(window);
+
+	/* Succeeded: saved Window/Document/function references retain quiet state. */
+	return;
 }
 
 /*
@@ -303,6 +401,13 @@ bind_checkpoint(
 	int queued;
 	int status;
 
+	/* A detached context never delivers work queued by later saved functions. */
+	if (window->detached) {
+		window->realm->jobs.count = 0;
+		window->realm->rejections.count = 0;
+		return 0;
+	}
+
 	/* Runs the jobs already queued by the script. */
 	status = vm_run_jobs(window->realm, window_report_job, window);
 	if (status != 0)
@@ -394,7 +499,7 @@ bind_console(
 	const char *text)
 {
 	/* A host without a console drops the line. */
-	if (window->host.console == NULL)
+	if (window->detached || window->host.console == NULL)
 		return;
 
 	/* Hands the line over. */
@@ -632,6 +737,41 @@ bind_get_option(
 	return 0;
 }
 
+/* Refines a just-published native IDL member's enumerable flag without changing its native value or other flags. */
+static int
+window_enumerate_dom_member(
+	struct vm_realm *realm,
+	struct vm_object *prototype,
+	const char *name)
+{
+	struct vm_property property;
+	vm_value key;
+	int found;
+	int status;
+
+	/* The existing native member owns its actual key and accessor or method value. */
+	key = vm_key_from_ascii(realm->heap, name);
+	if (key == VM_VALUE_EMPTY)
+		return ENOMEM;
+
+	/* A failed lookup cannot publish a partially refined native interface. */
+	found = vm_object_get_own(prototype, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* A missing generated member indicates incomplete native interface publication. */
+	if (found == 0)
+		return EINVAL;
+
+	/* Preserve genuine function/accessor identities and every descriptor flag except enumerability. */
+	status = vm_object_define(realm->heap, prototype, key, *property.value, property.attributes | VM_PROPERTY_ENUMERABLE);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the scoped Range member has its required native enumerable descriptor. */
+	return 0;
+}
+
 /* Makes one interface's object and prototype from its table. */
 static int
 window_make_interface(
@@ -670,6 +810,14 @@ window_make_interface(
 		error = js_builtin_accessor(realm, prototype, attribute->name, attribute->getter, attribute->setter);
 		if (error != 0)
 			return error;
+
+		/* Range's native readonly IDL attributes enumerate on their relevant prototype. */
+		if (index == BIND_ABSTRACT_RANGE || index == BIND_RANGE) {
+			error = window_enumerate_dom_member(realm, prototype, attribute->name);
+			if (error != 0)
+				return error;
+		}
+
 	}
 
 	/* The operations, methods on the prototype. */
@@ -677,6 +825,13 @@ window_make_interface(
 		error = js_builtin_method(realm, prototype, operation->name, operation->length, operation->method);
 		if (error != 0)
 			return error;
+
+		/* Range and the concrete Text split use the enumerable writable configurable WebIDL descriptor. */
+		if (index == BIND_RANGE || index == BIND_TEXT) {
+			error = window_enumerate_dom_member(realm, prototype, operation->name);
+			if (error != 0)
+				return error;
+		}
 	}
 
 	/* HTML elements, the document and the window have the event handler attributes. */
@@ -751,6 +906,11 @@ window_define_globals(
 
 	/* DOMRect's members (ws074-p031). */
 	error = bind_geometry_install(window);
+	if (error != 0)
+		return error;
+
+	/* The callback-interface namespace supplies unsigned traversal constants. */
+	error = bind_traversal_install(window);
 	if (error != 0)
 		return error;
 
@@ -984,9 +1144,9 @@ window_queue_microtask(
 }
 
 /*
- * Queues a same-page message (postMessage).  Frames and separate browsing
- * contexts are not present yet, so parent, top and frames all name this
- * window.  Delivery is still a later task, as it is in a browser.
+ * Queues a message for the callee's Window (postMessage).
+ * Delivery is a later task; source/origin transport between child contexts
+ * remains outside the initial about:blank context interface.
  */
 static int
 window_post_message(
@@ -1115,6 +1275,7 @@ window_inner_width(
 	vm_value *result)
 {
 	struct bind_window *window;
+	int status;
 
 	UNUSED_PARAMETER(this_value);
 	UNUSED_PARAMETER(args);
@@ -1122,6 +1283,9 @@ window_inner_width(
 
 	/* The size the page gave the window. */
 	window = bind_window_of(realm);
+	status = bind_frame_viewport(window);
+	if (status != 0)
+		return status;
 	*result = vm_value_int32(window->viewport_width);
 
 	/* Succeeded: the width is reported. */
@@ -1138,6 +1302,7 @@ window_inner_height(
 	vm_value *result)
 {
 	struct bind_window *window;
+	int status;
 
 	UNUSED_PARAMETER(this_value);
 	UNUSED_PARAMETER(args);
@@ -1145,6 +1310,9 @@ window_inner_height(
 
 	/* The size the page gave the window. */
 	window = bind_window_of(realm);
+	status = bind_frame_viewport(window);
+	if (status != 0)
+		return status;
 	*result = vm_value_int32(window->viewport_height);
 
 	/* Succeeded: the height is reported. */
@@ -1167,6 +1335,32 @@ window_report_job(
 	bind_report_exception(window, exception);
 }
 
+/* Releases host C state without reading any potentially finalized DOM cells. */
+static void
+window_release(
+	void *context)
+{
+	struct bind_window *window;
+
+	/* Removes registrations while the C realm and heap tables still exist. */
+	window = context;
+	html_parser_destroy(window->document_parser);
+	bind_environment_release(window);
+	bind_style_context_release(window);
+	if (window->realm->host == window)
+		window->realm->host = NULL;
+	window->realm->host_trace = NULL;
+	window->realm->host_release = NULL;
+	vm_heap_remove_tracer(window->realm->heap, window_trace, window);
+
+	/* Timer storage contains values, but releasing it reads none of them. */
+	wb_vector_release(&window->timers);
+	free(window);
+
+	/* Succeeded: the owner may now release its VM stack. */
+	return;
+}
+
 /* Marks the cells the window holds: the prototypes, the console, its listeners and the timers. */
 static void
 window_trace(
@@ -1176,8 +1370,25 @@ window_trace(
 	struct bind_window *window;
 	int index;
 
-	/* The prototypes. */
+	/* The owned Document remains available even if global.document was removed. */
 	window = context;
+	vm_heap_mark(heap, &window->document->node.cell);
+	html_parser_trace_owned(heap, window->document_parser);
+	bind_environment_trace(heap, window);
+
+	/* Initial blank fallback metadata belongs to this managed owner. */
+	if (window->base_url != NULL)
+		vm_heap_mark(heap, &window->base_url->cell);
+
+	/* Saved child Windows retain their ancestors and their connected frame. */
+	if (window->parent_global != NULL)
+		vm_heap_mark(heap, &window->parent_global->cell);
+	if (window->top_global != NULL)
+		vm_heap_mark(heap, &window->top_global->cell);
+	if (window->frame != NULL)
+		vm_heap_mark(heap, &window->frame->node.cell);
+
+	/* The interfaces keep every saved wrapper's native methods alive. */
 	for (index = 0; index < BIND_INTERFACES; index++) {
 		if (window->prototypes[index] != NULL)
 			vm_heap_mark(heap, &window->prototypes[index]->cell);

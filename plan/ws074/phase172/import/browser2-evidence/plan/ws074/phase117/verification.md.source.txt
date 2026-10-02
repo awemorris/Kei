@@ -1,0 +1,61 @@
+# q527 / p117 verification — 2026-10-01
+
+Outcome: cleared. Against baseline5e6457f5, plain/ASan original fixed Acid3
+65→67/100 solely26+27PASS, all100indexed results agree, zero formerPASS regression,
+Uncaught/exceptions/run errors0, completeTrue/run_status0; Acid2 exact100%.
+Pixel agreement38.486875% remains diagnostic, not full acceptance. p100 unmet.
+
+DOMImplementation uses a dedicated native brand, SameObject cache and associated
+Document trace. XMLDocument inherits Document, retains content kind and private
+prototype snapshot without a browsing-context view/raw Window owner. Ordinary
+HTML parser defaults remain HTML. Creation shares existing namespace validation;
+qualifiedName null→empty, ordered once-only conversions, invalid doctype rejected
+before tree mutation, supplieddoctype moves/adopts only after fallible result
+allocation and retains identity. General DOM adoption/loading remains later.
+XML/XHTML case naming and qualified tag-query matching verified; query collections
+remain existing snapshots (no live collection conformance). Current DOM createElement
+uses HTML namespace for XHTML MIME documents, preserving case. contentType readonly.
+
+Commands (both variants, ASAN_OPTIONS=detect_stack_use_after_return=0):
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan` → warning/error0.
+- browser `--run plan/ws074/tests/pages/xml-document-probe.html` →62/62.
+- host-xml-document →16/16; real GC twice with stack scanning disabled, raw
+  connected/detached XML descendant or sole implementation root only after primary
+  host/realm destruction. Fresh wrapper uses snapshot with NULL Window; dropped
+  root removes actual Document/snapshot/selected root cell addresses from heap.
+- host-frame-lifetime →48/48 (prior38 plus two5-checkcases); child-created XML
+  node or soleimplementation retains managed child after iframe removal/primary
+  destruction. Child native accessor/factory still usable, finalrootdrop finalizes
+  exactlyonce, repeatedGC no doublefree.
+- namespace-probe38/38, host-namespace12/12, element-name-probe31/31,
+  iframe-context-probe17/17, legacy-event-probe56/56, child-style-probe30/30.
+- host-context-ownership27/27, host-realms30/30, host-object100checks0failed,
+  host-interp45checks0failed, run-dom-tests23/23, run-js-tests14/14.
+- selectors `--dump=style` byte-identical golden.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/<variant>/browser --out build/ws074-acid-q527-<variant>`;
+  compare every oldPASS and fullplain/ASan inventory, not score alone.
+- `python3 plan/tools/style-check.py` all changed C source/host tests →no findings;
+  `git diff --check` PASS. Full applicable C standard/manual formatting review
+  covers allchanged functions: ANSI locals/forwards/public-order/semanticcomments/
+  checkedallocation/orderedcoercion/errorpaths/trace/lifetime/brands/boundedmutation.
+  Existing binding tables require static forwards before referencing methods.
+
+Fixture corrections: initial host GC assertion incorrectly demanded an entirely
+empty heap, but interned atoms intentionally live for the heap lifetime. Revised
+assertion verifies actual selected graph addresses become free (vm_heap_find_cell)
+plus live-cell reduction; production unchanged. Initial child-CSS filename typo
+corrected to existing child-style-probe; final evidence reruns affected checks.
+Earlier failed runs retained in build/ws074-q527-regressions-<variant> logs; final
+consolidated valid results build/ws074-q527-final-<variant>. No production bug
+transfer/waiver/acceptance reduction. Final source hashes in verification.json.
+
+Compilercc14.2.0/Python3.13.5; clang-format unavailable, manual format applied.
+Logs build/ws074-q527-build/style/regressions/final/acid-*; pinnedWPT commit
+2d66b9b7998bb58c336138c178323ddee857b586, original test source unchanged. No
+exhaustiveWPT/fuzz, OS/guest/boot/GPU check. Primary natives bound to explicitly
+destroyed manual realms are deliberately not invoked; managed child factories
+are tested through actual surviving owner functions. No origin/security model,
+XML loading/parser/serializer, genericadoption/import/clone/constructors,
+createHTMLDocument/hasFeature or new collection/control/SVG APIs supplied.
+Local unpublished/no push; WS incomplete, nextfiniteQueues cover remaining33.

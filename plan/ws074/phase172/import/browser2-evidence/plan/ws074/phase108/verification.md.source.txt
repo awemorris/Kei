@@ -1,0 +1,47 @@
+# q517 / p108 verification — 2026-10-01
+
+**cleared**. createElementNS preserves exact URI/prefix/localName and normative
+validation/NamespaceError ordering; known URI IDs remain compatible with parser
+classification, custom URIs get DOM_NS_OTHER/generic Element. Element.prefix and
+namespaceURI report identity, clones copy it and DOM tracing retains URI cells.
+createElement retains ASCII folding; the shared validator accepts both ASCII
+cases for the new namespaced API. No external browser API or source module added.
+
+Commands/results in each plain/ASan variant:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`:PASS, warning-free.
+- `browser --run plan/ws074/tests/pages/namespace-probe.html`:38/38, exact
+  qualified/URI/prefix/local/case/Unicode identities, generic/HTML/SVG wrappers,
+  null/empty/undefined namespaces, qualified serialization/clone, invalid names
+  and reserved/null namespace errors, argument conversion order/identity/Symbol/
+  required argument behavior, borrowed child owner and exception realm.
+- `build/ws074-host/{plain,asan}/host-namespace`:12/12, original raw node,
+  cloned wrapper and cloned raw node retain a runtime non-atom URI/prefix/local
+  and custom classification after primary destruction and repeated explicit-root
+  GC. Last-root removal and whole-heap cleanup report no sanitizer diagnostic.
+- p107 element-name-probe31/31, saved iframe-context-probe17/17, host-realms30/30,
+  `run-dom-tests.py --program .../browser`:23/23.
+- `run-acid-tests.py --program .../browser --out build/ws074-acid-q517-{plain,asan}`:
+  Acid2 exact100%; Acid3 47/100, all100 inventory identical between variants,
+  tests21/23/76 newly PASS, no previous pass regressed, Uncaught0/completeTrue/
+  run_status0/run_errors0. Test76 also benefits from real SVG namespace creation;
+  this does not prove complete SVG loading/rendering support. Visual39.21333333333333%.
+- `python3 plan/tools/style-check.py` on all changed C sources/host test and
+  `git diff --check`:PASS.
+
+ASAN_OPTIONS=detect_stack_use_after_return=0 preserves supported conservative
+stack scanning; GC identity checks switch to explicit embedding roots only after
+construction. Final host binaries are newer than the final test source. Complete
+changed-source coding-style.md review covers declarations/prototypes, semantic
+paragraphs/conditions, UTF-16 temporary allocation/unwind, callee exceptions,
+namespace publication/clone/tracing and generic wrapper selection; PASS. Manual
+formatting, clang-format unavailable; cc14.2.0/Python3.13.5. Allocation failures
+propagate, but exhaustive fault injection is not claimed.
+
+No namespaced attributes/DOMImplementation/XML parser/Traversal/Range/URL loading/
+CSSOM/custom registry support supplied. OS/guest/boot/GPU and aggregate checks
+not run because those paths are unchanged. p100 remains100/100 acceptance and
+full WS conformance remains p044. [Hashes/results](verification.json),
+[all100 inventory](inventory.json). Build reports/logs under build/ws074-q517-*
+and build/ws074-acid-q517-* are disposable; durable outcome above retained.
+Local unpublished/no push; remaining53 indexed failures need new finite phases.

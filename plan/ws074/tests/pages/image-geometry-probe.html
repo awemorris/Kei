@@ -1,0 +1,24 @@
+<!doctype html><html><head><style>iframe{display:block;width:100px;height:100px;border:2px solid;padding:3px}#primary{width:60px;height:12px}</style></head><body><img id="primary"><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+var f=document.createElement('iframe');document.body.appendChild(f);var d=f.contentDocument,w=f.contentWindow;
+d.open();d.write('<style>html,body{margin:0;height:100%}img{display:block;width:50px;height:10px}</style><img id=image width=7 height=8>');d.close();var img=d.images[0],s=d.head.firstChild;
+check(img.height===10&&img.width===50,'child image returns native CSS content dimensions');
+check(document.images[0].height===12&&document.images[0].width===60,'primary image uses its own cascade');
+s.firstChild.data='html,body{margin:0;height:100%}img{display:block;width:50px;height:20px}';check(img.height===20,'style character-data mutation updates image layout');
+s.appendChild(d.createTextNode('img{height:30px}'));check(img.height===30,'additional style text updates image layout');
+img.style.height='40px';check(img.height===40,'inline cascade updates real rendered image');
+img.style.cssText='display:block;width:80px;height:50px;border:2px solid;padding:3px';check(img.width===80&&img.height===50,'content size excludes border and padding');
+var r=img.getBoundingClientRect();check(r.width===90&&r.height===60,'child rectangle includes actual border and padding');
+img.style.boxSizing='border-box';check(img.width===70&&img.height===40,'border-box image exposes actual content area');
+img.style.cssText='width:50%;height:25%';check(img.width===50&&img.height===25,'child percentages use actual iframe content viewport');
+f.style.width='200px';f.style.height='200px';check(img.width===100&&img.height===50,'parent resize updates same child layout');
+f.style.width='0px';f.style.height='0px';check(w.innerWidth===0&&w.innerHeight===0,'exact zero embedding viewport remains zero');check(img.width===0&&img.height===0,'percent sizes resolve against exact zero child viewport');
+img.style.cssText='width:50px;height:10px';check(img.width===50&&img.height===10,'fixed image size remains layout based with zero viewport');
+img.style.display='none';check(img.width===7&&img.height===8,'unrendered image preserves attribute fallback');
+img.style.display='block';img.remove();check(img.width===7&&img.height===8,'disconnected image preserves attribute fallback');d.body.appendChild(img);check(img.height===10,'reattached image uses actual native layout again');
+var getter=Object.getOwnPropertyDescriptor(w.HTMLImageElement.prototype,'height').get;check(getter.call(img)===10,'native image getter accepts actual child receiver');check(getter.call(document.images[0])===12,'borrowed getter uses actual primary owner');
+var nested=d.createElement('iframe');nested.style.cssText='display:block;width:120px;height:80px';d.body.appendChild(nested);var nd=nested.contentDocument;nd.open();nd.write('<style>html,body{margin:0;height:100%}img{display:block;width:50%;height:25%}</style><img>');nd.close();check(nd.images[0].width===60&&nd.images[0].height===20,'nested child uses its own real content viewport');
+check(document.images[0].height===12,'child layout leaves primary dimensions unchanged');
+f.remove();check(d.defaultView===null&&img.height===8&&img.width===7,'retired image uses fallback without accessing destroyed parent layout');
+check(img.getBoundingClientRect().width===0,'retired child has no active geometry');console.log('image geometry probe done');
+</script></body></html>

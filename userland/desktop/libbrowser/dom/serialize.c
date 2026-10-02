@@ -126,6 +126,7 @@ serialize_node(
 		error = serialize_element((const struct dom_element *)node, scripting, out);
 		return error;
 	case DOM_TEXT:
+	case DOM_CDATA_SECTION:
 		/* Text, raw inside the raw text elements and escaped anywhere else. */
 		data = (const struct dom_character_data *)node;
 		raw = 0;
@@ -140,6 +141,21 @@ serialize_node(
 		}
 
 		/* Reports the writing. */
+		return error;
+	case DOM_PROCESSING_INSTRUCTION:
+		/* HTML fragment serialization preserves the actual PI target and uninterpreted data. */
+		data = (const struct dom_character_data *)node;
+		error = serialize_ascii("<?", out);
+		if (error == 0)
+			error = serialize_string(data->target, out);
+		if (error == 0)
+			error = serialize_ascii(" ", out);
+		if (error == 0)
+			error = wb_units_append(out, data->data.data, data->data.length);
+		if (error == 0)
+			error = serialize_ascii("?>", out);
+
+		/* Succeeded or failed: PI serialization never descends into nonexistent children. */
 		return error;
 	case DOM_COMMENT:
 		/* A comment, its data as it is. */

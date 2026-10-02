@@ -1,0 +1,46 @@
+<!-- awesome-plan project=zedbsd record=queue-q515 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q514](queue-q514.md), archive verified.
+
+## q515
+
+Purpose: finish p104 initial about:blank iframe lifecycle, WS074 / fg011.
+Timebox: one finite Phase, bounded ownership/error/teardown and regressions.
+Approval: current user 2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」; 2026-10-01 「続けてください」.
+Exact scope: p104 q515 saved revision; complete retained initial-context design,
+focused GC/saved references/removal/nesting/parent teardown/failure checks and
+in-scope fixes/full changed-source review. No URL/network/loading/navigation,
+parser/open-close/XML/SVG/object/Range/CSSOM/HAL/toolchain/modules.
+
+| Attempt | Phase | Status | Dependencies / readiness |
+| --- | --- | --- | --- |
+| q515-i01 | [ws074-p104](../ws074/phase104/phase.md) | cleared | p103/p105/p106 cleared, 8dd06539; saved17/17 plain+ASan already verified q514 |
+
+Criteria: focused lifecycle/GC/error/teardown PASS, saved17/17, ownership27/27,
+realm30/30, VM/DOM plain+ASan; warning-free/no sanitizer; Acid2 exact and all100
+Acid3 no regression from42/100, Uncaught0/no errors; full p104 changed-source
+standard/style/diff review with durable evidence. Earlier attempts preserved.
+Graph: p103+p105+p106 (external cleared) → q515-i01/p104 → p100 (external planned).
+No cycle; external nodes are context, not implementation authority.
+
+## Upcoming Work Outlook
+
+Use the complete100 inventory to split next required HTML parser/open-close,
+DOM/Events/Traversal/Range/CSSOM/XML/SVG/VM features into finite phases toward
+p100100/100, zero Uncaught/crash/timeout, preserving Acid2 exact. p101/p098
+remain outside this goal; p044 remains full WS conformance.
+
+## q515 terminal outcome (2026-10-01)
+
+q515-i01/p104 cleared. Initial about:blank iframe contexts, ownership/wrappers/
+relations and removal/reinsert/parent teardown verified. Plain/ASan lifetime24/24,
+Chromium17/17, safety14/14, ownership27/27, realms30/30, object100/100, interp45/45,
+DOM23/23, no sanitizer/warnings. Acid2 exact; Acid3 all100 unchanged42/100/
+Uncaught0/no run errors. Full changed-source standard/style/diff PASS; formatter
+absent. [Evidence](../ws074/phase104/verification.md). No loading/full iframe/p100
+claim; earlier uncleared attempts retained. Local unpublished/no push. Next
+finite feature selection follows all100 failure inventory under standing consent.

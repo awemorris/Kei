@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 """Classify the fixed browser2 diff against the WS107 relocation inventory."""
 import hashlib
 import json
@@ -12,6 +13,8 @@ COMMON = '493b6eea90c45b3c1f393c0c62a0f7882b43621c'
 BRANCH = 'e53ef03b80113aec959deb67f828cba21d68d4be'
 CURRENT = '41aac4fc76d0038f9024b0b966d8ae93eb4145fa'
 OUT = ROOT / 'plan/ws074/phase172/import'
+OUT.mkdir(parents=True, exist_ok=True)
+(ROOT / 'plan/ws074/temp/p172').mkdir(parents=True, exist_ok=True)
 
 
 def git(*args):
@@ -19,9 +22,10 @@ def git(*args):
 
 
 def blob(revision, path):
-    result = subprocess.run(['git', 'show', revision + ':' + path], cwd=ROOT,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return result.stdout if result.returncode == 0 else b''
+    listing = git('ls-tree', '-r', '--name-only', revision, '--', path)
+    if not listing:
+        return None
+    return git('show', revision + ':' + path)
 
 
 def normalize(content, old, new):
@@ -56,13 +60,16 @@ for line in git('diff', '--name-status', COMMON, BRANCH).decode().splitlines():
         owner, scope = 'main-reconciliation', 'history-evidence'
     else:
         owner, scope = 'main', 'excluded-board'
-    ancestor, branch, current = blob(COMMON, old), blob(BRANCH, old), blob(CURRENT, new)
+    versions = dict(common=blob(COMMON, old), branch=blob(BRANCH, old), current=blob(CURRENT, new))
+    if versions['branch'] is None and status != 'D':
+        raise RuntimeError('branch path missing: ' + old)
+    ancestor, branch, current = (versions[key] or b'' for key in ('common', 'branch', 'current'))
     classification = 'not-reviewed'
     if scope in ('source', 'build', 'test'):
         ancestor, branch = normalize(ancestor, old, new), normalize(branch, old, new)
         if branch == current:
             classification = 'redundant'
-        elif not ancestor and not current:
+        elif versions['common'] is None and versions['current'] is None:
             classification = 'new'
         elif ancestor == current:
             classification = 'clean'
@@ -80,10 +87,14 @@ for line in git('diff', '--name-status', COMMON, BRANCH).decode().splitlines():
                 target.write_bytes(merged.stdout)
     row = dict(branch_status=status, original=old, target=new, owner=owner, scope=scope,
                classification=classification, disposition='unresolved')
+    row['present'] = {key: value is not None for key, value in versions.items()}
+    row['raw_sha256'] = {key: hashlib.sha256(value).hexdigest() if value is not None else None for key, value in versions.items()}
     for label, content in [('common', ancestor), ('branch', branch), ('current', current)]:
         row[label + '_sha256'] = hashlib.sha256(content).hexdigest()
     rows.append(row)
-output = dict(common=COMMON, branch=BRANCH, current=CURRENT, entries=rows)
+output = dict(common=COMMON, branch=BRANCH, current=CURRENT,
+              hash_contract='comparison hashes normalize engine path/Makefile variables; raw_sha256 hashes original bytes; present distinguishes absent from empty',
+              entries=rows)
 (OUT / 'manifest.json').write_text(json.dumps(output, indent=2) + '\n')
 print('scope:', dict(Counter(row['scope'] for row in rows)))
 print('source/build:', dict(Counter(row['classification'] for row in rows if row['scope'] in ('source', 'build'))))

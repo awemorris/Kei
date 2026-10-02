@@ -21,15 +21,17 @@
 #include "net/net.h"
 
 #include <errno.h>
+#include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 /* The longest part of a script's src its errors are named by, in bytes. */
 #define SCRIPT_NAME_MAX		200U
 
-/* The most rounds of timers a settling page runs (a page whose timers never stop is cut short). */
-#define SCRIPT_SETTLE_ROUNDS	100
+/* The task-round limit that detects loops without virtual-clock progress. */
+#define SCRIPT_SETTLE_ROUNDS	10000
 
 /* The deepest inserted subtree searched for scripts. */
 #define SCRIPT_INSERT_DEPTH	512
@@ -56,6 +58,7 @@ struct page_fetch_request {
 	void *done_context;
 };
 
+static int script_settle_network(struct page *page, double wait, double *elapsed);
 static void script_console(void *context, int level, const char *text, size_t length);
 static int script_location(void *context, int part, struct wb_buffer *out);
 static int script_cookie_get(void *context, struct wb_buffer *out);
@@ -70,6 +73,7 @@ static void script_fetch_arrived(void *context, struct net_request *request);
 static void script_fetch_remove(struct page_fetch_request *entry);
 static int script_node_inserted(void *context, struct dom_node *node);
 static int script_checkpoint(void *context);
+static int script_document_write(void *context, const uint16_t *units, size_t length);
 static int script_walk_inserted(struct page *page, struct dom_node *node, int depth);
 static int script_prepare_dynamic(struct page *page, struct dom_element *script);
 static int script_prepare_external(struct page *page, struct dom_element *script, const struct vm_string *src);
@@ -231,11 +235,69 @@ page_start_scripts(
 	host.fetch = script_fetch;
 	host.fetch_sync = script_fetch_sync;
 	host.element_at = page_element_at;
+	host.document_write = script_document_write;
 	error = bind_window_create(page->realm, page->document, &host, &page->window);
 	if (error != 0)
 		return error;
 
 	/* Succeeded: the page can run scripts. */
+	return 0;
+}
+
+/* Polls one bounded actual loader step while recording monotonic elapsed waiting time. */
+static int
+script_settle_network(
+	struct page *page,
+	double wait,
+	double *elapsed)
+{
+	struct pollfd fds[64];
+	struct timespec before;
+	struct timespec after;
+	size_t count;
+	int timeout;
+	int ready;
+	int status;
+
+	/* Headless network integration uses the same supported monotonic clock as the native view and loader. */
+	*elapsed = 0;
+	status = clock_gettime(CLOCK_MONOTONIC, &before);
+	if (status != 0)
+		return errno;
+
+	/* Actual requests supply their own earliest timeout; a missing loader cannot make request progress. */
+	if (page->loader == NULL)
+		return ENOTSUP;
+	timeout = net_loader_timeout(page->loader);
+	if (timeout < 0)
+		timeout = 0;
+	if (timeout > wait) {
+		/* Poll uses whole milliseconds; rounding upward prevents submillisecond busy waits. */
+		timeout = (int)wait;
+		if ((double)timeout < wait)
+			timeout++;
+	}
+
+	/* Poll the actual descriptor snapshot without advancing any virtual timer first. */
+	count = net_loader_poll_fds(page->loader, fds, 64U);
+	ready = poll(fds, (nfds_t)count, timeout);
+	if (ready < 0 && errno != EINTR)
+		return errno;
+
+	/* A borrowed completion callback copies C metadata; outer Page timing drains child scripts and events later. */
+	if (ready >= 0)
+		net_loader_process(page->loader, fds, count);
+	status = clock_gettime(CLOCK_MONOTONIC, &after);
+	if (status != 0)
+		return errno;
+
+	/* Monotonic elapsed duration, rather than a fabricated fixed tick, advances pending child waits. */
+	*elapsed = (double)(after.tv_sec - before.tv_sec) * 1000;
+	*elapsed += (double)(after.tv_nsec - before.tv_nsec) / 1000000;
+	if (*elapsed < 0)
+		return EIO;
+
+	/* Succeeded: one actual network step completed outside child script/event dispatch. */
 	return 0;
 }
 
@@ -391,7 +453,7 @@ script_fetch_remove(
  * Runs a script element the parser has reached (the parser's script
  * hook; context is the page): its src file, or its text.
  */
-void
+int
 page_run_script_element(
 	void *context,
 	struct dom_element *script)
@@ -410,22 +472,27 @@ page_run_script_element(
 	script->node.flags |= DOM_NODE_SCRIPT_STARTED;
 	runs = script_type_runs(script);
 	if (!runs)
-		return;
+		return 0;
 
 	/* A script with a src runs the file. */
 	error = script_attribute(page, script, "src", &src);
 	if (error != 0)
-		return;
+		return error;
 	if (src != NULL) {
-		script_run_file(page, src->value);
-		return;
+		/* A fatal external-script failure must also stop the parser. */
+		error = script_run_file(page, src->value);
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the parser-blocking file has run. */
+		return 0;
 	}
 
 	/* Otherwise its text (its text children's) runs, named after the page's file. */
 	wb_units_init(&text);
 	error = 0;
 	for (child = script->node.first_child; child != NULL && error == 0; child = child->next) {
-		if (child->type != DOM_TEXT)
+		if (child->type != DOM_TEXT && child->type != DOM_CDATA_SECTION)
 			continue;
 		data = (const struct dom_character_data *)child;
 		error = wb_units_append(&text, data->data.data, data->data.length);
@@ -436,8 +503,13 @@ page_run_script_element(
 	if (page->base != NULL)
 		name = page->base;
 	if (error == 0)
-		bind_run_script(page->window, text.data, text.length, name);
+		error = bind_run_script(page->window, text.data, text.length, name);
 	wb_units_release(&text);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the script ran or its ordinary exception was reported. */
+	return 0;
 }
 
 /* A DOM operation inserted a subtree; connected script elements in it are prepared in tree order. */
@@ -460,12 +532,51 @@ script_node_inserted(
 	return 0;
 }
 
+/* Inserts a document write into the parser owned by the current load. */
+static int
+script_document_write(
+	void *context,
+	const uint16_t *units,
+	size_t length)
+{
+	struct page *page;
+	int error;
+
+	/* Late writes need a script-created parser, outside this implementation. */
+	page = context;
+	if (page->parser == NULL)
+		return ENOTSUP;
+
+	/* The parser keeps the written prefix ahead of its unread source. */
+	error = html_parser_write(page->parser, units, length);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the inserted text used the production parser. */
+	return 0;
+}
+
 /* Runs external scripts whose local bytes became ready at the last script checkpoint. */
 static int
 script_checkpoint(
 	void *context)
 {
-	return script_run_ready(context);
+	struct page *page;
+	int error;
+
+	/* Finish primary script work before starting native child resource tasks. */
+	page = context;
+	error = script_run_ready(page);
+	if (error != 0)
+		return error;
+
+	/* Reentrant child script checkpoints retain the outer task snapshot. */
+	error = page_frames_checkpoint(page);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: primary script work and one native child task snapshot are complete. */
+	return 0;
 }
 
 /* Prepares each unstarted script in an inserted connected subtree. */
@@ -537,7 +648,7 @@ script_prepare_dynamic(
 	wb_units_init(&text);
 	error = 0;
 	for (child = script->node.first_child; child != NULL && error == 0; child = child->next) {
-		if (child->type != DOM_TEXT)
+		if (child->type != DOM_TEXT && child->type != DOM_CDATA_SECTION)
 			continue;
 		data = (const struct dom_character_data *)child;
 		error = wb_units_append(&text, data->data.data, data->data.length);
@@ -833,6 +944,11 @@ page_set_time(
 	if (error != 0)
 		return error;
 
+	/* Drain responses only outside loader callbacks, after the ordinary timers. */
+	error = page_frames_checkpoint(page);
+	if (error != 0)
+		return error;
+
 	/* Succeeded: no timer is overdue. */
 	return 0;
 }
@@ -855,9 +971,7 @@ page_next_timer(
 }
 
 /*
- * Runs a page's timers on a virtual clock until none is left or the next
- * is due after budget milliseconds (the headless modes, which show the
- * page as it stands then).
+ * Settles virtual timers and actual pending child resources within explicit bounds.
  */
 int
 page_settle(
@@ -865,23 +979,68 @@ page_settle(
 	double budget)
 {
 	double due;
+	double wait;
+	double elapsed;
+	double network_waited;
+	double next;
 	int rounds;
 	int found;
 	int error;
 
-	/* Jumps from timer to timer. */
+	/* Only actual child work slows virtual jumps; ordinary timer-only settling stays fast. */
+	network_waited = 0;
 	for (rounds = 0; rounds < SCRIPT_SETTLE_ROUNDS; rounds++) {
+		/* Discover newly connected sources and dispatch already copied native response tasks. */
+		error = page_frames_checkpoint(page);
+		if (error != 0)
+			return error;
 		found = page_next_timer(page, &due);
-		if (!found || due > budget)
-			break;
 
-		/* The clock at the timer, which runs it. */
+		/* Pending real responses need descriptor progress before the virtual clock can leap ahead. */
+		if (page->frame_loads.count != 0) {
+			/* Unfinished real work cannot be reported as settled at an exhausted bound. */
+			if (page->now >= budget || network_waited >= 30000)
+				return ETIMEDOUT;
+
+			/* A short poll yields to due timers, including source replacement or cancellation. */
+			wait = budget - page->now;
+			if (wait > 10)
+				wait = 10;
+			if (found && due - page->now < wait)
+				wait = due - page->now;
+			if (wait < 0)
+				wait = 0;
+			error = script_settle_network(page, wait, &elapsed);
+			if (error != 0)
+				return error;
+
+			/* Actual monotonic waiting time advances this virtual clock without inventing network completion. */
+			network_waited += elapsed;
+			next = page->now + elapsed;
+			if (next > budget)
+				next = budget;
+			error = page_set_time(page, next);
+			if (error != 0)
+				return error;
+			continue;
+		}
+
+		/* With no pending child response, preserve the original timer-to-timer fast path. */
+		if (!found || due > budget)
+			return 0;
 		error = page_set_time(page, due);
 		if (error != 0)
 			return error;
 	}
 
-	/* Succeeded: the page has settled. */
+	/* A request or eligible timer surviving the task bound is an explicit incomplete run. */
+	if (page->frame_loads.count != 0)
+		return ETIMEDOUT;
+	found = page_next_timer(page, &due);
+	if (found && due <= budget)
+		return ETIMEDOUT;
+
+	/* Succeeded: no eligible timer or actual pending child work remains. */
 	return 0;
 }
 

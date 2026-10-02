@@ -1,0 +1,136 @@
+<!-- awesome-plan project=zedbsd record=queue-q509 -->
+
+# Queue q509: Parser-time document writes
+
+<!-- awesome-plan-current:start -->
+Status: finished (2026-09-30)
+Active Queue: none
+Previous finished Queue: [q508](queue-q508.md)
+<!-- awesome-plan-current:end -->
+
+## q509
+
+Purpose: restore parser-time document.write as the next Acid3 prerequisite.
+Timebox: one Phase; bounded parser insertion, not full Acid3 acceptance.
+Focus: WS074 / fg010, current user session direction; WS103 is stopped for now.
+Approval: current user, 2026-09-30 「次のqueueを実行してください。」.
+Exact item is p103, parser-time insertion only, with the scoped design revision
+recorded in its Phase. q508 prerequisite/evidence was verified. Executor: root
+agent in this checkout; no concurrent attempt or GitHub publication.
+
+| Attempt | Phase | Status | Dependency | Reason / readiness |
+| --- | --- | --- | --- | --- |
+| q509-i01 | [ws074-p103](../ws074/phase103/phase.md) | cleared | p102 cleared | document.write throws before Acid3 body fixtures exist. Parser lifetime confirmed; late calls explicitly unsupported; open/close deferred |
+
+Approved scope: parser input-position insertion, argument concatenation,
+writeln and nested script order, focused fixtures and plain/ASan verification,
+Acid2 exact preservation. No iframe/XML, Traversal/Range, CSSOM, ES-module,
+HAL or toolchain implementation. The Phase records acceptance and readiness.
+
+Dependency graph: `p102 (external, cleared) → q509-i01/p103 → p100 (external, planned)`.
+The missing child-context and DOM/CSSOM outputs are still external prerequisites
+to plan; the graph does not authorize or claim them present.
+
+## Upcoming Work Outlook
+
+p103 is the first feature candidate. Child contexts follow as separate finite
+work, then the indexed DOM/Core/Events, Traversal/Range, HTML, CSSOM/XML/SVG and
+one ECMAScript gap. p100 retains 100/100 and zero Uncaught/crash/timeout.
+p101 full CSS2 stays after p100, then p098 ES modules. Full WS conformance p044
+remains near-final work. Priorities do not authorize these candidates.
+
+## Terminal outcome
+
+q509-i01/p103 cleared (2026-09-30). Production parser-time document.write/writeln
+is implemented, with partial tokens, nested script order and bounded recursion.
+Fatal script allocation errors propagate through the parser hook. Plain/ASan
+builds are warning-free: DOM 23/23 including 20 Chromium checks, 3 write lifecycle
+checks, 2 fatal callback cases, 22 settle/diagnostic checks all PASS. Acid2 is
+byte-identical 100%; original Acid3 completes 40/100, Uncaught 0, no process
+crash/overall timeout, inventory 100 cases (40 pass / 60 fail). New pass indices
+14,15,16,17,48,55,63,65; none regress. Pixel agreement 38.59% is independent.
+
+Late document replacement/open/close remains outside this completed parser-time
+item. p104 initial HTML iframe contexts is the next candidate, still planning.
+p100 full acceptance, p101 all CSS2 and p044 full-WS conformance remain unmet.
+No whole-OS/guest/boot, full CSS2, GitHub publication or push performed; formatter
+unavailable, manual/full standards review and style checks passed.
+
+## Approved scope / design snapshot
+
+## Purpose and prerequisite
+
+Restore parser-time document.write/writeln so scripts can insert real HTML at
+that point in the document. p102's [inventory](../ws074/phase102/inventory.json)
+shows that the original Acid3 body cannot create its map, forms, table, or
+iframes. This is a prerequisite, not a promise of full Acid3 clearance.
+p102 must clear before selection. Child browsing contexts remain separate work.
+
+## Bounded scope and design
+
+Use the existing parser script hook, UTF-16 input stream and DOM bindings.
+Introduce insertion into the active parser's current input position; do not
+append an independently parsed fragment at the end of body. Support multiple
+arguments, writeln's newline, partial tokens across calls, and nested inline
+scripts with bounded recursion and preserved script execution order. Propagate
+allocation/parse failures through existing page/binding error paths.
+
+Before selection, inspect the active parser's ownership and lifetime through
+page_parse/script hooks. Specify the behavior outside an active parser and its
+relationship to document.open/close in a plan revision; do not silently provide
+a fragment substitute. If this requires a major architecture decision, stop the
+dependent implementation and record options. Existing design §3 already intends
+parser insertion; ordinary implementation details remain delegated.
+
+Affected scope: browser html/, bind/, page/ and focused WS074 tests. Apply
+[Guardrail](../guardrail.md), full [C standard](../coding-style.md),
+[design](../ws074/design.md) §§3,4,14. No iframe, XML, Range/Traversal, CSSOM, rendering
+exceptions, HAL, toolchain, or ES-module changes.
+
+## Acceptance and verification
+
+- Focused fixtures verify document order, argument concatenation/newlines,
+  partial-token insertion and nested script order, compared to Chromium.
+- Inserted markup is parsed through the production parser and visible to the
+  next script; allocation/failure handling and GC lifetime are reviewed.
+- The original Acid3's document.write call succeeds and its structural fixtures
+  exist. Record all 100 cases and remaining failures without changing assertions.
+- Acid2 stays exact; plain/ASan host builds and focused fixtures pass, with full
+  changed-source standards review, style check and diff check.
+- Investigation stops at parser insertion. Child-document and other missing
+  APIs become explicit subsequent prerequisites for p100, not hidden expansion.
+
+## Design event (2026-09-30)
+
+Introduced from p102's completed diagnosis. p100 retains 100/100 and zero
+Uncaught/crash/timeout; p101 stays after p100. This Phase is not cleared by the
+p102 inventory and has no selected Queue attempt. Local event only; GitHub
+publication was not requested.
+
+## Authorized design revision (2026-09-30)
+
+Current user: 「次のqueueを実行してください。」 authorizes q509 / p103.
+The initial parser is owned by page_load_html until feed/finish return, and its
+script hook runs synchronously. Publish that parser only for this lifetime and
+clear the pointer before destruction. The parser owns a scoped insertion point
+for each script; preserve the outer point when inserted scripts recurse.
+
+During write, keep the unread suffix in a temporary owned buffer, append the
+written UTF-16 units at the insertion point, run only the available prefix with
+EOF disabled, then restore the suffix. Preserve tokenizer state across calls,
+including partial tags, references and surrogate pairs. Bound nested writes to
+32 and propagate memory/parse errors. A lazy CR/LF fold covers raw written units
+without applying network append normalization to insertion text.
+
+Outside an active parser (and for foreign documents), return an explicit
+NotSupportedError: script-created parsers and implicit/explicit document.open /
+close are deferred to a later Phase. This is an advertised limitation, not a
+claim of conforming late writes or a fragment fallback. No open/close methods
+are introduced here. No acceptance change: this Phase covers parser insertion.
+
+Reference: [WHATWG HTML dynamic markup insertion](https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#document.write()).
+The standard's late-write replacement requires the deferred script-created
+parser lifecycle; the supported parser-time path follows its input insertion
+and synchronous token processing model. Compare supported fixtures to Chromium
+and separately verify the explicit unsupported-call behavior.
+

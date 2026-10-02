@@ -1,0 +1,41 @@
+<!-- awesome-plan project=zedbsd record=queue-q519 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q518](queue-q518.md), exact archive verified.
+
+## q519
+
+Purpose: BUG-128 invalid selector compound repair, WS074 / fg011.
+Timebox: one finite Phase, representative grammar and CSS/DOM/Acid regressions.
+Approval: current user2026-09-30「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」and2026-10-01 continuation.
+Exact scope: [p110 saved revision](../ws074/phase110/phase.md): require actual whitespace
+or explicit combinator between compounds; reject adjacent type/universal in
+stylesheet/query parse paths, preserve valid existing syntax. No pseudo-classes,
+HTML controls/new CSS/media/CSSOM/layout/loading/Traversal/Range/VM/HAL/toolchain.
+
+| Attempt | Phase | Status | Dependency / reason |
+| --- | --- | --- | --- |
+| q519-i01 | [ws074-p110](../ws074/phase110/phase.md) | cleared | q518 scoped child CSS output30/30/GC33/33, dfaa2acf; BUG-128 blocks p109 |
+
+Criteria: invalid/valid selector matrix PASS plain+ASan; DOM23/23/CSS selected
+host/childCSS30/30/frame33/33; all100Acid3 no q518 former pass regression/44PASS,
+Acid2 exact/Uncaught0/no errors/warnings/sanitizer; standards/style/diff/evidence.
+Graph: q518 verified scoped child CSS (external, wholep109uncleared) → q519/p110
+→ p109 revalidation (external) → p100 (external). No cycle; onlyp110 authorized.
+
+## Upcoming Work Outlook
+
+Revalidatep109 after repair; lang/empty and HTML control/CSS property gaps then
+other indexed Traversal/Range/loading/SVG/VM in finite Queues to100/100. p101/p098
+outside goal; full WS conformancep044 remains. Local unpublished/no push.
+
+## q519 terminal outcome (2026-10-01)
+
+p110cleared/BUG-128resolved. Grammar37/37/DOM23/23/selector golden/childCSS30/30/
+frame33/33 plain+ASan PASS, all10056/100/44 restored/no other changes/Uncaught0/
+Acid2exact. [Evidence](../ws074/phase110/verification.md). Full C standard/style/diff
+PASS, formatter absent/OS/guest/boot/GPU not run. Nextp109revalidation, remaining44
+features in finite Queues; local unpublished/no push.

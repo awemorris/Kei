@@ -157,6 +157,16 @@ bind_style_install(
 			return status;
 	}
 
+	/* Exposes the CSSOM alias for the existing float property. */
+	property = vm_atom_from_ascii(window->realm->heap, "float");
+	if (property == NULL)
+		return ENOMEM;
+
+	/* Both inline and computed declarations use the ordinary float accessor. */
+	status = style_accessor(window, "cssFloat", property);
+	if (status != 0)
+		return status;
+
 	/* Succeeded: the prototype has the accessors. */
 	return 0;
 }

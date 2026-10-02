@@ -1,0 +1,130 @@
+<!-- awesome-plan project=zedbsd record=ws074-p102 -->
+
+# ws074-p102: Acid3 execution and failure inventory
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q508-i01
+
+## Scope and approval
+
+2026-09-30 current user: 「では、取り組んでください。」 following the explanation
+that p100 needs smaller Phases: completion/diagnosis, document.write and child
+contexts, DOM/CSSOM, then full verification. This first finite item repairs bounded
+headless execution and establishes an honest Acid3 inventory. The whole p100 goal
+remains 100/100 with no Uncaught, crash or timeout; this item does not claim that goal.
+
+## Acceptance and design
+
+- A page making over 100 finite timer/message tasks can finish within the virtual
+  clock budget. A zero-delay loop still has a task bound; exhausted work is reported
+  instead of silently appearing settled.
+- Headless callers can explicitly choose a bounded virtual-time budget; default
+  behavior remains 5000 ms. No test-specific production path.
+- Unmodified pinned Acid3 is run with an explicit budget. Score, completion,
+  exceptions and process status are distinct from pixel agreement. A separate
+  diagnostic copy records all 100 indexed results or explicitly lists missing ones.
+  Test assertions and expected answers are never modified.
+- Acid2 remains exact. Plain/ASan builds, targeted timer/message regressions,
+  runner verification, full review of changed source and whitespace/style pass.
+- Record the missing feature groups and a bounded next Phase; no DOM API, iframe,
+  HAL, toolchain, ES module, or full CSS2 implementation in this item.
+
+## Prerequisites and bounds
+
+p099 cleared, fixed WPT 2d66b9b7998bb58c336138c178323ddee857b586.
+Guardrail, full coding-style.md and design.md apply. Host only; no guest-only
+path changes anticipated. No aggregate make check. Stop after the execution and
+inventory criteria; full Acid3 remains p100. GitHub publication is not requested.
+
+## Evidence before edits
+
+2026-09-30 current checkout: plain host build passed. Pinned Acid3 served locally:
+9/100, Uncaught TypeError. Separate diagnostic copy reaches tests 0..50:
+9 pass, 42 fail. document.write and iframe.contentDocument are undefined.
+page_settle stops after 100 timer rounds; postMessage itself queues a timer.
+Scratch evidence /tmp/ws074-acid3-review is disposable, durable findings are here.
+
+## Outcome (2026-09-30)
+
+q508-i01 cleared. The headless executor now allows 10000 timer rounds and
+returns ETIMEDOUT if eligible tasks still remain at that bound. --settle-ms
+accepts an explicit integer budget 0..60000; its default stays 5000 ms.
+No hidden environment switch or Acid-specific production branch was added.
+
+The runner uses 15000 virtual milliseconds, verifies pinned tracked resources
+and the BSD license, and distinguishes numeric score, completion marker,
+process status/exceptions and exact pixels. The diagnostic copy adds only a
+message listener before the first script; Acid3's assertions are unchanged.
+The score reader now skips attributes such as class="cats" and reads the text
+node. Runner schema 2 includes all indexed results and explicitly missing or
+invalid/duplicate messages.
+
+The original Acid3 completes with score **32/100**, one pre-existing Uncaught
+TypeError, and 41.92% pixel agreement. The observer copy records **100 results:
+32 pass, 68 fail, zero missing**, matching the original score. Test 69 exhausts
+its own retry timeout; no browser process crashes or overall 90-second runner
+timeouts occur. The former 9/100 was a partial run ending at index 50; this
+change exposes the remaining tests rather than implementing 23 missing APIs.
+Full p100 acceptance remains unmet.
+
+[Indexed evidence](inventory.json) preserves the pinned source hash, all cases
+and failure messages. Zero-based ranges:
+
+| Group | Range | Pass / total | Next work |
+| --- | --- | --- | --- |
+| Initial special case | 0 | 1 / 1 | Cleared in the diagnostic only |
+| Traversal, Range, HTTP | 1..16 | 1 / 16 | Traversal/Range APIs, child documents |
+| DOM2 Core and Events | 17..32 | 7 / 16 | Namespace/Attr/exception and event semantics |
+| Views, Style, Selectors | 33..48 | 0 / 16 | Missing document.write and iframe fixtures precede CSSOM analysis |
+| HTML DOM | 49..64 | 2 / 16 | Table/form collections and reflected properties |
+| Competition, XML, SVG | 65..80 | 4 / 16 | Child contexts/MIME/XML/SVG DOM; 69 retries time out |
+| ECMAScript | 81..96 | 15 / 16 | Test 95: Invalid array length |
+| Final special cases | 97..99 | 2 / 3 | Test 98 still lacks required DOM behavior |
+
+These groups follow the suite's buckets, not an assertion that every failure is
+an independent bug. In particular document.write throws before the body fixtures
+are installed, causing downstream failures. Restore that foundation first in
+[p103](../phase103/phase.md), then add child documents before judging selectors.
+The inactive, commented-out historical SMIL/font tests are not newly required.
+
+## Verification and standards review
+
+Host: Debian cc 14.2.0, Python 3.13.5. Pinned WPT
+2d66b9b7998bb58c336138c178323ddee857b586; Acid2 viewport 400x300, Acid3 800x600,
+checked-in comparison fonts plus pinned WPT Ahem resources. Source at session
+start: 493b6eea. The result is committed with these records using message WIP.
+
+- sh plan/ws074/tests/host-build.sh plain: PASS, no warnings.
+- sh plan/ws074/tests/host-build.sh asan: PASS, no warnings.
+- python3 plan/ws074/tests/run-settle-tests.py: 14 runtime checks and 8 diagnostic
+  checks PASS. Same checks PASS with --program build/ws074-host/asan/browser and
+  ASAN_OPTIONS=detect_stack_use_after_return=0.
+- python3 plan/ws074/tests/run-acid-tests.py --out build/ws074-acid-p102-plain:
+  Acid2 exact PASS, Acid3 complete 32/100 FAIL, inventory complete 100/100.
+  Same result with ASan at build/ws074-acid-p102-asan, no sanitizer report.
+- Python byte compilation, style-check.py on main.c and page/script.c,
+  git diff --check: PASS.
+- Full C standard §§1..14 reviewed over all changed C source: declarations,
+  comments/paragraphs, ownership and errors, finite bounds, no calls in
+  conditions, no C99 additions or test switches. Existing .clang-format used
+  as formatting guidance. clang-format is unavailable on this host; formatter
+  execution is skipped, automated style checks and manual review pass.
+
+Acid2 test/reference PNGs in both builds share SHA-256
+`d4bc344146d44577143ff678d2044fdfd8218468391b2c90feee95c3d2c05f25`.
+
+No HAL/toolchain/window-only path changed. Whole OS build, guest/boot, full
+CSS2, unrelated JS suites and full WS conformance p044 were not run in this
+host execution Phase. Network and timer processing are still not interleaved
+throughout browser_view_settle; child-context loading must account for that
+limitation in its own Phase. No GitHub publication or push was performed.
+
+## Design reconciliation event
+
+p100's full acceptance is preserved in its own record; p102 is its completed
+execution/diagnosis prerequisite. Added planned p103 for parser insertion, with
+child contexts and remaining feature groups still prerequisites to design.
+WS074 stays incomplete, p101 stays after p100, and p044 full-WS standards
+conformance remains planned. q508 authorizes no p103 implementation.

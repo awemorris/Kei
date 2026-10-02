@@ -1,0 +1,42 @@
+{
+  "queue": "q525",
+  "baseline": "6d64a2ec",
+  "sources": {
+    "userland/desktop/browser/bind/html-reflection.c": "e1d748dfc0f21fbc48a1350e7b029e681aecd253c6d41ddc6016cc4b13176382",
+    "userland/desktop/browser/bind/internal.h": "5aa777fe9d4b8bcafab639c010294e0f2bbf6a014a851fbaef9bd8b6156797ae",
+    "userland/desktop/browser/bind/node.c": "98b31874a765c6e8eb1fb2f84bffe45eb8b98d011e2cfa0d320d9fd8f9c568f5",
+    "userland/desktop/browser/bind/window.c": "dd9baf036a8fce0fab5061f6ee6b4bf072f17fec97f635fa00bfd44775d06579",
+    "plan/ws074/tests/pages/object-url-probe.html": "b82b76e616eefbf8feb1fe32c86743210288bb4eacffb784a66cdf099bc27163"
+  },
+  "plain_asan": {
+    "URLreflection": "44/44",
+    "reflection": "40/40",
+    "frame": "33/33",
+    "owner": "27/27",
+    "DOM": "23/23",
+    "WPTURLfirst100": "100/100",
+    "Acid2": "exact100%",
+    "Acid3": "63/100 all100,64newPASS,no regression/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "changes": [
+    [
+      64,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q525-plain/report.json",
+    "build/ws074-acid-q525-asan/report.json"
+  ],
+  "WPTURLfixture": {
+    "url": "https://raw.githubusercontent.com/web-platform-tests/wpt/2d66b9b7998bb58c336138c178323ddee857b586/url/resources/urltestdata.json",
+    "sha256": "81e85fd3c199c08ef9c34cf651b3580eeedd080316493bfaf277a6b5ff8cf652",
+    "selected": "first100 dict entries, original order, run-url-tests.py hexed/check"
+  },
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

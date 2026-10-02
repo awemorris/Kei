@@ -1,0 +1,110 @@
+<!-- awesome-plan project=zedbsd record=q542 -->
+
+# q542 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q542](history/queue-q542.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q542
+
+Purpose WS074/fg011 checked subtree Document adoption and iterator subscriptions.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p132 scope](ws074/phase132/phase.md) saved before source generation.
+Timebox one finite Phase; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q542-i01 | [ws074-p132](ws074/phase132/phase.md) | cleared | p131 scoped APIs f9e65a3f verified, p119/p120 weak token/iterator outputs; p131 ownership failure |
+
+Wholep132 native checked adoption/current Document ownership/optional weak-root
+token migration, same-heap validation before unlink, nested existing content model,
+identity/caches/lifetime/GC, plain+ASan regression/prior81/equal/noerrors/Acid2exact/
+fullC/evidence. Exclude new JS adopt/import APIs/Attr/custom/shadow/inert template
+Document model/table row/cell APIs and other recorded residuals.
+Graph p131-scoped-output(external)->p132->p131 retry(external)->future row/cell APIs
+(external)->p100(external), acyclic. Unknown dependency ends uncleared.
+
+## Upcoming Work Outlook
+
+p131 new attempt after verified adoption, table row/cell APIs (50–51), select/
+option, Range/CSS/loading/SVG, final p100/p044. Outlook supplies no authorization.
+
+## q542 outcome (2026-10-01)
+
+[p132](ws074/phase132/phase.md) cleared, [evidence](ws074/phase132/verification.md).
+Checked subtree/current Document adoption, optional weak iterator root token
+migration/preflight/native identity/lifetime. Adoption26/final p131 structure68/
+weak migration+finalization37/frame118/all39 groupsPASS both variants. Original
+all10081/100/all prior81/equal/noerrors/Acid2exact; remaining19. p131 q541 remains
+uncleared, next new finite p131 validation attempt using verified adoption output.
+Other residuals/p100/p044 unchanged/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p132 -->
+
+# ws074-p132: subtree Document adoption and iterator subscription migration
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q542 / q542-i01
+Prerequisites scoped p131 table APIs/typed brands/native insertion bridge verified
+in f9e65a3f, original81/100/prior80 + initial38 regressions PASS; whole p131 remains
+uncleared (ownership assertion). p119/p120 weak token/pre-removal outputs verified.
+One root executor/finite Phase. User2026-09-30 autonomous Acid3/automatic Queues
++2026-10-01 continuation approve exact scope saved before generation.
+Timebox one finite Phase / bounded selected fixtures and fixed suites.
+
+## Exact scope / design / criteria
+
+Implement reusable checked DOM adoption for bind_insert (ordinary/fragment paths),
+remove from original parent while old Document/pre-removal hooks still apply,
+then update every inclusive descendant's node Document before insertion/host
+notifications. Preserve identity/namespace/localname/prefix/attributes/text/dirty
+input state/native wrapper and collection caches/listeners; actual current
+Document owner selects later new wrappers and ordinary form association.
+Same-heap mandatory; reject cross-heap/Document native inputs before mutation.
+Existing template content fragments use their current same-Document engine model;
+update nested contents too. Separate inert template Documents/custom reactions/
+shadow/Attr-as-Node/Document.adoptNode/importNode and all DOM conformance excluded.
+
+Add dom/adopt.c registered production module and DOM declaration. Preflight
+subtree heap/Document checks and destination weak registry allocation before unlink;
+no JS/GC during C adoption. Existing dom_insert_before API/parser calls unchanged.
+bind_insert checks the fallible adoption helper after pre-insertion validity.
+Weak removal tokens gain optional nontracing actual-root association; existing
+subscribe signature/generic observers untouched. Native iterator associates its
+root once at construction. Transfer exactly tokens rooted in adopted nodes to
+destination registry; preserve token/context identity, allocation ownership,
+unsubscribe/finalization safety and unrelated old-Document observers. No permanent
+heap roots/raw Window caches. Counter/registration failures propagate; impossible
+forced SIZE_MAX overflow not claimed tested.
+
+Test actual cross-Document caption/head/foot setters and generic append/insert/
+fragment/repeated back-and-forth adoption, descendants/comment/text/template/
+form owner/live caches/wrapper identity; old outer iterator pre-removal repair and
+adopted-root iterators' later current/candidate removal repair after migration,
+repeated registry movement/arbitrary finalization/actual GC after managed primary
+teardown. Native cross-heap rejection and no mutation on failed preflight. New
+scoped host lifetime/registry checks, prior38 regression groups plus fixtures,
+final p131 ownership probe PASS. Original all100 prior81 preserved/equal/complete/
+status0/noerrors/Acid2exact. No required score gain for dependency Phase.
+Full C manual/style/manual format/diff/build warning0/sanitizer0/hashes/evidence.
+Guardrail/full coding-style loaded, no concise. DOM adopt/NodeIterator pre-removal
+primary algorithms read2026-10-01 https://dom.spec.whatwg.org/#concept-node-adopt.
+
+EXCLUDED table row/cell methods/indices/Cellclass/layout/parser/full template
+Document semantics, other recorded WS residuals, fullWPT/fuzz/OS/guest/boot/GPU.
+p100/p044 unchanged. Unknown prerequisite ends uncleared before redesign.
+Graph p131-scoped-output(external)->p132->p131 retry(external)->future row/cell APIs
+(external)->p100(external), acyclic; scoped dependency is not whole p131 clearance.
+Local unpublished/no push.
+
+## Introduction / q542 activation (2026-10-01)
+
+p131/q541 discovered missing generic adoption. Implement dependency with weak
+iterator migration, retain p131 acceptance; p131 new attempt only after verified
+output, no retroactive change to q541 uncleared outcome.

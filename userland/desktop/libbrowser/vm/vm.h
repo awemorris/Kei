@@ -552,6 +552,8 @@ struct vm_object {
 	uint32_t kind;
 	uint32_t reserved;
 	vm_value internal;
+	/* Optional C property operations expose native live views without stored fake slots. */
+	const struct vm_native_operations *native_operations;
 };
 
 /*
@@ -572,6 +574,8 @@ struct vm_property {
 	struct vm_object *holder;
 	vm_value *value;
 	uint32_t attributes;
+	/* Virtual properties publish their data in the caller's property record. */
+	vm_value temporary;
 };
 
 /* Which fields a property descriptor has. */
@@ -598,6 +602,22 @@ struct vm_descriptor {
 };
 
 /*
+ * Optional native property policy is shared immutable C code, not a GC owner.
+ * Get-own reports missing 0, found 1 or negative errno; other hooks return errno.
+ * Virtual data belongs in property.temporary with value pointing to that member.
+ * Define receives NULL realm for the heap-level assignment API; it cannot run JS.
+ * Define/delete may leave handled false for ordinary fallback; own keys append
+ * a prefix whose ordering is native policy. Callbacks cannot run user script.
+ */
+struct vm_native_operations {
+	int (*get_own)(struct vm_object *object, vm_value key, struct vm_property *property);
+	int (*own_keys)(struct vm_heap *heap, struct vm_object *object, struct wb_vector *keys);
+	int (*define)(struct vm_realm *realm, struct vm_object *object, vm_value key, const struct vm_descriptor *descriptor, int *handled, int *done);
+	int (*delete)(struct vm_heap *heap, struct vm_object *object, vm_value key, int *handled, int *deleted);
+	int (*prevent_extensions)(struct vm_object *object, int *allowed);
+};
+
+/*
  * A native function: what it does when called, with the this value and
  * the arguments; it stores its result, and returns 0, VM_THROWN with the
  * realm's exception set, or an errno value.
@@ -615,6 +635,8 @@ typedef int (*vm_native)(struct vm_realm *realm, vm_value this_value, const vm_v
 struct vm_function {
 	struct vm_object object;
 	struct vm_realm *realm;
+	/* Only managed owner cells are traced; raw manual realms may be retired. */
+	struct vm_cell *realm_owner;
 	vm_native native;
 	vm_native construct;
 	struct vm_code *code;
@@ -627,9 +649,11 @@ struct vm_function {
  * are made from, the exception being thrown, and the VM stack its code
  * runs on.
  *
- * A realm is not a cell; it registers a tracer that keeps its objects and
+ * A primary realm registers a tracer that keeps its objects and
  * marks every word of the used stack conservatively (Wasm's raw values sit
  * beside JavaScript's boxed ones there), and lives until vm_realm_destroy.
+ * A managed child is itself a cell: functions, global/prototype internal values
+ * and embedding Documents retain it. Only GC releases its stack and host hooks.
  * depth counts how many times the interpreter is entered from C, which a
  * native function calling a script function does.  host is what the
  * embedder keeps with the realm (the DOM binding's window), and jobs the
@@ -649,7 +673,12 @@ struct vm_function {
  * so the embedder writes it as a promise's ("Uncaught (in promise)").
  */
 struct vm_realm {
+	struct vm_cell cell;
 	struct vm_heap *heap;
+	/* Managed child realms and their host are retained by traced references. */
+	int managed;
+	vm_tracer host_trace;
+	void (*host_release)(void *context);
 	struct vm_object *global;
 	struct vm_object *object_prototype;
 	struct vm_object *function_prototype;
@@ -709,7 +738,9 @@ struct vm_object *vm_array_create(struct vm_heap *heap, struct vm_object *protot
 int vm_object_init(struct vm_heap *heap, struct vm_object *object, struct vm_object *prototype);
 struct vm_symbol *vm_symbol_create(struct vm_heap *heap, vm_value description);
 struct vm_accessor *vm_accessor_create(struct vm_heap *heap, vm_value getter, vm_value setter);
+/* Lookups report missing 0, found 1, or negative errno; status APIs remain positive errno. */
 int vm_object_get_own(struct vm_object *object, vm_value key, struct vm_property *property);
+int vm_object_get_own_ordinary(struct vm_object *object, vm_value key, struct vm_property *property);
 int vm_object_find(struct vm_object *object, vm_value key, struct vm_property *property);
 int vm_object_define(struct vm_heap *heap, struct vm_object *object, vm_value key, vm_value value, uint32_t attributes);
 int vm_object_get(struct vm_object *object, vm_value key, vm_value *value);
@@ -717,6 +748,7 @@ int vm_object_set(struct vm_heap *heap, struct vm_object *object, vm_value key, 
 int vm_object_delete(struct vm_heap *heap, struct vm_object *object, vm_value key, int *deleted);
 int vm_array_set_length(struct vm_heap *heap, struct vm_object *array, uint32_t length);
 int vm_object_own_keys(struct vm_heap *heap, struct vm_object *object, struct wb_vector *keys);
+int vm_object_prevent_extensions(struct vm_object *object, int *done);
 void vm_object_trace(struct vm_heap *heap, struct vm_cell *cell);
 void vm_object_finalize(struct vm_heap *heap, struct vm_cell *cell);
 
@@ -741,6 +773,8 @@ int vm_throw_site(const struct vm_realm *realm, vm_value exception, uint32_t *li
 
 /* Realms (realm.c). */
 int vm_realm_create(struct vm_heap *heap, struct vm_realm **realm);
+/* Makes a collectible child realm; only the heap destroys its resources. */
+int vm_realm_create_managed(struct vm_heap *heap, struct vm_realm **realm);
 void vm_realm_destroy(struct vm_realm *realm);
 int vm_enqueue_job(struct vm_realm *realm, vm_value callback, vm_value argument);
 int vm_run_jobs(struct vm_realm *realm, vm_job_report report, void *context);

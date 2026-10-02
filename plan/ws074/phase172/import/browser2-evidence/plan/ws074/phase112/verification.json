@@ -1,0 +1,43 @@
+{
+  "queue": "q522",
+  "baseline": "6f5b5818",
+  "sources": {
+    "userland/desktop/browser/bind/html-reflection.c": "7c0f959f14366f4c868c95aaf6674bd04cfce6cc840e819565ba660d5f3c6de1",
+    "userland/desktop/browser/bind/internal.h": "e9c0d5ed3604bab1cb000a79108f32bbc636d67f061bc238f25de37a68c13ef2",
+    "userland/desktop/browser/bind/node.c": "748ecc2f765bed68bdc86a291e93abdaf062d337ac7fbc671f922e0d15ccc473",
+    "userland/desktop/browser/bind/window.c": "c2d9e0dae43dd5fce041fcb7e24e87c1d4464b4c14bf56f66a84c03293bd2c28",
+    "userland/desktop/libbrowser/Makefile": "6a01f38fbddcd91023026e179b367a386631482b2c7ade669c2cf993b5eb5601",
+    "plan/ws074/tests/pages/html-reflection-probe.html": "accfa6ef1642b5788391d3fba6626c74e1dab21fce45fe23eb1660790d4b5b72"
+  },
+  "plain_asan": {
+    "reflection": "40/40",
+    "DOM": "23/23",
+    "frame_lifetime": "33/33",
+    "iframe": "17/17",
+    "ownership": "27/27",
+    "realms": "30/30",
+    "Acid2": "exact100%",
+    "Acid3": "60/100 all100,59/62newPASS,no regression/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "changes": [
+    [
+      59,
+      "fail",
+      "pass"
+    ],
+    [
+      62,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q522-plain/report.json",
+    "build/ws074-acid-q522-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

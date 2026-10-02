@@ -743,6 +743,12 @@ json_internalize(
 				continue;
 			if ((object->flags & VM_OBJECT_ARRAY) == 0U) {
 				found = vm_get_own_descriptor(object, element, &descriptor);
+				if (found < 0) {
+					status = -found;
+					break;
+				}
+
+				/* A missing descriptor follows the absence path after errors have been excluded. */
 				if (!found || (descriptor.attributes & VM_PROPERTY_ENUMERABLE) == 0U)
 					continue;
 			}
@@ -1051,6 +1057,12 @@ json_serialize_object(
 			continue;
 		if (writer->keys == VM_VALUE_UNDEFINED) {
 			found = vm_get_own_descriptor(source, key, &descriptor);
+			if (found < 0) {
+				status = -found;
+				break;
+			}
+
+			/* A missing descriptor follows the absence path after errors have been excluded. */
 			if (!found || (descriptor.attributes & VM_PROPERTY_ENUMERABLE) == 0U)
 				continue;
 		}

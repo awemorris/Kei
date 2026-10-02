@@ -1,0 +1,57 @@
+<!-- awesome-plan project=zedbsd record=ws074-p152 -->
+
+# ws074-p152: managed child HTML parser lifetime
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q566 / q566-i01
+Approval current user2026-09-30 autonomous Acid3/automatic Queues and2026-10-01
+continuation; root sole executor, basec95d254a clean, no cancellation/conflict.
+Prerequisites existing HTML parser and managed child ownership p104/p106 verified.
+Finite exact snapshot saved BEFORE generation.
+
+## Exact scope / design / criteria
+
+Prepare real child Document replacement streams for original71. Existing parser
+standalone tracer would permanently retain child Document/context while open.
+Add internal HTML ownership transfer: unregister standalone tracer, expose NULL-safe
+owned parser tracing using existing parser_trace, and retain parser pointer in
+Window. Window trace traverses parser native stacks; Window release destroys parser
+without reading GC DOM storage. Primary/fragment standalone parsers unchanged.
+No Document open/write/close API generated in this Phase; next separately selected
+Phase consumes lifetime output. No source parser/VM architecture rewrite.
+Affected html/html.h,html/parser.c,bind/internal.h,bind/window.c; new native lifetime
+fixture in plan/ws074/tests/host-document-parser.c, auto-discovered host build.
+
+Native genuine managed iframe: incomplete HTML parser stacks remain alive during
+actual GC with conservative stack disabled, including removed open elements absent
+from ordinary Document graph; parser resumes and finishes after GC. Ownership stays
+with saved child after frame retirement; after references released unfinished parser
+and realm/Document collectible, no external tracer cycle. Standalone parser behavior
+and teardown preserved. Bounded actual heap collection, no production test switch.
+Prior74+new native=75 groups plain+ASan, original pinned>=92/prior92 preserved/
+full100 equal/complete/status0/no Uncaught/crash/runnererrors/Acid2exact. Runner60sec.
+Guardrail/full coding-style1–14/automation, manual formatting (clang-format absent),
+style output inspected/diff clean/build warning0/sanitizer0/source hashes.
+Unknown dependency ends uncleared before redesign. Graph HTML+p104+p106(external)
+->p152->future Document stream+p100(external), acyclic.
+Exclusions script-created stream bindings/loading/SVG/fullHTML conformance/fullWPT/
+fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub publication.
+p100/p044/WS incomplete/local unpublished.
+
+## Introduction / q566 activation (2026-10-01)
+
+Read actual parser_trace and managed realm finalizer: parser roots Document and
+Document roots child realm. Remove permanent root before long-lived stream use;
+trace from owning Window instead. HTML dynamic markup insertion standard2026-09-29
+https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html read2026-10-01.
+This prerequisite supplies lifetime only, not a simulated Document API or score.
+
+## q566 cleared outcome (2026-10-01)
+
+[p152](phase.md) cleared in q566, [evidence](verification.md).
+Owned child parser tracing/finalization verified native8 real GC/hidden removed
+stacks/resume/unfinished retirement/collectibility/standalone preservation both.
+All75PASS/plain+ASan/original92/prior92/equal100/noerrors/Acid2exact. Next managed
+Document streams; p100/p044/WS incomplete/root released/local unpublished/no push.

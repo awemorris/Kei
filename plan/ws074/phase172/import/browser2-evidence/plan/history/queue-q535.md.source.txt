@@ -1,0 +1,40 @@
+<!-- awesome-plan project=zedbsd record=q535 -->
+
+# q535 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q534](history/queue-q534.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q535
+
+Purpose WS074/fg011 live form controls and duplicate-name indexed list foundation.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation, exact [p125 scope](ws074/phase125/phase.md) saved before generation.
+Timebox one finite Phase, no cancellation/conflicting edit/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q535-i01 | [ws074-p125](ws074/phase125/phase.md) | cleared | p124 aa158bf7 verified; indexed4/52 blocked on missing form.elements |
+
+Whole p125 native form.elements/length/controls and indexed duplicate NodeList core,
+selected plain+ASan fixtures/GC/regressions/all100 prior73 preserved/equal/new4+52/
+noerrors/Acid2exact/warning0/full C/evidence. No radio.value/grouping/NodeList iterables/
+form own-name maps/input reflection/parser magic/activation/submission/table/Range/
+CSS/loading/SVG. Graph p124(external) -> p125 -> future radio/input(external) -> p100
+(external), acyclic. Unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Radio value/input reflection/checkedness then form activation; remaining table/Range/
+CSS/loading/SVG. Known NodeList iterables/form own maps/parser-special associations
+retained. p100100/100 and p044 full-standard acceptance unchanged.
+
+## q535 outcome (2026-10-01)
+
+[p125](ws074/phase125/phase.md) cleared,[evidence](ws074/phase125/verification.md).
+Controls100/100/GC11/frame78/all selected regressionsPASS plain+ASan. Original
+all10075/100, indexed4+52newPASS/prior73 preserved/noerrors/Acid2exact. Remaining25;
+known radio value/input state/form/NodeList/parser residuals retained. p100/p044
+unchanged; root executor released/local unpublished/no push.

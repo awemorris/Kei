@@ -1,0 +1,26 @@
+# q590 / p171 retry — 2026-10-02
+
+CLEARED. Routine formatting corrected nine new native SVGLength callback definitions and
+one fixture collection callback to put names/arguments on separate lines, plus
+one three-clause decision. Actual logic/API/ownership unchanged. Manual full C1–14
+review now explicitly checks section3 definition layout omitted by style-check;
+all four SVG source/fixture files have zero single-line function definitions.
+Both final full builds finished beforetests/warning0/styleempty/diffclean. Native
+length60/60both and prior98+native1=99groupsPASSboth on final changed source.
+Original unchanged pinned Acid3 completes100/100; equal100indexedPASS/status0/
+noUncaught/crash/sanitizer/runnererrors/timeouts; Acid2exact100%/different_pixels0.
+Screenshot hashes equalboth and equal the already inspected q588 plain100/100
+rendering. VisualFAILlabels/pixel37.04% remain independent diagnostic; full visual
+conformance not claimed. Partial SVG relativegeometry/otherAPIs/rendering limits
+remain. cc14.2.0/Python3.13.5/clang-format absent/manual; C-required callback
+forward declarations before immutable descriptors/unchanged legacy ordering
+retained; no full-WS p044 claim. Priorq588 numeric evidence retained, q589clearance
+invalidation and unclearedp100 preserved. Samep171 current criteria now re-clear;
+then samep100 acceptance retry. Rootreleased/localunpublished/no push.
+
+Commands: host-build.sh plain+asan; host-svg-length both; q590-regressions.py both;
+original run-acid-tests.py both (ASAN_OPTIONS=detect_stack_use_after_return=0);
+style-check.py new SVG length/native fixture; git diff --check; explicit manual
+function-definition/compound-condition layout review. JSON stores source/program/
+artifact hashes/full reports/all99results. Final focused native result reused in
+99group evidence without rerun; no mandatory checks skipped.

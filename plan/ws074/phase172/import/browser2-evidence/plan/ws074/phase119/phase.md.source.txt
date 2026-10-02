@@ -1,0 +1,59 @@
+<!-- awesome-plan project=zedbsd record=ws074-p119 -->
+
+# ws074-p119: weak pre-removal subscription foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q529 / q529-i01
+Prerequisite: p118b744f662 verified TreeWalker/DOM links/GC; current Document removed
+hook owns frame retirement only; no iterator registry exists. User2026-09-30
+Acid3 autonomous/automaticQueues +2026-10-01 continuation authorizes this concrete
+finite prerequisite. Root sole writer/executor. Timebox one foundation Phase.
+
+## Exact scope / design / criteria
+
+Add DOM-owned opaque removal registry and per-subscription opaque token, separately
+C-allocated/refcounted, weak callback context (not traced GC owner). Registry has
+one Document ownership plus each token ownership. Document finalizer releases its
+registry ownership without reading any GC observer; token unlink uses only live
+C allocations without reading Document. This permits any GC finalization order,
+wholeheap teardown and dead subscriptions reclaimed while their Document remains.
+Register allocation rollback/overflow bounds, NULL-safe token release. All weak
+contexts must release token in their collector finalizer before context storage
+is reused. Notification is synchronous C-only; callbacks cannot allocate/collect,
+run script, subscribe/unsubscribe or change tree. These bounds suit iterator position
+repair; user filters run later outside notifications. Exact callback order FIFO.
+
+Hook dom_remove before existing frame retirement and unlink; detached nodes do not
+notify; removal/insertion-move retain original DOM links during notification.
+New dom/removal.c registered libbrowser, declarations/types/document opaque pointer
+in dom/dom.h, document finalizer/hook in dom/node.c. No VM collector changes,
+NodeIterator API/filter algorithms, generic observers/MutationObserver/adoption,
+collections/forms/Range/CSS/loading/SVG/HAL/toolchain. DOM is owner of generic C
+subscription, bindings later own iterator context/tokens. No permanent heap roots.
+
+Host focused real GC: multiple subscription delivery/full old links/unrelatedDocs/
+detached silence/appendmove, unregister and NULL, observers die while Doc rooted,
+Doc dies before a still allocated token (weak nontracing synthetic test), repeated
+collection/wholeheap teardown and both finalize orders under ASan. Plain/ASan build
+warning0/style/fullCstandard/diff PASS; traversal70/GC5/frame53/XML62+GC16/namespace/
+DOM23/JS14/owner27/VM/childCSS selected checks PASS. Acid3 all10068/100 all priorPASS
+preserved/equal inventories/Uncaught0/errors0/completeTrue/runstatus0/Acid2exact.
+Score improvement not a criterion for this infrastructure Phase. No WPTconformance
+or OS/guest/boot/GPU claim. Unknown prerequisites stop uncleared; no limitless retry.
+Guardrail/fullCstandard loaded. Primary [DOM pre-remove](https://dom.spec.whatwg.org/#concept-nodeiterator-pre-remove)
+read2026-10-01. Local unpublished/no push.
+
+## Introduction / q529 activation (2026-10-01)
+
+Read actual fixed indexed1–3 and current DOM candidate-reference removal algorithm.
+Separate deletion subscription lifetime from subsequent iterator API so allocation,
+weak ownership and arbitrary GC finalization order can be verified independently.
+[p118](../phase118/phase.md) unchanged/cleared; [WS](../ws.md).
+
+## q529 result (2026-10-01)
+
+Cleared; [evidence](verification.md). Weak notifications19/19 plus allselected
+plain/ASan regressions PASS, Acid3 all10068 unchanged/Uncaught0/Acid2exact.
+Foundation output ready for actual NodeIterator position correction; noAPI claim.

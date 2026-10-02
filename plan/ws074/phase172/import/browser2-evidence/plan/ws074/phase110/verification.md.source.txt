@@ -1,0 +1,23 @@
+# q519 evidence — 2026-10-01
+
+p110 cleared, [BUG-128](../../bugs/BUG-128.md) resolved. Shared complex-selector
+parser now requires actual whitespace or explicit >/+/~ between compounds. No
+second type/universal is silently read as a descendant. Author invalid-rule
+recovery and query SyntaxError both exercised. No pseudo-class/HTML/media expansion.
+
+Plain/ASan grammar37/37, child CSS30/30, frame lifetime33/33, DOM23/23. Existing
+selectors.style golden byte-identical including supported :is/:where/:has/nth/
+pseudo-elements and combinators. All100 Acid3 inventories equal,55→56 solely44
+restoration/no regressions, Uncaught0/completeTrue/run_errors[]/run_status0,
+Acid2exact/different_pixels0. Visual40.05354166666667% diagnostic independent.
+
+Commands: host-build.sh plain/asan; browser --run selector-grammar-probe.html and
+child-style-probe.html; host-frame-lifetime; run-dom-tests.py; browser --dump=style
+selectors.html followed by diff against golden/selectors.style; run-acid-tests.py
+--out build/ws074-acid-q519-<variant>. ASAN_OPTIONS=detect_stack_use_after_return=0.
+Logs under build/ws074-q519-*, [hashes/reports](verification.json), [inventory](inventory.json).
+Full changed C standard manually reviewed, style-check.py parser.c and diff check
+PASS. cc14.2.0/Python3.13.5, clang-format absent/manual formatting. No full grammar
+fuzz/allocator suite, OS/guest/boot/GPU not run. p109 still requires its own finite
+revalidation; p100 remainsplanned100/100. Local unpublished/no push. WIP commit
+containing these records is the revision evidence.

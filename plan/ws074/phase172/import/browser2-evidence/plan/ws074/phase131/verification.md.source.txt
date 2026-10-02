@@ -1,0 +1,31 @@
+# p131 / q543 verification — 2026-10-01
+
+**Cleared** original native table caption/head/foot typed structural API criteria,
+using verified p13249b0ee70 adoption prerequisite. New q543 attempt does not change
+[original q541 uncleared evidence](verification-q541.md). No source changes in q543.
+
+Plain+ASan fresh structure68 (cross-Document complete ordinary subtree owner now
+correct), adoption26, host-table-mutation42/actual owner callback GC/EIO root cleanup,
+frame118/old and current managed owner lifetime PASS. Original fixed WPT
+2d66b9b7998bb58c336138c178323ddee857b586 all100 **81/100** both variants,
+all prior81/equal complete inventories/status0/Uncaught/run_errors/crash/runner
+ timeout0, Acid2 exact100%. Remaining19; whole p100/WS goal unmet.
+
+Commands with ASAN_OPTIONS=detect_stack_use_after_return=0 for ASan:
+- python3 build/ws074-q543-regressions.py VARIANT: selected four groups PASS,
+  exact commands/counts/results embedded in verification.json.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q543-VARIANT: reports embedded verbatim, aggregate goalFAIL
+  until100 expected.
+- Reused just-final p132/q542 all39 regression/build0warnings results after verifying
+  every recorded source SHA256 still matches current files; no semantic edits
+  since that check, no broad repeated testing needed. Reused evidence embedded.
+- python3 plan/tools/style-check.py full changed native table/adoption C/header/host
+  scope: 0 findings. Full applicable C manual review/manual formatting (clang-format
+  absent), rooted mutation/native brand/order/typed conversion/removal/owner/errors/
+  cache/managed prototype reachability covered. git diff --check PASS.
+
+Source hashes/base49b0ee70 in JSON. Original p131 exclusions and p132 known template
+model/overflow/no forced allocation limitations retained. No fullWPT/fuzz/OS/guest/
+boot/GPU claim. Root released/local unpublished/no push. Primary algorithm:
+[WHATWG table operations](https://html.spec.whatwg.org/multipage/tables.html).

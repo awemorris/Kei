@@ -1,0 +1,44 @@
+# q528 / p118 verification — 2026-10-01
+
+Outcome: cleared. Plain/ASan original fixed Acid3 67→68/100 solely indexed6PASS,
+all100indexed results identical, prior67PASS preserved, Uncaught/exceptions/errors0,
+completeTrue/run_status0; Acid2 exact100%. Pixelagreement38.487083% diagnostic;
+p100 full100/100 remains unmet. Source and fixture hashes in verification.json.
+
+TreeWalker uses live DOM links for all seven methods, native branding, unsigned
+masks, dynamic callback-interface operations, unsigned-short return conversion,
+active guard and pending candidate tracing. Root/current/filter graph is collectible;
+current may be outside root or in another document. Factory prototype follows the
+receiver Document's realm/private XML snapshot. No NodeIterator or collections.
+
+Both variants, ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: warning/error0.
+- browser `--run plan/ws074/tests/pages/tree-walker-probe.html`:70/70,
+  seven methods/treeorder/masks/SKIP-vs-REJECT/function-or-object/dynamicacceptNode/
+  coercion/reentry/exceptionidentity/recovery/brands/regrafting/foreigncurrent/realm.
+- host-traversal5/5: unlink filter candidate, disable stack scanning and collect;
+  pending trace retains it and accepted result remains intact. A primary walker
+  currentNode alone retains removed foreign child context; reset permits reclamation.
+- host-frame-lifetime53/53: child-created XML walker/filter retained through primary
+  destruction, usable child native method, lastrootdrop finalizesonce/repeatedGCsafe.
+- XML62/62 + host-xml-document16/16, namespace38/38+GC12/12, names31/31,
+  iframe17/17, legacy56/56, childCSS30/30, ownership27/27, realms30/30,
+  object100/interp45, DOM23/23, JS14/14, selectorsstylegolden byte-identical.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/<variant>/browser --out build/ws074-acid-q528-<variant>`: above complete inventory.
+- `python3 plan/tools/style-check.py` changed C/header/tests: no findings;
+  `git diff --check`: PASS. Manual full C-standard review covers ANSI leading locals,
+  public/static ordering, one-line forwards (binding tables reference methods),
+  purpose comments/paragraphs, checked calls/allocation, coercion/error/lifetime/state.
+
+Initial callback-interface test exposed missing callable validation: vm_call's
+primitive contract throws undefined for noncallable; the IDL caller now explicitly
+throws TypeError for missing/noncallable acceptNode. Fixed within planned API scope;
+final focused/regression/Acid checks rerun both variants. Initial style tool path typo
+corrected to plan/tools/style-check.py. No VM changes or waived obligations.
+
+Logs: build/ws074-q528-build/style/final/acid-* and per-regression logs.
+Compilercc14.2.0/Python3.13.5; clang-format unavailable/manualformat. Fixed historical
+suite revision2d66b9b7998bb58c336138c178323ddee857b586 unchanged. No exhaustiveWPT,
+fuzz, OS/guest/boot/GPU check. Test1requiresNodeIterator and5document.links; missing
+known foundations remain later. WS incomplete;32 remaining. Local unpublished/no push.

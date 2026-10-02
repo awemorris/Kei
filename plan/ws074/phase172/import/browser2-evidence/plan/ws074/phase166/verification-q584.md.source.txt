@@ -1,0 +1,29 @@
+# q584 / p166 unchanged metadata retry — 2026-10-02
+
+CLEARED. q582 original99/101 remains uncleared history in its existing separate
+verification.md/json and exact archive; no erasure or retrospective pass. p167
+verified actual native body failure repair, BUG-132 resolved. All six actual p166
+source hashes match original q582 and q583 dependency hash evidence, no source/
+interface/criteria change. Exact q584 retry snapshot saved before reconciliation.
+Actual p166 source reviewed: real native response fields, canonical URL ownership,
+HTTP/data/local metadata and cleanup; supported declared HTML/XML/XHTML/SVG MIME
+essence, unknown/malformed types cannot select a guessed parser. Existing legacy
+fetch remains unchanged. Bothfull builds completed beforetests inq583 warning0,
+unchanged originalnative101/101both, actual96group superset PASS both, original94/
+prior94/72/equal100inventory/complete/status0/noUncaught/crash/sanitizer/runnererror/
+timeouts/Acid2exact. Reused actual evidence on same final source; no extra rerun
+without changed source/unresolved failure. Separate JSON preserves full reports,
+96commands/results, native101 logs and exact hashes/verified prerequisite.
+
+Commands reused: q583 host-build.sh both; run-resource-tests.py --program
+build/ws074-host/VARIANT/host-resource; q583-regressions.py both; original
+run-acid-tests.py both. ASAN_OPTIONS=detect_stack_use_after_return=0. q582 actual
+style output empty/baseline empty; q583 repair styleempty. Full manual p166 affected
+C review/Guardrail/coding-style1–14/automation/diffclean, cc14.2.0/Python3.13.5,
+clang-format absent manual. Real loopbackHTTP/data/local files, no outbound service.
+Declared-type foundation only, no full MIME Sniffing/Fetch/header-duplicate/encoding/
+CSP/cross-origin/navigation/WindowProxy/script/event/SVG claim. No fullWPT/fuzz/OS/
+guest/boot/GPU/HAL/toolchain/.internal/aggregate/push/GitHub publication performed.
+Root released/local unpublished. Actual child loading/DOM Window realm/lifecycle/
+parsererrorDocument/event tasks/namespace-gated scripts/object ownership next;
+p100/p044/WS incomplete, no metadata-only score gain claimed.

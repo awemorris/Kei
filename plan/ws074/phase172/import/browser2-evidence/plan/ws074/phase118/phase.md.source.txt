@@ -1,0 +1,76 @@
+<!-- awesome-plan project=zedbsd record=ws074-p118 -->
+
+# ws074-p118: TreeWalker and NodeFilter foundation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q528 / q528-i01
+Prerequisites: p117b4e86c12 verified XML factory/prototype/GC, existingDOM insertion/
+removal and p104/p106 managedchild. Approval currentuser2026-09-30 autonomousAcid3
+and automaticQueue plus2026-10-01 continuation. Rootsolewriter/executor;
+timebox onefiniteTraversalPhase. q527 exactarchive verified.
+
+## Exact scope / design / criteria
+
+Indexed6 lacks Document.createTreeWalker. Add actualbrandedmanagedTreeWalker
+(root/current/filter/whatToShow/active/pendingtrace) and readonlyroot/whatToShow/
+filter plus actualNode currentNode setter (can be outside root/fromanotherdoc).
+Implement parentNode/firstChild/lastChild/nextSibling/previousSibling/nextNode/
+previousNode using currentDOM links and DOMstandard algorithms, preserving root
+boundary and regrafting behavior, callback mutation, acceptednode identity.
+whatToShow default0xffffffff and ToUint32; required actualNode root, optional
+nullable callbackinterface filter (function or object with dynamicacceptNode).
+Brand beforeconversion, once maskcoercion, callbackboolean/ushortconversion,
+exactexceptionidentity, objectmethodthis, activeguardInvalidStateError, cleared
+active/pending on allfallible exits. Hidden node kinds skip callback, SKIP descends,
+REJECT prunes, state only commits acceptednode after successful wrapping.
+
+NodeFilter globalcallbackinterface namespace exposes readonlyenumerable FILTER_*
+and SHOW_* numericconstants (SHOW_ALL4294967295, no int32negativealias). Not a
+constructible interface. TreeWalker interface has no publicconstructor. Factory
+uses receiverDocument's actualprototype/snapshot even in borrowedcalls; root may
+be unrelateddocument. Graphtraces root/current/filter/pending, no permanentroot/
+weakregistries/rawWindow state. New bind/traversal.c registered libbrowser/Makefile,
+bind/document.c/internal.h/window.c only, focusedfixtures+GC testextensions.
+
+NodeIterator requires separatepre-remove/candidate-reference/weakregistry Phase,
+and1cannotPASSuntilthatAPI. Test5 also requires existingmissingdocument.links;
+1/4/5 fullacceptance notclaimed here. No collections/form/control/Range/general
+adoption/XML loading/SVG/CSS/HAL/toolchain. p100100/100 remainsunchanged.
+Guardrail/fullCstandard loaded; primary [DOMTraversal](https://dom.spec.whatwg.org/#traversal)
+read2026-10-01. No fullDOMTraversalconformance claim.
+
+Plain+ASan focusedallmethods/treeorder/masks/filterfunction+object/dynamicmethod/
+SKIPvsREJECT/exceptionidentity/recovery/reentry/statechanges/detachment/regrafting/
+XMLroot/crossrealm/prototype/defaults/brands PASS, managedGC savedwalker/filter/
+foreigncurrent rootretains and droppermits exactlyonceownercleanup. ExistingXML62/
+GC16/frame48/namespace38/DOM23/owner27/VM/JS selectedregressions PASS. All100prior67
+preserved,6PASS/noUncaught/errors/crash/runnertimeout/completeTrue/runstatus0/
+Acid2exact/warning0/ASan0/fullstandard/style/diff/hash/evidence. Investigationbounded
+focusedalgorithm/GC plusfixedAcid; unknownprereq endsuncleared before newQueue.
+OS/guest/boot/GPU untestedhere. Localunpublished/nopush.
+
+## Introduction / q528 activation (2026-10-01)
+
+TreeWalker is independentofNodeIterator/livecollectionmissingfoundations. Separate
+finitePhasecan verify6without expanding intodeletionobserver architecture. [WS](../ws.md).
+
+## q528 result (2026-10-01)
+
+Cleared; [evidence](verification.md). TreeWalker70/70, GC5/5, frame53/53 and all
+selected prior regressions plain+ASanPASS. Acid3 all10068/100,6newPASS/prior67
+preserved/Uncaught0, Acid2exact. No missing prerequisite/bugtransfer/waiver. Next
+NodeIterator pre-removal registry/collections; p100100/100 andp044 remain.
+
+## Callback helper reuse by p120 design (2026-10-01)
+
+[p120](../phase120/phase.md) moves existing callableinterface invocation to a shared
+internal helper, sameconversion/order/receiver/exception contract. All70+GC TreeWalker
+checks and original6 rerun; no externalAPI/criteria/dependency changes. Remainscleared
+unless actualregression invalidates evidence. [WS](../ws.md).
+
+## p120 shared callback revalidation (2026-10-01)
+
+[p120 evidence](../phase120/verification.md) verifies all70TreeWalkercontracts,
+GC9/9 and indexed6preserved bothvariants afterhelperextraction; clearance remainsvalid.

@@ -1,0 +1,51 @@
+# q534 / p124 verification — 2026-10-01
+
+Cleared. Plain+ASan original all10073/100 exact inventory unchanged, completeTrue/
+exceptions/runerrors/Uncaught/crash/runner timeout0/runstatus0, Acid2 exact100%.
+This ordinary-tree C prerequisite had no score increase criterion. Remaining27/
+p100full100/100 unmet.
+
+New dom_form_listed/control_member/owner are allocation-free ordinary DOM queries.
+Built-in listed categories use actual HTML namespace and exact case-sensitive local
+name despite internally folded tag enum. Image inputs listed but excluded from
+controls membership; exact case-insensitive image keyword, no whitespace trimming.
+Hidden/disabled/unnamed/fieldset controls retained. Associated nonlisted img uses
+ancestry rather than explicit form reference. Connected means actual tree root
+Document, including XML; ownerDocument alone does not establish connectedness.
+Connected listed controls with form attribute honor first nonempty matching ID,
+requiring actual HTML form, suppress later IDs/ancestry for nonform/foreign/missing/
+empty/case mismatch. Otherwise nearest actual form ancestor is recomputed.
+
+Plain+ASan with ASAN_OPTIONS=detect_stack_use_after_return=0:
+
+- host-build plain/asan warning/error0, registered actual dom/form.c in libbrowser.
+- host-form-owner56/56: actual built-in listed/nonlisted/foreign/uppercase categories,
+  image/invalid whitespace/hidden-disabled state, nearest/nested/moving/detaching/
+  reinserted controls, connected explicit overrides/misses/empty/case/ID change/
+  restoration/first duplicate nonform/foreign/form/reordering/removal, detached
+  explicit fallback/image ignores explicit/ordinary unrelated elements/fragment
+  before and after insertion, XML namespace/case/ancestor, independent managed
+  child/retired connected tree,1000 repeated queries. Host-only callbacks expose
+  actual production helpers to ordinary JS-created DOM; no production JS stubs,
+  synthetic expected association or hidden test switch.
+- Prior forms35/collection104/GC16/frame68/NodeIterator60/TreeWalker70/traversal9/
+  removal19/native65/XML62+GC16/namespace38+GC12/names31/iframe17/legacy56/childCSS30/
+  owner27/realms30/object100/interp45/DOM23/JS14/selectors golden allPASS.
+- Fixed Acid suite reports/source hashes/selected results in verification.json.
+- style-check changed C/header/host fixture no findings; git diff --check PASS.
+  Manual full changed-source C review covers public/static order/ANSI declarations/
+  one-line forwards, loop/switch/paragraph comments, call-before-condition checks,
+  actual tree root/preorder termination, case/namespace and ID equality, no cached
+  GC/raw owner state, fallible fixture input/native registration/wrapper conversion/
+  teardown. Fixture registration moved into guarded helper to avoid goto; final
+  builds/tests use updated source. Compilercc14.2.0/Python3.13.5/clang-format absent,
+  manual formatting. No applicable host criterion skipped.
+
+Primary HTML [categories](https://html.spec.whatwg.org/multipage/forms.html#categories)
+and [form ownership](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-owner)
+read2026-10-01. This does not preserve HTML parser special nonancestor associations;
+parser-magic/custom elements/public input.form/HTMLFormElement/form.elements/
+RadioNodeList/radio transitions/submission remain known later scope. Existing page
+activation/parser/DOM mutation/GC semantics untouched. No full HTML/WPT/fuzz/OS/
+guest/boot/GPU claim. Pinned WPT2d66b9b7998bb58c336138c178323ddee857b586 unchanged.
+p044 final full-standard gate remains; local records unpublished/no push.

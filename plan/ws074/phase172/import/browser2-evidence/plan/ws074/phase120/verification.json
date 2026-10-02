@@ -1,0 +1,66 @@
+{
+  "queue": "q530",
+  "baseline": "f5d31b7f",
+  "sources": {
+    "userland/desktop/browser/bind/iterator.c": "9cf524e4594aea6fc676c49583ec463bd179c29ec4320d6e2c70d9c7c185f7be",
+    "userland/desktop/browser/bind/traversal.c": "f16921663d02102c481981876e5bffe9e25c6f74ea2287f638c46b5ff17a710e",
+    "userland/desktop/browser/bind/document.c": "b95ab678d64ccf9094d120a70de4cfcaebcfd0174bee023b30fafccafc4ac9ab",
+    "userland/desktop/browser/bind/internal.h": "82deec0e5bde3a372f3f5fbdd12c48fea67c5602503b4d0ffadb98876423565e",
+    "userland/desktop/browser/bind/window.c": "8726cdc97b09787783cfe16a58c0dcb2dec623e674c8434e407f0375c22b7454",
+    "userland/desktop/libbrowser/Makefile": "249bfc58bc94de22d735325276f9ea4db4f0ca2d1eb84a209cd6dba41cbda7b2",
+    "plan/ws074/tests/host-frame-lifetime.c": "61b6bf772959c76e4d200a5f691898f561aa19fcc9eff6a1e2f8f8904945a0c6",
+    "plan/ws074/tests/host-traversal.c": "06f214b405fae396f60848bacf690eca0ac4e6e0b31ad3a6354b0f33019f9fe7",
+    "plan/ws074/tests/pages/node-iterator-probe.html": "ddcb292d0ab837cab32ef1a8db628f80f306c001b3fa6caa934b7ec1ced49542"
+  },
+  "changes": [
+    [
+      1,
+      "fail",
+      "pass"
+    ],
+    [
+      2,
+      "fail",
+      "pass"
+    ],
+    [
+      3,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q530-plain/report.json",
+    "build/ws074-acid-q530-asan/report.json"
+  ],
+  "regressions": [
+    "build/ws074-q530-final-plain.json",
+    "build/ws074-q530-final-asan.json"
+  ],
+  "plain_asan": {
+    "NodeIterator": "60/60",
+    "TreeWalker": "70/70",
+    "traversal GC": "9/9",
+    "frame": "58/58",
+    "removal": "19/19",
+    "XML": "62/62+GC16/16",
+    "namespace": "38/38+GC12/12",
+    "DOM": "23/23",
+    "JS": "14/14",
+    "owner": "27/27",
+    "realms": "30/30",
+    "VM": "object100/interp45",
+    "child CSS": "30/30",
+    "names": "31/31",
+    "iframe": "17/17",
+    "legacy": "56/56",
+    "selectors": "golden identical",
+    "Acid3": "71/100 all100/prior68preserved/1\u20133newPASS/noerrors",
+    "Acid2": "exact"
+  },
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

@@ -260,6 +260,10 @@ js_builtin_install_tags(
 		if (key == VM_VALUE_EMPTY)
 			return ENOMEM;
 		found = vm_object_get_own(realm->global, key, &property);
+		if (found < 0)
+			return -found;
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
 		error = js_builtin_tag(realm, (struct vm_object *)vm_value_as_cell(*property.value), globals[index]);
@@ -284,6 +288,10 @@ js_builtin_install_tags(
 		if (key == VM_VALUE_EMPTY)
 			return ENOMEM;
 		found = vm_object_get_own(realm->global, key, &property);
+		if (found < 0)
+			return -found;
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
 		error = js_builtin_species(realm, (struct vm_object *)vm_value_as_cell(*property.value));
@@ -362,6 +370,10 @@ symbol_for(
 	/* A symbol registered already. */
 	registry = realm->intrinsics[VM_INTRINSIC_SYMBOL_REGISTRY];
 	found = vm_object_get_own(registry, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found) {
 		*result = *property.value;
 		return 0;

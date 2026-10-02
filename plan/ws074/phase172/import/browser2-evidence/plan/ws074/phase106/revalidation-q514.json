@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-01",
+  "queue": "q514",
+  "baseline": "9a4a91db",
+  "source_hashes": {
+    "userland/desktop/browser/vm/function.c": "f3260a7276114e7ca0f183fa043e5bd628d9cfe0186c1b1c496877e6867debf0",
+    "userland/desktop/browser/vm/vm.h": "1f875628f9c2bd4db7ea60a8d2c01df93191e9bfc845283cd7ba015caf319df5",
+    "plan/ws074/tests/host-realm-retirement.c": "ec39965a141ae78c2070fd0719dba99d6d1a15aa58541bc78bdfa1fb9631b9be"
+  },
+  "plain_asan": {
+    "retirement": "PASS",
+    "ownership": "27/27",
+    "realms": "30/30",
+    "object": "100/100",
+    "interp": "45/45",
+    "DOM": "23/23",
+    "iframe_reference": "17/17",
+    "Acid2": "exact100%",
+    "Acid3": "42/100; all100; Uncaught0; no errors/timeout/crash"
+  },
+  "regressions": [],
+  "new_passes": [
+    44,
+    78
+  ],
+  "reports": [
+    "build/ws074-acid-q514-plain/report.json",
+    "build/ws074-acid-q514-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "clang-format": "unavailable"
+  },
+  "scope_note": "score gain belongs to retained q513 iframe progress, not VM owner repair; p104 remains uncleared"
+}

@@ -1,0 +1,58 @@
+<!-- awesome-plan project=zedbsd record=BUG-126 -->
+
+# BUG-126: Browser VM loses execution/exception identity across realms
+
+Reproduction: reproduced
+Disposition: resolved (q511 / ws074-p105 verified, 2026-09-30)
+Date: 2026-09-30
+Source: WS074 p104, q510 / q510-i01, bounded readiness investigation
+Handling Phase: [ws074-p105](../ws074/phase105/phase.md)
+
+## Expected and observed
+
+Two live realms in one heap must keep each callee's global environment and
+transport its thrown value to the caller. The current interpreter pushes foreign
+bytecode into the caller realm; native/constructor paths invoke the correct realm
+but return VM_THROWN without transferring the exception. Direct child calls and
+Function-created child functions lose their global environment; foreign native
+and constructor exceptions and bytecode exception identity fail.
+
+The saved [8-check probe](../ws074/tests/realm-context-probe.c) passes 3 controls
+and fails 5 assertions in both plain/ASan, exit 1. Existing host-object tests pass
+100/100 in both. No crash or sanitizer diagnostic occurred. This blocks genuine
+initial iframe contexts; no existing single-realm Phase acceptance is invalidated.
+
+## Reproduction and evidence
+
+Baseline `596fc1ca`; cc 14.2.0; host shared-heap embedding, no guest or network.
+Both realms remain alive until all test calls complete. Run host-build.sh for
+plain/asan, then `python3 plan/ws074/tests/run-realm-context-probe.py`.
+Exact inventory, source paths, commands, tool versions and limits:
+[investigation](../ws074/phase104/investigation.md) and
+[machine-readable evidence](../ws074/phase104/investigation.json).
+
+Searched `plan/bugs/` and known-bugs.md for realm/iframe/cross-realm conditions;
+no matching ticket found. The separately unimplemented reachability-based realm
+lifetime in p106 is not asserted to be a reproduced use-after-free or the same
+bug. No deliberately dangling C pointers were exercised. Async/generator,
+bidirectional/reentrant and C-API exception paths are not comprehensively tested
+yet; p105 must cover the affected dispatch contracts before resolution.
+
+## Decision / next trigger
+
+q510 ended uncleared under the repository's unknown-prerequisite rule. No
+non-blocking transfer or repair is claimed. Resolve only with p105 verification:
+8/8 baseline plus bounded call/construct/exception regressions and preserved
+single-realm behavior. Execution requires a separately approved Queue. Reopen
+on evidence of lost foreign global/exception identity after any later fix.
+
+## Resolution event (2026-09-30)
+
+q511-i01 / p105 cleared: unchanged reproduction now8/8 both variants;
+30 additional cross-realm call/construct/exception/GC/error checks and existing
+VM/DOM regressions pass plain/ASan. Actual foreign exception identity and source
+metadata retained; Acid2 exact, Acid3 all100 unchanged40/100, Uncaught0.
+[Evidence](../ws074/phase105/verification.md). Detached-context lifetime remains
+separate p106; no unrelated conformance or iframe completion claim. This dated
+resolution supersedes the scheduling state above without erasing reproduction.
+Local disposition event retained; remote ticket was not closed or published.

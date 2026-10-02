@@ -1,0 +1,37 @@
+# BUG-130: unpublished VM Array reclaimed during native child-list record construction
+
+Reproduction: reproduced
+Disposition: resolved（q558/p146 verified）
+Origin: [ws074-p145/q557](../ws074/phase145/phase.md)
+Handling: [p146/q558](../ws074/phase146/verification.md) repaired and verified; p145 retry afterwards.
+
+Expected: direct existing child-list helper with conservative stack scanning disabled
+and real ordinary allocation GC publishes exact added/removed native identities and
+zero/one NodeList lengths; no sanitizer leak. Observed: native14/16 both, added identity
+and cardinality fail; ASan64-byte leak through vm_array_create/js_builtin_array.
+[Evidence](../ws074/phase145/verification.md) includes exact logs/source hashes/build
+base2fb02f3f/plain+ASan/full production sources. Native reproducer
+plan/ws074/tests/host-mutation-record.c, ASAN_OPTIONS=detect_stack_use_after_return=0;
+ordinary8MiB-minus128/384/640 pressure cells, no production collector changes. Caller
+native inputs explicitly rooted during construction, dropped before real helper call.
+Existing Page13 and prior61 pass; actual pinned original88 preserved/Acid2exact.
+
+Static causal readback: vm_array_create allocates unpublished array then length-key
+string; vm_object_init can allocate root shape on cold heap. No own prototype/newborn
+root through these allocations. Caller list root can only acquire completed returned
+array. Shared factory callee ownership must be verified, rather than suppressing GC or
+narrowing record criteria. Related BUG-127 concerns realm ownership, distinct conditions;
+active/archived bug search found no matching unpublished Array ticket. BUG-129 unrelated
+capacity overflow remains unknown/tracking. No fix or non-blocking transfer claimed.
+
+Bound: three native pressure shapes, one replay retaining logs; full63 includes failing
+native; no allocator fault injection/fullVM audit/fuzz/OS evidence. Reinvestigate if
+factory ownership repair fails exact reproducer. q557 uncleared preserved permanently.
+
+## Resolution / q558 (2026-10-01)
+
+Factory callee prototype/newborn/input slots rooted; direct factory20/20 and unchanged
+q557 repro16/16 plain+ASan, ASan leak0, all64 PASS, Acid3 88/Acid2 exact.
+Original q557 outcome remains uncleared; p145 requires separate attempt. Reopen if
+this exact direct factory/record GC reproduction regresses. Local ticket closure is
+resolved; remote lifecycle unpublished.

@@ -1,0 +1,35 @@
+<!-- awesome-plan project=zedbsd record=q530 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q529](queue-q529.md), exact archive verified.
+
+## q530
+
+Purpose: NodeIterator reference/candidate/pre-remove for1–3, WS074/fg011.
+Timebox one finite Phase. Approval currentuser2026-09-30 autonomousAcid3/automatic
+Queues +2026-10-01 continuation; exact[p120scope](../ws074/phase120/phase.md) saved before
+source generation. No collections/controls/Range/loading/CSS/SVG/HAL/toolchain.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q530-i01 | [ws074-p120](../ws074/phase120/phase.md) | cleared | p119f5d31b7f weakregistry +p118verified; NodeIterator absent |
+
+Criteria API/algorithms/pre-removal/filter/realGC all plain+ASanPASS, selected prior
+regressionsPASS, all100prior68preserved/1–3PASS/noerrors/Acid2exact/warning0/fullC/style/
+diff/evidence. Graph p118/p119(external) → p120 → p100(external); acyclic.
+Onlyp120authorized.
+
+## Upcoming Work Outlook
+
+LiveHTMLcollections/control/Range/CSS/loading/SVG;4forms/5links remain missing known
+foundations. p100full100/100 unchanged/p044 remains. Local unpublished/no push.
+
+## q530 outcome (2026-10-01)
+
+[p120](../ws074/phase120/phase.md) cleared,[evidence](../ws074/phase120/verification.md).
+Bothvariants71/100 all100/1–3newPASS/prior68preserved/noerrors/Acid2exact; NodeIterator
+60/60/TreeWalker70/70/GC9/frame58/removal19/allselectedregressionsPASS. Remaining29
+trackedp100; nextlivecollections. Rootexecutor released/localunpublished.

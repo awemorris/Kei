@@ -133,6 +133,10 @@ struct html_parser {
 	/* What runs a script element when its end tag is parsed (NULL: nothing runs). */
 	html_script_hook script_hook;
 	void *script_context;
+	/* The current script's input boundary, or SIZE_MAX outside a script hook. */
+	size_t insertion_point;
+	/* Reentrant writes on the C stack; the parser refuses excessive nesting. */
+	unsigned write_depth;
 
 	/* Whether parsing stopped, and how many parse errors the tree builder saw. */
 	int stopped;
@@ -144,6 +148,7 @@ struct html_parser {
 
 /* The token loop and shared algorithms (parser.c). */
 void tb_process(struct html_parser *p, const struct tb_token *token);
+void tb_run_script(struct html_parser *p, struct dom_element *script);
 void tb_process_in_mode(struct html_parser *p, int mode, const struct tb_token *token);
 void tb_error(struct html_parser *p);
 struct dom_element *tb_current(const struct html_parser *p);

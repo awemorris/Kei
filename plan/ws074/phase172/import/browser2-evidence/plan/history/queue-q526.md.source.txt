@@ -1,0 +1,38 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none; finished Queue: q526 (root sole executor)
+Last finished Queue: [q525](history/queue-q525.md), archiveverified.
+
+## q526
+
+Purpose: legacyEvent/UIEventfactory+initializer30, WS074/fg011.
+Timebox: onefinitePhase/focusedeventlifecycle. Approval currentuser2026-09-30
+Acid3 autonomous/automaticQueue plus2026-10-01continuation.
+Exact[p116scope](ws074/phase116/phase.md): Event/UIEventfactoryaliases/initEvent/
+initUIEvent/view/detail/tracedbrand+initialized/preinitdispatchcheck. No other
+factory/initializer/constructor/shadow/HTML/CSS/XML/HAL/toolchain scope.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q526-i01 | [ws074-p116](ws074/phase116/phase.md) | cleared | p11593de18a4 inventory63/event dispatch verified;30missingfactory/initializer |
+
+Criteria focusedeventlifecycle/DOM23/frame33/owner27/eventinput+GC plain+ASanPASS,
+all100prior63preserved/30PASS/Uncaught0/errors0/completeTrue/runstatus0/Acid2exact/
+warning0/noASan/fullstandard/style/diff/evidence.
+Graph existingeventstate/dispatch/GC(external) → p116 → p100(external), no cycle.
+Onlyp116 implementationauthorized.
+
+## Upcoming Work Outlook
+
+HTMLcontrols/collections/activation, XMLDocument creation, Traversal/Range/CSSmedia/
+loading/SVG/blankabout-base snapshot finiteQueues toward100/100. No p101/p098,
+p044fullWSconformance remains. Localunpublished/nopush.
+
+## Outcome
+
+q526-i01/p116cleared,56/56/GC38/38/owner27/DOM23 PASSbothvariants,
+all10065/100/30+73newPASS/no regression/Uncaught0/Acid2exact.
+[Evidence](ws074/phase116/verification.md). Remaining35features.

@@ -1,0 +1,26 @@
+{
+  "queue": "q519",
+  "baseline": "dfaa2acf",
+  "sources": {
+    "userland/desktop/browser/css/parser.c": "356750d88ebe66b9c0fdcecc8041d2d4d784d6c8133bfb2775ae64a0a5ec8a23",
+    "plan/ws074/tests/pages/selector-grammar-probe.html": "c8feb59e1bb9680c7f87c687d1abc0e6d9ce43be95ee7c6ffe54b8bbb40ed40a"
+  },
+  "plain_asan": {
+    "grammar": "37/37",
+    "DOM": "23/23",
+    "selectors_golden_style": "identical",
+    "child_css": "30/30",
+    "frame_lifetime": "33/33",
+    "Acid2": "exact100%",
+    "Acid3": "56/100 all100,44 restored,no other changes/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "reports": [
+    "build/ws074-acid-q519-plain/report.json",
+    "build/ws074-acid-q519-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

@@ -1,0 +1,37 @@
+<!-- awesome-plan project=zedbsd record=q532 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q531](queue-q531.md), exact archive verified.
+Executor: root, this checkout, one Queue/one Phase, local unpublished.
+
+## q532
+
+Purpose: live HTMLCollection/children/Document.links for WS074/fg011.
+Timebox: one finite Phase. Approval current user 2026-09-30 autonomous Acid3/
+automatic Queues + 2026-10-01 continuation. Exact [p122 scope](../ws074/phase122/phase.md)
+saved before source generation; prerequisites verified in working code.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q532-i01 | [ws074-p122](../ws074/phase122/phase.md) | cleared | p12109d65c75 cleared; saved live collection and indexed5 require actual links |
+
+Scope/criteria: exact whole p122, children/links/native collection policy/lifetime,
+focused plain+ASan and all selected regressions, indexed5 PASS/prior71 preserved/
+no errors/Acid2 exact/warning0/fullC review/evidence. No getElementsBy* conversion,
+forms/control/tables/Range/CSS/loading/SVG. Graph p121(external) → p122 → p100(external),
+acyclic; only p122 authorized. Unknown dependencies end uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Live getElementsBy* queries, forms/control/table collections, Range/CSS/loading/SVG
+as separate necessary finite Phases. p100100/100 and p044 final conformance remain.
+
+## q532 outcome (2026-10-01)
+
+[p122](../ws074/phase122/phase.md) cleared; [evidence](../ws074/phase122/verification.md).
+HTMLCollection104/GC13/frame63/all selected plain+ASan regressionsPASS.
+Acid3all10072/100, indexed5 newPASS/prior71 preserved/noerrors/Acid2 exact.
+Remaining28/p100 unchanged. Root executor released. Local unpublished, no push.

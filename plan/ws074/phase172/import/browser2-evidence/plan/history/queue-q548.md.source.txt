@@ -1,0 +1,116 @@
+<!-- awesome-plan project=zedbsd record=q548 -->
+
+# q548 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q548](history/queue-q548.md), exact archive verified; p136 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q548
+
+Purpose WS074/fg011 native Range boundary foundation for indexed8.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p136](ws074/phase136/phase.md) snapshot saved before generation.
+One finite Phase/bounded tests; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q548-i01 | [ws074-p136](ws074/phase136/phase.md) | cleared | p117/p132/native nodes/prototypes/roots, q54785; indexed8 |
+
+Whole exactp136 native factories/identities/boundaries/getters/current ancestry/
+setters/selection/collapse/unsigned conversion roots/GC/owner/XML; plain+ASan/
+all46/prior85/new8/original86/equal/noerrors/Acid2exact/fullC. Known live mutation
+repair/contents/clone/comparison/stringification and other exclusions retained.
+Graph p117+p132(external)->p136->p100(external), acyclic. Unknown dependency ends
+uncleared. This boundary increment supplies no full live Range acceptance.
+
+## Upcoming Work Outlook
+
+Live Range repair and content operations/comparison/stringification, CSS/loading/
+SVG, final p100/p044. Outlook forecast supplies no implementation authorization.
+
+## q548 outcome (2026-10-01)
+
+[p136](ws074/phase136/phase.md) cleared in q548, [evidence](ws074/phase136/verification.md).
+Native AbstractRange/Range/factories/readonly descriptors/boundaries/typed setters/
+selection/current ancestry/uint32 conversion/GC/creator/XML ownership verified.
+Original86/100/newindexed8/prior85 preserved/equal/noerrors/Acid2exact/all48 groups
+PASS/range80/nativeGC40/frame138. Remaining14. Next native live removal repair,
+then insertion/CharacterData/comparison/stringification/contents, CSS/loading/SVG.
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p136 -->
+
+# ws074-p136: native Range boundary foundation
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q548 / q548-i01
+Prerequisites native XML/factory prototypes p117, DOM nodes/adoption p132, checked
+VM roots/native brands, latestq5475eb9ee32 actual85/equal/noerrors/Acid2exact/all46.
+User2026-09-30 autonomous Acid3/automatic Queues plus2026-10-01 continuation approve
+exact scope saved before generation. Root sole writer/executor, one finite Phase,
+commands bounded60sec; unknown prerequisite ends uncleared before redesign.
+
+## Exact scope / procedure / criteria
+
+Introduce native AbstractRange (illegal constructor) and Range (legal new Range(),
+plain call rejects) identities. Document.createRange branded current receiver
+Document creates independent native range initially (Document,0)-(Document,0),
+with relevant Document/XML snapshot prototype; constructor uses current Window
+Document. Readonly AbstractRange start/endContainer/start/endOffset/collapsed,
+Range.commonAncestorContainer. Actual native state traces creation Document and
+both endpoint nodes, not raw realm/window or script-visible fields; private native
+brand rejects forged prototype/internal nodes. Complete checked allocation/rooted
+publication, independently collectible cycles/creator owner retained.
+
+Native setStart/End(required Node,unsigned long), before/after(required Node),
+selectNode/Contents(required Node), collapse(optional boolean=false), detach noop.
+Exact method lengths/IDL argument requirements, brand before conversion; typed
+Node before one unsigned32 conversion; explicitly root range state/argument Node/
+conversion value through reentrant mutation/adoption/removal/GC/throw. Validate
+actual current node length AFTER conversion (Text/Comment UTF16 units vs ordinary
+child count); doctype InvalidNodeTypeError before range index validation, excessive
+offset IndexSizeError. Current-root changes or start-after-end/end-before-start
+collapse other endpoint to requested boundary; current pure ancestry/sibling
+position order, no JS properties consulted. Before/after/selectNode use actual
+parent and index; parentless InvalidNodeTypeError; selectNodeContents accepts any
+actual non-doctype Node, including Document/Fragment/Text/Comment. collapse defaults
+end/true=start with boolean no callback. common ancestor from actual endpoint
+ancestry; offsets are native uint32, readonly descriptors; no expando interference.
+Checked uint32 representability on native child counts/indices before mutation.
+New bind/range.c internal pure boundary helpers only, registered production source;
+interfaces enum/window registry/Document method/XML snapshot grow consistently.
+
+This is a boundary foundation increment, not full live Range conformance. Known
+next increments explicitly exclude live DOM insertion/removal/CharacterData/split/
+normalize range repair and weak subscriptions, cloneRange/compareBoundaryPoints/
+stringification/contents mutations/surround/geometry/StaticRange/Selection/custom/
+shadow/fullDOMRange. Excluded features are NOT stubbed as success; later finite
+Phases must supply them before p100 acceptance. Range.boundary consumers currently
+must not mutate DOM between operations except scoped conversion (where state is
+read after callback and only requested set operation is verified); no lifetime
+claim for unsupported live adjustment. Prior records/acceptance unchanged.
+
+Verify own initial/current tree order/reversed/different root/parentless/doctype/
+UTF16 offsets/unsigned coercion/current length/brands/readonly/native getters/
+XML/borrowed actual child/adoption; actual native conversion GC/throw root cleanup,
+sole range+creator lifetime/final release. Native fixtures plain+ASan+prior46 groups.
+Pinned all10086/100/newindexed8/prior85 preserved/equal/complete/status0/noerrors/
+Acid2exact; fullchanged C/manualformat/style/diff/buildwarning0/sanitizer0/hashes/
+evidence. No fullWPT/fuzz/OS/guest/boot/GPU/local unpublished/no push. p100/p044/WS
+remain incomplete. Guardrail/fullcoding-style/automation loaded (no concise).
+Primary DOM Range/boundary algorithms read2026-10-01 https://dom.spec.whatwg.org/
+#interface-range; node ownership verified in actual code. Graph p117+p132(external)
+->p136->p100(external), acyclic. New uncertainty blocks this attempt only.
+
+## Introduction / q548 activation (2026-10-01)
+
+Remaining Range6 currently fail at absent createRange. Indexed8 exercises real
+boundary movement/collapse/select semantics without live DOM mutation. Supply
+finite native boundary foundation; live repair and content algorithms remain
+explicit known next increments, not silently bundled into this Queue.

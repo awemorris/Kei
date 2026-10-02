@@ -1,0 +1,41 @@
+# BUG-131: Child media viewport inherits parent instead of iframe content box
+
+Reproduction: reproduced
+Disposition: resolved
+Date: 2026-10-01
+Origin [p150](../ws074/phase150/phase.md), q563/q563-i01.
+Handling: finite child viewport Phase to be selected, then unchanged p150 retry.
+
+Expected: connected iframe with computed width/height0 has child CSS viewport0x0;
+changing iframe to100x100 updates the same child engine; restoring0 restores media.
+Observed: frame_create copies parent viewport and style-context uses it unchanged.
+Original pinned Acid3 indexed46 reaches y1 (min-width/min-height1em) and incorrectly
+returns uppercase; new text-transform-media-probe Page fails y1/y4 plain+ASan.
+Native color media29/29 with explicit0x0 passes, isolating DOM binding viewport.
+Primary viewport800x600 original runner; base48bc59e4 plus q563 computed CSS/media.
+
+Repro ASAN_OPTIONS=detect_stack_use_after_return=0 build/ws074-host/{plain,asan}/browser
+--run plan/ws074/tests/pages/text-transform-media-probe.html:36PASS/2FAIL. Production
+original91/full100 equivalent/errors0/Acid2exact. Evidence p150/verification.json
+with commands, inventory and source hashes. No production viewport repair attempted
+inside p150. Search active+archived Bug Board/bug files found no same-condition bug.
+Existing p109 explicitly excluded box-size child viewport; p150 preapproval p111
+viewport prerequisite reference was incorrect, retained in exact approval archive.
+
+Plan native owner Window->owning iframe relation, current parent CSS/layout content
+box resolution and bounded nested fallback; preserve detached saved context lifetime,
+primary embedder viewport/no native permanent roots. Investigate before authorizing
+finite source scope. No full child layout/painting/navigation claimed.
+
+Handling [p151](../ws074/phase151/phase.md), q564; finite current layout callback
+content-box viewport design saved before generation. p150 unchanged retry afterward.
+
+## Resolved q564 / p151 (2026-10-01)
+
+[Verified](../ws074/phase151/verification.md): original46PASS/92/100, both Page12/
+native10 actual callback GC+retirement and prior p150 Page38/native29/all74PASS.
+Child viewport uses actual primary layout content box, retains0, refreshes cached
+media; explicit no-layout setter contract unchanged. Reopen if iframe current
+content sizing/cache/retirement again disagrees. Full child layout and fractional
+viewport are disclosed limitations, not claimed outputs. p150 requires separate
+retry; earlier q563 uncleared retained. Local resolved/remote publication absent.

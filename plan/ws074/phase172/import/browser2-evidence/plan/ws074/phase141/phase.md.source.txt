@@ -1,0 +1,115 @@
+<!-- awesome-plan project=zedbsd record=ws074-p141 -->
+
+# ws074-p141: native Text.splitText and Range.insertNode
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q553 / q553-i01
+Prerequisites p132 checked adoption, p139 pure pre-insert validity, p140 actual
+native insertion/CharacterData repair; f0ef3fb787/all54/Acid2exact. Root sole executor.
+User2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation approve this
+exact finite scope before generation; no product/risk decisions outstanding.
+
+## Exact scope / native design / criteria
+
+Implement actual Text.splitText(offset) and Range.insertNode(node), relying on verified
+native point/weak-registry/validation/adoption foundations. Only existing ordinary
+Document/Element/Fragment/Text/Comment/doctype graphs and uint32-representable tuples.
+Production affected bind/text.c, internal.h, range.c, window.c, dom/node.c/dom.h/
+removal.c; no new source module or layer ownership. New finite content capabilities
+remain subsequent Queue work, not part of this Phase.
+
+Add checked dom_text_truncate(node,length) in DOM: Text/Comment and <=currentlength
+validation before mutation, shorten retained UTF16 buffer without allocation, notify
+suffix replacement(offset=length,removed=oldlength-length,added0), generation after
+complete repair. Failure changes nothing; internal use prevents allocation failure
+after Text split has inserted its new suffix. Add optional dom_removal_set_split(token,
+callback) and dom_split_notify(document,original,newText,offset) to the existing weak C
+registry; same non-nesting/no allocation/GC/script/tree/registry-change callback
+contract/FIFO/adoption/finalizer semantics; generic observers receive no split callback.
+Range configures optional split callback on new subscriptions before publication.
+Attached split: insertion callback already shifts parent points strictly after new
+Text index; split callback moves original Text endpoints >offset into newText at
+old-offset, leaves equal/earlier Text offsets, increments parent points exactly equal
+to original Text index+1, then rebinds weak start association. Detached split sends no
+split relocation; suffix data truncation clamps original endpoints >offset. Independent
+clones/multiple ranges/current-owner registry repaired without visible properties.
+
+Internal public bind_split_text(realm,node,uint32offset,created) in bind/text.c:
+exact Text native brand/heap validation, bounds IndexSizeError1 before mutation;
+root original and pending new native node before allocation; copy suffix into new
+same-current-Document Text (preserve unpaired UTF16 units/empty suffix); if attached
+insert it before original.next, notify special split then truncate original; if detached
+only truncate original. Actual owner Window or caller fallback supplies existing
+environment child-mutation/host inserted hooks AFTER complete split repair/truncation;
+checked errors preserved, roots kept through callbacks. No rollback guarantee after a
+host/environment callback rejects an already committed mutation. Publish created node
+only on helper success. Existing ordinary creation/wrapper ownership reused.
+
+Text.splitText: exact Text brand (Comment/forged/other Node reject), required arg1,
+explicit temporary roots for genuine node/numeric argument/pending suffix before one
+ToUint32; use current owner/data/parent AFTER reentrant conversion (adoption/removal/
+data change/errors/GC); helper then native wrapper from actual current Document. Return
+new native Text, arity1/enumerable writable configurable. Existing private Window member
+enumerability helper renamed for DOM reuse; only newly added Text.splitText and already
+scoped Range attributes/methods adjusted, other interfaces unchanged.
+
+Range.insertNode: private native Range receiver, required typed Node; root genuine state/
+incoming/start container/reference/parent throughout validation/split/adoption/host GC.
+Reject start Comment, detached Text, startContainer===incoming with Hierarchy3 BEFORE
+prevalidation. Find actual reference (start Text itself or child at native start offset),
+actual parent; call p139 pure validation BEFORE any Text split. Split start Text via
+helper if needed; if reference===incoming use incoming.next. Reuse checked dom_adopt
+(parent.document,incoming) to prepare allocation before original removal and then detach/
+adopt exactly once; this performs the specified remove before native offset counting,
+and subsequent bind_insert rechecks/adopts the already detached same-owner node. No
+script/collector work in intervening native child count/index arithmetic. Compute new
+end offset from current parent length/reference index plus Fragment child count or1,
+checked representability; bind_insert actual node/Fragment. If native range is collapsed
+AFTER actual insertion, range_commit end(parent,newOffset) keeping current start; no
+snapshot of original collapsed state. Return undefined, arity1/enumerable/typed brand.
+Invalid prevalidation leaves data/tree/ranges/owners unchanged. Existing hook errors
+propagate and actual partial mutation retained accurately. Creator/source prototype
+and weak token ownership unchanged; no JS success shim or original-test branch.
+
+Verify focused Page: split attached/detached/zero/end/UTF16/unpaired/current conversion/
+ToUint32/bounds/error priority/brands/descriptors; actual all Range endpoint categories,
+multiple/clones/detach/current owner/XML/borrowed saved child/expandos. Range insert
+collapsed/noncollapsed Text and child tuples, Fragment/empty/comment/Document/doctype/
+ancestor/ref-self/moving node/adoption, validation before split, current collapse after
+removal and final native contents. Reproduce original Acid3 indexed12 sequence natively;
+expect score88/new12, prior87 preserved/equal100/complete/errors0/Acid2exact. Bounded native
+fixture/direct registered methods verifies callee roots during real numeric-conversion
+GC and host insertion GC (stack scanning disabled), actual status success/EIO/VM_THROWN,
+current creator/endpoints/offsetarg/incoming/reference/parent/new suffix survival and
+post-release collectibility; required failed checks recorded. Prior54+new fixtures both
+plain/ASan. Full changed C/manual/style/diff/buildwarning0/sanitizer0/hashes/durable
+outcomes. Each runner bounded60sec, unknown prerequisite ends uncleared before redesign.
+
+Exclusions: cloneContents/delete/extract/surround/wholeText/normalize/new partial
+CharacterData JS APIs, generic existing public string-conversion rooting refactor,
+full replacement/batch host atomicity, >UINT32 native graphs, Shadow/custom/PI/Attr/
+MutationObservers, fullDOM/WPT/fuzz/OS/guest/boot/GPU/push/remote publication. Host callback
+errors/GC rooted and propagated; no claim that arbitrary reentrant host DOM mutation is
+transactional. Acceptance p100/p044/WS remains incomplete until separately verified.
+Guardrail/fullcoding-style/automation and actual affected implementation loaded; no
+concise standard available. Primary DOM Living24Sept2026 splitText/Rangeinsert/suffix
+replace read2026-10-01 https://dom.spec.whatwg.org/#dom-text-splittext and
+#dom-range-insertnode. Graph p132+p139+p140(external)->p141->contents/p100(external), acyclic.
+
+## Introduction / q553 activation (2026-10-01)
+
+p140 cleared87/all54 with weak insertion/data repair. Implement concrete Text split/
+Range insert now that prevalidation and live mutations are actual verified prerequisites.
+No source generation preceded this exact Phase/Queue approval.
+
+## q553 result (2026-10-01)
+
+[p141](phase.md) cleared in q553, [evidence](verification.md).
+Actual rooted Textsplit/Rangeinsert/prevalidate-before-split/weak special split repair/
+allocation-free suffix truncation/current uint32 conversion/prototypes/current-owner
+hooks/actual post-insert collapse/error+GC ownership verified. Original88/newindexed12/
+prior87 preserved/equal/noerrors/Acid2exact/all56 groupsPASS/insertPage59/native92;
+existingRangecore59/GC89/frame148. Remaining12; next Range contents/CSS/loading/SVG.
+p100/p044/WS incomplete/root released/local unpublished/no push.

@@ -1,0 +1,24 @@
+# q520 acceptance revalidation — 2026-10-01
+
+p109 **cleared** after p110/BUG-128 actual repair412fe6e5. No new implementation;
+q518historical uncleared preserved. Final p109 CSS context/owner/media/inheritance/
+query/cssFloat sources unchanged; full changed-source C rules reviewed again,
+style-check.py and git diff --check PASS. Formatter unavailable/manual formatting.
+
+Plain/ASan childCSS30/30, frameGC/viewport33/33 (original24plus9), ownership27/27,
+realms30/30, object100/100, interp45/45, DOM23/23, iframe17/17. All100 Acid3
+inventories equal56/100, every prior q51747 and q51956pass preserved including44,
+exceptions/run_errors empty, completeTrue/run_status0; Acid2exact/different_pixels0.
+Visual40.05354166666667% independent diagnostic. Saved declarations keep child
+alive across parent destroy/GC, no permanent context root prevents final collection;
+whole-heap destruction and repeated finalization safe. No warnings/sanitizer.
+
+Commands rerun: browser --run child-style-probe.html/iframe-context-probe.html,
+host-frame-lifetime, host-context-ownership, host-realms, host-object, host-interp,
+run-dom-tests.py --program browser, run-acid-tests.py --out build/ws074-acid-q520-<variant>.
+Variants plain/asan, ASAN_OPTIONS=detect_stack_use_after_return=0. Uses q519's
+warning-free final-source host builds; no needless rebuild without source edits.
+Logs build/ws074-q520-*; [hashes](revalidation-q520.json)/[inventory](inventory-q520.json).
+cc14.2.0/Python3.13.5, no OS/guest/boot/GPU, external CSS/imports/child used-layout,
+full CSSOM conformance or exhaustive failures checked. p100100/100 remains unmet,
+remaining44 features receive finite Queues. Local unpublished/no push.

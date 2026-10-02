@@ -1,0 +1,67 @@
+<!-- awesome-plan project=zedbsd record=ws074-p107 -->
+
+# ws074-p107: createElement name validation
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Primary Milestone: inherited MG006
+Queue: q516 / q516-i01
+Prerequisites: p104 cleared; DOMException/p083 existing implementation verified
+by DOM regressions. Baselinefd64d63c, root sole executor.
+
+## Objective / exact finite scope
+
+Implement createElement valid element local name checks before DOM allocation,
+with existing InvalidCharacterError DOMException/name/code5 and foreign-realm
+identity. Acid3 tests20/22 currently fail because nonempty invalid names are
+accepted. Preserve argument string conversion and HTML ASCII folding, valid
+non-ASCII/UTF-16 names, wrapper ownership and no document mutation on failure.
+Current user's 2026-09-30 autonomous Acid3/automatic Queue instruction and
+2026-10-01 continuation authorize this necessary finite feature.
+
+## Design / standards
+
+Read [Guardrail](../../guardrail.md) and full [C standard](../../coding-style.md).
+Authoritative algorithm: [DOM createElement](https://dom.spec.whatwg.org/#dom-document-createelement)
+and [DOM valid element local name](https://dom.spec.whatwg.org/#valid-element-local-name),
+Living Standard2026-09-24, inspected2026-10-01. It has the ASCII-letter-start
+branch rejecting whitespace/NULL/slash/> and the colon/underscore/non-ASCII
+branch with restricted ASCII suffix characters. Use explicit UTF-16 scanning;
+all non-ASCII units are accepted by that definition, including supplementary
+pairs. Do not substitute XML1.0's older Name production for this current API.
+Bind-to-atom already folds ASCII, so a static helper in bind/document.c needs
+no new source module/DOM ABI or exception machinery. Original string conversion
+exceptions propagate before validation; throw in the callee's realm as existing
+DOM methods do. No new product/major architecture decision.
+
+Affected: bind/document.c and focused fixture/tests. No createElementNS/custom
+namespaces, parser token validation, attributes, Traversal/Range/loading/CSSOM/
+HAL/toolchain/modules. Those remain distinct future necessary phases.
+
+## Acceptance / bounded verification
+
+Focused valid/invalid/NULL/whitespace/digit/dash/dot/Unicode/argument conversion
+and borrowed-child receiver/exception/wrapper cases pass in plain/ASan; DOM23/23,
+existing frame17/17 and realm30/30. Warning-free builds/no sanitizer, full changed
+source standard/style/diff. Acid2 exact; Acid3 all100 no regression from42/100,
+tests20/22 pass, Uncaught0/no errors/crash/timeout. Record all100 inventory and
+commands/hashes/tools/skips. One finite fixture + normal bounded regressions;
+unknown prerequisites end this attempt uncleared before replanning.
+
+## Introduction / q516 activation (2026-10-01)
+
+Origin: p104 cleared q515, [inventory](../phase104/inventory.json) exposes two
+independent name-validation failures. This scoped feature precedes p100 acceptance
+without claiming to supply namespace creation, Traversal or the remaining56
+failures. q515 exact archive verified before rotation; no concurrent executor,
+local unpublished/no push. [WS structural summary](../ws.md).
+
+## q516 terminal event (2026-10-01, q516-i01)
+
+**cleared**; [verification](verification.md). Plain/ASan31/31 focused names,
+DOM23/23, realm30/30, frame17/17, warning-free/no sanitizer. Acid2 exact; Acid3
+42→44/100, tests20/22 PASS, all100/no regression/Uncaught0/no run errors.
+Full changed-source standards/style/diff PASS; formatter unavailable. Remaining
+namespace and other56 tests need separate feature phases, p100 unchanged.
+Local unpublished/no push; no remote lifecycle action.

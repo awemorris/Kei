@@ -1,0 +1,58 @@
+# q552 / p140 verification — 2026-10-01
+
+Base d8404b91. Original pinned Acid3 both plain/ASan87/100, prior87 preserved/newnone,
+full100 results exactly equal, completeTrue/runstatus0/exceptions[]/runerrors[];
+Acid2 exact100% both. Acid3pixel38.30% is diagnostic only. Remaining13; p100/p044/WS
+acceptance remain incomplete.
+
+All54 regression groups PASS both. New live mutation Page36/native36; existing
+preinsert64/native29, Rangecore59/boundary80/removal33/nativeGC89/frame148 unchanged.
+NoFAIL/Uncaught/sanitizer/runtimeerror. Native optional callback FIFO/final links/
+committed data lengths/generic removal-only exclusion, alias-safe full replacement,
+oversized preparation ENOMEM with unchanged data/generation/nonzero Range endpoints,
+actual efficient UTF16 append and callback-bearing weak tokens surviving Document-
+first finalization verified with conservative stack retention disabled.
+
+Production existing weak registry gains optional insertion/data repair without
+changing strong trace/cleanup/adoption ownership. Actual DOM insertion notifies after
+links/removal and before option/layout/host observation; full data set prepares an
+independent buffer before commit; append preserves checked efficient buffer path.
+Native Range callback adjusts strict following parent offsets and UTF16 replacement
+intervals. No wrapper properties/scripts/VM allocation/registry mutation in repair.
+Source-generation scope exactly matches approved p140; no split/insert/content API
+or generic string-conversion rooting refactor claimed.
+
+Commands/evidence:
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: production source list, awaited
+  both before execution; final warning/error0. cc14.2.0.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 build/ws074-host/VARIANT/browser --run
+  plan/ws074/tests/pages/range-mutation-probe.html` and `host-range-mutation`.
+  Initial Page assertion incorrectly appended an already attached ancestor before
+  checking a Text-boundary range, which correctly relocated to the original parent
+  during removal. Fixed the test to preserve Text endpoints and verify a distinct
+  XML creator/current primary owner; added detached Text adoption then data mutation.
+  No production removal semantics altered to accommodate an invalid expectation.
+- `python3 build/ws074-q552-regressions.py VARIANT`: all54 groups PASS, each60sec bound;
+  exact commands/outcomes retained in verification.json. DOM23/JS14/style-golden/
+  existing ownership/traversal/form/table/options/Range regressions retained.
+- `ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+  --program build/ws074-host/VARIANT/browser --out build/ws074-acid-q552-VARIANT`:
+  complete/equal87/noerrors/Acid2exact; overall Acid3FAIL correctly retained.
+- `python3 plan/tools/style-check.py userland/desktop/browser/bind/range.c
+  userland/desktop/browser/dom/removal.c userland/desktop/browser/dom/node.c
+  plan/ws074/tests/host-range-mutation.c`: inspected output empty.
+- `git diff --check`: PASS; new native fixture whitespace separately reviewed.
+
+Manual full plan/coding-style.md review of final changed C/header: file order/one-line
+forwards/ANSI declarations, no call in conditions/initializers, checked fallible APIs/
+status conventions/root ownership/atomic data buffer commit/cleanup, purpose paragraphs/
+blanklines/if/loop/return and compound conditions checked. Existing binding registration
+tables retain established table exception. No unrelated reformatting. clang-format
+unavailable, manual formatting; Python3.13.5. Source SHA256/reports/commands/results in
+verification.json. Host semantics only; no fullWPT/fuzz/OS/guest/boot/GPU acceptance,
+aggregate make check/HAL/toolchain/.internal/push/remote publication.
+
+Known bounds preserved: uint32-representable native graphs; per-child Fragment final
+offset equivalence without new host batch atomicity/MutationObservers; generic existing
+CharacterData string-conversion rooting is separate scope. No Phase/WS acceptance
+relaxed. Next finite Textsplit/Rangeinsert then content/CSS/loading/SVG/final conformance.

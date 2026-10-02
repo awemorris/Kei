@@ -1,0 +1,55 @@
+{
+  "queue": "q531",
+  "baseline": "e21136d0",
+  "sources": {
+    "userland/desktop/browser/vm/vm.h": "9be040e96589327446d0e893a68eaa9c5ada0bd17a464cf78f4de796c9de82ff",
+    "userland/desktop/browser/vm/object.c": "f233f157aeabf8b5a211106bfcd097ee7cd5015ce4e103eb06d5a4c9e58bfffc",
+    "userland/desktop/browser/vm/access.c": "467a2ebcdbb9091f1de2a1e99ec6f0ca3fd2cc9fb7a32999b1f34d0abf959765",
+    "userland/desktop/browser/vm/class.c": "9daa046c522b6c13830939061fda50d78a2cc277773bd2020c418b09be0cb525",
+    "userland/desktop/browser/vm/spread.c": "707677d773dddd712acf9d481f6bc40bcd24519f1e4dc281cee7a76c0ae9c71f",
+    "userland/desktop/browser/js/builtin_object.c": "37d807766b62ebbb0653624bb90467bcdcca3554d666861143ba096cb5abea9e",
+    "userland/desktop/browser/js/builtin_function.c": "a94b19d3561df2988bbc7e7ac5f3e2716a7f28f2d9126b48b208d71e47742e58",
+    "userland/desktop/browser/js/builtin_json.c": "5c1a570121eae461b25f30e29f8182226b78261043db513c4f38f4f011c10788",
+    "userland/desktop/browser/js/builtin_symbol.c": "9e3d4477b0248dccefe68d31d96edc90ab620072e985b306468c038455ed01f9",
+    "userland/desktop/browser/bind/event.c": "ba849f81f3888cb8b41180fd447b53ce7fa754a145c1cd651a64f9c3e66c47c3",
+    "userland/desktop/browser/bind/frame.c": "8fa368af57f521fc80e77905f9576a3c91797a7091eced85d12cc55fd3b24c13",
+    "plan/ws074/tests/host-native-properties.c": "4877599e6e6b4358cf40bfbd412ef425e6776df2eeaf5c3d9df48c4b19d0fd93"
+  },
+  "changes": [],
+  "reports": [
+    "build/ws074-acid-q531-plain/report.json",
+    "build/ws074-acid-q531-asan/report.json"
+  ],
+  "regressions": [
+    "build/ws074-q531-final-plain.json",
+    "build/ws074-q531-final-asan.json"
+  ],
+  "plain_asan": {
+    "native properties": "65/65",
+    "NodeIterator": "60/60",
+    "TreeWalker": "70/70",
+    "traversal GC": "9/9",
+    "frame": "58/58",
+    "removal": "19/19",
+    "XML": "62/62+GC16/16",
+    "namespace": "38/38+GC12/12",
+    "DOM": "23/23",
+    "JS": "14/14",
+    "owner": "27/27",
+    "realms": "30/30",
+    "VM": "object100/interp45",
+    "child CSS": "30/30",
+    "names": "31/31",
+    "iframe": "17/17",
+    "legacy": "56/56",
+    "selectors": "golden identical",
+    "Acid3": "71/100 unchanged all100/equal inventories/noerrors",
+    "Acid2": "exact"
+  },
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  },
+  "audit": "callsite-audit.json:44noncorecalls +3corecalls reviewed"
+}

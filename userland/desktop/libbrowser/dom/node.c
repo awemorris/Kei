@@ -16,16 +16,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void node_style_reset(struct dom_node *node);
+static void node_style_reset_tree(struct dom_node *root);
 static void node_trace(struct vm_heap *heap, struct vm_cell *cell);
+static void document_finalize(struct vm_heap *heap, struct vm_cell *cell);
 static void element_trace(struct vm_heap *heap, struct vm_cell *cell);
 static void element_finalize(struct vm_heap *heap, struct vm_cell *cell);
 static void character_data_finalize(struct vm_heap *heap, struct vm_cell *cell);
+static void character_data_trace(struct vm_heap *heap, struct vm_cell *cell);
 static void doctype_trace(struct vm_heap *heap, struct vm_cell *cell);
 static struct dom_node *node_alloc(struct dom_document *document, const struct vm_cell_type *type, size_t size, int node_type);
 static struct dom_node *character_data_create(struct dom_document *document, int node_type, const uint16_t *units, size_t length);
 
 /* A document, which refers to its children like any node. */
-static const struct vm_cell_type document_type = { "document", node_trace, NULL };
+static const struct vm_cell_type document_type = { "document", node_trace, document_finalize };
 
 /* A document fragment (a template's contents, a fragment being parsed). */
 static const struct vm_cell_type fragment_type = { "document-fragment", node_trace, NULL };
@@ -33,8 +37,8 @@ static const struct vm_cell_type fragment_type = { "document-fragment", node_tra
 /* An element, which also refers to its names, attributes and template contents. */
 static const struct vm_cell_type element_type = { "element", element_trace, element_finalize };
 
-/* A text or comment node, which owns its character buffer. */
-static const struct vm_cell_type character_data_type = { "character-data", node_trace, character_data_finalize };
+/* A native character node owns its C data buffer and traces its optional PI target. */
+static const struct vm_cell_type character_data_type = { "character-data", character_data_trace, character_data_finalize };
 
 /* A DOCTYPE node, which also refers to its strings. */
 static const struct vm_cell_type doctype_type = { "document-type", doctype_trace, NULL };
@@ -58,6 +62,7 @@ dom_document_create(
 	document->node.document = document;
 	document->heap = heap;
 	document->quirks = DOM_NO_QUIRKS;
+	document->content = DOM_CONTENT_HTML;
 
 	/* Succeeded: the document is empty. */
 	return document;
@@ -242,6 +247,16 @@ dom_insert_before(
 		parent->first_child = child;
 	}
 
+	/* A child-list change or new connection retires current inline source identities. */
+	node_style_reset(parent);
+	node_style_reset_tree(child);
+
+	/* Repair live boundaries before any option, layout or host observer sees the insertion. */
+	dom_insertion_notify(parent->document, child);
+
+	/* Reconcile option owners after the complete incoming subtree has its final links. */
+	dom_select_tree_changed(child);
+
 	/* The tree changed: the document's style and layout are out of date. */
 	parent->document->generation++;
 }
@@ -259,6 +274,13 @@ dom_remove(
 	parent = child->parent;
 	if (parent == NULL)
 		return;
+
+	/* Repairs weak traversal positions while every original DOM link remains available. */
+	dom_removal_notify(child->document, child);
+
+	/* Retires any child browsing contexts before their connection disappears. */
+	if (child->document->removed != NULL)
+		child->document->removed(child->document, child);
 
 	/* Joins its neighbours, or moves the parent's ends past it. */
 	if (child->previous != NULL) {
@@ -279,6 +301,13 @@ dom_remove(
 	child->previous = NULL;
 	child->next = NULL;
 
+	/* Removed styles and their old parent's child-list changes retire current source identities. */
+	node_style_reset(parent);
+	node_style_reset_tree(child);
+
+	/* Repair old and new option owners after the complete removed subtree is detached. */
+	dom_select_tree_changed(child);
+
 	/* The tree changed: the document's style and layout are out of date. */
 	parent->document->generation++;
 }
@@ -293,15 +322,22 @@ dom_text_append(
 	size_t length)
 {
 	struct dom_character_data *text;
+	size_t previous_length;
 	int error;
 
 	/* Appends to the node's buffer. */
 	text = (struct dom_character_data *)node;
+	previous_length = text->data.length;
 	error = wb_units_append(&text->data, units, length);
 	if (error != 0)
 		return error;
 
-	/* The text changed: the document's layout is out of date. */
+	/* Appending preserves equal endpoints while shifting only points beyond the replaced interval. */
+	dom_data_notify(node->document, node, previous_length, 0, length);
+
+	/* Text changes retire the current source association and invalidate document layout. */
+	if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION)
+		node_style_reset(node->parent);
 	node->document->generation++;
 
 	/* Succeeded: the node holds the characters. */
@@ -345,8 +381,13 @@ dom_element_add_attribute(
 	attribute->name = name;
 	attribute->prefix = prefix;
 	attribute->value = value;
+	attribute->namespace_uri = NULL;
 	attribute->ns = ns;
 	element->attribute_count++;
+
+	/* Only no-namespace content attributes affect native select selectedness. */
+	if (ns == DOM_NS_NONE)
+		dom_select_attribute_changed(element, name, 0, 1);
 
 	/* The attributes changed: the document's style is out of date. */
 	element->node.document->generation++;
@@ -365,6 +406,10 @@ dom_element_find_attribute(
 	const struct vm_string *name)
 {
 	size_t index;
+
+	/* Arbitrary URI identity cannot be recovered from the shared foreign classification alone. */
+	if (ns == DOM_NS_OTHER)
+		return NULL;
 
 	/* Compares each attribute's name and namespace. */
 	for (index = 0; index < element->attribute_count; index++) {
@@ -442,6 +487,7 @@ dom_element_set_attribute(
 	attribute = dom_element_find_attribute(element, DOM_NS_NONE, name);
 	if (attribute != NULL) {
 		attribute->value = value;
+		dom_select_attribute_changed(element, name, 1, 1);
 		element->node.document->generation++;
 		return 0;
 	}
@@ -479,6 +525,9 @@ dom_element_remove_attribute(
 	memmove(&element->attributes[index], &element->attributes[index + 1U], after * sizeof(*attribute));
 	element->attribute_count--;
 
+	/* The committed presence transition updates clean option defaults and select fallback. */
+	dom_select_attribute_changed(element, name, 1, 0);
+
 	/* The attributes changed: the document's style is out of date. */
 	element->node.document->generation++;
 
@@ -496,19 +545,179 @@ dom_text_set(
 	size_t length)
 {
 	struct dom_character_data *text;
+	struct wb_units replacement;
+	struct wb_units previous;
 	int error;
 
-	/* The old characters go, and the new ones take their place. */
+	/* Prepare an independent buffer so failed or aliased input cannot discard the old characters. */
 	text = (struct dom_character_data *)node;
-	wb_units_clear(&text->data);
-	error = wb_units_append(&text->data, units, length);
-	if (error != 0)
+	wb_units_init(&replacement);
+	error = wb_units_append(&replacement, units, length);
+	if (error != 0) {
+		wb_units_release(&replacement);
 		return error;
+	}
 
-	/* The text changed: the document's layout is out of date. */
+	/* Publish complete characters before pure repair observes the native replacement. */
+	previous = text->data;
+	text->data = replacement;
+	dom_data_notify(node->document, node, 0, previous.length, length);
+	wb_units_release(&previous);
+
+	/* Text changes retire the current source association and invalidate document layout. */
+	if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION)
+		node_style_reset(node->parent);
 	node->document->generation++;
 
 	/* Succeeded: the node holds the new text. */
+	return 0;
+}
+
+/*
+ * Deletes a CharacterData suffix without allocating or discarding the retained prefix.
+ */
+int
+dom_text_truncate(
+	struct dom_node *node,
+	size_t length)
+{
+	struct dom_character_data *text;
+	size_t previous_length;
+	int character_data;
+
+	/* Invalid native types cannot expose a CharacterData buffer. */
+	character_data = dom_is_character_data(node);
+	if (!character_data)
+		return EINVAL;
+
+	/* A suffix deletion cannot extend the old data or publish an invalid length. */
+	text = (struct dom_character_data *)node;
+	previous_length = text->data.length;
+	if (length > previous_length)
+		return EINVAL;
+
+	/* Commit the retained prefix before native repair observes the deleted interval. */
+	text->data.length = length;
+	dom_data_notify(node->document, node, length, previous_length - length, 0);
+
+	/* Text data replacement runs the actual parent's style child-change lifecycle. */
+	if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION)
+		node_style_reset(node->parent);
+	node->document->generation++;
+
+	/* Succeeded: the original buffer retains its prefix and all live offsets are repaired. */
+	return 0;
+}
+
+/*
+ * Replaces a checked native CharacterData interval with complete atomic UTF16 data.
+ *
+ * Pure deletion retains the original buffer and needs no allocation.
+ */
+int
+dom_text_replace(
+	struct dom_node *node,
+	size_t offset,
+	size_t count,
+	const uint16_t *units,
+	size_t length)
+{
+	struct dom_character_data *text;
+	struct wb_units replacement;
+	struct wb_units previous;
+	size_t retained;
+	size_t suffix;
+	size_t total;
+	int character_data;
+
+	/* Invalid native kinds cannot expose or modify CharacterData storage. */
+	character_data = dom_is_character_data(node);
+	if (!character_data)
+		return EINVAL;
+
+	/* Nonempty replacement data must have an actual readable source. */
+	if (length != 0 && units == NULL)
+		return EINVAL;
+
+	/* Bounds are checked before subtraction or interval clamping can overflow. */
+	text = (struct dom_character_data *)node;
+	if (offset > text->data.length)
+		return EINVAL;
+
+	/* Oversized counts delete only the actual remaining suffix. */
+	retained = text->data.length - offset;
+	if (count > retained)
+		count = retained;
+	suffix = retained - count;
+	retained = text->data.length - count;
+
+	/* Replacement size overflow cannot read the supplied input or change the old data. */
+	if (length > SIZE_MAX - retained)
+		return ENOMEM;
+	total = retained + length;
+
+	/* Pure deletion cannot fail after native content extraction has moved earlier siblings. */
+	if (length == 0) {
+		/* Empty suffixes avoid pointer arithmetic on an empty native buffer. */
+		if (suffix != 0) {
+			memmove(text->data.data + offset,
+				text->data.data + offset + count,
+				suffix * sizeof(uint16_t));
+		}
+
+		/* Complete retained data is visible before weak native endpoint repair. */
+		text->data.length = total;
+		dom_data_notify(node->document, node, offset, count, 0);
+
+		/* Text data replacement runs the actual parent's style child-change lifecycle. */
+		if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION)
+			node_style_reset(node->parent);
+		node->document->generation++;
+
+		/* Succeeded: prefix and shifted suffix remain in the original owned buffer. */
+		return 0;
+	}
+
+	/* Exact byte bounds avoid geometric capacity rounding beyond representable storage. */
+	if (total > SIZE_MAX / sizeof(uint16_t))
+		return ENOMEM;
+
+	/* Allocate exactly the complete independent buffer before reading any aliased input. */
+	wb_units_init(&replacement);
+	replacement.data = malloc(total * sizeof(uint16_t));
+	if (replacement.data == NULL)
+		return ENOMEM;
+
+	/* Exact capacity describes owned storage without an unchecked doubling operation. */
+	replacement.capacity = total;
+
+	/* A nonempty prefix belongs to the unchanged original buffer until publication. */
+	if (offset != 0)
+		memcpy(replacement.data, text->data.data, offset * sizeof(uint16_t));
+
+	/* Replacement units may alias any part of the still-owned original data. */
+	memcpy(replacement.data + offset, units, length * sizeof(uint16_t));
+
+	/* Only a nonempty retained suffix needs source or destination pointer arithmetic. */
+	if (suffix != 0) {
+		memcpy(replacement.data + offset + length,
+			text->data.data + offset + count,
+			suffix * sizeof(uint16_t));
+	}
+
+	/* Publish complete data before optional callbacks inspect repaired native points. */
+	replacement.length = total;
+	previous = text->data;
+	text->data = replacement;
+	dom_data_notify(node->document, node, offset, count, length);
+	wb_units_release(&previous);
+
+	/* Text data replacement runs the actual parent's style child-change lifecycle. */
+	if (node->type == DOM_TEXT || node->type == DOM_CDATA_SECTION)
+		node_style_reset(node->parent);
+	node->document->generation++;
+
+	/* Succeeded: the new owned buffer contains prefix, replacement and retained suffix. */
 	return 0;
 }
 
@@ -532,6 +741,74 @@ dom_is_inclusive_ancestor(
 	return 0;
 }
 
+/* Releases C registry ownership without accessing already finalized GC subscribers. */
+static void
+document_finalize(
+	struct vm_heap *heap,
+	struct vm_cell *cell)
+{
+	struct dom_document *document;
+
+	UNUSED_PARAMETER(heap);
+
+	/* Subscription tokens independently keep their C registry alive until their cleanup. */
+	document = (struct dom_document *)cell;
+	dom_removal_release(document);
+
+	/* Succeeded: this Document no longer owns a removal registry. */
+	return;
+}
+
+/* Clears only the opaque current source identity of a genuine HTML style element. */
+static void
+node_style_reset(
+	struct dom_node *node)
+{
+	struct dom_element *element;
+
+	/* A null parent or non-element cannot own an inline sheet. */
+	if (node == NULL || node->type != DOM_ELEMENT)
+		return;
+	element = (struct dom_element *)node;
+
+	/* DOM owns no CSS model storage and therefore never finalizes a retired binding state. */
+	if (element->ns == DOM_NS_HTML && element->tag == DOM_TAG_STYLE)
+		element->style_sheet = NULL;
+
+	/* Succeeded: any current inline source can be rebuilt without affecting saved old handles. */
+	return;
+}
+
+/* Retires style identities across a changed connected subtree without allocation or recursion. */
+static void
+node_style_reset_tree(
+	struct dom_node *root)
+{
+	struct dom_node *walk;
+
+	/* Visit actual tree children only; template contents and separate child Documents are not children. */
+	walk = root;
+	while (walk != NULL) {
+		node_style_reset(walk);
+
+		/* Descend before following siblings so every nested style observes its connection change. */
+		if (walk->first_child != NULL) {
+			walk = walk->first_child;
+			continue;
+		}
+
+		/* Ascend only within this changed subtree when the current branch has no sibling. */
+		while (walk != root && walk->next == NULL)
+			walk = walk->parent;
+		if (walk == root)
+			break;
+		walk = walk->next;
+	}
+
+	/* Succeeded: all actual style descendants lost their previous current association. */
+	return;
+}
+
 /* Marks the nodes a node is linked to. */
 static void
 node_trace(
@@ -547,9 +824,51 @@ node_trace(
 	if (node->listeners != NULL)
 		vm_heap_mark(heap, node->listeners);
 
+	/* Cached live children must preserve identity even without a saved script list. */
+	if (node->children_collection != NULL)
+		vm_heap_mark(heap, &node->children_collection->cell);
+
 	/* Marks the document, the parent, the neighbours and the children's ends. */
-	if (node->document != NULL)
+	if (node->document != NULL) {
 		vm_heap_mark(heap, &node->document->node.cell);
+		if (node->document->context != NULL)
+			vm_heap_mark(heap, node->document->context);
+	}
+
+	/* Script-created Documents retain cached binding objects without raw Window owners. */
+	if (node->type == DOM_DOCUMENT) {
+		/* Loaded metadata survives with any node retaining its owning Document. */
+		if (node->document->resource_url != NULL)
+			vm_heap_mark(heap, &node->document->resource_url->cell);
+		if (node->document->resource_mime != NULL)
+			vm_heap_mark(heap, &node->document->resource_mime->cell);
+
+		/* Both fields are cells whose traces preserve prototype and implementation graphs. */
+		if (node->document->binding_prototypes != NULL)
+			vm_heap_mark(heap, &node->document->binding_prototypes->cell);
+
+		/* SameObject caching must survive a collection between getter observations. */
+		if (node->document->implementation != NULL)
+			vm_heap_mark(heap, &node->document->implementation->cell);
+
+		/* Document links is another SameObject cache with a traced rooted query. */
+		if (node->document->links_collection != NULL)
+			vm_heap_mark(heap, &node->document->links_collection->cell);
+
+		/* Form collection identity survives while the Document remains reachable. */
+		if (node->document->forms_collection != NULL)
+			vm_heap_mark(heap, &node->document->forms_collection->cell);
+
+		/* Image collection identity participates in the same collectible Document cache graph. */
+		if (node->document->images_collection != NULL)
+			vm_heap_mark(heap, &node->document->images_collection->cell);
+
+		/* A Document alone preserves its current live stylesheet query identity. */
+		if (node->document->style_sheets != NULL)
+			vm_heap_mark(heap, &node->document->style_sheets->cell);
+	}
+
+	/* Connected relatives retain the live tree around a saved node. */
 	if (node->parent != NULL)
 		vm_heap_mark(heap, &node->parent->cell);
 	if (node->previous != NULL)
@@ -579,8 +898,48 @@ element_trace(
 	vm_heap_mark(heap, &element->local_name->cell);
 	if (element->prefix != NULL)
 		vm_heap_mark(heap, &element->prefix->cell);
+
+	/* Arbitrary script namespace URIs remain alive with their element graph. */
+	if (element->namespace_uri != NULL)
+		vm_heap_mark(heap, &element->namespace_uri->cell);
+
+	/* Template and frame ownership remain independent of namespace identity. */
 	if (element->content != NULL)
 		vm_heap_mark(heap, &element->content->cell);
+	if (element->child_context != NULL)
+		vm_heap_mark(heap, element->child_context);
+
+	/* Pending source identity is independent of the published child context. */
+	if (element->child_source != NULL)
+		vm_heap_mark(heap, &element->child_source->cell);
+
+	/* A reachable native style element retains its current binding-owned source model. */
+	if (element->style_sheet != NULL)
+		vm_heap_mark(heap, element->style_sheet);
+
+	/* A saved SVG rect retains its binding-owned stable scalar length handles. */
+	if (element->svg_width != NULL)
+		vm_heap_mark(heap, element->svg_width);
+
+	/* A form alone retains its cached live controls list across collection. */
+	if (element->controls_collection != NULL)
+		vm_heap_mark(heap, &element->controls_collection->cell);
+
+	/* The cached current select remains valid during option-owner reconciliation. */
+	if (element->option_select != NULL)
+		vm_heap_mark(heap, &element->option_select->cell);
+
+	/* Native select caches survive while the actual select alone remains reachable. */
+	if (element->options_collection != NULL)
+		vm_heap_mark(heap, &element->options_collection->cell);
+
+	/* Table collection caches survive when only their native root remains reachable. */
+	if (element->bodies_collection != NULL)
+		vm_heap_mark(heap, &element->bodies_collection->cell);
+	if (element->rows_collection != NULL)
+		vm_heap_mark(heap, &element->rows_collection->cell);
+	if (element->cells_collection != NULL)
+		vm_heap_mark(heap, &element->cells_collection->cell);
 
 	/* Marks each attribute's strings. */
 	for (index = 0; index < element->attribute_count; index++) {
@@ -588,6 +947,8 @@ element_trace(
 		vm_heap_mark(heap, &element->attributes[index].value->cell);
 		if (element->attributes[index].prefix != NULL)
 			vm_heap_mark(heap, &element->attributes[index].prefix->cell);
+		if (element->attributes[index].namespace_uri != NULL)
+			vm_heap_mark(heap, &element->attributes[index].namespace_uri->cell);
 	}
 }
 
@@ -607,7 +968,25 @@ element_finalize(
 	dom_control_free(element);
 }
 
-/* Frees the character buffer of a dead text or comment node. */
+/* Marks actual character-node ownership and the optional ProcessingInstruction target. */
+static void
+character_data_trace(
+	struct vm_heap *heap,
+	struct vm_cell *cell)
+{
+	struct dom_character_data *data;
+
+	/* Ordinary node links retain the actual owner and connected tree. */
+	node_trace(heap, cell);
+	data = (struct dom_character_data *)cell;
+	if (data->target != NULL)
+		vm_heap_mark(heap, &data->target->cell);
+
+	/* Succeeded: the target has no independent permanent root. */
+	return;
+}
+
+/* Frees the C character buffer of a dead Text, CDATA, Comment or PI node. */
 static void
 character_data_finalize(
 	struct vm_heap *heap,

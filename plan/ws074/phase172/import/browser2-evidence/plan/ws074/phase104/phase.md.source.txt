@@ -1,0 +1,235 @@
+<!-- awesome-plan project=zedbsd record=ws074-p104 -->
+
+# ws074-p104: Initial HTML iframe child contexts
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q515 / q515-i01; q510-i01 and q513-i01 remain uncleared history
+Prerequisites: [p103](../phase103/phase.md) cleared; [p105](../phase105/phase.md)
+and [p106](../phase106/phase.md) must clear before resumption
+
+## Objective and finite scope
+
+Establish real initial about:blank child contexts for HTML iframes: distinct
+Document/Window, contentDocument/contentWindow, parent/top relationships and
+lifetime within the existing single-process browser. p103 restored the Acid3
+iframe elements, but their child documents remain absent. This Phase establishes
+the context foundation; URL loading, XML/SVG and object documents are subsequent
+work, not a claim of complete iframe or Acid3 support.
+
+## Design and readiness
+
+Before activation, inspect wrapper identity, document ownership, per-document
+realm behavior and GC tracing, the parser's element-insertion path and frame
+removal/destruction. Preserve the existing one-agent-per-tab architecture;
+new child documents need a verified ownership model, not parent Window aliases.
+Record exact affected APIs, supported lifecycle and failure paths before code.
+Resolve any major architecture/product decision before dependent implementation.
+
+Bound implementation to initial about:blank HTML contexts, synchronous access
+once an iframe is connected, and parent/child cleanup. Document foreign-origin
+and source-loading limitations explicitly; do not expose unverified remote
+content as same-origin. No network loader, navigation, Window.open, XML/SVG,
+object, Range/Traversal, CSSOM, HAL, toolchain or ES-module implementation.
+
+Apply [Guardrail](../../guardrail.md), full [C standard](../../coding-style.md),
+and [browser design](../design.md) §§1,4,9,14. Planned affected areas: page/,
+bind/, DOM ownership hooks and focused WS074 tests. No unrelated modules.
+
+## Proposed acceptance
+
+- Separate child Document/Window identity and correct parent/top relationships
+  for connected initial about:blank iframes; supported fixtures match Chromium.
+- Nested frames, disconnected elements, removal and page teardown have defined,
+  verified ownership without dangling cells or accidental parent-document alias.
+- Plain/ASan builds, focused lifecycle/GC/error regressions, Acid2 exact
+  preservation, existing DOM regressions and all 100 Acid3 results recorded.
+- Full changed-source standards review, style check and diff check; no claim
+  that initial contexts satisfy URL-loading/XML requirements or p100.
+
+## Creation event (2026-09-30)
+
+Introduced from p103's diagnosis (40/100, no Uncaught, 60 remaining failures).
+Several groups need actual iframe documents before their DOM/CSSOM tests can
+be assessed. q510 is a proposal only; detailed readiness/criteria must be saved
+before approval/activation. p100 remains full Acid3 acceptance, p101 follows it.
+
+## q510 activation / bounded investigation (2026-09-30)
+
+Current user instructed 「次のqueueを実行してください。」 for the existing
+q510 proposal. p103 output and clean checkout at 596fc1ca were verified;
+executor is root, no concurrent attempt or remote publication. Acceptance and
+exclusions above are unchanged. Before any production edit, use two realms in
+one heap to check bytecode calls, native exceptions and constructors, and inspect
+realm/window tracers and destruction. One bounded probe in plain/ASan and one
+Chromium lifecycle comparison; no destructive dangling-pointer test. A missing
+VM/lifetime prerequisite ends this attempt uncleared rather than extending
+the Queue into a prerequisite implementation.
+
+## q510 terminal event (2026-09-30, q510-i01)
+
+**uncleared** after bounded readiness investigation. No production iframe code
+was generated. Two live realms in one heap reproduce five failures among eight
+checks in both plain/ASan; callee global selection and foreign exception transport
+are missing. Existing host-object passes 100/100 in both. Chromium provides a
+17/17 lifecycle reference, not zedBSD iframe acceptance. See
+[investigation.md](investigation.md), [inventory](investigation.json) and
+[BUG-126](../../bugs/BUG-126.md). No reproduced failure was waived or transferred
+as non-blocking. Initial-context criteria remain unmet.
+
+The repository rule in AGENTS.md states 「実行中に未知の依存が分かった Phase は
+uncleared で終え、Queue の後に計画を直す。」. This applies to the newly discovered
+shared-heap multi-realm execution/ownership prerequisite. Queue investigation
+ends here; its exact approved scope and outcome are preserved in
+[q510 history](../../history/queue-q510.md).
+
+## Post-uncleared design revision (2026-09-30)
+
+Added planned [p105](../phase105/phase.md) for reproduced execution/exception
+repair and planning [p106](../phase106/phase.md) for reachable child-context
+ownership. Both outputs must be verified before a new p104 attempt. This avoids
+parent Window aliases, unsafe destruction of saved functions, and permanent
+retention of every detached child. p104 retains its ID, evidence and full
+initial-context acceptance; it is not canceled or reset to planned. Resume with
+one shared tab heap and genuinely separate realms, then verify the saved 17
+Chromium lifecycle checks plus scoped GC/error, DOM and Acid preservation tests.
+Foreign-source loading/sandbox/WindowProxy limitations still require explicit
+safe treatment; no remote document may be exposed as verified same-origin.
+
+The changed dependency chain is p105 → p106 → p104 → p100. Each introduced Phase
+records its own dependency/verification and origin; p100 and the WS record the
+impact. q511 proposes p105 only and is unauthorized. No implementation of the
+new prerequisite phases occurred in q510. Local event records are unpublished.
+
+## p105 prerequisite clearance event (2026-09-30)
+
+[p105](../phase105/phase.md) cleared in q511: saved8/8 and additional30/30
+plain/ASan, correct callee globals/exceptions, Acid2 exact and Acid3 unchanged
+40/100, Uncaught0. [Verification](../phase105/verification.md) supplies the
+execution output. p106 ownership is still planning; no child lifetime/iframe
+acceptance is supplied by this clearance. Remaining dependencies and original
+criteria are preserved; next ownership Queue uses standing autonomous consent.
+
+## p106 ownership interface revision (2026-09-30)
+
+[p106](../phase106/phase.md) selects GC-cell-backed child realms and owned window
+hooks, Document context cell and function retention. A connected child must be
+retained by its embedding Document/global; removal calls idempotent detach and
+drops connection ownership while saved references keep the child alive. Initial
+child hosts cannot register async fetch until verified cancellation exists.
+p104 will verify nested relationships/disconnection and safe wrapper identity
+using this output. Its original initial-context criteria remain unchanged;
+no API implementation is supplied by q512. [WS summary](../ws.md).
+
+## p106 prerequisite clearance event (2026-09-30)
+
+[p106](../phase106/phase.md) cleared q512; managed saved refs/observer cycles/
+active detached host/failure/teardown27/27 plain/ASan. [Verification](../phase106/verification.md)
+supplies ownership output. p105 remains cleared. A new finite p104 attempt must
+record concrete initial-context construction/wrapper/relationship/removal design;
+q510 uncleared history remains unchanged. Async child loading is still excluded.
+
+## q513 concrete design / resumption (2026-09-30)
+
+p105/p106 verified in f39fdea9/f8c12297; latest clean baseline bc4d4ef7.
+q512 archive read back. Root executor, one Phase, no concurrent Queue. Current
+user's exact Acid3 autonomous/automatic Queue instruction authorizes this attempt.
+q510's earlier uncleared outcome and evidence remain unchanged.
+
+Add bind/frame.c and register it in libbrowser/Makefile. Use existing manual
+interface-table convention: HTMLIFrameElement extends HTMLElement with distinct
+contentWindow/contentDocument getters. Resolve wrappers from each node's Document
+owner window rather than the calling realm; preserve existing cached wrappers.
+Document stores an opaque view pointer and removal callback, and the existing GC
+context cell retains managed owners. DOM includes no bind headers.
+
+On first synchronous getter for a connected HTML iframe in an active Document,
+create a managed child realm in the parent heap, sharing the parent's well-known
+symbols before built-ins (same tab agent). Create an about:blank quirks Document
+with html/head/body, then its own Window/prototypes. Use only bounded blank host
+callbacks (console/User-Agent inherited, constant about:blank location); no async
+fetch, parser insertion, navigation or foreign resource callbacks. Publish the
+iframe's traced child realm only after successful construction; failed cells
+remain collectible. Bound nesting to64 and report RangeError beyond it. Creation
+is lazy at synchronous observation; initial load-task dispatch is subsequent
+loading/parser work, not supplied or claimed by this initial-context Phase.
+
+Trace iframe element → managed realm → Window/Document; child Window traces
+parent/top global objects and frame element. Window getters for parent/top/
+frames/closed/frameElement use the receiver's immutable own document property
+to validate its identity across realms; no fake Window alias or new WindowProxy.
+Document.defaultView returns its active owner global or null when detached;
+URL/readyState use the Document's owner, including borrowed accessors.
+
+DOM removal calls its Document callback before unlinking. Retire contexts in the
+removed subtree, clear element-owned child references and child's frameElement,
+then idempotently detach child Window and recursively retire nested children.
+Bounded context depth limits recursion. Inactive old Documents cannot create new
+children; reinsertion creates a fresh context. Primary Window destruction retires
+child contexts and clears its Document view hooks while cells are still live;
+managed finalization continues to avoid dereferencing unrelated dead cells.
+
+Scope: bind/frame.c, bind headers/window/environment/node/document; DOM headers/
+node ownership-removal hooks; libbrowser source registry and WS074 focused tests.
+No network/URL loading, sandbox implementation, navigation, Window.open, late
+write/open/close, XML/SVG/object, Range/Traversal/CSSOM, HAL/toolchain/modules.
+Unsupported sandbox frames expose no child objects; no unverifiable foreign
+content is exposed as same-origin. WindowProxy/frames enumeration remains later.
+
+Acceptance retains original initial-context criteria: saved Chromium17/17 in
+both variants, constructor/wrapper identity and nested/disconnected/removal/
+reinsert/old-document behavior; focused GC/saved function/document/host teardown/
+allocation bounds; existing ownership27/27, realms30/30, VM/DOM regressions;
+warning-free plain/ASan, Acid2 exact and all100 Acid3 inventory/no regressions,
+full changed-source standard/style/diff review. No complete loading or p100 claim.
+Reference: https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element
+
+## q513 terminal event (2026-09-30, q513-i01)
+
+**uncleared**: iframe initial-context implementation reaches plain17/17 lifecycle
+reference, but bounded GC readiness reproduces BUG-127 (ASan UAF in p106 trace).
+Production progress is retained; no full iframe clearance, ASan iframe acceptance
+or fresh Acid result is claimed. [Investigation](retirement-investigation.md).
+Unknown prerequisite rule ends this attempt; p106 is invalidated/replanned with
+cached managed-owner references. p105 and BUG-126 remain cleared/resolved.
+After p106 repair/revalidation, use a new p104 Queue for remaining GC/ASan/DOM/
+Acid/standards checks. q510 and q513 uncleared histories remain. Local unpublished.
+
+## p106 revalidation prerequisite event (2026-10-01)
+
+p106 recleared in q514 and BUG-127 resolved; [evidence](../phase106/revalidation-q514.md).
+Retirement/ownership/realms/VM/DOM plain+ASan PASS; retained iframe fixture17/17
+also passes both variants. Acid3 now42/100 all100/no regression/Uncaught0,
+Acid2 exact. p104 remains uncleared: its separate GC/error/teardown/full-source
+criteria were not supplied by q514. Resume those in a new finite completion
+Queue with unchanged initial-context design; no loading/navigation expansion.
+
+## q515 completion activation / exact scope (2026-10-01)
+
+Baseline8dd06539; p105/p106 verified, BUG-127 resolved, q514 exact archive read
+back. Root sole executor, no concurrent attempt, current user continued standing
+autonomous Acid3 instruction. Complete retained q513 initial-context scope only:
+focused host lifecycle tests of saved foreign functions/Documents/wrappers after
+GC/removal, connection and nested retirement, reinsertion and explicit parent
+teardown, whole-heap finalization, receiver branding/sandbox/depth/allocation
+bounds. Fix defects within these existing initial-context contracts if found;
+no loading/navigation/parser expansion. Recheck saved17/17, ownership27/27,
+realms30/30, VM/DOM, Acid2 exact/all100 Acid3 with no pass regressions. Plain/ASan
+warning-free/no diagnostics; full coding-style review of all q513 p104 changed
+source and any completion changes, style/diff. Record commands/hashes/limits.
+A newly missing architectural prerequisite ends this attempt uncleared; ordinary
+initial-context defects remain in scope. No exhaustive allocator injection or
+complete browser acceptance claimed. Guardrail/full C standard loaded.
+
+## q515 terminal event (2026-10-01, q515-i01)
+
+**cleared**. [Verification](verification.md) supplies retained initial-context
+implementation acceptance: lifetime24/24, saved Chromium17/17, safety14/14,
+ownership27/27, realms30/30, object100/100, interp45/45, DOM23/23, plain/ASan
+warning-free/no sanitizer. Acid2 exact; all100 Acid3 unchanged42/100/Uncaught0/
+no run errors. Full p104 changed-source coding-style/style/diff PASS. Initial
+blank/lazy access, sandbox fallback, depth64 and bounded allocation test limits
+explicit; no full iframe loading compatibility or p100 clearance. q510/q513
+uncleared histories preserved. Next split indexed remaining DOM/CSSOM/loading/
+VM work into finite phases under standing consent. Local unpublished/no push.

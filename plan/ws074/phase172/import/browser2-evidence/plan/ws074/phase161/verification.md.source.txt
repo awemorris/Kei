@@ -1,0 +1,40 @@
+# q577 / p161 native XML model — 2026-10-02
+
+CLEARED. Strict UTF8/XML1.0 namespace-aware pure C model owns normalized UTF16
+input and arena nodes/attributes/values. Complete parse before publication;
+malformed or unsupported inputs publish NULL with errno and normalized UTF16 offset.
+No VM edges, C recursion, HTML recovery, resource loading or script execution.
+Exact arbitrary namespaces, scoped default/prefix declarations, reserved identities,
+duplicate expanded attributes, separate Text/CDATA/Comment/PI and declaration
+metadata verified. Literal CRLF/CR normalize; attribute literal whitespace becomes
+space while references preserve their actual scalars. Scalar/name/reference arithmetic
+and every partial input/arena/value allocation were reviewed for bounds and cleanup.
+
+Native236/236 both: independent syntax/profile cases, expanded names, prefix shadow
+and sibling restoration, actual Unicode/entity/whitespace/CDATA/PI values, declaration
+metadata, mutable input destroyed before result inspection across 100 parse/destroy
+cycles. Actual pinned SVG PI/root namespace, XHTML correct and deliberately wrong
+namespace/script data preserved after resource buffer release; mismatched xhtml.2
+and invalid UTF8 empty.xml reject without normal partial tree. Exact depth256 accepted,
+257 rejected; records65536 accepted and next rejected; >16MiB rejected before byte
+access. All90groupsPASSboth; actual94/100/prior94 including72/equal100inventory/
+complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact100%.
+Remaining69/74/75/77/79/80 need loading/SVG; internal69/80retrytimeouts remain inventory
+failures, distinct from completed runner/no run_errors. Acid3 pixels37.026458% diagnostic.
+
+Both full builds finished before tests, warning0. Full affected C manual review against
+Guardrail/coding-style1–14/automation, style-check output empty, git diff --check clean.
+clang-format absent/manual; cc14.2.0/Python3.13.5. JSON contains actual source hashes,
+full original reports and all90 regression outcomes. Commands:
+sh plan/ws074/tests/host-build.sh plain|asan; host-xml both;
+python3 build/ws074-q577-regressions.py plain|asan;
+ASAN_OPTIONS=detect_stack_use_after_return=0 python3 plan/ws074/tests/run-acid-tests.py
+--program build/ws074-host/VARIANT/browser --out build/ws074-acid-q577-VARIANT;
+python3 plan/tools/style-check.py affectedC; git diff --check.
+
+Explicit finite profile: UTF8 XML1.0 only; DOCTYPE/DTD/external/general entities,
+validation/XML1.1/other encodings/XInclude/stylesheet network effects excluded.
+DOM projection, PI/CDATA bindings/custom attribute namespace, child navigation/MIME,
+SVG interfaces/events/script activation are separate future Queues. No full XML
+processor/DOM conformance claim. Guest/boot/OS/GPU/HAL/toolchain/.internal/aggregate
+check/fullWPT/fuzz/push/GitHub publication not performed. p100/p044/WS incomplete.

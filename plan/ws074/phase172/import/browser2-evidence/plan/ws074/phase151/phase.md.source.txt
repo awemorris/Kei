@@ -1,0 +1,82 @@
+<!-- awesome-plan project=zedbsd record=ws074-p151 -->
+
+# ws074-p151: iframe content-box viewport for child CSS
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q564 / q564-i01
+Prerequisites p104/p106/p109 cleared; q563 computed CSS/media scoped outputs
+verified but p150 whole criteria uncleared. Base2a233422 original91/prior70PASS/
+color native29/29/Acid2exact. Root sole executor/current user2026-09-30 automatic
+Acid3 Queues +2026-10-01 continuation approval; no cancellation/conflict.
+Snapshot saved BEFORE generation.
+
+## Exact scope / design / criteria
+
+Repair [BUG-131](../../bugs/BUG-131.md). HTML Living Standard2026-09-29 rendering
+https://html.spec.whatwg.org/multipage/rendering.html#embedded-content-2 read2026-
+10-01 line134: child viewport fits embedding content box, absent box zero dimensions.
+Existing managed Window.frame is traced and cleared at retirement; no new ownership
+architecture/VM permanent roots. Add internal checked bind_frame_viewport helper in
+frame.c; active owned child with live connected iframe/actual active parent owner
+and host.node_box obtains CURRENT laid-out border box; subtract native used borders
+and padding, preserve exact0, clamp negative0 and reject nonfinite/out-of-int range
+before conversion. Refresh child viewport before child style engine sets viewport,
+and before native own innerWidth/innerHeight observation. Parent primary viewport
+unchanged. With no actual parent layout callback (initial/nested/headless empty
+hosts), preserve existing explicitly supplied Window viewport contract; full child
+layout/painting remains separate. Existing integer CSSpixel viewport contract
+retained (positive fractional pixels truncated), no full fractional MQ claim.
+
+Root managed child realm and actual frame through callback allocations/GC; verify
+still active/same frame and parent after callback before publishing; callback may
+retire frame, in which case preserve retired state. No JS visible iframe width reads.
+No new bind_host API; reuse native node_box dimensions and existing viewport cache
+invalidation. Affected bind/frame.c,internal.h,style-context.c,window.c/new Page/native.
+
+Page zero->100->zero same iframe+saved computed declaration/media cache/borrowed
+owner/sheet sizes/displaynone/border+padding content isolation/primary viewport;
+re-run unchanged p150 Page38/native29 and allprior72 groups. Native embedding box
+callback, zero/nonzero/content bounds/no-box/explicit-host fallback, actual callback
+GC with stack disabled, retirement during callback and release collectibility.
+New2+prior72=74 plain+ASan; original pinned>=91/prior91 preserved/full100 equal/
+complete/status0/no Uncaught/crash/runnererrors/Acid2exact; expected46 restoration.
+Native real production callbacks/no test switch. Runner60sec/bounded pressure.
+Full changed C against Guardrail/full coding-style1–14/automation, inspectstyle/
+diff/manual formatting clang-format unavailable/build warning0/sanitizer0/hashes.
+Unknown prerequisite ends uncleared before redesign; p150 retry separately authorized.
+Graph p104+p106+p109+q563 scoped computed/media(external)->p151->p150retry+p100
+(external), acyclic.
+
+Exclusions child layout/painting/navigation/new public APIs/full fractional CSS/full
+WPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub.
+p150 remains uncleared until retry; p100/p044/WS incomplete/local unpublished.
+
+## Introduction / q564 activation (2026-10-01)
+
+p150 discovers actual child viewport missing, not defective earlier p109 acceptance
+(p109 explicitly excluded box viewport). Separate finite prerequisite now selected;
+unchanged p150 criteria will be retried afterward. BUG-131 scheduled.
+
+## Validation fixture reconciliation (2026-10-01)
+
+Existing child-style-probe assumed parent viewport was positive for its embedded
+media smoke check. Correct zero child viewport invalidates that assumption. Change
+its threshold1px to0px so it still verifies nested screen media application for any
+valid viewport; new native10/Page12 independently verify zero/nonzero dimensions
+and conditional media, including saved cache. This is necessary test-data adjustment
+inside delegated repair, no acceptance requirement removed. Source scope unchanged;
+fixture path child-style-probe.html added to verification/diff. p109 historical
+evidence retained, same-run full new coverage replaces the outdated size assumption.
+CLI Page without available fonts has no host layout boxes; new Page uses pinned
+Inter/JetBrainsMono/Droid fallback paths like original Acid runner, then actual
+layout0->100->0 and box-sizing pass. No page/core code altered for missing fonts.
+
+## q564 cleared outcome (2026-10-01)
+
+[p151](phase.md) cleared in q564, [evidence](verification.md).
+BUG-131 actual iframe content viewport repaired, Page12/native10 actual callback GC/
+retirement/all74PASS plain+ASan including unchanged p150 Page38/native29. Original92/
+new46/prior91/equal100/noerrors/Acid2exact. Next separately selected p150 retry;
+p150/p100/p044/WS incomplete/root released/local unpublished/no push.

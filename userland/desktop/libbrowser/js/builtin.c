@@ -20,6 +20,8 @@
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 /*
@@ -279,7 +281,7 @@ js_builtin_string(
 }
 
 /*
- * Makes an array of values.
+ * Makes an array of values while retaining every input and the unpublished Array.
  */
 int
 js_builtin_array(
@@ -289,23 +291,79 @@ js_builtin_array(
 	vm_value *array)
 {
 	struct vm_object *made;
+	struct vm_cell **roots;
+	size_t root_count;
+	size_t root_index;
+	size_t registered;
 	uint32_t index;
 	int error;
+	int is_cell;
 
-	/* The array. */
-	made = vm_array_create(realm->heap, realm->array_prototype);
-	if (made == NULL)
+	/* Reject missing elements or root-array size overflow before any allocation. */
+	if (count != 0 && values == NULL)
+		return EINVAL;
+	root_count = (size_t)count;
+	if (root_count == SIZE_MAX)
+		return EOVERFLOW;
+	root_count++;
+	if (root_count > SIZE_MAX / sizeof(*roots))
+		return EOVERFLOW;
+
+	/* Every input cell survives Array creation before its element can be installed. */
+	roots = calloc(root_count, sizeof(*roots));
+	if (roots == NULL)
 		return ENOMEM;
-
-	/* Each value in order. */
 	for (index = 0; index < count; index++) {
-		error = vm_object_define(realm->heap, made, vm_value_int32((int32_t)index), values[index], VM_PROPERTY_DEFAULT);
-		if (error != 0)
-			return error;
+		is_cell = vm_value_is_cell(values[index]);
+		if (is_cell)
+			roots[index] = vm_value_as_cell(values[index]);
 	}
 
-	/* Succeeded: the array. */
-	*array = vm_value_cell(made);
+	/* Reserve one last slot for the Array before any VM allocation. */
+	registered = 0;
+	error = 0;
+	for (root_index = 0; root_index < root_count; root_index++) {
+		error = vm_heap_add_root(realm->heap, &roots[root_index]);
+		if (error != 0)
+			break;
+		registered++;
+	}
+
+	/* The factory's own roots cover construction; this caller then retains its result. */
+	if (error == 0) {
+		made = vm_array_create(realm->heap, realm->array_prototype);
+		if (made == NULL) {
+			error = ENOMEM;
+		} else {
+			roots[count] = &made->cell;
+
+			/* Assign every element before the Array can escape to its caller. */
+			for (index = 0; index < count; index++) {
+				error = vm_object_define(realm->heap, made, vm_value_int32((int32_t)index), values[index], VM_PROPERTY_DEFAULT);
+				if (error != 0)
+					break;
+			}
+
+			/* Publish only a fully populated Array. */
+			if (error == 0)
+				*array = vm_value_cell(made);
+		}
+	}
+
+	/* Every registered temporary slot is released, including failed property creation. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* The C-side slot table no longer carries any collector roots. */
+	free(roots);
+
+	/* Propagate the original allocation or element-definition failure. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded: only the returned Array owns its input values. */
 	return 0;
 }
 

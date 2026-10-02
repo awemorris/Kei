@@ -1,0 +1,20 @@
+# q565 / p150 unchanged criteria retry — 2026-10-01
+
+CLEARED after p151 actual child viewport output verified; BUG-131 resolved q564.
+Repeat unchanged Page38/native29 plain+ASan PASS. Actual computed4keywords/parser/
+cascade/inheritance/CSS-wide/important/var/dynamic CSS/accessors/serialization and
+numeric color8/monochrome0/Boolean/min/max/ranges/integer syntax verified. Original
+active46 matrix including child0x0 now passes. q563 uncleared/history/evidence
+retained; no source generation or criterion weakening.
+
+Hash-verified immediately prior q564 evidence reused: original92/prior91+46/equal100/
+complete/status0/exceptions[]/runerrors[]/Acid2exact and full74PASS both. All p150+p151
+relevant source and fixture SHA256 identical, recorded in verification-q565.json;
+fullC review/style-check empty/diff/build warning0/sanitizer0 retained. Native Page
+repeat logs included. cc14.2.0/Python3.13.5/clang-format unavailable/manual. No
+unneeded repeat full suite where output and source already verified unchanged.
+
+Host native only/no fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate
+check/push/GitHub publication. Only computed transform state implemented, rendering
+still requires selected follow-up. p100/p044/WS incomplete; next actual document
+open/close/replacement HTML, XML support loading/SVG. Root released/local unpublished.

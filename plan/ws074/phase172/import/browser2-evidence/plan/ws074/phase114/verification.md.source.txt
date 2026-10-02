@@ -1,0 +1,28 @@
+# q524 evidence — 2026-10-01
+
+p114 cleared: all36 predefined cursor keywords, initialauto/default inheritance,
+CSS-wide inherit/unset/initial, ASCII keyword canonicalization, invalid IDENT/
+extra tokens/string rejection, rule/inline priority/mutation/removal/read-only
+computed CSSStyleDeclaration verified. Uses existing parser tables/scalar style/
+owner childCSS context; no VM graph or allocation/ownership change.
+
+Both variants cursor54/54, childCSS30/30, frameGC33/33, DOM23/23, selectors golden
+byte-identical. All100 inventories61→62 solely47newPASS, no former pass lost,
+Uncaught0/completeTrue/run_status0/run_errors[], Acid2exact/different_pixels0,
+warningfree/noASan. Visual38.486666666666665% independent diagnostic.
+
+Commands host-build.sh plain/asan; browser --run cursor-probe.html and
+child-style-probe.html; host-frame-lifetime; run-dom-tests.py;
+browser --dump=style selectors.html + diff golden/selectors.style;
+run-acid-tests.py --out build/ws074-acid-q524-<variant>.
+ASAN_OPTIONS=detect_stack_use_after_return=0 for production real-stack GC.
+Logs build/ws074-q524-*; hashes/reports in [verification.json](verification.json),
+[inventory](inventory.json). Full changed-source Cstandard manual review enum/table
+alignment, scalar initialization/inheritance/CSS-wide criteria, counted canonical
+serializer, ANSI/paragraphs/short-circuit preservation/checked operations PASS;
+style-check.py values.c/cascade.c/computed.c and git diff --check PASS.
+clang-format unavailable/manual formatting; cc14.2.0/Python3.13.5.
+No cursor URL/image/hotspot/fetch/platform pointer rendering/hit-testing,
+exhaustive failurefuzz, OS/guest/boot/GPU verification. Remaining38 features,
+p100100/100 unmet, p044 final WS conformance remains. Local unpublished/no push.
+WIP commit supplies record revision.

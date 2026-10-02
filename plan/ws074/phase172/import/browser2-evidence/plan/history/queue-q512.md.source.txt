@@ -1,0 +1,48 @@
+<!-- awesome-plan project=zedbsd record=queue-q512 -->
+
+# Queue
+
+Status: finished (2026-09-30)
+Active Queue: none
+Last finished: [q511](queue-q511.md), archive read back.
+
+## q512
+
+Purpose: reachable child-context ownership, WS074 / fg011.
+Timebox: one finite Phase, realm/window/Document GC foundation and bounded checks.
+Approval: current user 2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」.
+Exact selection: p106 concrete ownership design/revision saved 2026-09-30 above;
+managed cell-backed realm, host trace/finalization, function/Document ownership,
+observer roots, detached task cancellation, failure/GC/teardown verification.
+No iframe APIs/loading/navigation/open-close/HAL/toolchain/modules.
+
+| Attempt | Phase | Status | Dependency / selection evidence |
+| --- | --- | --- | --- |
+| q512-i01 | [ws074-p106](../ws074/phase106/phase.md) | cleared | p105 cleared f39fdea9; ownership investigation requires reclaimable saved-reference safety before p104 |
+
+Required output/criteria: saved refs and active execution survive GC; unreachable
+contexts/observer cycles reclaim; detach suppresses pending tasks; managed async
+host registration refused; partial construction/tab teardown safe. Plain/ASan,
+focused existing regressions, Acid2 exact and Acid3 all100 no regression, full
+changed-source standard review/style/diff. Phase owns detailed plan/results.
+
+Graph: p105 (external cleared) → q512-i01/p106 → p104 (external uncleared) →
+p100 (external planned); p103 (external cleared) → p104. No cycle.
+
+## Upcoming Work Outlook
+
+After verified p106 output, select a new p104 initial about:blank iframe attempt.
+Then finite loaded-child/parser/DOM/Traversal/CSSOM/VM feature phases required by
+all100 failures; p100 remains100/100 zero Uncaught/crash/timeout, Acid2 exact.
+p101 CSS2/p098 modules stay outside this autonomous goal; full WS p044 remains.
+No external graph node is authorized by q512 membership alone.
+
+## q512 terminal outcome (2026-09-30)
+
+q512-i01/p106 cleared. Plain/ASan ownership27/27, realm30/30, object100/100,
+interp45/45, DOM23/23; warning-free/no sanitizer. Acid2 exact100%, Acid3 all100
+unchanged40/100 Uncaught0; no crash/timeout. [Evidence](../ws074/phase106/verification.md).
+Full changed-source review/style/diff PASS; automatic formatter unavailable;
+OS/guest/boot/GPU skipped, p044 remains. Actual iframe embedding is p104 next,
+under standing autonomous consent; no next Queue active until scope is saved.
+Local unpublished, no push/remote closure. q511 previous archive preserved.

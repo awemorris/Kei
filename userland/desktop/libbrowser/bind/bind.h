@@ -147,6 +147,8 @@ struct bind_host {
 	int (*fetch)(void *context, const char *href, bind_fetch_done done, void *done_context);
 	int (*fetch_sync)(void *context, const char *href, struct wb_buffer *bytes, struct wb_buffer *final_url);
 	struct dom_node *(*element_at)(void *context, double x, double y);
+	/* Inserts into the active parser; ENOTSUP when no insertion point exists. */
+	int (*document_write)(void *context, const uint16_t *units, size_t length);
 };
 
 /*
@@ -208,10 +210,17 @@ struct bind_window;
 
 /* The window (window.c). */
 int bind_window_create(struct vm_realm *realm, struct dom_document *document, const struct bind_host *host, struct bind_window **window);
+/* Explicit primary windows are destroyed here; managed windows belong to GC. */
 void bind_window_destroy(struct bind_window *window);
+/* Cancels detached context tasks while saved script references remain valid. */
+void bind_window_detach(struct bind_window *window);
 void bind_window_set_time(struct bind_window *window, double now);
 void bind_window_set_viewport(struct bind_window *window, int width, int height);
 void bind_window_set_ready_state(struct bind_window *window, const char *state);
+/* Borrows active child cascade/viewport until its next DOM mutation; caller roots its Document. */
+int bind_window_child_styles(struct bind_window *window, struct css_engine **engine, int *width, int *height);
+/* Appends actual inline source for primary or managed-child rendering without DOM mutation. */
+int bind_style_sheet_source(struct dom_element *element, struct wb_units *units);
 int bind_run_script(struct bind_window *window, const uint16_t *source, size_t length, const char *name);
 int bind_checkpoint(struct bind_window *window);
 void bind_report_exception(struct bind_window *window, vm_value exception);

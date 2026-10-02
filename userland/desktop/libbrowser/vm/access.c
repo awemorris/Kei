@@ -112,6 +112,10 @@ vm_get(
 
 	/* The property, wherever on the chain. */
 	found = vm_object_find(holder, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* A missing descriptor follows the absence path after errors have been excluded. */
 	if (!found)
 		return 0;
 
@@ -234,6 +238,10 @@ vm_set(
 	/* An accessor on the chain: its setter is called with the value. */
 	object = (struct vm_object *)vm_value_as_cell(base);
 	found = vm_object_find(object, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found && (property.attributes & VM_PROPERTY_ACCESSOR) != 0U) {
 		accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 		if (accessor->setter == VM_VALUE_UNDEFINED) {
@@ -376,6 +384,10 @@ vm_in(
 
 	/* Succeeded: whether the chain has it. */
 	found = vm_object_find((struct vm_object *)vm_value_as_cell(object), property_key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Successful descriptor inspection now supplies the requested presence or flag result. */
 	*result = vm_value_boolean(found);
 	return 0;
 }
@@ -552,6 +564,10 @@ vm_define_accessor(
 	getter_function = VM_VALUE_UNDEFINED;
 	setter_function = VM_VALUE_UNDEFINED;
 	found = vm_object_get_own(target, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found && (property.attributes & VM_PROPERTY_ACCESSOR) != 0U) {
 		accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 		getter_function = accessor->getter;
@@ -595,7 +611,7 @@ vm_get_global(
 
 	/* A script's top-level let or const comes first; before its declaration runs it cannot be read (not even by typeof). */
 	*result = VM_VALUE_UNDEFINED;
-	found = vm_object_get_own(realm->lexicals, key, &property);
+	found = vm_object_get_own_ordinary(realm->lexicals, key, &property);
 	if (found && *property.value == VM_VALUE_EMPTY) {
 		status = vm_throw_uninitialized(realm, key);
 		return status;
@@ -609,6 +625,10 @@ vm_get_global(
 
 	/* A name the global object does not have. */
 	found = vm_object_find(realm->global, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* A missing descriptor follows the absence path after errors have been excluded. */
 	if (!found) {
 		if (for_typeof)
 			return 0;
@@ -641,7 +661,7 @@ vm_put_global(
 	int status;
 
 	/* A script's top-level let or const: not before its declaration runs, and never a const. */
-	found = vm_object_get_own(realm->lexicals, key, &property);
+	found = vm_object_get_own_ordinary(realm->lexicals, key, &property);
 	if (found && *property.value == VM_VALUE_EMPTY) {
 		status = vm_throw_uninitialized(realm, key);
 		return status;
@@ -662,6 +682,10 @@ vm_put_global(
 	/* Strict code assigns only a variable that exists. */
 	if (strict) {
 		found = vm_object_find(realm->global, key, &property);
+		if (found < 0)
+			return -found;
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found) {
 			status = vm_throw_not_defined(realm, key);
 			return status;
@@ -692,6 +716,10 @@ vm_define_global_var(
 
 	/* A name the global object has keeps its value. */
 	found = vm_object_get_own(realm->global, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found)
 		return 0;
 
@@ -731,6 +759,10 @@ vm_define_global_function(
 	/* A property there already decides whether the declaration may replace it. */
 	attributes = VM_PROPERTY_WRITABLE | VM_PROPERTY_ENUMERABLE;
 	found = vm_object_get_own(realm->global, key, &property);
+	if (found < 0)
+		return -found;
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found && (property.attributes & VM_PROPERTY_CONFIGURABLE) == 0U) {
 		replaceable = 0;
 		if ((property.attributes & VM_PROPERTY_ACCESSOR) == 0U &&
@@ -776,7 +808,7 @@ vm_delete_global(
 	int status;
 
 	/* A script's top-level let or const cannot be deleted. */
-	found = vm_object_get_own(realm->lexicals, key, &property);
+	found = vm_object_get_own_ordinary(realm->lexicals, key, &property);
 	if (found) {
 		*result = VM_VALUE_FALSE;
 		return 0;
@@ -808,7 +840,7 @@ vm_define_global_lexical(
 	int status;
 
 	/* A name declared already. */
-	found = vm_object_get_own(realm->lexicals, key, &property);
+	found = vm_object_get_own_ordinary(realm->lexicals, key, &property);
 	if (found) {
 		status = vm_throw_redeclared(realm, key);
 		return status;
@@ -840,7 +872,7 @@ vm_init_global_lexical(
 	int found;
 
 	/* The record has the name, which the script's prologue declared. */
-	found = vm_object_get_own(realm->lexicals, key, &property);
+	found = vm_object_get_own_ordinary(realm->lexicals, key, &property);
 	if (!found)
 		return EINVAL;
 
@@ -929,6 +961,10 @@ vm_get_own_descriptor(
 	/* The own property. */
 	memset(descriptor, 0, sizeof(*descriptor));
 	found = vm_object_get_own(object, key, &property);
+	if (found < 0)
+		return found;
+
+	/* A missing descriptor follows the absence path after errors have been excluded. */
 	if (!found)
 		return 0;
 
@@ -977,10 +1013,26 @@ vm_define_own_property(
 	int is_accessor;
 	int is_array;
 	int status;
+	int handled;
+
+	/* Native policy may reject or handle a descriptor before ordinary validation. */
+	*done = 0;
+	if (object->native_operations != NULL && object->native_operations->define != NULL) {
+		handled = 0;
+		status = object->native_operations->define(realm, object, key, descriptor, &handled, done);
+		if (status != 0)
+			return status;
+		if (handled)
+			return 0;
+	}
 
 	/* The property there now. */
 	*done = 0;
 	found = vm_get_own_descriptor(object, key, &current);
+	if (found < 0)
+		return -found;
+
+	/* Array descriptor handling resolves the separate length metadata key. */
 	length_key = vm_key_from_ascii(realm->heap, "length");
 	if (length_key == VM_VALUE_EMPTY)
 		return ENOMEM;
@@ -1210,6 +1262,10 @@ vm_for_in_next(
 		state->index++;
 		if (is_object) {
 			found = vm_object_find((struct vm_object *)vm_value_as_cell(state->object), candidate, &property);
+			if (found < 0)
+				return -found;
+
+			/* A missing descriptor follows the absence path after errors have been excluded. */
 			if (!found)
 				continue;
 		}
@@ -1317,14 +1373,14 @@ access_set_length(
 
 	UNUSED_PARAMETER(strict);
 
-	/* The new length must be a whole number in uint32's range (and in int32's for now). */
+	/* The new length must be a whole number in uint32's range. */
 	status = vm_to_uint32(realm, value, &length);
 	if (status != 0)
 		return status;
 	status = vm_to_number(realm, value, &number);
 	if (status != 0)
 		return status;
-	if ((double)length != number || length > 0x7fffffffU) {
+	if ((double)length != number) {
 		status = vm_throw_range_error(realm, "Invalid array length");
 		return status;
 	}
@@ -1404,6 +1460,12 @@ access_collect(
 			if (status != 0)
 				break;
 			found = vm_object_get_own(object, key, &property);
+			if (found < 0) {
+				status = -found;
+				break;
+			}
+
+			/* Present descriptors retain their ordinary accessor and attribute rules. */
 			if (found && (property.attributes & VM_PROPERTY_ENUMERABLE) != 0U)
 				status = wb_vector_push(keys, &key);
 		}
@@ -1516,8 +1578,13 @@ access_set_primitive(
 	/* A setter on the prototype's chain. */
 	prototype = access_primitive_prototype(realm, base);
 	found = 0;
-	if (prototype != NULL)
+	if (prototype != NULL) {
 		found = vm_object_find(prototype, key, &property);
+		if (found < 0)
+			return -found;
+	}
+
+	/* Present descriptors retain their ordinary accessor and attribute rules. */
 	if (found && (property.attributes & VM_PROPERTY_ACCESSOR) != 0U) {
 		accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 		if (accessor->setter != VM_VALUE_UNDEFINED) {
@@ -1662,7 +1729,7 @@ access_define_length(
 	int allowed;
 	int status;
 
-	/* The new length, when given: a whole number in uint32's range (and int32's for now). */
+	/* The new length, when given: a whole number in uint32's range. */
 	*done = 0;
 	length_key = vm_key_from_ascii(realm->heap, "length");
 	if (length_key == VM_VALUE_EMPTY)
@@ -1676,7 +1743,7 @@ access_define_length(
 		status = vm_to_number(realm, descriptor->value, &number);
 		if (status != 0)
 			return status;
-		if ((double)length != number || length > 0x7fffffffU) {
+		if ((double)length != number) {
 			status = vm_throw_range_error(realm, "Invalid array length");
 			return status;
 		}
@@ -1723,7 +1790,7 @@ access_get_length_attributes(
 
 	/* The property (an array always has it). */
 	*attributes = VM_PROPERTY_WRITABLE;
-	found = vm_object_get_own(array, length_key, &property);
+	found = vm_object_get_own_ordinary(array, length_key, &property);
 	if (found)
 		*attributes = property.attributes;
 }

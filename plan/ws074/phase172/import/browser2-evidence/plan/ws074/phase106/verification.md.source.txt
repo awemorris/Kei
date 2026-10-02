@@ -1,0 +1,40 @@
+# q512 / p106 verification — 2026-09-30
+
+Managed child realms are GC cells; primary realms retain explicit ownership.
+Functions and saved global/prototype/Document/generator graphs retain the child.
+A managed Window's host hooks trace its Document, objects and observer backend,
+and release C state before the realm's stack. Managed observer cycles have no
+permanent roots. Detach cancels timers/jobs/observer delivery; saved objects stay
+valid. Active timer entry points explicitly retain their host across a callback
+in a foreign realm that drops connection ownership and collects.
+
+Managed bind hosts refuse non-NULL asynchronous fetch (ENOTSUP before allocation)
+while cancellation is absent. No iframe API, loading/navigation or complete
+nested frame lifecycle is supplied; p104 verifies actual context embedding next.
+
+Commands/results, both variants:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: warning-free.
+- `build/ws074-host/{plain,asan}/host-context-ownership`:27/27. Five saved-reference paths retain/reclaim exactly once, saved function/generator execute during GC, Document retains bound host, detached old/new jobs suppressed, observer graph reclaimed, borrowed parent callback drops connection during GC, partial realm ENOMEM safe, explicit destroy does not release managed owner, whole-heap managed and bound-observer cleanup safe.
+- `host-realms`:30/30; `host-object`:100/100; `host-interp`:45/45 (active GC), each variant.
+- `python3 plan/ws074/tests/run-dom-tests.py --program build/ws074-host/{plain,asan}/browser`:23/23.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/{plain,asan}/browser --out build/ws074-acid-p106-{plain,asan}`: Acid2 exact100%; Acid3 all100 results identical to p105,40/100, exceptions/run_errors empty, run_status0, completeTrue. Pixel38.5933% remains independent diagnosis.
+- `python3 plan/tools/style-check.py` on changed C/test sources and `git diff --check`:PASS.
+
+ASan/UBSan reports no diagnostic; supported ASAN_OPTIONS disables fake-stack
+allocation for conservative scanning. Construction and active VM execution use
+normal C-stack scanning. Exact reclamation and the borrowed-callback root test
+use vm_heap_set_stack_base(NULL) only at explicitly rooted collection points,
+excluding stale unused C words; no freed pointer is subsequently exercised.
+This is the documented embedding GC API, no production test switch.
+
+Full coding-style.md manual review covers new/changed functions, all error exits,
+trace/finalizer ordering and partial cleanup; existing required trace prototypes
+precede their C cell-type initializers. Manual formatting follows .clang-format;
+automatic formatter unavailable. Automated style coverage is partial; final
+semantic review supplies the remaining rules. Full WS review remains p044.
+No guest/OS/boot/GPU path changed, so those checks and aggregate make check were
+not run. Bounded allocation test exercises realm skeleton ENOMEM; exhaustive
+fault injection is not claimed. Async cancellation/loading, actual nested iframe
+relationships and Document.defaultView are next Phase obligations, not verified
+by the generic ownership graphs here. Local evidence unpublished, no push.

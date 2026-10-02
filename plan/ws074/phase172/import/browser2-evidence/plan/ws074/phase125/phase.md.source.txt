@@ -1,0 +1,70 @@
+<!-- awesome-plan project=zedbsd record=ws074-p125 -->
+
+# ws074-p125: live form.elements and indexed duplicate-name lists
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q535 / q535-i01
+Prerequisite p124 aa158bf7 cleared, actual ordinary owner56/forms35/collection104/
+GC16/frame68, original10073/100/noerrors/Acid2 exact. q534 archive verified.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues plus2026-10-01
+continuation. Root sole executor, one finite Phase; scope saved before generation.
+
+## Exact scope / design / criteria
+
+Add HTMLFormElement prototype branded by actual HTML namespace/exact local form;
+readonly SameObject elements and readonly length. Elements native
+HTMLFormControlsCollection inherits HTMLCollection length/item, uses current form
+owner/listed-member p124 predicates, scans form current tree root in order including
+outside associated controls, excludes image input/img/nonlisted/foreign/case-invalid.
+Live after owner/id/form/name/type mutation/moves/removal/root changes; no snapshots.
+Retain owning form through traced state and SameObject cache on dom_element.
+Actual owning realm/private XML prototypes selected, no raw Window/realm lifetime.
+
+Controls namedItem and visible named properties: empty/missing null/undefined;
+single id OR name match returns Element; multiple distinct matched elements return
+new live RadioNodeList. Count id+name on same element once, order actual tree.
+Saved duplicate list keeps original exact name, owning form, follows current members
+and remains list at zero/one member. Native NodeList indexed length/item core and
+RadioNodeList inheritance, readonly indexed descriptors/keys/define/delete/integrity
+behavior; RadioNodeList has no virtual named getter. Native brands before one
+unsigned/string conversion, conversions may mutate DOM/throw. Reuse existing native
+collection operations but keep HTMLCollection and NodeList brands separate.
+
+Explicit incremental boundary: RadioNodeList.value and radio checkedness/grouping,
+NodeList iterator/forEach and conversion of existing snapshot query lists, form's own
+indexed/named/past-names map, public input reflection/activation/submission, parser
+special persisted associations/custom elements are known later requirements. No
+claim of full HTMLFormElement/NodeList/RadioNodeList compliance. p100/p044 unchanged.
+
+Affected bind/collection.c/internal.h/window.c/node.c; dom.h/node.c cache trace;
+bounded production HTML/host GC/managed child fixture changes under WS tests.
+Full Guardrail/C standard loaded, no concise copy; primary HTML common interfaces/
+forms and DOM collections read2026-10-01. Exact snapshot before source generation.
+
+Verify plain+ASan new fixture identity/inheritance/brands/direct+outside+detached+
+fragment/XML/nested/duplicate ID owners/image type changes/tree order/live names/
+multiple id+name counted once/saved zero-one-many lists/prototype visibility/expandos/
+readonly keys/descriptors/uint32 conversion/errors and conversion-time mutation;
+actual GC sole list/root and cache cycles plus managed child retirement. All p124
+selected regressionsPASS; all100 prior73 preserved/equal/noerrors/complete/status0,
+indexed4+52 expected newlyPASS; Acid2 exact. Warning0/ASan0/style/full changed-source
+manual review/diff/evidence. Bounded fixtures/fixedsuite, no full WPT/fuzz/OS/guest/
+boot/GPU. Unknown prerequisites end uncleared before redesign. Local unpublished,
+no push. Dependency p124(external) -> p125 -> future radio/input(external) -> p100
+(external), acyclic. Only p125 authorized.
+
+## Introduction / q535 activation (2026-10-01)
+
+Use verified ordinary ownership and legacy collection prerequisites for the missing
+live controls API. Keep known radio value and form own-name APIs separate, while
+preserving full p100 acceptance and inherited NodeList incremental residuals.
+
+## q535 result (2026-10-01)
+
+Cleared, [evidence](verification.md). Controls100/100/GC11/frame78 and all selected
+regressionsPASS both variants. Original all10075/100, indexed4+52 newlyPASS/prior73
+preserved/equal/noerrors/Acid2 exact. Known radio.value/checkedness/input reflections
+and NodeList/form/parser residuals retained. Remaining25/p100 full100/100 unmet.
+Root executor released, local unpublished/no push.

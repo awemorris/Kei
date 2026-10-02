@@ -90,6 +90,7 @@ static const struct parser_pseudo_name parser_pseudo_functions[] = {
 	{ "-webkit-any", CSS_PSEUDO_IS },
 	{ "where", CSS_PSEUDO_IS },
 	{ "has", CSS_PSEUDO_HAS },
+	{ "lang", CSS_PSEUDO_LANG },
 	{ "nth-child", CSS_PSEUDO_NTH_CHILD },
 	{ "nth-last-child", CSS_PSEUDO_NTH_LAST_CHILD },
 	{ "nth-of-type", CSS_PSEUDO_NTH_OF_TYPE },
@@ -1170,6 +1171,7 @@ parser_selector(
 	struct css_compound compound;
 	size_t index;
 	int combinator;
+	int separated;
 	int error;
 
 	/* An empty selector is invalid. */
@@ -1201,8 +1203,13 @@ parser_selector(
 		if (index >= tokens.count)
 			break;
 		combinator = CSS_COMBINATOR_DESCENDANT;
-		while (index < tokens.count && tokens.tokens[index].type == CSS_TOKEN_WHITESPACE)
+		separated = 0;
+		while (index < tokens.count && tokens.tokens[index].type == CSS_TOKEN_WHITESPACE) {
+			separated = 1;
 			index++;
+		}
+
+		/* Recognizes an explicit combinator even without surrounding spaces. */
 		if (index < tokens.count && tokens.tokens[index].type == CSS_TOKEN_DELIM) {
 			if (tokens.tokens[index].delim == '>') {
 				combinator = CSS_COMBINATOR_CHILD;
@@ -1218,6 +1225,12 @@ parser_selector(
 				while (index < tokens.count && tokens.tokens[index].type == CSS_TOKEN_WHITESPACE)
 					index++;
 			}
+		}
+
+		/* Adjacent type or universal tokens cannot begin another compound. */
+		if (combinator == CSS_COMBINATOR_DESCENDANT && !separated) {
+			wb_vector_release(&compounds);
+			return EINVAL;
 		}
 
 		/* A combinator needs a compound after it. */
@@ -1538,6 +1551,27 @@ parser_pseudo(
 			return error;
 		if (error != 0)
 			simple->pseudo = CSS_PSEUDO_NEVER;
+		return 0;
+	case CSS_PSEUDO_LANG:
+		/* A functional language selector must actually close its argument list. */
+		if (tokens[end - 1U].type != CSS_TOKEN_CLOSE_PAREN)
+			return EINVAL;
+
+		/* A language selector takes one nonempty CSS identifier. */
+		if (arguments.count != 1U)
+			return EINVAL;
+
+		/* Rejects malformed arguments rather than treating them as unknown language. */
+		if (arguments.tokens[0].type != CSS_TOKEN_IDENT)
+			return EINVAL;
+
+		/* Keeps the language parameter as an ordinary traced atom. */
+		simple->value = parser_atom(heap, &arguments.tokens[0], 0);
+		if (simple->value == NULL)
+			return ENOMEM;
+
+		/* Language contributes the specificity of a pseudo-class. */
+		*specificity += 1U << 8;
 		return 0;
 	case CSS_PSEUDO_NTH_CHILD:
 	case CSS_PSEUDO_NTH_LAST_CHILD:

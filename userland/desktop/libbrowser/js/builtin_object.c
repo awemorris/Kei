@@ -288,6 +288,12 @@ object_assign(
 		for (item = 0; status == 0 && item < keys.count; item++) {
 			key = *(vm_value *)wb_vector_at(&keys, item);
 			found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(source), key, &descriptor);
+			if (found < 0) {
+				status = -found;
+				break;
+			}
+
+			/* A missing descriptor follows the absence path after errors have been excluded. */
 			if (!found || (descriptor.attributes & VM_PROPERTY_ENUMERABLE) == 0U)
 				continue;
 			status = vm_get(realm, source, key, &value);
@@ -401,6 +407,12 @@ object_define_properties(
 	for (item = 0; status == 0 && item < keys.count; item++) {
 		key = *(vm_value *)wb_vector_at(&keys, item);
 		found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(properties), key, &own);
+		if (found < 0) {
+			status = -found;
+			break;
+		}
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found || (own.attributes & VM_PROPERTY_ENUMERABLE) == 0U) {
 			memset(&descriptor, 0, sizeof(descriptor));
 			descriptor.has = 0xffffffffU;
@@ -554,6 +566,10 @@ object_get_own_property_descriptor(
 	/* The descriptor as an object, or undefined. */
 	*result = VM_VALUE_UNDEFINED;
 	found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);
+	if (found < 0)
+		return -found;
+
+	/* A missing descriptor follows the absence path after errors have been excluded. */
 	if (!found)
 		return 0;
 	status = object_from_descriptor(realm, &descriptor, result);
@@ -599,6 +615,12 @@ object_get_own_property_descriptors(
 	for (item = 0; status == 0 && item < keys.count; item++) {
 		key = *(vm_value *)wb_vector_at(&keys, item);
 		found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);
+		if (found < 0) {
+			status = -found;
+			break;
+		}
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
 		status = object_from_descriptor(realm, &descriptor, &value);
@@ -766,6 +788,10 @@ object_has_own(
 
 	/* Succeeded: whether it has the property. */
 	found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);
+	if (found < 0)
+		return -found;
+
+	/* Successful descriptor inspection now supplies the requested presence or flag result. */
 	*result = vm_value_boolean(found);
 	return 0;
 }
@@ -843,6 +869,10 @@ object_is_frozen(
 
 	/* Succeeded: whether every property is read-only and fixed. */
 	frozen = object_test_integrity(realm, (struct vm_object *)vm_value_as_cell(value), OBJECT_FROZEN);
+	if (frozen < 0)
+		return -frozen;
+
+	/* Successful integrity inspection reports the requested boolean. */
 	*result = vm_value_boolean(frozen);
 	return 0;
 }
@@ -871,6 +901,10 @@ object_is_sealed(
 
 	/* Succeeded: whether every property is fixed. */
 	sealed = object_test_integrity(realm, (struct vm_object *)vm_value_as_cell(value), OBJECT_SEALED);
+	if (sealed < 0)
+		return -sealed;
+
+	/* Successful integrity inspection reports the requested boolean. */
 	*result = vm_value_boolean(sealed);
 	return 0;
 }
@@ -909,8 +943,9 @@ object_prevent_extensions(
 	struct vm_object *object;
 	vm_value value;
 	int is_object;
+	int done;
+	int status;
 
-	UNUSED_PARAMETER(realm);
 	UNUSED_PARAMETER(this_value);
 
 	/* A primitive is returned as it is. */
@@ -920,9 +955,19 @@ object_prevent_extensions(
 	if (!is_object)
 		return 0;
 
-	/* Succeeded: no new properties from now on. */
+	/* Native policy must permit the transition before any extensibility state changes. */
 	object = (struct vm_object *)vm_value_as_cell(value);
-	object->flags |= VM_OBJECT_NOT_EXTENSIBLE;
+	status = vm_object_prevent_extensions(object, &done);
+	if (status != 0)
+		return status;
+
+	/* Object.preventExtensions throws when a native object refuses the transition. */
+	if (!done) {
+		status = vm_throw_type_error(realm, "The object refuses preventing extensions.");
+		return status;
+	}
+
+	/* Succeeded: the object now refuses every new own property. */
 	return 0;
 }
 
@@ -1057,6 +1102,10 @@ object_has_own_property(
 
 	/* Succeeded: whether it has the property. */
 	found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);
+	if (found < 0)
+		return -found;
+
+	/* Successful descriptor inspection now supplies the requested presence or flag result. */
 	*result = vm_value_boolean(found);
 	return 0;
 }
@@ -1115,6 +1164,7 @@ object_property_is_enumerable(
 	vm_value object;
 	vm_value key;
 	int found;
+	int enumerable;
 	int status;
 
 	/* The key, then the object. */
@@ -1127,7 +1177,14 @@ object_property_is_enumerable(
 
 	/* Succeeded: whether it has the property and it is enumerable. */
 	found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);
-	*result = vm_value_boolean(found && (descriptor.attributes & VM_PROPERTY_ENUMERABLE) != 0U);
+	if (found < 0)
+		return -found;
+
+	/* Successful descriptor inspection now supplies the requested presence or flag result. */
+	enumerable = 0;
+	if (found && (descriptor.attributes & VM_PROPERTY_ENUMERABLE) != 0U)
+		enumerable = 1;
+	*result = vm_value_boolean(enumerable);
 	return 0;
 }
 
@@ -1696,6 +1753,12 @@ object_list(
 	for (index = 0; status == 0 && index < keys.count; index++) {
 		key = *(vm_value *)wb_vector_at(&keys, index);
 		found = vm_get_own_descriptor((struct vm_object *)vm_value_as_cell(object), key, &descriptor);
+		if (found < 0) {
+			status = -found;
+			break;
+		}
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found || (descriptor.attributes & VM_PROPERTY_ENUMERABLE) == 0U)
 			continue;
 		status = object_key_value(realm, key, &name);
@@ -1752,8 +1815,16 @@ object_set_integrity(
 	int done;
 	int status;
 
-	/* No new properties. */
-	object->flags |= VM_OBJECT_NOT_EXTENSIBLE;
+	/* Native refusal must leave both flags and descriptors unchanged. */
+	status = vm_object_prevent_extensions(object, &done);
+	if (status != 0)
+		return status;
+
+	/* Sealing and freezing cannot proceed when the object stays extensible. */
+	if (!done) {
+		status = vm_throw_type_error(realm, "The object refuses changing its integrity.");
+		return status;
+	}
 
 	/* Each own property. */
 	wb_vector_init(&keys, sizeof(vm_value));
@@ -1761,6 +1832,12 @@ object_set_integrity(
 	for (item = 0; status == 0 && item < keys.count; item++) {
 		key = *(vm_value *)wb_vector_at(&keys, item);
 		found = vm_get_own_descriptor(object, key, &descriptor);
+		if (found < 0) {
+			status = -found;
+			break;
+		}
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
 
@@ -1770,6 +1847,10 @@ object_set_integrity(
 		if (level == OBJECT_FROZEN && (descriptor.has & VM_HAS_VALUE) != 0U)
 			change.has |= VM_HAS_WRITABLE;
 		status = vm_define_own_property(realm, object, key, &change, &done);
+		if (status == 0 && !done) {
+			status = vm_throw_type_error(realm, "A property refuses changing its integrity.");
+			break;
+		}
 	}
 
 	/* The list is no longer needed. */
@@ -1807,6 +1888,12 @@ object_test_integrity(
 	for (item = 0; status == 0 && holds && item < keys.count; item++) {
 		key = *(vm_value *)wb_vector_at(&keys, item);
 		found = vm_get_own_descriptor(object, key, &descriptor);
+		if (found < 0) {
+			status = -found;
+			break;
+		}
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
 		if ((descriptor.attributes & VM_PROPERTY_CONFIGURABLE) != 0U)
@@ -1818,9 +1905,11 @@ object_test_integrity(
 	/* The list is no longer needed. */
 	wb_vector_release(&keys);
 
-	/* The answer (a failure to list reads as not). */
+	/* Lookup and enumeration failures retain their distinct negative error outcome. */
 	if (status != 0)
-		return 0;
+		return -status;
+
+	/* Succeeded: reports whether every own descriptor has the requested integrity. */
 	return holds;
 }
 
@@ -1933,6 +2022,10 @@ object_lookup_half(
 	/* The first object of the chain with the property decides. */
 	for (walk = (struct vm_object *)vm_value_as_cell(object); walk != NULL; walk = walk->prototype) {
 		found = vm_get_own_descriptor(walk, key, &descriptor);
+		if (found < 0)
+			return -found;
+
+		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
 		if ((descriptor.has & VM_HAS_GET) != 0U) {

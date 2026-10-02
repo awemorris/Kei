@@ -1,0 +1,82 @@
+<!doctype html><html><head><title>Input reflection and dirty text value</title></head><body><input id="parsed" type="HIDDEN" name="initial" value="raw"><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+function raises(fn,name){try{fn();return false;}catch(e){return e.name===name;}}
+var p=document.getElementById('parsed');check(p instanceof HTMLInputElement&&p instanceof HTMLElement,'parsed input actual interface');
+check(p.type==='hidden'&&p.getAttribute('type')==='HIDDEN'&&p.name==='initial','parsed type canonical and raw spelling');
+check(p.value==='raw'&&p.defaultValue==='raw','parsed hidden default mode');
+var i=document.createElement('input');check(i.type==='text'&&i.name===''&&i.value===''&&i.defaultValue===''&&i.form===null,'missing input defaults without form');
+check(!i.hasAttribute('type')&&!i.hasAttribute('name')&&!i.hasAttribute('value'),'observing defaults creates no attributes');
+var types=['hidden','text','search','tel','url','email','password','date','month','week','time','datetime-local','number','range','color','checkbox','radio','file','submit','image','reset','button'];
+for(var n=0;n<types.length;n++){i.type=types[n].toUpperCase();check(i.type===types[n]&&i.getAttribute('type')===types[n].toUpperCase(),'canonical keyword '+types[n]);}
+i.type='invalid';check(i.type==='text'&&i.getAttribute('type')==='invalid','invalid type uses text');
+i.type=' TEXT ';check(i.type==='text'&&i.getAttribute('type')===' TEXT ','whitespace invalid keyword preserves raw');
+i.type='';check(i.type==='text','empty keyword text fallback');i.removeAttribute('type');check(i.type==='text','removed type text fallback');
+i.name='first';i.type='text';i.value='test';check(i.getAttribute('name')==='first'&&i.name==='first','native name reflects attribute');
+check(i.type==='text'&&i.getAttribute('type')==='text','native type reflects attribute');
+check(i.value==='test'&&!i.hasAttribute('value'),'dirty text has no value attribute');
+var f=document.createElement('form');f.appendChild(i);var es=f.elements;check(i.form===f&&es.first===i&&es[0]===i,'native form getter and collection name');
+i.name='second';i.type='password';i.value='TEST';check(es.first===undefined&&es.second===i&&es.length===1,'name setter updates saved controls');
+check(i.type==='password'&&i.value==='TEST'&&i.getAttribute('type')==='password','text-password dirty value transition');
+i.defaultValue='default';check(i.defaultValue==='default'&&i.getAttribute('value')==='default'&&i.value==='TEST','dirty value independent of defaultValue');
+i.setAttribute('value','new default');check(i.value==='TEST'&&i.defaultValue==='new default','attribute change cannot overwrite dirty value');
+i.removeAttribute('value');check(i.value==='TEST'&&i.defaultValue===''&&!i.hasAttribute('value'),'attribute removal cannot overwrite dirty value');
+var clean=document.createElement('input');clean.defaultValue='clean';check(clean.value==='clean'&&clean.defaultValue==='clean','clean value follows defaultValue');
+clean.setAttribute('value','changed');check(clean.value==='changed','clean value follows content mutation');
+clean.removeAttribute('value');check(clean.value===''&&clean.defaultValue==='','clean content removal empty');
+clean.value='owned';clean.defaultValue='later';check(clean.value==='owned'&&clean.defaultValue==='later','clean becomes dirty after script write');
+i.value=null;check(i.value===''&&!i.hasAttribute('value'),'value legacy null to empty');
+i.value=undefined;check(i.value==='undefined','value undefined conversion');
+i.name=null;i.type=null;i.defaultValue=null;check(i.name==='null'&&i.type==='text'&&i.getAttribute('type')==='null'&&i.defaultValue==='null','other DOMString null remains null text');
+i.type='text';i.value='a\r\nb\rc\nd';check(i.value==='abcd','text newline sanitation');
+i.type='password';i.value='p\r\na\nss';check(i.value==='pass','password newline sanitation');
+i.type='search';i.value='s\re\na';check(i.value==='sea','search newline sanitation');
+i.type='tel';i.value='1\r2\n3';check(i.value==='123','tel newline sanitation');
+var line=document.createElement('input');line.defaultValue='\ra\nb\r';check(line.value==='ab'&&line.defaultValue==='\ra\nb\r','clean default newline sanitation leaves raw attribute');
+line.value='x\uD800y\uDC00z\u0000';check(line.value==='x\uD800y\uDC00z\u0000','owned UTF16 lone surrogates and null unit preserved');
+line.name='n\uD800';check(line.getAttribute('name')==='n\uD800','name UTF16 preserved');
+line.defaultValue='default';var clone=line.cloneNode(false);check(clone!==line&&clone instanceof HTMLInputElement&&clone.value===line.value&&clone.defaultValue==='default','clone copies dirty input value');
+clone.value='clone';check(clone.value==='clone'&&line.value==='x\uD800y\uDC00z\u0000','clone owned storage independent');
+line.value='source';check(clone.value==='clone'&&line.value==='source','source value independent from clone');
+clone.defaultValue='other default';check(clone.value==='clone'&&line.defaultValue==='default','clone default and dirty storage separate');
+var cleanClone=clean.cloneNode(true);check(cleanClone.value==='owned'&&cleanClone.defaultValue==='later','deep clone dirty value retains default');
+var pure=document.createElement('input');pure.defaultValue='pure';var pureClone=pure.cloneNode(false);pureClone.defaultValue='changed';check(pureClone.value==='changed'&&pure.value==='pure','clean clone remains clean');
+var container=document.createElement('div');container.appendChild(line);var tree=container.cloneNode(true);check(tree.firstChild.value==='source'&&tree.firstChild!==line,'deep subtree clone copies owned input value');
+// Default modes and default/on use content attributes, independently of owned text.
+var d=document.createElement('input');d.type='hidden';d.value='hidden';check(d.value==='hidden'&&d.getAttribute('value')==='hidden','hidden reflects value');
+d.type='submit';d.value='submit';check(d.value==='submit'&&d.defaultValue==='submit','submit reflects value');
+d.type='image';d.value='image';check(d.value==='image'&&d.defaultValue==='image','image reflects value');
+d.type='reset';d.value='reset';check(d.value==='reset'&&d.defaultValue==='reset','reset reflects value');
+d.type='button';d.value='button';check(d.value==='button'&&d.defaultValue==='button','button reflects value');
+var radio=document.createElement('input');radio.type='radio';check(radio.value==='on'&&!radio.hasAttribute('value'),'radio absent value on');
+radio.value='r';check(radio.value==='r'&&radio.defaultValue==='r','radio value reflects attribute');
+radio.removeAttribute('value');check(radio.value==='on','radio removing value restores on');
+var box=document.createElement('input');box.type='checkbox';check(box.value==='on','checkbox absent value on');box.value='';check(box.value===''&&box.hasAttribute('value'),'checkbox explicit empty value');
+var file=document.createElement('input');file.type='file';check(file.value==='','file no selected filename');check(raises(function(){file.value='fake';},'InvalidStateError')&&file.value===''&&!file.hasAttribute('value'),'file nonempty setter refuses');file.value=null;check(file.value===''&&!file.hasAttribute('value'),'file empty setter does not create filename');
+// Single conversion and exception identity use actual accessor entry points.
+var calls=0;i.name={toString:function(){calls++;return 'converted';}};check(calls===1&&i.name==='converted','name conversion once');
+calls=0;i.value={toString:function(){calls++;return 'converted value';}};check(calls===1&&i.value==='converted value','value conversion once');
+var vs=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set,ns=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'name').set,fg=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'form').get;
+var arg={toString:function(){calls++;return 'bad';}};calls=0;
+check(raises(function(){vs.call({},arg);},'TypeError')&&calls===0,'value brand before conversion');
+check(raises(function(){ns.call(f,arg);},'TypeError')&&calls===0,'name rejects noninput before conversion');
+check(raises(function(){vs.call(Object.create(HTMLInputElement.prototype),arg);},'TypeError')&&calls===0,'input rejects prototype lookalike');
+check(raises(function(){i.value=Symbol();},'TypeError')&&i.value==='converted value','value symbol failure leaves dirty value intact');
+check(raises(function(){i.name=Symbol();},'TypeError')&&i.name==='converted','name symbol failure leaves attribute intact');
+var err={marker:1};try{i.value={toString:function(){throw err;}};check(false,'value thrown conversion');}catch(e){check(e===err&&i.value==='converted value','value thrown conversion');}
+try{i.type={toString:function(){throw err;}};check(false,'type thrown conversion');}catch(e){check(e===err,'type thrown conversion');}
+i.value={toString:function(){i.type='hidden';return 'as default';}};check(i.value==='as default'&&i.defaultValue==='as default','value observes conversion-time type mutation');
+i.name={toString:function(){f.removeChild(i);return 'removed';}};check(i.name==='removed'&&es.length===0&&i.form===null,'name conversion-time removal updates owner');
+// Ordinary form ownership follows explicit connected and detached ancestry rules.
+f.id='owner';document.body.appendChild(f);document.body.appendChild(i);i.setAttribute('form','owner');check(i.form===f&&es[0]===i,'input form getter explicit external owner');
+i.setAttribute('form','missing');check(i.form===null&&es.length===0,'input explicit missing owner');i.removeAttribute('form');f.appendChild(i);check(i.form===f,'input nearest ancestor owner');
+check(raises(function(){fg.call(document);},'TypeError')&&raises(function(){HTMLInputElement();},'TypeError'),'input form brand and illegal constructor');
+var x=document.implementation.createDocument(null,'Root'),xi=x.createElementNS('http://www.w3.org/1999/xhtml','input'),upper=x.createElementNS('http://www.w3.org/1999/xhtml','INPUT'),foreign=x.createElementNS('urn:foreign','input');
+check(xi instanceof HTMLInputElement&&!(upper instanceof HTMLInputElement)&&!(foreign instanceof HTMLInputElement),'XML input exact namespace and local case');
+check(raises(function(){vs.call(upper,arg);},'TypeError')&&raises(function(){vs.call(foreign,arg);},'TypeError'),'XML invalid input brands rejected');
+xi.type='PaSsWoRd';xi.value='xml';check(xi.type==='password'&&xi.value==='xml'&&Object.getPrototypeOf(xi)===HTMLInputElement.prototype,'XML lowercase input relevant private prototype');
+var frame=document.createElement('iframe');document.body.appendChild(frame);var w=frame.contentWindow,cd=frame.contentDocument,ci=cd.createElement('input'),cf=cd.createElement('form');cd.body.appendChild(cf);cf.appendChild(ci);
+ci.value='child';check(Object.getPrototypeOf(ci)===w.HTMLInputElement.prototype&&ci.value==='child'&&fg.call(ci)===cf,'input relevant child prototype and borrowed owner getter');
+var childGetter=Object.getOwnPropertyDescriptor(w.HTMLInputElement.prototype,'value').get;document.body.removeChild(frame);frame=null;w=null;cd=null;
+check(childGetter.call(ci)==='child'&&ci.form===cf,'retired managed input native getter remains callable');
+console.log('input reflection probe done');
+</script></body></html>

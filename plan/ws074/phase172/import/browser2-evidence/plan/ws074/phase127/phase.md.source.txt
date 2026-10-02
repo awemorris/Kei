@@ -1,0 +1,78 @@
+<!-- awesome-plan project=zedbsd record=ws074-p127 -->
+
+# ws074-p127: native input checkedness and RadioNodeList.value
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q537 / q537-i01
+Prerequisite p126 f32314fe cleared/input94/GC12/frame83/all10076/100/noerrors/
+Acid2exact, exact q536 archive verified. Root sole executor/one finite Phase.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact scope saved before generation; no cancellation/conflict.
+
+## Exact scope / design / criteria
+
+Native HTMLInputElement.checked getter/setter actual input brand, boolean conversion
+without user coercion; getter uses production checkedness, setter target dirty true,
+no checked content attribute mutation. False setter never checks another member.
+Actual HTML exact input/radio type/nonempty name, same current tree root and same
+ordinary p124 form owner (both none allowed) define group. True setter unchecks other
+currently checked group members in actual DOM, including external controls; ids,
+DOM order/disabled/other form/foreign/case/checkbox cannot redefine group.
+
+Add independent initialized checkedness state so clean group-unchecked current
+state can differ from checked content attribute without falsely marking the other
+input dirty. Existing page checked_dirty writes remain compatible. Preallocate target
+and affected checked members before any checked-state commit; failed allocation
+leaves observable checked states unchanged, no JS in group update/no cached members.
+Clone initialized/dirty current checkedness directly into independent input state,
+never perform radio group effects while copying a disconnected clone. Preserve
+p126 dirty value clone and no copied geometry/cache/raw realm.
+
+RadioNodeList.value native getter/setter brand: getter first current checked actual
+radio member, raw no-namespace value attribute or on default, empty if none; never
+read script-shadowed checked/value/type/name. Setter one DOMString conversion before
+live scan (null string null), first current actual radio with content value match
+(default on); sets checkedness true through group helper without itself setting
+input dirty flag, unchecks actual group members even outside this id/name-filtered
+list. Missing match no effect, duplicate matching values choose first tree-order.
+
+Incremental boundary: checked content/defaultChecked mutation group hooks, radio
+name/type/form/id/tree connection and owner-change enforcement, input cross-value
+mode transitions, native click legacy preactivation/cancellation/events/submission,
+advanced sanitation/selection/files, NodeList iterable/form own map/parser magic are
+known subsequent increments. Group membership is current when selected explicit
+setter runs; do not claim automatic group repair on the excluded mutations or full
+HTML radio/input conformance. No DOM attribute/move/connection hooks in this Phase.
+
+Affected new dom/radio.c registration, dom.h/control.c/native initialized state,
+bind/html-input.c/collection.c, scoped WS HTML/host GC/child fixtures. Full Guardrail/
+C standard loaded (no concise), primary HTML radio group and RadioNodeList algorithms
+read2026-10-01. Verify plain+ASan dedicated initial/dirty/boolean/no user conversion/
+checked attrs independent/clone/CSS current state/group name vs id/current owner/
+root/disabled/type/namespace/detached/external/current membership mutations followed
+by setter; Radio.value first/default/empty/content-only/no script getters/current
+order/one conversion/exception/no-effect/actual group outside filtered list/brands/
+relevant XML/managed child/GC/lifetime. Prior28 selected regressionsPASS/all100 prior76
+preserved/equal/noerrors/complete/status0/new56expected/Acid2exact/warning0/ASan0/
+full C/style/diff/hashes/evidence. Bounded fixtures/fixedsuite, no full WPT/fuzz/OS/
+guest/boot/GPU; unknown prerequisite ends uncleared before redesign. p100/p044
+unchanged, local unpublished/no push. Graph p126(external) -> p127 -> future radio
+mutation/activation(external) -> p100(external), acyclic; onlyp127 authorized.
+
+## Introduction / q537 activation (2026-10-01)
+
+Indexed56 requires cloned radio selection to affect actual sibling states. Add the
+explicit native checkedness/group update and live duplicate-list value increment;
+retain known automatic mutation/activation dependencies as subsequent finite scope.
+
+## q537 result (2026-10-01)
+
+[p127](phase.md) cleared, [evidence](verification.md).
+Native explicit checkedness/group/clone and RadioNodeList.value; radio73/native12/
+GC13/frame88/all selected regressionsPASS both variants. Original all10077/100/
+indexed56newPASS/prior76 preserved/equal/noerrors/Acid2exact. Remaining23; next
+click activation/submission. Known automatic mutation/group/type/advanced input/
+NodeList/form/parser residuals retained. p100/p044 unchanged; root released/local
+unpublished/no push.

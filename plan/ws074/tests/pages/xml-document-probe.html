@@ -1,0 +1,88 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) {console.log((condition ? "PASS " : "FAIL ") + label);}
+function throws(label, f, name) {var caught=null;try {f();}catch(e){caught=e;}check(label, caught!==null && caught.name===name);}
+var imp=document.implementation;
+check("SameObject implementation", imp===document.implementation && imp instanceof DOMImplementation);
+check("implementation is not a Node", !(imp instanceof Node));
+check("primary HTML content", document.contentType==="text/html");
+throws("illegal implementation constructor",function(){new DOMImplementation();},"TypeError");
+throws("illegal XMLDocument constructor",function(){new XMLDocument();},"TypeError");
+throws("Document getter brand",function(){Object.getOwnPropertyDescriptor(Document.prototype,"implementation").get.call(document.body);},"TypeError");
+throws("implementation method brand",function(){imp.createDocument.call(document,null,null);},"TypeError");
+throws("implementation fake prototype",function(){imp.createDocument.call(Object.create(DOMImplementation.prototype),null,null);},"TypeError");
+throws("required factory arguments",function(){imp.createDocument(null);},"TypeError");
+throws("required doctype arguments",function(){imp.createDocumentType("html","");},"TypeError");
+var doc=imp.createDocument(null,null,null);
+check("XML document interface", doc instanceof XMLDocument && doc instanceof Document && doc instanceof Node);
+check("empty XML document", doc.documentElement===null && doc.doctype===null && doc.childNodes.length===0);
+check("detached document defaults", doc.defaultView===null && doc.URL==="about:blank" && doc.documentURI==="about:blank" && doc.compatMode==="CSS1Compat");
+check("XML MIME",doc.contentType==="application/xml");
+check("undefined qualified name is DOMString",imp.createDocument(null,undefined).documentElement.localName==="undefined");
+check("empty namespace normalized in factory",imp.createDocument("","Root").documentElement.namespaceURI===null);
+check("omitted nullable doctype",imp.createDocument(null,"Root").doctype===null);
+check("factory returns new objects",doc!==imp.createDocument(null,null));
+check("per document implementation",doc.implementation===doc.implementation && doc.implementation!==imp);
+var root=doc.createElement("MiXeD");doc.appendChild(root);
+check("XML case and null namespace",root.localName==="MiXeD" && root.tagName==="MiXeD" && root.nodeName==="MiXeD" && root.namespaceURI===null);
+check("XML owner and parent",root.ownerDocument===doc && root.parentNode===doc);
+var text=doc.createTextNode("data");root.appendChild(text);
+check("XML text ownership",text.ownerDocument===doc && root.textContent==="data");
+check("ordinary XML query exact case",doc.getElementsByTagName("MiXeD")[0]===root && doc.getElementsByTagName("mixed").length===0);
+var xhtml=imp.createDocument("http://www.w3.org/1999/xhtml","html",null);
+check("XHTML content kind",xhtml.contentType==="application/xhtml+xml" && xhtml instanceof XMLDocument);
+var htmlcase=xhtml.createElement("DiV");xhtml.documentElement.appendChild(htmlcase);
+check("XHTML createElement namespace and case",htmlcase.namespaceURI==="http://www.w3.org/1999/xhtml" && htmlcase.localName==="DiV" && htmlcase.tagName==="DiV" && htmlcase.nodeName==="DiV");
+check("XHTML query exact case",xhtml.getElementsByTagName("DiV")[0]===htmlcase && xhtml.getElementsByTagName("div").length===0);
+check("HTML naming unchanged",document.createElement("DiV").tagName==="DIV" && document.createElement("DiV").localName==="div");
+var svg=imp.createDocument("http://www.w3.org/2000/svg","svg",null);
+check("SVG XML content kind",svg.contentType==="image/svg+xml" && svg.documentElement.namespaceURI==="http://www.w3.org/2000/svg");
+check("SVG createElement remains no namespace",svg.createElement("Rect").namespaceURI===null);
+var custom=imp.createDocument("urn:test","P:Root",null);
+check("custom root qualified identity",custom.documentElement.prefix==="P" && custom.documentElement.localName==="Root" && custom.documentElement.namespaceURI==="urn:test" && custom.documentElement.tagName==="P:Root");
+check("qualified XML tag query",custom.getElementsByTagName("P:Root")[0]===custom.documentElement && custom.getElementsByTagName("Root").length===0 && custom.getElementsByTagName("p:Root").length===0);
+check("empty name does not validate namespace binding",imp.createDocument("urn:any", "").documentElement===null);
+throws("missing prefix namespace",function(){imp.createDocument(null,"p:Root");},"NamespaceError");
+throws("bad name",function(){imp.createDocument("urn:test","bad name");},"InvalidCharacterError");
+throws("reserved xml binding",function(){imp.createDocument("urn:test","xml:Root");},"NamespaceError");
+throws("invalid supplied doctype",function(){imp.createDocument(null,"",document.body);},"TypeError");
+var dt=imp.createDocumentType("html","public","system");
+check("doctype native interface and fields",dt instanceof DocumentType && dt.name==="html" && dt.publicId==="public" && dt.systemId==="system" && dt.nodeName==="html");
+check("doctype associated owner",dt.ownerDocument===document && dt.parentNode===null);
+var withdt=imp.createDocument("http://www.w3.org/1999/xhtml","html",dt);
+check("doctype adoption preserves identity",withdt.doctype===dt && dt.ownerDocument===withdt && dt.parentNode===withdt && withdt.childNodes[0]===dt && withdt.childNodes[1]===withdt.documentElement);
+throws("invalid name preserves supplied doctype",function(){imp.createDocument(null,"bad name",dt);},"InvalidCharacterError");
+check("doctype unchanged after failed factory",dt.parentNode===withdt && dt.ownerDocument===withdt && withdt.doctype===dt);
+var moved=imp.createDocument(null,"",dt);
+check("attached doctype moves and old doc loses it",moved.doctype===dt && withdt.doctype===null && dt.ownerDocument===moved && dt.parentNode===moved);
+check("empty doctype name valid",imp.createDocumentType("","","").name==="");
+check("current DOM allows non XML QName",imp.createDocumentType("a/b:c","","").name==="a/b:c");
+var bad=["a>","a b","a\t","a\n","a\r","a\f","a\0b"];
+for(var i=0;i<bad.length;i++){throws("invalid doctype "+i,function(){imp.createDocumentType(bad[i],"","");},"InvalidCharacterError");}
+var order="";
+var ns={toString:function(){order+="n";return "urn:order";}};
+var name={toString:function(){order+="q";return "Root";}};
+check("createDocument conversion order once",imp.createDocument(ns,name).documentElement.localName==="Root" && order==="nq");
+order="";
+imp.createDocumentType({toString:function(){order+="n";return "html";}},{toString:function(){order+="p";return "public";}},{toString:function(){order+="s";return "system";}});
+check("doctype conversion order once",order==="nps");
+var marker={};var caught=null;
+try{imp.createDocument(ns,{toString:function(){throw marker;}});}catch(e){caught=e;}
+check("conversion exception identity",caught===marker);
+order="";
+throws("brand before conversion",function(){imp.createDocument.call({},ns,name);},"TypeError");
+check("invalid receiver skips conversions",order==="");
+var frame=document.createElement("iframe");document.body.appendChild(frame);
+var win=frame.contentWindow, child=frame.contentDocument, childimp=child.implementation;
+check("borrowed getter uses receiver realm",Object.getOwnPropertyDescriptor(Document.prototype,"implementation").get.call(child)===childimp && childimp instanceof win.DOMImplementation && !(childimp instanceof DOMImplementation));
+var childxml=imp.createDocument.call(childimp,"urn:child","Root");
+check("borrowed factory uses implementation realm",childxml instanceof win.XMLDocument && !(childxml instanceof XMLDocument) && childxml.defaultView===null);
+var borrowed=Document.prototype.createElement.call(childxml,"Child");
+check("borrowed createElement wraps in XML owner realm",borrowed instanceof win.Element && !(borrowed instanceof Element) && borrowed.ownerDocument===childxml);
+check("child XML implementation prototype",childxml.implementation instanceof win.DOMImplementation);
+document.body.removeChild(frame);
+var after=childxml.createElement("After");
+check("removed frame XML remains usable",after instanceof win.Element && after.ownerDocument===childxml && after.tagName==="After");
+check("XML readonly content type",(function(){try{doc.contentType="text/html";}catch(e){}return doc.contentType==="application/xml";})());
+</script>

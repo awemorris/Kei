@@ -1,0 +1,75 @@
+<!-- awesome-plan project=zedbsd record=ws074-p130 -->
+
+# ws074-p130: native live table collections
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q540 / q540-i01
+Prerequisite p129 c0120928 cleared/prior79/submit56/GC13/frame98; actual p122
+native HTMLCollection operations and actual DOM clone/owner/prototype outputs
+verified in working source and prior34 regressions. Exact q539 archive verified.
+Root sole executor/one finite Phase; user2026-09-30 autonomous Acid3/automatic
+Queues +2026-10-01 continuation authorize exact scope saved before generation.
+Timebox one finite Phase / bounded selected fixtures and fixed suites.
+
+## Exact scope / design / criteria
+
+Native HTMLTableElement/HTMLTableSectionElement/HTMLTableRowElement prototypes
+inherit HTMLElement, illegal direct constructors, actual HTML namespace/exact
+case table / thead|tbody|tfoot / tr brands and receiver rejection before access;
+borrowed getters cannot use foreign or uppercase XML tags/prototype forgeries.
+Implement SameObject readonly table.tBodies/table.rows/section.rows/row.cells.
+Reuse actual native HTMLCollection wrappers/legacy indexed+named algorithms,
+relevant root Document private prototype snapshot or actual view, no raw realm/
+Window/state caches in collections. Trace each element's separate wrapper cache;
+sole collection retains root/members/actual managed child and final-root release
+collects complete cache cycle. Clones start independent empty caches and preserve
+actual original DOM whitespace/descendants.
+
+tBodies only direct actual HTML tbody children; section.rows only direct actual
+HTML tr children; row.cells only direct actual HTML td/th children. Table.rows
+only actual HTML tr direct children or direct children of actual direct table
+section children. Order ALL direct thead rows first (section/tree order), then
+mixed direct tr/tbody rows in actual tree order, then ALL direct tfoot rows; arbitrary
+section placement/multiplicity/empty/non-element/foreign/uppercase XML/wrappers/
+nested tables cannot change filter. Ordered traversal derives current links per
+observation, no snapshot or mutation hook and no JS while reading membership.
+Live mutation/removal/adoption between reads follows current DOM immediately.
+
+Incremental boundary EXCLUDED: caption/tHead/tFoot getters/setters/create/delete,
+createTBody/insertRow/deleteRow/insertCell/deleteCell, rowIndex/sectionRowIndex/
+cellIndex, HTMLTableCellElement/CaptionElement classes/obsolete attrs/layout,
+parser changes/table foster parenting. Known structural table prerequisites for
+indexed49–51 selected later, not silently added to this Queue. Other WS residuals
+(input/radio/form host/NodeList/Range/CSS/loading/SVG) retained, p100/p044 unchanged.
+
+Affected collection.c enum/membership/ordered iterator/cached native getters/
+interfaces, internal.h/window.c/node.c actual prototype registration, dom.h/
+dom/node.c tracing, scoped WS HTML/host GC/child fixture; no new production module.
+Guardrail/full C rules loaded/no concise; primary WHATWG table collection/ordering
+algorithms read2026-10-01. Plain+ASan dedicated filters/order/names/SameObject/live
+keys/brands/writes/clone/text/XML/child/GC and sole cache/collection release; prior34
+regressionsPASS/all100 prior79 preserved/equal/noerrors/complete/status0/new29
+expected/Acid2 exact/warning0/ASan0/full changed C/style/diff/hashes/evidence.
+No fullWPT/fuzz/OS/guest/boot/GPU/full table conformance. Unknown prerequisite ends
+uncleared before redesign. Graph p129(external)->p130->future table structural APIs
+(external)->p100(external), acyclic. Local unpublished/no push.
+
+## Introduction / q540 activation (2026-10-01)
+
+Indexed29 accesses cloned table.tBodies[0].rows[0].cells[0]. The actual DOM clone
+already preserves whitespace; missing native live table collections block access.
+Select reusable live table membership/ordering/cache foundation before structural
+APIs needed by indexed49–51.
+
+## q540 result (2026-10-01)
+
+[p130](phase.md) cleared, [evidence](verification.md).
+Native SameObject live table bodies/ordered rows/section rows/row cells;
+actual HTML namespace/exact-case brands, current direct membership/logical order,
+clone-independent traced caches and actual XML/managed-child owner prototypes.
+Table71/GC25/frame108/all36 selected regressionsPASS both variants. Original
+all10080/100/indexed29newPASS/prior79 preserved/equal/noerrors/Acid2exact.
+Remaining20; next table caption/head/foot structural APIs, then row/cell methods.
+Other recorded residuals/p100/p044 unchanged. Root released/local unpublished/no push.

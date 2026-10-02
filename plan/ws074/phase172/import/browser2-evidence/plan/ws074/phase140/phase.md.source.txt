@@ -1,0 +1,89 @@
+<!-- awesome-plan project=zedbsd record=ws074-p140 -->
+
+# ws074-p140: live Range insertion and existing CharacterData mutation repair
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q552 / q552-i01
+Prerequisites p137 native weak removal/current-owner subscriptions, p138 clone/
+comparison/stringification, p139 reusable validity; d8404b9187/all52/Acid2exact.
+Root sole executor. User2026-09-30 autonomous Acid3/automatic Queue instruction and
+2026-10-01 continuation approve this exact finite prerequisite before generation.
+
+## Exact scope / procedure / criteria
+
+Extend the existing separately allocated weak C removal subscription in dom/removal.c
+with optional insertion and CharacterData replacement callbacks; existing subscribe/
+unsubscribe/Document finalization/FIFO/adoption/root association remain intact. Add
+internal public dom_removal_set_updates(token,inserted,data), dom_insertion_notify
+(document,node), dom_data_notify(document,node,offset,removed,added) in dom.h. Install
+optional callbacks while token not notifying, no new strong GC edges. Pure synchronous
+callbacks: no allocation/GC/scripts/DOM mutation/registry mutation; no-op for generic
+removal-only NodeIterator/TreeWalker observers. Notification lists may not nest/mutate.
+
+In dom/node.c call insertion notify after complete actual child links and original
+removal, before option reconciliation/generation/host notification. Range insertion
+callback uses actual child.parent/index, shifts endpoints in that parent ONLY when
+offset>index; uint32-representable ordinary graphs. Append/equal offsets unchanged.
+Existing per-child fragment splice has equivalent final offset deltas; no new atomic
+batch host-observation/MutationObserver/full-DOM claim. Moves/adoption preserve original
+removal then destination insertion repair, actual current-owner registry delivered.
+
+For existing dom_text_set: prepare independent wb_units replacement before discarding
+old buffer (including aliased input); allocation failure leaves data/generation/ranges
+unchanged; commit complete buffer then data notification(offset0,oldlength,newlength).
+Existing dom_text_append retains checked efficient buffer append, notify after success
+with oldlength/0/addedlength. Range data callback only matching native Text/Comment
+points: >offset and <=offset+removed clamp offset; >offset+removed subtract removed/
+add inserted; validate representability without overflow. Native state only, no JS
+properties; start-node association unchanged. New Range callbacks configured on every
+new subscription before state publication; clones/creator retention/adoption/finalizer
+semantics preserved. No new source module or ownership boundaries.
+
+Page fixture: insertion before/equal/after/append, both endpoints/nested unrelated/
+multiple/clones/detach/Fragment/removal-then-move/current-owner/XML/borrowed child/
+expandos; existing data/nodeValue/textContent/appendData on native Text/Comment,
+full-set offsets reset0 even longer same content, append offsets unchanged, surrogate
+units, parent offsets unchanged, current setter conversions with globally retained
+nodes. Native fixture: optional-callback/no-op generic observers/FIFO/actual completed
+links/finalizer/adoption compatibility, native alias full replacement, failed invalid
+allocation size leaves buffer/generation/current Range offsets untouched, direct native
+set/append repair/actual GC/lifetime regression. Prior52+new groups plain/ASan original
+87/prior87/newnone/equal/all100/complete/errors0/Acid2exact; full changed C/manual/style/
+diff/buildwarning0/sanitizer0/hash/durable evidence. Checks bounded60sec.
+
+Explicit exclusions: Text.splitText/Range.insertNode/new partial CharacterData JS
+methods/cloneContents/delete/extract/surround, generic public string-conversion rooting
+refactor, >UINT32_MAX native strings/childgraphs, full DOM batching/Shadow/custom/PI/
+Attr/MutationObservers, replacement atomicity. Existing data binding conversion rooting
+limits are known separate scope; this Phase asserts pure native mutation repair and
+existing globally rooted Page setters, not forced collector safety during those string
+conversions. Further callbacks/suffix data deletion belong to subsequent finite Phase.
+Unknown prerequisites end uncleared before redesign. No OS/guest/boot/GPU/fullWPT/fuzz/
+push/remote sync. p100/p044/WS acceptance not relaxed.
+
+Guardrail/full plan/coding-style/automation loaded; primary DOM Living24Sept2026
+https://dom.spec.whatwg.org/#concept-node-insert and #concept-cd-replace read2026-10-01:
+only parent offsets strictly after insertion position shift; replaced interval uses
+native UTF16 lengths, full data setter replaces all and append removes0. Current
+actual registry/root/callback/DOM/set/append and prior GC callbacks inspected; no
+pending authority decisions. Graph p137+p138+p139(external)->p140->future split/insert/
+p100(external), acyclic.
+
+## Introduction / q552 activation (2026-10-01)
+
+p139 cleared87/all52. Missing actual insertion and existing data mutation repair are
+known prerequisites to correct live Text split/Range insert. Native weak registry can
+supply optional pure callbacks while retaining proven finalization/adoption behavior.
+No source generation preceded this exact Phase/Queue approval.
+
+## q552 result (2026-10-01)
+
+[p140](phase.md) cleared in q552, [evidence](verification.md).
+Actual weak native insertion/CharacterData callbacks/current-owner Range boundary
+repair/atomic alias-safe full data replacement/checked failure/FIFO/generic exclusion/
+GC+Document-first cleanup verified. Original87/prior87 preserved/newnone/equal/noerrors/
+Acid2exact/all54 groupsPASS/mutationPage36/native36; existingRangecore59/GC89/frame148.
+Remaining13; next Textsplit/Rangeinsert/content/CSS/loading/SVG. p100/p044/WS incomplete/
+root released/local unpublished/no push.

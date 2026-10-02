@@ -1,0 +1,446 @@
+{
+  "acid2": {
+    "agreement": 100.0,
+    "different_pixels": 0,
+    "max_difference": 0,
+    "pass": true,
+    "reference_image": "acid2-reference.png",
+    "side_image": "acid2-side.png",
+    "test_image": "acid2-test.png",
+    "total_pixels": 120000
+  },
+  "acid3": {
+    "agreement": 37.04,
+    "complete": true,
+    "different_pixels": 302208,
+    "dom": "acid3.dom",
+    "exceptions": [],
+    "max_difference": 255,
+    "pass": true,
+    "pixel_pass": false,
+    "reference_image": "acid3-reference.png",
+    "run_errors": [],
+    "run_status": 0,
+    "score": "100",
+    "side_image": "acid3-side.png",
+    "test_image": "acid3-test.png",
+    "total_pixels": 480000
+  },
+  "acid3_inventory": {
+    "complete": true,
+    "exceptions": [],
+    "invalid_messages": [],
+    "matches_original_score": true,
+    "missing": [],
+    "pass_count": 100,
+    "reported_total": 100,
+    "results": [
+      {
+        "result": "pass",
+        "test": 0
+      },
+      {
+        "result": "pass",
+        "test": 1
+      },
+      {
+        "result": "pass",
+        "test": 2
+      },
+      {
+        "result": "pass",
+        "test": 3
+      },
+      {
+        "result": "pass",
+        "test": 4
+      },
+      {
+        "result": "pass",
+        "test": 5
+      },
+      {
+        "result": "pass",
+        "test": 6
+      },
+      {
+        "result": "pass",
+        "test": 7
+      },
+      {
+        "result": "pass",
+        "test": 8
+      },
+      {
+        "result": "pass",
+        "test": 9
+      },
+      {
+        "result": "pass",
+        "test": 10
+      },
+      {
+        "result": "pass",
+        "test": 11
+      },
+      {
+        "result": "pass",
+        "test": 12
+      },
+      {
+        "result": "pass",
+        "test": 13
+      },
+      {
+        "result": "pass",
+        "test": 14
+      },
+      {
+        "result": "pass",
+        "test": 15
+      },
+      {
+        "result": "pass",
+        "test": 16
+      },
+      {
+        "result": "pass",
+        "test": 17
+      },
+      {
+        "result": "pass",
+        "test": 18
+      },
+      {
+        "result": "pass",
+        "test": 19
+      },
+      {
+        "result": "pass",
+        "test": 20
+      },
+      {
+        "result": "pass",
+        "test": 21
+      },
+      {
+        "result": "pass",
+        "test": 22
+      },
+      {
+        "result": "pass",
+        "test": 23
+      },
+      {
+        "result": "pass",
+        "test": 24
+      },
+      {
+        "result": "pass",
+        "test": 25
+      },
+      {
+        "result": "pass",
+        "test": 26
+      },
+      {
+        "result": "pass",
+        "test": 27
+      },
+      {
+        "result": "pass",
+        "test": 28
+      },
+      {
+        "result": "pass",
+        "test": 29
+      },
+      {
+        "result": "pass",
+        "test": 30
+      },
+      {
+        "result": "pass",
+        "test": 31
+      },
+      {
+        "result": "pass",
+        "test": 32
+      },
+      {
+        "result": "pass",
+        "test": 33
+      },
+      {
+        "result": "pass",
+        "test": 34
+      },
+      {
+        "result": "pass",
+        "test": 35
+      },
+      {
+        "result": "pass",
+        "test": 36
+      },
+      {
+        "result": "pass",
+        "test": 37
+      },
+      {
+        "result": "pass",
+        "test": 38
+      },
+      {
+        "result": "pass",
+        "test": 39
+      },
+      {
+        "result": "pass",
+        "test": 40
+      },
+      {
+        "result": "pass",
+        "test": 41
+      },
+      {
+        "result": "pass",
+        "test": 42
+      },
+      {
+        "result": "pass",
+        "test": 43
+      },
+      {
+        "result": "pass",
+        "test": 44
+      },
+      {
+        "result": "pass",
+        "test": 45
+      },
+      {
+        "result": "pass",
+        "test": 46
+      },
+      {
+        "result": "pass",
+        "test": 47
+      },
+      {
+        "result": "pass",
+        "test": 48
+      },
+      {
+        "result": "pass",
+        "test": 49
+      },
+      {
+        "result": "pass",
+        "test": 50
+      },
+      {
+        "result": "pass",
+        "test": 51
+      },
+      {
+        "result": "pass",
+        "test": 52
+      },
+      {
+        "result": "pass",
+        "test": 53
+      },
+      {
+        "result": "pass",
+        "test": 54
+      },
+      {
+        "result": "pass",
+        "test": 55
+      },
+      {
+        "result": "pass",
+        "test": 56
+      },
+      {
+        "result": "pass",
+        "test": 57
+      },
+      {
+        "result": "pass",
+        "test": 58
+      },
+      {
+        "result": "pass",
+        "test": 59
+      },
+      {
+        "result": "pass",
+        "test": 60
+      },
+      {
+        "result": "pass",
+        "test": 61
+      },
+      {
+        "result": "pass",
+        "test": 62
+      },
+      {
+        "result": "pass",
+        "test": 63
+      },
+      {
+        "result": "pass",
+        "test": 64
+      },
+      {
+        "result": "pass",
+        "test": 65
+      },
+      {
+        "result": "pass",
+        "test": 66
+      },
+      {
+        "result": "pass",
+        "test": 67
+      },
+      {
+        "result": "pass",
+        "test": 68
+      },
+      {
+        "result": "pass",
+        "test": 69
+      },
+      {
+        "result": "pass",
+        "test": 70
+      },
+      {
+        "result": "pass",
+        "test": 71
+      },
+      {
+        "result": "pass",
+        "test": 72
+      },
+      {
+        "result": "pass",
+        "test": 73
+      },
+      {
+        "result": "pass",
+        "test": 74
+      },
+      {
+        "result": "pass",
+        "test": 75
+      },
+      {
+        "result": "pass",
+        "test": 76
+      },
+      {
+        "result": "pass",
+        "test": 77
+      },
+      {
+        "result": "pass",
+        "test": 78
+      },
+      {
+        "result": "pass",
+        "test": 79
+      },
+      {
+        "result": "pass",
+        "test": 80
+      },
+      {
+        "result": "pass",
+        "test": 81
+      },
+      {
+        "result": "pass",
+        "test": 82
+      },
+      {
+        "result": "pass",
+        "test": 83
+      },
+      {
+        "result": "pass",
+        "test": 84
+      },
+      {
+        "result": "pass",
+        "test": 85
+      },
+      {
+        "result": "pass",
+        "test": 86
+      },
+      {
+        "result": "pass",
+        "test": 87
+      },
+      {
+        "result": "pass",
+        "test": 88
+      },
+      {
+        "result": "pass",
+        "test": 89
+      },
+      {
+        "result": "pass",
+        "test": 90
+      },
+      {
+        "result": "pass",
+        "test": 91
+      },
+      {
+        "result": "pass",
+        "test": 92
+      },
+      {
+        "result": "pass",
+        "test": 93
+      },
+      {
+        "result": "pass",
+        "test": 94
+      },
+      {
+        "result": "pass",
+        "test": 95
+      },
+      {
+        "result": "pass",
+        "test": 96
+      },
+      {
+        "result": "pass",
+        "test": 97
+      },
+      {
+        "result": "pass",
+        "test": 98
+      },
+      {
+        "result": "pass",
+        "test": 99
+      }
+    ],
+    "run_status": 0
+  },
+  "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+  "note": "Historical diagnostics only; WPT warns that these tests are not a standards certification.",
+  "schema": 2,
+  "settle_ms": 15000,
+  "suite": "WPT historical Acid tests"
+}

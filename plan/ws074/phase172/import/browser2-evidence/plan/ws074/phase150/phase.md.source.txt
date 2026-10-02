@@ -1,0 +1,85 @@
+<!-- awesome-plan project=zedbsd record=ws074-p150 -->
+
+# ws074-p150: CSS text-transform computed state and numeric color media
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q565 / q565-i01; original q563/q563-i01 uncleared retained
+Prerequisites existing CSS cascade/computed p109/q562 and new child viewport p151 verified;
+base48bc59e4 actual91/all70/Acid2exact. Root sole executor/no cancellation/conflict.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation. Finite snapshot saved BEFORE generation.
+
+## Exact scope / criteria
+
+CSS2 text-transform none/capitalize/uppercase/lowercase parser and computed state:
+append stable property ID, native enum/field/default none, actual cascade inherited/
+explicit declaration/initial/inherit/unset including important and var via existing
+machinery, CSSStyleDeclaration CSS/camel accessors, resolved computed serializer.
+Only computed state this Phase; Unicode/language-dependent layout/painting transform
+requires separately selected follow-up and is not claimed implemented here.
+CSS Text3 https://drafts.csswg.org/css-text-3/#text-transform-property and MediaQueries4
+https://drafts.csswg.org/mediaqueries-4/#color read2026-10-01. Existing display model
+color8 bits/component/monochrome0 promoted from incorrect discrete-name handling
+to numeric range feature with min/max and existing range comparators; Boolean color
+true/monochrome false, exact integer nonnegative value with no trailing junk. Reuse
+existing all/not/only/OR/AND grammar and native viewport including child0x0; no
+new global media grammar rewrite, display architecture or actual output query.
+
+Affected css/css.h,css/internal.h,css/values.c,css/cascade.c,css/media.c,bind/computed.c;
+new Page and native numeric-media fixture. Page full active original46 case matrix,
+property/default/inline validation/inheritance/initial/unset/important/var/dynamic
+stylesheet/child owner; DOM text unchanged by computed observation. Native independent
+media numeric bounds/equality/min/max/Boolean/range/combinations/invalid direct
+syntax/viewport0. New2+prior70=72 groups plain+ASan; pinned original>=91/prior91
+preserved/full100 equal/complete/status0/no Uncaught/crash/runner errors/Acid2exact.
+Each runner60sec. Unknown prerequisite ends uncleared before redesign. Fullchanged
+C against Guardrail/full coding-style1–14/automation, inspect style output/diff,
+manual formatting clang-format unavailable, builds warning0/sanitizer0/hashes.
+Graph CSS cascade+computed+p111(external)->p150->p100(external), acyclic.
+
+Exclusions transform rendering/full Unicode mapping/fullMQ grammar/allWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub publication.
+p100/p044/WS incomplete. Existing observer and DOM APIs untouched.
+
+## Introduction / q563 activation (2026-10-01)
+
+Original46 first fails missing resolved textTransform, numeric color prefixes also
+absent in actual media registry. Both finite CSS prerequisites selected together;
+render transformation remains explicit follow-up, no wider text compliance claim.
+
+## q563 uncleared outcome (2026-10-01)
+
+[p150](phase.md) uncleared in q563, [evidence](verification.md).
+Computed text-transform and numeric color media native29/29 verified; Page36PASS/
+2FAIL and original46 reaches y1. Unknown child viewport dependency [BUG-131](../../bugs/BUG-131.md)
+ends attempt; finite repair then unchanged retry. Original91/prior91/equal100/
+noerrors/Acid2exact/prior70PASS. Transform rendering pending; p150/p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+## Design revision after q563 uncleared (2026-10-01)
+
+Child viewport output is now an explicit prerequisite [p151](../phase151/phase.md)
+handling BUG-131. It uses actual existing parent layout and frame ownership, instead
+of assuming p111 supplied it; p111 is language/empty, p109 only initial cascade.
+No p150 criteria removed/expanded, q563 uncleared retained. Resume under separate
+retry after output verified. [WS structure](../ws.md).
+
+## Unchanged criteria retry / q565 activation (2026-10-01)
+
+[p151](../phase151/phase.md) actual viewport output verified q564/original92/all74/
+Acid2exact/BUG-131 resolved. Baseaabf5d1b. Current user autonomous2026-09-30 plus
+2026-10-01 continuation authorizes finite whole p150 retry under unchanged original
+computed CSS/media criteria. No source generation; repeat p150 Page38/native29 both;
+reuse immediately preceding q564 production/full74/standard evidence only after
+source hashes verify identical. Original q563 uncleared and verification retained.
+Root sole/no cancellation/conflict/bounded runner60sec; snapshot before execution.
+
+## q565 cleared retry outcome (2026-10-01)
+
+[p150](phase.md) cleared in q565 retry, [evidence](verification-q565.md).
+Unchanged CSS/media Page38/native29 pass both after p151/BUG-131 repair; q563
+uncleared retained. Exact source hashes verify q564 actual92/full74/equal100/
+noerrors/Acid2exact reuse. No source generation; transform rendering pending;
+p100/p044/WS incomplete/root released/local unpublished/no push.

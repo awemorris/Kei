@@ -1,0 +1,26 @@
+# q587 / p170 — 2026-10-02
+
+CLEARED. Canonical native SVG text/tspan/textPath now have actual SVG interface inheritance
+and private-branded getNumberOfChars. Live native Text+CDATA traversal counts UTF16
+units after actual inherited CSS whitespace normalization, skips display:none
+subtrees/ancestors and excludes comments/PI; visibility:hidden remains addressable.
+Actual owner CSS and precise receiver/cursor roots preserve child realm/prototype
+ownership through allocation and collection; last release collects the saved child.
+Native42/42both covers actual Unicode, lone surrogate, adjacent/nested flow, native
+CDATA, actual CSS, namespace/case/forgery brands, borrowed methods and saved-owner GC.
+All98groupsPASSboth; original99/100, new77pass/allprior98+72preserved/equal100,
+complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact.
+Only75 SVGRectElement.width remains. SVG painting/glyph metrics/textLength/
+lengthAdjust/XMLspace presentation mapping and full SVG/CSS whitespace are outside
+this partial native text feature; no placeholders or pinned-suite edits.
+Both full builds finished before tests; warning0/styleempty/manual changed full C1–14/
+diffclean; cc14.2.0/Python3.13.5/clang-format absent/manual. Legacy unchanged binding
+file ordering retained; no full-WS p044 conformance claim. Pixel38.44% diagnostic.
+
+Commands: host-build.sh plain+asan; host-svg-text both; q587-regressions.py both;
+original run-acid-tests.py both (ASAN_OPTIONS=detect_stack_use_after_return=0);
+style-check.py new SVG text/native fixture; git diff --check. JSON contains final
+source hashes/full reports/all98 results; focused final native run reused without
+redundant rerun. Development builds fixed uninitialized output warning and fixture
+property-lookup signature before runtime. No skipped mandatory check.
+p100/p044/WS incomplete; root released/local unpublished/no push.

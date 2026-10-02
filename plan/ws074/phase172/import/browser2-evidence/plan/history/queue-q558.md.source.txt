@@ -1,0 +1,99 @@
+<!-- awesome-plan project=zedbsd record=q558 -->
+
+# q558 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q558](history/queue-q558.md), exact archive verified; p146 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q558
+
+Purpose WS074/fg011 [BUG-130](bugs/BUG-130.md) VM factory unpublished object/Array GC
+ownership prerequisite. Approval current user2026-09-30 autonomous Acid3/automatic
+Queues +2026-10-01 continuation; exact [p146](ws074/phase146/phase.md) snapshot saved
+before generation. One finite Phase/bounded runners60sec/no cancellation/conflict.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q558-i01 | [ws074-p146](ws074/phase146/phase.md) | cleared | p106/p144 cleared; q557 reproducible BUG-130; base2eabec3a original88 |
+
+Exact whole p146 vm_object_create/vm_array_create/js_builtin_array callee roots, checked
+cleanup, new native direct-factory actual GC, existing q557 native16/16, prior63+1=64
+plain+ASan original>=88/prior88/equal/noerrors/Acid2exact/full changed C. No other VM
+factories/observer features/Range scope. Graph p106+p144(external)->p146->p145 retry/
+mutating Range/p100(external), acyclic; unknown dependency ends uncleared.
+
+## Upcoming Work Outlook
+
+Retry unchanged p145, then actual Range delete/extract/surround; CSS/loading/SVG;
+final p100/p044. Forecast is not authorization.
+
+## q558 outcome (2026-10-01)
+
+[p146](ws074/phase146/phase.md) cleared in q558, [evidence](ws074/phase146/verification.md).
+VM object/Array/builtin factory callee GC ownership verified native20/20; q557 native
+record repro16/16 both and ASan leak0, BUG-130 resolved. Original Acid3 88/no indexed
+regression/equal/noerrors/Acid2exact/all64PASS plain+ASan. p145 historical q557
+uncleared pending separate retry; p100/p044/WS incomplete/root released/local
+unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p146 -->
+
+# ws074-p146: VM object and Array factory callee GC ownership
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q558 / q558-i01
+Prerequisites p106/p144 cleared; q557/p145 uncleared due [BUG-130](../../bugs/BUG-130.md).
+Base2eabec3a original88/prior61+Page/pass, native14/16fail/ASan64B leak.
+Root sole executor/no cancellation/conflict. Approval current user2026-09-30 autonomous
+Acid3/automatic Queues +2026-10-01 continuation; exact snapshot saved BEFORE generation.
+
+## Exact scope / design / criteria
+
+Repair only the existing VM factories vm_object_create and vm_array_create in vm/object.c,
+and js_builtin_array in js/builtin.c. The raw object/Array factory must protect an
+incoming prototype before first VM allocation and its unpublished newborn cell through
+shape initialization and Array length-key/property construction. The shared builtin
+Array helper must protect each cell input and its unpublished new Array until every
+indexed definition succeeds, including collection during array construction and later
+property/shape allocation. Use ordinary vm_heap_add_root/remove_root with checked
+registration and exact cleanup on success/ENOMEM; no prototype/value/root ownership
+survives return, no new permanent root or collector threshold/config behavior. An atom
+key is already owned by heap atom table; root shape is already owned by heap. Preserve
+existing return conventions, output unchanged on failure and array/object semantics.
+For js_builtin_array, count>0 with NULL values fails EINVAL before allocation; count/root
+array sizing overflow fails before allocation. No broader VM API/allocator audit.
+
+Add a focused native factory fixture: direct calls with stack scanning disabled and
+ordinary near-threshold allocations, genuine prototype and cell inputs, actual collection
+counter, exact object/Array prototype/length/elements identities, returned result lifetime
+and no leaked temporary roots after explicit result release. Bounded empty and nonempty
+arrays; cold-heap raw shape initialization and failure cleanup where feasible. Re-run the
+unchanged p145 native reproducer: three actual GC shapes must become16/16 and ASan
+leak0; this supplies prerequisite evidence but does not rewrite q557 or clear p145.
+
+Plain+ASan builds warning0; direct factory and p145 native both PASS; all prior63+new
+factory=64 regression groups PASS; original pinned Acid3>=88/prior88 preserved/all100
+equivalent/complete/no Uncaught/crash/runner timeout/Acid2 exact. Each runner60sec;
+unknown prerequisite ends uncleared before redesign. Full changed C against Guardrail/
+full coding-style/automation, manual formatting (clang-format unavailable), inspect
+style output/diff/hashes. Source/current tests before acceptance. Graph p106+p144
+(external)->p146->p145 retry/Range mutation/p100(external), acyclic. [BUG-130](../../bugs/BUG-130.md)
+may resolve only after reproduction and ownership/lifetime evidence are verified.
+
+Exclusions: changes to environment.c/p145 criteria/MutationObserver API, unrelated VM
+factories, full VM/GC architecture, hidden production test switch, Range contents,
+shared BUG-129 buffer repair, fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/push/GitHub
+publication. Host-native evidence only; p100/p044/WS remain incomplete.
+Affected vm/object.c, js/builtin.c and new native fixture only.
+
+## Introduction / q558 activation (2026-10-01)
+
+q557 finite native repro found unpublished Array factory ownership prerequisite; exact
+callee change is isolated here. Earlier p145 remains uncleared until its own later
+approved retry; BUG-130 scheduled. No earlier acceptance invalidated by this design.

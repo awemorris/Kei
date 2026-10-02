@@ -35,6 +35,7 @@ typedef void (*page_console)(void *context, int level, const char *text, size_t 
 /* The network's loader and its requests (net/net.h), which the embedder runs through page_net_*. */
 struct net_loader;
 struct net_request;
+struct net_response;
 struct pollfd;
 
 /* A request's callback, as the loader calls it (net_request_done). */
@@ -87,6 +88,8 @@ struct page {
 	struct dom_document *document;
 	struct vm_realm *realm;
 	struct bind_window *window;
+	/* Borrowed while page_load_html owns the live parser; NULL afterward. */
+	struct html_parser *parser;
 	struct css_engine *css;
 	struct text_system text;
 	int text_open;
@@ -109,6 +112,9 @@ struct page {
 	uint32_t styled_sheets;
 	struct wb_vector scripts;
 	struct wb_vector fetches;
+	/* Pending child responses own temporary native roots until task completion. */
+	struct wb_vector frame_loads;
+	int frames_running;
 	int scripts_running;
 	struct wb_vector fonts;
 	uint32_t fonts_generation;
@@ -164,6 +170,11 @@ int page_update_styles(struct page *page);
 int page_paint(struct page *page);
 int page_title(const struct page *page, struct wb_buffer *out);
 
+/* Child response tasks (frame-load.c). */
+void page_frames_init(struct page *page);
+void page_frames_release(struct page *page);
+int page_frames_checkpoint(struct page *page);
+
 /* Dynamic scripts (script.c). */
 void page_scripts_init(struct page *page);
 void page_scripts_release(struct page *page);
@@ -184,7 +195,7 @@ void page_fonts_release(struct page *page);
 struct net_url;
 int page_start_scripts(struct page *page);
 int page_url(const struct page *page, struct net_url *url);
-void page_run_script_element(void *context, struct dom_element *script);
+int page_run_script_element(void *context, struct dom_element *script);
 int page_fire_load(struct page *page);
 int page_set_time(struct page *page, double now);
 int page_next_timer(const struct page *page, double *due);
@@ -253,5 +264,9 @@ const struct img_bitmap *page_image_of(void *context, const struct dom_element *
 const struct img_bitmap *page_image_by_url(void *context, const struct vm_string *url);
 void page_images_release(struct page *page);
 int page_fetch(const char *base, const char *href, struct wb_buffer *bytes, struct wb_buffer *final_url);
+/* Fresh response storage receives owned metadata/body, or an empty response on failure. */
+int page_fetch_response(const char *base, const char *href, struct net_response *response);
+/* Declared MIME essence selects a supported native document kind; failures preserve content. */
+int page_document_content(const char *mime, size_t length, enum dom_document_content *content);
 
 #endif

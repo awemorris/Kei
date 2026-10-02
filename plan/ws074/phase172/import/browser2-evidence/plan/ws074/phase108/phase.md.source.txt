@@ -1,0 +1,69 @@
+<!-- awesome-plan project=zedbsd record=ws074-p108 -->
+
+# ws074-p108: createElementNS and element namespace identity
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q517 / q517-i01
+Prerequisites: p107/p104 cleared, baseline1dd5f77c; q516 exact archive verified.
+Executor root, this checkout, no concurrent attempt; standing autonomous Acid3
+instruction2026-09-30 and continuation2026-10-01 authorize this finite feature.
+
+## Objective / exact scope
+
+Implement Document.createElementNS, URI/prefix/localName identity and proper
+InvalidCharacterError5/NamespaceError14 for Acid3 indexed21/23. Preserve case,
+argument conversion order, owner wrappers, clone and GC retention. No arbitrary
+URI alias to HTML/parent namespaces. Existing parser namespaces remain intact.
+
+## Design / applicable standards
+
+[Guardrail](../../guardrail.md)/full [C standard](../../coding-style.md) loaded.
+Inspected DOM Living Standard2026-09-24 on2026-10-01:
+[validate and extract](https://dom.spec.whatwg.org/#validate-and-extract),
+[createElementNS](https://dom.spec.whatwg.org/#dom-document-createelementns).
+Nullable namespace string conversion precedes qualified-name conversion; empty
+URI becomes null. Split at first colon, validate prefix/local with current DOM
+name rules (not obsolete XMLName constraints), then null-prefix/xml/xmlns binding
+checks in normative order. Preserve exact UTF-16 URI/names and callee exceptions.
+Extend p107's static local-name validator to both ASCII cases for nonfolded NS
+names; createElement caller still folds exactly as before.
+
+Append DOM_NS_OTHER to internal enum and an optional traced namespace_uri cell
+in dom_element. Namespaced API stores exact URI; known enum classification
+preserves HTML/SVG/MathML/XML/XMLNS behavior, custom enums get generic Element
+wrappers. Getter returns stored URI first; parser-created known elements keep
+existing constant mapping. Add Element.prefix getter, preserve qualified-name
+serialization/nodeName through existing prefix support, copy URI in clone and
+trace it. No new source module/public libbrowser API/ownership architecture.
+
+Affected: bind/document.c, element.c, node.c; dom/dom.h,node.c and focused tests.
+No namespaced attributes/DOMImplementation/XML parser/document type, Traversal/
+Range/loading/navigation/CSSOM/custom-element registry/HAL/toolchain/modules.
+
+## Acceptance / bounded verification
+
+Focused namespace/qualified-name/exception/nullable conversion/case/Unicode/
+clone/serialization/foreign-owner and saved URI GC checks PASS plain/ASan;
+p107 name31/31 preservation, DOM23/23, frame17/17, realm30/30; warning-free/no
+sanitizer. Acid2 exact, all100 Acid3 no regression from44/100,21/23 PASS,
+Uncaught0/no errors/crash/timeout. Full all changed-source standard/style/diff
+review, hashes/tools/limits. Unknown prerequisite ends attempt uncleared; no
+exhaustive fault injection or full namespace/DOM conformance claim.
+
+## Introduction / q517 activation (2026-10-01)
+
+Origin [p107 inventory](../phase107/inventory.json), two missing namespace APIs
+failures. p100 requires this output plus remaining features; scope/100 acceptance
+unchanged, no p100 execution. [WS summary](../ws.md), local unpublished/no push.
+
+## q517 terminal event (2026-10-01, q517-i01)
+
+**cleared**; [verification](verification.md). Namespaced creation38/38 and URI/
+clone/GC12/12 plain/ASan, name31/31, DOM23/23, frame17/17, realm30/30;
+warning-free/no sanitizer. Acid2 exact; Acid3 all10044→47/100,21/23/76 PASS,
+no regression/Uncaught0/no run errors. Full changed-source standards/style/diff
+PASS; formatter absent. Remaining53 failures need subsequent phases; next
+investigate child-document computed CSS, which is currently absent. p100
+criterion unchanged. Local unpublished/no push/remote lifecycle action.

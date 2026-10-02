@@ -1,0 +1,28 @@
+# q586 / p169 — 2026-10-02
+
+CLEARED. Headless page_settle now discovers actual child tasks and polls the native
+loader while child responses are pending, advancing virtual time by real monotonic
+elapsed wait and honoring due cancellation timers. Normal timer-only virtual jumps
+stay fast. Poll waits round upward at submillisecond granularity instead of busy
+waiting; actual budget/30sec network wait/10000task bound returns ETIMEDOUT for
+unfinished work. Native callbacks only copy child response metadata; actual scripts
+and events drain at the outer Page checkpoint, not inside borrowed callbacks.
+Native52/52both includes all previous46 plus actual delayed headless response,
+intervening native timer, cancellation while pending and complete root cleanup.
+All97groupsPASSboth; original98/100, new69/74/79/80pass, allprior94+72preserved,
+equal100inventory/complete/status0/noUncaught/crash/sanitizer/runnererrors/timeouts/
+Acid2exact. Remaining75(width) and77(text character count) are separate actual
+native SVG APIs; no placeholder or suite edits. Pixel38.44% independent diagnostic.
+Bothfull builds finished beforetests/warning0/styleempty/manual changed full C1–14/
+diffclean; cc14.2.0/Python3.13.5/clang-format absent/manual. Existing script.c legacy
+ordering outside changed scope remains; no full-WS p044 conformance claim.
+
+Commands: host-build.sh plain+asan; run-frame-load-tests.py actual both;
+q586-regressions.py both; original run-acid-tests.py both (ASAN_OPTIONS=
+detect_stack_use_after_return=0); style-check.py page/script.c/native fixture;
+git diff --check. JSON stores final source hashes/full actual reports/all97 results,
+focused native result reused on same source without redundant rerun. Test source
+braces/comment formatting corrected before final builds; no skipped mandatory check.
+No VM/net/native navigation/parser/renderer/GUI/OS/guest/HAL/.internal/aggregate/
+push/publication. WindowProxy/crossorigin/XML/PI/encoding profile limits retained.
+p100/p044/WS incomplete. Root released/local unpublished/no push.

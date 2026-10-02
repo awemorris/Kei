@@ -1,0 +1,97 @@
+<!-- awesome-plan project=zedbsd record=ws074-p138 -->
+
+# ws074-p138: native Range cloning, boundary comparison and text stringification
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q550 / q550-i01
+Prerequisites p136/p137/8e6acdb3 verified87/equal/prior86/noerrors/Acid2exact/all49;
+checked VM roots, native owner prototypes/constants and wb_units string APIs.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation.
+Root sole executor, one finite Phase, local unpublished/bounded60sec commands.
+Unknown prerequisite ends uncleared before redesign; no concurrent execution.
+
+## Exact scope / design / criteria
+
+Native Range.cloneRange(length0): require private receiver brand, independent new
+native range with identical current start/end tuples, separate weak subscription,
+actual source creator Document/XML snapshot relevant Range prototype even after
+endpoint adoption or borrowed foreign method. Explicitly root source state before
+checked allocation/factory calls; failed allocation/registry registration unwinds
+roots/token/pending wrapper. Original and clone setters/removal independently
+update their states; dropping original must leave clone creator/endpoints/native
+methods usable and both weak subscriptions ultimately collectible. No script
+visible prototypes/expandos determine actual native source points or creator.
+
+Native compareBoundaryPoints(required unsigned short, required genuine Range;
+length2), constants START_TO_START=0/START_TO_END=1/END_TO_END=2/END_TO_START=3
+on constructor and relevant prototype with constant flags. Receiver brand and
+required argument count first, numeric conversion of first argument exactly once
+before typed interface conversion of second; uint16 modulo via checked ToUint32
+then low16 bits. Explicit roots receiver state/first cell/second value throughout
+reentrant DOM/removal/adoption/GC/throw. Algorithm after conversions: invalidhow
+NotSupportedError9 before differentactualordinaryroot WrongDocumentError4; typed
+source conversion precedes both algorithm errors. Modes compare this.start vs
+source.start, this.end vs source.start, this.end vs source.end, this.start vs
+source.end respectively. Read actual current native points/roots after callback,
+use p136 pure boundary ordering, produce -1/0/1 without mutating either range.
+Branded source/target remain actual private cells after prototype pollution.
+
+Native Range.toString(length0) and ordinary string coercion: brand first; return
+actual selected UTF16 Text data in ordinary tree order, including partial start/
+end Text and fully contained Text, excluding comments/doctypes/elements as data
+and separate template content. Same Text slice; collapsed/comment-only empty;
+nested/sibling/Document/Fragment boundaries and unpaired surrogate units exact.
+Native data/ancestry/offsets only, ignore visible textContent/data/endpoint expandos
+and CSS/layout. Checked current offset/uint32 representability and wb_units append
+arithmetic; no JS callbacks/VM GC while copying native units; checked string
+publication/release on every error. Allocation/GC safe; original Range unchanged.
+Current ordinary DFS bounded by actual graph, no arbitrary depth truncation.
+
+Register exact native methods/constants. Refine enumerable configurable/writable
+Range methods per IDL using existing scoped Range attribute registry machinery;
+existing non-Range interfaces unchanged. If a scoped registry helper replaces
+p136's attribute flag refinement, preserve its exact behavior and error checks.
+Affected bind/range.c/window.c and focused native/page fixtures only. Existing
+boundary/live-removal acceptance remains subject to its known exclusions.
+
+No live insertion/CharacterData/split/normalize repair, cloneContents/delete/
+extract/insert/surround/comparePoint/intersects/isPointInRange/geometry/Selection/
+StaticRange/custom/shadow/fullRange. These are known next increments, not stubs.
+Original expected score remains87 (newpass none) because test7 first needs absent
+content operations; verified native outputs are prerequisites for later Range
+content/mutation tests. No score-driven content shortcuts.
+
+Verify own clone independence/weak live removal/receiver and source brands/
+required args/native unsignedshort modes/error and conversion order/once/current
+points and roots/reentrant exceptions/actual GC participants and cleanup;
+Text UTF16/mixed comments/deep ordinary tree/coercion/expandos/cross-document/
+borrowed actual child/creator after adoption/sole clone lifetime/final release.
+New focused fixture+prior49 groups plain/ASan/original87/prior87 preserved/all100
+inventories equal/complete/status0/noerrors/Acid2exact/fullchanged C manual/format/
+style/diff/buildwarning0/sanitizer0/hashes/durable evidence. No fullWPT/fuzz/OS/
+guest/boot/GPU/remote publication/push. Full Guardrail/coding-style/automation read
+(no concise). DOM Range algorithms current2026-10-01 https://dom.spec.whatwg.org/
+#dom-range-clonerange / #dom-range-compareboundarypoints / #dom-range-stringifier.
+Chromium153 reference q550 confirms source-relevant child/primary/XML clone
+prototype for ordinary and borrowed methods, preserved after endpoint adoption;
+comparison is bounded reference evidence, not full Chromium equivalence.
+Graph p136+p137(external)->p138->futurecontent/p100(external), acyclic.
+
+## Introduction / q550 activation (2026-10-01)
+
+Remaining Range7/9/11/12 need real cloning/comparison/stringification before content
+and insertion/data algorithms. Establish these finite outputs independently of
+new score progress. Native source creator prototype choice verified by primary
+algorithm plus actual cross-realm Chromium probe before choosing implementation.
+
+## q550 result (2026-10-01)
+
+[p138](phase.md) cleared in q550, [evidence](verification.md).
+Native independent clone/source prototype+creator/weak subscriptions, rooted
+unsignedshort boundary comparison/current point conversion/error order/constants,
+Text-only UTF16 stringification/coercion/descriptor flags/GC verified. Original87/
+prior87 preserved/newnone/equal/noerrors/Acid2exact/all50 groupsPASS/core59/nativeGC89/
+frame148. Remaining13; next live insertion/Text split/data/content algorithms,
+CSS/loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.

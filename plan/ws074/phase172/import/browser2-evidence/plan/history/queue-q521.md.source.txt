@@ -1,0 +1,41 @@
+<!-- awesome-plan project=zedbsd record=queue-q521 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q520](queue-q520.md), exact archive verified.
+
+## q521
+
+Purpose: :lang inheritance and :empty zero-text semantics, WS074/fg011.
+Timebox: one finite Phase, representative CSS semantics and bounded regressions.
+Approval: current user2026-09-30 autonomous Acid3/automatic Queue instruction and
+2026-10-01 continuation. Exactscope: [p111 saved revision](../ws074/phase111/phase.md).
+Single-identifier :lang, HTML/XML inherited language and empty override, ASCII
+case/hyphen semantics; :empty comments/zero-length text, shared cascade/query.
+No strings/multi/wildcard ranges/HTTPmeta language/HTML controls/new properties/
+media/loading/Traversal/Range/VM/HAL/toolchain/newmodules.
+
+| Attempt | Phase | Status | Dependency / reason |
+| --- | --- | --- | --- |
+| q521-i01 | [ws074-p111](../ws074/phase111/phase.md) | cleared | p109/p110clearedf47a5062;34/38 failures isolated to language/empty semantics |
+
+Criteria: focused fixture/34/38PASS plain+ASan; grammar37/37/childCSS30/30/GC33/33/
+DOM23/23/selectors golden preserve; all100 no56passregression/no Uncaught/errors/
+Acid2exact/warnings/sanitizer; fullstandard/style/diff/durableevidence.
+Graph: clearedp109+p110(external) → q521/p111 → p100(externalplanned). No cycle.
+
+## Upcoming Work Outlook
+
+HTML control/type/reflection and computed CSS property/media gaps then other
+indexed Traversal/Range/loading/SVG/VM toward100/100. p101/p098outsidegoal,
+fullWSconformancep044 remains. Localunpublished/nopush.
+
+## q521 terminal outcome (2026-10-01)
+
+p111cleared: focused32/32/grammar37/37/childCSS30/30/GC33/33/DOM23/23/selectors
+golden plain+ASanPASS; all10058/100 solely34/38newPASS/no regression/Uncaught0/
+Acid2exact. [Evidence](../ws074/phase111/verification.md). Fullstandard/style/diffPASS,
+formatterabsent/OSguestbootGPUnotrun; nextindexedHTML/CSS gaps, remaining42.
+Localunpublished/nopush.

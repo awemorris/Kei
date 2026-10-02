@@ -1,0 +1,46 @@
+# q580 / p164 native XML character bindings — 2026-10-02
+
+CLEARED. Real CDATASection inherits Text, ProcessingInstruction inherits CharacterData;
+exact private native node kind brands and PI target getter. Interface enum/window
+registration agree; actual Document snapshot/view supplies wrapper prototype.
+bind_wrap callee roots actual node/target/Doc before lookup/allocation and unwinds
+all errors; initialized wrapper/node associations publish before temporary root release.
+No public property/prototype fake brand or permanent roots.
+
+Existing Node name/value/textContent, CharacterData data/length/append/remove,
+Text.split, insertion/hierarchy/adoption, Range length/bounds/clone/delete/extract/
+string/insert/surround now use genuine native kinds. Text+CDATA contribute text,
+PI/Comment do not; partial PI surround and PI insertion refused, CDATA uses Text
+semantics. CDATA split retains original subtype and creates ordinary Text suffix
+per standard, live endpoints transfer correctly. Range slices retain PI target/kind
+or CDATA subtype. Layout text boxes/direct inline style/script/XML-document text
+includeCDATA; PI nonrendered. HTML serialization escapesCDATA as Text and preserves
+PI target/data with actual <?...?> syntax; full XML serializer remains excluded.
+
+Native34/34 both, actual DOMImplementation-created XMLDocument/native C factories/
+production scripts (no JS fake constructors): exact prototypes/type/name/data/target/
+value/content/native brands; clones/Document PI/CDATA hierarchy/descendant text;
+PI Range bounds/slice/extract/delete/string/insert/surround rejection; CDATA Range
+string/slice/split/live endpoints/insert/surround; traversal masks/element collection;
+CharacterData append/value edits; actual HTML serialization, native CDATA text height,
+inline CSS source counts and dynamic inline script execution. Real8MiB GC inside
+bind_wrap with no caller PI/target/stack roots; actual snapshot/type/target survive.
+Saved wrapper alone retains XMLDocument/target after globals clear; last release
+collects both. Native root/error branches reviewed, no permanent roots.
+
+All93groupsPASSboth; actual94/prior94/72/equal100inventory/complete/status0/noUncaught/
+crash/sanitizer/runnererrors/timeouts/Acid2exact100%. Remaining69/74/75/77/79/80 require
+loading/SVG; internal retrytime inventory failures distinct from complete runner.
+Pixels diagnostic separately. Bothfull builds beforetests/warning0/style output
+empty/manual affected full C Guardrail/coding-style1–14/automation/diff clean.
+clang-format absent/manual, cc14.2.0/Python3.13.5. JSON actual hashes/full reports/all93.
+Commands host-build.sh both, host-xml-binding both, q580-regressions.py both, original
+run-acid-tests.py both (ASAN_OPTIONS=detect_stack_use_after_return=0), style-check.py
+affected C, git diff --check.
+
+Partial existing node core only. Public XML Document factory validation, PI constructor/
+new attribute map APIs, missing full CharacterData operations/wholeText/full XML
+serialization/stylesheet PI resource effects/full DOM conformance remain excluded.
+XML DOM projection/loading/MIME/events/SVG next. FullWPT/fuzz/OS/guest/boot/GPU/HAL/
+toolchain/.internal/aggregatecheck/push/GitHub publication not performed.
+p100/p044/WS incomplete; no parser/interface-only score gain expected or claimed.

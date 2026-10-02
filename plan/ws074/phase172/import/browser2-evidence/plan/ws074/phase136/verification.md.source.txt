@@ -1,0 +1,43 @@
+# q548 / ws074-p136 verification — 2026-10-01
+
+Native Range boundary foundation cleared. Original pinned Acid3 **86/100** in
+plain and ASan: indexed **8** newly passes; all prior85 pass; full100 result arrays
+are equal; complete true, run status0, exceptions/run errors empty. Acid2 exact
+100% agreement in both variants. Actual production engine, no harness score edits.
+
+`sh plan/ws074/tests/host-build.sh plain` and `asan`: exit0, warning0; cc14.2.0.
+`ASAN_OPTIONS=detect_stack_use_after_return=0`: real conservative-stack GC contract.
+48 regression groups both PASS: Range boundary fixture80 assertions, direct native
+GC conversion40, frame lifetime138, prior46 groups including DOM23/JS14 and selector
+style golden. Native registry invocation excludes all C stacks during collection;
+creator XML Document, old endpoints, incoming node and numeric argument survive
+callback GC. Success uses post-conversion actual child length; EIO and real VM_THROWN
+preserve old endpoints and release every temporary native root. Sole child Range
+retains native getter and detached text after manual primary realm teardown; final
+release occurs exactly once. Ordinary DOM changes between operations still lack
+live Range repair in this finite increment; later p137+ must supply it.
+
+Factories use actual receiver Document/current constructor Window and XML relevant
+prototype snapshots. Native AbstractRange/Range identities and private platform
+brands, inherited readonly enumerable configurable getters, exact method lengths,
+required Node/uint32 conversion order, before/after/select, current ancestry,
+reversed/disconnected collapse, UTF16 offsets, throw/no-mutation, expando isolation,
+child borrowing and adoption verified. Scoped Range accessor enumeration refines
+only these new interface entries; existing interface behavior is preserved.
+
+Full C standard read/manual review: final changed production range.c, interface
+registry/headers/Document table and new native fixture/changed frame fixture.
+ANSI leading declarations, file organization (existing binding table exception),
+one-line forwards, public-before-static functions, semantic paragraphs/purpose
+comments, checked allocations/roots/fallible calls, current-owner traces and error
+cleanup inspected. Manual formatting: clang-format unavailable. Exact checked paths
+and SHA256 hashes, actual Acid reports and command outcomes in verification.json.
+`python3 plan/tools/style-check.py <changed C paths>`: no findings; exit0.
+`git diff --check`: exit0. Final source rebuild/revalidation after formatting edits;
+no ASan/UBSan errors. Each command bounded60sec; no fullWPT/fuzz/OS/guest/boot/GPU.
+
+Known excluded live mutation repair, cloneRange/compare/stringification/contents,
+geometry/Selection/StaticRange/custom/shadow remain absent, not stubbed success.
+Remaining14 indexed7/9/11/12/13/46/69/71/72/74/75/77/79/80 require later finite Queues.
+p100/p044/WS074 acceptance remains incomplete. Root sole executor released after
+exact Queue archival/read-back. Local unpublished records; no push/remote sync.

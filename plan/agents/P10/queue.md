@@ -22,3 +22,5 @@ Pinned source read-only fetch 2026-10-02: tip e53ef03b80113aec959deb67f828cba21d
 main baseline（import前）: BROWSER_HOST_BUILD=build/main-n3-browser-component sh plan/tools/browser-component/run.sh plain → component83checks PASS。log /tmp/zedbsd-main-n3-component.log、source118f094cb（ブラウザsourceはbaseline41aac4fc7と同一）。import後の検証の代用ではない。
 
 MR P10-q579-01: requested d07b65047625f1b04ccf07eaef0ac8773b870b9b (base41aac4fc7), sourceなしmanifest569/93paths。main: hash/count/分類/ownershipとPython syntax review PASS、全disposition unresolved保持。統合commit後ACK、製品build/回帰未実施。classifierのclean-tree一時dir作成とmissingblob/empty区別は次checkpointで補完を依頼。
+
+MR P10-q579-02: requested95835ef85d1e253229830501fd8089b11a5ea447、last ACKd07b65047。main scope577paths/public-header-exports不変/branch mapped bytes93分類と3way main.c/Makefile review/Python syntax/diff-check PASS。worker報告plain/ASan build0warnings、両component83、Acid2exact/Acid3score100/pixel37.04、plain98groups+20stylegolden PASS。ASan残2groups/ABI closure/target/guest/boot/fullmanualは未達、wholePhaseはclearしない。historical namespace356原本はcanonical acceptanceへ自動コピーしない。

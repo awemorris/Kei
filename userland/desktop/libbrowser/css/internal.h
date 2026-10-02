@@ -60,6 +60,9 @@ enum css_token_type {
  * delimiter, its code point.
  */
 struct css_token {
+	/* Original UTF16 half-open token extent, excluding skipped leading comments. */
+	size_t source_start;
+	size_t source_end;
 	int type;
 	const uint16_t *text;
 	size_t length;
@@ -123,7 +126,8 @@ enum css_pseudo_class {
 	CSS_PSEUDO_PLACEHOLDER_SHOWN,
 	CSS_PSEUDO_REQUIRED,
 	CSS_PSEUDO_OPTIONAL,
-	CSS_PSEUDO_ALWAYS
+	CSS_PSEUDO_ALWAYS,
+	CSS_PSEUDO_LANG
 };
 
 /*
@@ -364,6 +368,7 @@ enum css_property {
 	CSS_PROP_TEXT_ALIGN,
 	CSS_PROP_TEXT_INDENT,
 	CSS_PROP_WHITE_SPACE,
+	CSS_PROP_CURSOR,
 	CSS_PROP_TEXT_DECORATION_LINE,
 	CSS_PROP_LIST_STYLE_TYPE,
 	CSS_PROP_TOP,
@@ -423,6 +428,7 @@ enum css_property {
 	CSS_PROP_BORDER_SPACING_X,
 	CSS_PROP_BORDER_SPACING_Y,
 	CSS_PROP_BORDER_COLLAPSE,
+	CSS_PROP_TEXT_TRANSFORM,
 	CSS_PROP_COUNT
 };
 

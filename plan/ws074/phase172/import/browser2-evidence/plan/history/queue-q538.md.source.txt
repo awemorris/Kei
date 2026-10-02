@@ -1,0 +1,117 @@
+<!-- awesome-plan project=zedbsd record=q538 -->
+
+# q538 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q538](history/queue-q538.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q538
+
+Purpose WS074/fg011 native checkbox/radio script click activation and event lifetime.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation, exact [p128 scope](ws074/phase128/phase.md) saved before generation.
+Timebox one finite Phase; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q538-i01 | [ws074-p128](ws074/phase128/phase.md) | cleared | p127 31d9ed14 verified; indexed43 requires native .click checkedness |
+
+Whole p128 exact snapshot above: checkbox/radio preactivation/cancel/current group,
+recursion, input disabled/indeterminate clone, fieldset disabled, target event realm,
+explicit activation/dispatch GC roots, selected plain+ASan regressions/prior77/new43/
+Acid2 exact/fullC/evidence. Excluded dispatchEvent/UI/label/submit/reset/navigation/
+validation/PointerEvent/composed/automatic mutation hooks/other recorded residuals.
+Graph p127(external) -> p128 -> future submit(external) -> p100(external), acyclic.
+Unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Form submission cancelable event/actual host navigation protocol, then table/Range/
+CSS/loading/SVG; known radio mutation/input/NodeList/form/parser residuals retained.
+p100/p044 acceptance unchanged.
+
+## q538 outcome (2026-10-01)
+
+[p128](ws074/phase128/phase.md) cleared, [evidence](ws074/phase128/verification.md).
+Script checkbox/radio activation/cancel/disabled/recursion/indeterminate clone and
+explicit callback roots; click57/GC10/frame93/all32 selected regressionsPASS both
+variants. Original all10078/100/indexed43newPASS/prior77 preserved/equal/noerrors/
+Acid2exact. Remaining22; next submit-button submission event/known host navigation
+boundary. Other click/input/automatic mutation residuals retained; p100/p044
+unchanged. Root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p128 -->
+
+# ws074-p128: script click checkbox/radio activation
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q538 / q538-i01
+Prerequisite p127 31d9ed14 cleared; actual checkedness/group/clone/native APIs,
+radio73/native12/GC13/frame88/prior77 verified, exact q537 archive verified.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact scope saved BEFORE source generation. Root sole executor.
+Timebox one finite Phase / selected bounded fixtures and fixed suite.
+
+## Exact scope / design / criteria
+
+Implement native Element.click existing compatibility entry point for actual
+HTML input checkbox/radio: preactivation before click callbacks, dirty target
+checkedness; checkbox flip and clear independent indeterminate, canceled restore
+old checkedness/indeterminate; radio save prior selected current-group member,
+canceled restore it only if still same actual current group, otherwise uncheck
+target. Current p124 ordinary owner and p127 exclusivity, no script-shadowed
+properties. Same-element recursive click suppressed across click/input/change;
+different-target nested activation allowed, flag always released on errors.
+
+Actual disabled built-in form controls skip script click: own disabled attribute
+and disabled ancestor fieldset, except its first actual HTML legend subtree;
+nested fieldsets assessed independently. Add input.disabled native boolean
+reflection, input.indeterminate native owned boolean/clone (all actual input types,
+no user coercion), initially false. Preserve existing ordinary non-input click.
+Untrusted bubbling/cancelable existing MouseEvent click (PointerEvent/composed/
+shadow DOM absent, explicit compatibility boundary); connected uncanceled changed
+checkbox/radio fires trusted bubbling noncancelable input then change. Already
+selected radio produces click only; detached toggles but no input/change. Recheck
+current actual type/connectedness after click callback. No unrelated focus/UI
+native mouse/default-action changes.
+
+Use actual target document view for child event realm. Explicit GC roots for
+activation target, previous radio, current event and dispatcher path/event/target
+across callbacks, removals and actual collector with conservative stack disabled;
+clean every registered root and recursion flag on fallible exits. Checkedness
+allocation before preactivation observable commit; preserve prior flags in rollback
+except click target dirty established. Native group query exports derive current
+root/name/owner, no cache and no JS. Review failures without forced calloc harness.
+
+Known subsequent increments EXCLUDED: dispatchEvent or GUI mouse activation,
+ancestor activation target/label forwarding, submit/reset/navigation/validation,
+PointerEvent/composed/shadow, automatic checked/defaultChecked/name/type/form/id/
+connection group mutation hooks and value-mode transitions, advanced input,
+NodeList/form maps/parser magic, table/Range/CSS/loading/SVG. Not full click/input
+conformance. q538 does not authorize these; p100/p044 unchanged.
+
+Affected bind/click.c (new registered module), bind/element.c/event.c/internal.h,
+bind/html-input.c, dom/radio.c/dom.h, scoped WS fixtures/GC/child-lifetime tests.
+Guardrail and full C style loaded, no concise C exists; primary WHATWG HTML
+input/interaction read2026-10-01; bounded Chromium reference confirms untrusted
+click, trusted input/change, canceled state and already-selected radio suppression.
+Verify plain+ASan meaningful checkbox/radio listeners observe pre-state/order/
+cancellation/returnfalse/currentgroup/removal/nesting/disabled-fieldset/brands/
+boolean/clone/shadowed getters/child/GC; prior30 regression groups PASS; all100
+prior77 preserved/equal/complete/status0/noerrors, expected new43, Acid2 exact,
+warning0/ASan0/full changed C/manual formatter/style/diff/hashes/evidence. No full
+WPT/fuzz/OS/guest/boot/GPU. Unknown prerequisite ends uncleared before redesign.
+Graph p127(external) -> p128 -> future submit(external) -> p100(external), acyclic.
+Local unpublished/no push.
+
+## Introduction / activation (2026-10-01)
+
+Indexed43 requires actual checked state after .click(); current native operation
+only fires click. Select bounded checkbox/radio activation and lifetime increment;
+form submission has a known separate host-protocol dependency and remains Outlook.

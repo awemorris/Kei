@@ -1,0 +1,88 @@
+<!-- awesome-plan project=zedbsd record=ws074-p161 -->
+
+# ws074-p161: strict UTF8 XML namespace-aware native parsing model
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q577 / q577-i01
+Base43d36e72/q576finished/actual94 including72/all89both/Acid2exact.
+Current user 2026-09-30 automaticAcid3Queues+2026-10-01 continuation approve finite
+exact scope before generation. Root solewriter/executor/no cancellation/conflict.
+Guardrail/fullcoding-style1–14/automation/browserdesign/actualHTMLparser/basearena/
+DOMnamespace representation/resource metadata and pinnedXMLfixtures read.
+XML1.0 FifthEdition2008 +NamespacesXML1.0 ThirdEdition2009 verified2026-10-01
+https://www.w3.org/TR/xml/ and https://www.w3.org/TR/xml-names/ .
+
+## Exact scope / design / criteria
+
+New browser xml/xml.h and xml/parser.c: independent pureC namespace-aware XML tree
+model, no VM/DOM/JS/loading changes before parser output verified. Model owns one
+normalizedUTF16 wb_units input +arena immutable records/data. Native xml_node types
+Document/Element/Text/CDATA/Comment/PI, actual parent/first/last/next tree links;
+qualified/prefix/local/namespaceURI and attribute qualified/prefix/local/namespaceURI/
+normalizedvalue views refer only to same model input/arena. Arbitrarynamespace URIs
+preserved exactly, defaultnamespace scoped through ancestors/currentstarttag;
+unprefixed attributes remain noNS, implicitxml and xmlns URI bindings/reserved
+namespace constraints, unboundprefix/duplicateexpandedattribute rejection.
+Model Cdestroy releases arena/input/model, allpartialconstruction clean; no borrowed
+VMcells/heap roots/tracers/recursion/HTMLparser fallback. Parse fully before publish;
+error *outNULL +normalizedUTF16erroroffset +errno, no partialsuccess/scriptcallbacks.
+No filename/test recognition.
+
+Strict rawUTF8 decoder rejects overlong/truncated/continuation/surrogates/>10FFFF/
+illegal XML1.0codepoints, optionalleadingUTF8BOM, CRLF/CR->LF. XML1.0 Unicode
+NameStart/NameChar scalar ranges, QName exactlyoptionalonecolon/NCName prefix/local,
+PI targetNCName and caseinsensitive reservedxml target. Matching case-sensitive tags,
+exactoneRoot/wellnested/selfclosing/quotedattrs/requiredwhitespace/attributeNoLiteral<,
+characterdataNoLiteral]]>, commentsNo--, PIterminator, CDATA onlyinsideRoot;
+predefined5entity/numericdecimal+hex references withscalar/overflow/terminationchecks.
+Textnormalizedsource/entityexpanded; attrliteralXMLwhitespace spaces but numericrefs
+retain referencedtab/LF/CR. Namespace declarations normalizevalues before binding;
+duplicate raw and expanded names fatal. OutsideRoot whitespace ignored, comments/PI
+preserved. OptionalXMLdecl onlystart afterBOM: version1.0requiredfirst, optional
+UTF8encoding then standalone yes/no in order/no duplicates/unknownattrs; decl metadata
+separate from PI tree. Unsupported encodings, DOCTYPE/DTD/entitydeclarations profile
+returnENOTSUP without successfulnormalparse; XML1.1/generalentities/externalDTD/
+validation/XInclude/XMLstylesheetPIresource effects deferred explicitly. PI contents
+preserved withoutinterpretingstylesheetnetwork. Finite input16MiB/depth256/totalnodes+
+attrs65536 bounds returnEOVERFLOW, not truncatedsuccess. Recursive source trees never
+use nativeCrecursion; arena lifetime explicit. ExistingpermissivegenericUTFhelpers
+unchanged. Newsource registeredonceexistinglibbrowserMakefile.
+
+New host-xml.c: ordinarygeneratedvalid/invalid inputs exercise UTF8/UnicodeNames/
+QName/defaultscopes/undeclaredprefix/reservedURI/duplicateexpandedattrs/whitespace/
+entities/CDATA/comments/PI/XMLdecl/root/tag/encoding/profile/depth/input/node bounds/
+partialfailure cleanup/lifetime repeatedparseDestroy. Actual pinnedfiles fromsameWPT
+2d66b9b7998bb58c336138c178323ddee857b586: svg.xml parsedSVGURI andxml-stylesheetPI;
+xhtml.1 validexactHTMLURI+scripttext; xhtml.3 validwrongHTMLURI preserved;
+xhtml.2 mismatchedtag andempty.xml rawinvalidUTF8 rejected withno publishedtree.
+Native model output only; no notifications/events/DOM traversal invented.
+
+Prior89+newnative1=90groups allPASSplain+ASan/original>=94/prior94/actual72/full100
+same/complete/noUncaught/crash/sanitizer/runnererror/timeout/Acid2exact; bothfullbuilds
+finishbeforetests/runner60sec/buildwarning0/styleoutputempty/manualfullaffectedC/diff/
+hashes. Graph p160context(external)->p161->XMLDOMprojection/nativechildnavigation/
+SVG+p100(external), acyclic. Unknownprereqendsuncleared before redesign. No scoregain
+expected from parser-only. Affected newxmlheader/parser/libbrowserMakefile/newnative
+fixture only. ActualDOM PI/CDATA/customattribute namespace identity are known future
+projection prerequisites, not silently skipped. NativeMIME/navigation/iframe/object/
+SVGinterfaces/imageonload/XHTMLscriptexecution/fullXMLconformance/fullWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHubpublication excluded.
+p100/p044/WS incomplete; no broaderXmlprocessor/XMLDOMconformanceclaim.
+
+## Introduction / q577 (2026-10-01)
+
+Known loading fixtures require strictUTF8/wellformedness/exactnamespace gating before
+child script activation. Independent owning native parse model verifies that output
+before selecting actualDOM projection/load readiness and notifications.
+
+## q577 cleared outcome (2026-10-02)
+
+[p161](phase.md) cleared in q577, [evidence](verification.md).
+Strict owning native XML model: real namespaces/Unicode/normalization/CDATA/PI,
+full parse before publication, malformed pinned resources reject with NULL.
+Native236/all90PASSboth; actual94 including72/prior94/equal100/noerrors/Acid2exact.
+Pure C parser only, no score gain expected. Finite UTF8/XML1.0/DTD exclusions retained.
+Next native arbitrary attribute namespaces/PI/CDATA, then DOM projection/loading/SVG.
+p100/p044/WS incomplete; root released/local unpublished/no push.

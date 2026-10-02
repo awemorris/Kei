@@ -1,0 +1,121 @@
+<!-- awesome-plan project=zedbsd record=q551 -->
+
+# q551 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q551](history/queue-q551.md), exact archive verified; p139 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q551
+
+Purpose WS074/fg011 reusable native DOM pre-insert validity before Range insertion.
+Approval user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation;
+exact [p139](ws074/phase139/phase.md) snapshot saved before generation.
+One finite Phase/bounded tests60sec; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q551-i01 | [ws074-p139](ws074/phase139/phase.md) | cleared | p132/p138, 3df1768c87/all50; prevalidation before Text split missing |
+
+Whole exactp139 internal pure validation API/new registered bind/insertion.c/
+Document type/order/Fragment checks/ordinary bind_insert extraction; validation
+without mutation/rejected insertion unchanged; prior50/newfixture/plain+ASan/
+original87/prior87/newnone/equal/noerrors/Acid2exact/fullchangedC. Known replacement
+atomicity/Range insertion/data/content and other exclusions retained. Graph p132+
+p138(external)->p139->future insert/p100(external), acyclic. Unknown dependency ends
+uncleared; new score progress expected after actual Range insertion/content work.
+
+## Upcoming Work Outlook
+
+Native Range insert/Text split/live insertion/data repair, content algorithms,
+CSS/loading/SVG, final p100/p044. Forecast does not authorize implementation.
+
+## q551 outcome (2026-10-01)
+
+[p139](ws074/phase139/phase.md) cleared in q551, [evidence](ws074/phase139/verification.md).
+Pure reusable native DOM pre-insertion validity/extracted bind_insert checks,
+Document Text/element/doctype/order/whole Fragment validation before mutation,
+original owner/generation/host/removal/root ownership/error priority verified.
+Original87/prior87 preserved/newnone/equal/noerrors/Acid2exact/all52 groupsPASS/
+preinsert64/native29. Remaining13; next live insertion/Textsplit/data/Range content,
+CSS/loading/SVG. p100/p044/WS incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p139 -->
+
+# ws074-p139: reusable native DOM pre-insertion validity
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q551 / q551-i01
+Prerequisites p132 checked adoption and p136/p137/p138 actual native Range;
+3df1768c original87/equal/noerrors/Acid2exact/all50 verified. Current bind_insert
+validation is inseparable from mutation and misses Document doctype/order/Fragment
+constraints. Range.insertNode must validate BEFORE Text splitting: known prerequisite
+selected before that Phase. User2026-09-30 autonomous Acid3/automatic Queues plus
+2026-10-01 continuation approve exact scope before generation. Root sole executor.
+
+## Exact scope / design / criteria
+
+Add internal public **bind_validate_insert(realm,parent,node,reference)** in new
+bind/insertion.c registered in production libbrowser source list/internal.h. Pure
+native pre-insert validity for actual ordinary node graphs, childrenToExclude
+empty; no adoption/unlink/insert/generation/environment/host mutation. Caller owns
+participants through potential checked DOM-exception allocation, as existing
+bindings/Range temporary roots require. Invalid embedding NULL arguments EINVAL.
+Actual parent must Document/Fragment/Element; incoming node cannot inclusively
+contain parent; nonnull reference must actual direct child (Hierarchy ancestor
+before NotFound reference). Allowed incoming Fragment/doctype/Element/Text/Comment
+only among existing supported types; Document invalid. Doctype only into Document;
+Text cannot enter Document; Comments are accepted.
+
+For Document: Fragment >one direct Element or any direct Text invalid, even empty
+Text; no-element/no-Text Fragment accepted. Element/one-element Fragment reject
+existing Document Element, insertion before doctype or before a node with following
+doctype. Doctype rejects existing doctype, reference preceded by an Element, or
+append after existing Element. Actual child types/order/ordinary direct links only,
+no script-visible documentElement/doctype/childNodes consulted. Empty exclusion
+list intentionally preserves existing rejection of moving Document's existing
+Element/doctype within itself; do not invent node-exclusion semantics. Check whole
+Fragment before moving any child. Checked exception status/code3/8 and no state
+change on validation failure.
+
+bind_insert first calls helper, then keeps existing actual parent host resolution,
+self-reference adjustment, checked adoption/original removal, Fragment splice and
+per-node environment/host hooks/error propagation. Remove duplicate inline validity
+from bind/node.c; no behavioral changes for previously valid cases except correct
+new Document rejection. Helper success alone does not authorize or perform mutation.
+Public JS appendChild/insertBefore inherit stronger validation. New source belongs
+to existing bind layer, pure static Document helper, no DOM/VM module ownership
+change. Null-pointer entry is bounded embedding validation, not a product setting.
+
+No Range.insertNode/Textsplit/insertion/data repair yet (next finite Phase), full
+replaceChild/replacement exclusions, replaceChildren/moveBefore, Shadow/custom/
+Attr/PI/new node interfaces, DOM mutation observers or full DOM conformance. Existing
+replaceChild removes its old child before bind_insert; whole replacement atomicity
+is explicitly outside this finite helper/ordinary insert scope and not accepted.
+Scope does not relax Range/content or p100 acceptance. No raw script success stub.
+
+Verify own exact Document order/count/node/ref/ancestor errors and error priority,
+whole-Fragment unchanged on rejection, append/insertBefore valid comments/Element/
+doctype/empty Fragment/splice/adoption/self-reference ordinary Element parents,
+native graph identity/generation/removal/host untouched by validation alone and
+rejected insertion, XML/current owner/borrowed child methods/expandos. New focused
+fixture+prior50 groups plain/ASan original87/prior87/newnone/full100 equal/complete/
+status0/noerrors/Acid2exact. Full changed C manual/format/style/diff/buildwarning0/
+sanitizer0/hashes/durable evidence. Commands bounded60sec; unknown prerequisite
+ends uncleared before redesign. No fullWPT/fuzz/OS/guest/boot/GPU/push/remote sync.
+Guardrail/fullcoding-style/automation loaded (no concise). DOM current pre-insert
+validity/empty exclusions read2026-10-01 https://dom.spec.whatwg.org/#concept-node-
+ensure-pre-insertion-validity . Graph p132+p138(external)->p139->future Range insert/
+p100(external), acyclic. Source/helper API and production registry are exact scope.
+
+## Introduction / q551 activation (2026-10-01)
+
+p138 cleared87/all50. Investigation of Range insert finds needed non-mutating
+prevalidation absent, and Document Fragment/doctype/order checks incomplete. Supply
+this finite shared prerequisite before split/insert; no unsuccessful insert attempt
+or source generation preceded this exact Queue agreement.

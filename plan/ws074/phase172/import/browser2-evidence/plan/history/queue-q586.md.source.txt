@@ -1,0 +1,101 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-02)
+Finished Queue: q586
+Last finished Queue: [q585](queue-q585.md), exact archive verified; p168 cleared.
+Executor root / browser2 / one finite Phase / local unpublished.
+
+## q586 exact scope and approval
+
+Autonomous Acid3 automatic finite Queue instruction2026-09-30 +continuation
+2026-10-02 approves exact p169 pre-generation snapshot. Verifiedp168 normal loader
+native46/all97both/original94/Acid2exact. Headless virtual settle misses new network
+work between timers, preventing original69/74/79/80. Sole root executor.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q586-i01 | [ws074-p169](../ws074/phase169/phase.md) | cleared | p168 cleared; integrate actual pending child network progress with headless virtual clock |
+
+Exact page/script.c native pending child checkpoint/poll/monotonic wait/timer
+progress/budget+30sec+10000round bound and existing native host-frame-load.c
+extension only. Actual completed responses consumed outside loader callback,
+normal virtual fast timer jumps preserved when no pending children. Native delayed
+HTTP/timer cancellation/real event fixture, all97both/original>=98/69+74+79+80/
+prior94+72/equal100/noerrors/Acid2exact. Graphp168(external)->p169->SVG75/77/p100
+(external), acyclic. Finite implementation+verification cycle, unknownprereqends
+uncleared. No native navigation/VM/net/parser/renderer/GUI/.internal/HAL/aggregate/
+push/publication edits. p100/p044/WS incomplete; SVG APIs/full100 later separate.
+
+## Upcoming Work Outlook
+
+Actual native SVG rect length/text character APIs, originalfull100 and acceptance.
+Known fullWindowProxy/crossorigin/navigation/PI/encoding limitations retained.
+Forecast only; automatically selected exact finite scope is recorded before execution.
+
+## q586 outcome
+
+p169cleared/native52/all97both/original98/prior94+72/equal100/noerrors/Acid2exact.
+New69/74/79/80pass, remaining75/77. [Evidence](../ws074/phase169/verification.md).
+Allselectedterminal/rootreleased/localunpublished/no push. p100/WS incomplete.
+
+## Exact approved p169 snapshot before generation
+
+```markdown
+<!-- awesome-plan project=zedbsd record=ws074-p169 -->
+
+# ws074-p169: headless virtual timer and real child network progress
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q586 / q586-i01
+Base a4203fd7/q585 p168 cleared native46/all97both/original94/Acid2exact.
+Root/browser2 sole executor/writer; local unpublished/no push/concurrent/cancellation.
+User2026-09-30 autonomousAcid3 automaticfiniteQueues +2026-10-02continuation
+approve this exact finite scope before source generation. Guardrail/full C1–14/
+automation/native Page virtual clock/loader/frame task/view code and actualq585
+evidence read. p168 native normal loader→Page checkpoint verifies actual child
+loading; view_settle_network processes only before/after page_settle, while
+page_settle jumps through all virtual timers without polling newly started requests.
+
+## Exact finite scope / criteria
+
+Connect existing production page_settle headless virtual timers to actual pending
+child response tasks. New source discovery/ready task drain at outer checkpoints;
+while native child records remain pending, poll actual existing loader descriptors
+in bounded short waits, process real network callbacks, then drain completed tasks
+outside those callbacks. Advance Page virtual time by actual monotonic elapsed
+waiting time, respecting budget and due timers (including timers which remove,
+replace or cancel pending frames); once child tasks settle, preserve existing fast
+virtual jumps between timers. No fake timer/network results, suite modifications,
+test names, new VM/net algorithms, source MIME parsing or native navigation edits.
+No script in borrowed child callback, no headless test-only switch.
+
+Exact implementation page/script.c and existing native host-frame-load.c fixture
+extension only; reuse real loopback driver/delayed XML sources. Internal poll/clock
+helper can use existing public POSIX poll/clock_gettime supported by loader/view.
+Checked monotonic failures/poll EINTR behavior; actual pending child work at budget,
+30-second network wait bound or existing10000 task-round limit is explicit
+ETIMEDOUT rather than falsely reported settled. No busy-unbounded request wait,
+source pointer into callbacks or change to GUI browser_view_process scheduling.
+General full event-loop/history/crossorigin/WindowProxy/module/PI/renderer/OS/.internal/
+HAL/toolchain/aggregate/push/publication excluded.
+
+Native existing46 remain plus real page_settle HTTP source created after initial
+load, delayed completion producing genuine Document/load event, intervening native
+timer progress, cancellation timer while real request pending, no stale callback or
+root. Real virtual timer-only behavior unchanged. All97groupsPASSboth, same actual
+focused native evidence reused in final97 without redundant rerun; original>=98,
+actual69/74/79/80 pass, allprior94+72preserved/equal100inventory/complete/status0/
+zeroUncaught/crash/sanitizer/runnererror/timeout/Acid2exact. SVG75/77/p100 remain
+separate native API/full100 criteria. Bothfull builds before any tests/warning0/
+styleempty/manual full all changed C1–14/diff/sourcehashes/actual toolversions,
+clang-format unavailable/manual. Finite one implementation+verification cycle;
+unknown prerequisite ends uncleared with recoverable evidence before redesign.
+
+Graph p168(external)->p169->remainingSVG75/77/p100(external), acyclic.
+No p100 selection/clearance or WS/p044 completion implied. Actual network time
+and virtual clock remain distinct; no scoring substitution or goal criterion waiver.
+```

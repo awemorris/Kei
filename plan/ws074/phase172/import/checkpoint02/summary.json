@@ -1,0 +1,40 @@
+{
+  "base": "d07b65047625f1b04ccf07eaef0ac8773b870b9b",
+  "phase_status": "in-progress",
+  "whole_phase_cleared": false,
+  "plain_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "asan_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "plain_component": {
+    "checks": 83,
+    "passed": true
+  },
+  "dom": {
+    "checked": 23,
+    "passed": 23
+  },
+  "plain_regressions": {
+    "command_groups": 98,
+    "passed": 98,
+    "pending": "selectors golden group verified separately: all20 style goldens pass"
+  },
+  "style": {
+    "changed_source_and_test_C_files": 138,
+    "candidates": 0
+  },
+  "source_membership": 174,
+  "archived_evidence": 356,
+  "phase_originals": 71,
+  "checks_pending": [
+    "full final C semantic review/formatter restoration",
+    "full ASan runtime",
+    "public ABI/ELF/include closure",
+    "target build/guest/boot",
+    "semantic reconciliation of all historical phases and bug collisions"
+  ]
+}

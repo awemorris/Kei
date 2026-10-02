@@ -220,8 +220,6 @@ sheets_add_style(
 {
 	struct page_sheet *entry;
 	struct page_sheet *candidate;
-	struct dom_node *child;
-	const struct dom_character_data *text;
 	struct wb_units units;
 	const struct css_media *chain[CSS_MEDIA_CHAIN_MAX];
 	uint32_t hash;
@@ -229,17 +227,9 @@ sheets_add_style(
 	int differs;
 	int error;
 
-	/* The element's text. */
+	/* Inline source ownership is shared with child styling and later native CSSOM handles. */
 	wb_units_init(&units);
-	error = 0;
-	for (child = element->node.first_child; child != NULL && error == 0; child = child->next) {
-		if (child->type != DOM_TEXT)
-			continue;
-		text = (const struct dom_character_data *)child;
-		error = wb_units_append(&units, text->data.data, text->data.length);
-	}
-
-	/* Memory ran out on the way. */
+	error = bind_style_sheet_source(element, &units);
 	if (error != 0) {
 		wb_units_release(&units);
 		return error;

@@ -1,0 +1,42 @@
+# p131 / q541 verification — 2026-10-01
+
+**Uncleared**: discovered unknown prerequisite, native insertion does not adopt
+nodes from another Document. Actual dom_insert_before updates only sibling links;
+node.document is never updated. New final cross-Document caption setter assertion
+fails both plain/ASan (67 PASS/1 FAIL) with unchanged source behavior. Resume after
+finite Document-adoption dependency is implemented and verified, then retry p131.
+No new implementation expanded into this Queue; acceptance remains unchanged.
+
+Before discovery, structure67/host-table-mutation42/frame113/all38 selected groups
+PASS both variants. Host callback removes owner/new/old/anchor then actual stack
+excluded GC; native roots retain all graphs and unwind on actual EIO host failure.
+Borrowed primary method selects actual child host; saved child table creates caption
+after manual primary destruction. Typed conversion/ordering/null/multiplicity/
+brands/XML/clone covered. Pre-discovery full regression commands/results and final
+failing probe logs separately preserved in verification.json, not conflated.
+
+Original fixed WPT2d66b9b7998bb58c336138c178323ddee857b586 all100 **81/100**
+plain+ASan, indexed49 newPASS/all prior80/equal complete inventories/status0/
+Uncaught/run_errors/crash/runner timeout0, Acid2 exact100%. Remaining19, whole goal
+unmet. Actual partial useful outputs retained despite whole Phase uncleared.
+
+Commands with ASAN_OPTIONS=detect_stack_use_after_return=0 for sanitizer variant:
+- sh plan/ws074/tests/host-build.sh VARIANT: final cc14.2.0 warning/error0.
+  Initial new module build used nonexistent atom helper; corrected to actual checked
+  vm_atom_from_ascii API before any final check. Final source-only comment correction
+  removes false adoption claim, no behavior change after passing builds.
+- python3 build/ws074-q541-regressions.py VARIANT: initial all38 PASS (includes
+  structure67/GC42/frame113), exact commands/counts embedded in JSON.
+- browser --run plan/ws074/tests/pages/table-structure-probe.html: final67PASS/1FAIL
+  new cross-Document ownership assertion, no sanitizer/Uncaught diagnostic.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q541-VARIANT: real original reports embedded in JSON,
+  aggregate goalFAIL expected until100.
+- python3 plan/tools/style-check.py changed C/header files: 0 findings. Full C
+  manual review/manual formatting (clang-format absent), checked roots/native brands/
+  actual owner callback/error paths. git diff --check PASS. Source SHA256 recorded.
+
+No forced allocation failure, fullWPT/fuzz/OS/guest/boot/GPU checks. Custom reactions,
+row/cell indices/methods/layout/parser and prior other WS residuals excluded. Local
+unpublished/no push; p100/p044 unchanged. Primary source:
+[WHATWG table operations](https://html.spec.whatwg.org/multipage/tables.html).

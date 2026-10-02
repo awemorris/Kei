@@ -1973,6 +1973,19 @@ tokenizer_consume(
 	/* Nothing left: end of file, or wait for more. */
 	input = t->input;
 	available = input->units.length - input->position;
+
+	/* A raw script-written CR already emitted LF; swallow its following LF. */
+	if (input->position == input->inserted_cr && available != 0) {
+		input->inserted_cr = (size_t)-1;
+
+		/* The LF completes the already emitted CR line break. */
+		if (input->units.data[input->position] == 0x0aU) {
+			input->position++;
+			available--;
+		}
+	}
+
+	/* The insertion boundary may leave no readable code point yet. */
 	if (available == 0) {
 		t->last_width = 0;
 		if (input->closed)
@@ -1988,6 +2001,14 @@ tokenizer_consume(
 
 	/* Decodes the code point and moves past it, checking it the first time it is read. */
 	width = wb_utf16_decode(input->units.data + input->position, available, &code_point);
+
+	/* Network input is preprocessed; raw inserted text is folded when read. */
+	if (code_point == 0x0dU) {
+		code_point = 0x0aU;
+		input->inserted_cr = input->position + width;
+	}
+
+	/* Checks and advances past the normalized code point. */
 	tokenizer_check_input(t, code_point, input->position);
 	input->position += width;
 	t->last_width = width;

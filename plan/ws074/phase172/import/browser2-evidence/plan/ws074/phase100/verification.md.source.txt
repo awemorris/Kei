@@ -1,0 +1,38 @@
+# q591 / p100 final acceptance — 2026-10-02
+
+CLEARED. The pinned unmodified historical Acid3 now finishes at100/100 in both plain and
+ASan builds, with all100 indexed testsPASS and equal inventories consistent with
+the original score. Complete/status0/noUncaught/crash/sanitizer/runnererror/timeout;
+Acid2 exact100%/different_pixels0. All99 native/browser regression groupsPASSboth,
+including actual childload52, SVGtext42 and SVGlength60 native observations.
+Current final source/program/artifact hashes equal the completed q590 verification;
+product Git diff empty and pinnedWPT commit/diff verified. No code changes or
+redundant runtime rerun in this acceptance Queue. C-token equality proves q590
+signature/condition changes were formatting only; manual C1–14 review explicitly
+checks section3 layout omitted by styletool. Styleempty/finalbothbuildswarning0,
+formatter absent/manual; existing untouched legacy ordering retained. Standalone
+JSON stores complete actual reports/all99results/fullcurrent source/program/suite/
+artifact hashes, not just references. Both screenshot hashes equal the inspected
+native rendering displaying100/100; visibleFAILlabels and37.04% pixel agreement
+remain independent diagnostics. This clears the existing numeric p100 criterion,
+not full visual Acid3/browser/SVG standards conformance. Partial SVG relative
+geometry/otherAPIs/animation/rendering/XML/CSS/WindowProxy/crossorigin limitations
+remain. Previous q589uncleared preserved; q590 repairs and re-clears its prerequisite.
+fg011 autonomous goal achieved; no automatic next Queue. p101CSS2/p098ESmodules/
+p044fullWS conformance and broaderWS acceptance remain unselected/incomplete.
+Rootreleased/localunpublished/no push/no remoteIssueclose claimed.
+
+Implementation: native SVG text live UTF16/CSS count (q587), actual SVG scalar width
+reflection/typed SameObject handles (q588, corrected/revalidated q590). Actual
+same-origin response loading/strict XML owner realms and headless network progress
+were supplied by q585/q586. Historical exact Queues/outcomes remain linked.
+
+Verification: reused completed q590 host-build.sh plain+asan, host-svg-length both,
+all99group regression results and run-acid-tests.py both. Acceptance checked every
+source/program/artifact SHA256 against q590, git diff --exit-code HEAD product paths,
+pinnedWPT rev-parse/diff, C token equality for formatting repair, actual screenshot
+hash equality, style-check.py all fourSVG sources/fixtures and manual full changed
+C1–14. ASAN_OPTIONS=detect_stack_use_after_return=0; cc14.2.0/Python3.13.5. No skipped
+mandatory check. Pixel agreement is explicitly separate from the requested score.
+
+[Complete artifacts](verification.json), [WS](../ws.md), [q590 prerequisite evidence](../phase171/verification-q590.md).

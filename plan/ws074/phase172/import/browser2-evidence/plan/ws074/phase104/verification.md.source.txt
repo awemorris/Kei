@@ -1,0 +1,58 @@
+# q515 / p104 verification — 2026-10-01
+
+**cleared**. Retained q513 implementation provides distinct GC-managed initial
+about:blank child Document/Window, owner-realm wrappers, parent/top/frameElement,
+defaultView/URL/readyState, nested removal/reinsertion and primary teardown hooks.
+q514 repaired its VM prerequisite; q515 supplies remaining scoped acceptance.
+Completion changes add lifecycle/error tests and clarify source purpose comments.
+
+Commands/results, both plain/ASan variants:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: PASS, warning-free.
+- `build/ws074-host/{plain,asan}/host-frame-lifetime`:24/24. Saved function,
+  Document and Window survive removal/explicit parent destruction and GC;
+  saved function executes in the child, Document wrapper identity remains,
+  nested saved Window retains both child owners. Last-root removal reclaims
+  each real host once, repeated collection does not release twice; whole-heap
+  cleanup and a1MiB limit causing child getter ENOMEM leave no partial published
+  context and report no sanitizer diagnostic.
+- `browser --run plan/ws074/tests/pages/iframe-context-probe.html`:17/17, saved
+  Chromium reference. `iframe-safety-probe.html`:14/14, borrowed accessors and
+  owner wrappers, shared agent symbols, invalid receivers/no user getter calls,
+  unsupported sandbox null fallback, ancestor removal/reinsert, depth64 error
+  and bounded nested retirement. The depth exception belongs to the child
+  realm; checking its name preserves foreign-realm exception identity.
+- `host-context-ownership`:27/27; `host-realms`:30/30; `host-object`:100/100;
+  `host-interp`:45/45. `run-dom-tests.py --program .../browser`:23/23.
+- `run-acid-tests.py --program .../browser --out build/ws074-acid-q515-{plain,asan}`:
+  Acid2 exact100%; Acid3 42/100, all100 inventory exactly equals q514 in both
+  variants, Uncaught0, completeTrue/run_status0/run_errors0. Visual38.593125%.
+- `python3 plan/tools/style-check.py` on all p104 changed C sources and new host
+  test; `git diff --check`:PASS.
+
+ASAN_OPTIONS=detect_stack_use_after_return=0 is required for supported real-stack
+conservative scanning. Exact reclamation excludes obsolete construction stack
+words only at explicit rooted collection checkpoints through the ordinary heap
+API. The test wraps real managed host release hooks for observations and always
+delegates cleanup; production has no test switch. Final build contains the final
+host test; broader regressions remain valid because later changes only extended
+tests/comments, with no production semantic changes.
+
+Full coding-style.md review covers frame.c, the complete q513 diff in binding/
+DOM headers/window/document/environment/node/source registry, completion comments,
+and the host test: declarations/prototypes/paragraphs, allocation/error paths,
+trace edges and finalizer ordering. All applicable changed-source rules PASS;
+formatter unavailable, manual formatting. cc14.2.0, Python3.13.5. The one complete
+real heap-cap failure is bounded evidence, not exhaustive fault injection.
+
+Initial contexts are lazily created at first supported synchronous observation;
+no initial load task, URL/network navigation, WindowProxy/frame enumeration,
+document.open/close, XML/SVG/object loading or cross-context postMessage transport
+is claimed. Unsupported sandbox exposes no child; it is a documented safe
+fallback rather than complete sandbox compatibility. OS/guest/boot/GPU and
+aggregate make check not run because relevant paths are unchanged. p100 remains
+100/100 acceptance, and full WS conformance remains p044.
+
+[Hashes/results](verification.json), [inventory](inventory.json). Earlier q510
+and q513 uncleared outcomes remain historical; BUG-126/127 already resolved.
+Local unpublished, no push or remote lifecycle action.

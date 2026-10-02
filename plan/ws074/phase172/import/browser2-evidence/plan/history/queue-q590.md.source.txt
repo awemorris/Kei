@@ -1,0 +1,174 @@
+<!-- awesome-plan project=zedbsd record=queue -->
+
+# Queue
+
+Status: finished (2026-10-02)
+Finished Queue: q590
+Last finished Queue: [q589](queue-q589.md), exact archive verified;p100uncleared.
+Executor root/browser2/onefinitePhase/localunpublished.
+
+## Exact q590 scope and approval
+
+User autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation2026-10-02
+approve exact samep171 retry. Routine formatting only of new SVG length callback
+function definitions/new native GC callback and long compound decisions. Original
+native feature scope/criteria unchanged; final bothfullbuilds beforetests/warning0/
+manual full C1–14/styleempty/native60/all99both/original100/all100PASS/equalboth/
+noerrors/Acid2exact/finalsourcehashes. Prior q588 changed-source artifact reuse not
+permitted; rerun final affected checks. No concurrent/canceled/completed retry.
+No newlogic/API/CSS2/renderer/VM/net/OS/HAL/.internal/aggregate/push/publication.
+Finite formatting+verificationcycle/unknownprereqendsuncleared.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q590-i01 | [ws074-p171](../ws074/phase171/phase.md) | cleared | p170clear; repair full C layout prerequisite discovered in p100q589 |
+
+Graphp170(external)->p171->p100(external), acyclic.
+
+## Upcoming Work Outlook
+
+Samep100 finite acceptance retry after verified p171clear. Goal100 numeric evidence
+already confirmed; no CSS2/ESmodule/renderer automatic scope aftergoalachievement.
+
+## q590 outcome
+
+p171re-cleared/native60/all99both/original100/all100PASS/noerrors/Acid2exact.
+Mandatory signature formatting fixed/manually verified; originalq589uncleared
+retained. [Final evidence](../ws074/phase171/verification-q590.md). Allselectedterminal/
+rootreleased/localunpublished/no push; samep100retry next.
+
+## Exact approved p171 retry snapshot
+
+```markdown
+<!-- awesome-plan project=zedbsd record=ws074-p171 -->
+
+# ws074-p171: native SVG rect width and live scalar length reflection
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q590 / q590-i01 (prior q588 clearance invalidated in q589)
+Base7cfe12cd/q587 cleared/native42/all98both/actual99/Acid2exact.
+Current user autonomousAcid3 automaticfiniteQueues2026-09-30 +continuation
+2026-10-02 approve this exact finite necessary width feature before generation.
+Root/browser2 sole executor/writer/localunpublished/no push/no concurrentattempt.
+Guardrail/full C1–14/automation/native interface registry/DOM trace/CSSOM typed
+state/actual owner prototype snapshots/exception and number conversion read.
+
+## Exact finite scope / criteria
+
+Canonical exact SVG rect receives native SVGRectElement→SVGGeometryElement→
+SVGGraphicsElement→SVGElement. Native branded width is SameObject actual
+SVGAnimatedLength with distinct SameObject baseVal/animVal actual SVGLength.
+Private traced state owns actual native rect and all three wrappers, cached via
+one traced opaque dom_element.svg_width field. No public property storage or
+hardcoded numeric result. Live native unnamespaced width attribute is authoritative;
+clone has independent new cache; saved length retains actual owner/creator graph
+through precise-only GC; lastreleasecollects. Wrongnamespace/case/prototype/private
+platform and borrowed wronginterfaces reject; borrowed native genuine wrappers work.
+
+Finite scalar length profile exposes SVGLength unitType/value/valueInSpecifiedUnits/
+valueAsString and specified0–10constants, illegal constructors. Numeric and absolute
+NUMBER/px/cm/mm/in/pt/pc values convert at96CSSpx/in, parse finite signed decimal/
+exponent grammar and serialize real values back to native width. Numeric .value
+setter makes unitlessNUMBER; .valueInSpecifiedUnits preserves current supported unit;
+.valueAsString setter validates supported finite scalar length then serializes.
+Actual percentage/em/ex retain recognized unitType/specification/string, but user
+unit conversion .value throws explicit NotSupportedError: full viewport/font relative
+SVG geometry is still absent, no guessed scale. Relative string writes are retained
+as parsed attribute values; numeric specified-unit writes preserve that unit.
+Missing/invalid width uses actual initial scalar0; live valid negative numeric values
+are preserved in DOM reflection (rendering validation outside scope).
+animVal tracks actual nonanimated base attribute and is read-only with genuine
+NoModificationAllowedError; readonly unitType/baseVal/animVal/width remain accessor
+contracts. No animation/CSS override/fullSVG rendering claim. NewValueSpecifiedUnits/
+convertToSpecifiedUnits/other rect geometry attributes remain absent, not stubs.
+CSScomments/escapes/calc/newunits/auto geometry not expanded in this bounded numeric
+attribute profile. Native mutators protect state/owner across actual coercion,
+GC/reentrancy; errors never publish partial cache or stale conversions.
+
+New bind/svg-length.c registeredonce; selected bind/internal.h/window.c/svg-text.c
+for registry/rect dispatch only; dom/dom.h/node.c for opaque cache tracing only,
+existing native DOM attribute APIs for writes. No DOM algorithm/VM/net/style/parser/
+renderer/load/OS/HAL/.internal/aggregate/push/publication. New host-svg-length.c
+realPage/fonts actual rects, scalar grammar/unit conversion/livewrites/readonly/
+brands/clone/borrowedactualchild wrappers/GC/reentrantcoercion/lastrelease.
+Both full plain/ASan builds finish beforetests/warning0/styleempty/manual changed
+full C1–14/diffclean/sourcehashes/toolversions/clang-format absent/manual.
+Prior98+newnative1=99groupsPASSboth; original100/actual75/allprior99+72/equal100,
+complete/status0/noUncaught/crash/sanitizer/runnererror/timeouts/Acid2exact.
+Finite implementation+verificationcycle; unexpectedprereqendsuncleared before
+redesign. Graphp170(external)->p171->p100(external), acyclic. p100 has its own
+acceptance Queue next; p044/fullWS incomplete. No goal/criteria waiver.
+
+## Primary standards consulted — 2026-10-02
+
+https://www.w3.org/TR/SVG2/shapes.html#InterfaceSVGRectElement
+https://www.w3.org/TR/SVG2/types.html#InterfaceSVGAnimatedLength
+https://www.w3.org/TR/SVG2/types.html#InterfaceSVGLength
+Native SameObject/scalar attribute reflection/readonly animated handle and specified
+unit identities guide this declared partial profile. Other methods/geometry and
+relative conversion are explicit remaining SVG work, not full SVG conformance.
+
+## Outcome / q588-p171-clear — 2026-10-02
+
+Actual canonical rects now expose SVGRectElement/SVGGeometryElement identity and
+SameObject native SVGAnimatedLength.width with distinct writable baseVal and
+readonly animVal SVGLength wrappers. A private traced cache owns the real rect and
+all wrappers; live unnamespaced width attributes supply actual scalar data.
+Numeric/absolute units convert at96CSSpx/in; finite decimal/exponent parsing and
+scalar setters use actual native attribute invalidation. .value resets toNUMBER,
+.specified preserves actual post-coercion unit, .string validates before publication.
+Native animVal changes throw NoModificationAllowedError; unitless/absolute values
+are real, not truthy placeholder objects. Native60/60both covers scalar grammar,
+conversions/livewrites/readonly/brands/clones/actual child prototypes/borrowedgetters/
+coercion including genuine precise-only GC/saved-only owner and lastrelease.
+Prior98+native1=99groupsPASSboth. Original unchanged pinned Acid3 completes100/100,
+all100inventoryPASS/equalboth/prior99+72preserved/status0/noUncaught/crash/sanitizer/
+runnererror/timeouts; Acid2 exact100%/different_pixels0. Final plain screenshot
+visually inspected: displayed100/100, but FAIL labels/rendering differences remain;
+Acid3 pixel agreement37.04% is independent diagnostic, not full visual acceptance.
+Recognized percentage/em/ex specified coefficients/strings remain live, while user
+unit conversion throws explicit NotSupportedError rather than guessed geometry.
+Other rect geometry/conversion methods/animation/CSS overrides/modern grammar/
+full SVG rendering remain absent or unsupported in this declared partial profile.
+Both full final builds finished beforetests/warning0/styleempty/manual changed
+full C1–14/diffclean; cc14.2.0/Python3.13.5/clang-format absent/manual. Callback
+forward declarations precede immutable native descriptors for C name resolution;
+actual public interfaces precede static function definitions. Existing untouched
+legacy ordering retained; no full-WS p044 conformance claim.
+
+[Evidence](verification.md), [artifacts](verification.json), [WS](../ws.md).
+Root released/local unpublished, remote close not performed.
+
+## Clearance invalidated / q589 full manual review — 2026-10-02
+
+Full manual C section3 review found nine one-line SVGLength callback definitions
+and the new native collection callback: function name and every argument must occupy
+separate lines. style-check.py reports empty because its current coverage does not
+check this rule. Original100/all99both/noerrors/Acid2exact remain actual numeric
+behavior evidence; full changed-source conformance required by p171 was incorrectly
+reported clear. No product source edited in q589; final acceptance cannot clear.
+Invalidate current p171 clearance (retain original q588 cleared attempt/history),
+repair routine signature formatting within same native width scope and revalidate
+p171 in a new finite Queue, then retry this samep100. No human decision or scope/
+acceptance waiver; standing autonomous consent permits these necessary Queues.
+
+[Origin p100](../phase100/phase.md), [WS](../ws.md). Original q588 attempt kept cleared historically; current Phase requires revalidation.
+
+## q590 exact same-Phase retry / approved revision — 2026-10-02
+
+User standing autonomous goal and continuation approve finite samep171 retry after
+q589 final review identified mandatory section3 definition layout. Original native
+width scope/criteria unchanged. Source edits limited to ordinary formatting of nine
+callback signatures in bind/svg-length.c and one native collection callback in
+host-svg-length.c, plus mandatory multiline compound-decision formatting. No logic/
+API/ownership/source-boundary change. Basea696ab5d; root soleexecutor/no concurrency.
+Both full plain/ASan final builds beforetests/warning0; focused native60/all99both/
+original100/all100inventoryPASS/equalboth/noerrors/Acid2exact; final source hashes,
+styleempty and manual full C1–14 including explicit definition-layout inspection.
+Old q588 actual numeric100 evidence is retained but not reused for changed source;
+rebuild and rerun affected final checks once. Original q589/p100 remainsuncleared,
+then samep100retry after verified p171clear. Finiteformatting+verificationcycle,
+unknownprereqendsuncleared; no extra product code/CSS2/renderer/push/publication.
+```

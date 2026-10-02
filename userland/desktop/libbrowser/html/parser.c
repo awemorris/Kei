@@ -67,6 +67,7 @@ html_parser_create(
 	p->scripting = scripting;
 	p->frameset_ok = 1;
 	p->mode = TB_INITIAL;
+	p->insertion_point = (size_t)-1;
 	html_input_init(&p->input);
 	html_tokenizer_init(&p->tokenizer, &p->input);
 	wb_vector_init(&p->template_modes, sizeof(int));
@@ -185,6 +186,35 @@ html_parser_set_script_hook(
 	p->script_context = context;
 }
 
+/* Transfers stack tracing to an owner that participates in the GC graph. */
+void
+html_parser_transfer_ownership(
+	struct html_parser *p)
+{
+	/* A published owner must trace the parser before its independent root disappears. */
+	vm_heap_remove_tracer(p->heap, parser_trace, p);
+
+	/* Succeeded: the owner now determines parser reachability. */
+	return;
+}
+
+/* Marks native parser stacks whenever their managed owner is reachable. */
+void
+html_parser_trace_owned(
+	struct vm_heap *heap,
+	struct html_parser *p)
+{
+	/* Windows without a script-created parser have no parser stack to mark. */
+	if (p == NULL)
+		return;
+
+	/* Reuses the complete stack traversal of ordinary standalone parsers. */
+	parser_trace(heap, p);
+
+	/* Succeeded: every parser-held DOM edge is visible to this collection. */
+	return;
+}
+
 /*
  * Destroys a parser (the document stays).
  */
@@ -231,6 +261,120 @@ html_parser_feed(
 
 	/* Succeeded: the tree holds what the text described. */
 	return 0;
+}
+
+/*
+ * Inserts script-written text before the current script's input boundary.
+ *
+ * The unread suffix stays owned while the tokenizer runs the inserted prefix.
+ * Partial tokens remain in the tokenizer for the next write or source bytes.
+ */
+int
+html_parser_write(
+	struct html_parser *p,
+	const uint16_t *units,
+	size_t length)
+{
+	struct wb_units suffix;
+	size_t suffix_length;
+	int was_closed;
+	int restore_error;
+	int error;
+
+	/* A failed parser cannot safely expose another input boundary. */
+	if (p->failed)
+		return ENOMEM;
+
+	/* Only a parser executing a script has a supported insertion point. */
+	if (p->insertion_point == (size_t)-1 || p->stopped)
+		return ENOTSUP;
+
+	/* Refuses a recursive writer before it consumes the host's C stack. */
+	if (p->write_depth >= 32U)
+		return ELOOP;
+
+	/* Protects the unread source, which this write must not consume. */
+	wb_units_init(&suffix);
+	suffix_length = p->input.units.length - p->insertion_point;
+	if (suffix_length != 0) {
+		error = wb_units_append(&suffix, p->input.units.data + p->insertion_point, suffix_length);
+		if (error != 0) {
+			p->failed = 1;
+			wb_units_release(&suffix);
+			return error;
+		}
+	}
+
+	/* Reserves the inserted text before hiding any original source bytes. */
+	error = wb_units_reserve(&p->input.units, length);
+	if (error != 0) {
+		p->failed = 1;
+		wb_units_release(&suffix);
+		return error;
+	}
+
+	/* Makes only the script's prefix available, with no synthetic EOF. */
+	was_closed = p->input.closed;
+	p->input.closed = 0;
+	p->input.units.length = p->insertion_point;
+	error = wb_units_append(&p->input.units, units, length);
+	if (error == 0) {
+		/* Keeps the boundary after partial tokens that await further writes. */
+		p->insertion_point = p->input.units.length;
+		p->write_depth++;
+		error = parser_run(p);
+		p->write_depth--;
+	}
+
+	/* Restores the source even when parsing the inserted prefix failed. */
+	restore_error = wb_units_append(&p->input.units, suffix.data, suffix.length);
+	p->input.closed = was_closed;
+	wb_units_release(&suffix);
+	if (restore_error != 0) {
+		p->failed = 1;
+		return restore_error;
+	}
+
+	/* Propagates a failed insertion instead of claiming a complete parse. */
+	if (error != 0) {
+		p->failed = 1;
+		return error;
+	}
+
+	/* Succeeded: the written prefix is parsed and the source is readable again. */
+	return 0;
+}
+
+/*
+ * Gives a parser script its insertion point and restores the enclosing writer.
+ */
+void
+tb_run_script(
+	struct html_parser *p,
+	struct dom_element *script)
+{
+	size_t previous_point;
+	size_t previous_length;
+	int error;
+
+	/* A parser without script execution needs no insertion scope. */
+	if (p->script_hook == NULL)
+		return;
+
+	/* Publishes the point immediately after this script's end tag. */
+	previous_point = p->insertion_point;
+	previous_length = p->input.units.length;
+	p->insertion_point = p->input.position;
+	error = p->script_hook(p->script_context, script);
+	if (error != 0)
+		p->failed = 1;
+
+	/* Nested text shifted the outer script's still-unread boundary. */
+	if (previous_point != (size_t)-1 && !p->failed)
+		previous_point += p->input.units.length - previous_length;
+
+	/* The outer writer, or normal source parser, owns the input again. */
+	p->insertion_point = previous_point;
 }
 
 /*
@@ -2344,6 +2488,9 @@ parser_clone_element(
 			parser_nomem(p);
 			return NULL;
 		}
+
+		/* Attribute namespace identity survives copying before another parser allocation. */
+		clone->attributes[index].namespace_uri = element->attributes[index].namespace_uri;
 	}
 
 	/* Succeeded: the clone is detached. */

@@ -89,6 +89,7 @@ enum computed_property {
 	COMPUTED_TEXT_INDENT,
 	COMPUTED_DIRECTION,
 	COMPUTED_WHITE_SPACE,
+	COMPUTED_CURSOR,
 	COMPUTED_VERTICAL_ALIGN,
 	COMPUTED_LIST_STYLE_TYPE,
 	COMPUTED_BORDER_COLLAPSE,
@@ -108,7 +109,8 @@ enum computed_property {
 	COMPUTED_OUTLINE_STYLE,
 	COMPUTED_OUTLINE_COLOR,
 	COMPUTED_TRANSFORM,
-	COMPUTED_GRID_TEMPLATE_COLUMNS
+	COMPUTED_GRID_TEMPLATE_COLUMNS,
+	COMPUTED_TEXT_TRANSFORM
 };
 
 /*
@@ -208,6 +210,8 @@ static const struct computed_entry computed_entries[] = {
 	{ "text-indent", COMPUTED_TEXT_INDENT },
 	{ "direction", COMPUTED_DIRECTION },
 	{ "white-space", COMPUTED_WHITE_SPACE },
+	{ "text-transform", COMPUTED_TEXT_TRANSFORM },
+	{ "cursor", COMPUTED_CURSOR },
 	{ "vertical-align", COMPUTED_VERTICAL_ALIGN },
 	{ "list-style-type", COMPUTED_LIST_STYLE_TYPE },
 	{ "border-collapse", COMPUTED_BORDER_COLLAPSE },
@@ -260,6 +264,49 @@ static const char *const computed_text_aligns[] = { "start", "left", "right", "c
 
 /* The names of direction, by enum css_direction. */
 static const char *const computed_directions[] = { "ltr", "rtl" };
+
+/* The canonical cursor names, indexed by enum css_cursor for computed serialization. */
+static const char *const computed_cursors[] = {
+	"auto",
+	"default",
+	"none",
+	"context-menu",
+	"help",
+	"pointer",
+	"progress",
+	"wait",
+	"cell",
+	"crosshair",
+	"text",
+	"vertical-text",
+	"alias",
+	"copy",
+	"move",
+	"no-drop",
+	"not-allowed",
+	"e-resize",
+	"n-resize",
+	"ne-resize",
+	"nw-resize",
+	"s-resize",
+	"se-resize",
+	"sw-resize",
+	"w-resize",
+	"ew-resize",
+	"ns-resize",
+	"nesw-resize",
+	"nwse-resize",
+	"col-resize",
+	"row-resize",
+	"all-scroll",
+	"grab",
+	"grabbing",
+	"zoom-in",
+	"zoom-out",
+};
+
+/* The resolved CSS2 transform names follow the native computed keyword enum. */
+static const char *const computed_text_transforms[] = { "none", "capitalize", "uppercase", "lowercase" };
 
 /* The names of white-space, by enum css_white_space. */
 static const char *const computed_white_spaces[] = { "normal", "pre", "nowrap", "pre-wrap", "pre-line" };
@@ -384,6 +431,7 @@ bind_computed_value(
 	const struct vm_string *name,
 	vm_value *result)
 {
+	struct bind_window *window;
 	struct wb_units units;
 	int property;
 	int found;
@@ -396,9 +444,14 @@ bind_computed_value(
 		return status;
 	}
 
+	/* Uses the element's owning Document even for a borrowed parent method. */
+	window = bind_window_of(realm);
+	if (element->node.document->view != NULL)
+		window = element->node.document->view;
+
 	/* The value's text. */
 	wb_units_init(&units);
-	status = computed_write(bind_window_of(realm), element, property, &units);
+	status = computed_write(window, element, property, &units);
 	if (status != 0) {
 		wb_units_release(&units);
 		return status;
@@ -487,15 +540,27 @@ computed_write(
 	int found;
 	int error;
 
-	/* No host computes nothing. */
-	if (window->host.computed_style == NULL)
-		return 0;
+	/* Only active initial children can compute without a primary page host. */
+	if (window->host.computed_style == NULL) {
+		if (!window->owned ||
+		    window->context_depth == 0 ||
+		    window->detached)
+			return 0;
+	}
 
 	/* The element's style (on the heap: it is large). */
 	style = malloc(sizeof(*style));
 	if (style == NULL)
 		return ENOMEM;
-	error = window->host.computed_style(window->host.context, element, style);
+
+	/* Primary pages keep their host path; initial children own their cascade. */
+	if (window->host.computed_style != NULL) {
+		error = window->host.computed_style(window->host.context, element, style);
+	} else {
+		error = bind_style_context_compute(window, element, style);
+	}
+
+	/* Detached or disconnected elements have empty resolved values. */
 	if (error == ENOENT) {
 		free(style);
 		return 0;
@@ -771,6 +836,13 @@ computed_write_keyword(
 		break;
 	case COMPUTED_DIRECTION:
 		error = computed_name(computed_directions, 2, style->direction, out);
+		break;
+	case COMPUTED_CURSOR:
+		error = computed_name(computed_cursors, sizeof(computed_cursors) / sizeof(computed_cursors[0]), style->cursor, out);
+		break;
+	case COMPUTED_TEXT_TRANSFORM:
+		/* Serialize the actual cascaded keyword in CSS and camel-case accessors alike. */
+		error = computed_name(computed_text_transforms, 4, style->text_transform, out);
 		break;
 	case COMPUTED_WHITE_SPACE:
 		error = computed_name(computed_white_spaces, 5, style->white_space, out);

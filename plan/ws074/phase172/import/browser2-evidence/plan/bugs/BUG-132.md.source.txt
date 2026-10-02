@@ -1,0 +1,51 @@
+# BUG-132: data URL base64 errors are erased by unrelated MIME fallback
+
+Reproduction: reproduced
+Disposition: resolved
+Date: 2026-10-02
+Origin [p166](../ws074/phase166/phase.md), q582/q582-i01.
+Handling: finite native data URL error-preservation prerequisite to be selected,
+then unchanged p166 retry. Related: none confirmed. Search active/archive Bug Board
+and all linked bug files for base64/data URL/MIME found no matching existing ticket.
+
+Expected: data:application/xml;base64,! rejects decoding with EINVAL, no normal
+successful MIME/body/response; MIME fallback applies only to MIME parsing failure.
+Observed: production net_data_parse reports success, default text/plain MIME and
+empty body because its shared error==EINVAL fallback also catches data_base64
+failure. New page_fetch_response correctly forwards this incorrect native result
+as status200, so mandatory invalid-response cleanup criteria fail. Both plain/ASan
+run-resource-tests.py --program build/ws074-host/VARIANT/host-resource:99/101,
+FAIL invalid data decoding rejects successful response status / invalid data
+leaves empty owned response. No crash/Uncaught/sanitizer failure. Real valid data/
+base64/local files/loopbackHTTP/redirect/404/declared MIME/legacy compatibility
+checks pass. q582 build warning0/styleempty, source HEAD f9d31097 plus p166 changes.
+
+Root cause net/data.c net_data_parse: data_base64 sets EINVAL; later data_mime is
+skipped but unconditional MIME error fallback replaces the failure with a successful
+buffer append. Invalid body and invalid MIME need independent error routing.
+Native parser's actual forgiving decode already rejects !; no decoder replacement
+or altered forgiving padding needed. Preserve native invalid body cleanup and
+existing valid MIME/default/parameters/data URL behavior. Fetch Standard data URL
+processor https://fetch.spec.whatwg.org/#data-url-processor steps11 vs14 and
+Infra https://infra.spec.whatwg.org/#forgiving-base64-decode read2026-10-02.
+
+Evidence [q582 record](../ws074/phase166/verification.md) with both native logs,
+source hashes and exact approval snapshot. Bounds: one native fixture run per
+variant, source inspection confirmed cause; no net source repair inside q582.
+All95/original reruns skipped after focused failure; last verified original94/
+all94/Acid2exact remains q581. No acceptance relaxation/nonblocking transfer.
+Reinvestigation trigger: any invalid data body succeeds or MIME-only fallback
+changes valid/default resource decoding after verified repair.
+
+## Scheduled q583 / p167 (2026-10-02)
+
+[Exact repair](../ws074/phase167/phase.md) routes MIME-only fallback separately
+from earlier body errors. p166 remains uncleared until unchanged separate retry.
+
+## Resolved q583 / p167 (2026-10-02)
+
+[Verification](../ws074/phase167/verification.md): genuine invalid-body errors no
+longer enter MIME default fallback; native68/68 and unchanged p166resource101/101
+both, all96/original94/noerrors/Acid2exact. No decoder replacement or false
+nonblocking transfer. Reopen on invalid body success or MIME-only fallback
+regression. p166 separate unchanged retry still required; originalq582 retained.

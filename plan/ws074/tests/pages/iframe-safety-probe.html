@@ -1,0 +1,60 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) {
+  console.log((condition ? "PASS " : "FAIL ") + label);
+}
+var frame = document.createElement("iframe");
+document.body.appendChild(frame);
+var child = frame.contentWindow;
+var doc = frame.contentDocument;
+var getDocument = Object.getOwnPropertyDescriptor(HTMLIFrameElement.prototype, "contentDocument").get;
+var getParent = Object.getOwnPropertyDescriptor(Window.prototype, "parent").get;
+var getURL = Object.getOwnPropertyDescriptor(Document.prototype, "URL").get;
+var getState = Object.getOwnPropertyDescriptor(Document.prototype, "readyState").get;
+check("borrowed iframe getter", getDocument.call(frame) === doc);
+check("borrowed Window getter", getParent.call(child) === window);
+check("borrowed URL getter", getURL.call(doc) === "about:blank");
+check("borrowed state getter", getState.call(doc) === "complete");
+check("borrowed createElement owner", Document.prototype.createElement.call(doc, "div") instanceof child.HTMLElement);
+check("shared well-known symbol", child.Symbol.iterator === Symbol.iterator);
+var rejected = false;
+try { getDocument.call(document.createElement("div")); } catch (error) { rejected = error instanceof TypeError; }
+check("iframe getter rejects unrelated element", rejected);
+rejected = false;
+try { getParent.call({document: doc}); } catch (error) { rejected = error instanceof TypeError; }
+check("Window getter rejects copied Document", rejected);
+var reads = 0;
+rejected = false;
+try { getParent.call({get document() { reads++; return doc; }}); } catch (error) { rejected = error instanceof TypeError; }
+check("Window branding avoids user getter", rejected && reads === 0);
+var sandboxed = document.createElement("iframe");
+sandboxed.setAttribute("sandbox", "");
+document.body.appendChild(sandboxed);
+check("unsupported sandbox does not expose child", sandboxed.contentWindow === null && sandboxed.contentDocument === null);
+var container = document.createElement("div");
+document.body.appendChild(container);
+container.appendChild(frame);
+child = frame.contentWindow;
+doc = frame.contentDocument;
+document.body.removeChild(container);
+check("ancestor removal retires child", child.closed && doc.defaultView === null && frame.contentWindow === null);
+document.body.appendChild(container);
+check("ancestor reinsertion makes fresh context", frame.contentWindow !== child);
+var first = document.createElement("iframe");
+document.body.appendChild(first);
+var cursor = first.contentDocument;
+var contexts = 1;
+rejected = false;
+try {
+  while (contexts <= 64) {
+    var nested = cursor.createElement("iframe");
+    cursor.body.appendChild(nested);
+    cursor = nested.contentDocument;
+    contexts++;
+  }
+} catch (error) { rejected = error.name === "RangeError"; }
+check("nesting resource bound", rejected && contexts === 64);
+document.body.removeChild(first);
+check("bounded nested teardown", first.contentWindow === null);
+</script>

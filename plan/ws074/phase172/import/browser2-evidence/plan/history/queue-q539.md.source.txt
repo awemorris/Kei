@@ -1,0 +1,116 @@
+<!-- awesome-plan project=zedbsd record=q539 -->
+
+# q539 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q539](history/queue-q539.md), exact archive verified.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q539
+
+Purpose WS074/fg011 actual input submit-button native submission events.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact [p129 scope](ws074/phase129/phase.md) saved before generation.
+Timebox one finite Phase; no cancellation/conflict/concurrent executor.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q539-i01 | [ws074-p129](ws074/phase129/phase.md) | cleared | p1286a9badbf verified; indexed54 needs actual canceled native submit event |
+
+Wholep129 native current Submit input owner/event/guard, SubmitEvent constructor/
+traced submitter/composed getter/root lifecycle, bounded fixtures/selected plain+
+ASan regressions/prior78/new54/equal/noerrors/Acid2exact/fullC/evidence. Known
+host missing navigation means only event stage authorized; uncanceled script
+submissions report unsupported navigation, no fake success. Exclude actual host/
+page/navigation/validation/other submitters/methods/formdata/composed path and other
+recorded residuals. Graph p128(external)->p129->future host navigation(external)->
+p100(external), acyclic; unknown prerequisite ends uncleared before redesign.
+
+## Upcoming Work Outlook
+
+Actual script submission/navigation host protocol, radio/input hooks, table/Range/
+CSS/loading/SVG; p100/p044 acceptance unchanged.
+
+## q539 outcome (2026-10-01)
+
+[p129](ws074/phase129/phase.md) cleared, [evidence](ws074/phase129/verification.md).
+Actual input Submit .click native submission-event stage/current owner/guard,
+SubmitEvent constructor/traced submitter/composed getter/roots. Submit56/GC13/
+frame98/all34 selected regressionsPASS both variants. Original all10079/100/
+indexed54newPASS/prior78 preserved/equal/noerrors/Acid2exact. Remaining21; next
+native table collections/accessors, then structural methods. Known actual host
+navigation/complete submission/composed path and other residuals retained;
+p100/p044 unchanged. Root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p129 -->
+
+# ws074-p129: input submit-button submission events
+
+Approved snapshot status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q539 / q539-i01
+Prerequisite p1286a9badbf cleared; actual click/GC10/frame93/prior78 verified,
+exact q538 archive verified. Root sole executor/one finite Phase.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact scope saved before source generation; no cancellation/conflict.
+Timebox bounded selected fixtures and fixed Acid suites.
+
+## Exact scope / design / criteria
+
+Incremental submission-event stage for actual HTML input current type Submit:
+uncanceled .click dispatch then recompute ordinary live form owner and connectivity;
+only connected submitter/owner in an actual document browsing context dispatches
+trusted bubbling/cancelable SubmitEvent at actual form, submitter native reference,
+current form realm, no input/change. Same-form firing-submission-events flag blocks
+nested other submitter recursion and clears after all errors/cancellation; later
+independent attempts eligible. Click preventDefault/handlerfalse suppresses submit;
+submit cancellation succeeds without any navigation/encoding/fetch request.
+
+Known host capability boundary established BEFORE selection: bind_host has no
+submission/navigation callback; page_submit_form currently covers separate GUI GET
+flow. This Phase selects the native event stage ONLY; uncanceled script submissions
+have an explicit unsupported-navigation console diagnostic and no pretend success
+or hidden navigation. Does not modify page/host protocol or existing GUI flow.
+Does not claim complete submission, requestSubmit/submit methods, buttons/images/
+implicit/validation/no-validate/formdata/GET/POST/history/action reflection.
+
+Add native SubmitEvent : Event with constructor type+nullable dictionary flags
+bubbles/cancelable/composed and nullable HTMLElement submitter; scalar dictionaries
+TypeError, missing type TypeError, one type conversion then ordered flag/submitter
+gets, propagation, boolean no user coercion, actual HTMLElement brand independent
+of prototype forgery, readonly native submitter getter with actual event subclass
+brand. Strong trace of submitter and explicit roots for converted type/dictionary/
+submitter during arbitrary getter-triggered GC before allocation/publication.
+Native Event.composed getter supplies stored state (new SubmitEvent initialization
+and default false for existing interfaces); existing other event constructors'
+composed option propagation and click/input composed are a known separate increment,
+no shadow DOM/path semantics claimed. Native submission events composed false.
+
+Submission helper explicitly roots owner/event/submitter through dispatch/removal/GC,
+keeps actual form guard scoped; saved sole event retains submitted child element and
+managed owner even after former primary destruction. No raw primary realm pointer.
+Affected new bind/submit.c registration, click.c/internal.h/window.c/event.c/dom.h,
+scoped WS tests/GC/child lifetime. No HAL/toolchain/aggregate check/push.
+
+Full Guardrail/C rules loaded (no concise), WHATWG form submission/SubmitEvent read
+2026-10-01. Verify plain+ASan dedicated order/cancellation/returnfalse/live owner/
+external explicit forms/disconnected/typechanged/disabled/recursion/flags/native
+submitter/method shadow/getters/brand/dictionary/conversion/error/prototype/child;
+actual callback and dictionary GC roots and saved child event last-root release;
+prior32 selected regressionsPASS/all100 prior78 preserved/equal/noerrors/complete/
+status0/new54expected/Acid2 exact/warning0/ASan0/full changed C/style/diff/hashes/
+evidence. No fullWPT/fuzz/OS/guest/boot/GPU or complete form/input conformance.
+Unknown prerequisite ends uncleared before redesign. p100/p044 unchanged;
+known p128/automatic radio/input/NodeList/parser/table/Range/CSS/SVG residuals retained.
+Graph p128(external) -> p129 -> future actual host navigation(external) -> p100(external),
+acyclic; only p129 authorized. Local unpublished/no push.
+
+## Introduction / q539 activation (2026-10-01)
+
+Indexed54 changes a parsed hidden input to submit and cancels the resulting form
+submit event. Select actual native event stage with explicit known navigation
+boundary, retaining full submission/host integration as separate later work.

@@ -1,0 +1,44 @@
+{
+  "queue": "q529",
+  "baseline": "b744f662",
+  "sources": {
+    "userland/desktop/browser/dom/removal.c": "0a1ed6242dec4b078c2a9d3a026d13676b00a3b59b424d1b75c6a99d625b27b0",
+    "userland/desktop/browser/dom/dom.h": "f906775dfda72783eba2d5d2f38ad2823ac44ecc8e3404da0413a38442e2e425",
+    "userland/desktop/browser/dom/node.c": "f0e3494b69f5f491472827776b833e89e2cfc5008cd97896128844d75849edda",
+    "userland/desktop/libbrowser/Makefile": "dfd627acc9674f115671de851b3cd159888b4e5f1f01d9e980076d63744ed9a9",
+    "plan/ws074/tests/host-removal.c": "cecbd62f3d54be8dd047c174f1c38216a4653ee250af92922a6f641ee1959de9"
+  },
+  "changes": [],
+  "reports": [
+    "build/ws074-acid-q529-plain/report.json",
+    "build/ws074-acid-q529-asan/report.json"
+  ],
+  "regressions": [
+    "build/ws074-q529-final-plain.json",
+    "build/ws074-q529-final-asan.json"
+  ],
+  "plain_asan": {
+    "removal": "19/19",
+    "TreeWalker": "70/70+GC5/5",
+    "frame": "53/53",
+    "XML": "62/62+GC16/16",
+    "namespace": "38/38+GC12/12",
+    "DOM": "23/23",
+    "JS": "14/14",
+    "owner": "27/27",
+    "realms": "30/30",
+    "VM": "object100/interp45",
+    "child CSS": "30/30",
+    "names": "31/31",
+    "iframe": "17/17",
+    "legacy": "56/56",
+    "selectors": "golden identical",
+    "Acid3": "68/100 unchanged all100/noerrors",
+    "Acid2": "exact"
+  },
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

@@ -1,0 +1,118 @@
+<!-- awesome-plan project=zedbsd record=q559 -->
+
+# q559 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q559](history/queue-q559.md), exact archive verified; p145 retry cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q559
+
+Purpose WS074/fg011 retry exact [p145](ws074/phase145/phase.md) child-list
+MutationRecord roots after verified [BUG-130](bugs/BUG-130.md) factory repair.
+Approval current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01
+continuation; exact p145 retry snapshot saved BEFORE any generation. One finite Phase/
+bounded runner60sec/no cancellation/conflict. No source generation planned.
+
+| Attempt | Phase | Status | Prerequisite / reason |
+| --- | --- | --- | --- |
+| q559-i01 | [ws074-p145](ws074/phase145/phase.md) | cleared | q557 preserved uncleared; p146/BUG-130 resolved, same existing notification criteria; base1c8ef0ce original88/all64 |
+
+Exact whole p145 parent/added/removed + newborn list/record callee roots and cleanup,
+existing child-list model/independent results, Page13/native16 actual GC, prior61+2=63
+plus current factory64 integration, plain+ASan original>=88/prior88/equal/noerrors/
+Acid2exact/full changed C. Reuse q558 built current source only if hashes match; fresh
+Page/native/all64/Acid tests in this Queue. Graph p106+p144+p146(external)->p145->
+Range delete/extract/p100(external), acyclic. Unknown dependency ends uncleared.
+
+## Upcoming Work Outlook
+
+Actual Range delete/extract/surround contents; CSS/loading/SVG; final p100/p044.
+Forecast is not authorization.
+
+## q559 outcome (2026-10-01)
+
+[p145](ws074/phase145/phase.md) cleared in q559 retry, [evidence](ws074/phase145/verification-q559.md).
+Original p145 child-list roots/Page13/native16 actual GC now verified plain+ASan after
+p146 BUG-130 repair; q557 prior uncleared preserved. Original Acid3 88/prior88/equal/
+noerrors/Acid2exact/all64PASS. Next actual Range delete/extract/surround; p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p145 -->
+
+# ws074-p145: rooted native child-list MutationRecord construction
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q557 / q557-i01 uncleared; q559 / q559-i01 in-progress
+Prerequisites p106 managed ownership and p144 cleared; base2fb02f3f original88/all61/Acid2exact.
+Root sole executor/no cancellation/conflict. Approval current user2026-09-30 autonomous
+Acid3/automatic Queues +2026-10-01 continuation. Exact snapshot saved BEFORE generation.
+
+## Exact scope / design / criteria
+
+Repair temporary ownership only in existing bind/environment.c child-list record and
+zero/one NodeList-shaped array construction. Explicit native parent/added/removed and
+newborn list/constructor/name/type/record slots protect all participants through actual
+VM allocations with stack scanning disabled. No permanent managed observer roots;
+retain existing primary observer rooting, managed Window tracing, registration/FIFO,
+current minimal childList/subtree target model, array-shaped NodeList constructor.name,
+null sibling/attribute/oldValue fields. Publish a complete decorated list and complete
+record only success; cleanup every temporary root on all errors. Existing pending array
+may remain empty after allocation failure; no DOM rollback or new observer features.
+Public helper loop performs no allocation before record callee; queued job push is C
+vector allocation only and installs realm traced values without intermediate VM allocation.
+Preserve existing file layout outside changed private helpers; no unrelated ordering rewrite.
+
+Add one focused Page childList/subtree/takeRecords/disconnect/independent observer/FIFO/
+callback delivery probe, and one native fixture. Native fixture uses genuine registered
+observers/ordinary native nodes, direct existing child mutation helper with no outer VM
+receiver frame or stack scanning. Three finite input/pressure cases exercise added+removed,
+added-only and removed-only, NodeList zero/one entries, actual allocation-triggered GC
+near ordinary8MiB threshold, complete recorded identities and constructor names/null fields,
+independent pending arrays and release of removed nodes after take/disconnect. Ordinary
+inert cells supply pressure; no heap implementation or hidden production switches.
+Baseline reproducer may be run once within this Phase; only actual reproduction warrants
+resolved bug evidence, static concern alone does not establish reproduced bug identity.
+
+Both plain/ASan builds warning0, new probes and all prior61+2=63 regression groupsPASS,
+original pinned Acid3>=88/prior88 preserved/all100 equivalent/complete/no Uncaught/crash/
+runner timeout/Acid2exact. Each runner60sec; unknown prerequisite ends uncleared before
+redesign, no arbitrary retry extension. Full changed C against Guardrail/full coding-style/
+automation, manual formatting (clang-format unavailable), inspect style output/diff/hashes.
+No score increase required; this is necessary ownership foundation for forthcoming actual
+Range delete/extract mutation notifications. Graph p106+p144(external)->p145->mutating
+contents/p100(external), acyclic. Existing phase acceptance unchanged.
+
+Exclusions: new public API, attributes/CharacterData observation, real NodeList architecture,
+transient registrations/fullDOM/observer standard expansion, Range contents methods,
+BUG-129 shared buffer repair, VM/collector/realm lifetime changes, fullWPT/fuzz/OS/guest/
+boot/GPU/HAL/toolchain/push/GitHub publication. Host-native evidence only. p100/p044/WS
+remain incomplete. Affected environment.c/new Page/native fixtures only.
+
+## Introduction / q557 activation (2026-10-01)
+
+Read-only dependency review before selecting mutating Range contents found unrooted
+record/list intermediate cells. Isolate their callee ownership in this finite prerequisite;
+no earlier cleared Phase design or acceptance changed. Source baseline style output empty.
+
+## q557 uncleared outcome (2026-10-01)
+
+p145 uncleared in q557: existing record/list roots implemented, Page13/prior61 pass;
+native allocation-GC14/16 fails added identity/cardinality, ASan64-byte leak. Original
+88/prior88/equal/noerrors/Acid2exact preserved. Unknown unpublished VM Array factory
+prerequisite [BUG-130](../../bugs/BUG-130.md) scheduled; finite factory ownership Phase then
+unchanged p145 retry. p100/p044/WS incomplete/root released/local unpublished/no push.
+[Evidence](verification.md).
+
+## q559 retry / dependency resolution (2026-10-01)
+
+[BUG-130](../../bugs/BUG-130.md) resolved by [p146/q558](../phase146/verification.md): direct VM factory20/20, unchanged q557 native16/16, ASan leak0. The original p145
+record/list design and all exact whole-Phase criteria above remain unchanged; prior
+q557 failure/evidence/history remain intact. q559 re-verifies current final source
+plain/ASan, original88/equal/Acid2exact and all current64 groups, then clears only
+if the original notification ownership/lifetime criteria hold. No source expansion.

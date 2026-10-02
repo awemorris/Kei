@@ -1,0 +1,49 @@
+<!-- awesome-plan project=zedbsd record=queue-q513 -->
+
+# Queue
+
+Status: finished (2026-09-30)
+Active Queue: none
+Last finished Queue: [q512](queue-q512.md), verified archive.
+
+## q513
+
+Purpose: initial about:blank HTML iframe contexts, WS074 / fg011.
+Timebox: one finite Phase, initial contexts and bounded lifecycle/GC regressions.
+Approval: current user 2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」.
+Exact scope: p104 q513 concrete revision saved before activation, distinct
+managed realm/Window/Document, iframe getters, wrappers/relations, removal/nested
+retirement/reinsertion, owner URL/readyState/defaultView and bounded blank hosts.
+No network/loading/navigation/Window.open/open-close/XML/SVG/object/Range/CSSOM/
+HAL/toolchain/modules. Initial load task, WindowProxy/enumeration remain later.
+
+| Attempt | Phase | Status | Dependency / selection reason |
+| --- | --- | --- | --- |
+| q513-i01 | [ws074-p104](../ws074/phase104/phase.md) | uncleared | p103/p105/p106 cleared, working call/ownership output verified bc4d4ef7; iframe Documents unblock Acid3 groups |
+
+Acceptance: Chromium17/17 plus focused lifecycle/GC/error/teardown, ownership27/
+27 and realm30/30 plus existing VM/DOM; plain/ASan builds warning-free; Acid2
+exact and all100 Acid3/no regressions, full changed-source standard/style/diff.
+q510-i01 remains historical uncleared; new attempt does not rewrite history.
+
+Graph: p103 + p105 + p106 (external cleared) → q513-i01/p104 → p100 (external
+planned). No cycle. All external nodes are context, not q513 implementation.
+
+## Upcoming Work Outlook
+
+Loaded-child HTML and script-created parser/open/close, then indexed DOM/Core/
+Events/Traversal/Range/CSSOM/XML/SVG/VM requirements in finite phases to p100.
+p100 is100/100 zero Uncaught/crash/timeout preserving Acid2 exact; p044 full WS
+review remains. p101 CSS2 and p098 modules follow p100 outside this goal.
+
+## q513 terminal outcome (2026-09-30)
+
+q513-i01/p104 uncleared: initial iframe plain17/17 production progress retained,
+but GC investigation reproduces BUG-127 / ASan UAF in p106 function trace.
+[Evidence](../ws074/phase104/retirement-investigation.md). No full iframe/ASan/Acid
+clearance; last actual Acid measurement q51240/100Uncaught0, Acid2 exact.
+p106 clearance invalidated and redesigned for cached managed-owner tracing;
+p105 unaffected. Next select p106 repair/revalidation automatically, then new
+p104 attempt. Scope expansion stopped; exact outcomes/history retained. New
+probe full manual standard/style/diff pass, compiler14.2.0, formatter absent.
+OS/guest/boot/GPU skipped, local unpublished, no push or remote lifecycle action.

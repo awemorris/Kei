@@ -1,0 +1,33 @@
+# q525 evidence — 2026-10-01
+
+p115 cleared: brandedHTMLObjectElement data accessor resolves through existing
+netURL parser against actual nodeDocument URL/firstHTMLbase[href], returning raw
+scalar text for syntax failure. Content setter converts exactlyonce/repairs lone
+surrogates without serializing the attribute or starting fetch. Absence/empty/
+relative/dot/root/query/fragment/absolute/nonASCII/pairs/errors/brand/parser/clone/
+firstbase/mutation/removal/ownchildabsolute base/borrowedcallee verified.
+
+Bothvariants focused44/44, existingreflection40/40, frameGC33/33, owner27/27,
+DOM23/23, WPT URL first100dict entries100/100. All100 equalinventories62→63 solely
+64newPASS/no formerpasslost/Uncaught0/completeTrue/run_status0/run_errors[], Acid2
+exact/different_pixels0, warningfree/noASan. Visual38.48708333333333% separate.
+
+Commands host-build.sh plain/asan; browser --run object-url-probe.html and
+html-reflection-probe.html; host-frame-lifetime/host-context-ownership;
+run-dom-tests.py; run-acid-tests.py --out build/ws074-acid-q525-<variant>.
+ASAN_OPTIONS=detect_stack_use_after_return=0 for real-stackGC. host-url receives
+first100 WPT dicts in originalorder using run-url-tests.py hexed/check. Initially
+fixtureabsent; fetched exactlypinned rawurltestdata.json, URL/hash recorded in
+[verification.json](verification.json), parsedbeforecachewrite. No pinchange,
+no productionparserchange, no fullWPT claim. Logs build/ws074-q525-*.
+
+Full changedsource manualstandardreview brand-before-reentrancy, registry order/
+forwards, receiverowner, UTF16/USVString, checkedallocation/URL failure vsENOMEM/
+cleanup/singleownedcandidate transfer/namespace/treeorder/ANSI/paragraphs PASS.
+style-check.py html-reflection.c/node.c/window.c and git diff --check PASS;
+clang-formatunavailable/manualformatting, cc14.2.0/Python3.13.5. [Inventory](inventory.json).
+Knowninitialblankrelative URL about-base snapshot remains a separate foundation;
+no fullbaseURI/CSP/freezing/adoption/navigation/objectload/contentDocument/SVG/
+fullHTMLObjectinterface/exhaustivefailurefuzz/OS/guest/boot/GPU checked. Remaining37
+features/p100100/100 unmet, p044 fullWSconformance remains. Localunpublished/nopush.
+WIPcommit suppliesrecordrevision.

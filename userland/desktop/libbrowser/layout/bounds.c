@@ -26,7 +26,7 @@ static const struct layout_box *bounds_find(const struct layout_box *box, const 
 /*
  * Finds the rectangle a node takes on the page, in layout units from the
  * document's top left.  Returns whether the node has any box (a node that
- * is not rendered, or whose boxes are all empty, has none).
+ * is not rendered has none; all empty boxes retain their first rectangle).
  */
 int
 layout_node_bounds(
@@ -47,8 +47,12 @@ layout_node_bounds(
 	if (tree->root != NULL)
 		bounds_walk(tree->root, node, rect, &found, 0);
 
-	/* Reports whether the node has a box. */
-	return found;
+	/* No native box is different from a first empty rectangle preserved by the walk. */
+	if (found == 0)
+		return 0;
+
+	/* Succeeded: a positive union or actual first empty fragment supplied geometry. */
+	return 1;
 }
 
 /*
@@ -192,7 +196,7 @@ bounds_lines(
 	}
 }
 
-/* Grows a rectangle to take in another (the first one found is taken as it is); an empty one adds nothing. */
+/* Unions positive rectangles while preserving the first actual empty rectangle as a fallback. */
 static void
 bounds_add(
 	struct layout_rect *rect,
@@ -205,12 +209,27 @@ bounds_add(
 	layout_unit right;
 	layout_unit bottom;
 
-	/* An empty box has no place to add. */
-	if (width <= 0 || height <= 0)
+	/* A negative native extent cannot supply a valid border rectangle. */
+	if (width < 0 || height < 0)
 		return;
 
-	/* The first box is the rectangle. */
-	if (!*found) {
+	/* All-empty results keep the first actual fragment, without enlarging a positive union. */
+	if (width == 0 || height == 0) {
+		/* A negative marker records fallback geometry until a positive-area rectangle replaces it. */
+		if (*found == 0) {
+			rect->x = x;
+			rect->y = y;
+			rect->width = width;
+			rect->height = height;
+			*found = -1;
+		}
+
+		/* Later empty fragments cannot enlarge or replace the chosen rectangle. */
+		return;
+	}
+
+	/* The first positive rectangle replaces any provisional empty fragment. */
+	if (*found <= 0) {
 		rect->x = x;
 		rect->y = y;
 		rect->width = width;

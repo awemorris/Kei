@@ -22,10 +22,9 @@
 #include <errno.h>
 #include <string.h>
 
+/* Trace declarations are required by the cell-type initializers below. */
 static void function_trace(struct vm_heap *heap, struct vm_cell *cell);
 static void function_env_trace(struct vm_heap *heap, struct vm_cell *cell);
-static int function_add_prototype(struct vm_realm *realm, struct vm_function *function);
-static int function_add_generator_prototype(struct vm_realm *realm, struct vm_function *function);
 
 /* The cell type of functions: objects that also hold their realm's objects through the realm's tracer. */
 const struct vm_cell_type vm_function_type = {
@@ -36,6 +35,12 @@ const struct vm_cell_type vm_function_type = {
 const struct vm_cell_type vm_env_type = {
 	"environment", function_env_trace, NULL
 };
+
+static int function_add_prototype(struct vm_realm *realm, struct vm_function *function);
+static int function_add_generator_prototype(struct vm_realm *realm, struct vm_function *function);
+static struct vm_object *function_default_prototype(struct vm_realm *realm, vm_value target, struct vm_object *fallback);
+static int function_run_native(struct vm_function *function, vm_native native, vm_value this_value, const vm_value *args, unsigned count, vm_value new_target, vm_value *result);
+static void function_transfer_exception(struct vm_realm *caller, struct vm_realm *callee, int status);
 
 /*
  * Makes a native function of a realm with its name and length properties
@@ -62,6 +67,12 @@ vm_function_create_native(
 	if (error != 0)
 		return NULL;
 	function->realm = realm;
+
+	/* Retains only collectible realms without consulting retired manual owners. */
+	if (realm->managed)
+		function->realm_owner = &realm->cell;
+
+	/* Initializes the native entry point and its ordinary function state. */
 	function->native = native;
 	function->object.kind = VM_KIND_FUNCTION;
 	function->data = VM_VALUE_UNDEFINED;
@@ -113,6 +124,12 @@ vm_function_create(
 	if (error != 0)
 		return NULL;
 	function->realm = realm;
+
+	/* Retains only collectible realms without consulting retired manual owners. */
+	if (realm->managed)
+		function->realm_owner = &realm->cell;
+
+	/* Initializes the bytecode entry point and its ordinary function state. */
 	function->code = code;
 	function->object.kind = VM_KIND_FUNCTION;
 	function->data = VM_VALUE_UNDEFINED;
@@ -313,10 +330,13 @@ vm_construct_prototype(
 	if (status != 0)
 		return status;
 
-	/* An object is the prototype; anything else leaves the fallback. */
+	/* Uses an explicit object prototype or the target realm's default intrinsic. */
 	is_object = vm_value_is_object(value);
-	if (is_object)
+	if (is_object) {
 		*prototype = (struct vm_object *)vm_value_as_cell(value);
+	} else {
+		*prototype = function_default_prototype(realm, new_target, fallback);
+	}
 
 	/* Succeeded: the prototype. */
 	return 0;
@@ -369,7 +389,7 @@ vm_call(
 	int callable;
 	int status;
 
-	/* Only a function can be called (a TypeError when the realm has its constructors). */
+	/* Rejects a non-callable value in the caller's realm. */
 	*result = VM_VALUE_UNDEFINED;
 	callable = vm_value_is_callable(callee);
 	if (!callable) {
@@ -377,33 +397,48 @@ vm_call(
 		return status;
 	}
 
-	/* A bytecode function runs in the interpreter; a class's constructor only with new. */
+	/* Rejects a class constructor invoked without new. */
 	function = (struct vm_function *)vm_value_as_cell(callee);
-	if (function->code != NULL && (function->code->flags & VM_CODE_CLASS) != 0U) {
+	if (function->code != NULL &&
+	    (function->code->flags & VM_CODE_CLASS) != 0U) {
 		status = vm_throw_class_call(realm, function);
 		return status;
 	}
 
-	/* Any other bytecode function runs. */
+	/* Runs script code in the callee's realm, including suspended functions. */
 	if (function->code != NULL) {
-		status = vm_interpret(function->realm, function, this_value, args, count, result);
-		return status;
+		status = vm_interpret(
+		    function->realm,
+		    function,
+		    this_value,
+		    args,
+		    count,
+		    result);
+		if (status != 0) {
+			function_transfer_exception(realm, function->realm, status);
+			return status;
+		}
+	} else {
+		/* A native-less function cannot be executed. */
+		if (function->native == NULL)
+			return ENOSYS;
+
+		/* Preserves the native caller's callee and construction state. */
+		status = function_run_native(
+		    function,
+		    function->native,
+		    this_value,
+		    args,
+		    count,
+		    VM_VALUE_UNDEFINED,
+		    result);
+		if (status != 0) {
+			function_transfer_exception(realm, function->realm, status);
+			return status;
+		}
 	}
 
-	/* A function with neither has nothing to run. */
-	if (function->native == NULL)
-		return ENOSYS;
-
-	/* Runs the native code in the function's own realm (which tells it which function it is). */
-	function->realm->callee = callee;
-	function->realm->new_target = VM_VALUE_UNDEFINED;
-	status = function->native(function->realm, this_value, args, count, result);
-	if (status == VM_THROWN)
-		return VM_THROWN;
-	if (status != 0)
-		return status;
-
-	/* Succeeded: the result is stored. */
+	/* Succeeded: the callee's result is available in the caller. */
 	return 0;
 }
 
@@ -427,7 +462,7 @@ vm_construct(
 	int is_constructor;
 	int status;
 
-	/* Only a constructor. */
+	/* Rejects a non-constructor in the caller's realm. */
 	*result = VM_VALUE_UNDEFINED;
 	is_constructor = vm_value_is_constructor(constructor);
 	if (!is_constructor) {
@@ -435,37 +470,68 @@ vm_construct(
 		return status;
 	}
 
-	/* A native constructor makes its object itself. */
+	/* A native constructor creates its object in its own realm. */
 	function = (struct vm_function *)vm_value_as_cell(constructor);
 	if (function->code == NULL) {
-		function->realm->callee = constructor;
-		function->realm->new_target = new_target;
-		status = function->construct(function->realm, VM_VALUE_UNDEFINED, args, count, result);
-		if (status != 0)
+		status = function_run_native(
+		    function,
+		    function->construct,
+		    VM_VALUE_UNDEFINED,
+		    args,
+		    count,
+		    new_target,
+		    result);
+		if (status != 0) {
+			function_transfer_exception(realm, function->realm, status);
 			return status;
-		return 0;
+		}
+	} else if ((function->code->flags & VM_CODE_DERIVED) != 0U) {
+		/* A derived constructor's super call supplies this. */
+		status = vm_interpret_construct(
+		    function->realm,
+		    function,
+		    VM_VALUE_EMPTY,
+		    args,
+		    count,
+		    new_target,
+		    result);
+		if (status != 0) {
+			function_transfer_exception(realm, function->realm, status);
+			return status;
+		}
+	} else {
+		/* Allocates this using new.target's prototype and the callee's fallback. */
+		status = vm_construct_prototype(
+		    function->realm,
+		    new_target,
+		    function->realm->object_prototype,
+		    &prototype);
+		if (status != 0) {
+			function_transfer_exception(realm, function->realm, status);
+			return status;
+		}
+
+		/* Makes the ordinary constructor's receiver in the shared heap. */
+		made = vm_object_create(function->realm->heap, prototype);
+		if (made == NULL)
+			return ENOMEM;
+
+		/* Runs the constructor without losing its realm or new.target. */
+		status = vm_interpret_construct(
+		    function->realm,
+		    function,
+		    vm_value_cell(made),
+		    args,
+		    count,
+		    new_target,
+		    result);
+		if (status != 0) {
+			function_transfer_exception(realm, function->realm, status);
+			return status;
+		}
 	}
 
-	/* A derived class's constructor starts without this (its super call makes it). */
-	if ((function->code->flags & VM_CODE_DERIVED) != 0U) {
-		status = vm_interpret_construct(function->realm, function, VM_VALUE_EMPTY, args, count, new_target, result);
-		if (status != 0)
-			return status;
-		return 0;
-	}
-
-	/* Any other bytecode one runs on a new object. */
-	status = vm_construct_prototype(realm, new_target, realm->object_prototype, &prototype);
-	if (status != 0)
-		return status;
-	made = vm_object_create(realm->heap, prototype);
-	if (made == NULL)
-		return ENOMEM;
-	status = vm_interpret_construct(function->realm, function, vm_value_cell(made), args, count, new_target, result);
-	if (status != 0)
-		return status;
-
-	/* Succeeded: the object made. */
+	/* Succeeded: the constructor's object is available to the caller. */
 	return 0;
 }
 
@@ -511,7 +577,127 @@ vm_throw_site(
 	return 1;
 }
 
-/* Marks what a function refers to: what every object refers to, and its code (its realm's objects are the realm's tracer's). */
+/* Resolves a default intrinsic in a direct function target's own realm. */
+static struct vm_object *
+function_default_prototype(
+	struct vm_realm *realm,
+	vm_value target,
+	struct vm_object *fallback)
+{
+	struct vm_function *function;
+	struct vm_realm *target_realm;
+	unsigned index;
+	int callable;
+
+	/* A host-provided non-function target retains its explicit fallback. */
+	callable = vm_value_is_callable(target);
+	if (!callable)
+		return fallback;
+
+	/* The common same-realm case requires no intrinsic translation. */
+	function = (struct vm_function *)vm_value_as_cell(target);
+	target_realm = function->realm;
+	if (target_realm == realm)
+		return fallback;
+
+	/* Translates the three foundational prototypes stored outside intrinsics. */
+	if (fallback == realm->object_prototype)
+		return target_realm->object_prototype;
+
+	/* Function.prototype is independently initialized in each realm. */
+	if (fallback == realm->function_prototype)
+		return target_realm->function_prototype;
+
+	/* Array.prototype is likewise a realm-specific foundational object. */
+	if (fallback == realm->array_prototype)
+		return target_realm->array_prototype;
+
+	/* Maps any registered default intrinsic to its counterpart in the target. */
+	for (index = 0; index < VM_INTRINSICS; index++) {
+		/* Only a constructed intrinsic can match the provided fallback. */
+		if (realm->intrinsics[index] == NULL)
+			continue;
+
+		/* Keeps fallback identity within the target function's realm. */
+		if (fallback == realm->intrinsics[index])
+			return target_realm->intrinsics[index];
+	}
+
+	/* Succeeded: a host-specific fallback retains its explicit ownership. */
+	return fallback;
+}
+
+/* Runs a native with scoped callee/new.target state, including reentrant calls. */
+static int
+function_run_native(
+	struct vm_function *function,
+	vm_native native,
+	vm_value this_value,
+	const vm_value *args,
+	unsigned count,
+	vm_value new_target,
+	vm_value *result)
+{
+	struct vm_realm *realm;
+	vm_value saved_callee;
+	vm_value saved_target;
+	int status;
+
+	/* Keeps the outer native's state while this invocation owns the realm. */
+	realm = function->realm;
+	saved_callee = realm->callee;
+	saved_target = realm->new_target;
+	realm->callee = vm_value_cell(function);
+	realm->new_target = new_target;
+
+	/* Restores the outer state even when the native throws or allocation fails. */
+	status = native(realm, this_value, args, count, result);
+	if (status != 0) {
+		realm->callee = saved_callee;
+		realm->new_target = saved_target;
+		return status;
+	}
+
+	/* Lets the suspended outer native observe its original call again. */
+	realm->callee = saved_callee;
+	realm->new_target = saved_target;
+
+	/* Succeeded: the native produced its result with the outer state intact. */
+	return 0;
+}
+
+/* Moves a foreign thrown value and its source metadata to the catching realm. */
+static void
+function_transfer_exception(
+	struct vm_realm *caller,
+	struct vm_realm *callee,
+	int status)
+{
+	/* Ordinary failures carry no JavaScript exception. */
+	if (status != VM_THROWN)
+		return;
+
+	/* A same-realm call already published its exception in the right place. */
+	if (caller == callee)
+		return;
+
+	/* Transfers the actual object rather than constructing a caller-realm copy. */
+	caller->exception = callee->exception;
+	caller->throw_value = callee->throw_value;
+	caller->throw_line = callee->throw_line;
+	caller->throw_column = callee->throw_column;
+
+	/* The caller now owns the pending throw; the callee no longer retains it. */
+	callee->exception = VM_VALUE_UNDEFINED;
+	callee->throw_value = VM_VALUE_UNDEFINED;
+	callee->throw_line = 0;
+	callee->throw_column = 0;
+
+	/* Succeeded: the foreign exception is pending only in its caller. */
+	return;
+}
+
+/* Marks a function's environment, code, data and collectible child realm. */
 static void
 function_trace(
 	struct vm_heap *heap,
@@ -524,6 +710,7 @@ function_trace(
 
 	/* The code unit it runs, the environment it runs in, and its data. */
 	function = (struct vm_function *)cell;
+	vm_heap_mark(heap, function->realm_owner);
 	if (function->code != NULL)
 		vm_heap_mark(heap, (struct vm_cell *)function->code);
 	if (function->env != NULL)

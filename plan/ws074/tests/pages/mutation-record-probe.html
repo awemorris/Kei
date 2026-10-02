@@ -1,0 +1,20 @@
+<!doctype html><html><body><script>
+function check(ok,name){console.log((ok?'PASS ':'FAIL ')+name);}
+var root=document.createElement('div'),nested=document.createElement('p');root.appendChild(nested);document.body.appendChild(root);
+var delivered=0,delivery=null,one=new MutationObserver(function(records){delivered++;delivery=records;}),two=new MutationObserver(function(){});
+one.observe(root,{childList:true,subtree:true});two.observe(root,{childList:true});
+var a=document.createElement('b'),b=document.createComment('old');root.appendChild(a);root.appendChild(b);root.removeChild(b);
+var first=one.takeRecords(),second=two.takeRecords();
+check(first.length===3&&second.length===3,'takeRecords preserves FIFO and independent observers');
+check(first!==second&&first[0]!==second[0]&&first[0].addedNodes!==second[0].addedNodes,'observers own independent records and lists');
+check(first[0].type==='childList'&&first[0].target===root&&first[0].addedNodes[0]===a,'record retains actual added identity and parent');
+check(first[1].addedNodes[0]===b&&first[2].removedNodes[0]===b&&b.parentNode===null,'record retains detached removed identity');
+check(first[0].addedNodes.constructor.name==='NodeList'&&first[0].removedNodes.constructor.name==='NodeList','empty and nonempty sequences preserve constructor name');
+check(first[0].addedNodes.length===1&&first[0].removedNodes.length===0&&first[2].addedNodes.length===0&&first[2].removedNodes.length===1,'empty and single-item sequence cardinality');
+check(first[0].previousSibling===null&&first[0].nextSibling===null&&first[0].attributeName===null&&first[0].attributeNamespace===null&&first[0].oldValue===null,'existing child-list null fields preserved');
+check(one.takeRecords().length===0&&two.takeRecords().length===0,'takeRecords drains each pending sequence');
+var c=document.createTextNode('nested');nested.appendChild(c);var deep=one.takeRecords();check(deep.length===1&&deep[0].target===nested&&deep[0].addedNodes[0]===c,'subtree observation retains actual changed descendant');check(two.takeRecords().length===0,'ordinary target excludes descendant mutation');
+one.disconnect();root.appendChild(document.createElement('i'));check(one.takeRecords().length===0,'disconnect discards target and pending records');two.takeRecords();
+one.observe(root,{childList:true});root.appendChild(document.createElement('u'));root.removeChild(a);
+setTimeout(function(){check(delivered===1&&delivery.length===2,'checkpoint batches complete FIFO records');check(delivery[0].addedNodes[0].localName==='u'&&delivery[1].removedNodes[0]===a,'callback preserves added and removed identity');one.disconnect();two.disconnect();console.log('mutation record probe done');},0);
+</script></body></html>

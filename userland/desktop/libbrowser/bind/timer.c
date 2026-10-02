@@ -33,6 +33,7 @@
 static int timer_add(struct vm_realm *realm, const vm_value *args, unsigned count, int repeat, vm_value *result);
 static int timer_find_due(const struct bind_window *window, uint64_t limit, size_t *index);
 static int timer_run(struct bind_window *window, const struct bind_timer *timer);
+static int timer_run_due(struct bind_window *window);
 
 /*
  * Reports when the next timer is due; zero when there is none.
@@ -68,39 +69,28 @@ int
 bind_run_timers(
 	struct bind_window *window)
 {
-	struct bind_timer *queued;
-	struct bind_timer timer;
-	uint64_t limit;
-	size_t index;
-	int found;
+	struct vm_cell *owner;
 	int status;
 
-	/* Only the timers made before this round run in it. */
-	limit = window->next_sequence;
-	for (;;) {
-		found = timer_find_due(window, limit, &index);
-		if (!found)
-			break;
-
-		/* An interval stays for its next period (as the newest timer); a timeout goes. */
-		queued = wb_vector_at(&window->timers, index);
-		timer = *queued;
-		if (timer.repeat) {
-			queued->due = window->now + timer.interval;
-			queued->sequence = window->next_sequence;
-			window->next_sequence++;
-		} else {
-			*queued = *(struct bind_timer *)wb_vector_at(&window->timers, window->timers.count - 1U);
-			wb_vector_pop(&window->timers);
-		}
-
-		/* The callback. */
-		status = timer_run(window, &timer);
+	/* Parent-realm callbacks can remove the child's last connected reference. */
+	owner = NULL;
+	if (window->realm->managed) {
+		owner = &window->realm->cell;
+		status = vm_heap_add_root(window->realm->heap, &owner);
 		if (status != 0)
 			return status;
 	}
 
-	/* Succeeded: no timer made before the round is due. */
+	/* Keeps the child host alive across every timer callback and checkpoint. */
+	status = timer_run_due(window);
+	if (owner != NULL)
+		vm_heap_remove_root(window->realm->heap, &owner);
+
+	/* Any callback failure retains its original return contract. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the bounded round has no remaining due callback. */
 	return 0;
 }
 
@@ -331,6 +321,53 @@ timer_add(
 
 	/* Succeeded: the number is reported. */
 	*result = vm_value_number((double)timer.id);
+	return 0;
+}
+
+/* Runs the finite due-timer round while its public caller retains the host. */
+static int
+timer_run_due(
+	struct bind_window *window)
+{
+	struct bind_timer *queued;
+	struct bind_timer timer;
+	uint64_t limit;
+	size_t index;
+	int found;
+	int status;
+
+	/* Detached contexts cannot deliver callbacks, including newly queued timers. */
+	if (window->detached) {
+		window->timers.count = 0;
+		return 0;
+	}
+
+	/* Only the timers made before this round run in it. */
+	limit = window->next_sequence;
+	for (;;) {
+		found = timer_find_due(window, limit, &index);
+		if (!found)
+			break;
+
+		/* An interval stays for its next period (as the newest timer); a timeout goes. */
+		queued = wb_vector_at(&window->timers, index);
+		timer = *queued;
+		if (timer.repeat) {
+			queued->due = window->now + timer.interval;
+			queued->sequence = window->next_sequence;
+			window->next_sequence++;
+		} else {
+			*queued = *(struct bind_timer *)wb_vector_at(&window->timers, window->timers.count - 1U);
+			wb_vector_pop(&window->timers);
+		}
+
+		/* The callback. */
+		status = timer_run(window, &timer);
+		if (status != 0)
+			return status;
+	}
+
+	/* Succeeded: no timer made before the round is due. */
 	return 0;
 }
 

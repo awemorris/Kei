@@ -1,0 +1,50 @@
+# p133 / q544 verification — 2026-10-01
+
+Cleared native table.createTBody/table+section insertRow/deleteRow and readonly
+rowIndex/sectionRowIndex. Exact native HTML namespace/local case, optional/required
+signed long conversion once before current live membership, logical row parent
+selection, complete new body+row publication, current owner and explicit graph roots.
+Pure internal table traversal shares actual native collection order; script-visible
+list/method expandos cannot change native algorithms.
+
+Original fixed WPT2d66b9b7998bb58c336138c178323ddee857b586 all100 **83/100**
+plain+ASan; new indexed50+51, all prior81 preserved/equal complete inventories,
+status0/Uncaught/run_errors/crash/runner timeout0; Acid2 exact100%. Remaining17.
+
+Commands plain and asan (ASAN_OPTIONS=detect_stack_use_after_return=0):
+- sh plan/ws074/tests/host-build.sh VARIANT: cc14.2.0 final warning/error0.
+- browser --run plan/ws074/tests/pages/table-row-probe.html: 62 PASS. Initial/
+  multiple/misplaced bodies/head/foot/direct rows; insertion/deletion current parent,
+  optional undefined/required missing/ranges/fraction/NaN/infinity/modulo/conversion
+  mutation/error, native list/method expando bypass, XML/foreign/uppercase brands,
+  indices/clone/current ownership after conversion adoption and child frame removal.
+- host-table-row: 75/75 PASS. Direct native invocation forces real stack-excluded
+  GC during numeric valueOf (owner+argument retained) and actual insertion callback
+  removes new row/body/owner/current header parent/reference. All pending graphs
+  survive; after success or actual EIO host error, all roots/results/arguments are
+  released and actual cells reclaimed. One host notification sees complete new
+  body+row; no hidden production switches. Borrowed operation calls actual child host.
+- host-frame-lifetime: 123/123 PASS. Saved child native table inserts a row after
+  manual primary destruction and stack-excluded GC, final root releases once.
+- python3 build/ws074-q544-regressions.py VARIANT: all41 groups PASS. Exact commands/
+  counts/results embedded in verification.json; prior table68/71/nativeGC42/25,
+  adoption26/removal37/Submit56/click57/radio73/input94/forms/collection/traversal/
+  XML/realm/DOM23/JS14/child CSS and selectors golden preserved.
+- python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+  --out build/ws074-acid-q544-VARIANT: real reports embedded verbatim in JSON;
+  aggregate goalFAIL expected until100.
+- python3 plan/tools/style-check.py changed production C/header/host scope:
+  0 findings. Full C manual review/manual formatting (clang-format absent), complete
+  forward/public/static order/native registry exception/ANSI locals/no calls in
+  conditions/checked conversion+allocation/roots/current membership/owner reviewed.
+- git diff --check PASS; base57b37012/source SHA256 in JSON.
+
+No forced root/atom/DOM allocation or INT32_MAX row-count injection; checked exits
+and limits reviewed manually. Existing callbacks can remove new rows after insertion,
+so returned rows may then be detached; roots guarantee publication safety rather
+than undoing ordinary callback effects. No insertCell/deleteCell/cellIndex/Cellclass,
+obsolete attributes/layout/parser/custom reactions/full table conformance claim.
+Known p132 template Document model and other prior input/form/radio/Range/CSS/SVG/
+loading residuals retained. No fullWPT/fuzz/OS/guest/boot/GPU checks, host semantics
+only. p100/p044 unmet/root released/local unpublished/no push. Primary algorithms
+read2026-10-01: [WHATWG tables](https://html.spec.whatwg.org/multipage/tables.html).

@@ -22,49 +22,6 @@ static int mixin_element_link(struct vm_realm *realm, struct dom_node *node, vm_
 static int mixin_name_matches(const struct dom_element *element, const struct vm_string *name, const struct vm_string *lower);
 
 /*
- * Reports a parent's element children as an array (children).
- */
-int
-bind_children(
-	struct vm_realm *realm,
-	vm_value this_value,
-	const vm_value *args,
-	unsigned count,
-	vm_value *result)
-{
-	struct bind_window *window;
-	struct dom_node *node;
-	struct dom_node *child;
-	struct vm_object *array;
-	int status;
-
-	UNUSED_PARAMETER(args);
-	UNUSED_PARAMETER(count);
-
-	/* The node and an empty list. */
-	window = bind_window_of(realm);
-	status = bind_this_node(realm, this_value, &node);
-	if (status != 0)
-		return status;
-	status = bind_array_create(realm, &array);
-	if (status != 0)
-		return status;
-
-	/* Each element child in order. */
-	for (child = node->first_child; child != NULL; child = child->next) {
-		if (child->type != DOM_ELEMENT)
-			continue;
-		status = bind_array_push_node(window, array, child);
-		if (status != 0)
-			return status;
-	}
-
-	/* Succeeded: the list is reported. */
-	*result = vm_value_cell(array);
-	return 0;
-}
-
-/*
  * Reports a parent's first element child (firstElementChild).
  */
 int
@@ -610,24 +567,65 @@ mixin_element_link(
 	return 0;
 }
 
-/* Tells whether an element's qualified name matches getElementsByTagName's name ("*" matches all). */
+/* Tells whether a qualified name matches using the owning Document's case policy. */
 static int
 mixin_name_matches(
 	const struct dom_element *element,
 	const struct vm_string *name,
 	const struct vm_string *lower)
 {
+	const struct vm_string *requested;
+	size_t index;
+	size_t offset;
+	uint16_t actual;
+	uint16_t expected;
 	int star;
 
-	/* "*" matches every element. */
+	/* A wildcard includes every descendant Element irrespective of namespace. */
 	star = vm_string_equal_ascii(name, "*");
 	if (star)
 		return 1;
 
-	/* An HTML element matches the name folded to lower case (the names are atoms). */
-	if (element->ns == DOM_NS_HTML)
-		return element->local_name == lower;
+	/* Only HTML elements within HTML Documents use the folded query spelling. */
+	requested = name;
+	if (element->ns == DOM_NS_HTML && element->node.document->content == DOM_CONTENT_HTML)
+		requested = lower;
 
-	/* Other elements match the name as it is. */
-	return element->local_name == name;
+	/* The qualified name includes an optional prefix and its colon separator. */
+	offset = 0;
+	if (element->prefix != NULL) {
+		offset = element->prefix->length + 1U;
+
+		/* A different qualified-name length cannot match this element. */
+		if (requested->length != offset + element->local_name->length)
+			return 0;
+
+		/* Prefixes participate in exact comparison rather than disappearing from queries. */
+		for (index = 0; index < element->prefix->length; index++) {
+			actual = vm_string_at(element->prefix, index);
+			expected = vm_string_at(requested, index);
+			if (actual != expected)
+				return 0;
+		}
+
+		/* A prefix always occupies the slice before one literal namespace separator. */
+		expected = vm_string_at(requested, offset - 1U);
+		if (expected != ':')
+			return 0;
+	}
+
+	/* Unprefixed and prefixed local slices must have exactly the same remaining length. */
+	if (requested->length != offset + element->local_name->length)
+		return 0;
+
+	/* Compares UTF-16 code units without allocation or repeating user conversion. */
+	for (index = 0; index < element->local_name->length; index++) {
+		actual = vm_string_at(element->local_name, index);
+		expected = vm_string_at(requested, offset + index);
+		if (actual != expected)
+			return 0;
+	}
+
+	/* Succeeded: every qualified-name code unit matches the selected spelling. */
+	return 1;
 }

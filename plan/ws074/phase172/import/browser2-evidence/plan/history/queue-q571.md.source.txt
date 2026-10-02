@@ -1,0 +1,145 @@
+<!-- awesome-plan project=zedbsd record=q571 -->
+
+# q571 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q571](history/queue-q571.md), exact archive verified; p155 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q571
+
+Current user automatic Acid3 Queues +continuation authorizes finite p155 revalidation.
+Exact Phase revision snapshot saved before source/comment changes. p156 actual native
+zero/empty layout prerequisites verified. Prior q569uncleared retained; no cancellation.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q571-i01 | [ws074-p155](ws074/phase155/phase.md) | cleared | p109/p151/p153/p154/p156 actualoutputs verified; same acceptance revalidation |
+
+Graph p109+p151+p153+p154+p156(external)->p155->CSSOM+p100(external), acyclic whole
+prerequisites; p156 used earlier scoped actual output rather than p155clearance.
+All83both/original>=93/prior93/equal100/noerrors/Acid2exact. Whole original p155 criteria
+retained; full p155 source review/minor semantic comments only, runner60sec; unknown
+prerequisites enduncleared. No CSSOM/loading/SVG execution in this cycle.
+
+## Upcoming Work Outlook
+
+Native CSSOM then eligible SVG/XML loading; final p100/p044. Forecast only.
+
+## q571 outcome (2026-10-01)
+
+[p155](ws074/phase155/phase.md) cleared in q571, [evidence](ws074/phase155/verification-q571.md).
+Same acceptance revalidated after independent p156 outputs. Native10/Page22/all83
+PASS both; original93/prior93/equal100/noerrors/Acid2exact. Actual72 obtains rendered
+height10 and reaches missing CSSOM. Full affected-source review/semantic comments
+complete. Earlier q569 uncleared/evidence retained. Next CSSOM/loading/SVG;
+p100/p044/WS incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p155 -->
+
+# ws074-p155: child native geometry and rendered image dimensions
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q571 / q571-i01 (prior q569-i01 uncleared retained)
+Prerequisites p109 child CSS/p151 actual iframe viewport/p153 streams/p154 images
+cleared and actual outputs verified; base040c92ea clean/original93/all79/Acid2exact.
+Root sole executor/current user2026-09-30 autonomous Acid3/automatic Queues +
+2026-10-01 continuation approval, finite exact snapshot saved BEFORE generation.
+No cancellation/conflict. Guardrail/full coding-style1–14/automation/browser design
+6/7/12.4 plus actual Page geometry/layout/text/image modules read.
+
+## Exact scope / design / criteria
+
+Actual72 now has real img but height getter reads only content attributes and child
+has no layout callback. Supply real existing layout_build for connected active
+managed child documents through Page.node_box, using actual child cascade/viewport
+and ordinary Page font/image resources. Compute transient child tree per observation;
+release before returning, no C layout DOM pointers retained between calls/no child
+permanent roots. Native public bind_window_child_styles bridge exposes borrowed
+current child CSS engine and integer viewport only for active owned context; verify
+retirement after geometry refresh, reject out-of-layout-unit viewport before multiply.
+Existing primary layout/index path unchanged; factor common box serialization so
+primary and transient child use actual border/padding/content dimensions equally.
+Initial child inherits parent's existing node_box callback; nested child routing
+uses actual node Document to choose child engine, finite context-depth limit already
+exists. Retired/factory/disconnected/unrendered nodes produce no geometry. Font/image
+resources borrowed during synchronous call only; no Page pointers persist beyond
+existing quiet managed host retirement. Child painting/network/image loading not
+introduced; existing decoded-resource lookup or ordinary replaced fallback used.
+
+Rendered HTMLImageElement width/height getters brand exact native HTML img and
+use actual receiver Document owner host.node_box. Root target native node and actual
+owner realm through callback allocation/GC/retirement; verify current owner/connection
+before publishing. Rendered dimensions subtract used borders/padding (content box),
+clamp negative zero, reject nonfinite/out-of-int geometry and truncate fractional
+unsigned IDL size. Existing nonrendered attribute fallback preserved; full intrinsic
+natural-size/currentSrc/complete loading semantics remain separate follow-up.
+Primary getters also return real rendered content dimensions, setters unchanged.
+Standard HTML2026-09-29 embedded-content.html#dom-img-height and
+embedded-content-other.html#dimension-attributes read2026-10-01 content-box algorithm.
+No computed CSS string used as layout result and no score fixture shim.
+Affected bind/bind.h,style-context.c,frame.c,element.c; page/geometry.c; new Page/native.
+
+Page real child viewport0/nonzero/percent and CSS height10->20->30->40 by actual style
+text/inline mutations; widths/content vs border/padding/box-sizing/display none/
+detached attribute fallback; real geometry rectangles and child ownership/borrowed
+image getter/primary isolation/nested frame/retired state. Use real checked-in fonts
+same as pinned Acid runner. Native ordinary Page child layout plus direct image
+getters, actual host callback GC with stack disabled, iframe retirement during
+callback and collectibility after temporary roots released; no production test switch.
+Prior79+new2=81 plain+ASan/original>=93/prior93/full100 same/complete/status0/no
+Uncaught/crash/runnererrors/Acid2exact. Original72 should reach next CSSOM dependency;
+CSSOM excluded, no requirement72 passes here. Each runner60sec/bounded GC. Build
+warning0/sanitizer0/style output inspected/full affected C/manual formatting
+clang-format absent/diff/hashes. Unknown dependency ends uncleared before redesign.
+Graph p109+p151+p153+p154(external)->p155->future CSSOM+p100(external), acyclic.
+Exclusions child painting/navigation/loading/full rendering conformance/container
+query rerender loops/independent child font loading/full intrinsic image APIs/CSSOM/
+XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/
+GitHub publication. p100/p044/WS incomplete/local unpublished.
+
+## Introduction / q569 activation (2026-10-01)
+
+Real current72 height0 is verified. Page already owns fonts/images/layout; bind
+already owns child cascade. A small CSS bridge and transient Page-host layout reuse
+existing layer responsibilities and actual viewport0 rather than new child Page
+instances or C cache cycles. Geometry queries and rendered image getters share real
+box data. Known next CSSOM dependency retained, no acceptance reduction.
+
+## q569 uncleared outcome (2026-10-01)
+
+[p155](phase.md) uncleared in q569, [evidence](verification.md).
+Transient child layout/native content image dimensions implemented; native10/10
+real GC/retirement/collectibility both. Prior79 pass; new Page21/22 has exact-zero
+percentage failure. Original93/prior93/full100 same/noerrors/Acid2exact. Existing
+layout rejects zero percentage bases and drops empty inline rectangles, so original72
+still height0. Separate layout dependency repair then same p155 acceptance revalidation;
+CSSOM/loading/SVG remain. Root released; p100/p044/WS incomplete/local unpublished.
+
+## Design revision after q569 / p156 prerequisite (2026-10-01)
+
+Verified real replaced_length rejects zero definite percentage bases; bounds_add
+suppresses actual empty inline img rectangles. Add [p156](../phase156/phase.md)
+layout repair as prerequisite to same p155 acceptance revalidation. Keep existing
+scope/criteria/root safety and all q569 evidence/outcome; no reclassification as
+cleared. Revised order p156 supplied outputs -> separately selected p155revalidation
+-> CSSOM. No CSSOM implementation or full rendering expansion here. [WS](../ws.md).
+
+## q571 exact revalidation approval (2026-10-01)
+
+Base49a53f14, p156 cleared and actual zero/empty output verified Page15/native10/
+all83both/original93/actual72 now known CSSOM. Current user automatic finite Queues
+and continuation authorize same p155 acceptance revalidation with original criteria;
+exact revised snapshot before generation. One finite Phase rootonly/no cancellation.
+Review all p155 final source against full Guardrail/coding-style1–14/automation;
+correct in-scope public-header/decision semantic comments only if needed. No new
+functional interface/architecture/scope. Rebuild both before tests; Page22/native10
+realcallbackGC/retirement/collectibility/all83PASS both/original>=93/prior93/equal100/
+complete/status0/noerrors/Acid2exact/actual72 reachesCSSOM. Bounded60sec/full affectedC
+styleoutput/hashes/diff; existing q569 outcome remainsuncleared and q570 p156 remains
+independent evidence. Unknowndependency endsuncleared. CSSOM/loading excluded.

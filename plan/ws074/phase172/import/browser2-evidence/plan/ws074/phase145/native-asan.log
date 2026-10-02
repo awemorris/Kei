@@ -1,0 +1,32 @@
+FAIL added record preserves exact native node identity
+FAIL zero and one entry NodeList-shaped sequences retain exact lengths
+
+=================================================================
+==3636370==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 32 byte(s) in 1 object(s) allocated from:
+    #0 0x7fd5132f3b58 in realloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:85
+    #1 0x555a056e5e70 in object_grow_elements userland/desktop/browser/vm/object.c:1120
+    #2 0x555a056e5e70 in vm_object_define userland/desktop/browser/vm/object.c:553
+    #3 0x555a0575eb80 in js_builtin_array userland/desktop/browser/js/builtin.c:302
+    #4 0x555a0584b791 in environment_node_list userland/desktop/browser/bind/environment.c:2876
+    #5 0x555a0585119b in environment_mutation_record userland/desktop/browser/bind/environment.c:2735
+    #6 0x555a0585119b in bind_environment_child_mutation userland/desktop/browser/bind/environment.c:2633
+    #7 0x555a056a8c0d in mutation_case plan/ws074/tests/host-mutation-record.c:237
+    #8 0x555a056a8c0d in main plan/ws074/tests/host-mutation-record.c:79
+    #9 0x7fd512835ca7  (/lib/x86_64-linux-gnu/libc.so.6+0x29ca7) (BuildId: c495b62edadd6c356265942ec1282d98058a7b41)
+
+Direct leak of 32 byte(s) in 1 object(s) allocated from:
+    #0 0x7fd5132f3b58 in realloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:85
+    #1 0x555a056e24bc in object_grow_slots userland/desktop/browser/vm/object.c:1086
+    #2 0x555a056e24bc in object_store_named userland/desktop/browser/vm/object.c:1154
+    #3 0x555a056e3862 in vm_array_create userland/desktop/browser/vm/object.c:302
+    #4 0x555a0575eae0 in js_builtin_array userland/desktop/browser/js/builtin.c:296
+    #5 0x555a0584b791 in environment_node_list userland/desktop/browser/bind/environment.c:2876
+    #6 0x555a0585119b in environment_mutation_record userland/desktop/browser/bind/environment.c:2735
+    #7 0x555a0585119b in bind_environment_child_mutation userland/desktop/browser/bind/environment.c:2633
+    #8 0x555a056a8c0d in mutation_case plan/ws074/tests/host-mutation-record.c:237
+    #9 0x555a056a8c0d in main plan/ws074/tests/host-mutation-record.c:79
+    #10 0x7fd512835ca7  (/lib/x86_64-linux-gnu/libc.so.6+0x29ca7) (BuildId: c495b62edadd6c356265942ec1282d98058a7b41)
+
+SUMMARY: AddressSanitizer: 64 byte(s) leaked in 2 allocation(s).

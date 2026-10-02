@@ -1,0 +1,30 @@
+# q511 / p105 verification — 2026-09-30
+
+Foreign bytecode dispatch uses the callee realm; native calls restore scoped
+callee/new.target, and errors transfer actual exception identity and throw-site.
+Direct foreign new.target functions select their realm's default intrinsic.
+Two realms remain explicitly alive; detached-context ownership is not claimed.
+
+Commands (both plain and asan unless stated):
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: warning-free.
+- `python3 plan/ws074/tests/run-realm-context-probe.py --out build/ws074-p105-probe`: unchanged baseline 8/8 each.
+- `build/ws074-host/{plain,asan}/host-realms`: 30/30 each.
+- `build/ws074-host/{plain,asan}/host-object`: 100/100 each.
+- `build/ws074-host/{plain,asan}/host-interp`: 45/45 each, including active GC.
+- `python3 plan/ws074/tests/run-dom-tests.py --program build/ws074-host/{plain,asan}/browser`: 23/23 each.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/{plain,asan}/browser --out build/ws074-acid-p105-{plain,asan}`: Acid2 exact 100%; Acid3 40/100, all100 complete, exceptions/run_errors empty, run_status0. Both inventories identical to p103; no regression or new pass. Pixel agreement38.5933% is independent diagnosis.
+- `python3 plan/tools/style-check.py` and `git diff --check`: PASS.
+
+ASan uses `ASAN_OPTIONS=detect_stack_use_after_return=0`, required by the existing
+conservative-stack collector. ASan/UBSan report no diagnostic. Compiler cc14.2.0,
+Python3.13.5; exact source hashes and report paths in verification.json.
+Full coding-style.md checked manually against both changed VM functions/helpers
+and the new C test, including failure/unwind paths and semantic paragraph comments.
+Existing trace declarations before cell-type initializers are required by C;
+new static prototypes remain single-line. `.clang-format` reviewed manually:
+clang-format unavailable, so automatic formatting was skipped. Style automation
+is partial; semantic review supplies the remaining checks. No guest/OS/boot/GPU
+paths changed; those checks and aggregate make check were not run. Full WS final
+conformance remains p044. Bound/Proxy construction and arbitrary unsupported
+ECMAScript combinations are outside this finite call-boundary acceptance.

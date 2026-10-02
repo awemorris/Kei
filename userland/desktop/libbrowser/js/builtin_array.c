@@ -225,18 +225,30 @@ array_call(
 	*result = vm_value_cell(made);
 
 	/* One number is a length. */
-	is_number = count == 1U && vm_value_is_number(args[0]);
+	is_number = 0;
+	if (count == 1U)
+		is_number = vm_value_is_number(args[0]);
+
+	/* Converts a numeric length through the existing safe unsigned conversion. */
 	if (is_number) {
 		number = vm_value_as_number(args[0]);
-		length = (uint32_t)number;
-		if ((double)length != number || length > 0x7fffffffU) {
+		status = vm_to_uint32(realm, args[0], &length);
+		if (status != 0)
+			return status;
+
+		/* Fractional, non-finite and out-of-range numbers cannot be array lengths. */
+		if ((double)length != number) {
 			status = vm_throw_range_error(realm, "Invalid array length");
 			return status;
 		}
 
 		/* The length. */
 		status = vm_array_set_length(realm->heap, made, length);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: only the length metadata grew; no holes were allocated. */
+		return 0;
 	}
 
 	/* Anything else is the elements. */

@@ -1,0 +1,34 @@
+# q568 / p154 verification — 2026-10-01
+
+CLEARED. Readonly native Document.images SameObject live HTMLCollection cache,
+private actual rooted query, exact HTML namespace/local img, current tree order/
+named/indexed native properties. Existing VM collection algorithms/prototypes/
+readonly descriptors reused. Document traces cache, cache state traces Document;
+no permanent roots. Collection enum/getter appended, existing operation IDs intact.
+
+Page23 PASS both: actual identity/prototype/empty/index/name, insertion/reorder/
+attribute updates/removal/adoption, SVG/no-namespace/uppercase XML exclusions,
+template contents/detached exclusions, illegal getter brand, readonly property,
+indexed descriptor/inherited length, child realm and saved list through actual
+Document.open twice, isolated parent, saved list after retirement. Native10/10
+both: actual GC with conservative stack disabled, Document-alone SameObject cache
+retention, direct borrowed getter identity, collection-only retired child realm/
+Document/member retained and native length usable; final root release collects
+child/Document/cache/member cycle. No environment test switch or fake snapshot.
+
+All79 groups PASS plain+ASan. Actual pinned93/100/prior93 preserved/full100 same/
+complete/status0/exceptions[]/runerrors[]/Acid2exact100%. Actual72 now obtains img
+and reaches rendered dimension: height remains0 rather than10. Known geometry/
+CSSOM dependencies explicitly outside this finite images Phase, no score gain claim.
+Build warning0/sanitizer0/diff clean/style output empty/manual full affected C
+Guardrail/coding-style1–14/automation. clang-format absent/manual, cc14.2.0/
+Python3.13.5. Source hashes/full reports JSON, exact approved scope archived.
+Commands: sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q568-regressions.py plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q568-VARIANT; style-check affected C; git diff --check.
+
+Next independently selected image geometry/CSSOM or eligible SVG native work;
+XML support loading remains missing. No image decoding/layout/CSSOM/network/SVG
+changes in this Queue. No fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/
+aggregate check/push/GitHub publication. p100/p044/WS incomplete/local unpublished.

@@ -1,0 +1,24 @@
+# q582 / p166 owned response metadata — 2026-10-02
+
+UNCLEARED. Added actual response metadata ownership/declaration-based MIME
+selection/native101/loopback driver within exact scope. Bothfull builds finished
+beforetests; warning0/styleempty/manual affected full C/cc14.2.0/Python3.13.5/
+clang-format absent manual/diff clean. Actual local files/data/base64/HTTPheaders/
+redirect/finalURL/404/declared-type matrix/legacy compatibility99/101 both pass.
+Two focused mandatory failures reproduce [BUG-132](../../bugs/BUG-132.md): real
+net_data_parse erases body-decoding EINVAL through unrelated MIME default fallback,
+so page_fetch_response receives false success and publishes status200.
+Existing decoder already rejects invalid base64; error routing is the cause.
+No implementation in unselected net module inside q582. No synthetic responses,
+root/filename-dependent HTTP parser, exception hiding or acceptance relaxation.
+
+Commands: host-build.sh plain/asan; run-resource-tests.py --program
+build/ws074-host/VARIANT/host-resource (exit1 both,99/101, actual logs in JSON);
+style-check.py page/link.c/resource.c/page.h and host-resource.c empty; native
+standalone compiles, Python py_compile, git diff --check. Loopback subprocess60sec,
+no outbound services. Actual source hashes in verification.json. All95 groups and
+original Acid3/Acid2 skipped after focused failure; last verified q581 actual94/
+all94/Acid2exact, no fresh score claim. No sanitizer/crash from either focused run.
+FullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate/push/publication
+not run. Root released/local unpublished. Resume unchanged p166 criteria after
+separately selected actual native data URL failure-preservation fix is verified.

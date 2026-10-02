@@ -1,0 +1,38 @@
+{
+  "queue": "q523",
+  "baseline": "52a76648",
+  "sources": {
+    "userland/desktop/browser/vm/access.c": "4243946989e976ab5f544f633b4a69142ff8b9a5cebea97a640c5c79a4b90884",
+    "userland/desktop/browser/vm/object.c": "19ed2cc5f00c9bd13c28e77b8c9113548b0ff904fbd8631d7b319a7838326ec1",
+    "userland/desktop/browser/js/builtin_array.c": "3ffe8cc4acaf773ee3ed9e46ba035987abb1c84c9af1a1b3d794bc3d34018126",
+    "plan/ws074/tests/host-array-length.c": "989ac4a7fb85804d4becfc4e956c8b977288866ae729219921c06ea3dabb7161",
+    "plan/ws074/tests/pages/array-length-probe.js": "f92b5b1a5032b46b50d4a8838a09479a69a30adfd8a740b4e12c3ef6369f113a"
+  },
+  "plain_asan": {
+    "focused": "39/39",
+    "capacity": "4/4",
+    "object": "100/100",
+    "interp": "45/45",
+    "realms": "30/30",
+    "JS": "14/14",
+    "DOM": "23/23",
+    "Acid2": "exact100%",
+    "Acid3": "61/100 all100,95newPASS,no regression/Uncaught0/errors0/completeTrue/run_status0"
+  },
+  "changes": [
+    [
+      95,
+      "fail",
+      "pass"
+    ]
+  ],
+  "reports": [
+    "build/ws074-acid-q523-plain/report.json",
+    "build/ws074-acid-q523-asan/report.json"
+  ],
+  "tools": {
+    "compiler": "cc14.2.0",
+    "python": "3.13.5",
+    "formatter": "unavailable"
+  }
+}

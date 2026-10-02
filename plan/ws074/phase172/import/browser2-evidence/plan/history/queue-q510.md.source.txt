@@ -1,0 +1,72 @@
+<!-- awesome-plan project=zedbsd record=queue-q510 -->
+
+# Queue q510: Initial HTML iframe context readiness
+
+Status: finished (2026-09-30)
+Active Queue: none
+Previous finished Queue: [q509](queue-q509.md)
+Purpose: genuine initial about:blank HTML iframe contexts, WS074 / fg010.
+Timebox: one finite Phase; initial contexts only.
+Approval: current user, 2026-09-30 「次のqueueを実行してください。」 for the
+standing q510 proposal. Executor: root in this checkout, baseline 596fc1ca;
+previous Queue finished, no concurrent attempt or GitHub publication.
+
+| Attempt | Phase | Outcome | Prerequisite / selection |
+| --- | --- | --- | --- |
+| q510-i01 | [ws074-p104](../ws074/phase104/phase.md) | uncleared | p103 cleared; restored iframe fixtures need real child Documents. Bounded realm/GC readiness investigation found missing prerequisites before production edits |
+
+## Exact authorized scope and acceptance snapshot
+
+Distinct initial about:blank HTML Document/Window, contentDocument/contentWindow,
+parent/top relationships, connection/removal lifecycle and bounded verification
+within the existing one-agent-per-tab architecture. Readiness includes wrapper
+identity, document ownership, realm behavior, tracing and frame destruction.
+
+Criteria: separate child identities/relationships matching supported Chromium
+fixtures; defined safe nested/disconnected/removal/teardown ownership; plain/ASan
+focused lifecycle/GC/error and existing DOM checks, Acid2 exact preservation,
+all 100 Acid3 results; full changed-source standards/style/diff checks. No claim
+of URL/XML or full Acid3 acceptance. No URL loading/navigation, Window.open,
+late-write/open/close, XML/SVG/object, Range/Traversal/CSSOM, HAL/toolchain or
+ES-module work. Readiness must precede production generation.
+
+Original proposal/Phase snapshot hashes (before activation/result edits):
+- queue.md SHA256: 07f753b705ccaf778c3c3df32ae824a24510a34fcb70396572cf0190c1eaede7
+- phase104/phase.md SHA256: a64a56447bf5f05d904a08bad3fb8bfca0f2e45554c3da1b37ca285827e176f9
+
+## Investigation and terminal outcome
+
+q510-i01 / p104 **uncleared**. Eight shared-heap two-realm checks pass 3/fail 5
+in both plain/ASan (exit 1, no sanitizer diagnostics). Direct calls use the wrong
+realm; native/constructor exception transport is absent. Source inspection also
+finds that manually owned realm/window tracers do not support detached child
+reachability. No deliberately invalid realm lifetime was exercised, so no
+use-after-free reproduction is claimed. Existing host-object stays 100/100 in
+both. Chromium 153.0.8010.52 passes the 17-check lifecycle reference.
+
+Evidence: [p104 investigation](../ws074/phase104/investigation.md),
+[machine-readable inventory](../ws074/phase104/investigation.json),
+[BUG-126](../bugs/BUG-126.md). New probe compiles without warnings; full manual
+C-standard/format review, style/Python/diff checks pass. Formatter unavailable.
+No production source changed; production builds, Acid2/Acid3, full OS/guest/boot
+and GPU were not rerun. Last actual Acid3 remains p103 40/100, Uncaught 0; this
+is historical evidence, not a fresh measurement or q510 acceptance.
+
+## Dependency redesign and resume
+
+AGENTS.md requires ending a Phase uncleared on a newly discovered dependency.
+Added [p105](../ws074/phase105/phase.md) to repair multi-realm execution/exception
+identity, and [p106](../ws074/phase106/phase.md) to define/verify reachable context
+ownership before p104 resumes. p104 acceptance is unchanged and unmet. No bug
+waiver, cancellation, or prior single-realm clearance invalidation occurred.
+
+Graph: `p103 (external cleared) → p104 (uncleared)`;
+`p105 (external planned) → p106 (external planning) → p104 → p100 (external planned)`.
+New external nodes are not q510 members. Outlook: propose p105 alone next;
+then refine/select p106 and resume p104, before loaded child HTML/parser/DOM/CSSOM
+work. p100 still requires 100/100, zero Uncaught/crash/timeout; p101 follows p100,
+then p098, with p044 full-WS conformance near completion.
+
+All selected attempts have terminal outcomes/evidence. Local records remain
+unpublished; no remote close/sync or push occurred. The next Queue is a proposal
+only and requires a new execution instruction.

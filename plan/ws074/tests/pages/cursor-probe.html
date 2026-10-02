@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><script>
+function check(label, condition) { console.log((condition ? 'PASS ' : 'FAIL ') + label); }
+var f = document.createElement('iframe'); document.body.appendChild(f);
+var w = f.contentWindow, d = f.contentDocument;
+var parent = d.createElement('div'), child = d.createElement('p');
+d.body.appendChild(parent); parent.appendChild(child);
+function cursor() { return w.getComputedStyle(child).cursor; }
+check('initial auto', cursor() === 'auto');
+var values = ["auto", "default", "none", "context-menu", "help", "pointer", "progress", "wait", "cell", "crosshair", "text", "vertical-text", "alias", "copy", "move", "no-drop", "not-allowed", "e-resize", "n-resize", "ne-resize", "nw-resize", "s-resize", "se-resize", "sw-resize", "w-resize", "ew-resize", "ns-resize", "nesw-resize", "nwse-resize", "col-resize", "row-resize", "all-scroll", "grab", "grabbing", "zoom-in", "zoom-out"];
+var sheet = d.createElement('style'); d.head.appendChild(sheet);
+for (var i=0; i<values.length; i++) {
+  sheet.textContent = '#target { cursor: '+values[i]+'; }'; child.id='target';
+  check('rule keyword '+values[i], cursor() === values[i]);
+}
+sheet.textContent = ''; parent.style.cursor = 'crosshair';
+check('default inherited', cursor() === 'crosshair');
+child.style.cursor = 'pointer'; check('own override', cursor() === 'pointer');
+child.style.cursor = 'bogus'; check('invalid preserves declaration', cursor() === 'pointer');
+child.style.cursor = 'pointer text'; check('extra token rejected', cursor() === 'pointer');
+child.style.cursor = '"text"'; check('string rejected', cursor() === 'pointer');
+child.style.cursor = 'initial'; check('initial overrides inheritance', cursor() === 'auto');
+child.style.cursor = 'unset'; check('unset inherits', cursor() === 'crosshair');
+child.style.cursor = 'inherit'; check('explicit inherit', cursor() === 'crosshair');
+parent.style.cursor = 'help'; check('live ancestor mutation', cursor() === 'help');
+child.style.cursor = 'NwSe-ReSiZe'; check('canonical ASCII keyword', cursor() === 'nwse-resize');
+check('property value agrees', w.getComputedStyle(child).getPropertyValue('cursor') === 'nwse-resize');
+child.style.removeProperty('cursor'); check('removal inherits', cursor() === 'help');
+sheet.textContent = '#target { cursor: wait !important; }';
+child.style.cursor = 'pointer'; check('rule important over inline', cursor() === 'wait');
+child.style.setProperty('cursor','move','important'); check('inline important wins', cursor() === 'move');
+var readonly = w.getComputedStyle(child); var thrown = false;
+try { readonly.cursor='text'; } catch(e) { thrown=e.name==='NoModificationAllowedError'; }
+check('computed read-only', thrown && cursor() === 'move');
+child.style.removeProperty('cursor'); sheet.textContent = '#target { cursor: bogus; }';
+check('invalid rule preserves inheritance', cursor() === 'help');
+sheet.textContent = 'html { cursor: initial; }'; parent.style.removeProperty('cursor');
+check('removed ancestor returns auto', cursor() === 'auto');
+</script>

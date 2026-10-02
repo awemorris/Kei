@@ -1,0 +1,89 @@
+<!-- awesome-plan project=zedbsd record=q570 -->
+
+# q570 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q570](history/queue-q570.md), exact archive verified; p156 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q570
+
+Current user2026-09-30 automatic Acid3 Queues +2026-10-01 continuation; exact p156
+snapshot saved BEFORE generation/no cancellation/conflict. Verified native layout
+zero base and empty rectangle dependencies from p155; no unknown product decision.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q570-i01 | [ws074-p156](ws074/phase156/phase.md) | cleared | q569 actual child layout scoped output verified; zero/empty native layout missing |
+
+Graph p155 scopedactualoutput(external,wholeuncleared)->p156->p155revalidation(external)
+->CSSOM+p100(external). No wholePhase dependency cycle. Prior81+new2=83bothallpass/
+original>=93/prior93/equal100/noerrors/Acid2exact. Runner60sec; unknown dependency
+endsuncleared before redesign. Only native replaced length/fragment bounds/newprobes.
+
+## Upcoming Work Outlook
+
+Same p155 revalidation then CSSOM/native SVG/XML loading; final p100/p044.
+Forecast, not executionauthority. Original93; prior q569 failed criterion retained.
+
+## q570 outcome (2026-10-01)
+
+[p156](ws074/phase156/phase.md) cleared in q570, [evidence](ws074/phase156/verification.md).
+Actual zero percentage bases/first empty fragment bounds repaired. Native10/Page15/
+all83PASS both; p155 Page22/native10 nowpass. Original93/prior93/equal100/noerrors/
+Acid2exact. Actual72 now passes native height10 and reaches missing CSSOM. Next
+same p155 acceptance revalidation then CSSOM/loading/SVG. p100/p044/WS incomplete/
+root released/local unpublished/no push; q569 uncleared history preserved.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p156 -->
+
+# ws074-p156: definite zero replaced dimensions and empty native image rectangles
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q570 / q570-i01
+Root sole writer/executor, base8d41e546/q569 finished exact archive verified.
+Current user2026-09-30 autonomous Acid3/automatic Queues +2026-10-01 continuation
+supplies finite exact scope approval, saved BEFORE source generation; no cancellation.
+
+## Exact scope / criteria
+
+Verified q569/p155 unknown dependencies: layout/replaced.c replaced_length rejects
+CSS_UNIT_PERCENT when containing==0 even though width is definite and height caller
+already checks definite. Return resolved zero/offset for nonnegative containing
+bases; negative sentinel remains refusal. Existing natural sizes/ratio/hints and
+positive/indefinite semantics unchanged. layout/bounds.c drops every empty rectangle,
+so actual inline native img width0 height10 is reported absent by Page node_box.
+Keep first actual empty fragment rectangle as fallback, replace it on first positive
+area rectangle, exclude later empty rectangles from positive union; return native
+box availability0/1, preserve actual fragment coordinates/borders/zero sides and
+nonempty unions. No invented coordinates/CSS lookup or changes to default visibility.
+Guardrail/full coding-style1–14/automation/layout modules read. CSSOM View2026-09
+getBoundingClientRect algorithm read2026-10-01: no boxes allzero; all empty firstrect;
+otherwise unionnonempty. Actual zero definite percentage is independent CSSlength.
+Affected layout/replaced.c,bounds.c and two new native/Page probes only; existing
+p155 fixtures retain exact expectedzero0/0. New native direct actual layout APIs test
+zero width/height/offset vs indefinite-height attrs, negative refusal, first empty/
+nonempty union/empty ignoring/no boxes. New Page child+primary inline zero-width
+height10/zero-height width10/bothzero, border/padding, displaynone vs native rendered
+boxes, percentzero/resize. Prior81+new2=83 allpass plain+ASan, original>=93/prior93/
+full100identical/complete/noexceptions/errors/crash/timeouts/Acid2exact. Actual72
+should reach known CSSOM next dependency (CSSOM excluded, score gain not required).
+Two builds complete before tests; runner60sec/bounded native fixtures/warning0/
+sanitizer0/style output inspected/manualfullaffectedC/diff/hashes. Unknown dependencies
+enduncleared before redesign. No child loading/painting/CSSOM/XML/SVG/fullWPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHub publication.
+Graph p155 scoped actual transientlayout output(q569 evidence; wholeuncleared,
+not claimedclear)->p156->p155revalidation->CSSOM+p100(external), acyclic at scoped
+output level; p156 not dependent on p155 wholePhaseclearance. p100/p044/WS incomplete.
+
+## Introduction / q570 (2026-10-01)
+
+Origin p155 uncleared preserves failed exactzero criterion and original72 height0.
+Native existing replaced length and fragment-union fixes supply actual missing
+outputs. p155 external design adds verified p156 prerequisite before a separately
+authorized same-Phase revalidation; its earlier attempt staysuncleared.

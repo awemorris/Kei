@@ -1,0 +1,114 @@
+<!-- awesome-plan project=zedbsd record=q574 -->
+
+# q574 exact Queue scope and outcome
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q574](history/queue-q574.md), exact archive verified; p158 cleared.
+Executor root / this checkout / one finite Phase / local unpublished.
+
+## q574
+
+Current user automatic Acid3 Queues +continuation approves exact finite p158 snapshot
+before generation. Corrected p157/p155 actual outputs verified; no cancellation/conflict.
+One native inline source state/DOMcache retirement/shared Page+childrender bridge.
+
+| Attempt | Phase | Status | Dependencies / selection |
+| --- | --- | --- | --- |
+| q574-i01 | [ws074-p158](ws074/phase158/phase.md) | cleared | p155/p157 verified; source ownership/rendering prerequisite to native CSSOM |
+
+Graph p155+p157(external)->p158->futureCSSOM+p100(external), acyclic. Prior84+new1=85
+bothallPASS/original>=93/prior93/equal100/noerrors/Acid2exact/runner60sec/fullaffectedC.
+No publicCSSOM/MIME/CSP/stylesets/scoregain/loading/XML/SVG execution. Unknown dependency
+endsuncleared before redesign. Original93. p100/p044/WS incomplete.
+
+## Upcoming Work Outlook
+
+Public native sheet/rule/live list wrappers, then eligible SVG/XMLloading; finalp100/p044.
+Forecast only. Original p157 fullCSSSyntax boundaries retained before broad conformance.
+
+## q574 outcome (2026-10-01)
+
+[p158](ws074/phase158/phase.md) cleared in q574, [evidence](ws074/phase158/verification.md).
+Traced native inline source models/sharedprimary+childrendering/actualDOMidentity
+retirement verified; native21/all85bothPASS/actual93/prior93/equal100/noerrors/
+Acid2exact. Genuine native edits render10->20->40->20 withoutDOMwrites/records;
+owner-only/saved-state-only retired child graph GC and lastrelease verified.
+Next public native sheet/rule lists and edits then loading/SVG. p100/p044/WS
+incomplete/root released/local unpublished/no push.
+
+## Approved pre-generation snapshot
+
+<!-- awesome-plan project=zedbsd record=ws074-p158 -->
+
+# ws074-p158: inline native CSS source association and rendering bridge
+
+Status: in-progress
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q574 / q574-i01
+Base234bdc04/q573 finished/p155+p157 corrected outputs verified/actual93/all84both/
+Acid2exact. Current user automatic Acid3Queuess +2026-10-01 continuation approves
+finite exact scope before generation. Rootonlywriter/executor/no cancellation/conflict.
+Guardrail/full coding-style1–14/automation/browser design6/actualDOMnode/Text/bind/
+Page sheet gathering read. HTML2026-09-29 style update/DOMchildren-change/CSSOM owner
+removal and CSSSyntax2026-09-30 EOFblock standards read2026-10-01.
+
+## Exact scope / design / criteria
+
+Before public CSSOM wrappers, associate one traced native VMstate/model with each
+connected exact HTMLnamespace/localstyle element. New bind/style-sheet.c/internal
+bind_style_sheet struct startsvm_cell, owns p157 css_rule_model and original direct
+Text UTF16 source, actual ownerElement, changedflag. DOMelement opaque style_sheet
+vm_cell pointer traced, never Cfinalized by DOM. State trace marks actual ownernode
+and thereby Document/realm; finalizer only destroys Cmodel/source, noDOMread. No
+permanent roots/tracers. get uses checked temporary ownernode root through parser/VM
+allocation, copies directText excluding comment/descendant elements/template contents,
+reuses currentcache until actual source/tree change. Rootownergraph before allocation;
+publish only completeVMstate. Publicinternal bind_style_sheet_source(element,units)
+bridge shared primaryPage/managedchildCSS: unchanged sheets emit exact original units,
+mutatedmodels emit aggregate actual currentrules. Existing engines continue owning
+parsed Ccopies; no borrowed VM model pointer retained by Page or childCcache. Parent
+external/link/import/font/media gathering/cache policy staysexisting. File registered
+once existinglibbrowser source list. No JS-facing interfaces or modelmutation shim.
+
+DOMpure helpers clear currentstyle_sheet on direct childlist change/actual Textdata
+mutation (append/set/truncate/replace/normalize routes), and connected/disconnected
+subtree insertion/removal iteratively (no recursion/VMcallbacks/allocation). Old native
+states remain alive only through genuine saved handles; current identity no longer
+points to them even for same-text replacement or empty-text append. Comment.data
+changes do not recreate Text-derivedstyle source; comment insertion/removal is child
+change. Adoption/move reuses normal DOMremove/insert lifecycle. Opaque fields don't
+reparentDOM or invoke optionalhostcallbacks. Native bind_style_sheet_changed(state)
+marks modelchanged and increments ownerDocgeneration only if state remains current
+and owner connected, without MutationObserverrecords or DOMText writes; obsolete
+modelmutation cannot affect currentDocument/rendering. Rendering bridge reuses real
+existing sheet parser/cascade/media/font/import/resource code, no computed-style shortcut.
+Known p157 fullCSSSyntax/EOFcomponents/canonicalCSSRulecssText limits retained; original
+raw source preserves all existing initialrendering behavior before modelmutations.
+MIME/type/CSP/stylesets/disabled/HTMLstyleload readiness/publicCSSOM wrappers are separate
+follow-up, no fullstyleassociation conformanceclaim in this internal bridge increment.
+Affected DOMdom.h/node.c,bindbind.h/internal.h,newstyle-sheet.c/style-context.c,
+Pagesheets.c,libbrowserMakefile,newnativefixture only.
+
+Native ordinary Page with actualfonts/primary+managedchild, existing Document streams
+and real imagegetters: direct modelinsert height10->20->40->20, source Text unchanged/
+no native MutationObserverrecords, same currentcache across unrelated DOM changes,
+Textdata/same-textset/emptyTextappend/childremove/remove+reappend recreatecurrentmodel,
+oldmodelmutation affects savedmodelonly, primary/childcascade isolated. NativeactualGC
+conservative stack disabled: native owneralone retains same model, savedstate-only
+retiredchildDocument/realm/owner/model retained and readable; last root release collects
+all; GCfinalizerorder ASanquiet. Checkedrootunwind/partialconstructionreview. Prior84+
+new1=85 plain+ASanallPASS/original>=93/prior93/full100same/complete/noUncaught/crash/
+sanitizer/runnererrors/timeouts/Acid2exact. Both builds beforetests/runner60sec/fullaffected
+C/manualformatting clang-format absent/styleoutput/buildwarning0/diff/hashes. Unknown
+prereqs enduncleared before redesign. Graph p155+p157(external)->p158->futureCSSOM+p100
+(external), acyclic. No publicCSSOMscoregain/loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/
+GPU/HAL/toolchain/.internal/aggregatecheck/push/GitHubpublication. p100/p044/WS incomplete.
+
+## Introduction / q574 (2026-10-01)
+
+Shared native source ownership and DOM-driven cache retirement precede live public
+sheet/rule wrappers. Retired states keep their ownmodel independently; current native
+source mutation invalidates actual style/layout generation without fabricated DOM
+mutation. Existing original CSS render behavior is retained until genuine model edits.

@@ -1,0 +1,58 @@
+<!-- awesome-plan project=zedbsd record=ws074-p123 -->
+
+# ws074-p123: SameObject live Document.forms
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q533 / q533-i01
+Prerequisite: p122971eb319 cleared, live collection104/GC13/frame63 and original
+all10072/100/noerrors/Acid2 exact. q532 exact archive verified. Root sole executor.
+Approval current-user2026-09-30 autonomous Acid3/automatic Queues renewed continuation
+2026-10-01. One finite Phase timebox; exact scope saved before source generation.
+
+## Scope / design / criteria
+
+Add SameObject Document.forms as branded live HTMLCollection selecting descendant
+HTML namespace elements with local name exactly form, tree order, excluding root,
+foreign/XML uppercase/template contents/detached nodes. Reuse p122 checked native
+legacy index/name/property/enumeration/guard protocol. Cache traced on actual
+Document; actual receiver Document prototype owner/private XML snapshot; no new
+collection/interface constructors. Borrowed getter checks Document before any work.
+Saved length/index/item/namedItem/descriptors/keys reflect mutation immediately.
+Each cache retains its actual root and relevant managed owner; final roots may die.
+
+Affected collection.c/document.c/internal.h/dom.h/node.c plus focused forms fixture,
+existing host-collection cache observations and frame lifetime one sole forms-root
+case. No form.elements/HTMLFormElement interfaces/control reflection/RadioNodeList/
+form ownership/parser special associations/submission/past names/Range/table/CSS/
+loading/SVG/HAL/toolchain. Those are known subsequent prerequisites for indexed4/52,
+not silently claimed here. This small accessor is a verified prerequisite before
+larger control-ownership and collection work, not full form conformance.
+
+Plain+ASan focused SameObject/live insertion/removal/reorder/id/name/visibility/
+descriptor/property/mutation guards/namespace/case/template/XML/two realms PASS;
+realGC node-cache identity/drop and managed forms owner after primary teardown PASS.
+All p122 selected regressions (collection104/GC13/frame63 etc.) preserved, original
+all100prior72 equal/preserved/noerrors/complete/runstatus0/Acid2exact. No score
+increase criterion for this prerequisite. Warning0/ASan0/manual changed-source full
+C/style/diff/hashes/evidence. Unknown dependencies end uncleared before replanning;
+bounded focused and fixed suite, no exhaustive WPT/OS/guest/boot/GPU. Local unpublished/
+no push, p100full100/100/p044 final standard unchanged.
+
+Guardrail/full C standard already read (no concise copy). Primary HTML Document.forms
+https://html.spec.whatwg.org/multipage/dom.html#dom-document-forms and DOM collection/
+WebIDL legacy rules consulted2026-10-01. Config standing authorization applies.
+
+## Introduction / q533 activation (2026-10-01)
+
+p122 verified actual live collection substrate. Add one bounded Document.forms
+accessor before controls require form owner and RadioNodeList foundations. Known
+subsequent requirements retained; no p100 acceptance reduction or clearance.
+
+## q533 result (2026-10-01)
+
+Cleared, [evidence](verification.md). Forms35/collection104/GC16/frame68/all selected
+regressionsPASS both variants. Original all10073/100, indexed98 newPASS/prior72
+preserved/noerrors/Acid2 exact. Known form.elements/control/owner/RadioNodeList
+prerequisites remain; p100full100/100 unmet/27 remaining. Local unpublished/no push.

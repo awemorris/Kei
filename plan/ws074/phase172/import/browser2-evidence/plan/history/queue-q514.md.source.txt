@@ -1,0 +1,47 @@
+<!-- awesome-plan project=zedbsd record=queue-q514 -->
+
+# Queue
+
+Status: finished (2026-10-01)
+Active Queue: none
+Last finished Queue: [q513](queue-q513.md), verified archive.
+
+## q514
+
+Purpose: repair/revalidate p106's GC ownership regression BUG-127, WS074 / fg011.
+Timebox: one finite Phase, function owner cache and bounded regressions.
+Approval: current user 2026-09-30 「では、Acid3 100%をゴールに自走をお願いします。queueは自動で実行してOKです。」.
+Exact scope: p106 q514 revision saved before edits; initialize managed owner cell
+in native/bytecode functions and trace it independently of raw primary realms.
+Retirement regression, managed ownership/calls, VM/DOM/Acid preservation/full
+standard review. No iframe additions/loading/navigation/parser/HAL/toolchain.
+
+| Attempt | Phase | Status | Dependency / readiness |
+| --- | --- | --- | --- |
+| q514-i01 | [ws074-p106](../ws074/phase106/phase.md) | cleared | p105 cleared, BUG-127 ASan UAF reproduced q513, baseline9a4a91db; retained-primary GC needs safe owner reference |
+
+Criteria: retirement PASS plain/ASan, ownership27/27, realm30/30, existing VM/DOM,
+saved frame17/17 regression, Acid2 exact and all100 Acid3/no regressions from40;
+warning-free/no sanitizer, full affected-source standards/style/diff and durable
+outcomes. q513's unfinished iframe code is present for regressions only; do not
+attribute its feature output to this VM repair or claim p104 clearance.
+
+Graph: p105 (external cleared) → q514-i01/p106 → p104 (external uncleared) →
+p100 (external planned). No cycle or other authorized item.
+
+## Upcoming Work Outlook
+
+Reclear verified p106, then select new p104 completion attempt. Subsequent finite
+feature phases retain p100100/100 zero Uncaught/crash/timeout, Acid2 exact.
+p101 CSS2/p098 modules remain later/outside goal; p044 full WS remains.
+
+## q514 terminal outcome (2026-10-01)
+
+q514-i01/p106 recleared, BUG-127 resolved. Cached managed owner tracing fixes
+the retained-primary ASan UAF. Retirement PASS plain/ASan, ownership27/27,
+realms30/30, object100/100, interp45/45, DOM23/23, saved frame17/17. Acid2 exact;
+Acid3 all10042/100, Uncaught0/no errors/no regression, gains44/78 belong to
+retained q513 iframe progress. [Revalidation](../ws074/phase106/revalidation-q514.md).
+Full affected-source standards/style/diff PASS, formatter absent; guest/OS/boot/
+GPU skipped. p104 remains uncleared pending its own completion Queue. Local
+unpublished, no push/remote lifecycle action. Exact q512/q513 history preserved.

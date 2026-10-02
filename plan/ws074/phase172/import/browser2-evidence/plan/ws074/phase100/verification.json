@@ -1,0 +1,3587 @@
+{
+  "queue": "q591",
+  "phase": "ws074-p100",
+  "outcome": "cleared",
+  "goal": "fg011 achieved",
+  "base": "aa39c4b7",
+  "approved_sha256": "4b334b397d79affc6339149130ae6d96d1c448a0f01ed1a0edc7433ace5ea3de",
+  "verification_reuse": "q590 completed full builds/runtime on exactly current source/program/artifact hashes; no new product edits or redundant tests",
+  "current_source_sha256": {
+    "plan/ws074/tests/host-build.sh": "f44365b2af3da608be6cb7ab692e9c6fe6ffc50e77ec4ce6e28fcca779661669",
+    "plan/ws074/tests/host-svg-length.c": "e09e5b03a0d7ecf79af8b0ef78461032bd64e0c454e75e72732e674a205bc57c",
+    "plan/ws074/tests/host-svg-text.c": "8ab0263a73bfc98e954de755821c82aeabe2a0601f9f2aa0046e99939563caf2",
+    "plan/ws074/tests/run-acid-tests.py": "0cd6cda79b4958de0ad2413d255d99cfc0120d311565a38b622e5040df67b4d0",
+    "userland/desktop/browser/base/arena.c": "0dc39f372aa17108b38a574f6e4d1b9af3427d30c247ddbb74ae670946086039",
+    "userland/desktop/browser/base/base.h": "49d2ffd4a7a2a4f830b49a43b8d1b467112d47b6422fd36dd2ce19e7819bf499",
+    "userland/desktop/browser/base/buffer.c": "308b3652cc970d179929c4ce31257e8c72d7b8d7604c8f9b60e79fb66d9f3320",
+    "userland/desktop/browser/base/file.c": "5aeaed697ea2b8cf7c577e6ae6825ffa656bef0e7a92dacb1d3c134880ac058f",
+    "userland/desktop/browser/base/hash.c": "4742aff1c5874dcc66eccd6f9e000e1c5feb2fccef647f3e88a2600434db8b6d",
+    "userland/desktop/browser/base/unicode-case-table.c": "373324512ce18bb2ce37ef2e327b1fdf56f30544e11ed92ce5f7bd3f03ea2b97",
+    "userland/desktop/browser/base/unicode.c": "7ce3b275bbad6c539ea6dc977ee4eb7d948169cd16ceda6af293b90e328f6ca4",
+    "userland/desktop/browser/base/unicode.h": "281e255316f6a3c7aeb8c43432792328dfb440b905b9056c4255622e8bb2d87b",
+    "userland/desktop/browser/base/utf.c": "4dc9547b5a48c58b549da006c15ce38a8b70c474187d6e426ad089f5a604151b",
+    "userland/desktop/browser/base/vector.c": "22a58f6d5ab6af6fa1c704d99607bce03ac793a279d0a7fbd5bf9f83f6f794be",
+    "userland/desktop/browser/bind/bind.h": "34ba4af15eac8c4d9f0a92834cb2cc8f29fa4ad9ba73d99a2bac0662eb756ff1",
+    "userland/desktop/browser/bind/click.c": "a704b6f98ccaceda6f5bd5254a04b98d4ca02e7fccd019654cf1c22c6e24aa89",
+    "userland/desktop/browser/bind/cloning.c": "a65e5e087f39e2f2cd5d9df1ec894e5399363b5561983f9ba1014da1c724eb1d",
+    "userland/desktop/browser/bind/collection.c": "75545aec575b71c6fe6fc72a468e4ee11af6dba24b083810b821bae34927c99f",
+    "userland/desktop/browser/bind/computed.c": "38aa9c89bb9001366275e1dfa0224d7c00b3bd6a406f6cc6cff9901c369ad86d",
+    "userland/desktop/browser/bind/cssom.c": "bddeeb49e12c795218229b9beb932819909dd552f2750c91629c86c051f7eb41",
+    "userland/desktop/browser/bind/document.c": "c9c6da8eb2061c1abc3f85ab1fdcf930b4f0dbeaaf867a4b70fd292f5c70731e",
+    "userland/desktop/browser/bind/element.c": "663376ab0687fa785ecd39357fdcfce660a83c646695847392d8070d2eda87fa",
+    "userland/desktop/browser/bind/encoding.c": "723da4e5add8e4de65588a9c8aae931314a29cf80d46d067d077b880fe4f6d61",
+    "userland/desktop/browser/bind/environment.c": "f9f4b3fac3a2aa500177ea3073ee5c86f9ef4d2e2257135a484114fd2611f7e0",
+    "userland/desktop/browser/bind/event.c": "b787a24d2c3f54640a24432e04945e47d1f25e113a537c5d501689a029e1f54b",
+    "userland/desktop/browser/bind/exception.c": "60fa9db6cc327bf7e63d2a59ea621e5f93182397c8902e84a5908b55aaf4b090",
+    "userland/desktop/browser/bind/frame-resource.c": "c536f54e57966d436f5bf7a1d76004c8be77fd6798bb959b2feb5c68222d2f00",
+    "userland/desktop/browser/bind/frame.c": "a7ea4741e6b55539e35a935b60fadb7f6d6c745fef597c075c8ddde18c4ab7c2",
+    "userland/desktop/browser/bind/geometry.c": "cc2d1511345e93e4d1b7337bad1d13e6fb426f87b7ebead24d132ec7b642ea70",
+    "userland/desktop/browser/bind/handler.c": "05350d78ec9058b07dc40d38de3d509b00716a3a6d6b606e4ba2cf0d1eadea75",
+    "userland/desktop/browser/bind/html-input.c": "bafc7f0e104112f14567cd311e11dc48646cad23f29dbbbf57655e6f7352105a",
+    "userland/desktop/browser/bind/html-reflection.c": "609a069950a5a2f6a3113e18f4c831d085dafe19ce124745d6ddf1a0e96b578f",
+    "userland/desktop/browser/bind/implementation.c": "12126b92256d208eb3fb3a83d47e52ca6f843acbb3c1e42ff1b4f84a256218f8",
+    "userland/desktop/browser/bind/input.c": "c0405f03becb556963049e495e1b736a9d561d7c550e2f7456063de360871047",
+    "userland/desktop/browser/bind/insertion.c": "631eb455e5003fc586ca680d61a872e9b6fb9632d4c409761e5ea645a1f644a1",
+    "userland/desktop/browser/bind/internal.h": "dc73f23942e77881c446e1d57dae0a5c6843a51dbec7d83c57a1dbf29d7099e2",
+    "userland/desktop/browser/bind/iterator.c": "486931ec02689f1c755c74de3768354b882cf149e22a7489e0c212c9e6c2a2b4",
+    "userland/desktop/browser/bind/markup.c": "d2606c372c48488534599c170c5c9100b04075cb2a1e72b5b6ba8f1354730eaf",
+    "userland/desktop/browser/bind/mixin.c": "bdd106e5f11da3abb686db628f08fcb103e350875ba4a7ea3e5bd4325f735756",
+    "userland/desktop/browser/bind/node.c": "5935a7be6c36e53b17ecc096704ead1bfdd66954a07cf95c7acc33b75b628d54",
+    "userland/desktop/browser/bind/query.c": "a31740de92a21528c7d9ccdac9557eb5a864462e49e67eb1cad17134a6230d50",
+    "userland/desktop/browser/bind/range.c": "dfe248b3d93974206e2be3d97b5b0505fa7e716d52f48b83424e3cf507fc7e24",
+    "userland/desktop/browser/bind/select.c": "4fcef80d702c33314b1cf2045939f225abe3a13919b61da3f825727fc1f599a4",
+    "userland/desktop/browser/bind/storage.c": "d390c3c35104713b9663a2c400d9924a137214efe5a13d5091d59e49f74c0f40",
+    "userland/desktop/browser/bind/style-context.c": "37798912c58e9137600822422fcc25fecc030b9e4b89c3d2fe56514b8c441347",
+    "userland/desktop/browser/bind/style-sheet.c": "87b8634a6f35382693046d13e82177251bd739b2d95c7aebff792a5afce1f80e",
+    "userland/desktop/browser/bind/style.c": "fcc44ded0aea1dfb6cb83a0d5ba255003d0187c74e454e47919d3818da100536",
+    "userland/desktop/browser/bind/submit.c": "2d41818f33842fb5a7528f482c864d4569e40947ffe03065cbf6d4bcbdb90be4",
+    "userland/desktop/browser/bind/svg-length.c": "c54c89411d69165ad9fda3286d28c33e7ee41246f869d2a0c03b736740023625",
+    "userland/desktop/browser/bind/svg-text.c": "b1b92fe4befaa0be4a74cea70741fceea2318554732864a2a8bf2d4584eca1a4",
+    "userland/desktop/browser/bind/table-row.c": "8f53c3ae6d0f26ca9d4bc613f71156652ebf5e987f8b9ce1b6181099a2c20d6f",
+    "userland/desktop/browser/bind/table.c": "1caeb76b5f59f99048fbb64e0439cf285193a8b1f5888e03cd4a288d4269543e",
+    "userland/desktop/browser/bind/text.c": "273a33eea978bae37baca0e5f4076ef1cc840d583f51d0e323fd0f144bacfe4d",
+    "userland/desktop/browser/bind/timer.c": "ae045eb841960a865515c182557a7d960acfd0a2207644c762aeb4be6a05b95c",
+    "userland/desktop/browser/bind/traversal.c": "f16921663d02102c481981876e5bffe9e25c6f74ea2287f638c46b5ff17a710e",
+    "userland/desktop/browser/bind/window.c": "131c24782b6806b5fd5a19f7bb67298d89b7bdba7c7176480c67054264e1446d",
+    "userland/desktop/browser/bind/xml.c": "44579352a20abb8a12974a364932356885d4559dc5970d16c87563e09f9522d2",
+    "userland/desktop/browser/css/cascade.c": "7f4c07befc605bc8e84ba82f76d43ed9643a47ee099815201eed945d936107e0",
+    "userland/desktop/browser/css/css.h": "03fa4f28e796f72f02af9e620256633e322aee90a295bc7d2ce359c413ab65a7",
+    "userland/desktop/browser/css/index.c": "7b418d0f4815b57648be7341cafc5c8acea749da04bdfb7c4804e73121ba8251",
+    "userland/desktop/browser/css/internal.h": "377f576a94455732f83650856fa38291f20173e8713bd0e2a1c8cf7ee8cd4a34",
+    "userland/desktop/browser/css/media.c": "e1debeee9566a5459be1498bf84eac6172797636f19025521ec30716ff80b5cc",
+    "userland/desktop/browser/css/parser.c": "8950ab64e598a285f706b82a93829fa8dee3227f16b99b6150eb13614affe86a",
+    "userland/desktop/browser/css/rule-model.c": "79ba855773036c811547b9d5379491d50a65891e40d079161967d4c9dee0b61c",
+    "userland/desktop/browser/css/tokenizer.c": "c532d79f34e75bb717333485f75625bcce48b6cbec58202ba8be43d808b1074f",
+    "userland/desktop/browser/css/ua.c": "7bb223d44277ab9574db20cecb8bc05f6024eb540ca3e40d50d2c4d47c5b412a",
+    "userland/desktop/browser/css/values.c": "1e3462711f8cccc40381895f4464b88fe1650f748890337f7197f5e40f11dcbb",
+    "userland/desktop/browser/dom/adopt.c": "57873a3122325cd8eae077eedb8a032292f19cb9c890bc69c75d8c78d718e26c",
+    "userland/desktop/browser/dom/attribute.c": "705454ea982969fcc2be5f2d138ec2a870eb2ec267a65d5d358881c2b451a7c9",
+    "userland/desktop/browser/dom/control.c": "ca832a8893497c6af51431dc3feb068c7771d39618aa2e190f1de543b4d70f0b",
+    "userland/desktop/browser/dom/dom.h": "78b6a9d2d4b469caf9a33271184807a5e8b9607c73d9f79307f281deea1454e5",
+    "userland/desktop/browser/dom/form.c": "11f0fcef5c97036a2bfbf60188fa4c257e307ab553875dbbf1ed6b51b1ec6bf3",
+    "userland/desktop/browser/dom/names.c": "cc0a2fcb3d7553af57b8974592b5e269e6dc10d4401f6851fe4d7bb2a1e9f245",
+    "userland/desktop/browser/dom/node.c": "1dc870a61ee41dfa3c4b8cf534608943fdb6c530bea9937a335e281f1ac18a68",
+    "userland/desktop/browser/dom/radio.c": "579113388586aa5aebd7bc5be0ce298c29d4a9da07970bfca0a3c96be45ea646",
+    "userland/desktop/browser/dom/removal.c": "19dc02259cc840d3b6e9e213713f90b79c25be4a478c96874ebf971bc8ddfb5d",
+    "userland/desktop/browser/dom/select.c": "1bb0733211983b76ff982ab72fedffe8191efebb1ec756935a1051402e99d99b",
+    "userland/desktop/browser/dom/serialize.c": "7645a22d6e5403d15581fb14a7d21bd93045bf0fcdcb65a898c3c376fb4a5e50",
+    "userland/desktop/browser/dom/xml.c": "01691ca59a30bec51e6c57f53962bc6289e0cf071dc75cfa3277f1ea34a1ef55",
+    "userland/desktop/browser/html/body.c": "ee66abcd323194facf878543c4b849a05d64b158e4d725e578758bcf0912c24b",
+    "userland/desktop/browser/html/entities-table.c": "653c80db7c52fa58ca24f773940309772ead2951bce536baad079e078e431997",
+    "userland/desktop/browser/html/entities.h": "741d8a7abfbe2a30e55ef1aaf27a4bc2f374a165ec0b94d86d32cb8e67ed114b",
+    "userland/desktop/browser/html/foreign.c": "05e31af65adf6f44741150aeb6ebbe8648b00eaef03486db2eb9320ad412749a",
+    "userland/desktop/browser/html/html.h": "9505bad26a5e028e8dc084140009ca83bbef84a31e8756946c306b8c7e983472",
+    "userland/desktop/browser/html/input.c": "7756278846f9175c02aeb6a55d9ac8edac2779ab9be1f9f6acd1b0942ef9941b",
+    "userland/desktop/browser/html/modes.c": "7acfbbf61a8947fbfaed3415a0602c24756c713be6c1173beadc7d35202b93b1",
+    "userland/desktop/browser/html/parser.c": "37dbd1aabfa84d53acd0bea32f2987f675f2d294a2c94cff715a40e2123bda67",
+    "userland/desktop/browser/html/parser.h": "ef80cd9f83f4df75546371b2d5e6bb1fa58a6fe120aeb609426c2bd1c41cea10",
+    "userland/desktop/browser/html/tokenizer.c": "b4e6c3466b66fa10cd7c429063761520d2dea45f47ed5ffb468fe20d0a5faca1",
+    "userland/desktop/browser/image/decode.c": "04da2f866c26bba35f4e655b38484520d8dda3545b0edc454a7db096251bb33a",
+    "userland/desktop/browser/image/gif.c": "a36f256588f38b1eb607442bd5b062b0268296167d0fa4c505f3db7da8612420",
+    "userland/desktop/browser/image/image.h": "8a2d520e86d0b3ac8e2036b29ded389c9673ba32fdfb4b9cc20b6c64afc74fd9",
+    "userland/desktop/browser/image/jpeg.c": "0e408ce1e823e7bfeb9249e76abfb856c645cbc695ac288beb81aa2e3acd7995",
+    "userland/desktop/browser/image/png.c": "51cdd1f6d9d7e345713f4e9b24ce9a575f29fbd5ed9df0664cc8158b8680cf5b",
+    "userland/desktop/browser/js/builtin.c": "5a225618c5bce38f5d719b1235124fb8cc8d88bf5d474f0d3e5e6b52474faa4f",
+    "userland/desktop/browser/js/builtin.h": "e0985734c4290a53f7fdc1c5365de0be6b07d4eede445e6c96370b49fb66a51d",
+    "userland/desktop/browser/js/builtin_array.c": "3ffe8cc4acaf773ee3ed9e46ba035987abb1c84c9af1a1b3d794bc3d34018126",
+    "userland/desktop/browser/js/builtin_collection.c": "d7d3d3263cffb026ae8a76bb3d9c638b8b249fbeffcd839f8c99c0bebc1725a1",
+    "userland/desktop/browser/js/builtin_date.c": "2bbd8b0e8d7a81e9b7277d056cf715fd56e1704f3ddec9593d0cceff0a0f6efa",
+    "userland/desktop/browser/js/builtin_error.c": "bbb05739566571a8d9dde8f3be86347f2f804a779b82fdd3626a54340bfabafc",
+    "userland/desktop/browser/js/builtin_function.c": "a94b19d3561df2988bbc7e7ac5f3e2716a7f28f2d9126b48b208d71e47742e58",
+    "userland/desktop/browser/js/builtin_generator.c": "b24509193a07079e5e943bcda56475adb1b372b40df9aceb5ffa91f1509c8df8",
+    "userland/desktop/browser/js/builtin_global.c": "fb6baaeba6bc924459c2aa167b6be8ee5f3916762227b5753251170b1d6c273e",
+    "userland/desktop/browser/js/builtin_iterator.c": "3d71f4a05da1546f2914e2a6a71bc59b29d1326c582eb867c8ff976b1f14d583",
+    "userland/desktop/browser/js/builtin_json.c": "5c1a570121eae461b25f30e29f8182226b78261043db513c4f38f4f011c10788",
+    "userland/desktop/browser/js/builtin_math.c": "2624d8872659f58e9ef752fe84098276c7963512a874c7de17e727a124291856",
+    "userland/desktop/browser/js/builtin_number.c": "15db3a4b410dfe4e38004bfc90947744e1dfdfccadfe2cc48e714c7bf71456f2",
+    "userland/desktop/browser/js/builtin_object.c": "37d807766b62ebbb0653624bb90467bcdcca3554d666861143ba096cb5abea9e",
+    "userland/desktop/browser/js/builtin_promise.c": "341a1d9a0d3917016e2617bd56e8609e4a28f47baf76af35109e27c8a920d0a6",
+    "userland/desktop/browser/js/builtin_regexp.c": "d417366e74f69b0d925a31885c6c04f02f366a17283a17f7fe5d1a9cb0acca14",
+    "userland/desktop/browser/js/builtin_string.c": "3421be21004b8f395e3747c539d074c7016ea38dba983cef52aed71288cd2b8e",
+    "userland/desktop/browser/js/builtin_symbol.c": "9e3d4477b0248dccefe68d31d96edc90ab620072e985b306468c038455ed01f9",
+    "userland/desktop/browser/js/builtin_uri.c": "ca48c30e6737ae4aa91a0d7514d5735435e674b1bca1d3d45245af9dde811890",
+    "userland/desktop/browser/js/compile.c": "fd3b778c514a4f02b7a3fffa492e9a098d46eaa5bb78a65e9cc344b14da366ea",
+    "userland/desktop/browser/js/compile.h": "10c2633d8d6aac326ae003261767590ca0e869ed85341871e34049ccdd52c037",
+    "userland/desktop/browser/js/compile_expr.c": "e2ea1ffdbc01c1166e7f2837f06a3ac80c04aa59d1ac158acdddcd5890eef4d0",
+    "userland/desktop/browser/js/dump.c": "b48eae1c92be69cfe118fcd869c3ca4f07dca579a7eeff9efb37d2a56a0bce6d",
+    "userland/desktop/browser/js/emit.c": "81ac5a40a5d49ba1463f27a0a0bcc43c1a4adc3b425b6e4d9f1e1e6e851db897",
+    "userland/desktop/browser/js/internal.h": "addd2033408933a21a9910863567162ca383fdd8512f322704d28b27087a6cb7",
+    "userland/desktop/browser/js/js.h": "d18b55c0c1506af7a6faef060cf6cdd36b91da10e186a35920f648caa6335db1",
+    "userland/desktop/browser/js/lexer.c": "b0a551e761ba02f40ec2519cf6f68fcf33eb2130f672955504db83d96c761adb",
+    "userland/desktop/browser/js/parse_expr.c": "6bf42303472a853dd90f6e4f3ca57aefec450010135afc534e8e449eed81c870",
+    "userland/desktop/browser/js/parse_stmt.c": "3f937482ac736f3f1154ec6194d731239fe1b829c3f4345336819d4d670aab82",
+    "userland/desktop/browser/js/parser.c": "9360d2ba21f59db4ebc8b0daa9a1ccefc83b3898b8eb7e4a14e8bd2159f40303",
+    "userland/desktop/browser/js/regexp.c": "aa4c04d641b46999db0eb5fc5baac8f0666fb17f7d94969ab0c5c64241d5bb7a",
+    "userland/desktop/browser/js/regexp.h": "3fff531740e7b8911d209bf1c3d9126d4b81e1cc6240587c38eea503c2845ccd",
+    "userland/desktop/browser/js/scope.c": "e69a40228dd94b6304c2a8ebf0b9dc04d5105b6ddff9b6d6db9f5b2343498c4c",
+    "userland/desktop/browser/js/script.c": "3e1796780478df057fa16de9861957030a7c9dd0e7b54fba570e7a4f21a3ff0f",
+    "userland/desktop/browser/js/tool.c": "6834c4c602c41efdee8d47392f3718cca34d58fe529c23b2017c7e163781a660",
+    "userland/desktop/browser/layout/block.c": "279e791354c0d5e39291da8053fda839c0e0c5f9c5c01fd229e08a4149013983",
+    "userland/desktop/browser/layout/bounds.c": "d9f899dfc5c8a2543e015077b789f0f628e29b7fcdf10396f136d49e576a319e",
+    "userland/desktop/browser/layout/box.c": "ddd89dcf4dd47b9879861f6931f6b96c20e9032b55976d4f360fad5d9b1354e0",
+    "userland/desktop/browser/layout/control.c": "6f8e14a4293c3bc14016f3ecea5dffc196c3250e194c55a1741cbc4e59b61d2e",
+    "userland/desktop/browser/layout/dump.c": "8f3757937efda8e3bd4aa9307486ba7c3f151bf5e5216ba9216ae3de059b93fd",
+    "userland/desktop/browser/layout/flex.c": "ca80820946fa7a3dfd462791ee0c9ad71bd8ed8e9b1056728241491d657465dd",
+    "userland/desktop/browser/layout/float.c": "02520b7b7b572bc50bad8cb47fd7f2c661f5eac31b698254e78eb50f41d4fa20",
+    "userland/desktop/browser/layout/grid.c": "6a0e172f0e62bf38b498ee13fbffeba39faf2034cdb49334daab286f970194d2",
+    "userland/desktop/browser/layout/hit.c": "9a606c579ca67ceea1677544c075034e981395b4a73982b41ceaaf6f1a652e4f",
+    "userland/desktop/browser/layout/inline.c": "e1d5452a9e2bd39e604753d97930c5e6ac578b29f2888900f0095b723e174082",
+    "userland/desktop/browser/layout/layout.h": "cb8b6fcdf296d125a11fcbd281016fae5d0c25f831f155e02ac32fb16a3ae855",
+    "userland/desktop/browser/layout/position.c": "8cebb7b2df215480ac494d92eb146b13d2092b30d5269bf8dab6c3fc527c9f09",
+    "userland/desktop/browser/layout/replaced.c": "14fb488f08fefa424913281403e24d1002dfe6a25733962c9fcbf9cd959a1229",
+    "userland/desktop/browser/layout/table.c": "05044a375df3ccded0740ae6e5fb0e3caec6ce8841af7416b75c844c781596f9",
+    "userland/desktop/browser/main.c": "850ad7d493ef80056e5306491ad47cd6c24ecb5bb5076c08e2027f2b0d9ead90",
+    "userland/desktop/browser/net/cookie.c": "0a5d418a8ef1529a193329218d5f94f49b1e5eb0beaa7d82007214967073ce40",
+    "userland/desktop/browser/net/data.c": "a601bb16ef8931ebcd2ae2520eaf02491ab0918c7835907ce3cb845aaaa4ad0d",
+    "userland/desktop/browser/net/host.c": "0ac5aa05b02a0f988b32ee0209d6bdad4614113592e50aa6b5ead08787f648a3",
+    "userland/desktop/browser/net/http.c": "0ee4d501afceed61f97481fb314fec5bf72fde9a3882020e9d2e13574aaf42ce",
+    "userland/desktop/browser/net/loader.c": "a35e17653cec862d73fff8faaab974c0aa19780f237dcef05715475b97d8e3da",
+    "userland/desktop/browser/net/net.h": "5faa02864b01067d73a0620b9965ed1f896d4509893a1715fe847609dbaf4dbc",
+    "userland/desktop/browser/net/tls.c": "01119176cd67c559963ddf7d9f8e4445b5f30e11b7bb1fed9dcfa57ae7083731",
+    "userland/desktop/browser/net/url.c": "34a9c2bd7f4840ff9f521a27b8673aaeaf1ad06c3c4cf77ed8ca8f2bbeaa803f",
+    "userland/desktop/browser/page/fonts.c": "18e0939572128a3e3706d46a377b59e9d6f24f64308ca7a11f8e47e516d9964b",
+    "userland/desktop/browser/page/form.c": "428ae44f3c7585bfaa757dba8ae8f75a6c757de0dc860ebabfa3e898bc0f1249",
+    "userland/desktop/browser/page/frame-load.c": "34aa534a4dd6eaf3e57004987b23786ec508267f8da1ad9b8c27a3f3b467c60b",
+    "userland/desktop/browser/page/geometry.c": "59152bffd582f729d8e9c044acca2c9dc7621f5ae69a10a423e89c8048ec34a2",
+    "userland/desktop/browser/page/images.c": "d5ba6623cda83636ed0d2e4d143ffe2668833a1f39f8c770cd6521027d44a14e",
+    "userland/desktop/browser/page/input.c": "7f9a105cd5d4ad9884b8438b5d5d41ae37deb381915637bad415c5bc9ceefcae",
+    "userland/desktop/browser/page/link.c": "4da7ba93b718b55c1c59bf7dd1bbf36af4e658e39de297aec191c9c94e4400b5",
+    "userland/desktop/browser/page/network.c": "6bb85a585a1981a861fa5ba872bf92f85d33d87683b3d93221d579c45a62119e",
+    "userland/desktop/browser/page/page.c": "35079bcf50692082cf2093aa9ffb417a3825de34b84b0f911e5c1a7dd2e669da",
+    "userland/desktop/browser/page/page.h": "eaf2511bd16841dee37200bcc94040c31ad9a4ba986e41dbf90fd560e2ecec66",
+    "userland/desktop/browser/page/resource.c": "8c5face9daf4219a2fb3b5d022da5ee346f47203ccf6a5d4ab2bd8dd1da264c9",
+    "userland/desktop/browser/page/script.c": "1371b2bb59cda0434442c17a0969f7d264f74663b1682692612925efd10e5e61",
+    "userland/desktop/browser/page/sheets.c": "5f92baf1a5692d011fcd2af1b9da327ee281f3442ca83ad16ab0a9add19f2059",
+    "userland/desktop/browser/page/storage.c": "6c4fcea77f0f78716b196d1b05086bbbc13ab70e6173efc449d75e9f724aeaaf",
+    "userland/desktop/browser/paint/gpu.h": "d27b7512f58bab8ea546d1151a0f86f15e341f8b6b2a96a93af4c43279a00baa",
+    "userland/desktop/browser/paint/list.c": "09b34c99bbd1d340c17299a2e390f84cbf06d92537255da3b11396c2a9f8c8e9",
+    "userland/desktop/browser/paint/paint.h": "29c723f1c5bebf79edaecdb74ba0accfdb8bc69d9ffae1518dbb24864e32cbbf",
+    "userland/desktop/browser/paint/shaders.h": "5a150e9387b3c4f0244fd0343599386f69b67fb181556eabe4e8e73c340f4a3e",
+    "userland/desktop/browser/paint/software.c": "0719e77dd8f185b3b36872312325ab7bb1ff94d9fb92dd97db619d89da30ce96",
+    "userland/desktop/browser/paint/vulkan.c": "52dbf1bb3f724611254a0aa06b8c5b70d5866defe351ad7062ea0db26c328b95",
+    "userland/desktop/browser/shell/internal.h": "acd6dae6b1f370b789cac00696a53595dd1059afc8549c91b0086e30bb1bb6a1",
+    "userland/desktop/browser/shell/keys.c": "db36813619bea98eb547bdaa6e693ff0a6b7b26e7ab262583a8d7f562f2442e6",
+    "userland/desktop/browser/shell/present.c": "c7310ab3faf92e7136e171d9dae8550ba8cc16090a4f0e670033014951ee41c5",
+    "userland/desktop/browser/shell/shell.c": "5045b19954d9d37cf35ab4e9efc36495b980f542210952a11418a32b0653931c",
+    "userland/desktop/browser/shell/shell.h": "acc2e454708961d277d697c6b1d86911c51e9a65152ceea46b12a2e54f96cce9",
+    "userland/desktop/browser/shell/titlebar.c": "a3ab50e9aa567274a5dff5bde6e8d602a06c988acf99e5f7796adf34d3d563fa",
+    "userland/desktop/browser/shell/touch.c": "76256c34f641bbd1b5247c1bc0d0ebc91beb3d9b6e3a391356a7e45af615f62d",
+    "userland/desktop/browser/shell/touch.h": "f37570763c11e410f5d62d2140ef251a3aaf1c0299e91ac046914deb6b97c6e7",
+    "userland/desktop/browser/shell/window.c": "9a83d2056c1eb5adef8c8ded3ac161953be39d62fe2427a443fa09621f02e6d1",
+    "userland/desktop/browser/text/font.c": "8ee0e69d49ec48ad5c787a2a11a780ccac3f7b557510d49fd798977d2cc2b410",
+    "userland/desktop/browser/text/linebreak.c": "f02b0aee895b50e8cc9290231cd6f9bda60af066d49d22d39584fe44253ba507",
+    "userland/desktop/browser/text/text.h": "7d920d3ef2f93b6cc36166666f8e5b8ad8f78a44a9ab54be6ca7bb5451774e12",
+    "userland/desktop/browser/text/woff.c": "a06698cd0678272206337339ebf5f95ba9c1f92733ca70ad74ca9614a0d4241f",
+    "userland/desktop/browser/view/view.c": "7ffca34c4354b58c488e5b36929e8c468ce68e389ad13c0eae481813cc3bca55",
+    "userland/desktop/browser/vm/access.c": "467a2ebcdbb9091f1de2a1e99ec6f0ca3fd2cc9fb7a32999b1f34d0abf959765",
+    "userland/desktop/browser/vm/atom.c": "c45c98dbaf3ef5726b686186e5c9de5249c5b3f76148cb9652c583f410a5dd63",
+    "userland/desktop/browser/vm/bytecode.h": "90a7b064a055b5c7880874624f4fd37095117d4e424489b079dceaf6f6124e4a",
+    "userland/desktop/browser/vm/class.c": "9daa046c522b6c13830939061fda50d78a2cc277773bd2020c418b09be0cb525",
+    "userland/desktop/browser/vm/code.c": "39311b09fbc73e18108f361ccd1373eaff30a224cbdd530e1c5779633b621e2c",
+    "userland/desktop/browser/vm/function.c": "f3260a7276114e7ca0f183fa043e5bd628d9cfe0186c1b1c496877e6867debf0",
+    "userland/desktop/browser/vm/generator.c": "14b3b2692d190c9e52b33b7877460c2ec164f4c4efee4064dda7a0dc1863a017",
+    "userland/desktop/browser/vm/heap.c": "a6819b047d3c698c8317e4784e3bf55c6efddf0d3e37800e302b6558e7cadb0d",
+    "userland/desktop/browser/vm/internal.h": "7423d719db23c28dbfc8710d3dc756b62301515337decf5e8516ac2d760e4750",
+    "userland/desktop/browser/vm/interpreter.c": "e686e274550179e1ad33113373b6d1e720e44fafb79579fec5420b01fbb5d143",
+    "userland/desktop/browser/vm/number.c": "51031970ec4cdf10a8804930ac864528429e658654ba55b43ee9d727b929e6a8",
+    "userland/desktop/browser/vm/object.c": "6254a594a5085af09acabb285e3cbd6993ae2d4c9f48fd37a6fd0bf22e902832",
+    "userland/desktop/browser/vm/operation.c": "14a9a6f763f2a13e492d42d3e8661487684d2aa98b41deeaf619d3a32c337bb8",
+    "userland/desktop/browser/vm/promise.c": "34e3ccf8a6b0cf2bfd4b9220a1b8389c0eb1c19d58d4fe4bbcd9467c7cc32f1c",
+    "userland/desktop/browser/vm/realm.c": "f840fa0b68b82019508199f4bb7bb10fea4b83bfc59d991e3927bda1c9aeaad1",
+    "userland/desktop/browser/vm/shape.c": "ea4d6943523f1bca5035df09f837d49dbd034ac5f8954f29ea718c8ed6a845f8",
+    "userland/desktop/browser/vm/spread.c": "707677d773dddd712acf9d481f6bc40bcd24519f1e4dc281cee7a76c0ae9c71f",
+    "userland/desktop/browser/vm/string.c": "31bddf509981be0d38b282d21ed25b04ee15fbd94cf09921c0202eb1603ea131",
+    "userland/desktop/browser/vm/vm.h": "9be040e96589327446d0e893a68eaa9c5ada0bd17a464cf78f4de796c9de82ff",
+    "userland/desktop/browser/xml/dom.c": "c1aef535a4efc6f355e0ad85b413e41e4c39a4137bf23b78ea48383625b45658",
+    "userland/desktop/browser/xml/dom.h": "5284bcb14d9b6bc56edf1c05509460004c9e70a56c0a02388721d2b1469d44de",
+    "userland/desktop/browser/xml/parser.c": "22ed80598f14c6772f1138fd47f390143f3c0e0cc1d371a84a5e983473964d30",
+    "userland/desktop/browser/xml/xml.h": "646511b012cb5bfb84c367d6edf38099d072b02233d4ee359e5e94072c20ea06",
+    "userland/desktop/fonts/DroidSansFallbackFull.ttf": "acb6440a713d880a13a21b468ba7cd43f5a2b2934972e51be791c880730777b8",
+    "userland/desktop/fonts/Inter.ttf": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+    "userland/desktop/fonts/JetBrainsMono-Regular.ttf": "e6fd0d7e91550b3ed2b735d4312474362c4716edc4fc0577a0f61ed782d5aed1",
+    "userland/desktop/libbrowser/Makefile": "767f4c73313e37d1a558d177ec918deac126aa3f6a101dd794e1db4ec25005ae"
+  },
+  "feature_source_sha256": {
+    "userland/desktop/browser/bind/svg-length.c": "c54c89411d69165ad9fda3286d28c33e7ee41246f869d2a0c03b736740023625",
+    "userland/desktop/browser/bind/svg-text.c": "b1b92fe4befaa0be4a74cea70741fceea2318554732864a2a8bf2d4584eca1a4",
+    "userland/desktop/browser/bind/internal.h": "dc73f23942e77881c446e1d57dae0a5c6843a51dbec7d83c57a1dbf29d7099e2",
+    "userland/desktop/browser/bind/window.c": "131c24782b6806b5fd5a19f7bb67298d89b7bdba7c7176480c67054264e1446d",
+    "userland/desktop/browser/dom/dom.h": "78b6a9d2d4b469caf9a33271184807a5e8b9607c73d9f79307f281deea1454e5",
+    "userland/desktop/browser/dom/node.c": "1dc870a61ee41dfa3c4b8cf534608943fdb6c530bea9937a335e281f1ac18a68",
+    "userland/desktop/libbrowser/Makefile": "767f4c73313e37d1a558d177ec918deac126aa3f6a101dd794e1db4ec25005ae",
+    "plan/ws074/tests/host-svg-length.c": "e09e5b03a0d7ecf79af8b0ef78461032bd64e0c454e75e72732e674a205bc57c"
+  },
+  "program_sha256": {
+    "build/ws074-host/plain/browser": "b6c2d4d527d70224fca58c7032d2dd795c7803089bdbe5d7e6befb6e74805f6b",
+    "build/ws074-host/plain/host-svg-length": "4907360589bc17edb9b62f359b360586ded391d2436c785e3be6945ad360d816",
+    "build/ws074-host/plain/host-svg-text": "45918d0bdb2bb5cd96fdf72b91f6a65e95fcdd9d190ead8c970ce0f789b053f8",
+    "build/ws074-host/plain/host-frame-load": "618622b07d63820cfd8b090568b34a65f8ccd4c9d112d7ab991c2c24317e7cd9",
+    "build/ws074-host/asan/browser": "c4a82d1712043952efb1a53bfa1f01127ff97a8f53bb2b6c15291137163468b3",
+    "build/ws074-host/asan/host-svg-length": "5b4f29a48faa10a689e25ce05ef433bc37f87b9936927f91851a2f95de6ded88",
+    "build/ws074-host/asan/host-svg-text": "efa555d0ff925454603974133abfac721837f0b30fae9c00700f0637924b097b",
+    "build/ws074-host/asan/host-frame-load": "52d2336b0ac22c03a7e41090dc8e9803baab2433da9d8756573e19632cac6b36"
+  },
+  "artifact_sha256": {
+    "build/ws074-acid-q590-plain/report.json": "b24979e28a766718c95a5b131c8bc004674e6d35104f969700d55a0eb08c2926",
+    "build/ws074-acid-q590-plain/acid3-test.png": "66d26ed2237cd25bc3c6844749a1ec7d040a3d0ff493d539ae22b0477cf7d978",
+    "build/ws074-acid-q590-plain/acid2-test.png": "d4bc344146d44577143ff678d2044fdfd8218468391b2c90feee95c3d2c05f25",
+    "build/ws074-acid-q590-asan/report.json": "b24979e28a766718c95a5b131c8bc004674e6d35104f969700d55a0eb08c2926",
+    "build/ws074-acid-q590-asan/acid3-test.png": "66d26ed2237cd25bc3c6844749a1ec7d040a3d0ff493d539ae22b0477cf7d978",
+    "build/ws074-acid-q590-asan/acid2-test.png": "d4bc344146d44577143ff678d2044fdfd8218468391b2c90feee95c3d2c05f25"
+  },
+  "pinned_suite_commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+  "suite_sha256": {
+    "build/ws074-suites/wpt/acid/README.md": "af30c7962373556c745618f4731f39cf231815902be2b955e2dc47e3dbd5de23",
+    "build/ws074-suites/wpt/acid/META.yml": "d86a0942aa3d91307c9a92e624c14e59dd1e570e87e9f77baf73d584f0c7f1b9",
+    "build/ws074-suites/wpt/acid/acid2/test.html": "d67fcd46f17158857f20e803edef646b0465ec3a5a6acd748cd1c174ed2ce860",
+    "build/ws074-suites/wpt/acid/acid2/404.html": "130bcdc853b3cdccc82011d8dc7207d4554fdb89adb4bcc600a83fc8c248d656",
+    "build/ws074-suites/wpt/acid/acid2/reference.html": "4be7b25bd09d37cef1cb82e7a0fa717caafe24e81097b4095576ac4bc55d2920",
+    "build/ws074-suites/wpt/acid/acid2/px-reference.html": "1bdfb0f668d0f085d7d5ff9f15d1422cd82943fc1841f3953b56bd85dc646047",
+    "build/ws074-suites/wpt/acid/acid2/reference.png": "e2c329b59178c40a12ebc8a2bf5765206dd458a18a5ca49f427bec5d225ee524",
+    "build/ws074-suites/wpt/acid/acid2/reftest.html": "7159d6041956268412e9dd63459e489f307a73c6d97006895a7d6f25d41c024d",
+    "build/ws074-suites/wpt/acid/acid3/numbered-tests.html": "2cde57125fd6c1dd7e6f53906ec16d030dc3e40546dd1edbdc122c0f21c3480c",
+    "build/ws074-suites/wpt/acid/acid3/favicon.ico.headers": "4d29ab8bea7477a78206094bcc178d523348e6067e58331a340ef2edc1e98e91",
+    "build/ws074-suites/wpt/acid/acid3/reference.sub.html": "b4b97e21066d6ebd9c6da6b8c8d9314e37ba566d24be9186d4a0c6ef99491bbc",
+    "build/ws074-suites/wpt/acid/acid3/empty.css.headers": "97230b32826aee75ec7bbe4d5269b27290c8c143d4ae19ca0f29d24cb186b795",
+    "build/ws074-suites/wpt/acid/acid3/test.html": "7e436eb5b3d2add870c2389b6704c5c7537668a315bdb6fa8fec6b57c7f0d7fa",
+    "build/ws074-suites/wpt/acid/acid3/empty.html": "57efe98952b1b3a463f1cb302f504e0f16bc6ad141e82a8f46ad2712c34bd238",
+    "build/ws074-suites/wpt/acid/acid3/support-b.png": "21260b5e5d9ffd3158d14bf2c4c29a434505c9aa70babcc74d20cf3ea8a1c4b7",
+    "build/ws074-suites/wpt/acid/acid3/support-b.png.headers": "2318878ca9c372a4e5b27247beeab57edcad1ea7c4db5ca22e057496310f575f",
+    "build/ws074-suites/wpt/acid/acid3/support-a.png": "743ea1d3aa160bcc2447e447bc2693b2bac4805c69c081f96defb9c5bde31edf",
+    "build/ws074-suites/wpt/acid/acid3/empty.xml": "912318165cd5f199bb73298fb4258379eb31feb8fd20da9e7f1c70e50ddbbbf0",
+    "build/ws074-suites/wpt/acid/acid3/xhtml.3": "b888c394b6afe5dc1d1f4fa634e8916f6c1503f1b432408944a029e6eae993c7",
+    "build/ws074-suites/wpt/acid/acid3/xhtml.2": "23a5397fbd4252e0bdf9de64076b9f8c7c248e7cca3c98539a8197c997ca2ff3",
+    "build/ws074-suites/wpt/acid/acid3/svg.xml": "2ddd4fdb65d2cfcebcd27660071dc2f26c8dadd2c0bd895f5b28432f056ea7d4",
+    "build/ws074-suites/wpt/acid/acid3/empty.xml.headers": "bb1c4092cdc436dc40ee808c43d1b3f9034b0b5391798cab3bfa6fcbf013811f",
+    "build/ws074-suites/wpt/acid/acid3/xhtml.1.headers": "c9c9becf547bd01ac345af91be4a0b38e3ca9471ec092a7a34fa382748cd2b58",
+    "build/ws074-suites/wpt/acid/acid3/svg.xml.headers": "8e857d7c694a54a8cd86949532ab87e84b5995c73b945b1c4f5b7edde6da7b64",
+    "build/ws074-suites/wpt/acid/acid3/xhtml.2.headers": "c9c9becf547bd01ac345af91be4a0b38e3ca9471ec092a7a34fa382748cd2b58",
+    "build/ws074-suites/wpt/acid/acid3/favicon.ico": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/ws074-suites/wpt/acid/acid3/empty.png": "4a49c92dcf775e8e6b97d58fdf3446f113cd618e648089ccd9f94c5bd7049b85",
+    "build/ws074-suites/wpt/acid/acid3/empty.css": "88cd71a00a9a81c2247c85fa24951f5e5e5e3f2b4929b290e2b913ad25a8e217",
+    "build/ws074-suites/wpt/acid/acid3/reference.png": "e39b3e928afc50b3386ad80c32e8de52654164bc3d2e18f95d3026439d5642f2",
+    "build/ws074-suites/wpt/acid/acid3/xhtml.1": "50332cb7418c7659ad5407031536123b80e58d54235e1c04b89a2b355882b507",
+    "build/ws074-suites/wpt/acid/acid3/xhtml.3.headers": "c9c9becf547bd01ac345af91be4a0b38e3ca9471ec092a7a34fa382748cd2b58",
+    "build/ws074-suites/wpt/acid/acid3/empty.txt": "fd702c3e047d7dfa6b39786b0e535c798c574a2896ce34cd0ac7440f2f8e9149",
+    "build/ws074-suites/wpt/fonts/Ahem.ttf": "b719ecb31c5b21fc573c03f6421c74ac63c271a5a3ff841e34f9705fb94b8448",
+    "build/ws074-suites/wpt/LICENSE.md": "5fac07febb0e2a97fb0d7b0def149ec08b642e1ba4b9c345283ab1cbd2af6570"
+  },
+  "acid": {
+    "plain": {
+      "acid2": {
+        "agreement": 100.0,
+        "different_pixels": 0,
+        "max_difference": 0,
+        "pass": true,
+        "reference_image": "acid2-reference.png",
+        "side_image": "acid2-side.png",
+        "test_image": "acid2-test.png",
+        "total_pixels": 120000
+      },
+      "acid3": {
+        "agreement": 37.04,
+        "complete": true,
+        "different_pixels": 302208,
+        "dom": "acid3.dom",
+        "exceptions": [],
+        "max_difference": 255,
+        "pass": true,
+        "pixel_pass": false,
+        "reference_image": "acid3-reference.png",
+        "run_errors": [],
+        "run_status": 0,
+        "score": "100",
+        "side_image": "acid3-side.png",
+        "test_image": "acid3-test.png",
+        "total_pixels": 480000
+      },
+      "acid3_inventory": {
+        "complete": true,
+        "exceptions": [],
+        "invalid_messages": [],
+        "matches_original_score": true,
+        "missing": [],
+        "pass_count": 100,
+        "reported_total": 100,
+        "results": [
+          {
+            "result": "pass",
+            "test": 0
+          },
+          {
+            "result": "pass",
+            "test": 1
+          },
+          {
+            "result": "pass",
+            "test": 2
+          },
+          {
+            "result": "pass",
+            "test": 3
+          },
+          {
+            "result": "pass",
+            "test": 4
+          },
+          {
+            "result": "pass",
+            "test": 5
+          },
+          {
+            "result": "pass",
+            "test": 6
+          },
+          {
+            "result": "pass",
+            "test": 7
+          },
+          {
+            "result": "pass",
+            "test": 8
+          },
+          {
+            "result": "pass",
+            "test": 9
+          },
+          {
+            "result": "pass",
+            "test": 10
+          },
+          {
+            "result": "pass",
+            "test": 11
+          },
+          {
+            "result": "pass",
+            "test": 12
+          },
+          {
+            "result": "pass",
+            "test": 13
+          },
+          {
+            "result": "pass",
+            "test": 14
+          },
+          {
+            "result": "pass",
+            "test": 15
+          },
+          {
+            "result": "pass",
+            "test": 16
+          },
+          {
+            "result": "pass",
+            "test": 17
+          },
+          {
+            "result": "pass",
+            "test": 18
+          },
+          {
+            "result": "pass",
+            "test": 19
+          },
+          {
+            "result": "pass",
+            "test": 20
+          },
+          {
+            "result": "pass",
+            "test": 21
+          },
+          {
+            "result": "pass",
+            "test": 22
+          },
+          {
+            "result": "pass",
+            "test": 23
+          },
+          {
+            "result": "pass",
+            "test": 24
+          },
+          {
+            "result": "pass",
+            "test": 25
+          },
+          {
+            "result": "pass",
+            "test": 26
+          },
+          {
+            "result": "pass",
+            "test": 27
+          },
+          {
+            "result": "pass",
+            "test": 28
+          },
+          {
+            "result": "pass",
+            "test": 29
+          },
+          {
+            "result": "pass",
+            "test": 30
+          },
+          {
+            "result": "pass",
+            "test": 31
+          },
+          {
+            "result": "pass",
+            "test": 32
+          },
+          {
+            "result": "pass",
+            "test": 33
+          },
+          {
+            "result": "pass",
+            "test": 34
+          },
+          {
+            "result": "pass",
+            "test": 35
+          },
+          {
+            "result": "pass",
+            "test": 36
+          },
+          {
+            "result": "pass",
+            "test": 37
+          },
+          {
+            "result": "pass",
+            "test": 38
+          },
+          {
+            "result": "pass",
+            "test": 39
+          },
+          {
+            "result": "pass",
+            "test": 40
+          },
+          {
+            "result": "pass",
+            "test": 41
+          },
+          {
+            "result": "pass",
+            "test": 42
+          },
+          {
+            "result": "pass",
+            "test": 43
+          },
+          {
+            "result": "pass",
+            "test": 44
+          },
+          {
+            "result": "pass",
+            "test": 45
+          },
+          {
+            "result": "pass",
+            "test": 46
+          },
+          {
+            "result": "pass",
+            "test": 47
+          },
+          {
+            "result": "pass",
+            "test": 48
+          },
+          {
+            "result": "pass",
+            "test": 49
+          },
+          {
+            "result": "pass",
+            "test": 50
+          },
+          {
+            "result": "pass",
+            "test": 51
+          },
+          {
+            "result": "pass",
+            "test": 52
+          },
+          {
+            "result": "pass",
+            "test": 53
+          },
+          {
+            "result": "pass",
+            "test": 54
+          },
+          {
+            "result": "pass",
+            "test": 55
+          },
+          {
+            "result": "pass",
+            "test": 56
+          },
+          {
+            "result": "pass",
+            "test": 57
+          },
+          {
+            "result": "pass",
+            "test": 58
+          },
+          {
+            "result": "pass",
+            "test": 59
+          },
+          {
+            "result": "pass",
+            "test": 60
+          },
+          {
+            "result": "pass",
+            "test": 61
+          },
+          {
+            "result": "pass",
+            "test": 62
+          },
+          {
+            "result": "pass",
+            "test": 63
+          },
+          {
+            "result": "pass",
+            "test": 64
+          },
+          {
+            "result": "pass",
+            "test": 65
+          },
+          {
+            "result": "pass",
+            "test": 66
+          },
+          {
+            "result": "pass",
+            "test": 67
+          },
+          {
+            "result": "pass",
+            "test": 68
+          },
+          {
+            "result": "pass",
+            "test": 69
+          },
+          {
+            "result": "pass",
+            "test": 70
+          },
+          {
+            "result": "pass",
+            "test": 71
+          },
+          {
+            "result": "pass",
+            "test": 72
+          },
+          {
+            "result": "pass",
+            "test": 73
+          },
+          {
+            "result": "pass",
+            "test": 74
+          },
+          {
+            "result": "pass",
+            "test": 75
+          },
+          {
+            "result": "pass",
+            "test": 76
+          },
+          {
+            "result": "pass",
+            "test": 77
+          },
+          {
+            "result": "pass",
+            "test": 78
+          },
+          {
+            "result": "pass",
+            "test": 79
+          },
+          {
+            "result": "pass",
+            "test": 80
+          },
+          {
+            "result": "pass",
+            "test": 81
+          },
+          {
+            "result": "pass",
+            "test": 82
+          },
+          {
+            "result": "pass",
+            "test": 83
+          },
+          {
+            "result": "pass",
+            "test": 84
+          },
+          {
+            "result": "pass",
+            "test": 85
+          },
+          {
+            "result": "pass",
+            "test": 86
+          },
+          {
+            "result": "pass",
+            "test": 87
+          },
+          {
+            "result": "pass",
+            "test": 88
+          },
+          {
+            "result": "pass",
+            "test": 89
+          },
+          {
+            "result": "pass",
+            "test": 90
+          },
+          {
+            "result": "pass",
+            "test": 91
+          },
+          {
+            "result": "pass",
+            "test": 92
+          },
+          {
+            "result": "pass",
+            "test": 93
+          },
+          {
+            "result": "pass",
+            "test": 94
+          },
+          {
+            "result": "pass",
+            "test": 95
+          },
+          {
+            "result": "pass",
+            "test": 96
+          },
+          {
+            "result": "pass",
+            "test": 97
+          },
+          {
+            "result": "pass",
+            "test": 98
+          },
+          {
+            "result": "pass",
+            "test": 99
+          }
+        ],
+        "run_status": 0
+      },
+      "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+      "note": "Historical diagnostics only; WPT warns that these tests are not a standards certification.",
+      "schema": 2,
+      "settle_ms": 15000,
+      "suite": "WPT historical Acid tests"
+    },
+    "asan": {
+      "acid2": {
+        "agreement": 100.0,
+        "different_pixels": 0,
+        "max_difference": 0,
+        "pass": true,
+        "reference_image": "acid2-reference.png",
+        "side_image": "acid2-side.png",
+        "test_image": "acid2-test.png",
+        "total_pixels": 120000
+      },
+      "acid3": {
+        "agreement": 37.04,
+        "complete": true,
+        "different_pixels": 302208,
+        "dom": "acid3.dom",
+        "exceptions": [],
+        "max_difference": 255,
+        "pass": true,
+        "pixel_pass": false,
+        "reference_image": "acid3-reference.png",
+        "run_errors": [],
+        "run_status": 0,
+        "score": "100",
+        "side_image": "acid3-side.png",
+        "test_image": "acid3-test.png",
+        "total_pixels": 480000
+      },
+      "acid3_inventory": {
+        "complete": true,
+        "exceptions": [],
+        "invalid_messages": [],
+        "matches_original_score": true,
+        "missing": [],
+        "pass_count": 100,
+        "reported_total": 100,
+        "results": [
+          {
+            "result": "pass",
+            "test": 0
+          },
+          {
+            "result": "pass",
+            "test": 1
+          },
+          {
+            "result": "pass",
+            "test": 2
+          },
+          {
+            "result": "pass",
+            "test": 3
+          },
+          {
+            "result": "pass",
+            "test": 4
+          },
+          {
+            "result": "pass",
+            "test": 5
+          },
+          {
+            "result": "pass",
+            "test": 6
+          },
+          {
+            "result": "pass",
+            "test": 7
+          },
+          {
+            "result": "pass",
+            "test": 8
+          },
+          {
+            "result": "pass",
+            "test": 9
+          },
+          {
+            "result": "pass",
+            "test": 10
+          },
+          {
+            "result": "pass",
+            "test": 11
+          },
+          {
+            "result": "pass",
+            "test": 12
+          },
+          {
+            "result": "pass",
+            "test": 13
+          },
+          {
+            "result": "pass",
+            "test": 14
+          },
+          {
+            "result": "pass",
+            "test": 15
+          },
+          {
+            "result": "pass",
+            "test": 16
+          },
+          {
+            "result": "pass",
+            "test": 17
+          },
+          {
+            "result": "pass",
+            "test": 18
+          },
+          {
+            "result": "pass",
+            "test": 19
+          },
+          {
+            "result": "pass",
+            "test": 20
+          },
+          {
+            "result": "pass",
+            "test": 21
+          },
+          {
+            "result": "pass",
+            "test": 22
+          },
+          {
+            "result": "pass",
+            "test": 23
+          },
+          {
+            "result": "pass",
+            "test": 24
+          },
+          {
+            "result": "pass",
+            "test": 25
+          },
+          {
+            "result": "pass",
+            "test": 26
+          },
+          {
+            "result": "pass",
+            "test": 27
+          },
+          {
+            "result": "pass",
+            "test": 28
+          },
+          {
+            "result": "pass",
+            "test": 29
+          },
+          {
+            "result": "pass",
+            "test": 30
+          },
+          {
+            "result": "pass",
+            "test": 31
+          },
+          {
+            "result": "pass",
+            "test": 32
+          },
+          {
+            "result": "pass",
+            "test": 33
+          },
+          {
+            "result": "pass",
+            "test": 34
+          },
+          {
+            "result": "pass",
+            "test": 35
+          },
+          {
+            "result": "pass",
+            "test": 36
+          },
+          {
+            "result": "pass",
+            "test": 37
+          },
+          {
+            "result": "pass",
+            "test": 38
+          },
+          {
+            "result": "pass",
+            "test": 39
+          },
+          {
+            "result": "pass",
+            "test": 40
+          },
+          {
+            "result": "pass",
+            "test": 41
+          },
+          {
+            "result": "pass",
+            "test": 42
+          },
+          {
+            "result": "pass",
+            "test": 43
+          },
+          {
+            "result": "pass",
+            "test": 44
+          },
+          {
+            "result": "pass",
+            "test": 45
+          },
+          {
+            "result": "pass",
+            "test": 46
+          },
+          {
+            "result": "pass",
+            "test": 47
+          },
+          {
+            "result": "pass",
+            "test": 48
+          },
+          {
+            "result": "pass",
+            "test": 49
+          },
+          {
+            "result": "pass",
+            "test": 50
+          },
+          {
+            "result": "pass",
+            "test": 51
+          },
+          {
+            "result": "pass",
+            "test": 52
+          },
+          {
+            "result": "pass",
+            "test": 53
+          },
+          {
+            "result": "pass",
+            "test": 54
+          },
+          {
+            "result": "pass",
+            "test": 55
+          },
+          {
+            "result": "pass",
+            "test": 56
+          },
+          {
+            "result": "pass",
+            "test": 57
+          },
+          {
+            "result": "pass",
+            "test": 58
+          },
+          {
+            "result": "pass",
+            "test": 59
+          },
+          {
+            "result": "pass",
+            "test": 60
+          },
+          {
+            "result": "pass",
+            "test": 61
+          },
+          {
+            "result": "pass",
+            "test": 62
+          },
+          {
+            "result": "pass",
+            "test": 63
+          },
+          {
+            "result": "pass",
+            "test": 64
+          },
+          {
+            "result": "pass",
+            "test": 65
+          },
+          {
+            "result": "pass",
+            "test": 66
+          },
+          {
+            "result": "pass",
+            "test": 67
+          },
+          {
+            "result": "pass",
+            "test": 68
+          },
+          {
+            "result": "pass",
+            "test": 69
+          },
+          {
+            "result": "pass",
+            "test": 70
+          },
+          {
+            "result": "pass",
+            "test": 71
+          },
+          {
+            "result": "pass",
+            "test": 72
+          },
+          {
+            "result": "pass",
+            "test": 73
+          },
+          {
+            "result": "pass",
+            "test": 74
+          },
+          {
+            "result": "pass",
+            "test": 75
+          },
+          {
+            "result": "pass",
+            "test": 76
+          },
+          {
+            "result": "pass",
+            "test": 77
+          },
+          {
+            "result": "pass",
+            "test": 78
+          },
+          {
+            "result": "pass",
+            "test": 79
+          },
+          {
+            "result": "pass",
+            "test": 80
+          },
+          {
+            "result": "pass",
+            "test": 81
+          },
+          {
+            "result": "pass",
+            "test": 82
+          },
+          {
+            "result": "pass",
+            "test": 83
+          },
+          {
+            "result": "pass",
+            "test": 84
+          },
+          {
+            "result": "pass",
+            "test": 85
+          },
+          {
+            "result": "pass",
+            "test": 86
+          },
+          {
+            "result": "pass",
+            "test": 87
+          },
+          {
+            "result": "pass",
+            "test": 88
+          },
+          {
+            "result": "pass",
+            "test": 89
+          },
+          {
+            "result": "pass",
+            "test": 90
+          },
+          {
+            "result": "pass",
+            "test": 91
+          },
+          {
+            "result": "pass",
+            "test": 92
+          },
+          {
+            "result": "pass",
+            "test": 93
+          },
+          {
+            "result": "pass",
+            "test": 94
+          },
+          {
+            "result": "pass",
+            "test": 95
+          },
+          {
+            "result": "pass",
+            "test": 96
+          },
+          {
+            "result": "pass",
+            "test": 97
+          },
+          {
+            "result": "pass",
+            "test": 98
+          },
+          {
+            "result": "pass",
+            "test": 99
+          }
+        ],
+        "run_status": 0
+      },
+      "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+      "note": "Historical diagnostics only; WPT warns that these tests are not a standards certification.",
+      "schema": 2,
+      "settle_ms": 15000,
+      "suite": "WPT historical Acid tests"
+    }
+  },
+  "regressions": {
+    "plain": [
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-frame-load-tests.py",
+          "--program",
+          "build/ws074-host/plain/host-frame-load"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native child loading: 52/52 passed; error=0"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-svg-text"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native SVG text: 42/42 passed; error=0"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-document-parser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native document parser lifetime: 8/8 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-image-geometry"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native image geometry: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-image-zero"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native image zero layout: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-css-rule-model"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native CSS rule model: 44/44 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-style-sheet"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native style source: 21/21 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-cssom"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native CSSOM: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-cssom-mutation"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native CSSOM mutation: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-resource-tests.py",
+          "--program",
+          "build/ws074-host/plain/host-resource"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native resource metadata: 101/101 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-data-url"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native data URL error routing: 68/68 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-xml-dom"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML DOM: 54/54 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-xml-binding"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML bindings: 34/34 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-xml-node"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML nodes: 32/32 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-attribute-namespace"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native attribute namespaces: 25/25 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-xml"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML model: 236/236 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/style-sheet-mutation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 23,
+        "failures": [],
+        "last": [
+          "style sheet mutation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/style-sheet-probe.html"
+        ],
+        "exit": 0,
+        "passes": 22,
+        "failures": [],
+        "last": [
+          "style sheet probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/image-zero-probe.html"
+        ],
+        "exit": 0,
+        "passes": 15,
+        "failures": [],
+        "last": [
+          "image zero probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/image-geometry-probe.html"
+        ],
+        "exit": 0,
+        "passes": 22,
+        "failures": [],
+        "last": [
+          "image geometry probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-document-images"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Document.images lifetime: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-images-probe.html"
+        ],
+        "exit": 0,
+        "passes": 23,
+        "failures": [],
+        "last": [
+          "document images probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-document-stream"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native document streams: 9/9 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-stream-probe.html"
+        ],
+        "exit": 0,
+        "passes": 36,
+        "failures": [],
+        "last": [
+          "document stream probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/frame-viewport-probe.html"
+        ],
+        "exit": 0,
+        "passes": 12,
+        "failures": [],
+        "last": [
+          "frame viewport probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/text-transform-media-probe.html"
+        ],
+        "exit": 0,
+        "passes": 38,
+        "failures": [],
+        "last": [
+          "text transform media probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-surround-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 24,
+        "failures": [],
+        "last": [
+          "range surround contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-extract-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 22,
+        "failures": [],
+        "last": [
+          "range extract contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-delete-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 17,
+        "failures": [],
+        "last": [
+          "range delete contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/mutation-record-probe.html"
+        ],
+        "exit": 0,
+        "passes": 13,
+        "failures": [],
+        "last": [
+          "mutation record probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-clone-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 32,
+        "failures": [],
+        "last": [
+          "range clone contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/node-cloning-probe.html"
+        ],
+        "exit": 0,
+        "passes": 27,
+        "failures": [],
+        "last": [
+          "node cloning probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-insert-probe.html"
+        ],
+        "exit": 0,
+        "passes": 59,
+        "failures": [],
+        "last": [
+          "range insert probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-mutation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 36,
+        "failures": [],
+        "last": [
+          "range mutation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/pre-insertion-probe.html"
+        ],
+        "exit": 0,
+        "passes": 64,
+        "failures": [],
+        "last": [
+          "pre-insertion probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-core-probe.html"
+        ],
+        "exit": 0,
+        "passes": 59,
+        "failures": [],
+        "last": [
+          "range core probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-removal-probe.html"
+        ],
+        "exit": 0,
+        "passes": 33,
+        "failures": [],
+        "last": [
+          "range removal probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-boundary-probe.html"
+        ],
+        "exit": 0,
+        "passes": 80,
+        "failures": [],
+        "last": [
+          "range boundary probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/option-selectedness-probe.html"
+        ],
+        "exit": 0,
+        "passes": 73,
+        "failures": [],
+        "last": [
+          "option selectedness probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/select-options-probe.html"
+        ],
+        "exit": 0,
+        "passes": 72,
+        "failures": [],
+        "last": [
+          "select options probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/table-row-probe.html"
+        ],
+        "exit": 0,
+        "passes": 62,
+        "failures": [],
+        "last": [
+          "table row probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-adoption-probe.html"
+        ],
+        "exit": 0,
+        "passes": 26,
+        "failures": [],
+        "last": [
+          "Document adoption probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/table-structure-probe.html"
+        ],
+        "exit": 0,
+        "passes": 68,
+        "failures": [],
+        "last": [
+          "table structure probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/table-collection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 71,
+        "failures": [],
+        "last": [
+          "table collection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/submit-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "submit event probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/click-activation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 57,
+        "failures": [],
+        "last": [
+          "click activation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/radio-state-probe.html"
+        ],
+        "exit": 0,
+        "passes": 73,
+        "failures": [],
+        "last": [
+          "radio state probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/input-reflection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 94,
+        "failures": [],
+        "last": [
+          "input reflection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/form-controls-probe.html"
+        ],
+        "exit": 0,
+        "passes": 100,
+        "failures": [],
+        "last": [
+          "form controls probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-forms-probe.html"
+        ],
+        "exit": 0,
+        "passes": 35,
+        "failures": [],
+        "last": [
+          "Document.forms probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/html-collection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 104,
+        "failures": [],
+        "last": [
+          "HTMLCollection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/node-iterator-probe.html"
+        ],
+        "exit": 0,
+        "passes": 60,
+        "failures": [],
+        "last": [
+          "PASS removed child factories remain usable"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/tree-walker-probe.html"
+        ],
+        "exit": 0,
+        "passes": 70,
+        "failures": [],
+        "last": [
+          "PASS readonly walker state and constants"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/xml-document-probe.html"
+        ],
+        "exit": 0,
+        "passes": 62,
+        "failures": [],
+        "last": [
+          "PASS XML readonly content type"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/namespace-probe.html"
+        ],
+        "exit": 0,
+        "passes": 38,
+        "failures": [],
+        "last": [
+          "PASS child namespace exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/element-name-probe.html"
+        ],
+        "exit": 0,
+        "passes": 31,
+        "failures": [],
+        "last": [
+          "PASS child method exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/iframe-context-probe.html"
+        ],
+        "exit": 0,
+        "passes": 17,
+        "failures": [],
+        "last": [
+          "PASS inactive document child null"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/legacy-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "PASS active method still converts arguments"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-frame-lifetime"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "frame lifetime checks: 148/148 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-namespace"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "namespace GC checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-context-ownership"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "ownership checks: 27/27 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-realms"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "realm checks: 30/30 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-object"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-object: 100 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-interp"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-interp: 45 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-dom-tests.py",
+          "--program",
+          "build/ws074-host/plain/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "dom-tests 23/23"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-js-tests.py",
+          "--program",
+          "build/ws074-host/plain/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "js-tests 14/14"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-xml-document"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "XML document GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/child-style-probe.html"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "PASS retired child selector empty"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-frame-viewport"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native iframe viewport: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-color-media"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native color media: 29/29 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-surround-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range surround contents: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-extract-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range extract contents: 14/14 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-delete-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range delete contents: 11/11 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-vm-factory"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native VM factory GC: 20/20 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-mutation-record"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native mutation record GC: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-clone-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range clone contents: 15/15 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-data"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range-data native checks: 100/100 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-node-cloning"
+        ],
+        "exit": 0,
+        "passes": 26,
+        "failures": [],
+        "last": [
+          "native node cloning: 26 checks, 0 failures"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-insert"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range insertion lifetime checks: 92/92 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-mutation"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range-mutation native checks: 36/36 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-insertion"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "pre-insertion native checks: 29/29 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-range-boundary"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range boundary lifetime checks: 89/89 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-option-state"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "option selectedness lifetime checks: 20/20 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-select"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "select addition lifetime checks: 78/78 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-select-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "select collection GC checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-table-row"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "table row lifetime checks: 75/75 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-table-mutation"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "table mutation lifetime checks: 42/42 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-table-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "table collection GC checks: 25/25 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-submit"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "submit lifetime checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-click"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "click lifetime checks: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-radio-state"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "radio state checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-form-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form collection GC checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-form-owner"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form owner checks: 56/56 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "collection GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-traversal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "traversal GC checks: 9/9 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-removal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "removal subscription checks: 37/37 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-native-properties"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native property checks: 65/65 passed"
+        ]
+      },
+      {
+        "command": [
+          "selectors style golden"
+        ],
+        "exit": 0,
+        "same": true,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-svg-length"
+        ],
+        "exit": 0,
+        "checks": 60,
+        "passed": 60,
+        "log": "native SVG length: 60/60 passed; error=0\n",
+        "reuse": "actual completed final focused fixture; no redundant rerun"
+      }
+    ],
+    "asan": [
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-frame-load-tests.py",
+          "--program",
+          "build/ws074-host/asan/host-frame-load"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native child loading: 52/52 passed; error=0"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-svg-text"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native SVG text: 42/42 passed; error=0"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-document-parser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native document parser lifetime: 8/8 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-image-geometry"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native image geometry: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-image-zero"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native image zero layout: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-css-rule-model"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native CSS rule model: 44/44 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-style-sheet"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native style source: 21/21 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-cssom"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native CSSOM: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-cssom-mutation"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native CSSOM mutation: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-resource-tests.py",
+          "--program",
+          "build/ws074-host/asan/host-resource"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native resource metadata: 101/101 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-data-url"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native data URL error routing: 68/68 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-xml-dom"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML DOM: 54/54 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-xml-binding"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML bindings: 34/34 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-xml-node"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML nodes: 32/32 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-attribute-namespace"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native attribute namespaces: 25/25 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-xml"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native XML model: 236/236 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/style-sheet-mutation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 23,
+        "failures": [],
+        "last": [
+          "style sheet mutation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/style-sheet-probe.html"
+        ],
+        "exit": 0,
+        "passes": 22,
+        "failures": [],
+        "last": [
+          "style sheet probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/image-zero-probe.html"
+        ],
+        "exit": 0,
+        "passes": 15,
+        "failures": [],
+        "last": [
+          "image zero probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/image-geometry-probe.html"
+        ],
+        "exit": 0,
+        "passes": 22,
+        "failures": [],
+        "last": [
+          "image geometry probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-document-images"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Document.images lifetime: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-images-probe.html"
+        ],
+        "exit": 0,
+        "passes": 23,
+        "failures": [],
+        "last": [
+          "document images probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-document-stream"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native document streams: 9/9 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-stream-probe.html"
+        ],
+        "exit": 0,
+        "passes": 36,
+        "failures": [],
+        "last": [
+          "document stream probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "--font=userland/desktop/fonts/Inter.ttf",
+          "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+          "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+          "plan/ws074/tests/pages/frame-viewport-probe.html"
+        ],
+        "exit": 0,
+        "passes": 12,
+        "failures": [],
+        "last": [
+          "frame viewport probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/text-transform-media-probe.html"
+        ],
+        "exit": 0,
+        "passes": 38,
+        "failures": [],
+        "last": [
+          "text transform media probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-surround-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 24,
+        "failures": [],
+        "last": [
+          "range surround contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-extract-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 22,
+        "failures": [],
+        "last": [
+          "range extract contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-delete-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 17,
+        "failures": [],
+        "last": [
+          "range delete contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/mutation-record-probe.html"
+        ],
+        "exit": 0,
+        "passes": 13,
+        "failures": [],
+        "last": [
+          "mutation record probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-clone-contents-probe.html"
+        ],
+        "exit": 0,
+        "passes": 32,
+        "failures": [],
+        "last": [
+          "range clone contents probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/node-cloning-probe.html"
+        ],
+        "exit": 0,
+        "passes": 27,
+        "failures": [],
+        "last": [
+          "node cloning probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-insert-probe.html"
+        ],
+        "exit": 0,
+        "passes": 59,
+        "failures": [],
+        "last": [
+          "range insert probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-mutation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 36,
+        "failures": [],
+        "last": [
+          "range mutation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/pre-insertion-probe.html"
+        ],
+        "exit": 0,
+        "passes": 64,
+        "failures": [],
+        "last": [
+          "pre-insertion probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-core-probe.html"
+        ],
+        "exit": 0,
+        "passes": 59,
+        "failures": [],
+        "last": [
+          "range core probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-removal-probe.html"
+        ],
+        "exit": 0,
+        "passes": 33,
+        "failures": [],
+        "last": [
+          "range removal probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/range-boundary-probe.html"
+        ],
+        "exit": 0,
+        "passes": 80,
+        "failures": [],
+        "last": [
+          "range boundary probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/option-selectedness-probe.html"
+        ],
+        "exit": 0,
+        "passes": 73,
+        "failures": [],
+        "last": [
+          "option selectedness probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/select-options-probe.html"
+        ],
+        "exit": 0,
+        "passes": 72,
+        "failures": [],
+        "last": [
+          "select options probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/table-row-probe.html"
+        ],
+        "exit": 0,
+        "passes": 62,
+        "failures": [],
+        "last": [
+          "table row probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-adoption-probe.html"
+        ],
+        "exit": 0,
+        "passes": 26,
+        "failures": [],
+        "last": [
+          "Document adoption probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/table-structure-probe.html"
+        ],
+        "exit": 0,
+        "passes": 68,
+        "failures": [],
+        "last": [
+          "table structure probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/table-collection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 71,
+        "failures": [],
+        "last": [
+          "table collection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/submit-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "submit event probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/click-activation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 57,
+        "failures": [],
+        "last": [
+          "click activation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/radio-state-probe.html"
+        ],
+        "exit": 0,
+        "passes": 73,
+        "failures": [],
+        "last": [
+          "radio state probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/input-reflection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 94,
+        "failures": [],
+        "last": [
+          "input reflection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/form-controls-probe.html"
+        ],
+        "exit": 0,
+        "passes": 100,
+        "failures": [],
+        "last": [
+          "form controls probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-forms-probe.html"
+        ],
+        "exit": 0,
+        "passes": 35,
+        "failures": [],
+        "last": [
+          "Document.forms probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/html-collection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 104,
+        "failures": [],
+        "last": [
+          "HTMLCollection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/node-iterator-probe.html"
+        ],
+        "exit": 0,
+        "passes": 60,
+        "failures": [],
+        "last": [
+          "PASS removed child factories remain usable"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/tree-walker-probe.html"
+        ],
+        "exit": 0,
+        "passes": 70,
+        "failures": [],
+        "last": [
+          "PASS readonly walker state and constants"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/xml-document-probe.html"
+        ],
+        "exit": 0,
+        "passes": 62,
+        "failures": [],
+        "last": [
+          "PASS XML readonly content type"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/namespace-probe.html"
+        ],
+        "exit": 0,
+        "passes": 38,
+        "failures": [],
+        "last": [
+          "PASS child namespace exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/element-name-probe.html"
+        ],
+        "exit": 0,
+        "passes": 31,
+        "failures": [],
+        "last": [
+          "PASS child method exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/iframe-context-probe.html"
+        ],
+        "exit": 0,
+        "passes": 17,
+        "failures": [],
+        "last": [
+          "PASS inactive document child null"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/legacy-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "PASS active method still converts arguments"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-frame-lifetime"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "frame lifetime checks: 148/148 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-namespace"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "namespace GC checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-context-ownership"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "ownership checks: 27/27 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-realms"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "realm checks: 30/30 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-object"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-object: 100 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-interp"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-interp: 45 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-dom-tests.py",
+          "--program",
+          "build/ws074-host/asan/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "dom-tests 23/23"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-js-tests.py",
+          "--program",
+          "build/ws074-host/asan/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "js-tests 14/14"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-xml-document"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "XML document GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/child-style-probe.html"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "PASS retired child selector empty"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-frame-viewport"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native iframe viewport: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-color-media"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native color media: 29/29 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-surround-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range surround contents: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-extract-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range extract contents: 14/14 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-delete-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range delete contents: 11/11 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-vm-factory"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native VM factory GC: 20/20 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-mutation-record"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native mutation record GC: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-clone-contents"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native Range clone contents: 15/15 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-data"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range-data native checks: 100/100 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-node-cloning"
+        ],
+        "exit": 0,
+        "passes": 26,
+        "failures": [],
+        "last": [
+          "native node cloning: 26 checks, 0 failures"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-insert"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range insertion lifetime checks: 92/92 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-mutation"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range-mutation native checks: 36/36 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-insertion"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "pre-insertion native checks: 29/29 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-range-boundary"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "range boundary lifetime checks: 89/89 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-option-state"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "option selectedness lifetime checks: 20/20 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-select"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "select addition lifetime checks: 78/78 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-select-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "select collection GC checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-table-row"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "table row lifetime checks: 75/75 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-table-mutation"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "table mutation lifetime checks: 42/42 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-table-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "table collection GC checks: 25/25 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-submit"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "submit lifetime checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-click"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "click lifetime checks: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-radio-state"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "radio state checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-form-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form collection GC checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-form-owner"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form owner checks: 56/56 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "collection GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-traversal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "traversal GC checks: 9/9 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-removal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "removal subscription checks: 37/37 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-native-properties"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native property checks: 65/65 passed"
+        ]
+      },
+      {
+        "command": [
+          "selectors style golden"
+        ],
+        "exit": 0,
+        "same": true,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-svg-length"
+        ],
+        "exit": 0,
+        "checks": 60,
+        "passed": 60,
+        "log": "native SVG length: 60/60 passed; error=0\n",
+        "reuse": "actual completed final focused fixture; no redundant rerun"
+      }
+    ]
+  },
+  "freshness_checks": {
+    "current_product_git_diff": "empty",
+    "pinned_suite_git_diff": "empty",
+    "all_q590_source_program_artifact_hashes": "equal",
+    "both_acid3_png_hashes": "equal inspected100/100 rendering",
+    "q590_formatting_C_tokens": "equal previous source; Git -w alone retains line breaks and is not used as semantic equality",
+    "style": "empty; explicit manual section3 definition layout verified"
+  },
+  "limitations": [
+    "Acid3 pixel agreement37.04%, visible FAIL labels/rendering differences; independent diagnostic under existing numeric acceptance; full visual conformance not achieved",
+    "SVG scalar profile supports numeric/absolute unit conversion; recognized relative user-unit conversion NotSupported; otherSVG APIs/rendering/animation/modern grammar remain partial",
+    "fullWS p044 conformance/WS acceptance/CSS2/ESmodule/OS guest/physical acceptance not achieved by this Phase",
+    "clang-format unavailable; full changedSVG source manual C1\u201314 review and style-check; tool omits function-definition layout, explicitly manually checked",
+    "C-required callback declarations before immutable descriptors; existing unchanged legacy file ordering retained",
+    "local unpublished/no push/GitHub close not performed"
+  ]
+}

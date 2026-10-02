@@ -1,0 +1,37 @@
+<!doctype html>
+<!-- zedBSD; Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib -->
+<body><iframe id="parsed"></iframe><script>
+// Chromium lifecycle reference, retained across the q510 and q513 attempts.
+function check(label, condition) {
+  console.log((condition ? "PASS " : "FAIL ") + label);
+}
+var parsed = document.getElementById("parsed");
+check("parser child", parsed.contentDocument !== null && parsed.contentDocument !== document);
+var frame = document.createElement("iframe");
+check("detached child null", frame.contentWindow === null && frame.contentDocument === null);
+document.body.appendChild(frame);
+var child = frame.contentWindow;
+var doc = frame.contentDocument;
+check("distinct identity", child !== window && doc !== document);
+check("repeated identity", child === frame.contentWindow && doc === frame.contentDocument);
+check("initial URL", doc.URL === "about:blank");
+check("initial tree", doc.documentElement.outerHTML === "<html><head></head><body></body></html>");
+check("initial state", doc.readyState === "complete" && doc.compatMode === "BackCompat");
+check("defaultView", doc.defaultView === child && child.document === doc);
+check("parent top frameElement", child.parent === window && child.top === window && child.frameElement === frame);
+check("realm constructor", child.Object !== Object && doc instanceof child.Document);
+var nested = doc.createElement("iframe");
+doc.body.appendChild(nested);
+var nestedWindow = nested.contentWindow;
+check("nested relationships", nestedWindow.parent === child && nestedWindow.top === window);
+frame.parentNode.removeChild(frame);
+check("removed child null", frame.contentWindow === null && frame.contentDocument === null);
+check("saved window closed", child.closed && child.frameElement === null);
+check("removed defaultView", doc.defaultView === null);
+check("nested destroyed", nestedWindow.closed && nested.contentWindow === null);
+document.body.appendChild(frame);
+check("reinsert fresh identity", frame.contentWindow !== child && frame.contentDocument !== doc);
+var late = doc.createElement("iframe");
+doc.body.appendChild(late);
+check("inactive document child null", late.contentWindow === null && late.contentDocument === null);
+</script>

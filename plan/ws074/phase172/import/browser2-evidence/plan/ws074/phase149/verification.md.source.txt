@@ -1,0 +1,34 @@
+# q562 / p149 verification — 2026-10-01
+
+CLEARED. Genuine native Range.surroundContents index17/arity1, typed Node and
+private brand. Iterative endpoint ancestor paths reject partial non-Text before
+parent kind validation. Native extraction, actual clearing/removal/frame retirement/
+live repair/owner notices, validated Range insertion, Fragment append and final
+native selection in normative order. Separate8 temporary slots protect private
+state/source/parent/output/current removed node and insertion scratch through GC.
+Same Comment and CharacterData parent reach late Hierarchy3 after actual mutations.
+No rollback claim, JS shim or script-visible boundary reads.
+
+Page24 PASS both; whole identity/unpaired UTF16/Comment/early partial and kind error
+order/late Document hierarchy/collapsed Text/clearing live repair+records/existing
+parent/cycle/CharacterData/deep640/template/borrowed/adopted/saved XML. Two initial
+fixture expectations corrected: extracted Comment belongs to Fragment, and adopted
+existing Text retains original wrapper identity; source algorithm unchanged.
+Native16/16 both: registered method/no caller receiver frame/disabled stack scan/
+actual allocation GC, 1800 exact moved nodes+2partial Text copies, source1801 and
+parent1803 existing per-child FIFO records, private finalroot1..2 interval, release
+collectibility. Existing observer aggregation limitations explicitly scoped out.
+
+Pinned actual Acid3 91/100 both, new11/prior90 preserved/full100 inventory same/
+complete/status0/exceptions[]/runerrors[]; Acid2 exact100%. Final70 groups PASS both/
+Page24/native16; final Page fixes repeated both full regression sets; source unchanged
+since Acid run. Host builds warning0/ASan error+leak0/style-check changed C empty/
+diff clean. Full changed C manual review Guardrail/full coding-style1–14/automation;
+clang-format unavailable/manual/cc14.2.0/Python3.13.5. Comment-only stale extraction
+paragraph removed; p148 behavior revalidated by original inventory and prior probes.
+
+Exact approval snapshot archived; hashes/reports verification.json. Host native only,
+no fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate check/push/GitHub
+publication. >UINT32 graphs excluded/no new OOM fault injection. p100/p044/WS
+incomplete; next CSS/media/text-transform then loading/SVG. Root released/local
+unpublished/no push.

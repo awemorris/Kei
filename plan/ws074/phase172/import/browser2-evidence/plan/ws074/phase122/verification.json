@@ -1,0 +1,32 @@
+{
+  "queue": "q532",
+  "baseline": "09d65c75",
+  "sources": {
+    "userland/desktop/browser/bind/collection.c": "715cbeacc3dd4fc972acaba6239039c1cb5935f1f5e1c3215cbf13033a87feeb",
+    "userland/desktop/browser/bind/internal.h": "3ab63de8c6ffa9c22871a6a03c4ea775c1d476a2d3f06d2d53e1ee107e73a571",
+    "userland/desktop/browser/bind/window.c": "c2b6870e1f4f3af91f85b65ca9a060f0433da55b2727c32f60c5ffaf335bc286",
+    "userland/desktop/browser/bind/mixin.c": "bdd106e5f11da3abb686db628f08fcb103e350875ba4a7ea3e5bd4325f735756",
+    "userland/desktop/browser/bind/document.c": "7e76cb6dea41649a6469f9f00d4edde3a07a1a4d6bb88a548cd7f953e5808c75",
+    "userland/desktop/browser/dom/dom.h": "be47f8684a8a75c204392e17d363d9cc4f3f35ebd089e3bd884bd63a368fbe20",
+    "userland/desktop/browser/dom/node.c": "f5bb671f176ae5b1340224cd47e14a0da21b49da07b062f06b16642428bcd848",
+    "userland/desktop/libbrowser/Makefile": "da4df49ffbb066bf622980c359be6d7de22725ae7ce692b273b22202ab2e3fed",
+    "plan/ws074/tests/host-collection.c": "624a4893d9a7a5f8f60131e172bca06fd6982977444adf72b7a21f0a61597253",
+    "plan/ws074/tests/host-frame-lifetime.c": "5eb2f7b23370586a558911a4cc71e723d2117f902ba02420c1461a573459a86a",
+    "plan/ws074/tests/pages/html-collection-probe.html": "4fa261905859569ece4486f98ef10729362d63362ff977225dd4a3ad1ba5e5dc"
+  },
+  "changes": [
+    {
+      "result": "pass",
+      "test": 5
+    }
+  ],
+  "reports": [
+    "build/ws074-acid-q532-plain/report.json",
+    "build/ws074-acid-q532-asan/report.json"
+  ],
+  "regressions": [
+    "build/ws074-q532-final-plain.json",
+    "build/ws074-q532-final-asan.json"
+  ],
+  "style": "build/ws074-q532-style.log"
+}

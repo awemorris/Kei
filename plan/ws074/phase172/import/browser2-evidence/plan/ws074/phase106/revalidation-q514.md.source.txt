@@ -1,0 +1,43 @@
+# q514 / p106 revalidation — 2026-10-01
+
+**cleared**; BUG-127 resolved. Native and bytecode functions cache a managed
+owner cell while their realm is live. Tracing marks that cell without reading
+the raw execution realm after explicit primary retirement. Heap allocation
+zeroes the field for manual realms and partially initialized cells. Invoking
+functions after manual realm destruction remains outside the embedding contract.
+
+Baseline9a4a91db retains q513's unaccepted initial iframe implementation.
+Only vm/function.c and vm/vm.h changed for this repair. The saved retirement
+probe now exits0/PASS in plain and ASan, replacing its recorded ASan UAF.
+
+Commands/results, each plain/ASan variant:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: PASS, warning-free.
+- `build/ws074-host/{plain,asan}/host-realm-retirement`: PASS, no sanitizer.
+- `host-context-ownership`:27/27; `host-realms`:30/30; `host-object`:100/100;
+  `host-interp`:45/45.
+- `browser --run plan/ws074/tests/pages/iframe-context-probe.html`:17/17.
+- `python3 plan/ws074/tests/run-dom-tests.py --program build/ws074-host/{plain,asan}/browser`:23/23.
+- `python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/{plain,asan}/browser --out build/ws074-acid-q514-{plain,asan}`:
+  Acid2 exact100%; Acid3 42/100, all100 results, Uncaught0, run_status0,
+  completeTrue, no run errors. Inventories agree between variants; no former
+  pass regressed. Tests44/78 now pass due retained q513 iframe progress, not
+  this VM repair. Acid3 visual agreement38.593125%, full goal still unmet.
+- `python3 plan/tools/style-check.py userland/desktop/browser/vm/function.c plan/ws074/tests/host-realm-retirement.c`
+  and `git diff --check`: PASS.
+
+ASAN_OPTIONS=detect_stack_use_after_return=0 preserves the collector's supported
+real-stack scanning. Full coding-style.md review of changed declarations,
+creation/partial construction, trace and retirement test PASS; prior p106
+ownership source reviewed against its preserved design/results. The final edit
+only added purpose comments; verified machine behavior is unchanged. cc14.2.0,
+Python3.13.5; clang-format unavailable, manual formatting. OS/guest/boot/GPU and
+aggregate checks not run because their paths are unchanged. No exhaustive fault
+injection, loading/cancellation or full iframe acceptance is claimed.
+
+[Hashes/results](revalidation-q514.json), [inventory](inventory-q514.json).
+Build logs/reports remain in build/ws074-q514-* and build/ws074-acid-q514-*;
+durable summaries above survive disposable build artifacts. p106 reclears;
+p104 needs a new finite Queue for remaining GC/error/teardown/full standards.
+q512's original clearance and q513's invalidation remain historical events.
+Local unpublished, no push or remote close/reopen claimed.

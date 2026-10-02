@@ -1,0 +1,38 @@
+# q516 / p107 verification — 2026-10-01
+
+**cleared**. createElement checks the complete folded UTF-16 local name before
+allocating a DOM node, using DOM's current valid-element-local-name branches.
+Invalid input throws existing InvalidCharacterError/code5 in the callee's realm;
+conversion exceptions and wrapper ownership remain intact. All non-ASCII units
+are valid by the inspected current DOM definition, including supplementary pairs.
+
+Commands/results in both plain/ASan variants:
+
+- `sh plan/ws074/tests/host-build.sh plain` / `asan`: PASS, warning-free.
+- `browser --run plan/ws074/tests/pages/element-name-probe.html`:31/31. Invalid
+  empty/digit/dash/dot/markup/embeddedNULL/whitespace/slash/>/suffix cases,
+  valid folded/colon/underscore/Unicode/supplementary/current DOM punctuation,
+  null/undefined/single conversion/Symbol/throw identity, borrowed child wrappers
+  and exception realm, direct child exception identity; failed creation leaves
+  Document child count unchanged.
+- `host-realms`:30/30; saved iframe-context-probe17/17; `run-dom-tests.py`:23/23.
+- `run-acid-tests.py --program .../browser --out build/ws074-acid-q516-{plain,asan}`:
+  Acid2 exact100%; Acid3 44/100, all100 inventory, tests20/22 now PASS, no former
+  pass regressed, both inventories identical, Uncaught0/completeTrue/run_status0/
+  run_errors0. Pixel agreement38.593125% remains separate diagnosis.
+- `python3 plan/tools/style-check.py userland/desktop/browser/bind/document.c`
+  and `git diff --check`:PASS.
+
+ASAN_OPTIONS=detect_stack_use_after_return=0 preserves supported collector stack
+scanning. Full coding-style.md review of the final changed function/helper/
+prototype covers declarations, semantic paragraphs/conditions, complete-unit
+iteration, conversion/exception/ENOMEM exits and unchanged wrapper publication.
+Manual formatting; clang-format unavailable. cc14.2.0/Python3.13.5. No parser,
+namespace creation/attributes/Traversal/Range/CSSOM/loading change supplied;
+OS/guest/boot/GPU and aggregate checks not run because those paths are unchanged.
+No exhaustive allocator injection claim. Full WS conformance remains p044.
+
+[Hashes/results](verification.json), [all100 inventory](inventory.json).
+Build logs/reports build/ws074-q516-* and build/ws074-acid-q516-*; durable outcome
+above does not depend on disposable output. Next split namespace creation and
+other indexed56 failures into finite phases. Local unpublished/no push.

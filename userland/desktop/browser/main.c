@@ -23,7 +23,7 @@
  * a script, without a window; the tests use them on the host and in the
  * guest.  The modes that load a page do it through a view (<browser.h>),
  * as the window does: the page's scripts run, its timers run on a virtual
- * clock up to MAIN_SETTLE_BUDGET (browser_view_settle), and the page is
+ * clock up to --settle-ms (5000 by default, browser_view_settle), and the page is
  * drawn with the CPU (browser_view_draw_pixels), with the GPU into an
  * offscreen image read back (browser_offscreen, --render-gpu), or dumped
  * (browser_view_dump).  --run writes the page's console to standard
@@ -72,6 +72,9 @@
  */
 #define MAIN_SETTLE_BUDGET	5000.0
 
+/* The largest explicit headless virtual-time budget, in milliseconds. */
+#define MAIN_MAX_SETTLE_BUDGET	60000UL
+
 /*
  * What the program was asked to do.
  */
@@ -100,6 +103,7 @@ struct main_options {
 	struct browser_fonts fonts;
 	const char *output;
 	unsigned parse;
+	double settle_budget;
 	int async;
 };
 
@@ -147,6 +151,7 @@ static void main_console_err(void *context, struct browser_view *view, int level
 static int main_draw_gpu(struct browser_view *view, uint32_t *pixels, unsigned width, unsigned height);
 static int main_write_ppm(const char *path, const uint32_t *pixels, unsigned width, unsigned height);
 static int main_parse_size(const char *text, unsigned *size);
+static int main_parse_budget(const char *text, double *budget);
 static const char *main_value(const char *argument, const char *name);
 static void main_usage(FILE *stream);
 
@@ -407,7 +412,7 @@ main_open(
 	}
 
 	/* The page settled: fetched, its timers run, and laid out with its images when the mode needs that. */
-	error = browser_view_settle(page->view, MAIN_SETTLE_BUDGET, flags);
+	error = browser_view_settle(page->view, options->settle_budget, flags);
 	if (error != 0) {
 		if (!page->failed)
 			fprintf(stderr, "browser: cannot run %s: %s\n", options->shell.start, strerror(error));
@@ -610,6 +615,7 @@ main_parse(
 	options->mode = MAIN_MODE_WINDOW;
 	options->shell.width = MAIN_DEFAULT_WIDTH;
 	options->shell.height = MAIN_DEFAULT_HEIGHT;
+	options->settle_budget = MAIN_SETTLE_BUDGET;
 
 	/* Takes each word in turn. */
 	for (index = 1; index < argc; index++) {
@@ -694,6 +700,16 @@ main_parse(
 		differs = strcmp(argv[index], "--async");
 		if (differs == 0) {
 			options->async = 1;
+			continue;
+		}
+
+		/* The virtual clock budget for headless page tasks. */
+		value = main_value(argv[index], "--settle-ms=");
+		if (value != NULL) {
+			error = main_parse_budget(value, &options->settle_budget);
+			if (error != 0)
+				return error;
+
 			continue;
 		}
 
@@ -782,6 +798,44 @@ main_parse(
 	return 0;
 }
 
+/* Reads a bounded virtual-time budget in milliseconds. */
+static int
+main_parse_budget(
+	const char *text,
+	double *budget)
+{
+	unsigned long milliseconds;
+	const char *digit;
+	char *end;
+
+	/* Accepts only decimal digits, including zero for tasks already due. */
+	if (text[0] == '\0')
+		return EINVAL;
+
+	/* Refuses signs, whitespace and fractional or non-finite input. */
+	for (digit = text; *digit != '\0'; digit++) {
+		/* Each character must belong to the decimal representation. */
+		if (*digit < '0' || *digit > '9')
+			return EINVAL;
+	}
+
+	/* Reads the complete budget without allowing overflow. */
+	errno = 0;
+	milliseconds = strtoul(text, &end, 10);
+	if (errno != 0 || *end != '\0')
+		return EINVAL;
+
+	/* Keeps caller-selected execution finite. */
+	if (milliseconds > MAIN_MAX_SETTLE_BUDGET)
+		return EINVAL;
+
+	/* Publishes the validated clock limit. */
+	*budget = (double)milliseconds;
+
+	/* Succeeded: the caller has a finite headless clock budget. */
+	return 0;
+}
+
 /* Reads a window size in pixels. */
 static int
 main_parse_size(
@@ -847,5 +901,6 @@ main_usage(
 		"       browser --dump=ast [--module] [--strict] FILE.js\n"
 		"       browser --js [--strict] FILE.js\n"
 		"       browser --dump=code [--strict] FILE.js\n"
-		"       browser --version | --help\n");
+		"       browser --version | --help\n"
+		"       headless page modes: [--settle-ms=0..60000] (default 5000)\n");
 }

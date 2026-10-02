@@ -239,6 +239,54 @@ enum css_text_align {
 	CSS_TEXT_ALIGN_END
 };
 
+/* The predefined cursor selected by computed style; images are not stored here. */
+enum css_cursor {
+	CSS_CURSOR_AUTO,
+	CSS_CURSOR_DEFAULT,
+	CSS_CURSOR_NONE,
+	CSS_CURSOR_CONTEXT_MENU,
+	CSS_CURSOR_HELP,
+	CSS_CURSOR_POINTER,
+	CSS_CURSOR_PROGRESS,
+	CSS_CURSOR_WAIT,
+	CSS_CURSOR_CELL,
+	CSS_CURSOR_CROSSHAIR,
+	CSS_CURSOR_TEXT,
+	CSS_CURSOR_VERTICAL_TEXT,
+	CSS_CURSOR_ALIAS,
+	CSS_CURSOR_COPY,
+	CSS_CURSOR_MOVE,
+	CSS_CURSOR_NO_DROP,
+	CSS_CURSOR_NOT_ALLOWED,
+	CSS_CURSOR_E_RESIZE,
+	CSS_CURSOR_N_RESIZE,
+	CSS_CURSOR_NE_RESIZE,
+	CSS_CURSOR_NW_RESIZE,
+	CSS_CURSOR_S_RESIZE,
+	CSS_CURSOR_SE_RESIZE,
+	CSS_CURSOR_SW_RESIZE,
+	CSS_CURSOR_W_RESIZE,
+	CSS_CURSOR_EW_RESIZE,
+	CSS_CURSOR_NS_RESIZE,
+	CSS_CURSOR_NESW_RESIZE,
+	CSS_CURSOR_NWSE_RESIZE,
+	CSS_CURSOR_COL_RESIZE,
+	CSS_CURSOR_ROW_RESIZE,
+	CSS_CURSOR_ALL_SCROLL,
+	CSS_CURSOR_GRAB,
+	CSS_CURSOR_GRABBING,
+	CSS_CURSOR_ZOOM_IN,
+	CSS_CURSOR_ZOOM_OUT
+};
+
+/* The four CSS2 text-transform computed keywords retained by each native style. */
+enum css_text_transform {
+	CSS_TEXT_TRANSFORM_NONE,
+	CSS_TEXT_TRANSFORM_CAPITALIZE,
+	CSS_TEXT_TRANSFORM_UPPERCASE,
+	CSS_TEXT_TRANSFORM_LOWERCASE
+};
+
 /* The values of white-space. */
 enum css_white_space {
 	CSS_WHITE_SPACE_NORMAL,
@@ -472,6 +520,8 @@ struct css_style {
 	float border_spacing[2];
 	int border_collapse;
 	int white_space;
+	int text_transform;
+	int cursor;
 	int underline;
 	int list_style;
 
@@ -543,6 +593,19 @@ typedef int (*css_url_resolver)(void *context, const struct vm_string *url, stru
  * out there, which the engine counts (css_engine_container_missed).
  */
 typedef int (*css_container_lookup)(void *context, const struct dom_element *container, float *width, float *height);
+
+/* A native ordered top-level source list owns immutable entries until its final release. */
+struct css_rule_model;
+
+/* Structural sources, not normative CSSRule.cssText serialization (rule-model.c). */
+int css_rule_model_create(struct css_rule_model **model, struct vm_heap *heap, const uint16_t *units, size_t length);
+void css_rule_model_destroy(struct css_rule_model *model);
+size_t css_rule_model_count(const struct css_rule_model *model);
+uint32_t css_rule_model_id(const struct css_rule_model *model, size_t index);
+int css_rule_model_source(const struct css_rule_model *model, uint32_t id, const uint16_t **units, size_t *length, int *type, int *present);
+int css_rule_model_text(const struct css_rule_model *model, struct wb_units *units);
+int css_rule_model_insert(struct css_rule_model *model, const uint16_t *units, size_t length, size_t index);
+int css_rule_model_delete(struct css_rule_model *model, size_t index);
 
 /* Sheets (parser.c). */
 int css_sheet_create(struct css_sheet **sheet, struct vm_heap *heap, const uint16_t *units, size_t length);

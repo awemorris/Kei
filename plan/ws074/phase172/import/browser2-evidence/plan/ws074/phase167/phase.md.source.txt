@@ -1,0 +1,61 @@
+<!-- awesome-plan project=zedbsd record=ws074-p167 -->
+
+# ws074-p167: preserve data URL body decoding failures (BUG-132)
+
+Status: cleared
+Disposition: normal
+Parent: [WS074](../ws.md)
+Queue: q583 / q583-i01
+Base73957f37/q582 p166uncleared/native99/101both, BUG-132 reproduced;
+last originalq581actual94/all94/Acid2exact. Current autonomousAcid3+automaticfinite
+Queues2026-09-30/continuation2026-10-02 authorize exact repair before generation.
+Root/browser2 sole executor/writer; local unpublished/no push/no cancellation.
+Guardrail/full C coding-style1–14/automation/net/data.c/URL/bufferownership and
+actual p166 evidence read. No new policy, architecture or acceptance choice.
+
+## Exact scope / design / criteria
+
+Modify only net/data.c net_data_parse error routing: MIME fallback for invalid
+MIME belongs inside successful-body path and catches only data_mime EINVAL.
+Earlier percent/base64 decoding failure or allocation error remains failure and
+uses existing release cleanup. Existing native forgiving-base64 algorithm,
+MIME parser, percent decoding, URL and valid/default MIME behavior unchanged.
+New host-data-url.c observes production URL/data parser across invalid base64
+characters/remainder/padding/embedded decoded NUL/partial output; exactEINVAL/
+emptyowned data/body/MIME after failed decode. Valid padded/unpadded/whitespace/
+emptybase64 and invalid MIME-only/default/fallback/parameter/fragment cases
+retain actual expected bytes and MIME. Native page_fetch_response and unchanged
+legacy page_fetch propagate invalid body failure, no status200 or partial data.
+Reuse actual p166loopback resource101 fixture unchanged; it must now pass101/101.
+Fetch Standard https://fetch.spec.whatwg.org/#data-url-processor steps11 vs14 and
+Infra https://infra.spec.whatwg.org/#forgiving-base64-decode read2026-10-02:
+body decode failure precedes MIME-only fallback. Narrow error repair, not full
+Fetch/MIME/sniffing/decoder replacement or navigation implementation.
+
+Prior94+resource1+native1=96groupsPASSboth/original>=94/prior94/72/equal100/complete/
+status0/noUncaught/crash/sanitizer/runnererrors/timeouts/Acid2exact. Bothfull builds
+beforetests/warning0/style no new findings/fullmanual changed C/diff/sourcehashes/
+toolversions/skips. One finite Phase, no endless investigation; unexpected
+prerequisite ends uncleared before redesign. Existing p166 metadata remains
+uncleared until separate exact retry even if its focused fixture passes here.
+Resolve BUG-132 only after real verification; do not rewrite q582 past result.
+Graph p165(external)->p167->p166 retry(external)->navigation/SVG/p100(external),
+acyclic. HTML navigation/child realm/windowproxy/CSP/SVG/publicFetch/XHR/WPT/fuzz/
+OS/guest/boot/GPU/HAL/toolchain/.internal/aggregate/push/publication excluded.
+p100/p044/WS incomplete; no score gain expected from this error repair.
+
+## Introduction / dependency revision (2026-10-02)
+
+q582's real invalid response requirement exposed native BUG-132. Separate finite
+net-module repair supplies verified failure routing before unchanged p166 retry.
+New dependency only; p166 source/interface/criteria and p100100 acceptance retained.
+[Origin](../phase166/phase.md), [Bug](../../bugs/BUG-132.md), [WS](../ws.md).
+
+## q583 cleared outcome (2026-10-02)
+
+[p167](phase.md) cleared in q583, [evidence](verification.md).
+[BUG-132](../../bugs/BUG-132.md) resolved: only MIME-parser EINVAL gets default MIME;
+real body failure remains failure with complete cleanup. Native68/p166native101/
+all96PASSboth; actual94/prior94/72/equal100/noerrors/Acid2exact. p166 remains
+uncleared until separate exact unchanged retry. Next metadata retry then actual
+child navigation/SVG. p100/p044/WS incomplete. Root released/local unpublished.

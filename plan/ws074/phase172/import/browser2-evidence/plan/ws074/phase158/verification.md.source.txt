@@ -1,0 +1,41 @@
+# q574 / p158 native inline source association — 2026-10-01
+
+CLEARED. One private traced inline source state owns actual HTML styleElement,
+original direct Text units and pure p157 model. Checked temporary owner root spans
+parser and VM state allocation; complete state only is published. DOM traces opaque
+current cell; state traces actual owner/Document/realm; finalizer destroys only owned
+C buffers, never dereferences DOM. No permanent root/tracer/model borrow by C caches.
+Primary Page and managed-child rendering copy unchanged original raw source until
+an actual model edit, then parse actual current aggregate through existing engines.
+Actual child-list/Textdata and subtree connection lifecycle retires current identity;
+commentdata doesn't retire Text-derived source; DOM owns no model finalization.
+Changed current model invalidates actual ownerDocgeneration without DOM Text changes
+or MutationObserverrecords; saved obsolete model edits affect their own storage only.
+
+Native ordinary Page with checked-in fonts and genuine managed-child stream:21/21
+both, actualheight10->20->40->20/currentprimaryheight7, unchangedDOMText/no mutation
+records, unrelatedDOMedit keeps identity, same-textset creates originalmodel,
+obsoleteinsert doesn't invalidate currentDoc or height10, emptyTextinsert/removal/
+emptydataappend retire identity, actualremove/reappend+Textedit rendersheight30.
+Conservative stack disabled: after iframe removal+allJSvariables cleared, actual
+owner-only root retains same model; source-state-only root retains retired child
+Document/realm and readablemodel; release last root collects allthree ASanquiet.
+DOM hooks reviewed truncate/replace/normalization/native insertion/removal/adoption
+routes; commentdata guard type==TEXT; iterative subtree excludes template/childDocs.
+
+All85groupsPASS plain+ASan, original93/prior93/full100inventory identical/complete/
+status0/noexceptions/crashes/sanitizer/runnererrors/timeouts/Acid2exact100%. Actual72
+still known excluded publicCSSOM. Pixel37.026875% diagnostic separately. Both full
+builds finish before tests; final header comment placement-only change afterwards
+has no compiled semantics. Buildwarning0/styleoutputempty/diffclean/manualfullaffected
+C Guardrail/coding-style1–14/automation; clang-format absent/manual, cc14.2.0/Python3.13.5.
+JSON hashes/fullreports/all85; sh plan/ws074/tests/host-build.sh plain|asan; python3
+build/ws074-q574-regressions.py plain|asan; ASAN_OPTIONS=detect_stack_use_after_return=0
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q574-VARIANT; style-check affectedC; git diff --check.
+
+Known p157 fullCSSSyntax EOFcomponents/canonicalCSSRulecssText limits retained;
+original rawsource preserves initial existingrender semantics. No JS-facingCSSOM,
+MIME/type/CSP/stylesets/disabled/style-load/readiness/full association conformance,
+loading/XML/SVG/fullWPT/fuzz/OS/guest/boot/GPU/HAL/toolchain/.internal/aggregatecheck/
+push/GitHubpublication. Public native wrappers next; p100/p044/WS incomplete.

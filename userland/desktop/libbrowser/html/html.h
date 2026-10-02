@@ -28,15 +28,17 @@
 /*
  * The text a parser reads, in UTF-16 code units.
  *
- * Carriage returns are normalized as the text is appended: CR LF and a lone
- * CR both become LF.  position is how far the tokenizer has read; closed
- * says no more text will be appended.
+ * Network carriage returns are normalized as text is appended; raw inserted
+ * text is normalized when the tokenizer reads it. CR LF and lone CR become LF.
+ * position is how far the tokenizer has read; closed says the source has ended.
  */
 struct html_input {
 	struct wb_units units;
 	size_t position;
 	int closed;
 	int after_cr;
+	/* The read position after a raw inserted CR, or SIZE_MAX when none waits. */
+	size_t inserted_cr;
 };
 
 /*
@@ -151,13 +153,15 @@ struct html_tokenizer {
 struct dom_document;
 struct dom_element;
 struct html_parser;
+struct vm_heap;
 
 /*
  * What the parser calls when a script element's end tag is parsed (the
  * standard's "prepare the script element" from the parser): the page runs
- * the script there, while the parser waits.
+ * the script there, while the parser waits. Returns zero or ENOMEM; a fatal
+ * allocation failure stops the parser instead of silently losing the write.
  */
-typedef void (*html_script_hook)(void *context, struct dom_element *script);
+typedef int (*html_script_hook)(void *context, struct dom_element *script);
 
 /* The input stream (input.c). */
 void html_input_init(struct html_input *input);
@@ -178,8 +182,12 @@ int html_parser_create(struct html_parser **parser, struct dom_document *documen
 int html_parser_create_fragment(struct html_parser **parser, struct dom_element *context, int scripting);
 struct dom_element *html_parser_fragment_root(const struct html_parser *parser);
 void html_parser_set_script_hook(struct html_parser *parser, html_script_hook hook, void *context);
+/* Owned parsers are traced by their Window, rather than permanently rooting it. */
+void html_parser_transfer_ownership(struct html_parser *parser);
+void html_parser_trace_owned(struct vm_heap *heap, struct html_parser *parser);
 void html_parser_destroy(struct html_parser *parser);
 int html_parser_feed(struct html_parser *parser, const uint16_t *units, size_t length);
+int html_parser_write(struct html_parser *parser, const uint16_t *units, size_t length);
 int html_parser_finish(struct html_parser *parser);
 size_t html_parser_errors(const struct html_parser *parser);
 

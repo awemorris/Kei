@@ -1,0 +1,43 @@
+# ws074-p135 / q546 — 2026-10-01
+
+Outcome: uncleared. Owned option selection/defaultSelected/selected/native index,
+attribute/tree hooks and chosen consumer are implemented; indexed58 now passes.
+Original all100 Acid3 plain/ASan85/100, prior84 preserved/equal/complete/status0/
+exceptions/run_errors empty, Acid2exact100%. All46 selected regression groups PASS
+both: direct option70, actual GC conversion/error20, child lifetime133, prior44.
+Builds exit0/warning0, style-check findings0/diff checkPASS, sanitizer diagnostics0.
+ASAN_OPTIONS=detect_stack_use_after_return=0 is the established conservative stack
+contract. Whole changed C manually reviewed against full standard; clone behavior
+is a semantic standards defect below, so no full clearance claimed.
+
+Blocker / resume: the approved clone criterion propagates option selectedness and
+dirtiness, including explicit empty selection. Current HTML option definition has
+no option cloning steps; ordinary DOM attribute cloning initializes fresh option
+state instead. Native Chromium153.0.8010.52 confirms deep clone does not preserve
+an explicit empty single-select state. This criterion/implementation is incorrect;
+end attempt uncleared rather than declare nonconformant behavior cleared. Revised
+exact Phase/next finite Queue must remove invented propagation, verify ordinary
+attribute-initialized clone state, preserve every other acceptance item and85.
+No human product decision needed: standing autonomy delegates this technical
+standards correction. Earlier q546 scope/outcome retained independently.
+
+Read-only Chromium fixture71 messages: five semantic differences. Four other
+comparisons (very large size and option/group disabled presence reset) follow the
+current primary algorithms and do not justify substituting Chromium behavior.
+Zero-size Chromium selects first; primary parsed display size0 does not trigger
+size1 fallback; record as implementation comparison limitation, not agreement.
+HTML nonnegative parsing also accepts negative zero; correct this scoped parser
+edge in redesigned attempt. No full Chromium/WPT equivalence claim.
+
+Commands/results/source hashes/full reports in verification.json. Commands:
+sh plan/ws074/tests/host-build.sh plain|asan;
+python3 build/ws074-q546-regressions.py plain|asan;
+python3 plan/ws074/tests/run-acid-tests.py --program build/ws074-host/VARIANT/browser
+--out build/ws074-acid-q546-VARIANT;
+python3 plan/tools/style-check.py changed C/header/host; git diff --check;
+Chromium CLI headless local semantic fixture. clang-format unavailable/manual
+format; cc14.2.0/Python3.13.5. No OS/guest/boot/GPU/fullWPT/fuzz/publication/push.
+Scope exclusions preserved; p100/p044/WS incomplete; local unpublished.
+Sources: [HTML option](https://html.spec.whatwg.org/multipage/form-elements.html#the-option-element),
+[DOM clone](https://dom.spec.whatwg.org/#concept-node-clone),
+[integer parsing](https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#rules-for-parsing-non-negative-integers).

@@ -1,0 +1,1857 @@
+{
+  "base_commit": "6a9badbf",
+  "phase": "ws074-p129",
+  "queue": "q539",
+  "date": "2026-10-01",
+  "source_sha256": {
+    "userland/desktop/browser/bind/submit.c": "2d41818f33842fb5a7528f482c864d4569e40947ffe03065cbf6d4bcbdb90be4",
+    "userland/desktop/browser/bind/click.c": "a704b6f98ccaceda6f5bd5254a04b98d4ca02e7fccd019654cf1c22c6e24aa89",
+    "userland/desktop/browser/bind/event.c": "b787a24d2c3f54640a24432e04945e47d1f25e113a537c5d501689a029e1f54b",
+    "userland/desktop/browser/bind/internal.h": "c02b16a971ec2f62bdbf7ebea3c7b0d63f64d9bd50160b480883db14a0f50c9c",
+    "userland/desktop/browser/bind/window.c": "2adeacb060a3e074f9845a08880ca4ad138b0d344ecbb6accf617cfb713789f7",
+    "userland/desktop/browser/dom/dom.h": "0e7ce0b677a958cb3689c9d1e50020593dba24811822ef168dcdd6afa1ef2ea1",
+    "userland/desktop/libbrowser/Makefile": "e353ed4cb5adaf6c605ccdb09772d0bea76abcdb386f64a0f9e9b3ca67b67ca9",
+    "plan/ws074/tests/host-submit.c": "293c3715411cd0027847d28e0d98a9e0512cddb69e654cade405bc175ee72753",
+    "plan/ws074/tests/host-frame-lifetime.c": "abf6fcf8208a7d0170bcca41886d8f102172355de78eb425a3346fda0920f77a",
+    "plan/ws074/tests/pages/submit-event-probe.html": "87eeef995513efe53b1d69b1bf21d4d0a15b146e1b09703454048978ab5b3cd2"
+  },
+  "acid": {
+    "plain": {
+      "acid2": {
+        "agreement": 100.0,
+        "different_pixels": 0,
+        "max_difference": 0,
+        "pass": true,
+        "reference_image": "acid2-reference.png",
+        "side_image": "acid2-side.png",
+        "test_image": "acid2-test.png",
+        "total_pixels": 120000
+      },
+      "acid3": {
+        "agreement": 39.60666666666667,
+        "complete": true,
+        "different_pixels": 289888,
+        "dom": "acid3.dom",
+        "exceptions": [],
+        "max_difference": 255,
+        "pass": false,
+        "pixel_pass": false,
+        "reference_image": "acid3-reference.png",
+        "run_errors": [],
+        "run_status": 0,
+        "score": "79",
+        "side_image": "acid3-side.png",
+        "test_image": "acid3-test.png",
+        "total_pixels": 480000
+      },
+      "acid3_inventory": {
+        "complete": true,
+        "exceptions": [],
+        "invalid_messages": [],
+        "matches_original_score": true,
+        "missing": [],
+        "pass_count": 79,
+        "reported_total": 100,
+        "results": [
+          {
+            "result": "pass",
+            "test": 0
+          },
+          {
+            "result": "pass",
+            "test": 1
+          },
+          {
+            "result": "pass",
+            "test": 2
+          },
+          {
+            "result": "pass",
+            "test": 3
+          },
+          {
+            "result": "pass",
+            "test": 4
+          },
+          {
+            "result": "pass",
+            "test": 5
+          },
+          {
+            "result": "pass",
+            "test": 6
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 7
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 8
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 9
+          },
+          {
+            "result": "pass",
+            "test": 10
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 11
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 12
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 13
+          },
+          {
+            "result": "pass",
+            "test": 14
+          },
+          {
+            "result": "pass",
+            "test": 15
+          },
+          {
+            "result": "pass",
+            "test": 16
+          },
+          {
+            "result": "pass",
+            "test": 17
+          },
+          {
+            "result": "pass",
+            "test": 18
+          },
+          {
+            "result": "pass",
+            "test": 19
+          },
+          {
+            "result": "pass",
+            "test": 20
+          },
+          {
+            "result": "pass",
+            "test": 21
+          },
+          {
+            "result": "pass",
+            "test": 22
+          },
+          {
+            "result": "pass",
+            "test": 23
+          },
+          {
+            "result": "pass",
+            "test": 24
+          },
+          {
+            "result": "pass",
+            "test": 25
+          },
+          {
+            "result": "pass",
+            "test": 26
+          },
+          {
+            "result": "pass",
+            "test": 27
+          },
+          {
+            "result": "pass",
+            "test": 28
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 29
+          },
+          {
+            "result": "pass",
+            "test": 30
+          },
+          {
+            "result": "pass",
+            "test": 31
+          },
+          {
+            "result": "pass",
+            "test": 32
+          },
+          {
+            "result": "pass",
+            "test": 33
+          },
+          {
+            "result": "pass",
+            "test": 34
+          },
+          {
+            "result": "pass",
+            "test": 35
+          },
+          {
+            "result": "pass",
+            "test": 36
+          },
+          {
+            "result": "pass",
+            "test": 37
+          },
+          {
+            "result": "pass",
+            "test": 38
+          },
+          {
+            "result": "pass",
+            "test": 39
+          },
+          {
+            "result": "pass",
+            "test": 40
+          },
+          {
+            "result": "pass",
+            "test": 41
+          },
+          {
+            "result": "pass",
+            "test": 42
+          },
+          {
+            "result": "pass",
+            "test": 43
+          },
+          {
+            "result": "pass",
+            "test": 44
+          },
+          {
+            "result": "pass",
+            "test": 45
+          },
+          {
+            "message": "expected 'uppercase' but got 'undefined' - case a failed (index 1)",
+            "result": "fail",
+            "test": 46
+          },
+          {
+            "result": "pass",
+            "test": 47
+          },
+          {
+            "result": "pass",
+            "test": 48
+          },
+          {
+            "message": "initially: tBodies",
+            "result": "fail",
+            "test": 49
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 50
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 51
+          },
+          {
+            "result": "pass",
+            "test": 52
+          },
+          {
+            "result": "pass",
+            "test": 53
+          },
+          {
+            "result": "pass",
+            "test": 54
+          },
+          {
+            "result": "pass",
+            "test": 55
+          },
+          {
+            "result": "pass",
+            "test": 56
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 57
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 58
+          },
+          {
+            "result": "pass",
+            "test": 59
+          },
+          {
+            "result": "pass",
+            "test": 60
+          },
+          {
+            "result": "pass",
+            "test": 61
+          },
+          {
+            "result": "pass",
+            "test": 62
+          },
+          {
+            "result": "pass",
+            "test": 63
+          },
+          {
+            "result": "pass",
+            "test": 64
+          },
+          {
+            "result": "pass",
+            "test": 65
+          },
+          {
+            "result": "pass",
+            "test": 66
+          },
+          {
+            "result": "pass",
+            "test": 67
+          },
+          {
+            "result": "pass",
+            "test": 68
+          },
+          {
+            "message": "timeout -- could be a networking issue",
+            "result": "fail",
+            "test": 69
+          },
+          {
+            "result": "pass",
+            "test": 70
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 71
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 72
+          },
+          {
+            "result": "pass",
+            "test": 73
+          },
+          {
+            "message": "getSVGDocument missing on <iframe> element.",
+            "result": "fail",
+            "test": 74
+          },
+          {
+            "message": "SVG DOM interface SVGRectElement not supported.",
+            "result": "fail",
+            "test": 75
+          },
+          {
+            "result": "pass",
+            "test": 76
+          },
+          {
+            "message": "SVGTextContentElement.getNumberOfChars() not supported.",
+            "result": "fail",
+            "test": 77
+          },
+          {
+            "result": "pass",
+            "test": 78
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 79
+          },
+          {
+            "message": "timeout -- could be a networking issue",
+            "result": "fail",
+            "test": 80
+          },
+          {
+            "result": "pass",
+            "test": 81
+          },
+          {
+            "result": "pass",
+            "test": 82
+          },
+          {
+            "result": "pass",
+            "test": 83
+          },
+          {
+            "result": "pass",
+            "test": 84
+          },
+          {
+            "result": "pass",
+            "test": 85
+          },
+          {
+            "result": "pass",
+            "test": 86
+          },
+          {
+            "result": "pass",
+            "test": 87
+          },
+          {
+            "result": "pass",
+            "test": 88
+          },
+          {
+            "result": "pass",
+            "test": 89
+          },
+          {
+            "result": "pass",
+            "test": 90
+          },
+          {
+            "result": "pass",
+            "test": 91
+          },
+          {
+            "result": "pass",
+            "test": 92
+          },
+          {
+            "result": "pass",
+            "test": 93
+          },
+          {
+            "result": "pass",
+            "test": 94
+          },
+          {
+            "result": "pass",
+            "test": 95
+          },
+          {
+            "result": "pass",
+            "test": 96
+          },
+          {
+            "result": "pass",
+            "test": 97
+          },
+          {
+            "result": "pass",
+            "test": 98
+          },
+          {
+            "result": "pass",
+            "test": 99
+          }
+        ],
+        "run_status": 0
+      },
+      "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+      "note": "Historical diagnostics only; WPT warns that these tests are not a standards certification.",
+      "schema": 2,
+      "settle_ms": 15000,
+      "suite": "WPT historical Acid tests"
+    },
+    "asan": {
+      "acid2": {
+        "agreement": 100.0,
+        "different_pixels": 0,
+        "max_difference": 0,
+        "pass": true,
+        "reference_image": "acid2-reference.png",
+        "side_image": "acid2-side.png",
+        "test_image": "acid2-test.png",
+        "total_pixels": 120000
+      },
+      "acid3": {
+        "agreement": 39.60666666666667,
+        "complete": true,
+        "different_pixels": 289888,
+        "dom": "acid3.dom",
+        "exceptions": [],
+        "max_difference": 255,
+        "pass": false,
+        "pixel_pass": false,
+        "reference_image": "acid3-reference.png",
+        "run_errors": [],
+        "run_status": 0,
+        "score": "79",
+        "side_image": "acid3-side.png",
+        "test_image": "acid3-test.png",
+        "total_pixels": 480000
+      },
+      "acid3_inventory": {
+        "complete": true,
+        "exceptions": [],
+        "invalid_messages": [],
+        "matches_original_score": true,
+        "missing": [],
+        "pass_count": 79,
+        "reported_total": 100,
+        "results": [
+          {
+            "result": "pass",
+            "test": 0
+          },
+          {
+            "result": "pass",
+            "test": 1
+          },
+          {
+            "result": "pass",
+            "test": 2
+          },
+          {
+            "result": "pass",
+            "test": 3
+          },
+          {
+            "result": "pass",
+            "test": 4
+          },
+          {
+            "result": "pass",
+            "test": 5
+          },
+          {
+            "result": "pass",
+            "test": 6
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 7
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 8
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 9
+          },
+          {
+            "result": "pass",
+            "test": 10
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 11
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 12
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 13
+          },
+          {
+            "result": "pass",
+            "test": 14
+          },
+          {
+            "result": "pass",
+            "test": 15
+          },
+          {
+            "result": "pass",
+            "test": 16
+          },
+          {
+            "result": "pass",
+            "test": 17
+          },
+          {
+            "result": "pass",
+            "test": 18
+          },
+          {
+            "result": "pass",
+            "test": 19
+          },
+          {
+            "result": "pass",
+            "test": 20
+          },
+          {
+            "result": "pass",
+            "test": 21
+          },
+          {
+            "result": "pass",
+            "test": 22
+          },
+          {
+            "result": "pass",
+            "test": 23
+          },
+          {
+            "result": "pass",
+            "test": 24
+          },
+          {
+            "result": "pass",
+            "test": 25
+          },
+          {
+            "result": "pass",
+            "test": 26
+          },
+          {
+            "result": "pass",
+            "test": 27
+          },
+          {
+            "result": "pass",
+            "test": 28
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 29
+          },
+          {
+            "result": "pass",
+            "test": 30
+          },
+          {
+            "result": "pass",
+            "test": 31
+          },
+          {
+            "result": "pass",
+            "test": 32
+          },
+          {
+            "result": "pass",
+            "test": 33
+          },
+          {
+            "result": "pass",
+            "test": 34
+          },
+          {
+            "result": "pass",
+            "test": 35
+          },
+          {
+            "result": "pass",
+            "test": 36
+          },
+          {
+            "result": "pass",
+            "test": 37
+          },
+          {
+            "result": "pass",
+            "test": 38
+          },
+          {
+            "result": "pass",
+            "test": 39
+          },
+          {
+            "result": "pass",
+            "test": 40
+          },
+          {
+            "result": "pass",
+            "test": 41
+          },
+          {
+            "result": "pass",
+            "test": 42
+          },
+          {
+            "result": "pass",
+            "test": 43
+          },
+          {
+            "result": "pass",
+            "test": 44
+          },
+          {
+            "result": "pass",
+            "test": 45
+          },
+          {
+            "message": "expected 'uppercase' but got 'undefined' - case a failed (index 1)",
+            "result": "fail",
+            "test": 46
+          },
+          {
+            "result": "pass",
+            "test": 47
+          },
+          {
+            "result": "pass",
+            "test": 48
+          },
+          {
+            "message": "initially: tBodies",
+            "result": "fail",
+            "test": 49
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 50
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 51
+          },
+          {
+            "result": "pass",
+            "test": 52
+          },
+          {
+            "result": "pass",
+            "test": 53
+          },
+          {
+            "result": "pass",
+            "test": 54
+          },
+          {
+            "result": "pass",
+            "test": 55
+          },
+          {
+            "result": "pass",
+            "test": 56
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 57
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 58
+          },
+          {
+            "result": "pass",
+            "test": 59
+          },
+          {
+            "result": "pass",
+            "test": 60
+          },
+          {
+            "result": "pass",
+            "test": 61
+          },
+          {
+            "result": "pass",
+            "test": 62
+          },
+          {
+            "result": "pass",
+            "test": 63
+          },
+          {
+            "result": "pass",
+            "test": 64
+          },
+          {
+            "result": "pass",
+            "test": 65
+          },
+          {
+            "result": "pass",
+            "test": 66
+          },
+          {
+            "result": "pass",
+            "test": 67
+          },
+          {
+            "result": "pass",
+            "test": 68
+          },
+          {
+            "message": "timeout -- could be a networking issue",
+            "result": "fail",
+            "test": 69
+          },
+          {
+            "result": "pass",
+            "test": 70
+          },
+          {
+            "message": "value is not a function",
+            "result": "fail",
+            "test": 71
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 72
+          },
+          {
+            "result": "pass",
+            "test": 73
+          },
+          {
+            "message": "getSVGDocument missing on <iframe> element.",
+            "result": "fail",
+            "test": 74
+          },
+          {
+            "message": "SVG DOM interface SVGRectElement not supported.",
+            "result": "fail",
+            "test": 75
+          },
+          {
+            "result": "pass",
+            "test": 76
+          },
+          {
+            "message": "SVGTextContentElement.getNumberOfChars() not supported.",
+            "result": "fail",
+            "test": 77
+          },
+          {
+            "result": "pass",
+            "test": 78
+          },
+          {
+            "message": "Cannot read properties of undefined or null",
+            "result": "fail",
+            "test": 79
+          },
+          {
+            "message": "timeout -- could be a networking issue",
+            "result": "fail",
+            "test": 80
+          },
+          {
+            "result": "pass",
+            "test": 81
+          },
+          {
+            "result": "pass",
+            "test": 82
+          },
+          {
+            "result": "pass",
+            "test": 83
+          },
+          {
+            "result": "pass",
+            "test": 84
+          },
+          {
+            "result": "pass",
+            "test": 85
+          },
+          {
+            "result": "pass",
+            "test": 86
+          },
+          {
+            "result": "pass",
+            "test": 87
+          },
+          {
+            "result": "pass",
+            "test": 88
+          },
+          {
+            "result": "pass",
+            "test": 89
+          },
+          {
+            "result": "pass",
+            "test": 90
+          },
+          {
+            "result": "pass",
+            "test": 91
+          },
+          {
+            "result": "pass",
+            "test": 92
+          },
+          {
+            "result": "pass",
+            "test": 93
+          },
+          {
+            "result": "pass",
+            "test": 94
+          },
+          {
+            "result": "pass",
+            "test": 95
+          },
+          {
+            "result": "pass",
+            "test": 96
+          },
+          {
+            "result": "pass",
+            "test": 97
+          },
+          {
+            "result": "pass",
+            "test": 98
+          },
+          {
+            "result": "pass",
+            "test": 99
+          }
+        ],
+        "run_status": 0
+      },
+      "commit": "2d66b9b7998bb58c336138c178323ddee857b586",
+      "note": "Historical diagnostics only; WPT warns that these tests are not a standards certification.",
+      "schema": 2,
+      "settle_ms": 15000,
+      "suite": "WPT historical Acid tests"
+    }
+  },
+  "regressions": {
+    "plain": [
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/submit-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "submit event probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/click-activation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 57,
+        "failures": [],
+        "last": [
+          "click activation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/radio-state-probe.html"
+        ],
+        "exit": 0,
+        "passes": 73,
+        "failures": [],
+        "last": [
+          "radio state probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/input-reflection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 94,
+        "failures": [],
+        "last": [
+          "input reflection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/form-controls-probe.html"
+        ],
+        "exit": 0,
+        "passes": 100,
+        "failures": [],
+        "last": [
+          "form controls probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-forms-probe.html"
+        ],
+        "exit": 0,
+        "passes": 35,
+        "failures": [],
+        "last": [
+          "Document.forms probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/html-collection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 104,
+        "failures": [],
+        "last": [
+          "HTMLCollection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/node-iterator-probe.html"
+        ],
+        "exit": 0,
+        "passes": 60,
+        "failures": [],
+        "last": [
+          "PASS removed child factories remain usable"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/tree-walker-probe.html"
+        ],
+        "exit": 0,
+        "passes": 70,
+        "failures": [],
+        "last": [
+          "PASS readonly walker state and constants"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/xml-document-probe.html"
+        ],
+        "exit": 0,
+        "passes": 62,
+        "failures": [],
+        "last": [
+          "PASS XML readonly content type"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/namespace-probe.html"
+        ],
+        "exit": 0,
+        "passes": 38,
+        "failures": [],
+        "last": [
+          "PASS child namespace exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/element-name-probe.html"
+        ],
+        "exit": 0,
+        "passes": 31,
+        "failures": [],
+        "last": [
+          "PASS child method exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/iframe-context-probe.html"
+        ],
+        "exit": 0,
+        "passes": 17,
+        "failures": [],
+        "last": [
+          "PASS inactive document child null"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/legacy-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "PASS active method still converts arguments"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-frame-lifetime"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "frame lifetime checks: 98/98 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-namespace"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "namespace GC checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-context-ownership"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "ownership checks: 27/27 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-realms"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "realm checks: 30/30 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-object"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-object: 100 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-interp"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-interp: 45 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-dom-tests.py",
+          "--program",
+          "build/ws074-host/plain/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "dom-tests 23/23"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-js-tests.py",
+          "--program",
+          "build/ws074-host/plain/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "js-tests 14/14"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-xml-document"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "XML document GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/browser",
+          "--run",
+          "plan/ws074/tests/pages/child-style-probe.html"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "PASS retired child selector empty"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-submit"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "submit lifetime checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-click"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "click lifetime checks: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-radio-state"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "radio state checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-form-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form collection GC checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-form-owner"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form owner checks: 56/56 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "collection GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-traversal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "traversal GC checks: 9/9 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-removal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "removal subscription checks: 19/19 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/plain/host-native-properties"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native property checks: 65/65 passed"
+        ]
+      },
+      {
+        "command": [
+          "selectors style golden"
+        ],
+        "exit": 0,
+        "same": true,
+        "stderr": ""
+      }
+    ],
+    "asan": [
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/submit-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "submit event probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/click-activation-probe.html"
+        ],
+        "exit": 0,
+        "passes": 57,
+        "failures": [],
+        "last": [
+          "click activation probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/radio-state-probe.html"
+        ],
+        "exit": 0,
+        "passes": 73,
+        "failures": [],
+        "last": [
+          "radio state probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/input-reflection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 94,
+        "failures": [],
+        "last": [
+          "input reflection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/form-controls-probe.html"
+        ],
+        "exit": 0,
+        "passes": 100,
+        "failures": [],
+        "last": [
+          "form controls probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/document-forms-probe.html"
+        ],
+        "exit": 0,
+        "passes": 35,
+        "failures": [],
+        "last": [
+          "Document.forms probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/html-collection-probe.html"
+        ],
+        "exit": 0,
+        "passes": 104,
+        "failures": [],
+        "last": [
+          "HTMLCollection probe done"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/node-iterator-probe.html"
+        ],
+        "exit": 0,
+        "passes": 60,
+        "failures": [],
+        "last": [
+          "PASS removed child factories remain usable"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/tree-walker-probe.html"
+        ],
+        "exit": 0,
+        "passes": 70,
+        "failures": [],
+        "last": [
+          "PASS readonly walker state and constants"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/xml-document-probe.html"
+        ],
+        "exit": 0,
+        "passes": 62,
+        "failures": [],
+        "last": [
+          "PASS XML readonly content type"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/namespace-probe.html"
+        ],
+        "exit": 0,
+        "passes": 38,
+        "failures": [],
+        "last": [
+          "PASS child namespace exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/element-name-probe.html"
+        ],
+        "exit": 0,
+        "passes": 31,
+        "failures": [],
+        "last": [
+          "PASS child method exception realm"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/iframe-context-probe.html"
+        ],
+        "exit": 0,
+        "passes": 17,
+        "failures": [],
+        "last": [
+          "PASS inactive document child null"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/legacy-event-probe.html"
+        ],
+        "exit": 0,
+        "passes": 56,
+        "failures": [],
+        "last": [
+          "PASS active method still converts arguments"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-frame-lifetime"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "frame lifetime checks: 98/98 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-namespace"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "namespace GC checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-context-ownership"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "ownership checks: 27/27 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-realms"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "realm checks: 30/30 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-object"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-object: 100 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-interp"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "host-interp: 45 checks, 0 failed"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-dom-tests.py",
+          "--program",
+          "build/ws074-host/asan/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "dom-tests 23/23"
+        ]
+      },
+      {
+        "command": [
+          "python3",
+          "plan/ws074/tests/run-js-tests.py",
+          "--program",
+          "build/ws074-host/asan/browser"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "js-tests 14/14"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-xml-document"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "XML document GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/browser",
+          "--run",
+          "plan/ws074/tests/pages/child-style-probe.html"
+        ],
+        "exit": 0,
+        "passes": 30,
+        "failures": [],
+        "last": [
+          "PASS retired child selector empty"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-submit"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "submit lifetime checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-click"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "click lifetime checks: 10/10 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-radio-state"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "radio state checks: 12/12 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-form-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form collection GC checks: 13/13 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-form-owner"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "form owner checks: 56/56 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-collection"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "collection GC checks: 16/16 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-traversal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "traversal GC checks: 9/9 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-removal"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "removal subscription checks: 19/19 passed"
+        ]
+      },
+      {
+        "command": [
+          "build/ws074-host/asan/host-native-properties"
+        ],
+        "exit": 0,
+        "passes": 0,
+        "failures": [],
+        "last": [
+          "native property checks: 65/65 passed"
+        ]
+      },
+      {
+        "command": [
+          "selectors style golden"
+        ],
+        "exit": 0,
+        "same": true,
+        "stderr": ""
+      }
+    ]
+  },
+  "prior_pass_preserved": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    10,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    47,
+    48,
+    52,
+    53,
+    55,
+    56,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    70,
+    73,
+    76,
+    78,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  ],
+  "new_pass": [
+    54
+  ]
+}
