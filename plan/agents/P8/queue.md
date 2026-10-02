@@ -24,3 +24,5 @@ MR P8-q577-01: requested966a19d39ac82ccdd8a88bf29ebcf8f65084f4b0/base41aac4fc7�
 MR P8-q577-02: requested8f28d9e02d8516f5210acdb71d19c8c65cf7ab26、lastACK966a19d39。main review原log/refused-no-press/expectedMISSING比較、prototype注入無効・短縮条件と全p076を区別する訂正、diff-check PASS。証拠checkpointのみ。held new-requestcountで1回geometryPASS、負例/20単独/5C9は未達。
 
 MR P8-q577-03: requestedfb8732b939294e7e98f4362150298dbe929f7723、lastACK8f28d9e02。main reviewpress前count→held新規acceptedrequest→motion/up、oldcount拒否とtimeoutrelease/abort、期待geometry/pixel不変、sh-n/diff-check PASS。試験sourceの同期修正checkpoint統合、製品binary修正なし。単独20/C9 5とC2関連症状の切り分け未達、BUGtracking/Phasein-progress保持。
+
+MR P8-q577-04 / recovery: requestedf4ba75a87/base25729c88a、sourceなし。mainが原FAIL/renderer未設定と環境不備/cleanup/単独15PASS+popupFAIL/geometry全PASS/補完有限C9をreviewし統合。main takeoverのenv省略がC9-2無効環境の原因、元FAIL保存。git diff-checkはraw C9results2filesの12末尾spaceを検出、原本維持の明示除外でcode/newdocPASS。worker workingtreecheckにuntrackedが含まれない点を訂正。whole-Phase clearなし。
