@@ -24,9 +24,9 @@ static void bounds_add(struct layout_rect *rect, int *found, layout_unit x, layo
 static const struct layout_box *bounds_find(const struct layout_box *box, const struct dom_node *node, int depth);
 
 /*
- * Finds the rectangle a node takes on the page, in layout units from the
- * document's top left.  Returns whether the node has any box (a node that
- * is not rendered has none; all empty boxes retain their first rectangle).
+ * Finds a node's rectangle in layout units from the document's top left.
+ *
+ * Returns whether any native box exists; all empty boxes retain their first rectangle.
  */
 int
 layout_node_bounds(
@@ -56,8 +56,9 @@ layout_node_bounds(
 }
 
 /*
- * Finds the first box a node made (in tree order), or NULL when it has
- * none: a form control's box, whose style the caret's placing measures by.
+ * Finds the first native box of a node in tree order, or NULL when absent.
+ *
+ * The caret measures its form control through this first box's used style.
  */
 const struct layout_box *
 layout_box_of(
@@ -71,7 +72,7 @@ layout_box_of(
 	if (tree->root != NULL)
 		found = bounds_find(tree->root, node, 0);
 
-	/* The box, or NULL. */
+	/* Succeeded: reports the first actual box or normal absence. */
 	return found;
 }
 
@@ -94,13 +95,15 @@ bounds_find(
 		return box;
 
 	/* Its children in order. */
-	for (child = box->first_child; child != NULL; child = child->next) {
+	for (child = box->first_child;
+	     child != NULL;
+	     child = child->next) {
 		found = bounds_find(child, node, depth + 1);
 		if (found != NULL)
 			return found;
 	}
 
-	/* Not under this box. */
+	/* Succeeded: this bounded native subtree has no box for the requested node. */
 	return NULL;
 }
 
@@ -149,8 +152,13 @@ bounds_walk(
 		bounds_lines(box, node, rect, found);
 
 	/* The children, which may hold more of the node (floats and positioned boxes among inline content too). */
-	for (child = box->first_child; child != NULL; child = child->next)
+	for (child = box->first_child;
+	     child != NULL;
+	     child = child->next)
 		bounds_walk(child, node, rect, found, depth + 1);
+
+	/* Succeeded: every bounded descendant supplied its native box or line geometry. */
+	return;
 }
 
 /* Adds the fragments of a block's lines that belong to a node or its descendants. */
@@ -178,6 +186,8 @@ bounds_lines(
 	/* Each fragment of each line whose box is the node's. */
 	for (index = 0; index < box->line_count; index++) {
 		line = &box->lines[index];
+
+		/* Each actual fragment may contribute only its selected native node descendants. */
 		for (item = 0; item < line->fragment_count; item++) {
 			fragment = &line->fragments[item];
 
@@ -194,6 +204,9 @@ bounds_lines(
 			bounds_add(rect, found, x, y, fragment->width, fragment->ascent + fragment->descent);
 		}
 	}
+
+	/* Succeeded: all actual line fragments were considered without creating boxes. */
+	return;
 }
 
 /* Unions positive rectangles while preserving the first actual empty rectangle as a fallback. */
@@ -243,14 +256,23 @@ bounds_add(
 	bottom = rect->y + rect->height;
 	if (x + width > right)
 		right = x + width;
+
+	/* The farther vertical edge expands the accumulated positive union. */
 	if (y + height > bottom)
 		bottom = y + height;
 
 	/* Its near edges, and the size between them. */
 	if (x < rect->x)
 		rect->x = x;
+
+	/* The smaller vertical origin preserves all accumulated positive rectangles. */
 	if (y < rect->y)
 		rect->y = y;
+
+	/* Publishes the extents between the final near and far edges. */
 	rect->width = right - rect->x;
 	rect->height = bottom - rect->y;
+
+	/* Succeeded: the positive union includes this native rectangle. */
+	return;
 }
