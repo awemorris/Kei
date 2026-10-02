@@ -1,0 +1,72 @@
+[
+  {
+    "mode": "original",
+    "run": 1,
+    "status": 0,
+    "seconds": 40.809,
+    "output": "build/b3-q583/original-1"
+  },
+  {
+    "mode": "original",
+    "run": 2,
+    "status": 0,
+    "seconds": 50.094,
+    "output": "build/b3-q583/original-2"
+  },
+  {
+    "mode": "original",
+    "run": 3,
+    "status": 0,
+    "seconds": 43.671,
+    "output": "build/b3-q583/original-3"
+  },
+  {
+    "mode": "original",
+    "run": 4,
+    "status": 0,
+    "seconds": 30.228,
+    "output": "build/b3-q583/original-4"
+  },
+  {
+    "mode": "original",
+    "run": 5,
+    "status": 0,
+    "seconds": 31.135,
+    "output": "build/b3-q583/original-5"
+  },
+  {
+    "mode": "handshake",
+    "run": 1,
+    "status": 0,
+    "seconds": 32.027,
+    "output": "build/b3-q583/handshake-1"
+  },
+  {
+    "mode": "handshake",
+    "run": 2,
+    "status": 0,
+    "seconds": 32.087,
+    "output": "build/b3-q583/handshake-2"
+  },
+  {
+    "mode": "handshake",
+    "run": 3,
+    "status": 0,
+    "seconds": 32.182,
+    "output": "build/b3-q583/handshake-3"
+  },
+  {
+    "mode": "handshake",
+    "run": 4,
+    "status": 0,
+    "seconds": 32.132,
+    "output": "build/b3-q583/handshake-4"
+  },
+  {
+    "mode": "handshake",
+    "run": 5,
+    "status": 0,
+    "seconds": 32.134,
+    "output": "build/b3-q583/handshake-5"
+  }
+]

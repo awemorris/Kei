@@ -21,6 +21,15 @@
 
 #include "bind/bind.h"
 
+/* The parent of an interface that has none. */
+#define BIND_NO_PARENT (-1)
+
+/* The phases of an event (Event.eventPhase). */
+#define BIND_PHASE_NONE 0
+#define BIND_PHASE_CAPTURING 1
+#define BIND_PHASE_AT_TARGET 2
+#define BIND_PHASE_BUBBLING 3
+
 /*
  * The interfaces the binding makes, parents before children (window.c
  * makes them in this order, so a prototype's parent exists when it is
@@ -108,9 +117,6 @@ enum bind_interface_index {
 	BIND_INTERFACES
 };
 
-/* The parent of an interface that has none. */
-#define BIND_NO_PARENT		(-1)
-
 /*
  * One attribute of an interface: an accessor on the prototype with a
  * native getter and, unless the attribute is read-only, a native setter.
@@ -172,9 +178,13 @@ struct bind_timer {
 	vm_value arguments;
 };
 
+/* Window-owned C style storage and parser/request state use private definitions. */
 struct bind_style_context;
+
 struct html_parser;
+
 struct environment_fetch_pending;
+
 struct environment_mutation_observer;
 
 /*
@@ -244,113 +254,8 @@ struct bind_style_sheet {
 	struct vm_object *rules;
 };
 
-/* Native canonical SVG node classification and text-content interfaces. */
-extern const struct bind_interface bind_svg_geometry_element_interface;
-extern const struct bind_interface bind_svg_rect_element_interface;
-extern const struct bind_interface bind_svg_animated_length_interface;
-extern const struct bind_interface bind_svg_length_interface;
-extern const struct bind_interface bind_svg_element_interface;
-extern const struct bind_interface bind_svg_graphics_element_interface;
-extern const struct bind_interface bind_svg_text_content_element_interface;
-extern const struct bind_interface bind_svg_text_positioning_element_interface;
-extern const struct bind_interface bind_svg_text_element_interface;
-extern const struct bind_interface bind_svg_tspan_element_interface;
-extern const struct bind_interface bind_svg_text_path_element_interface;
-int bind_svg_node_interface(const struct dom_element *element);
-
-/* Scoped branded HTML reflected attributes (html-reflection.c). */
-extern const struct bind_interface bind_html_button_element_interface;
-extern const struct bind_interface bind_html_label_element_interface;
-extern const struct bind_interface bind_html_meta_element_interface;
-extern const struct bind_interface bind_html_object_element_interface;
-extern const struct bind_interface bind_tree_walker_interface;
-extern const struct bind_interface bind_node_iterator_interface;
-extern const struct bind_interface bind_html_collection_interface;
-extern const struct bind_interface bind_html_table_element_interface;
-extern const struct bind_interface bind_html_table_section_element_interface;
-extern const struct bind_interface bind_html_table_row_element_interface;
-extern const struct bind_interface bind_html_table_caption_element_interface;
-extern const struct bind_interface bind_html_form_element_interface;
-extern const struct bind_interface bind_html_input_element_interface;
-extern const struct bind_interface bind_html_form_controls_collection_interface;
-extern const struct bind_interface bind_node_list_interface;
-extern const struct bind_interface bind_radio_node_list_interface;
-
-/* Native range boundary factories and interface identities. */
-extern const struct bind_interface bind_abstract_range_interface;
-extern const struct bind_interface bind_range_interface;
-int bind_create_range(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-/* Select-family identities and SameObject native option membership. */
-extern const struct bind_interface bind_html_select_element_interface;
-extern const struct bind_interface bind_html_option_element_interface;
-extern const struct bind_interface bind_html_opt_group_element_interface;
-extern const struct bind_interface bind_html_options_collection_interface;
-int bind_select_options(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-/* SameObject live Document links (collection.c). */
-int bind_document_forms(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_document_images(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_document_links(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-/* Initial HTML iframe contexts and their synchronous removal hooks (frame.c). */
-extern const struct bind_interface bind_html_iframe_element_interface;
+/* URL reflection helpers borrow the network module's parsed URL record. */
 struct net_url;
-int bind_document_url(struct dom_document *document, int use_base, struct wb_buffer *out);
-int bind_frame_location(struct bind_window *window, int part, struct wb_buffer *out);
-int bind_frame_install(struct bind_window *parent, struct dom_element *element, struct dom_document *document, struct bind_window **window);
-int bind_run_inline_script(struct bind_window *window, struct dom_element *script);
-int bind_reflection_base(struct dom_document *document, struct net_url *base);
-int bind_reflect_url_get(struct vm_realm *realm, vm_value receiver, int tag, const char *name, vm_value *result);
-int bind_reflect_url_set(struct vm_realm *realm, vm_value receiver, int tag, const char *name, const vm_value *args, unsigned count, vm_value *result);
-int bind_object_document(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_object_svg_document(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-void bind_frames_attach(struct bind_window *window);
-void bind_frames_detach(struct bind_window *window);
-void bind_frames_release(struct bind_window *window);
-int bind_frame_parent(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-int bind_frame_top(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-int bind_frame_self(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-int bind_frame_closed(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-int bind_frame_element(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-
-/* Native CSSOM interfaces expose genuine inline source identity and current list counts. */
-extern const struct bind_interface bind_html_style_element_interface;
-extern const struct bind_interface bind_style_sheet_interface;
-extern const struct bind_interface bind_css_style_sheet_interface;
-extern const struct bind_interface bind_style_sheet_list_interface;
-extern const struct bind_interface bind_css_rule_list_interface;
-int bind_cssom_document_sheets(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_style_sheet(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_owner(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_href(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_rules(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_sheets_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_sheets_item(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_rules_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-int bind_cssom_insert(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-int bind_cssom_delete(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-/* Inline source association stays native before public CSSOM wrapper construction. */
-int bind_style_sheet_get(struct dom_element *element, struct bind_style_sheet **sheet);
-void bind_style_sheet_changed(struct bind_style_sheet *sheet);
-
-/* Window-owned child CSS cascade and connected ancestor inheritance. */
-int bind_frame_viewport(struct bind_window *window);
-int bind_style_context_engine(struct bind_window *window, struct css_engine **engine);
-int bind_style_context_compute(struct bind_window *window, struct dom_element *element, struct css_style *style);
-void bind_style_context_release(struct bind_window *window);
-
-void bind_environment_release(struct bind_window *window);
-void bind_environment_trace(struct vm_heap *heap, struct bind_window *window);
-void bind_environment_disconnect(struct bind_window *window);
-int bind_environment_checkpoint(struct bind_window *window, int *queued);
-int bind_environment_child_mutation(
-	struct bind_window *window,
-	struct dom_node *parent,
-	struct dom_node *added,
-	struct dom_node *removed);
 
 /*
  * One event listener of a target: its type, its callback (a function or
@@ -423,11 +328,56 @@ struct bind_event {
 	int repeat;
 };
 
-/* The phases of an event (Event.eventPhase). */
-#define BIND_PHASE_NONE		0
-#define BIND_PHASE_CAPTURING	1
-#define BIND_PHASE_AT_TARGET	2
-#define BIND_PHASE_BUBBLING	3
+/* Native canonical SVG node classification and text-content interfaces. */
+extern const struct bind_interface bind_svg_geometry_element_interface;
+extern const struct bind_interface bind_svg_rect_element_interface;
+extern const struct bind_interface bind_svg_animated_length_interface;
+extern const struct bind_interface bind_svg_length_interface;
+extern const struct bind_interface bind_svg_element_interface;
+extern const struct bind_interface bind_svg_graphics_element_interface;
+extern const struct bind_interface bind_svg_text_content_element_interface;
+extern const struct bind_interface bind_svg_text_positioning_element_interface;
+extern const struct bind_interface bind_svg_text_element_interface;
+extern const struct bind_interface bind_svg_tspan_element_interface;
+extern const struct bind_interface bind_svg_text_path_element_interface;
+
+/* Scoped branded HTML reflected attributes (html-reflection.c). */
+extern const struct bind_interface bind_html_button_element_interface;
+extern const struct bind_interface bind_html_label_element_interface;
+extern const struct bind_interface bind_html_meta_element_interface;
+extern const struct bind_interface bind_html_object_element_interface;
+extern const struct bind_interface bind_tree_walker_interface;
+extern const struct bind_interface bind_node_iterator_interface;
+extern const struct bind_interface bind_html_collection_interface;
+extern const struct bind_interface bind_html_table_element_interface;
+extern const struct bind_interface bind_html_table_section_element_interface;
+extern const struct bind_interface bind_html_table_row_element_interface;
+extern const struct bind_interface bind_html_table_caption_element_interface;
+extern const struct bind_interface bind_html_form_element_interface;
+extern const struct bind_interface bind_html_input_element_interface;
+extern const struct bind_interface bind_html_form_controls_collection_interface;
+extern const struct bind_interface bind_node_list_interface;
+extern const struct bind_interface bind_radio_node_list_interface;
+
+/* Native range boundary factories and interface identities. */
+extern const struct bind_interface bind_abstract_range_interface;
+extern const struct bind_interface bind_range_interface;
+
+/* Select-family identities and SameObject native option membership. */
+extern const struct bind_interface bind_html_select_element_interface;
+extern const struct bind_interface bind_html_option_element_interface;
+extern const struct bind_interface bind_html_opt_group_element_interface;
+extern const struct bind_interface bind_html_options_collection_interface;
+
+/* Initial HTML iframe contexts and their synchronous removal hooks (frame.c). */
+extern const struct bind_interface bind_html_iframe_element_interface;
+
+/* Native CSSOM interfaces expose genuine inline source identity and current list counts. */
+extern const struct bind_interface bind_html_style_element_interface;
+extern const struct bind_interface bind_style_sheet_interface;
+extern const struct bind_interface bind_css_style_sheet_interface;
+extern const struct bind_interface bind_style_sheet_list_interface;
+extern const struct bind_interface bind_css_rule_list_interface;
 
 /* The interface tables (node.c, element.c, document.c, event.c, window.c). */
 extern const struct bind_interface bind_event_target_interface;
@@ -469,6 +419,64 @@ extern const struct bind_interface bind_text_decoder_interface;
 extern const struct bind_interface bind_storage_interface;
 extern const struct bind_interface bind_html_template_element_interface;
 extern const struct bind_interface bind_dom_exception_interface;
+
+/* Native node classification and range/options construction share these entry points. */
+int bind_svg_node_interface(const struct dom_element *element);
+int bind_create_range(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_select_options(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+
+/* SameObject live Document links (collection.c). */
+int bind_document_forms(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_document_images(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_document_links(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+
+/* URL resolution and frame helpers retain actual parent/child document ownership. */
+int bind_document_url(struct dom_document *document, int use_base, struct wb_buffer *out);
+int bind_frame_location(struct bind_window *window, int part, struct wb_buffer *out);
+int bind_frame_install(struct bind_window *parent, struct dom_element *element, struct dom_document *document, struct bind_window **window);
+int bind_run_inline_script(struct bind_window *window, struct dom_element *script);
+int bind_reflection_base(struct dom_document *document, struct net_url *base);
+int bind_reflect_url_get(struct vm_realm *realm, vm_value receiver, int tag, const char *name, vm_value *result);
+int bind_reflect_url_set(struct vm_realm *realm, vm_value receiver, int tag, const char *name, const vm_value *args, unsigned count, vm_value *result);
+int bind_object_document(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_object_svg_document(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+void bind_frames_attach(struct bind_window *window);
+void bind_frames_detach(struct bind_window *window);
+void bind_frames_release(struct bind_window *window);
+int bind_frame_parent(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+int bind_frame_top(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+int bind_frame_self(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+int bind_frame_closed(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+int bind_frame_element(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+
+/* Native CSSOM getters and mutations operate on the traced source model. */
+int bind_cssom_document_sheets(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_style_sheet(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_owner(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_href(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_rules(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_sheets_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_sheets_item(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_rules_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_insert(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+int bind_cssom_delete(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+
+/* Inline source association stays native before public CSSOM wrapper construction. */
+int bind_style_sheet_get(struct dom_element *element, struct bind_style_sheet **sheet);
+void bind_style_sheet_changed(struct bind_style_sheet *sheet);
+
+/* Window-owned child CSS cascade and connected ancestor inheritance. */
+int bind_frame_viewport(struct bind_window *window);
+int bind_style_context_engine(struct bind_window *window, struct css_engine **engine);
+int bind_style_context_compute(struct bind_window *window, struct dom_element *element, struct css_style *style);
+void bind_style_context_release(struct bind_window *window);
+
+/* Window environment state is traced, disconnected and checkpointed by its owner. */
+void bind_environment_release(struct bind_window *window);
+void bind_environment_trace(struct vm_heap *heap, struct bind_window *window);
+void bind_environment_disconnect(struct bind_window *window);
+int bind_environment_checkpoint(struct bind_window *window, int *queued);
+int bind_environment_child_mutation(struct bind_window *window, struct dom_node *parent, struct dom_node *added, struct dom_node *removed);
 
 /* Markup (markup.c, ws074-p081). */
 int bind_template_contents(struct dom_element *element, struct dom_node **contents);

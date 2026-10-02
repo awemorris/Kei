@@ -1,0 +1,21 @@
+[1520117.292] {Default Queue} wl_pointer#6.button(21, 315294, 272, 1)
+[1521388.337] {Default Queue} wl_pointer#6.button(23, 316565, 272, 0)
+[1544919.642] {Default Queue} wl_pointer#6.button(24, 340086, 272, 1)
+[1544919.877]  -> xdg_toplevel#31.resize(wl_seat#14, 24, 10)
+ZWL CONFIGURE client=3 surface=23 serial=3 width=0 height=0 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=17 width=0 height=0 fullscreen=0
+ZWL RESIZE start surface=23 edges=10 width=700 height=460
+ZWL CONFIGURE client=4 surface=23 serial=26 width=710 height=466 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=27 width=720 height=472 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=28 width=730 height=478 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=29 width=740 height=484 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=30 width=750 height=490 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=31 width=760 height=496 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=32 width=770 height=502 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=33 width=780 height=508 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=34 width=790 height=514 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=35 width=800 height=520 fullscreen=0
+ZWL CONFIGURE client=4 surface=23 serial=36 width=800 height=520 fullscreen=0
+ZWL RESIZE end surface=23 width=800 height=520
+ZWL RESIZE settled surface=23 x=276 y=198 width=800 height=520
+ZWL CONFIGURE client=5 surface=23 serial=39 width=0 height=0 fullscreen=0

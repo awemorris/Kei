@@ -5,24 +5,26 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Genuine XML character interfaces expose native identity without synthesizing public factories. */
+/*
+ * Genuine XML character interfaces expose native identity without synthesizing public factories.
+ */
 
 #include "bind/internal.h"
 
 static int pi_target(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 
-/* The exact PI-only target getter never consults script-side target properties. */
+/* This immutable process-lifetime PI-only table never consults script-side target properties. */
 static const struct bind_attribute pi_attributes[] = {
 	{ "target", pi_target, NULL },
 	{ NULL, NULL, NULL }
 };
 
-/* CDATA inherits genuine Text operations while preserving its own actual native prototype. */
+/* This immutable process-lifetime CDATA descriptor preserves its native prototype and Text operations. */
 const struct bind_interface bind_cdata_interface = {
 	"CDATASection", BIND_TEXT, 0, NULL, NULL, NULL, NULL
 };
 
-/* This partial PI core inherits real CharacterData and exposes its actual immutable target. */
+/* This immutable process-lifetime PI descriptor inherits CharacterData and exposes its native target. */
 const struct bind_interface bind_pi_interface = {
 	"ProcessingInstruction", BIND_CHARACTER_DATA, 0, NULL, pi_attributes, NULL, NULL
 };
@@ -38,7 +40,7 @@ pi_target(
 {
 	struct dom_node *node;
 	struct dom_character_data *data;
-	int status;
+	int error;
 
 	UNUSED_PARAMETER(args);
 	UNUSED_PARAMETER(count);
@@ -46,8 +48,8 @@ pi_target(
 	/* Native node identity precedes any public prototype or expando metadata. */
 	node = bind_node_of(receiver);
 	if (node == NULL || node->type != DOM_PROCESSING_INSTRUCTION) {
-		status = bind_throw_illegal(realm);
-		return status;
+		error = bind_throw_illegal(realm);
+		return error;
 	}
 
 	/* The actual target is already retained by the receiver's native node graph. */

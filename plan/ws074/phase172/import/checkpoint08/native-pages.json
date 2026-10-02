@@ -1,0 +1,93 @@
+[
+  {
+    "path": "plan/ws074/tests/pages/array-length-probe.js",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--js",
+      "plan/ws074/tests/pages/array-length-probe.js"
+    ],
+    "exit": 0,
+    "pass_lines": 39,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "f102376d186d8ab9a2fd582afe0277fa58623587a1efe366f3e6d794684a05e6"
+  },
+  {
+    "path": "plan/ws074/tests/pages/cursor-probe.html",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/cursor-probe.html"
+    ],
+    "exit": 0,
+    "pass_lines": 54,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "2d773805b05760dafce6212ef20c3704034ae69ef5f2caf5d85ca95aa0f1a706"
+  },
+  {
+    "path": "plan/ws074/tests/pages/html-reflection-probe.html",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/html-reflection-probe.html"
+    ],
+    "exit": 0,
+    "pass_lines": 40,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "7221c41b24ea9040cc4a2e4b7f0f9d663251fcc84fc3ef21bead8720a1124c83"
+  },
+  {
+    "path": "plan/ws074/tests/pages/iframe-safety-probe.html",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/iframe-safety-probe.html"
+    ],
+    "exit": 0,
+    "pass_lines": 14,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "ead952a3b189ec42e5d09f536bca6b61675e40ad3c382f651288f131fb80fb4d"
+  },
+  {
+    "path": "plan/ws074/tests/pages/language-empty-probe.html",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/language-empty-probe.html"
+    ],
+    "exit": 0,
+    "pass_lines": 32,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "33a6fc761a37518e873e92a54986fccaac9ce18931622f4ded533ea996371869"
+  },
+  {
+    "path": "plan/ws074/tests/pages/object-url-probe.html",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/object-url-probe.html"
+    ],
+    "exit": 0,
+    "pass_lines": 44,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "b2212301fb168ca373d77b3cb04a0be51c04d6693767c750b9e020c415a8488f"
+  },
+  {
+    "path": "plan/ws074/tests/pages/selector-grammar-probe.html",
+    "command": [
+      "build/a1-browser2/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/selector-grammar-probe.html"
+    ],
+    "exit": 0,
+    "pass_lines": 37,
+    "stderr": "",
+    "passed": true,
+    "log_sha256": "e722a15aca267f6f3946466bcf8c02ec7b7168ce0256eaffd34309916bb9ec74"
+  }
+]

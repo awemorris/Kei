@@ -1,0 +1,30 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/html/html.h",
+    "types_and_field_order_equal": true,
+    "all_preprocessor_directives_equal": true,
+    "remaining_declarations_equal_modulo_order": true,
+    "final_sha256": "83d5c84a1fb0820a3733ce64c9a61d202231a6be1aa78f65a287b7a0444fa38e"
+  },
+  {
+    "path": "userland/desktop/libbrowser/html/parser.h",
+    "types_and_field_order_equal": true,
+    "all_preprocessor_directives_equal": true,
+    "remaining_declarations_equal_modulo_order": true,
+    "final_sha256": "23652c927e85b42ec6f9ea87b01156b6b7e7ea34d1651011217dec4e8021eaae"
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/bind.h",
+    "types_and_field_order_equal": true,
+    "all_preprocessor_directives_equal": true,
+    "remaining_declarations_equal_modulo_order": true,
+    "final_sha256": "2cfb6d9950f496d35327d954e17d4e276d87de5cb8b88bbee44d3224d01a0404"
+  },
+  {
+    "path": "userland/desktop/libbrowser/page/page.h",
+    "types_and_field_order_equal": true,
+    "all_preprocessor_directives_equal": true,
+    "remaining_declarations_equal_modulo_order": true,
+    "final_sha256": "037bcde8a08753a4a896aad4f9e3245e711ba83b31b98b179c76d3003c131c40"
+  }
+]

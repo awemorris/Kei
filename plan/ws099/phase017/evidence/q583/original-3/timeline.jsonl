@@ -1,0 +1,84 @@
+{"deadline_seconds": 240, "event": "run-begin", "host_monotonic_ns": 592898048647739, "host_utc_ns": 1790926155427755927, "mode": "original"}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E \"[w]ayland( |$)|[p]opup-probe\" | awk \"{print \\$1}\"); do kill $p; done; i=0; while ps -A -o args | grep -qE \"[w]ayland( |$)|[p]opup-probe\" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done"], "event": "guest-begin", "host_monotonic_ns": 592898101984575, "host_utc_ns": 1790926155481092271}
+{"event": "guest-end", "host_monotonic_ns": 592901426645150, "host_utc_ns": 1790926158805754275, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm\n/bin/wayland --log-frames --timeout=400 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1\n/bin/popup-probe --wide --timeout-s=300 --token=p > /tmp/p.log 2>&1 </dev/null & sleep 4; echo started"], "event": "guest-begin", "host_monotonic_ns": 592901489904587, "host_utc_ns": 1790926158869012533}
+{"event": "guest-end", "host_monotonic_ns": 592907773705930, "host_utc_ns": 1790926165152815541, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE ready run=p' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592907836796522, "host_utc_ns": 1790926165215904447}
+{"event": "guest-end", "host_monotonic_ns": 592908402840457, "host_utc_ns": 1790926165781949431, "status": 1}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE ready run=p' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592910458485540, "host_utc_ns": 1790926167837593399}
+{"event": "guest-end", "host_monotonic_ns": 592910723750304, "host_utc_ns": 1790926168102859409, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1"], "event": "guest-begin", "host_monotonic_ns": 592910789243690, "host_utc_ns": 1790926168168351464}
+{"event": "guest-end", "host_monotonic_ns": 592914615295432, "host_utc_ns": 1790926171994404706, "status": 0}
+{"arguments": ["python3", "plan/ws035/tests/qmp-pointer.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime/qmp.sock", "move", "498", "353", "sleep", "150", "move", "500", "353", "sleep", "300", "down", "sleep", "60", "up", "sleep", "1200"], "event": "pointer-begin", "host_monotonic_ns": 592914679000660, "host_utc_ns": 1790926172058108422}
+{"event": "pointer-end", "host_monotonic_ns": 592916499083036, "host_utc_ns": 1790926173878192671, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'ZWL POPUP grab popup=' /tmp/zdesktop.log"], "event": "guest-begin", "host_monotonic_ns": 592916569309324, "host_utc_ns": 1790926173948417140}
+{"event": "guest-end", "host_monotonic_ns": 592916834143845, "host_utc_ns": 1790926174213252881, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1' /tmp/zdesktop.log"], "event": "guest-begin", "host_monotonic_ns": 592916899576939, "host_utc_ns": 1790926174278684752}
+{"event": "guest-end", "host_monotonic_ns": 592917164823915, "host_utc_ns": 1790926174543933185, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'ZWL PING pong client=1 ' /tmp/zdesktop.log"], "event": "guest-begin", "host_monotonic_ns": 592918030059734, "host_utc_ns": 1790926175409167571}
+{"event": "guest-end", "host_monotonic_ns": 592922257707179, "host_utc_ns": 1790926179636816501, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE ping serial=[0-9]+ answered' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592922447572155, "host_utc_ns": 1790926179826680006}
+{"event": "guest-end", "host_monotonic_ns": 592922712916825, "host_utc_ns": 1790926180092025922, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE configure menu x=60 y=60 width=360 height=180' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592922779192341, "host_utc_ns": 1790926180158300206}
+{"event": "guest-end", "host_monotonic_ns": 592923044487648, "host_utc_ns": 1790926180423596770, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE focus menu' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592923112646940, "host_utc_ns": 1790926180491754849}
+{"event": "guest-end", "host_monotonic_ns": 592923377800488, "host_utc_ns": 1790926180756909304, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592923445261328, "host_utc_ns": 1790926180824369171, "label": "menu-before"}
+{"event": "snapshot-end", "host_monotonic_ns": 592923710678621, "host_utc_ns": 1790926181089787977, "label": "menu-before", "status": 0}
+{"arguments": ["/usr/bin/python3", "/home/awe/zedBSD-worktrees/b3/plan/ws035/tests/zdesktop-check.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/original-3/menu.png", "--expect", "600,398,4a90e2", "--runtime", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime"], "event": "capture-begin", "host_monotonic_ns": 592923711065127, "host_utc_ns": 1790926181090172934}
+{"event": "capture-end", "host_monotonic_ns": 592923926678421, "host_utc_ns": 1790926181305787397, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592923927042452, "host_utc_ns": 1790926181306150406, "label": "menu-after"}
+{"event": "snapshot-end", "host_monotonic_ns": 592924192790579, "host_utc_ns": 1790926181571899456, "label": "menu-after", "status": 0}
+{"arguments": ["python3", "plan/ws035/tests/qmp-pointer.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime/qmp.sock", "move", "598", "483", "sleep", "150", "move", "600", "483", "sleep", "300", "down", "sleep", "60", "up", "sleep", "1200"], "event": "pointer-begin", "host_monotonic_ns": 592924248963739, "host_utc_ns": 1790926181628071518}
+{"event": "pointer-end", "host_monotonic_ns": 592926068927084, "host_utc_ns": 1790926183448036144, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE button menu state=1 x=100 y=130' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592926131318701, "host_utc_ns": 1790926183510426600}
+{"event": "guest-end", "host_monotonic_ns": 592926396694969, "host_utc_ns": 1790926183775804829, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE configure submenu x=360 y=120 width=360 height=120' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592926464311604, "host_utc_ns": 1790926183843419357}
+{"event": "guest-end", "host_monotonic_ns": 592926729398914, "host_utc_ns": 1790926184108508139, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE focus submenu' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592926795918951, "host_utc_ns": 1790926184175026740}
+{"event": "guest-end", "host_monotonic_ns": 592927061124462, "host_utc_ns": 1790926184440233831, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE focus window' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592927131258000, "host_utc_ns": 1790926184510365911}
+{"event": "guest-end", "host_monotonic_ns": 592927396153911, "host_utc_ns": 1790926184775263231, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592927461737909, "host_utc_ns": 1790926184840846094, "label": "submenu-before"}
+{"event": "snapshot-end", "host_monotonic_ns": 592927727173253, "host_utc_ns": 1790926185106282434, "label": "submenu-before", "status": 0}
+{"arguments": ["/usr/bin/python3", "/home/awe/zedBSD-worktrees/b3/plan/ws035/tests/zdesktop-check.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/original-3/submenu.png", "--expect", "960,518,e2a04a", "--runtime", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime"], "event": "capture-begin", "host_monotonic_ns": 592927727550463, "host_utc_ns": 1790926185106658324}
+{"event": "capture-end", "host_monotonic_ns": 592927943051136, "host_utc_ns": 1790926185322160260, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592927943417198, "host_utc_ns": 1790926185322525348, "label": "submenu-after"}
+{"event": "snapshot-end", "host_monotonic_ns": 592928209048436, "host_utc_ns": 1790926185588157561, "label": "submenu-after", "status": 0}
+{"arguments": ["python3", "plan/ws035/tests/qmp-pointer.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime/qmp.sock", "move", "958", "518", "sleep", "150", "move", "960", "518", "sleep", "300", "down", "sleep", "60", "up", "sleep", "1200"], "event": "pointer-begin", "host_monotonic_ns": 592928263253146, "host_utc_ns": 1790926185642361183}
+{"event": "pointer-end", "host_monotonic_ns": 592930082478752, "host_utc_ns": 1790926187461588276, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE choose submenu row=1' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592930151331095, "host_utc_ns": 1790926187530438908}
+{"event": "guest-end", "host_monotonic_ns": 592930416649495, "host_utc_ns": 1790926187795758735, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE close menu' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592930483522613, "host_utc_ns": 1790926187862630442}
+{"event": "guest-end", "host_monotonic_ns": 592930748859576, "host_utc_ns": 1790926188127968983, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE focus window' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592930813156532, "host_utc_ns": 1790926188192264417}
+{"event": "guest-end", "host_monotonic_ns": 592931078341967, "host_utc_ns": 1790926188457451262, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592931141480243, "host_utc_ns": 1790926188520587968, "label": "chosen-before"}
+{"event": "snapshot-end", "host_monotonic_ns": 592931406839075, "host_utc_ns": 1790926188785948447, "label": "chosen-before", "status": 0}
+{"arguments": ["/usr/bin/python3", "/home/awe/zedBSD-worktrees/b3/plan/ws035/tests/zdesktop-check.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/original-3/chosen.png", "--expect", "600,398,2b3444", "--runtime", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime"], "event": "capture-begin", "host_monotonic_ns": 592931407229946, "host_utc_ns": 1790926188786337773}
+{"event": "capture-end", "host_monotonic_ns": 592931622729726, "host_utc_ns": 1790926189001837934, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592931623042659, "host_utc_ns": 1790926189002150503, "label": "chosen-after"}
+{"event": "snapshot-end", "host_monotonic_ns": 592931888390191, "host_utc_ns": 1790926189267498756, "label": "chosen-after", "status": 0}
+{"arguments": ["python3", "plan/ws035/tests/qmp-pointer.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime/qmp.sock", "move", "798", "353", "sleep", "150", "move", "800", "353", "sleep", "300", "down", "sleep", "60", "up", "sleep", "1200"], "event": "pointer-begin", "host_monotonic_ns": 592931949601618, "host_utc_ns": 1790926189328709489}
+{"event": "pointer-end", "host_monotonic_ns": 592933769615908, "host_utc_ns": 1790926191148725020, "status": 0}
+{"arguments": ["python3", "plan/ws035/tests/qmp-pointer.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime/qmp.sock", "move", "898", "483", "sleep", "150", "move", "900", "483", "sleep", "300", "down", "sleep", "60", "up", "sleep", "1200"], "event": "pointer-begin", "host_monotonic_ns": 592933835643545, "host_utc_ns": 1790926191214751318}
+{"event": "pointer-end", "host_monotonic_ns": 592935655649249, "host_utc_ns": 1790926193034758443, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -cE 'POPUPPROBE configure submenu x=-360 y=120 width=360 height=120' /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592935706201165, "host_utc_ns": 1790926193085308987}
+{"event": "guest-end", "host_monotonic_ns": 592935971391493, "host_utc_ns": 1790926193350501079, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592936037835462, "host_utc_ns": 1790926193416943313, "label": "flipped-before"}
+{"event": "snapshot-end", "host_monotonic_ns": 592936303230166, "host_utc_ns": 1790926193682339275, "label": "flipped-before", "status": 0}
+{"arguments": ["/usr/bin/python3", "/home/awe/zedBSD-worktrees/b3/plan/ws035/tests/zdesktop-check.py", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/original-3/flipped.png", "--expect", "540,518,e2a04a", "--runtime", "/home/awe/zedBSD-worktrees/b3/build/b3-q583/runtime"], "event": "capture-begin", "host_monotonic_ns": 592936303605266, "host_utc_ns": 1790926193682713402}
+{"event": "capture-end", "host_monotonic_ns": 592936569134285, "host_utc_ns": 1790926193948242844, "status": 0}
+{"event": "snapshot-begin", "host_monotonic_ns": 592936569460177, "host_utc_ns": 1790926193948568072, "label": "flipped-after"}
+{"event": "snapshot-end", "host_monotonic_ns": 592936885344929, "host_utc_ns": 1790926194264453564, "label": "flipped-after", "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "cat /tmp/zdesktop.log"], "event": "guest-begin", "host_monotonic_ns": 592936939705391, "host_utc_ns": 1790926194318813102}
+{"event": "guest-end", "host_monotonic_ns": 592937204938747, "host_utc_ns": 1790926194584047777, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -E \"ERROR|FAILED|protocol error\" /tmp/zdesktop.log /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592937270080622, "host_utc_ns": 1790926194649188369}
+{"event": "guest-end", "host_monotonic_ns": 592937535423962, "host_utc_ns": 1790926194914533218, "status": 1}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "cat /tmp/p.log"], "event": "guest-begin", "host_monotonic_ns": 592937599254551, "host_utc_ns": 1790926194978362373}
+{"event": "guest-end", "host_monotonic_ns": 592937864596291, "host_utc_ns": 1790926195243705427, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "grep -E \"POPUP|PING|RESIZE|GLASS (request|moved|dock|undock|minimize)\" /tmp/zdesktop.log"], "event": "guest-begin", "host_monotonic_ns": 592937927585489, "host_utc_ns": 1790926195306693258}
+{"event": "guest-end", "host_monotonic_ns": 592938192868664, "host_utc_ns": 1790926195571978071, "status": 0}
+{"arguments": ["python3", "plan/tools/guest/guest.py", "run", "service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E \"[w]ayland( |$)|[p]opup-probe\" | awk \"{print \\$1}\"); do kill $p; done; i=0; while ps -A -o args | grep -qE \"[w]ayland( |$)|[p]opup-probe\" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done"], "event": "guest-begin", "host_monotonic_ns": 592938256202069, "host_utc_ns": 1790926195635309939}
+{"event": "guest-end", "host_monotonic_ns": 592941630680284, "host_utc_ns": 1790926199009789222, "status": 0}
+{"event": "run-end", "host_monotonic_ns": 592941648546856, "host_utc_ns": 1790926199027656646, "mode": "original", "status": 0}

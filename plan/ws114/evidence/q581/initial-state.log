@@ -1,0 +1,13 @@
+{"event": "gtk-version", "pid": 671, "version": "4.18.6"}
+{"event": "focus", "pid": 671, "active": true}
+{"event": "snapshot", "pid": 671, "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+ZWL CONFIGURE client=3 surface=23 serial=3 width=0 height=0 fullscreen=0
+ZWL VIEWPORT surface=23 source=0,0,0,0 destination=728,489
+ZWL MAP client=3 surface=23 x=276 y=198
+ZWL IME activate client=3
+ZWL CURSOR shape client=3 shape=1 image=10
+KEI-IME ACTIVATE
+ZWL PERF 5006ms: passes=491 timeouts=450 | poll 94.4% work 6.2%
+ZWL PERF compose frames=11 draw_ms=19.41 (acquire 0.08 submit+present 19.23) frame_ms=20.72
+ZWL PERF shm copies=7 copy_ms=1.035
+ZWL PERF 5037ms: passes=475 timeouts=475 | poll 96.2% work 0.4%

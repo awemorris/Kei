@@ -329,6 +329,8 @@ struct fm_desktop {
 	size_t laid_count;
 	time_t laid_modified;
 	uint32_t laid_names;
+	/* A recovered directory read must refresh pruning even when its names did not change. */
+	int laid_error;
 	int band;
 	int band_x;
 	int band_y;
@@ -1354,6 +1356,7 @@ int fm_desktop_layout_path(char *path, size_t size);
 int fm_desktop_layout_read(const char *path, struct fm_desktop_saved **saved, size_t *count);
 int fm_desktop_layout_write(const char *path, const struct fm_desktop_saved *saved, size_t count);
 int fm_desktop_layout_set(struct fm_desktop *desk, const char *name, int column, int row);
+void fm_desktop_layout_prune(struct fm_desktop *desk, const char *const *names, size_t count);
 int fm_desktop_clean_up(struct fm_desktop *desk);
 int fm_desktop_layout_rename(struct fm_desktop *desk, const char *old_name, const char *new_name);
 int fm_desktop_remember(struct fm_desktop *desk, const char *const *names, size_t count);

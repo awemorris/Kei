@@ -27,6 +27,18 @@ driver/libvulkan/compositor/protocol/libkeiland/Settings全変更をC全文でma
 
 Commands/results/commit/environment/artifacts/skipped checks: 未実施（計画のみ）。Findings: [現状調査](../design.md)。Resume: prerequisiteの実出力を確認し、このPhaseだけを新Queueへ選定・承認後に開始。
 
+## p001契約調査による詳細化（2026-10-02）
+
+[origin p001](../phase001/phase.md)、[契約](../phase001/contracts.md)、[ID/完了比較](../phase001/identity-completion.md)、[fixture](../phase001/fixtures.md)、[WS summary](../ws.md)を入力とする。
+
+Procedure: WS内で変更したdriver/libvulkan/header/dispatch/protocol/libkeiland/Settings/compositor全sourceをfinal SHAで収集しfull-standard manual review。format/style/static/narrow build、ABI/dispatch/sync/単一表示regressionを対応付け、後続修正で無効化したcheckを再実行する。
+
+Verification / resume: D1–D5をPhase countから独立に評価。実i915証拠のrevision/fixtureと最終sourceを照合。未検証connector/0台/physical保証、標準latestと維持pinの差、Linux/FreeBSD単一表示維持の限界を残す。aggregate make check/toolchain/HAL所有外変更を追加しない。
+
+Status/dependenciesは上記のまま。未採択architecture/製品判断とactual prerequisiteを確認し、新QueueでこのPhaseだけを有限選定・承認後に実装する。q586はp001文書のみで後続sourceを許可しない。
+
 ## Event
 
 2026-10-02 / ws113-multidisplay-plan-20261002-ws113-p009-created: current userの5条件・3つの追加判断をこのPhaseへ投影。planned/Queue none。GitHub body/comment/Projectへの公開は保留。
+
+2026-10-02 / ws113-contract-design-20261002-a3-ws113-p009: p001のsource/一次仕様で明らかになった不足に合わせ、上記の自Phase procedureと検証/resumeを詳細化。D1–D5をPhase countから独立に評価。実i915証拠のrevision/fixtureと最終sourceを照合。未検証connector/0台/physical保証、標準latestと維持pinの差、Linux/FreeBSD単一表示維持の限界を残す。aggregate make check/toolchain/HAL所有外変更を追加しない。 origin/WSリンクは上記。planned/Queue noneを保持。GitHub body/comment/Projectはmainへdelivery依頼pending。

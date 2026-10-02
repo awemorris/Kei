@@ -16,11 +16,31 @@
 
 #include "css/css.h"
 
-/* The color value that stands for currentcolor (zero alpha, so no real color has it). */
-#define CSS_CURRENT_COLOR	0x00000001U
+/* Reserved currentcolor encoding, resolved by the cascade against the text color. */
+#define CSS_CURRENT_COLOR 0x00000001U
 
 /* How many families a declared font-family keeps. */
-#define CSS_DECLARED_FAMILIES	CSS_FAMILIES_MAX
+#define CSS_DECLARED_FAMILIES CSS_FAMILIES_MAX
+
+/* The most arguments a min(), max() or clamp() keeps. */
+#define CSS_CALC_ARGUMENTS 3
+
+/*
+ * The property of a custom property's declaration (--name: tokens): its
+ * name is custom_name and its value the tokens raw (ws074-p061).
+ */
+#define CSS_PROP_CUSTOM (-1)
+
+/*
+ * The property of a declaration whose value uses var(): its tokens raw
+ * are parsed as pending_property (a longhand or a shorthand) once the
+ * element's custom properties are known.
+ */
+#define CSS_PROP_PENDING (-2)
+
+/* The origins of style sheets. */
+#define CSS_ORIGIN_USER_AGENT 0
+#define CSS_ORIGIN_AUTHOR 1
 
 /*
  * The token types of CSS Syntax 3.
@@ -51,25 +71,6 @@ enum css_token_type {
 	CSS_TOKEN_OPEN_CURLY,
 	CSS_TOKEN_CLOSE_CURLY,
 	CSS_TOKEN_EOF
-};
-
-/*
- * One token: its type, its text (the name of an ident, function,
- * at-keyword or hash, the value of a string or URL, the unit of a
- * dimension; unescaped, in the sheet's arena), its number and, for a
- * delimiter, its code point.
- */
-struct css_token {
-	/* Original UTF16 half-open token extent, excluding skipped leading comments. */
-	size_t source_start;
-	size_t source_end;
-	int type;
-	const uint16_t *text;
-	size_t length;
-	double number;
-	int integer;
-	uint32_t delim;
-	int hash_is_id;
 };
 
 /*
@@ -141,146 +142,12 @@ enum css_combinator {
 	CSS_COMBINATOR_SUBSEQUENT
 };
 
-/*
- * One simple selector: a name (an atom), and for attributes a value (an
- * atom) and a comparison.  A pseudo-class is pseudo (CSS_PSEUDO_*); :not,
- * :is, :where and :has keep their argument selectors (in the sheet's
- * arena), the :nth-* ones the a and b of an+b.  A pseudo-element is pseudo
- * (CSS_PSEUDO_ELEMENT_*).
- */
-struct css_simple {
-	int kind;
-	struct vm_string *name;
-	struct vm_string *value;
-	int match;
-	int case_insensitive;
-	int pseudo;
-	const struct css_selector *arguments;
-	size_t argument_count;
-	int nth_a;
-	int nth_b;
-};
-
-/*
- * One compound selector and the combinator that joins it to the compound
- * on its left.
- */
-struct css_compound {
-	struct css_simple *simples;
-	size_t count;
-	int combinator;
-	int pseudo_element;
-};
-
-/*
- * A complex selector, compounds from left to right, and its specificity
- * (ids << 16 | classes << 8 | types).
- */
-struct css_selector {
-	struct css_compound *compounds;
-	size_t count;
-	uint32_t specificity;
-};
-
-/* The most arguments a min(), max() or clamp() keeps. */
-#define CSS_CALC_ARGUMENTS	3
-
-/*
- * A sum of lengths of the kinds calc() mixes, each the number of its unit:
- * pixels (the absolute units converted), percentages, font-relative and
- * viewport-relative lengths, and at most one min(), max() or clamp()
- * inside it times a factor (nested, in the parse's arena; ws074-p074).
- * The cascade turns it into pixels and a percentage the layout resolves.
- */
-struct css_calc_sum {
-	float px;
-	float percent;
-	float em;
-	float ex;
-	float rem;
-	float vw;
-	float vh;
-	float vmin;
-	float vmax;
-	float cqw;
-	float cqh;
-	const struct css_calc *nested;
-	float nested_factor;
-};
-
 /* What a calculation does with its sums. */
 enum css_calc_operation {
 	CSS_CALC_SUM,
 	CSS_CALC_MIN,
 	CSS_CALC_MAX,
 	CSS_CALC_CLAMP
-};
-
-/*
- * A calc(), min(), max() or clamp() length (ws074-p061): one sum, or the
- * least or greatest of several, or the middle one of three.
- */
-struct css_calc {
-	int operation;
-	size_t count;
-	struct css_calc_sum sums[CSS_CALC_ARGUMENTS];
-};
-
-/*
- * A declared value, as parsed: a keyword, a length, a number, a color or
- * font families.  A length whose unit is CSS_DUNIT_CALC is the
- * calculation calc points at (in the arena the value was parsed into).
- */
-struct css_value {
-	int kind;
-	int keyword;
-	float number;
-	int unit;
-	uint32_t color;
-	struct vm_string *families[CSS_DECLARED_FAMILIES];
-	int family_count;
-	struct vm_string *url;
-	const struct css_calc *calc;
-	const struct css_content *content;
-	const struct css_shadow_list *shadows;
-	const struct css_declared_inset *inset;
-	const struct css_track_list *tracks;
-};
-
-/* One declared grid track (ws074-p072): its kind, its size (a length, or the fr share) and minmax()'s minimum. */
-struct css_declared_track {
-	int kind;
-	struct css_value size;
-	int minimum_kind;
-	struct css_value minimum;
-};
-
-/* A declared grid template, kept in the parse's arena (none is an empty list). */
-struct css_track_list {
-	struct css_declared_track tracks[CSS_TRACKS];
-	size_t count;
-};
-
-/* A declared clip-path: inset(): its four declared lengths, top, right, bottom, left (ws074-p062). */
-struct css_declared_inset {
-	struct css_value lengths[4];
-};
-
-/*
- * One declared box shadow (ws074-p062): its offset, blur and spread as
- * declared lengths (the missing ones zero pixels), its color and whether
- * it is inset.
- */
-struct css_declared_shadow {
-	struct css_value lengths[4];
-	uint32_t color;
-	int inset;
-};
-
-/* A declared box-shadow list, kept in the parse's arena (none is an empty list). */
-struct css_shadow_list {
-	struct css_declared_shadow shadows[CSS_SHADOWS];
-	size_t count;
 };
 
 /* The kinds of declared value. */
@@ -433,6 +300,156 @@ enum css_property {
 };
 
 /*
+ * One token: its type, its text (the name of an ident, function,
+ * at-keyword or hash, the value of a string or URL, the unit of a
+ * dimension; unescaped, in the sheet's arena), its number and, for a
+ * delimiter, its code point.
+ */
+struct css_token {
+	/* Original UTF16 half-open token extent, excluding skipped leading comments. */
+	size_t source_start;
+	size_t source_end;
+	int type;
+	const uint16_t *text;
+	size_t length;
+	double number;
+	int integer;
+	uint32_t delim;
+	int hash_is_id;
+};
+
+/*
+ * One simple selector: a name (an atom), and for attributes a value (an
+ * atom) and a comparison.  A pseudo-class is pseudo (CSS_PSEUDO_*); :not,
+ * :is, :where and :has keep their argument selectors (in the sheet's
+ * arena), the :nth-* ones the a and b of an+b.  A pseudo-element is pseudo
+ * (CSS_PSEUDO_ELEMENT_*).
+ */
+struct css_simple {
+	int kind;
+	struct vm_string *name;
+	struct vm_string *value;
+	int match;
+	int case_insensitive;
+	int pseudo;
+	const struct css_selector *arguments;
+	size_t argument_count;
+	int nth_a;
+	int nth_b;
+};
+
+/*
+ * One compound selector and the combinator that joins it to the compound
+ * on its left.
+ */
+struct css_compound {
+	struct css_simple *simples;
+	size_t count;
+	int combinator;
+	int pseudo_element;
+};
+
+/*
+ * A complex selector, compounds from left to right, and its specificity
+ * (ids << 16 | classes << 8 | types).
+ */
+struct css_selector {
+	struct css_compound *compounds;
+	size_t count;
+	uint32_t specificity;
+};
+
+/*
+ * A sum of lengths of the kinds calc() mixes, each the number of its unit:
+ * pixels (the absolute units converted), percentages, font-relative and
+ * viewport-relative lengths, and at most one min(), max() or clamp()
+ * inside it times a factor (nested, in the parse's arena; ws074-p074).
+ * The cascade turns it into pixels and a percentage the layout resolves.
+ */
+struct css_calc_sum {
+	float px;
+	float percent;
+	float em;
+	float ex;
+	float rem;
+	float vw;
+	float vh;
+	float vmin;
+	float vmax;
+	float cqw;
+	float cqh;
+	const struct css_calc *nested;
+	float nested_factor;
+};
+
+/*
+ * A calc(), min(), max() or clamp() length (ws074-p061): one sum, or the
+ * least or greatest of several, or the middle one of three.
+ */
+struct css_calc {
+	int operation;
+	size_t count;
+	struct css_calc_sum sums[CSS_CALC_ARGUMENTS];
+};
+
+/*
+ * A declared value, as parsed: a keyword, a length, a number, a color or
+ * font families.  A length whose unit is CSS_DUNIT_CALC is the
+ * calculation calc points at (in the arena the value was parsed into).
+ */
+struct css_value {
+	int kind;
+	int keyword;
+	float number;
+	int unit;
+	uint32_t color;
+	struct vm_string *families[CSS_DECLARED_FAMILIES];
+	int family_count;
+	struct vm_string *url;
+	const struct css_calc *calc;
+	const struct css_content *content;
+	const struct css_shadow_list *shadows;
+	const struct css_declared_inset *inset;
+	const struct css_track_list *tracks;
+};
+
+/* One declared grid track (ws074-p072): its kind, its size (a length, or the fr share) and minmax()'s minimum. */
+struct css_declared_track {
+	int kind;
+	struct css_value size;
+	int minimum_kind;
+	struct css_value minimum;
+};
+
+/* A declared grid template, kept in the parse's arena (none is an empty list). */
+struct css_track_list {
+	struct css_declared_track tracks[CSS_TRACKS];
+	size_t count;
+};
+
+/* A declared clip-path: inset(): its four declared lengths, top, right, bottom, left (ws074-p062). */
+struct css_declared_inset {
+	struct css_value lengths[4];
+};
+
+/*
+ * One declared box shadow (ws074-p062): its offset, blur and spread as
+ * declared lengths (the missing ones zero pixels), its color and whether
+ * it is inset.
+ */
+struct css_declared_shadow {
+	struct css_value lengths[4];
+	uint32_t color;
+	int inset;
+};
+
+/* A declared box-shadow list, kept in the parse's arena (none is an empty list). */
+struct css_shadow_list {
+	struct css_declared_shadow shadows[CSS_SHADOWS];
+	size_t count;
+};
+
+/*
  * One declaration: a property, its value and whether it is !important.
  */
 struct css_declaration {
@@ -444,19 +461,6 @@ struct css_declaration {
 	size_t raw_count;
 	int pending_property;
 };
-
-/*
- * The property of a custom property's declaration (--name: tokens): its
- * name is custom_name and its value the tokens raw (ws074-p061).
- */
-#define CSS_PROP_CUSTOM		(-1)
-
-/*
- * The property of a declaration whose value uses var(): its tokens raw
- * are parsed as pending_property (a longhand or a shorthand) once the
- * element's custom properties are known.
- */
-#define CSS_PROP_PENDING	(-2)
 
 /*
  * One custom property an element has (ws074-p061): its name, its value's
@@ -593,9 +597,8 @@ struct css_query {
 	size_t count;
 };
 
-/* The origins of style sheets. */
-#define CSS_ORIGIN_USER_AGENT	0
-#define CSS_ORIGIN_AUTHOR	1
+/* The user agent's style sheet (ua.c). */
+extern const char css_user_agent_sheet[];
 
 /* The tokenizer (tokenizer.c). */
 int css_tokenize(struct wb_arena *arena, const uint16_t *units, size_t length, struct css_token **tokens, size_t *count);
@@ -622,8 +625,5 @@ int css_parse_property(struct css_parse *parse, int property, const struct css_t
 int css_parse_color(const struct css_token *tokens, size_t count, uint32_t *color);
 int css_parse_value_as(struct css_parse *parse, int property, const struct css_token *tokens, size_t count, struct css_declaration *out, size_t *out_count);
 int css_parse_font(struct css_parse *parse, const struct css_token *tokens, size_t count, struct css_declaration *out, size_t *out_count);
-
-/* The user agent's style sheet (ua.c). */
-extern const char css_user_agent_sheet[];
 
 #endif

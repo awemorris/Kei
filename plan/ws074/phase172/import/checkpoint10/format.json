@@ -1,0 +1,30 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-realm-retirement.c",
+      "formatted_sha256": "c1d123b35db57637cb57fcff0603f77bf3f4767be19458a4e3799e432afede43",
+      "final_sha256": "81727dc13b90b3cf53dc71fcd48dbb5c166942fbc508d1f4fda9a358d1605944",
+      "restorations": "Mandatory definition argument tabs and readable immutable media corpus rows restored after formatter comparison."
+    },
+    {
+      "path": "plan/ws074/tests/host-array-length.c",
+      "formatted_sha256": "36db97796d468f1b70d951b0cfbca4f873aa88470fec5959eb32e4231e730d28",
+      "final_sha256": "7d4c31827c14e445f80f672313c639fa5e21a5338217d8606f1ee7dbff5737b9",
+      "restorations": "Mandatory definition argument tabs and readable immutable media corpus rows restored after formatter comparison."
+    },
+    {
+      "path": "plan/ws074/tests/host-write.c",
+      "formatted_sha256": "7f14c899bb6cb66aff7eb669668a1990c11b81b98c5df7e5f3eeb07ef6e1def3",
+      "final_sha256": "41333c9e1e46c646fc72c0f713aa32a4eaa2e0e583e6021bf8f07b9af21480f3",
+      "restorations": "Mandatory definition argument tabs and readable immutable media corpus rows restored after formatter comparison."
+    },
+    {
+      "path": "plan/ws074/tests/host-color-media.c",
+      "formatted_sha256": "0ec74d2d3142911e90eeee7febd86043b2796caa45d5d2d136aaf1b34e59597b",
+      "final_sha256": "a84c247e7750687d731ff2461861b498385e18bdc752cd2330374f2adf29884a",
+      "restorations": "Mandatory definition argument tabs and readable immutable media corpus rows restored after formatter comparison."
+    }
+  ]
+}

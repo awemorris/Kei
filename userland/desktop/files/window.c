@@ -707,6 +707,9 @@ window_desktop_configure(
 		window->height = (uint32_t)height;
 		window->resized = 1;
 	}
+
+	/* Succeeded: the acknowledged desktop size is recorded. */
+	return;
 }
 
 /* Takes the size and the states the compositor gives; a zero size keeps the window's own. */

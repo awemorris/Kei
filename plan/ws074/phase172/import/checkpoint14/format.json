@@ -1,0 +1,36 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/dom/dom.h",
+      "formatted_sha256": "7827e3a70347708a6586f056789a6a1031957de0f9c76b2fd71eebec4c8079de",
+      "final_sha256": "7827e3a70347708a6586f056789a6a1031957de0f9c76b2fd71eebec4c8079de",
+      "restorations": "static-inline definition argument tabs only"
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/css.h",
+      "formatted_sha256": "e2007315579154288b86041467e583928d8e5cdf13bb7f76284ec7d207367748",
+      "final_sha256": "e2007315579154288b86041467e583928d8e5cdf13bb7f76284ec7d207367748",
+      "restorations": "static-inline definition argument tabs only"
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/internal.h",
+      "formatted_sha256": "9704408f74ec4c219c970eb8f6db05d92e1b4d4e2f13d8f6c1bca26ce4d1a2df",
+      "final_sha256": "9704408f74ec4c219c970eb8f6db05d92e1b4d4e2f13d8f6c1bca26ce4d1a2df",
+      "restorations": "none"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/internal.h",
+      "formatted_sha256": "638b2b3e07d88628bfdb00af47e810f574daa665043e4e85b90ce276bd2b5f3b",
+      "final_sha256": "638b2b3e07d88628bfdb00af47e810f574daa665043e4e85b90ce276bd2b5f3b",
+      "restorations": "static-inline definition argument tabs only"
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/vm.h",
+      "formatted_sha256": "55ed5a0f2a811c81fcb7bac5aaefe6433218dd6b95baf3d0b886e690cbcf9f97",
+      "final_sha256": "89bd0323fd42b62b3e143965f5aba3d39890da9410a22b9dd32b173aa1340b35",
+      "restorations": "static-inline definition argument tabs only"
+    }
+  ]
+}

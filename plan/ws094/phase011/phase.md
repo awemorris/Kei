@@ -2,10 +2,10 @@
 
 # ws094-p011: L4b 溢れた項目の数の log と、無い名前の保存の行の掃除
 
-Status: planned（2026-10-01 に phase.md を作った。手順は下）
+Status: cleared（2026-10-02、q582-i01 / Agent B2、host・warning0 build・guest・boot PASS）
 Disposition: normal
 Parent: [WS094](../ws.md)
-Queue: なし
+Queue: q582 / q582-i01（最大3時間、2026-10-02 user「N=3で作業を開始してください」）
 依存: p010（cleared）
 実行者の目安: phase-runner-mid（Files の desktop の部分だけ。compositor は触らない）
 
@@ -52,3 +52,7 @@ Queue: なし
 | boot | `OUTPUT=build/<W>/boot plan/tools/boot-test.sh build/<W>-inset/hdd-image.img` | `boot-test: PASS`、PNG をユーザーに見せる |
 
 image は guide.md §5.1 の `build-inset-image.sh build/<W>-inset` で 1 回作る（Phase の最初）。build/amd64 は使わない。
+
+## q582 checkpoint（2026-10-02）
+
+[結果と再開点](q582-result.md)。hidden/pruneと専用host/guest試験を実装。host3本、warning0 target build、prune/L1/drag/menu guest回帰、最終staged imageのboot-testがPASS。Phase/attemptはcleared。fresh full-image生成はNoct/toolchain制限のため実施せず、B mainが指定した検証済みfixtureの独立コピーへ現行Files/libraryを入れた。詳細・hash・制限は結果記録に保持。

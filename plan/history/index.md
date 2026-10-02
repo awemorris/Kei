@@ -2,7 +2,26 @@
 
 # Past Log
 
-Last finished Queue: [q580](queue-q580.md)（WS114 p001 uncleared / GTK4部分実測）
+最新: [q584](queue-q584.md) / 2026-10-02 07:12–08:53 UTC。通常終了でuncleared、browser全文97/209・残112件。A1最終成果10e844f23へ統合、209hashes確認。A1/A2/A3すべて終了、未達条件と再開証拠を保存。B停止は最終報告未確認。GitHub publication保留。
+
+
+2026-10-02 / current execution: userの全agent区切り終了指示でA1/A2/A3を回収・終了済み。q581/q582/q583部分cleared、q585/q586契約調査uncleared。B q587/q588/q589の停止は未確認。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
+
+Last finished Queue: [q584](queue-q584.md)（browser残全文review / uncleared）
+
+## 最新: q586と全agent wrap-up（2026-10-02）
+
+[Archive](queue-q586.md)に承認/90min結果/契約・source能力20行/技術採択・次候補・未実施を保存。D-ATOMIC未決でp001 uncleared、全後続planned。A3成果2ad9c951 → root83b111c63統合・clean/process無し・終了確認。userが全担当を安全なcommit地点で切り上げるよう指示しA1/A2回収中、新Queue無し。
+
+B最新4b655803 → A8f807c73fから[q582 cleared](queue-q582.md)、q588/p007 source partial開始、q589/低overhead準備・guest資源待ち、q587/入力release amendment01を投影。元scope/timebox/criteriaとsnapshot hashを確認。q593/B2背景資産・3 OS収録は予約のみ。B停止receipt未受領、GitHub publication pending、WIP/no push。
+
+
+## 最新: q585 / native package契約調査（2026-10-02）
+
+[Archive](queue-q585.md)に承認lane/Phase snapshotと結果を保存。5OS入力・metadata署名・native環境・形式/依存・共通payload/source/CI成果物と後続commandを具体化。D2 RPi方式は委任技術判断で採用、Fedora/Arch boot適用D1 user回答待ちでq585-i01/p001 uncleared。実image/guest/build/package/runtime/CI/remoteは未実施。same-session待機、q591/p002は候補のみ。
+
+q581/p001 GTK調査clearとq583部分診断clearをB df66db5e→A435a62126から投影し、q587/p007装飾を開始。whole p017/BUG-125は未解決、q588 B2最終規約・q589 B3追加切り分けを予約。A1 checkpoint11 reviewed88/209、A3契約を統合・ACK、後続gate保持。全WIP、pushなし、GitHub publication pending。
+
 
 ## 最新: q577/q579/q580 wrap-up（2026-10-02）
 
@@ -96,3 +115,7 @@ Event ws074-dedicated-interop2025-20261002: userが前回3人案のP10を[WS074]
 ## 計画追記 / 2026-10-02（3専任枠とブラウザ次目標）
 
 Event three-dedicated-lanes-and-browser-goals-20261002: userが[P8バグ修正、P9デスクトップ高度化、P10ブラウザ](../agents/registry.md)を固定。P9の発見したbugはmainが[Bug Board](../known-bugs.md)へ登録しP8へ渡す。[desktop作業一覧](../agents/desktop-outlook.md)を作成。P10の新目標は[p174 File System Access](../ws074/phase174/phase.md)→[p175 OPFS](../ws074/phase175/phase.md)→[p173 Interop 2025 100%](../ws074/phase173/phase.md)→[p176 Test262](../ws074/phase176/phase.md)。既存p172/p100 gateとp101 CSS2は保持、Test262最終率は未指定。3枠ともreserved/未起動、q576 finished、実装/Queue/merge/pushなし。Issue/Project publication保留。
+
+2026-10-02 / initial-A-checkpoints: q584 checkpoint06/main c2743455c、q585 survey/main 5acb47a9c、q586 source-audit/main 8021bc210をレビュー統合・各ACK。全3Queueは実行中、clearanceなし。B next q587をuser依頼で予約し、q581〜q583の現行scopeは保持。
+
+2026-10-02 / B-checkpoint-df66db5e: [q581](queue-q581.md)調査cleared、[q583](queue-q583.md)部分診断cleared/whole p017 unclearedをA435a62126へ統合。q587/p007装飾の開始を投影。B次ID q588/q589予約、same-session連続投入のuser指示をprotocolへ保存。GitHub publication保留、pushなし。

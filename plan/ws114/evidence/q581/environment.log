@@ -1,0 +1,25 @@
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.7
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+6.12.107+deb13-amd64
+gsettings-desktop-schemas	48.0-1
+gtk-4-examples	4.18.6+ds-2
+libgtk-4-1:amd64	4.18.6+ds-2
+f11d8ff644d5bbca54fa3b9c1f8715520c9ca45a78d6f50c6722766a155e1957  /opt/keiland/bin/wayland
+	linux-vdso.so.1 (0x00007fec59182000)
+	libkeiland.so => /opt/keiland/lib/libkeiland.so (0x00007fec590a1000)
+	libtruetype.so => /opt/keiland/lib/libtruetype.so (0x00007fec59099000)
+	libpng-compat.so => /opt/keiland/lib/libpng-compat.so (0x00007fec59093000)
+	libvulkan.so.1 => /opt/keiland/lib/libvulkan.so.1 (0x00007fec59070000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fec58f74000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fec58d80000)
+	libwayland-client.so => /opt/keiland/lib/libwayland-client.so (0x00007fec58d60000)
+	libz-compat.so => /opt/keiland/lib/libz-compat.so (0x00007fec58d5a000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fec59184000)

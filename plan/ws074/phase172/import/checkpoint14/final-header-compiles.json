@@ -1,0 +1,71 @@
+[
+  {
+    "argv": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/a1-browser2/include",
+      "-I.",
+      "-fsyntax-only",
+      "userland/desktop/libbrowser/vm/operation.c"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/a1-browser2/include",
+      "-I.",
+      "-fsyntax-only",
+      "userland/desktop/libbrowser/bind/window.c"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/a1-browser2/include",
+      "-I.",
+      "-fsyntax-only",
+      "userland/desktop/libbrowser/css/parser.c"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

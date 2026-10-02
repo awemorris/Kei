@@ -1,0 +1,316 @@
+{
+  "base": "334cf75604d2a7259c3137689091fb3e554ffd76",
+  "files": [
+    {
+      "path": "plan/ws074/tests/dom/document-write.expected",
+      "sha256": "a9ef747d6a100edf2f182c7ab521e44850b8ca7200272aafb86eff255ce462df",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/dom/document-write.html",
+      "sha256": "5ad9798bc7d328f47ec4d16cb4ec7f00f8219d6cbfaf311f87d15aac85db1f63",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/form-owner.js",
+      "sha256": "b457b86209963a8e940bab68d9b0c7696d69368e4f6c589bfab1ae33bc3d5193",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/array-length-probe.js",
+      "sha256": "f92b5b1a5032b46b50d4a8838a09479a69a30adfd8a740b4e12c3ef6369f113a",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/child-style-probe.html",
+      "sha256": "bee8c0a690384913d7fc741dfadebb1a3fc03085bd36af29412e191e0f3d085b",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/click-activation-probe.html",
+      "sha256": "f80de464607d0c05fadb140a34793b148708096ad2df59f44935283587d2ca7e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/cursor-probe.html",
+      "sha256": "6a2abeba1075ac065e6c1c548db12874e0bc9d8e3cb7853453def54ef04e819e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-adoption-probe.html",
+      "sha256": "c3bec8532f398a5b92e5f2f5c018c80c5d695cd079db836fac36f65c17cc8a42",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-forms-probe.html",
+      "sha256": "e076050770861d3264514dba1eb22b7e3efb0954235ea5610688c13a5520e65e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-images-probe.html",
+      "sha256": "4882d511359a63395dcef33086d80ef4fc8e8eea40b18dbafc2616de9cfc18d4",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-stream-probe.html",
+      "sha256": "edf70d0b62cd6aab4c59cf93ba8c41c268c42805f345af3079079447aaa0d067",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/element-name-probe.html",
+      "sha256": "721d129d37f3cd643178d3ef4d96700507f56714748d0356b6252b886e3a2d5e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/form-controls-probe.html",
+      "sha256": "03e67a40ba9355dc18125ef34dbba628e857de248c5061f056e43de792999e8f",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/frame-viewport-probe.html",
+      "sha256": "3d87c56d7259990c0719121b0612e31faf047836a27716a396cf541e43ec335e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/html-collection-probe.html",
+      "sha256": "4fa261905859569ece4486f98ef10729362d63362ff977225dd4a3ad1ba5e5dc",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/html-reflection-probe.html",
+      "sha256": "accfa6ef1642b5788391d3fba6626c74e1dab21fce45fe23eb1660790d4b5b72",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/iframe-context-probe.expected",
+      "sha256": "2f7c5d31d1b66675cd84e233fa6c4d2ac86540594d44028b5fe19d88c74a4466",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/iframe-context-probe.html",
+      "sha256": "983d8bed7561f6d481ae59a92128153df52b0e1253953de99a968d643d95f878",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/iframe-safety-probe.html",
+      "sha256": "3b0e7f941327f73b83eb67d31cf0918f5a5ee7d109678074549dbc196e7d204f",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/image-geometry-probe.html",
+      "sha256": "dedab366c960a68cb040ec485e9f234329649ca6d4c1ad5eb59bc981a465ed9e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/image-zero-probe.html",
+      "sha256": "18e5cc6b8cd40b78d363dbadd47a738db9652838157a6a2d7bd2614685ee2359",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/input-reflection-probe.html",
+      "sha256": "c14c745d161a0dfebf474fee4544fa0d9f2c483e4b65c9691833846a68496301",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/language-empty-probe.html",
+      "sha256": "cdb7dd7d6f7ec4aead8762030223ca9e544b8945cef34e3760f0b15903cca537",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/legacy-event-probe.html",
+      "sha256": "fec1930d2d1077a31c730d5c4c289484f5d4548b68401b516ce85f2eb4e9a228",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/mutation-record-probe.html",
+      "sha256": "0e8cef5730cb237204885f8e45a4856b4c1b4434ad945569ce88b4a6399b23a0",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/namespace-probe.html",
+      "sha256": "24feecbf77c3b2aac55c4eb022764ccad4cab1b731d05e4c488bc9955c3f328c",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/node-cloning-probe.html",
+      "sha256": "a3531d8433e3dd0eb2b5d27496a7aba062288bdbce0584d04ecb4ea07966906e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/node-iterator-probe.html",
+      "sha256": "ddcb292d0ab837cab32ef1a8db628f80f306c001b3fa6caa934b7ec1ced49542",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/object-url-probe.html",
+      "sha256": "b82b76e616eefbf8feb1fe32c86743210288bb4eacffb784a66cdf099bc27163",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/option-selectedness-probe.html",
+      "sha256": "0b8aa644d583b04bfa858077ba66e6777398088ff49d5417feabef2cf400c320",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/pre-insertion-probe.html",
+      "sha256": "8c82647678fdb0b578c4e34c71fb5cc53f7dab8bdab37c3bbdbbfc298d559b9e",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/radio-state-probe.html",
+      "sha256": "3302295fadbd17b6b5397e21dd38aff72d1ea381281588f33f9852d177cb2f96",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-boundary-probe.html",
+      "sha256": "527f27292317472e2fa92991ace11cf153852cada59a4e670af61ae630c6025a",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-clone-contents-probe.html",
+      "sha256": "64fd345b256c7d1e609b9a02c74ad6d7b3739e5cd6e129e353cf99175d06e24f",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-core-probe.html",
+      "sha256": "fc74d55581c06ee60c460a1881af8078cbb975d6227dfd87d2ac015fd454cd3a",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-delete-contents-probe.html",
+      "sha256": "3c12e392ef3416e082845a1e5a0c4471149b22526bfe48184b53a1bbb41af475",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-extract-contents-probe.html",
+      "sha256": "8673f051bb2d94c182310c98c8a5b985f05cfffd2018e88f57a64e594e1d2473",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-insert-probe.html",
+      "sha256": "7fff8abb7cd2616a0153dbac351fe30f1ff1a066535c31d33a8d37ee16dffe18",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-mutation-probe.html",
+      "sha256": "55751d6ee55bfdf93ae0f444c06da63fb96510b427437a3117ef679025d2d326",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-removal-probe.html",
+      "sha256": "bf3abac897967a8f36cffdc4b31aeb9ae8c92bb3601dffff06739100fc8936fc",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-surround-contents-probe.html",
+      "sha256": "1570f36aec2225c5dfc5c8187466ab779e4fe69082a50d94469841a46d5c6285",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/select-options-probe.html",
+      "sha256": "11b6f2624104e16e2a774223fec3d45e372e5cae2949f1ae0347bb136bd34cd3",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/selector-grammar-probe.html",
+      "sha256": "c8feb59e1bb9680c7f87c687d1abc0e6d9ce43be95ee7c6ffe54b8bbb40ed40a",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/style-sheet-mutation-probe.html",
+      "sha256": "6c50f6e1ba9004898e5b16b124126bb587a0b5cc8da8504bcd57cb412d8114ec",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/style-sheet-probe.html",
+      "sha256": "301e633663a366221a4abd6d3dcc3717746b101258f3edd82430d3c988e50197",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/submit-event-probe.html",
+      "sha256": "87eeef995513efe53b1d69b1bf21d4d0a15b146e1b09703454048978ab5b3cd2",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/table-collection-probe.html",
+      "sha256": "d1ccfba14b0ab423dc1abf45a516fed114ba43ba24e204fb82708bf6494349ae",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/table-row-probe.html",
+      "sha256": "5b6517459e2bfc780f28a754b6c236de4c36a90e8e54f22c66b68d8153816ff6",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/table-structure-probe.html",
+      "sha256": "9e0fb9c68edb0da58bc1a2f8e1928a7171859c135f7b5ccea2d4ee93fae478e3",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/text-transform-media-probe.html",
+      "sha256": "968b6c36aa26d5582b064e15fbade86db0fd9073b61c9c33bdbdb551bc20a95d",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/tree-walker-probe.html",
+      "sha256": "eac52be6b32ff0c9ee39a0865d1aec42db6594e3c76995a84259849e1686e391",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/pages/xml-document-probe.html",
+      "sha256": "a08e6da6b386678c15405e40fa455c02a188f9c61ca6124c2ff94f352311f6d3",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-acid-tests.py",
+      "sha256": "0cd6cda79b4958de0ad2413d255d99cfc0120d311565a38b622e5040df67b4d0",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-dom-tests.py",
+      "sha256": "a760ee9700f30bc455e46d54f2a98218e559cf9b8c4724cd861f6f1c5cbb4f75",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-frame-load-tests.py",
+      "sha256": "1afeae4bf5e191d692113d15b5b80a31a777f64056edaf25f1268d20a454de64",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-realm-context-probe.py",
+      "sha256": "8a871aff89208bb5ceda3dbe0d8dc85d7fbe3397758317bd85db4e647f3fa04a",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-resource-tests.py",
+      "sha256": "d03c65650139b6bada83c2a90205e2f9c3f944b48b63231ef8881fe269f3afd4",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-settle-tests.py",
+      "sha256": "031828e5eabe21df9bfb2eebef8067300ac1336cb19f20f859ee188b02e2c229",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "plan/ws074/tests/run-write-tests.py",
+      "sha256": "00586f53006b1024752bac810ba730cd0a5db4faf4825f86b9f5ead9eb848624",
+      "matches_import_applied_hash": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/Makefile",
+      "sha256": "7dacad3caf6fc044828868c07391e61670a9e5832b57bdde7df99429d234f797",
+      "matches_import_applied_hash": true
+    }
+  ],
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "python_ast_and_compile": "all seven pass; no code execution or pycache writes",
+  "source_registry": {
+    "engine": 167,
+    "app": 7,
+    "duplicate_engine": 0,
+    "missing": 0
+  },
+  "plain_groups_preserved": "checkpoint02/regressions-plain.json: 41 pages directly covered; other native tests covered separately",
+  "asan_groups_preserved": "checkpoint03/regressions-asan-recovered.json",
+  "no_source_change": true
+}

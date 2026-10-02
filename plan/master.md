@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: なし。q577 BUG-125、q579 browser2、q580 GTK4 baselineは通常wrap-upしuncleared、q578 C10はcleared。
+Active Queues: A q584/browser・q585/package・q586/displayはfinished/uncleared、A1/A2/A3終了済み。browser残112全文review、package D1・display D-ATOMIC判断を保存。B q587/GTK4・q588/規約・q589/診断はlatest4b655803 → A8f807c73f、全体wrap方針共有/停止実績未確認。q581/q582/q583部分はcleared、whole p017/BUG-125未解決。
 Current Focused Goals: fg010 — 10/17 demo（P9 desktop高度化とP8 bug）、fg017 — WS074専任のp172取込→Acid3 pixel完全一致→File System Access→OPFS→Interop 2025 100%→Test262。fg018 — P9次作業のGTK4 baselineとレビュー。fg016はWS109 F1〜F6/ユーザー実機受け入れで達成。
-Next（2026-10-02 更新）: P8/P9/P10の成果を回収し、A/Bの2 checkoutを同じorigin/mainから開始できる状態へ移行。A1はp172残review、B1はWS114 p001残測定、B3はBUG-125を候補として、それぞれ新しい有限Queueの選定を待つ。--login本人確認/PIN交換とWS110/testingは検討のみ。WS112の5OS package/CIとWS113のzedBSD i915複数displayはあとで実装する計画。既存demo順/WS106保留保持。
+Next（2026-10-02 更新）: user指示で全agentを区切り終了し成果を統合。新Queueは投入しない。A2/A3はWS112/113の契約設計のみ、製品実装は後続Phaseへ。Aは共有投影/mergeを所有し、Bは自checkoutのGTK/desktop/bugを所有。--login/WS110は検討のみ、既存demo順/WS106保留保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 はp099までcleared。origin/browser2取込のblocking p172が後続browser作業の前提。旧P8/P9/P10は停止・回収済みで、[Queue index](queue.md)にterminal outcomeを保存。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -222,9 +222,9 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | completed | q574 native実機build/install+全文規約、p008 user「完璧に動作しました」でF6受け入れ合格 |
 | [WS110](ws110/ws.md) | MG006 | 通常compositor起動を既定にし--testingで試験用有限modeを明示 | planning | ユーザー指定で検討のみ、alias/opt契約案とlaunch候補を保存、実装未承認 |
 | [WS111](ws111/ws.md) | MG006 | Linux/FreeBSD共通console keiland-desktop、GDMはdirect維持 | completed | q575/q576: 共通console launcher/両native install/全source確認、GDMdirect不変。--login検討のみ |
-| [WS112](ws112/ws.md) | MG007 | Linux5種類のbinary packageを指定make/CIで作成しreleaseへ添付 | planned | p001契約/入力から。RPi arm64確定、CI runtime不要、FreeBSD source-only。あとで実装、未順位/Queue none |
-| [WS113](ws113/ws.md) | MG006 | zedBSD i915 hotplug/Vulkan Displayから複数画面・Settings/libkeiland・窓の全体移動 | planned | p001から。全拡張/全mirror、pointer越境で窓一括移動。あとで実装、未順位/Queue none |
-| [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | incomplete | [19項目の実測表](ws114/gtk4-compat-matrix.md)。p001/q580は部分実測でuncleared、残測定後の採否はp002/user |
+| [WS112](ws112/ws.md) | MG007 | Linux5種類のbinary packageを指定make/CIで作成しreleaseへ添付 | incomplete | p001/q585契約調査uncleared、D1 Fedora/Arch boot回答待ち。RPi arm64、CI runtime不要、FreeBSD source-only。q591は候補のみ |
+| [WS113](ws113/ws.md) | MG006 | zedBSD i915 hotplug/Vulkan Displayから複数画面・Settings/libkeiland・窓の全体移動 | incomplete | p001/q586設計調査uncleared、D-ATOMIC未決、A3成果回収/終了。全拡張/全mirror、pointer越境で窓一括移動。実装未投入 |
+| [WS114](ws114/ws.md) | MG006 | Linux標準GTK4互換性を調査し機能表レビュー後にXDG-shell/portal等を選択改善 | incomplete | [19項目の実測表](ws114/gtk4-compat-matrix.md)。p001/q581調査cleared、G05 user採用のp007/q587を開始。残る行の採否はp002/user |
 | [WS115](ws115/ws.md) | MG002 | upstream GTK4をzedBSD `packages/desktop/gtk4`へ移植し知見を記録 | planning | WS114判断/実測の後。旧WS034 p029移管、Queue none |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
@@ -238,7 +238,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 ユーザー指示によりメインセッションをAgent AとAgent Bに分け、各セッションが最大3サブエージェントを起動する。この表は一時的な実行所有であり、WSの目的・優先順位・依存・Queue承認・保留判断を変更しない。Phase単位の有限Queueを作ってから実行し、単に担当欄に入ったことを実装許可にしない。
 
-起動時の正本は[Agent A](agents/session-a.md)と[Agent B](agents/session-b.md)。Aは`/home/awe/zedBSD-claude1`の`main`、Bは`/home/awe/zedBSD-claude2`の`codex/agent-b`を使い、同じ`origin/main` handoff commitから開始する。
+起動時の正本は[Agent A](agents/session-a.md)と[Agent B](agents/session-b.md)。Aは`/home/awe/zedBSD-claude1`の`codex/agent-a`（起動時環境のbranch指定を採用）、Bは`/home/awe/zedBSD-claude2`の`codex/agent-b`を使い、同じ`origin/main` handoff commitから開始した。[協調記録](agents/two-session-coordination.md)にQueue IDとsource所有を保存する。
 
 | Session / lane | 担当WS | 当面の順序と境界 |
 | --- | --- | --- |
@@ -352,8 +352,8 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS106 p002 → p003 | 残るime-probe移動 → 全文規約・最終build/boot | p001 cleared、29件＋13files移動済み。ime-probe非競合回答が再開条件、次Queue未選定 |
 | WS107 | libbrowser/source所有・品質 | completed、q544/B1〜B5 verified |
 | WS108 | 2 distro native .deb/QEMU/CI release | completed / q549、remote未実行 |
-| [WS112 p001](ws112/phase001/phase.md) | 5OS package/CI release、ad hoc生成可 | planned / 契約・公式入力/形式調査から。RPi arm64、CI runtime不要。未順位/実装Queue未選定 |
-| [WS113 p001](ws113/phase001/phase.md) | 外部display/拡張・mirror/SettingsとVulkan通知契約 | planned / zedBSD i915優先。実機fixture/通知契約の調査、未順位/Queue未選定 |
+| [WS112 p001](ws112/phase001/phase.md) | 5OS package/CI release、ad hoc生成可 | uncleared / q585契約証拠保存、D1回答待ち。RPi arm64、CI runtime不要、実装未選定 |
+| [WS113 p001](ws113/phase001/phase.md) | 外部display/拡張・mirror/SettingsとVulkan通知契約 | uncleared / q586契約成果保存、D-ATOMIC回答待ち、A3終了。実機は後続 |
 | [WS114 p001](ws114/phase001/phase.md) → [WS115](ws115/ws.md) → [WS116](ws116/ws.md) | 標準GTK4実測・行別レビュー→zedBSD upstream移植→Qt6範囲判断/移植 | q580で部分実測済み、残測定と採否が未決。Queueなし。独自実装WS097/096へ後で知見を渡し、B1が再開候補を所有 |
 | WS109 p002 L1 | native FreeBSD15 library/build foundation | q551 p001 cleared、native ABI/environment verified。q565全F2とq572全WSをverified、実機gateはuserwaived、実QEMU i915利用。historical L1依存を解消 |
 
@@ -545,3 +545,15 @@ Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調�
 2026-10-02 / desktop-next-gtk4-priority: user指示によりfocused goal fg018とP9 lane優先を同時追加。P9の次はWS114 p001/q580、既存WS090/094候補より先。GTK4移植WS115はWS114実測/採否/選択改善が前提。他lane/デモ全体相対順は保持。利用上限回復のuser確認により同model GPT-6.1 Sol Highでgeneration2へ。
 
 2026-10-02 / two-session-handoff-ready: P8/P9/P10を通常wrap-upし、q577/q579/q580をunclearedで終了。q578 clearedは維持。A/B分担と起動文書を保存し、旧runtimeは停止、次の実行Queueは未選定。Aが共有計画のsingle writer、Bは割当WS/PhaseとB lane Queueを所有する。
+
+2026-10-02 / two-session-n3-start: userがAもN=3開始を指示。q584/A1 WS074 p172残review、q585/A2 WS112 p001契約調査、q586/A3 WS113 p001設計調査を有限scope/snapshotへ固定し指定model/highで起動。p112/113は初回実行でincomplete、製品実装は未投入。user経由のB記録991fc890（q581/GTK4、q582/desktop、q583/BUG-125部分診断）をc87341a78で統合し全体Queue/registryへ投影。BのPhase/WS開始草稿はB側の次成果commitと照合して投影する。GitHub Issues/Project公開とpushは保留。
+
+2026-10-02 / B-next-q587-reserved: user経由でB1のq581後のWS114装飾モード実装・GTK4確認追加承認とID予約依頼を受領。q587をB1に予約。具体的Phase/scope/承認snapshotはB側の次checkpointで照合し、現q581の状態/基準は変更しない。[協調記録](agents/two-session-coordination.md)。
+
+2026-10-02 / B-df66db5e-integration-and-continuity: user依頼のB checkpointをmain435a62126へ統合。q581調査clearとq583部分診断clearを共有Queue/履歴へ投影、whole p017とBUG-125 trackingを保持。q587の具体Phase/snapshotとuserの開始報告を確認しp007へ投影。q588/B2 WS094最終規約とq589/B3 BUG-125追加切り分けを予約。workerはQueue終端で終了せず、同runtime/contextへ後続を渡す。[協調記録](agents/two-session-coordination.md)。
+
+2026-10-02 / A-checkpoints-q585-terminal: A1 checkpoint11 reviewed88/209、残121 C/headerと後続gateを維持。A2のq585/p001は入力・形式・環境・CI契約調査を保存してD1 boot適用回答待ちでuncleared、[history](history/queue-q585.md)へexact承認/基準別証拠/再開を保存。A3 p001契約と変更foreign p002–009の設計を統合、製品/hardware未実施。全workerを同runtime/contextで維持、q590〜q592予約は未投入。GitHub publication保留。
+
+2026-10-02 / all-agent-normal-wrap: 最新userが全agentをきりのいいところで切り上げ終了へ指示。A1/A2のPhase完了待ちを置換、A3はfinal2ad9c951 → 83b111c63、q586/p001 uncleared履歴と再開を[archive](history/queue-q586.md)へ保存して終了確認。B checkpoint4b655803 → A8f807c73fを統合、q582 cleared、q588 source partial/q589診断準備/q587amendment01を共有投影。B2背景資産・3 OS収録q593は予約だけで開始しない。全次Queue未投入、B停止未確認、source受け入れ/WS completionを停止に合わせて偽らない。
+
+2026-10-02 / local-main-integration-request: userがサブエージェント結果→codex/agent-a→ローカルmain→リモートcodex/agent-b出現後ローカルmainの順に統合を指示。全commit message WIP、pushなし。A1 final2f6556750を10e844f23へ統合、A2/A3既統合、全A worker停止確認。

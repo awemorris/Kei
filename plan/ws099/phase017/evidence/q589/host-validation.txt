@@ -1,0 +1,33 @@
+Python syntax / generated sh -n: PASS
+Actual shell wrapper host negative: first FAIL retained after six later PASS, original coordinates preserved: PASS
+No log retrieval before first capture verdict: PASS
+observation: original=1 later=0 poll=1
+observation: original=1 later=0 poll=2
+observation: original=1 later=0 poll=3
+observation: original=1 later=0 poll=4
+observation: original=1 later=0 poll=5
+observation: original=1 later=0 poll=6
+host_negative status=1 checks=7
+
+594294.67 capture_begin /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png --expect 540,518,e2a04a
+594294.67 capture_end 1 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 first_log_begin /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 first_log_end 0 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_begin 1 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_end 0 1 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_log_end 0 1 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_begin 2 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_end 0 2 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_log_end 0 2 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_begin 3 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_end 0 3 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_log_end 0 3 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_begin 4 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_end 0 4 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_log_end 0 4 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_begin 5 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_end 0 5 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_log_end 0 5 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_begin 6 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_capture_end 0 6 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png
+594294.67 later_log_end 0 6 /home/awe/zedBSD-worktrees/b3/build/b3-q589/tmpk_7h8gnv/flipped.png

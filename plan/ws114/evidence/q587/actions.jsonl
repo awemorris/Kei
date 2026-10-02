@@ -1,0 +1,109 @@
+{"utc": "2026-10-02T08:00:35Z", "action": "ssh", "command": "cat /etc/os-release; uname -r; dpkg --audit; dpkg-query -W libgtk-4-1 gtk-4-examples gsettings-desktop-schemas; sha256sum /opt/keiland/bin/wayland; ldd /opt/keiland/bin/wayland", "evidence": "environment.log"}
+{"utc": "2026-10-02T08:00:35Z", "action": "screenshot", "name": "boot.png"}
+{"utc": "2026-10-02T08:01:11Z", "action": "ssh", "command": "mkdir -p /opt/keiland/lib /opt/keiland/bin", "evidence": null}
+{"utc": "2026-10-02T08:01:12Z", "action": "ssh", "command": "sha256sum /opt/keiland/bin/wayland /opt/keiland/bin/terminal /opt/keiland/bin/files /opt/keiland/bin/textedit; file /opt/keiland/bin/wayland; ldd /opt/keiland/bin/wayland; sh /tmp/q587-start-session.sh; . /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer WS114_PROBE_TEXT=\"q587 clipboard \u03a9 \u65e5\u672c\u8a9e\" python3 /tmp/gtk4-baseline.py > /tmp/q587-gl.stdout 2> /tmp/q587-gl.trace < /dev/null & echo $! > /tmp/q587-gl.pid", "evidence": "install-session.log"}
+{"utc": "2026-10-02T08:01:36Z", "action": "ssh", "command": "cat /tmp/q587-gl.stdout; tail -15 /tmp/q587-gl.trace; tail -15 /tmp/q587-compositor.log", "evidence": "gl-initial.log"}
+{"utc": "2026-10-02T08:01:36Z", "action": "screenshot", "name": "gl-initial.png"}
+{"utc": "2026-10-02T08:02:07Z", "action": "ssh", "command": ". /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer WS114_PROBE_TEXT=\"q587 clipboard \u03a9 \u65e5\u672c\u8a9e\" python3 /tmp/gtk4-baseline.py > /tmp/q587-gl.stdout 2> /tmp/q587-gl.trace < /dev/null & echo $! > /tmp/q587-gl.pid", "evidence": "gl-start.log"}
+{"utc": "2026-10-02T08:02:26Z", "action": "ssh", "command": "cat /tmp/q587-gl.stdout; tail -8 /tmp/q587-compositor.log", "evidence": "gl-ready.log"}
+{"utc": "2026-10-02T08:02:26Z", "action": "screenshot", "name": "gl-ready.png"}
+{"utc": "2026-10-02T08:02:45Z", "action": "point", "x": 400, "y": 374}
+{"utc": "2026-10-02T08:02:45Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:02:45Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:02:45Z", "action": "key", "keys": ["a"]}
+{"utc": "2026-10-02T08:02:46Z", "action": "key", "keys": ["b"]}
+{"utc": "2026-10-02T08:02:46Z", "action": "point", "x": 335, "y": 232}
+{"utc": "2026-10-02T08:02:46Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:02:46Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:02:46Z", "action": "screenshot", "name": "gl-menu.png"}
+{"utc": "2026-10-02T08:02:46Z", "action": "point", "x": 348, "y": 279}
+{"utc": "2026-10-02T08:02:47Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:02:47Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:02:47Z", "action": "point", "x": 335, "y": 232}
+{"utc": "2026-10-02T08:02:48Z", "action": "screenshot", "name": "gl-tooltip.png"}
+{"utc": "2026-10-02T08:02:48Z", "action": "point", "x": 350, "y": 422}
+{"utc": "2026-10-02T08:02:48Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:02:48Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:02:49Z", "action": "screenshot", "name": "gl-modal.png"}
+{"utc": "2026-10-02T08:02:49Z", "action": "point", "x": 640, "y": 449}
+{"utc": "2026-10-02T08:02:49Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:02:49Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:02:50Z", "action": "point", "x": 638, "y": 232}
+{"utc": "2026-10-02T08:02:50Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:02:50Z", "action": "point", "x": 644, "y": 236}
+{"utc": "2026-10-02T08:02:50Z", "action": "point", "x": 650, "y": 240}
+{"utc": "2026-10-02T08:02:50Z", "action": "point", "x": 656, "y": 244}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 662, "y": 248}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 668, "y": 252}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 674, "y": 256}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 680, "y": 260}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 686, "y": 264}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 692, "y": 268}
+{"utc": "2026-10-02T08:02:51Z", "action": "point", "x": 698, "y": 272}
+{"utc": "2026-10-02T08:02:51Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:02:52Z", "action": "screenshot", "name": "gl-move.png"}
+{"utc": "2026-10-02T08:02:52Z", "action": "point", "x": 500, "y": 550}
+{"utc": "2026-10-02T08:02:52Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:02:52Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:02:53Z", "action": "ssh", "command": "cat /tmp/q587-gl.stdout; tail -100 /tmp/q587-gl.trace", "evidence": "gl-after-move.log"}
+{"utc": "2026-10-02T08:04:14Z", "action": "point", "x": 500, "y": 232}
+{"utc": "2026-10-02T08:04:14Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:04:14Z", "action": "point", "x": 506, "y": 236}
+{"utc": "2026-10-02T08:04:14Z", "action": "point", "x": 512, "y": 240}
+{"utc": "2026-10-02T08:04:14Z", "action": "point", "x": 518, "y": 244}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 524, "y": 248}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 530, "y": 252}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 536, "y": 256}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 542, "y": 260}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 548, "y": 264}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 554, "y": 268}
+{"utc": "2026-10-02T08:04:15Z", "action": "point", "x": 560, "y": 272}
+{"utc": "2026-10-02T08:04:15Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:04:16Z", "action": "screenshot", "name": "gl-move2.png"}
+{"utc": "2026-10-02T08:04:16Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:04:16Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:04:16Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:04:17Z", "action": "ssh", "command": "tail -100 /tmp/q587-gl.trace; cat /tmp/q587-gl.stdout", "evidence": "gl-move2.log"}
+{"utc": "2026-10-02T08:06:14Z", "action": "ssh", "command": "kill $(cat /tmp/q587-gl.pid); . /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer WS114_PROBE_ID=org.zedbsd.WS114Move python3 /tmp/gtk4-baseline.py > /tmp/q587-move.stdout 2> /tmp/q587-move.trace < /dev/null & echo $! > /tmp/q587-move.pid", "evidence": "move-start.log"}
+{"utc": "2026-10-02T08:06:15Z", "action": "ssh", "command": ". /tmp/q587-session.env; python3 /tmp/decoration-wire.py > /tmp/q587-wire.log 2>&1; echo wire_exit=$?; tail -8 /tmp/q587-wire.log", "evidence": "wire-start.log"}
+{"utc": "2026-10-02T08:06:16Z", "action": "screenshot", "name": "move-initial.png"}
+{"utc": "2026-10-02T08:07:08Z", "action": "point", "x": 500, "y": 232}
+{"utc": "2026-10-02T08:07:09Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:07:09Z", "action": "point", "x": 506, "y": 236}
+{"utc": "2026-10-02T08:07:09Z", "action": "point", "x": 512, "y": 240}
+{"utc": "2026-10-02T08:07:09Z", "action": "point", "x": 518, "y": 244}
+{"utc": "2026-10-02T08:07:09Z", "action": "point", "x": 524, "y": 248}
+{"utc": "2026-10-02T08:07:10Z", "action": "point", "x": 530, "y": 252}
+{"utc": "2026-10-02T08:07:10Z", "action": "point", "x": 536, "y": 256}
+{"utc": "2026-10-02T08:07:10Z", "action": "point", "x": 542, "y": 260}
+{"utc": "2026-10-02T08:07:10Z", "action": "point", "x": 548, "y": 264}
+{"utc": "2026-10-02T08:07:10Z", "action": "point", "x": 554, "y": 268}
+{"utc": "2026-10-02T08:07:10Z", "action": "point", "x": 560, "y": 272}
+{"utc": "2026-10-02T08:07:10Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:07:11Z", "action": "screenshot", "name": "move-real.png"}
+{"utc": "2026-10-02T08:07:11Z", "action": "point", "x": 600, "y": 550}
+{"utc": "2026-10-02T08:07:12Z", "action": "button", "down": true, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:07:12Z", "action": "button", "down": false, "kind": "wheel-down"}
+{"utc": "2026-10-02T08:07:12Z", "action": "ssh", "command": "cat /tmp/q587-move.stdout; grep -E 'xdg_toplevel.*move|wl_pointer.*(button|axis|enter|leave)' /tmp/q587-move.trace | tail -18; cp /tmp/q587-wire.log /tmp/q587-wire-copy.log; grep 'ZWL DECORATION applied' /tmp/q587-compositor.log | tail -25", "evidence": "move-release-check.log"}
+{"utc": "2026-10-02T08:07:12Z", "action": "ssh", "command": "cat /tmp/q587-wire.log", "evidence": "wire.log"}
+{"utc": "2026-10-02T08:08:20Z", "action": "ssh", "command": "cat /tmp/q587-compositor.log", "evidence": "compositor-checkpoint.log"}
+{"utc": "2026-10-02T08:10:47Z", "action": "ssh", "command": "kill $(cat /tmp/q587-move.pid); . /tmp/q587-session.env; nohup env WAYLAND_DEBUG=client GSK_DEBUG=renderer WS114_PROBE_TEXT=\"q587 clipboard \u03a9 \u65e5\u672c\u8a9e\" python3 /tmp/gtk4-baseline.py > /tmp/q587-gl2.stdout 2> /tmp/q587-gl2.trace < /dev/null & echo $! > /tmp/q587-gl2.pid", "evidence": "gl2-start.log"}
+{"utc": "2026-10-02T08:10:49Z", "action": "point", "x": 565, "y": 422}
+{"utc": "2026-10-02T08:10:49Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:10:49Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:10:50Z", "action": "screenshot", "name": "gl-maximized.png"}
+{"utc": "2026-10-02T08:10:53Z", "action": "screenshot", "name": "gl-max-restore.png"}
+{"utc": "2026-10-02T08:10:54Z", "action": "point", "x": 667, "y": 422}
+{"utc": "2026-10-02T08:10:54Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:10:54Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:10:55Z", "action": "screenshot", "name": "gl-fullscreen.png"}
+{"utc": "2026-10-02T08:10:59Z", "action": "screenshot", "name": "gl-full-restore.png"}
+{"utc": "2026-10-02T08:10:59Z", "action": "point", "x": 350, "y": 422}
+{"utc": "2026-10-02T08:10:59Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:10:59Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:10:59Z", "action": "screenshot", "name": "gl-modal2.png"}
+{"utc": "2026-10-02T08:11:00Z", "action": "point", "x": 640, "y": 478}
+{"utc": "2026-10-02T08:11:00Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:11:00Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:11:00Z", "action": "screenshot", "name": "gl-modal-closed.png"}
+{"utc": "2026-10-02T08:11:01Z", "action": "ssh", "command": "cat /tmp/q587-gl2.stdout", "evidence": "gl2-states.log"}

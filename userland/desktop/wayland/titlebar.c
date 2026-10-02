@@ -18,6 +18,7 @@
  * control or a tab comes back as keiland_titlebar_v1's events.
  */
 
+#include "extras.h"
 #include "titlebar.h"
 
 #include <errno.h>
@@ -157,6 +158,7 @@ zwl_titlebar_object_gone(
 	struct zwl_object *object)
 {
 	struct zwl_titlebar_model *model;
+	int error;
 
 	/* The presentation forgets it: a press, a field and its places (titlebar-shell.c). */
 	zwl_titlebar_forget(object->client->server, object);
@@ -174,8 +176,19 @@ zwl_titlebar_object_gone(
 		return;
 
 	/* The window stops naming it. */
-	if (object->top != NULL)
+	if (object->top != NULL) {
 		object->top->titlebar = NULL;
+
+		/* Withdraws native decoration ownership with the surviving surface's next commit. */
+		error = zwl_decoration_native_changed(object->top);
+		if (error != 0) {
+			/* Defers connection teardown until the dispatcher can report failure. */
+			object->client->fatal = 1;
+			object->client->fatal_time = zwl_milliseconds();
+		}
+	}
+
+	/* Removes the retiring titlebar's reciprocal toplevel link. */
 	object->top = NULL;
 
 	/* The model goes with its object, and the windows are drawn without it. */
@@ -511,6 +524,11 @@ manager_request(
 	created->top = toplevel;
 	toplevel->titlebar = created;
 	printf("ZWL TITLEBAR create client=%llu titlebar=%u toplevel=%u\n", (unsigned long long)manager->client->number, id, toplevel->id);
+
+	/* Native titlebar creation explicitly requests compositor decoration ownership. */
+	error = zwl_decoration_native_changed(toplevel);
+	if (error != 0)
+		return error;
 
 	/* Succeeded: the window has a titlebar presentation. */
 	return 0;

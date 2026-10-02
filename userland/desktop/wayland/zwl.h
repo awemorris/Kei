@@ -500,6 +500,23 @@ struct zwl_object {
 	 */
 	struct zwl_object *decoration;
 	struct zwl_object *decoration_toplevel;
+
+	/*
+	 * The toplevel owns its decoration negotiation and outstanding configure
+	 * snapshots until teardown. Preferred zero means no explicit xdg choice;
+	 * configured is the offered mode and committed is the visible mode.
+	 * An acknowledged snapshot waits for the next surface commit. Generation
+	 * changes invalidate mode proposals from a destroyed/replaced decoration;
+	 * reset withdraws SSD at the next commit even without a new configure.
+	 */
+	uint32_t decoration_preferred;
+	uint32_t decoration_configured;
+	uint32_t decoration_committed;
+	uint32_t decoration_acked_mode;
+	uint64_t decoration_generation;
+	unsigned decoration_acked;
+	unsigned decoration_reset;
+	struct zwl_decoration_configure *decoration_configures;
 	struct zwl_object *shape_pointer;
 	struct zwl_object *viewport;
 	int32_t pending_source[4];

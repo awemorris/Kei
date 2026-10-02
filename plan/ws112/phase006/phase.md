@@ -17,6 +17,13 @@ Investigation bound: 60分の有限1Phase Queue案。具体的なscope/timebox/c
 
 [共通設計](../design.md)の対応節を使用する。自分のPhase以外の受け入れを変更する必要が出たら、依存/foreign Phase/WSを同時に計画修正し、material scopeの同意を確認する。
 
+## Detailed procedure / q585 investigation
+
+[Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
+既存image/zipと5OS package matrix全件をrelease needsに設定。target_id/CPU/format/source/inputと20file集合を検査し、downloadの重複上書きを防止、runtime PNG/smoke必須を解除する。
+後続command/証拠: 全5実package+3sidecars setをnative metadata/manifest/checksumで受理。missing/duplicate/truncated/wrong OS・CPU・source・hash・dirty/path traversal/test payloadの有限各1例を拒否、PNGだけで欠損packageを受理しない。既存CI/YAMLをlocal検査しremote未実施を明記。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は[環境契約](../native-environments.md)の採用方式に従い、実成立は担当Phaseで確認する。
+
 ## Clearance criteria / verification
 
 YAML/展開script/merged artifact検証で5OS/CPUすべてがrelease対象となる。欠落・破損・重複・別OS/CPU/sourceが拒否される。runtime testがCIに残っていないことを確認、remote実行/公開の実施有無を区別。
@@ -39,3 +46,5 @@ Resume: prerequisitesの実出力と判断を照合し、当PhaseだけのQueue�
 ## Event history
 
 2026-10-02 / ws112-package-plan-20261002-ws112-p006-created: userの5OS package計画をこの有限Phaseへ分割、Status planned・Queue none。RPi arm64回答を契約に反映。詳細とscopeはWS/design参照。GitHub body/comment/Project公開は保留、local/outboxに記録。
+
+2026-10-02 / ws112-q585-contract-detail: [p001](../phase001/phase.md)の一次資料/実source調査で当Phaseのprocedure/command/証拠を具体化。上記のnative環境/形式/CI契約へ対応づけ、既存prerequisites・受け入れ・Queue none・Status plannedを保持。再開はp001残件と必要な実出力を照合後の当Phaseだけの承認済Queue。[WS要約](../ws.md#event-history)。GitHub deliveryはmain canonical outboxへ。

@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Copies supported native node graphs with callee roots and checked iterative descent. */
+/*
+ * Copies supported native node graphs with callee roots and checked iterative descent.
+ */
 
 #include "bind/internal.h"
 
@@ -17,6 +19,7 @@ struct clone_frame {
 	struct dom_node *copy;
 	struct dom_node *destination;
 	struct dom_node *next;
+	/* Ordinary children are followed once by the source's separate template graph. */
 	int content_pending;
 };
 
@@ -39,7 +42,7 @@ bind_clone_node(
 	struct dom_node *copy;
 	struct vm_cell *roots[3];
 	unsigned index;
-	int status;
+	int error;
 
 	/* Invalid embedding arguments cannot allocate or publish a partial copy. */
 	if (realm == NULL ||
@@ -55,19 +58,21 @@ bind_clone_node(
 	roots[0] = &source->cell;
 	roots[1] = NULL;
 	roots[2] = NULL;
+
+	/* Registers each stack slot before any shallow node factory may collect. */
 	for (index = 0; index < 3U; index++) {
-		status = vm_heap_add_root(realm->heap, &roots[index]);
-		if (status != 0) {
+		error = vm_heap_add_root(realm->heap, &roots[index]);
+		if (error != 0) {
 			clone_unroot(realm->heap, roots, index);
-			return status;
+			return error;
 		}
 	}
 
 	/* The first complete node becomes the strongly traced root of the destination graph. */
-	status = clone_shallow(source, &roots[2], &copy);
-	if (status != 0) {
+	error = clone_shallow(source, &roots[2], &copy);
+	if (error != 0) {
 		clone_unroot(realm->heap, roots, 3);
-		return status;
+		return error;
 	}
 
 	/* The top copy now traces every child linked during descent. */
@@ -75,10 +80,10 @@ bind_clone_node(
 
 	/* Iterative descent cannot silently omit a deep suffix or overflow the C call stack. */
 	if (deep) {
-		status = clone_descendants(source, copy, &roots[2]);
-		if (status != 0) {
+		error = clone_descendants(source, copy, &roots[2]);
+		if (error != 0) {
 			clone_unroot(realm->heap, roots, 3);
-			return status;
+			return error;
 		}
 	}
 
@@ -103,7 +108,7 @@ clone_shallow(
 	struct dom_doctype *doctype;
 	struct dom_node *copy;
 	size_t index;
-	int status;
+	int error;
 
 	/* Every supported factory completes native identity before another VM allocation. */
 	switch (source->type) {
@@ -120,28 +125,28 @@ clone_shallow(
 
 		/* Native attributes preserve exact identity independently of script expandos. */
 		for (index = 0; index < element->attribute_count; index++) {
-			status = dom_element_add_attribute(
+			error = dom_element_add_attribute(
 				copy_element,
 				element->attributes[index].ns,
 				element->attributes[index].prefix,
 				element->attributes[index].name,
 				element->attributes[index].value);
-			if (status != 0)
-				return status;
+			if (error != 0)
+				return error;
 
 			/* The traced copy retains the exact attribute URI before the next allocation. */
 			copy_element->attributes[index].namespace_uri = element->attributes[index].namespace_uri;
 		}
 
 		/* Dirty input text and caret keep their established independent-buffer semantics. */
-		status = dom_input_clone_value(copy_element, element);
-		if (status != 0)
-			return status;
+		error = dom_input_clone_value(copy_element, element);
+		if (error != 0)
+			return error;
 
 		/* Checkedness copies without touching the original radio group or option dirtiness. */
-		status = dom_input_clone_checked(copy_element, element);
-		if (status != 0)
-			return status;
+		error = dom_input_clone_checked(copy_element, element);
+		if (error != 0)
+			return error;
 		break;
 	case DOM_TEXT:
 		text = (struct dom_character_data *)source;
@@ -149,15 +154,15 @@ clone_shallow(
 		break;
 	case DOM_CDATA_SECTION:
 		text = (struct dom_character_data *)source;
-		status = dom_cdata_create(source->document, text->data.data, text->data.length, &copy);
-		if (status != 0)
-			return status;
+		error = dom_cdata_create(source->document, text->data.data, text->data.length, &copy);
+		if (error != 0)
+			return error;
 		break;
 	case DOM_PROCESSING_INSTRUCTION:
 		text = (struct dom_character_data *)source;
-		status = dom_pi_create(source->document, text->target, text->data.data, text->data.length, &copy);
-		if (status != 0)
-			return status;
+		error = dom_pi_create(source->document, text->target, text->data.data, text->data.length, &copy);
+		if (error != 0)
+			return error;
 		break;
 	case DOM_COMMENT:
 		text = (struct dom_character_data *)source;
@@ -202,7 +207,7 @@ clone_descendants(
 	struct dom_node *child_copy;
 	struct dom_node *contents;
 	struct dom_element *element;
-	int status;
+	int error;
 
 	/* The first frame owns ordinary traversal followed by any separate template contents. */
 	wb_vector_init(&frames, sizeof(struct clone_frame));
@@ -211,10 +216,12 @@ clone_descendants(
 	initial.destination = copy;
 	initial.next = source->first_child;
 	initial.content_pending = 1;
-	status = wb_vector_push(&frames, &initial);
-	if (status != 0) {
+
+	/* Publishes the first native traversal record before descending into either graph. */
+	error = wb_vector_push(&frames, &initial);
+	if (error != 0) {
 		wb_vector_release(&frames);
-		return status;
+		return error;
 	}
 
 	/* Linked copies and original participants remain traced even when the C vector reallocates. */
@@ -232,10 +239,10 @@ clone_descendants(
 
 				/* A lazily absent source fragment represents no content children. */
 				if (element->content != NULL) {
-					status = bind_template_contents((struct dom_element *)frame->copy, &contents);
-					if (status != 0) {
+					error = bind_template_contents((struct dom_element *)frame->copy, &contents);
+					if (error != 0) {
 						wb_vector_release(&frames);
-						return status;
+						return error;
 					}
 
 					/* The copy element traces its newly installed template fragment. */
@@ -254,23 +261,27 @@ clone_descendants(
 
 		/* Prepare the following sibling before another frame can move vector storage. */
 		frame->next = child->next;
-		status = clone_shallow(child, pending, &child_copy);
-		if (status != 0) {
+		error = clone_shallow(child, pending, &child_copy);
+		if (error != 0) {
 			wb_vector_release(&frames);
-			return status;
+			return error;
 		}
 
 		/* The new graph retains this child before any subsequent VM allocation. */
 		dom_append_child(frame->destination, child_copy);
+
+		/* Prepares this child's independent ordinary-then-template traversal record. */
 		child_frame.source = child;
 		child_frame.copy = child_copy;
 		child_frame.destination = child_copy;
 		child_frame.next = child->first_child;
 		child_frame.content_pending = 1;
-		status = wb_vector_push(&frames, &child_frame);
-		if (status != 0) {
+
+		/* A checked push preserves every remaining subtree across vector growth. */
+		error = wb_vector_push(&frames, &child_frame);
+		if (error != 0) {
 			wb_vector_release(&frames);
-			return status;
+			return error;
 		}
 	}
 
@@ -293,4 +304,7 @@ clone_unroot(
 		count--;
 		vm_heap_remove_root(heap, &roots[count]);
 	}
+
+	/* Succeeded: no temporary graph slot points into this invocation's expired stack. */
+	return;
 }

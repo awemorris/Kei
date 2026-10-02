@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/submit.c",
+      "formatted_sha256": "2045e3d564322a88485b284724198217cf56795345debafd5ed9916be8ef58af",
+      "final_sha256": "a959ab463b2b56685f3572fdf0e149fbbeac84c615a869c29da383c11b9d4d19",
+      "restorations": "Required definition argument tabs and readable immutable initializer rows restored."
+    }
+  ]
+}

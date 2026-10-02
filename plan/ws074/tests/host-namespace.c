@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Checks namespace cells through cloning, primary teardown and real collection. */
+/*
+ * Checks namespace cells through cloning, primary teardown and real collection.
+ */
 
 #include "bind/internal.h"
 
@@ -15,6 +17,7 @@
 
 /* Failed independent identity checks determine this test's exit status. */
 static unsigned failures;
+
 /* Every field assertion contributes to the final test total. */
 static unsigned checks;
 
@@ -59,11 +62,17 @@ namespace_check(
 	int condition,
 	const char *name)
 {
-	/* All observations remain available until main reports the complete result. */
+	int printed;
+
+	/* Counts this independent namespace field observation until main reports. */
 	checks++;
+
+	/* The existing failure count rejects the case even if its report is lost. */
 	if (!condition) {
 		failures++;
-		fprintf(stderr, "FAIL %s\n", name);
+		printed = fprintf(stderr, "FAIL %s\n", name);
+		if (printed < 0)
+			return;
 	}
 
 	/* Succeeded: this assertion has been recorded. */
@@ -92,6 +101,8 @@ namespace_sample(
 	error = vm_realm_create(heap, &realm);
 	if (error != 0)
 		return error;
+
+	/* Installs ordinary intrinsics before namespaced node creation runs. */
 	error = js_install_builtins(realm);
 	if (error != 0) {
 		vm_realm_destroy(realm);
@@ -167,6 +178,8 @@ namespace_case(
 	error = vm_heap_create(&heap, 0);
 	if (error != 0)
 		return error;
+
+	/* Registers the selected graph's persistent root after conservative construction setup. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	root = NULL;
 	error = vm_heap_add_root(heap, &root);
@@ -199,6 +212,8 @@ namespace_case(
 	/* Prefix and local-name atoms retain their original case independently. */
 	same = vm_string_equal_ascii(element->prefix, "prefix");
 	namespace_check(same, "namespace prefix survives GC");
+
+	/* The cloned or original graph keeps its case-sensitive local identity too. */
 	same = vm_string_equal_ascii(element->local_name, "Local");
 	namespace_check(same, "case-preserving local name survives GC");
 

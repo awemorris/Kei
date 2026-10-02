@@ -1,0 +1,53 @@
+built build/a1-browser2/plain/browser
+built build/a1-browser2/plain/browser-probe
+built build/a1-browser2/plain/host-array-length
+built build/a1-browser2/plain/host-attribute-namespace
+built build/a1-browser2/plain/host-base
+built build/a1-browser2/plain/host-click
+built build/a1-browser2/plain/host-collection
+built build/a1-browser2/plain/host-color-media
+built build/a1-browser2/plain/host-context-ownership
+built build/a1-browser2/plain/host-css-rule-model
+built build/a1-browser2/plain/host-cssom-mutation
+built build/a1-browser2/plain/host-cssom
+built build/a1-browser2/plain/host-data-url
+built build/a1-browser2/plain/host-document-images
+built build/a1-browser2/plain/host-document-parser
+built build/a1-browser2/plain/host-document-stream
+built build/a1-browser2/plain/host-form-collection
+built build/a1-browser2/plain/host-form-owner
+built build/a1-browser2/plain/host-form
+built build/a1-browser2/plain/host-frame-lifetime
+built build/a1-browser2/plain/host-frame-load
+built build/a1-browser2/plain/host-frame-viewport
+built build/a1-browser2/plain/host-heap
+built build/a1-browser2/plain/host-image-geometry
+built build/a1-browser2/plain/host-image-zero
+built build/a1-browser2/plain/host-insertion
+built build/a1-browser2/plain/host-interp
+built build/a1-browser2/plain/host-js
+built build/a1-browser2/plain/host-link
+built build/a1-browser2/plain/host-loader
+built build/a1-browser2/plain/host-mutation-record
+built build/a1-browser2/plain/host-namespace
+built build/a1-browser2/plain/host-native-properties
+built build/a1-browser2/plain/host-node-cloning
+built build/a1-browser2/plain/host-number
+built build/a1-browser2/plain/host-object
+built build/a1-browser2/plain/host-option-state
+built build/a1-browser2/plain/host-parse
+built build/a1-browser2/plain/host-position
+plan/ws074/tests/host-radio-state.c: In function ‘collection_case’:
+plan/ws074/tests/host-radio-state.c:170:17: error: missing terminating " character [-Werror]
+  170 |                 "var form=document.createElement('form,
+      |                 ^
+plan/ws074/tests/host-radio-state.c:170:17: error: missing terminating " character
+  170 |                 "var form=document.createElement('form,
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plan/ws074/tests/host-radio-state.c:237:17: error: missing terminating " character [-Werror]
+  237 |                 "var clone=form.elements[0].cloneNode(fals,
+      |                 ^
+plan/ws074/tests/host-radio-state.c:237:17: error: missing terminating " character
+  237 |                 "var clone=form.elements[0].cloneNode(fals,
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors

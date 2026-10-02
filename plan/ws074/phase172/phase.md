@@ -6,7 +6,7 @@ Status: uncleared
 Disposition: normal
 Parent: [WS074](../ws.md)
 Primary Milestone: MG006（WS074から継承）
-Queue / attempts: q579 / q579-i01 / P10（finished / uncleared）
+Queue / attempts: q584 / q584-i01 / A1（finished / uncleared、2026-10-02 user通常停止）；q579 / q579-i01 / P10（finished / uncleared）
 Blocking: このPhaseが**whole-Phase cleared**になり、統合されたブラウザの実出力を確認するまで、WS074の後続のsource・runner・互換性作業は開始不可。p099以前の歴史的cleared状態には遡及適用しない。2026-10-02追加の[p100](../phase100/phase.md) pixel完全一致・[p173](../phase173/phase.md) Interop 2025もこのgateの後。
 
 ## Goal and exact scope
@@ -37,8 +37,9 @@ GitHubの`origin/browser2`が持つブラウザ変更を、WS107完了後の現�
 Prerequisites: WS107 completedの実source/API移動成果、WS074 p099 cleared、`origin/browser2`の到達可能なcommit。これは既存成果の照合条件であり、新しいQueueの許可ではない。
 Investigation bound: まず変更manifest/移動対応と競合分類を最大3時間の有限attemptで実施。scopeが大きくtimeboxを超える、branch tipがmaterialに変わる、またはABI/仕様の判断が要るときはattemptをunclearedで記録し、設計/Queueを再選定する。段階的適用をしてもPhase全体は上の全件受け入れまでclearにしない。
 Standards: [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、[browser component全文](../../standards/browser-component.md)、[automation](../../standards/automation.md)。WS107の不変移動style例外は完了時に失効し、このPhaseへ流用しない。`make check`禁止、HAL API/toolchain変更は対象外。pushしない。
-Commands/results/commit/environment/artifacts/skipped checks: 計画時の`git fetch`、`git merge-base`、`git diff --name-status`とWS107 inventoryのread-only照合のみ。source変更、patch適用、build/回帰/bootは未実施。
-Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queueへ明示的に選定/承認してから実行する。
+Planning-time commands: 計画時は`git fetch`、`git merge-base`、`git diff --name-status`とWS107 inventoryのread-only照合のみ。その後のq579/q584統合・修正・検証は下のdated eventsと各checkpointに保存。
+Current outcome/evidence: q584はユーザー通常停止指示でuncleared。最終[checkpoint14](import/checkpoint14/README.md)に全209current hashes、全文review97完了、残112 C/header、warning0 plain build/全168object text同一/実native117checksと所有process終了を保存。既往target/ABI/ASan成果を保持し、whole基準は未達。
+Resume: mainの最終WIP統合/共有projectionを確認し、残112の全文review・必要規約修正・影響範囲検証を新たな有限p172 Queueへ明示的に選定/承認する。whole clearと実統合出力確認まで後続browser Phaseを開始しない。
 
 ## Event
 
@@ -53,3 +54,25 @@ Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queu
 2026-10-02 / c-table-forward-order-20261002: full/manual review identified §2 vars-before-forward order conflicts with ANSI C callback-table initializers (bind/xml.c and svg-length.c). main asked user, who approved only necessary function prototypes before constant tables. Full C §2/Guardrail/automation updated; irrelevant prototypes remain normal block. This resolves the local policy question without weakening other conformance/whole-clear criteria or authorizing downstream work. Other manual review remains in-progress. GitHub decision comment pending publication.
 
 2026-10-02 / q579-wrap-uncleared: userの全agent停止指示で通常wrap-up。branch差分の現行libbrowser配置への統合、ABI/境界、plain/ASan buildと既存回帰、target boot/native p014までの証拠は保存した。[checkpoint05](import/checkpoint05/README.md)時点で全209対象のmanual reviewは8完了、C/header 141とその他60が未完了。whole-Phaseはuncleared、後続browser gateは閉じたまま。再開は残りreviewを有限Queueへ再選定する。
+
+2026-10-02 / q584-start: 最新userのAgent A N=3開始指示により残reviewとin-scope規約修正を最大3hのq584/A1へ選定。q579原結果を保存し、whole-Phase受け入れと後続gateを維持。指定model/highで独立worktreeから開始。
+
+2026-10-02 / q584-A1-checkpoint06: A1 completed full C/component review of four small implementations and verified the eight previous reviewed hashes. [checkpoint06](import/checkpoint06/README.md) retains final hashes, warning0 plain build, compiler-specific identical object text and implementation tokens modulo two error-code names. Reviewed12/209; remaining137 C/header+60other. q584-i01 and p172 remain in-progress; no downstream work or whole-Phase clearance. GitHub publication pending under main ownership.
+
+2026-10-02 / q584-A1-checkpoint07: Four more complete C/component reviews finished; [checkpoint07](import/checkpoint07/README.md) fixes SVG/PI/XML projection/HTML input hashes and warning0 compiler-specific identical object text. Reviewed16/209; remaining133 C/header+60other. q584-i01/p172 remain in-progress; downstream gate closed and remote publication pending.
+
+2026-10-02 / q584-A1-checkpoint08: All60 non-C import entries have complete applicable manual review and exact applied-source hash reconciliation; [checkpoint08](import/checkpoint08/README.md) retains runner syntax, engine registry and seven missing direct native page receipts (260 PASS lines). Reviewed76/209; remaining133 C/header. q584-i01/p172 remain in-progress, downstream gate closed, remote publication pending.
+
+2026-10-02 / q584-A1-checkpoint09: Four private headers now have complete C/component review; [checkpoint09](import/checkpoint09/README.md) retains unchanged types/field order/prototypes, warning0 rebuild and all168 production object-text equality. Reviewed80/209; remaining129 C/header. q584-i01/p172 remain in-progress; downstream gate closed and remote publication pending.
+
+2026-10-02 / q584-A1-checkpoint10: Four small native fixtures have complete full C/component review; [checkpoint10](import/checkpoint10/README.md) retains executable-token equality, warning0 build/compiles, three identical object texts plus disclosed assert line metadata, and four PASS runtimes. Reviewed84/209; remaining125 C/header. q584-i01/p172 remain in-progress; downstream gate closed and remote publication pending.
+
+2026-10-02 / q584-fixture-failure-safeguards: main確認で既存q584の必要なin-scope規約修正にはfixtureの失敗検知も含まれ、全修正のtoken一致は承認条件ではない。host-namespaceのfprintf戻り値を保存して負値なら即時return（既存failures加算を重複しない）、host-image-zeroのatom生成を別変数でNULL確認し既存construction failureへ返す。production OOM/仕様は変更せず、影響する2fixtureのcompile/runと変化したerror pathを記録する。新Queueや後続browser開始の許可ではない。
+
+2026-10-02 / q584-A1-checkpoint11: Four more fixtures have full C/component review; main clarified necessary fixture failure handling is in q584 scope. [checkpoint11](import/checkpoint11/README.md) records namespace report checking and explicit image atom NULL refusals, warning0 final build/compiles, four PASS native runs and the retained/corrected initial call-layout build failure. Reviewed88/209; remaining121 C/header. q584-i01/p172 remain in-progress; downstream gate closed and remote publication pending.
+
+2026-10-02 / q584-A1-checkpoint12: Three complete sizing/geometry/cloning implementations reviewed; [checkpoint12](import/checkpoint12/README.md) fixes hashes, exact token/object equality, warning0 build/compiles and affected native46 observations including real clone ENOMEM/collection. Reviewed91/209; remaining118 C/header. q584-i01/p172 remain in-progress; gate closed and remote publication pending.
+
+2026-10-02 / q584-A1-checkpoint13: SubmitEvent implementation now has complete full C/component review; [checkpoint13](import/checkpoint13/README.md) verifies necessary2-only callback declarations, unchanged initializer bodies, exact final object text, warning0 targeted compile/link and native13/13 lifetime tests. Reviewed92/209; remaining117 C/header. q584-i01/p172 remain in-progress; gate closed and remote publication pending.
+
+2026-10-02 / q584-A1-wrap-uncleared: Latest user requests all agents to end at a safe checkpoint, superseding same-session continuation and p172-completion-only wrap-up. [checkpoint14](import/checkpoint14/README.md) finishes five private header reviews with unchanged declaration tokens/field order, all168 exact production object texts, warning0 build/final-header compiles and actual117 native checks. Reviewed97/209; remaining112 C/header, zero other files. q584-i01 ends uncleared before10:12 UTC; whole p172 is uncleared because remaining full review/final conformance is absent. No new Phase/Queue, no owned running process, no intentionally uncommitted source. Resume requires merged final hashes and explicit finite p172 reselection; WS/Queue/history/main projections and GitHub publication are main-owner reconciliation.

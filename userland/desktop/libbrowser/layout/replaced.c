@@ -21,8 +21,9 @@ static int replaced_length(const struct css_length *length, layout_unit containi
 static layout_unit replaced_content_size(const struct layout_box *box, layout_unit size, int first, int second);
 
 /*
- * Sets a replaced box's content width and height for a containing block
- * of a width (its box model is resolved already).
+ * Sets a replaced box's content width and height within its containing block.
+ *
+ * The box model is resolved already; height_definite distinguishes zero from auto.
  */
 void
 layout_replaced_size(
@@ -62,6 +63,8 @@ layout_replaced_size(
 	width_given = replaced_length(&box->style.width, containing_width, &width);
 	if (width_given)
 		width = replaced_content_size(box, width, CSS_LEFT, CSS_RIGHT);
+
+	/* Only an unresolved non-control width falls back to the real content attribute. */
 	if (!width_given && box->control == DOM_CONTROL_NONE)
 		width_given = replaced_attribute(box, "width", &width);
 
@@ -73,6 +76,8 @@ layout_replaced_size(
 		height_given = replaced_length(&box->style.height, containing_height, &height);
 	if (height_given)
 		height = replaced_content_size(box, height, CSS_TOP, CSS_BOTTOM);
+
+	/* Only an unresolved non-control height falls back to the real content attribute. */
 	if (!height_given && box->control == DOM_CONTROL_NONE)
 		height_given = replaced_attribute(box, "height", &height);
 
@@ -112,17 +117,20 @@ layout_replaced_size(
 	/* No side is negative. */
 	if (width < 0)
 		width = 0;
+
+	/* The final used height cannot be negative either. */
 	if (height < 0)
 		height = 0;
+
+	/* Publishes both final used content dimensions after all limits were resolved. */
 	box->width = width;
 	box->height = height;
+
+	/* Succeeded: the existing box now holds its resolved content dimensions. */
+	return;
 }
 
-/*
- * Reads a width or height attribute of the box's element as a number of
- * pixels (its leading digits); 0 when the element has no such attribute
- * or it starts with no digit.
- */
+/* Reads leading attribute digits as pixels, reporting absence when no initial digit exists. */
 static int
 replaced_attribute(
 	const struct layout_box *box,
@@ -140,6 +148,8 @@ replaced_attribute(
 	/* The element's attribute of that name. */
 	if (box->node == NULL || box->node->type != DOM_ELEMENT)
 		return 0;
+
+	/* Searches only actual no-namespace attributes on the native element. */
 	element = (const struct dom_element *)box->node;
 	attribute = NULL;
 	for (index = 0; index < element->attribute_count; index++) {
@@ -160,13 +170,17 @@ replaced_attribute(
 	unit = 0;
 	while (index < text->length) {
 		unit = vm_string_at(text, index);
-		if (unit != 0x20U && unit != 0x09U && unit != 0x0aU)
+		if (unit != 0x20U &&
+		    unit != 0x09U &&
+		    unit != 0x0aU)
 			break;
 		index++;
 	}
 
 	/* A value that starts with no digit gives no size. */
-	if (index >= text->length || unit < '0' || unit > '9')
+	if (index >= text->length ||
+	    unit < '0' ||
+	    unit > '9')
 		return 0;
 
 	/* The digits, up to a size no page needs. */
@@ -175,6 +189,8 @@ replaced_attribute(
 		unit = vm_string_at(text, index);
 		if (unit < '0' || unit > '9')
 			break;
+
+		/* Accumulates digits only while the existing bounded pixel cap still permits growth. */
 		if (number < 1000000)
 			number = number * 10 + (unit - '0');
 		index++;
@@ -185,10 +201,7 @@ replaced_attribute(
 	return 1;
 }
 
-/*
- * Resolves a length that sizes the box: pixels, or a percentage of the
- * containing width when that is known; 0 for auto, none and the rest.
- */
+/* Resolves pixels or a percentage with a known containing size, leaving other units unresolved. */
 static int
 replaced_length(
 	const struct css_length *length,
@@ -207,15 +220,11 @@ replaced_length(
 		return 1;
 	}
 
-	/* Not a size. */
+	/* Succeeded: auto, none or an unresolved containing size supplies no explicit length. */
 	return 0;
 }
 
-/*
- * Turns a size the style gave into the content box's: under box-sizing:
- * border-box it sized the border box, so the borders and paddings of the
- * two sides (first and second) come off it, down to nothing.
- */
+/* Removes both sides' borders and paddings from a border-box size without making it negative. */
 static layout_unit
 replaced_content_size(
 	const struct layout_box *box,
@@ -235,6 +244,6 @@ replaced_content_size(
 	if (size < 0)
 		size = 0;
 
-	/* The content's size. */
+	/* Succeeded: reports the nonnegative used content dimension. */
 	return size;
 }

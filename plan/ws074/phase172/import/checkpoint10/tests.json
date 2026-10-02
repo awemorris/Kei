@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "build/a1-browser2/plain/host-realm-retirement"
+    ],
+    "exit": 0,
+    "stdout": "retired primary realm tracing: PASS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-array-length"
+    ],
+    "exit": 0,
+    "stdout": "array length capacity checks: 4/4 passed\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-write"
+    ],
+    "exit": 0,
+    "stdout": "write fatal errors: 2 cases passed\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "build/a1-browser2/plain/host-color-media"
+    ],
+    "exit": 0,
+    "stdout": "native color media: 29/29 passed\n",
+    "stderr": ""
+  }
+]

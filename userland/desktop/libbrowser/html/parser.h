@@ -18,6 +18,11 @@
 #include "html/html.h"
 #include "dom/dom.h"
 
+/* What a run of characters is, for the modes' decisions. */
+#define TB_TEXT_WHITESPACE 0
+#define TB_TEXT_NULL 1
+#define TB_TEXT_OTHER 2
+
 /*
  * The insertion modes of the standard's tree construction.
  */
@@ -73,11 +78,6 @@ struct tb_token {
 	const uint16_t *text;
 	size_t length;
 };
-
-/* What a run of characters is, for the modes' decisions. */
-#define TB_TEXT_WHITESPACE	0
-#define TB_TEXT_NULL		1
-#define TB_TEXT_OTHER		2
 
 /*
  * One entry of the list of active formatting elements: an element, or a

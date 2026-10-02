@@ -1,0 +1,35 @@
+{
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": "cc -std=gnu11 -O1 -g -Wall -Wextra -Werror -D_GNU_SOURCE -fPIC -Iuserland/desktop/libbrowser -Iuserland/desktop/browser -Iplan/ws074/tests -Ibuild/a1-browser2/include -I. -g0 -c SOURCE -o OBJECT",
+  "base": "78e9b0a5477bee1b8127b6df74d71ca867da4670",
+  "files": [
+    {
+      "path": "plan/ws074/tests/host-data-url.c",
+      "compile_warning0": true,
+      "before_text_sha256": "b432db55af66dc8479323b930c33c57144e659d382db66014918d8365c6d0d06",
+      "after_text_sha256": "85bbadf98fee0416838d857445fa1659b7893e378d153e2195a224ee857f776e",
+      "text_equal": false
+    },
+    {
+      "path": "plan/ws074/tests/host-image-zero.c",
+      "compile_warning0": true,
+      "before_text_sha256": "035fca1ac7aead719ecc41d5ef2280268a1ac1bb4c091c195da321644668dc35",
+      "after_text_sha256": "8041348d7b66a29e759a67d4dec577191be1f8ede8ec2f6b5788bc8f3b5b0041",
+      "text_equal": false
+    },
+    {
+      "path": "plan/ws074/tests/host-namespace.c",
+      "compile_warning0": true,
+      "before_text_sha256": "ad8db7b363e8c1a5fc66817c89318a2b30dbe7ca27ad61e91496d5da1ae17456",
+      "after_text_sha256": "ad8db7b363e8c1a5fc66817c89318a2b30dbe7ca27ad61e91496d5da1ae17456",
+      "text_equal": true
+    },
+    {
+      "path": "plan/ws074/tests/host-radio-state.c",
+      "compile_warning0": true,
+      "before_text_sha256": "d7ef7e99a5305b0e8dd02428a580481e3a3c49ff1728a0c5f9619a87ca941d28",
+      "after_text_sha256": "d7ef7e99a5305b0e8dd02428a580481e3a3c49ff1728a0c5f9619a87ca941d28",
+      "text_equal": true
+    }
+  ]
+}
