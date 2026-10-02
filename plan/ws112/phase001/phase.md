@@ -34,7 +34,8 @@ push/remote release/Issues公開は本計画では承認されていない。
 ## Evidence / findings / resume
 
 q585-i01実行中。[調査証拠と未決](survey.md)へ実source gap、5OS input候補、公式checksum/index/catalog照合、共通payloadを記録。base `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。
-Skipped: OS image取得、signature/image本体検証、implementation/build/guest/CI/release/導入・runtime。
+[環境/署名/後続command](../native-environments.md)と[形式/依存/CI成果物契約](../package-contract.md)を追加。Ubuntu/Fedora/Arch checksum署名は小metadataで実検証、image本体は未検証。
+Skipped: OS image取得、image本体署名/hash検証、implementation/build/guest/CI/release/導入・runtime。
 Resume: 07:12〜08:12 UTCの有限調査内で形式/依存/build環境を具体化。新OS boot方針・RPi環境・trust rootが未知のままclearしない。
 
 ## Event history
@@ -44,3 +45,5 @@ Resume: 07:12〜08:12 UTCの有限調査内で形式/依存/build環境を具体
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。
 
 2026-10-02 / ws112-q585-survey-checkpoint-1: 承認済みp001調査を開始。既存source gapと5OS input/hash候補を保存、runtime/新OS合格は未実施。新3OS boot例外・RPi実rootfsのbuild環境・署名trust rootを未決としてmainへ報告。Status in-progress、後続Queueなし、GitHub delivery保留。
+
+2026-10-02 / ws112-q585-survey-checkpoint-2: 版付きArch URL、公式checksum署名trust root/実暗号検証、RPi公式.infoのnative inventoryを追加。dpkg/RPM/Arch encoderと独立監査、payload/source gzip/CI全5OS集合の契約を具体化。D1/D2判断と実guest照合は未決、Status in-progress。Scope/外部Phaseのclear条件/Queue許可は変更せず、詳細設計の次反映はWSと各foreign Phaseへ記録予定。
