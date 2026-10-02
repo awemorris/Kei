@@ -35,6 +35,7 @@ push/remote release/Issues公開は本計画では承認されていない。
 
 q585-i01実行中。[調査証拠と未決](survey.md)へ実source gap、5OS input候補、公式checksum/index/catalog照合、共通payloadを記録。base `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。
 [環境/署名/後続command](../native-environments.md)と[形式/依存/CI成果物契約](../package-contract.md)を追加。Ubuntu/Fedora/Arch checksum署名は小metadataで実検証、image本体は未検証。
+[基準別証拠/commands/results/limits](criteria.md)を保存。D1だけが未解決人間判断、他の実image/native ELF/tool版/経過時間は後続実装verification契約と区別する。
 Skipped: OS image取得、image本体署名/hash検証、implementation/build/guest/CI/release/導入・runtime。
 Resume: 07:12〜08:12 UTCの有限調査。5OS input/形式/依存/source/payload/CI契約と後続commandを定義。D2はmainのdelegated判断で既存Debian VM内公式RPi arm64 rootfs/QEMU-user方式を採用、D1 Fedora/Arch boot適用はuser返答待ち。未決のままclearしない。
 
@@ -55,3 +56,5 @@ Resume: 07:12〜08:12 UTCの有限調査。5OS input/形式/依存/source/payloa
 2026-10-02 / ws112-q585-rpi-environment-selected: mainのdelegated technical判断でD2を解決。外側既存pin Debian13 QEMU VM＋内側公式RPi Lite Trixie arm64 rootfs/QEMU-user/native compilerを採用、真のOS/CPU/compiler/headers/libcとbuild-only契約を保持。外側既存Debian例外を用いRPi kernel bootなし、実成立確認/p003実行許可は追加しない。変更したforeign p003、WS/design/環境契約にも根拠とresumeを保存。D1 Fedora/Archはmainがuser確認中、in-progress保持。
 
 2026-10-02 / ws112-q591-p002-candidate: main指示で後続p002 scope/command/verification候補を[文書](../phase002/queue-candidate.md)へ準備、p002/WSにもevent保存。p001残件やQueue承認を代替せず、後続実装は開始しない。
+
+2026-10-02 / ws112-q585-evidence-checkpoint: D2選択後のcurrent procedure参照を更新、source識別version契約とnative parser検証を明示。既存WS108にelapsed未保存/新OS方式未実測の限界を保存、基準別evidence/commands/results/skips/resumeをcriteriaへ追加。D1返答待ちのためin-progress保持、終端clearはまだ宣言しない。

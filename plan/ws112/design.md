@@ -49,7 +49,7 @@ configの扱いは形式ごとに保持契約を記録する。package scripts�
 各成果物には既存方針のchecksum、payload manifest、Keiland JSON buildinfoを添付する。buildinfoはsource revision/dirty/hash、OS/CPU、入力checksum、compiler/toolsを記録する。
 一時stage/source転送は専用buildディレクトリ、allowlist方式。共有build/toolchain/host /optを変更しない。ホストtoolchainでなく、各対象OSのnative toolchainを使う。
 
-[形式/依存契約](package-contract.md)でnative dpkg-deb/rpmbuild/makepkgと独立query/extraction、config保持・private Vulkanのdlopen依存・native package DB・version案を具体化。
+[形式/依存契約](package-contract.md)でnative dpkg-deb/rpmbuild/makepkgと独立query/extraction、config保持・private Vulkanのdlopen依存・native package DB・source識別versionを具体化。
 共通manifestはpath/type/hash/mode/owner/link targetとdirectoryを監査。all5 source archive hash一致は外側gzip headerも決定的にするp002修正を前提とする（現行はmember時刻だけ固定）。
 公開package index版と実guest版を区別し、後続Phaseがnative導入/ELFと照合する。候補表だけで実packageの依存合格としない。
 

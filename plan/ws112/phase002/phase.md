@@ -22,7 +22,7 @@ tools/release/keiland-linux-debとroot targetの必須経路を整理。native Q
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
 既存native QEMU buildをruntimeから分離し、共通stageとsource archiveの外側gzip時刻/filename固定を提供。既存2inputを保持、launcher/test app除外・conffiles・native dpkg-shlibdeps/dpkg-debと独立dpkg query/extractionを照合する。
 後続command/証拠: make keiland-linux-debian / make keiland-linux-ubuntu2604、専用outputの各deb+3sidecars、source hash再現、readelf CPU/SONAME/RUNPATH、package展開と共通manifest比較。任意runtimeの入口と過去WS108証拠は保存。
-Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は[環境契約](../native-environments.md)の採用方式に従い、実成立は担当Phaseで確認する。
 
 ## Clearance criteria / verification
 

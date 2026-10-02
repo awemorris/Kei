@@ -60,7 +60,7 @@ package scriptsによる起動やuser data削除は禁止、install/remove runti
 Debian/Ubuntuは既存version`0~gitDATE.SHA12-1+debian13/ubuntu2604`を保持。RPiは`0~gitDATE.SHA12-1+rpios13`。
 RPMは`Version: 0.0.gitDATE.SHA12`と`Release: 1.fc44`、Archは`pkgver=0.0.gitDATE.SHA12`と`pkgrel=1`。
 deb version文字列を他形式へそのまま代入しない。native parserでこのversion/archの受理と、同日の2commitおよび日付変更時の比較をp002〜p005で記録する。
-SHAの辞書順はcommit時系列を保証しないため、上記version案だけで厳密なupgrade順を保証したとしない。現行deb契約は維持し、新formatの正式versionはnative比較結果も見て確定する。
+SHAの辞書順はcommit時系列を保証しないため、上記version契約はsource識別であり厳密なupgrade順を保証したとしない。現行deb契約を維持し、新formatも上記文字列をnative grammarへ渡す。parserが拒否した場合は技術設計を修正し、証拠を保存する。
 
 | target_id | package architecture / ELF | package filename |
 | --- | --- | --- |
@@ -87,9 +87,9 @@ p002でouter gzip mtime/filenameも固定し、source archive hash一致を検�
 ## CI/release verifierと失敗確認
 
 matrixは上表の5target_idと指定make target/CPU/formatを明示し、sourceはcheckoutの同一`github.sha`。
-Debian/Ubuntu/Fedora/ArchのQEMU x86_64ではTCGを基本に、RPi方式は[環境調査](native-environments.md)のD2解決後に設定する。
+Debian/Ubuntu/Fedora/ArchのQEMU x86_64ではTCGを基本に、RPiは[環境契約](native-environments.md)の選択済み外側Debian VM＋内公式rootfs/QEMU-user方式を設定する。
 host dependencies、artifact path、期限は各jobの方式から定める。現在45minの全2OS jobを新RPiへ無根拠に流用せず、p003の実経過時間を根拠にする。
-build guest起動確認はcompiler実行の前提、package導入/GUI runtimeの関門とは別。boot方法D1未決時は新guestを開始しない。
+build guest起動確認はcompiler実行の前提、package導入/GUI runtimeの関門とは別。boot方法D1未決時は新Fedora/Arch guestを開始しない。RPiの外側は既存Debian例外を用い、内RPi kernelをbootしない。
 
 releaseは既存image/zip buildと**5package matrix全件**をneeds。download後、package内のnative metadataとsidecarを読み、5OS/CPU/source/形式が一意に揃うことを再確認する。
 未知file/重複basenameがmerge-multipleで上書きされる前に、per-target directoryまたはartifact indexで検査する。

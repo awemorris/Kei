@@ -22,7 +22,7 @@ Fedora native buildと軽量RPM生成、CPU/version/依存/config/license metada
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
 Fedora44 Generic44-1.7 x86_64の公式image/hashとsigned CHECKSUM検証済みtrust rootを候補入力とする。native gcc/repo/rpm-buildでproduction stageをbinary rpm化、auto system Requiresとprivate self-contained依存の境界、config(noreplace)/licenseを設定する。
 後続command/証拠: make keiland-linux-fedora44、native RPM headerのOS/CPU/version/Requires/Provides/scripts/file owner/modeをrpm -qpでquery、rpm2cpio+cpioの独立展開とmanifest比較。BRP/strip/debugによるstage変更は拒否、新OS boot条件を次Queue承認前に照合。
-Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の残存判断と定義済み契約を照合し、当Phaseのexact Queueにinput/適用boot方法/command/timeboxを保存するまで実装を開始しない。D2は[環境契約](../native-environments.md)の採用方式に従い、実成立は担当Phaseで確認する。
 
 ## Clearance criteria / verification
 
