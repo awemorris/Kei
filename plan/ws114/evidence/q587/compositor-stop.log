@@ -1,0 +1,10 @@
+owned compositor pid=1340
+ZWL CLEANUP client=2 objects=19 unread_fds=0
+ZWL DESKTOP gone client=2
+ZWL IME lost pid=1353
+ZWL CLEANUP client=1 objects=10 unread_fds=0
+ZFILES DONE reason=disconnected
+KEI-IME DONE
+ZWL OUTPUT closed
+ZWL EXIT frames=985 error=0 cleanup_failed=0 pid=1340 input_events=153 seat_events=272 at_ms=2989997
+    PID COMMAND

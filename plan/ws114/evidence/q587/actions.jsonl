@@ -409,3 +409,19 @@
 {"utc": "2026-10-02T08:45:10Z", "action": "ssh", "command": "ps -p $(cat /tmp/q587-files.pid) -o pid,args || true; grep -E \"TITLEBAR.*(text|activated)|GLASS (dock|undock)\" /tmp/q587-compositor.log | tail -15", "evidence": "native-files-controls.log"}
 {"utc": "2026-10-02T08:45:11Z", "action": "ssh", "command": "printf \"q587 Textedit test\\n\" > /tmp/q587-note.txt; . /tmp/q587-session.env; nohup /opt/keiland/bin/textedit /tmp/q587-note.txt > /tmp/q587-textedit.stdout 2> /tmp/q587-textedit.trace < /dev/null & echo $! > /tmp/q587-textedit.pid", "evidence": "native-textedit-start.log"}
 {"utc": "2026-10-02T08:45:12Z", "action": "screenshot", "name": "native-textedit.png"}
+{"utc": "2026-10-02T08:50:04Z", "action": "point", "x": 1063, "y": 73}
+{"utc": "2026-10-02T08:50:04Z", "action": "button", "down": true, "kind": "left"}
+{"utc": "2026-10-02T08:50:04Z", "action": "button", "down": false, "kind": "left"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "ps -p $(cat /tmp/q587-textedit.pid) -o pid,args || true; tail -6 /tmp/q587-textedit.stdout", "evidence": "native-textedit-close.log"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "cat /tmp/q587-final.trace", "evidence": "gtk-gl-final.trace"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "cat /tmp/q587-cairo.trace", "evidence": "gtk-cairo.trace"}
+{"utc": "2026-10-02T08:50:05Z", "action": "ssh", "command": "cat /tmp/q587-vulkan.trace", "evidence": "gtk-vulkan.trace"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-wire-final.log", "evidence": "wire-final.log"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-bounded.log", "evidence": "bounded-wire.log"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-rightmove.log", "evidence": "rightmove-wire.log"}
+{"utc": "2026-10-02T08:50:06Z", "action": "ssh", "command": "cat /tmp/q587-compositor.log", "evidence": "compositor-before-stop.log"}
+{"utc": "2026-10-02T08:50:07Z", "action": "ssh", "command": "compositor_pid=$(pgrep -f \"^/opt/keiland/bin/wayland --socket=/run/b1-q587/wayland-q587\"); printf \"owned compositor pid=%s\\n\" \"$compositor_pid\"; test -n \"$compositor_pid\"; kill -TERM \"$compositor_pid\"; sleep 1; tail -8 /tmp/q587-compositor.log; ps -p \"$compositor_pid\" -o pid,args || true", "evidence": "compositor-stop.log"}
+{"utc": "2026-10-02T08:50:08Z", "action": "ssh", "command": "cat /tmp/q587-compositor.log", "evidence": "compositor-complete.log"}
+{"utc": "2026-10-02T08:50:08Z", "action": "key", "keys": ["ctrl", "alt", "f1"]}
+{"utc": "2026-10-02T08:50:08Z", "action": "screenshot", "name": "linux-final-console.png"}
+{"utc": "2026-10-02T08:50:08Z", "action": "poweroff", "qemu_pid": 327367}
