@@ -36,3 +36,5 @@ mainが旧v2-soft-b.pngを目視確認。既存wallpaper.ppm（1280x800、SHA256
 2026-10-02 / user-lake-default-20261002: 実装前の追加指示により起動defaultと既存背景選択維持を受け入れ条件へ追加。q593のexact snapshotへ含める。q588のsource conformance scopeは変更しない。WS099 summaryへ投影し、共有記録の投影はAgent Aへのhandoff対象。
 
 2026-10-02 / user-b1-b2-wrap-up-20261002: userがB1/B2へ現在のPhase後のラップアップ/終了を指示。B2の現在の実行はq588であり、q593/p019はまだ開始していないため後続投入を停止する。背景収録/defaultの決定と調査成果を保持し、Phaseはplanning/normalのまま。取り消しや実装完了を意味しない。
+
+2026-10-02 / b2-wallpaper-resume-saved: B2最終提出111b864aをB main9323725bへ統合。[再開資料](../../ws094/phase007/q593-resume.md)に既存PNG/PPMの同一bytes/hash/provenance、native/zedBSDの最小recipe候補、保存設定優先/既存選択肢維持、抽象版の未発見と探索限界を保存。source画像収録・default変更は未実施。q593は予約のみで未着手を維持する。

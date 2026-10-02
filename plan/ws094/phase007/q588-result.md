@@ -117,3 +117,12 @@ acquired. Existing q582 owned QEMU/renderer were previously stopped and their
 runtime session record removed. Private build/evidence caches remain for resume;
 shared toolchain and source trees were read-only. Main owns Queue/WS projections
 and final integration/ACK; B2 does not alter A-owned shared records or push.
+
+## Main integration / 2026-10-02
+
+Final submission `111b864a` was integrated at `9323725b`; lane ACK `04f05ff1`.
+Main reviewed the source/manual dispositions and verified all nineteen original
+log hashes. q588-i01 is cleared for its approved partial scope; whole p007 remains
+uncleared. The sole merge conflict was the Phase status projection, reconciled
+to uncleared. B1's concurrent compositor changes require the recorded inventory
+and final runtime checks to be refreshed before whole-Phase acceptance.
