@@ -1,0 +1,54 @@
+PASS initial auto
+PASS rule keyword auto
+PASS rule keyword default
+PASS rule keyword none
+PASS rule keyword context-menu
+PASS rule keyword help
+PASS rule keyword pointer
+PASS rule keyword progress
+PASS rule keyword wait
+PASS rule keyword cell
+PASS rule keyword crosshair
+PASS rule keyword text
+PASS rule keyword vertical-text
+PASS rule keyword alias
+PASS rule keyword copy
+PASS rule keyword move
+PASS rule keyword no-drop
+PASS rule keyword not-allowed
+PASS rule keyword e-resize
+PASS rule keyword n-resize
+PASS rule keyword ne-resize
+PASS rule keyword nw-resize
+PASS rule keyword s-resize
+PASS rule keyword se-resize
+PASS rule keyword sw-resize
+PASS rule keyword w-resize
+PASS rule keyword ew-resize
+PASS rule keyword ns-resize
+PASS rule keyword nesw-resize
+PASS rule keyword nwse-resize
+PASS rule keyword col-resize
+PASS rule keyword row-resize
+PASS rule keyword all-scroll
+PASS rule keyword grab
+PASS rule keyword grabbing
+PASS rule keyword zoom-in
+PASS rule keyword zoom-out
+PASS default inherited
+PASS own override
+PASS invalid preserves declaration
+PASS extra token rejected
+PASS string rejected
+PASS initial overrides inheritance
+PASS unset inherits
+PASS explicit inherit
+PASS live ancestor mutation
+PASS canonical ASCII keyword
+PASS property value agrees
+PASS removal inherits
+PASS rule important over inline
+PASS inline important wins
+PASS computed read-only
+PASS invalid rule preserves inheritance
+PASS removed ancestor returns auto

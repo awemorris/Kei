@@ -1,0 +1,40 @@
+PASS button interface identity
+PASS label interface identity
+PASS meta interface identity
+PASS unrelated element no special property
+PASS button missing type
+PASS canonical button raw content
+PASS button setter raw reflection
+PASS button invalid type Auto
+PASS keyword whitespace not trimmed
+PASS removed type restores default
+PASS Auto command context
+PASS explicit submit overrides command context
+PASS Auto commandfor context
+PASS Auto select parent context
+PASS Auto removed select context
+PASS missing button value independent of label
+PASS button value from content
+PASS button value writes content
+PASS button value removed
+PASS missing alias values empty
+PASS label property reflects for
+PASS label content reflects property
+PASS label for expando distinct
+PASS label expando cannot change reflection
+PASS meta property preserves raw content
+PASS meta content reflects property
+PASS meta expando name distinct
+PASS meta expando cannot change reflection
+PASS DOMString conversion once
+PASS DOMString null literal
+PASS conversion exception preserves content
+PASS Symbol conversion rejected
+PASS receiver brand before conversion
+PASS foreign namespace cannot borrow button brand
+PASS clone interface and attribute preserved
+PASS parser chooses specialized button
+PASS parser chooses specialized label meta
+PASS child interface owner
+PASS borrowed child receiver writes own DOM
+PASS child getter exception realm

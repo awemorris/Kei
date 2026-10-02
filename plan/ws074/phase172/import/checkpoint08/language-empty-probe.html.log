@@ -1,0 +1,32 @@
+PASS language direct and inherited
+PASS language hyphen exact
+PASS ASCII case insensitive range
+PASS ASCII case insensitive declaration
+PASS arbitrary prefix rejected
+PASS cascade language applies
+PASS query language inheritance
+PASS attribute dash remains exact-case
+PASS own language overrides ancestor
+PASS live language cascade mutation
+PASS empty language stops inheritance
+PASS removed declaration restores inheritance
+PASS hyphen boundary required
+PASS live ancestor language change
+PASS invalid language argument 0
+PASS invalid language argument 1
+PASS invalid language argument 2
+PASS invalid language argument 3
+PASS invalid language argument 4
+PASS XML namespaced language inheritance
+PASS foreign language query
+PASS empty element matches
+PASS comment ignored by empty
+PASS zero-length text ignored
+PASS multiple empty text ignored
+PASS empty cascade applies
+PASS whitespace text is content
+PASS live nonempty cascade mutation
+PASS empty text mutation restores empty
+PASS foreign element makes parent nonempty
+PASS foreign removal restores empty
+PASS empty text nodes preserved
