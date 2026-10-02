@@ -1,0 +1,30 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-data-url.c",
+      "formatted_sha256": "59590a060b21343fd0ad3a4903c0663b16e993c15f05114718c6f4540f94fbc4",
+      "final_sha256": "34378a71ef5c7ef29dd0984539c3cc0afd1573984b7742db058a6339cee0103d",
+      "restorations": "Mandatory definition argument tabs, immutable corpus rows and one-argument-per-line split fixture calls retained."
+    },
+    {
+      "path": "plan/ws074/tests/host-image-zero.c",
+      "formatted_sha256": "a003840d6c53a20de4e231501cf14cb2ce31d7d8bc070333ddd50cf853955db0",
+      "final_sha256": "699f19add5fe60de1ac328ecac3b5121bac453aeb9e65af80c765dca1494a954",
+      "restorations": "Mandatory definition argument tabs, immutable corpus rows and one-argument-per-line split fixture calls retained."
+    },
+    {
+      "path": "plan/ws074/tests/host-namespace.c",
+      "formatted_sha256": "84a27101ff804664e618706562494892d51c67e53f25034d8be2b7d84ab4042b",
+      "final_sha256": "e9ae652c8e01aab449e22108a668072b7fc8be1d52f6facd0c72cd6a531cca31",
+      "restorations": "Mandatory definition argument tabs, immutable corpus rows and one-argument-per-line split fixture calls retained."
+    },
+    {
+      "path": "plan/ws074/tests/host-radio-state.c",
+      "formatted_sha256": "6002a43529156058464d091d167221731c1f29b29104752bf3b24c290efdbcd4",
+      "final_sha256": "e2a44c648ab8c6441462ab995aab33a3537b09084c64d61300f0d1ff96db6efd",
+      "restorations": "Mandatory definition argument tabs, immutable corpus rows and one-argument-per-line split fixture calls retained."
+    }
+  ]
+}
