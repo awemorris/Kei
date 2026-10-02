@@ -13,7 +13,7 @@ Approval: current user 2026-10-02「では、N=3で作業を開始してくだ�
 - `files.h`: internal prune declaration and cached listing error. The failed→successful listing transition refreshes pruning even when count/names are unchanged; the host test does not invalidate the cache manually.
 - `host-desktop.c`: persisted stale-row removal, retained off-grid name, repeated/empty listing, deferred write, failed-listing guard.
 - `files-desktop-guest.sh`: new prune step checks a stale row before/after dragging, hidden=0 and 100 items/91 cells/hidden=9. Guest execution pending.
-- Three pre-existing blank-after-brace findings in the touched desktop C files are repaired by whitespace only.
+- Three pre-existing blank-after-brace findings in the touched desktop C files are repaired with purpose comments and spacing; behavior is unchanged.
 
 ## Validation
 
