@@ -17,6 +17,13 @@ Investigation bound: 90分の有限1Phase Queue案。具体的なscope/timebox/c
 
 [共通設計](../design.md)の対応節を使用する。自分のPhase以外の受け入れを変更する必要が出たら、依存/foreign Phase/WSを同時に計画修正し、material scopeの同意を確認する。
 
+## Detailed procedure / q585 investigation
+
+[Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
+公式Arch cloudimg v20261001.604814と2026/10/01 repo snapshotを候補入力とする。公式arch-boxes checksum signerを使用、native非root makepkgのminimal PKGBUILDで既存stageを収録、system依存とbackup/licenseを設定する。
+後続command/証拠: make keiland-linux-arch、native pacman/makepkg版・repo時点・signed packages、PKGINFO/BUILDINFO/MTREEとpacman -Qip/-Qlp/bsdtarの独立展開をmanifest比較。CPU x86_64・pkg.tar.zst・strip/debug抑止を確認、新OS boot条件を次Queue承認前に照合。
+Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
+
 ## Clearance criteria / verification
 
 make keiland-linux-archでArch binary packageを生成、metadata query/extraction等でformat/payload/CPU/owner/mode/依存を確認。rolling OSの入力時点を記録。
@@ -39,3 +46,5 @@ Resume: prerequisitesの実出力と判断を照合し、当PhaseだけのQueue�
 ## Event history
 
 2026-10-02 / ws112-package-plan-20261002-ws112-p005-created: userの5OS package計画をこの有限Phaseへ分割、Status planned・Queue none。RPi arm64回答を契約に反映。詳細とscopeはWS/design参照。GitHub body/comment/Project公開は保留、local/outboxに記録。
+
+2026-10-02 / ws112-q585-contract-detail: [p001](../phase001/phase.md)の一次資料/実source調査で当Phaseのprocedure/command/証拠を具体化。上記のnative環境/形式/CI契約へ対応づけ、既存prerequisites・受け入れ・Queue none・Status plannedを保持。再開はp001残件と必要な実出力を照合後の当Phaseだけの承認済Queue。[WS要約](../ws.md#event-history)。GitHub deliveryはmain canonical outboxへ。

@@ -1,8 +1,7 @@
 # q585-i01: Linux package契約調査
 
 Status: in-progress / 契約調査の部分証拠。実装・OS image取得・guest起動・package生成は未実施。
-Observation: 2026-10-02 UTC、Agent A2、base `0e68854ace6a84b06eb23268ae75c4cf7b79b6bda`。
-正しいbase SHAはgit記録の `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。調査上限は07:12〜08:12 UTC。
+Observation: 2026-10-02 UTC、Agent A2、base `0e68854ace6a84b06eb23268ae75c4cf7b79b6da`。調査上限は07:12〜08:12 UTC。
 Approval / scope: [A2 Queue](../../agents/A2/queue.md)、[p001](phase.md)。
 
 ## 実sourceと既存成果の照合
@@ -24,7 +23,7 @@ WS112では必須package工程からclient compileも除き、任意runtime側�
 
 ## 5OSの入力候補と観測
 
-下表のhashは公式metadataとの一致確認であり、image本体の取得/hash照合や署名の暗号検証を実施したという意味ではない。
+下表のhashは公式metadataとの一致確認であり、image本体の取得/hash照合を実施したという意味ではない。checksum署名の暗号検証は後掲の通り一部実施した。
 mutable `latest`をproduction pinにしない。image pinsとguest内repositoryから導入するbuild packagesの版/由来は別々に記録する。
 
 | Target / OS / CPU | 版とinput URL | Hash / 確認結果 |
@@ -33,7 +32,7 @@ mutable `latest`をproduction pinにしない。image pinsとguest内repository�
 | `keiland-linux-ubuntu2604` / Ubuntu26.04 / amd64・x86_64 | [release-20260927 cloud img](https://cloud-images.ubuntu.com/releases/resolute/release-20260927/ubuntu-26.04-server-cloudimg-amd64.img) | SHA256 `8800651811af9a85465ad1d552add729947bb16488dddb4a9b5305a3d97332b2`、既存inputs.jsonと公式SHA256SUMSが一致 |
 | `keiland-linux-rpi` / Raspberry Pi OS Lite Trixie / arm64・aarch64 | [2026-09-15 official image](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2026-09-15/2026-09-15-raspios-trixie-arm64-lite.img.xz) | compressed SHA256 `cdf4f3bfac35ae947b46e4e767f935453810549779ac3290e05a6754aee627e5`、公式download pageと同名.sha256が一致。official Imager catalogのexpanded image SHA256 `49fafba626ec00e0f9800349b9edae6caf8cfc223f673b875b72ac2797ed9576`、サイズ3061841920 bytes |
 | `keiland-linux-fedora44` / Fedora44 / x86_64 | [Cloud Base Generic44-1.7 qcow2](https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2) | SHA256 `28680fe5b371a5a82ebf43a31926e086a168e59949d03969c5093e7071f90b7f`、公式download pageとofficial redirectで取得したsigned CHECKSUMの値が一致。image583729152 bytes |
-| `keiland-linux-arch` / Arch snapshot / x86_64 | [Cloudimg20261001.604814 qcow2](https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg-20261001.604814.qcow2) | SHA256 `360f0fa49db6813bdc8e35bed230a2dc2ae3567b7b5ab74719c0a706e4e34e87`、公式indexと同名.SHA256を確認。image578080256 bytes。latest配下の保持期間は未確認、archiveへ固定できるか残件 |
+| `keiland-linux-arch` / Arch snapshot / x86_64 | [Cloudimg20261001.604814 qcow2](https://geo.mirror.pkgbuild.com/images/v20261001.604814/Arch-Linux-x86_64-cloudimg-20261001.604814.qcow2) | SHA256 `360f0fa49db6813bdc8e35bed230a2dc2ae3567b7b5ab74719c0a706e4e34e87`、版付きdirectoryの同名.SHA256とlatest値が一致。image578080256 bytes。`v`なしdirectoryは404、将来保持は保証しない |
 
 Debian/Ubuntuは既存pinを保持する。RPiは公式Lite arm64の実rootfsを使い、Debian13 arm64だけをRPiと称して出荷しない。
 FedoraのGeneric imageを選ぶ。UEFI-UKI imageは別hash/firmware経路なので取り違えを拒否する。
@@ -69,22 +68,25 @@ web toolで一次download/仕様を閲覧後、Python3 urllibでchecksum/index/c
 | URL / 出典 | 2026-10-02確認結果 |
 | --- | --- |
 | [Debian SHA512SUMS](https://cloud.debian.org/images/cloud/trixie/20260914-2601/SHA512SUMS) | webは取得不可、bounded HTTP200で該当qcow2のhashを照合 |
-| [Ubuntu SHA256SUMS](https://cloud-images.ubuntu.com/releases/resolute/release-20260927/SHA256SUMS) | webは取得不可、bounded HTTP200で該当amd64.imgのhashを照合 |
+| [Ubuntu SHA256SUMS](https://cloud-images.ubuntu.com/releases/resolute/release-20260927/SHA256SUMS) | webは取得不可、bounded HTTP200で該当amd64.imgのhashを照合。SUMS.gpgを公式cloud image keyで暗号検証、exit0/VALIDSIG一致 |
 | [RPi downloads](https://www.raspberrypi.com/software/operating-systems/) | webでLite64-bit/2026-09-15/Trixie/6.18/hashを確認。direct HTMLは403 |
 | [Imager catalog](https://downloads.raspberrypi.com/os_list_imagingutility_v4.json) | bounded HTTP200、Lite64-bitのURL/expanded hash/size、`init_format=cloudinit-rpi`を確認 |
 | [RPi image checksum](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2026-09-15/2026-09-15-raspios-trixie-arm64-lite.img.xz.sha256) | bounded HTTP200、download pageと一致。latest/latest-sha256 shortcutは404なので使用しない |
 | [RPi repo InRelease](https://archive.raspberrypi.com/debian/dists/trixie/InRelease) | bounded HTTP200、Origin/Label Raspberry Pi Foundation、Codename trixie、arm64収録。signature未検証 |
 | [Fedora downloads](https://fedoraproject.org/cloud/download/) | web/HTMLで44-1.7 Generic x86_64のURL/hashとsigned CHECKSUM参照を確認 |
-| [Fedora CHECKSUM](https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-44-1.7-x86_64-CHECKSUM) | official redirect→`ftp.yz.yamagata-u.ac.jp`でHTTP200、Generic hash一致。dl.fedoraproject.org直URLとarchives直URLは404。暗号署名は未検証 |
-| [Arch index](https://geo.mirror.pkgbuild.com/images/latest/)・[SHA256](https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg-20261001.604814.qcow2.SHA256) | web/indexとbounded HTTP200でfilename/hashを確認。SHA256.sig/image.sigの存在をindexで確認、署名検証未実施 |
+| [Fedora CHECKSUM](https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-44-1.7-x86_64-CHECKSUM) | official redirect→`ftp.yz.yamagata-u.ac.jp`でHTTP200、Generic hash一致。dl.fedoraproject.org直URLとarchives直URLは404。公式Fedora44 keyでCHECKSUM署名を暗号検証、exit0/VALIDSIG一致 |
+| [Arch index](https://geo.mirror.pkgbuild.com/images/v20261001.604814/)・[SHA256](https://geo.mirror.pkgbuild.com/images/v20261001.604814/Arch-Linux-x86_64-cloudimg-20261001.604814.qcow2.SHA256) | bounded HTTP200でfilename/hashと版付きURLを確認。latestと版付きSHA256.sigの双方をarch-boxes公式README keyで暗号検証、exit0/VALIDSIG一致。版付きSUMS値は同一 |
+
+署名fingerprint/日付/未確認範囲とnative環境commandは[環境証拠](../native-environments.md)、encoder/依存/config/version/manifest/CI契約は[形式契約](../package-contract.md)へ記録。
+host Python3.13.5/git2.47.3/curl8.14.1/GnuPG2.4.7/QEMU10.0.11を読取確認。ignored tempのisolated keyringのみ使用し、host install/buildは行わなかった。
 
 ## 未決 / 依存を解除しない条件
 
 | ID | 不足 / 判断 | 再開条件 |
 | --- | --- | --- |
-| D1 | GuardrailのSSH/QMP boot例外はDebian/Ubuntu/FreeBSDだけ。新RPi/Fedora/Archへ適用したというユーザー決定は未発見 | mainが既存scope/決定を確認し、必要なら新3OS build guestのboot方法を判断元付きで共有Guardrailへ記録。serial/console log判定を許可したと解釈しない |
-| D2 | RPi board imageはgeneric QEMU virtでそのまま起動できない。実rootfs＋kernel/transportの成立性・補助kernelのinput pinは未確定 | 一次資料で成立するnative arm64 build環境を具体化、OS identity/CPU/compiler/headers/library由来を検証できるcommandを設計。実起動はp003の新Queueのみ |
-| D3 | 新OS image/チェックサムの署名trust rootとArch snapshot retention/repository固定時点 | official signer/key/verificationと保持されるversion URLを確認、取得不能は明記。checksumだけを署名検証と主張しない |
-| D4 | Fedora/Arch/RPi native依存名・native encoder版と実ELF依存の照合が未完 | package形式一次資料と公式package名を調査、guestでversion/依存を確認する後続commandを定義。実guest導入は今回scope外 |
+| D1 | Fedora/ArchへのSSH/QMP boot例外適用をmainがuserへ確認、返答待ち。RPiは採用方式の外側Debian既存例外を使用 | Fedora/Archの判断元と共有Guardrailをmainが保存後に解消。serial/console log判定を許可したと解釈しない |
+| D2 | 解決: mainがdelegated technical判断として外側既存Debian13 pinned QEMU VM＋内側公式RPi OS13 Lite arm64 rootfs/QEMU-user native compilerを採用 | [環境契約](../native-environments.md)の隔離/syscall/OS/compiler/ABI証拠commandをp003の新Queueで実証。実環境成立や実行許可と混同しない |
+| D3 | Ubuntu/Fedora/Archのchecksum署名trust rootは実検証済み。RPi image署名はfull image未取得、Debian現行SUMS署名は提供されない。versioned Arch URL/repo snapshotは確認済み | 既存Debian pin契約を保持。後続Queueで実imageのhash/利用可能な署名を確認、公式input消失なら明示pin改訂へ戻す。将来保持を保証しない |
+| D4 | native encoder/依存計算/query/extraction commandを定義。公式package index名/版とRPi.info inventoryを確認、実guest/実ELF未確認 | 後続Queueでnative DBと実ELF依存を照合し、候補名や公開inventoryを実native build合格としない |
 
 p001は全基準を実証するまでin-progress。未知を後続Phaseへ押し付けてclearしない。
