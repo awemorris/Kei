@@ -43,3 +43,5 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 実装・試験未実施。q581は旧baseline測定であり本Phaseの成功証拠に流用しない。GitHub publicationはAgent Aによる投影待ち。
 
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の具体実装とGTK4確認を追加指示。p007へ分離し、p002/p003の重複scopeを除き、p005にp007成果を追加。WS acceptanceは他行判断・引継ぎ・最終conformanceを含め未達のまま。[WS summary](../ws.md)。
+
+2026-10-02 / q587-scope-amendment01: Current CSD runtimeでGTK4 move release欠落を再現。GTK4実操作の元基準を満たす最小[追加scope](q587-scope-amendment-01.md)をB mainが具体化し、seat/toplevelと元client operation state/lifecycleを所有へ追加。元snapshotと3h期限を保持、基準を緩和しない。
