@@ -3,10 +3,10 @@
 # ws115-p006: libpng・freetype・harfbuzz・fontconfig
 
 Parent: [WS115](../ws.md)
-Status: planning
+Status: in-progress（q605-i01、P3）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
-Queue / attempts: none
+Queue / attempts: q605-i01（P3、継続 dispatch、時限 4h、base main 55ff880b4）
 Purpose / goal: 文字の描画の基盤の library を移植する。
 Prerequisites: p005（harfbuzz は glib/gobject 付き）
 Investigation bound: timebox 4h
