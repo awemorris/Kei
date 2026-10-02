@@ -2,9 +2,16 @@
 
 # Past Log
 
-2026-10-02 / current execution: A q584/browserとq586/display、B q582/desktopとq587/GTK装飾は実行中。q581調査・q583部分診断はcleared、q585契約調査はD1回答待ちでuncleared。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
+2026-10-02 / current execution: userの全agent区切り終了指示でA1/A2を回収中、A3終了済み。q581/q582/q583部分cleared、q585/q586契約調査uncleared。B q587/q588/q589の停止は未確認。[Queue](../queue.md)、[registry](../agents/registry.md)を参照。B lane記録991fc890をA c87341a78へ統合。旧wrap-upのuncleared履歴とq578 clearedは保持。
 
-Last finished Queue: [q585](queue-q585.md)（WS112 p001契約調査uncleared）
+Last finished Queue: [q586](queue-q586.md)（WS113 p001契約調査uncleared）
+
+## 最新: q586と全agent wrap-up（2026-10-02）
+
+[Archive](queue-q586.md)に承認/90min結果/契約・source能力20行/技術採択・次候補・未実施を保存。D-ATOMIC未決でp001 uncleared、全後続planned。A3成果2ad9c951 → root83b111c63統合・clean/process無し・終了確認。userが全担当を安全なcommit地点で切り上げるよう指示しA1/A2回収中、新Queue無し。
+
+B最新4b655803 → A8f807c73fから[q582 cleared](queue-q582.md)、q588/p007 source partial開始、q589/低overhead準備・guest資源待ち、q587/入力release amendment01を投影。元scope/timebox/criteriaとsnapshot hashを確認。q593/B2背景資産・3 OS収録は予約のみ。B停止receipt未受領、GitHub publication pending、WIP/no push。
+
 
 ## 最新: q585 / native package契約調査（2026-10-02）
 

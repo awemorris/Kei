@@ -1,7 +1,7 @@
 # Agent A3 Queue q586
 
-Status: active
-Attempt: q586-i01 / in-progress
+Status: finished
+Attempt: q586-i01 / uncleared
 Owner: Agent A canonical writer / A3 display executor
 Approval: current user / 2026-10-02「エージェントA、あなたもN=3で作業を開始してください」。A3の既定担当WS113の最初の契約調査のみ選定。
 Started UTC: 2026-10-02T07:12:00Z
@@ -18,3 +18,5 @@ Sync: GitHub publication保留。commitはWIP、pushなし。
 2026-10-02 / MR ACK reconciliation: A3-002 6a0a532b/A3-003 addd2583 → root8cf8a8ea6 integrated/ACK delivered。20行能力表とcontracts/identity/fixtures、変更foreign p002–p009のprocedure/verification/event確認。D-BOOT/LAYOUT/REC/AUTH/PORT採択、D-ID full PCI portkeyと旧boot anchorはrootが追加判断を送付済み、次docs MRへ投影。D-ATOMIC user返答待ち、deadline08:42 UTC保持。
 
 2026-10-02 / MR A3-004 ACK: df2f36ff → root ec870f856 integrated/ACK delivered。採択済local PCI portkey/旧bootpreferredのcurrent契約・foreign p001–008、native capability proposalを確認。local paths237/0error、keylength/diff-check PASS。D-ATOMIC回答待ち、source/HAL/API/hardware実装なし。
+
+2026-10-02 / final ACK/wrap-up: A3-005ed06a2226/A3-0062ad9c951 → root83b111c63 integrated/ACK。90min上限とD-ATOMIC未決でq586/p001 uncleared、[archive](../../history/queue-q586.md)保存。userのA3終了指示による通常wrap-upでfinal receipt受領、HEAD2ad9c951/worktree clean/未commit・ignored証拠・owned process無し。agent session終了済み、次Queue未投入。

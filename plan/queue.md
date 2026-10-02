@@ -2,21 +2,23 @@
 
 # Queue / all-agent index
 
-Active Queues: q582/B2 desktop、q584/A1 browser、q586/A3 display契約調査、q587/B1 GTK4装飾。q581とq583はfinished/cleared（q583は部分診断のみ）、q585/A2はfinished/uncleared。
+Active Queues: q584/A1は通常wrap-up中。Bのq587/GTK4、q588/規約、q589/BUG診断は最新報告でactive（全体wrap方針共有、停止実績未確認）。q581/q582/q583はfinished/cleared（q583部分のみ）、q585/q586はfinished/uncleared。
 Status: active
 Main executor / plan writer: Q1
 Approval: 各lane/snapshotがexact scopeの正本。Aは2026-10-02 user「エージェントA、あなたもN=3で作業を開始してください」、BはuserのB開始指示とcommit991fc890のlaneを確認。A/B各3枠、timeboxはlaneごと。旧P8/P9/P10の承認・終了履歴を現行Queueへ流用しない。
-Last finished Queue: [q585](history/queue-q585.md)（D1返答待ち / 契約調査uncleared）
+Last finished Queue: [q586](history/queue-q586.md)（D-ATOMIC未決 / 契約調査uncleared）
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
 | q581 / q581-i01 | B1 | [p001](ws114/phase001/phase.md) | GTK4標準baseline残実測のみ、最大3h | finished / cleared | [archive](history/queue-q581.md)、B df66db5e → A435a62126 |
-| q582 / q582-i01 | B2 | [p011](ws094/phase011/phase.md) | Files desktop overflow log・listing成功時pruneと限定回帰、最大3h | active / in-progress（B報告） | [lane](agents/B2/queue.md)、commit991fc890 |
+| q582 / q582-i01 | B2 | [p011](ws094/phase011/phase.md) | Files desktop overflow log・listing成功時pruneと限定回帰、最大3h | finished / cleared | [archive](history/queue-q582.md)、B4b655803 → A8f807c73f |
 | q583 / q583-i01 | B3 | [p017](ws099/phase017/phase.md) | BUG-125の2popup症状を各最大5runで時刻/画素分類、90min。部分scope | finished / cleared（whole Phase uncleared） | [archive](history/queue-q583.md)、B df66db5e → A435a62126 |
 | q587 / q587-i01 | B1 | [p007](ws114/phase007/phase.md) | CSD/SSD modeのconfigure/ack/commitと標準GTK4/native SSD回帰、3h | active / in-progress（user開始共有） | [lane](agents/B1/queue.md)、snapshot6de86725 |
-| q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md)、A1-006 → 5c0817c60 ACK / reviewed88/209 |
+| q588 / q588-i01 | B2 | [p007](ws094/phase007/phase.md) | WS094全文規約のsource/host/build部分のみ、3h。whole p007 uncleared | active / in-progress（B報告、wrap-up指示） | [lane](agents/B2/queue.md)、snapshota1faf483 / checkpoint4b655803 |
+| q589 / q589-i01 | B3 | [p017](ws099/phase017/phase.md) | pre-capture SSHを減らす5run/45min、first verdict維持。guest資源待ち | active / prepared（B報告、wrap-up指示） | [lane](agents/B3/queue.md)、snapshot16005006 |
+| q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md)、A1-008 → 52c3ee3d7 ACK / reviewed92/209 / wrapping up |
 | q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | finished / uncleared | [archive](history/queue-q585.md)、D1 user返答待ち |
-| q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | active / in-progress | [lane](agents/A3/queue.md)、A3-004 → ec870f856 ACK |
+| q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | finished / uncleared | [archive](history/queue-q586.md)、final2ad9c951 → 83b111c63 ACK |
 | q577 / q577-i01 | P8 | [phase](ws099/phase017/phase.md) | BUG-125の再現/同期診断、証明された試験raceのみ修正。compositor読取のみ。 | finished / uncleared | [archive](history/queue-q577.md) |
 | q578 / q578-i01 | P9 | [phase](ws099/phase014/phase.md) | C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。 | finished / cleared | [lane](agents/P9/queue.md) |
 | q580 / q580-i01 | P9 | [phase](ws114/phase001/phase.md) | Debian13標準GTK4実測/19行機能表、compositor/GTK source変更なし、3時間 | finished / uncleared | [archive](history/queue-q580.md) |
@@ -33,7 +35,7 @@ WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ�
 [P9 desktop](agents/desktop-outlook.md): WS099/090/094等の高度化と実機/規約検証を専任で担当。最初の候補は[WS099 p014](ws099/phase014/phase.md)のC10実機1時間。見つけたbugはmainがBoardへ登録しP8へ。Queue未選定。
 [P10 browser / WS074 p172](ws074/phase172/phase.md): origin/browser2取込が全後続browser Phaseのblocking gate。取込後の候補は[p100](ws074/phase100/phase.md) Acid3 pixel完全一致 → [p174](ws074/phase174/phase.md) File System Access → [p175](ws074/phase175/phase.md) OPFS → [p173](ws074/phase173/phase.md) Interop 2025 100% → [p176](ws074/phase176/phase.md) Test262。p101 CSS2全件も保持。A1はq584/p172 reviewを実行中。後続Phaseは未投入。
 [WS112 p001](ws112/phase001/phase.md): 5OS package/CI配布の契約・入力・形式調査。RPi arm64/buildのみ、CI runtime不要、FreeBSD source-only。q585 finished/uncleared、D1 boot適用回答待ち、q591/p002候補のみ。
-[WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。q586調査中、製品実装Queueは未投入。
+[WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。q586 finished/uncleared、D-ATOMIC未決。A3終了済み、製品実装Queueは未投入。
 [WS114 p001](ws114/phase001/phase.md): Linux標準GTK4の実測と[機能表](ws114/gtk4-compat-matrix.md)の証拠化。B1 q581でbaseline調査cleared、q587/p007装飾モード実装・GTK4確認を開始。他機能の採否レビュー、WS115 upstream GTK4→WS116 Qt6範囲判断/移植→WS097/096書き下ろしは後続未投入。
 
 
@@ -54,3 +56,5 @@ Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21
 2026-10-02 / A-checkpoints-terminal-q585: A1 reviewed88/209とA3契約/foreign Phasesを統合・ACK。A2 q585契約調査を有限上限内に終了、D1未解決でuncleared、[archive](history/queue-q585.md)検証済み。workerは同sessionで待機、q590〜q592はID予約/候補のみ。GitHub publication保留、pushなし。
 
 2026-10-02 / q593-reserved-B2: userが既存白樺・湖背景と見つかれば直線的抽象版の共通source収録を追加指示。q588後続WS099 p019のID **q593** をB2へ予約、exact Phase/scope/assets/3 OS verificationと依存はBから受領後に投影。予約はactive membershipではない。次の未予約IDq594。[協調記録](agents/two-session-coordination.md)。
+
+2026-10-02 / final-user-normal-wrap: 全agentを現在の安全なcommit地点で切り上げるuser指示を各A workerへ送付。A3は終了確認、A1/A2は回収中。B checkpoint4b655803をA8f807c73fへ統合しq582終端、q588/q589開始、q587amendment01を投影。q593予約は保持、新Queue無し。B停止実績はB receipt待ち、GitHub/push無し。
