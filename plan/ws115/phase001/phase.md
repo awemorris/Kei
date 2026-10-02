@@ -3,10 +3,10 @@
 # ws115-p001: GTK4 target移植契約
 
 Parent: [WS115](../ws.md)
-Status: planned（user の順序では WS117 の後。WS117 と並行して始めるかはユーザーの判断）
+Status: cleared（q597-i01、P3、2026-10-02。[移植契約](../port-contract.md)。Queue と共有記録への投影は Q1）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
-Queue / attempts: none
+Queue / attempts: q597-i01（P3、cleared）
 Purpose / goal: GTK4 target移植契約
 Prerequisites: WS114受け入れ/WS034必要成果
 Investigation bound: timebox 3〜4h / 1 Queue。調査と文書だけ（package の追加・build はしない。tarball の取得と展開・meson の dry 構成は可）。
@@ -49,3 +49,24 @@ Event ws114-gtk-qt-port-plan-20261002: 2026-10-02 user指示から作成。plann
 
 - D-VER（GTK の版）。
 - WS117 と並行して始めるか（調査だけなので source の衝突は無い）。
+
+## q597-i01 の結果（2026-10-02、P3）
+
+承認: 2026-10-02 user「まずは素のGTK4を移植してください。移植できないところがないか、ノウハウを蓄積します。そのあとで独自実装を作ります。Qt6はこれらの作業のあとにします。」。Q1 が q597 として P3 に投入した。上の Status の「WS117 の後」はこの決定で置き換えた（WS117 を待たずに着手する）。時限 4h、base は main 73e259378。
+
+成果: [port-contract.md](../port-contract.md) に範囲の 1〜7 をまとめた。
+- 推奨の版の組は GTK 4.18.6・glib 2.84.4・pango 1.56.4・fontconfig 2.17.1（host の meson 1.7）。4.20/4.22/4.24.1 の要件を比べた。
+- libc に関数を足す必要は無い。header の `sys/poll.h` が 1 つ要る（glib の dry 構成で確認）。
+- host 道具: gperf だけを source から build する。
+- libwayland の不足: `wl_log_set_handler_client`、wl_surface v5/v6、output と pointer の名前、enum、pkg-config。
+- renderer は Cairo → GL（epoxy の patch）→ Vulkan（header の判断）。
+- app は gtk4-demo と gtk4-widget-factory。試験の手順を決めた。
+- ユーザーの判断が要る点: D-VER・L1・L2・R1・P1・S1（契約の §8）。
+
+実施したこと:
+- tarball の取得と SHA-256 の照合。
+- GTK・glib・依存の meson.build の読解。
+- zedBSD の libc.so・libwayland-client.so・libEGL の export と SONAME の照合。
+- glib 2.84.4 の target 向け meson の dry 構成（`build/p3-q597/probe/`）。
+
+未実施: package の build、GTK の構成、runtime。package・libc・libwayland の source は変えていない。判断の結論が出るまで p004 以降の範囲は契約の推奨のまま。判断が推奨と違えば p004〜p010 の範囲を直す。
