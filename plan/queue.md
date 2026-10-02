@@ -16,7 +16,7 @@ Last finished Queue: [q585](history/queue-q585.md)（D1返答待ち / 契約調�
 | q587 / q587-i01 | B1 | [p007](ws114/phase007/phase.md) | CSD/SSD modeのconfigure/ack/commitと標準GTK4/native SSD回帰、3h | active / in-progress（user開始共有） | [lane](agents/B1/queue.md)、snapshot6de86725 |
 | q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md)、A1-006 → 5c0817c60 ACK / reviewed88/209 |
 | q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | finished / uncleared | [archive](history/queue-q585.md)、D1 user返答待ち |
-| q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | active / in-progress | [lane](agents/A3/queue.md)、A3-003 → 8cf8a8ea6 ACK |
+| q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | active / in-progress | [lane](agents/A3/queue.md)、A3-004 → ec870f856 ACK |
 | q577 / q577-i01 | P8 | [phase](ws099/phase017/phase.md) | BUG-125の再現/同期診断、証明された試験raceのみ修正。compositor読取のみ。 | finished / uncleared | [archive](history/queue-q577.md) |
 | q578 / q578-i01 | P9 | [phase](ws099/phase014/phase.md) | C10 hardware試験script、3分試走、60分soak。host占有は所有lock確認後。compositor修正なし。 | finished / cleared | [lane](agents/P9/queue.md) |
 | q580 / q580-i01 | P9 | [phase](ws114/phase001/phase.md) | Debian13標準GTK4実測/19行機能表、compositor/GTK source変更なし、3時間 | finished / uncleared | [archive](history/queue-q580.md) |

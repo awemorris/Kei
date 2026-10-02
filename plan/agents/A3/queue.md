@@ -16,3 +16,5 @@ Merge requests / ACK: A3-001 requested → integrated `6e34d1bb9690685342b2916bc
 Sync: GitHub publication保留。commitはWIP、pushなし。
 
 2026-10-02 / MR ACK reconciliation: A3-002 6a0a532b/A3-003 addd2583 → root8cf8a8ea6 integrated/ACK delivered。20行能力表とcontracts/identity/fixtures、変更foreign p002–p009のprocedure/verification/event確認。D-BOOT/LAYOUT/REC/AUTH/PORT採択、D-ID full PCI portkeyと旧boot anchorはrootが追加判断を送付済み、次docs MRへ投影。D-ATOMIC user返答待ち、deadline08:42 UTC保持。
+
+2026-10-02 / MR A3-004 ACK: df2f36ff → root ec870f856 integrated/ACK delivered。採択済local PCI portkey/旧bootpreferredのcurrent契約・foreign p001–008、native capability proposalを確認。local paths237/0error、keylength/diff-check PASS。D-ATOMIC回答待ち、source/HAL/API/hardware実装なし。
