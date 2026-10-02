@@ -5,10 +5,12 @@
 | q593 / q593-i01 | [ws095-p012](../../ws095/phase012/phase.md) | IME の辞書を千語に拡張、held-out で測る | 2026-10-02 user「作業を開始しましょう。」 | 4h | finished / cleared |
 
 | q595 / q595-i01 | [ws127-p001](../../ws127/phase001/phase.md) | Files の棚卸し（source 不変） | 継続 dispatch（user 2026-10-02） | 3h | finished / cleared |
-| q603 / q603-i01 | [ws095-p013](../../ws095/phase013/phase.md) | BUG-139 preedit の大きさ | user 2026-10-02 | 4h | in-progress |
+| q603 / q603-i01 | [ws095-p013](../../ws095/phase013/phase.md) | BUG-139 preedit の大きさ | user 2026-10-02 | 4h | finished / cleared |
+| q604 / q604-i01 | [ws095-p005](../../ws095/phase005/phase.md) | 候補の窓と右上の IME の status | user 2026-10-02 | 4h | in-progress |
 
-Next（予約）: ws095-p005（候補の窓と右上の IME の status）→ ws129-p010 → ws089-p010
+Next（予約）: ws129-p010（全 base・desktop の program を config へ）→ ws127-p002（Files の改善）→ ws089-p010
 
 ## Merge requests
 | P4-001 | q593 | 1c049e599..c9d9187ad（base 901037f9f） | userland/desktop/ime・plan/ws095 | integrated c7bbbf06a |
 | P4-002 | q595 | 7f5e0199f..2142b1fc6（前回 c9d9187ad） | plan/ws127 | integrated 3381b12ab |
+| P4-003 | q603 | 12bc714ea（前回 2142b1fc6） | textedit・plan/ws095・BUG-139 | integrated c0449523a |
