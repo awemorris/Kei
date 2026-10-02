@@ -79,14 +79,11 @@ qemu-system-x86_64 \
 ```sh
 git clone https://github.com/awemorris/zedBSD.git
 cd zedBSD
-make toolchain-cache
-make toolchain
-make keiland-linux
-make keiland-linux-install
-/opt/keiland/bin/wayland
+make keiland
+make keiland-install
 ```
 
-Or,
+Or, one of:
 
 ```
 sudo dpkg -i keiland-debian13.deb
@@ -94,22 +91,27 @@ sudo dpkg -i keiland-ubuntu2604.deb
 sudo tar xzf keiland-linux.tar.gz -C /
 ```
 
+Then restart your display manager such as GDM.
+
 ### FreeBSD portion of Keiland Desktop
 
 ```sh
 git clone https://github.com/awemorris/zedBSD.git
 cd zedBSD
-make toolchain-cache
-make toolchain
-make keiland-freebsd
-make keiland-freebsd-install
-/opt/keiland/bin/wayland
+make keiland
+make keiland-install
 ```
 
 Or,
 
 ```
 sudo pkg install keiland-freebsd15.tar.gz -C /
+```
+
+Then, run:
+
+```
+/opt/keiland/bin/wayland
 ```
 
 ---
