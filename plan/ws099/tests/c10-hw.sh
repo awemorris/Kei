@@ -132,9 +132,13 @@ run() (
 		fi
 		if [ $((n % 20)) -eq 0 ]; then
 			ctl shot "round-$n" > "$out/round-$n-shot.out"
-			echo "C10-HW CHECKPOINT rounds=$n elapsed_seconds=$(($(date +%s) - start))"
 		fi
 		now=$(date +%s)
+		printf 'rounds=%s elapsed_seconds=%s qemu_pid=%s\n' "$n" "$((now - start))" "$qemu_pid" > "$out/checkpoint.new"
+		mv "$out/checkpoint.new" "$out/checkpoint.txt"
+		if [ $((n % 5)) -eq 0 ]; then
+			echo "C10-HW CHECKPOINT $(cat "$out/checkpoint.txt")"
+		fi
 	done
 	elapsed=$((now - start))
 
