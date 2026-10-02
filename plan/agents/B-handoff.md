@@ -10,7 +10,7 @@ publication; B has retained the required outcomes/events locally.
 
 | Lane | Terminal submission / integration | Outcome / resume |
 | --- | --- | --- |
-| B1 | MR02 19452fe8 → 6f04f1a8; terminal MR pending | q587 CSD and original-client move/resize release implemented; Linux/native partial evidence saved, guest stopped. Final runtime/clipboard/zedBSD boot acceptance pending; uncleared terminal being saved. |
+| B1 | final36b3130d → 53053eb7; lane ACK saved | q587/p007 uncleared, WS114 incomplete. CSD and original-client move/resize release implemented; Linux/native partial evidence saved. Final runtime/clipboard/Textedit/native negative/zedBSD boot criteria remain. Guest stopped and B1 ended. |
 | B2 | final111b864a → 9323725b; ACK04f05ff1 | q588 partial cleared, whole WS094 p007 uncleared/WS incomplete. 56-path inventory/manual review, host4/private warning0 build/boundary/probe limited negatives saved. All owned processes stopped, B2 ended. |
 | B3 | finald3396117 → 90c124e8; ACK5d29dcfb | q589 uncleared, helper/host negative preparation only; guest5/boot unexecuted. Whole p017 uncleared, BUG125 reproduced/tracking. No owned process, B3 ended. |
 
@@ -33,6 +33,14 @@ were reconciled against recorded intent. Main checked source/test/record whitesp
 (raw diff evidence preserved), viewed GTK/native PNGs, checked B2's 19 local
 evidence hashes and B3's four durable artifact hashes. No new guest/whole-image
 test was started during wrap-up; unverified criteria remain explicit below.
+
+All three final submissions are integrated and all three children have ended.
+The integration branch is `codex/agent-b`, to be pushed as `origin/codex/agent-b`
+under the explicit user instruction. Every commit created for this work uses
+message `WIP`. B1's [result](../ws114/phase007/q587-result.md), B2's
+[result](../ws094/phase007/q588-result.md), and B3's
+[result](../ws099/phase017/q589-result.md) are the terminal evidence owners.
+Lane archives q587/q588/q589 retain exact scope, submissions, ACK and outcomes.
 
 Earlier checkpoints below are historical, not the current lane state.
 

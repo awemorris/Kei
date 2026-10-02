@@ -36,7 +36,7 @@ Resume point: p011（L4b）はq582でcleared（2026-10-02、host/build/guest/boo
 | [ws094-p010](phase010/phase.md) | L4a: 長い名前（2 行、中を省く）と画面の大きさの変更 | cleared（2026-09-30: 統合の試験 demo-s8-s9.sh で合格（ユーザーの指示）、Terminal と p088 は未切り分け、実機は未実施） | p006 |
 | [ws094-p011](phase011/phase.md) | L4b: 置き場の溢れ（grid より多い項目）と、無い名前の保存の行の掃除 | cleared（2026-10-02、q582-i01） | p010 |
 | ws094-p012 | L5: 実機（5330）での L1〜L3 の確認 | planned | p009、実機 |
-| ws094-p007 | 全文の規約と回帰（WS の最後。選んだ段の Phase の後） | planned | 最後の段の Phase |
+| [ws094-p007](phase007/phase.md) | 全文の規約と回帰（WS の最後。選んだ段の Phase の後） | uncleared（q588 source/host/build部分はcleared、所有外規約/全guest/実機/最終boot未達） | 最後の段の Phase |
 
 注（p006）: `desktop-guest.sh` の restart の手順で、試験用の probe（`--timeout-s=3`）が時々終わらず、起動の上限の行が出ないことがある（p002 で 1 回観察、
 p006 で 2 回再現、別の 2 回は再現せず）。compositor は role と ack を正しく扱っている。p006 は Files だけを変えており、compositor は p005 と同じ。
