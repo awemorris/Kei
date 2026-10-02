@@ -228,6 +228,9 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--monitor", required=True)
     parser.add_argument("--screenshot", required=True)
+    parser.add_argument("--frame", default=None,
+                        help="scratch file for each screen frame "
+                             "(default: beside the screenshot)")
     parser.add_argument("--timeout", type=float, default=180.0)
     parser.add_argument("--pattern", default=r"^(?:\S+ )?login: ?")
     arguments = parser.parse_args()
@@ -238,6 +241,8 @@ def main() -> int:
     prompt = re.compile(arguments.pattern)
     screenshot = Path(arguments.screenshot)
     frame = screenshot.with_suffix(".ppm")
+    if arguments.frame is not None:
+        frame = Path(arguments.frame)
     monitor = Monitor(arguments.monitor, timeout=30.0)
 
     deadline = time.monotonic() + arguments.timeout
