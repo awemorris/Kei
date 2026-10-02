@@ -28,6 +28,7 @@
 #include <net/if.h>
 #include <net/route.h>
 #include <poll.h>
+#include <pwd.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,6 +46,9 @@
 #define NETWORKD_AUTH_LOG_MAX 512U
 #define NETWORKD_GROUP_DATABASE_MAX 8192U
 #define NETWORKD_GROUP_BUFFER_MAX 2048U
+
+/* The most groups of one account that the Wi-Fi control check examines. */
+#define NETWORKD_PEER_GROUP_MAX 64
 #define NETWORKD_GROUP_FILE "/etc/group"
 #define NETWORKD_GROUP_GID ((gid_t)69)
 #define NETWORKD_GROUP_NAME "network"
@@ -211,6 +215,7 @@ static struct networkd_control_input control_inputs[NETWORKD_CONTROL_INPUT_MAX];
 static int control_input_pending(void);
 static int receive_wait_request(struct networkd_request *, struct kern_peercred *, enum networkd_client_role *);
 static int service_wifi_wait(void);
+static int interrupts_background_work(const struct networkd_request *, const struct kern_peercred *);
 static void remember_wifi_observation(const char *, const struct networkd_wifi_child_result *);
 static void clear_wifi_observation(size_t);
 static int append_wifi_snapshot(const char *, const char *, size_t, uint64_t, char *, size_t, size_t *);
@@ -271,7 +276,8 @@ static void handle_wifi_request(int, struct networkd_request *,
 static int wifi_request_list(struct networkd_wifi_request *);
 static int wifi_request_enable(struct networkd_wifi_request *, const struct kern_peercred *);
 static int wifi_request_stop(struct networkd_wifi_request *, int);
-static int wifi_request_connect(struct networkd_wifi_request *, const struct networkd_request *);
+static int wifi_request_connect(struct networkd_wifi_request *, const struct networkd_request *, const struct kern_peercred *);
+static int wifi_policy_take(struct networkd_wifi_request *, uid_t);
 static int wifi_request_prepare(struct networkd_wifi_request *);
 static void process_wifi_request(int, struct networkd_request *, const struct kern_peercred *);
 static int read_request(int descriptor, struct networkd_request *request);
@@ -330,6 +336,7 @@ static int reconcile_pending_l3(void);
 static const struct wifi_conf_profile *find_profile(const struct wifi_conf_model *, const void *, size_t);
 static int load_policy(uid_t, struct wifi_conf_model *, char *, size_t);
 static int owner_allowed(const struct kern_peercred *);
+static int peer_in_network_group(const struct kern_peercred *);
 static const char *managed_state_name(enum networkd_managed_wlan_state);
 static int append_managed_status(char *, size_t, size_t *);
 static int snapshot_interface_l3(const char *, uint32_t *, struct networkd_managed_l3 *);
@@ -3175,18 +3182,47 @@ wifi_request_enable(
 	    managed_connection_usable())
 		return 0;
 
-	work->stage = "retire prior Wi-Fi connection";
-	if (managed_wlan.state != NETWORKD_WLAN_DISABLED &&
-	    retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1) != 0)
-		return -1;
-	work->stage = "enable Wi-Fi policy";
-	if (networkd_managed_wlan_enable(&managed_wlan, peer->euid) != 0)
+	/* Retires the prior connection and makes the sender the policy owner. */
+	if (wifi_policy_take(work, peer->euid) != 0)
 		return -1;
 
 	/* RF association belongs to scheduled work, never to enable dispatch. */
-	automatic_candidate_skip = 0U;
 	schedule_automatic_work(0U);
 	return wifi_request_prepare(work);
+}
+
+/*
+ * Moves the enabled Wi-Fi policy to one account.
+ *
+ * The prior connection, whoever owned it, is retired first, and the new
+ * owner's store is what automatic and manual joins read afterwards.
+ */
+static int
+wifi_policy_take(
+	struct networkd_wifi_request *work,
+	uid_t owner_uid)
+{
+	int error;
+
+	/* Retires the connection the prior owner made, if any. */
+	work->stage = "retire prior Wi-Fi connection";
+	if (managed_wlan.state != NETWORKD_WLAN_DISABLED) {
+		error = retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1);
+		if (error != 0)
+			return -1;
+	}
+
+	/* Publishes the new owner with automatic discovery in effect. */
+	work->stage = "enable Wi-Fi policy";
+	error = networkd_managed_wlan_enable(&managed_wlan, owner_uid);
+	if (error != 0)
+		return -1;
+
+	/* A new owner's profiles are all candidates again. */
+	automatic_candidate_skip = 0U;
+
+	/* Succeeded: the account owns the enabled policy. */
+	return 0;
 }
 
 /* Pauses automatic policy before fallible teardown and radio normalization. */
@@ -3244,13 +3280,17 @@ wifi_disable_defer(void)
 static int
 wifi_request_connect(
 	struct networkd_wifi_request *work,
-	const struct networkd_request *request)
+	const struct networkd_request *request,
+	const struct kern_peercred *peer)
 {
 	const struct wifi_conf_profile *profile;
 	uint64_t selection_deadline;
 	uint64_t deadline;
 	size_t winner;
+	uid_t store_uid;
 	int l2_succeeded;
+	int transfer;
+	int taken;
 
 	if (wifi_disable_pending) {
 		errno = EBUSY;
@@ -3261,8 +3301,22 @@ wifi_request_connect(
 		errno = EPERM;
 		return -1;
 	}
+
+	/*
+	 * A join by an account that does not own the policy moves the policy to
+	 * that account (user decision 2026-10-02, ws005-p019), so the key comes
+	 * from the joining account's own store.  Nothing moves until that store
+	 * holds the profile and a radio exists.
+	 */
+	transfer = 0;
+	store_uid = managed_wlan.owner_uid;
+	if (!networkd_managed_wlan_owner_matches(&managed_wlan, peer->euid)) {
+		transfer = 1;
+		store_uid = peer->euid;
+	}
+
 	work->stage = "load Wi-Fi profiles";
-	if (load_policy(managed_wlan.owner_uid, &work->profiles,
+	if (load_policy(store_uid, &work->profiles,
 	    work->diagnostic, sizeof(work->diagnostic)) != 0)
 		return -1;
 	work->stage = "unknown Wi-Fi profile";
@@ -3279,6 +3333,13 @@ wifi_request_connect(
 		work->stage = "no WLAN radio";
 		errno = ENODEV;
 		return -1;
+	}
+
+	/* Moves the policy to the joining account through the enable path. */
+	if (transfer) {
+		taken = wifi_policy_take(work, peer->euid);
+		if (taken != 0)
+			return -1;
 	}
 
 	/* This covers connected, reconnecting, connecting and retiring identities. */
@@ -3356,7 +3417,7 @@ process_wifi_request(
 			result = wifi_request_stop(&work, 0);
 			break;
 		case NETWORKD_OP_WIFI_CONNECT:
-			result = wifi_request_connect(&work, request);
+			result = wifi_request_connect(&work, request, peer);
 			break;
 		case NETWORKD_OP_WIFI_PROFILES_CHANGED:
 			wifi_profiles_changed(peer);
@@ -3785,6 +3846,7 @@ service_wifi_wait(
 	int client;
 	int error;
 	int deferred;
+	int interrupts;
 	uint64_t cleanup_deadline;
 
 	if (wifi_work.cleanup)
@@ -3832,11 +3894,10 @@ service_wifi_wait(
 		    NETWORKD_RESULT_OK, 0, NULL, NULL, 0U);
 	} else {
 		error = EBUSY;
-		if (wifi_work.background &&
-		    (request.header.opcode < NETWORKD_OP_WIFI_ENABLE ||
-		    ((request.header.opcode == NETWORKD_OP_WIFI_DISCONNECT ||
-		    request.header.opcode == NETWORKD_OP_WIFI_DISABLE) &&
-		    owner_allowed(&peer)))) {
+		interrupts = 0;
+		if (wifi_work.background)
+			interrupts = interrupts_background_work(&request, &peer);
+		if (interrupts) {
 			wifi_pending_client = client;
 			wifi_pending.role = role;
 			memcpy(&wifi_pending.request, &request, sizeof(request));
@@ -3864,6 +3925,46 @@ service_wifi_wait(
 	if (!deferred)
 		(void)close(client);
 	return deferred ? EINTR : 0;
+}
+
+/*
+ * Tests whether a request arriving during background Wi-Fi work stops it.
+ *
+ * Wired requests always do.  So does an explicit Wi-Fi on, off, join or
+ * disconnect from a peer allowed to make it: the user decided on 2026-10-02
+ * (ws005-p019) that a person's choice is never kept waiting behind the
+ * automatic search, which is cancelled and resumes from the new state.
+ */
+static int
+interrupts_background_work(
+	const struct networkd_request *request,
+	const struct kern_peercred *peer)
+{
+	uint32_t opcode;
+	int allowed;
+
+	/* A wired request is never held behind automatic Wi-Fi work. */
+	opcode = request->header.opcode;
+	if (opcode < NETWORKD_OP_WIFI_ENABLE)
+		return 1;
+
+	/* Turning Wi-Fi on is open to every admitted peer, as on dispatch. */
+	if (opcode == NETWORKD_OP_WIFI_ENABLE)
+		return 1;
+
+	/* Listing and profile notices are served without stopping the work. */
+	if (opcode != NETWORKD_OP_WIFI_DISABLE &&
+	    opcode != NETWORKD_OP_WIFI_CONNECT &&
+	    opcode != NETWORKD_OP_WIFI_DISCONNECT)
+		return 0;
+
+	/* Off, join and disconnect stop the work only for a peer allowed them. */
+	allowed = owner_allowed(peer);
+	if (!allowed)
+		return 0;
+
+	/* Succeeded: the explicit request takes the place of the search. */
+	return 1;
 }
 
 /* Starts one actor transaction; every exit goes through its outer wrapper. */
@@ -5016,19 +5117,93 @@ load_policy(
 	    diagnostic_capacity);
 }
 
-/* Tests whether one peer may control the currently enabled policy. */
+/*
+ * Tests whether one peer may control the Wi-Fi policy, whoever owns it.
+ *
+ * The user decided on 2026-10-02 (ws005-p019): a member of the network group
+ * may control Wi-Fi.  Turning it on or off, joining and disconnecting are
+ * therefore not reserved to the account that enabled the policy; root and
+ * every network member may do them.  A join moves the policy to the joining
+ * account, whose own store supplies the key, so a key still never passes
+ * through this daemon.  Any other account is refused.
+ */
 static int
 owner_allowed(
 	const struct kern_peercred *peer)
 {
-	/* Root may override; other admitted peers must own the active policy. */
+	int member;
+
+	/* Refuses a request whose sender is unknown. */
 	if (peer == NULL)
 		return 0;
+
+	/* Root may control the policy. */
 	if (peer->euid == 0)
 		return 1;
-	if (managed_wlan.state == NETWORKD_WLAN_DISABLED)
+
+	/* Admits a member of the network group and nobody else. */
+	member = peer_in_network_group(peer);
+	if (!member)
+		return 0;
+
+	/* Succeeded: the peer is a network operator. */
+	return 1;
+}
+
+/*
+ * Tests whether one peer belongs to the network group.
+ *
+ * The listener's mode already keeps other accounts out; this check states the
+ * same rule where the policy is decided.  The peer counts as a member when it
+ * runs with the group as its effective group, or when the group database
+ * lists its account in the group.
+ */
+static int
+peer_in_network_group(
+	const struct kern_peercred *peer)
+{
+	char buffer[NETWORKD_GROUP_BUFFER_MAX];
+	gid_t groups[NETWORKD_PEER_GROUP_MAX];
+	struct passwd storage;
+	struct passwd *account;
+	int group_count;
+	int error;
+	int index;
+
+	/* A process running with the network group is a member. */
+	if ((gid_t)peer->egid == NETWORKD_GROUP_GID)
 		return 1;
-	return networkd_managed_wlan_owner_matches(&managed_wlan, peer->euid);
+
+	/* Finds the account behind the peer's effective user. */
+	account = NULL;
+	error = getpwuid_r((uid_t)peer->euid, &storage, buffer, sizeof(buffer),
+	    &account);
+	if (error != 0)
+		return 0;
+
+	/* An effective user with no account is not a member. */
+	if (account == NULL || account->pw_name == NULL)
+		return 0;
+
+	/*
+	 * Collects the groups the database gives the account.  A list longer
+	 * than the buffer still stores its first entries, which are searched.
+	 */
+	memset(groups, 0, sizeof(groups));
+	group_count = NETWORKD_PEER_GROUP_MAX;
+	(void)getgrouplist(account->pw_name, account->pw_gid, groups,
+	    &group_count);
+	if (group_count > NETWORKD_PEER_GROUP_MAX)
+		group_count = NETWORKD_PEER_GROUP_MAX;
+
+	/* Looks for the network group among them. */
+	for (index = 0; index < group_count; index++) {
+		if (groups[index] == NETWORKD_GROUP_GID)
+			return 1;
+	}
+
+	/* The account is not a member of the network group. */
+	return 0;
 }
 
 /* Returns the public spelling for one managed policy state. */

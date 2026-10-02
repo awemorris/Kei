@@ -420,8 +420,12 @@ network_finished(
 			network_message(app, 0, "Connected to %s.", network->join_ssid);
 		} else if (error == ENOENT) {
 			network_message(app, 1, "%s has no saved key.", network->join_ssid);
+		} else if (error == EPERM && network->state.wifi == KEILAND_WIFI_OFF) {
+			/* networkd refuses a join while Wi-Fi is off. */
+			network_message(app, 1, "Wi-Fi is off. Turn it on to join %s.", network->join_ssid);
 		} else if (error == EPERM) {
-			network_message(app, 1, "Wi-Fi was turned on by another account. Turn it off and on to join %s.", network->join_ssid);
+			/* Only root and the network group may control Wi-Fi (2026-10-02, ws005-p019). */
+			network_message(app, 1, "This account may not control Wi-Fi. Ask an administrator to add it to the network group.");
 		} else {
 			network_message(app, 1, "Could not join %s. Check the key and that the network is in reach.", network->join_ssid);
 		}

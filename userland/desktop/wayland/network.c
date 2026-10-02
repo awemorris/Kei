@@ -1350,9 +1350,14 @@ network_finished(
 		/* A network that asks for no key, or is no longer seen, says so. */
 		if (!network_view.key_open)
 			(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not join %s: no saved key", network_view.joining);
-	} else if (error == EPERM && request == KEILAND_NETWORK_REQUEST_JOIN) {
-		/* The policy belongs to another account (root's, from the boot). */
-		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Wi-Fi is managed by another account");
+	} else if (error == EPERM &&
+	    request == KEILAND_NETWORK_REQUEST_JOIN &&
+	    network_view.state.wifi == KEILAND_WIFI_OFF) {
+		/* networkd refuses a join while Wi-Fi is off. */
+		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Wi-Fi is off; turn it on to join");
+	} else if (error == EPERM) {
+		/* Only root and the network group may control Wi-Fi (2026-10-02, ws005-p019). */
+		(void)snprintf(network_view.failure, sizeof(network_view.failure), "This account may not control Wi-Fi");
 	} else if (error != 0 && request != KEILAND_NETWORK_REQUEST_SCAN) {
 		/* Anything else that failed says the errno's text. */
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not %s (%s)", network_request_name(request), strerror(error));
