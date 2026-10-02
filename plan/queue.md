@@ -22,6 +22,7 @@ Started UTC: 2026-10-02T02:47:22.972372+00:00
 
 WS111 launcherはcompleted。WS110/testingと本人確認--loginは検討のみ。
 [WS112 p001](ws112/phase001/phase.md): 5OS package/CI配布の契約・入力・形式調査。RPi arm64/buildのみ、CI runtime不要、FreeBSD source-only。planned/未順位、実装Queue未選定。
+[WS113 p001](ws113/phase001/phase.md): zedBSD i915複数displayとVulkan通知/Settingsの契約・実機fixture。全拡張/全mirror、pointer越境で窓一括移動。planned/未順位、実装Queue未選定。
 
 Outcome: q576-i01 /Phase cleared。L1〜L3: 両OS shell/native build/install、FreeBSD/opt script0755、LinuxGDM direct entry unchanged、全source review PASS。[結果](/home/awe/zedBSD-claude1/plan/history/ws111/q576/result.md)。--loginは本人確認/PIN交換案のみ、WS110/testing未実装。
 Finished UTC: 2026-10-02T02:51:00.579101+00:00
@@ -35,3 +36,5 @@ Event ws112-package-plan-20261002: [WS112](ws112/ws.md)と[候補p001](ws112/pha
 q576の承認/attempt/outcomeは変更しない。Active Queueなし、次Queueを作らない。既存demo順位/WS106保留を保持。
 
 2026-10-02 / ws112-rpi-build-only-20261002: OutlookのWS112 RPi候補はbuild/deb生成で受け入れ、GPU/GUI関門なし。Active Queueなし、q576履歴不変。
+
+2026-10-02 / ws113-multidisplay-plan-20261002: WS113は後日候補のみ。q576 finished/Active Queueなし、既存承認とdemo順位は変更しない。

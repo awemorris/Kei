@@ -92,3 +92,6 @@ Resume point: **2026-09-29 ユーザーの指示でブラッシュアップは�
 - 完了の後、Settings を libkeiui に移す作業（WS090 の p007）が始められる。settings は files の canvas・text・icons を source で共有して
   いる（`userland/desktop/files/canvas.c`・`text.c`・`icons.c` と `artwork/mark.c`、Makefile と host-build.sh）。
 
+## 後続のDisplay機能 / 2026-10-02
+
+Event ws113-multidisplay-plan-20261002-ws089-followup: userは読み取り専用のDisplay stubを、外部display/全拡張・全mirror/drag配置ができる[WS113](../ws113/ws.md)で後日実装するよう指定。Settingsはlibkeilandの公開APIだけからcompositor拡張へ接続する。WS089の過去のNetwork中心/stub受け入れとp001〜p009の結果はそのまま保持。新WSはplanned、WS089の未実行Phase/Queueを自動開始しない。GitHub comment/body反映保留。

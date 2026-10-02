@@ -114,3 +114,17 @@ Authority: [package方針全文](ws112-linux-packages.md)、[WS112](../ws112/ws.
 対象別formatter/linterの新project-wide設定は追加しない。実装選定前に適用全文/近傍sourceを読む。make check禁止。
 
 2026-10-02 / ws112-rpi-build-only-20261002: WS112 RPi coverageはarm64 native build/deb形式・整合確認のみ。GPU/GUI/実機試験を必須automation/manual関門にしない。
+
+## WS113 multi-display coverage (2026-10-02)
+
+[scoped full rule](ws113-display.md)、[WS113](../ws113/ws.md)。Event ws113-multidisplay-plan-20261002。以下は将来の検証計画で、今は未実施。
+
+| 契約 | 予定の検証 | 限界 |
+| --- | --- | --- |
+| i915 HPD→Vulkan hotplug | driver HPD fixture、POLLPRI/generation/fence/ACKと標準Vulkan entryの独立client | p002/p003、実i915通知はp008で別記 |
+| 複数出力と両mode | 2出力のpresent/capture、全拡張/全mirror、1台/切断/再接続 | p004/p008。QEMU/modelは実機合格の代替にしない |
+| libkeiland/Settings | 公開APIの独立client、設定照会/拒否/変更通知、UI drag | p005/p006/p008。Settingsのdriver直呼出し禁止 |
+| 窓単一所属 | 境界dragと再配置でoutput別画素/所属を観察、mirror全画面 | p007/p008。窓の一部を他出力へ描かない |
+| GPU境界/全文C | `plan/tools/gpu-boundary/v1-check.sh`、該当build/format/style-check/manual/boot | p009。C全文の意味/所有はtoolだけでは保証しない |
+
+`make check`は使わない。source生成時にGuardrailと全文を再読し、最終変更の範囲・command/version/skipを記録。

@@ -160,3 +160,7 @@ Event ws112-package-plan-20261002: [方針全文](standards/ws112-linux-packages
 既存WS108の歴史とQEMU native build指示は保持し、今後のCI runtime必須方針を置換する。最終全文規約/package形式・metadata/CI artifact整合は必要、C例外は無し。今回は計画のみ、Queue/実装/push/公開承認ではない。
 
 2026-10-02 / ws112-rpi-build-only-20261002: WS112 RPiはuserの追加指示でbuild/deb生成のみの受け入れ、QEMU GPU制約を理由としてGPU/GUI/実機関門は不要。正本はstandards/ws112-linux-packages.md。
+
+## WS113 複数displayの新しい契約（2026-10-02）
+
+Event ws113-multidisplay-plan-20261002: current userのi915接続通知/Vulkan Display拡張→compositor、Settings→libkeiland→compositor拡張、全拡張/全mirror、配置drag/窓全体移動の指示。3追加回答（pointerが隣画面へ入った時に切替、単一出力は拡張時、zedBSD i915をまず受け入れ）を[全文](standards/ws113-display.md)・[WS113](ws113/ws.md)に記録。GPU UAPIのcompositor直接ioctl禁止、OS module境界、HAL承認/C全文規約は維持。計画のみ、実装/Queue許可は無し。

@@ -56,3 +56,7 @@ Event ws112-package-plan-20261002: userの「あとで実装」に従い[WS112](
 実装・build・Queue実行は無し。q576 finishedと旧WS108/WS111の完了証拠は保持。新実装候補はOutlookのみ、Issue/Projectとrepository pushは未実施。
 
 2026-10-02 / ws112-rpi-build-only-20261002: 追加user決定: RPiはbuildが通ればOK。GPU/GUI確認を要求しないことをWS112とaffected Phase/方針へ反映、計画のみ。
+
+## 計画追記 / 2026-10-02（WS113）
+
+Event ws113-multidisplay-plan-20261002: [WS113](../ws113/ws.md)をMG006のplannedとして追加。i915→標準Vulkan Display通知、Settings→libkeiland→compositor拡張、全拡張/全mirror、配置drag、拡張時の窓単一出力/pointer越境切替を保存。zedBSD i915を完了の対象とし、9Phaseを計画。実装/Queue/実機試験なし。q576とWS089の過去証拠を保持。Issue/Project公開とpushは未実施。
