@@ -26,7 +26,12 @@ driver UAPI、Vulkan Display実装、Settings/Waylandの所有を調査。安定
 [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、[scoped full rule](../../standards/ws113-display.md)、[automation](../../standards/automation.md#ws113-multi-display-coverage-2026-10-02)を実装前に読む。formatter/style-checkは補助、意味/所有/イベント順はfull/manual review。HAL API変更は差分ごとの事前承認。compositorのGPU UAPI直接ioctl禁止。無関係なtoolchain変更、aggregate make check、既存WS089/WS099のPhase改変は含めない。
 
 Commands/results/commit/environment/artifacts/skipped checks: 2026-10-02 q586-i01でsource/plan全文・関係functionをrg/sed/catで読取、Khronos一次ページopen、docsのgit diff --checkとlocal link存在照合PASS。baseline0e68854ac、A3-001 commit6e34d1bb9 / main ACK8021bc210、A3-002 commit6a0a532b2。build/製品実装/hardware/SSH/host操作は未実施。
-Findings/artifacts: [source能力20行](source-audit.md)、[契約](contracts.md)、[ID/完了保証](identity-completion.md)、[fixture](fixtures.md)、[現状/依存](../design.md)。D-ID/D-ATOMIC等は未採択材料で、標準仕様から実能力を推定しない。Resume: 本q586期限08:42 UTC内で選択材料/影響Phaseを記録しmain reviewへ。後続p002は未承認。
+Findings/artifacts: [source能力20行](source-audit.md)、[契約](contracts.md)、[ID/完了保証](identity-completion.md)、[fixture](fixtures.md)、[native capability結線](native-contract.md)、[現状/依存](../design.md)。D-ID A2/旧boot anchor等はmain技術採択、D-ATOMICは未採択材料。標準仕様から実能力を推定しない。Resume: 本q586期限08:42 UTC内で選択材料/影響Phaseを記録しmain reviewへ。後続p002は未承認。
+
+## 採択済local port ID / native capability入力
+
+[main採択A2とsource](../phase001/identity-completion.md)、[native capability結線](../phase001/native-contract.md)を使う。自Phaseへの影響: D-ID A2/旧boot anchorは解決、D-ATOMICのみuser回答待ち。native capability semantic contractを設計入力へ追加。
+後続の実装権限/依存は不変。actual API番号/layout/共有callback差分は選定前にowner/main review、HAL変更なら事前承認。
 
 ## Event
 
@@ -39,3 +44,5 @@ Findings/artifacts: [source能力20行](source-audit.md)、[契約](contracts.md
 2026-10-02 / ws113-contract-design-20261002-a3-ws113-p001: source/一次仕様照合からnative固定sequence/単一output、EXT全entry依存、永続ID欠落、scanout移動保証差を記録しcontracts/identity-completion/fixturesを保存。p002–p009のprocedure/検証/resumeを詳細化し、それぞれへeventを残した。依存順/既往WS/製品sourceは不変。D-ID/D-ATOMIC等の材料をmainへ送付、通常提案の技術裁量を分離。in-progress/q586-i01を保持。GitHub origin/foreign Phase/WS deliveryと全体projectionはmain依頼pending。
 
 2026-10-02 / ws113-technical-choice-20261002-a3-ws113-p001: mainのdelegated technical decision messageからD-BOOT/LAYOUT/REC/AUTH/PORT通常案を採択記録。自Phase影響: D-IDのstandard短port key/UUID別gateを詳細化し、D-ATOMIC回答と旧override互換性を待つ。p001 in-progress。 [origin](../phase001/phase.md)/[詳細](../phase001/identity-completion.md)/[WS](../ws.md)。依存/Queue権限不変、main remote delivery pending。
+
+2026-10-02 / ws113-local-port-id-20261002-a3-ws113-p001: mainのD-ID A2/旧bootpreferred技術採択messageを受領。D-ID A2/旧boot anchorは解決、D-ATOMICのみuser回答待ち。native capability semantic contractを設計入力へ追加。 [origin](../phase001/phase.md)/[sourceと範囲](../phase001/identity-completion.md)/[WS](../ws.md)。既往eventを保存し、該当current designを更新。p001 in-progress、他Phase planned/Queue none。main remote delivery pending。

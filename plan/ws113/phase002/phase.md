@@ -31,11 +31,16 @@ Commands/results/commit/environment/artifacts/skipped checks: 未実施（計画
 
 [origin p001](../phase001/phase.md)、[契約](../phase001/contracts.md)、[ID/完了比較](../phase001/identity-completion.md)、[fixture](../phase001/fixtures.md)、[WS summary](../ws.md)を入力とする。
 
-Procedure: connectorの固定slot/非0ID、output generationとdevice topology sequenceの分離、HPD workerのcoherent inventory publish→poll_notify、独立open ACKを実装・検証する。単一rdをper-output lease/pipe/PLL/scanoutへ分け、切断中のbuffer retirementと残るhead継続を証明する。EXT control全entryに必要なpower/next-first-pixel/vblank能力、必要時のGPU UUID native query、present completionの不足を差分設計し、共有/HAL所有境界の承認前にAPI変更しない。
+Procedure: connectorの固定slot/非0ID、output generationとdevice topology sequenceの分離、HPD workerのcoherent inventory publish→poll_notify、独立open ACKを実装・検証する。単一rdをper-output lease/pipe/PLL/scanoutへ分け、切断中のbuffer retirementと残るhead継続を証明する。EXT control全entryに必要なpower/next-first-pixel/vblank能力、present completionの不足を差分設計し、共有/HAL所有境界の承認前にAPI変更しない。
 
-Verification / resume: H01–H03/H07–H10を適用。connector数/connected数/plane indexを混同しない。2台の独立claim/presentはactual i915両画面とcounterで確認し、model PASSを代替にしない。D-ID/D-ATOMIC/D-PORTとboot overrideの材料が必要部分を選定前に解決。
+Verification / resume: H01–H03/H07–H10を適用。connector数/connected数/plane indexを混同しない。2台の独立claim/presentはactual i915両画面とcounterで確認し、model PASSを代替にしない。D-ID A2/boot anchor/初回fixtureはmain採択。D-ATOMICの依存部分は回答後に選定。
 
 Status/dependenciesは上記のまま。未採択architecture/製品判断とactual prerequisiteを確認し、新QueueでこのPhaseだけを有限選定・承認後に実装する。q586はp001文書のみで後続sourceを許可しない。
+
+## 採択済local port ID / native capability入力
+
+[main採択A2とsource](../phase001/identity-completion.md)、[native capability結線](../phase001/native-contract.md)を使う。自Phaseへの影響: 既存PCI address+kind/DDIでname[64]内のlocal key生成。ordinal禁止。旧bootはpreferred anchor。GPU UUID nativequeryを必須APIから外す（比較としてのみ残す）。power/timing能力はnative-contract.mdの差分review入力。
+後続の実装権限/依存は不変。actual API番号/layout/共有callback差分は選定前にowner/main review、HAL変更なら事前承認。
 
 ## Event
 
@@ -44,3 +49,5 @@ Status/dependenciesは上記のまま。未採択architecture/製品判断とact
 2026-10-02 / ws113-contract-design-20261002-a3-ws113-p002: p001のsource/一次仕様で明らかになった不足に合わせ、上記の自Phase procedureと検証/resumeを詳細化。H01–H03/H07–H10を適用。connector数/connected数/plane indexを混同しない。2台の独立claim/presentはactual i915両画面とcounterで確認し、model PASSを代替にしない。D-ID/D-ATOMIC/D-PORTとboot overrideの材料が必要部分を選定前に解決。 origin/WSリンクは上記。planned/Queue noneを保持。GitHub body/comment/Projectはmainへdelivery依頼pending。
 
 2026-10-02 / ws113-technical-choice-20261002-a3-ws113-p002: mainのdelegated technical decision messageからD-BOOT/LAYOUT/REC/AUTH/PORT通常案を採択記録。自Phase影響: 初回fixture eDP+HDMIとall-connected初回extendedを入力にする。未移植portを完成扱いにしない。 [origin](../phase001/phase.md)/[詳細](../phase001/identity-completion.md)/[WS](../ws.md)。依存/Queue権限不変、main remote delivery pending。
+
+2026-10-02 / ws113-local-port-id-20261002-a3-ws113-p002: mainのD-ID A2/旧bootpreferred技術採択messageを受領。既存PCI address+kind/DDIでname[64]内のlocal key生成。ordinal禁止。旧bootはpreferred anchor。GPU UUID nativequeryを必須APIから外す（比較としてのみ残す）。power/timing能力はnative-contract.mdの差分review入力。 [origin](../phase001/phase.md)/[sourceと範囲](../phase001/identity-completion.md)/[WS](../ws.md)。既往eventを保存し、該当current designを更新。p001 in-progress、他Phase planned/Queue none。main remote delivery pending。
