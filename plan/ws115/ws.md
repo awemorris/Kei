@@ -54,7 +54,7 @@ Resume point（2026-10-02 q597）: p001 cleared。[移植契約](port-contract.m
 | ID | Purpose / goal | Status | Dependencies | 目安 |
 | --- | --- | --- | --- | --- |
 | [ws115-p001](phase001/phase.md) | 移植契約: 版（D-VER）・依存の一覧と版・libc の不足・host 道具・libwayland ABI・renderer・demo app・試験（WS034 p038 を含む） | cleared（q597 / P3、[移植契約](port-contract.md)） | WS114 の実測（済み）、WS034 inventory | 3〜4h |
-| [ws115-p004](phase004/phase.md) | meson のクロス契約と host 道具（cross file・pkg-config・gperf・host の glib 道具と wayland-scanner）（旧 WS034 p025） | planning（p001 待ち） | p001、共有 path の割当 | 3〜4h |
+| [ws115-p004](phase004/phase.md) | meson のクロス契約と host 道具（cross file・pkg-config・gperf・host の glib 道具と wayland-scanner）（旧 WS034 p025） | cleared（q600 / P3） | p001、共有 path の割当 | 3〜4h |
 | [ws115-p005](phase005/phase.md) | libffi・pcre2・glib（旧 WS034 p026） | planning | p004 | 4h |
 | [ws115-p006](phase006/phase.md) | libpng・freetype・harfbuzz・fontconfig（旧 WS034 p027） | planning | p005 | 3〜4h |
 | [ws115-p007](phase007/phase.md) | pixman・cairo・fribidi・pango（旧 WS034 p028 の前半） | planning | p006 | 4h |
@@ -73,3 +73,5 @@ Graph: WS114 + WS034 inventory → p001 → p004 → p005 → {p006 → p007, p0
 2026-10-02 / ws115-beta1-plan-20261002: 計画担当が依存 package の移植を Phase として追加（p004〜p010）。WS034 の p025〜p028・p034・p038 の移管を main に依頼（WS034 の記録の更新は main）。p002 の scope を「依存を除いた GTK4 本体の build/install」に、zedBSD 上の実行を新 p010 に分け、p003 の依存を p010 に改訂（p002・p003 に redesign の event）。p001 を planned（並行開始の判断待ち）。ベータ1の選択肢 A/B/C と推奨 B・D-VER の推奨 4.18 系を記録。実装・build・guest なし。
 
 2026-10-02 / q597-p001-cleared: P3 が q597-i01 で p001 の移植契約（[port-contract.md](port-contract.md)）を作った。推奨は GTK 4.18.6 の組（glib 2.84.4・pango 1.56.4・fontconfig 2.17.1）。libc は `sys/poll.h` の header だけが要る。libwayland の不足は p009 の範囲として確定し、本家 libwayland と wayland-cursor は使わない。renderer は Cairo を最初にする。p004〜p010 の範囲と版は契約の §9 を正本とする（各 phase.md への反映は着手時）。ユーザーの判断（D-VER・L1・L2・R1・P1・S1）は未決。package・libc の source は変えていない。
+
+2026-10-02 / q600-p004-cleared: P3 が q600-i01 で meson の cross 契約を作った（`userland/packages/tools/gen-meson-cross.sh`、external.mk の `ZEDBSD_EXTERNAL_MESON` と view と依存の閉包、host 道具の gperf 3.3）。試験 project と upstream の graphene を zedBSD target 向けに build し、ELF の検査を通した。zlib/expat に回帰は無い。sysroot に `sys/poll.h` が入り、glib の構成が pcre2 まで進むことを確かめた。次は p005。[p004](phase004/phase.md)。
