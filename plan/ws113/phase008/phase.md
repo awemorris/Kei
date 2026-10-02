@@ -27,6 +27,20 @@ D1〜D5の実i915結果、物理各outputの画面証拠と操作結果を記録
 
 Commands/results/commit/environment/artifacts/skipped checks: 未実施（計画のみ）。Findings: [現状調査](../design.md)。Resume: prerequisiteの実出力を確認し、このPhaseだけを新Queueへ選定・承認後に開始。
 
+## p001契約調査による詳細化（2026-10-02）
+
+[origin p001](../phase001/phase.md)、[契約](../phase001/contracts.md)、[ID/完了比較](../phase001/identity-completion.md)、[fixture](../phase001/fixtures.md)、[WS summary](../ws.md)を入力とする。
+
+Procedure: fixture manifestをsource/build/machine/runtime/physical sink/mode/connector/capability/occupancy/commands/evidence/bounds付きで完成し、H01–H10/D01–D10の選定scopeを有限に実行する。現physical fixtureは未確認。historical eDP+HDMIと実GPU passthrough、capture build、host modelを別classに記録する。
+
+Verification / resume: D1–D5のactual zedBSD i915 gate。両physical出力の同時content、異解像度、hotplug、Settings保存/復元、窓全tree境界移動と採択D-ATOMICを確認。boot-test.shのlogin PNG scopeを守り、旧serial/SSH例外を流用しない。0台fixture不在や必要能力不足はuncleared/再開条件。
+
+Status/dependenciesは上記のまま。未採択architecture/製品判断とactual prerequisiteを確認し、新QueueでこのPhaseだけを有限選定・承認後に実装する。q586はp001文書のみで後続sourceを許可しない。
+
 ## Event
 
 2026-10-02 / ws113-multidisplay-plan-20261002-ws113-p008-created: current userの5条件・3つの追加判断をこのPhaseへ投影。planned/Queue none。GitHub body/comment/Projectへの公開は保留。
+
+2026-10-02 / ws113-contract-design-20261002-a3-ws113-p008: p001のsource/一次仕様で明らかになった不足に合わせ、上記の自Phase procedureと検証/resumeを詳細化。D1–D5のactual zedBSD i915 gate。両physical出力の同時content、異解像度、hotplug、Settings保存/復元、窓全tree境界移動と採択D-ATOMICを確認。boot-test.shのlogin PNG scopeを守り、旧serial/SSH例外を流用しない。0台fixture不在や必要能力不足はuncleared/再開条件。 origin/WSリンクは上記。planned/Queue noneを保持。GitHub body/comment/Projectはmainへdelivery依頼pending。
+
+2026-10-02 / ws113-technical-choice-20261002-a3-ws113-p008: mainのdelegated technical decision messageからD-BOOT/LAYOUT/REC/AUTH/PORT通常案を採択記録。自Phase影響: eDP+HDMIを初回actual fixture候補にする。現可用性未確認と他port不足を保持。 [origin](../phase001/phase.md)/[詳細](../phase001/identity-completion.md)/[WS](../ws.md)。依存/Queue権限不変、main remote delivery pending。

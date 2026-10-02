@@ -7,7 +7,7 @@ Primary Milestone: MG006
 Related Milestones: MG001（GPU/API契約と回帰証拠）
 Parent: [Master](../master.md)
 Queue: q586 / A3（p001契約調査のみ、製品実装は後続）
-Resume point: p001の標準Vulkan hotplug能力・出力状態機械・実i915 fixture設計。実装順位は未指定。
+Resume point: p001契約/能力20行とfixture設計を保存。D-ID/物理移動解釈等のmain reviewとoutcome判定。実装順位/次Queueは未指定。
 
 ## Objective / scope
 
@@ -30,7 +30,7 @@ zedBSD i915で外部ディスプレイの接続/切断をVulkan Display拡張か
 
 ## Design / standards / dependencies
 
-[現状と順番](design.md)、[全文方針](../standards/ws113-display.md)、[Guardrail](../guardrail.md)、[C全文](../coding-style.md)、[automation](../standards/automation.md#ws113-multi-display-coverage-2026-10-02)。WS075/WS103/WS089はcontext。既存のSettings Display stubを新目標で拡張する。WS099の現在のデモ基準と既存順位は変更しない。
+[現状と順番](design.md)、[p001契約](phase001/contracts.md)、[ID/完了保証比較](phase001/identity-completion.md)、[fixture](phase001/fixtures.md)、[全文方針](../standards/ws113-display.md)、[Guardrail](../guardrail.md)、[C全文](../coding-style.md)、[automation](../standards/automation.md#ws113-multi-display-coverage-2026-10-02)。WS075/WS103/WS089はcontext。既存のSettings Display stubを新目標で拡張する。WS099の現在のデモ基準と既存順位は変更しない。
 ユーザーが追加判断: pointer境界で切替、「単一display」は拡張時だけ、実機完了はまずzedBSD i915。設定の永続化/異解像度mirror/安定IDの細目はp001で技術設計する。各Phaseは有限1 Queue、今回Queueには入れない。
 
 ## Phases
@@ -55,3 +55,7 @@ p008はp002〜p007の実出力を要する。見込みは実装許可ではな�
 2026-10-02 / ws113-multidisplay-plan-20261002-created: userの追加WS指示を9Phaseへ分割し、質問への3回答を受け入れ条件/全文方針へ反映。planned/未順位/Queue none。WS089 stubの過去結果を変更せず、後続の実装先を新WSとして記録。GitHub Issue/Project公開はlocal outbox pending。
 
 2026-10-02 / q586-audit1-integrated: A3-001 6e34d1bb9をmain 8021bc210へ統合・ACK。[18行source/能力調査](phase001/source-audit.md)を実sourceとVulkan一次仕様へ照合。固定HPD sequence/単一出力の現状、標準拡張の全command/dependency、ID/handleの保証範囲を記録。p001 in-progress、製品/hardware変更なし、ID/scanout/fixture契約は調査継続。
+
+2026-10-02 / ws113-contract-design-20261002-a3-ws113: p001読取設計を契約/能力/IDとpresent保証/fixtureへ詳細化し、p002–p009の各procedure/検証/resumeとforeign eventを保存した。固定sequence/単一rdからの下層不足、EXT依存/全entry、private ID未採択、標準present_waitの限界を受け入れ材料へ反映。Phase追加/依存変更/acceptance緩和は無し。WS incomplete、p001 in-progress/q586、後続planned/Queue none。GitHub event delivery、Master/Queue/standards/agent lane投影はmain依頼pending。
+
+2026-10-02 / ws113-technical-choice-20261002-a3-ws113: main通常技術裁量で初回全extended/internal anchor、edge snap/非重複/辺連結、退避窓自動奪回無し、active同UID peer変更、初回eDP+HDMI fixtureを採択。p001–p008へ自Phase影響とeventを記録。私有Vulkan identity拡張不採用、standard短portkeyとUUID別gateを詳細化。D-ATOMIC user回答、旧boot override互換性と現fixtureは未確認。WS acceptance/Phase依存/実装権限の削除拡張無し。main remote delivery/projection pending。
