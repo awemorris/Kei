@@ -1,7 +1,7 @@
 # Agent B1 Queue q581
 
-Status: active
-Attempt: q581-i01 / in-progress
+Status: finished
+Attempt: q581-i01 / cleared
 Owner: Agent B / B1 GTK executor
 Approval: current user / 2026-10-02「では、N=3で作業を開始してください。」。既存B1担当とWS114 p001残測定候補を選定。
 Timebox: 最大3時間 / 1 Phaseの残測定
@@ -12,5 +12,5 @@ Dependencies: q580の保存overlay/backing/keyとWS105/WS108 Linux compositor実
 Criteria: 行別reviewに必要な再現可能な結果/未測定理由と正常停止証拠。whole p001基準を満たさなければattempt unclearedにして残件を保存する。
 Worktree: `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114`
 Next Queue: 未投入。p002のユーザー採否は別。
-Merge requests / ACK: なし
+Merge requests / ACK: MR B1-q581-01（base ea55c973、提出21ce88c0、B統合9046f6fa、ACK）。[結果](../../ws114/phase001/q581-result.md)をreview。G01–G19に実測/具体skip、move/resize・別client clipboard・scroll/tooltip・software Cairo/Vulkanを確認しguest正常停止。p001の調査基準を満たしてcleared。GTK4全機能の成功やbug修正ではなく、WS114はincomplete。ユーザー追加CSD実装は別Phase/Queue。
 Sync: GitHub publication保留。WIP commitのみ、pushなし。Agent Aが共有投影を所有。
