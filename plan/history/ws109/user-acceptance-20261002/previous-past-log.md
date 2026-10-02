@@ -4,11 +4,11 @@
 
 Last finished Queue: [q574](queue-q574.md)（WS109 p007 cleared）
 
-## 最新: q574 の後続 /WS109実機受け入れ合格
+## 最新: q574 /WS109 p007
 
-q574で実機native build/install/最終規約を確認し、2026-10-02にuser「完璧に動作しました」でp008/F6 cleared、WS109 completed/fg016達成。[ユーザーacceptance](ws109/user-acceptance-20261002/phase008.md)。q574当時のuser操作未実施をsuccessへ書き換えず、dated follow-upとして保存。
+cleared。実機native build/sudo install warning0、334source/11library native auditと全14実行file loader/hash PASS、seatd/video/runtime準備済み。[結果](/home/awe/zedBSD-claude1/plan/history/ws109/q574/result.md)。p008ユーザーlocalGUI acceptanceは未実施。
 
-FreeBSD GDM撤回、native sessiond/graphicallogin/passwordlock未移植、BUG130/Venus/physicalradio制限を保持。WIP source b49ffa9bまでpush/実機pull verified、Issue/Project同期保留。今回WS110の--testing検討案を保存、source/test changesと新実装Queue無し。
+今回のWIP commit/push/実機pullは承認済み。Issue/Project同期は保留。WS109はincomplete、ユーザーの実機acceptance待ち。
 
 ## Queue history（直近30、古い順）
 

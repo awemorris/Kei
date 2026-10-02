@@ -169,8 +169,9 @@ The earlier QEMU acceptance waived physical-machine and physical WiFi tests.
 The later physical-machine acceptance uses FreeBSD 15.1-RELEASE amd64 on Intel
 Tiger Lake Iris Xe (`8086:9a49`), with the same base Clang 19.1.7, native Python
 3.12 and installed Mesa 26.1.3/drm-66/seatd stack. Native build and installation
-under `/opt/keiland` were verified there. Final physical display/input/application
-acceptance awaits the user's local-console session; GDM launch was withdrawn.
+under `/opt/keiland` were verified there. The user subsequently accepted the
+local-console session as working on 2026-10-02; this is user acceptance rather
+than individual device benchmarks. GDM launch was withdrawn.
 
 Native WiFi
 ABI/refusal and WPA wire tests use an independent datagram peer; these do not
