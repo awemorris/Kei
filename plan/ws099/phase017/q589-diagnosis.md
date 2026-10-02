@@ -2,7 +2,8 @@
 
 Status: in-progress, host preparation complete; guest resource grant pending.
 Whole p017: uncleared. BUG-125: reproduced / tracking.
-Start: 2026-10-02 approximately07:49 UTC; maximum45 minutes (08:34 UTC).
+Preparation start: 2026-10-02 07:49:13 UTC; preparation checkpoint07:53:30 UTC.
+Maximum45 minutes of active work; external resource hold is recorded separately.
 Authorization is [q589-approved-scope.md](q589-approved-scope.md), SHA256
 `16005006ee6e1868d2ad67dc1c1328f27d27d1e43f02dd012fa31ad7877464c7`.
 Base/main checkpoint: `3b2d2924`; q583 integration and all original evidence retained.
@@ -33,6 +34,8 @@ the session-b continuity addition. No new C or standard exception; C formatter,
 product build, C9/whole p076 and physical checks are outside this scope.
 
 B1 q587 has QEMU priority; no guest was started. Main will grant the resource after
-B1 stops. A prolonged hold that threatens the45-minute bound must be reported
-before guest execution; it does not authorize added runs or concurrent load.
+B1 stops. Main's 07:55 UTC follow-up separates external resource wait from active
+work time and bounds the hold by q587's own deadline. Scope/run limits are unchanged.
+Preparation used about five active minutes conservatively; at most40 active minutes
+remain after grant. No further helper or host repetitions during the resource hold.
 Preparation source/Markdown whitespace was checked on staged owned paths.
