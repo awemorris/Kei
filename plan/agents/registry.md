@@ -5,9 +5,9 @@
 | Agent / generation | Agent type | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | P1 / generation1 | phase-runner（high） | WS004（BUG-134 AX211） | `/home/awe/zedBSD-worktrees/p1` / `agent/p1` | [q590](P1/queue.md) | — | running | — |
-| P2 / — | — | 未配属 | — | — | — | not started | — |
-| P3 / — | — | 未配属 | — | — | — | not started | — |
-| P4 / — | — | 未配属 | — | — | — | not started | — |
+| P2 / generation1 | phase-runner（high） | WS099（BUG-125） | `/home/awe/zedBSD-worktrees/p2` / `agent/p2` | [q591](P2/queue.md) | lane の Next | running | — |
+| P3 / generation1 | phase-runner（high） | WS114 → WS115 | `/home/awe/zedBSD-worktrees/p3` / `agent/p3` | [q592](P3/queue.md) | lane の Next | running | — |
+| P4 / generation1 | phase-runner（high） | WS095 → WS127/WS089 | `/home/awe/zedBSD-worktrees/p4` / `agent/p4` | [q593](P4/queue.md) | lane の Next | running | — |
 | P5〜P8 | — | 未配属 | — | — | — | N=4 の間は起動しない | — |
 
 担当の WS と最初の Queue は、ベータ1（fg019）の内容をユーザーと決めてから割り当てる。

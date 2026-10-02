@@ -9,6 +9,7 @@ Related Milestones: MG006（GUI動作、compositor互換性）
 Parent: [Master](../master.md)
 Queue: none / 計画のみ
 Resume point（2026-10-02 計画詳細化）: p001 の入力を WS117（Linux の Qt6 の機能表と改良、2026-10-02 user の順序）に改訂し、host 道具（p004）と qtwayland・実行（p005）の Phase を追加。p001 は WS117 p002（Qt6 の行別採否）の後に、module と代表 app と到達点をユーザーと決める。ベータ1に入れるかはユーザーの判断（下の選択肢）。
+順序（2026-10-02 user（作業開始の指示））: WS115・WS097・WS117 の後。
 <!-- awesome-plan-current:end -->
 
 ## Objective / scope

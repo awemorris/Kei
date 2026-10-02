@@ -2,14 +2,17 @@
 
 # Queue / all-agent index
 
-Active Queues: q590（P1）。
+Active Queues: q590（P1）、q591（P2）、q592（P3）、q593（P4）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q591。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q594。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
-| q590 / q590-i01 | P1 | [ws004-p051](ws004/phase051/phase.md) | BUG-134 AX211 の passthrough 再現・解析・修正、4h | in-progress | user 2026-10-02「PCIパススルーでQEMUを起動してデバッグ…最初に取り組みましょう！」、[lane](agents/P1/queue.md) |
+| q590 / q590-i01 | P1 | [ws004-p051](ws004/phase051/phase.md) | BUG-134: passthrough で再現せず → ユーザーの実機試験 image を作って渡し、解析は後回し | in-progress（wrap 中） | user 2026-10-02、[lane](agents/P1/queue.md) |
+| q591 / q591-i01 | P2 | [ws099-p020](ws099/phase020/phase.md) | BUG-125 の原因特定と compositor の修正（phase.md の範囲）、4h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P2/queue.md) |
+| q592 / q592-i01 | P3 | [ws114-p007](ws114/phase007/phase.md) | CSD/SSD の残り5点（新 attempt、phase.md の範囲）、3h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P3/queue.md) |
+| q593 / q593-i01 | P4 | [ws095-p012](ws095/phase012/phase.md) | IME の辞書を千語に拡張し held-out で測る（phase.md の範囲）、4h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P4/queue.md) |
 
 ## 直近の終了 Queue の残り（再開の候補、承認ではない）
 
@@ -24,4 +27,4 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 
 ## Upcoming Work Outlook
 
-fg019（ベータ1、2026-10-17）。担当の線と順は Master の [Upcoming Work Outlook](master.md#upcoming-work-outlook)。最初の投入の案（承認待ち）: P2 = ws099-p020、P3 = ws114-p007（新 attempt）、P4 = ws095-p012。P1 は q590 の後 ws005-p018。q593（旧 B2 の WS099 p019 予約）は解放し、ws099-p019 は新しい ID で投入する。どれも承認ではない。
+担当の線は Master の [Upcoming Work Outlook](master.md#upcoming-work-outlook)。予約（承認は投入時に確認）: P1 → デモの image を CI 設定の土台へ → ws005-p018 → ws033-p001 → ws118-p001。P2 → ws099-p021 → ws094-p014。P3 → ws115-p001（素の GTK4 移植の契約）→ ws115-p004〜。P4 → ws127-p001 → ws089-p010 → ws095-p005。

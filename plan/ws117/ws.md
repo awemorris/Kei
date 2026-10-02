@@ -10,6 +10,7 @@ Objectives: O2
 Parent: [Master](../master.md)
 Queue: none
 Resume point（2026-10-02 計画詳細化）: [p001](phase001/phase.md)（Debian13 の標準 Qt6 6.8 の実測と機能表 Q01〜）が planned。開始条件は WS114 p007 cleared（user の順序）。p001 の後に p002 で行別採否をユーザーと決め、p003/p004 で compositor を改良する。
+順序（2026-10-02 user（作業開始の指示））: WS115（GTK4 移植）と WS097（独自 GTK4）の後に着手する。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー）

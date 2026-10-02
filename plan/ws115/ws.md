@@ -9,6 +9,7 @@ Related Milestones: MG006（GUI動作、compositor互換性）
 Parent: [Master](../master.md)
 Queue: none / 計画のみ
 Resume point（2026-10-02 計画詳細化）: 依存 package の移植を含む Phase 表を作成（p004〜p010 を追加）。2026-10-02 user の順序では WS114 p007 → WS117 の後に移植へ進む。**ベータ1に zedBSD 上の GTK4 を入れるなら、依存 library の Phase（p001・p004〜p009。compositor を触らない）を WS117 と並行して始める判断がユーザーに要る**（下の「ベータ1の選択肢」）。到達点は WS117 の調査の後にユーザーが決める（2026-10-02 user「まず調査して…から決めます」）。
+順序（2026-10-02 user（作業開始の指示））: WS114 p007 の後、WS117 を待たずに着手する。ベータ1 で素の GTK4 の移植を進め、移植できない所を記録する。
 <!-- awesome-plan-current:end -->
 
 ## Objective / scope
