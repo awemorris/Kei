@@ -2,10 +2,10 @@
 
 # ws109p005: 全文規約・主な app と3 OS の最終回帰
 
-Status: uncleared
+Status: planned
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q566 / q566-i01
+Queue / Attempt: なし（未承認）
 
 ## 目的・範囲
 
@@ -73,26 +73,3 @@ conformance corrections, native operational documentation and owning tests/evide
 movement has no style exception. No make check/push/publication/shared cleanup/host installation.
 Structural event ws109-q566: own p005 dependency distinguishes verified source outputs from remaining
 whole physical acceptance; WS projection updated now, unchanged p003/p004 criteria not withdrawn.
-
-## 2026-10-02 / ws109-20261002-qemu-venus-acceptance
-
-Current user, this chat async reply: 「実機検証は不要です。qemuでVenusが使えればclearとします。」
-This explicitly replaces the earlier user-provided-machine gate. Physical GPU/display/WiFi
-acceptance is waived for WS109; do not request hardware or reintroduce those gates. Required
-replacement evidence is actual FreeBSD QEMU Venus usage; mere host support, headless lavapipe or
-Linux/zedBSD Venus does not establish that evidence. Native backend/build/standards and affected
-regression obligations remain. p004 hardware radio operations become waived, not falsely tested;
-native audio/wired and native radio ABI/refusal/WPA wire evidence remains classified accurately.
-p003/F3 and p005/F5 replace physical display/main-app checks with owned FreeBSD QEMU Venus-backed
-checks. If the native guest stack lacks a required Venus driver, investigate a bounded actual
-capability chain and expose the remaining platform/scope choice; kernel/driver port is still outside
-WS109's agreed scope. Current q566 standards/regression/docs subset stays authorized; Venus
-configuration/implementation is selected separately after q566. No automatic WS/Phase clearance.
-Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/scoped standard,
-Queue supplement and docs; remote decision/structural events pending publication.
-
-## Result / q566-i01 / 2026-10-02T00:22:28.921774+00:00
-
-Queue item cleared /whole Phase uncleared。Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.
-
-Event ws109-q566-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.

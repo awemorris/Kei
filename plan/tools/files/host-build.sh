@@ -57,7 +57,8 @@ for file in userland/desktop/libkeiland/gesture.c userland/desktop/libkeiland/sc
 done
 
 # files without the window, the presenter, the menus, the titlebar and the glass.
-for file in $src/*.c; do
+# The shared mount-table adapter supplies the same real table on the host and zedBSD.
+for file in $src/*.c $src/mntent/*.c; do
 	case $(basename "$file") in
 	main.c|window.c|present.c|menu.c|titlebar.c|glass.c|dnd.c) continue ;;
 	esac

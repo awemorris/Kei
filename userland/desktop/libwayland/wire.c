@@ -43,6 +43,7 @@ wlc_signature_start(
 	if (since == 0)
 		since = 1;
 
+	/* Publishes the negotiated minimum version with the remaining signature. */
 	*version = since;
 
 	/* Succeeded: reports the start of the argument signature. */
@@ -152,6 +153,7 @@ wlc_wire_queue(
 	/* Retains independent fd references before publishing the packet. */
 	error = wlc_wire_encode(proxy, message, arguments, created, packet);
 	if (error != 0) {
+		/* Retires only the now-detached complete packet and its remaining storage. */
 		wlc_packet_destroy(packet);
 		return error;
 	}
@@ -164,6 +166,7 @@ wlc_wire_queue(
 		display->output_tail->next = packet;
 	}
 
+	/* The tail identifies the final packet owned by this connection. */
 	display->output_tail = packet;
 
 	/* Succeeded: caller descriptors may now be closed independently. */
@@ -188,6 +191,7 @@ wlc_wire_flush(
 	ssize_t sent;
 	size_t index;
 	int total;
+	int closed;
 	int error;
 
 	/* Sends queued packets in order while the socket accepts more bytes. */
@@ -222,6 +226,7 @@ wlc_wire_flush(
 			if (error == EINTR)
 				continue;
 
+			/* Propagates the failed socket submission without consuming packet rights. */
 			errno = error;
 			return -1;
 		}
@@ -232,10 +237,16 @@ wlc_wire_flush(
 			return -1;
 		}
 
-		/* A positive send has transferred every ancillary reference once. */
-		for (index = 0; index < packet->descriptor_count; index++)
-			close(packet->descriptors[index]);
+		/* Closes every packet duplicate after the kernel accepts the corresponding rights. */
+		for (index = 0; index < packet->descriptor_count; index++) {
+			closed = close(packet->descriptors[index]);
+			if (closed != 0) {
+				/* Accepted rights cannot be resent; a retired descriptor number cannot safely be retried. */
+				continue;
+			}
+		}
 
+		/* Accepted rights no longer belong to the queued packet, even after a partial send. */
 		packet->descriptor_count = 0;
 		packet->sent += (size_t)sent;
 
@@ -255,6 +266,7 @@ wlc_wire_flush(
 		if (display->output_head == NULL)
 			display->output_tail = NULL;
 
+		/* Retires only the now-detached complete packet and its remaining storage. */
 		wlc_packet_destroy(packet);
 	}
 
@@ -297,6 +309,7 @@ wlc_wire_read(
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
 			return 0;
 
+		/* Reports a failed receive before any input storage or rights are published. */
 		return errno;
 	}
 
@@ -327,10 +340,16 @@ wlc_packet_destroy(
 	struct wlc_packet *packet)
 {
 	size_t index;
+	int closed;
 
 	/* Recovers references never accepted by sendmsg. */
-	for (index = 0; index < packet->descriptor_count; index++)
-		close(packet->descriptors[index]);
+	for (index = 0; index < packet->descriptor_count; index++) {
+		closed = close(packet->descriptors[index]);
+		if (closed != 0) {
+			/* Cleanup continues after one close refusal without risking a recycled descriptor number. */
+			continue;
+		}
+	}
 
 	/* Drops packet-owned byte storage after its rights are released. */
 	free(packet->bytes);
@@ -362,7 +381,7 @@ wlc_wire_measure(
 	int nullable;
 	int same;
 
-	/* Starts with the two mandatory protocol header words. */
+	/* Measures each argument from the two mandatory protocol header words. */
 	*length = 8;
 	fd_count = 0;
 	constructors = 0;
@@ -391,14 +410,17 @@ wlc_wire_measure(
 			if (arguments[index].h < 0 || fd_count >= WLC_FD_MAX)
 				return EINVAL;
 
+			/* Counts the right that this request must transport separately from its payload. */
 			fd_count++;
 			addition = 0;
 			break;
 		case 's':
+			/* The permitted null string contributes only its zero length prefix. */
 			bytes = 0;
 
 			/* Null strings are legal only with an explicit nullable signature. */
 			if (arguments[index].s == NULL) {
+				/* A non-nullable string cannot use the wire's null representation. */
 				if (!nullable)
 					return EINVAL;
 			} else {
@@ -407,9 +429,11 @@ wlc_wire_measure(
 				if (bytes >= WLC_WIRE_MAX)
 					return E2BIG;
 
+				/* The terminator contributes one byte to the string length on the wire. */
 				bytes++;
 			}
 
+			/* Variable data contributes its full protocol-aligned extent to this argument. */
 			addition += (bytes + 3U) & ~(size_t)3U;
 			break;
 		case 'a':
@@ -417,6 +441,7 @@ wlc_wire_measure(
 			if (arguments[index].a == NULL)
 				return EINVAL;
 
+			/* Reads the caller-provided array extent before validating its payload pointer. */
 			bytes = arguments[index].a->size;
 
 			/* Keeps length alignment and the message header representable. */
@@ -427,14 +452,17 @@ wlc_wire_measure(
 			if (bytes != 0 && arguments[index].a->data == NULL)
 				return EINVAL;
 
+			/* Variable data contributes its full protocol-aligned extent to this argument. */
 			addition += (bytes + 3U) & ~(size_t)3U;
 			break;
 		case 'n':
 		case 'o':
+			/* Caller object arguments identify retained local proxy generations. */
 			object = (struct wl_proxy *)arguments[index].o;
 
 			/* Constructor calls provide the allocated proxy independently of args. */
 			if (type == 'n') {
+				/* The constructor count must agree with the request's single created object. */
 				constructors++;
 
 				/* The legacy entry point instead supplies a precreated object. */
@@ -444,6 +472,7 @@ wlc_wire_measure(
 
 			/* Only explicitly nullable ordinary object arguments may encode zero. */
 			if (object == NULL) {
+				/* New identities and non-nullable ordinary references cannot encode zero. */
 				if (type == 'n' || !nullable)
 					return EINVAL;
 
@@ -464,6 +493,7 @@ wlc_wire_measure(
 
 			break;
 		default:
+			/* No other signature kind has a representable Wayland argument. */
 			return EINVAL;
 		}
 
@@ -471,6 +501,7 @@ wlc_wire_measure(
 		if (addition > WLC_WIRE_MAX - *length)
 			return E2BIG;
 
+		/* Accumulates one validated argument and advances the matching caller union index. */
 		*length += addition;
 		index++;
 	}
@@ -504,7 +535,7 @@ wlc_wire_encode(
 	int nullable;
 	int descriptor;
 
-	/* Serializes payload words in the host's native endian convention. */
+	/* Serializes every argument in host-native endian order without transport-side padding data. */
 	(void)proxy;
 	offset = 8;
 	index = 0;
@@ -524,34 +555,45 @@ wlc_wire_encode(
 			if (descriptor < 0)
 				return errno;
 
+			/* The ownership count includes only duplicates that packet cleanup may close. */
 			packet->descriptors[packet->descriptor_count] = descriptor;
 			packet->descriptor_count++;
 			index++;
 			continue;
 		case 's':
+			/* A present string supplies its own terminator-bearing wire payload. */
 			data = arguments[index].s;
 
 			/* A zero length represents the permitted null string. */
-			if (data != NULL)
-				bytes = strlen(data) + 1;
+			if (data != NULL) {
+				bytes = strlen(data);
+				bytes++;
+			}
 
+			/* The string prefix carries its byte extent including the terminator. */
 			word = (uint32_t)bytes;
 			break;
 		case 'a':
+			/* An array contributes its validated byte count and opaque caller data. */
 			data = arguments[index].a->data;
+			/* Reads the caller-provided array extent before validating its payload pointer. */
 			bytes = arguments[index].a->size;
+			/* The string prefix carries its byte extent including the terminator. */
 			word = (uint32_t)bytes;
 			break;
 		case 'n':
+			/* Modern constructors supply their new identity separately from legacy union arguments. */
 			object = created;
 
 			/* Legacy new_id arguments already hold a local proxy identity. */
 			if (object == NULL)
 				object = (struct wl_proxy *)arguments[index].o;
 
+			/* A constructor encodes the selected retained local proxy identity. */
 			word = object->id;
 			break;
 		case 'o':
+			/* An ordinary object encodes its current identity or the permitted null value. */
 			object = (struct wl_proxy *)arguments[index].o;
 
 			/* Null objects serialize to the reserved zero identity. */
@@ -560,6 +602,7 @@ wlc_wire_encode(
 
 			break;
 		default:
+			/* Validated integer and fixed-point arguments each occupy one native-endian word. */
 			word = arguments[index].u;
 			break;
 		}
@@ -574,6 +617,7 @@ wlc_wire_encode(
 			offset += (bytes + 3U) & ~(size_t)3U;
 		}
 
+		/* Consumes exactly one caller argument after its full wire payload is written. */
 		index++;
 	}
 
@@ -595,6 +639,7 @@ wlc_wire_control(
 	size_t index;
 	size_t needed;
 	int error;
+	int closed;
 
 	/* Rejects truncated rights without losing any descriptors actually returned. */
 	error = 0;
@@ -635,8 +680,14 @@ wlc_wire_control(
 
 			/* Recovers rights that cannot enter the connection-owned FIFO. */
 			if (error != 0) {
-				for (index = 0; index < count; index++)
-					close(descriptors[index]);
+				/* Returns every received reference while preserving the original control failure. */
+				for (index = 0; index < count; index++) {
+					closed = close(descriptors[index]);
+					if (closed != 0) {
+						/* Another close refusal cannot replace the malformed-control error or stop later cleanup. */
+						continue;
+					}
+				}
 			} else {
 				/* Appends rights in receive order independently of byte framing. */
 				display->input_descriptors = grown;
@@ -650,6 +701,7 @@ wlc_wire_control(
 		if (needed > message->msg_controllen - offset)
 			break;
 
+		/* Advances to the next complete control header using native ancillary alignment. */
 		offset += needed;
 	}
 
@@ -726,6 +778,7 @@ wlc_wire_parse(
 					queue->tail->next = event;
 				}
 
+				/* The tail identifies the last event still owned by this dispatch queue. */
 				queue->tail = event;
 			}
 		}
@@ -757,51 +810,55 @@ wlc_wire_display(
 	uint32_t code;
 	uint32_t bytes;
 
-	/* An ID acknowledgement is exactly one payload word. */
-	if (opcode == 1) {
-		if (length != 12)
+	/* Every non-acknowledgement opcode must describe a complete fatal protocol error. */
+	if (opcode != 1) {
+		/* Unknown opcodes and incomplete error payloads cannot describe this display interface. */
+		if (opcode != 0 || length < 24)
 			return EPROTO;
 
-		/* Rejects acknowledgements outside the client-owned ID namespace. */
+		/* Validates the complete NUL-terminated error description. */
 		memcpy(&id, display->input + 8, sizeof(id));
-		if (id < 2 || id >= WLC_SERVER_ID_START)
+		memcpy(&code, display->input + 12, sizeof(code));
+		memcpy(&bytes, display->input + 16, sizeof(bytes));
+		if (bytes == 0 || bytes > length - 20)
 			return EPROTO;
 
-		/* Keeps queued events attached to the old proxy, never the reused ID. */
+		/* A trailing NUL and exact padded extent are required by the wire format. */
+		if (display->input[20 + bytes - 1] != 0 ||
+		    20 + ((bytes + 3U) & ~3U) != length)
+			return EPROTO;
+
+		/* The offending object may have already been destroyed by the client. */
 		proxy = wlc_proxy_lookup(display, id);
-		if (proxy == NULL)
-			return EPROTO;
+		display->protocol_id = id;
+		display->protocol_code = code;
+		display->protocol_interface = NULL;
+		if (proxy != NULL)
+			display->protocol_interface = proxy->interface;
 
-		wlc_proxy_remove(proxy);
-		return 0;
+		/* Reports the server's fatal protocol error with separately queryable detail. */
+		return EPROTO;
 	}
 
-	/* The only other display event is a protocol error with object/code/string. */
-	if (opcode != 0 || length < 24)
+	/* An ID acknowledgement is exactly one payload word. */
+	if (length != 12)
 		return EPROTO;
 
-	/* Validates the complete NUL-terminated error description. */
+	/* Rejects acknowledgements outside the client-owned ID namespace. */
 	memcpy(&id, display->input + 8, sizeof(id));
-	memcpy(&code, display->input + 12, sizeof(code));
-	memcpy(&bytes, display->input + 16, sizeof(bytes));
-	if (bytes == 0 || bytes > length - 20)
+	if (id < 2 || id >= WLC_SERVER_ID_START)
 		return EPROTO;
 
-	/* A trailing NUL and exact padded extent are required by the wire format. */
-	if (display->input[20 + bytes - 1] != 0 ||
-	    20 + ((bytes + 3U) & ~3U) != length)
-		return EPROTO;
-
-	/* The offending object may have already been destroyed by the client. */
+	/* Keeps queued events attached to the old proxy, never the reused ID. */
 	proxy = wlc_proxy_lookup(display, id);
-	display->protocol_id = id;
-	display->protocol_code = code;
-	display->protocol_interface = NULL;
-	if (proxy != NULL)
-		display->protocol_interface = proxy->interface;
+	if (proxy == NULL)
+		return EPROTO;
 
-	/* Reports the server's fatal protocol error with separately queryable detail. */
-	return EPROTO;
+	/* Retires the acknowledged map identity while queued events retain their old generation. */
+	wlc_proxy_remove(proxy);
+
+	/* Succeeded: the server acknowledgement retired exactly one client object identity. */
+	return 0;
 }
 
 /* Decodes a complete event while retaining its payload and argument objects. */
@@ -895,6 +952,7 @@ wlc_wire_event(
 		return ENOMEM;
 	}
 
+	/* Retains the complete payload independently of the next connection read. */
 	memcpy(event->bytes, display->input, length);
 
 	/* Decodes one argument at a time while recording only acquired ownership. */
@@ -918,6 +976,7 @@ wlc_wire_event(
 		if (length - offset < 4)
 			goto fail;
 
+		/* Consumes one validated scalar prefix and marks this decoded argument for cleanup. */
 		memcpy(&word, event->bytes + offset, sizeof(word));
 		offset += 4;
 		event->argument_count = index + 1;
@@ -927,6 +986,7 @@ wlc_wire_event(
 		case 'i':
 		case 'u':
 		case 'f':
+			/* Scalar event arguments retain the exact native-endian wire bits. */
 			event->arguments[index].u = word;
 			break;
 		case 's':
@@ -935,6 +995,7 @@ wlc_wire_event(
 			if (word > length - offset)
 				goto fail;
 
+			/* Includes mandatory wire padding only after the raw extent has been bounded. */
 			padded = ((size_t)word + 3U) & ~(size_t)3U;
 
 			/* Padding is part of the message extent even when bytes are ignored. */
@@ -944,12 +1005,15 @@ wlc_wire_event(
 			/* Strings require either an allowed null or a trailing terminator. */
 			if (type == 's') {
 				if (word == 0) {
+					/* A non-nullable string must carry at least its terminator. */
 					if (!nullable)
 						goto fail;
 				} else {
+					/* The string's final byte must terminate the event-owned payload. */
 					if (event->bytes[offset + word - 1] != 0)
 						goto fail;
 
+					/* Listener strings borrow only the validated event-owned terminated bytes. */
 					event->arguments[index].s = (const char *)event->bytes + offset;
 				}
 			} else {
@@ -959,11 +1023,13 @@ wlc_wire_event(
 				event->arguments[index].a = &event->arrays[index];
 			}
 
+			/* Consumes the validated variable argument and its complete padding. */
 			offset += padded;
 			break;
 		case 'o':
 			/* Nullable zero references do not retain any object. */
 			if (word == 0) {
+				/* A non-nullable reference cannot omit its object identity. */
 				if (!nullable)
 					goto fail;
 
@@ -975,18 +1041,21 @@ wlc_wire_event(
 			if (object == NULL)
 				goto fail;
 
+			/* Untyped object references need no protocol-class constraint. */
 			expected = NULL;
 
 			/* An explicitly typed reference must match the described protocol class. */
 			if (message->types != NULL)
 				expected = message->types[index];
 
+			/* Rejects a retained proxy whose class differs from the typed protocol reference. */
 			if (expected != NULL) {
 				same = strcmp(expected->name, object->interface->name);
 				if (same != 0)
 					goto fail;
 			}
 
+			/* The event keeps this exact object generation alive until dispatch or discard. */
 			object->references++;
 			event->objects[index] = object;
 			event->arguments[index].o = (struct wl_object *)object;
@@ -1035,14 +1104,20 @@ wlc_wire_event(
 		}
 	}
 
+	/* Publishes the complete event and the FIFO prefix whose ownership it acquired. */
 	*fd_count = descriptors;
 	*output = event;
 
-	/* Succeeded: the caller can atomically advance the connection's input FIFO. */
-	return 0;
+	/* No partially acquired event resources need recovery after complete publication. */
+	error = 0;
 
 fail:
-	/* Recovers only resources acquired by this partially decoded event. */
-	wlc_event_destroy(event);
-	return error;
+	/* Recovers only resources acquired by a partially decoded event before publication. */
+	if (error != 0) {
+		wlc_event_destroy(event);
+		return error;
+	}
+
+	/* Succeeded: the caller can atomically advance the connection's input FIFO. */
+	return 0;
 }

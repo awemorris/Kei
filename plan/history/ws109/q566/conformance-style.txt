@@ -1,0 +1,6 @@
+plan/ws109/tests/attributes-freebsd.c goto=17
+plan/ws109/tests/network-address.c goto=9
+userland/desktop/files/places.c goto=4
+userland/desktop/freebsd-compat/freebsd/xattr-freebsd.c goto=6
+userland/desktop/libwayland/wire.c call-in-condition=2 goto=10
+total 48

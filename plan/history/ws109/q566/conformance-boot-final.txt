@@ -1,0 +1,2 @@
+boot-test: saw '^(?:\\S+ )?login: ?'
+boot-test: PASS /home/awe/zedBSD-claude1/build/ws109-control/boot-final/login.png

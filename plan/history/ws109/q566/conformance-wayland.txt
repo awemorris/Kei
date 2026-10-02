@@ -1,0 +1,2 @@
+PASS Wayland client: queues, fragmented wire, tombstones, fd ownership, delayed rights, partial sends, reader barrier, protocol errors, seat/pointer/keyboard
+PASS Wayland client: queues, fragmented wire, tombstones, fd ownership, delayed rights, partial sends, reader barrier, protocol errors, seat/pointer/keyboard

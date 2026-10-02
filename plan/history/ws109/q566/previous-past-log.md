@@ -2,18 +2,19 @@
 
 # Past Log
 
-Last finished Queue: [q566](queue-q566.md)（WS109 p005 uncleared）
+Last finished Queue: [q565](queue-q565.md)（WS109 p002 cleared）
 
-## 最新: q566 /WS109 p005
+## 最新: q565 /WS109 p002
 
-item cleared /Phase uncleared。Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.
+item cleared /Phase cleared。F2一式fresh native324unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
 
-WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免除、FreeBSD QEMU Venus acceptanceは未確認。
+WIP commit/pushなし、GitHub publication/outbox pending。actual hardware acceptanceは別。
 
 ## Queue history（直近30、古い順）
 
 | Queue | Outcome |
 | --- | --- |
+| [q536](queue-q536.md) | ws105-p009 cleared |
 | [q537](queue-q537.md) | ws105-p010 cleared |
 | [q538](queue-q538.md) | ws105-p011 cleared |
 | [q539](queue-q539.md) | ws106p001 cleared |
@@ -44,6 +45,5 @@ WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免�
 | [q563](queue-q563.md) | WS109 p002 item uncleared /Phase uncleared |
 | [q564](queue-q564.md) | WS109 p002 item cleared /Phase uncleared |
 | [q565](queue-q565.md) | WS109 p002 item cleared /Phase cleared |
-| [q566](queue-q566.md) | WS109 p005 item cleared /Phase uncleared |
 
 前回全文は[保存済みindex](ws109/q551/previous-past-log.md)。以前の全summary/判断/bugリンクは[through q548](past-log-through-q548.md)、[through q537](past-log-through-q537.md)、[through q522](past-log-through-q522.md)。各承認scope/結果はQueue archiveを参照。

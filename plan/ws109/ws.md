@@ -7,8 +7,8 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG007
 Parent: [Master](../master.md)
-Queue: なし（q565 finished）
-Resume point: p002 cleared; F2一式fresh native324unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
+Queue: なし（q566 finished）
+Resume point: p005 uncleared; Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.
 <!-- awesome-plan-current:end -->
 
 ## 目標・決定の出典
@@ -32,11 +32,11 @@ system の graphics stack に LinuxKPI/DRM がある場合も、GPL が無いと
 
 ## WS 自身の完了条件
 
-- F1: 固定 FreeBSD15 version/amd64、graphics device/driver、検証環境、license、native ABI の対応表を確定。
+- F1: 固定 FreeBSD15 version/amd64、QEMU Venus device/driver、検証環境、license、native ABI の対応表を確定。
 - F2: 独立 native build/DESTDIR install が warning 0、標準公開 header と ELF/後段 Vulkan の symbol chain が利用可能。
-- F3: 共通描画から実際の表示・入力・buffer 同期・session/seat の device 所有と解放を確認。
-- F4: audio の列挙/音量/mute、network の状態、有線/WiFi の scan/接続/切断/設定を実 backend で検証。mock は実検証と分ける。
-- F5: 主な app の起動/操作、Linux と zedBSD の影響範囲の回帰、全文規約と移植/運用文書を確認。
+- F3: FreeBSD QEMUで実Venusを使用し、共通描画/入力/同期/sessionの利用可能な経路を確認。実機関門は2026-10-02ユーザーにより免除。
+- F4: audioの列挙/音量/mute、network/有線をQEMU実backendで確認。WiFi backendのnativeABI/拒否/WPAwireを確認し、mockを実WiFiから区別。実機radio操作はユーザー免除。
+- F5: FreeBSD QEMU Venusで主なapp/操作、Linux/zedBSD影響範囲の回帰、全文規約/運用文書を確認。実機検証はユーザー免除。
 
 ## 依存・所有
 
@@ -50,7 +50,7 @@ WS104/105 の境界・Linux 出力は completed context。共通描画/API の�
 | [ws109p002](phase002/phase.md) | native build・library と system Vulkan chain | F2。glibc 固有の loader binding に頼らないことを実際の FreeBSD で検証。 | cleared / q565 | p001 |
 | [ws109p003](phase003/phase.md) | 共有描画と FreeBSD の device/session/input 境界 | F3。Linux source を丸ごと複製した renderer を作らない。device release/fd lifetime も確認。 | uncleared / q559 | p002 L1 verified output |
 | [ws109p004](phase004/phase.md) | audio・network・WiFi の FreeBSD backend | F4。PCM 再生を含めるかは p001 で確定し、WS105 の音量 backend と取り違えない。 | uncleared / q555 | p002 L1 verified output |
-| [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | planning | p002 L2、p003、p004 + hardware gates |
+| [ws109p005](phase005/phase.md) | 全文規約・主な app と3 OS の最終回帰 | F1〜F5。FreeBSD build のみを移植完了としない。未実施の GPU/実機/OS version を記録。 | uncleared / q566 | p002 F2 verified + p003/p004 implementation outputs for subset; QEMU Venus gate for whole |
 
 
 依存は表の prerequisite → dependent。context は選定された作業ではない。
@@ -133,3 +133,24 @@ ws109-q558-permissive-seat-client: existing p001 MITclient option concretized wi
 2026-10-01T23:49:51.391199+00:00 / ws109-q564-cleared: p002 uncleared。13apps/compositor/nativeall warning0、25ELF/private install/data/refusal・native辞書150tests PASS。実mount contracts/LinuxFiles回帰PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q564/result.md)。F2最終一式audit・p005全文規約/threeOSと実GPU/WiFi関門は保持。
 
 2026-10-01T23:53:09.700338+00:00 / ws109-q565-cleared: p002 cleared。F2一式fresh native324unique C/all/install/header closure/25ELF・public64pixels/PDFと実Vulkan1MiBchain verified。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q565/result.md)。nativeGUI/F3/F4実機とp005全文規約/threeOS/docsは未達、WS incomplete。
+
+2026-10-02 / ws109-q566-conformance-design: p005 full standards/regression/docs subset ready using p002 cleared/q565 and verified backend sources; full physical/app acceptance retained. Origin [p005](phase005/phase.md). Remote structural event pending.
+
+## 2026-10-02 / ws109-20261002-qemu-venus-acceptance
+
+Current user, this chat async reply: 「実機検証は不要です。qemuでVenusが使えればclearとします。」
+This explicitly replaces the earlier user-provided-machine gate. Physical GPU/display/WiFi
+acceptance is waived for WS109; do not request hardware or reintroduce those gates. Required
+replacement evidence is actual FreeBSD QEMU Venus usage; mere host support, headless lavapipe or
+Linux/zedBSD Venus does not establish that evidence. Native backend/build/standards and affected
+regression obligations remain. p004 hardware radio operations become waived, not falsely tested;
+native audio/wired and native radio ABI/refusal/WPA wire evidence remains classified accurately.
+p003/F3 and p005/F5 replace physical display/main-app checks with owned FreeBSD QEMU Venus-backed
+checks. If the native guest stack lacks a required Venus driver, investigate a bounded actual
+capability chain and expose the remaining platform/scope choice; kernel/driver port is still outside
+WS109's agreed scope. Current q566 standards/regression/docs subset stays authorized; Venus
+configuration/implementation is selected separately after q566. No automatic WS/Phase clearance.
+Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/scoped standard,
+Queue supplement and docs; remote decision/structural events pending publication.
+
+2026-10-02T00:22:28.923483+00:00 / ws109-q566-cleared: p005 uncleared。Final changed-source standards, wire/Places fixes, native docs and affected native/Linux/zedBSD checks PASS. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q566/result.md). Physical tests waived; whole p005/WS pending actual FreeBSD QEMU Venus.

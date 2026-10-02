@@ -78,3 +78,20 @@ Files: libkeiland/freebsd/network-link-freebsd.c, linux/network-link-linux.c, wp
 Queue item cleared /whole Phase uncleared。nativeAF_LINK/net80211/共有WPA実装、realvtnet/DNS/権限/flag保持/carrierdown→up、nativeUnix/mockWPAwire/期限とLinuxlibrary/link契約PASS。[result](/home/awe/zedBSD-claude1/plan/history/ws109/q555/result.md)。actualWiFi/fullF4・mainGUI/全source規約/3OS/実GPUは保持、WS incomplete。
 
 Event ws109-q555-cleared: local evidence/outcome saved; remote comment (no Phase close) pending.
+
+## 2026-10-02 / ws109-20261002-qemu-venus-acceptance
+
+Current user, this chat async reply: 「実機検証は不要です。qemuでVenusが使えればclearとします。」
+This explicitly replaces the earlier user-provided-machine gate. Physical GPU/display/WiFi
+acceptance is waived for WS109; do not request hardware or reintroduce those gates. Required
+replacement evidence is actual FreeBSD QEMU Venus usage; mere host support, headless lavapipe or
+Linux/zedBSD Venus does not establish that evidence. Native backend/build/standards and affected
+regression obligations remain. p004 hardware radio operations become waived, not falsely tested;
+native audio/wired and native radio ABI/refusal/WPA wire evidence remains classified accurately.
+p003/F3 and p005/F5 replace physical display/main-app checks with owned FreeBSD QEMU Venus-backed
+checks. If the native guest stack lacks a required Venus driver, investigate a bounded actual
+capability chain and expose the remaining platform/scope choice; kernel/driver port is still outside
+WS109's agreed scope. Current q566 standards/regression/docs subset stays authorized; Venus
+configuration/implementation is selected separately after q566. No automatic WS/Phase clearance.
+Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/scoped standard,
+Queue supplement and docs; remote decision/structural events pending publication.

@@ -1,0 +1,14 @@
+cc: error: no such file or directory: 'plan/ws109/tests/ancillary.c'
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-claude1/build/ws109-control/guest.py", line 35, in <module>
+    elif sys.argv[1]=='ssh':ssh(sys.argv[2],timeout=int(sys.argv[3]) if len(sys.argv)>3 else 120)
+                            ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/awe/zedBSD-claude1/build/ws109-control/guest.py", line 11, in ssh
+    return command(['ssh','-i',str(D/'id_ed25519'),'-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null','-o','LogLevel=ERROR','-o','BatchMode=yes','-o','ConnectTimeout=3','-p',str(CFG['port']),'root@127.0.0.1',script],timeout=timeout,**kwargs)
+  File "/home/awe/zedBSD-claude1/build/ws109-control/guest.py", line 9, in command
+    return subprocess.run(args,check=True,timeout=timeout,**kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['ssh', '-i', '/home/awe/zedBSD-claude1/build/ws109-control/guest/id_ed25519', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'LogLevel=ERROR', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=3', '-p', '47969', 'root@127.0.0.1', 'cd /root/keiland-src && cc -O2 -g -std=gnu17 -Wall -Wextra -Werror -I. -Iuserland/desktop/keiland -Ibuild/native-final/include plan/ws109/tests/ancillary.c -Lbuild/native-final/lib -l:libwayland-client.so -o /tmp/ws109-final-ancillary && env LD_LIBRARY_PATH=/root/keiland-stage-final/opt/keiland/lib /tmp/ws109-final-ancillary']' returned non-zero exit status 1.

@@ -1,0 +1,34 @@
+In file included from userland/desktop/libwayland/client.c:12:
+userland/desktop/libwayland/internal.h:15:10: fatal error: wayland/wayland-client.h: No such file or directory
+   15 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from userland/desktop/libwayland/proxy.c:12:
+userland/desktop/libwayland/internal.h:15:10: fatal error: wayland/wayland-client.h: No such file or directory
+   15 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from userland/desktop/libwayland/wire.c:12:
+userland/desktop/libwayland/internal.h:15:10: fatal error: wayland/wayland-client.h: No such file or directory
+   15 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from userland/desktop/libwayland/event.c:17:
+userland/desktop/libwayland/internal.h:15:10: fatal error: wayland/wayland-client.h: No such file or directory
+   15 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from userland/desktop/libwayland/protocol.c:10:
+userland/desktop/libwayland/internal.h:15:10: fatal error: wayland/wayland-client.h: No such file or directory
+   15 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from userland/desktop/libwayland/utility.c:12:
+userland/desktop/libwayland/internal.h:15:10: fatal error: wayland/wayland-client.h: No such file or directory
+   15 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+plan/ws014/phase006/tests/wayland-client.c:12:10: fatal error: wayland/wayland-client.h: No such file or directory
+   12 | #include <wayland/wayland-client.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.

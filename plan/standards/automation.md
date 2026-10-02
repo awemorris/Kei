@@ -85,3 +85,7 @@ Boundary check.sh recognizes nativefreebsd OS roots, rejects OSmacro outside zwl
 outside OS modules, except the five shared native evdev metadata/clock request families in exactly
 wayland/evdev/input-evdev.c. Its header selector owns record/constants ABI, OS seat owns leases.
 No new operation or C relocation-style exception; unknown request families still fail the checker.
+
+## WS109 acceptance revision / 2026-10-02
+
+User waives physical-machine tests; actual native FreeBSD QEMU Venus replaces that gate. Earlier hardware-check descriptions are superseded for WS109. Full C/manual review and affected native/Linux/zedBSD checks remain required; no host-only or lavapipe substitute. [Decision](ws109-native.md).

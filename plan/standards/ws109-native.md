@@ -16,11 +16,28 @@ system Vulkan behind our WSI; keep Linux rendering shared and OS code in modules
 - SSH via127.0.0.1 forwarding, QMP screendump PNG inspected and shown.
 - serial null; no console/serial-log based acceptance. Cleanup own processes only.
 - Native compile/DESTDIR/header/ELF/loader and services verified in FreeBSD guest.
-- Real GPU display, dma-buf/fences/seat lifecycle and actual WiFi require the
-  user-provided machine; prepare implementations first and retain these gates.
-- Physical device model/driver versions are recorded at that gate. A VM/headless
-  Vulkan result does not supply the physical acceptance. No false clearance.
+- Physical tests are waived by the later user decision below. Actual FreeBSD QEMU
+  Venus usage is the replacement graphics gate; no lavapipe/other-OS substitution.
+- Native QEMU audio/wired/seat checks remain real evidence; absent physical WiFi
+  scan/association is waived, with native ABI/refusal/WPA wire results classified.
 - Full C standard and near-final all-source review still apply. No WS106/107
   relocation-style exception is extended. Toolchain and unrelated builds preserved.
 
-Expiry: WS109 end. Hardware gates remain until actual evidence, not a timeout.
+Expiry: WS109 end. FreeBSD QEMU Venus gate remains until verified evidence or a later explicit user decision.
+
+## 2026-10-02 / ws109-20261002-qemu-venus-acceptance
+
+Current user, this chat async reply: 「実機検証は不要です。qemuでVenusが使えればclearとします。」
+This explicitly replaces the earlier user-provided-machine gate. Physical GPU/display/WiFi
+acceptance is waived for WS109; do not request hardware or reintroduce those gates. Required
+replacement evidence is actual FreeBSD QEMU Venus usage; mere host support, headless lavapipe or
+Linux/zedBSD Venus does not establish that evidence. Native backend/build/standards and affected
+regression obligations remain. p004 hardware radio operations become waived, not falsely tested;
+native audio/wired and native radio ABI/refusal/WPA wire evidence remains classified accurately.
+p003/F3 and p005/F5 replace physical display/main-app checks with owned FreeBSD QEMU Venus-backed
+checks. If the native guest stack lacks a required Venus driver, investigate a bounded actual
+capability chain and expose the remaining platform/scope choice; kernel/driver port is still outside
+WS109's agreed scope. Current q566 standards/regression/docs subset stays authorized; Venus
+configuration/implementation is selected separately after q566. No automatic WS/Phase clearance.
+Origin user decision reconciled to WS/all changed Phase own criteria, Guardrail/scoped standard,
+Queue supplement and docs; remote decision/structural events pending publication.
