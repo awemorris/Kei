@@ -2,10 +2,10 @@
 
 # Queue / all-agent index
 
-Active Queues: q596（P1）、q591（P2）、q592（P3）、q595（P4）。
+Active Queues: q596（P1）、q591（P2）、q597（P3）、q595（P4）。
 Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q597。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q598。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
@@ -13,8 +13,9 @@ Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q58
 | q594 / q594-i01 | P1 | [ws129-p009](ws129/phase009/phase.md) | デモの image を CI の設定を土台に、boot-test の screendump timeout の調査、3h | finished / uncleared（main の full demo image の build と boot-test 待ち） | user 2026-10-02「デモのイメージはCI設定をベースに変更しましょう。」、[lane](agents/P1/queue.md)、P1 22efda2be → main eeecec752 |
 | q595 / q595-i01 | P4 | [ws127-p001](ws127/phase001/phase.md) | Files の棚卸し（回帰の取り直し、spec との照合、QEMU の実使用、候補の一覧。source は変えない）、3h | in-progress | 継続 dispatch（user 2026-10-02「N=4で週次利用制限に達するまで作業してください」）、[lane](agents/P4/queue.md) |
 | q596 / q596-i01 | P1 | [ws005-p018](ws005/phase018/phase.md) | WiFi の利用者の流れの調査と契約（source 不変）、3h | in-progress | 継続 dispatch（user 2026-10-02）、[lane](agents/P1/queue.md) |
+| q597 / q597-i01 | P3 | [ws115-p001](ws115/phase001/phase.md) | 素の GTK4 の zedBSD 移植の契約（版・依存・libc の不足・host 道具・libwayland ABI・renderer・demo app）、3〜4h | in-progress | user 2026-10-02「まずは素のGTK4を移植してください」＋継続 dispatch、[lane](agents/P3/queue.md) |
 | q591 / q591-i01 | P2 | [ws099-p020](ws099/phase020/phase.md) | BUG-125 の原因特定と compositor の修正（phase.md の範囲）、4h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P2/queue.md) |
-| q592 / q592-i01 | P3 | [ws114-p007](ws114/phase007/phase.md) | CSD/SSD の残り5点（新 attempt、phase.md の範囲）、3h | in-progress | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P3/queue.md) |
+| q592 / q592-i01 | P3 | [ws114-p007](ws114/phase007/phase.md) | CSD/SSD の残り5点（新 attempt、phase.md の範囲）、3h | finished / cleared | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P3/queue.md)、P3 597841d2a → main 3b985ae4c |
 | q593 / q593-i01 | P4 | [ws095-p012](ws095/phase012/phase.md) | IME の辞書を千語に拡張し held-out で測る（phase.md の範囲）、4h | finished / cleared | user 2026-10-02「作業を開始しましょう。」（Q1 提案の P2/P3/P4 の最初の Queue）、[lane](agents/P4/queue.md)、P4 c9d9187ad → main c7bbbf06a（held-out A 64→109/125、B 47→81/110、host 203 tests） |
 
 ## 直近の終了 Queue の残り（再開の候補、承認ではない）
