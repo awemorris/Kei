@@ -18,3 +18,5 @@ Outcome: 実行準備、未検証。
 Sync: local-only records pending publication（configured github、公開保留）。push禁止、全commit -m WIP。
 
 Preflight: 専用loopback SSH55747/gdb37895、image SHA256992e83f498cda2a1d506bb6ad7975b3c4592069fcb6493eca707e0d84403ac37。boot-test PASS、login PNG main目視/ユーザー提示済み。過去q538にRESIZE refused reason=no-pressがあり、試験のimplicit grab同期を診断中。
+
+MR P8-q577-01: requested966a19d39ac82ccdd8a88bf29ebcf8f65084f4b0/base41aac4fc7、diagnosis/boot PNG/baseline1証拠のみ。main log/source比較・sh-n/diff-check review PASS。単独1回PASS、過去no-press症状の説明、provenance限界を保持。修理/全Phase clearanceなし。mainがBOOT PNG目視しuserへ提示済み。
