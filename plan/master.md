@@ -234,6 +234,27 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 [正本](agents/protocol.md)・[実体台帳](agents/registry.md)。Q1は唯一の共有計画/cache書き手とQueue配布/merge担当。希望 `N_target=8`、子は`gpt-6.1-sol` / high、実行環境/利用制限/依存/競合に応じて `N_effective` を調整する（このsessionの子の同時上限は3）。P1〜P7の旧割当は歴史として保持し、新規実装担当はP8から。各agent最大1 active Queue、全体で複数可。1Queueは原則1Phaseで、mainが起動時Queueと承認済み後続Queueを順に投入する。WS affinityを優先し、WS終了後の再配属も可能。commit可能地点で頻繁にmergeを依頼し、通常/urgentラップアップは正本の手順で自発的に終了する。
 
+### 一時的な2セッション分担（2026-10-02）
+
+ユーザー指示によりメインセッションをAgent AとAgent Bに分け、各セッションが最大3サブエージェントを起動する。この表は一時的な実行所有であり、WSの目的・優先順位・依存・Queue承認・保留判断を変更しない。Phase単位の有限Queueを作ってから実行し、単に担当欄に入ったことを実装許可にしない。
+
+| Session / lane | 担当WS | 当面の順序と境界 |
+| --- | --- | --- |
+| **Agent A / A1 Browser** | **WS074**（browser固有bugを含む） | p172 whole-clear → p100 Acid3 pixel完全一致 → p174 File System Access → p175 OPFS → p173 Interop 2025 100% → p176 Test262。p101 CSS2も保持。browser/libbrowser sourceとそのbugはAだけが編集する |
+| **Agent A / A2 Package・release・資産整理** | **WS112、WS088、WS106、WS034、WS026** | WS112の5 Linux package/CIを主対象。WS106はime-probe判断待ち、WS088は外部fork/user入力待ちを維持。外部package・CI・test資産の変更をBと重ねない |
+| **Agent A / A3 GPU・display・platform** | **WS014、WS029、WS031、WS051、WS068、WS075、WS083、WS084、WS101、WS113** | 実行可能な依存から選ぶ。複数displayのWS113はSettings/libkeilandも含めてAが一体所有し、Bは同WSを編集しない。WS075の描画最適化停止、WS083のデモ後、WS113の「あとで実装」を維持 |
+| **Agent B / B1 GTK・Qt** | **WS114、WS115、WS116、WS097、WS096** | WS114標準GTK4実測 → ユーザーの行別採否 → 選択したcompositor/portal改善 → WS115 upstream GTK4 → WS116 Qt6 → 後の独自実装WS097/096。採否前の機能実装を始めない |
+| **Agent B / B2 Keiland desktop・UI** | **WS078、WS079、WS081、WS085、WS089、WS090、WS094、WS099、WS100、WS102、WS110** | デモと依存順で有限Queueを選ぶ。WS110は検討のみ、WS079/081/085/100のuser/Windows/実機gateを保持。WS113のSettings/display部分はA所有なので編集しない |
+| **Agent B / B3 Bug fixes** | **WS073とBug Boardから割り当てるhandling WS/Phase** | BUG-125の残りを最初の引継ぎ対象とする。Aのbrowser固有bugとA所有sourceはAへ返す。新しいdesktop bugはticket化してこのlaneへ。ticketだけで修正許可とはしない |
+
+負荷の見積りはAが「browserの大規模互換性」「5 OS package/release」「GPU・複数display」、Bが「GTK/Qt移植」「desktop/UI」「一般bug修正」の3本ずつ。予約・保留・実機待ちを除いた実行可能PhaseだけをQueueに載せる。完了済みWSは証拠/contextであり再割当しない。上表にないlegacy WSは休止を維持し、再開時にA/Bを決める。WS001はユーザーが再開を指示した時だけ、WS013/015はFuture Workから昇格するまで、WS095は人間作業の解除まで、WS098はWS095の後まで実行しない。
+
+共有状態の競合を避けるため、**Agent Aがmaster・Guardrail・全体Queue/Past Log・GitHub syncの単一writer**を続ける。Agent Bは自分のWS/Phase、B用lane Queue、worktreeと証拠を所有し、Master/全体Queueへの投影はcommit可能なcheckpointとしてAへ渡す。同じsourceを両sessionで同時編集しない。A/B間の依存は必要なcommit SHAと検証済み実出力をhandoffし、未mergeのworktreeを依存として扱わない。
+
+移行時点ではq579/WS074をAが継続する。q577/BUG-125とq580/WS114は現在のサブエージェントへ通常wrap-upを依頼済みで、成果・未達基準・資源cleanupをcommitしてからBの新しいQueueへ引き渡す。Bのsession/worktreeが実在する前にBをactive executorとは記録しない。現在のA配下P8/P9が終了するまでは同じscopeをBで重複実行しない。
+
+Event `two-session-temporary-ownership-20261002`: 最初の案A=browserのみ/B=desktop+bugではAの3サブエージェント枠に対して負荷が小さいというユーザー判断を受け、上の3laneずつへ再配分。既存focusと優先順位を保持し、担当変更そのものは新Queueや実装許可ではない。GitHub publicationは保留。
+
 Event subagent-queues-projections-20261002: 以前のN=0〜9/Claude Opus High・Mid/Phaseごと返却の運用記述は下に履歴として保持し、今回の新指示で置換。旧secondary queueの2026-09-26削除も履歴として保持。現在はq576 finished、実装Queue/実装担当は未選定。設計調査だけで優先順位、fg010、WS scopeを変えない。
 
 ## WS の優先順位
