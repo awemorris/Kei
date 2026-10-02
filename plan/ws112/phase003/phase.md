@@ -20,7 +20,7 @@ Investigation bound: 90分の有限1Phase Queue案。具体的なscope/timebox/c
 ## Detailed procedure / q585 investigation
 
 [Origin p001](../phase001/phase.md)、[input/source survey](../phase001/survey.md)、[native環境](../native-environments.md)、[形式/CI契約](../package-contract.md)を使用。
-公式2026-09-15 RPi Lite Trixie arm64 image/rootfsを候補入力とする。外側既存Debian QEMU VM+内側RPi rootfs/native arm64 compilerのQEMU-user具体案と補助kernelとの差を環境契約に記録、採用/boot条件はmain照合中。
+公式2026-09-15 RPi Lite Trixie arm64 image/rootfsを候補入力とする。外側既存Debian13 pinned QEMU VM+内側RPi rootfs/native arm64 compilerのQEMU-user方式をmainの委任された通常技術判断で採用。外側の既存Debian boot例外を用い、内RPi kernelはbootしない。境界/command/補助kernel案との差は環境契約へ保存。
 後続command/証拠: make keiland-linux-rpi、RPi imageのcompressed/expanded hashと利用可能な署名、RPi marker/packages/repo、compiler自体と全出力ELF AArch64、native dpkg DB/dependency/encoderと独立deb展開を保存。outer kernelとinner rootfsのidentityを区別、elapsedを工程別記録。
 Prerequisitesは上記のcleared Phaseと実出力のまま。p001の未決D1/D2・候補version等が解消され、当Phaseのexact Queueにinput/boot/command/timeboxを保存するまで実装を開始しない。
 
@@ -52,3 +52,5 @@ Resume: prerequisitesの実出力と判断を照合し、当PhaseだけのQueue�
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。
 
 2026-10-02 / ws112-q585-contract-detail: [p001](../phase001/phase.md)の一次資料/実source調査で当Phaseのprocedure/command/証拠を具体化。上記のnative環境/形式/CI契約へ対応づけ、既存prerequisites・受け入れ・Queue none・Status plannedを保持。再開はp001残件と必要な実出力を照合後の当Phaseだけの承認済Queue。[WS要約](../ws.md#event-history)。GitHub deliveryはmain canonical outboxへ。
+
+2026-10-02 / ws112-q585-rpi-environment-selected: [origin p001](../phase001/phase.md)でmainのdelegated判断により外側既存Debian13 QEMU VM＋内側公式RPi rootfs/arm64 native compiler/QEMU-userを採用。環境成立/ABI/source/CPU/形式の実証commandは環境契約、bootは外側既存Debian例外。p002 clearedの共通stage/outputと当Phaseのexact Queueを引き続き必要とし、planned/実行未承認を保持。[WS](../ws.md#event-history)。

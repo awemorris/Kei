@@ -7,7 +7,7 @@ Primary Milestone: MG007
 Related Milestones: MG001（追跡可能なbuild/配布記録）、MG006（既存Keilandの配布）
 Parent: [Master](../master.md)
 Queue: q585 / A2（p001契約調査のみ）
-Resume point: q585-i01/p001の有限契約調査中。5OS公式input/署名/形式契約を記録、RPi native環境の具体案と新OS boot条件をmainで照合。実装は後続Queue未承認。
+Resume point: q585-i01/p001の有限契約調査中。5OS公式input/署名/形式契約を記録、RPiは外側既存Debian QEMU＋内側公式arm64 rootfs/QEMU-user方式採用。Fedora/Arch boot条件D1はmainのuser返答待ち。実装は後続Queue未承認。
 
 ## Objective / scope
 
@@ -63,3 +63,7 @@ Master/Guardrail/Outlookへ反映。実装の指示ではなく新focus/最優�
 2026-10-02 / ws112-plan-review-20261002: planning review PASS。7 Phaseの親/状態/Primary/依存、8 record IDの重複無し、全新規Markdown localリンク、指定5 target契約、q576 finished/WS108 completed保持を確認。git diff --check PASS、全変更はplan内のみ。28件のprepared/pending journal payloadを検査、GitHub/publication未実施。コード/build/package/GUI試験は計画scopeのため未実施。
 
 2026-10-02 / ws112-q585-contract-detail: p001調査から5OS input/署名/環境/encoder/依存と共通source/payload/CI契約を詳細化。影響するp002〜p007のprocedureに各自のcommand/証拠/再開条件を反映、依存順・受け入れ・Queue権限は維持。RPi rootfs native build具体案と新OS boot条件はmain照合中、p001 in-progress/WS incomplete、未実行Phaseはplanned。GitHub deliveryはmainのcanonical outboxに委ねる。
+
+2026-10-02 / ws112-q585-rpi-environment-selected: p001でmainのdelegated判断により外側既存Debian13 QEMU VM＋内側公式RPi rootfs/QEMU-user native arm64方式を採用、影響するp003とdesign/環境証拠へ根拠/境界/再開commandを反映。p003実行/実環境成立は未承認/未検証、D1 Fedora/Arch boot適用はmainのuser返答待ち。WS incomplete保持。
+
+2026-10-02 / ws112-q591-p002-candidate: main指示で[p002候補](phase002/queue-candidate.md)を具体化しorigin p001/p002にも準備eventを保存。後続Queue scope/承認はmain所有、p002 planned、実装未実行。

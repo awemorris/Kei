@@ -75,7 +75,7 @@ web toolで一次download/仕様を閲覧後、Python3 urllibでchecksum/index/c
 | [RPi repo InRelease](https://archive.raspberrypi.com/debian/dists/trixie/InRelease) | bounded HTTP200、Origin/Label Raspberry Pi Foundation、Codename trixie、arm64収録。signature未検証 |
 | [Fedora downloads](https://fedoraproject.org/cloud/download/) | web/HTMLで44-1.7 Generic x86_64のURL/hashとsigned CHECKSUM参照を確認 |
 | [Fedora CHECKSUM](https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-44-1.7-x86_64-CHECKSUM) | official redirect→`ftp.yz.yamagata-u.ac.jp`でHTTP200、Generic hash一致。dl.fedoraproject.org直URLとarchives直URLは404。公式Fedora44 keyでCHECKSUM署名を暗号検証、exit0/VALIDSIG一致 |
-| [Arch index](https://geo.mirror.pkgbuild.com/images/v20261001.604814/)・[SHA256](https://geo.mirror.pkgbuild.com/images/v20261001.604814/Arch-Linux-x86_64-cloudimg-20261001.604814.qcow2.SHA256) | bounded HTTP200でfilename/hashと版付きURLを確認。latestのSHA256.sigをarch-boxes公式README keyで暗号検証、exit0/VALIDSIG一致。版付きSUMS値は同一 |
+| [Arch index](https://geo.mirror.pkgbuild.com/images/v20261001.604814/)・[SHA256](https://geo.mirror.pkgbuild.com/images/v20261001.604814/Arch-Linux-x86_64-cloudimg-20261001.604814.qcow2.SHA256) | bounded HTTP200でfilename/hashと版付きURLを確認。latestと版付きSHA256.sigの双方をarch-boxes公式README keyで暗号検証、exit0/VALIDSIG一致。版付きSUMS値は同一 |
 
 署名fingerprint/日付/未確認範囲とnative環境commandは[環境証拠](../native-environments.md)、encoder/依存/config/version/manifest/CI契約は[形式契約](../package-contract.md)へ記録。
 host Python3.13.5/git2.47.3/curl8.14.1/GnuPG2.4.7/QEMU10.0.11を読取確認。ignored tempのisolated keyringのみ使用し、host install/buildは行わなかった。
@@ -84,8 +84,8 @@ host Python3.13.5/git2.47.3/curl8.14.1/GnuPG2.4.7/QEMU10.0.11を読取確認。i
 
 | ID | 不足 / 判断 | 再開条件 |
 | --- | --- | --- |
-| D1 | GuardrailのSSH/QMP boot例外はDebian/Ubuntu/FreeBSDだけ。新RPi/Fedora/Archへ適用したというユーザー決定は未発見 | mainが既存scope/決定を確認し、必要なら新3OS build guestのboot方法を判断元付きで共有Guardrailへ記録。serial/console log判定を許可したと解釈しない |
-| D2 | RPi board imageはgeneric QEMU virtでそのまま起動できない。実rootfs＋kernel/transportの成立性・補助kernelのinput pinは未確定 | 一次資料で成立するnative arm64 build環境を具体化、OS identity/CPU/compiler/headers/library由来を検証できるcommandを設計。実起動はp003の新Queueのみ |
+| D1 | Fedora/ArchへのSSH/QMP boot例外適用をmainがuserへ確認、返答待ち。RPiは採用方式の外側Debian既存例外を使用 | Fedora/Archの判断元と共有Guardrailをmainが保存後に解消。serial/console log判定を許可したと解釈しない |
+| D2 | 解決: mainがdelegated technical判断として外側既存Debian13 pinned QEMU VM＋内側公式RPi OS13 Lite arm64 rootfs/QEMU-user native compilerを採用 | [環境契約](../native-environments.md)の隔離/syscall/OS/compiler/ABI証拠commandをp003の新Queueで実証。実環境成立や実行許可と混同しない |
 | D3 | Ubuntu/Fedora/Archのchecksum署名trust rootは実検証済み。RPi image署名はfull image未取得、Debian現行SUMS署名は提供されない。versioned Arch URL/repo snapshotは確認済み | 既存Debian pin契約を保持。後続Queueで実imageのhash/利用可能な署名を確認、公式input消失なら明示pin改訂へ戻す。将来保持を保証しない |
 | D4 | native encoder/依存計算/query/extraction commandを定義。公式package index名/版とRPi.info inventoryを確認、実guest/実ELF未確認 | 後続Queueでnative DBと実ELF依存を照合し、候補名や公開inventoryを実native build合格としない |
 

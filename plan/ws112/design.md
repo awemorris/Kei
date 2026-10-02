@@ -30,7 +30,7 @@ Raspberry Pi OSの実rootfsを使用し、Debian arm64をその名前で出荷�
 arm64のTCG build時間やnative依存不足が判明したら調査範囲内で記録し、対象OS/CPUを勝手に変更せず計画を見直す。
 追加CPU版・実機GPU/WiFi/audio・FreeBSD packageは含めない。[公式input調査](phase001/survey.md)に5OSの版付きURL/hashと観測結果を記録。
 Ubuntu/Fedora/Archのchecksum署名は小metadataで暗号検証、image本体は未取得。Debian既存pin/公式unsigned cloud入力の限界とRPi image署名の後続検証を[環境契約](native-environments.md)に分けて保存。
-RPiは公式2026-09-15 Lite Trixie arm64 rootfsを候補に固定。既存Debian QEMU VM内でrootfs native arm64 compilerをQEMU user-modeで使う具体案と補助kernel案の境界/負担差を記録、mainが委任された技術判断として採用可否を照合中。
+RPiは公式2026-09-15 Lite Trixie arm64 rootfsを固定候補入力とし、外側既存Debian13 pinned QEMU VM＋内側rootfs native arm64 compiler/QEMU-user方式をmainの委任された通常技術判断で採用。補助kernel案との境界/負担差と採用根拠は環境契約に保存。実成立やp003実行は未確認/未承認。
 新OS guestのboot方法は次exact Queueへ判断元/Guardrailの適用を含め、今回未決を解消したと扱わない。
 
 ## 共通payload・形式
@@ -73,5 +73,7 @@ package install/runtimeは今回のCI受け入れ条件にしない。破損・�
 1 Queueは1 Phase。各Phaseの予定調査上限内で未解決の環境/依存/形式を記録し、endless retryをしない。具体的command/version/input pinsはp001で確定し各Phaseへ反映する。
 
 2026-10-02 / ws112-q585-contract-detail: p001の実source/一次資料調査からinput/環境/encoder/manifest/CI契約を具体化し、p002〜p007のprocedureと再開条件へ反映。Phaseの依存順、受け入れ、runtime除外、Queue権限は変更しない。未決D1/D2とnative実未検証はp001に保持、各foreign PhaseとWSに同eventを記録。
+
+2026-10-02 / ws112-q585-rpi-environment-selected: mainのdelegated技術判断でD2採用方式を確定、p001/p003/WS/native環境へ反映。実env取得/boot/compileなし、D1 Fedora/Arch boot適用はuser返答待ち。
 
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。

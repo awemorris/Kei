@@ -14,7 +14,7 @@ checksum metadataの値と、未取得image本体のdigestは別々の検証で�
 | Ubuntu26.04 | 既存release-20260927。SHA256SUMS.gpgを公式documentationのcloud-image fingerprintで暗号検証、exit0 | isolated keyringで同じfingerprint/SUMS署名を検証してからimage SHA256照合 |
 | RPi OS13 Lite arm64 | 2026-09-15 image.xz、圧縮SHA256とImagerの展開SHA256/sizeを確認。image.sigは取得可能 | 圧縮digest→公式download keyによるimage署名→展開raw image digest/size。署名がraw/compressedのどちらを対象とするかは検証commandで確認し、曖昧なまま成功としない |
 | Fedora44 | Generic44-1.7。signed CHECKSUMをFedora44公式keyで暗号検証、exit0 | 同じfingerprint/署名とGeneric image SHA256/size。UEFI-UKIは別inputなので拒否 |
-| Arch | versioned `images/v20261001.604814/`はHTTP200、latestと同じfilename/hash | 版付きSHA256/SHA256.sig、arch-boxes CI key、image SHA256/size。repoは2026/10/01 snapshotを固定しnative pacman署名を保持 |
+| Arch | versioned `images/v20261001.604814/`のSUMS/SUMS.sigはHTTP200、署名暗号検証exit0/VALIDSIG一致、latestと同じfilename/hash | 版付きSHA256/SHA256.sig、arch-boxes CI key、image SHA256/size。repoは2026/10/01 snapshotを固定しnative pacman署名を保持 |
 
 署名の小metadata検証はisolated `GNUPGHOME`をignored tempに置き、host user keyringを変更しなかった。
 `gpg --batch --status-fd 1 --verify SIGNATURE SUMS`（Fedoraはclearsigned CHECKSUM）のexit0と`VALIDSIG`を照合した。
@@ -25,7 +25,7 @@ Web of Trustは設定していないため`TRUST_UNDEFINED`があっても、公
 | [Ubuntu公式verify guide](https://ubuntu.com/docs/public-images/public-images-how-to/verify-image-checksum/) | `D2EB44626FDDC30B513D5BB71A5D6C4C7DB87C81`、SUMS signatureのVALIDSIG一致、signature date2026-09-29 |
 | [Fedora security](https://fedoraproject.org/security/)・[公式fedora.gpg](https://fedoraproject.org/fedora.gpg) | `36F612DCF27F7D1A48A835E4DBFCF71C6D9F90A6`、Fedora44 CHECKSUMのVALIDSIG一致、signature date2026-04-24 |
 | [Arch公式arch-boxes README](https://raw.githubusercontent.com/archlinux/arch-boxes/master/README.md) | primary `1B9A16984A4E8CB448712D2AE0B78BF4326C6F8F`、signing subkey `656E4C5AC1CC3B86E539D97E343635A6859A9174`、SHA256.sigのVALIDSIG一致、signature date2026-10-01 |
-| [Raspberry Pi公式engineerのkey更新案内](https://forums.raspberrypi.com/viewtopic.php?t=394045) | `F4AADD86C4687D69AE04543E796C114AD12B2292`、image.sigのpacket issuerと一致。web searchでstaff案内を確認、page openは403。image署名の暗号検証は未実施 |
+| [Raspberry Pi公式engineerのkey更新案内](https://forums.raspberrypi.com/viewtopic.php?t=394045) | `F4AADD86C4687D69AE04543E796C114AD12B2292`、image.sigのpacket issuerと一致。公式案内のkeyserverからbounded key取得/isolated fingerprint一致を確認。web searchでstaff案内を確認、page openは403。image署名の暗号検証は未実施 |
 | [Debian公式cloud index](https://cloudfront.debian.net/cdimage/cloud/) | cloud imageの現行署名は提供されず、公式HTTPS/TLS等を案内。既存WS108の固定URL/hash契約を保持、独自署名基盤を追加しない |
 
 keyserverの応答だけをtrust sourceにしない。RPM/pacman/aptのrepository signatureはimage署名と別にnative guestで検証・記録する。
@@ -94,9 +94,11 @@ rootfs抽出はraw partition tableとfilesystemを専用directoryへ扱い、hos
 いずれも全compileは実RPi rootfsのarm64 compiler/system headers/libraryから行い、host cross gccや別Debian sysrootをRPi native buildとして使わない。
 user-modeの場合は`uname -m`だけではkernel/CPU証拠が足りないため、compiler target、gcc ELFのAArch64、出力全ELFのMachine、native dpkg arm64とRPi provenanceを確認する。
 
-## RPi具体案: 既存Debian VM内のarm64 native rootfs
+## RPi採用環境: 既存Debian VM内のarm64 native rootfs
 
-既存Debian13 pinned QEMU guestを外側の隔離に使い、内側で公式RPi rootfsのarm64 userlandをQEMU user-modeで実行する案を技術候補とする。
+既存Debian13 pinned QEMU guestを外側の隔離に使い、内側で公式RPi rootfsのarm64 userlandをQEMU user-modeで実行する方式を採用する。
+2026-10-02 mainのdelegated technical判断: 新OS環境はp001で具体化を委任済み、userのRPi build-only/真の対象rootfs/arm64/native toolchainを保ち、Debian/Ubuntuのfull QEMU指示を変えないため通常技術選択として確定。
+実環境の成立確認やp003実行許可ではない。mainからAgent A2への判断通知がdecision source、共有Guardrail/Queueの更新はmainが所有する。
 hostは既存loopback SSH/QMPだけを用い、source/inputを専用VMへ転送する。RPi kernelをbootしたとは報告しない。
 外側のkernel/OSはDebian13、内側のcompiler/headers/system libc/package DBはRPi OS13 arm64として別fieldに記録する。
 rootfs内のgcc/as/ld/Python/make自体がAArch64 executableであることを確認し、外側Debianのx86_64 compiler/libraryをcompile/linkへ使わない。
@@ -130,11 +132,11 @@ plain chrootも外側VMのkernelを共有し、VM内rootを保護するsandbox�
 | 保証しない範囲 | RPi kernel、device/GPU/GUI/実機、namespace syscall全機能 | RPi board/kernel/device/GPU/GUI/実機 |
 
 userが要求したnative compiler/真のRPi rootfs/build-onlyを満たすかは上記native provenanceと実buildで検証する。
-この技術候補はscope/CPUを変えず、GPU/GUI試験やhost変更を追加しない。採用のdelegated authority/boot方法はmainが既存決定と照合中。
+この採用方式はscope/CPUを変えず、GPU/GUI試験やhost変更を追加しない。RPi kernelをbootしないため、外側の既存Debian boot例外を適用する。
 90分Phase案やCI45minの達成を推測で保証しない。p003ではmetadata/input/環境準備/compile/encoder/audit別のelapsedを記録し、有限timeboxで止める。
 
 ## 判断と再開
 
-D1: 新3OS build guestの許可されたboot判定/transportをmainが既存承認と照合する。共有Guardrail改訂が必要ならmainが判断元を保存する。
-D2: RPi方式の具体案/境界は上記へ保存。full方針は新OS環境具体化をp001へ委ね、明示QEMU native指示はDebian/Ubuntuのみ。mainが通常技術選択として採用できるか照合中であり、user判断必須と先に断定しない。
-p001はこれらの未解決人間判断を残したままclearしない。後続Queueは実input取得/起動で成立性を実証し、失敗・不足・経過時間を有限に記録する。
+D1: Fedora/Arch build guestへのloopback SSH/QMP PNG boot判定適用はmainがuserへ確認し返答待ち。RPiは上記外側Debian既存例外を使い、RPi kernelのbootなし。共有Guardrail改訂はmainが判断元を保存する。
+D2: 上記方式を委任された通常技術選択として解決、実input取得/起動/内rootfs compiler/encoderの成立性はp003で検証する。
+p001はD1の未解決人間判断を残したままclearしない。後続Queueは実input取得/起動で成立性を実証し、失敗・不足・経過時間を有限に記録する。
