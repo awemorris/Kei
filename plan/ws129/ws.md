@@ -13,6 +13,7 @@ Queue: none
 Resume point: [p001](phase001/phase.md)（release の定義: 版の付け方、配布物、CI の release、release notes・既知の問題・license の一覧の作り方、凍結と最終回帰・実機の確認の日程、planned）。版の名前はユーザーの判断。
 凍結は無し（2026-10-02 user（作業開始の指示）「凍結はしません。できたところまででベータ1にします。安定化はベータの最後の方のバージョンで行います。」）。p001 の日程案（10/13 凍結）を置き換える。デモの image は CI の設定を土台に変える（同日 user）。
 2026-10-02 user（リリースの流れ）:「CIはPrereleaseを生成、それをダウンロードして動作確認した私が、PrereleaseからLatest Releaseに手動昇格します。」→ CI の release の job はベータ1 の版の Prerelease を作る（nightly とは別の tag）。ユーザーが download して動作確認し、手で Latest Release に昇格する。エージェントは昇格・公開をしない。版の名前・tag の形・配布物（Windows の zip を載せるか）は未決。
+2026-10-02 user:「zedbsd-0.1.0-beta1 にしましょう。」→ 版と tag は `zedbsd-0.1.0-beta1`（ws129-p003 で版の一つの源を作り、uname・About などに出す）。配布物に Windows の zip を載せるかは未決。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー「次のFeature Goalはベータ1のリリースにします」「リリース目標は10/17です」）
