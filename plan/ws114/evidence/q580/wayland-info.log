@@ -1,0 +1,39 @@
+interface: 'wl_compositor',                              version:  4, name:  1
+interface: 'xdg_wm_base',                                version:  4, name:  2
+interface: 'zwp_linux_dmabuf_v1',                        version:  3, name:  3
+	formats (fourcc) and modifiers (names):
+	0x34325258 = 'XR24'; 0x0000000000000000 = LINEAR
+	0x34325241 = 'AR24'; 0x0000000000000000 = LINEAR
+interface: 'wl_output',                                  version:  4, name:  4
+	name: DISPLAY-1
+	description: Display 1280x800
+	x: 0, y: 0, scale: 1,
+	physical_width: 0 mm, physical_height: 0 mm,
+	make: 'Unknown', model: 'Unknown',
+	subpixel_orientation: unknown, output_transform: normal,
+	mode:
+		width: 1280 px, height: 800 px, refresh: 74.994 Hz,
+		flags: current preferred
+interface: 'wl_seat',                                    version:  5, name:  5
+	name: seat0
+	capabilities: pointer keyboard
+	keyboard repeat rate: 25
+	keyboard repeat delay: 400
+interface: 'wl_shm',                                     version:  1, name:  6
+	formats (fourcc):
+	         1 = 'XR24'
+	         0 = 'AR24'
+interface: 'xdg_menu_manager_v1',                        version:  2, name:  7
+interface: 'wl_subcompositor',                           version:  1, name:  8
+interface: 'wl_data_device_manager',                     version:  3, name:  9
+interface: 'zxdg_decoration_manager_v1',                 version:  1, name: 10
+interface: 'wp_cursor_shape_manager_v1',                 version:  1, name: 11
+interface: 'wp_viewporter',                              version:  1, name: 12
+interface: 'zwp_text_input_manager_v3',                  version:  1, name: 13
+interface: 'keiland_titlebar_manager_v1',                version:  3, name: 16
+interface: 'keiland_glass_manager_v1',                   version:  2, name: 17
+interface: 'zwp_primary_selection_device_manager_v1',    version:  1, name: 18
+interface: 'zwp_tablet_manager_v2',                      version:  1, name: 19
+interface: 'keiland_desktop_manager_v1',                 version:  1, name: 21
+interface: 'keiland_keyboard_inset_manager_v1',          version:  1, name: 22
+interface: 'keiland_edit_manager_v1',                    version:  1, name: 23

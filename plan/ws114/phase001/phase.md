@@ -3,7 +3,7 @@
 # ws114-p001: 標準Linux GTK4 baselineと機能表の実測
 
 Parent: [WS114](../ws.md)
-Status: in-progress
+Status: uncleared
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
 Queue / attempts: q580 / q580-i01 / P9 generation2
@@ -26,3 +26,9 @@ Debian 13等の標準GTK4版・実アプリ・Wayland globals・rendererを固�
 Event ws114-gtk-qt-port-plan-20261002: 2026-10-02 user指示から作成。planning/Queue none。GitHub publication pending。
 
 2026-10-02 / ws114-next-desktop-q580: user「デスクトップ担当には、次の作業として、GTK4の移植作業のWSを進めてもらいたいです。」および「利用上限は回復したので、サブエージェントを起動し直してOKです」。q578完了後の次scopeを既存p001 baseline実測に限定しq580で実行。Linux専用guest標準GTK4package導入/実操作/機能表証拠化、3時間。p002採否前にcompositor/portal実装を始めない。GitHub publication保留。
+
+## q580 / generation2 wrap outcome（2026-10-02）
+
+Attempt q580-i01: **uncleared**。userのA/B分割・全subagent停止指示で通常wrap。標準GTK4/demoの部分実測と全19行の観測/skip理由を保存。window/popup/modal/FileDialog通常経路、既定software GL renderer、同一clientのUnicode clipboard、maximize/fullscreen/scale1は証拠あり。interactive move/有効なresize・別client clipboard等は未測定でwhole-clearを主張しない。G04復帰寸法増加とG05二重decorationsはbaseline限定未確定bug候補、current runtimeとの同一性/既存Bug照合はmainへ送付、ticket未判定。本体修正/portal backend追加/採否決定無し。
+
+[結果・残件](q580-result.md)、[機能表](../gtk4-compat-matrix.md)、[再開](../tests/README.md)、[停止証拠](../evidence/q580/stop.log)。QEMU251216/SSH2249正常停止、absence確認。overlayは専用ignoredbuildに保全、credentials非commit。新Queue/採否前のsource実装開始無し。main統合/判定/共有Board更新待ち、GitHub publication保留。

@@ -1,0 +1,7 @@
+{"event": "gtk-version", "version": "4.18.6"}
+{"event": "snapshot", "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "file-dialog-requested"}
+{"event": "file-dialog-response", "path": "/tmp/q580-marker.txt"}
+{"event": "maximized", "value": true}
+{"event": "snapshot", "renderer": "GskGLRenderer", "width": 1280, "height": 762, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "maximized", "value": false}

@@ -1,0 +1,31 @@
+[3358878.480] {mesa egl surface queue}  -> wl_surface#32.commit()
+[3358878.484] {mesa egl surface queue}  -> wl_display#1.sync(new id wl_callback#39)
+[3358891.517] {Display Queue} wl_display#1.delete_id(30)
+[3358891.531] {Display Queue} wl_display#1.delete_id(36)
+[3358891.540] {Display Queue} wl_display#1.delete_id(37)
+[3358891.542] {Display Queue} wl_display#1.delete_id(39)
+[3358906.259] {Display Queue} wl_display#1.delete_id(38)
+[3358906.312] {Default Queue} wl_data_device#16.selection(nil)
+[3358906.378] {Default Queue} zwp_primary_selection_device_v1#15.selection(nil)
+[3358906.392] {Default Queue} wl_keyboard#22.enter(78, wl_surface#32, array[0])
+[3358906.414] {Default Queue} wl_keyboard#22.modifiers(79, 0, 0, 0, 0)
+[3358906.462] {Default Queue} wl_pointer#6.enter(80, wl_surface#32, 0.00000000, 102.00000000)
+[3358906.479] {Default Queue} wl_pointer#6.frame()
+[3358906.515] {Default Queue}  -> wp_cursor_shape_device_v1#21.set_shape(80, 1)
+[3358906.527] {Default Queue} wl_callback#38.done(331523)
+[3358908.329] {mesa egl surface queue} wl_callback#39.done(331497)
+[3358908.346] {mesa egl surface queue} wl_buffer#31.release()
+[3358908.593]  -> wl_surface#32.frame(new id wl_callback#39)
+[3358908.619] {mesa egl surface queue}  -> wl_surface#32.attach(wl_buffer#31, 0, 0)
+[3358908.627] {mesa egl surface queue}  -> wl_surface#32.damage_buffer(26, 189, 70, 34)
+[3358908.928] {mesa egl surface queue}  -> wl_surface#32.commit()
+[3358908.941] {mesa egl surface queue}  -> wl_display#1.sync(new id wl_callback#38)
+[3358909.039] {Display Queue} wl_display#1.delete_id(38)
+[3358930.572] {Display Queue} wl_display#1.delete_id(39)
+[3358930.582] {Default Queue} wl_callback#39.done(331545)
+{"event": "gtk-version", "version": "4.18.6"}
+{"event": "snapshot", "renderer": "GskGLRenderer", "width": 728, "height": 489, "scale": 1, "display": "GdkWaylandDisplay"}
+{"event": "target-text", "text": "q580 clipboard omega Ω"}
+{"event": "menu-action", "name": "second"}
+{"event": "dialog-opened", "modal": true, "transient": true}
+{"event": "dialog-closed"}
