@@ -10,12 +10,12 @@ system written from scratch, and ships with Keiland, a Wayland desktop
 that unifies the classic desktop UI/UX and a futuristic touch UI/UX.
 
 Kei and zedBSD aim to become a commercial UNIX in the line of macOS
-and iOS, Solaris, and AIX: an operating system that is made for newly
-designed computers, that changes "the way computing is". zedBSD is
+and iOS, Solaris, and AIX: an operating system made for newly-designed
+cutting-edge computers, that changes "the way computing is".  They are
 written to conform to POSIX.1-2024 and to the Single UNIX
-Specification, Version 4 (SUSv4). It is not yet a certified UNIX
-system. Conformance will keep being raised, and UNIX certification
-from The Open Group is a goal. UNIX is a registered trademark of The
+Specification, Version 4 (SUSv4).  It is not yet a certified UNIX
+system.  Conformance will keep being raised, and UNIX certification
+from The Open Group is a goal.  UNIX is a registered trademark of The
 Open Group.
 
 Getting there means not being bound to an existing kernel or userland
