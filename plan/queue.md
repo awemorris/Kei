@@ -13,14 +13,16 @@ Snapshot: [approved Phase](history/ws109/q572/approved-phase.md)、SHA256 643941
 
 | Attempt | Phase | Exact scope | Status | Dependencies |
 | --- | --- | --- | --- | --- |
-| q572-i01 | [ws109p005](ws109/phase005/phase.md) | F5 actualnativeIntelGPU mainapp operations, addedsource fullstandard/nativebuild/header/ELF/docs; ownWSacceptance/recordcleanup ifallcriteria satisfied. | cleared | verified p001 software/ABI/environment output; further scope-specific prerequisites in Phase |
+| q572-i01 | [ws109p005](history/ws109/q572/phase.md) | F5 actualnativeIntelGPU mainapp operations, addedsource fullstandard/nativebuild/header/ELF/docs; ownWSacceptance/recordcleanup ifallcriteria satisfied. | cleared | p002/q565、p003/q570、p004/q571 cleared outputs +q566 final-review/regression receipts |
 
-Dependency graph: verified p001 software/ABI/environment output; further scope-specific prerequisites in Phase → q572-i01。実機検証は免除。実FreeBSD QEMU Venus出力は未確認であり、host能力だけではacceptanceでない。
+Dependency graph: p002/q565、p003/q570、p004/q571 cleared outputs +q566 final-review/regression receipts → q572-i01。実機検証は免除。実FreeBSD QEMU Venus出力は未確認であり、host能力だけではacceptanceでない。
 Started UTC: 2026-10-02T01:27:14.547590+00:00
 
 ## Upcoming Work Outlook
 
-本Queueの実outputから次の有限Phaseを選定。FreeBSD QEMU実GPU利用とC全文review/affected3OS回帰を確認。WS106の保留は別。
+WS109 completed、fg016達成。新Queue未選定。既存demo WSの優先とWS106の保留を維持。
 
 Outcome: q572-i01 cleared /whole Phase cleared。Actual sevennativeGPU mainapps/PTY/fileopens plus AppHome PASS; fullsource C fixes/review/nativeheaderELF/3OS builds/finalboot/docs verified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q572/result.md). F1..F5 satisfied under userselectedi915/physicalWiFiwaiver; BUG130 upstreamtracking, ownVMstopped/VFIOpreserved.
 Finished UTC: 2026-10-02T01:47:37.313116+00:00
+
+WS acceptance: WS109 F1〜F5 verified/completed、actualFreeBSD QEMU i915 route。BUG130 upstreamtracking、Venus未実行、physicalradio userwaived。専用VM停止/VFIO復元状態、WIP/no push/publicationdeferred。

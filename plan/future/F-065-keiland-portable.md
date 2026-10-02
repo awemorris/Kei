@@ -104,3 +104,7 @@ Linux分のpromotionは結果を保持して終了。FreeBSDはdeferredのまま
 Linux の completed と既知 bug の扱いを保持。互換 Qt/GTK、EGL/GLES、ARM/musl/PCM 等の未指定 design§8 は deferred のまま。
 以前の FreeBSD deferred は当時の判断として保持し、この日付の promotion を現在の行き先とする。
 [レビューの出典](../reviews/2026-10-01-review.md)。implementation は有限 Queue の選定/承認後。
+
+## FreeBSD合意範囲の完了（2026-10-02）
+
+[WS109](../ws109/ws.md)/q572 F1〜F5を検証してcompleted。ユーザーのdrm-kmod利用・SSH/QMP例外・physicalradio免除と最新の指定host i915 PCIpassthroughで、nativeFreeBSD15.1/実GPU/主要app/OSS有線/backend/全文規約・3OSを確認。[結果](../history/ws109/q572/result.md)。Venus未実行・radio wiremock・BUG130 driver未修理を明示。前のplanning/deferredは当時の判断として保持し、FreeBSDのpromotionはこの合意範囲で終了。未指定design§8追加scopeはdeferredを維持。

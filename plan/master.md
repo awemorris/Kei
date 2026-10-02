@@ -1,9 +1,9 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queue: なし（q572 finished、WS109 p005 cleared）
-Current Focused Goal: fg016 — WS109 FreeBSD15 native Keiland移植。fg015達成、fg010/fg013の未達を保持。
-Next（2026-10-02 に更新）: WS109 native guest/ABIを確認しbuild/backend移植を先行。実機検証はユーザー免除、FreeBSD QEMU Venusの実使用を新関門とする。
+Active Queue: なし（q572 finished、WS109 completed）
+Current Focused Goal: fg010 — 10/17 demo。fg016はWS109 F1〜F5で達成、fg013/WS106の保留を保持。
+Next（2026-10-02 に更新）: WS109完了。新Queueは未選定、既存demo WSの相対優先とWS106保留を保持。
 IME（WS095）は一時的に人間が作業中（エージェントに割り当てない）。WS074 は 2026-09-30 のユーザー指示「Run ws074」で再開し、p099まで cleared。
 優先順位（2026-09-30 夜 ユーザー）: 最優先の WS103 は 2026-10-01 に完了。2026-10-01 ユーザー指示で WS104 → WS105 を次の目標にし、q538で完了した。その後の既存候補順は WS099・WS079・WS090・WS089・WS094・WS100・WS078・WS102、WS074 はデモ critical の中位。
 <!-- awesome-plan-current:end -->
@@ -42,8 +42,8 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | **MG003** 対象機へ導入して単独起動 | O2, O4 | 合意した機種・媒体でインストール後の単独起動と login を確認できる。実機と QEMU の証拠を分ける | インストーラ（WS019）と Intel Mac（WS020）は完了。4 機種の実機受け入れ（WS028）が残る | WS003, WS004, WS019, WS020, WS028 |
 | **MG004** データの保持とメモリ/ストレージの実用 | O1, O2 | 永続化、低メモリ時の進行、媒体世代、既定構成の性能を確認できる | swap（WS016）、UFS（WS024）、I/O・cache（WS025）は完了。実機の性能の一部は未測定。UFS の directory は 12 block まで育つ（WS054、完了） | WS016, WS024, WS025, WS054, WS057, WS058, WS059, WS060 |
 | **MG005** 一貫したネットワーク/サービス管理 | O1, O2, O3 | networkd・netconf・service の責務・設定・操作が一貫し、永続化と失敗後の復旧を確認できる | サービス（WS002）、net console（WS011）、service console（WS012）は完了。有線 LAN の常駐管理（WS005・WS033）が残る | WS002, WS005, WS011, WS012, WS033 |
-| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105, WS107, WS109 |
-| **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。WS105独立/opt build・installとWS108の2OS native deb/QEMU検証・CI/release定義をverified、MG007全体は未充足 | WS013, WS015, WS108 |
+| **MG006** グラフィカルな操作環境 | O2 | 入力・描画・ウィンドウ・端末・GUI ツールの一連の操作を確認できる | 入力（WS006）、Noct/BeUI（WS008）、標準 Vulkan（WS030）、即時起床（WS041）は完了。**Wayland デスクトップ（WS035）が fg010 の中心**。WS104 の OS 境界は A1〜A6 と全体回帰で完了、LinuxのWS105はL1〜L9・全文規約/両OS最終回帰でcompleted（fg012達成、既知resizeはユーザー許可のtracking）。WS109 nativeFreeBSD15.1/実i915/主要app/backend/全文規約がq572でverified。デモ実機を含むMG006全体は未完了 | WS006, WS007, WS008, WS014, WS017, WS029, WS030, WS031, WS035, WS037〜WS039, WS041, WS068, WS104, WS105, WS107, WS109 |
+| **MG007** 用途別の独自ディストリビューション | O1, O2 | 第三者が用途別に構成し、独自ブランドで build・配布できる | 担う作業は一部だけ（WS013・WS015 は Future Work に保留）。WS105独立/opt build・installとWS108の2OS native deb/QEMU検証・CI/release定義をverified、WS109 nativeFreeBSD独立build/install/privateprefixもverified、MG007全体は未充足 | WS013, WS015, WS108 |
 | **MG008** 最小 HAL の移植契約と異種機での実証 | O4 | HAL 契約・移植手順と異種/レトロ機での実証を公開する | source の所有の整理（WS018）と時間の単位（WS040）は完了。他 platform への反映（WS036、aarch64 を含む）と PowerPC（WS027）、rpi4 の開発環境（WS044）が残る | WS018, WS027, WS036, WS040, WS044 |
 | **MG009** AI 活用 OSS 開発の知見の公開 | O5 | 設計権限・レビュー・変更追跡・失敗からの回復の事例と根拠を公開する | 担う作業が未定義 | なし |
 
@@ -53,12 +53,11 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | --- | --- | --- | --- | --- |
 | **fg010** | **2026-10-17 の Open Source Conference Tokyo Fall のデモに向けて、Kei Operating System を仕上げる**: Dell Latitude 5330 の実機（内蔵 LCD、USB boot。HDMI の touch LCD は 2026-09-29 に外した）で graphical login から Keiland のデスクトップ、demo critical のアプリ（Image Viewer・Text Editor・Files・Settings・Notes・PDF Viewer・ブラウザ（amazon.co.jp）・terminal）が動く | MG006 | [WS099](ws099/ws.md)（Keiland のデモの仕上げ、WS035 の後継）、[WS075](ws075/ws.md)（i915）、[WS089](ws089/ws.md)（Settings）、[WS091](ws091/ws.md)・[WS092](ws092/ws.md)・[WS093](ws093/ws.md)（画像・text・Files からの起動）、[WS079](ws079/ws.md)（Notes・PDF Viewer）、[WS074](ws074/ws.md)（ブラウザ）、[WS081](ws081/ws.md)（touch） | 2026-09-24 ユーザー指示、2026-09-29 のデモ critical の追加（画像 viewer と text editor）、2026-09-30 に記述を更新 |
 
-| **fg016** | Linux共通描画を再利用しFreeBSD15 native compositor/主要appとaudio/network/WiFi backendを実検証する（WS109 F1〜F5） | MG006 | [WS109](ws109/ws.md) | 2026-10-02 user「WS108の完了後、WS109の実行をお願いします。」。WS109自身の既存目標をfocusとする |
 
 デモの platform は amd64 の実機（Dell Latitude 5330、HDMI + USB、2026-09-28 ユーザーの回答）。開発の試験は QEMU（amd64）で行い、実機の証拠と分けて書く。以前の focus（fg004 インストーラの実機、
 fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残すが、現在は優先しない。
 
-### 達成した Focused Goal（2026-10-01）
+### 達成した Focused Goal（2026-10-02）
 
 | Goal | 成果 | Milestone | 担当 | 出典/結果 |
 | --- | --- | --- | --- | --- |
@@ -66,6 +65,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | **fg013** | WS106 の対象テスト・見本を userland/tests に集約し、既存の選択・実行・デモを保つ | MG001 | [WS106](ws106/ws.md) | 2026-10-01 ユーザー「WS106を実行してください。」。WS106 の既存目標だけをfocusとし、既存fg010は保持 |
 | **fg014** | libbrowserがengineを所有し、標準Vulkanと抽象入力で独立clientから利用できる | MG006 | [WS107](ws107/ws.md) | 2026-10-02 ユーザー「WS107を実行してください。」。B1〜B5 verified/q544で達成、WS106/fg013の未達を保存 |
 | **fg015** | Debian13/Ubuntu26.04のQEMU guest native build/dpkg導入・動作とCI/release files | MG007 | [WS108](ws108/ws.md) | 2026-10-02 user指定targets/guest/CI/release、q549/P1〜P5達成。remote未実行 |
+| **fg016** | Linux共通描画を再利用しFreeBSD15 native compositor/主要appとaudio/network/WiFi backendを実検証する（WS109 F1〜F5） | MG006 | [WS109](ws109/ws.md) | 2026-10-02 user「WS108の完了後、WS109の実行をお願いします。」。WS109自身の既存目標をfocusとする。q572/F1〜F5で達成、実FreeBSD i915/主要app/全文規約/3OS、radioはuserwaived |
 
 ### fg010 の達成基準: デモの台本（2026-09-30 ユーザー「WS099のゴールも、明確な達成基準がないような気がします。それはFGに入れて、WSでは、このソフトがこういう基準を満たす、という明確なゴールを設定したいです。ソフトごとにそれをWSで作りましょう」）
 
@@ -217,7 +217,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 | [WS106](ws106/ws.md) | MG001 | base/desktop の test/probe/demo 30件を userland/tests/ へ移し、package/config/install と既存の動作を維持 | incomplete | q540 partial cleared、p002 uncleared（ime-probe回答待ち）、p003未実行。 |
 | [WS107](ws107/ws.md) | MG006 | engine の source を libbrowser に所属させ、Wayland無し・標準Vulkan/抽象入力の component と browser shell を整備 | completed | B1〜B5 verified / q544、API v2/public Vulkan client/最終boot。GitHub deferred |
 | [WS108](ws108/ws.md) | MG007 | CI で Debian13/Ubuntu26.04 の Linux Keiland .deb を別々に作成/検証/artifact保存 | completed | P1〜P5 / q549、2OS native deb＋QEMU runtime、CI/release定義。remote未実施 |
-| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | incomplete | p005 cleared/q572; actual FreeBSD QEMU graphics pending (user-selected i915 passthrough) |
+| [WS109](ws109/ws.md) | MG006 | Linux版の共通描画を利用した native FreeBSD15 Keiland、audio/network/WiFi backend | completed | q572/F1〜F5: native15.1/i915/主要app/OSS有線/全文規約・3OS、BUG130 upstream tracking。VM停止、push無し |
 
 完了した WS の Phase の記録は 2026-09-24 に plan から削除した（git の履歴に残る）。
 
@@ -225,7 +225,7 @@ fg005 有線 LAN、fg007 HAL の可読性、fg009 PowerPC）は定義を残す�
 
 ### WS109 の実行優先（2026-10-02）
 
-ユーザーのWS108後の実行指示をfg016と最優先へ同時反映。WS108 completedを確認、WS109の既存F1〜F5を対象とする。他WSの相対順位とWS106保留を維持。未知の前提/人間の判断を解消してからdependent Queueを選定。
+ユーザーのWS108後の実行指示をfg016と最優先へ同時反映。WS108 completedを確認、WS109の既存F1〜F5を対象とする。他WSの相対順位とWS106保留を維持。q572でWS109 completed/fg016達成。実行優先は完了の履歴にし、他WSの相対順とWS106保留を保持。次Queueは未選定。
 
 
 ### WS108 の実行優先（2026-10-02）
@@ -314,7 +314,7 @@ source所有/Wayland禁止の新規則は WS074/WS107 に適用。WS074 p100→p
 | WS106 p002 → p003 | 残るime-probe移動 → 全文規約・最終build/boot | p001 cleared、29件＋13files移動済み。ime-probe非競合回答が再開条件、次Queue未選定 |
 | WS107 | libbrowser/source所有・品質 | completed、q544/B1〜B5 verified |
 | WS108 | 2 distro native .deb/QEMU/CI release | completed / q549、remote未実行 |
-| WS109 p002 L1 | native FreeBSD15 library/build foundation | q551 p001 cleared、native ABI/environment verified。実backend統合と実機関門は後段 |
+| WS109 p002 L1 | native FreeBSD15 library/build foundation | q551 p001 cleared、native ABI/environment verified。q565全F2とq572全WSをverified、実機gateはuserwaived、実QEMU i915利用。historical L1依存を解消 |
 
 ## Tools
 

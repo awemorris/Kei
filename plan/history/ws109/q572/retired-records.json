@@ -1,0 +1,130 @@
+{
+  "reason": "AGENTS completed WS retirement; archive and git history preserve evidence",
+  "source_commit": "3f1aa068",
+  "files": [
+    {
+      "path": "plan/ws109/phase001/phase.md",
+      "sha256": "3a1159f942e413838b0d944b9a84b7f9dae7d9899ee2a09bfaa201385826601d"
+    },
+    {
+      "path": "plan/ws109/phase002/phase.md",
+      "sha256": "01270de90e377589117313a981a8583dfceeb0478f8ddb2acb7483392fe018ba"
+    },
+    {
+      "path": "plan/ws109/phase003/phase.md",
+      "sha256": "96281e08964fcb63e39d65c1b521cbe666ec553f800855d43c1213eca6c9b2ec"
+    },
+    {
+      "path": "plan/ws109/phase004/phase.md",
+      "sha256": "a39cce2b69b77b6261fcadb5907ee97c6f10147186baec9b1a19630b9339225c"
+    },
+    {
+      "path": "plan/ws109/phase005/phase.md",
+      "sha256": "ba70167b1459c3795d2811c438462cbd9529cb4b06e94524d3cac6472c63bb99"
+    },
+    {
+      "path": "plan/ws109/tests/README.md",
+      "sha256": "e50a8f35df2ace4cf34c15a7940f353da7e180f88b4b7c733c4d907e09d4e0a3"
+    },
+    {
+      "path": "plan/ws109/tests/ancillary.c",
+      "sha256": "223d56e58251b8925a0cdec3d99f8b127fbe1440fdc681ee89e65ea68173b62e"
+    },
+    {
+      "path": "plan/ws109/tests/apps-freebsd.py",
+      "sha256": "384c48b4bd4a6c2a3c403632f8d56a25c77c3b3741a03c762c991c2c087c36b9"
+    },
+    {
+      "path": "plan/ws109/tests/attributes-fixture-freebsd.py",
+      "sha256": "3ee4cc929c0795374bd7f1130ba8aa0b7af84bccc40808bd7e8f33d18f56badc"
+    },
+    {
+      "path": "plan/ws109/tests/attributes-freebsd.c",
+      "sha256": "5f8dd31481ab65f58a9aa19fdef99c0a2a8fdc17ee85ee972e84a50b8536e8b3"
+    },
+    {
+      "path": "plan/ws109/tests/audio-freebsd.c",
+      "sha256": "3d53fba304c76a2bf6df1fdc339ae6db39ab0567d43e1a09a95aeee0e0b0cffa"
+    },
+    {
+      "path": "plan/ws109/tests/audio-retry-freebsd.c",
+      "sha256": "951b2a34560d6c0f54a8bef2bff25fffefc7c4be003a55aaf4e040e2e161a4ec"
+    },
+    {
+      "path": "plan/ws109/tests/audio-retry-freebsd.py",
+      "sha256": "0d1148ce9177fc5af0553d58d2b5a618a2b7d7a2bbccff3970ca9b988b681a3b"
+    },
+    {
+      "path": "plan/ws109/tests/compositor-refusal-freebsd.py",
+      "sha256": "8a57155f2c5618f7f37322f3a00a50aa5fb03d39ae3abfd85aebf5f73184d6ef"
+    },
+    {
+      "path": "plan/ws109/tests/favorites-fixture.py",
+      "sha256": "44242eda5c5f67a37a8f9621ad1c66a2c756b9ca6eed36da4637251d1ce74201"
+    },
+    {
+      "path": "plan/ws109/tests/favorites.c",
+      "sha256": "005b22ea6a48764b548b2222815760a3ddc8d2f3ca4f0bcd047f83fe4d7dbbdf"
+    },
+    {
+      "path": "plan/ws109/tests/mounts-freebsd.c",
+      "sha256": "f68b323877971ca456374da6cb56c2917175038074032a450a704f26014c8306"
+    },
+    {
+      "path": "plan/ws109/tests/mounts-mntent.c",
+      "sha256": "5b306aa4714368f04f65cec9f2d58d144e322a3f7647f5fdfc12a1707c30e861"
+    },
+    {
+      "path": "plan/ws109/tests/network-address.c",
+      "sha256": "6655314890570444841918fcd398061bb04fd41b07acc115fee3e6dccc305939"
+    },
+    {
+      "path": "plan/ws109/tests/network-carrier.c",
+      "sha256": "62baca08838852478444431a4ab24aebbbb5d29acba5c8cb33b42a57aa10af4d"
+    },
+    {
+      "path": "plan/ws109/tests/network-native.c",
+      "sha256": "cf9cb9b09cd5d7286d3740628d158c9a03d3680aba6a76f4afa5379e93d67c06"
+    },
+    {
+      "path": "plan/ws109/tests/network-radio-freebsd.c",
+      "sha256": "b20dc8cb8f31350b28cbd0ad0dd371647f6179297f0505beb91ecce0a91f72e4"
+    },
+    {
+      "path": "plan/ws109/tests/network-wpa-contract.c",
+      "sha256": "d40af2a7fd305c7418d5e258fe006fc7ae2f7174464ebf6ceb307b144c0bc72d"
+    },
+    {
+      "path": "plan/ws109/tests/network-wpa-contract.py",
+      "sha256": "06e1d5180b2bcee681662948ec8dab4942eeabd0a716f431d45d2f47052c2228"
+    },
+    {
+      "path": "plan/ws109/tests/pty-freebsd.c",
+      "sha256": "de6041a7fa5a53488de9c2304b8c9f1ba3861a7e80c9f75f777342883ffb48c5"
+    },
+    {
+      "path": "plan/ws109/tests/public-libraries.c",
+      "sha256": "801b8e3c31ba460b8096f1d3ed10239a7cbab956445d4acfb06d78611e492038"
+    },
+    {
+      "path": "plan/ws109/tests/seat-backend-fixture-freebsd.py",
+      "sha256": "acbb3cca48321661f063e72182c9b6e7edbd9b396235d960884d8602182d44bb"
+    },
+    {
+      "path": "plan/ws109/tests/seat-backend-freebsd.c",
+      "sha256": "542f1cedecc3fb911cd45ba8becee62172f4d7c65a6ce4fbc0d0bdd5f5836df3"
+    },
+    {
+      "path": "plan/ws109/tests/seat-client-freebsd.c",
+      "sha256": "029ef6e1c796f4ef52319de1612b5622f560427794daf4537f551bbc5612ff6b"
+    },
+    {
+      "path": "plan/ws109/tests/seat-fixture-freebsd.py",
+      "sha256": "bd71beaad78777d61b50fbfbc25ff64e3bf585438b750850b48e24e30ea72d18"
+    },
+    {
+      "path": "plan/ws109/tests/ui-libraries.c",
+      "sha256": "f7fbb651bfe88db1c743b178e7e79a8f9e0bbe30420a133a3e939dd16b0c6747"
+    }
+  ]
+}

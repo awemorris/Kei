@@ -50,3 +50,7 @@ q550のorigin p001の未決D1/D2は解消、D3は実機準備まで実装を進�
 ## q551 native design output
 
 [Actual environment/ABI and execution procedure](../history/ws109/q551/environment.md). p002 L1→p003/p004 backend outputs→p002 L2 integration→p005 conformance/regression/physical gates. No wholePhase dependency cycle; actual scoped output is mandatory before selection. libseat/basu linkage is not selected for production; native seatd-only permissive contract is verified by p003.
+
+## 最終実現（2026-10-02）
+
+[WS109 F1〜F5](ws.md) completed/q572。先行設計の未決はnative15.1 ABI/systemstackと共有renderer＋native seatd/OSS/net80211/WPA境界で解消した。ユーザー選択のi915 PCIpassthroughで実GPU/VT/input/主要7apps＋AppHomeを検証、physicalradioは免除。Venus未実行、BUG130のdriver自体は未修理、Keilandの既存CPUcompletionへのnative capability適応を実検証。kernelport/未知GPU/互換QtGTK/FreeBSDpkg配布など初期WS非対象は追加していない。[最終証拠](../history/ws109/q572/result.md)、[native運用](../../userland/desktop/README.freebsd.md)。

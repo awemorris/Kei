@@ -2,13 +2,13 @@
 
 # Past Log
 
-Last finished Queue: [q572](queue-q572.md)（WS109 p005 cleared）
+Last finished Queue: [q572](queue-q572.md)（WS109 completed/F1〜F5、p005 cleared）
 
 ## 最新: q572 /WS109 p005
 
 item cleared /Phase cleared。Actual sevennativeGPU mainapps/PTY/fileopens plus AppHome PASS; fullsource C fixes/review/nativeheaderELF/3OS builds/finalboot/docs verified. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q572/result.md). F1..F5 satisfied under userselectedi915/physicalWiFiwaiver; BUG130 upstreamtracking, ownVMstopped/VFIOpreserved.
 
-WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免除、user-selected FreeBSD QEMU i915 acceptanceは未確認。
+WIP commit/pushなし、GitHub publication/outbox pending。実機検証は免除、user-selected FreeBSD QEMU i915 acceptance/F1〜F5 verified、WS109 completed/fg016達成。BUG130 upstreamtracking、Venus未実行、専用VM停止/VFIO保持。
 
 ## Queue history（直近30、古い順）
 
