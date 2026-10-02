@@ -2,12 +2,28 @@
 
 # WS114: Linux Keiland 上の標準 GTK4 互換性を調査・改善する
 
+<!-- awesome-plan-current:start -->
 Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG002（後続の移植知見）
 Parent: [Master](../master.md)
-Queue: q587-i01 uncleared（q581-i01 cleared / q580-i01 unclearedの履歴を保持。共有Queue投影はmain担当）
-Resume point: p001/q581調査はclear。G05のp007/q587はCSD/明示SSDとclient release修正、部分実検証を保存し、ユーザー終了指示でuncleared。最終runtime/clipboard/Textedit/zedBSD boot等の[残件](phase007/q587-result.md)と[再開条件](phase007/q587-resume.md)を新Queue選定に渡す。残る行の採否はp002、全変更最終conformanceはp006に保持。
+Queue: none（q587-i01 uncleared / q581-i01 cleared / q580-i01 unclearedの履歴を保持。共有Queue投影はmain担当）
+Resume point（2026-10-02 計画詳細化）: **次は p007 の新 attempt**（[再開条件](phase007/q587-resume.md)の残り 5 点だけ、目安 3h、Queue 投入可）。並行して p002 の行別採否をユーザーに提示する（[推奨案](phase002/phase.md)、WS117 p002 と同じ席で決めると速い）。p007 cleared が WS117 p001 の開始条件（2026-10-02 user の順序）。p003〜p006 は p002 の採否待ち。
+<!-- awesome-plan-current:end -->
+
+## ベータ1（fg019、2026-10-17）までの到達目標（2026-10-02 計画、ユーザー確認待ち）
+
+2026-10-02 user「GTK4は、Linuxでの本物のGTK4によるCSDの動作を完成させましょう。」を最優先の到達点にする。
+
+| # | 受け入れ（測れる形） | Phase |
+| --- | --- | --- |
+| B1 | 最終 source の Linux compositor を guest に導入し SHA を照合。Debian13 標準 GTK4 4.18.6 の GL/Cairo/Vulkan 各 renderer で、SSD 二重表示 0、CSD の move/resize/maximize/fullscreen/restore、menu/tooltip/modal、別 client の空 entry への Unicode paste の完全一致が PNG/protocol 証拠で通る | p007 |
+| B2 | native Terminal/Files/Textedit の SSD（tabs・controls・max/dock/restore/close）に回帰無し。最終 source の zedBSD target build warning 0 と `boot-test.sh` の PNG | p007 |
+| B3 | G01〜G19（G05 以外）の採否がユーザーにより記録される | p002 |
+| B4 | 採用された基礎行（推奨: G04 restore 時の buffer 増加、G08 grab 後の wheel/hover、G10 の Kei IME 日本語入力）が標準 GTK4 で再現しなくなる | p003 |
+| B5 | WS115/WS117/WS097 への引継ぎ表（protocol・buffer・入力・依存/サービス・回避策）と全変更の全文規約・最終回帰 | p005・p006 |
+
+ベータ1の最低線は B1・B2（CSD の完成）。B3〜B5 はユーザーの採否と残り日数で決める（p004 portal は推奨: ベータ1 では取消または保留）。
 
 ## Objective / scope
 
@@ -28,17 +44,17 @@ WS105 Linux compositorはcontext、WS034 p038のzedBSD Vulkan/EGL横断調査は
 
 ## Phases
 
-| ID | Purpose / goal | Status | Dependencies |
-| --- | --- | --- | --- |
-| [ws114-p001](phase001/phase.md) | 標準Linux GTK4 baselineと機能表の実測 | cleared（q581 / 残測定と全行skip理由） | WS105実行環境（context） |
-| [ws114-p002](phase002/phase.md) | 行ごとの採否をユーザーと確定 | planning | p001の実測 |
-| [ws114-p003](phase003/phase.md) | 選択されたXDG-shell/compositor修正 | planning | p002の採用範囲 |
-| [ws114-p004](phase004/phase.md) | 選択されたportal/session統合 | planning | p002の採用範囲。不要なら取消判断を記録 |
-| [ws114-p005](phase005/phase.md) | 標準GTK4の再検証と知見の引継ぎ | planning | p003/p004/p007の採用出力 |
-| [ws114-p006](phase006/phase.md) | 全変更の全文規約と最終回帰 | planning | p005実測/最終source |
-| [ws114-p007](phase007/phase.md) | G05 CSD/明示SSDの装飾モードとGTK4確認 | uncleared（q587 / user安全wrap） | p001実測・G05ユーザー指示 |
+| ID | Purpose / goal | Status | Dependencies | 目安 |
+| --- | --- | --- | --- | --- |
+| [ws114-p001](phase001/phase.md) | 標準Linux GTK4 baselineと機能表の実測 | cleared（q581 / 残測定と全行skip理由） | WS105実行環境（context） | — |
+| [ws114-p002](phase002/phase.md) | 行ごとの採否をユーザーと確定 | planned（ユーザーの判断の席。推奨案を記載） | p001の実測 | user 30分 |
+| [ws114-p003](phase003/phase.md) | 選択されたXDG-shell/compositor修正 | planning（p002 の採否待ち） | p002の採用範囲、p007 cleared | 3〜4h |
+| [ws114-p004](phase004/phase.md) | 選択されたportal/session統合 | planning（推奨: ベータ1では取消/保留） | p002の採用範囲。不要なら取消判断を記録 | 0〜4h |
+| [ws114-p005](phase005/phase.md) | 標準GTK4の再検証と知見の引継ぎ | planning | p003/p004/p007の採用出力 | 2〜3h |
+| [ws114-p006](phase006/phase.md) | 全変更の全文規約と最終回帰 | planning | p005実測/最終source | 2〜3h |
+| [ws114-p007](phase007/phase.md) | G05 CSD/明示SSDの装飾モードとGTK4確認 | uncleared（q587 / user安全wrap）。**新 attempt を Queue 投入可**（残り 5 点） | p001実測・G05ユーザー指示 | 3h |
 
-Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS115。追加: p001 + G05ユーザー指示 → p007 → p005。選択しない行のPhaseは現状のまま自動clearせず、採否に応じ取消と依存/WS受け入れを改訂する。実装は新Queueの承認が必要。
+Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS115。追加: p001 + G05ユーザー指示 → p007 → {p003, p005, WS117 p001}。選択しない行のPhaseは現状のまま自動clearせず、採否に応じ取消と依存/WS受け入れを改訂する。実装は新Queueの承認が必要。
 
 ## Event
 
@@ -55,3 +71,5 @@ Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS1
 2026-10-02 / A-B-checkpoint-start-projection: B df66db5eをA435a62126へ統合しp001/q581調査clearを投影。G05個別採用のp007/q587はuser開始報告でin-progress、他機能採否p002とWS全体受け入れは未達のまま。
 
 2026-10-02 / q587-user-wrap-uncleared: p007のCSD/明示SSDとaccepted xdg move/resize matching releaseを実装し、wire・GTK4 GL/Cairo/Vulkan・native Terminal/Filesの部分証拠を保存。userの全agent終了指示で正常停止し、最終source runtime導入、別client clipboard空target一致、Textedit controls、最終zedBSD install/boot PNG等を未達としてuncleared。p005の引継ぎに利用可能な部分成果でありp007出力のclearanceを供給しない。WS114 incomplete、p002他行採否/p006最終conformanceを維持。[結果](phase007/q587-result.md) / [再開](phase007/q587-resume.md)。mainがQueue/共有記録とremote統合を引継ぐ。
+
+2026-10-02 / ws114-beta1-plan-20261002: 計画担当が fg019（ベータ1）向けに詳細化。最低線を p007 の CSD 完成（B1/B2）とし、p007 の新 attempt を残り 5 点に限定して Queue 投入可と記録。p002 に行別の推奨案（提案であり採否ではない）を追記し planned に、p003 は p007 cleared も依存に追加、p004 は portal をベータ1で取消/保留する推奨を記録。p007 cleared を WS117 p001 の開始条件として投影。実装・guest 実行なし。Queue/Master/WS117 投影は main。

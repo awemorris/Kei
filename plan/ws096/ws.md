@@ -10,6 +10,7 @@ Objectives: O2
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: p001（設計）から
+2026-10-02（計画担当）: 前提の知見は WS117（Linux Qt6 の調査と改良）と WS116（upstream Qt6 の zedBSD 移植）から受ける。ベータ1（fg019）の対象外。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-09-29 ユーザー）

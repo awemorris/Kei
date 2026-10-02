@@ -10,6 +10,7 @@ Objectives: O2
 Parent: [Master](../master.md)
 Queue: なし
 Resume point: p001（設計）から
+2026-10-02（計画担当）: 前提の知見は WS114（Linux GTK4）と WS115（upstream GTK4 の zedBSD 移植）から受ける。ベータ1（fg019）の対象外。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-09-29 ユーザー）

@@ -3,14 +3,15 @@
 # WS095: IME（Wayland の標準の方法、まず日本語）
 
 <!-- awesome-plan-current:start -->
-Status: incomplete（p001〜p004 cleared、p005 uncleared で中断）
+Status: incomplete（p001〜p004 cleared、p005 uncleared。2026-10-02 user の担当の変更で再開）
 Primary Milestone: MG006
 Related Milestones: MG006
 Objectives: O2
 Parent: [Master](../master.md)
 Queue: なし
-Resume point: 2026-09-29 ユーザーの指示でブラッシュアップ（p005 の残り・p012 の辞書の拡張・p006〜p011）は後回し、Keiland を優先。IME は p004 で変換（kanji → 漢字、確定）まで guest で動く。再開は p005（phase005 の Resume point、書きかけは plan/ws095/p005-wip.patch）
-2026-10-02 user:「IMEは人間の作業を完了したので、あなたが担当します。」人間の作業中の制限を解除し、優先度を上げる。人間の commit（2026-10-01〜02、`userland/desktop/ime` ほか）で p005 の状態と `p005-wip.patch` が古い可能性があるため、最初の Queue で現行 source と Phase の照合から始める。
+Resume point（2026-10-02 計画詳細化）: **次は p005 の新 attempt**（候補の窓・indicator・key の repeat・ime-p004.sh の kill の修正、目安 4h、Queue 投入可）。その後 p006（Terminal）→ p007（Text Editor の確認）→ p008（Files・titlebar の検索）と p012（辞書の拡張）を並行、最後に p011。
+2026-10-02 user:「IMEは人間の作業を完了したので、あなたが担当します。」人間の作業中の制限を解除し、優先度を上げる。
+**source の照合（2026-10-02 計画担当）**: 2026-09-29 の p004 以降、`userland/desktop/ime/`・`wayland/input-method.c`・`wayland/text-input.c` の変更は path の共通化（cec34d3e1、`paths.h`）と Linux/FreeBSD の Makefile の追加（ba46edf89・1ed1a4b59）だけで、IME の機能の変更は無い（commit の author は全て同じ名前で、人間とエージェントの区別は git では付かない）。`p005-wip.patch` は現行の `ime.h`・`input-method.c` に `git apply --check` で当たる（offset 2 行）。旧 worktree `.claude/worktrees/ws095-ime` は gitdir が `/home/awe/zedBSD-rpi4` を指して壊れているので使わず、P 担当の新しい worktree で再開する。**「人間の作業」の内容（repository の外の作業か、未 commit の差分か）をユーザーに確認する**。libkeiui（WS090 p013）に text-input-v3 の client（`kui_window_text_input`）があり、Text Editor は既に呼んでいる。Terminal・Notes も libkeiui の window を使う。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-09-29 ユーザー）
@@ -24,22 +25,36 @@ Resume point: 2026-09-29 ユーザーの指示でブラッシュアップ（p005
 - 辞書の license（2026-09-29）: REmacs の辞書の header は「remacs と同じ license（GPL）」とあるが、ユーザー「REmacsは私が著作権者なので、気にしなくていいです。」→ 著作権者の許可として Kei の IME の辞書に使う。
 - 使う app の側: Terminal・text editor（WS092）・ブラウザの text field・Notes・Settings の検索（text-input-v3 の対応）。
 
-## Phase（案）
+## ベータ1（fg019、2026-10-17）までの到達目標（2026-10-02 計画、ユーザー確認待ち）
 
-| Phase | 目的 | Status | 依存 |
-| --- | --- | --- | --- |
-| [ws095-p001](phase001/phase.md) | 設計（[design.md](design.md)） | cleared（2026-09-29） | — |
-| [ws095-p002](phase002/phase.md) | 日本語の engine（Wayland 無し）: ローマ字・辞書・活用の規則・分割・候補・利用者の辞書、固定の辞書で host の試験 | cleared（2026-09-29） | p001 |
-| [ws095-p003](phase003/phase.md) | 辞書の package（pin した tarball の取得・検証）、100 文での品質の計測、補いの辞書の案（ユーザーと相談） | cleared（2026-09-29） | p002、D1・D3 |
-| [ws095-p004](phase004/phase.md) | protocol の記述、zdesktop の仲介（起動と信頼・key の経路・Alt+Space・watchdog）、IME の program（日本語の engine の結線を含む）、ime-probe の guest の試験 | cleared（2026-09-29） | p002 |
-| [ws095-p005](phase005/phase.md) | 候補の窓の合成と IME の描画、indicator、IME の中の key の repeat、guest の画面の確認 | uncleared（2026-09-29、ユーザーの指示で中断。書きかけは `p005-wip.patch`） | p003・p004 |
-| ws095-p006 | libkeiland の text-input の helper と Terminal（password の検出） | planning | p004・p005、Terminal の CJK の font（D14） |
-| ws095-p007 | Text Editor の対応（WS092 の口） | planning | p006、WS092 |
-| ws095-p008 | zdesktop の自前の field（titlebar の検索）と Files の field | planning | p005・p006 |
-| ws095-p009 | Browser の text field | planning | p006 |
-| ws095-p010 | PS/2 の日本語の key の写し（条件付き: JIS の PS/2 keyboard の利用者が出た時、F-058 と一緒に。5330 は PS/2 だが US 配列で日本語の key が無い。main 2026-09-29） | planning | JIS の PS/2 の利用者（F-058） |
-| ws095-p011 | 全体の規約の適合、guest の回帰（実機の確認は別に記録） | planning | p002〜p009・p012 |
-| ws095-p012 | 補いの辞書を千語へ広げ、補いの辞書の候補に活用の種類の注釈（SKK の `;…`）を足して engine が読む。held-out の文 100 以上を書き下ろし、拡張の前後で測る（ユーザーの答え 2026-09-29 夜） | planning | p003・p004 |
+| # | 受け入れ（測れる形） | Phase |
+| --- | --- | --- |
+| I-B1 | zedBSD QEMU の Keiland で、Alt+Space（と 変換/無変換）で日本語に切替え、ローマ字→かな→変換の候補の窓が cursor の下に出て、選んで確定できる。top bar の indicator（A／あ）が切替えに追従し、click で切替わる。全画面の窓の上でも候補が出る。PNG で確認 | p005 |
+| I-B2 | Terminal・Text Editor・Notes で日本語を入力・確定でき、Terminal の password の入力では IME が無効。Terminal で CJK の文字が表示される（D14） | p006・p007 |
+| I-B3 | Files の field と titlebar の検索で日本語の入力 | p008 |
+| I-B4 | 補いの辞書の拡張と held-out の文 100 以上で変換の正解率を拡張の前後で測り、下がらない | p012 |
+| I-B5 | 全変更の全文規約、guest の回帰。実機（5330）の切替えの確認はユーザーに依頼し、別に記録 | p011 |
+
+最低線は I-B1・I-B2。ブラウザ（p009）は WS074 がこの session の対象外（2026-10-02 user、Codex の担当）なので、ベータ1では WS074 の担当に引継ぐか保留するかをユーザーが決める。
+
+## Phase
+
+| Phase | 目的 | Status | 依存 | 目安 |
+| --- | --- | --- | --- | --- |
+| [ws095-p001](phase001/phase.md) | 設計（[design.md](design.md)） | cleared（2026-09-29） | — | — |
+| [ws095-p002](phase002/phase.md) | 日本語の engine（Wayland 無し）: ローマ字・辞書・活用の規則・分割・候補・利用者の辞書、固定の辞書で host の試験 | cleared（2026-09-29） | p001 | — |
+| [ws095-p003](phase003/phase.md) | 辞書の package（pin した tarball の取得・検証）、100 文での品質の計測、補いの辞書の案（ユーザーと相談） | cleared（2026-09-29） | p002、D1・D3 | — |
+| [ws095-p004](phase004/phase.md) | protocol の記述、zdesktop の仲介（起動と信頼・key の経路・Alt+Space・watchdog）、IME の program（日本語の engine の結線を含む）、ime-probe の guest の試験 | cleared（2026-09-29） | p002 | — |
+| [ws095-p005](phase005/phase.md) | 候補の窓の合成と IME の描画、indicator、IME の中の key の repeat、guest の画面の確認 | uncleared（2026-09-29 中断）。**新 attempt を Queue 投入可** | p003・p004 | 4h |
+| [ws095-p006](phase006/phase.md) | Terminal の text-input（libkeiui の `kui_window_text_input` を使う、password の検出）と Terminal の CJK の fallback の font（D14） | planned（p005 の後） | p005 | 3〜4h |
+| [ws095-p007](phase007/phase.md) | Text Editor と Notes の確認と不足の修正（preedit の表示・cursor の矩形） | planned（p005 の後） | p005 | 2〜3h |
+| [ws095-p008](phase008/phase.md) | zdesktop の自前の field（titlebar の検索）と Files の field | planning（Files の担当 WS127 と file の調整） | p005・p006、WS127 との調整 | 3〜4h |
+| ws095-p009 | Browser の text field | planning（WS074 はこの session の対象外。引継ぎか保留をユーザーが決める） | p006、WS074 の担当 | — |
+| ws095-p010 | PS/2 の日本語の key の写し（条件付き: JIS の PS/2 keyboard の利用者が出た時、F-058 と一緒に。5330 は PS/2 だが US 配列で日本語の key が無い。main 2026-09-29） | planning | JIS の PS/2 の利用者（F-058） | — |
+| [ws095-p011](phase011/phase.md) | 全体の規約の適合、guest の回帰（実機の確認は別に記録） | planning | p005〜p008・p012（p009/p010 は行った時だけ） | 2〜3h |
+| [ws095-p012](phase012/phase.md) | 補いの辞書を千語へ広げ、活用の種類の注釈（SKK の `;…`）を engine が読む。held-out の文 100 以上で拡張の前後を測る（ユーザーの答え 2026-09-29 夜） | planned（p005 と並行可、compositor を触らない） | p003・p004 | 4h |
+
+**source の衝突**: p005 は `userland/desktop/wayland/` の compose.c・protocol.c・display.c・shell.c・input-method.c・ime.h を触る。WS114 p007 の再 attempt（修正が要る時の shell.c・protocol.c）、WS117 p003、WS099（BUG-125）・WS094（desktop surface）・WS113（display.c）の compositor の Queue と同時に実行すると merge の衝突が出る。main が順を決める。p008 は Files（WS127 最重点）と titlebar-shell.c を触る。p006 は Terminal、p007 は textedit・notes。p012 は `userland/desktop/ime/` の中だけで衝突しない。
 
 ## 再開のときに直すこと（2026-09-30 main、ws035-p137 の調べから）
 
@@ -47,8 +62,6 @@ Resume point: 2026-09-29 ユーザーの指示でブラッシュアップ（p005
   BUG-113（閉じた後に focus が戻らない）の観測はこれによる見込み（zdesktop は次の窓へ focus を移している、ws035-p137）。
   guest の `ps` は引数を出さないので、閉じる process は起動の時の pid（`$!`）で kill する。
 
-## 再開のときに直すこと（2026-09-30 main、ws035-p137 の調べから）
+## Event
 
-- `plan/ws095/tests/ime-p004.sh`（139 行目付近）の kill は `grep "[i]me-probe"` に当たる全ての ime-probe を閉じ、残すはずの窓も閉じる。
-  BUG-113（閉じた後に focus が戻らない）の観測はこれによる見込み（zdesktop は次の窓へ focus を移している、ws035-p137）。
-  guest の `ps` は引数を出さないので、閉じる process は起動の時の pid（`$!`）で kill する。
+2026-10-02 / ws095-beta1-plan-20261002: 計画担当が source と plan を照合（上の current block）し、ベータ1の到達目標 I-B1〜I-B5、p005 の新 attempt の範囲、p006・p007・p008・p011・p012 の Phase file を作成。p006 は libkeiland の新しい helper ではなく既存の libkeiui の text-input を使う形に改め、p007 に Notes を加えた。p009（Browser）は WS074 がこの session の対象外のため判断待ち。重複していた「再開のときに直すこと」の節を 1 つにした（内容は p005 の新 attempt の範囲にも入れた）。実装・guest なし。

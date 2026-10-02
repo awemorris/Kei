@@ -24,3 +24,5 @@ G13–G16のうち採用されたものについてsession D-Bus/frontend/backen
 [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、[scoped方針](../../standards/ws114-gtk-qt-learning.md)、[automation](../../standards/automation.md)を実装前に確認する。新コードは全文規約、外部tarballはprovenance・license・patch分離。具体コマンド/版/結果/commit/環境/成果物/skip/制限は未実施（計画のみ）。各PhaseはQueueの個別scope承認後に実行する。前提未達・判断待ちならattemptをunclearedとして証拠/再開条件を残す。
 
 Event ws114-gtk-qt-port-plan-20261002: 2026-10-02 user指示から作成。planning/Queue none。GitHub publication pending。
+
+2026-10-02 / ws114-beta1-plan-20261002: 推奨はベータ1では portal を採用せず、本 Phase を取消（canceled、理由: 通常 FileDialog 経路で足り、portal backend は fg019 の範囲外）または保留とすること。ユーザーの p002 の判断で決める。Status は planning のまま。

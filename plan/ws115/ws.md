@@ -2,16 +2,25 @@
 
 # WS115: upstream GTK4 を zedBSD の desktop package に移植する
 
+<!-- awesome-plan-current:start -->
 Status: planning
 Primary Milestone: MG002
 Related Milestones: MG006（GUI動作、compositor互換性）
 Parent: [Master](../master.md)
 Queue: none / 計画のみ
-Resume point: （2026-10-02 user の順序: WS114 p007 の CSD 完成 → WS117 Linux Qt6 調査と compositor 改良の後に着手）WS114で承認した機能とLinux実測を入力にp001の移植契約を作る。
+Resume point（2026-10-02 計画詳細化）: 依存 package の移植を含む Phase 表を作成（p004〜p010 を追加）。2026-10-02 user の順序では WS114 p007 → WS117 の後に移植へ進む。**ベータ1に zedBSD 上の GTK4 を入れるなら、依存 library の Phase（p001・p004〜p009。compositor を触らない）を WS117 と並行して始める判断がユーザーに要る**（下の「ベータ1の選択肢」）。到達点は WS117 の調査の後にユーザーが決める（2026-10-02 user「まず調査して…から決めます」）。
+<!-- awesome-plan-current:end -->
 
 ## Objective / scope
 
-外部のGTK4ソースを公式tarball＋zedBSD patchとして `userland/packages/desktop/gtk4/` に追加し、zedBSD上でWaylandのGTK4アプリをbuild/実行する。移植時の実際の依存・OS API・描画・入力・Wayland/portal条件を記録し、後の完全な書き下ろし [WS097](../ws097/ws.md) の設計材料にする。GTK4ソースをbase/compositorへ取り込まない。既存[WS034のinventory](../ws034/package-inventory.md)を再検証して使う。
+外部のGTK4ソースを公式tarball＋zedBSD patchとして `userland/packages/desktop/gtk4/` に追加し、zedBSD上でWaylandのGTK4アプリをbuild/実行する。移植時の実際の依存・OS API・描画・入力・Wayland/portal条件を記録し、後の完全な書き下ろし [WS097](../ws097/ws.md) の設計材料にする。GTK4ソースをbase/compositorへ取り込まない。既存[WS034のinventory](../ws034/package-inventory.md)を再検証して使う。手前のゴール（2026-10-02 user）は `userland/packages/desktop/gtk4` の実装、奥のゴールは独自実装の互換 gtk4（WS097）。
+
+## 現状（2026-10-02 調査、計画担当）
+
+- zedBSD の `userland/packages/` にあるのは zlib・expat・openssl・openssh・curl・ca-certificates・clang・libc++・remacs・noto-color-emoji だけ。**GTK4 の依存（meson のクロス契約、libffi・pcre2・glib、libpng・freetype・harfbuzz・fontconfig、pixman・cairo・fribidi・pango・gdk-pixbuf・libjpeg-turbo・libtiff・graphene・libepoxy・libxkbcommon・xkeyboard-config、wayland-protocols）は全て未移植**。WS034 の p025〜p028・p034・p038 は planning のまま未実行（tarball の版・hash・license・既知のクロス build 問題は [inventory](../ws034/package-inventory.md) §2.4〜§2.7 に調査済み）。
+- 使えるもの: CMake の toolchain file と autoconf の cross cache（`userland/packages/external.mk`・`tools/gen-cross-toolchain.sh`）。meson の cross file は無い。host の meson 1.7.0・ninja・cmake 3.31。gperf は host に無い。
+- zedBSD 独自の `libwayland-client.so`（queue・`prepare_read`・wrapper を実装、[README](../../userland/desktop/libwayland/README.md)）、EGL 1.5 と GLES（Vulkan の上、`userland/desktop/libegl`・`libglesv2`）、`libwayland-egl` がある。upstream の wayland-scanner の生成 code（`wl_proxy_marshal_flags` 等）との ABI 互換は未確認。
+- libc: iconv・libintl・locale（newlocale/uselocale）・dlopen・shm_open・posix_spawn・pipe2・mkostemp・posix_fallocate・qsort_r はある。memfd_create・getifaddrs・eventfd・accept4 は無い（glib/GTK が要るかは p001 で確認）。
 
 ## Completion criteria（p001で対象app/操作を確定）
 
@@ -20,20 +29,43 @@ Resume point: （2026-10-02 user の順序: WS114 p007 の CSD 完成 → WS117 
 3. 必要だったOS API/第三者ライブラリ/Wayland protocol/portalと各patchの理由を引継ぎ表に残す。Linux標準GTK4との差分を示す。
 4. 全変更sourceとpackage metadataの全文規約・provenance・build/guest回帰を検証する。
 
+## ベータ1（fg019、2026-10-17）の選択肢（2026-10-02 計画担当の見積り、ユーザーが決める）
+
+依存の Phase は直列（p004 → p005 → p006 → p007 → p008 → p002 → p010）で、1 Queue 3〜4h、合計およそ 36〜40h（10 Queue）。libc の不足・libtool の共有ライブラリ・meson の cross の問題で 1.5〜2 倍になり得る。
+
+| 案 | ベータ1の到達線 | 条件 | 危険 |
+| --- | --- | --- | --- |
+| A（安全） | p001 の移植契約と、依存の一部（p004〜p006）まで。GTK4 本体はベータ1の後 | WS117 の後に開始（user の順序どおり） | ベータ1に GTK4 app は無い |
+| **B（推奨）** | zedBSD 上で GTK4 の demo app（`gtk4-demo` か小さな試験 app）が **Cairo renderer・wl_shm** で window を出し、click/key/menu が通る | 依存の Phase（p001・p004〜p009）を WS117 と並行して 10/04 頃から 1 担当で直列に実行。GTK4 本体（p002・p010）は WS117 の p002 の採否の後 | 10/13〜10/15 着の見込みで余裕が小さい。GL/Vulkan renderer は後 |
+| C | B に加え GL（zedBSD の libegl/libglesv2）か Vulkan（Venus）の renderer | B ＋ 2 担当目 | ベータ1の他の WS の枠を圧迫 |
+
+推奨の GTK の版（D-VER、p001 で確定）: **4.18 系（Linux で実測した Debian13 の 4.18.6 と同じ系列）**。4.24.0（inventory の版）は glib ≥ 2.89.3 と meson ≥ 1.8 を要求し、host の meson 1.7 では足りない（meson の host 道具の build が要る）。
+
 ## Dependencies / ownership
 
-[WS114](../ws114/ws.md)の採用範囲/実測が前提。[WS034](../ws034/ws.md) p028（描画系）/p034（本家libwayland）とp038（zedBSDのEGL/Vulkan横断調査）の必要な成果を確認。p029の旧GTK4実装枠はこのWSへ移す。p028/p034/p038の他package目的は維持する。Linuxでの標準GTK4の成功はzedBSD動作の証拠にしない。native menubarの後日案[F-045](../future-work.md)は通常GTK4移植の必須条件にせず、WS114の機能表G19でレビューする。[Guardrail](../guardrail.md)、[C全文](../coding-style.md)、[方針](../standards/ws114-gtk-qt-learning.md)、[license audit](../tools/packages/audit-licenses.sh)。既存のinventory版は候補であり、実装時に公式入力と依存を再照合する。
+[WS114](../ws114/ws.md)の採用範囲/実測と [WS117](../ws117/ws.md) の compositor 改良が runtime（p010）の前提。依存 library の build（p004〜p009）は compositor に依存しない。WS034 の p025（meson cross）・p026（glib）・p027（フォント系）・p028（描画系）・p034（libwayland 互換）・p038（Vulkan だけで GTK4 が動くかの調査）を本 WS の p004〜p009・p001 へ移管することを main に依頼する（WS034 の ws.md の更新は main。WS034 の他 package の目的と GTK3/Qt5 は WS034 に残す）。p029の旧GTK4実装枠はこのWSへ移した。Linuxでの標準GTK4の成功はzedBSD動作の証拠にしない。native menubarの後日案[F-045](../future-work.md)は通常GTK4移植の必須条件にしない。[Guardrail](../guardrail.md)、[C全文](../coding-style.md)、[方針](../standards/ws114-gtk-qt-learning.md)、[license audit](../tools/packages/audit-licenses.sh)。既存のinventory版は候補であり、実装時に公式入力と依存を再照合する。
+
+**共有 path（main の割当が要る）**: `userland/packages/external.mk`・`userland/packages/tools/gen-cross-toolchain.sh`（meson の cross file、p004）、`userland/desktop/libwayland/`（全 Keiland app と libvulkan の WSI が使う、p009）。toolchain（`toolchain/`・`lang/clang`・`devel/libcxx`・共有 `build/llvm`）は変更しない。
 
 ## Phases
 
-| ID | Purpose / goal | Status | Dependencies |
-| --- | --- | --- | --- |
-| [ws115-p001](phase001/phase.md) | target app/依存/patch/renderer/試験契約 | planning | WS114の実測と採用範囲、WS034必要成果 |
-| [ws115-p002](phase002/phase.md) | upstream GTK4の移植・build/zedBSD実行 | planning | p001契約/必要依存 |
-| [ws115-p003](phase003/phase.md) | 知見引継ぎ・最終全文規約と回帰 | planning | p002の最終sourceとguest証拠 |
+| ID | Purpose / goal | Status | Dependencies | 目安 |
+| --- | --- | --- | --- | --- |
+| [ws115-p001](phase001/phase.md) | 移植契約: 版（D-VER）・依存の一覧と版・libc の不足・host 道具・libwayland ABI・renderer・demo app・試験（WS034 p038 を含む） | planned（user の順序では WS117 の後。並行の判断待ち） | WS114 の実測（済み）、WS034 inventory | 3〜4h |
+| [ws115-p004](phase004/phase.md) | meson のクロス契約と host 道具（cross file・pkg-config・gperf・host の glib 道具と wayland-scanner）（旧 WS034 p025） | planning（p001 待ち） | p001、共有 path の割当 | 3〜4h |
+| [ws115-p005](phase005/phase.md) | libffi・pcre2・glib（旧 WS034 p026） | planning | p004 | 4h |
+| [ws115-p006](phase006/phase.md) | libpng・freetype・harfbuzz・fontconfig（旧 WS034 p027） | planning | p005 | 3〜4h |
+| [ws115-p007](phase007/phase.md) | pixman・cairo・fribidi・pango（旧 WS034 p028 の前半） | planning | p006 | 4h |
+| [ws115-p008](phase008/phase.md) | gdk-pixbuf・libjpeg-turbo・libtiff・graphene・libepoxy・libxkbcommon・xkeyboard-config（旧 WS034 p028 の後半） | planning | p005（p007 と並行可） | 4h |
+| [ws115-p009](phase009/phase.md) | libwayland-client の upstream ABI 互換・wayland-protocols・wayland-cursor（旧 WS034 p034） | planning | p001、共有 path の割当 | 3〜4h |
+| [ws115-p002](phase002/phase.md) | GTK4 本体の package（`userland/packages/desktop/gtk4`）の build/install | planning | p007・p008・p009 | 4h |
+| [ws115-p010](phase010/phase.md) | zedBSD QEMU で GTK4 demo app の起動と代表操作（Cairo → GL/Vulkan） | planning | p002、WS117 p003（compositor の改良） | 4h（＋debug） |
+| [ws115-p003](phase003/phase.md) | 知見引継ぎ・最終全文規約と回帰 | planning | p010 | 3h |
 
-Graph: WS114 + WS034 context/必要出力 → p001 → p002 → p003 → WS097/WS116。Queueなし。具体patchや新OS APIはp001調査後に範囲/判断を確定。
+Graph: WS114 + WS034 inventory → p001 → p004 → p005 → {p006 → p007, p008}; p001 → p009; {p007, p008, p009} → p002 → p010 → p003 → {WS097, WS116}。WS117 p003 → p010。p002 と p003 の scope は 2026-10-02 に改訂（下の Event）。
 
 ## Event
 
 2026-10-02 / ws114-gtk-qt-port-plan-20261002: upstream GTK4移植をWS034 p029から別WSへ移管計画。独自実装WS097は保持。実装/guest試験なし、GitHub publication pending。
+
+2026-10-02 / ws115-beta1-plan-20261002: 計画担当が依存 package の移植を Phase として追加（p004〜p010）。WS034 の p025〜p028・p034・p038 の移管を main に依頼（WS034 の記録の更新は main）。p002 の scope を「依存を除いた GTK4 本体の build/install」に、zedBSD 上の実行を新 p010 に分け、p003 の依存を p010 に改訂（p002・p003 に redesign の event）。p001 を planned（並行開始の判断待ち）。ベータ1の選択肢 A/B/C と推奨 B・D-VER の推奨 4.18 系を記録。実装・build・guest なし。

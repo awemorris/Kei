@@ -3,7 +3,7 @@
 # ws114-p007: GTK4 CSDとKeiland SSDの選択を実装・検証する
 
 Parent: [WS114](../ws.md)
-Status: uncleared
+Status: uncleared（新 attempt を Queue 投入可、下の「次の attempt」）
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
 Queue / attempts: q587-i01
@@ -53,3 +53,21 @@ q587-i01はユーザーの全agent終了指示により安全な区切りで終�
 2026-10-02 / q587 checkpoint02: amendment01のclient move/resize release修正と有限Linux/native検証を提出。[checkpoint](q587-checkpoint-02.md)。未達確認を保持し、Phaseはin-progress。
 
 2026-10-02 08:50:10 UTC / q587-user-wrap-uncleared: user「すべてのエージェントを終了に向かわせます」「きりのいいところで作業をきりあげてもらいます」に従い、専用compositor error=0/cleanup_failed=0、QEMU PID327367消滅、SSH2249 listenerなしを保存。3時間deadlineより前の安全停止であり、残基準を免除しない。Phase disposition normal、WS114 incomplete、p006最終conformanceを保持。MR01/MR02の実装と採取済み証拠を残し、追加guest/反復を開始せず結果・再開資料を最終MRへ提出する。[停止](../evidence/q587/stop-proof.json) / [WS event](../ws.md)。
+
+## 次の attempt（2026-10-02 計画担当、Queue 承認ではない）
+
+Scope は新しく広げず、[q587-result](q587-result.md) の未達 1〜5 だけに限る。製品 source の追加変更は、未達の確認で欠陥が出た場合の最小修正だけ。
+
+1. main の現行 source（19452fe8 以降の main の `userland/desktop/wayland/`）から Linux compositor を build し、guest へ導入して SHA/ELF を照合。限定 wire・GTK4 GL/Cairo/Vulkan の表示と入力 smoke。
+2. 別 client の Unicode paste: receiver の空 entry の座標を PNG で確かめてから paste し、完全一致を確認。
+3. native Textedit の edit/save/controls/max/dock/restore/close と、native SSD 操作で client への phantom release が無いこと（`plan/ws114/tests/interactive-wire.py` を使う）。
+4. 最終 source の zedBSD target build（warning 0）、専用 image への install、`plan/tools/boot-test.sh` の PNG を確認しユーザーに見せる。
+5. 変更 C の全文規約の再照合（q587 の review 以降の差分だけ）、OS/GPU 境界 checker、guest/QEMU の正常停止。
+
+資源: q587 の停止済み overlay（`/home/awe/zedBSD-worktrees/b1/build/b1-q587/guest/overlay.qcow2`）は読取 input として新 Queue 所有の overlay へ clone する（[再開資料](q587-resume.md) の 2・3）。P 担当の worktree で行い、b1 の worktree と build は変更しない。QEMU と SSH port は main が割り当てる。目安 3h（timebox 3h、超えたら残件を保存して uncleared）。
+
+所有 path: `userland/desktop/wayland/{decoration.c,protocol.c,shell.c,titlebar.c,seat.c,toplevel.c,objects.c,zwl.h,extras.h}`（修正が要る場合だけ）、`plan/ws114/`。衝突: WS095 p005（compose.c・protocol.c・display.c・shell.c・input-method.c）、WS099/WS094/WS113 の compositor の Queue と同時に shell.c/protocol.c を変える場合は main が merge 順を決める。
+
+未決の判断: なし（G05 はユーザー採用済み）。cleared になれば WS117 p001 を開始できる。
+
+2026-10-02 / ws114-beta1-plan-20261002: 次 attempt の範囲・資源・目安を記録。Status は uncleared のまま（新 attempt は main の Queue 承認後）。

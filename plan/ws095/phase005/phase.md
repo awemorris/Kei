@@ -2,7 +2,7 @@
 
 # ws095-p005: 候補の窓と indicator
 
-Status: uncleared（2026-09-29、ユーザーの指示で中断）
+Status: uncleared（2026-09-29、ユーザーの指示で中断。2026-10-02 新 attempt を Queue 投入可）
 Disposition: normal
 Parent: [WS095](../ws.md)
 Queue: main が割り当て（2026-09-29、worktree `.claude/worktrees/ws095-ime`、branch `wt/ws095`）。Queue の ID は main が記録する
@@ -61,3 +61,15 @@ p004 で変換（kanji → 漢字、確定）まで guest で確かめてある�
 2. 上の「未着手」の差し込みと、IME の `popup.c` を書く。
 3. image を作り直し（`plan/ws095/tests/build-ime-image.sh`）、guest で候補の窓と indicator を撮り、目で確かめる（画面は `build/ws095-shots/p005/`）。
 4. 表示の文字は英語か日本語だけにする（Keiland の名は UI に出さない）。
+
+## 次の attempt（2026-10-02 計画担当、Queue 承認ではない）
+
+- 前提の照合（済み）: 09-29 以降 IME の機能の変更は無く、`p005-wip.patch` は現行 source に当たる（offset 2 行）。旧 worktree は壊れているので P 担当の新しい worktree で `git apply plan/ws095/p005-wip.patch` から始める。
+- 範囲: 上の Resume point の 1〜4 ＋ `plan/ws095/tests/ime-p004.sh` の kill を起動時の pid に直す（ws.md の「再開のときに直すこと」）。IME の program を Linux/FreeBSD の Makefile（ba46edf89・1ed1a4b59）でも build が壊れないこと（`popup.c` と `paint.c`・`paint-text.c` の追加を Makefile.linux/.freebsd にも反映）。
+- 受け入れ: ws.md の I-B1（Alt+Space で切替え、候補の窓が cursor の下に出て選択・確定、indicator の追従と click、全画面の窓の上の候補、IME の中の key の repeat）を zedBSD QEMU の PNG で確かめ、ユーザーに見せる。直接入力の遅延が増えないこと。zedBSD target build warning 0、Linux の keiland の build（`make keiland-linux` の IME と compositor）が通る、`boot-test.sh` の PNG。変更 C の全文規約。
+- 所有 path: `userland/desktop/wayland/{ime.h,input-method.c,compose.c,protocol.c,display.c,shell.c}`（各 1〜3 行の差し込みは設計どおり）、`userland/desktop/ime/`、`platform/amd64/vmunix.mk` の `keiland-ime` の規則（`-l:libtruetype.so`、platform の共有 file なので main に確認）、`plan/ws095/`。
+- 衝突: compositor の compose.c・protocol.c・display.c・shell.c を他 WS の Queue（WS114 p007 の修正、WS117 p003、WS099、WS094、WS113）と同時に変えない。main が順を決める。
+- 目安 4h（timebox 4h）。
+- 未決の判断: なし（表示の文字は英語か日本語だけ）。
+
+2026-10-02 / ws095-beta1-plan-20261002: 次 attempt の範囲・受け入れ・所有 path・衝突を記録。Status は uncleared のまま。
