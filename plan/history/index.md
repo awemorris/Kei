@@ -98,3 +98,5 @@ Event ws074-dedicated-interop2025-20261002: userが前回3人案のP10を[WS074]
 ## 計画追記 / 2026-10-02（3専任枠とブラウザ次目標）
 
 Event three-dedicated-lanes-and-browser-goals-20261002: userが[P8バグ修正、P9デスクトップ高度化、P10ブラウザ](../agents/registry.md)を固定。P9の発見したbugはmainが[Bug Board](../known-bugs.md)へ登録しP8へ渡す。[desktop作業一覧](../agents/desktop-outlook.md)を作成。P10の新目標は[p174 File System Access](../ws074/phase174/phase.md)→[p175 OPFS](../ws074/phase175/phase.md)→[p173 Interop 2025 100%](../ws074/phase173/phase.md)→[p176 Test262](../ws074/phase176/phase.md)。既存p172/p100 gateとp101 CSS2は保持、Test262最終率は未指定。3枠ともreserved/未起動、q576 finished、実装/Queue/merge/pushなし。Issue/Project publication保留。
+
+2026-10-02 / initial-A-checkpoints: q584 checkpoint06/main c2743455c、q585 survey/main 5acb47a9c、q586 source-audit/main 8021bc210をレビュー統合・各ACK。全3Queueは実行中、clearanceなし。B next q587をuser依頼で予約し、q581〜q583の現行scopeは保持。

@@ -12,5 +12,7 @@ Exact scope: q579の統合済み209対象について、残る141 C/header・60�
 Dependencies: q579 checkpoint05/main統合source、p099/WS107実成果を開始時に照合。
 Worktree: /home/awe/zedBSD-worktrees/a1 / codex/a1-browser
 Next Queue: 未投入。
-Merge requests / ACK: none
+Merge requests / ACK: A1-001 requested → integrated `4da5eb2e5e7ad96feb42a85b50b568cd2b0fbc65` → main `c2743455c` / ACK delivered。source diff/ownership/VM_THROWN契約と8 source hashes照合、worker warning0 build/object一致証拠。review12/209、whole gate閉。
 Sync: GitHub Issues/Project publication保留。commitはWIP、pushなし。
+
+MR A1-002 requested: last ACK `4da5eb2e5e7ad96feb42a85b50b568cd2b0fbc65` → `334cf75604d2a7259c3137689091fb3e554ffd76`。4 source全文review/checkpoint07、main review pending。agent独立review継続、未統合を依存解除に用いない。

@@ -53,3 +53,5 @@ p008はp002〜p007の実出力を要する。見込みは実装許可ではな�
 ## Event history
 
 2026-10-02 / ws113-multidisplay-plan-20261002-created: userの追加WS指示を9Phaseへ分割し、質問への3回答を受け入れ条件/全文方針へ反映。planned/未順位/Queue none。WS089 stubの過去結果を変更せず、後続の実装先を新WSとして記録。GitHub Issue/Project公開はlocal outbox pending。
+
+2026-10-02 / q586-audit1-integrated: A3-001 6e34d1bb9をmain 8021bc210へ統合・ACK。[18行source/能力調査](phase001/source-audit.md)を実sourceとVulkan一次仕様へ照合。固定HPD sequence/単一出力の現状、標準拡張の全command/dependency、ID/handleの保証範囲を記録。p001 in-progress、製品/hardware変更なし、ID/scanout/fixture契約は調査継続。

@@ -9,7 +9,7 @@ Related Milestones: MG002
 Objectives: O1, O2
 Parent: [Master](../master.md)
 Queue: q584 / A1（q579の残review、last: q579-i01 uncleared）
-Resume point: p099 cleared. p172 integrated the pinned origin/browser2 changes and retained build/runtime evidence, but q579 ended uncleared with 141 C/header and 60 other imported entries still needing final reconciliation/review. Select a finite p172 continuation before p100, p174, p175, p173, p176 or p101; the downstream gate remains closed.
+Resume point: p099 cleared. p172 integrated the pinned origin/browser2 changes and retained build/runtime evidence. q579 ended uncleared; q584 is now reviewing the remainder. Integrated checkpoint06 reviewed12/209, remaining137 C/header and60 other. Downstream p100/p174/p175/p173/p176/p101 remain gated by whole p172 clearance.
 <!-- awesome-plan-current:end -->
 
 2026-10-02 ユーザー更新: ブラウザ専任のP10枠を固定。p172の取込が実際に統合・検証された後は、p100でAcid3の100/100とpixel完全一致・fail 0を目指す。追加指示によりFile System Access API・OPFS・Interop 2025の100%・JavaScript Test262をこの専任枠に積む。p101のCSS2全件目標は保持する。最新のN=3実行指示でp172/q579をP10に投入。後続目標はp172のwhole-Phase clearance後に有限Queueへ選定する。
@@ -279,3 +279,5 @@ Event ws074-browser-next-goals-20261002: ユーザーが専任P10の次の目標
 2026-10-02 / q579-wrap-uncleared: p172のbranch統合と広い回帰証拠を保存したが、全209対象の最終reviewは8完了、C/header残141、その他残60。userのagent停止指示でq579をuncleared終了。A1が再開候補を所有し、後続browser Phaseは引き続きblocked。GitHub publication保留。
 
 2026-10-02 / c-table-forward-order-20261002: [p172](phase172/phase.md)全文レビューによりC§2の定数callback tableと先行宣言のcompile矛盾を確認、userが必要宣言だけ先行させる例外を承認。全文標準/Guardrail/automationに記録。import gate/他の全文条件/後続依存は不変。GitHub comment未公開。
+
+2026-10-02 / q584-checkpoint06-integrated: A1-001 4da5eb2e5をmain c2743455cへ統合・ACK。4全文reviewと規約修正、worker warning0 host build/.text同一の証拠、main所有権/例外契約/diff/source hash照合。[checkpoint06](phase172/import/checkpoint06/README.md)。p172はin-progress、review12/209でwhole gateは閉じたまま。

@@ -12,5 +12,5 @@ Exact scope: 5OS targetのnative build環境、公式input/version/hash、CPU、
 Dependencies: WS108/WS105/WS111実成果はcontextとして確認、必須API追加なし。
 Worktree: /home/awe/zedBSD-worktrees/a2 / codex/a2-packages
 Next Queue: 未投入。
-Merge requests / ACK: none
+Merge requests / ACK: A2-001 requested → integrated `67c78c0e6c5ec8d9db055bad682251fc73e82632` → main `5acb47a9c` / ACK delivered。source gap/payload/input候補と未検証区分review。未決D1–D4保持、Phase開始とcheckpointの両イベント保存。
 Sync: GitHub publication保留。commitはWIP、pushなし。

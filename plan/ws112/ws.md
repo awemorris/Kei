@@ -7,7 +7,7 @@ Primary Milestone: MG007
 Related Milestones: MG001（追跡可能なbuild/配布記録）、MG006（既存Keilandの配布）
 Parent: [Master](../master.md)
 Queue: q585 / A2（p001契約調査のみ）
-Resume point: p001の契約・公式OS入力・形式確認から。ユーザー「あとで実装」のため今回は計画のみ、実行順位未指定。
+Resume point: q585/A2でp001契約調査中。[survey](phase001/survey.md)に公式OS入力候補・実source gap・payloadと未決を記録。製品実装は後続Queueで、今回未投入。
 
 ## Objective / scope
 
@@ -60,3 +60,5 @@ Master/Guardrail/Outlookへ反映。実装の指示ではなく新focus/最優�
 2026-10-02 / ws112-rpi-build-only-20261002: current userのRPi build-only受け入れを反映。影響するp001/p003/p007・WS/design・release方針を更新、Queue/実装許可は追加しない。GitHub event deliveryは保留。
 
 2026-10-02 / ws112-plan-review-20261002: planning review PASS。7 Phaseの親/状態/Primary/依存、8 record IDの重複無し、全新規Markdown localリンク、指定5 target契約、q576 finished/WS108 completed保持を確認。git diff --check PASS、全変更はplan内のみ。28件のprepared/pending journal payloadを検査、GitHub/publication未実施。コード/build/package/GUI試験は計画scopeのため未実施。
+
+2026-10-02 / q585-checkpoint1-integrated: A2-001 67c78c0eをmain 5acb47a9cへ統合・ACK。source/input/payload候補と未検証範囲をレビュー。D1 guest方法、D2 RPi環境、D3 trust/version固定、D4形式/依存を調査継続。p001 in-progress、後続実装未投入。

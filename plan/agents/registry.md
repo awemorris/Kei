@@ -4,10 +4,10 @@
 
 | Agent / generation | Model / effort | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / wrap-up / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | 未投入、p172 whole-clearまで後続禁止 | running | runtime `/root/a1_browser`、base0e68854ac、preflight PASS |
-| A2 packages / generation1 | `gpt-6.1-sol` / high | WS112 p001 | `/home/awe/zedBSD-worktrees/a2` / `codex/a2-packages` | [q585](A2/queue.md) | 未投入 | running | runtime `/root/a2_packages`、base0e68854ac、preflight PASS |
-| A3 display / generation1 | `gpt-6.1-sol` / high | WS113 p001 | `/home/awe/zedBSD-worktrees/a3` / `codex/a3-display` | [q586](A3/queue.md) | 未投入 | running | runtime `/root/a3_display`、base0e68854ac |
-| B1 GTK / generation1 | `gpt-6.1-sol` / high | WS114 p001 | `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114` | [q581](B1/queue.md) | 未投入、p002採否はuser | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、Bが実行所有 |
+| A1 browser / generation1 | `gpt-6.1-sol` / high | WS074 | `/home/awe/zedBSD-worktrees/a1` / `codex/a1-browser` | [q584](A1/queue.md) | 未投入、p172 whole-clearまで後続禁止 | running | runtime `/root/a1_browser`、base0e68854ac、A1-001 4da5eb2e5 → c2743455c ACK、review12/209 |
+| A2 packages / generation1 | `gpt-6.1-sol` / high | WS112 p001 | `/home/awe/zedBSD-worktrees/a2` / `codex/a2-packages` | [q585](A2/queue.md) | 未投入 | running | runtime `/root/a2_packages`、base0e68854ac、A2-001 67c78c0e → 5acb47a9c ACK、調査継続 |
+| A3 display / generation1 | `gpt-6.1-sol` / high | WS113 p001 | `/home/awe/zedBSD-worktrees/a3` / `codex/a3-display` | [q586](A3/queue.md) | 未投入 | running | runtime `/root/a3_display`、base0e68854ac、A3-001 6e34d1bb9 → 8021bc210 ACK、調査継続 |
+| B1 GTK / generation1 | `gpt-6.1-sol` / high | WS114 p001 | `/home/awe/zedBSD-worktrees/b1` / `codex/b1-ws114` | [q581](B1/queue.md) | q587 ID予約 / WS114装飾モード実装・GTK4確認、詳細はB作成 | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、Bが実行所有 |
 | B2 desktop / generation1 | `gpt-6.1-sol` / high | WS094 p011 | `/home/awe/zedBSD-worktrees/b2` / `codex/b2-ws094` | [q582](B2/queue.md) | 未投入 | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、Bが実行所有 |
 | B3 bugs / generation1 | `gpt-6.1-sol` / high | WS099 p017 / BUG-125 | `/home/awe/zedBSD-worktrees/b3` / `codex/b3-bug125` | [q583](B3/queue.md) | 未投入、whole p017はuncleared | dispatched（B/user報告） | queue991fc890 → A integration c87341a78、部分診断のみ |
 | P8（バグ修正専任、generation 2） | `gpt-6.1-sol` / high | [Bug Board](../known-bugs.md)の未解決項目を個別のhandling WS/Phaseで担当 | `/home/awe/zedBSD-worktrees/p8` / `codex/p8` | [q577](P8/queue.md) | BUG-125はAgent B B3の再開候補 | stopped / wrapped | final23065bf05 → main c1487ae3f。q577 uncleared、runtime cleanup済み |

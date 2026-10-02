@@ -12,5 +12,5 @@ Exact scope: i915→Vulkan Display通知の実能力、安定ID/出力generation
 Dependencies: WS075/WS089/WS103実成果はcontext。Bのsource変更と同時に編集しない。
 Worktree: /home/awe/zedBSD-worktrees/a3 / codex/a3-display
 Next Queue: 未投入。
-Merge requests / ACK: none
+Merge requests / ACK: A3-001 requested → integrated `6e34d1bb9690685342b2916bc6addc4f3369c606` → main `8021bc210` / ACK delivered。18行能力表・実sourceとVulkan一次仕様を照合。製品source/hardware変更なし、whole criteria未達。
 Sync: GitHub publication保留。commitはWIP、pushなし。

@@ -547,3 +547,5 @@ Event ws114-gtk-qt-port-projections-20261002: current userのLinux標準GTK4調�
 2026-10-02 / two-session-handoff-ready: P8/P9/P10を通常wrap-upし、q577/q579/q580をunclearedで終了。q578 clearedは維持。A/B分担と起動文書を保存し、旧runtimeは停止、次の実行Queueは未選定。Aが共有計画のsingle writer、Bは割当WS/PhaseとB lane Queueを所有する。
 
 2026-10-02 / two-session-n3-start: userがAもN=3開始を指示。q584/A1 WS074 p172残review、q585/A2 WS112 p001契約調査、q586/A3 WS113 p001設計調査を有限scope/snapshotへ固定し指定model/highで起動。p112/113は初回実行でincomplete、製品実装は未投入。user経由のB記録991fc890（q581/GTK4、q582/desktop、q583/BUG-125部分診断）をc87341a78で統合し全体Queue/registryへ投影。BのPhase/WS開始草稿はB側の次成果commitと照合して投影する。GitHub Issues/Project公開とpushは保留。
+
+2026-10-02 / B-next-q587-reserved: user経由でB1のq581後のWS114装飾モード実装・GTK4確認追加承認とID予約依頼を受領。q587をB1に予約。具体的Phase/scope/承認snapshotはB側の次checkpointで照合し、現q581の状態/基準は変更しない。[協調記録](agents/two-session-coordination.md)。
