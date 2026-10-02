@@ -1,0 +1,44 @@
+PASS actual object interface
+PASS absent is empty
+PASS relative URL
+PASS setter raw attribute
+PASS prototype getter not expando
+PASS dot segment normalized
+PASS parent segment normalized
+PASS present empty resolves
+PASS relative query
+PASS relative fragment
+PASS root path
+PASS absolute canonical URL
+PASS invalid raw fallback
+PASS invalid getter scalar
+PASS setter USVString repairs
+PASS getAttribute raw UTF16 remains
+PASS getter repairs content without mutation
+PASS nonASCII URL encoding
+PASS surrogate pair retained
+PASS null conversion
+PASS undefined conversion
+PASS one user conversion
+PASS conversion exception identity
+PASS wrong HTML tag rejected
+PASS foreign namespace rejected
+PASS brand before argument conversion
+PASS clone interface and URL
+PASS parser object interface
+PASS ordinary object children
+PASS first base URL
+PASS later base ignored
+PASS live base mutation
+PASS invalid first blocks later
+PASS javascript base ignored
+PASS data base ignored
+PASS base without href skips
+PASS base removal restores document
+PASS relative base against document
+PASS child object interface
+PASS own child explicit base
+PASS borrowed parent getter uses child document
+PASS borrowed child getter uses parent document
+PASS detached node retains document base
+PASS removal returns absent empty

@@ -1,0 +1,37 @@
+PASS invalid compound author ignored body
+PASS invalid compound author ignored child
+PASS following valid rule survives
+PASS invalid query 0
+PASS invalid matches 0
+PASS invalid query 1
+PASS invalid matches 1
+PASS invalid query 2
+PASS invalid matches 2
+PASS invalid query 3
+PASS invalid matches 3
+PASS invalid query 4
+PASS invalid matches 4
+PASS invalid query 5
+PASS invalid matches 5
+PASS invalid query 6
+PASS invalid matches 6
+PASS invalid query 7
+PASS invalid matches 7
+PASS invalid query 8
+PASS invalid matches 8
+PASS invalid query 9
+PASS invalid matches 9
+PASS valid selector 0
+PASS valid selector 1
+PASS valid selector 2
+PASS valid selector 3
+PASS valid selector 4
+PASS valid selector 5
+PASS valid selector 6
+PASS valid selector 7
+PASS valid selector 8
+PASS valid selector 9
+PASS valid selector 10
+PASS valid selector 11
+PASS invalid ordinary list drops entire rule
+PASS valid rule after invalid list retained

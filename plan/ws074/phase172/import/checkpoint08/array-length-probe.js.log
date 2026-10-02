@@ -1,0 +1,39 @@
+PASS assignment preserves string RHS
+PASS large length has no invented own elements
+PASS valid assignment boundary 0
+PASS valid constructor boundary 0
+PASS valid assignment boundary 1
+PASS valid constructor boundary 1
+PASS valid assignment boundary 2
+PASS valid constructor boundary 2
+PASS valid assignment boundary 3
+PASS valid constructor boundary 3
+PASS valid assignment boundary 4
+PASS valid constructor boundary 4
+PASS invalid assignment preserves length 0
+PASS invalid numeric constructor 0
+PASS invalid assignment preserves length 1
+PASS invalid numeric constructor 1
+PASS invalid assignment preserves length 2
+PASS invalid numeric constructor 2
+PASS invalid assignment preserves length 3
+PASS invalid numeric constructor 3
+PASS invalid assignment preserves length 4
+PASS invalid numeric constructor 4
+PASS invalid assignment preserves length 5
+PASS invalid numeric constructor 5
+PASS invalid assignment preserves length 6
+PASS string constructor remains one element
+PASS boxed number constructor remains one element
+PASS null length conversion
+PASS boolean length conversion
+PASS two numeric conversions and original RHS identity
+PASS coercion exception preserved
+PASS conversion comparison order
+PASS descriptor accepts full unsigned length
+PASS existing signed sparse index after huge length
+PASS large length contraction removes sparse keys
+PASS negative zero length normalized
+PASS large readonly length descriptor
+PASS sloppy readonly assignment refused
+PASS strict readonly assignment throws

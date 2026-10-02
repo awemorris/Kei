@@ -1,0 +1,14 @@
+PASS borrowed iframe getter
+PASS borrowed Window getter
+PASS borrowed URL getter
+PASS borrowed state getter
+PASS borrowed createElement owner
+PASS shared well-known symbol
+PASS iframe getter rejects unrelated element
+PASS Window getter rejects copied Document
+PASS Window branding avoids user getter
+PASS unsupported sandbox does not expose child
+PASS ancestor removal retires child
+PASS ancestor reinsertion makes fresh context
+PASS nesting resource bound
+PASS bounded nested teardown
