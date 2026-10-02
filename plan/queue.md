@@ -2,14 +2,14 @@
 
 # Queue / all-agent index
 
-Active Queues: なし。
-Status: finished
+Active Queues: q590（P1）。
+Status: active
 Main executor / plan writer: Q1（単一 Claude Code セッション、[protocol](agents/protocol.md)）。サブエージェント P1〜P8、N=2。
-Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q590。
+Last reconciled Queues: [q584](history/queue-q584.md)〜[q589](history/queue-q589.md)。過去の Queue は [Past Log](history/index.md)。次の未予約 ID は q591。
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
-| — | — | — | — | — | — |
+| q590 / q590-i01 | P1 | [ws004-p051](ws004/phase051/phase.md) | BUG-134 AX211 の passthrough 再現・解析・修正、4h | in-progress | user 2026-10-02「PCIパススルーでQEMUを起動してデバッグ…最初に取り組みましょう！」、[lane](agents/P1/queue.md) |
 
 ## 直近の終了 Queue の残り（再開の候補、承認ではない）
 

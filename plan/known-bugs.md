@@ -11,6 +11,7 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-134](bugs/BUG-134.md) | AX211 不動作、driver 有効で起動停止 | reproduced（ユーザー報告） / scheduled（ws004-p051、q590） | 2026-10-02 ユーザー報告。既定 config は driver 無効 | passthrough で原因特定・修正、driver 有効で起動 |
 | [BUG-133](bugs/BUG-133.md) | Browser UTF16 reserve byte数overflow | unknown / tracking（静的証拠） | browser2:BUG129をp172/q579で検出、mainBUG129はFonts別条件。原本を保持してID衝突修復 | 有限buffer-bounds Phaseを選定。runtime再現/修理未実施、import回帰は上限の証明ではない |
 | [BUG-130](bugs/BUG-130.md) | FreeBSD drm-kmod DMA-BUF のaccess flags | reproduced / tracking | WS109 q568、live fdのsync ioctlがEBADF、Vulkan window acquire失敗 | Keiland workaround/実GPU window・所有権はq569/q570で検証済み。driver未修理、drm-kmod upgrade時に再確認 |
 | [BUG-129](bugs/BUG-129.md) | package menu に Fonts 分類が無い | reproduced / tracking | WS106 q540、移動前rowsでもMAC-T001 noto-color-emojiでFAIL | package/menu整備時。今回未修正、BUG-080は関連する別条件 |

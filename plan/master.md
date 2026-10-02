@@ -1,11 +1,11 @@
 <!-- awesome-plan project=zedbsd record=master -->
 
 <!-- awesome-plan-current:start -->
-Active Queues: なし。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=2 から開始（[protocol](agents/protocol.md)）。
+Active Queues: q590（P1、BUG-134 AX211）。実行体制（2026-10-02 user）: 単一session Q1 が固定名サブエージェント P1〜P8 を使う、N=2 から開始（[protocol](agents/protocol.md)）。
 Current Focused Goals: **fg019 — ベータ1のリリース（内容はユーザーと議論中、draft）**、fg018 — WS114 GTK4。fg010（10/17 OSCデモ）は2026-10-02 user判断で達成（実装到達、nightly release binaryで公開済み）。fg017（WS074）はこのsessionの対象外。
 Next（2026-10-02）: fg019 の内容をユーザーと決めてから、優先作業と P1/P2 の最初の Queue を選ぶ。それまで新 Queue は投入しない。
 **WS074（ブラウザ）はこのsessionの対象外**（2026-10-02 user: Codex / GPT-6.1 Sol が Web テストを oracle に作業）。Q1 は WS074 の Queue を作らず、P1〜P8 に割り当てない。
-優先順位の調整（2026-10-02 user）: **WS099 を優先**（BUG-125 を WS099 の blocking にし、WS099 の担当が直す。実機の目視確認はユーザーに声をかける）。**WS114 を優先**し、GTK/Qt は WS114 p007（Linux 本物 GTK4 の CSD 完成）→ WS117（Linux 本物 Qt6 調査と compositor 改良）→ WS115 GTK4 / WS116 Qt6 の zedBSD 移植の順。**IME（WS095）は人間の作業が完了し、エージェント（Q1 の割当）が担当する**（人間の作業中の制限は解除）。WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる。**複数 display（WS113）は標準アプリの次**。**ネットワーク > 対象 platform（WS118 Latitude 5320）**。**インストーラの作り直し（WS119）> Linux packaging（WS112、下げる）**。全体の順位は fg019 確定時に見直す。
+優先順位の調整（2026-10-02 user）: **WS099 を優先**（BUG-125 を WS099 の blocking にし、WS099 の担当が直す。実機の目視確認はユーザーに声をかける）。**WS114 を優先**し、GTK/Qt は WS114 p007（Linux 本物 GTK4 の CSD 完成）→ WS117（Linux 本物 Qt6 調査と compositor 改良）→ WS115 GTK4 / WS116 Qt6 の zedBSD 移植の順。**IME（WS095）は人間の作業が完了し、エージェント（Q1 の割当）が担当する**（人間の作業中の制限は解除）。WS094 は現行設計のまま（Files の `files --desktop` が compositor の desktop surface に描く）実装しきる。**複数 display（WS113）は標準アプリの次**。**最初に BUG-134（AX211 不動作・driver 有効で起動停止）を passthrough で解析**（q590）。**ネットワーク（WiFi を含む）> 対象 platform（WS118 Latitude 5320）> インストーラの作り直し（WS119）> Linux packaging（WS112、下げる）**。GTK/Qt: まず Linux で本物の GTK4・Qt6 が我々の compositor で完璧に動くかを調査してから到達点を決める。手前のゴールは `userland/packages/desktop/gtk4`・`userland/packages/desktop/qt6` の実装（WS115/WS116）、奥のゴールは独自実装の互換 gtk4・qt6（WS097/WS096）。全体の順位は fg019 確定時に見直す。
 <!-- awesome-plan-current:end -->
 
 # zedBSD Master

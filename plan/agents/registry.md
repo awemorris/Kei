@@ -4,7 +4,7 @@
 
 | Agent / generation | Agent type | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| P1 / — | — | 未配属 | — | — | — | not started | — |
+| P1 / generation1 | phase-runner（high） | WS004（BUG-134 AX211） | `/home/awe/zedBSD-worktrees/p1` / `agent/p1` | [q590](P1/queue.md) | — | running | — |
 | P2 / — | — | 未配属 | — | — | — | not started | — |
 | P3〜P8 | — | 未配属 | — | — | — | N=2 の間は起動しない | — |
 
