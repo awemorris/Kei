@@ -2,7 +2,7 @@
 
 # ws099-p020: BUG-125 の原因の特定と compositor の直し（ベータ1 の blocking）
 
-Status: in-progress（q591-i01、2026-10-02 P2）
+Status: uncleared（q591-i01 は 2026-10-02 23:40 に時限で終了、P2。原因の特定と compositor の直しはできた。受け入れの C3・C4・C8・C9 は、直す前の image でも同じ試験が落ちていて未達）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Queue: [q591](../../queue.md) / q591-i01（承認: 2026-10-02 ユーザー「作業を開始しましょう。」、P2、時限 4h）
@@ -89,3 +89,20 @@ p076 の試験の同期（map と最初の frame の log を待つ）は案を�
 - p076 単独 20 回（1 回目、元の harness）: PASS 13 / FAIL 7（[summary](evidence/acc20/summary.txt)）。FAIL の 7 回は全て harness の SSH の失敗で、count を数える ssh が status 255 で落ちた（うち 1 回は `Connection timed out during banner exchange`）。どの回も compositor は要求を受け付けている（[例](evidence/acc20/p076-4-zdesktop.log)）。画素と log の判定で落ちた回は 0。
 - 同じ guest で直す前と直した後の compositor を交互に 4 巡流した比較（[summary](evidence/sshcmp/summary.txt)）: SSH の失敗は直す前に 3+0+2+0 回、直した後に 2+0+2+0 回で、どちらにも banner timeout が出る。直す前の 4 巡目は flipped の画素で FAIL した。SSH の stall は今回の変更が原因ではなく、guest の sshd が 5 秒以上応答しないため（ConnectTimeout=5）。BUG-135（UFS の stat の遅さ）と同じ根の可能性があるが、証明していない。
 - Q1 の判断（2026-10-02）: sshd の stall は compositor の範囲外。harness の count の SSH に retry を入れ、SSH の失敗は harness の失敗として数え直し、画素と log の判定で FAIL 0 を受け入れの基準にする。これを受けて `plan/ws035/tests/zdesktop-p076.sh` に `guest_retry` を足した（ssh の status 255 のときだけ、合わせて 3 回まで試す。1 回ごとに host の deadline を付け、retry は stderr に出す）。期待の幾何・画素・log の判定は変えていない。
+- p076 単独 20 回（2 回目、`guest_retry` 付き、[summary](evidence/acc20b/summary.txt)）: PASS 19 / FAIL 1。20 回のうち 9 回で SSH の retry が起きた（banner timeout が計 30 回。いずれも 2 回目以内の試行で回復）。FAIL の run 19 は probe が compositor につながらなかった（`POPUPPROBE FAILED run=p setup errno=5`、[probe](evidence/acc20b/p076-19-probe.log)）ため、全ての段が連鎖して落ちた。直す前の compositor でも同じ形の FAIL が出ている（[sshcmp base-1](evidence/sshcmp/base-1.txt)）。直前に banner timeout が出ているので、guest の stall で zdesktop の起動が 15 秒の待ちを超えたと見ているが、未証明。compositor が落ちたことを示す証拠も無い（その回の zdesktop の log は filter され、次の回で上書きされた）。
+- C2: PASS（14/14、[結果](evidence/critcmp/concurrent-fix-results.txt)。p076 と並行で流した回）。
+- C3（p138・c3-swipe-back）、C4（p137）、C8（p134）、C9 の p072: 直した image で FAIL（[fix](evidence/critcmp/fix-results.txt)）。ただし同じ試験は直す前の image（main `901037f9f`）でも同じ所で FAIL した（[base](evidence/critcmp/base-results.txt)）。p138・c3 は Notes の窓に title bar が出ず、title bar の drag で `GLASS moved` が出ない（[PNG](evidence/critcmp/fix-p138-moved.png)、[base の log](evidence/critcmp/base-p138.log)）。p137 は probe-a の focus と key。p134 は probe の本体の角。どれも今回の変更の前から base にある失敗で、BUG-125 の範囲の外。title bar が無い症状は BUG-136・BUG-137（次の p023）と関係する可能性がある。
+- C9 の p052: 直す前は FAIL、直した後は PASS（1 回ずつ）。C9 の全体を 5 回は未実施（時限）。並行で流した 1 回目（[concurrent](evidence/critcmp/concurrent-fix-results.txt)）は p076 の 20 回と同時に 2 つの guest を動かしたため、判定には使わない。
+
+### 未実施・残り
+
+- C9 の全体 5 回は未実施。C3・C4・C8・C9 の p072 が base で既に落ちているので、FAIL 0 は BUG-125 の直しだけでは満たせない。それぞれ別の Phase（p023・p021 など）か bug の判断が要る。
+- 実機（5330）での確認は未実施（範囲の外）。
+- BUG-135（kernel の stat・sshd の stall）は直していない（Q1 の判断）。
+- run 19 の setup の失敗（probe が接続できない）は原因が未確定。zdesktop の起動時の log を残す harness の改善が要る。
+- `plan/ws035/tests/zdesktop-p076.sh` の SSH の retry は、他の C9 の試験（p137・p138 など）には入れていない。
+
+### 再開の条件と次の Phase の案
+
+- compositor の直し（`f1af6cc7f`）と harness の retry（`a781d60f5`）を main が統合する。そのうえで、base の C3・C4・C8・C9 の FAIL（title bar が出ない、p137 の focus、p134 の角、p072）を BUG-136/137 と合わせて p023 か別の bug で扱った後に、C9 の 5 回を流し直す。
+- BUG-125 の 3 症状は、原因と直しの証拠がそろった。resolved にするかは Q1 が判断する（p076 単独の受け入れは、harness の失敗を除いて 19/19 が PASS）。

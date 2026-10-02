@@ -1,0 +1,8 @@
+C2 c2-geometry PASS seconds=111 C2 RESULT pass=14 fail=0 C2: PASS 
+C3 p138 FAIL seconds=72 p138: FAIL 
+C3 c3-swipe-back FAIL seconds=70 c3-swipe-back: FAIL 
+C4 p137 FAIL seconds=135 p137: FAIL 
+C8 p134 FAIL seconds=112 probe-title corners: 0 of 4 square, want round: PASS p134/p136: FAIL 
+C9 p052 FAIL seconds=42 p052: FAIL 
+C9 p053 PASS seconds=96 p053: PASS 
+C9 p072 FAIL seconds=3 zdesktop-p072: FAIL 

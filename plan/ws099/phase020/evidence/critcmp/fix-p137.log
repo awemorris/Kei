@@ -1,0 +1,23 @@
+log: /tmp/probe-a.log POPUPPROBE ready run=a (1) MISSING (found 0)
+log: /tmp/probe-a.log POPUPPROBE focus window (1) MISSING (found 0)
+log: /tmp/probe-b.log POPUPPROBE ready run=b (1) MISSING (found 0)
+log: /tmp/probe-b.log POPUPPROBE focus window (1) MISSING (found 0)
+log: /tmp/probe-a.log POPUPPROBE unfocus window (1) MISSING (found 0)
+probe b killed: gone
+log: /tmp/probe-a.log POPUPPROBE focus window (2) MISSING (found 0)
+log: /tmp/probe-a.log POPUPPROBE key 45 state=1 (1) MISSING (found 0)
+log: /tmp/probe-c.log POPUPPROBE ready run=c (1) MISSING (found 0)
+log: /tmp/probe-c.log POPUPPROBE focus window (1) MISSING (found 0)
+c at 440,250
+log: /tmp/probe-c.log POPUPPROBE DONE run=c (1) MISSING (found 0)
+log: /tmp/probe-a.log POPUPPROBE focus window (3) MISSING (found 0)
+log: /tmp/probe-a.log POPUPPROBE key 45 state=1 (2) MISSING (found 0)
+log: /tmp/probe-d.log POPUPPROBE ready run=d (1) MISSING (found 0)
+log: /tmp/probe-d.log POPUPPROBE focus window (1) MISSING (found 0)
+probe d killed: gone
+a on desktop 1 did not take the keyboard while desktop 2 is shown ok
+log: /tmp/probe-a.log POPUPPROBE focus window (1) MISSING (found 0)
+probe a killed: gone
+ZWL VULKAN_ERROR operation=swapchain result=-1000000001 images=0 format=37
+ZWL MODE_ERROR errno=5
+p137: FAIL

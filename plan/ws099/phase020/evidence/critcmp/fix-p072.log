@@ -1,0 +1,17 @@
+a: surface 0 at 0,0; b: surface 8 at 428,321
+check: (528,421) want d04040 got d04040 ok
+check: build/p2-p020/crit-fix/c9-p072/minimized.png 1280x800 PASS
+log: GLASS minimize surface=8 MISSING
+check: (528,421) want 4060d0 got 4060d0 ok
+check: build/p2-p020/crit-fix/c9-p072/restored.png 1280x800 PASS
+log: WISEVIEW select surface=8 ok
+log: WISEVIEW drag surface=0 MISSING
+log: GLASS move-desktop surface=0 desktop=2 via=wiseview MISSING
+check: (100,100) want d04040 got c4dfc9 DIFFERS
+check: build/p2-p020/crit-fix/c9-p072/desk2.png 1280x800 FAIL
+log: GLASS desktop=2 via=wiseview MISSING
+check: (10,10) want d04040 got d2e3ed DIFFERS
+check: build/p2-p020/crit-fix/c9-p072/desk1.png 1280x800 FAIL
+log: GLASS move-desktop surface=0 desktop=1 via=key MISSING
+log: GLASS desktop settled desktop=1 windows=2 ok
+zdesktop-p072: FAIL

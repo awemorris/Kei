@@ -1,0 +1,18 @@
+log: ZTERM START ok
+terminal at 182,127 size 916x632 columns 90
+terminal-body corners: 4 of 4 square, want square: PASS
+terminal-title corners: 0 of 4 square, want round: PASS
+log: POPUPPROBE ready run=p ok
+probe at 440,293 size 400x300
+log: ZWL WISEVIEW opening key ok
+log: ZWL GLASS dock surface=[0-9]+ via= ok
+docked at 0,38 size 1280x762
+docked-body corners: 4 of 4 square, want square: PASS
+log: ZWL GLASS undock surface=[0-9]+ via= ok
+restored-body corners: 4 of 4 square, want square: PASS
+restored-title corners: 0 of 4 square, want round: PASS
+log: POPUPPROBE ready run=q ok
+probe alone at 440,293 size 400x300
+probe-body corners: 4 of 4 square, want round: FAIL
+probe-title corners: 0 of 4 square, want round: PASS
+p134/p136: FAIL
