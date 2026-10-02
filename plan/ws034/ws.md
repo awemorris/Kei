@@ -11,6 +11,7 @@ Parent: [Master](../master.md)
 Queue: なし
 Resume point: Phase 表の planning の項目（package の導入と libc/kernel の是正）
 2026-10-02 / fg019 移管: ws034-p008（vim）→ [WS125](../ws125/ws.md)、ws034-p010（emacs）→ [WS124](../ws124/ws.md)、ws034-p025・p026・p027・p028・p034・p038 → [WS115](../ws115/ws.md) の p004〜p009・p001。元の Phase は再選定しない（移管先で実行）。libffi は WS126 p004 と WS115 p005 の共有で、先に着手する側が `userland/packages/libs/libffi` を作り、他方は依存として使う。
+2026-10-02: 新 [p058](phase058/phase.md)（移植で見つかった libc の不足の取り込み、ユーザーの方針）。
 <!-- awesome-plan-current:end -->
 
 ## 単一目標

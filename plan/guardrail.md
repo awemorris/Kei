@@ -184,3 +184,7 @@ Event ws114-gtk-qt-port-projections-20261002: user指定の順序は[全文](sta
 ## libc の追加（2026-10-02）
 
 ユーザー「alloca(),getc_unlocked()は実装できるなら実装してほしいです。」「<alloca.h> に #define alloca(size) __builtin_alloca(size) を置くだけでいいです。」→ Q1 が `include/libc/alloca.h` と stdio の `getc_unlocked`・`getchar_unlocked`・`putc_unlocked`・`putchar_unlocked`（POSIX、lock は再帰なので locked 版を呼ぶ）を追加。
+
+## 移植で見つかった API の取り込み（2026-10-02）
+
+ユーザー「getc_unlocked()は追加します。このように、GNUソフトウェアの移植で判明した、POSIX標準でないが重要なAPIは、積極的に取り込みます。」→ 外部 package の移植で libc に無いと分かった API（POSIX でない GNU・BSD の広く使われるものを含む）は、package ごとの patch で済ませず、libc に積極的に取り込む。取り込みは ABI 互換と名前空間（WS001 の POSIX の観点）を確かめ、全文規約・build・試験を通す。最初のまとめは [ws034-p058](ws034/phase058/phase.md)。
