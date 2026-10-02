@@ -1,7 +1,7 @@
 # Agent B3 Queue q589
 
 Status: active
-Attempt: q589-i01 / pending
+Attempt: q589-i01 / in-progress（準備済み、guest資源待ち）
 Owner: Agent B / B3 bug executor
 Approval: current user / 2026-10-02 continuous same-agent Queue指示。既存BUG-125の次の有限切り分け、製品修正なし。
 Timebox: 最大45分、5 partial runs / 各240秒
@@ -15,3 +15,5 @@ Merge requests / ACK: 未提出。
 Previous: [q583 finished partial diagnosis](q583-queue.md)
 Upcoming Work Outlook: 非再現なら次の弁別条件をmainへ。負荷/製品修正は未投入。
 Sync: WIP/no push、GitHub shared projectionはA所有。同じagentを維持して後続dispatchを受ける。
+
+MR B3-q589-01: submitted0d93e727 / B integrated42b08dab / ACK。helper・host負例・syntax/manual PASS、guest未実施。[資源順序/時限補足](../../ws099/phase017/q589-resource-order.md)に実作業45分と外部待ちの有限上限を分けて記録。scope/criteriaは不変。
