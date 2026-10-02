@@ -2,10 +2,10 @@
 
 # ws109p003: 共有描画と FreeBSD の device/session/input 境界
 
-Status: cleared
+Status: uncleared
 Disposition: normal
 Parent: [WS109](../ws.md)
-Queue / Attempt: q570 / q570-i01
+Queue / Attempt: q569 / q569-i01
 
 ## 目的・範囲
 
@@ -257,9 +257,3 @@ hostVT changes or seriallog interpretation. If missingdriver/service prerequisit
 choice, finishuncleared with evidence; independentp004 closure can proceed. p005 revalidates anynew
 nativechanges beforeF5. No push/publication; WIP ownpaths. Reuse retainedcommonLinux/zedBSD checks
 when sharedsource unchanged.
-
-## Result / q570-i01 / 2026-10-02T01:24:59.320999+00:00
-
-Queue item cleared /whole Phase cleared。Actual nativeGPU window/VT asynchronous lease retirement→reacquisition/input/93frames/cleanup PASS; q569 DMAownership/window output retained. [result](/home/awe/zedBSD-claude1/plan/history/ws109/q570/result.md). Whole F3 cleared, F4closure/F5mainapps/finalstandards remain.
-
-Event ws109-q570-cleared: local evidence/outcome saved; remote comment and close intent pending.

@@ -1,0 +1,134 @@
+VT after seatd start 00001e001f001700
+VT after GPU start 01001e001f001700
+SEATD FILES   PID COMM                FD T V FLAGS    REF  OFFSET PRO NAME        
+ 2690 seatd             text v r r-------   -       - -   /usr/local/bin/seatd
+ 2690 seatd              cwd v d r-------   -       - -   /root             
+ 2690 seatd             root v d r-------   -       - -   /                 
+ 2690 seatd                0 p - rw------   6       0 -   -                 
+ 2690 seatd                1 v c rw------   1       0 -   /dev/null         
+ 2690 seatd                2 p - rw------   1       0 -   -                 
+ 2690 seatd                3 p - rw---n--   1       0 -   -                 
+ 2690 seatd                4 p - rw---n--   1       0 -   -                 
+ 2690 seatd                5 s - rw---n--   1       0 UDS 0 0 /var/run/seatd.sock
+ 2690 seatd                6 s - rw---n--   1       0 UDS 0 0 /var/run/seatd.sock
+ 2690 seatd                7 v c rw---n--   5       0 -   /dev/drm/0        
+ 2690 seatd                8 v c rw---n--   2       0 -   /dev/input/event0 
+ 2690 seatd                9 v c rw---n--   2       0 -   /dev/input/event1 
+ 2690 seatd               10 v c rw---n--   2       0 -   /dev/input/event2 
+ 2690 seatd               11 v c rw---n--   2       0 -   /dev/input/event3 
+ 2690 seatd               12 v c rw---n--   2       0 -   /dev/input/event4 
+ 2690 seatd               13 v c rw---n--   2       0 -   /dev/input/event5 
+
+ACTIVE FD SNAPSHOT
+  PID COMM                FD T V FLAGS    REF  OFFSET PRO NAME        
+ 2691 wayland           text v r r-------   -       - -   /opt/keiland/bin/wayland
+ 2691 wayland            cwd v d r-------   -       - -   /tmp/ws109-intel-6hu_vrvi
+ 2691 wayland           root v d r-------   -       - -   /                 
+ 2691 wayland              0 p - rw------   6       0 -   -                 
+ 2691 wayland              1 v r -w------   5    3740 -   /root/ws109-passthrough-evidence/compositor.txt
+ 2691 wayland              2 v r -w------   5    3740 -   /root/ws109-passthrough-evidence/compositor.txt
+ 2691 wayland              3 s - rw---n--   1       0 UDS 0 0 /var/run/seatd.sock
+ 2691 wayland              4 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland              5 v c rw------   1       0 -   /dev/drm/128      
+ 2691 wayland              6 v c rw------   1       0 -   /dev/drm/128      
+ 2691 wayland              7 h - rw------   1       0 -   -                 
+ 2691 wayland              8 h - rw------   1       0 -   -                 
+ 2691 wayland              9 h - rw------   1       0 -   -                 
+ 2691 wayland             10 h - rw------   1       0 -   -                 
+ 2691 wayland             11 h - rw------   1       0 -   -                 
+ 2691 wayland             12 h - rw------   1       0 -   -                 
+ 2691 wayland             13 h - rw------   1       0 -   -                 
+ 2691 wayland             14 v c rw---n--   2       0 -   /dev/input/event0 
+ 2691 wayland             15 v c rw------   1       0 -   /dev/drm/0        
+ 2691 wayland             16 s - rw---n--   1       0 UDS 0 0 /tmp/ws109-intel-6hu_vrvi/wayland-keiland
+ 2691 wayland             17 v c rw---n--   2       0 -   /dev/input/event1 
+ 2691 wayland             18 v c rw---n--   2       0 -   /dev/input/event2 
+ 2691 wayland             19 v c rw---n--   2       0 -   /dev/input/event3 
+ 2691 wayland             20 v c rw---n--   2       0 -   /dev/input/event4 
+ 2691 wayland             21 v c rw---n--   2       0 -   /dev/input/event5 
+ 2691 wayland             22 v r r-------   1       0 -   -                 
+ 2691 wayland             23 s - rw---n--   1       0 UDS 0 0 -
+ 2691 wayland             24 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland             25 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland             26 s - rw---n--   1       0 UDS 0 0 /tmp/ws109-intel-6hu_vrvi/wayland-keiland
+ 2691 wayland             27 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland             29 ? - --------   5  307200 -   -                 
+ 2691 wayland             30 ? - --------   5  307200 -   -                 
+ 2691 wayland             31 ? - --------   5  307200 -   -                 
+
+PAUSED FD SNAPSHOT
+  PID COMM                FD T V FLAGS    REF  OFFSET PRO NAME        
+ 2691 wayland           text v r r-------   -       - -   /opt/keiland/bin/wayland
+ 2691 wayland            cwd v d r-------   -       - -   /tmp/ws109-intel-6hu_vrvi
+ 2691 wayland           root v d r-------   -       - -   /                 
+ 2691 wayland              0 p - rw------   6       0 -   -                 
+ 2691 wayland              1 v r -w------   5    3791 -   /root/ws109-passthrough-evidence/compositor.txt
+ 2691 wayland              2 v r -w------   5    3791 -   /root/ws109-passthrough-evidence/compositor.txt
+ 2691 wayland              3 s - rw---n--   1       0 UDS 0 0 /var/run/seatd.sock
+ 2691 wayland              4 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland              5 v c rw------   1       0 -   /dev/drm/128      
+ 2691 wayland              6 v c rw------   1       0 -   /dev/drm/128      
+ 2691 wayland              7 h - rw------   1       0 -   -                 
+ 2691 wayland              8 h - rw------   1       0 -   -                 
+ 2691 wayland              9 h - rw------   1       0 -   -                 
+ 2691 wayland             10 h - rw------   1       0 -   -                 
+ 2691 wayland             11 h - rw------   1       0 -   -                 
+ 2691 wayland             12 h - rw------   1       0 -   -                 
+ 2691 wayland             13 h - rw------   1       0 -   -                 
+ 2691 wayland             14 v c rw---n--   2       0 -   /dev/input/event0 
+ 2691 wayland             15 v c rw------   1       0 -   /dev/drm/0        
+ 2691 wayland             16 s - rw---n--   1       0 UDS 0 0 /tmp/ws109-intel-6hu_vrvi/wayland-keiland
+ 2691 wayland             17 v c rw---n--   2       0 -   /dev/input/event1 
+ 2691 wayland             18 v c rw---n--   2       0 -   /dev/input/event2 
+ 2691 wayland             19 v c rw---n--   2       0 -   /dev/input/event3 
+ 2691 wayland             21 v c rw---n--   2       0 -   /dev/input/event5 
+ 2691 wayland             22 v r r-------   1       0 -   -                 
+ 2691 wayland             23 s - rw---n--   1       0 UDS 0 0 -
+ 2691 wayland             24 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland             25 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland             26 s - rw---n--   1       0 UDS 0 128 /tmp/ws109-intel-6hu_vrvi/wayland-keiland
+ 2691 wayland             27 v c rw---n--   5       0 -   /dev/drm/0        
+ 2691 wayland             29 ? - --------   5  307200 -   -                 
+ 2691 wayland             30 ? - --------   5  307200 -   -                 
+ 2691 wayland             31 ? - --------   5  307200 -   -                 
+
+owned seatd cleanup 0 00:00:00.000 [INFO] [seatd/seat.c:48] Created VT-bound seat seat0
+00:00:00.000 [INFO] [seatd/seatd.c:194] seatd started
+00:00:00.002 [INFO] [seatd/server.c:146] New client connected (pid: 2691, uid: 65534, gid: 65534)
+00:00:00.002 [INFO] [seatd/seat.c:248] Added client 1 to seat0
+00:00:00.002 [DEBUG] [common/terminal.c:196] Setting process switching to 1
+00:00:00.002 [DEBUG] [common/terminal.c:244] Setting KD keyboard state to 0
+00:00:00.002 [DEBUG] [common/terminal.c:271] Setting KD graphics state to 1
+00:00:00.002 [INFO] [seatd/seat.c:584] Opened client 1 on seat0
+00:00:00.002 [DEBUG] [seatd/seat.c:331] Opening device /dev/dri/card0 for client 1 on seat0
+00:00:00.120 [DEBUG] [seatd/seat.c:331] Opening device /dev/input/event0 for client 1 on seat0
+00:00:00.120 [DEBUG] [seatd/seat.c:331] Opening device /dev/input/event1 for client 1 on seat0
+00:00:00.120 [DEBUG] [seatd/seat.c:331] Opening device /dev/input/event2 for client 1 on seat0
+00:00:00.121 [DEBUG] [seatd/seat.c:331] Opening device /dev/input/event3 for client 1 on seat0
+00:00:00.127 [DEBUG] [seatd/seat.c:331] Opening device /dev/input/event4 for client 1 on seat0
+00:00:00.127 [DEBUG] [seatd/seat.c:331] Opening device /dev/input/event5 for client 1 on seat0
+00:00:02.202 [DEBUG] [seatd/seat.c:749] Releasing VT
+00:00:02.228 [INFO] [seatd/seat.c:621] Disabling client 1 on seat0
+00:00:02.228 [DEBUG] [common/terminal.c:224] Acking VT release
+00:00:03.693 [DEBUG] [seatd/seat.c:482] Closing device /dev/input/event4 for client 1 on seat0
+00:00:03.693 [DEBUG] [seatd/seat.c:482] Closing device /dev/input/event5 for client 1 on seat0
+00:00:03.751 [DEBUG] [seatd/seat.c:482] Closing device /dev/input/event0 for client 1 on seat0
+00:00:03.751 [DEBUG] [seatd/seat.c:482] Closing device /dev/input/event1 for client 1 on seat0
+00:00:03.751 [DEBUG] [seatd/seat.c:482] Closing device /dev/input/event2 for client 1 on seat0
+00:00:03.751 [DEBUG] [seatd/seat.c:482] Closing device /dev/input/event3 for client 1 on seat0
+00:00:03.751 [DEBUG] [seatd/seat.c:482] Closing device /dev/drm/0 for client 1 on seat0
+00:00:03.751 [INFO] [seatd/seat.c:158] No clients on seat0 to activate
+00:00:03.751 [DEBUG] [seatd/seat.c:284] Closing active VT
+00:00:03.751 [DEBUG] [common/terminal.c:196] Setting process switching to 0
+00:00:03.751 [DEBUG] [common/terminal.c:244] Setting KD keyboard state to 1
+00:00:03.751 [DEBUG] [common/terminal.c:271] Setting KD graphics state to 0
+00:00:03.751 [INFO] [seatd/seat.c:297] Removed client 1 from seat0
+00:00:03.751 [INFO] [seatd/client.c:480] Client disconnected
+00:00:03.789 [INFO] [seatd/seatd.c:218] seatd stopped
+
+PASS native VT/mode/keyboard/drawing/termios/input permissions restored
+Traceback (most recent call last):
+  File "/root/ws109-passthrough-lifecycle.py", line 54, in <module>
+    paused=descriptors('PAUSED');assert paused==0, 'input descriptors not retired'
+                                        ^^^^^^^^^
+AssertionError: input descriptors not retired
