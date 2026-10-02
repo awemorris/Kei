@@ -3,7 +3,7 @@
 # ws114-p007: GTK4 CSDとKeiland SSDの選択を実装・検証する
 
 Parent: [WS114](../ws.md)
-Status: planned
+Status: in-progress（userのB開始共有）
 Disposition: normal
 Primary Milestone: MG006（WSから継承）
 Queue / attempts: q587-i01
@@ -43,3 +43,5 @@ B1専用worktree/build/overlay/SSHを使い、共有toolchain/sysrootは読取�
 実装・試験未実施。q581は旧baseline測定であり本Phaseの成功証拠に流用しない。GitHub publicationはAgent Aによる投影待ち。
 
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の具体実装とGTK4確認を追加指示。p007へ分離し、p002/p003の重複scopeを除き、p005にp007成果を追加。WS acceptanceは他行判断・引継ぎ・最終conformanceを含め未達のまま。[WS summary](../ws.md)。
+
+2026-10-02 / A-q587-start-projection: current userがBでのp007開始を共有。df66db5e内のexact scope/承認原文/snapshotを保持し、A canonicalでin-progressへ投影。実装・runtime結果のclearanceはBの後続checkpointで別に確認する。

@@ -2,17 +2,18 @@
 
 # Queue / all-agent index
 
-Active Queues: q581/B1 GTK4、q582/B2 desktop、q583/B3 BUG-125、q584/A1 browser、q585/A2 package契約調査、q586/A3 display契約調査。
+Active Queues: q582/B2 desktop、q584/A1 browser、q585/A2 package契約調査、q586/A3 display契約調査、q587/B1 GTK4装飾。q581とq583はfinished/cleared（q583は部分診断のみ）。
 Status: active
 Main executor / plan writer: Q1
 Approval: 各lane/snapshotがexact scopeの正本。Aは2026-10-02 user「エージェントA、あなたもN=3で作業を開始してください」、BはuserのB開始指示とcommit991fc890のlaneを確認。A/B各3枠、timeboxはlaneごと。旧P8/P9/P10の承認・終了履歴を現行Queueへ流用しない。
-Last finished Queue: [q580](history/queue-q580.md)
+Last finished Queue: [q583](history/queue-q583.md)（部分診断）
 
 | Queue / attempt | Agent | Phase | Exact scope | State | Approval / checkpoint |
 | --- | --- | --- | --- | --- | --- |
-| q581 / q581-i01 | B1 | [p001](ws114/phase001/phase.md) | GTK4標準baseline残実測のみ、最大3h | active / in-progress（B報告） | [lane](agents/B1/queue.md)、commit991fc890 |
+| q581 / q581-i01 | B1 | [p001](ws114/phase001/phase.md) | GTK4標準baseline残実測のみ、最大3h | finished / cleared | [archive](history/queue-q581.md)、B df66db5e → A435a62126 |
 | q582 / q582-i01 | B2 | [p011](ws094/phase011/phase.md) | Files desktop overflow log・listing成功時pruneと限定回帰、最大3h | active / in-progress（B報告） | [lane](agents/B2/queue.md)、commit991fc890 |
-| q583 / q583-i01 | B3 | [p017](ws099/phase017/phase.md) | BUG-125の2popup症状を各最大5runで時刻/画素分類、90min。部分scope | active / in-progress（B報告） | [lane](agents/B3/queue.md)、commit991fc890 |
+| q583 / q583-i01 | B3 | [p017](ws099/phase017/phase.md) | BUG-125の2popup症状を各最大5runで時刻/画素分類、90min。部分scope | finished / cleared（whole Phase uncleared） | [archive](history/queue-q583.md)、B df66db5e → A435a62126 |
+| q587 / q587-i01 | B1 | [p007](ws114/phase007/phase.md) | CSD/SSD modeのconfigure/ack/commitと標準GTK4/native SSD回帰、3h | active / in-progress（user開始共有） | [lane](agents/B1/queue.md)、snapshot6de86725 |
 | q584 / q584-i01 | A1 | [p172](ws074/phase172/phase.md) | 統合済みbrowserの残全文reviewとin-scope修正・有限検証、3h | active / in-progress | [lane](agents/A1/queue.md)、A1-001 → c2743455c ACK |
 | q585 / q585-i01 | A2 | [p001](ws112/phase001/phase.md) | 5OS packageの入力/形式/native環境/CI契約調査のみ、60min | active / in-progress | [lane](agents/A2/queue.md)、A2-001 → 5acb47a9c ACK |
 | q586 / q586-i01 | A3 | [p001](ws113/phase001/phase.md) | Vulkan hotplug/出力/Settings/窓所属/実機fixture設計のみ、90min | active / in-progress | [lane](agents/A3/queue.md)、A3-001 → 8021bc210 ACK |
@@ -47,3 +48,5 @@ Preflight 2026-10-02: browser2 fetch確認 tip e53ef03b80113aec959deb67f828cba21
 2026-10-02 / n3-wrap-for-two-sessions: userの停止・回収指示によりP8/P9/P10を通常wrap-up。q577/q579/q580はいずれも部分成果・再開条件・cleanupを保存してunclearedで終了し、実行中Queueは0。A/B分担は計画上の所有であり、新しいQueueの承認ではない。
 
 2026-10-02 / next-ID-reservation: **q587はB1のq581後続、WS114装飾モード実装・GTK4確認用に予約**。userの共有指示を記録、Bのexact lane/snapshotは未到着。予約はactive membershipではない。次の未予約IDはq588。[協調記録](agents/two-session-coordination.md)。
+
+2026-10-02 / B-df66db5e-projected: B checkpoint df66db5eをmain435a62126へ統合、195 BUG診断assets+73 GTK assetsのhash照合、代表PNG目視、Files source diff/style-check0・helper syntaxを確認。q581/p001調査clear、q583部分item clear/whole p017 uncleared、user共有によりq587/p007開始投入を投影。B2 q582 guest/boot関門は未達のまま。次ID q588/B2最終規約、q589/B3追加切り分け予約、A q590〜q592確保。全次Queueは個別lane/snapshotと依存で実行を確認する。

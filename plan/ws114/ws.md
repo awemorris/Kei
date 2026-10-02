@@ -6,7 +6,7 @@ Status: incomplete
 Primary Milestone: MG006
 Related Milestones: MG002（後続の移植知見）
 Parent: [Master](../master.md)
-Queue: q581-i01 cleared（q580-i01 unclearedの履歴を保持）
+Queue: q587 / B1 p007実装開始（q581-i01 cleared、q580-i01 unclearedの履歴を保持）
 Resume point: p001/q581の残主要測定をclearし、[19行機能表](gtk4-compat-matrix.md)を行別採否に渡す。残るoptional経路のskipとbaseline不足を明記。G05はユーザーが個別採用したp007/q587で実装・GTK4検証する。残る行の採否はp002へ。
 
 ## Objective / scope
@@ -52,3 +52,5 @@ Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS1
 2026-10-02 / q581-baseline-cleared: p001の残主要操作を測定、全19行の再現証拠/具体skipを保存し調査基準clear。WS acceptanceの採否/改善/引継ぎ/全文最終回帰は未達、WS114はincomplete。q580 uncleared履歴は保持。[q581結果](phase001/q581-result.md)。追加CSD指示のsource実装は新Phase/Queue投入後。
 
 2026-10-02 / ws114-csd-user-selection-20261002: userがG05の装飾モード実装・GTK4確認を個別採用。[p007](phase007/phase.md)を追加しq587へ投入。p002は他行の判断を継続、p003はG05を重複実装せず、p005はp007出力を再検証/引継ぎに含める。WS acceptanceとp006最終conformanceは未達。
+
+2026-10-02 / A-B-checkpoint-start-projection: B df66db5eをA435a62126へ統合しp001/q581調査clearを投影。G05個別採用のp007/q587はuser開始報告でin-progress、他機能採否p002とWS全体受け入れは未達のまま。

@@ -1,7 +1,7 @@
 # Agent B1 Queue q587
 
 Status: active
-Attempt: q587-i01 / pending
+Attempt: q587-i01 / in-progress（user開始共有）
 Owner: Agent B / B1 GTK executor
 Approval: current user / 2026-10-02、[Phaseに保存した追加CSD指示](../../ws114/phase007/phase.md)。具体実装と確認の追加実行を承認。Agent Aがq587を予約。
 Timebox: 最大3時間 / 1 Phase
@@ -15,3 +15,5 @@ Merge requests / ACK: 未提出。
 Previous: [q581 finished/clearedのlane snapshot](q581-queue.md)。過去attemptを改変しない。
 Upcoming Work Outlook: 残る機能行はp002判断後に個別選定。p005/p006は依存未達で未投入。
 Sync: GitHub publication保留。WIP commitのみ、pushなし。Agent Aが共有投影を所有。
+
+2026-10-02 / A-projection-start: userがB checkpoint df66db5eのp007/q587開始を共有。checkpoint時のlane pending/Phase planned草稿を保存した上で、共有canonical attemptをin-progressへ投影。A435a62126で資料統合、source実装/試験の結果はBの後続MRを待つ。
