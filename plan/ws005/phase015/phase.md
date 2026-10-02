@@ -25,3 +25,10 @@ networkd readyと既存net bootの設定適用に整合するoneshotを追加し
 未決判断を確定してから有限Queueに選ぶ。[guardrail](../../guardrail.md)、`plan/coding-style.md`全文の該当規則と既存のservice/net/WLAN契約を守る。Cコード生成前に全文該当規則をロードする。通常の技術判断は委任範囲で行い、HAL責務や未指定の機能へ範囲を拡大しない。
 実行時には変更に対応するfocused checkと選択構成の `make -j16`、必要な通常系の確認を行う。aggregate `make check`、commit、pushはしない。既存の完了したp001〜p012の受け入れは保持する。
 source/config・artifact hash・コマンド・結果・未実施・残条件を結果へ記録する。今回の作業は計画のみで、コード変更・実行確認は未実施。
+
+## 2026-10-02 再評価（ベータ1 の計画）
+
+WS033（[notes](../../ws033/notes.md)）が、このPhaseの契約・実装（`net lan enable/disable`、networkd の `managed-lan`、`net startup`、
+`/etc/service.d/networking`、rc.conf の `networking.wait`）を WS005 の Phase を通さずに実装した（source: `userland/base/net/main.c` の `lan`・`startup`、
+`userland/base/networkd/managed-lan.c`、`userland/base/init/services/networking`）。このPhaseの残りは無いので、disposition を canceled（WS033 へ吸収）に
+することを main に提案した。決まるまで Status は planning のまま。実機の抜き差しの確認は [ws033-p001](../../ws033/phase001/phase.md)・[ws033-p002](../../ws033/phase002/phase.md) が担う。

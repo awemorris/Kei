@@ -8,9 +8,46 @@ Primary Milestone: MG005
 Related Milestones: MG006
 Objectives: O1, O2, O3
 Parent: [Master](../master.md)
+Focused goal: fg019（ベータ1、2026-10-17）。2026-10-02 user: ネットワーク（WiFi を含む）＞ WS118 ＞ WS119 ＞ WS112
 Queue: なし
-Resume point: fg005: 有線 LAN の常駐管理と起動時の接続待機（p013〜p017、p016 は ws035-p018 へ移管済み）
+Resume point: [p018](phase018/phase.md)（ベータ1 の WiFi の利用者の流れの調査と契約、planned）。AX211 の経路は [BUG-134](../bugs/BUG-134.md)（ws004-p051 / q590）の解決が前提。p013〜p015 は WS033 の実装で中身が済んでおり、取消し（canceled、WS033 へ吸収）を main に提案中。
 <!-- awesome-plan-current:end -->
+
+<!-- beta1-current:start -->
+
+## ベータ1（fg019）の到達目標と受け入れ（2026-10-02 計画）
+
+対象 platform は Latitude 5330（内蔵 AX211、RJ45 は無く有線は USB の LAN）と Latitude 5320（内蔵の無線は未調査、有線は USB の LAN。RTL8156 の NCM は ws005-p001 で 5320 の実機で通っている）。
+既にあるもの（source で確認、2026-10-02）: `net wifi` の 6 つの形・networkd の managed-wlan（p001〜p012）、`net lan`・`net startup`・`networking` の oneshot（WS033）、
+networkd の SUBSCRIBE と `net watch`（ws035-p018）、system bar の network の menu（ws035-p013、偽の networkd・QEMU だけ）、Settings の Network の頁（ws089-p003、鍵の入力つき join）。
+**本物の radio を使った desktop の通しは未実施**。
+
+ベータ1 の受け入れ（測れる形）:
+
+| # | 条件 | 証拠 |
+| --- | --- | --- |
+| B1 | 起動直後のログインした利用者が、Settings または system bar から WiFi を on にし、scan の一覧から SSID を選び、鍵を入れて接続でき、IPv4 の address を得て `fetch` で外部の HTTP(S) を 1 回取れる | QEMU（RTL8822BU の USB passthrough、または AX211 の PCI passthrough）の画面の PNG と guest の log。実機は B5 |
+| B2 | 再起動の後、B1 で保存した network に、利用者の操作なしで（または p018 で決めた 1 操作で）再接続する | 同上 |
+| B3 | 有線（USB の LAN）と WiFi が同時にあるとき、route・DNS が一つに決まり、片方を外してももう片方で通信が続く | QEMU の usb-net と WiFi の passthrough、guest の `route`・`fetch` |
+| B4 | WiFi の off・切断・鍵の誤り・AP の不在で、画面に理由が出て、networkd が止まらない（次の操作が通る） | QEMU の PNG と guest の log |
+| B5 | 実機: 5330 の単独起動で AX211 の B1・B2、5330 と 5320 で USB の LAN の DHCP と `fetch`。5320 の無線は p018/WS118 p002 の調査で決める（USB の Archer T3U で代える案） | ユーザーの目視と報告（実機の時期はユーザーに聞く） |
+
+範囲外（ベータ1）: WPA3・802.1X・hidden SSID の入力・IPv6・VPN・Bluetooth・5320 の内蔵無線の新しい driver（WS004 への提案）。
+
+### ベータ1 の Phase
+
+| Phase | 目的 | Status | 依存 | 目安 |
+| --- | --- | --- | --- | --- |
+| [p018](phase018/phase.md) | WiFi の利用者の流れの調査と契約（boot の root の方針と session の利用者の鍵の所有者の関係、再起動後の再接続、有線との route/DNS）。決定の要る点をユーザーへ出す | planned | なし | 2〜3h |
+| [p019](phase019/phase.md) | p018 で決めた流れの実装（networkd・net・libkeiland の network の最小の修正）と host/QEMU の試験 | planning | p018 とユーザーの判断 | 3〜4h |
+| [p020](phase020/phase.md) | RTL8822BU（Archer T3U）の USB passthrough で、現在の main の WLAN の経路と desktop の B1〜B4 を通す | planning | p019、Archer の置き場所と試験用 AP の SSID/鍵の渡し方（ユーザー） | 2〜3h |
+| [p021](phase021/phase.md) | AX211 の PCI passthrough で B1〜B4 を通す | planning | BUG-134 の解決（ws004-p051）、p019 | 2〜3h |
+| [p022](phase022/phase.md) | 変更した source の全文規約の確認と回帰（near-final conformance） | planning | p019（p020・p021 の修正を含む） | 2h |
+| [p023](phase023/phase.md) | 実機の受け入れ B5（5330 の AX211・USB の LAN、5320 の USB の LAN・無線）。ユーザーと一緒に行う | planning | p020/p021/p022、ユーザーの時期、WS118 p001 の image の方式 | 2h（ユーザーの立会い） |
+
+p016 は ws035-p018 へ移管済み（cleared）。p017（旧 fg005 の統合）は p022・p023 に置き換える提案（main の確認待ち、それまで planning のまま残す）。
+
+<!-- beta1-current:end -->
 
 <!-- network-improvements-current:start -->
 
@@ -97,11 +134,17 @@ Shared tests: [WS005 test index](tests/README.md)
 | [`ws005-p010`](phase010/phase.md) | Complete (`q071`) | `/sbin/wifi` owns the finite 30-second scan/select/connect sequence and its focused boundary/redaction gates pass |
 | [`ws005-p011`](phase011/phase.md) | Complete (`q071`) | Authenticated policy ownership, four persistent states, link events, and one same-SSID recovery child pass |
 | [`ws005-p012`](phase012/phase.md) | Complete (`q085`) | Coherent managed rewrite and P048 integration; 30/30 ordinary and sanitized stories, maintained regressions and three builds pass; RF untested |
-| [ws005-p013](phase013/phase.md) | planning | ネットワーク改善の共通契約・Wi-Fi enable仕様確認 |
-| [ws005-p014](phase014/phase.md) | planning | net lanとnetworkdの有線LAN管理 |
-| [ws005-p015](phase015/phase.md) | planning | oneshot network-enableと設定可能な起動待機 |
+| [ws005-p013](phase013/phase.md) | planning（取消し提案） | ネットワーク改善の共通契約・Wi-Fi enable仕様確認。2026-10-02: WS033 の notes.md が契約（net lan・net startup・`networking.wait`）を決めて実装したため、canceled（WS033 へ吸収）を main に提案 |
+| [ws005-p014](phase014/phase.md) | planning（取消し提案） | net lanとnetworkdの有線LAN管理。WS033 の `managed-lan`・`net lan` で実装済み（実機の抜き差しは ws033-p001/p002） |
+| [ws005-p015](phase015/phase.md) | planning（取消し提案） | oneshot network-enableと設定可能な起動待機。WS033 の `net startup`・`/etc/service.d/networking`・`networking.wait` で実装済み |
 | [ws005-p016](phase016/phase.md) | planning / canceled | networkd状態通知とデスクトップ受信。2026-09-23 [WS035 p018](../ws035/ws.md)へ移管（未実装のまま取消し） |
-| [ws005-p017](phase017/phase.md) | planning | ネットワーク改善の統合受け入れと最終規約確認 |
+| [ws005-p017](phase017/phase.md) | planning（置換え提案） | ネットワーク改善の統合受け入れと最終規約確認。p022・p023 に置き換える提案 |
+| [ws005-p018](phase018/phase.md) | planned | ベータ1: WiFi の利用者の流れの調査と契約 |
+| [ws005-p019](phase019/phase.md) | planning | ベータ1: 流れの実装（p018 の判断待ち） |
+| [ws005-p020](phase020/phase.md) | planning | ベータ1: RTL8822BU の USB passthrough で desktop の通し |
+| [ws005-p021](phase021/phase.md) | planning | ベータ1: AX211 の PCI passthrough で desktop の通し（BUG-134 待ち） |
+| [ws005-p022](phase022/phase.md) | planning | ベータ1: 全文規約の確認と回帰 |
+| [ws005-p023](phase023/phase.md) | planning | ベータ1: 実機の受け入れ（ユーザーの時期） |
 
 `ws002-p020` remains historical ownership of the current wired
 `networkd`/`net` baseline; it is not renumbered into this WS. Native device and

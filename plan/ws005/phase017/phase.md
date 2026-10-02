@@ -25,3 +25,8 @@ Queue: none / 実装未承認
 未決判断を確定してから有限Queueに選ぶ。[guardrail](../../guardrail.md)、`plan/coding-style.md`全文の該当規則と既存のservice/net/WLAN契約を守る。Cコード生成前に全文該当規則をロードする。通常の技術判断は委任範囲で行い、HAL責務や未指定の機能へ範囲を拡大しない。
 実行時には変更に対応するfocused checkと選択構成の `make -j16`、必要な通常系の確認を行う。aggregate `make check`、commit、pushはしない。既存の完了したp001〜p012の受け入れは保持する。
 source/config・artifact hash・コマンド・結果・未実施・残条件を結果へ記録する。今回の作業は計画のみで、コード変更・実行確認は未実施。
+
+## 2026-10-02 再評価（ベータ1 の計画）
+
+p013〜p015 は WS033 で実装済み、p016 は ws035-p018 で cleared。このPhaseの統合と規約の確認は、ベータ1 の [p022](../phase022/phase.md)（規約・回帰）と
+[p023](../phase023/phase.md)（実機の受け入れ）に置き換えることを main に提案した。決まるまで Status は planning のまま。
