@@ -8,6 +8,7 @@
 - サブエージェントは全員 `gpt-6.1-sol`、reasoning effort `high`。希望並列数 `N_target=8`。実並列数は `min(N_target, 実行環境の子エージェント枠, 利用可能な枠, 承認済みで依存を満たす非競合Queue数)` とする。2026-10-02のこの実行環境はメインを含む4枠なので子は同時最大3。枠数を超えるための孫エージェントは起動しない。利用制限を観測できなければ推測で枠を増減しない。
 - 過去のP1〜P7は履歴として保持。新しい実装担当は次のP8からIDを割り当て、同じ担当の再開世代を別に記録する。読取専用の短時間設計調査者は実装担当枠/Queueに数えない。可能ならWS担当を固定し、WS完了後は別WSへ再配属できる。
 - 2026-10-02のユーザー指定により、前回の3人割当案のP10枠はWS074ブラウザ専任として予約する。p172取込後もAcid3のpixel完全一致、Interop 2025の対象WPTへ継続する。通常のWS切替候補にせず、ブラウザQueueが空ならmainの次の明示指示を待つ。予約は起動・実装Queueの承認を意味しない。
+- 同日の追加指示で3枠を[P8=バグ修正、P9=Keilandデスクトップ高度化、P10=ブラウザ](registry.md)に固定する。P8はBug Boardの未解決ticketをmainが優先/前提を見て1件ずつhandling WSの有限Queueへ選ぶ。tracking/scheduled/実機待ちを無条件に着手可能とは扱わない。P9は[desktop outlook](desktop-outlook.md)の機能・検証を担当し、見つけたバグを再現条件/証拠とともにmainへ返す。mainが既存ticketと照合してBug Boardへ記録し、P8へ次のQueue候補として渡す。P9はバグを自分の高度化Queueへ混ぜない。P8がP9所有sourceを直す時はmainがpathの編集順とQEMU/実機を調整し、統合/検証したSHAをP9へ知らせる。P10はp172→p100→File System Access→OPFS→Interop 2025 100%→Test262を候補順とし、p101 CSS2を保持する。どの予約も実装Queue承認ではない。
 - サブエージェントは担当WS/Phaseのsourceと当該WS計画、自分のworktree内buildのみ書く。担当worktreeのWS記録は統合前の草稿であり、canonicalな共有plan/cacheではない。mainは統合前に変更記録をoutboxへ準備し、統合後にQueue/WS/Phase/Project投影を更新する。共有Board、Master、Guardrail、history、同期cacheはメインが書く。bug ticketは明示された範囲のみ。HAL API・toolchain・WS095人間作業等の既存制限は保持する。
 
 ## Queue と割当

@@ -76,3 +76,7 @@ Event subagent-queues-projections-20261002: userの希望N=8/GPT-6.1 Sol High、
 ## 計画追記 / 2026-10-02（WS074ブラウザ専任）
 
 Event ws074-dedicated-interop2025-20261002: userが前回3人案のP10を[WS074](../ws074/ws.md)専任に固定。p172 branch統合後の[p100](../ws074/phase100/phase.md) Acid3 100/100・pixel完全一致・fail 0、[p173](../ws074/phase173/phase.md)でInterop 2025公式focus area対象WPTの固定版/baselineを定めて全件PASSへ進む。p101 CSS2全件目標とfg010/全体demo順位は保持。P10はreserved/未起動、q576 finished、実装/Queue/merge/pushなし。Issue/Project publication保留。
+
+## 計画追記 / 2026-10-02（3専任枠とブラウザ次目標）
+
+Event three-dedicated-lanes-and-browser-goals-20261002: userが[P8バグ修正、P9デスクトップ高度化、P10ブラウザ](../agents/registry.md)を固定。P9の発見したbugはmainが[Bug Board](../known-bugs.md)へ登録しP8へ渡す。[desktop作業一覧](../agents/desktop-outlook.md)を作成。P10の新目標は[p174 File System Access](../ws074/phase174/phase.md)→[p175 OPFS](../ws074/phase175/phase.md)→[p173 Interop 2025 100%](../ws074/phase173/phase.md)→[p176 Test262](../ws074/phase176/phase.md)。既存p172/p100 gateとp101 CSS2は保持、Test262最終率は未指定。3枠ともreserved/未起動、q576 finished、実装/Queue/merge/pushなし。Issue/Project publication保留。

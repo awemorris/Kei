@@ -45,3 +45,5 @@ Resume: 本Phaseのscope/branch SHAと最新状態を再確認し、1 Phase Queu
 2026-10-02 / ws074-browser2-gate-20261002: current userがbranch統合をWS074のblocking Phaseに指定。Phase172を計画し、WS074の全未実行browser作業の前提に追加。GitHub Issue/Projectはpublication保留。
 
 2026-10-02 / ws074-dedicated-interop2025-20261002: userがブラウザ専任P10とp172後のAcid3 pixel完全一致・Interop 2025を追加。p172のimport scope/clearanceは維持。後続p100/p173の新条件は取込だけで達成とみなさず、統合出力を確認してから別Queueで測る。GitHub comment publication保留。
+
+2026-10-02 / ws074-browser-next-goals-20261002: userがp174 File System Access、p175 OPFS、p176 Test262を後続目標に追加し、p173 Interop 2025の全対象PASS 100%を明示。p172のimport criteriaは変更しない。新Phaseもp172 whole-Phase clearanceと統合済みsourceの確認まで開始不可。GitHub publication保留。
