@@ -4,7 +4,7 @@
 Status: uncleared
 Disposition: normal
 Parent: [WS099](../ws.md)
-Queue: q577 / q577-i01 / P8
+Queue: q577 / q577-i01 / P8（uncleared履歴）、q583 / q583-i01 / B3（部分診断cleared）
 
 ## 承認と有限範囲
 
@@ -28,3 +28,5 @@ Resume: finite Queueの証拠と原因判定を確認して次attemptを選定�
 2026-10-02 / n3-start-ws099-p017: guideの提案を正式Phaseにし、BUG-125の試験同期診断だけをP8へ割当。compositor修正は別Queueへ。GitHub publication保留。
 
 2026-10-02 / p8-q577-terminal-wrap: userの全subagent停止指示で06:47UTCに補完C9を安全な境界で終了。単独20/全C9×5のFAIL0は未達、whole-Phaseはuncleared。held request同期修正の部分成果を保持し、popupのmapped-but-invisible症状とmap前click症状、別p128 launch失敗を未修正として区別する。[結果/再開条件](q577-result.md)。製品source変更無し、owned2runtime/全QEMU/processは停止済み。共有Board/WS/Bugとremote publicationはmain所有、公開保留。新Queue未開始。
+
+2026-10-02 / b3-q583-terminal-diagnosis: q583部分診断を完了、[結果](q583-result.md)と[適用規約review](q583-conformance.md)をB mainが3ed1834cへ統合。original5/handshake5の全部分PASS、残2症状は今回非再現。診断 overhead/非並列条件の限界を保持し、修正・whole基準達成と扱わない。whole Phase uncleared、BUG-125 trackingのまま。owned runtime停止。新しい弁別条件を具体化した別Queueまで追加反復しない。
