@@ -12,6 +12,7 @@ Queue: なし
 Resume point（2026-10-02 計画詳細化）: **次は p005 の新 attempt**（候補の窓・indicator・key の repeat・ime-p004.sh の kill の修正、目安 4h、Queue 投入可）。その後 p006（Terminal）→ p007（Text Editor の確認）→ p008（Files・titlebar の検索）と p012（辞書の拡張）を並行、最後に p011。
 2026-10-02 user:「IMEは人間の作業を完了したので、あなたが担当します。」人間の作業中の制限を解除し、優先度を上げる。
 **source の照合（2026-10-02 計画担当）**: 2026-09-29 の p004 以降、`userland/desktop/ime/`・`wayland/input-method.c`・`wayland/text-input.c` の変更は path の共通化（cec34d3e1、`paths.h`）と Linux/FreeBSD の Makefile の追加（ba46edf89・1ed1a4b59）だけで、IME の機能の変更は無い（commit の author は全て同じ名前で、人間とエージェントの区別は git では付かない）。`p005-wip.patch` は現行の `ime.h`・`input-method.c` に `git apply --check` で当たる（offset 2 行）。旧 worktree `.claude/worktrees/ws095-ime` は gitdir が `/home/awe/zedBSD-rpi4` を指して壊れているので使わず、P 担当の新しい worktree で再開する。**「人間の作業」の内容（repository の外の作業か、未 commit の差分か）をユーザーに確認する**。libkeiui（WS090 p013）に text-input-v3 の client（`kui_window_text_input`）があり、Text Editor は既に呼んでいる。Terminal・Notes も libkeiui の window を使う。
+2026-10-02 / q593: ws095-p012 cleared（main c7bbbf06a）。辞書 337→1,478 見出し（計画の目安「千語」を約 4 割超え、ユーザーに報告）。held-out A 64→109/125、B 47→81/110、既存 100 文 92→97。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-09-29 ユーザー）
