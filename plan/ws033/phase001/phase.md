@@ -1,11 +1,11 @@
 <!-- awesome-plan project=zedbsd record=ws033-p001 -->
 # ws033-p001: USB の LAN の後挿し・抜去・carrier の変化を QEMU で通す
 
-Status: planned
+Status: uncleared（q598-i01、P1、2026-10-02 Q1 の優先度の変更で中断。後で再投入）
 Disposition: normal
 Parent: [WS033](../ws.md)
 Focused goal: fg019（ベータ1）
-Queue: none（未承認）
+Queue: q598 / q598-i01（P1、中断）
 目安: 2〜3h
 
 ## 範囲
@@ -36,3 +36,18 @@ Queue: none（未承認）
 ## 未決の判断
 
 なし。
+
+## q598-i01 の途中の結果（P1、2026-10-02、base `0e9809833`、中断）
+
+- 器: `plan/tools/guest/guest.sh`（SSH の guest、ue0 は管理用の usb-net、`GUEST_RUNTIME=build/p1-gr`）と、image
+  `make ZEDBSD_CONFIG=plan/tools/guest/config-amd64-ssh.mk BUILD=build/p1-ssh $(guest.py extra-files) disk-image`（rc=0）。
+  試験の usb-net は `--qemu-extra "-netdev user,id=net1,net=10.0.5.0/24,host=10.0.5.2,dhcpstart=10.0.5.15"` で netdev だけ用意し、QMP で後挿し。
+  判定は SSH の `net show`・`route`・`ifconfig`（console/serial log は使っていない）。
+- 起動の後: `ue0 static online`、route は `10.0.2.0/24` と `default 10.0.2.2 ue0`、`/etc/resolv.conf` は dhcpc（ue0）、`service status networking` は completed。
+- **L1（後挿し）の観測: FAIL の疑い**。QMP `device_add usb-net,bus=xhci.0,port=4,id=hot,netdev=net1,mac=52:54:00:33:00:05` の後、
+  `ue1` は 5 秒以内に生えて `ue1 static online` と表示されたが、30 秒の間 route は `169.254.0.0/16 link UC ue1` だけで、10.0.5.x の DHCP の address を
+  得なかった（link-local への後退。WS033 の設計の「DHCP が取れなければ MAC から 169.254.x.y」）。その間に一度、SSH が `Connection timed out during
+  banner exchange`。原因（後挿しの DHCP の timeout 10 秒の間に link/carrier が上がっていない、slirp の DHCP の応答、再試行の有無）は未調査。
+- L1 の fetch・抜去（L1/L2 の 2）・`set_link`（3）・`networking.wait`（4）は未実施。`lan-hotplug.sh` は未作成。
+- 再開の手順: 同じ器で、`device_add` の後に `ifconfig ue1`（flags の RUNNING）と `net dhcp ue1 --timeout=20` を手で試し、managed-lan の後挿しの経路
+  （RTM_IFINFO → PENDING → dhcp の timeout → 169.254）を読む。
