@@ -20,6 +20,8 @@
 
 #include "zwl.h"
 
+#include <vulkan/vulkan.h>
+
 /* The evdev codes whose presses are remembered, so that a release goes where its press went. */
 #define ZWL_IME_KEYS		768U
 
@@ -89,6 +91,9 @@ struct zwl_ime {
 	struct zwl_object *status;
 	struct zwl_object *popups[4];
 	char language[16];
+	char label[16];
+	int32_t indicator_x;
+	unsigned indicator_shown;
 	unsigned composing;
 	struct zwl_text_input *active;
 	unsigned activated;
@@ -128,5 +133,10 @@ void zwl_ime_modifiers(struct zwl_server *server);
 void zwl_ime_focus(struct zwl_server *server, struct zwl_object *previous);
 void zwl_ime_update(struct zwl_server *server, struct zwl_text_input *committed);
 void zwl_ime_text_input_gone(struct zwl_server *server, struct zwl_text_input *input);
+void zwl_ime_surface_commit(struct zwl_object *surface);
+void zwl_ime_popup_draw(struct zwl_server *server, VkCommandBuffer command);
+int32_t zwl_ime_indicator_width(struct zwl_server *server);
+void zwl_ime_indicator_draw(struct zwl_server *server, VkCommandBuffer command, int32_t x, const float *ink);
+int zwl_ime_indicator_button(struct zwl_server *server, uint32_t button, uint32_t state);
 
 #endif

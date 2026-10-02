@@ -1263,11 +1263,15 @@ $(BUILD)/bin/wlshm: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
 	$(PYTHON) $(DYNAMIC_VULKAN_CHECK) --machine amd64 --role application \
  --needed libwayland-client.so --needed libc.so $@
 
-# The input method (ws095-p004) and its test client import only standard Wayland and C library entry points.
+# The input method (ws095-p004) imports standard Wayland and C library entry points; its candidate window
+# (ws095-p005) draws with libkeiui's canvas and text (and so with what libkeiui links).  Its test client imports
+# only standard Wayland and C library entry points.
 DYNAMIC_KEILAND_IME_OBJS := $(call ZEDBSD_USERLAND_OBJECTS,$(DYNAMIC_DIR)/obj,keiland-ime)
 
 $(BUILD)/bin/keiland-ime: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
-	$(DYNAMIC_KEILAND_IME_OBJS) $(DYNAMIC_DIR)/libwayland-client.so \
+	$(DYNAMIC_KEILAND_IME_OBJS) $(DYNAMIC_DIR)/libvulkan.so $(DYNAMIC_DIR)/libwayland-client.so \
+	$(DYNAMIC_DIR)/libkeiland.so $(DYNAMIC_DIR)/libkeiui.so $(DYNAMIC_DIR)/libtruetype.so \
+	$(DYNAMIC_DIR)/libpng-compat.so $(DYNAMIC_DIR)/libz-compat.so \
 	$(DYNAMIC_DIR)/libc.so $(DYNAMIC_DIR)/ld.so $(DYNAMIC_VULKAN_CHECK)
 	@mkdir -p $(dir $@)
 	$(CC) -m64 -nostdlib -pie -Wl,--no-relax \
@@ -1276,9 +1280,10 @@ $(BUILD)/bin/keiland-ime: $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o \
  -Wl,--dynamic-linker=/lib/ld.so \
  $(ZEDBSD_SYSROOT_AMD64)/usr/lib/crt1.o $(DYNAMIC_KEILAND_IME_OBJS) \
  -L$(DYNAMIC_DIR) -Wl,-rpath-link,$(DYNAMIC_DIR) \
- -l:libwayland-client.so -l:libc.so -o $@
+ -l:libvulkan.so -l:libwayland-client.so -l:libkeiland.so -l:libkeiui.so -l:libtruetype.so -l:libpng-compat.so -l:libz-compat.so -l:libc.so -o $@
 	$(PYTHON) $(DYNAMIC_VULKAN_CHECK) --machine amd64 --role application \
- --needed libwayland-client.so --needed libc.so $@
+ --needed libvulkan.so --needed libwayland-client.so --needed libkeiland.so --needed libkeiui.so --needed libtruetype.so \
+ --needed libpng-compat.so --needed libz-compat.so --needed libc.so $@
 
 DYNAMIC_IME_PROBE_OBJS := $(call ZEDBSD_USERLAND_OBJECTS,$(DYNAMIC_DIR)/obj,ime-probe)
 
