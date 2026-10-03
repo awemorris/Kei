@@ -350,7 +350,8 @@ struct se_field {
  * scan_received tells that a scan's report arrived, so an empty list
  * means no network is in reach rather than none looked for yet.
  * key_ssid names the network whose key is being typed (empty when the key
- * form is closed).  The usage ring holds the bytes a second received and
+ * form is closed); key_reveal asks the next frame to scroll the page so
+ * that the form, under its network's row, is in sight (BUG-160).  The usage ring holds the bytes a second received and
  * sent, newest at usage_next - 1.
  */
 struct se_network {
@@ -376,6 +377,7 @@ struct se_network {
 	char key_ssid[KEILAND_NETWORK_SSID_MAX];
 	struct se_field key;
 	int key_shown;
+	int key_reveal;
 	char message[SE_MESSAGE];
 	int message_bad;
 	uint64_t polled_at;

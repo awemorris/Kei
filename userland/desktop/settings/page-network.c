@@ -85,6 +85,7 @@ static int network_wifi_card(struct se_app *app, struct fm_canvas *canvas, int x
 static int network_rows(const struct se_app *app, struct network_row *rows, int capacity);
 static void network_row_draw(struct se_app *app, struct fm_canvas *canvas, const struct network_row *row, int x, int y, int width);
 static void network_key_draw(struct se_app *app, struct fm_canvas *canvas, int x, int y, int width);
+static void network_key_reveal(struct se_app *app, int top, int bottom);
 static int network_ethernet_card(struct se_app *app, struct fm_canvas *canvas, int x, int top, int width);
 static int network_dns_card(struct se_app *app, struct fm_canvas *canvas, int x, int top, int width);
 static int network_usage_card(struct se_app *app, struct fm_canvas *canvas, int x, int top, int width);
@@ -311,10 +312,11 @@ se_network_press(
 		return;
 	}
 
-	/* A new secured network: the line for its key opens under it. */
+	/* A new secured network: the line for its key opens under it, scrolled into sight at the next frame. */
 	(void)snprintf(network->key_ssid, sizeof(network->key_ssid), "%s", ap->ssid);
 	se_field_clear(&network->key);
 	network->key_shown = 0;
+	network->key_reveal = 1;
 	network->message[0] = '\0';
 	se_log("NETWORK key-form ssid=%s", ap->ssid);
 }
@@ -601,6 +603,7 @@ network_wifi_card(
 			network_key_draw(app, canvas, x + 10, y, width - 20);
 			y += NETWORK_KEY_LINE;
 			y = network_message_draw(app, canvas, x + NETWORK_PAD + 2, y, width - 2 * NETWORK_PAD);
+			network_key_reveal(app, y - NETWORK_ROW - NETWORK_KEY_LINE, y);
 		}
 	}
 
@@ -787,6 +790,44 @@ network_row_draw(
 	/* A network of the scan is clickable. */
 	if (row->index >= 0)
 		se_ui_hit(app, &rect, SE_HIT_CONTROL, control);
+}
+
+/*
+ * Scrolls the page pane, once after the line for a key opened, so that the
+ * network's row and the line under it (top to bottom, on the canvas) are
+ * in sight (BUG-160: a network low on the page opened its line out of
+ * sight, at the bottom of the screen).  The next frame draws the new scroll.
+ */
+static void
+network_key_reveal(
+	struct se_app *app,
+	int top,
+	int bottom)
+{
+	const struct fm_rect *pane;
+	int scroll;
+
+	/* Only once for a line that opened. */
+	if (app->network.key_reveal == 0)
+		return;
+	app->network.key_reveal = 0;
+
+	/* A line below the pane's bottom comes up to it, without taking the row above the pane's top. */
+	pane = &app->layout.page;
+	scroll = app->page_scroll;
+	if (bottom > pane->y + pane->height)
+		scroll += bottom - (pane->y + pane->height);
+	if (top - (scroll - app->page_scroll) < pane->y)
+		scroll = app->page_scroll + (top - pane->y);
+	if (scroll < 0)
+		scroll = 0;
+
+	/* A change needs a frame (the page's extent keeps it within the page). */
+	if (scroll != app->page_scroll) {
+		app->page_scroll = scroll;
+		app->dirty = 1;
+		se_log("NETWORK key-form reveal scroll=%d", scroll);
+	}
 }
 
 /* Draws the line for a key under its network: the field (dots unless shown), Show, Join and Cancel. */
