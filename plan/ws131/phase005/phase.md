@@ -2,7 +2,7 @@
 
 # ws131-p005: backend の電源の領域
 
-Status: in-progress（q650、2026-10-03、P1。実装と host の確認は済み、QEMU の試験は試験の担当に予約。元の記載: planning）
+Status: cleared（q650、2026-10-03、P1。Q1 判定）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）
@@ -76,3 +76,7 @@ base は main（p004 の `b8b50d098` を含む）。
 
 - boot-test。
 - criteria の image で `plan/ws099/tests/c1-boot-shutdown.sh`。greeter の Shut Down が backend を通って sessiond に届き、machine が止まる。`ZWL GREETER powering=poweroff` の後に `power=poweroff`。
+
+## 結果（Q1、2026-10-03、T1-040、QEMU）
+
+cleared。boot-test PASS、c1-boot-shutdown ×2 とも `C1: PASS`（greeter の Shut Down で SSH が止まり QEMU が終了）。制限: 2 回とも `C1-shutdown-order: WARN`（止まる前に greeter の log を読めず、`powering=poweroff` → `power=poweroff` の順と send errno の無いことは未確認）。電源が切れるという結果は確かめたので cleared とし、log の順は host-power 17/17 の確認に頼る。実機は S2（BUG-119）。証拠 worktrees/t1/build/t1-criteria/t1-040/。
