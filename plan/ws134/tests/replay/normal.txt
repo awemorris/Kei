@@ -1,0 +1,6 @@
+# ws134 replay: a calm machine of 4 CPUs and one GPU (Normal); the values the summary must show are in the comments.
+info host=kei cpus=4 gpus=1 memory=8589934592 swap=2147483648 gpu0=Venus gpu0memory=4294967296
+frame t=0 cpu=0.30 cores=0.20,0.40,0.25,0.35 used=2147483648 cache=1073741824 available=5905580032 swap=0 rx=500000 tx=60000 read=2000000 write=800000 latency=0.6 gpu0=0.20 gpu0used=1288490188 gpu0temp=45 gpu0power=14
+frame t=1000 cpu=0.33 cores=0.25,0.42,0.28,0.37 used=2254857830 cache=1073741824 available=5798205440 swap=0 rx=520000 tx=61000 read=2100000 write=820000 latency=0.6 gpu0=0.21 gpu0used=1288490188 gpu0temp=45 gpu0power=14
+# t=2000: CPU 37%, Memory 2.1 / 8 GiB, Network 4.2 Mb/s (rx 480 KB/s + tx 45 KB/s = 525000 B/s), Disk 12 MB/s (read 9 + write 3), GPU 21%
+frame t=2000 cpu=0.37 cores=0.30,0.78,0.06,0.34 used=2254857830 cache=1073741824 available=5798205440 swap=0 rx=480000 tx=45000 read=9000000 write=3000000 latency=0.8 gpu0=0.21 gpu0used=3049426124 gpu0temp=48 gpu0power=15

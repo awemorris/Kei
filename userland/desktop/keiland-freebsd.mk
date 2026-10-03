@@ -109,6 +109,7 @@ KEILAND_FREEBSD_PACKAGES ?= userland/base/libz-compat/Makefile.freebsd \
 	userland/desktop/files/Makefile.freebsd \
 	userland/desktop/settings/Makefile.freebsd \
 	userland/desktop/notes/Makefile.freebsd \
+	userland/desktop/monitor/Makefile.freebsd \
 	userland/desktop/textedit/Makefile.freebsd \
 	userland/desktop/imageview/Makefile.freebsd \
 	userland/desktop/pdfviewer/Makefile.freebsd \

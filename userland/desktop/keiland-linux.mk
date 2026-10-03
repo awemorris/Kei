@@ -113,6 +113,7 @@ include userland/desktop/terminal/Makefile.linux
 include userland/desktop/files/Makefile.linux
 include userland/desktop/settings/Makefile.linux
 include userland/desktop/notes/Makefile.linux
+include userland/desktop/monitor/Makefile.linux
 include userland/desktop/textedit/Makefile.linux
 include userland/desktop/imageview/Makefile.linux
 include userland/desktop/pdfviewer/Makefile.linux

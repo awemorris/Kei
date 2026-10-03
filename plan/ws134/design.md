@@ -136,7 +136,8 @@ void kl_backend_monitor_close(struct kl_backend_monitor *monitor);
   結果を pipe で event loop に渡し、emit は event loop の thread だけで行う（review 7）。
 
 **compositor の拡張**（WS131 §4.1 の共通の約束に従う）: `kl_system_manager_v1.get_monitor(new_id, period_ms)`（250〜10000、既定 1000）。
-manager の version と opcode は Q1 が予約する（WS131 §4.2 は version 2 を WS113 の `get_displays` に充てる。monitor は 3 の案、review 10）。
+manager の version は **3**（Q1 が予約、2026-10-03。version 2 は WS113 の `get_displays`）。`get_monitor` の opcode は version 2 の最後の request の
+次の番号（version 2 の確定の後に p012 で決める）。
 `capabilities` の bit に monitor を足す。object `kl_system_monitor_v1`:
 - event `device(kind, id, generation, name, size_hi, size_lo)`（機器ごとに 1 つ、作った時と抜き差しの時、`device_done(serial)` で区切る）・`removed(kind, id)`。
 - sample の event `cpu(index, user_hi, user_lo, system_hi, system_lo, idle_hi, idle_lo, other_hi, other_lo)`・`memory(…)`・`link(id, …)`・`disk(id, …)`・
@@ -472,7 +473,7 @@ ID は Q1 が割り当て済み（2026-10-03）。QEMU の試験は T1/T2 に依
 | p005（K1） | kernel: `hw.cputimes`、sysctl の CLI の表示、`top` の CPU の行 | — | kernel build warning 0、guest で `sysctl hw.cputimes` の 2 回の差: `yes > /dev/null` の CPU の user が増え、全 CPU の和 ≈ 経過 × CPU の数（±10%、QEMU の tick の揺れ）、SMP の stress、boot-test | — | 0.5 日 |
 | p006（K2） | kernel: `hw.diskstats`（物理の whole disk、kind・id・generation） | — | guest で `dd` の読み書きの前後で該当の disk の bytes・ops が増え、他は増えない、latency の和が正、USB の disk の抜き差しで generation が変わる（QMP の device_del・add）、boot-test | NVMe（5330） | 0.5〜1 日 |
 | p007（K3） | kernel: `hw.gputelemetry`（i915 の busy の和と実行中の分・周波数・objects） | — | build、Venus では要素 0、boot-test | 5330 で負荷で busy・周波数が動く | 0.5 日 |
-| p008（M3 本物の値） | **4 つに分けて進める（Q1 に追加の ID を依頼）**: (a) backend の monitor 領域（zedBSD: p005・p006・p007・vmstat（5 秒ごと、所要時間の probe）・SIOCGIFSTATS・Vulkan の device 名）、(b) Linux・FreeBSD の backend、(c) compositor の `kl_system_monitor_v1`（専用の thread、ack と sample の丸ごとの間引き）と libkeiland の `kl_system_monitor_*`、(d) app の system の source | WS131 p010 までの統合（Q1 が P1 の進みを見て開始を決める）、p005・p006 | 3 OS の build と WS131 の checker（B1〜B3）、host 試験（率・counter の巻き戻り・機器の抜き差しの id・u64 の hi/lo・client が 60 秒読まない時に compositor の送信の queue が 1 sample を越えない）、guest で `--source=system` の memory が `top` の表示と ±1%、負荷の CPU の % が上がる、USB の disk の抜き差しで Disk の plate が追従 | 5330 | 3〜4 日 |
+| p008・p011・p012・p013（M3 本物の値） | **4 つに分ける（Q1 が ID を割当、2026-10-03）**: (a) p008 backend の monitor 領域（zedBSD: p005・p006・p007・vmstat（5 秒ごと、所要時間の probe）・SIOCGIFSTATS・Vulkan の device 名）、(b) p011 Linux・FreeBSD の backend、(c) p012 compositor の `kl_system_monitor_v1`（専用の thread、ack と sample の丸ごとの間引き）と libkeiland の `kl_system_monitor_*`、(d) p013 app の system の source | WS131 p010 までの統合（Q1 が P1 の進みを見て開始を決める）、p005・p006 | 3 OS の build と WS131 の checker（B1〜B3）、host 試験（率・counter の巻き戻り・機器の抜き差しの id・u64 の hi/lo・client が 60 秒読まない時に compositor の送信の queue が 1 sample を越えない）、guest で `--source=system` の memory が `top` の表示と ±1%、負荷の CPU の % が上がる、USB の disk の抜き差しで Disk の plate が追従 | 5330 | 3〜4 日 |
 | p009（K4） | kernel: ACPI の thermal・電池（WS131 p005 と調整） | 実機 | — | 5330 で温度・電池 | 1〜2 日 |
 | p010（M4） | 全文規約・回帰・デモの通し | p002〜p008 | `style-check.py`、全部の試験、boot-test | 5330 の通し | 1 日 |
 

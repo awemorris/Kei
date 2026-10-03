@@ -24,5 +24,7 @@ extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_E
 [ -f build/ws071-fonts/DroidSansFallback-LICENSE.txt ] && extra="$extra --file /usr/share/fonts/keiland-fallback-LICENSE.txt=build/ws071-fonts/DroidSansFallback-LICENSE.txt"
 [ -f build/ws035-wallpaper/wallpaper.ppm ] && extra="$extra --file /usr/share/keiland/wallpaper.ppm=build/ws035-wallpaper/wallpaper.ppm"
 extra="$extra --file /usr/share/files-tests/make-home.sh=plan/tools/files/make-home.sh"
+# Files another test adds (its own --file entries, e.g. plan/ws134/tests/build-monitor-image.sh).
+extra="$extra ${FILES_EXTRA:-}"
 exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG="${FILES_CONFIG:-plan/tools/files/config-amd64-files.mk}" BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image
