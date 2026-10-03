@@ -21,6 +21,7 @@ export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/ws035-sq-run}"
 out=${1:-build/ws035-p069}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -63,7 +64,8 @@ pointer move 1250 780 sleep 400
 check "$out/terminal.png" >/dev/null
 expect_log 'ZWL HOME launch name=Terminal pid='
 expect_log 'ZWL HOME close via=launch'
-expect_log 'ZWL MAP client=2 '
+zwl_app_clients
+expect_log "ZWL MAP client=$zc2 "
 
 # 3. The corner drag follows the pointer, and opens Home past the threshold.
 pointer move 6 6 sleep 300 down sleep 100 \

@@ -18,6 +18,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws070-p009}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[t]itlebar-probe" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[t]itlebar-probe" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -39,7 +40,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=300 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 /bin/titlebar-probe --show="日本語のタイトル — 表示の試験" --seconds=120 > /tmp/probe.log 2>&1 </dev/null & sleep 5; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "probe: surface $surface at $wx,$wy"
 

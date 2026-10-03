@@ -18,6 +18,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws071-p018}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[f]iles" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[f]iles" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -52,15 +53,16 @@ shot() {
 guest "$stop_all; rm -f /etc/keiland/apps.conf; sh /usr/share/files-tests/make-home.sh /tmp/fhome >/dev/null 2>&1" >/dev/null
 guest "$start" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=200 > /tmp/f1.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-expect_log /tmp/zdesktop.log 'ZWL BOUNDS client=1 surface=[0-9]+ width=1256 height=690'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL BOUNDS client=$zc1 surface=[0-9]+ width=1256 height=690"
 expect_log /tmp/f1.log 'ZFILES READY width=1120 height=690'
-expect_log /tmp/zdesktop.log 'ZWL MAP client=1 surface=[0-9]+ x=80 y=98'
+expect_log /tmp/zdesktop.log "ZWL MAP client=$zc1 surface=[0-9]+ x=80 y=98"
 shot one.png
 
 # 2. A second window, cascaded and kept inside.
 guest 'export XDG_RUNTIME_DIR=/tmp; HOME=/tmp/fhome /bin/files --token=f2 --timeout-s=200 --width=1000 --height=640 > /tmp/f2.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
 expect_log /tmp/f2.log 'ZFILES READY width=1000 height=640'
-expect_log /tmp/zdesktop.log 'ZWL MAP client=2 surface=[0-9]+ x=128 y=146'
+expect_log /tmp/zdesktop.log "ZWL MAP client=$zc2 surface=[0-9]+ x=128 y=146"
 shot two.png
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
 [ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
@@ -71,8 +73,9 @@ guest "$start" >/dev/null
 pointer move 23 17 sleep 300 down sleep 60 up sleep 1500
 set -- $(guest "grep 'ZWL HOME icon name=\"Files\"' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\).*/\1 \2/p')
 pointer move ${1:-0} ${2:-0} sleep 400 down sleep 60 up sleep 8000
-expect_log /tmp/zdesktop.log 'ZWL BOUNDS client=1 surface=[0-9]+ width=1256 height=690'
-expect_log /tmp/zdesktop.log 'ZWL MAP client=1 surface=[0-9]+ x=80 y=98'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL BOUNDS client=$zc1 surface=[0-9]+ width=1256 height=690"
+expect_log /tmp/zdesktop.log "ZWL MAP client=$zc1 surface=[0-9]+ x=80 y=98"
 shot home.png
 
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)

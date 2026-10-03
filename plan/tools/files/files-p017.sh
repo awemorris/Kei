@@ -23,6 +23,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws071-p017}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.7; }
@@ -49,7 +50,7 @@ expect_log() {
 
 # A control's place (client, where, ID) as zdesktop last logged it: "x y width height".
 place() {
-	guest "grep 'ZWL TITLEBAR control client=$1 .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1" |
+	guest "grep 'ZWL TITLEBAR control client=$(zwl_app_client $1) .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1" |
 	    sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 
@@ -82,7 +83,8 @@ guest 'rm -f /tmp/wayland-0 /tmp/files.clipboard; rm -rf /tmp/fhome; sh /usr/sha
 guest 'export XDG_RUNTIME_DIR=/tmp
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass --wallpaper=/usr/share/keiland/wallpaper.ppm > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=800 --width=1000 --height=640 /tmp/fhome/Documents > /tmp/f.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "files: surface $surface at $wx,$wy"
 
@@ -104,7 +106,7 @@ shot floating.png
 set -- $(place 1 floating 1)
 double $((wx + 60)) $((${2:-0} + ${4:-0} / 2))
 expect_log /tmp/zdesktop.log "GLASS dock surface=$surface"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=docked id=1 .* shown=1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=docked id=1 .* shown=1"
 expect_log /tmp/zdesktop.log "ZWL GLASS client=[0-9]+ surface=$surface panels=2 card:8,8,212,[0-9]+,16 card:228,8,[0-9]+,[0-9]+,16\$"
 shot docked.png
 
@@ -116,7 +118,7 @@ expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Documents ite
 
 # The docked search field.
 control 1 docked 5
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR focus client=1 surface=$surface id=5 edit=0"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR focus client=$zc1 surface=$surface id=5 edit=0"
 keys 'report'
 sleep 2
 expect_log /tmp/f.log 'ZFILES SEARCH done query=report results=[1-9]'
@@ -137,7 +139,7 @@ expect_log /tmp/f.log 'ZFILES ACTION action=16'
 # The docked bar's name "Files" (120,17) undocks on a double click; (190,17) is the Forward control now (ws127-p001 T1).
 double 120 17
 expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=floating id=1 .* shown=1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=floating id=1 .* shown=1"
 floating=$(guest "grep -c 'ZWL GLASS client=[0-9]* surface=$surface panels=2 card:0,0,212,640,16 card:220,0,780,640,16' /tmp/zdesktop.log" | tail -1)
 [ "${floating:-0}" -ge 2 ] && echo "restored cards: ok" || { echo "restored cards: $floating MISSING"; status=1; }
 shot restored.png

@@ -21,6 +21,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p088}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 input() { python3 plan/tools/files/qmp-input.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -56,7 +57,7 @@ expect_guest() {
 }
 
 window() {
-	guest "grep 'ZWL MAP client=$1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
+	guest "grep 'ZWL MAP client=$(zwl_app_client $1) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
 }
 
 # Drags between two screen points (optionally with a key held) and releases.
@@ -104,14 +105,15 @@ echo "A at $ax,$ay  B at $bx,$by"
 
 # 1. Alt: the choice, and Copy Here.
 drag_alt $((ax + 330)) $((ay + 110)) $((bx + 420)) $((by + 420))
-expect_log /tmp/zdesktop.log 'ZWL DATA drag action client=2 action=4'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL DATA drag action client=$zc2 action=4"
 expect_log /tmp/b.log 'ZFILES DROP drop self=0 destination=/tmp/fhome/Documents action=4'
 expect_log /tmp/b.log 'ZFILES CONTEXT-MENU open rows=5 '
 sleep 1
 shot ask.png
 click $(( $(popup_x) + 60 )) "$(row_n 2)" 2000
 expect_log /tmp/b.log 'ZFILES DROP operation=copy items=1 destination=/tmp/fhome/Documents first=/tmp/fhome/Desktop/Logo.png'
-expect_log /tmp/zdesktop.log 'ZWL DATA drag finish client=2 action=1'
+expect_log /tmp/zdesktop.log "ZWL DATA drag finish client=$zc2 action=1"
 expect_guest '[ -f /tmp/fhome/Documents/Logo.png ] && [ -f /tmp/fhome/Desktop/Logo.png ]' 'Logo.png copied'
 
 # 2. Alt again, and Cancel.
@@ -121,7 +123,7 @@ expect_log /tmp/b.log 'ZFILES CONTEXT-MENU open rows=5 '
 sleep 1
 click $(( $(popup_x) + 60 )) "$(row_n 5)" 2000
 expect_log /tmp/b.log 'ZFILES DROP ask cancel'
-expect_log /tmp/zdesktop.log 'ZWL DATA drag unfinished client=2'
+expect_log /tmp/zdesktop.log "ZWL DATA drag unfinished client=$zc2"
 expect_log /tmp/a.log 'ZFILES DRAG out done dropped=0'
 expect_guest '[ -f /tmp/fhome/Desktop/Screenshot.png ] && [ ! -e /tmp/fhome/Documents/Screenshot.png ]' 'Screenshot.png stayed'
 
@@ -133,7 +135,7 @@ drag $((tx + 60)) $((ty - 30)) $((tx + 60 + 300)) $((ty - 30))
 tx=$((tx + 300))
 drag $((ax + 440)) $((ay + 110)) $((tx + 200)) $((ty + 120))
 expect_log /tmp/t.log 'ZTERM DROP enter uris=1 text=1'
-expect_log /tmp/zdesktop.log 'ZWL DATA drag accept client=3 mime=text/uri-list'
+expect_log /tmp/zdesktop.log "ZWL DATA drag accept client=$zc3 mime=text/uri-list"
 expect_log /tmp/t.log 'ZTERM DROP bytes=[1-9][0-9]* uris=1'
 expect_guest '[ -f /tmp/fhome/Desktop/Screenshot.png ]' 'Screenshot.png stayed (a copy)'
 sleep 1

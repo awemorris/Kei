@@ -22,6 +22,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws070-p013}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 input() { python3 plan/tools/files/qmp-input.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -48,7 +49,7 @@ expect_log() {
 
 # The latest logged line of a tab (client, place, ID).
 tab_line() {
-	guest "grep 'ZWL TITLEBAR strip client=$1 .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1"
+	guest "grep 'ZWL TITLEBAR strip client=$(zwl_app_client $1) .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1"
 }
 
 # The centre of a logged rectangle ("x y" from a line with x=, y=, width=, height=), and its left edge.
@@ -79,7 +80,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=600 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 probe /tmp/probe.log '--show=Editor --mode=tabs --seconds=500'
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "probe: surface $surface at $wx,$wy"
 expect_log /tmp/probe.log 'TITLEBARPROBE show ready mode=tabs'
@@ -105,24 +107,24 @@ expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
 
 # 3. A long title gives way to six tabs.
 probe /tmp/probe2.log '--show=A_rather_long_window_title_that_would_crowd_the_tabs --mode=tabs --tabs=5 --width=860 --seconds=300'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=2 .* where=floating id=[0-9]+ .* shown=1 '
-set -- $(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=.*/\1/p')
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc2 .* where=floating id=[0-9]+ .* shown=1 "
+set -- $(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=.*/\1/p')
 w2x=${1:-0}
-first=$(guest "grep 'ZWL TITLEBAR strip client=2 .* where=floating id=' /tmp/zdesktop.log | head -1" | left)
+first=$(guest "grep 'ZWL TITLEBAR strip client=$zc2 .* where=floating id=' /tmp/zdesktop.log | head -1" | left)
 [ $(( ${first:-9999} - w2x )) -le 150 ] && echo "title: first tab at +$(( ${first:-0} - w2x )) ok" || { echo "title: first tab at +$(( ${first:-9999} - w2x )) MISSING"; status=1; }
-arrows=$(guest "grep -c 'ZWL TITLEBAR strip client=2 .* button=left ' /tmp/zdesktop.log" | tail -1)
+arrows=$(guest "grep -c 'ZWL TITLEBAR strip client=$zc2 .* button=left ' /tmp/zdesktop.log" | tail -1)
 [ "${arrows:-1}" = 0 ] && echo "title: no arrows ok" || { echo "title: arrows=$arrows MISSING"; status=1; }
 shot title.png
 
 # 4. The wheel over a scrolling strip.
 probe /tmp/probe3.log '--show=Many --mode=tabs --tabs=14 --width=640 --seconds=300'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=3 .* where=floating button=left '
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc3 .* where=floating button=left "
 set -- $(tab_line 3 floating 2 | centre)
 pointer move "$1" "$2" sleep 400 wheel-down sleep 600
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip scroll client=3 surface=[0-9]+ first=1 by=wheel'
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip scroll client=$zc3 surface=[0-9]+ first=1 by=wheel"
 check "$out/wheel.png" >/dev/null
 pointer wheel-up sleep 600
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip scroll client=3 surface=[0-9]+ first=0 by=wheel'
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip scroll client=$zc3 surface=[0-9]+ first=0 by=wheel"
 
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
 [ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }

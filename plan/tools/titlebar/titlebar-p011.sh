@@ -26,6 +26,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws070-p011}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[t]itlebar-probe" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[t]itlebar-probe" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -51,10 +52,10 @@ expect_log() {
 
 # The latest logged line of a tab (client, place, ID) or of a strip button (client, place, name).
 tab_line() {
-	guest "grep 'ZWL TITLEBAR strip client=$1 .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1"
+	guest "grep 'ZWL TITLEBAR strip client=$(zwl_app_client $1) .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1"
 }
 button_line() {
-	guest "grep 'ZWL TITLEBAR strip client=$1 .* where=$2 button=$3 ' /tmp/zdesktop.log | tail -1"
+	guest "grep 'ZWL TITLEBAR strip client=$(zwl_app_client $1) .* where=$2 button=$3 ' /tmp/zdesktop.log | tail -1"
 }
 
 # The centre of a logged rectangle ("x y" from a line with x=, y=, width=, height=), and a tab's close button's.
@@ -97,38 +98,39 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=700 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 probe /tmp/probe.log '--show=Editor --mode=tabs --seconds=500'
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "probe: surface $surface at $wx,$wy"
 
 # 1. The strip.
 expect_log /tmp/probe.log 'TITLEBARPROBE show ready mode=tabs'
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating id=2 .* shown=1 flags=5 close=[0-9]+"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating id=3 .* shown=1 flags=6 close=-1"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating button=new "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating id=2 .* shown=1 flags=5 close=[0-9]+"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating id=3 .* shown=1 flags=6 close=-1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating button=new "
 shot tabs.png
 
 # 2. README.md, 日本語.txt and its close button, "+".
 set -- $(tab_line 1 floating 1 | centre); click "$1" "$2"
 expect_log /tmp/probe.log 'TITLEBARPROBE event=tab id=1 '
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR tab client=1 id=1 event=activated'
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating id=1 .* flags=1 close=-1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR tab client=$zc1 id=1 event=activated"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating id=1 .* flags=1 close=-1"
 set -- $(tab_line 1 floating 3 | centre); click "$1" "$2"
 expect_log /tmp/probe.log 'TITLEBARPROBE event=tab id=3 '
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating id=3 .* flags=5 close=[0-9]+"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating id=3 .* flags=5 close=[0-9]+"
 set -- $(tab_line 1 floating 3 | close_centre); click "$1" "$2"
 expect_log /tmp/probe.log 'TITLEBARPROBE event=close id=3'
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating id=2 .* flags=5 "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating id=2 .* flags=5 "
 set -- $(button_line 1 floating new | centre); click "$1" "$2"
 expect_log /tmp/probe.log 'TITLEBARPROBE event=new '
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=floating id=4 .* shown=1 flags=5 "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=floating id=4 .* shown=1 flags=5 "
 shot after.png
 
 # 3. Docked, main.c there, restored.
 set -- $(tab_line 1 floating 1 | centre)
 double $((wx + 40)) "$2"
 expect_log /tmp/zdesktop.log "GLASS dock surface=$surface"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=1 surface=$surface where=docked id=2 .* shown=1 "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 surface=$surface where=docked id=2 .* shown=1 "
 shot docked.png
 set -- $(tab_line 1 docked 2 | centre); click "$1" "$2"
 activations=$(guest "grep -c 'TITLEBARPROBE event=tab id=2 ' /tmp/probe.log" | tail -1)
@@ -138,26 +140,26 @@ expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
 
 # 4. Six tabs narrowed.
 probe /tmp/probe2.log '--show=Six --mode=tabs --tabs=6 --width=860 --seconds=300'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=2 .* where=floating id=6 .* shown=1 '
-hidden=$(guest "grep -c 'ZWL TITLEBAR strip client=2 .* shown=0 ' /tmp/zdesktop.log" | tail -1)
-arrows=$(guest "grep -c 'ZWL TITLEBAR strip client=2 .* button=left ' /tmp/zdesktop.log" | tail -1)
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc2 .* where=floating id=6 .* shown=1 "
+hidden=$(guest "grep -c 'ZWL TITLEBAR strip client=$zc2 .* shown=0 ' /tmp/zdesktop.log" | tail -1)
+arrows=$(guest "grep -c 'ZWL TITLEBAR strip client=$zc2 .* button=left ' /tmp/zdesktop.log" | tail -1)
 [ "${hidden:-1}" = 0 ] && [ "${arrows:-1}" = 0 ] && echo "narrow: all shown, no arrows ok" || { echo "narrow: hidden=$hidden arrows=$arrows MISSING"; status=1; }
 shot narrow.png
 
 # 5. Fourteen tabs scrolled.
 probe /tmp/probe3.log '--show=Many --mode=tabs --tabs=14 --width=640 --seconds=300'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=3 .* where=floating button=left '
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=3 .* where=floating id=14 .* shown=0 '
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=3 .* where=floating button=overflow '
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc3 .* where=floating button=left "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc3 .* where=floating id=14 .* shown=0 "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc3 .* where=floating button=overflow "
 shot scroll.png
 set -- $(button_line 3 floating right | centre); click "$1" "$2"
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip scroll client=3 surface=[0-9]+ first=1'
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip scroll client=$zc3 surface=[0-9]+ first=1"
 set -- $(button_line 3 floating overflow | centre); click "$1" "$2" 1000
-expect_log /tmp/zdesktop.log 'ZWL MENU open client=3 '
+expect_log /tmp/zdesktop.log "ZWL MENU open client=$zc3 "
 check "$out/strip-overflow.png" >/dev/null
 click $(( $(popup_x) + 60 )) "$(row_y 4026531854)" 1000
 expect_log /tmp/probe3.log 'TITLEBARPROBE event=tab id=14 '
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=3 .* where=floating id=14 .* shown=1 flags=5 '
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc3 .* where=floating id=14 .* shown=1 flags=5 "
 
 # 6. The mode switched in single commits.
 guest "$stop_all" >/dev/null
@@ -166,11 +168,12 @@ picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/sh
 /bin/wayland --timeout=300 --width=1280 --height=800 --glass $picture > /tmp/zdesktop2.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 probe /tmp/probe4.log '--show=Switch --mode=tabs --switch=2 --seconds=200'
 expect_log /tmp/probe4.log 'TITLEBARPROBE switch mode=controls'
-expect_log /tmp/zdesktop2.log 'ZWL TITLEBAR control client=1 .* where=floating id=5 .* shown=1'
+zwl_app_clients /tmp/zdesktop2.log
+expect_log /tmp/zdesktop2.log "ZWL TITLEBAR control client=$zc1 .* where=floating id=5 .* shown=1"
 check "$out/switch-controls.png" >/dev/null
 expect_log /tmp/probe4.log 'TITLEBARPROBE switch mode=tabs'
 check "$out/switch-tabs.png" >/dev/null
-set -- $(guest "grep 'ZWL TITLEBAR commit client=1 ' /tmp/zdesktop2.log > /tmp/commits.txt; grep -c . /tmp/commits.txt; grep -vc ' controls=8 tabs=3 ' /tmp/commits.txt" | tail -2)
+set -- $(guest "grep 'ZWL TITLEBAR commit client=$zc1 ' /tmp/zdesktop2.log > /tmp/commits.txt; grep -c . /tmp/commits.txt; grep -vc ' controls=8 tabs=3 ' /tmp/commits.txt" | tail -2)
 commits=${1:-0}; partial=${2:-1}
 [ "$commits" -ge 3 ] && [ "$partial" = 0 ] && echo "switch: $commits commits, each whole ok" || { echo "switch: commits=$commits partial=$partial MISSING"; status=1; }
 

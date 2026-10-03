@@ -26,6 +26,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws071-p014}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.7; }
@@ -63,7 +64,7 @@ expect_count() {
 
 # A control's place (client, where, ID) as zdesktop last logged it: "x y width height".
 place() {
-	guest "grep 'ZWL TITLEBAR control client=$1 .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1" |
+	guest "grep 'ZWL TITLEBAR control client=$(zwl_app_client $1) .* where=$2 id=$3 ' /tmp/zdesktop.log | tail -1" |
 	    sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 
@@ -97,16 +98,17 @@ guest 'export XDG_RUNTIME_DIR=/tmp
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=800 --width=1000 --height=640 /tmp/fhome/Documents > /tmp/f.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "files: surface $surface at $wx,$wy"
 
 # 1. The controls in the floating titlebar.
 expect_log /tmp/f.log 'ZFILES TITLEBAR ready controls=8'
 expect_log /tmp/f.log 'ZFILES TITLEBAR state back=0 forward=0 parts=2 last=Documents '
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=floating id=4 .* shown=1"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=floating id=8 .* shown=1"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=floating id=0 "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=floating id=4 .* shown=1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=floating id=8 .* shown=1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=floating id=0 "
 shot floating.png
 
 # 2. The path's first part (Home, or the "..." before Documents), then Back.
@@ -126,7 +128,7 @@ expect_log /tmp/f.log 'ZFILES TITLEBAR kind=0 id=8 detail=0 '
 
 # 4. Ctrl+F, a search, Esc.
 keys '<ctrl-f>'
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR focus client=1 surface=$surface id=5 edit=0"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR focus client=$zc1 surface=$surface id=5 edit=0"
 keys 'report'
 sleep 2
 expect_log /tmp/f.log 'ZFILES SEARCH done query=report results=[1-9]'
@@ -138,7 +140,7 @@ expect_count /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Documents '
 
 # 5. Ctrl+L and a path.
 keys '<ctrl-l>'
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR focus client=1 surface=$surface id=4 edit=1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR focus client=$zc1 surface=$surface id=4 edit=1"
 keys '<ctrl-a>' '/tmp/fhome/Pictures'
 shot location.png
 keys '<ret>'
@@ -149,7 +151,7 @@ expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Pictures item
 set -- $(place 1 floating 1)
 double $((wx + 60)) $((${2:-0} + ${4:-0} / 2))
 expect_log /tmp/zdesktop.log "GLASS dock surface=$surface"
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=docked id=6 .* shown=1"
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=docked id=6 .* shown=1"
 shot docked.png
 control 1 docked 3
 expect_log /tmp/f.log 'ZFILES LOCATION kind=home path=/tmp/fhome '
@@ -160,10 +162,10 @@ expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
 # 7. A narrow window: its controls give way to "...", which holds them and the menus.
 guest 'export XDG_RUNTIME_DIR=/tmp; HOME=/tmp/fhome /bin/files --token=f2 --timeout-s=400 --width=420 --height=400 /tmp/fhome/Documents > /tmp/f2.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
 expect_log /tmp/f2.log 'ZFILES TITLEBAR ready controls=8'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR control client=2 .* where=floating id=7 .* shown=0'
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc2 .* where=floating id=7 .* shown=0"
 shot narrow.png
 control 2 floating 0
-expect_log /tmp/zdesktop.log 'ZWL MENU open client=2 '
+expect_log /tmp/zdesktop.log "ZWL MENU open client=$zc2 "
 expect_log /tmp/zdesktop.log 'ZWL MENU row item=1 depth=1 '
 expect_log /tmp/zdesktop.log 'ZWL MENU row item=4026531847 depth=1 '
 shot overflow.png

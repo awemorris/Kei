@@ -24,6 +24,7 @@ mkdir -p "$out"
 # The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p023).
 . plan/ws099/tests/guest-retry.sh
 guest() { guest_retry 90 "$1" </dev/null; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
@@ -61,7 +62,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/sh
 /bin/wayland --timeout=600 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/terminal --token=t1 --timeout-s=500 > /tmp/t.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
 expect_log /tmp/t.log 'ZTERM START'
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 tx=${1:-0}; ty=${2:-0}
 set -- $(guest "grep 'ZTERM START' /tmp/t.log | tail -1" | sed -n 's/.* columns=\([0-9]*\) .* window=\([0-9]*\)x\([0-9]*\).*/\1 \2 \3/p')
 columns=${1:-80}; tw=${2:-0}; th=${3:-0}
@@ -79,7 +81,7 @@ corners "$out/terminal.png" "$tx" "$(title_y "$ty")" "$tw" 44 round terminal-tit
 # 2. The probe over it (its corners are checked alone, in 5).
 guest 'export XDG_RUNTIME_DIR=/tmp; /bin/popup-probe --timeout-s=300 --token=p > /tmp/p.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 expect_log /tmp/p.log 'POPUPPROBE ready run=p'
-set -- $(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+set -- $(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 px=${1:-0}; py=${2:-0}
 echo "probe at $px,$py size 400x300"
 pointer move 5 790 sleep 600

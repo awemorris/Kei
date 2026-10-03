@@ -17,6 +17,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p080}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -46,13 +47,14 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/sh
 /bin/wayland --timeout=200 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/extras-probe --timeout-s=150 --token=x > /tmp/x.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 expect_log /tmp/x.log 'EXTRAS ready run=x'
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 wx=${1:-0}; wy=${2:-0}
 echo "window at $wx,$wy"
 
 # 1. Server-side decorations, whatever the client asks.
-expect_log /tmp/zdesktop.log 'ZWL DECORATION asked client=1 mode=1'
-expect_log /tmp/zdesktop.log 'ZWL DECORATION configure client=1 mode=2' 2
+expect_log /tmp/zdesktop.log "ZWL DECORATION asked client=$zc1 mode=1"
+expect_log /tmp/zdesktop.log "ZWL DECORATION configure client=$zc1 mode=2" 2
 expect_log /tmp/x.log 'EXTRAS decoration mode=2' 2
 
 # 2. The viewport: the red quarter at 200x100 (inside it red; right of it the window).
@@ -64,14 +66,14 @@ check "$out/decoration.png" --expect $((wx + 40)),$((wy + 40)),e04040 --expect $
 # 3. The cursor shapes, at a point of the window away from the sub-surface.
 px=$((wx + 300)); py=$((wy + 200))
 pointer move $((px - 3)) "$py" sleep 200 move "$px" "$py" sleep 800
-expect_log /tmp/zdesktop.log 'ZWL CURSOR shape client=1 shape=9 image=0'
+expect_log /tmp/zdesktop.log "ZWL CURSOR shape client=$zc1 shape=9 image=0"
 check "$out/text.png" --expect "$px","$py",ffffff --expect "$px",$((py + 6)),ffffff || status=1
 keys 'h'
-expect_log /tmp/zdesktop.log 'ZWL CURSOR shape client=1 shape=4 image=1'
+expect_log /tmp/zdesktop.log "ZWL CURSOR shape client=$zc1 shape=4 image=1"
 pointer move $((px + 1)) "$py" sleep 150 move "$px" "$py" sleep 600
 check "$out/hand.png" --expect "$px","$py",ffffff --expect "$px",$((py + 6)),ffffff || status=1
 keys 'e'
-expect_log /tmp/zdesktop.log 'ZWL CURSOR shape client=1 shape=26 image=3'
+expect_log /tmp/zdesktop.log "ZWL CURSOR shape client=$zc1 shape=26 image=3"
 pointer move $((px + 1)) "$py" sleep 150 move "$px" "$py" sleep 600
 check "$out/resize.png" --expect "$px","$py",ffffff --expect $((px + 5)),"$py",ffffff || status=1
 

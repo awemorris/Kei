@@ -15,6 +15,7 @@ export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/ws068-run}"
 out=${1:-build/ws068-p013}
 mkdir -p "$out"
 guest() { timeout 120 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[x]server|[g]lxtest|[e]gltest|[z]term" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[x]server|[g]lxtest|[e]gltest|[z]term" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -47,7 +48,8 @@ guest "$stop_all" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0 /tmp/.X11-unix/X0; /bin/wayland --timeout=600 --width=1280 --height=800 --glass --log-frames > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 DISPLAY=:0 /bin/xserver > /tmp/x11server.log 2>&1 </dev/null & sleep 6
 DISPLAY=:0 /bin/glxtest --gl3 --frames=600 --delay-ms=30 --token=g3 > /tmp/glx3.log 2>&1 </dev/null & i=0; while ! grep -q "EGLTEST CHECK" /tmp/glx3.log && [ $i -lt 60 ]; do sleep 1; i=$((i+1)); done; sleep 2; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 wx=${1:-0}; wy=${2:-0}
 echo "glxtest window at $wx,$wy"
 pointer move 1250 780 sleep 400

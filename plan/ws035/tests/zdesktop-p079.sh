@@ -19,6 +19,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p079}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -45,7 +46,7 @@ expect_log() {
 
 # The place of a client's window (from zdesktop's MAP line).
 window_of() {
-	guest "grep 'ZWL MAP client=$1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
+	guest "grep 'ZWL MAP client=$(zwl_app_client $1) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
 }
 
 # Clicks a point (with a small approach, so that the motion is seen before the press).
@@ -63,7 +64,8 @@ expect_log /tmp/a.log 'DATAPROBE focus'
 # 1. a sets the selection; b starts on top and receives a's text.
 keys 's'
 expect_log /tmp/a.log 'DATAPROBE set selection text=hello from a'
-expect_log /tmp/zdesktop.log 'ZWL DATA selection client=1 source=[0-9]+ types=2'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL DATA selection client=$zc1 source=[0-9]+ types=2"
 guest 'export XDG_RUNTIME_DIR=/tmp; /bin/data-probe --token=b --color=30a050 --text="b says hi" --timeout-s=300 > /tmp/b.log 2>&1 </dev/null & sleep 3; echo started' >/dev/null
 expect_log /tmp/b.log 'DATAPROBE ready run=b'
 expect_log /tmp/b.log 'DATAPROBE type text/plain;charset=utf-8'
@@ -98,7 +100,7 @@ sleep 2
 keys 'echo p079-copy-me' '<ret>'
 sleep 1
 keys '<ctrl-shift-a>' '<ctrl-shift-c>'
-expect_log /tmp/zdesktop.log 'ZWL DATA selection client=3 '
+expect_log /tmp/zdesktop.log "ZWL DATA selection client=$zc3 "
 check "$out/terminal-copy.png" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; /bin/data-probe --token=c --color=a05030 --text="touch /tmp/p079-pasted
 " --timeout-s=300 > /tmp/c.log 2>&1 </dev/null & sleep 3; echo started' >/dev/null

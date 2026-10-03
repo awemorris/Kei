@@ -20,6 +20,7 @@ out=${1:-build/ws035-p105}
 prefix=${2:-}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1 </dev/null; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[m]view|[x]server|[z]term" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[m]view|[x]server|[z]term" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -55,7 +56,8 @@ shot() {
 guest "$stop_all" >/dev/null
 guest "$start" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; /bin/mview --windowed --size=1600x1000 --timeout-s=300 --token=big > /tmp/m1.log 2>&1 </dev/null & sleep 8; echo started' >/dev/null
-expect_log /tmp/zdesktop.log 'ZWL BOUNDS client=1 surface=[0-9]+ width=1256 height=690'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL BOUNDS client=$zc1 surface=[0-9]+ width=1256 height=690"
 expect_log /tmp/m1.log 'MVIEW WINDOW run=big width=1256 height=690 bounds=1256x690'
 shot mview.png
 guest "$stop_all" >/dev/null
@@ -64,7 +66,8 @@ guest "$stop_all" >/dev/null
 guest "$start" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/.X11-unix/X0; DISPLAY=:0 /bin/xserver --size 1280x800 > /tmp/x11server.log 2>&1 </dev/null & sleep 3; DISPLAY=:0 /bin/zterm -geometry 300x100 > /tmp/zterm.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
 expect_log /tmp/x11server.log 'X11SERVER BOUNDS window=0x[0-9a-f]+ width=1240 height=690 was=1240x720'
-expect_log /tmp/zdesktop.log 'ZWL BOUNDS client=1 surface=[0-9]+ width=1256 height=690'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL BOUNDS client=$zc1 surface=[0-9]+ width=1256 height=690"
 shot zterm.png
 guest "$stop_all" >/dev/null
 

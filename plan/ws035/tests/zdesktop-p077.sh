@@ -21,6 +21,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p077}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -50,8 +51,9 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/sh
 /bin/wayland --timeout=300 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/subsurface-probe --timeout-s=240 --token=s > /tmp/s.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 expect_log /tmp/s.log 'SUBPROBE ready run=s'
-expect_log /tmp/zdesktop.log 'ZWL SUBSURFACE create client=1 ' 3
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL SUBSURFACE create client=$zc1 " 3
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 wx=${1:-0}; wy=${2:-0}
 echo "window at $wx,$wy"
 sleep 1

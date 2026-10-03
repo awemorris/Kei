@@ -23,6 +23,7 @@ export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/ws035-sq-run}"
 out=${1:-build/ws035-p063}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[w]lshm|[w]ltest|[m]view" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[w]lshm|[w]ltest|[m]view" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -45,7 +46,7 @@ open_wiseview() {
 
 # The tile of a client in the latest open Wiseview: x y width height.
 tile() {
-	guest "grep 'WISEVIEW tile client=$1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep 'WISEVIEW tile client=$(zwl_app_client $1) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 
 guest "$stop_all" >/dev/null
@@ -78,7 +79,8 @@ check "$out/hover.png" >/dev/null
 pointer down sleep 80 up sleep 1500 move 1200 796 sleep 500
 expect_log "WISEVIEW select surface="
 expect_log "WISEVIEW closed"
-set -- $(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 check "$out/selected.png" --expect $(($1 + 180)),$(($2 + 130)),2b3444 || status=1
 
 # 4. Opened again, a click on empty space closes it.

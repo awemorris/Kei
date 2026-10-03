@@ -7,6 +7,8 @@
 # /usr/share/fonts/truetype/droid/ with /usr/share/doc/fonts-droid-fallback/copyright).
 #
 #   plan/tools/files/build-files-image.sh [BUILD]     (default build/amd64)
+#   FILES_CONFIG=plan/tools/files/config-amd64-files-ime.mk plan/tools/files/build-files-image.sh BUILD
+#                                                     (the same with the input method, BUG-146)
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
@@ -21,5 +23,5 @@ extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_E
 [ -f build/ws071-fonts/DroidSansFallback-LICENSE.txt ] && extra="$extra --file /usr/share/fonts/keiland-fallback-LICENSE.txt=build/ws071-fonts/DroidSansFallback-LICENSE.txt"
 [ -f build/ws035-wallpaper/wallpaper.ppm ] && extra="$extra --file /usr/share/keiland/wallpaper.ppm=build/ws035-wallpaper/wallpaper.ppm"
 extra="$extra --file /usr/share/files-tests/make-home.sh=plan/tools/files/make-home.sh"
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/tools/files/config-amd64-files.mk BUILD="$build" \
+exec make -j"$(nproc)" ZEDBSD_CONFIG="${FILES_CONFIG:-plan/tools/files/config-amd64-files.mk}" BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

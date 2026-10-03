@@ -28,6 +28,7 @@ export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/ws035-sq-run}"
 out=${1:-build/ws035-p062}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[w]lshm|[w]ltest|[m]view" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[w]lshm|[w]ltest|[m]view" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -53,7 +54,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/sh
 /bin/wayland --timeout=600 --width=1280 --height=800 --glass $picture --log-frames > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/wltest --windowed --size=420x300 --color=f4f7fc --frames=3600 --delay-ms=100 --token=a > /tmp/a.log 2>&1 </dev/null & sleep 2
 /bin/mview --windowed --size=640x460 --timeout-s=500 --token=m > /tmp/m.log 2>&1 </dev/null & sleep 10; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=$1; mx=$2; my=$3
 title_y=$((my - 8 - 22))
 echo "m: surface $surface at $mx,$my"
@@ -67,7 +69,7 @@ pointer move $((mx + 150)) $title_y sleep 400 down sleep 60 up sleep 60 down sle
 check "$out/docking.png" >/dev/null
 sleep 3
 expect_log "GLASS dock surface=$surface via=double-click"
-expect_log "CONFIGURE client=2 surface=$surface serial=[0-9]* width=1280 height=762"
+expect_log "CONFIGURE client=$zc2 surface=$surface serial=[0-9]* width=1280 height=762"
 frames=$(count "GLASS anim surface=$surface docking=1")
 echo "animation frames while docking: $frames"
 [ "$frames" -ge 1 ] || status=1
@@ -82,7 +84,7 @@ check "$out/docked-hover.png" >/dev/null
 pointer move $((title_x + 60)) 17 sleep 400 down sleep 60 up sleep 60 down sleep 60 up sleep 100
 sleep 3
 expect_log "GLASS undock surface=$surface via=double-click x=$mx y=$my"
-expect_log "CONFIGURE client=2 surface=$surface serial=[0-9]* width=640 height=460"
+expect_log "CONFIGURE client=$zc2 surface=$surface serial=[0-9]* width=640 height=460"
 pointer move 1200 780 sleep 500
 check "$out/undocked.png" --expect $((mx + 20)),$((my + 200)),333333 || status=1
 
@@ -120,7 +122,7 @@ check "$out/restored.png" --expect $((px + 20)),$((py + 200)),333333 || status=1
 # Nothing failed.
 guest 'grep -E "ERROR|FAILED" /tmp/zdesktop.log /tmp/a.log /tmp/m.log' | tee "$out/errors.txt"
 [ -s "$out/errors.txt" ] && status=1
-guest 'grep -E "GLASS (dock|undock|moved)|CONFIGURE client=2" /tmp/zdesktop.log' > "$out/log.txt"
+guest 'grep -E "GLASS (dock|undock|moved)|CONFIGURE client='"$zc2"'" /tmp/zdesktop.log' > "$out/log.txt"
 guest "$stop_all" >/dev/null
 [ $status -eq 0 ] && echo "p062: PASS" || echo "p062: FAIL"
 exit $status

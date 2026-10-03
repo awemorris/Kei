@@ -16,6 +16,7 @@ mkdir -p "$out"
 # The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p023).
 . plan/ws099/tests/guest-retry.sh
 guest() { guest_retry 90 "$1"; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -35,7 +36,7 @@ expect_log() {
 
 # The tile of a client's window in the latest open Wiseview: x y width height.
 tile() {
-	guest "grep 'WISEVIEW tile client=$1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep 'WISEVIEW tile client=$(zwl_app_client $1) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 
 # Opens Wiseview with the swipe from the bottom edge.
@@ -48,9 +49,10 @@ guest "$stop_all" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; /bin/wayland --timeout=600 --width=1280 --height=800 --glass > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/wlshm --size=520x340 --color=ffd04040 --frames=20000 --token=a > /tmp/a.log 2>&1 </dev/null & sleep 3
 /bin/wlshm --size=520x340 --color=ff4060d0 --frames=20000 --token=b > /tmp/b.log 2>&1 </dev/null & sleep 3; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 sa=${1:-0}; ax=${2:-0}; ay=${3:-0}
-set -- $(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+set -- $(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 sb=${1:-0}; bx=${2:-0}; by=${3:-0}
 echo "a: surface $sa at $ax,$ay; b: surface $sb at $bx,$by"
 

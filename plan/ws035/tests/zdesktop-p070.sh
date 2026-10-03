@@ -14,6 +14,7 @@ export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/ws035-sq-run}"
 out=${1:-build/ws035-p070}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; ps -A -o pid,comm | awk "{ n = \$2; sub(\".*/\", \"\", n) } n == \"wayland\" || n == \"xserver\" || n == \"zgears\" || n == \"zterm\" {print \$1}" | while read p; do kill $p; done; sleep 1'
@@ -54,7 +55,8 @@ pointer move ${1:-0} ${2:-0} sleep 400 down sleep 60 up sleep 9000
 pointer move 1250 780 sleep 400
 check "$out/xterm.png" >/dev/null
 expect_log 'ZWL HOME launch name=X terminal pid='
-expect_log 'ZWL MAP client=1 '
+zwl_app_clients
+expect_log "ZWL MAP client=$zc1 "
 servers=$(processes xserver); zterm=$(processes zterm)
 echo "after X terminal: x11server=$servers zterm=$zterm"
 [ "$servers" = 1 ] && [ "$zterm" = 1 ] || status=1
@@ -67,7 +69,7 @@ pointer move ${1:-0} ${2:-0} sleep 400 down sleep 60 up sleep 12000
 pointer move 1250 780 sleep 400
 check "$out/gears.png" >/dev/null
 expect_log 'ZWL HOME launch name=Gears pid='
-maps=$(guest "grep -c 'ZWL MAP client=1 ' /tmp/zdesktop.log" | tail -1)
+maps=$(guest "grep -c 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log" | tail -1)
 echo "the server's windows mapped: $maps"
 [ "${maps:-0}" -ge 2 ] 2>/dev/null || status=1
 servers=$(processes xserver); gears=$(processes zgears)

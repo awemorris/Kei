@@ -24,6 +24,7 @@ export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/ws035-sq-run}"
 out=${1:-build/ws035-p059}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 qmp() { python3 plan/tools/qmp.py "$GUEST_RUNTIME/qmp.sock" input-send-event "$1" >/dev/null; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[w]lshm|[w]ltest|[m]view" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[w]lshm|[w]ltest|[m]view" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -49,7 +50,7 @@ click() {
 
 # The place zdesktop gave a surface of a client (x and y from its MAP line).
 place() {
-	guest "grep 'ZWL MAP client=$1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
+	guest "grep 'ZWL MAP client=$(zwl_app_client $1) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
 }
 
 status=0
@@ -99,7 +100,8 @@ python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" move $((title_
 sleep 3
 move 1200 700
 check "$out/restored.png" --expect $((ax + 20)),$((ay + 150)),f4f7fc || status=1
-guest 'grep -E "CONFIGURE client=1" /tmp/zdesktop.log; grep RESIZE /tmp/a.log' | tee "$out/maximize.txt"
+zwl_app_clients
+guest 'grep -E "CONFIGURE client='"$zc1"'" /tmp/zdesktop.log; grep RESIZE /tmp/a.log' | tee "$out/maximize.txt"
 grep -q "width=1280 height=762" "$out/maximize.txt" || status=1
 grep -q "RESIZE run=a width=420 height=300" "$out/maximize.txt" || status=1
 

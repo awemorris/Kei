@@ -23,6 +23,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p084}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[f]iles" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[f]iles" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -58,12 +59,12 @@ expect_guest() {
 
 # A window's place from zdesktop's log: "x y" of client N's map.
 window() {
-	guest "grep 'ZWL MAP client=$1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
+	guest "grep 'ZWL MAP client=$(zwl_app_client $1) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p'
 }
 
 # A titlebar control's rectangle from zdesktop's log: "x y width height".
 place() {
-	guest "grep 'ZWL TITLEBAR control client=$1 .* where=floating id=$2 ' /tmp/zdesktop.log | tail -1" |
+	guest "grep 'ZWL TITLEBAR control client=$(zwl_app_client $1) .* where=floating id=$2 ' /tmp/zdesktop.log | tail -1" |
 	    sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 
@@ -109,14 +110,15 @@ shot two.png
 # 2. Logo.png from A onto B's content.
 drag $((ax + 330)) $((ay + 110)) $((bx + 420)) $((by + 420))
 expect_log /tmp/a.log 'ZFILES DRAG out items=1$'
-expect_log /tmp/zdesktop.log 'ZWL DATA drag start client=1 source=[0-9]+ types=2 actions=7 '
-expect_log /tmp/zdesktop.log 'ZWL DATA drag enter client=2 '
-expect_log /tmp/zdesktop.log 'ZWL DATA drag accept client=2 mime=text/uri-list'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL DATA drag start client=$zc1 source=[0-9]+ types=2 actions=7 "
+expect_log /tmp/zdesktop.log "ZWL DATA drag enter client=$zc2 "
+expect_log /tmp/zdesktop.log "ZWL DATA drag accept client=$zc2 mime=text/uri-list"
 check "$out/over.png" >/dev/null
 release
-expect_log /tmp/zdesktop.log 'ZWL DATA drag drop client=1 target=2 '
+expect_log /tmp/zdesktop.log "ZWL DATA drag drop client=$zc1 target=$zc2 "
 expect_log /tmp/b.log 'ZFILES DROP operation=move items=1 destination=/tmp/fhome/Documents first=/tmp/fhome/Desktop/Logo.png'
-expect_log /tmp/zdesktop.log 'ZWL DATA drag finish client=2 '
+expect_log /tmp/zdesktop.log "ZWL DATA drag finish client=$zc2 "
 expect_log /tmp/a.log 'ZFILES DRAG out done dropped=1'
 expect_guest '[ -f /tmp/fhome/Documents/Logo.png ] && [ ! -e /tmp/fhome/Desktop/Logo.png ]' 'Logo.png moved to Documents'
 shot moved.png
@@ -128,7 +130,7 @@ crumb_x=$((${1:-0} - ax0 + ax + 10)); crumb_y=$((${2:-0} + ${4:-0} / 2))
 logo=$(guest "ls /tmp/fhome/Documents | sort -f | grep -n Logo.png | cut -d: -f1" | tail -1)
 echo "crumb at $crumb_x,$crumb_y; Logo.png is item ${logo:-?} in B"
 drag $((bx + 330 + ((${logo:-1} - 1) % 3) * 110)) $((by + 110 + ((${logo:-1} - 1) / 3) * 120)) "$crumb_x" "$crumb_y"
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR drop_target client=1 id=4 detail=0'
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR drop_target client=$zc1 id=4 detail=0"
 check "$out/crumb.png" >/dev/null
 release
 expect_log /tmp/a.log 'ZFILES DROP operation=move items=1 destination=/tmp/fhome first=/tmp/fhome/Documents/Logo.png'
@@ -146,7 +148,7 @@ shot self.png
 # 5. A drag from B released over the wallpaper: nothing moves.
 drag $((bx + 330)) $((by + 110)) 640 760
 release
-expect_log /tmp/zdesktop.log 'ZWL DATA drag cancel client=2 reason=release'
+expect_log /tmp/zdesktop.log "ZWL DATA drag cancel client=$zc2 reason=release"
 expect_log /tmp/b.log 'ZFILES DRAG out done dropped=0'
 count=$(guest "ls /tmp/fhome/Documents | wc -l" | tail -1)
 [ "${count:-0}" -eq 6 ] 2>/dev/null && echo "cancel: Documents keeps 6 ok" || { echo "cancel: Documents has ${count:-?} MISSING"; status=1; }
