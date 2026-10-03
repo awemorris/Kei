@@ -8,8 +8,12 @@
  * still reports POLLHUP, a peer that stopped reading still reports an error
  * for the writer, and a pending socket error still reports POLLERR.
  *
- * Each case prints "PASS name", "FAIL name ..." or "SKIP name ...", the TCP
- * observation prints "INFO", and the last line is "RESULT pass=N fail=N".
+ * TCP (BUG-151, ws005-p027) is held to the same rule: a client's own
+ * SHUT_WR reports nothing until the server answers, the answer is
+ * readable, and the server's FIN after it reports POLLHUP.
+ *
+ * Each case prints "PASS name", "FAIL name ..." or "SKIP name ...", and the
+ * last line is "RESULT pass=N fail=N".
  * The exit status is 0 only when no case failed.
  */
 
@@ -43,7 +47,7 @@ static void bug149_peer_stopped_reading(void);
 static void bug149_datagram_shutwr(void);
 static void bug149_udp_shutwr(void);
 static void bug149_socket_error(void);
-static void bug149_tcp_shutwr_info(void);
+static void bug149_tcp_shutwr(void);
 
 /* Runs every case and reports the totals. */
 int
@@ -59,7 +63,7 @@ main(void)
 	bug149_datagram_shutwr();
 	bug149_udp_shutwr();
 	bug149_socket_error();
-	bug149_tcp_shutwr_info();
+	bug149_tcp_shutwr();
 
 	/* The totals. */
 	printf("RESULT pass=%d fail=%d\n", bug149_passed, bug149_failed);
@@ -520,12 +524,19 @@ bug149_socket_error(void)
 	(void)close(descriptor);
 }
 
-/* Records what a loopback TCP client's poll reports after its own write shutdown. */
+/*
+ * A loopback TCP client writes, shuts its writing down and polls (BUG-151):
+ * nothing until the server answers, then the answer, then the server's FIN
+ * as POLLHUP with the end of the stream.
+ */
 static void
-bug149_tcp_shutwr_info(void)
+bug149_tcp_shutwr(void)
 {
 	struct sockaddr_in address;
 	socklen_t length;
+	char detail[96];
+	char answer[8];
+	ssize_t count;
 	short revents;
 	long elapsed;
 	int listener;
@@ -534,14 +545,12 @@ bug149_tcp_shutwr_info(void)
 	int failed;
 	int ready;
 
-	/* A TCP listener. */
+	/* A TCP listener on a loopback port of the system's choice. */
 	listener = socket(AF_INET, SOCK_STREAM, 0);
 	if (listener < 0) {
-		printf("INFO tcp-shutwr socket errno=%d\n", errno);
+		printf("SKIP tcp-shutwr socket errno=%d\n", errno);
 		return;
 	}
-
-	/* On a loopback port of the system's choice. */
 	bug149_loopback(&address, 0);
 	failed = bind(listener, (struct sockaddr *)&address, sizeof(address));
 	if (failed == 0)
@@ -550,34 +559,55 @@ bug149_tcp_shutwr_info(void)
 	if (failed == 0)
 		failed = getsockname(listener, (struct sockaddr *)&address, &length);
 	if (failed != 0) {
-		printf("INFO tcp-shutwr listen errno=%d\n", errno);
+		printf("SKIP tcp-shutwr listen errno=%d\n", errno);
 		(void)close(listener);
 		return;
 	}
 
-	/* The client connects. */
+	/* The client connects and the server takes the connection. */
 	client = socket(AF_INET, SOCK_STREAM, 0);
 	failed = -1;
 	if (client >= 0)
 		failed = connect(client, (struct sockaddr *)&address, sizeof(address));
-	if (failed != 0) {
-		printf("INFO tcp-shutwr connect errno=%d\n", errno);
+	server = -1;
+	if (failed == 0)
+		server = accept(listener, NULL, NULL);
+	if (failed != 0 || server < 0) {
+		printf("SKIP tcp-shutwr connect/accept errno=%d\n", errno);
 		if (client >= 0)
 			(void)close(client);
 		(void)close(listener);
 		return;
 	}
 
-	/* The server takes the connection; the client writes and shuts its writing down. */
-	server = accept(listener, NULL, NULL);
+	/* The request, and the client's writing shut down: nothing to report yet. */
 	(void)write(client, "req", 3);
 	(void)shutdown(client, SHUT_WR);
-
-	/* Linux and FreeBSD report nothing here until the server answers. */
 	ready = bug149_poll(client, POLLIN, 0, &revents, &elapsed);
-	printf("INFO tcp-shutwr ready=%d revents=0x%x (Linux/FreeBSD: 0)\n", ready, (unsigned)revents);
+	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x", ready, (unsigned)revents);
+	bug149_result("tcp-shutwr-nothing-yet", ready == 0 && revents == 0, detail);
+
+	/* The server answers and shuts its side: the answer is readable. */
+	(void)write(server, "ans", 3);
+	(void)shutdown(server, SHUT_WR);
+	ready = bug149_poll(client, POLLIN, 2000, &revents, &elapsed);
+	memset(answer, 0, sizeof(answer));
+	count = -1;
+	if (ready == 1 && (revents & POLLIN) != 0)
+		count = read(client, answer, sizeof(answer) - 1U);
+	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x read=%ld text=%s", ready, (unsigned)revents, (long)count, answer);
+	bug149_result("tcp-shutwr-answer", count == 3 && strcmp(answer, "ans") == 0, detail);
+
+	/* The server's FIN after the answer: the end of the stream and a hangup. */
+	ready = bug149_poll(client, POLLIN, 2000, &revents, &elapsed);
+	count = -1;
+	if (ready == 1 && (revents & POLLIN) != 0)
+		count = read(client, answer, sizeof(answer) - 1U);
+	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x read=%ld", ready, (unsigned)revents, (long)count);
+	bug149_result("tcp-peer-fin-hangs-up", count == 0 && (revents & POLLHUP) != 0, detail);
+
+	/* The sockets go. */
 	(void)close(client);
-	if (server >= 0)
-		(void)close(server);
+	(void)close(server);
 	(void)close(listener);
 }
