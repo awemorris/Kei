@@ -56,3 +56,5 @@
 ## 記録の最小項目
 
 [Registry](registry.md)は担当名/世代、WS、worktree/branch、current Queue、ordered next Queues、状態、最終checkpoint、wrap-up指示、最終merge ACKを持つ。Queue laneは承認元/範囲/Phase/attempt/依存と結果を持つ。成果のGit commit、統合、Queue/Phase clearance、WS completionは別イベント。shared cache/outboxはmainだけが書き、GitHub publicationの保留とローカル実行成果を混同しない。
+
+2026-10-03 / toolchain の規則と試験の image: T1 の T1-027（CI の image、config/ci/config-amd64.mk）が T1 の worktree の build/ の中で target の clang の package（userland/packages/lang/clang）を build・stage した。共有の toolchain（build/llvm・llvm-source・llvm-build・NoctLang）は toolchain-lock.sh status で全て書き込み不可のまま、変更なしを Q1 が確認。AGENTS.md の「subagent は toolchain を変更・build・install しない（main の許可が要る）」に対し、Q1（main）の許可: 試験の担当（T1・T2）が自分の worktree の build/ の中で、image に入れる target の clang・libcxx の package を build するのは可（共有の toolchain の tree は lock のまま、source と規則は変えない）。I/O が重いので、同じ BUILD の directory を使い回して作り直しを避ける。
