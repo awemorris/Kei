@@ -25,6 +25,14 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-159](bugs/BUG-159.md) | バッテリー駆動で描画が 5 fps ほどに落ち、電池切れで警告なく落ちる | reproduced（実機 S1） / tracking | S1（WS133） | WS075（i915）、電源の管理（WS050〜052・WS132） |
+| [BUG-158](bugs/BUG-158.md) | 操作中・放置中にフリーズし、電源ボタンの長押しが要る | reproduced（実機 S1） / tracking | S1（WS133） | WS005／WS004（AX211）、原因次第 |
+| [BUG-157](bugs/BUG-157.md) | 鍵を間違えたとき「Could not join (Network is down)」と出る（5330 の AX211） | reproduced（実機 S1） / scheduled | S1（WS133） | WS005／WS004（AX211） |
+| [BUG-156](bugs/BUG-156.md) | タッチパッドでスクロールできない | reproduced（実機 S1） / scheduled | S1（WS133） | WS081（touch）か WS006（入力） |
+| [BUG-155](bugs/BUG-155.md) | Terminal で IME の日本語を入力できない | reproduced（実機 S1） / scheduled | S1（WS133） | WS128（Terminal） |
+| [BUG-154](bugs/BUG-154.md) | WiFi の AP を切り替えるとき「Connecting...」の表示が無い | reproduced（実機 S1） / scheduled | S1（WS133） | WS005（system bar・Settings の WiFi、WS131 の backend の後の path） |
+| [BUG-153](bugs/BUG-153.md) | system bar の音量の slider で 50% を click しても次の瞬間に 100% になる | reproduced（実機 S1） / scheduled | S1（WS133） | WS100（音量） |
+| [BUG-152](bugs/BUG-152.md) | Settings の Wallpaper の頁を開くと約 10 秒止まる | reproduced（実機 S1） / scheduled | S1（WS133） | WS089（Settings） |
 | [BUG-151](bugs/BUG-151.md) | kernel の TCP: 自分側の SHUT_WR で poll が POLLHUP | reproduced（QEMU） / tracking | ws005-p025 / q635 | S1 の後に時期を決める |
 | [BUG-150](bugs/BUG-150.md) | Terminal で Emacs の描画が 2 行目から始まる（右端の wrap の保留が無かった） | reproduced / resolved（ws128-p010、統合 02c0d6f41） | 2026-10-03 ユーザー報告 | — |
 | [BUG-149](bugs/BUG-149.md) | kernel の AF_UNIX stream: 自分側の SHUT_WR で poll が POLLERR | reproduced（QEMU、libkeiland の join の EIO） / resolved（ws005-p025、統合 cb3da62d1。実機は S1） | ws005-p020 / q631 | —。libkeiland 側の回避は ws131-p003 |
@@ -143,7 +151,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-116](bugs/BUG-116.md) | 起動の途中、USB の EP0 の control 転送が 1 秒で時間切れ（event が ring に届き IP も立つのに guest が取らない）で keyboard の attach が失敗 | reproduced（QEMU の TCG・KVM） / resolved（ws073-p042、2026-09-30） | ws073-p041 の試験 | 解決（ws073-p042）: 修正の後 TCG 2×20（起動のみ）と KVM 2×20（丸読み 1 回）の 80 回で `xhci: cancel` 0・attach-failed 0・`error=` 0・列挙の再試行 0、usb-hid 毎回、SSH 80/80、`dd` 40/40 が 2216689664 bytes。boot test（uefi-usb）PASS、serial の login 可 |
 | [BUG-117](bugs/BUG-117.md) | 窓の多いとき executor が「set 0 binding 0 に image view と sampler が無い」draw を拒み、compositor の描画が止まる | reproduced（passthrough、stress で 100 回に 2 件） / resolved（ws075-p025、executor の object 表の lock 無しの同時変更） | ws075-p024 | 素の 5330 での確認 |
 | [BUG-118](bugs/BUG-118.md) | X client（X terminal）が cursor を空にすると、focus が変わるまで cursor が全画面で隠れる | reproduced / resolved（ws099-p007、2026-09-30） | 修正済み: client の cursor はその client の窓の本体の上だけ、他は矢印。`plan/ws099/tests/cursor-owner.sh`（C9） | X terminal そのものと実機は未確認 |
-| [BUG-119](bugs/BUG-119.md) | greeter の Shut Down の後、QEMU が終わらない（電源が切れていない恐れ）、画面は greeter のまま | reproduced（QEMU） / resolved（ws073-p043、2026-09-30） | ws099-p004 | 修正済み: ACPI の S5 の電源断（`KERN_SYSTEM_POWEROFF`、`drv_acpi_poweroff()`）。QEMU で `/sbin/poweroff` の後に QEMU が `guest-shutdown` で終わる。5330 の実機は未実施。greeter の表示は ws099-p009 |
+| [BUG-119](bugs/BUG-119.md) | greeter の Shut Down の後、QEMU が終わらない（電源が切れていない恐れ）、画面は greeter のまま | reproduced（QEMU） / tracking（reopened 2026-10-03、S1 の実機で電源が切れない） | ws099-p004 | 修正済み: ACPI の S5 の電源断（`KERN_SYSTEM_POWEROFF`、`drv_acpi_poweroff()`）。QEMU で `/sbin/poweroff` の後に QEMU が `guest-shutdown` で終わる。5330 の実機は未実施。greeter の表示は ws099-p009 |
 | [BUG-120](bugs/BUG-120.md) | 窓を 30 個ほど開くと GPU の object の枠（128）が尽きる | reproduced（passthrough） / tracking | ws075-p025 | pool を動的に、または上限を上げる。デモの 10 窓では出ない |
 | [BUG-121](bugs/BUG-121.md) | Model viewer の窓の角を drag すると窓が消える | reproduced（passthrough、20 回中 6 回） / resolved（ws099-p011、5330 20 回・QEMU 200 回で 0） | ws075-p025 | 原因: 上の窓の frame の帯の press を下の窓の title bar の control が取った、端の帯が frame を覆った。再び起きたら `resize-hw.sh` と session の log の `ZWL CLIENT gone` を見る |
 | [BUG-122](bugs/BUG-122.md) | compositor が落ちた後、greeter が 3 回失敗して文字の console に落ちる | reproduced（passthrough・QEMU） / resolved（ws099-p010、QEMU） | ws075-p025 | 5330 で再び起きたら sessiond の log の `SESSIOND GREETER failed reason=` を読む（WS099 の L2） |

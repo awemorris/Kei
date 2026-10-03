@@ -3,7 +3,7 @@
 # WS133: 安定版 S1 の実機試験
 
 <!-- awesome-plan-current:start -->
-Status: incomplete
+Status: completed
 Primary Milestone: MG003
 Related Milestones: MG005、MG006
 Objectives: O1, O2
@@ -84,3 +84,20 @@ Resume point: 16:30 に main を締め、17:00 までに S1 の image と手順�
 | 今日の修正（間に合えば） | Settings・system bar からの join（EIO が出ない） | BUG-149（P1 ws005-p025）、WS131 p003（P3） | 作業中 |
 
 外す: 5320（FreeBSD が入っていて P3 が使用中、WS118 の P4 の branch は未統合）、未実装の WS、別の機種・外付けの機器の要る項目。
+
+## S1 の結果（2026-10-03 終了）
+
+user「S1はここで終了します。フリーズはおそらく、WiFiが未接続のときに起きています。実機がなくても修正できる問題から順に並べ替えてください。」結果は [s1-results.md](s1-results.md)。直す物（実機なしで直せる順）:
+
+| 順 | Bug | 内容 | 実機なしで | WS |
+| --- | --- | --- | --- | --- |
+| 1 | [BUG-152](../bugs/BUG-152.md) | Settings の Wallpaper の頁で約 10 秒止まる | 直せる・QEMU で確認 | WS089 |
+| 2 | [BUG-155](../bugs/BUG-155.md) | Terminal で IME の日本語を打てない | 直せる・QEMU で確認 | WS128 |
+| 3 | [BUG-154](../bugs/BUG-154.md) | WiFi の切替で「Connecting...」が無い | 直せる・QEMU（network-probe）で確認 | WS005 |
+| 4 | [BUG-153](../bugs/BUG-153.md) | 音量の slider が 100% に戻る | たぶん直せる・QEMU と host 試験（実機の HDA が原因なら最後に実機） | WS100 |
+| 5 | [BUG-156](../bugs/BUG-156.md) | タッチパッドでスクロールできない | 実装は合成の event で、確認は実機 | WS081／WS006 |
+| 6 | [BUG-157](../bugs/BUG-157.md) | 間違えた鍵で「Network is down」 | 読みで原因、確認は実機 | WS005／WS004 |
+| 7 | [BUG-158](../bugs/BUG-158.md) | フリーズ（WiFi 未接続の時の見込み） | 読みで候補、再現と確認は実機 | WS005／WS004 |
+| 8 | [BUG-119](../bugs/BUG-119.md) | Shut Down で電源が切れない（reopen） | 実機が要る | WS073 |
+| 9 | [BUG-159](../bugs/BUG-159.md) | バッテリーで描画が 5 fps、電池切れで警告なし | 実機が要る | WS075・電源の管理 |
+| — | F-072 | PDF Viewer の起動 約 1 秒 | 速さのチケットでまとめて | — |
