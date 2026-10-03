@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p026 -->
 # ws005-p026: WiFi の join の間「Connecting...」を出す（BUG-154）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-013（QEMU）connecting-bug154・settings-p003・zdesktop-p013 PASS。実機は S2。強調行の「Connecting...」の色の読みにくさは P1 が続けて直す）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Queue: q638（P1 generation11、2026-10-03。承認: user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」「実行してください。」）

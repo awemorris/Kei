@@ -46,7 +46,7 @@ networkd の SUBSCRIBE と `net watch`（ws035-p018）、system bar の network 
 | [p022](phase022/phase.md) | 変更した source の全文規約の確認と回帰（near-final conformance） | planning | p019（p020・p021 の修正を含む） | 2h |
 | [p023](phase023/phase.md) | 実機の受け入れ B5（5330 の AX211・USB の LAN、5320 の USB の LAN・無線）。ユーザーと一緒に行う | planning | p020/p021/p022、ユーザーの時期、WS118 p001 の image の方式 | 2h（ユーザーの立会い） |
 | [p025](phase025/phase.md) | [BUG-149](../bugs/BUG-149.md): AF_UNIX の自分側の SHUT_WR で poll が POLLERR を返す kernel の不具合を直し、libkeiland・zsv1-client・greeter・net の影響を確かめる | in-progress（q635、P1。A1〜A5 を満たし cleared を提案） | なし | 4h |
-| [p026](phase026/phase.md) | [BUG-154](../bugs/BUG-154.md): WiFi の join の間、system bar の menu と Settings の Wi-Fi に「Connecting...」を出す | in-progress（q638、P1。実装済み・T1 の試験待ち） | なし | 2h |
+| [p026](phase026/phase.md) | [BUG-154](../bugs/BUG-154.md): WiFi の join の間、system bar の menu と Settings の Wi-Fi に「Connecting...」を出す | cleared（2026-10-03 Q1、T1-013） | なし | 2h |
 
 p016 は ws035-p018 へ移管済み（cleared）。p017（旧 fg005 の統合）は p022・p023 に置き換える提案（main の確認待ち、それまで planning のまま残す）。
 
