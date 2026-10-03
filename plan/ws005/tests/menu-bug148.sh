@@ -34,7 +34,7 @@ expect_log() {
 	tries=0
 	found=0
 	while [ $tries -lt ${3:-10} ]; do
-		found=$(guest "grep -cE '$2' $1" | tail -1)
+		found=$(guest "grep -acE '$2' $1" | tail -1)
 		[ "${found:-0}" -gt 0 ] 2>/dev/null && break
 		tries=$((tries + 1))
 		sleep 1
@@ -57,15 +57,15 @@ shot() {
 }
 # The middle of the network icon, from zdesktop's log.
 icon() {
-	guest "grep 'ZWL NETWORK icon' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep -a 'ZWL NETWORK icon' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 # The place of the last laid-out menu row whose text is $1.
 row() {
-	guest "grep 'ZWL NETWORK row .*text=$1\$' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep -a 'ZWL NETWORK row .*text=$1\$' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 # Clicks a control of Settings' page by its index, where Settings last logged it.
 control() {
-	set -- $(guest "grep 'ZSETTINGS CONTROL index=$1 ' /tmp/s.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
+	set -- $(guest "grep -a 'ZSETTINGS CONTROL index=$1 ' /tmp/s.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
 	if [ -z "${1:-}" ]; then
 		echo "control: not found"
 		status=1
@@ -76,7 +76,7 @@ control() {
 
 # The rows of the last layout logged.
 last_rows() {
-	guest "grep -E 'ZWL NETWORK (menu|row|disconnect) ' /tmp/zdesktop.log" | awk '/ZWL NETWORK menu /{block=""} {block=block $0 "\n"} END{printf "%s", block}'
+	guest "grep -aE 'ZWL NETWORK (menu|row|disconnect) ' /tmp/zdesktop.log" | awk '/ZWL NETWORK menu /{block=""} {block=block $0 "\n"} END{printf "%s", block}'
 }
 
 # 0. A key for Kei Lab (against the real networkd), then the stand-in and zdesktop.
@@ -120,7 +120,7 @@ height=$(grep 'ZWL NETWORK menu ' "$out/rows-short.txt" | tail -1 | sed -n 's/.*
 shot short.png
 
 # 3. The button disconnects.
-set -- $(guest "grep 'ZWL NETWORK disconnect ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p') 0 0 0 0
+set -- $(guest "grep -a 'ZWL NETWORK disconnect ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p') 0 0 0 0
 [ "$1" = 0 ] && { echo "the Disconnect button: MISSING"; status=1; }
 click $(($1 + $3 / 2)) $(($2 + $4 / 2)) 1500
 expect_log /tmp/probe.log 'NETPROBE request op=36'
@@ -128,9 +128,9 @@ expect_log /tmp/zdesktop.log 'ZWL NETWORK state .*wifi=disconnected'
 shot left.png
 
 # zdesktop saw no error; networkd's socket back and the test key gone.
-errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
+errors=$(guest "grep -ac ERROR /tmp/zdesktop.log" | tail -1)
 [ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
-guest 'grep "ZWL NETWORK" /tmp/zdesktop.log' > "$out/zdesktop-network.log"
+guest 'grep -a "ZWL NETWORK" /tmp/zdesktop.log' > "$out/zdesktop-network.log"
 guest "$stop_all" >/dev/null
 guest 'rm -f /run/networkd.sock; mv /run/networkd.sock.real /run/networkd.sock; rm -f /etc/wifi.conf; net show' > "$out/net-show.txt"
 grep -q 'online' "$out/net-show.txt" && echo "networkd: back" || { echo "networkd: not back"; status=1; }
