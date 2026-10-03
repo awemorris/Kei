@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws134-p001 -->
 # ws134-p001: システムモニターの設計
 
-Status: in-progress（q649、P2）
+Status: cleared の提案（q649、P2、2026-10-03。design.md を作り design-reviewer の 25 項目を反映。user「確認しなくていい」）
 Parent: [WS134](../ws.md)
 
 ## 範囲
@@ -16,3 +16,12 @@ Parent: [WS134](../ws.md)
 ## 受け入れ
 
 design.md が上の 1〜4 を含み、design-reviewer の敵対的レビューを通す。ユーザーには Q1 が知らせるが、実装はレビューを待たずに始めてよい（2026-10-03 user「P2はコードを書いてOKだと思います。衝突しないです。」）。
+
+## 結果（2026-10-03、P2）
+
+- [design.md](../design.md): 情報の出どころ（zedBSD・Linux・FreeBSD の表、kernel の追加 K1〜K5、WS131 の backend・拡張・libkeiland の API の案と重なり）、
+  stub の model と stub の項目の表（印は付けない、user の決定）、画面の構成（[layout-mock.png](../design/layout-mock.png)）、3D・動き・操作、描画の方式と
+  frame の予算（隠れた窓の frame の許可を含む）、Phase（p002〜p010、Q1 が ID を割り当て）と受け入れ、試験の道具。
+- 調べ: Explore の subagent 2 つ（zedBSD の統計の出どころ、libkeiland・libkeiui・app の描画の構成）。probe の code は書いていない。
+- design-reviewer（敵対的レビュー）: 高 5・中 13・低 7 の 25 項目。全て design.md に反映した（§8 の表）。
+- 未実施: Linux・FreeBSD の出どころは一般の知識と Linux の host の確認だけ。`KERN_SYSTEM_GET_VMSTAT` の所要時間、i915 の timestamp の対応は未測定。
