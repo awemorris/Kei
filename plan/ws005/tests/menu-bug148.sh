@@ -21,7 +21,8 @@ out=${1:-build/ws005-shots/bug148}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1 </dev/null; }
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
-pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" --height "${PH:-800}" "$@"; }
+# The output's height goes before the socket: qmp-pointer.py takes every word after the socket as a step.
+pointer() { python3 plan/ws035/tests/qmp-pointer.py --height "${PH:-800}" "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[s]ettings|[n]etwork-probe" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[s]ettings|[n]etwork-probe" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
 start_desktop='export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1; echo started'
@@ -87,11 +88,12 @@ guest "$start_desktop" >/dev/null
 expect_log /tmp/zdesktop.log 'ZWL NETWORK state reachable=1 '
 
 # 1. Joined to Kei Lab: first, with its button.
-set -- $(icon)
+set -- $(icon) 0 0 0 0
 ix=$(($1 + $3 / 2)); iy=$(($2 + $4 / 2))
 click $ix $iy 1500
 expect_log /tmp/zdesktop.log 'ZWL NETWORK scan count=3'
-set -- $(row 'Kei Lab')
+set -- $(row 'Kei Lab') 0 0 0 0
+[ "$1" = 0 ] && { echo "Kei Lab's row: MISSING"; status=1; }
 click $(($1 + 150)) $(($2 + $4 / 2)) 1500
 expect_log /tmp/zdesktop.log 'ZWL NETWORK state .*wifi=connected ssid=Kei Lab'
 expect_log /tmp/zdesktop.log 'ZWL NETWORK disconnect .*ssid=Kei Lab'
@@ -109,7 +111,7 @@ PH=230
 start_short=$(echo "$start_desktop" | sed 's/--height=800/--height=230/')
 guest "$start_short" >/dev/null
 expect_log /tmp/zdesktop.log 'ZWL NETWORK icon x='
-set -- $(icon)
+set -- $(icon) 0 0 0 0
 click $(($1 + $3 / 2)) $(($2 + $4 / 2)) 1500
 expect_log /tmp/zdesktop.log 'ZWL NETWORK row .*text=[0-9]+ more in Settings > Wi-Fi'
 last_rows > "$out/rows-short.txt"
@@ -118,7 +120,8 @@ height=$(grep 'ZWL NETWORK menu ' "$out/rows-short.txt" | tail -1 | sed -n 's/.*
 shot short.png
 
 # 3. The button disconnects.
-set -- $(guest "grep 'ZWL NETWORK disconnect ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
+set -- $(guest "grep 'ZWL NETWORK disconnect ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p') 0 0 0 0
+[ "$1" = 0 ] && { echo "the Disconnect button: MISSING"; status=1; }
 click $(($1 + $3 / 2)) $(($2 + $4 / 2)) 1500
 expect_log /tmp/probe.log 'NETPROBE request op=36'
 expect_log /tmp/zdesktop.log 'ZWL NETWORK state .*wifi=disconnected'
