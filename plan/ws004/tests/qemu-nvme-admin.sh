@@ -2,6 +2,8 @@
 # Disposable QEMU NVMe Identify and non-destructive boot regression.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 if [ "$#" -ne 2 ]; then
 	echo "usage: $0 AMD64-HDD-IMAGE OUTPUT-DIRECTORY" >&2
@@ -65,6 +67,7 @@ namespace_digest=$(sha256sum "$nvme_image" | awk '{print $1}')
 
 "$qemu" \
 	-machine q35 \
+	$(qemu_accel_args "") \
 	-m 512 \
 	-smp 4 \
 	-drive if=pflash,format=raw,readonly=on,file="$ovmf_code" \

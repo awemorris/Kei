@@ -4,6 +4,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 root=$(cd "$(dirname "$0")/../../.." && pwd)
 cd "$root" || exit 1
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 extra=$(python3 plan/tools/guest/guest.py extra-files)
-eval "make -j48 ZEDBSD_CONFIG=plan/tools/guest/config-amd64-ssh.mk BUILD=$build $extra disk-image"
+eval "make -j$ZEDBSD_JOBS ZEDBSD_CONFIG=plan/tools/guest/config-amd64-ssh.mk BUILD=$build $extra disk-image"

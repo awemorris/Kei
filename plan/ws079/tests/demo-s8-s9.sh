@@ -15,6 +15,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -u
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 image=${1:-}
 out=${2:-build/ws079-shots/p016}
 limit=${TURN_LIMIT_MS:-200}
@@ -76,7 +77,7 @@ largest() {
 # 0. The image, the guest, the document, and zdesktop.
 if [ -z "$image" ]; then
 	extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
-	timeout 3000 make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws079/tests/config-amd64-demo.mk BUILD=build/amd64 \
+	timeout 3000 make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws079/tests/config-amd64-demo.mk BUILD=build/amd64 \
 	    "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image > "$out/image.log" 2>&1 || { echo "image: FAIL"; exit 1; }
 	mkdir -p build/ws079
 	cp --reflink=auto build/amd64/hdd-image.img build/ws079/demo.img

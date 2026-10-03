@@ -18,6 +18,11 @@
 #   BOOT_TIMEOUT   seconds to wait for the login prompt (default 180)
 #   QEMU           emulator to run (default depends on BOOT_MODE)
 #   BOOT_MODE      uefi-nvme (default), uefi-usb, bios-ide or raspi4b
+#   QEMU_NO_KVM    1 runs the amd64 guest on TCG (-cpu max) even when /dev/kvm
+#                  is usable; otherwise it runs under KVM (-cpu host) when the
+#                  host offers it (plan/tools/guest/qemu-accel.sh)
+#
+# The bios-ide and raspi4b guests always run on TCG.
 #
 # BOOT_MODE=bios-ide boots the image the way i386 machines are booted: the
 # firmware is the PC BIOS and the disk is on IDE.  Those kernels put their
@@ -35,6 +40,7 @@
 set -euo pipefail
 
 root=$(cd -- "$(dirname -- "$0")/../.." && pwd)
+. "$root/plan/tools/guest/qemu-accel.sh"
 image=${1:-${IMAGE:-$root/build/amd64/hdd-image.img}}
 output=${OUTPUT:-$root/build/boot-test}
 boot_timeout=${BOOT_TIMEOUT:-180}
@@ -116,7 +122,9 @@ if [[ $boot_mode == uefi-usb || $boot_mode == uefi-nvme ]]; then
 	fi
 	# amd64 is tested with 8 GiB (2026-09-24 user decision).  raspi4b
 	# below cannot follow: QEMU's model of the board takes only 2 GiB.
-	"$qemu" -machine q35 -m 8G -smp 4 -cpu max \
+	# KVM when the host offers it (2026-10-03 user: every test uses KVM).
+	read -r -a accel <<<"$(qemu_accel_args max)"
+	"$qemu" -machine q35 -m 8G -smp 4 "${accel[@]}" \
 		-drive "if=pflash,format=raw,readonly=on,file=$code" \
 		-drive "if=pflash,format=raw,file=$nvram" \
 		-device qemu-xhci,id=xhci \

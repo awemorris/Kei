@@ -2,6 +2,8 @@
 # WS004 p024 disposable QEMU strict-GPT publication acceptance.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -euo pipefail
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 repo=$(cd -- "$script_dir/../../.." && pwd)
@@ -150,7 +152,7 @@ broken_controller()
 }
 
 qemu_command=(
-	"$qemu" -machine q35 -m 512 -smp 4
+	"$qemu" -machine q35 -m 512 -smp 4 $(qemu_accel_args "")
 	-drive "if=pflash,format=raw,readonly=on,file=$ovmf_code"
 	-drive "if=pflash,format=raw,file=$broken_vars"
 	-device piix3-ide,id=legacyide

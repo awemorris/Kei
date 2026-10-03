@@ -9,6 +9,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
 [ -n "$extra" ] || { echo "build-demo-venus-image: no guest files (plan/tools/guest/guest.py keys?)"; exit 1; }
@@ -27,5 +28,5 @@ extra="$extra --file /usr/share/files-tests/make-home.sh=plan/tools/files/make-h
 accounts=$build/demo-accounts
 plan/ws035/demo/demo-accounts.sh "$accounts"
 extra="$extra --file /etc/passwd=$accounts/passwd --file /etc/group=$accounts/group --file /etc/shadow=$accounts/shadow"
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws035/tests/config-amd64-demo-venus.mk BUILD="$build" \
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws035/tests/config-amd64-demo-venus.mk BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

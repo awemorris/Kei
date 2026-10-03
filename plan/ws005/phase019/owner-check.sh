@@ -19,6 +19,8 @@
 # refused.  The SSID and passphrase are fixed fake test values.
 #   sh plan/ws005/phase019/owner-check.sh IMAGE [RUN-DIRECTORY]
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 image=${1:?image}
 run=${2:-build/p1-owner}
 code=${OVMF_CODE:-/usr/share/OVMF/OVMF_CODE_4M.fd}
@@ -26,7 +28,7 @@ vars=${OVMF_VARS:-/usr/share/OVMF/OVMF_VARS_4M.fd}
 mkdir -p "$run"
 rm -f "$run/serial.sock"
 cp "$vars" "$run/vars.fd"
-timeout 600 qemu-system-x86_64 -machine q35 -m 4G -smp 4 -cpu max -enable-kvm \
+timeout 600 qemu-system-x86_64 -machine q35 -m 4G -smp 4 $(qemu_accel_args max) \
 	-drive "if=pflash,format=raw,readonly=on,file=$code" \
 	-drive "if=pflash,format=raw,file=$run/vars.fd" \
 	-drive "if=none,id=boot,file=$image,format=raw,snapshot=on" \

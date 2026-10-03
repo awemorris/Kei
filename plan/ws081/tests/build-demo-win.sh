@@ -6,6 +6,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/ws081-demo-win}
 mkdir -p "$build"
 extra="--file /etc/keiland/apps.conf=plan/ws035/demo/apps.conf"
@@ -21,6 +22,6 @@ key=plan/tmp/guest/id_ed25519.pub
 extra="$extra --file /etc/passwd=$accounts/passwd --file /etc/group=$accounts/group --file /etc/shadow=$accounts/shadow"
 # touchlog first, against the toolchain's sysroot (build/amd64/sysroot, the one the packages are linked with).
 sh plan/ws081/tests/build-touchlog.sh build/amd64
-make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws081/tests/config-amd64-demo-win.mk BUILD="$build" \
+make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws081/tests/config-amd64-demo-win.mk BUILD="$build" \
 	"ZEDBSD_TEST_EXTRA_FILES=$extra" ZEDBSD_TEST_IMAGE_TAG=demo-win disk-image
 echo "demo image: $build/hdd-image.img"

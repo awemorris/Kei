@@ -16,7 +16,7 @@
 
 ```
 mkdir -p build/<W>
-make -j64 disk-image > build/<W>/build.log 2>&1; echo "make exit=$?"
+make -j16 disk-image > build/<W>/build.log 2>&1; echo "make exit=$?"
 grep -E ':[0-9]+:[0-9]+: warning:' build/<W>/build.log | grep -vE '/packages/|^\.\./src/|userland/base/noct/noct/' | wc -l
 ls -la build/amd64/hdd-image.img
 ```
@@ -29,7 +29,7 @@ ls -la build/amd64/hdd-image.img
 ## 2. sysroot だけを作り直す・中身の hash
 
 ```
-make -j64 sysroot-amd64
+make -j16 sysroot-amd64
 mkdir -p build/<W>
 (cd build/amd64/sysroot/usr/include && find . -type f | LC_ALL=C sort | xargs sha256sum) > build/<W>/sysroot-include.txt
 ```
@@ -39,8 +39,8 @@ mkdir -p build/<W>
 ## 3. 1 つの library・program だけを build
 
 ```
-make -j64 build/amd64/dynamic/libkeiland.so
-make -j64 build/amd64/bin/wayland
+make -j16 build/amd64/dynamic/libkeiland.so
+make -j16 build/amd64/bin/wayland
 ```
 
 image は作り直さない。boot test・guest の試験の前には 1 の `disk-image` を走らせる。

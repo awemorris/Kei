@@ -8,10 +8,11 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 config=${AUDIOD_CONFIG:-plan/ws100/tests/config-amd64-volume.mk}
 sysroot=$(pwd)/build/amd64/sysroot
-[ -f "$build/dynamic/libc.so" ] || make -j"$(nproc)" ZEDBSD_CONFIG="$config" BUILD="$build" "$build/dynamic/libc.so"
+[ -f "$build/dynamic/libc.so" ] || make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG="$config" BUILD="$build" "$build/dynamic/libc.so"
 [ -f "$sysroot/usr/include/stdint.h" ] || { echo "build-audiod-feedback: no sysroot headers in $sysroot"; exit 1; }
 mkdir -p build/ws100-tests
 build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot="$sysroot" -nostdinc -I. -Iinclude -isystem "$sysroot/usr/include" \

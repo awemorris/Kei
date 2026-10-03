@@ -163,9 +163,11 @@ def start(arguments: argparse.Namespace) -> int:
 	ssh_port = free_port()
 	debug_port = free_port()
 	# KVM when the host offers it: an emulated CPU takes minutes to boot
-	# the guest and makes every timeout in it a question of luck.
+	# the guest and makes every timeout in it a question of luck.  The rule
+	# is plan/tools/guest/qemu-accel.sh's: QEMU_NO_KVM=1 is --no-kvm.
 	acceleration = []
-	if not arguments.no_kvm and os.access("/dev/kvm", os.R_OK | os.W_OK):
+	no_kvm = arguments.no_kvm or os.environ.get("QEMU_NO_KVM", "") not in ("", "0", "no")
+	if not no_kvm and os.access("/dev/kvm", os.R_OK | os.W_OK):
 		acceleration = ["-accel", "kvm"]
 	# The boot disk is a USB stick, the way the physical machines are
 	# tried, or an NVMe drive, the way they are installed (2026-09-25 user

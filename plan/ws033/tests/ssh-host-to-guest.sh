@@ -22,6 +22,8 @@
 #
 # usage: ssh-host-to-guest.sh [image]
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 root=$(cd "$(dirname "$0")/../../.." && pwd)
 image=${1:-$root/build/amd64/hdd-image.img}
@@ -69,11 +71,11 @@ cp "$image" "$disk"
 # tree, because a private key in a repository is a private key nobody has.
 ssh-keygen -q -t ed25519 -N '' -C zedbsd-host-test -f "$key"
 
-# -cpu max is what gives the guest RDRAND.  Without it OpenSSL has nothing
+# -cpu max (TCG) or -cpu host (KVM, on a host that has it) is what gives the guest RDRAND.  Without it OpenSSL has nothing
 # to seed from on this system and ssh-keygen refuses to make a host key,
 # which is a gap in the system rather than in the test, but this test is
 # about the network and runs the way the other guest tests run.
-"$qemu" -machine q35 -m 512 -smp 2 -cpu max \
+"$qemu" -machine q35 -m 512 -smp 2 $(qemu_accel_args max) \
 	-device qemu-xhci,id=xhci \
 	-drive "if=none,id=boot,file=$disk,format=raw" \
 	-device usb-storage,bus=xhci.0,port=1,drive=boot,id=rootstick,bootindex=1 \

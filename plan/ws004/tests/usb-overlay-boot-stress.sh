@@ -1,5 +1,7 @@
 #!/bin/sh
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
 	echo "usage: $0 IMAGE OUTPUT-DIRECTORY [COUNT]" >&2
@@ -82,6 +84,7 @@ while [ "$run" -le "$count" ]; do
 	if [ "$storage_mode" = usb ]; then
 		"$qemu" \
 			-machine q35 \
+			$(qemu_accel_args "") \
 			-m 512 \
 			-smp "$smp_cpus" \
 			-device qemu-xhci,id=xhci \

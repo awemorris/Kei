@@ -9,6 +9,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 variant=${2:-}
 [ $# -ge 2 ] && shift 2 || shift $#
@@ -24,5 +25,5 @@ extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_E
 [ -f build/ws035-wallpaper/wallpaper.ppm ] && extra="$extra --file /usr/share/keiland/wallpaper.ppm=build/ws035-wallpaper/wallpaper.ppm"
 extra="$extra --file /usr/share/files-tests/make-home.sh=plan/tools/files/make-home.sh"
 [ $# -eq 0 ] && set -- disk-image
-exec make -j"$(nproc)" ZEDBSD_CONFIG=$config BUILD="$build" \
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=$config BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" "$@"

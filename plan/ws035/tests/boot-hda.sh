@@ -2,12 +2,14 @@
 # ws035-p007: boots the HDA test image under KVM with the serial console and
 # logs in.  IMG is the disk image, RUN the run directory, QEMU_EXTRA the audio
 # devices.
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 cd /home/awe/zedBSD-rpi4
 for pid in $(pgrep qemu-system); do kill -9 $pid; done; sleep 1
 IMG=${IMG:-build/p007-img/hdd-image.img}
 D=${RUN:-/tmp/p007-run}; mkdir -p $D; rm -f $D/*.sock $D/*.wav
 cp $IMG $D/stick.img; cp /usr/share/OVMF/OVMF_VARS_4M.fd $D/vars.fd
-qemu-system-x86_64 -accel kvm -machine q35 -m 512 -smp 4 -cpu host \
+qemu-system-x86_64 -machine q35 -m 512 -smp 4 $(qemu_accel_args max) \
   -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \
   -drive if=pflash,format=raw,file=$D/vars.fd -device qemu-xhci,id=xhci \
   -drive if=none,id=boot,file=$D/stick.img,format=raw \

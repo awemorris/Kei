@@ -6,6 +6,8 @@
 #   sh plan/tools/guest/amd64-serial.sh build/amd64/hdd-image.img 'uname -a'
 # RUN is the work directory (default build/amd64-serial-run).
 set -e
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/qemu-accel.sh"
 IMAGE=${1:?image}
 shift
 D=${RUN:-build/amd64-serial-run}
@@ -14,7 +16,7 @@ VARS=${OVMF_VARS:-/usr/share/OVMF/OVMF_VARS_4M.fd}
 mkdir -p "$D"
 rm -f "$D/serial.sock"
 cp "$VARS" "$D/vars.fd"
-qemu-system-x86_64 -machine q35 -m 8G -smp 4 -cpu max -enable-kvm \
+qemu-system-x86_64 -machine q35 -m 8G -smp 4 $(qemu_accel_args max) \
   -drive "if=pflash,format=raw,readonly=on,file=$CODE" \
   -drive "if=pflash,format=raw,file=$D/vars.fd" \
   -drive "if=none,id=boot,file=$IMAGE,format=raw,snapshot=on" \

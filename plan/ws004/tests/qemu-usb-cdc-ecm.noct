@@ -4,7 +4,21 @@ require zedbuild;
 // Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 
 var qmpTranscript = "";
+// ws129-p011: kvm or tcg, from plan/tools/guest/qemu-accel.sh (QEMU_NO_KVM=1 forces TCG).
+var qemuAccelMode = "tcg";
 var cellFailure = "";
+
+// Adds the accelerator: KVM with the host's CPU, else single-threaded TCG as before.
+func pushQemuAccel(command) {
+    Array.push(command, "-accel");
+    if (qemuAccelMode == "kvm") {
+        Array.push(command, "kvm");
+        Array.push(command, "-cpu");
+        Array.push(command, "host");
+    } else {
+        Array.push(command, "tcg,thread=single");
+    }
+}
 
 func normalizeProcessText(value) {
     var result = "";
@@ -246,12 +260,16 @@ func productionSourceReady(repo) {
 
 func makeQemuCommand(qemu, ovmfCode, varsCopy, image, topology,
                      guestLog, serialLog, pcap) {
-    var command = [qemu, "-machine", "q35,usb=off", "-accel",
-        "tcg,thread=single", "-m", "512", "-smp", "4", "-drive",
+    var command = [qemu, "-machine", "q35,usb=off"];
+    pushQemuAccel(command);
+    var rest = ["-m", "512", "-smp", "4", "-drive",
         "if=pflash,format=raw,unit=0,readonly=on,file=" + ovmfCode,
         "-drive", "if=pflash,format=raw,unit=1,file=" + varsCopy,
         "-device", "qemu-xhci,id=xhci", "-drive",
         "if=none,id=boot,file=" + image + ",format=raw"];
+    for (i in 0..Array.size(rest)) {
+        Array.push(command, rest[i]);
+    }
     if (topology == "ide") {
         Array.push(command, "-device");
         Array.push(command, "piix3-ide,id=ide");
@@ -438,6 +456,9 @@ func main(args) {
     }
     var repo = capture("realpath " + zbShellQuote(args[0]),
                        "resolve repository");
+    qemuAccelMode = capture(". " +
+        zbShellQuote(repo + "/plan/tools/guest/qemu-accel.sh") +
+        " && qemu_accel_mode", "choose the QEMU accelerator");
     var evidence = capture("realpath -m " + zbShellQuote(args[1]),
                            "resolve evidence");
     if (FileUtil.checkFileExists(evidence) == 1) {
