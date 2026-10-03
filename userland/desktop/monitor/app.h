@@ -235,6 +235,54 @@ struct sm_motion {
 	float write_phase;
 };
 
+/*
+ * The card brought forward (design.md section 3.9): the plate (-1: none),
+ * how far it has come out (0 to 1, eased when drawn), whether it is coming
+ * or going, whether it is pinned, and the plate the keyboard is on.
+ */
+struct sm_focus {
+	int plate;
+	float progress;
+	int opening;
+	int pinned;
+	int keyboard;
+	uint64_t last_ms;
+};
+
+/* The most fingers the monitor follows. */
+#define SM_FINGERS		5U
+
+/*
+ * The fingers and the pointer (design.md section 3.10): libkeiland's
+ * gestures, the fingers down and where each touched, the most down in this
+ * contact, a two-finger tap's start, whether a pinch already acted, the
+ * drag in progress (and whether it turns the core), and the pointer's
+ * press.
+ */
+struct sm_touch {
+	struct keiland_gesture *gesture;
+	int32_t ids[SM_FINGERS];
+	float down_x[SM_FINGERS];
+	float down_y[SM_FINGERS];
+	float last_x[SM_FINGERS];
+	float last_y[SM_FINGERS];
+	unsigned fingers;
+	unsigned most;
+	uint64_t second_us;
+	int moved;
+	int pinched;
+	int dragging;
+	int drag_core;
+	int pressed;
+	int press_moved;
+	int press_long;
+	int press_core;
+	float press_x;
+	float press_y;
+	uint64_t press_ms;
+	float core_turn;
+};
+
 /* The time ranges the graphs show (the titlebar's controls). */
 #define SM_RANGES		4U
 
@@ -289,6 +337,8 @@ struct sm_app {
 	struct sm_layout layout;
 	struct sm_layout view;
 	struct sm_motion motion;
+	struct sm_focus focus;
+	struct sm_touch touch;
 	struct sm_slide slides[SM_PLATES];
 	char shown[SM_PLATES][48];
 
@@ -316,6 +366,14 @@ void sm_layout_compute(struct sm_layout *layout, float width, float height);
 void sm_motion_update(struct sm_app *app, uint64_t now_ms);
 void sm_space_core(struct sm_app *app, const struct sm_box *box, uint64_t now_ms);
 void sm_space_relief(struct sm_app *app, const struct sm_box *box);
+
+/* interact.c */
+int sm_interact_open(struct sm_app *app);
+void sm_interact_close(struct sm_app *app);
+void sm_interact_event(struct sm_app *app, const struct kui_window_event *event, uint64_t now_ms);
+int sm_interact_tick(struct sm_app *app, uint64_t now_ms);
+const char *sm_plate_name(enum sm_plate plate);
+void sm_set_range(struct sm_app *app, unsigned range);
 
 /* render.c */
 VkResult sm_renderer_open(struct sm_renderer *renderer, struct wl_display *display, struct wl_surface *surface, uint32_t width, uint32_t height);

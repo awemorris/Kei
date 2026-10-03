@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 static void take_frames(struct sm_app *app, uint64_t now);
 
@@ -36,6 +37,11 @@ main(
 	uint32_t header[6];
 	unsigned cpus;
 	unsigned gpus;
+	unsigned bench;
+	unsigned round;
+	struct timespec begin;
+	struct timespec end;
+	const char *bench_text;
 	int error;
 
 	/* The arguments. */
@@ -93,6 +99,18 @@ main(
 	error = sm_scene_build(&app, app.fixed_ms);
 	if (error != 0)
 		return 1;
+
+	/* PREVIEW_BENCH=N: the scene built N times more, and the mean time of one (the CPU's share of a frame). */
+	bench = 0;
+	bench_text = getenv("PREVIEW_BENCH");
+	if (bench_text != NULL)
+		bench = (unsigned)strtoul(bench_text, NULL, 10);
+	clock_gettime(CLOCK_MONOTONIC, &begin);
+	for (round = 0; round < bench; round++)
+		(void)sm_scene_build(&app, app.fixed_ms + round * 16U);
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	if (bench != 0U)
+		printf("preview: scene %.3f ms each (%u builds)\n", ((double)(end.tv_sec - begin.tv_sec) * 1000.0 + (double)(end.tv_nsec - begin.tv_nsec) / 1e6) / bench, bench);
 
 	/* The file: the sizes, the vertices, the draws and the atlas's pixels. */
 	file = fopen(argv[1], "wb");

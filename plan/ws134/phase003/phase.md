@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws134-p003 -->
 # ws134-p003: システムモニターの 3D と動き（M2）
 
-Status: uncleared（P2、2026-10-03。T1-043 で sim の fps が 4.7、条件 15 以上）
+Status: uncleared（q645、P2、2026-10-03。T1-043 で sim の fps 4.7（条件 15 以上）。P2 はユーザーの指示でラップアップ、直しは未着手）
 Parent: [WS134](../ws.md)
 設計: [design.md](../design.md) §2.2・§3・§4.2
 
@@ -37,3 +37,35 @@ p002 と同じ（全ての値が sim か replay、本物は hostname・CPU の�
 ## 結果（Q1、2026-10-03、T1-043、QEMU）
 
 uncleared。sim の fps 4.7（条件 15 以上、2 回とも同じ）、他の項目と PNG は ok（worktrees/t1/build/t1-monitor/t1-043/）。guest の描画は llvmpipe（`ZMON READY device="llvmpipe"`、Venus 無し）。Q1 の目視: sim の Graphics に「GPU 1 Simulated GPU」の名前が出る（ユーザーの指示「simという表記はつけなくていいです」に反する）、GPU 0 の名前が「llvmpipe (LLVM 19.1.7, 2」で切れる。再開: P2 が fps の原因（llvmpipe の CPU 描画の重さか、app の描画の量か）を調べ、Venus で測るか条件を直すか描画を軽くし、表記を直して T1 に再依頼。
+
+## 結果（T1-043、a02f7eecd、QEMU、2026-10-03）
+
+uncleared。`monitor-p003.sh` を 2 回（66 s・65 s、変更なし）流して同じ:
+
+- FAIL: `sim: 4 fps (want 15 or more) MISSING`（sim.log `ZMON FRAME fps=4.7 wait_ms=5.21`・`4.7 / 6.92`・`4.6 / 5.96`）。guest は llvmpipe で描いている
+  （`ZMON READY … device="llvmpipe (LLVM 19.1.7, 256 bits)"`）。流し直しの時の host: CPU の圧力 0、IO の avg10=6.87、T2 の QEMU が 1 つ。
+- ok: 3 つの replay の level の順（Elevated → Warning → Critical）、state の文字、sim の cpus=16 gpus=2、failure 無し、zdesktop の ERROR 無し。
+- PNG（T1 の目視）: critical.png に 8 個の CPU の箱・Critical の赤い枠・Events 3 行、sim.png に 16 個の箱と GPU 2 台。
+  `/home/awe/zedBSD-worktrees/t1/build/t1-monitor/t1-043/`・`t1-043-retry/`。
+- 実機・Venus の image では未測定。
+
+### fps の調べ（途中）
+
+- host で scene を作る CPU の時間を測った（`preview.c` に `PREVIEW_BENCH=N` を足した、commit 1227ff647）:
+  `PREVIEW_BENCH=200 plan/ws134/tests/host/preview.sh OUT 1200 690 120000 sim:3:16:2` → **0.284 ms/frame**（20796 vertices、62 draws）。
+  guest の CPU が host の 10 倍遅くても 3 ms で、scene の build は原因ではない。
+- guest の `wait_ms`（present の後の fence の待ち）は 5〜7 ms で、1 frame の 213 ms の大半ではない。残りは未測定:
+  `vkAcquireNextImageKHR`（FIFO で compositor が buffer を返すまで）、`vkQueueSubmit`・`vkQueuePresentKHR`（llvmpipe が描画や wl_shm への複写を
+  ここで同期に行う可能性）、compositor の frame callback の間隔（zdesktop の合成も llvmpipe）。
+
+### 再開の条件（次の担当へ。Q1 の 2026-10-03 の指摘 3 点）
+
+1. fps: `render.c` の各段（acquire・submit・present・fence）と frame callback の間隔を `ZMON FRAME` に足して、QEMU の llvmpipe の image と
+   **Venus の image の両方**で測り、phase.md に両方書く。llvmpipe の fill が重いなら描画を軽くする（全面の背景・plate の重なり・殻の半透明の
+   overdraw を減らす、変わらない層を毎 frame 描き直さない等）。条件を llvmpipe に合わせて下げるだけで済ませない。比較に同じ image の他の
+   Vulkan app（Notes 等）の fps も見る。
+2. sim の Graphics の 2 台目が「GPU 1 Simulated GPU」と出る → ユーザーの「simという表記はつけなくていいです」に反する。`source.c` の sim の
+   GPU 名を、それらしい名前に（例: 実在の型番を騙らない一般的な名前）。`plan/ws134/tests/host/host-test.c` の期待も合わせる。
+3. GPU 0 の名前「llvmpipe (LLVM 19.1.7, 2」が途中で切れる → 括弧の前で切るか省略記号（`scene.c` の `short_name` の周り）。
+4. 直したら build（warning 0）・host 試験（`tests/host/run.sh`）・preview を流し、T1 に `monitor-p003.sh` を再依頼。
+
