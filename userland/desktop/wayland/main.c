@@ -631,6 +631,8 @@ event_loop(
 	struct zwl_client **clients;
 	struct zwl_object *surface;
 	struct zwl_input_device *devices[ZWL_INPUT_MAX];
+	struct zwl_input_device *ready_devices[ZWL_INPUT_MAX];
+	size_t ready_count;
 	struct pollfd *descriptors;
 	uint64_t started;
 	uint64_t now;
@@ -847,12 +849,20 @@ event_loop(
 			zwl_frame_done(server);
 		zwl_compose_poll(server);
 
-		/* Device events are applied before clients are flushed, so they leave in this pass. */
+		/*
+		 * Device events are applied before clients are flushed, so they leave in this pass.  A readable, failed or
+		 * vanished device is read, all of them together in the order their events were made (BUG-142); a read
+		 * failure closes the device.
+		 */
+		ready_count = 0;
 		for (index = first_input; index < last_input; index++) {
-			/* A readable, failed or vanished device is read; a read failure closes it. */
 			if (descriptors[index].revents != 0 && devices[index - first_input]->fd >= 0)
-				zwl_input_read(server, devices[index - first_input]);
+				ready_devices[ready_count++] = devices[index - first_input];
 		}
+
+		/* Reads them together. */
+		if (ready_count != 0)
+			zwl_input_read_devices(server, ready_devices, ready_count);
 
 		/* Process only the clients captured by this poll snapshot. */
 		for (index = 1; index < first_input; index++) {

@@ -1264,7 +1264,7 @@ void zwl_seat_key(struct zwl_server *server, uint32_t time, uint32_t key, uint32
 void zwl_seat_key_deliver(struct zwl_server *server, uint32_t time, uint32_t key, uint32_t state);
 void zwl_seat_modifiers(struct zwl_server *server);
 int zwl_input_attach(struct zwl_server *server, int descriptor, const char *path, unsigned pointer, unsigned keyboard, const struct input_absinfo *x, const struct input_absinfo *y);
-void zwl_input_read(struct zwl_server *server, struct zwl_input_device *device);
+void zwl_input_read_devices(struct zwl_server *server, struct zwl_input_device **devices, size_t count);
 void zwl_input_close(struct zwl_server *server, struct zwl_input_device *device);
 void zwl_input_cleanup(struct zwl_server *server);
 

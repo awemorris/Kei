@@ -85,6 +85,7 @@ static void pointer_enter(struct zwl_object *pointer, struct zwl_object *surface
 static void keyboard_enter(struct zwl_object *keyboard, struct zwl_object *surface, uint32_t serial);
 static void keyboard_modifiers(struct zwl_object *keyboard, uint32_t serial);
 static void send_leave(struct zwl_object *surface);
+static void motion_taken_leave(struct zwl_server *server);
 static void set_cursor(struct zwl_server *server, struct zwl_client *client, struct zwl_object *surface, const unsigned char *bytes);
 static void send_enter(struct zwl_object *surface);
 static void report_seat(struct zwl_client *client);
@@ -469,8 +470,11 @@ zwl_seat_motion(
 
 	/* zdesktop's own grabs and screens take the motion first. */
 	taken = zwl_seat_motion_shell(server, time);
-	if (taken)
+	if (taken) {
+		/* The client loses the pointer to zdesktop's own screens and menus (BUG-141). */
+		motion_taken_leave(server);
 		return;
+	}
 
 	/* Succeeded: otherwise the surface under the pointer hears it. */
 	zwl_seat_motion_deliver(server, time);
@@ -1204,6 +1208,37 @@ keyboard_modifiers(
 
 	/* Succeeded: the keyboard knows the modifier state. */
 	return;
+}
+
+/*
+ * Tells the surface the pointer was on that it left, when a motion was
+ * zdesktop's: its menus, App Home, Wiseview, the lock screen, the corners'
+ * and the edges' gestures.  The client would otherwise keep the last place
+ * it heard, and the item it lit there (BUG-141).  A window being moved,
+ * resized, pulled or swiped, and a drag and drop, keep the pointer as before
+ * (data.c has its own leave); the next motion that is the client's enters
+ * again (zwl_seat_pointer_update).
+ */
+static void
+motion_taken_leave(
+	struct zwl_server *server)
+{
+	/* Nothing to leave. */
+	if (server->pointer_surface == NULL)
+		return;
+
+	/* A window operation or a drag and drop keeps the pointer where it is. */
+	if (server->drag != NULL ||
+	    server->resize != NULL ||
+	    server->pull != NULL ||
+	    server->interactive_window != NULL ||
+	    server->desktop_press ||
+	    server->dnd_active)
+		return;
+
+	/* The surface hears leave; none has the pointer until a motion is a client's again. */
+	zwl_seat_pointer_move(server, server->pointer_surface, NULL);
+	server->pointer_surface = NULL;
 }
 
 /* Tells every keyboard of a surface's client that the focus left it (the pointer is zwl_seat_pointer_update's). */
