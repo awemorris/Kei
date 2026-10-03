@@ -26,6 +26,11 @@
  * turns the Wi-Fi on or off.  A click elsewhere, or Esc, closes the menu.
  * Opening the menu asks for a scan.
  *
+ * From the click on a network until its join is answered, the line under
+ * the switch says "Connecting to X..." and the network's row says
+ * "Connecting..." (BUG-154: switching networks took about ten seconds,
+ * the menu's scan and then the join, with nothing shown).
+ *
  * libkeiland-backend carries one request at a time.  A switch or a network clicked
  * while another request (the menu's own scan, usually) is still out waits
  * in one slot and is sent when that one is answered, rather than being
@@ -111,6 +116,11 @@ struct network_row {
  * The waiting slot: pending_request (KL_BACKEND_NETWORK_REQUEST_NONE when
  * empty) and pending_ssid, sent when the outstanding request is answered.
  *
+ * connecting is the network the user chose to join, from the choice (a
+ * join sent, waiting in the slot, or behind its key being saved) until the
+ * join is answered or given up; empty otherwise.  The menu shows it as
+ * being connected to (BUG-154).
+ *
  * It lives as long as zdesktop; the menu's rows are laid out again each
  * time the menu is drawn, so they always show the state last read.
  */
@@ -141,6 +151,7 @@ struct network_view {
 	unsigned join_after_profiles;
 	unsigned pending_request;
 	char pending_ssid[KL_BACKEND_NETWORK_SSID_MAX];
+	char connecting[KL_BACKEND_NETWORK_SSID_MAX];
 };
 
 /*
@@ -193,6 +204,7 @@ static void network_key_type(struct zwl_server *server, uint32_t key);
 static void network_key_submit(struct zwl_server *server);
 static void network_key_wipe(void);
 static void network_finished(struct zwl_server *server, unsigned request, int error);
+static void network_connecting(const char *ssid);
 
 /*
  * Reads what the network watch has brought since the last tick, and makes
@@ -537,10 +549,12 @@ network_layout(
 	state = &network_view.state;
 	network_view.row_count = 0;
 
-	/* The Wi-Fi's switch, with its state under it. */
+	/* The Wi-Fi's switch, with its state under it (the network being joined while the user waits for it). */
 	if (state->wifi != KL_BACKEND_WIFI_ABSENT && state->reachable) {
 		network_add_row(NETWORK_ROW_SWITCH, "Wi-Fi", NETWORK_ROW_HEIGHT, 0);
 		network_state_text(state, text, sizeof(text));
+		if (network_view.connecting[0] != '\0')
+			(void)snprintf(text, sizeof(text), "Connecting to %s...", network_view.connecting);
 		network_add_row(NETWORK_ROW_NOTE, text, NETWORK_NOTE_HEIGHT, 0);
 	} else {
 		network_state_text(state, text, sizeof(text));
@@ -723,6 +737,15 @@ network_request(
 	if (ssid != NULL)
 		(void)snprintf(network_view.joining, sizeof(network_view.joining), "%s", ssid);
 
+	/*
+	 * A join shows its network as being connected to; leaving the Wi-Fi
+	 * (disconnect, the switch off) ends any join the user was waiting for.
+	 */
+	if (request == KL_BACKEND_NETWORK_REQUEST_JOIN)
+		network_connecting(network_view.joining);
+	if (request == KL_BACKEND_NETWORK_REQUEST_DISCONNECT || request == KL_BACKEND_NETWORK_REQUEST_WIFI_OFF)
+		network_connecting(NULL);
+
 	/* The request; the answer comes through the ticks. */
 	error = kl_backend_network_request(network_view.watch, request, ssid);
 	printf("ZWL NETWORK request %s ssid=%s error=%d\n", network_request_name(request), network_view.joining, error);
@@ -735,9 +758,12 @@ network_request(
 		return;
 	}
 
-	/* A request that could not even be sent is said in the menu. */
-	if (error != 0 && request != KL_BACKEND_NETWORK_REQUEST_SCAN)
+	/* A request that could not even be sent is said in the menu, and a join that was not sent is not waited for. */
+	if (error != 0 && request != KL_BACKEND_NETWORK_REQUEST_SCAN) {
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not %s (%s)", network_request_name(request), strerror(error));
+		if (request == KL_BACKEND_NETWORK_REQUEST_JOIN || request == KL_BACKEND_NETWORK_REQUEST_PROFILES)
+			network_connecting(NULL);
+	}
 }
 
 /* Finds the row that can be chosen under a point of the open menu, with its top. */
@@ -922,8 +948,10 @@ network_draw_row(
 	int32_t right;
 	int32_t middle;
 	int32_t baseline;
+	int32_t width;
 	int present;
 	int differs;
+	int joining;
 
 	/* The row's edges, its middle and the text's baseline. */
 	left = network_view.menu_x;
@@ -957,11 +985,39 @@ network_draw_row(
 		return;
 	}
 
-	/* A network: the check of the one it is on, its SSID, a padlock and its signal. */
+	/*
+	 * A network: the check of the one it is on, its SSID, a padlock and its
+	 * signal; while one is being joined, it says so in place of the padlock
+	 * and the signal, and no check is shown until the join is answered.
+	 */
 	if (row->kind == NETWORK_ROW_AP) {
 		ap = &network_view.scan[row->ap];
+		joining = 0;
+		if (network_view.connecting[0] != '\0') {
+			/* The network the user chose and waits for. */
+			differs = strcmp(ap->ssid, network_view.connecting);
+			if (differs == 0)
+				joining = 1;
+		} else if (network_view.state.wifi == KL_BACKEND_WIFI_CONNECTING) {
+			/* The network the daemon is joining on its own (a saved one found again). */
+			differs = strcmp(ap->ssid, network_view.state.ssid);
+			if (differs == 0)
+				joining = 1;
+		}
+
+		/* The row of the network being joined: its SSID and "Connecting..." at the right. */
+		if (joining) {
+			width = glass_text_width(server, SIZE_BAR, "Connecting...");
+			glass_draw_text(server, command, SIZE_BAR, left + 32, baseline, row->text, NETWORK_MENU_WIDTH - 32 - 24 - width, ink);
+			glass_draw_text(server, command, SIZE_BAR, right - width, baseline, "Connecting...", width + 2, soft);
+			return;
+		}
+
+		/* The check of the network it is on, unless another is being joined. */
 		differs = strcmp(ap->ssid, network_view.state.ssid);
-		if (network_view.state.wifi == KL_BACKEND_WIFI_CONNECTED && differs == 0) {
+		if (network_view.state.wifi == KL_BACKEND_WIFI_CONNECTED &&
+		    differs == 0 &&
+		    network_view.connecting[0] == '\0') {
 			/* The check mark, or a small square without the glyph. */
 			present = glass_glyph_advance(server, SIZE_BAR, GLASS_CHECK_GLYPH);
 			if (present > 0) {
@@ -1290,10 +1346,11 @@ network_key_submit(
 	}
 	printf("ZWL NETWORK key saved ssid=%s\n", network_view.key_ssid);
 
-	/* The field closes; the daemon is told, and its answer sends the join. */
+	/* The field closes; the daemon is told, and its answer sends the join (the menu says it is connecting from now). */
 	network_view.key_open = 0;
 	network_view.join_after_profiles = 1;
 	(void)snprintf(network_view.joining, sizeof(network_view.joining), "%s", network_view.key_ssid);
+	network_connecting(network_view.key_ssid);
 	network_request(server, KL_BACKEND_NETWORK_REQUEST_PROFILES, NULL);
 }
 
@@ -1330,6 +1387,10 @@ network_finished(
 
 	/* No failure from before. */
 	network_view.failure[0] = '\0';
+
+	/* A join answered, joined or not, is no longer waited for (its state, or its failure, shows now). */
+	if (request == KL_BACKEND_NETWORK_REQUEST_JOIN)
+		network_connecting(NULL);
 
 	/* The daemon has the new key: the join follows (the slot waits for it). */
 	if (request == KL_BACKEND_NETWORK_REQUEST_PROFILES && network_view.join_after_profiles) {
@@ -1375,4 +1436,34 @@ network_finished(
 			network_request(server, waiting, NULL);
 		}
 	}
+}
+
+/*
+ * Sets the network the menu shows as being connected to (NULL: none), and
+ * logs each change for the tests.
+ */
+static void
+network_connecting(
+	const char *ssid)
+{
+	int differs;
+
+	/* None, when none was shown: nothing changes. */
+	if (ssid == NULL && network_view.connecting[0] == '\0')
+		return;
+
+	/* The same network again: nothing changes. */
+	if (ssid != NULL) {
+		differs = strcmp(ssid, network_view.connecting);
+		if (differs == 0)
+			return;
+	}
+
+	/* The network, or none. */
+	network_view.connecting[0] = '\0';
+	if (ssid != NULL)
+		(void)snprintf(network_view.connecting, sizeof(network_view.connecting), "%s", ssid);
+
+	/* The log line the tests read. */
+	printf("ZWL NETWORK connecting ssid=%s\n", network_view.connecting);
 }

@@ -80,11 +80,11 @@ main(void)
 	slot_finish(&app, 0);
 	slot_expect_sent("1 scan then off", 2U, scan_then_off);
 
-	/* 2. A saved network joined during a scan: Joining is said at once, the join follows the scan. */
+	/* 2. A saved network joined during a scan: Connecting is said at once, the join follows the scan. */
 	slot_reset(&app);
 	se_network_scan(&app);
 	se_network_join(&app, "Cafe Guest");
-	slot_expect("2 joining said", strcmp(app.network.message, "Joining Cafe Guest...") == 0);
+	slot_expect("2 joining said", strcmp(app.network.message, "Connecting to Cafe Guest...") == 0);
 	slot_finish(&app, 0);
 	slot_expect_sent("2 scan then join", 2U, scan_then_join);
 	slot_expect("2 join names the network", strcmp(slot_daemon.sent_ssid[1], "Cafe Guest") == 0);

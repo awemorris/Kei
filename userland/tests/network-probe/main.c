@@ -29,9 +29,11 @@
  *
  * It starts with the Wi-Fi on and not connected, logs each request
  * ("NETPROBE request op=N ssid=S"), and ends after the seconds given
- * (default 300), removing its socket.
+ * (default 300), removing its socket.  JOIN-SECONDS (default 0) makes each
+ * join take that long before it is answered, with the state left as it
+ * was meanwhile, as a slow radio's join looks to the desktop (BUG-154).
  *
- *   network-probe [SECONDS]
+ *   network-probe [SECONDS [JOIN-SECONDS]]
  */
 
 #include "userland/base/net/protocol.h"
@@ -58,13 +60,14 @@
 /*
  * The stand-in's network: the Wi-Fi's state as networkd names it, the SSID
  * it is on (empty when none), whether the saved profiles changed (which
- * gives "Neighbor 5G" a profile), and the watchers' connections (-1 when
- * free).
+ * gives "Neighbor 5G" a profile), the seconds a join takes, and the
+ * watchers' connections (-1 when free).
  */
 struct probe_network {
 	const char *wifi;
 	char ssid[33];
 	int profiles_changed;
+	int join_seconds;
 	int watchers[PROBE_WATCHERS];
 	uint32_t watcher_ids[PROBE_WATCHERS];
 };
@@ -107,6 +110,11 @@ main(
 	if (count > 1)
 		seconds = atoi(arguments[1]);
 	end = time(NULL) + seconds;
+
+	/* How long a join takes (none: answered at once). */
+	probe.join_seconds = 0;
+	if (count > 2)
+		probe.join_seconds = atoi(arguments[2]);
 
 	/* Wi-Fi on, not connected, nobody watching. */
 	probe.wifi = "manual-disconnected";
@@ -375,6 +383,13 @@ probe_join(
 	if ((differs == 0 && probe.profiles_changed == 0) || ssid[0] == '\0') {
 		probe_send(client, request->request_id, request->opcode, NETWORKD_RESULT_ERROR, ENOENT, NULL);
 		return;
+	}
+
+	/* A slow join: the answer and the new state come only after the wait. */
+	if (probe.join_seconds > 0) {
+		printf("NETPROBE join waits seconds=%d ssid=%s\n", probe.join_seconds, ssid);
+		(void)fflush(stdout);
+		(void)sleep((unsigned)probe.join_seconds);
 	}
 
 	/* Connected, and the watchers are told. */

@@ -241,7 +241,7 @@ se_network_join(
 
 	/* A join sent or waiting says so (a refusal has said why instead). */
 	if (network->request == KEILAND_NETWORK_REQUEST_JOIN || network->pending_request == KEILAND_NETWORK_REQUEST_JOIN)
-		network_message(app, 0, "Joining %s...", ssid);
+		network_message(app, 0, "Connecting to %s...", ssid);
 }
 
 /*
@@ -278,7 +278,7 @@ se_network_join_key(
 
 	/* A join under way or waiting says so (a refusal has said why instead). */
 	if (network->request == KEILAND_NETWORK_REQUEST_PROFILES || network->pending_request == KEILAND_NETWORK_REQUEST_PROFILES)
-		network_message(app, 0, "Joining %s...", ssid);
+		network_message(app, 0, "Connecting to %s...", ssid);
 }
 
 /*

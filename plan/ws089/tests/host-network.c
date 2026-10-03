@@ -193,7 +193,7 @@ se_network_join(
 	printf("NETWORK join ssid=%s\n", ssid);
 	(void)snprintf(app->network.join_ssid, sizeof(app->network.join_ssid), "%s", ssid);
 	app->network.join_step = SE_JOIN_CONNECT;
-	(void)snprintf(app->network.message, sizeof(app->network.message), "Joining %s...", ssid);
+	(void)snprintf(app->network.message, sizeof(app->network.message), "Connecting to %s...", ssid);
 	app->network.message_bad = 0;
 }
 
@@ -206,7 +206,7 @@ se_network_join_key(
 	printf("NETWORK join-key ssid=%s key-length=%u\n", ssid, (unsigned)strlen(key));
 	(void)snprintf(app->network.join_ssid, sizeof(app->network.join_ssid), "%s", ssid);
 	app->network.join_step = SE_JOIN_PROFILES;
-	(void)snprintf(app->network.message, sizeof(app->network.message), "Joining %s...", ssid);
+	(void)snprintf(app->network.message, sizeof(app->network.message), "Connecting to %s...", ssid);
 	app->network.message_bad = 0;
 }
 
