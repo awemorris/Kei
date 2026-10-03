@@ -3,7 +3,7 @@
 # ws046-p016: BUG-093 Noct の source の stamp を patch の中身で判定する
 
 Parent: [WS046](../ws.md)
-Status: in-progress
+Status: cleared（Q1 判定 2026-10-03: 移行の後、P1 の worktree の make -n toolchain と make toolchain で共有の NoctLang を取り出し直さず refusing も無し、共有の stamp・identity・manifest・noct の mtime は前後で同じ）。元の記載: in-progress
 Disposition: normal
 Queue: Q1 の割り当て（2026-10-03、P1。toolchain の変更は Q1 が main として許可、`userland/base/noct/Makefile` だけ）
 Bug: [BUG-093](../../bugs/BUG-093.md)

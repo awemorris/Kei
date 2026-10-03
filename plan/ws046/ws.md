@@ -53,7 +53,7 @@ package を guest で build・install できるようにする。今の base に
 | [ws046-p013](phase013/phase.md) | libc に mount の一覧の API（getmntinfo など）を足す | cleared（q424-i01。`<mntent.h>` の getmntent 系を kernel の mount query の上に実装。coreutils の cross build を通すために libc に `<elf.h>`・`<stdio_ext.h>`・`<utime.h>`・`fseeko`・spawn の `_np`・errno 14 個・`statvfs.f_basetype` も足し、configure・make・install が通り guest で `df`・`stat`・`ls` などが動く。`df` の既定の出力の欠けは BUG-047（kernel の `st_dev` 0）） | — |
 | [ws046-p014](phase014/phase.md) | private の file の mapping で page cache の page を直接 map する（p011 の当て直し、p012 の設計 5） | uncleared（q434-i01。private の file の mapping で cache の page を map、書き込みで COW。file fault 8.4 → 3.2 µs、`cc t.c -o t` 0.35 → 0.25 秒、configure（tmpfs）35 → 30〜33 秒。expat の make は status 0、runtests 4932/4932。`make check` だけ bash が無く status 2: 判断待ち） | p012 |
 | [ws046-p015](phase015/phase.md) | BUG-027 の再計測（ticket の file の fault の計測を `ffault` で再現、SSH の guest に libLLVM を載せて cold・warm）と close の提案 | cleared（2026-10-03 Q1、T1-034） | p014 |
-| [ws046-p016](phase016/phase.md) | BUG-093: Noct の source の stamp を patch の中身（SHA-256）で判定し、新しい worktree の `make toolchain` が共有の `build/NoctLang` を取り出し直そうとして止まるのを直す | in-progress（2026-10-03 Q1 の割り当て、P1。移行の後の worktree の `make -n toolchain`・`make toolchain` で Noct の作り直しが無いことを確認、Q1 の確認待ち） | — |
+| [ws046-p016](phase016/phase.md) | BUG-093: Noct の source の stamp を patch の中身（SHA-256）で判定し、新しい worktree の `make toolchain` が共有の `build/NoctLang` を取り出し直そうとして止まるのを直す | cleared（2026-10-03 Q1） | — |
 | ws046-p005 | 規約の全文確認と回帰 | planning | p004 |
 
 2026-09-24（ws046-p001）: 調べた結果、automake の出力と zlib は POSIX make と入れ子の変数参照で動き、GNU の関数・条件は coreutils の
