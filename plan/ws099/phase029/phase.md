@@ -47,3 +47,13 @@ Bugs: [BUG-142](../../bugs/BUG-142.md)、[BUG-141](../../bugs/BUG-141.md)
 ## 結果（Q1、2026-10-03、T2-004、QEMU）
 
 uncleared。bug142-order・cursor-owner・zdesktop-p077・menu-p003・files-p004・zdesktop-p084 は PASS。bug141-hover は 2 回 FAIL（`hover: the item is not lit (118 pixels) MISSING`、`menu: the item stays lit (5655 pixels differ) FAIL`）。目視（判定外）では hover-on.png で tile が明るく menu.png で暗く、試験の判定（画素の数え方・領域）の誤りの疑い。PNG: worktrees/t2/build/t2-004/bug141/・bug141-retry/。修正前の対照は未実施。再開の条件: P2 が試験の判定を直し（必要なら修正前の対照も）、T1/T2 で再試験。
+
+## T2-004 の結果（2026-10-03）と試験の判定の直し
+
+- T2-004: bug142-order ほか 6 本 PASS、**bug141-hover は 2 回 FAIL**（`hover: not lit (118 pixels)`、`menu: stays lit (5655 pixels)`）。T2 の目視（判定外）では
+  hover-on.png で Plan v3.key の tile が明るく、menu.png で暗い（直しは効いている）。
+- 判定の誤り: (1) tile の hover の地は淡い灰（差は 10 段ほど）で、差の閾値 12 では拾えなかった。(2) 4 番目の item は F10 の menu の Help の submenu に
+  覆われ、menu.png の差が submenu のものになった。
+- 直し（`plan/ws099/tests/bug141-hover.sh`）: hover する item を menu の開く所から遠い 1 番目にし、差の閾値を 3 に、pointer の矢印の所を除き、
+  lit は 1500 画素以上・menu は 200 画素以下。T2-004 の PNG で確かめた: 4 番目の tile の hover-on は 7422 画素、1 番目の tile の hover-on（hover していない）
+  と menu は 0 画素。

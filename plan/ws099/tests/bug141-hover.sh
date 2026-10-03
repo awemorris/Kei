@@ -3,8 +3,8 @@
 # On the lean image (plan/tools/files/build-files-image.sh), zdesktop --glass 1280x800 and files at 1000x640 on
 # Documents:
 #  1. base.png: an item clicked, the pointer then on the window's empty bottom (no item lit).
-#  2. hover-on.png: the pointer on another item: the box around it differs from base.png (it is lit: 600 pixels
-#     or more, more than the cursor alone).
+#  2. hover-on.png: the pointer on another item (the first, left of where the menus open): its tile differs from
+#     base.png (it is lit: 1500 pixels or more of the tile, the pointer's arrow left out).
 #  3. menu.png: F10 opens the first menu and the pointer goes onto its rows (the motion is zdesktop's): the box is
 #     as in base.png again (files heard the pointer leave).  Before the fix files heard nothing and kept it lit.
 # Judged by the pictures (the Venus display) and the logs, not the console.
@@ -66,8 +66,8 @@ pointer move $((wx + 444)) $((wy + 140)) sleep 150 move $((wx + 446)) $((wy + 14
 pointer move $((wx + 600)) $((wy + 600)) sleep 800
 check "$out/base.png" >/dev/null
 
-# 2. The pointer on another item.
-pointer move $((wx + 670)) $((wy + 140)) sleep 300 move $((wx + 680)) $((wy + 145)) sleep 800
+# 2. The pointer on another item: the first one, left of where the menus open (T2-004: a submenu covered the fourth).
+pointer move $((wx + 320)) $((wy + 120)) sleep 300 move $((wx + 330)) $((wy + 125)) sleep 800
 check "$out/hover-on.png" >/dev/null
 
 # 3. F10's menu, the pointer onto its rows (the first popup row the log names).
@@ -81,7 +81,7 @@ check "$out/menu.png" >/dev/null
 keys '<esc>'
 
 # The box around the hovered item: lit in hover-on.png, as in base.png in menu.png.
-python3 - "$out" "$((wx + 680))" "$((wy + 145))" <<'PY' || status=1
+python3 - "$out" "$((wx + 330))" "$((wy + 117))" <<'PY' || status=1
 import sys
 from PIL import Image
 out, cx, cy = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
@@ -89,19 +89,23 @@ base = Image.open(out + "/base.png").convert("RGB")
 def differing(name):
 	other = Image.open(out + "/" + name).convert("RGB")
 	count = 0
-	for y in range(cy - 50, cy + 50):
-		for x in range(cx - 60, cx + 60):
+	# The tile's lit ground is a faint grey (T2-004: about 10 levels), so a small difference counts; the pointer's own
+	# arrow (in hover-on.png only) is a few hundred pixels at most.
+	for y in range(cy - 55, cy + 55):
+		for x in range(cx - 48, cx + 48):
+			if x >= cx - 2 and x < cx + 22 and y >= cy + 6 and y < cy + 40:
+				continue
 			p, q = base.getpixel((x, y)), other.getpixel((x, y))
-			if max(abs(p[i] - q[i]) for i in range(3)) > 12:
+			if max(abs(p[i] - q[i]) for i in range(3)) > 3:
 				count += 1
 	return count
 lit, menu = differing("hover-on.png"), differing("menu.png")
 status = 0
-if lit >= 600:
+if lit >= 1500:
 	print("hover: the item is lit (%d pixels differ from base) ok" % lit)
 else:
 	print("hover: the item is not lit (%d pixels) -- the test did not light it MISSING" % lit); status = 1
-if menu <= 50:
+if menu <= 200:
 	print("menu: the item is dark again (%d pixels differ) ok" % menu)
 else:
 	print("menu: the item stays lit (%d pixels differ) FAIL" % menu); status = 1
