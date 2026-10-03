@@ -10,7 +10,7 @@
  * Each subscription owns one mixer descriptor and refreshes through ordinary ticks.
  */
 
-#include <keiland.h>
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -25,7 +25,7 @@
 #define AUDIO_MIXERS_MAX 32
 
 /* One caller owns a native mixer, its selected control and the latest public snapshot. */
-struct keiland_audio {
+struct kl_backend_audio {
 	int fd;
 	int control;
 	unsigned has_mute;
@@ -33,22 +33,22 @@ struct keiland_audio {
 	unsigned dirty;
 	uint64_t retry;
 	uint64_t sampled;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state state;
 };
 
 static uint64_t audio_milliseconds(void);
-static int audio_connect(struct keiland_audio *audio);
-static int audio_state(struct keiland_audio *audio, struct keiland_audio_state *state);
-static void audio_drop(struct keiland_audio *audio);
+static int audio_connect(struct kl_backend_audio *audio);
+static int audio_state(struct kl_backend_audio *audio, struct kl_backend_audio_state *state);
+static void audio_drop(struct kl_backend_audio *audio);
 
 /*
  * Allocates a native mixer subscription that can recover from device absence.
  */
-struct keiland_audio *
-keiland_audio_open(
+struct kl_backend_audio *
+kl_backend_audio_open(
 	void)
 {
-	struct keiland_audio *audio;
+	struct kl_backend_audio *audio;
 	int error;
 
 	/* Keeps allocation failure distinct from a temporarily unavailable mixer. */
@@ -71,8 +71,8 @@ keiland_audio_open(
  * Releases the native descriptor and its subscription allocation.
  */
 void
-keiland_audio_close(
-	struct keiland_audio *audio)
+kl_backend_audio_close(
+	struct kl_backend_audio *audio)
 {
 	/* A missing subscription has no device ownership to retire. */
 	if (audio == NULL)
@@ -90,8 +90,8 @@ keiland_audio_close(
  * Reports that OSS mixer changes require periodic updates rather than event reads.
  */
 int
-keiland_audio_fd(
-	const struct keiland_audio *audio)
+kl_backend_audio_fd(
+	const struct kl_backend_audio *audio)
 {
 	(void)audio;
 
@@ -103,12 +103,12 @@ keiland_audio_fd(
  * Refreshes native volume and topology while reconnecting absent devices at bounded intervals.
  */
 int
-keiland_audio_update(
-	struct keiland_audio *audio,
+kl_backend_audio_update(
+	struct kl_backend_audio *audio,
 	unsigned *changed)
 {
-	struct keiland_audio_state previous;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state previous;
+	struct kl_backend_audio_state state;
 	uint64_t now;
 	int error;
 	int differs;
@@ -146,12 +146,12 @@ keiland_audio_update(
 
 	/* A caller can distinguish device arrival or loss from an ordinary volume update. */
 	if (previous.reachable != audio->state.reachable || audio->initial != 0)
-		*changed |= KEILAND_AUDIO_CHANGED_REACHABLE;
+		*changed |= KL_BACKEND_AUDIO_CHANGED_REACHABLE;
 
 	/* Reports any public state change, including control topology and channel count. */
 	differs = memcmp(&previous, &audio->state, sizeof(previous));
 	if (differs != 0 || audio->initial != 0)
-		*changed |= KEILAND_AUDIO_CHANGED_VOLUME;
+		*changed |= KL_BACKEND_AUDIO_CHANGED_VOLUME;
 
 	/* The first update has now published the initial subscription state. */
 	audio->initial = 0;
@@ -164,9 +164,9 @@ keiland_audio_update(
  * Copies the latest mixer snapshot without borrowing native control storage.
  */
 void
-keiland_audio_get_state(
-	const struct keiland_audio *audio,
-	struct keiland_audio_state *state)
+kl_backend_audio_get_state(
+	const struct kl_backend_audio *audio,
+	struct kl_backend_audio_state *state)
 {
 	/* A caller without output storage cannot receive a snapshot. */
 	if (state == NULL)
@@ -188,8 +188,8 @@ keiland_audio_get_state(
  * Writes native volume and mute while preserving unrelated mixer controls.
  */
 int
-keiland_audio_set_volume(
-	struct keiland_audio *audio,
+kl_backend_audio_set_volume(
+	struct kl_backend_audio *audio,
 	unsigned left,
 	unsigned right,
 	unsigned muted)
@@ -253,8 +253,8 @@ keiland_audio_set_volume(
  * Accepts silent feedback for a connected mixer without adding PCM playback.
  */
 int
-keiland_audio_feedback(
-	struct keiland_audio *audio)
+kl_backend_audio_feedback(
+	struct kl_backend_audio *audio)
 {
 	/* A missing caller-owned subscription cannot submit feedback. */
 	if (audio == NULL)
@@ -272,10 +272,10 @@ keiland_audio_feedback(
  * Reports whether native mixer permissions expose a usable volume control.
  */
 int
-keiland_audio_available(
+kl_backend_audio_available(
 	void)
 {
-	struct keiland_audio audio;
+	struct kl_backend_audio audio;
 	int error;
 
 	/* Probes the real default or enumerated mixer without allocating a lasting subscription. */
@@ -312,9 +312,9 @@ audio_milliseconds(
 /* Prefers the native default mixer alias, then scans bounded device units. */
 static int
 audio_connect(
-	struct keiland_audio *audio)
+	struct kl_backend_audio *audio)
 {
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state state;
 	char path[64];
 	uint64_t now;
 	int index;
@@ -367,8 +367,8 @@ audio_connect(
 /* Reads native control topology, channel percentages and the real mute mask. */
 static int
 audio_state(
-	struct keiland_audio *audio,
-	struct keiland_audio_state *state)
+	struct kl_backend_audio *audio,
+	struct kl_backend_audio_state *state)
 {
 	int device_mask;
 	int stereo_mask;
@@ -442,7 +442,7 @@ audio_state(
 /* Retires the current device while preserving the next permitted reconnect deadline. */
 static void
 audio_drop(
-	struct keiland_audio *audio)
+	struct kl_backend_audio *audio)
 {
 	/* A connected subscription owns exactly one native descriptor. */
 	if (audio->fd >= 0)

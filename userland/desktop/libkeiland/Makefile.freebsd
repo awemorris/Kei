@@ -14,5 +14,5 @@ KEILAND_FREEBSD_KEILAND_SOURCES := userland/desktop/libkeiland/version.c \
 	userland/desktop/libkeiland/keyboard-inset.c \
 	userland/desktop/libkeiland/edit.c \
 	userland/desktop/libkeiland/system-compat.c \
-	userland/desktop/libkeiland/freebsd/audio-freebsd.c
+	userland/desktop/libkeiland/audio-compat.c
 $(eval $(call KEILAND_FREEBSD_LIBRARY,keiland,libkeiland.so,$(KEILAND_FREEBSD_KEILAND_SOURCES),libwayland-client.so libkeiland-backend.a,-lm,userland/desktop/libkeiland/exports.map))

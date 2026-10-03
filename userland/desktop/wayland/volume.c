@@ -21,13 +21,17 @@
  * a moment after it settles.  The preferences are applied when audiod is
  * reached and whenever they change.
  *
- * All of it goes through libkeiland (keiland_audio_*): zdesktop never
- * speaks audiod's protocol, and nothing here waits for it.
+ * All of it goes through libkeiland-backend (kl_backend_audio_*, ws131-p004):
+ * zdesktop never speaks audiod's protocol, and nothing here waits for it.
+ * The preferences stay libkeiland's until the compositor keeps them itself
+ * (ws131-p010).
  */
 
 #include "glass.h"
 #include "titlebar.h"
 #include <keiland.h>
+
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -90,9 +94,9 @@
  * write and set audiod back to the kept volume over a newer click).
  */
 struct volume_view {
-	struct keiland_audio *audio;
+	struct kl_backend_audio *audio;
 	unsigned opened;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state state;
 	unsigned value;
 	unsigned muted;
 	unsigned open;
@@ -149,10 +153,10 @@ zwl_volume_tick(
 	unsigned changed;
 	uint64_t now;
 
-	/* The link, once (libkeiland connects to audiod when it can). */
+	/* The link, once (the backend connects to audiod when it can). */
 	if (!volume_view.opened) {
 		volume_view.opened = 1U;
-		volume_view.audio = keiland_audio_open();
+		volume_view.audio = kl_backend_audio_open();
 		volume_view.icon_x = -1;
 		volume_view.value = 100U;
 	}
@@ -162,26 +166,26 @@ zwl_volume_tick(
 		return;
 
 	/* What arrived. */
-	(void)keiland_audio_update(volume_view.audio, &changed);
+	(void)kl_backend_audio_update(volume_view.audio, &changed);
 	if (changed != 0U) {
-		keiland_audio_get_state(volume_view.audio, &volume_view.state);
+		kl_backend_audio_get_state(volume_view.audio, &volume_view.state);
 		server->dirty = 1;
 
 		/* audiod reached or lost: the preferences are applied once per connection. */
-		if ((changed & KEILAND_AUDIO_CHANGED_REACHABLE) != 0U) {
+		if ((changed & KL_BACKEND_AUDIO_CHANGED_REACHABLE) != 0U) {
 			printf("ZWL VOLUME reachable=%u device=%u\n", volume_view.state.reachable, volume_view.state.device);
 			if (!volume_view.state.reachable)
 				volume_view.applied = 0U;
 		}
 
 		/* A report shows the volume, unless a drag or a wheel leads. */
-		if ((changed & KEILAND_AUDIO_CHANGED_VOLUME) != 0U && !volume_view.dragging && !volume_view.send_waiting) {
+		if ((changed & KL_BACKEND_AUDIO_CHANGED_VOLUME) != 0U && !volume_view.dragging && !volume_view.send_waiting) {
 			volume_view.value = volume_view.state.left;
 			volume_view.muted = volume_view.state.muted;
 		}
 
 		/* A connection with the volume known takes the preferences. */
-		if (volume_view.state.reachable && !volume_view.applied && (changed & KEILAND_AUDIO_CHANGED_VOLUME) != 0U) {
+		if (volume_view.state.reachable && !volume_view.applied && (changed & KL_BACKEND_AUDIO_CHANGED_VOLUME) != 0U) {
 			volume_view.applied = 1U;
 			volume_apply_preferences(server, 0U);
 		}
@@ -194,7 +198,7 @@ zwl_volume_tick(
 	if (volume_view.feedback_waiting && now - volume_view.feedback_ms >= VOLUME_FEEDBACK_MS) {
 		volume_view.feedback_waiting = 0U;
 		volume_view.feedback_ms = now;
-		(void)keiland_audio_feedback(volume_view.audio);
+		(void)kl_backend_audio_feedback(volume_view.audio);
 		printf("ZWL VOLUME feedback at_ms=%llu via=held\n", (unsigned long long)now);
 	}
 
@@ -653,7 +657,7 @@ volume_set(
 		if (final || now - volume_view.feedback_ms >= VOLUME_FEEDBACK_MS) {
 			volume_view.feedback_waiting = 0U;
 			volume_view.feedback_ms = now;
-			(void)keiland_audio_feedback(volume_view.audio);
+			(void)kl_backend_audio_feedback(volume_view.audio);
 			printf("ZWL VOLUME feedback at_ms=%llu via=%s\n", (unsigned long long)now, via);
 		} else {
 			volume_view.feedback_waiting = 1U;
@@ -676,7 +680,7 @@ volume_send(
 	/* The request; one that cannot go is logged and dropped (the next report shows audiod's). */
 	volume_view.send_waiting = 0U;
 	volume_view.sent_ms = zwl_milliseconds();
-	error = keiland_audio_set_volume(volume_view.audio, volume_view.value, volume_view.value, volume_view.muted);
+	error = kl_backend_audio_set_volume(volume_view.audio, volume_view.value, volume_view.value, volume_view.muted);
 	if (error != 0)
 		printf("ZWL VOLUME send errno=%d\n", error);
 }

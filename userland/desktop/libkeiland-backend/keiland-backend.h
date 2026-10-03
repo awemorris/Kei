@@ -302,4 +302,81 @@ int kl_backend_network_save_key(const char *ssid, const char *key);
  */
 size_t kl_backend_network_get_saved(char (*ssids)[KL_BACKEND_NETWORK_SSID_MAX], size_t capacity);
 
+
+/*
+ * The sound output's volume (ws100-p003, ws131-p004).
+ *
+ * The device volume the system's sound service applies to everything it
+ * plays, 0 to 100 per channel, and whether it is muted, for the system
+ * bar: audiod on zedBSD, the ALSA mixer on Linux and the OSS mixer on
+ * FreeBSD.  Nothing here waits: kl_backend_audio_update reads what has
+ * arrived, and a set or the feedback sound is sent at once.  A service that
+ * is not running is not a failure; the updates connect again, at most once
+ * a second.
+ */
+struct kl_backend_audio;
+
+/* What the sound service last reported. */
+struct kl_backend_audio_state {
+	unsigned reachable;	/* 0 while the service cannot be reached */
+	unsigned device;	/* 0 when the service has no sound device */
+	unsigned rate;		/* the device's rate, 0 unknown */
+	unsigned channels;
+	unsigned left;		/* 0..100 */
+	unsigned right;		/* 0..100 */
+	unsigned muted;		/* 0 or 1 */
+};
+
+/* What kl_backend_audio_update found changed. */
+#define KL_BACKEND_AUDIO_CHANGED_REACHABLE	1U	/* the service came or went */
+#define KL_BACKEND_AUDIO_CHANGED_VOLUME		2U	/* the volume or mute changed */
+
+/*
+ * Starts following the volume.  Returns NULL only without memory.
+ */
+struct kl_backend_audio *kl_backend_audio_open(void);
+
+/*
+ * Stops following the volume.
+ */
+void kl_backend_audio_close(struct kl_backend_audio *audio);
+
+/*
+ * The descriptor to poll for the service's reports, or -1 when there is
+ * none (an OSS mixer is read by the periodic updates).
+ */
+int kl_backend_audio_fd(const struct kl_backend_audio *audio);
+
+/*
+ * Reads what has arrived without waiting, and connects again when the
+ * connection went (at most once a second).  *changed has the
+ * KL_BACKEND_AUDIO_CHANGED_* bits of what changed.  Returns 0, or EINVAL.
+ */
+int kl_backend_audio_update(struct kl_backend_audio *audio, unsigned *changed);
+
+/*
+ * Copies what the service last reported.
+ */
+void kl_backend_audio_get_state(const struct kl_backend_audio *audio, struct kl_backend_audio_state *state);
+
+/*
+ * Asks for a volume (0..100 each) and mute.  The new volume comes back
+ * through kl_backend_audio_update.  Returns 0, ENOTCONN (not connected),
+ * EINVAL (out of range) or the error of sending.
+ */
+int kl_backend_audio_set_volume(struct kl_backend_audio *audio, unsigned left, unsigned right, unsigned muted);
+
+/*
+ * Asks for the short feedback sound at the device volume (a service
+ * without it stays silent).  Returns 0, ENOTCONN, or the error of sending.
+ */
+int kl_backend_audio_feedback(struct kl_backend_audio *audio);
+
+/*
+ * Tells whether the sound service runs: 1 when it does, 0 when it does
+ * not.  It does not connect and does not wait; a service that runs may
+ * still have no sound device (struct kl_backend_audio_state's device).
+ */
+int kl_backend_audio_available(void);
+
 #endif

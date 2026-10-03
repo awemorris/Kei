@@ -18,7 +18,7 @@
  * message whole; the bytes are kept and cut by the headers' length.
  */
 
-#include <keiland.h>
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 
 #include "userland/base/audiod/protocol.h"
 
@@ -55,30 +55,30 @@
  * The subscriber owns this allocation from open until close; socket -1
  * means updates must reconnect before any request can be sent.
  */
-struct keiland_audio {
+struct kl_backend_audio {
 	int socket;
 	uint32_t serial;
 	uint64_t retry_ms;
 	uint8_t pending[AUDIO_PENDING];
 	size_t pending_used;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state state;
 };
 
-static int audio_connect(struct keiland_audio *audio);
-static void audio_drop(struct keiland_audio *audio, unsigned *changed);
-static int audio_send(struct keiland_audio *audio, const void *message, uint32_t length);
-static void audio_read(struct keiland_audio *audio, unsigned *changed);
-static void audio_message(struct keiland_audio *audio, const uint8_t *bytes, uint32_t length, unsigned *changed);
+static int audio_connect(struct kl_backend_audio *audio);
+static void audio_drop(struct kl_backend_audio *audio, unsigned *changed);
+static int audio_send(struct kl_backend_audio *audio, const void *message, uint32_t length);
+static void audio_read(struct kl_backend_audio *audio, unsigned *changed);
+static void audio_message(struct kl_backend_audio *audio, const uint8_t *bytes, uint32_t length, unsigned *changed);
 static uint64_t audio_milliseconds(void);
 
 /*
  * Starts following audiod's volume; an audiod not running yet is connected by a later update.
  */
-struct keiland_audio *
-keiland_audio_open(
+struct kl_backend_audio *
+kl_backend_audio_open(
 	void)
 {
-	struct keiland_audio *audio;
+	struct kl_backend_audio *audio;
 
 	/* The record, with no connection. */
 	audio = calloc(1, sizeof(*audio));
@@ -100,8 +100,8 @@ keiland_audio_open(
  * Stops following audiod.
  */
 void
-keiland_audio_close(
-	struct keiland_audio *audio)
+kl_backend_audio_close(
+	struct kl_backend_audio *audio)
 {
 	/* Nothing to close. */
 	if (audio == NULL)
@@ -122,8 +122,8 @@ keiland_audio_close(
  * Gives the descriptor to poll, or -1 while not connected.
  */
 int
-keiland_audio_fd(
-	const struct keiland_audio *audio)
+kl_backend_audio_fd(
+	const struct kl_backend_audio *audio)
 {
 	/* No record, no descriptor. */
 	if (audio == NULL)
@@ -137,8 +137,8 @@ keiland_audio_fd(
  * Reads what audiod has sent, and connects again when the connection went and its wait is over.
  */
 int
-keiland_audio_update(
-	struct keiland_audio *audio,
+kl_backend_audio_update(
+	struct kl_backend_audio *audio,
 	unsigned *changed)
 {
 	uint64_t now;
@@ -158,7 +158,7 @@ keiland_audio_update(
 		if (now >= audio->retry_ms) {
 			error = audio_connect(audio);
 			if (error == 0)
-				*changed |= KEILAND_AUDIO_CHANGED_REACHABLE;
+				*changed |= KL_BACKEND_AUDIO_CHANGED_REACHABLE;
 		}
 	}
 
@@ -174,9 +174,9 @@ keiland_audio_update(
  * Copies what audiod last reported.
  */
 void
-keiland_audio_get_state(
-	const struct keiland_audio *audio,
-	struct keiland_audio_state *state)
+kl_backend_audio_get_state(
+	const struct kl_backend_audio *audio,
+	struct kl_backend_audio_state *state)
 {
 	/* A missing record knows nothing. */
 	memset(state, 0, sizeof(*state));
@@ -196,8 +196,8 @@ keiland_audio_get_state(
  * Asks audiod for a volume and mute (DEVICE_VOLUME).
  */
 int
-keiland_audio_set_volume(
-	struct keiland_audio *audio,
+kl_backend_audio_set_volume(
+	struct kl_backend_audio *audio,
 	unsigned left,
 	unsigned right,
 	unsigned muted)
@@ -236,8 +236,8 @@ keiland_audio_set_volume(
  * Asks audiod for its short feedback sound (FEEDBACK).
  */
 int
-keiland_audio_feedback(
-	struct keiland_audio *audio)
+kl_backend_audio_feedback(
+	struct kl_backend_audio *audio)
 {
 	struct audiod_header header;
 	int error;
@@ -269,10 +269,10 @@ keiland_audio_feedback(
  * Tells whether audiod runs: 1 when its socket is there, 0 when it is not.
  *
  * Nothing connects and nothing waits; an audiod that runs may still have no
- * sound device (keiland_audio_state's device).
+ * sound device (kl_backend_audio_state's device).
  */
 int
-keiland_audio_available(
+kl_backend_audio_available(
 	void)
 {
 	struct stat status;
@@ -294,7 +294,7 @@ keiland_audio_available(
 /* Connects to audiod, says HELLO and SUBSCRIBE; returns 0 or an errno value. */
 static int
 audio_connect(
-	struct keiland_audio *audio)
+	struct kl_backend_audio *audio)
 {
 	struct sockaddr_un address;
 	struct audiod_hello hello;
@@ -358,7 +358,7 @@ audio_connect(
 /* Drops the connection; the next update after the wait connects again. */
 static void
 audio_drop(
-	struct keiland_audio *audio,
+	struct kl_backend_audio *audio,
 	unsigned *changed)
 {
 	/* The connection. */
@@ -377,7 +377,7 @@ audio_drop(
 
 		/* Publishes the lost reachability when the caller is collecting changes. */
 		if (changed != NULL)
-			*changed |= KEILAND_AUDIO_CHANGED_REACHABLE;
+			*changed |= KL_BACKEND_AUDIO_CHANGED_REACHABLE;
 	}
 
 	/* Succeeded: the subscription waits to reconnect with empty pending input. */
@@ -387,7 +387,7 @@ audio_drop(
 /* Writes one whole request; a connection that cannot take it is dropped. Returns 0 or an errno value. */
 static int
 audio_send(
-	struct keiland_audio *audio,
+	struct kl_backend_audio *audio,
 	const void *message,
 	uint32_t length)
 {
@@ -412,7 +412,7 @@ audio_send(
 /* Reads the bytes that have come and handles each whole message. */
 static void
 audio_read(
-	struct keiland_audio *audio,
+	struct kl_backend_audio *audio,
 	unsigned *changed)
 {
 	struct audiod_header header;
@@ -464,7 +464,7 @@ audio_read(
 /* Handles one message from audiod: WELCOME and VOLUME_CHANGED change the state, the rest is passed over. */
 static void
 audio_message(
-	struct keiland_audio *audio,
+	struct kl_backend_audio *audio,
 	const uint8_t *bytes,
 	uint32_t length,
 	unsigned *changed)
@@ -489,7 +489,7 @@ audio_message(
 		/* Keeps the format reported by the daemon. */
 		audio->state.rate = welcome.rate;
 		audio->state.channels = welcome.channels;
-		*changed |= KEILAND_AUDIO_CHANGED_REACHABLE;
+		*changed |= KL_BACKEND_AUDIO_CHANGED_REACHABLE;
 		return;
 	}
 
@@ -505,7 +505,7 @@ audio_message(
 			audio->state.muted = 1U;
 
 		/* Notifies the subscriber that its visible volume state changed. */
-		*changed |= KEILAND_AUDIO_CHANGED_VOLUME;
+		*changed |= KL_BACKEND_AUDIO_CHANGED_VOLUME;
 	}
 
 	/* Succeeded: the report is applied or its unneeded type is passed over. */

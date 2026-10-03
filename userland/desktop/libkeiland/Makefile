@@ -16,11 +16,12 @@ LIBKEILAND_SOURCES := userland/desktop/libkeiland/version.c userland/desktop/lib
 	userland/desktop/libkeiland/desktop.c \
 	userland/desktop/libkeiland/keyboard-inset.c userland/desktop/libkeiland/edit.c
 
-# The zedBSD side of the library: audiod (WS104).  The network moved to libkeiland-backend (ws131-p003);
-# keiland_network_* forwards to it (system-compat.c) until Settings uses the compositor's extension
-# (ws131-p011), so the backend's zedBSD sources are built in here too.
-LIBKEILAND_ZEDBSD_SOURCES := userland/desktop/libkeiland/zedbsd/audio-zedbsd.c \
-	userland/desktop/libkeiland/system-compat.c \
+# The zedBSD side of the library.  The network (ws131-p003) and the sound (ws131-p004) moved to
+# libkeiland-backend; keiland_network_* and keiland_audio_* forward to it (system-compat.c, audio-compat.c)
+# until Settings uses the compositor's extension (ws131-p011), so the backend's zedBSD sources are built in
+# here too.
+LIBKEILAND_ZEDBSD_SOURCES := userland/desktop/libkeiland/system-compat.c \
+	userland/desktop/libkeiland/audio-compat.c \
 	$(KL_BACKEND_ZEDBSD_SOURCES)
 
 LIBZDESKTOP_IMAGE_DATA := $(if $(ZEDBSD_TOPLEVEL_BUILD),/lib/libkeiland.so=$(BUILD)/dynamic/libkeiland.so)

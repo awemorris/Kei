@@ -14,6 +14,8 @@ cd "$(dirname -- "$0")/../../.."
 out=build/ws089-host
 src=userland/desktop/settings
 mkdir -p "$out/include" "$out/obj"
+# Objects of an earlier layout (as shared-audio.o before ws131-p004) would be linked again by host-wallpaper.sh.
+rm -f "$out"/obj/*.o
 ln -sf "$(pwd)/userland/desktop/keiland/truetype.h" "$out/include/truetype.h"
 ln -sf "$(pwd)/userland/desktop/keiland/keiland.h" "$out/include/keiland.h"
 cc=${CC:-cc}
@@ -32,10 +34,13 @@ for file in userland/desktop/files/canvas.c userland/desktop/files/text.c userla
 	"$cc" -O2 -g -Wall -Werror -D_GNU_SOURCE -I$out/include -c "$file" -o "$object"
 	objects="$objects $object"
 done
-# The sound page's link to audiod (ws100-p005): libkeiland's zedbsd/audio-zedbsd.c (no audiod on the host: the page shows no sound).
-object="$out/obj/shared-audio.o"
-"$cc" -O2 -g -Wall -Werror -D_GNU_SOURCE -I$out/include -I. -c userland/desktop/libkeiland/zedbsd/audio-zedbsd.c -o "$object"
-objects="$objects $object"
+# The sound page's link to audiod (ws100-p005): libkeiland's audio-compat.c over libkeiland-backend's zedBSD
+# audio-zedbsd.c (ws131-p004; no audiod on the host: the page shows no sound).
+for file in userland/desktop/libkeiland-backend-zedbsd/audio-zedbsd.c userland/desktop/libkeiland/audio-compat.c; do
+	object="$out/obj/shared-$(basename "$file" .c).o"
+	"$cc" -O2 -g -Wall -Werror -D_GNU_SOURCE -I$out/include -I. -c "$file" -o "$object"
+	objects="$objects $object"
+done
 for file in $src/*.c; do
 	case $(basename "$file") in
 	main.c|window.c|present.c|menu.c|titlebar.c|glass.c|network.c) continue ;;

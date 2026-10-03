@@ -9,7 +9,7 @@
  * Tracks ALSA mixer controls directly, without alsa-lib or PCM playback.
  * One subscription owns a nonblocking control fd and reconnects after loss.
  */
-#include <keiland.h>
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <sound/asound.h>
@@ -24,7 +24,7 @@
 #define AUDIO_ELEMENTS_MAX 1024U
 
 /* One caller owns this control fd, element descriptions and cached state. */
-struct keiland_audio {
+struct kl_backend_audio {
 	int fd;
 	struct snd_ctl_elem_info volume;
 	struct snd_ctl_elem_info toggle;
@@ -33,25 +33,25 @@ struct keiland_audio {
 	unsigned dirty;
 	uint64_t retry;
 	uint64_t sampled;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state state;
 };
 
 static uint64_t audio_milliseconds(void);
-static int audio_connect(struct keiland_audio *audio);
-static int audio_elements(struct keiland_audio *audio);
-static int audio_element(struct keiland_audio *audio, const struct snd_ctl_elem_id *ids, size_t count, const char *name, snd_ctl_elem_type_t type, struct snd_ctl_elem_info *info);
-static int audio_state(struct keiland_audio *audio, struct keiland_audio_state *state);
-static void audio_drop(struct keiland_audio *audio);
+static int audio_connect(struct kl_backend_audio *audio);
+static int audio_elements(struct kl_backend_audio *audio);
+static int audio_element(struct kl_backend_audio *audio, const struct snd_ctl_elem_id *ids, size_t count, const char *name, snd_ctl_elem_type_t type, struct snd_ctl_elem_info *info);
+static int audio_state(struct kl_backend_audio *audio, struct kl_backend_audio_state *state);
+static void audio_drop(struct kl_backend_audio *audio);
 static unsigned audio_percentage(long sample, long minimum, long maximum);
 
 /*
  * Allocates a mixer subscription even when no accessible device exists.
  */
-struct keiland_audio *
-keiland_audio_open(
+struct kl_backend_audio *
+kl_backend_audio_open(
 	void)
 {
-	struct keiland_audio *audio;
+	struct kl_backend_audio *audio;
 
 	/* Device absence is recoverable, while allocation failure is not. */
 	audio = calloc(1, sizeof(*audio));
@@ -69,8 +69,8 @@ keiland_audio_open(
  * Closes the control fd before releasing the subscription.
  */
 void
-keiland_audio_close(
-	struct keiland_audio *audio)
+kl_backend_audio_close(
+	struct kl_backend_audio *audio)
 {
 	/* A missing subscription owns no control device. */
 	if (audio == NULL)
@@ -87,8 +87,8 @@ keiland_audio_close(
  * Returns the pollable mixer event fd or -1 while disconnected.
  */
 int
-keiland_audio_fd(
-	const struct keiland_audio *audio)
+kl_backend_audio_fd(
+	const struct kl_backend_audio *audio)
 {
 	/* A missing subscription cannot supply an event source. */
 	if (audio == NULL)
@@ -102,13 +102,13 @@ keiland_audio_fd(
  * Drains mixer events and reads the latest volume without waiting.
  */
 int
-keiland_audio_update(
-	struct keiland_audio *audio,
+kl_backend_audio_update(
+	struct kl_backend_audio *audio,
 	unsigned *changed)
 {
 	struct snd_ctl_event event;
-	struct keiland_audio_state previous;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state previous;
+	struct kl_backend_audio_state state;
 	uint64_t now;
 	ssize_t received;
 	unsigned index;
@@ -173,10 +173,10 @@ keiland_audio_update(
 
 	/* Reachability changes are separate from volume and device changes. */
 	if (previous.reachable != audio->state.reachable || audio->initial != 0)
-		*changed |= KEILAND_AUDIO_CHANGED_REACHABLE;
+		*changed |= KL_BACKEND_AUDIO_CHANGED_REACHABLE;
 	differs = memcmp(&previous, &audio->state, sizeof(previous));
 	if (differs != 0 || audio->initial != 0)
-		*changed |= KEILAND_AUDIO_CHANGED_VOLUME;
+		*changed |= KL_BACKEND_AUDIO_CHANGED_VOLUME;
 	audio->initial = 0;
 
 	/* Succeeded: the state cache is ready for the caller's next snapshot. */
@@ -187,9 +187,9 @@ keiland_audio_update(
  * Copies the latest mixer snapshot without touching the device.
  */
 void
-keiland_audio_get_state(
-	const struct keiland_audio *audio,
-	struct keiland_audio_state *state)
+kl_backend_audio_get_state(
+	const struct kl_backend_audio *audio,
+	struct kl_backend_audio_state *state)
 {
 	/* A null subscription is represented by an absent audio service. */
 	if (state == NULL)
@@ -207,8 +207,8 @@ keiland_audio_get_state(
  * Writes channel volume and mute through the selected mixer controls.
  */
 int
-keiland_audio_set_volume(
-	struct keiland_audio *audio,
+kl_backend_audio_set_volume(
+	struct kl_backend_audio *audio,
 	unsigned left,
 	unsigned right,
 	unsigned muted)
@@ -270,8 +270,8 @@ keiland_audio_set_volume(
  * Accepts feedback silently because this backend does not play PCM.
  */
 int
-keiland_audio_feedback(
-	struct keiland_audio *audio)
+kl_backend_audio_feedback(
+	struct kl_backend_audio *audio)
 {
 	/* Feedback cannot be submitted without an active mixer subscription. */
 	if (audio == NULL)
@@ -287,10 +287,10 @@ keiland_audio_feedback(
  * Reports whether an accessible control device has a usable volume element.
  */
 int
-keiland_audio_available(
+kl_backend_audio_available(
 	void)
 {
-	struct keiland_audio audio;
+	struct kl_backend_audio audio;
 	int error;
 
 	/* Probe local control metadata without allocating a lasting subscription. */
@@ -327,10 +327,10 @@ audio_milliseconds(
 /* Finds an accessible ALSA card and subscribes to its mixer changes. */
 static int
 audio_connect(
-	struct keiland_audio *audio)
+	struct kl_backend_audio *audio)
 {
 	struct snd_ctl_card_info card;
-	struct keiland_audio_state state;
+	struct kl_backend_audio_state state;
 	char path[64];
 	unsigned index;
 	int subscribe;
@@ -390,7 +390,7 @@ audio_connect(
 /* Resolves the preferred volume and its matching mute switch from kernel IDs. */
 static int
 audio_elements(
-	struct keiland_audio *audio)
+	struct kl_backend_audio *audio)
 {
 	struct snd_ctl_elem_list list;
 	struct snd_ctl_elem_id *ids;
@@ -452,7 +452,7 @@ audio_elements(
 /* Copies a named element's validated integer or Boolean metadata. */
 static int
 audio_element(
-	struct keiland_audio *audio,
+	struct kl_backend_audio *audio,
 	const struct snd_ctl_elem_id *ids,
 	size_t count,
 	const char *name,
@@ -497,8 +497,8 @@ audio_element(
 /* Reads hardware quantization and the audible state into a clean snapshot. */
 static int
 audio_state(
-	struct keiland_audio *audio,
-	struct keiland_audio_state *state)
+	struct kl_backend_audio *audio,
+	struct kl_backend_audio_state *state)
 {
 	struct snd_ctl_elem_value control;
 	long minimum;
@@ -546,7 +546,7 @@ audio_state(
 /* Clears descriptor ownership after device or event failure. */
 static void
 audio_drop(
-	struct keiland_audio *audio)
+	struct kl_backend_audio *audio)
 {
 	/* Closing releases the event subscription as well as control access. */
 	if (audio->fd >= 0)
