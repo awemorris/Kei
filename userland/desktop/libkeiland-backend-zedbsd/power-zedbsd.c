@@ -14,9 +14,9 @@
  * power request (sessiond/session.c), so inside a session no action is
  * offered (plan/ws131/design.md, decision D12).  The request is one short
  * line written whole.  sessiond's "OK" comes back on the same descriptor
- * as its answers to the login screen's other requests, and the login
- * screen reads them all until the session moves here (ws131-p006).  The
- * power source is not read: there is no battery interface yet.
+ * as its answers to the login screen's other requests, and the session
+ * (session-zedbsd.c) reads them all.  The power source is not read: there
+ * is no battery interface yet.
  */
 
 #include "userland/desktop/libkeiland-backend/backend-private.h"
@@ -77,8 +77,8 @@ kl_backend_power_action(
 	if (action >= 32U || (power_actions(backend) & KL_BACKEND_POWER_ACTION_BIT(action)) == 0U)
 		return ENOTSUP;
 
-	/* One action at a time: the machine is ending once one has been asked. */
-	if (backend->power_asked != 0U)
+	/* One action at a time, and none while another request of sessiond's awaits its answer. */
+	if (backend->power_asked != 0U || backend->session_request != KL_BACKEND_SESSION_NONE)
 		return EBUSY;
 
 	/* The request's word. */
@@ -95,8 +95,9 @@ kl_backend_power_action(
 	if ((size_t)written != length)
 		return EIO;
 
-	/* Succeeded: sessiond ends the machine. */
+	/* Succeeded: sessiond ends the machine; its OK comes as session_answer(KL_BACKEND_SESSION_POWER). */
 	backend->power_asked = action;
+	backend->session_request = KL_BACKEND_SESSION_POWER;
 	return 0;
 }
 

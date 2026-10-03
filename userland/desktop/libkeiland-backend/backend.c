@@ -8,12 +8,13 @@
 /*
  * The backend object every operating system shares (WS131 p003).
  *
- * It keeps the compositor's callbacks and options for the areas that will
+ * It keeps the compositor's callbacks and options for the areas that
  * report through them (struct kl_backend is in backend-private.h, which the
- * operating systems' areas share).  No area polls a descriptor or waits for time yet:
- * the network is read by the compositor's own updates
- * (kl_backend_network_update), so the poll and the tick have nothing to do
- * until the areas that need them (the seat, the input devices) move here.
+ * operating systems' areas share).  No area polls a descriptor yet: the
+ * network and the sound are read by the compositor's own updates, and the
+ * session's manager is read by the tick (ws131-p006), as the compositor
+ * read it before.  The poll has nothing to do until the areas that need it
+ * (the seat, the input devices) move here.
  */
 
 #include "userland/desktop/libkeiland-backend/backend-private.h"
@@ -113,7 +114,10 @@ kl_backend_tick(
 	struct kl_backend *backend,
 	uint64_t now_ms)
 {
-	/* No area works by the clock yet. */
-	UNUSED_PARAMETER(backend);
-	UNUSED_PARAMETER(now_ms);
+	/* A compositor whose backend did not open has nothing to do here. */
+	if (backend == NULL)
+		return;
+
+	/* The session manager's lines and the Log Out's deadline (ws131-p006). */
+	kl_backend_session_tick(backend, now_ms);
 }

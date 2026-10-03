@@ -19,13 +19,16 @@
  *
  * After OK the screen says "Starting session..." and takes no input until
  * sessiond closes the descriptor, once the session is ready to take the
- * display (ws035-p101); zdesktop then ends.
+ * display (ws035-p101); zdesktop then ends.  libkeiland-backend speaks
+ * these lines (ws131-p006): this screen asks through
+ * kl_backend_session_authenticate, kl_backend_session_unlock and
+ * kl_backend_power_action, and the answers come back through handoff.c as
+ * zwl_greeter_answer.
  *
  * The same screen is a session's lock (ws035-p102, zwl_lock): the session's
  * user only, no power buttons, and the password goes to sessiond on the
  * session's descriptor (--control-fd) as UNLOCK password; OK unlocks, FAIL
- * (after sessiond's delay) asks again.  Its answers come through
- * handoff.c, which reads that descriptor.
+ * (after sessiond's delay) asks again.
  *
  * The screen is the blurred wallpaper with the time and the date at the
  * top, a frosted card in the middle with the users (the accounts with a uid
@@ -141,7 +144,7 @@ struct greeter_layout {
 /*
  * The users read once at the start, the one selected, what has been typed
  * (erased as soon as it is sent), the line under the field, whether an
- * answer is awaited, and the partial answer read so far.  zdesktop runs one
+ * answer is awaited.  zdesktop runs one
  * greeter, so these live for the process.
  */
 static struct greeter_user greeter_users[GREETER_USERS];
@@ -165,8 +168,6 @@ static char greeter_powering[16];
 static unsigned greeter_power_sent;
 static uint64_t greeter_power_frame;
 static uint64_t greeter_power_ms;
-static char greeter_answer[64];
-static size_t greeter_answer_used;
 
 /* The characters each key types, without and with Shift (US layout); 0 for none. */
 static const char greeter_plain[GREETER_KEYS] = {
@@ -199,10 +200,8 @@ static void greeter_submit(struct zwl_server *server);
 static void greeter_power(struct zwl_server *server, const char *what);
 static void greeter_power_send(struct zwl_server *server);
 static void greeter_draw_power(struct zwl_server *server, VkCommandBuffer command, const struct greeter_layout *layout);
-static void greeter_send(struct zwl_server *server, const char *line);
-static void greeter_answered(struct zwl_server *server, const char *answer);
+static void greeter_answered(struct zwl_server *server, int error);
 static void greeter_erase(void);
-static int greeter_descriptor(const struct zwl_server *server);
 
 /*
  * Prepares the login screen: the users, and the answers' descriptor.
@@ -251,8 +250,8 @@ zwl_lock(
 {
 	struct passwd *entry;
 
-	/* Only a session sessiond started, and once. */
-	if (server->greeter || server->control_fd < 0)
+	/* Only a session a session manager started (it unlocks), and once. */
+	if (server->greeter || !kl_backend_session_managed(server->backend))
 		return 0;
 	if (server->locked)
 		return 1;
@@ -281,20 +280,23 @@ zwl_lock(
 }
 
 /*
- * Acts on an answer of sessiond's to the lock screen's UNLOCK (handoff.c
- * reads it from the session's descriptor).
+ * Acts on an answer of the session manager's to the login screen's or the
+ * lock screen's request (libkeiland-backend reads it; handoff.c passes it
+ * on).  request is the KL_BACKEND_SESSION_* it answers.
  */
 void
-zwl_lock_answer(
+zwl_greeter_answer(
 	struct zwl_server *server,
-	const char *answer)
+	unsigned request,
+	int error)
 {
-	/* Only while the lock screen shows. */
-	if (!server->locked)
+	/* Only while the login screen or the lock screen shows. */
+	(void)request;
+	if (!server->greeter && !server->locked)
 		return;
 
-	/* The same answers as the login screen's. */
-	greeter_answered(server, answer);
+	/* The same answers for both. */
+	greeter_answered(server, error);
 }
 
 /*
@@ -448,14 +450,13 @@ zwl_greeter_key(
 }
 
 /*
- * Reads sessiond's answers, and redraws when the minute changes.
+ * Redraws when the minute changes, and sends a power request once its
+ * picture is shown (the answers come through zwl_greeter_answer).
  */
 void
 zwl_greeter_tick(
 	struct zwl_server *server)
 {
-	char *end;
-	ssize_t count;
 	int64_t minute;
 
 	/* The clock shows a new minute. */
@@ -465,7 +466,7 @@ zwl_greeter_tick(
 		server->dirty = 1;
 	}
 
-	/* The lock screen's answers come through handoff.c. */
+	/* The lock screen has only its clock. */
 	if (!server->greeter)
 		return;
 
@@ -474,36 +475,6 @@ zwl_greeter_tick(
 		server->dirty = 1;
 		greeter_power_send(server);
 	}
-
-	/* What sessiond has answered. */
-	count = read(server->auth_fd, greeter_answer + greeter_answer_used, sizeof(greeter_answer) - 1U - greeter_answer_used);
-	if (count < 0)
-		return;
-
-	/* sessiond gone: the screen ends. */
-	if (count == 0) {
-		printf("ZWL GREETER closed at_ms=%llu\n", (unsigned long long)zwl_milliseconds());
-		zwl_handoff_release(server);
-		zwl_request_stop();
-		return;
-	}
-
-	/* Each whole answer. */
-	greeter_answer_used += (size_t)count;
-	greeter_answer[greeter_answer_used] = '\0';
-	for (;;) {
-		end = strchr(greeter_answer, '\n');
-		if (end == NULL)
-			break;
-		*end = '\0';
-		greeter_answered(server, greeter_answer);
-		greeter_answer_used -= (size_t)(end - greeter_answer) + 1U;
-		memmove(greeter_answer, end + 1, greeter_answer_used + 1U);
-	}
-
-	/* An answer that never ends is thrown away. */
-	if (greeter_answer_used + 1U >= sizeof(greeter_answer))
-		greeter_answer_used = 0U;
 }
 
 /* Reads the users offered: the people's accounts, or root when there are none. */
@@ -1038,30 +1009,31 @@ greeter_type(
 	greeter_message[0] = '\0';
 }
 
-/* Sends the selected user's password to sessiond and erases it. */
+/* Sends the selected user's password to the session manager and erases it. */
 static void
 greeter_submit(
 	struct zwl_server *server)
 {
-	char line[GREETER_NAME + GREETER_PASSWORD + 8];
+	int error;
 
 	/* One question at a time. */
 	if (greeter_waiting)
 		return;
 
-	/* The request (UNLOCK on a session's lock screen), sent; then nothing of the password is kept. */
-	if (server->locked) {
-		snprintf(line, sizeof(line), "UNLOCK %s\n", greeter_password);
-	} else {
-		snprintf(line, sizeof(line), "AUTH %s %s\n", greeter_users[greeter_selected].name, greeter_password);
-	}
-
-	/* Nothing typed is kept once it is in the request. */
-	greeter_erase();
+	/* The request (unlock on a session's lock screen), through the backend. */
 	greeter_waiting = 1;
 	greeter_message[0] = '\0';
-	greeter_send(server, line);
-	memset(line, 0, sizeof(line));
+	if (server->locked)
+		error = kl_backend_session_unlock(server->backend, greeter_password);
+	else
+		error = kl_backend_session_authenticate(server->backend, greeter_users[greeter_selected].name, greeter_password);
+
+	/* Nothing typed is kept once it is asked. */
+	greeter_erase();
+	if (error != 0) {
+		printf("ZWL GREETER send errno=%d\n", error);
+		greeter_waiting = 0;
+	}
 	server->dirty = 1;
 	printf("ZWL GREETER auth user=%s\n", greeter_users[greeter_selected].name);
 }
@@ -1175,41 +1147,31 @@ greeter_draw_power(
 	}
 }
 
-/* Writes one request line to sessiond. */
-static void
-greeter_send(
-	struct zwl_server *server,
-	const char *line)
-{
-	size_t length;
-	ssize_t written;
-
-	/* The whole line in one write (it is short). */
-	length = strlen(line);
-	written = write(greeter_descriptor(server), line, length);
-	if (written != (ssize_t)length) {
-		printf("ZWL GREETER send errno=%d\n", errno);
-		greeter_waiting = 0;
-	}
-}
-
-/* Acts on one answer of sessiond's. */
+/*
+ * Acts on one answer of the session manager's: 0 granted (OK), EACCES a
+ * wrong password (FAIL), EIO refused (ERROR), another a line not
+ * understood.
+ */
 static void
 greeter_answered(
 	struct zwl_server *server,
-	const char *answer)
+	int error)
 {
-	int match;
-	int failed;
-	int refused;
+	const char *answer;
 
-	/* The screen is redrawn with the result. */
+	/* The screen is redrawn with the result, and the log names the answer as the manager said it. */
 	server->dirty = 1;
+	answer = "?";
+	if (error == 0)
+		answer = "OK";
+	else if (error == EACCES)
+		answer = "FAIL";
+	else if (error == EIO)
+		answer = "ERROR";
 	printf("ZWL GREETER answer=%s\n", answer);
 
 	/* Unlocked: the desktop shows again. */
-	match = strcmp(answer, "OK");
-	if (match == 0 && greeter_waiting && server->locked) {
+	if (error == 0 && greeter_waiting && server->locked) {
 		greeter_waiting = 0;
 		server->locked = 0U;
 		server->lock_input_ms = zwl_milliseconds();
@@ -1218,7 +1180,7 @@ greeter_answered(
 	}
 
 	/* Logged in: the screen stays until sessiond closes the descriptor (the session is then ready). */
-	if (match == 0 && greeter_waiting) {
+	if (error == 0 && greeter_waiting) {
 		greeter_waiting = 0;
 		greeter_starting = 1;
 		printf("ZWL GREETER starting\n");
@@ -1226,29 +1188,14 @@ greeter_answered(
 	}
 
 	/* A wrong password, or a refused request. */
-	failed = strcmp(answer, "FAIL");
-	refused = strcmp(answer, "ERROR");
-	if (failed == 0) {
+	if (error == EACCES) {
 		snprintf(greeter_message, sizeof(greeter_message), "Wrong password. Try again.");
-	} else if (refused == 0) {
+	} else if (error == EIO) {
 		snprintf(greeter_message, sizeof(greeter_message), "The login failed.");
 	}
 
 	/* The next password can be typed. */
 	greeter_waiting = 0;
-}
-
-/* Returns the descriptor to sessiond: the login screen's, or a session's for its lock screen. */
-static int
-greeter_descriptor(
-	const struct zwl_server *server)
-{
-	/* A session's lock screen asks on the session's descriptor. */
-	if (server->locked)
-		return server->control_fd;
-
-	/* The login screen on its own. */
-	return server->auth_fd;
 }
 
 /* Erases what has been typed. */

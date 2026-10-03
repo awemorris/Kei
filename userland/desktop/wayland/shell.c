@@ -2002,13 +2002,14 @@ zwl_glass_tick(
 	float progress;
 	time_t now;
 
-	/* The login screen has only its clock and sessiond's answers (greeter.c). */
+	/* The login screen has only its clock (greeter.c) and the session manager's answers (handoff.c). */
 	if (server->greeter) {
 		zwl_greeter_tick(server);
+		zwl_handoff_tick(server);
 		return;
 	}
 
-	/* What sessiond sent the session (handoff.c). */
+	/* What the session manager sent the session (handoff.c). */
 	zwl_handoff_tick(server);
 
 	/* The lock screen has only its clock (its answers came above). */

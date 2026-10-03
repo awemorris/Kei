@@ -57,7 +57,7 @@ app は OS の抽象化を直接持たない。例: Settings → libkeiland → 
 | [p003](phase003/phase.md) | backend の土台と network | planning | p002 の承認、P1 の network-zedbsd.c の merge（2026-10-03 満たされた）、P2 の終了 | 4〜5h |
 | [p004](phase004/phase.md) | backend の音声 | in-progress（q650、P1。実装と host の確認は済み、QEMU は T1・T2 待ち） | p003 | 3〜4h |
 | [p005](phase005/phase.md) | backend の電源 | in-progress（q650、P1。実装と host の確認は済み、QEMU は試験の担当待ち） | p004 | 3〜4h |
-| [p006](phase006/phase.md) | backend の seat・session | planning | p005 | 4〜5h |
+| [p006](phase006/phase.md) | backend の seat・session | in-progress（q650、P1。p006a zedBSD の session は実装と host の確認済み・QEMU 待ち、p006b Linux は user の判断待ち、p006c FreeBSD は未着手） | p005 | 4〜5h |
 | [p007](phase007/phase.md) | backend の入力 | planning | p006 | 3〜4h |
 | [p008](phase008/phase.md) | backend の表示 | planning | p007 | 3〜4h |
 | [p009](phase009/phase.md) | backend の GPU の buffer と境界の確定 | planning | p008 | 4〜5h |

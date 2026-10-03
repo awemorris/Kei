@@ -46,6 +46,8 @@
 
 #include "userland/desktop/paths.h"
 
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -919,7 +921,7 @@ home_read_apps(
 	}
 
 	/* A login's session locks (ws035-p102) and ends with Log Out (ws035-p095), the last icons. */
-	if (server->session && server->control_fd >= 0)
+	if (server->session && kl_backend_session_managed(server->backend))
 		home_add_app("Lock Screen", HOME_LOCK, "lock screen away", 0x5a6aa0U, "lock");
 	if (server->session)
 		home_add_app("Log Out", HOME_LOGOUT, "logout log out sign out exit session end", 0x6a7488U, "logout");

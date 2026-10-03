@@ -3,7 +3,6 @@
 # keiland-linux-sync: skip userland/desktop/wayland/zedbsd/* target-only modules
 # keiland-linux-sync: only userland/desktop/wayland/dmabuf/* native dma-buf protocol
 # keiland-linux-sync: only userland/desktop/wayland/evdev/* shared native evdev
-# keiland-linux-sync: only userland/desktop/wayland/session/* native system session
 WAYLAND_LINUX_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/wayland/wire.c \
 	userland/desktop/wayland/objects.c \
@@ -59,7 +58,7 @@ WAYLAND_LINUX_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/wayland/linux/dbus-linux.c \
 	userland/desktop/wayland/linux/seat-logind-linux.c \
 	userland/desktop/wayland/evdev/input-evdev.c \
-	userland/desktop/wayland/session/handoff-session.c \
+	userland/desktop/wayland/handoff.c \
 	userland/desktop/wayland/dmabuf/gpu-dmabuf.c \
 	userland/desktop/wayland/linux/sync-linux.c \
 	userland/desktop/wayland/linux/input-seat-linux.c

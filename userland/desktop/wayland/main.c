@@ -92,6 +92,8 @@ main(
 	memset(&backend_options, 0, sizeof(backend_options));
 	memset(&backend_host, 0, sizeof(backend_host));
 	backend_host.data = &server;
+	backend_host.session_stop = zwl_handoff_stop;
+	backend_host.session_answer = zwl_handoff_answer;
 
 	/* Reads the command line; a mistake ends the run with the usage. */
 	error = parse_options(&server, count, arguments);
@@ -142,12 +144,16 @@ main(
 
 	/*
 	 * Opens the operating system's side (libkeiland-backend) before
-	 * anything asks it for a resource.  The login screen's descriptor to
-	 * sessiond carries the power requests (ws131-p005).
+	 * anything asks it for a resource.  The login screen's and a session's
+	 * descriptors to sessiond carry the session (ws131-p006) and the power
+	 * requests (ws131-p005).
 	 */
 	backend_options.greeter_descriptor = -1;
+	backend_options.session_descriptor = -1;
 	if (server.greeter)
 		backend_options.greeter_descriptor = server.auth_fd;
+	else
+		backend_options.session_descriptor = server.control_fd;
 	error = kl_backend_open(&backend_options, &backend_host, &server.backend);
 	if (error != 0)
 		printf("ZWL BACKEND unavailable errno=%d\n", error);

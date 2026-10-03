@@ -59,6 +59,8 @@ struct kl_backend;
  */
 struct kl_backend_host {
 	void *data;
+	void (*session_stop)(void *data, unsigned reason);
+	void (*session_answer)(void *data, unsigned request, int error);
 };
 
 /*
@@ -68,11 +70,15 @@ struct kl_backend_host {
  * descriptors sessiond hands over) add their fields when they move here.
  * greeter_descriptor is the login screen's descriptor to the session
  * manager (zedBSD's sessiond, --auth-fd), or -1 when the compositor is not
- * the login screen; the power area sends its requests on it (ws131-p005).
+ * the login screen; session_descriptor is a session's descriptor to it
+ * (--control-fd), or -1 when no session manager started the session.  The
+ * session (ws131-p006) and the power (ws131-p005) speak on them; the
+ * compositor makes them nonblocking and keeps them from its children.
  */
 struct kl_backend_options {
 	unsigned flags;
 	int greeter_descriptor;
+	int session_descriptor;
 };
 
 /*
@@ -391,9 +397,9 @@ int kl_backend_audio_available(void);
  * machine: power it off, restart it, suspend it.  An action is asked of
  * the system's session manager (zedBSD's sessiond from the login screen;
  * logind on Linux from ws131-p006) and the machine then ends or sleeps;
- * the session manager's answer is read by the login screen with its other
- * answers until the session moves here (ws131-p006).  One action is asked
- * at a time.  The power source is not read on any system yet: the state
+ * the session manager's answer comes as
+ * session_answer(KL_BACKEND_SESSION_POWER).  One action is asked at a
+ * time.  The power source is not read on any system yet: the state
  * says unknown.
  */
 
@@ -433,5 +439,77 @@ int kl_backend_power_get_state(const struct kl_backend *backend, struct kl_backe
  * asked already, EINVAL, or the error of sending.
  */
 int kl_backend_power_action(struct kl_backend *backend, unsigned action);
+
+
+/*
+ * The session (ws131-p006): the session manager that started the
+ * compositor, and the hand-over of the display between the login screen
+ * and a session.
+ *
+ * On zedBSD that is sessiond (plan/ws035/login-manager-design.md): the
+ * login screen asks it to log a user in on its descriptor, a session asks
+ * it to log out or to unlock its lock screen on its own descriptor, and
+ * both say when they first take the display and when they have given it
+ * back.  Elsewhere no session manager speaks to the compositor yet: every
+ * call answers ENOTSUP and kl_backend_session_managed is 0.
+ *
+ * The answers and the end come through the host's callbacks, from
+ * kl_backend_tick: session_answer(request, error) for the request asked
+ * last (KL_BACKEND_SESSION_NONE for a line no request asked for), error 0
+ * when it was granted, EACCES when refused (a wrong password), EIO when
+ * the manager could not do it, EPROTO for a line not understood; and
+ * session_stop(reason) when the compositor is to end.  For
+ * KL_BACKEND_SESSION_QUIT and KL_BACKEND_SESSION_ENDED the compositor gives
+ * the display back (its swapchain and lease) inside the callback, and the
+ * backend tells the manager so when the callback returns.
+ */
+
+/* The requests a session_answer answers. */
+#define KL_BACKEND_SESSION_NONE		0U
+#define KL_BACKEND_SESSION_AUTH		1U	/* the login screen's log in */
+#define KL_BACKEND_SESSION_UNLOCK	2U	/* a session's lock screen */
+#define KL_BACKEND_SESSION_POWER	3U	/* kl_backend_power_action */
+
+/* Why session_stop is called. */
+#define KL_BACKEND_SESSION_QUIT		1U	/* the session's Log Out was answered: end */
+#define KL_BACKEND_SESSION_ENDED	2U	/* the login screen's manager is done with it (a session is ready, or the manager went) */
+#define KL_BACKEND_SESSION_UNANSWERED	3U	/* a Log Out had no answer in time: end anyway */
+
+/*
+ * Says the compositor is about to take the display for the first time,
+ * and waits (at most 20 seconds) for the manager to let it: 0 when it did,
+ * ETIMEDOUT when the wait ended without it (the display is taken anyway),
+ * ENOTSUP without a session manager, or the error of saying so.
+ */
+int kl_backend_session_ready(struct kl_backend *backend);
+
+/*
+ * Asks the manager to log the session out.  Returns 0 when asked (the
+ * answer is session_stop(KL_BACKEND_SESSION_QUIT), or
+ * KL_BACKEND_SESSION_UNANSWERED after 30 seconds), ENOTSUP when no manager
+ * started the session (the compositor simply ends), or the error of
+ * asking.
+ */
+int kl_backend_session_logout(struct kl_backend *backend);
+
+/*
+ * Asks the manager to log user in with password (the login screen).
+ * Returns 0 when asked, EBUSY while another request waits for its answer,
+ * ENOTSUP, EINVAL, or the error of asking.  Nothing of the password is
+ * kept.
+ */
+int kl_backend_session_authenticate(struct kl_backend *backend, const char *user, const char *password);
+
+/*
+ * Asks the manager to unlock the session's lock screen with password.
+ * Returns as kl_backend_session_authenticate.
+ */
+int kl_backend_session_unlock(struct kl_backend *backend, const char *password);
+
+/*
+ * Tells whether a session manager started this session and still listens
+ * (1), so that it can be locked and logged out through it, or not (0).
+ */
+int kl_backend_session_managed(const struct kl_backend *backend);
 
 #endif
