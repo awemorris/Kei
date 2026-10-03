@@ -2,7 +2,7 @@
 
 # ws131-p007: backend の入力の領域
 
-Status: in-progress（q650、2026-10-03、P1。実装と host の確認は済み、QEMU と Linux の guest は試験の担当待ち。元の記載: planning）
+Status: uncleared（q650、2026-10-03、P1。T1-044 で 3/4 PASS、touch・pen の demo-s8-s9 はラップアップで未実行）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）
@@ -89,3 +89,7 @@ evdev の device の走査・読み・lease を backend へ移す。evdev の型
   - C1。C2・C9 は user の指示で実機の試験の後。
   - pointer・key・touch・pen の `demo-s8-s9.sh`。
 - Linux: gdm の guest で QMP の pointer・key の入力に compositor が反応する PNG（T1-042 の試験 2 の手順の click）。
+
+## 結果（Q1、2026-10-03、T1-044、QEMU）
+
+uncleared（未実行の項目が残る）。boot-test PASS、C1 PASS（p126・c1-boot-shutdown）、Linux の gdm の guest（QEMU+KVM）PASS（`ZWL INPUT device=` 4 つ、launcher の click で App Home、Terminal に `$ ab`）。demo-s8-s9（touch・pen）はユーザーの指示のラップアップで未実行。証拠 worktrees/t1/build/t1-criteria/t1-044/・t1-linux/t1-044/。再開: demo-s8-s9 を流して PASS なら cleared。
