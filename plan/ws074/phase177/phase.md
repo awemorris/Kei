@@ -3,7 +3,7 @@
 
 Q1 が割り当て（2026-10-03、P2）。ws074 は別の session（browser3）も使う。この Phase は P2 の q645 の続きで、変更は `base/buffer.c` の 1 か所だけ。
 
-Status: in-progress（実装と host 試験が済み、cleared の判定は Q1）
+Status: cleared（Q1 判定 2026-10-03: host の単体の試験 bug133-units が直す前 FAIL・直した後 PASS、ASan/UBSan でも PASS、zedBSD の build warning 0）。元の記載: in-progress（実装と host 試験が済み、cleared の判定は Q1）
 Disposition: normal
 Parent: [WS074](../ws.md)
 Bug: [BUG-133](../../bugs/BUG-133.md)
