@@ -235,6 +235,7 @@ p009 → p018 → p027 → p028 → p029 → p047 → p031 → p032 → p033 →
 | [ws074-p174](phase174/phase.md) | File System Access APIの仕様/WPT・権限・picker/handle契約を確定し、機能群ごとの実装Phaseへ分割 | planning / Queueなし | p172、p100 |
 | [ws074-p175](phase175/phase.md) | OPFSのorigin分離・永続保存・handle契約を確定し、機能群ごとの実装Phaseへ分割 | planning / Queueなし | p172、p174の共有契約の実出力 |
 | [ws074-p176](phase176/phase.md) | Test262固定全suiteのbaselineと失敗群/runner coverage、段階的改善Phaseの設計 | planning / Queueなし | p172、JS runnerの実出力 |
+| [ws074-p177](phase177/phase.md) | BUG-133: `wb_units_reserve` の幾何の増長後の byte 数の overflow を need に落として防ぐ（Q1 が割り当て、2026-10-03、P2） | in-progress（実装と host 試験済み、判定は Q1） | — |
 
 ## 後の WS・Future Work の候補
 
