@@ -140,7 +140,14 @@ main(
 	if (previous_handler == SIG_ERR)
 		return 1;
 
-	/* Opens the operating system's side (libkeiland-backend) before anything asks it for a resource. */
+	/*
+	 * Opens the operating system's side (libkeiland-backend) before
+	 * anything asks it for a resource.  The login screen's descriptor to
+	 * sessiond carries the power requests (ws131-p005).
+	 */
+	backend_options.greeter_descriptor = -1;
+	if (server.greeter)
+		backend_options.greeter_descriptor = server.auth_fd;
 	error = kl_backend_open(&backend_options, &backend_host, &server.backend);
 	if (error != 0)
 		printf("ZWL BACKEND unavailable errno=%d\n", error);

@@ -66,9 +66,13 @@ struct kl_backend_host {
  *
  * flags is 0 so far; the areas that need to know (a windowed run, the
  * descriptors sessiond hands over) add their fields when they move here.
+ * greeter_descriptor is the login screen's descriptor to the session
+ * manager (zedBSD's sessiond, --auth-fd), or -1 when the compositor is not
+ * the login screen; the power area sends its requests on it (ws131-p005).
  */
 struct kl_backend_options {
 	unsigned flags;
+	int greeter_descriptor;
 };
 
 /*
@@ -378,5 +382,56 @@ int kl_backend_audio_feedback(struct kl_backend_audio *audio);
  * still have no sound device (struct kl_backend_audio_state's device).
  */
 int kl_backend_audio_available(void);
+
+
+/*
+ * The power (ws131-p005).
+ *
+ * The machine's power source and the actions a user may take on the
+ * machine: power it off, restart it, suspend it.  An action is asked of
+ * the system's session manager (zedBSD's sessiond from the login screen;
+ * logind on Linux from ws131-p006) and the machine then ends or sleeps;
+ * the session manager's answer is read by the login screen with its other
+ * answers until the session moves here (ws131-p006).  One action is asked
+ * at a time.  The power source is not read on any system yet: the state
+ * says unknown.
+ */
+
+/* The actions (kl_backend_power_action), and their bits in the state's actions. */
+#define KL_BACKEND_POWER_POWEROFF	1U
+#define KL_BACKEND_POWER_REBOOT		2U
+#define KL_BACKEND_POWER_SUSPEND	3U
+#define KL_BACKEND_POWER_ACTION_BIT(action)	(1U << (action))
+
+/* Where the power comes from. */
+#define KL_BACKEND_POWER_SOURCE_UNKNOWN	0U
+#define KL_BACKEND_POWER_SOURCE_AC	1U
+#define KL_BACKEND_POWER_SOURCE_BATTERY	2U
+
+/*
+ * The power as the backend knows it: the source, the battery's charge in
+ * percent (-1 when unknown), whether it charges, and the
+ * KL_BACKEND_POWER_ACTION_BIT of each action a user may take now (0 when
+ * none: a zedBSD session cannot power the machine off, only the login
+ * screen can).
+ */
+struct kl_backend_power_state {
+	unsigned source;
+	int percent;
+	unsigned charging;
+	unsigned actions;
+};
+
+/*
+ * Copies the power's state.  Returns 0, or EINVAL without a backend.
+ */
+int kl_backend_power_get_state(const struct kl_backend *backend, struct kl_backend_power_state *state);
+
+/*
+ * Asks for an action (KL_BACKEND_POWER_*).  Returns 0 when it was asked,
+ * ENOTSUP for an action not in the state's actions, EBUSY when one was
+ * asked already, EINVAL, or the error of sending.
+ */
+int kl_backend_power_action(struct kl_backend *backend, unsigned action);
 
 #endif

@@ -2,10 +2,10 @@
 
 # ws131-p005: backend の電源の領域
 
-Status: planning（p002 第 2 版はユーザーのレビュー済み（2026-10-03、D7 は確認中）。開始はユーザーの承認と P2 の終了の後に Q1 が指示）
+Status: in-progress（q650、2026-10-03、P1。実装と host の確認は済み、QEMU の試験は試験の担当に予約。元の記載: planning）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
-Queue: none
+Queue: q650（2026-10-03、Q1 の割り当て）
 依存: p004 cleared。判断 D12
 目安: 3〜4h（1 Queue）。実行者: Q1 が割り当てる（high）
 所有 path: `userland/desktop/libkeiland-backend*/`（power、`unsupported/`）、`userland/desktop/wayland/greeter.c`（POWER の行の送り）、`plan/ws131/`
@@ -38,3 +38,41 @@ Queue: none
 ## Resume
 
 依存の Phase の cleared と main への統合、関係する判断の決定の後に、Q1 が Queue を作る。
+
+## 実施の記録（q650、P1、2026-10-03）
+
+base は main（p004 の `b8b50d098` を含む）。
+
+### 変えたこと
+
+- `libkeiland-backend/keiland-backend.h`: power の領域。
+  - `KL_BACKEND_POWER_POWEROFF`・`REBOOT`・`SUSPEND`、`KL_BACKEND_POWER_ACTION_BIT`、`KL_BACKEND_POWER_SOURCE_*`。
+  - `struct kl_backend_power_state`（source・percent・charging・actions）、`kl_backend_power_get_state`・`kl_backend_power_action`。
+  - `struct kl_backend_options` に `greeter_descriptor`（login screen の sessiond への descriptor、それ以外は -1）。
+- `libkeiland-backend/backend-private.h`（新規）: `struct kl_backend` の中身を backend.c と OS の領域で共有する。`power_asked` で一度に一つ。compositor は include しない。
+- `libkeiland-backend-zedbsd/power-zedbsd.c`（新規）:
+  - login screen（`greeter_descriptor` ≥ 0）だけが poweroff・reboot を出す。session では actions 0・ENOTSUP（D12、sessiond は session の socket で POWER を受けない）。
+  - `POWER poweroff|reboot` の 1 行を一度に書く。2 回目は EBUSY。
+  - 電池の interface は無いので source は unknown。
+- `libkeiland-backend/unsupported/power-unsupported.c`（新規、Linux・FreeBSD の共通）: actions 0、全ての action が ENOTSUP。Linux の logind は D-Bus と一緒に p006 で有効にする。
+- compositor:
+  - `main.c` は greeter の時に `--auth-fd` を `greeter_descriptor` に渡す。
+  - `greeter.c` の `greeter_power_send` は行を自分で書かず `kl_backend_power_action` を呼ぶ。log の `ZWL GREETER power=…` は同じ。失敗は `ZWL GREETER send errno=N`。
+  - sessiond の答え（OK）は、AUTH の答えと同じ descriptor で greeter.c が読むまま。読みの移動は session の領域（p006）で行い、`host->session_answer` もそこで足す。
+- build: `sources.mk` に power-zedbsd.c、Linux・FreeBSD の backend の Makefile に power-unsupported.c。
+- 試験（新規）: `plan/ws131/tests/host-power.c`・`host-power.sh`。zedBSD の実装は socketpair を sessiond の代わりにし、unsupported の実装と 2 回 build する（ASan・UBSan）。
+
+### 確認（host）
+
+| 確認 | 結果 |
+| --- | --- |
+| `host-power.sh` | zedBSD の実装 17/17、unsupported 6/6。中身: login screen の actions、`POWER reboot\n`・`POWER poweroff\n` の 1 行、2 回目の EBUSY、suspend と未知の action の ENOTSUP、sessiond が閉じた時の EPIPE、session の actions 0 と ENOTSUP、backend 無しの EINVAL |
+| zedBSD の build（libkeiland.so・wayland・settings） | exit 0、warning 0。compositor は `kl_backend_power_*` 2 個、libkeiland.so は `kl_backend_*` を出さない |
+| Linux の build（native の gcc・clang） | どちらも exit 0、warning 0。`libkeiland-backend.a` の未定義の symbol に `zwl_`・`kwl_`・`keiland_` が無い（B1）。header-check PASS（347）、install、elf-check PASS（24 ELF） |
+| 境界の checker | `check.sh` PASS |
+| FreeBSD | 書くだけ |
+
+### QEMU の試験（試験の担当に予約、結果待ち）
+
+- boot-test。
+- criteria の image で `plan/ws099/tests/c1-boot-shutdown.sh`。greeter の Shut Down が backend を通って sessiond に届き、machine が止まる。`ZWL GREETER powering=poweroff` の後に `power=poweroff`。

@@ -56,7 +56,7 @@ app は OS の抽象化を直接持たない。例: Settings → libkeiland → 
 | [p002](phase002/phase.md) | 移行計画（[design.md](design.md) 第 2 版、[rename-map.md](rename-map.md)・[rename-map-kwl.md](rename-map-kwl.md)） | in-progress（2026-10-03 ユーザーのレビュー済み、q630 で D4・D8・D9 を反映、D7 は確認中） | p001 | — |
 | [p003](phase003/phase.md) | backend の土台と network | planning | p002 の承認、P1 の network-zedbsd.c の merge（2026-10-03 満たされた）、P2 の終了 | 4〜5h |
 | [p004](phase004/phase.md) | backend の音声 | in-progress（q650、P1。実装と host の確認は済み、QEMU は T1・T2 待ち） | p003 | 3〜4h |
-| [p005](phase005/phase.md) | backend の電源 | planning | p004 | 3〜4h |
+| [p005](phase005/phase.md) | backend の電源 | in-progress（q650、P1。実装と host の確認は済み、QEMU は試験の担当待ち） | p004 | 3〜4h |
 | [p006](phase006/phase.md) | backend の seat・session | planning | p005 | 4〜5h |
 | [p007](phase007/phase.md) | backend の入力 | planning | p006 | 3〜4h |
 | [p008](phase008/phase.md) | backend の表示 | planning | p007 | 3〜4h |
