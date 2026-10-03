@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p030 -->
 # ws005-p030: system bar の network の menu — 接続中の AP を一番上に Disconnect の button、画面に収まる件数（BUG-148）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-031（QEMU）menu-bug148 PASS、short.png に「2 more in Settings > Wi-Fi」。実機は S2）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Bug: [BUG-148](../../bugs/BUG-148.md)

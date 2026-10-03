@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p028 -->
 # ws099-p028: zdesktop の log に NUL の byte が入る（試験の grep が log を binary と読む）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-035（QEMU）log-nul-guest PASS（Settings の image と、volume の image の Log Out・login の後の session.log）、直す前の image では NUL 1279 byte で FAIL（再現））。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Queue: q643 の続き（P1 generation11、2026-10-03。Q1 の指示: 見つけた担当がその場で直す。user「実機なしで解決できるバグをどんどん処理してください。」）
