@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws129-p011 -->
 # ws129-p011: 試験の QEMU を KVM に統一し、image の build の並列の数を 16 に揃える
 
-Status: in-progress（q646、2026-10-03、P1）
+Status: cleared（q646、2026-10-03、P1。Q1 判定）
 Disposition: normal
 Parent: [WS129](../ws.md)
 
@@ -72,3 +72,7 @@ Parent: [WS129](../ws.md)
   - build-settings-image は `ZEDBSD_JOBS=4` で `-j4`。
   - build-ssh-image（eval）は `-j16`。
 - QEMU の試験（boot-test の KVM での PASS、代表の guest 試験）は T1・T2 に予約（結果待ち）。
+
+## 結果（Q1、2026-10-03）
+
+cleared。T1-038（QEMU）: boot-test PASS（KVM 9 s・`-accel kvm -cpu host`、TCG 13 s・`-cpu max`）、lean の image の bug149-check は KVM で pass=12、image の build は -j16。残り: submake が `-j64` を出す warning が 1 行（無害、次に build の規則を触る時に直す）。
