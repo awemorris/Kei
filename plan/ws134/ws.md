@@ -14,7 +14,7 @@ Resume point: p001（設計: 情報の出どころの調査と画面・3D・動�
 
 ## 目標（2026-10-03 ユーザー）
 
-「P2が空いているので、システムモニターのアプリを作ってほしいです。添付がイメージです。」デザインのコンセプトは [design/user-concept.md](design/user-concept.md)（原文の要約）と参考の画像 [design/reference-image.webp](design/reference-image.webp)。
+「P2が空いているので、システムモニターのアプリを作ってほしいです。添付がイメージです。」2026-10-03 user「イメージの通りじゃなくてよくて、要素を採用してほしいです。」→ 参考の画像の再現ではなく、コンセプトと画像の要素を取り入れて設計する。デザインのコンセプトは [design/user-concept.md](design/user-concept.md)（原文の要約）と参考の画像 [design/reference-image.webp](design/reference-image.webp)。
 
 CPU（全体と各 core）、GPU（Util・VRAM・温度・電力、複数）、RAM（Used・Cache・Available・Swap）、Network（RX/TX）、Disk I/O（読み・書き・Latency）と最近の出来事を、中央の「システム状態の立体コア」を顔にした層構造の画面で見せる Keiland の app。3D は階層を見せるため、動きは「呼吸」。タブレットの操作（タップで浮く、スワイプで時間軸、長押しで固定、2 本指で俯瞰）。
 
