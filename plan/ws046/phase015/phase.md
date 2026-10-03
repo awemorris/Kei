@@ -34,3 +34,10 @@ BUG-027（ticket の計測: libLLVM の先頭 32 MiB の `MAP_PRIVATE` の読み
 - host（Linux）: ffault を gcc で作って libLLVM で走らせた（read fault 0.8 µs/page、read() 1.1 µs/page）。判定の python を良い値・ticket の値で試し、
   PASS・FAIL を期待どおり返した。`style-check.py` は ffault.c に違反 0。guest 用の build（zedBSD の clang、-Werror）は warning 0。
 - QEMU（T1 に依頼）: 結果は未着。
+
+## 結果（T1-034、2026-10-03、QEMU の amd64 guest、他の QEMU の無い時に単独）
+
+`bug027-test.sh` PASS（[T1 の出力](/home/awe/zedBSD-worktrees/t1/build/t1-bug027/t1-034/)）: libLLVM の先頭 32 MiB の MAP_PRIVATE の読みの fault が
+cold 76.54 µs/page（ticket 1.8 ms の約 1/24）、warm 1.71 µs/page（ticket 0.34 ms の約 1/200）、warm の fault と `read()` の比 1.0 倍（ticket 7〜36 倍）。
+kbench: file page fault 950 ns、anon page fault 2380 ns。BUG-027 は直っている（ws046-p007〜p014 の直し）。resolved を提案。cold は今も 1 page ずつ同期だが、
+基準（180 µs）の内なので直さない。実機は未実施。
