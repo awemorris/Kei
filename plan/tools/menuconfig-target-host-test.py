@@ -74,9 +74,13 @@ def check_packages() -> None:
     # build, not by the platform: only the kernel options, the drivers, the
     # desktop and the firmware are tied to one (BUG-080).  noct and zedinst
     # need the Noct runtime, which some platforms lack.
+    # The desktop's own packages (packages/desktop, such as GTK 4) go with
+    # the desktop, which only some platforms have (BUG-129).
     platform_tied = {"noct", "zedinst"}
     for row in rows:
         if row[0] in platform_tied:
+            continue
+        if row[4] == "packages/desktop":
             continue
         if row[4].startswith("packages/") or row[4] == "base":
             if row[2] != "*":

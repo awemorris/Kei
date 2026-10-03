@@ -78,6 +78,8 @@ PACKAGE_CATEGORIES = [
     ("Editors", "packages/editors"),
     ("Development", "packages/devel"),
     ("Libraries", "packages/libs"),
+    ("Desktop", "packages/desktop"),
+    ("Fonts", "packages/fonts"),
     ("Network", "packages/network"),
     ("Security", "packages/security"),
 ]
