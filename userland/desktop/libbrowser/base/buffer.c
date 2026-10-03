@@ -268,8 +268,14 @@ wb_units_reserve(
 	if (needed <= units->capacity)
 		return 0;
 
-	/* Grows the storage geometrically. */
+	/*
+	 * Grows the storage geometrically.  A doubling whose byte count would
+	 * not fit in size_t falls back to the need itself, which fits because
+	 * the need is at most half of SIZE_MAX (BUG-133).
+	 */
 	capacity = buffer_grown(units->capacity, needed);
+	if (capacity > ((size_t)-1) / sizeof(*data))
+		capacity = needed;
 	data = realloc(units->data, capacity * sizeof(*data));
 	if (data == NULL)
 		return ENOMEM;

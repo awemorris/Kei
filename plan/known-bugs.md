@@ -52,7 +52,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-136](bugs/BUG-136.md) | Gears（X11）にタイトルバーが出ない | reproduced / resolved（2026-10-03 整理） | ユーザー実機 | p023 |
 | [BUG-135](bugs/BUG-135.md) | stat() が数秒かかる（UFS、guest） | reproduced / tracking | ws099-p020 の診断で 0.7〜6.5 秒。compositor は watcher thread で回避 | kernel/UFS の Phase で gdbstub で待ちの場所を取る |
 | [BUG-134](bugs/BUG-134.md) | AX211 不動作、driver 有効で起動停止 | unreproduced / resolved（2026-10-02 ユーザーの実機確認） | デモ config の firmware 欠落。CI 土台の image で実機動作 | 起動停止が再び見えたら reopen |
-| [BUG-133](bugs/BUG-133.md) | Browser UTF16 reserve byte数overflow | unknown / tracking（静的証拠） | browser2:BUG129をp172/q579で検出、mainBUG129はFonts別条件。原本を保持してID衝突修復 | 有限buffer-bounds Phaseを選定。runtime再現/修理未実施、import回帰は上限の証明ではない |
+| [BUG-133](bugs/BUG-133.md) | Browser UTF16 reserve byte数overflow | reproduced（host の単体の試験） / scheduled | browser2:BUG129をp172/q579で検出、mainBUG129はFonts別条件。原本を保持してID衝突修復 | ws074-p177（P2）で直した: 増長後の capacity が SIZE_MAX/2 を越えたら need に落とす。host 試験の前 FAIL・後 PASS。resolved の判定は Q1 |
 | [BUG-130](bugs/BUG-130.md) | FreeBSD drm-kmod DMA-BUF のaccess flags | reproduced / tracking | WS109 q568、live fdのsync ioctlがEBADF、Vulkan window acquire失敗 | Keiland workaround/実GPU window・所有権はq569/q570で検証済み。driver未修理、drm-kmod upgrade時に再確認 |
 | [BUG-129](bugs/BUG-129.md) | package menu に Fonts 分類が無い | reproduced / tracking | WS106 q540、移動前rowsでもMAC-T001 noto-color-emojiでFAIL | package/menu整備時。今回未修正、BUG-080は関連する別条件 |
 | [BUG-128](bugs/BUG-128.md) | Terminal menu初期化でNULL screenを読む | reproduced / resolved（WS105 p008） | source 7dd3ad9e、Linux / zedBSDで起動・文字・終了PASS | startup再発時にreopen、実機未実施 |
