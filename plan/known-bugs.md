@@ -39,7 +39,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-149](bugs/BUG-149.md) | kernel の AF_UNIX stream: 自分側の SHUT_WR で poll が POLLERR | reproduced（QEMU、libkeiland の join の EIO） / resolved（ws005-p025、統合 cb3da62d1。実機は S1） | ws005-p020 / q631 | —。libkeiland 側の回避は ws131-p003 |
 | [BUG-148](bugs/BUG-148.md) | system bar の WiFi の menu の下端が画面の外に切れる | reproduced（QEMU） / resolved（ws005-p030、T1-031） | ws005-p020 | 標準 |
 | [BUG-147](bugs/BUG-147.md) | C9 の p128・cursor-owner が間欠的に落ちる | reproduced（1/5） / resolved | ws099-p023 の C9 ×5 | ws099-p024・p026 で修正、T2-002 の QEMU で PASS。再発で reopen |
-| [BUG-146](bugs/BUG-146.md) | Venus の guest 試験が client=1 前提、IME が先だと外れる | reproduced / scheduled | ws127-p002 | ws099-p025 で共有の helper（plan/tools/guest/zwl-clients.sh）に置き換え済み、T1 の QEMU の結果待ち |
+| [BUG-146](bugs/BUG-146.md) | Venus の guest 試験が client=1 前提、IME が先だと外れる | reproduced / resolved | ws127-p002 | ws099-p025 で共有の helper（plan/tools/guest/zwl-clients.sh）に置き換え、T1-039 の QEMU で PASS |
 | [BUG-145](bugs/BUG-145.md) | AX211: handshake の後に DHCP の lease が取れず disassoc（reason 8） | reproduced（passthrough） / tracking | ws005-p019 q611、5GHz | WS004 の新しい Phase |
 | [BUG-144](bugs/BUG-144.md) | 8 番目の Model viewer が vkAllocateMemory -4 | reproduced（QEMU） / resolved（ws014-p011、窓 1 GiB、2026-10-03） | ws129-p010、Venus の hostmem の見当 | 実機で確かめる |
 | [BUG-143](bugs/BUG-143.md) | IME の確定のたびに 500 ms 超で止まり IME を迂回 | reproduced（QEMU） / tracking | ws095-p005、辞書の保存の fsync の見当 | WS095 の次の Phase |

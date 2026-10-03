@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws134-p002 -->
 # ws134-p002: システムモニターの骨組み（M1）
 
-Status: in-progress（P2、2026-10-03。実装済み・T1 の試験待ち）
+Status: cleared（P2、2026-10-03。Q1 判定）
 Parent: [WS134](../ws.md)
 設計: [design.md](../design.md) §0・§1.5・§1.6・§2・§4・§5
 
@@ -46,3 +46,7 @@ build: `Makefile`（zedBSD）・`Makefile.linux`・`Makefile.freebsd`、`keiland
 ## stub の項目（design.md §1.5、今は全部の値が stub）
 
 hostname・CPU の数・uptime は本物（libc の標準の関数）。CPU・memory・swap・network・disk・latency・GPU の全ての値は sim の model（`--source=sim`）か記録（replay）。本物にする API は design.md §1.5 の表（p005〜p009、p011〜p013）。
+
+## 結果（Q1、2026-10-03）
+
+cleared。T1-041（QEMU、8a7f3abef）: monitor-p002.sh PASS。PNG: worktrees/t1/build/t1-monitor/t1-041/replay.png・sim.png。値は hostname・CPU 数・uptime 以外 stub（design.md §1.5）。Linux の link・FreeBSD は未実施。

@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p025 -->
 # ws099-p025: BUG-146 — Venus の guest 試験が app の client の番号を IME の有無に関わらず求める
 
-Status: in-progress（q645、P2、2026-10-03。実装済み・T1 の試験待ち）
+Status: cleared（q645、P2、2026-10-03。Q1 判定）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Bug: [BUG-146](../../bugs/BUG-146.md)
@@ -53,3 +53,7 @@ client の番号は 1 本の連番なので、試験が最初に起こした app
   幅 30）に入っていた。
 - 直し: `docked_free_x` は `ZWL GLASS dock … buttons=close,restore,minimize` の行から最小化の左端（中心 − 15）を読み、右端との中点を double click
   する（p010 は 618 と 626 の間の 622）。隙間が無い時だけ従来の右端 + 40。3 本（p010・p011・p013）とも同じ helper。T1-036 の log の値で host で確かめた。
+
+## 結果（Q1、2026-10-03）
+
+cleared。T1-039（QEMU）: 97c019b5b で作り直した image で 3 本とも PASS（古い image A のままでは probe の窓が見つからず 2 回 FAIL、image が直しを含まないため）。

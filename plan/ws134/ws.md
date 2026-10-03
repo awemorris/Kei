@@ -23,7 +23,7 @@ CPU（全体と各 core）、GPU（Util・VRAM・温度・電力、複数）、R
 | Phase | 内容 | 状態 | 依存 |
 | --- | --- | --- | --- |
 | [p001](phase001/phase.md) | 設計: zedBSD（と Linux・FreeBSD）で取れる情報の出どころの調査（不足は kernel・libkeiland の追加の案）、画面の構成・3D の表現・動き・操作・描画の方式（libkeiui と Vulkan）、Phase の分け方 | planning（P2、q649） | — |
-| [p002](phase002/phase.md) | M1 骨組み: package・3 OS の build・libkeiui の窓＋自前の Vulkan・title bar・data source の層（sim・replay）・履歴・plate と文字・ZMON の log・App Home | in-progress（P2: 実装済み・T1 の試験待ち） | p001 |
+| [p002](phase002/phase.md) | M1 骨組み: package・3 OS の build・libkeiui の窓＋自前の Vulkan・title bar・data source の層（sim・replay）・履歴・plate と文字・ZMON の log・App Home | cleared（T1-041 PASS） | p001 |
 | p003 | M2 3D と動き: 状態コア・CPU のタイル面・GPU のカード・Network/Disk の流れ・Memory の層・視差・数値の slide・段階的な警告・Events | planned | p002 |
 | p004 | M3a 操作: tap の展開・長押しの固定・swipe の時間軸・pinch の俯瞰・key/pointer・--calm | planned | p003 |
 | p005 | K1 kernel: CPU ごとの時間 `hw.cputimes`（sysctl の CLI・top の CPU 行、design.md §1.2 の review の反映） | planned | — |
