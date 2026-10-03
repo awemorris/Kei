@@ -21,3 +21,7 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 5 | Terminal で emacs（BUG-150） | 対象外 | zedBSD の image に Emacs は無い（BUG-150 は FreeBSD で見つかった。Q1 の手順の誤り） |
 | 5 | Terminal で日本語の入力 | **FAIL（要修正）** | Terminal で日本語が打てない。user「IME非対応なんじゃない？これは要修正。」 |
 | 5 | Terminal の Treat Ambiguous-Width Characters as Wide | PASS | チェックが付く。日本語が打てないので表示の確認は未実施 |
+| 6 | Text Editor で日本語・英語の入力と保存 | PASS | Desktop に保存 |
+| 6 | Desktop の icon の表示（WS094） | PASS | 保存した file が 1 秒以内に icon で出た |
+| 6 | Notes の起動 | PASS | 一瞬 |
+| 6 | PDF Viewer の起動 | PASS | 約 1 秒（F-072 の速さの候補） |
