@@ -67,3 +67,5 @@
 | T1 / generation1（2026-10-03 14:10） | test-runner の役（phase-runner の型で起動、定義 `.claude/agents/test-runner.md`） | 試験 | `/home/awe/zedBSD-worktrees/t1` / `agent/t1` | —（T1-001〜004 終了） | — | stopped | 台帳を統合 |
 2026-10-03 / T1: user「P3の試験スクリプト修正はすぐ終わると思います。それが終わった後、T1を立てて、たまっているテストを実行してください。S1では手動試験になるので、できるステップ数が非常に限られています。S1の前にT1を立てて、可能な限り自動試験を行ってください。」→ T1 generation1 を起動、16:20 まで。
 2026-10-03 15:00 / T1 generation1 終了: T1-001〜004 の全 23 試験 PASS（p003 は試験の script の直しの後）。台帳を統合。N=0。
+
+2026-10-03 / force push: user「force pushはmainだけでよいです。…安全のため、browser3をマージしてからforce pushします。」→ origin/browser3（2a4609684）は addf67ffb で統合済み（内容は 6ecf801cc に含む。再 merge は汚れた履歴を main に戻すので行わない）。今日の 167 commit を 6ecf801cc の 1 つにまとめ、push 前の確認（Co-Authored-By 0、WIP 以外 0）の後に `git push --force-with-lease=main:417f4ca28 origin main`（417f4ca28 → c44fa918d）。元の履歴は local の branch backup/main-before-squash-20261003。今日の記録の統合の SHA はそちらで辿れる。origin/browser3 は書き換えていない（汚れた commit 24 件が残る）。
