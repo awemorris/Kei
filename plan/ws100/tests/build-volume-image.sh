@@ -20,5 +20,8 @@ python3 userland/desktop/wallpapers/generate.py "$build/wallpapers" >/dev/null
 for picture in "$build"/wallpapers/*.ppm; do
 	extra="$extra --file /usr/share/keiland/wallpapers/$(basename "$picture")=$picture"
 done
+# The test client audiod-feedback, which config-amd64-volume.mk puts into /usr/bin when it is built (T1-014: the
+# volume tests read audiod's volume with it and could not without it).
+sh plan/ws100/tests/build-audiod-feedback.sh "$build"
 exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws100/tests/config-amd64-volume.mk BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image
