@@ -21,6 +21,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p086}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
@@ -47,10 +48,12 @@ expect_log() {
 
 # The latest logged rectangle of a tab or of a strip button of client 1 (floating), and its centre.
 tab_line() {
-	guest "grep 'ZWL TITLEBAR strip client=1 .* where=floating id=$1 ' /tmp/zdesktop.log | tail -1"
+	zwl_app_clients
+	guest "grep 'ZWL TITLEBAR strip client=$zc1 .* where=floating id=$1 ' /tmp/zdesktop.log | tail -1"
 }
 button_line() {
-	guest "grep 'ZWL TITLEBAR strip client=1 .* where=floating button=$1 ' /tmp/zdesktop.log | tail -1"
+	zwl_app_clients
+	guest "grep 'ZWL TITLEBAR strip client=$zc1 .* where=floating button=$1 ' /tmp/zdesktop.log | tail -1"
 }
 centre() {
 	sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p' |
@@ -72,12 +75,13 @@ guest "$stop_all" >/dev/null
 guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=600 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/terminal --token=t1 --timeout-s=500 > /tmp/t.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 wx=${2:-0}; wy=${3:-0}
 echo "terminal at $wx,$wy"
 
 # 1. One tab, the menus.
-expect_log /tmp/zdesktop.log 'ZWL BOUNDS client=1 surface=[0-9]+ width=1256 height=690'
+expect_log /tmp/zdesktop.log "ZWL BOUNDS client=$zc1 surface=[0-9]+ width=1256 height=690"
 expect_log /tmp/t.log 'ZTERM TABS count=1 active=1 mode=0'
 keys 'echo one' '\n'
 
@@ -85,7 +89,7 @@ keys 'echo one' '\n'
 keys '<ctrl-shift-t>'
 expect_log /tmp/t.log 'ZTERM TAB new run=t1 id=2 count=2'
 expect_log /tmp/t.log 'ZTERM TABS count=2 active=2 mode=2'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR strip client=1 .* where=floating id=2 .* shown=1 flags=5 '
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR strip client=$zc1 .* where=floating id=2 .* shown=1 flags=5 "
 keys 'echo two' '\n'
 shot tabs.png
 
@@ -93,13 +97,13 @@ shot tabs.png
 set -- $(tab_line 1 | centre); click "$1" "$2"
 expect_log /tmp/t.log 'ZTERM TAB active id=1'
 keys '<ctrl-w>'
-closes=$(guest "grep -c 'ZWL TITLEBAR tab client=1 .*event=close' /tmp/zdesktop.log" | tail -1)
+closes=$(guest "grep -c 'ZWL TITLEBAR tab client=$zc1 .*event=close' /tmp/zdesktop.log" | tail -1)
 [ "${closes:-1}" = 0 ] && echo "ctrl-w: the shell's ok" || { echo "ctrl-w: $closes tab closes MISSING"; status=1; }
 shot tab1.png
 
 # 4. Ctrl+Tab, "+", and the third tab's close button.
 keys '<ctrl-tab>'
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR tab client=1 id=2 event=activated'
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR tab client=$zc1 id=2 event=activated"
 expect_log /tmp/t.log 'ZTERM TABS count=2 active=2 mode=2'
 set -- $(button_line new | centre); click "$1" "$2" 1500
 expect_log /tmp/t.log 'ZTERM TAB new run=t1 id=3 count=3'

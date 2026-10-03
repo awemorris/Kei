@@ -18,6 +18,7 @@ out=${1:-build/ws079-p005-home}
 prefix=${2:-}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1 </dev/null; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
@@ -69,8 +70,9 @@ set -- $(icon Notes)
 echo "Notes icon at ${1:-?},${2:-?}"
 pointer move ${1:-0} ${2:-0} sleep 400 down sleep 60 up sleep 6000
 expect_log /tmp/zdesktop.log 'ZWL HOME launch name=Notes'
-expect_log /tmp/zdesktop.log 'ZWL MENU commit client=1 .*items=18'
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL MENU commit client=$zc1 .*items=18"
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 wx=${1:-0}; wy=${2:-0}
 echo "Notes window at $wx,$wy"
 pointer move $((wx + 350)) $((wy + 200)) sleep 60 down sleep 40 move $((wx + 420)) $((wy + 240)) sleep 30 \

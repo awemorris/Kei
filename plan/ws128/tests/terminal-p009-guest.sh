@@ -22,6 +22,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws128-p009-guest}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -59,7 +60,7 @@ expect_conf() {
 
 # The centre (x) of a top-level item of a client's floating bar.
 item_x() {
-	guest "grep 'MENU bar client=$1 .* where=floating item=$2 ' /tmp/zdesktop.log | tail -1" |
+	guest "grep 'MENU bar client=$(zwl_app_client $1) .* where=floating item=$2 ' /tmp/zdesktop.log | tail -1" |
 	    sed -n 's/.* offset=\([-0-9]*\) top=[-0-9]* width=\([0-9]*\).*/\1 \2/p' | { read offset width; echo $(( ${3:-0} + ${offset:-0} + ${width:-0} / 2 )); }
 }
 
@@ -79,7 +80,7 @@ click() {
 # Starts a terminal with a token and finds its window (client number $2).
 start_terminal() {
 	guest "export XDG_RUNTIME_DIR=/tmp; /bin/terminal --token=$1 --timeout-s=600 >> /tmp/t.log 2>&1 </dev/null & sleep 6; echo started" >/dev/null
-	set -- $(guest "grep 'ZWL MAP client=$2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+	set -- $(guest "grep 'ZWL MAP client=$(zwl_app_client $2) ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 	wx=${2:-0}; wy=${3:-0}; bar=$((wy - 30))
 	echo "terminal: surface ${1:-0} at $wx,$wy"
 }
@@ -113,7 +114,8 @@ expect_log /tmp/zdesktop.log 'MENU row item=36 '
 
 # 3. The item chosen.
 click $(( $(popup_x) + 60 )) "$(row_y 36)" 1200
-expect_log /tmp/zdesktop.log 'MENU activate client=1 place=[0-9]+ item=36 action=21 .*via=pointer'
+zwl_app_clients
+expect_log /tmp/zdesktop.log "MENU activate client=$zc1 place=[0-9]+ item=36 action=21 .*via=pointer"
 expect_log /tmp/t.log 'ZTERM AMBIGUOUS run=t1 wide=1 saved=0'
 expect_log /tmp/t.log 'ZTERM MENU state .* ambiguous_wide=1'
 expect_conf 'ambiguous-wide=1'

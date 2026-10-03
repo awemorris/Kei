@@ -22,6 +22,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws127-p002}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
@@ -73,7 +74,8 @@ start() {
 	guest "export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass --wallpaper=/usr/share/keiland/wallpaper.ppm > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=800 --width=1000 --height=640 $1 > /tmp/f.log 2>&1 </dev/null & sleep 6; echo started" >/dev/null
-	set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+	zwl_app_clients
+	set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 	surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 	echo "files: surface $surface at $wx,$wy"
 }
@@ -118,7 +120,8 @@ rclick 335 130
 expect_log /tmp/zdesktop.log 'ZWL MENU row item=1058 depth=1 '
 click $(( $(popup_x 1) + 60 )) "$(row_y 1058)" 6000
 expect_log /tmp/f.log 'ZFILES CONTEXT new-window path=/tmp/fhome/Projects/[a-zA-Z]+$'
-expect_log /tmp/zdesktop.log 'ZWL MAP client=2 '
+zwl_app_clients
+expect_log /tmp/zdesktop.log "ZWL MAP client=$zc2 "
 running=$(guest "ps -A -o args | grep -c '[/]bin/files'" | tail -1)
 [ "${running:-0}" -ge 2 ] && echo "new window: two files ok" || { echo "new window: two files MISSING"; status=1; }
 shot newwindow.png

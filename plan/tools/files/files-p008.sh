@@ -26,6 +26,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws071-p008}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
@@ -69,7 +70,8 @@ wclick() {
 # Opens a top-level menu (its item) from the titlebar's "..." (its place from zdesktop's log).
 menu() {
 	item=$1
-	set -- $(guest "grep 'ZWL TITLEBAR control client=1 .* where=floating id=0 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
+	zwl_app_clients
+	set -- $(guest "grep 'ZWL TITLEBAR control client=$zc1 .* where=floating id=0 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
 	click $((${1:-0} + ${3:-0} / 2)) $((${2:-0} + ${4:-0} / 2)) 900
 	click $(( $(popup_x) + 60 )) "$(row_y "$item")" 900
 }
@@ -84,19 +86,20 @@ guest 'export XDG_RUNTIME_DIR=/tmp
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=800 --width=1000 --height=640 /tmp/fhome/Documents > /tmp/f.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "files: surface $surface at $wx,$wy"
 
 # 1. The controls and "..." in the floating title bar.
 expect_log /tmp/f.log 'ZFILES MENU ready items='
 expect_log /tmp/f.log 'ZFILES TITLEBAR ready controls='
-expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=floating id=0 "
+expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=$zc1 surface=$surface where=floating id=0 "
 shot floating.png
 
 # 2. File by the pointer.
 menu 1
-expect_log /tmp/zdesktop.log "MENU open client=1 surface=$surface item=1 depth="
+expect_log /tmp/zdesktop.log "MENU open client=$zc1 surface=$surface item=1 depth="
 shot file-menu.png
 keys '<esc>' '<esc>'
 
@@ -116,7 +119,7 @@ keys '<esc>' '<esc>' '<esc>'
 
 # 5. Get Info by its shortcut.
 keys '<ctrl-i>'
-expect_log /tmp/zdesktop.log 'MENU activate client=1 .*item=1004 action=4 .*via=shortcut'
+expect_log /tmp/zdesktop.log "MENU activate client=$zc1 .*item=1004 action=4 .*via=shortcut"
 expect_log /tmp/f.log 'ZFILES INFO path=/tmp/fhome/Documents/Meeting notes.txt '
 keys '<esc>'
 expect_log /tmp/f.log 'ZFILES INFO close'
@@ -139,7 +142,7 @@ expect_log /tmp/f.log 'ZFILES HELP close'
 # 8. Go > Desktop and Back by their shortcuts.
 keys '<ctrl-shift-d>'
 expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Desktop '
-expect_log /tmp/zdesktop.log 'MENU activate client=1 .*item=1028 action=28 .*via=shortcut'
+expect_log /tmp/zdesktop.log "MENU activate client=$zc1 .*item=1028 action=28 .*via=shortcut"
 keys '<alt-left>'
 back=$(guest "grep -c 'LOCATION kind=folder path=/tmp/fhome/Documents ' /tmp/f.log" | tail -1)
 [ "${back:-0}" -ge 2 ] && echo "back: ok" || { echo "back: MISSING"; status=1; }
@@ -148,7 +151,7 @@ back=$(guest "grep -c 'LOCATION kind=folder path=/tmp/fhome/Documents ' /tmp/f.l
 keys '<ctrl-n>'
 expect_log /tmp/f.log 'ZFILES SPAWN program=/bin/files'
 expect_log /tmp/f.log 'ZFILES READY .* token=f1-new'
-expect_log /tmp/zdesktop.log 'ZWL MAP client=2 '
+expect_log /tmp/zdesktop.log "ZWL MAP client=$zc2 "
 sleep 2
 shot two-windows.png
 keys '<ctrl-shift-w>'

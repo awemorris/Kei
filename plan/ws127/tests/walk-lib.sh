@@ -20,6 +20,8 @@ WALK_OUT=${WALK_OUT:-build/p4-files-out/walk}
 mkdir -p "$WALK_OUT"
 
 walk_run() { timeout 120 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+ZWL_RUN=walk_run
+. plan/tools/guest/zwl-clients.sh
 
 walk_stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[f]iles|[t]erminal|[i]mageview|[t]extedit|[p]dfviewer" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[f]iles" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
 
@@ -35,7 +37,8 @@ picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/sh
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=1700 --width=$width --height=$height '$folder' > /tmp/f.log 2>&1 </dev/null & echo started" >/dev/null
 	i=0
 	while [ $i -lt 30 ]; do
-		set -- $(walk_run "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+		zwl_app_clients
+		set -- $(walk_run "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 		[ -n "${1:-}" ] && break
 		sleep 1
 		i=$((i+1))

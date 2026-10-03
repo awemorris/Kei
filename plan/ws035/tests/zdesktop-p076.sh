@@ -30,6 +30,7 @@ mkdir -p "$out"
 # The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p020/p023).
 . plan/ws099/tests/guest-retry.sh
 guest() { guest_retry 90 "$1"; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -119,7 +120,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/sh
 /bin/wayland --timeout=400 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & for w in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do grep -q ZWL.READY /tmp/zdesktop.log 2>/dev/null && break; sleep 0.5; done; sleep 1
 /bin/popup-probe --wide --timeout-s=300 --token=p > /tmp/p.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
 expect_log /tmp/p.log 'POPUPPROBE ready run=p'
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 wx=${1:-0}; wy=${2:-0}
 echo "window at $wx,$wy"
 
@@ -127,7 +129,7 @@ echo "window at $wx,$wy"
 click $((wx + 60)) $((wy + 60)) 1200
 expect_log /tmp/zdesktop.log 'ZWL POPUP grab popup='
 expect_log /tmp/zdesktop.log 'ZWL POPUP map surface=[0-9]+ x=[0-9]+ y=[0-9]+ grab=1'
-expect_log /tmp/zdesktop.log 'ZWL PING pong client=1 '
+expect_log /tmp/zdesktop.log "ZWL PING pong client=$zc1 "
 expect_log /tmp/p.log 'POPUPPROBE ping serial=[0-9]+ answered'
 expect_log /tmp/p.log 'POPUPPROBE configure menu x=60 y=60 width=360 height=180'
 expect_log /tmp/p.log 'POPUPPROBE focus menu'
@@ -209,11 +211,11 @@ pointer move $((mx - 250 + 400)) $((my + 100)) sleep 300 right-down sleep 60 rig
 expect_log /tmp/p.log 'POPUPPROBE window-menu'
 expect_log /tmp/p.log 'POPUPPROBE ping serial=[0-9]+ ignored'
 sleep 6
-expect_log /tmp/zdesktop.log 'ZWL PING unresponsive client=1'
+expect_log /tmp/zdesktop.log "ZWL PING unresponsive client=$zc1"
 check "$out/unresponsive.png" >/dev/null
 keys 'p'
 expect_log /tmp/p.log 'POPUPPROBE pong on answered=[1-9]'
-expect_log /tmp/zdesktop.log 'ZWL PING responsive client=1'
+expect_log /tmp/zdesktop.log "ZWL PING responsive client=$zc1"
 
 # 10. Maximize, unmaximize and minimize from the keyboard.
 keys 'm'

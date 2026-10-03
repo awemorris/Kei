@@ -23,6 +23,7 @@ mode=${2:-mouse}
 mkdir -p "$out"
 status=0
 guest() { timeout 120 python3 plan/tools/guest/guest.py run "$1" 2>&1 </dev/null; }
+. plan/tools/guest/zwl-clients.sh
 put() { timeout 120 python3 plan/tools/guest/guest.py put "$1" "$2" >/dev/null 2>&1 </dev/null || { echo "put $1: FAILED"; status=1; }; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@" >/dev/null; sleep 0.7; }
@@ -89,7 +90,8 @@ menu_click() {
 
 # Opens a top-level menu (its item) from the titlebar's "...", as plan/tools/files/files-p008.sh does.
 menu_top() {
-	set -- "$1" $(guest "grep 'ZWL TITLEBAR control client=1 .* where=floating id=0 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
+	zwl_app_clients
+	set -- "$1" $(guest "grep 'ZWL TITLEBAR control client=$zc1 .* where=floating id=0 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
 	x=$((${2:-0} + ${4:-0} / 2)); y=$((${3:-0} + ${5:-0} / 2))
 	pointer move $((x - 2)) "$y" sleep 150 move "$x" "$y" sleep 300 down sleep 60 up sleep 900
 	menu_click "$1"
@@ -133,7 +135,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 rm -f /tmp/wayland-0; /bin/wayland --timeout=1200 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 5
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=1100 --width=1000 --height=640 /tmp/demo > /tmp/f.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 wx=${2:-0}; wy=${3:-0}
 echo "files at $wx,$wy"
 expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/demo items=6 error=0'

@@ -20,6 +20,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws035-p014}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -50,8 +51,9 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/sh
 /bin/wltest --windowed --size=420x300 --color=f4f7fc --frames=3000 --delay-ms=100 --token=a > /tmp/a.log 2>&1 </dev/null & sleep 2
 /bin/wlshm --size=360x260 --color=ff2b3444 --frames=9000 --token=s > /tmp/s.log 2>&1 </dev/null & sleep 2
 /bin/wltest --windowed --size=380x280 --color=dfe9f7 --frames=3000 --delay-ms=100 --token=b > /tmp/b.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null
-s=$(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) .*/\1/p')
-b=$(guest "grep 'ZWL MAP client=3 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) .*/\1/p')
+zwl_app_clients
+s=$(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) .*/\1/p')
+b=$(guest "grep 'ZWL MAP client=$zc3 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) .*/\1/p')
 echo "s is surface ${s:-?}, b is surface ${b:-?}"
 pointer move 1250 780 sleep 300
 
@@ -77,7 +79,7 @@ keys '<ret>'
 sleep 1.5
 expect_log "WISEVIEW select surface=$s via=key"
 expect_log 'WISEVIEW closed'
-set -- $(guest "grep 'ZWL MAP client=2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
+set -- $(guest "grep 'ZWL MAP client=$zc2 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2/p')
 check "$out/selected.png" --expect $(($1 + 180)),$(($2 + 130)),2b3444 || status=1
 
 # 4. Super+Tab, then Esc.

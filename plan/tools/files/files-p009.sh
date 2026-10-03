@@ -21,6 +21,7 @@ export GUEST_RUNTIME
 out=${1:-build/ws071-p009}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+. plan/tools/guest/zwl-clients.sh
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
@@ -71,7 +72,8 @@ guest 'export XDG_RUNTIME_DIR=/tmp
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 HOME=/tmp/fhome /bin/files --token=f1 --timeout-s=800 --width=1000 --height=640 /tmp/fhome/Documents > /tmp/f.log 2>&1 </dev/null & sleep 6; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
+zwl_app_clients
+set -- $(guest "grep 'ZWL MAP client=$zc1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
 surface=${1:-0}; wx=${2:-0}; wy=${3:-0}
 echo "files: surface $surface at $wx,$wy"
 expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Documents items=6 error=0'
@@ -79,11 +81,11 @@ expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Documents ite
 # 1. Budget.csv: the items' menu, and Get Info.
 rclick 446 140
 expect_log /tmp/f.log 'ZFILES CONTEXT-MENU open rows=[0-9]+ x=446 y=140 '
-expect_log /tmp/zdesktop.log "ZWL MENU context client=1 context=[0-9]+ surface=$surface x=$((wx + 446)) y=$((wy + 140)) rows="
+expect_log /tmp/zdesktop.log "ZWL MENU context client=$zc1 context=[0-9]+ surface=$surface x=$((wx + 446)) y=$((wy + 140)) rows="
 expect_log /tmp/zdesktop.log 'ZWL MENU row item=1004 depth=1 '
 shot items.png $((wx + 446)) $((wy + 140))
 click $(( $(popup_x 1) + 60 )) "$(row_y 1004)" 1200
-expect_log /tmp/zdesktop.log 'ZWL MENU context-activate client=1 context=[0-9]+ item=1004 action=4 '
+expect_log /tmp/zdesktop.log "ZWL MENU context-activate client=$zc1 context=[0-9]+ item=1004 action=4 "
 expect_log /tmp/f.log 'ZFILES CONTEXT-MENU item=1004 action=4 '
 expect_log /tmp/f.log 'ZFILES INFO path=/tmp/fhome/Documents/Budget.csv '
 expect_log /tmp/f.log 'ZFILES CONTEXT-MENU done'
