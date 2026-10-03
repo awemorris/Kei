@@ -17,12 +17,20 @@
  * damaged or oversized file is read as far as it is well formed.  The
  * directory it lives in is made by the input method before the engine
  * starts.
+ *
+ * A choice learned while typing is written by a thread of its own
+ * (ja_user_save_later, BUG-143): the file's text is made at once, and the
+ * write, its sync and the rename happen away from the keys, which on a
+ * slow disk took long enough that zdesktop passed the input method by.
+ * Only the newest text waits to be written; freeing the dictionary waits
+ * for the last write.
  */
 
 #include "ja.h"
 
 #include <errno.h>
 #include <fcntl.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,6 +47,23 @@
 /* The first line of a saved file. */
 #define USER_HEADER		";; Kei input method: the user's conversions, most recent first.\n"
 
+/*
+ * The thread that writes the user dictionary's file away from the keys.
+ *
+ * user_writer_lock guards it: pending is the newest text not yet written
+ * (NULL for none) for the file at path, started says the thread runs and
+ * must be joined, and stopping asks it to end once nothing waits.  There
+ * is one, for the one dictionary the input method keeps.
+ */
+struct user_writer {
+	pthread_t thread;
+	int started;
+	int stopping;
+	char *pending;
+	size_t pending_length;
+	char path[1024];
+};
+
 static int user_load(struct ja_user *user);
 static int user_parse_line(struct ja_user *user, const char *line, size_t length, uint64_t stamp);
 static struct ja_user_entry *user_slot(struct ja_user *user, const char *reading, size_t length);
@@ -50,6 +75,23 @@ static bool user_is_storable(const char *text, size_t length);
 static uint32_t user_hash(const char *text, size_t length);
 static int user_compare_stamps(const void *left, const void *right);
 static int user_write_all(int descriptor, const char *bytes, size_t length);
+static int user_serialize(const struct ja_user *user, char **text, size_t *length);
+static int user_write_file(const char *path, const char *text, size_t length);
+static void *user_writer_run(void *argument);
+static void user_writer_flush(void);
+
+/* The one writer thread (see struct user_writer); zero until the first save that waits. */
+static struct user_writer user_writer;
+
+/* Guards user_writer; user_writer_wake tells the thread a text waits or the end is asked. */
+static pthread_mutex_t user_writer_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t user_writer_wake = PTHREAD_COND_INITIALIZER;
+
+/*
+ * Held around each write of the file, so that a save made at once
+ * (ja_user_save) and the thread's never write the temporary file together.
+ */
+static pthread_mutex_t user_writer_file_lock = PTHREAD_MUTEX_INITIALIZER;
 
 /*
  * Opens the user dictionary at a path, reading the file if there is one.
@@ -98,6 +140,9 @@ ja_user_free(
 	struct ja_user *user)
 {
 	size_t i;
+
+	/* A write still waiting or under way finishes first: the choices outlive the input method. */
+	user_writer_flush();
 
 	/* Frees every entry, then the table. */
 	if (user->slots != NULL) {
@@ -183,7 +228,7 @@ ja_user_learn(
 }
 
 /*
- * Writes the user dictionary back to its file.
+ * Writes the user dictionary back to its file now.
  *
  * Returns 0 or the errno of the step that failed; the old file is then
  * left as it was.
@@ -192,17 +237,114 @@ int
 ja_user_save(
 	const struct ja_user *user)
 {
+	char *text;
+	size_t length;
+	int error;
+
+	/* The file's text. */
+	error = user_serialize(user, &text, &length);
+	if (error != 0)
+		return error;
+
+	/* Written in place of the old file, never together with the writer thread. */
+	(void)pthread_mutex_lock(&user_writer_file_lock);
+
+	error = user_write_file(user->path, text, length);
+
+	(void)pthread_mutex_unlock(&user_writer_file_lock);
+
+	free(text);
+
+	/* Reports a write that failed. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the file holds every choice. */
+	return 0;
+}
+
+/*
+ * Writes the user dictionary back to its file by the writer thread
+ * (BUG-143): the text is made now, the slow write, sync and rename happen
+ * away from the keys.  A newer save replaces a text that still waits.
+ *
+ * Returns 0, or ENOMEM or the errno of a thread that could not start; the
+ * file is then written now instead.
+ */
+int
+ja_user_save_later(
+	const struct ja_user *user)
+{
+	char *text;
+	size_t length;
+	int error;
+
+	/* The file's text. */
+	error = user_serialize(user, &text, &length);
+	if (error != 0)
+		return error;
+
+	/* The text waits for the thread, in place of an older one; the thread starts the first time. */
+	(void)pthread_mutex_lock(&user_writer_lock);
+
+	free(user_writer.pending);
+	user_writer.pending = text;
+	user_writer.pending_length = length;
+	(void)snprintf(user_writer.path, sizeof(user_writer.path), "%s", user->path);
+	error = 0;
+	if (!user_writer.started) {
+		user_writer.stopping = 0;
+		error = pthread_create(&user_writer.thread, NULL, user_writer_run, NULL);
+		if (error == 0)
+			user_writer.started = 1;
+	}
+	if (error == 0)
+		(void)pthread_cond_signal(&user_writer_wake);
+	if (error != 0) {
+		user_writer.pending = NULL;
+		user_writer.pending_length = 0;
+	}
+
+	(void)pthread_mutex_unlock(&user_writer_lock);
+
+	/* Without a thread the file is written now, as before. */
+	if (error != 0) {
+		(void)pthread_mutex_lock(&user_writer_file_lock);
+
+		error = user_write_file(user->path, text, length);
+
+		(void)pthread_mutex_unlock(&user_writer_file_lock);
+
+		free(text);
+		if (error != 0)
+			return error;
+	}
+
+	/* Succeeded: the text is written, or will be. */
+	return 0;
+}
+
+/*
+ * Makes the file's text: the header, then one line per reading, most
+ * recent first.  Returns 0 with a text the caller frees, or ENOMEM.
+ */
+static int
+user_serialize(
+	const struct ja_user *user,
+	char **text,
+	size_t *length)
+{
 	const struct ja_user_entry **order;
-	char temporary[sizeof(user->path) + 8U];
 	char *line;
+	char *grown;
+	char *buffer;
 	size_t line_size;
 	size_t line_length;
+	size_t capacity;
+	size_t used;
 	size_t count;
 	size_t i;
 	size_t j;
-	int descriptor;
-	int error;
-	int status;
 
 	/* A dictionary that could not be opened has nothing to save. */
 	if (user->slots == NULL)
@@ -231,30 +373,76 @@ ja_user_save(
 		return ENOMEM;
 	}
 
-	/* Opens the temporary file beside the real one, the user's alone. */
-	snprintf(temporary, sizeof(temporary), "%s.tmp", user->path);
-	descriptor = open(temporary, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (descriptor < 0) {
-		error = errno;
+	/* The text starts with the header. */
+	capacity = strlen(USER_HEADER) + 4096U;
+	buffer = malloc(capacity);
+	if (buffer == NULL) {
 		free(line);
 		free(order);
-		return error;
+		return ENOMEM;
 	}
+	used = strlen(USER_HEADER);
+	memcpy(buffer, USER_HEADER, used);
 
-	/* Writes the header, then one line per reading. */
-	error = user_write_all(descriptor, USER_HEADER, strlen(USER_HEADER));
-	for (i = 0; i < count && error == 0; i++) {
+	/* One line per reading, the buffer grown when a line does not fit. */
+	for (i = 0; i < count; i++) {
 		line_length = 0;
 		line_length += (size_t)snprintf(line + line_length, line_size - line_length, "%s /", order[i]->reading);
 		for (j = 0; j < order[i]->candidate_count; j++)
 			line_length += (size_t)snprintf(line + line_length, line_size - line_length, "%s/", order[i]->candidates[j]);
-
 		line_length += (size_t)snprintf(line + line_length, line_size - line_length, "\n");
-		error = user_write_all(descriptor, line, line_length);
+
+		/* A line that does not fit doubles the buffer. */
+		if (used + line_length > capacity) {
+			capacity = (capacity + line_length) * 2U;
+			grown = realloc(buffer, capacity);
+			if (grown == NULL) {
+				free(buffer);
+				free(line);
+				free(order);
+				return ENOMEM;
+			}
+			buffer = grown;
+		}
+
+		/* The line after the ones before it. */
+		memcpy(buffer + used, line, line_length);
+		used += line_length;
 	}
 
 	free(line);
 	free(order);
+
+	/* Succeeded: the caller owns the text. */
+	*text = buffer;
+	*length = used;
+	return 0;
+}
+
+/*
+ * Writes a text to a temporary file beside path, syncs it and renames it
+ * over path.  Returns 0 or the errno of the step that failed; the old
+ * file is then left as it was.  The caller holds user_writer_file_lock.
+ */
+static int
+user_write_file(
+	const char *path,
+	const char *text,
+	size_t length)
+{
+	char temporary[sizeof(user_writer.path) + 8U];
+	int descriptor;
+	int error;
+	int status;
+
+	/* Opens the temporary file beside the real one, the user's alone. */
+	snprintf(temporary, sizeof(temporary), "%s.tmp", path);
+	descriptor = open(temporary, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (descriptor < 0)
+		return errno;
+
+	/* The text. */
+	error = user_write_all(descriptor, text, length);
 
 	/* Makes the new file durable before it replaces the old one. */
 	if (error == 0) {
@@ -275,15 +463,95 @@ ja_user_save(
 	}
 
 	/* Replaces the old file in one step. */
-	status = rename(temporary, user->path);
+	status = rename(temporary, path);
 	if (status != 0) {
 		error = errno;
 		unlink(temporary);
 		return error;
 	}
 
-	/* Succeeded: the file holds every choice. */
+	/* Succeeded: the file holds the text. */
 	return 0;
+}
+
+/*
+ * The writer thread: writes the newest waiting text, again while more
+ * come, and ends when asked once nothing waits.
+ */
+static void *
+user_writer_run(
+	void *argument)
+{
+	char path[sizeof(user_writer.path)];
+	char *text;
+	size_t length;
+
+	(void)argument;
+
+	/* Each text in turn. */
+	for (;;) {
+		/* Waits for a text, or for the end. */
+		(void)pthread_mutex_lock(&user_writer_lock);
+
+		while (user_writer.pending == NULL && !user_writer.stopping)
+			(void)pthread_cond_wait(&user_writer_wake, &user_writer_lock);
+		text = user_writer.pending;
+		length = user_writer.pending_length;
+		user_writer.pending = NULL;
+		user_writer.pending_length = 0;
+		memcpy(path, user_writer.path, sizeof(path));
+
+		(void)pthread_mutex_unlock(&user_writer_lock);
+
+		/* Nothing waits and the end was asked. */
+		if (text == NULL)
+			break;
+
+		/* The file, written away from the keys; a failure leaves the old file. */
+		(void)pthread_mutex_lock(&user_writer_file_lock);
+
+		(void)user_write_file(path, text, length);
+
+		(void)pthread_mutex_unlock(&user_writer_file_lock);
+
+		free(text);
+	}
+
+	/* Succeeded: every text was written. */
+	return NULL;
+}
+
+/* Waits for the writer thread to write what waits and end (nothing when it never started). */
+static void
+user_writer_flush(
+	void)
+{
+	int started;
+
+	/* Asks the thread to end once nothing waits. */
+	(void)pthread_mutex_lock(&user_writer_lock);
+
+	started = user_writer.started;
+	if (started) {
+		user_writer.stopping = 1;
+		(void)pthread_cond_signal(&user_writer_wake);
+	}
+
+	(void)pthread_mutex_unlock(&user_writer_lock);
+
+	/* A thread that never started has nothing to write. */
+	if (!started)
+		return;
+
+	/* The last write, then the thread is gone; a later save starts another. */
+	(void)pthread_join(user_writer.thread, NULL);
+
+	(void)pthread_mutex_lock(&user_writer_lock);
+
+	user_writer.started = 0;
+	user_writer.stopping = 0;
+
+	(void)pthread_mutex_unlock(&user_writer_lock);
 }
 
 /*

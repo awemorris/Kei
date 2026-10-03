@@ -865,6 +865,26 @@ test_user(void)
 	check(entry != NULL, "user: きょう is kept");
 	ja_user_free(&user);
 
+	/* BUG-143: a save by the writer thread; freeing waits for it, and a reopen reads it. */
+	error = ja_user_open(&user, path);
+	check(error == 0, "user: reopens for a later save");
+	error = ja_user_learn(&user, "あした", strlen("あした"), "明日");
+	check(error == 0, "user: learns 明日");
+	error = ja_user_save_later(&user);
+	check(error == 0, "user: a later save is taken (error %d)", error);
+	error = ja_user_learn(&user, "あさって", strlen("あさって"), "明後日");
+	check(error == 0, "user: learns 明後日");
+	error = ja_user_save_later(&user);
+	check(error == 0, "user: a newer later save replaces the waiting one (error %d)", error);
+	ja_user_free(&user);
+	error = ja_user_open(&user, path);
+	check(error == 0, "user: reopens after the writer");
+	entry = ja_user_find(&user, "あさって", strlen("あさって"));
+	check(entry != NULL, "user: the writer wrote 明後日 before the dictionary was freed");
+	entry = ja_user_find(&user, "わたし", strlen("わたし"));
+	check(entry != NULL, "user: the writer kept わたし");
+	ja_user_free(&user);
+
 	/* A damaged file gives its good lines. */
 	error = write_file("damaged.dict", ";; header\nよい /良い/\nbroken\nわるい /悪い/\n / /\n", damaged, sizeof(damaged));
 	check(error == 0, "user: the damaged file is written");
