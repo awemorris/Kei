@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p027 -->
 # ws099-p027: BUG-095 — oneshot の service から `/sbin/poweroff` を呼ぶと init と待ち合い、電源が切れない
 
-Status: in-progress（q645、P2、2026-10-03。実装済み・T1 の試験待ち）
+Status: cleared（q645、P2、2026-10-03。Q1 判定、実機は S2）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Bug: [BUG-095](../../bugs/BUG-095.md)
@@ -48,3 +48,7 @@ main の loop の `accept4` に戻らず、control socket の要求に答えな�
 同日の追記。`unix_connect_resolved` は accept の前から peer を持つので「受け付け前」は関係せず、原因は SHUT_WR の後の `unix_poll` の POLLERR だった。
 今の `unix_poll`・`socket_poll_common` は自分側の write_shutdown で POLLERR を立てず、相手の close は `read_shutdown` を立てるので、zsv1-client の
 `wait_ready` → `recv` が EAGAIN を回る経路は残っていない。追加の source の変更は無い。BUG-151（TCP）は zsv1 に関係しない。
+
+## 結果（Q1、2026-10-03）
+
+cleared。T2-003（2026-10-03、QEMU）: bug095 A PASS（42 s で終了）・B FAIL（直す前の挙動、期待どおり）、boot-test PASS、C1-boot・C1-shutdown-qemu PASS。証拠 worktrees/t2/build/t2-003/。実機は未実施（S2）

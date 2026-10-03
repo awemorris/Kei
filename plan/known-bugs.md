@@ -38,7 +38,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-150](bugs/BUG-150.md) | Terminal で Emacs の描画が 2 行目から始まる（右端の wrap の保留が無かった） | reproduced / resolved（ws128-p010、統合 02c0d6f41） | 2026-10-03 ユーザー報告 | — |
 | [BUG-149](bugs/BUG-149.md) | kernel の AF_UNIX stream: 自分側の SHUT_WR で poll が POLLERR | reproduced（QEMU、libkeiland の join の EIO） / resolved（ws005-p025、統合 cb3da62d1。実機は S1） | ws005-p020 / q631 | —。libkeiland 側の回避は ws131-p003 |
 | [BUG-148](bugs/BUG-148.md) | system bar の WiFi の menu の下端が画面の外に切れる | reproduced（QEMU） / resolved（ws005-p030、T1-031） | ws005-p020 | 標準 |
-| [BUG-147](bugs/BUG-147.md) | C9 の p128・cursor-owner が間欠的に落ちる | reproduced（1/5） / scheduled | ws099-p023 の C9 ×5 | 起動の検出は ws099-p024 で修正。cursor-owner は guest の起動の失敗の見逃し（ws099-p026 で criteria.sh が確かめ・起こし直し・INFRA の記録）、T1 の結果待ち |
+| [BUG-147](bugs/BUG-147.md) | C9 の p128・cursor-owner が間欠的に落ちる | reproduced（1/5） / resolved | ws099-p023 の C9 ×5 | ws099-p024・p026 で修正、T2-002 の QEMU で PASS。再発で reopen |
 | [BUG-146](bugs/BUG-146.md) | Venus の guest 試験が client=1 前提、IME が先だと外れる | reproduced / scheduled | ws127-p002 | ws099-p025 で共有の helper（plan/tools/guest/zwl-clients.sh）に置き換え済み、T1 の QEMU の結果待ち |
 | [BUG-145](bugs/BUG-145.md) | AX211: handshake の後に DHCP の lease が取れず disassoc（reason 8） | reproduced（passthrough） / tracking | ws005-p019 q611、5GHz | WS004 の新しい Phase |
 | [BUG-144](bugs/BUG-144.md) | 8 番目の Model viewer が vkAllocateMemory -4 | reproduced（QEMU） / resolved（ws014-p011、窓 1 GiB、2026-10-03） | ws129-p010、Venus の hostmem の見当 | 実機で確かめる |
@@ -128,7 +128,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-092](bugs/BUG-092.md) | graphical な起動で sessiond が /dev/gpu0 の前に始まり console の login に落ちる | reproduced（実機） / resolved（ws035-p113: `hw.gpu.attaching` の間だけ sessiond が最大 15 秒待つ、実機と GPU 無しの QEMU で確認） | ws075-p013 | — |
 | [BUG-093](bugs/BUG-093.md) | Noct の source の stamp が patch の mtime に依り新しい worktree で make toolchain が止まる | reproduced / resolved（ws046-p016） | ws073-p027 | patch の hash を identity に |
 | [BUG-094](bugs/BUG-094.md) | i915 の capture の image で compositor が始まらない（service の連鎖が `sleep 45` で止まる、i915 の start が `time_base_anomaly`） | reproduced（実機 3/4 回） / **resolved**（2026-09-29、ws075-p009） | ws075-p015 | 原因: host が vCPU を止めた間の HAL の起動時の測定。ws075-p015 で `lapic.c`・`timecounter.c` を修正、修正の後の 15 回（p015 の 10、p008・p009 の 5）で再現なし | 再発時に開き直す |
-| [BUG-095](bugs/BUG-095.md) | capture の image の power-off が完了しない（oneshot の service の `/sbin/poweroff` と init が待ち合う） | reproduced（実機、session を終えた run の全て） / scheduled | ws075-p015 | ws099-p027 で init が oneshot の待ちの間も要求を受けるように直した。T1 の QEMU（tests/bug095）の結果待ち |
+| [BUG-095](bugs/BUG-095.md) | capture の image の power-off が完了しない（oneshot の service の `/sbin/poweroff` と init が待ち合う） | reproduced（実機、session を終えた run の全て） / resolved | ws075-p015 | ws099-p027 で修正、T2-003 の QEMU で PASS。実機は S2 |
 | [BUG-096](bugs/BUG-096.md) | worktree の build が共有の LLVM の source に clang・libcxx の package の patch を当てた | reproduced / resolved（2026-09-28、main が patch -R で修復、manifest と一致） | ws075-p015 の報告 | toolchain-lock・AGENTS.md の規則 |
 | [BUG-097](bugs/BUG-097.md) | 既にある名前への mkdir が親に書けない利用者で EACCES（EEXIST のはず） | reproduced（QEMU） / resolved（ws035-p120） | ws035-p118 | 直した: mkdir は lookup を権限の検査の前に（p120-kei-mkdir.sh PASS） |
 | [BUG-098](bugs/BUG-098.md) | 新しい pty の slave が常に root の所有で、root 以外が forkpty できない（Terminal が kei で起動しない） | reproduced（QEMU） / resolved（ws035-p120） | ws035-p118 | 直した: slave は呼び出し側の ruid・gid 0（kei の Terminal 起動） |

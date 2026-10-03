@@ -73,8 +73,8 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 | [ws099-p020](phase020/phase.md) | **BUG-125（blocking）**: p076 の popup の 2 症状と left resize の settle の原因を guest で弁別し、compositor（と必要なら試験の同期）を直す。B1 | cleared（2026-10-03 Q1、BUG-125 resolved） | p017 の資産（q589 の helper）、Venus の renderer |
 | [ws099-p021](phase021/phase.md) | C2 の geometry（q538: top-right の増分 20、bottom-left/left の settle）と BUG-127（最小化の直後に窓が残る）。B2 | planned（3h） | p020 cleared（同じ shell.c の周り） |
 | [ws099-p022](phase022/phase.md) | WS099 の全文規約と回帰（WS の最後）。B5 | planning（最後。p019〜p021 の後） | p019・p020・p021、p012 |
-| [ws099-p025](phase025/phase.md) | BUG-146: Venus の guest 試験が app の client の番号を IME の有無に関わらず求める（共有の helper `plan/tools/guest/zwl-clients.sh`、81 本の試験の `client=N` を置き換え） | in-progress（q645、P2: 実装済み・T1 の試験待ち） | — |
-| [ws099-p026](phase026/phase.md) | BUG-147 の残り: cursor-owner の guest の消失は、criteria.sh の start_guest が guest の起動の失敗を確かめずに次の試験を流したもの（記録の読み）。start の出力を残し、SSH を確かめ、1 回起こし直す、失敗は INFRA と記録 | in-progress（q645、P2: 実装済み・T1 の試験待ち） | p024 |
+| [ws099-p025](phase025/phase.md) | BUG-146: Venus の guest 試験が app の client の番号を IME の有無に関わらず求める（共有の helper `plan/tools/guest/zwl-clients.sh`、81 本の試験の `client=N` を置き換え） | cleared（q645、T2-003 PASS、実機は S2） | — |
+| [ws099-p026](phase026/phase.md) | BUG-147 の残り: cursor-owner の guest の消失は、criteria.sh の start_guest が guest の起動の失敗を確かめずに次の試験を流したもの（記録の読み）。start の出力を残し、SSH を確かめ、1 回起こし直す、失敗は INFRA と記録 | cleared（q645、T2-002 PASS） | p024 |
 | [ws099-p027](phase027/phase.md) | BUG-095: oneshot の service の `/sbin/poweroff` と init の待ち合い。init が oneshot を待つ間も control socket に答え（system の action・読むだけの要求はすぐ、起こす・止めるは loop で）、action で待ちを終える。試験 `tests/bug095/` | in-progress（q645、P2: 実装済み・T1 の試験待ち） | — |
 | [ws099-p029](phase029/phase.md) | BUG-142（入力 device を時刻の順に merge して読む、`input.c`・`main.c`）と BUG-141（zdesktop が motion を取ったら client に leave、`seat.c`）。試験 `bug142-order.sh`・`bug141-hover.sh` | in-progress（q645、P2: 実装済み・T1 の試験待ち） | — |
 | [ws099-p028](phase028/phase.md) | zdesktop の log に NUL が入る（`>` の log を次の run が切り詰めた後の古い offset への write）。stdout・stderr に O_APPEND | cleared（2026-10-03 Q1、T1-035） | — |

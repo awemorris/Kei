@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p026 -->
 # ws099-p026: BUG-147 の残り — cursor-owner の「guest の session が途中で消える」
 
-Status: in-progress（q645、P2、2026-10-03。実装済み・T1 の試験待ち）
+Status: cleared（q645、P2、2026-10-03。Q1 判定）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Bug: [BUG-147](../../bugs/BUG-147.md)
@@ -42,3 +42,7 @@ start の結果を `>/dev/null 2>&1` で捨て、`sleep 40` の後に確かめ�
   SSH が答えない → 1。各回の start.log の内容も期待どおり。`sh -n` PASS。
 - QEMU（T1 に依頼）: criteria の image で `C9_TESTS="p128 plan/ws099/tests/cursor-owner.sh" criteria.sh IMAGE OUT C9` が 2 本 PASS、
   `OUT/*.start.log` に `guest: ready`。結果は未着。
+
+## 結果（Q1、2026-10-03）
+
+cleared。T2-002（2026-10-03、QEMU）: criteria ebe770901 で C9 p128 PASS（47 s）・cursor-owner PASS（23 s）、start.log に `guest: ready`、`guest start 1 failed` 無し。証拠 worktrees/t2/build/t2-002/
