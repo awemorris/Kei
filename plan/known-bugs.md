@@ -32,7 +32,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-155](bugs/BUG-155.md) | Terminal で IME の日本語を入力できない | reproduced（実機 S1） / scheduled | S1（WS133） | WS128（Terminal） |
 | [BUG-154](bugs/BUG-154.md) | WiFi の AP を切り替えるとき「Connecting...」の表示が無い | reproduced（実機 S1） / scheduled | S1（WS133） | WS005（system bar・Settings の WiFi、WS131 の backend の後の path） |
 | [BUG-153](bugs/BUG-153.md) | system bar の音量の slider で 50% を click しても次の瞬間に 100% になる | reproduced（実機 S1） / scheduled | S1（WS133） | WS100（音量） |
-| [BUG-152](bugs/BUG-152.md) | Settings の Wallpaper の頁を開くと約 10 秒止まる | reproduced（実機 S1） / scheduled | S1（WS133） | WS089（Settings） |
+| [BUG-152](bugs/BUG-152.md) | Settings の Wallpaper の頁を開くと約 10 秒止まる | reproduced（実機 S1） / resolved（ws089-p020、QEMU。実機は S2） | S1（WS133） | WS089（Settings） |
 | [BUG-151](bugs/BUG-151.md) | kernel の TCP: 自分側の SHUT_WR で poll が POLLHUP | reproduced（QEMU） / tracking | ws005-p025 / q635 | S1 の後に時期を決める |
 | [BUG-150](bugs/BUG-150.md) | Terminal で Emacs の描画が 2 行目から始まる（右端の wrap の保留が無かった） | reproduced / resolved（ws128-p010、統合 02c0d6f41） | 2026-10-03 ユーザー報告 | — |
 | [BUG-149](bugs/BUG-149.md) | kernel の AF_UNIX stream: 自分側の SHUT_WR で poll が POLLERR | reproduced（QEMU、libkeiland の join の EIO） / resolved（ws005-p025、統合 cb3da62d1。実機は S1） | ws005-p020 / q631 | —。libkeiland 側の回避は ws131-p003 |

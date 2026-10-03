@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws089-p020 -->
 # ws089-p020: Wallpaper の頁の縮小表示を別の thread で読む（BUG-152）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-011（QEMU）settings-p004・p009 PASS、6 枚の tile が埋まる。実機（5330）の確認は S2）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS089](../ws.md)
 Queue: q638（P1 generation11、2026-10-03。承認: user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」「実行してください。」）
