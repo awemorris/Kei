@@ -2,7 +2,7 @@
 
 # ws131-p004: backend の音声の領域
 
-Status: in-progress（q650、2026-10-03、P1。実装と host の確認は済み、QEMU の試験は T1・T2 に予約。元の記載: planning）
+Status: uncleared（q650、2026-10-03、P1。T2-006 で volume-p004 の mute off が FAIL）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03 user「backend への移行はP1が今やりましょう。…」、Q1 の割り当て）
@@ -71,3 +71,7 @@ base は main（`368385d4f` に merge した worktree `/home/awe/zedBSD-worktree
 ### QEMU の試験（T1・T2 に予約、結果待ち）
 
 boot-test、`volume-p004.sh`・`volume-p005.sh`（volume の image、`build-volume-image.sh`）、`settings-regress.sh`（settings の image）。
+
+## 結果（Q1、2026-10-03、T2-006、QEMU）
+
+uncleared。boot-test PASS、settings-regress PASS 8/8。volume-p004 FAIL ×2: 1 回目は session の画面が出ず（HANDOFF go=1 MISSING 以下全て、fstrim で host の I/O が止まっていた時間）、再試行は `mute off: audiod unmuted (1) FAIL` の 1 項目だけ。volume-p005 は 1 回目 FAIL（desktop.conf の保存・release の音）、再試行 PASS。証拠 worktrees/t2/build/t2-006/。mute off は backend の移行（audio-compat の mute の引き渡し）の退行の疑い。再開: P1 が mute off を調べて直し、BUG-161（ws100-p012）の試験と合わせて T2 で volume-p004・p005 を再試験。desktop.conf の項目は BUG-161 の新しい項目に置き換わる。
