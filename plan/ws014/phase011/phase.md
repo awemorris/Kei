@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws014-p011 -->
 # ws014-p011: Model viewer の 8 個目の vkAllocateMemory -4 — memory の量と上限の測定（BUG-144、BUG-120 との関係）
 
-Status: in-progress（測定の準備と読みの見積もり済み・T1 の測定待ち。ENOSPC の意味の修正を実装。容量の修正は user の助言の後）
+Status: cleared（Q1 判定 2026-10-03、2026-10-03 user「(A) 1 GiB に広げたことで十分として、BUG-144・124 を閉じる。」。T2-001: boot-test PASS、hostmem 1G で mview 14 個起動、256M は 4 個目で失敗の対照）。元の記載: in-progress（測定の準備と読みの見積もり済み・T1 の測定待ち。ENOSPC の意味の修正を実装。容量の修正は user の助言の後）
 Disposition: normal
 Parent: [WS014](../ws.md)
 Bug: [BUG-144](../../bugs/BUG-144.md)（関係: [BUG-120](../../bugs/BUG-120.md)）
