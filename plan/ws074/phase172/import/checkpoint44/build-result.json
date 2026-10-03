@@ -1,0 +1,15 @@
+{
+  "kind": "GCC14.2 scoped compile/link against current unchanged own engine objects",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-insertion.c": "92b1ed69604a81eb71eb5be9ad80c109be181657145b7cdc18574e336c1a3149",
+    "plan/ws074/tests/host-mutation-record.c": "a665a4cc87e772cc3cd1b10e0a446a0ce445342e0070ce5d06da89aabb5894d8",
+    "plan/ws074/tests/host-style-sheet.c": "fe3fab4be2f1e907775ec4f782b4a8c322b7840a9207b6f25afa237fb38794ef",
+    "plan/ws074/tests/host-submit.c": "d2c763a713486d5d7f847a0bafa08108fb1067e65f30b308e376d97e6391def1",
+    "plan/ws074/tests/host-table-mutation.c": "15443867e70fe15cc65fb07ba00bf05414bc94393f972013c1e478e07f46996a",
+    "plan/ws074/tests/host-table-row.c": "8a8c5702d16dd517ce120c04dbb6cd862ed70369fb33375727f4b8d9b9512e45"
+  }
+}

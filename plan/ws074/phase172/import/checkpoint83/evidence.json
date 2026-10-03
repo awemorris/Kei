@@ -1,0 +1,32 @@
+{
+  "queue": "q597",
+  "checkpoint": 83,
+  "source": "userland/desktop/libbrowser/js/builtin_object.c",
+  "source_sha256": "e0734fbf821ed686dc1e800d88ee51684f41958520c7000b043aa397115c734c",
+  "baseline": "eecb6cf41d40d96ba18fdfae225706bb27c8dcc6",
+  "reviewed": 202,
+  "total": 209,
+  "remaining": 7,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 28,
+    "classification": "permitted forward cleanup jumps only"
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "object": "100 checks, 0 failed",
+    "vm-factory": "56/56 passed",
+    "native-properties": "65/65 passed",
+    "js-tests": "js-tests 14/14",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "limits": [
+    "No forced collector in every Object builtin getter window; static lifetime and cleanup reviewed.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

@@ -60,9 +60,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Release the completed fixture heap before reporting its observations. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("option selectedness lifetime checks: %u/%u passed\n", checks - failures, checks);
@@ -119,9 +123,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release the borrowed script input after checking execution. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -142,6 +150,10 @@ index_collect(
 	UNUSED_PARAMETER(receiver);
 	UNUSED_PARAMETER(args);
 	UNUSED_PARAMETER(count);
+
+	/* Reject an invocation outside the finite observer lifetime. */
+	if (active_observer == NULL)
+		return EIO;
 
 	/* The direct native invocation has no script argument frame independently retaining the receiver. */
 	active_observer->conversions++;
@@ -227,15 +239,24 @@ collection_case(
 					   "s.add(document.createElement('option'));s.add(document.createElement('option'));return s;})()",
 					   &receiver);
 		if (status != 0)
-			break;
+			goto cleanup;
 		table = bind_node_of(receiver);
+		if (table == NULL ||
+		    table->type != DOM_ELEMENT ||
+		    table->first_child == NULL ||
+		    table->last_child == NULL) {
+			status = EIO;
+			goto cleanup;
+		}
+
+		/* Publish addresses only after checking the generated option graph. */
 		memset(&observer, 0, sizeof(observer));
 		observer.heap = heap;
 		observer.target = (uintptr_t)table;
 		observer.old = (uintptr_t)table->last_child;
 		status = collection_script(realm, "({valueOf:collectIndex})", &argument);
 		if (status != 0)
-			break;
+			goto cleanup;
 		observer.argument = (uintptr_t)vm_value_as_cell(argument);
 
 		/* Conversion itself detaches and collects the target and argument graph. */
@@ -248,7 +269,22 @@ collection_case(
 		/* Call the production registry setter without an outer VM receiver frame. */
 		active_observer = &observer;
 		status = bind_html_select_element_interface.attributes[1].setter(realm, receiver, &argument, 1, &answer);
+		if (status != expected) {
+			active_observer = NULL;
+			status = EIO;
+			goto cleanup;
+		}
+
+		/* The observer ends before inspecting current owned option state. */
 		active_observer = NULL;
+		found = vm_heap_find_cell(heap, observer.target);
+		if (found == NULL) {
+			status = EIO;
+			goto cleanup;
+		}
+
+		/* Inspect only the target located in the actual heap after collection. */
+		table = (struct dom_node *)found;
 		collection_check(status == expected, "exact selected index conversion outcome propagated");
 		collection_check(observer.conversions == 1U, "index conversion runs once during collector pressure");
 
@@ -280,7 +316,13 @@ collection_case(
 		status = 0;
 	}
 
-	/* Primary teardown observes no root slot pointing into an expired native invocation. */
+	/* Succeeded: every native sample completed before shared teardown. */
+	status = 0;
+
+cleanup:
+	/* Primary teardown observes no expired callback or construction stack contract. */
+	active_observer = NULL;
+	vm_heap_set_stack_base(heap, construction_stack);
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	if (status != 0)

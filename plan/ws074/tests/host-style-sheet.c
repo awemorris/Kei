@@ -50,17 +50,29 @@ main(
 
 	/* Load a genuine primary Page before constructing the binding-owned child. */
 	status = page_load_html(page, html, sizeof(html) - 1U);
-	if (status == 0)
-		status = sheet_case(page);
+	if (status != 0) {
+		page_destroy(page);
+		return 2;
+	}
+
+	/* All initial DOM and native source state exists before the real layout/lifetime campaign. */
+	status = sheet_case(page);
+	if (status != 0) {
+		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
+		page_destroy(page);
+		return 2;
+	}
+
+	/* A successful campaign finishes before Page destruction removes its final resources. */
 	vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
 	page_destroy(page);
-	if (status != 0)
-		return 2;
 
 	/* Publish complete observations after every production resource was released. */
 	printed = printf("native style source: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Any geometry, identity or collection failure rejects the native source fixture. */
 	if (failures != 0)
 		return 1;
 
@@ -84,6 +96,9 @@ sheet_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: every failed observation remains in the final fixture count. */
+	return;
 }
 
 /* Executes ordinary scripts to construct production managed child contexts. */
@@ -107,9 +122,13 @@ sheet_script(
 
 	/* Execute genuine DOM operations without a production test switch. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Checked script completion no longer borrows converted fixture storage. */
+	wb_units_release(&units);
 
 	/* Succeeded: the script supplied actual native state. */
 	return 0;
@@ -128,11 +147,20 @@ sheet_insert(
 	/* Native CSS insertion owns its source and never changes the owner's DOM Text. */
 	wb_units_init(&units);
 	status = wb_utf8_to_units((const unsigned char *)source, strlen(source), &units);
-	if (status == 0)
-		status = css_rule_model_insert(sheet->model, units.data, units.length, index);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Complete conversion precedes the real native model insertion. */
+	status = css_rule_model_insert(sheet->model, units.data, units.length, index);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* The checked native model owns the inserted source independently of this buffer. */
+	wb_units_release(&units);
 
 	/* Invalidation is separate from pure model storage and runs only after successful insertion. */
 	bind_style_sheet_changed(sheet);
@@ -172,6 +200,7 @@ sheet_case(
 	struct page *page)
 {
 	struct dom_element *element;
+	struct dom_node *node;
 	struct dom_node *text;
 	struct dom_node *empty;
 	struct bind_style_sheet *sheet;
@@ -188,106 +217,118 @@ sheet_case(
 	size_t count;
 	int status;
 	int same;
+	int compared;
+	int registered;
+
+	/* No optional saved-state root or serialization buffer exists before native construction. */
+	root = NULL;
+	registered = 0;
+	wb_units_init(&units);
 
 	/* Primary and child styles start with different actual native cascade results. */
-	status = sheet_script(page->realm,
-			      "var ps=document.createElement('style');ps.appendChild(document.createTextNode('img{display:block;width:10px;height:7px}'));document.head.appendChild(ps);"
-			      "document.body.appendChild(document.createElement('img'));"
-			      "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
-			      "var d=f.contentDocument;d.open();d.write('<style>img{display:block;width:10px;height:10px}</style><img>');d.close();"
-			      "var s=d.getElementsByTagName('style')[0];var mo=new MutationObserver(function(){});mo.observe(s,{childList:true,characterData:true,subtree:true});s",
-			      &answer);
+	status = sheet_script(
+	    page->realm,
+	    "var ps=document.createElement('style');ps.appendChild(document.createTextNode('img{display:block;width:10px;height:7px}'));document.head.appendChild(ps);"
+	    "document.body.appendChild(document.createElement('img'));"
+	    "var f=document.createElement('iframe');f.style.cssText='display:block;width:120px;height:80px';document.body.appendChild(f);"
+	    "var d=f.contentDocument;d.open();d.write('<style>img{display:block;width:10px;height:10px}</style><img>');d.close();"
+	    "var s=d.getElementsByTagName('style')[0];var mo=new MutationObserver(function(){});mo.observe(s,{childList:true,characterData:true,subtree:true});s",
+	    &answer);
 	if (status != 0)
-		return status;
-	element = (struct dom_element *)bind_node_of(answer);
+		goto cleanup;
+	node = bind_node_of(answer);
+	if (node == NULL ||
+	    node->type != DOM_ELEMENT ||
+	    node->first_child == NULL) {
+		status = EINVAL;
+		goto cleanup;
+	}
+
+	/* Only the actual child style Element and its original Text enter native source queries. */
+	element = (struct dom_element *)node;
 	text = element->node.first_child;
 	status = bind_style_sheet_get(element, &sheet);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = sheet_height(page, page->realm, "d.images[0]", 10);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = sheet_insert(sheet, "img{height:20px}", 1);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = sheet_height(page, page->realm, "d.images[0]", 20);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = sheet_insert(sheet, "img{height:40px}", 2);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = sheet_height(page, page->realm, "d.images[0]", 40);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = css_rule_model_delete(sheet->model, 2);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	bind_style_sheet_changed(sheet);
 	status = sheet_height(page, page->realm, "d.images[0]", 20);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = sheet_height(page, page->realm, "document.images[0]", 7);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* Native rule edits are independent of DOM Text and MutationObserver record creation. */
 	status = sheet_script(page->realm, "s.firstChild.data==='img{display:block;width:10px;height:10px}' && mo.takeRecords().length===0", &answer);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	sheet_check(answer == vm_value_boolean(1), "model edits preserve actual DOM Text and create no mutation records");
 	status = sheet_script(page->realm, "d.body.appendChild(d.createElement('span'))", &answer);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = bind_style_sheet_get(element, &current);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	sheet_check(current == sheet, "unrelated DOM edits preserve current native sheet identity");
 
 	/* Save only the old native state while same-text replacement discards its current association. */
 	root = &sheet->cell;
 	status = vm_heap_add_root(page->heap, &root);
 	if (status != 0)
-		return status;
+		goto cleanup;
+
+	/* Cleanup owns only this successfully registered saved-state or owner slot. */
+	registered = 1;
 	status = sheet_script(page->realm, "s.firstChild.data=s.firstChild.data", &answer);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
-	/* Continue only after the previous native operation succeeded. */
+	/* Query current source after identical Text replacement retires its old association. */
 	status = bind_style_sheet_get(element, &current);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
-	/* Observe the completed native operation before proceeding. */
+	/* Same-text replacement must supply one fresh original native rule model. */
 	count = css_rule_model_count(current->model);
 	sheet_check(current != sheet && count == 1U, "same-text replacement creates a new original model");
 	generation = element->node.document->generation;
 	status = sheet_insert(sheet, "img{height:99px}", 2);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
-	/* Observe the completed native operation before proceeding. */
+	/* Obsolete source edits must leave the current Document generation unchanged. */
 	sheet_check(element->node.document->generation == generation, "obsolete model edit does not invalidate current Document");
 	status = sheet_height(page, page->realm, "d.images[0]", 10);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
 	/* Appending even empty Text retires the current identity rather than comparing source hashes. */
 	empty = dom_text_create(element->node.document, NULL, 0);
 	if (empty == NULL) {
-		vm_heap_remove_root(page->heap, &root);
-		return ENOMEM;
+		status = ENOMEM;
+		goto cleanup;
 	}
 
 	/* The real child-list operation retires the previous source identity. */
@@ -295,9 +336,7 @@ sheet_case(
 	sheet_check(element->style_sheet == NULL, "empty Text child insertion retires current source identity");
 	status = bind_style_sheet_get(element, &current);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
 	/* Removing the actual child must retire the newly current model. */
@@ -305,56 +344,48 @@ sheet_case(
 	sheet_check(element->style_sheet == NULL, "Text child removal retires current source identity");
 	status = bind_style_sheet_get(element, &current);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
-	/* Continue only after the previous native operation succeeded. */
+	/* Even an empty Text append must execute the real source retirement lifecycle. */
 	status = dom_text_append(text, NULL, 0);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
-	/* Observe the completed native operation before proceeding. */
+	/* Empty Text data mutation must retire the previously current source identity. */
 	sheet_check(element->style_sheet == NULL, "empty Text data append runs source retirement lifecycle");
 	status = sheet_script(page->realm, "d.head.removeChild(s);d.head.appendChild(s);s.firstChild.data='img{display:block;width:10px;height:30px}'", &answer);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
-	/* Continue only after the previous native operation succeeded. */
+	/* The reinserted current source must supply the newly written thirty-pixel height. */
 	status = sheet_height(page, page->realm, "d.images[0]", 30);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
 	/* A genuine owner-only root retains its current state with conservative stack discovery disabled. */
 	vm_heap_remove_root(page->heap, &root);
+	registered = 0;
 	root = &element->node.cell;
 	status = vm_heap_add_root(page->heap, &root);
 	if (status != 0)
-		return status;
+		goto cleanup;
+
+	/* Cleanup owns only this successfully registered saved-state or owner slot. */
+	registered = 1;
 	status = bind_style_sheet_get(element, &current);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
 	/* Record identity before disabling conservative stack discovery. */
 	state_address = (uintptr_t)&current->cell;
 	status = sheet_script(page->realm, "mo.disconnect();mo=null;s=null;d=null;f.parentNode.removeChild(f);f=null", &answer);
 	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+		goto cleanup;
 	}
 
 	/* Collect only after clearing script-held child references. */
@@ -365,11 +396,21 @@ sheet_case(
 
 	/* A saved source state alone retains its retired actual child Document and realm. */
 	vm_heap_remove_root(page->heap, &root);
+	registered = 0;
 	root = &current->cell;
 	status = vm_heap_add_root(page->heap, &root);
 	if (status != 0)
-		return status;
+		goto cleanup;
+
+	/* Cleanup owns only this successfully registered saved-state or owner slot. */
+	registered = 1;
 	owner = element->node.document->view;
+	if (owner == NULL) {
+		status = EINVAL;
+		goto cleanup;
+	}
+
+	/* Integer identities observe the retired child without additional retaining roots. */
 	document_address = (uintptr_t)&element->node.document->node.cell;
 	realm_address = (uintptr_t)&owner->realm->cell;
 
@@ -379,23 +420,33 @@ sheet_case(
 	sheet_check(found != NULL && owner->detached, "saved state alone retains retired actual child Document");
 	found = vm_heap_find_cell(page->heap, realm_address);
 	sheet_check(found != NULL, "saved state traces actual binding realm after child retirement");
-	wb_units_init(&units);
+	/* Read the complete saved model before inspecting or releasing its serialized text. */
 	status = css_rule_model_text(current->model, &units);
-	same = units.length == current->original.length + 1U;
-	if (same)
-		same = memcmp(units.data, current->original.data, current->original.length * sizeof(*units.data)) == 0;
-	wb_units_release(&units);
-	if (status != 0) {
-		vm_heap_remove_root(page->heap, &root);
-		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
-		return status;
+	if (status != 0)
+		goto cleanup;
+
+	/* A matching native source has one serializer newline beyond its original text. */
+	same = 0;
+	if (units.length == current->original.length + 1U)
+		same = 1;
+
+	/* Compare only the successfully serialized, correctly sized native source bytes. */
+	if (same) {
+		compared = memcmp(units.data, current->original.data, current->original.length * sizeof(*units.data));
+		same = 0;
+		if (compared == 0)
+			same = 1;
 	}
 
-	/* Observe the completed native operation before proceeding. */
+	/* The successful comparison no longer needs its temporary serialization buffer. */
+	wb_units_release(&units);
+
+	/* Saved retired source bytes must remain readable after real collector pressure. */
 	sheet_check(same, "saved retired model remains readable after actual GC");
 
 	/* Releasing the last saved model root leaves no permanent owner or resource edge. */
 	vm_heap_remove_root(page->heap, &root);
+	registered = 0;
 	vm_heap_collect(page->heap);
 	found = vm_heap_find_cell(page->heap, state_address);
 	sheet_check(found == NULL, "released saved model is collectible");
@@ -405,7 +456,15 @@ sheet_case(
 	sheet_check(found == NULL, "released saved model leaves no retained child realm");
 	vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
 
+cleanup:
+	/* Restore ordinary Page teardown and release only still-acquired fixture ownership. */
+	vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
+	if (registered)
+		vm_heap_remove_root(page->heap, &root);
+	wb_units_release(&units);
+	if (status != 0)
+		return status;
+
 	/* Succeeded: all genuine model, lifecycle, rendering and lifetime observations completed. */
 	return 0;
-
 }

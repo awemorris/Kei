@@ -122,7 +122,8 @@ enum se_event_type {
 /*
  * One input: where the pointer is, which button or key, the modifiers
  * held, and a menu's action.  serial is the compositor's serial of a
- * button press.
+ * button press.  touch is 1 for the pointer's moves and presses a finger
+ * on the touch screen made (a drag of the finger scrolls a pane, ws089-p012).
  */
 struct se_event {
 	unsigned type;
@@ -137,6 +138,7 @@ struct se_event {
 	uint64_t time;
 	int focused;
 	uint32_t action;
+	int touch;
 };
 
 /*
@@ -339,6 +341,13 @@ struct se_field {
  * state, scan, links, dns and saved are the last reports.  request is the
  * daemon's request outstanding (KEILAND_NETWORK_REQUEST_NONE when none);
  * join_step and join_ssid carry a join with a new key through its steps.
+ * libkeiland carries one request at a time: a switch, a disconnect or a
+ * join asked for while another request (a scan, usually) is out waits in
+ * one slot -- pending_request (NONE when empty), the join's step and its
+ * network -- and is sent when that one is answered (ws089-p012 C1, as the
+ * system bar does since ws005-p019).  A scan is never kept.
+ * scan_received tells that a scan's report arrived, so an empty list
+ * means no network is in reach rather than none looked for yet.
  * key_ssid names the network whose key is being typed (empty when the key
  * form is closed).  The usage ring holds the bytes a second received and
  * sent, newest at usage_next - 1.
@@ -350,6 +359,7 @@ struct se_network {
 	struct keiland_network_ap scan[SE_NETWORK_SCAN];
 	size_t scan_count;
 	uint64_t scanned_at;
+	int scan_received;
 	struct keiland_network_link links[SE_NETWORK_LINKS];
 	size_t link_count;
 	char dns[SE_NETWORK_DNS][KEILAND_NETWORK_ADDRESS_MAX];
@@ -359,6 +369,9 @@ struct se_network {
 	unsigned request;
 	unsigned join_step;
 	char join_ssid[KEILAND_NETWORK_SSID_MAX];
+	unsigned pending_request;
+	unsigned pending_step;
+	char pending_ssid[KEILAND_NETWORK_SSID_MAX];
 	char key_ssid[KEILAND_NETWORK_SSID_MAX];
 	struct se_field key;
 	int key_shown;
@@ -514,6 +527,14 @@ struct se_search {
 	struct se_search_result results[SE_SEARCH_RESULTS];
 	unsigned count;
 	unsigned focus_serial;
+
+	/*
+	 * The result the keys have chosen (ws089-p012): the first of a new list,
+	 * moved by Up and Down, and opened by Enter.  reveal asks the next frame
+	 * to scroll it into sight after the keys moved it.
+	 */
+	unsigned chosen;
+	int reveal;
 };
 
 /* How many pictures the Wallpaper page offers besides the default, and the bytes of a path. */
@@ -607,6 +628,21 @@ struct se_sound {
 };
 
 /*
+ * A finger on the touch screen held on a pane, which a drag of it scrolls
+ * (ws089-p012): where it touched, the pane and its scroll then, and whether
+ * it has moved far enough to be a scroll rather than a tap.  held is 0 when
+ * no finger is down (or the finger is on a slider, which it drags instead).
+ */
+struct se_touch_scroll {
+	int held;
+	int scrolling;
+	unsigned pane;
+	int start_x;
+	int start_y;
+	int start_scroll;
+};
+
+/*
  * Settings in one window: the page shown and its history, the list's and
  * the page's scroll, what the last frame drew, and what the pointer is
  * doing.
@@ -643,6 +679,9 @@ struct se_app {
 
 	/* Whether the list is to scroll the page shown into sight at the next frame (after the page changed). */
 	int reveal;
+
+	/* A finger held on a pane, which a drag of it scrolls (ws089-p012). */
+	struct se_touch_scroll touch;
 
 	/* The panes of the last frame and its clickable regions. */
 	struct se_layout layout;
@@ -787,7 +826,8 @@ float se_slider_fraction(const struct fm_rect *rect, int x);
 void se_search_set(struct se_app *app, const char *query);
 void se_search_end(struct se_app *app);
 void se_search_focus(struct se_app *app);
-int se_search_open_first(struct se_app *app);
+int se_search_open_chosen(struct se_app *app);
+void se_search_step(struct se_app *app, int direction);
 int se_search_draw(struct se_app *app, struct fm_canvas *canvas, int x, int top, int width);
 void se_search_press(struct se_app *app, int index);
 

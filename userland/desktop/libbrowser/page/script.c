@@ -58,6 +58,48 @@ struct page_fetch_request {
 	void *done_context;
 };
 
+/*
+ * The part of a URL (a NET_URL_*) each part of the window's location
+ * reads, in the order of the BIND_LOCATION_* values.  The table is
+ * constant for the life of the program.
+ */
+static const int script_location_parts[] = {
+	NET_URL_HREF,
+	NET_URL_ORIGIN,
+	NET_URL_PROTOCOL,
+	NET_URL_HOST,
+	NET_URL_HOSTNAME,
+	NET_URL_PORT,
+	NET_URL_PATHNAME,
+	NET_URL_SEARCH,
+	NET_URL_HASH
+};
+
+/*
+ * The MIME types of a classic script's type attribute, in lower case (the
+ * standard's JavaScript MIME type essence matches).  The table is constant
+ * for the life of the program and ends with NULL.
+ */
+static const char *const script_types[] = {
+	"application/ecmascript",
+	"application/javascript",
+	"application/x-ecmascript",
+	"application/x-javascript",
+	"text/ecmascript",
+	"text/javascript",
+	"text/javascript1.0",
+	"text/javascript1.1",
+	"text/javascript1.2",
+	"text/javascript1.3",
+	"text/javascript1.4",
+	"text/javascript1.5",
+	"text/jscript",
+	"text/livescript",
+	"text/x-ecmascript",
+	"text/x-javascript",
+	NULL
+};
+
 static int script_settle_network(struct page *page, double wait, double *elapsed);
 static void script_console(void *context, int level, const char *text, size_t length);
 static int script_location(void *context, int part, struct wb_buffer *out);
@@ -153,48 +195,6 @@ page_url(
 	/* Succeeded: the caller releases the URL. */
 	return 0;
 }
-
-/*
- * The part of a URL (a NET_URL_*) each part of the window's location
- * reads, in the order of the BIND_LOCATION_* values.  The table is
- * constant for the life of the program.
- */
-static const int script_location_parts[] = {
-	NET_URL_HREF,
-	NET_URL_ORIGIN,
-	NET_URL_PROTOCOL,
-	NET_URL_HOST,
-	NET_URL_HOSTNAME,
-	NET_URL_PORT,
-	NET_URL_PATHNAME,
-	NET_URL_SEARCH,
-	NET_URL_HASH
-};
-
-/*
- * The MIME types of a classic script's type attribute, in lower case (the
- * standard's JavaScript MIME type essence matches).  The table is constant
- * for the life of the program and ends with NULL.
- */
-static const char *const script_types[] = {
-	"application/ecmascript",
-	"application/javascript",
-	"application/x-ecmascript",
-	"application/x-javascript",
-	"text/ecmascript",
-	"text/javascript",
-	"text/javascript1.0",
-	"text/javascript1.1",
-	"text/javascript1.2",
-	"text/javascript1.3",
-	"text/javascript1.4",
-	"text/javascript1.5",
-	"text/jscript",
-	"text/livescript",
-	"text/x-ecmascript",
-	"text/x-javascript",
-	NULL
-};
 
 /*
  * Makes the page's realm with the built-ins and makes its global object
@@ -745,8 +745,8 @@ script_prepare_external(
 			wb_buffer_release(&location);
 			wb_buffer_release(&bytes);
 			return error;
-			}
 		}
+	}
 
 	/* The temporary buffers no longer own anything. */
 	wb_buffer_release(&href);
@@ -1302,9 +1302,9 @@ script_run_file(
 	if (error == 0) {
 		error = bind_run_script(page->window, units.data, units.length, wb_buffer_string(&path));
 	} else if (error != ENOMEM) {
-		wb_buffer_printf(&line, "Failed to load the script %s: %s", wb_buffer_string(&href), strerror(error));
-		bind_console(page->window, BIND_CONSOLE_ERROR, wb_buffer_string(&line));
-		error = 0;
+		error = wb_buffer_printf(&line, "Failed to load the script %s: %s", wb_buffer_string(&href), strerror(error));
+		if (error == 0)
+			bind_console(page->window, BIND_CONSOLE_ERROR, wb_buffer_string(&line));
 	}
 
 	/* Frees the buffers. */

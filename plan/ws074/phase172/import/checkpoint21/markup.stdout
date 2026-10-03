@@ -1,0 +1,22 @@
+serialize t&lt;u&gt;&amp;&nbsp;<br><img src="x.png"><!--c--><script>if (1 < 2 && 3 > 4) {}</script><style>p > a {}</style><textarea>&lt;x&gt;</textarea><svg viewBox="0 0 1 1"><path d="M0 0"></path></svg><noscript><b>n</b></noscript><template><i>tt</i></template>
+outer <div id="s" title="a&quot;b&lt;c&gt;&amp;&nbsp;x" data-x="q&quot;r">t&
+inner <b class="c">b&amp;</b><i>i</i><script>console.log("ran")</script>text 3 B
+adjacent <!--c--><u>u</u><b class="c">b&amp;</b><i>i</i><script>console.log("ran")</script>text<em>e</em>
+table <tbody id="tb"><tr><td>1</td></tr></tbody>
+select <option>a</option><div>b</div><option selected="">c</option> 3
+element true d
+detached null
+text t&lt;<!--c--><u>u</u
+outer set t&lt;<!--c--><u>u</u><b class="c">b&amp;</b><q>q</q><q>r</q><script>console.log("ran")</script>text<em>e</em>
+position threw SyntaxError 12
+document child threw NoModificationAllowedError 7
+no parent <div></div>
+template <td>z</td> 1 0 #document-fragment
+parsed template I 0 true
+clone <i>tt</i> true
+newline "<pre>line</pre><textarea>t</textarea><listing>l</listing>"
+foreign <math><mi>x</mi></math><svg><foreignObject><b>f</b></foreignObject></svg> http://www.w3.org/1998/Math/MathML
+escape a<!--x-->b&lt;&gt;&amp;&nbsp;"' 3
+attribute <p title="&quot;&amp;&lt;&gt;&nbsp;'">a<
+empty 0 []
+errors <br><br><p>q</p>

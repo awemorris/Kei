@@ -1,0 +1,15 @@
+{
+  "input_utf16_units": [
+    "0022",
+    "0061",
+    "000d",
+    "000a",
+    "0078"
+  ],
+  "probe": "css_tokenize token type/source_start/source_end, real host objects; 5=BAD_STRING,12=WHITESPACE,0=IDENT,24=EOF",
+  "before": "5 0 3\n12 3 4\n0 4 5\n24 5 5\n",
+  "after": "5 0 2\n12 2 4\n0 4 5\n24 5 5\n",
+  "expected": "5 0 2\n12 2 4\n0 4 5\n24 5 5\n",
+  "before_object": "previous host-build libbrowser_css_tokenizer.o",
+  "after_object": "new scoped compile of css/tokenizer.c"
+}

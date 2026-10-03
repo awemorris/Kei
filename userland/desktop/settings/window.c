@@ -1137,12 +1137,14 @@ window_touch_place(
 {
 	struct se_event *event;
 
-	/* The finger's place is the pointer's. */
+	/* The finger's place is the pointer's, a move the finger made. */
 	window->pointer_x = wl_fixed_to_int(x);
 	window->pointer_y = wl_fixed_to_int(y);
 	event = se_window_push(window, SE_EVENT_MOTION);
-	if (event != NULL)
-		event->time = se_clock();
+	if (event == NULL)
+		return;
+	event->time = se_clock();
+	event->touch = 1;
 }
 
 /* Queues the left button pressed or let go by the finger taken as the pointer. */
@@ -1154,7 +1156,7 @@ window_touch_button(
 {
 	struct se_event *event;
 
-	/* The button, as a click would give it. */
+	/* The button, as a click would give it, pressed by a finger. */
 	event = se_window_push(window, SE_EVENT_BUTTON);
 	if (event == NULL)
 		return;
@@ -1162,6 +1164,7 @@ window_touch_button(
 	event->pressed = pressed;
 	event->serial = serial;
 	event->time = se_clock();
+	event->touch = 1;
 }
 
 /* A finger touches the window: the first one presses the left button where it lands. */

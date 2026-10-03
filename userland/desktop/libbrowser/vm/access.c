@@ -554,6 +554,7 @@ vm_define_accessor(
 	struct vm_property property;
 	struct vm_accessor *accessor;
 	struct vm_object *target;
+	struct vm_cell *accessor_root;
 	vm_value getter_function;
 	vm_value setter_function;
 	int found;
@@ -585,8 +586,15 @@ vm_define_accessor(
 	accessor = vm_accessor_create(realm->heap, getter_function, setter_function);
 	if (accessor == NULL)
 		return ENOMEM;
+
+	/* The new pair is not owned by the literal until definition publishes it. */
+	accessor_root = &accessor->cell;
+	status = vm_heap_add_root(realm->heap, &accessor_root);
+	if (status != 0)
+		return status;
 	status = vm_object_define(realm->heap, target, key, vm_value_cell(accessor),
 	    VM_PROPERTY_ACCESSOR | VM_PROPERTY_ENUMERABLE | VM_PROPERTY_CONFIGURABLE);
+	vm_heap_remove_root(realm->heap, &accessor_root);
 	if (status != 0)
 		return status;
 
@@ -894,6 +902,7 @@ vm_to_object(
 {
 	struct vm_object *wrapper;
 	struct vm_object *prototype;
+	struct vm_cell *wrapper_root;
 	int is_object;
 	int is_string;
 	int is_boolean;
@@ -920,6 +929,12 @@ vm_to_object(
 	wrapper = vm_object_create(realm->heap, prototype);
 	if (wrapper == NULL)
 		return ENOMEM;
+
+	/* A primitive wrapper is detached while its indexed characters are built. */
+	wrapper_root = &wrapper->cell;
+	status = vm_heap_add_root(realm->heap, &wrapper_root);
+	if (status != 0)
+		return status;
 	wrapper->internal = value;
 
 	/* Its kind by the primitive's type; a string's characters and length are its own properties. */
@@ -933,14 +948,17 @@ vm_to_object(
 	} else if (is_string) {
 		wrapper->kind = VM_KIND_STRING;
 		status = access_wrap_string(realm, wrapper, (struct vm_string *)vm_value_as_cell(value));
-		if (status != 0)
+		if (status != 0) {
+			vm_heap_remove_root(realm->heap, &wrapper_root);
 			return status;
+		}
 	} else {
 		wrapper->kind = VM_KIND_SYMBOL;
 	}
 
 	/* Succeeded: the wrapper. */
 	*object = vm_value_cell(wrapper);
+	vm_heap_remove_root(realm->heap, &wrapper_root);
 	return 0;
 }
 
@@ -1001,6 +1019,7 @@ vm_define_own_property(
 {
 	struct vm_descriptor current;
 	struct vm_accessor *accessor;
+	struct vm_cell *accessor_root;
 	vm_value length_key;
 	vm_value getter;
 	vm_value setter;
@@ -1094,7 +1113,14 @@ vm_define_own_property(
 		accessor = vm_accessor_create(realm->heap, getter, setter);
 		if (accessor == NULL)
 			return ENOMEM;
+
+		/* The descriptor owns the pair only after the property is published. */
+		accessor_root = &accessor->cell;
+		status = vm_heap_add_root(realm->heap, &accessor_root);
+		if (status != 0)
+			return status;
 		status = vm_object_define(realm->heap, object, key, vm_value_cell(accessor), attributes | VM_PROPERTY_ACCESSOR);
+		vm_heap_remove_root(realm->heap, &accessor_root);
 		if (status != 0)
 			return status;
 		*done = 1;

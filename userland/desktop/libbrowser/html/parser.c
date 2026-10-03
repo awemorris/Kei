@@ -1056,6 +1056,7 @@ tb_create_element(
 	struct vm_string *name;
 	struct vm_string *value;
 	struct dom_attribute *existing;
+	struct vm_cell *element_root;
 	size_t index;
 	int error;
 
@@ -1079,7 +1080,15 @@ tb_create_element(
 		return NULL;
 	}
 
-	/* Copies each attribute the tokenizer kept. */
+	/* The element is detached while its attributes and contents are allocated. */
+	element_root = &element->node.cell;
+	error = vm_heap_add_root(p->heap, &element_root);
+	if (error != 0) {
+		parser_nomem(p);
+		return NULL;
+	}
+
+	/* Keeps the detached element alive while allocating its attribute values. */
 	for (index = 0; index < token->raw->attribute_count; index++) {
 		attribute = &token->raw->attributes[index];
 		if (attribute->dropped)
@@ -1089,14 +1098,14 @@ tb_create_element(
 		name = vm_atom_from_units(p->heap, attribute->name.data, attribute->name.length);
 		if (name == NULL) {
 			parser_nomem(p);
-			return element;
+			goto cleanup;
 		}
 
 		/* Makes the value. */
 		value = vm_string_from_units(p->heap, attribute->value.data, attribute->value.length);
 		if (value == NULL) {
 			parser_nomem(p);
-			return element;
+			goto cleanup;
 		}
 
 		/* A name repeated after the tokenizer's check (it compares only kept names) is skipped. */
@@ -1108,7 +1117,7 @@ tb_create_element(
 		error = dom_element_add_attribute(element, DOM_NS_NONE, NULL, name, value);
 		if (error != 0) {
 			parser_nomem(p);
-			return element;
+			goto cleanup;
 		}
 	}
 
@@ -1118,6 +1127,10 @@ tb_create_element(
 		if (element->content == NULL)
 			parser_nomem(p);
 	}
+
+cleanup:
+	/* The caller takes the detached element; an attempted parse failure stays recorded. */
+	vm_heap_remove_root(p->heap, &element_root);
 
 	/* Succeeded: the element is detached. */
 	return element;
@@ -1133,6 +1146,8 @@ tb_create_element_for_tag(
 {
 	struct dom_element *element;
 	struct vm_string *local_name;
+	struct vm_cell *element_root;
+	int error;
 
 	/* Interns the tag's name. */
 	local_name = vm_atom_from_ascii(p->heap, dom_tag_name(tag));
@@ -1148,12 +1163,23 @@ tb_create_element_for_tag(
 		return NULL;
 	}
 
-	/* A template gets its contents. */
+	/* The element stays live until its template fragment has been allocated. */
+	element_root = &element->node.cell;
+	error = vm_heap_add_root(p->heap, &element_root);
+	if (error != 0) {
+		parser_nomem(p);
+		return NULL;
+	}
+
+	/* A template gets its contents while its detached element remains live. */
 	if (tag == DOM_TAG_TEMPLATE) {
 		element->content = dom_fragment_create(p->document);
 		if (element->content == NULL)
 			parser_nomem(p);
 	}
+
+	/* The caller takes the detached element. */
+	vm_heap_remove_root(p->heap, &element_root);
 
 	/* Succeeded: the element is detached. */
 	return element;

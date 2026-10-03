@@ -68,6 +68,7 @@ enum image_kind {
 
 static enum image_kind image_kind(const char *path, const char **format, int *error);
 static int image_png(struct iv_image *image, struct keiland_picture *picture);
+static void image_jpeg_refuse(struct iv_image *image, int error);
 static int image_jpeg(struct iv_image *image, struct keiland_picture *picture);
 static int image_gif(struct iv_image *image, struct keiland_picture *picture);
 static int image_gif_frames(struct iv_image *image, GifFileType *gif, uint32_t *screen);
@@ -228,6 +229,8 @@ iv_image_orientation(
 
 	/* The shared reading (userland/desktop/picture). */
 	orientation = keiland_picture_exif_orientation(data, size);
+
+	/* Succeeded: the orientation the file gives. */
 	return orientation;
 }
 
@@ -409,6 +412,31 @@ image_png(
 	return 0;
 }
 
+/* Tells why a JPEG could not be decoded: damaged or not supported, too large, or out of memory. */
+static void
+image_jpeg_refuse(
+	struct iv_image *image,
+	int error)
+{
+	/* A damaged file, or a kind not supported. */
+	if (error == EINVAL) {
+		image_refuse(image, EINVAL, "The JPEG image is damaged or of a kind not supported");
+		return;
+	}
+
+	/* One too large to hold. */
+	if (error == E2BIG) {
+		image_refuse(image, E2BIG, "The image is too large");
+		return;
+	}
+
+	/* Any other failure is memory running out. */
+	image_refuse(image, error, "There is not enough memory for this image");
+
+	/* Succeeded: the reason is told. */
+	return;
+}
+
 /* Decodes a JPEG with libjpeg into a picture, turned as its EXIF orientation says. */
 static int
 image_jpeg(
@@ -431,23 +459,14 @@ image_jpeg(
 
 	/* The picture as stored and its orientation (the shared decoding, userland/desktop/picture). */
 	error = keiland_picture_jpeg(file, NULL, 0U, IMAGE_SIDE_MAX, 0UL, picture, &orientation);
-	fclose(file);
-	if (error == EINVAL) {
-		image_refuse(image, EINVAL, "The JPEG image is damaged or of a kind not supported");
-		return EINVAL;
-	}
-
-	/* One too large to hold. */
-	if (error == E2BIG) {
-		image_refuse(image, E2BIG, "The image is too large");
-		return E2BIG;
-	}
-
-	/* Memory ran out. */
 	if (error != 0) {
-		image_refuse(image, error, "There is not enough memory for this image");
+		fclose(file);
+		image_jpeg_refuse(image, error);
 		return error;
 	}
+
+	/* The file is not needed any more. */
+	fclose(file);
 
 	/* The picture turned upright. */
 	image->file_width = picture->width;

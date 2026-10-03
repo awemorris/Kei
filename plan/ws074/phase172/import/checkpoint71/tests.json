@@ -1,0 +1,36 @@
+[
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  },
+  {
+    "name": "child-style-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/child-style-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS child stylesheet cascade\nPASS ancestor color inheritance\nPASS ancestor font inheritance\nPASS child author sheet isolation\nPASS parent sheet preserved\nPASS computed float alias\nPASS child document query\nPASS child matches and closest\nPASS child querySelectorAll\nPASS borrowed query owner\nPASS borrowed matches owner\nPASS borrowed computed owner\nPASS live inline mutation\nPASS important author wins\nPASS class query mutation\nPASS important inline wins\nPASS removed inline and class state\nPASS inline float alias\nPASS removed inline float\nPASS sheet text replacement\nPASS live ancestor inheritance\nPASS media attribute exclusion\nPASS media attribute mutation\nPASS embedded media with nonnegative viewport\nPASS sheet removal invalidation\nPASS sibling sheet isolation\nPASS disconnected computed empty\nPASS reinserted declaration remains live\nPASS retired child computed empty\nPASS retired child selector empty\n"
+  },
+  {
+    "name": "query-gc-pressure",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "build/browser3-p172/review71/query-gc-pressure.html"
+    ],
+    "exit": 0,
+    "stdout": "query 3000 true\nclass true true false 3\ndataset changed two changed\n"
+  }
+]

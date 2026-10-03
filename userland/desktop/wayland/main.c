@@ -17,6 +17,7 @@
 #include "data.h"
 #include "userland/desktop/paths.h"
 #include "zwl-os.h"
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/stat.h>
@@ -56,6 +57,8 @@ main(
 	char **arguments)
 {
 	struct zwl_server server;
+	struct kl_backend_options backend_options;
+	struct kl_backend_host backend_host;
 	void (*previous_handler)(int);
 	int error;
 	int keymap_error;
@@ -79,6 +82,13 @@ main(
 	server.timeout_ms = 150000;
 	strcpy(server.socket_path, "/tmp/wayland-0");
 	setvbuf(stdout, NULL, _IOLBF, 0);
+
+	/* The backend reports nothing to the compositor yet (WS131 p003); its callbacks come with the areas that need them. */
+	memset(&backend_options, 0, sizeof(backend_options));
+	memset(&backend_host, 0, sizeof(backend_host));
+	backend_host.data = &server;
+
+	/* Reads the command line; a mistake ends the run with the usage. */
 	error = parse_options(&server, count, arguments);
 	if (error != 0) {
 		fprintf(stderr, "usage: wayland [--socket=/path] [--width=N] [--height=N] [--timeout=seconds] [--max-frames=N] [--log-frames] [--keyboard-blur] [--glass] [--font=/path] [--fallback-font=/path] [--wallpaper=/path.ppm] [--window-opacity=1..100] [--desktop-client=COMMAND|none] [--desktop-token=TOKEN] [--session [--control-fd=N] [--lock-idle=seconds] | --greeter --auth-fd=N]\n");
@@ -124,6 +134,11 @@ main(
 	previous_handler = signal(SIGTERM, stop_service);
 	if (previous_handler == SIG_ERR)
 		return 1;
+
+	/* Opens the operating system's side (libkeiland-backend) before anything asks it for a resource. */
+	error = kl_backend_open(&backend_options, &backend_host, &server.backend);
+	if (error != 0)
+		printf("ZWL BACKEND unavailable errno=%d\n", error);
 
 	/* Takes the OS's seat resources before Vulkan opens the display. */
 	if (error == 0) {
@@ -954,6 +969,10 @@ service_cleanup(
 
 	/* Returns the OS resources after input and display cleanup. */
 	zwl_os_close(server);
+
+	/* Closes the operating system's side last, after everything that used it. */
+	kl_backend_close(server->backend);
+	server->backend = NULL;
 
 	/* Succeeded: the service retains no listener, client or Vulkan object. */
 	return;

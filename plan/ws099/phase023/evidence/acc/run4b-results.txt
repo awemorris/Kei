@@ -1,0 +1,8 @@
+C9 p072 PASS seconds=45 zdesktop-p072: PASS (and judge the screens) 
+C9 p076 PASS seconds=68 p076: PASS 
+C9 p126 PASS seconds=106 zdesktop-p126: status=0 
+C9 p128 PASS seconds=47 zdesktop-p128: status=0 
+C9 p134 PASS seconds=81 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p137 PASS seconds=51 p137: PASS 
+C9 p138 PASS seconds=49 p138: PASS 
+C9 cursor-owner PASS seconds=30 cursor-owner: PASS 

@@ -1,0 +1,18 @@
+terminal: surface 16 at 182,127
+log: ZTERM MENU ready items=31 ok
+log: MENU commit client=1 menu=[0-9]+ serial=1 items=31 ok
+log: MENU bar client=1 surface=16 where=floating item=5  ok
+check: (582,427) want 1d2230 got 1d2230 ok
+check: build/p009/menu-p003/floating.png 1280x800 PASS
+log: MENU open client=1 surface=16 item=2 depth=1 ok
+log: ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0 ok
+check: (582,427) want 3a5a98 got 1d2230 DIFFERS
+check: build/p009/menu-p003/selected.png 1280x800 FAIL
+log: MENU activate client=1 place=[0-9]+ item=23 action=5 .*via=pointer MISSING
+log: ZTERM MENU state selection=1 clipboard=0 MISSING
+log: MENU activate client=1 place=[0-9]+ item=20 action=3 .*via=shortcut MISSING
+log: ZTERM COPY bytes=[1-9] MISSING
+log: ZTERM MENU state selection=1 clipboard=1 MISSING
+log: MENU activate client=1 place=[0-9]+ item=53 action=16 .*via=key ok
+log: ZTERM COPY bytes=13 ok
+log: MENU activate client=1 place=[0-9]+ item=50 action=14 ok

@@ -25,3 +25,9 @@ Prerequisites: [p099](../phase099/phase.md) cleared、[p172](../phase172/phase.m
 [Guardrail](../../guardrail.md)、[C全文](../../coding-style.md)、[browser component全文](../../standards/browser-component.md)を適用。WS107の内容不変移動style例外は流用しない。着手時の設計/試験条件をphaseへ確定し、exact-scope Queue承認を得る。現時点は計画のみ、source変更/試験/Queue実行なし。
 
 Event ws074-dedicated-interop2025-20261002: ユーザーがAcid3のpixel単位100%・fail 0を指定。WS074のp100を強化。WS/branch側p100との照合はp172へ接続。GitHub publication保留。
+
+2026-10-03 JST / p172-prerequisite: [p172 whole clearance](../phase172/import/checkpoint98/README.md)と実際の最終browser shell出力を確認。p100はplannedのまま、固定Acid3の入力・runner・参照/viewport/font・比較方式・時間枠を定めた新Queueの選定/承認が必要。Acid3の実行やpixel達成は未実施。共有Queue ID衝突はAgent Aの投影待ち。
+
+2026-10-03 JST / next-queue-proposal: [90分のread-only Acid3 baseline案](browser3/next-queue-proposal.md)を準備。WPT固定commit/必要font/host browserの存在をread-onlyで確認。Queue IDはAgent Aの衝突解消・承認待ちで、実行なし。
+
+2026-10-03 04:45 UTC / p100-baseline-approval: userが[90分scope](browser3/next-queue-proposal.md)を「承認し、A に ID 割当を依頼する」と回答。[承認記録](browser3/approval-20261003.md)、[AへのID依頼](../../agents/browser3/next-id-request.md)。ID/Queue activation待ち、p100 planned・未着手、Acid3未実行。

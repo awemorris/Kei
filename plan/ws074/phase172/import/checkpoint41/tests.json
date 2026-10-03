@@ -1,0 +1,12 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review41/host-vm-factory"
+    ],
+    "exit": 0,
+    "stdout_file": "host-vm-factory.stdout",
+    "stderr_file": "host-vm-factory.stderr"
+  }
+]

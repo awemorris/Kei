@@ -570,19 +570,29 @@ network_wifi_card(
 		(void)se_button_draw(app, canvas, x + width - NETWORK_PAD - se_button_width(app, "Scan"), top + 16, "Scan", 0, on != 0 && network->request == KEILAND_NETWORK_REQUEST_NONE, NETWORK_SCAN);
 	}
 
-	/* Without the radio, or before a scan, a line of words. */
+	/* Without the radio, while it is off, or with nothing listed, a line of words. */
 	if (network->state.wifi == KEILAND_WIFI_ABSENT) {
 		(void)fm_text_draw_fit(app->text, canvas, x + NETWORK_PAD + 2, y + 22, "This computer has no Wi-Fi radio.", NETWORK_TEXT_ROW, 0, width - 2 * NETWORK_PAD, SE_COLOR_TEXT_SECONDARY);
 		y += 36;
 	} else if (on == 0) {
 		(void)fm_text_draw_fit(app->text, canvas, x + NETWORK_PAD + 2, y + 22, "Wi-Fi is off.", NETWORK_TEXT_ROW, 0, width - 2 * NETWORK_PAD, SE_COLOR_TEXT_SECONDARY);
 		y += 36;
+	} else if (shown == 0 &&
+		   network->scan_received != 0 &&
+		   network->request != KEILAND_NETWORK_REQUEST_SCAN) {
+		/* A scan came back empty: nothing is in reach. */
+		(void)fm_text_draw_fit(app->text, canvas, x + NETWORK_PAD + 2, y + 22, "No networks in reach.", NETWORK_TEXT_ROW, 0, width - 2 * NETWORK_PAD, SE_COLOR_TEXT_SECONDARY);
+		y += 36;
 	} else if (shown == 0) {
 		(void)fm_text_draw_fit(app->text, canvas, x + NETWORK_PAD + 2, y + 22, "No networks found yet.", NETWORK_TEXT_ROW, 0, width - 2 * NETWORK_PAD, SE_COLOR_TEXT_SECONDARY);
 		y += 36;
 	}
 
-	/* Each network listed, the line for a key under its network. */
+	/*
+	 * Each network listed, the line for a key under its network, and the
+	 * last message under that line, where the person typing reads it (a
+	 * long list would put the card's foot out of sight).
+	 */
 	for (index = 0; on != 0 && index < shown; index++) {
 		network_row_draw(app, canvas, &rows[index], x + 10, y, width - 20);
 		y += NETWORK_ROW;
@@ -590,6 +600,7 @@ network_wifi_card(
 		if (network->key_ssid[0] != '\0' && differs == 0) {
 			network_key_draw(app, canvas, x + 10, y, width - 20);
 			y += NETWORK_KEY_LINE;
+			y = network_message_draw(app, canvas, x + NETWORK_PAD + 2, y, width - 2 * NETWORK_PAD);
 		}
 	}
 
@@ -608,8 +619,9 @@ network_wifi_card(
 		y += 40;
 	}
 
-	/* The last message. */
-	(void)network_message_draw(app, canvas, x + NETWORK_PAD + 2, y, width - 2 * NETWORK_PAD);
+	/* The last message at the card's foot, unless it stands under the key's line of a listed network. */
+	if (form == 0 || on == 0)
+		(void)network_message_draw(app, canvas, x + NETWORK_PAD + 2, y, width - 2 * NETWORK_PAD);
 
 	/* The edge below the card. */
 	return top + height;
@@ -976,7 +988,7 @@ network_usage_card(
 	/* The card. */
 	network = &app->network;
 	height = NETWORK_HEADER + NETWORK_GRAPH_HEIGHT + 34;
-	y = network_header(app, canvas, x, top, width, height, "Network Activity", "Every interface's traffic while this window is open.");
+	y = network_header(app, canvas, x, top, width, height, "Network Activity", "The graph shows every interface's traffic since this window opened.");
 
 	/* The legend at the left: received and sent since the computer started. */
 	legend = 190;

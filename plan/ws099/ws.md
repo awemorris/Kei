@@ -68,9 +68,9 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 | [ws099-p016](phase016/phase.md) | zdesktop の buffer の import の短縮（ws094-p009 の発見: 1 枚約 210 ms、うち layout の変更の submit と `vkQueueWaitIdle` が 100 ms。次の合成の command buffer の barrier にまとめる）。app の起動から最初の frame まで（C5 と WS094 の (a')）を前後で測る。QEMU と 5330 | cleared（2026-09-30、QEMU: WS094 (a') 2977 → 2652 ms、App Home → Files の最初の frame 2655 → 2407 ms、Model viewer 4439 → 4182 ms。C9・WS079-p010・boot PASS。5330 は lock が使用中で未実施） | —（p015 と file を分ける: import.c・compose.c の周り。display.c・shell.c・seat.c・backdrop.c は他の Phase が作業中） |
 | [ws099-p012](phase012/phase.md) | C1 の 5330 の目視（ユーザー）と、5330 での BUG-119（電源断）・BUG-122 の確かめ。B4 | planned（agent 1h + ユーザー 15 分。WS094 p012 などと同じ回にまとめられる） | p004・p009・p010、ws073-p043、ユーザーの時間 |
 | [ws099-p014](phase014/phase.md) | C10 i915 passthroughの60分連続操作。試験script/短時間試走とsoak | cleared（q578、i915 passthrough: 3602秒/278周、errors0/restarts0、main最終確認） | p001/p002/WS075 hdmi-h4の実出力 |
-| [ws099-p017](phase017/phase.md) | BUG-125のmove/resize再現と試験同期の切り分け。実compositor defectは別Phaseへ | uncleared（q577 FAIL保持、q583部分診断cleared/非再現、q589準備のみunclearedで終端） | p003/p007のC9実出力 |
+| [ws099-p017](phase017/phase.md) | BUG-125のmove/resize再現と試験同期の切り分け。実compositor defectは別Phaseへ | cleared（2026-10-03 Q1、p020・p024 の証拠） | p003/p007のC9実出力 |
 | [ws099-p019](phase019/phase.md) | ユーザー追加: 白樺・湖と発見された抽象版を共通source/3 OS release dataへ。ぼやけた湖を起動default、既存背景の選択を維持 | planned（2026-10-02 ベータ1の計画で再開可に。user の決定は済み、exact scope は [再開資料](../ws094/phase007/q593-resume.md)。3h。q593 の予約 ID の扱いは Q1） | 旧p061資産・q588安全な終端 |
-| [ws099-p020](phase020/phase.md) | **BUG-125（blocking）**: p076 の popup の 2 症状と left resize の settle の原因を guest で弁別し、compositor（と必要なら試験の同期）を直す。B1 | planned（4h、P の新しい attempt） | p017 の資産（q589 の helper）、Venus の renderer |
+| [ws099-p020](phase020/phase.md) | **BUG-125（blocking）**: p076 の popup の 2 症状と left resize の settle の原因を guest で弁別し、compositor（と必要なら試験の同期）を直す。B1 | cleared（2026-10-03 Q1、BUG-125 resolved） | p017 の資産（q589 の helper）、Venus の renderer |
 | [ws099-p021](phase021/phase.md) | C2 の geometry（q538: top-right の増分 20、bottom-left/left の settle）と BUG-127（最小化の直後に窓が残る）。B2 | planned（3h） | p020 cleared（同じ shell.c の周り） |
 | [ws099-p022](phase022/phase.md) | WS099 の全文規約と回帰（WS の最後）。B5 | planning（最後。p019〜p021 の後） | p019・p020・p021、p012 |
 
@@ -140,3 +140,7 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 2026-10-02 / b3-q589-user-wrap-20261002: [p017 q589終端結果](phase017/q589-result.md)を回収、準備/hostチェックのみでguest実測未実行のためattemptとwhole p017はuncleared。user指示でB3終了、BUG-125 tracking/WS incomplete維持。証拠と再開手順は保存済み。p019は最新user全agent終了指示により未着手で再開待ち。
 
 2026-10-02 / ws099-beta1-plan: fg019 の計画エージェントがベータ1 の到達目標 B1〜B5 と p020（BUG-125 の直し、blocking）・p021（C2・BUG-127）・p022（全文規約と回帰）を追加。p019 は既存の user の決定と q593 の再開資料で planned に。p013 は ws073-p043 で不要と注記。C1〜C10 と既存の Phase の結果は不変。Queue は未投入。
+
+2026-10-03 / p017・p020: Q1 判定で cleared、BUG-125 resolved（user「Q1の判断で閉じられるものは閉じてください。」）。p021（C2 ×3）は T1-005 の結果で判定する。
+
+2026-10-03 / C5: 2026-10-03 user「C5の200msは問題視しません。clearでOKです。理由は、あとでパフォーマンス改善のチケットを作ってまとめて改善するからです。」 → T1-006 の C5（QEMU、1 回目だけ first 201〜202 ms・gap 243 ms、2・3 回目は 92〜95 ms）を WS099 の受け入れでは PASS と扱う。速さは F-072 でまとめて改善する。

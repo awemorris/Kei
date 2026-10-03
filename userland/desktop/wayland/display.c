@@ -227,6 +227,7 @@ zwl_top_window(
 	struct zwl_client *client;
 	struct zwl_object *surface;
 	struct zwl_object *top;
+	int desktop_surface;
 
 	/* The highest map order on the desktop shown wins. */
 	top = NULL;
@@ -240,7 +241,8 @@ zwl_top_window(
 				continue;
 
 			/* The desktop's icons are never a window, so a closed last window does not give them the keyboard (desktop.c). */
-			if (zwl_desktop_is(surface))
+			desktop_surface = zwl_desktop_is(surface);
+			if (desktop_surface)
 				continue;
 			if (top == NULL || surface->map_order > top->map_order)
 				top = surface;

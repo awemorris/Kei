@@ -51,7 +51,7 @@ status=0
 for command in \
 	'id' \
 	'net wifi list' \
-	'net wifi set-key P018-FAKE-SSID p018-fake-passphrase auto' \
+	'net wifi add P018-FAKE-SSID --password p018-fake-passphrase --auto yes' \
 	'net wifi connect P018-FAKE-SSID' \
 	'net wifi disable' \
 	'net wifi enable' \

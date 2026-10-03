@@ -1,0 +1,86 @@
+[
+  {
+    "name": "host-frame-lifetime",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-frame-lifetime",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "frame lifetime checks: 148/148 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-frame-viewport",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-frame-viewport",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "native iframe viewport: 12/12 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-realms",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-realms",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "PASS child arguments and this\nPASS child closure environment\nPASS child constructor\nPASS child derived constructor\nPASS derived realm\nPASS derived target\nPASS derived prototype\nPASS foreign new.target\nPASS foreign target identity\nPASS foreign target prototype\nPASS returning reentry\nPASS native state on reentry\nPASS child getter throw\nPASS child setter throw\nPASS foreign generator\nPASS foreign generator throw\nPASS foreign async promise\nPASS bidirectional global\nPASS bidirectional exception\nPASS stack limit across realms\nPASS recovered after stack limit\nPASS async callback realm\nPASS target object fallback\nPASS target array fallback\nPASS target error fallback\nPASS VM call global\nPASS VM script exception\nPASS VM native exception\nPASS VM constructor exception\nPASS native failure unwind\nrealm checks: 30/30 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-realm-retirement",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-realm-retirement",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "retired primary realm tracing: PASS\n",
+    "stderr": ""
+  },
+  {
+    "name": "frame-load",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-frame-load-tests.py",
+      "--program",
+      "build/browser3-p172/plain/host-frame-load"
+    ],
+    "exit": 0,
+    "stdout": "native child loading: 52/52 passed; error=0\n",
+    "stderr": ""
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n",
+    "stderr": ""
+  }
+]

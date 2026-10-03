@@ -1,0 +1,73 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "python3",
+      "plan/ws074/tests/run-resource-tests.py",
+      "--program",
+      "/home/awe/zedBSD-claude2/build/browser3-p172/review18/resource-after"
+    ],
+    "exit": 0,
+    "stdout_file": "resource-after.stdout",
+    "stderr_file": "resource-after.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "python3",
+      "plan/ws074/tests/run-resource-tests.py",
+      "--program",
+      "/home/awe/zedBSD-claude2/build/browser3-p172/plain/host-resource"
+    ],
+    "exit": 0,
+    "stdout_file": "resource-plain.stdout",
+    "stderr_file": "resource-plain.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-svg-text"
+    ],
+    "exit": 0,
+    "stdout_file": "host-svg-text.stdout",
+    "stderr_file": "host-svg-text.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-viewport"
+    ],
+    "exit": 0,
+    "stdout_file": "host-frame-viewport.stdout",
+    "stderr_file": "host-frame-viewport.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-link"
+    ],
+    "exit": 2,
+    "stdout_file": "host-link.stdout",
+    "stderr_file": "host-link.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-link",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout_file": "host-link-corrected.stdout",
+    "stderr_file": "host-link-corrected.stderr",
+    "corrects": "prior missing fixture arguments; initial usage exit2 retained"
+  }
+]

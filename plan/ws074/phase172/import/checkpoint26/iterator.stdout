@@ -1,0 +1,60 @@
+PASS initial reference before root
+PASS default unsigned mask and null filter
+PASS NodeIterator relevant prototype
+PASS initial previous exhausted preserves cursor
+PASS root is included first
+PASS live forward preorder
+PASS forward exhaustion retains final cursor
+PASS reverse preorder includes current first
+PASS reverse exhaustion retains before root
+PASS direction changes visit same reference
+PASS detach is harmless
+PASS zero mask suppresses callbacks
+PASS explicit undefined mask defaults
+PASS unsigned mask coerces once
+PASS negative mask wraps uint32
+PASS hidden nodes do not call filter
+PASS REJECT still descends for NodeIterator
+PASS SKIP descends for NodeIterator
+PASS factory preserves filter without invoking it
+PASS object operation this
+PASS callback object method invoked
+PASS acceptNode dynamically replaced
+PASS dynamic getter and unsigned short conversion
+PASS filter exact exception preserves reference
+PASS filter recovers after exception
+PASS return conversion exact exception
+PASS return conversion recovers
+PASS reentry throws without destroying outer candidate
+PASS active flag resets after callback
+PASS missing acceptNode throws TypeError
+PASS noncallable acceptNode throws TypeError
+PASS primitive filter rejected
+PASS root required
+PASS fake root brand rejected
+PASS factory Document brand required
+PASS navigation native brand required
+PASS detach native brand required
+PASS accessor native brand required
+PASS illegal iterator constructor
+PASS all cursor attributes readonly
+PASS after reference removal falls back to parent
+PASS after removal resumes following subtree
+PASS before reference removal prefers following outside subtree
+PASS before replacement position visits following reference
+PASS last before removal falls back to preceding deepest descendant
+PASS fallback cursor preserves both directional semantics
+PASS removing iterator root preserves root tree cursor
+PASS removing root ancestor preserves iterator positions
+PASS removed original candidate can be accepted and returned
+PASS accepted removed node commits adjusted candidate
+PASS accepted detached candidate resumes live root
+PASS rejected removed candidate resumes corrected position
+PASS removal during throwing filter preserves permanent repair
+PASS throw after removal recovers with corrected state
+PASS moving reference subtree repairs before reinsert
+PASS finite traversal follows repeated callback regrafting
+PASS regrafting ends after seven accepted and seven skipped live nodes
+PASS borrowed factory prototype follows receiver Document
+PASS child XML prototype snapshot used
+PASS removed child factories remain usable

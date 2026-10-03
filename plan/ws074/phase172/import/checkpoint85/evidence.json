@@ -1,0 +1,30 @@
+{
+  "queue": "q597",
+  "checkpoint": 85,
+  "source": "userland/desktop/libbrowser/bind/event.c",
+  "source_sha256": "d50480a135da16cd308cc92c64d6366b853ba01bec61e44b55c3a6d55e03e040",
+  "baseline": "8095ab79815b529ec339bc8b06371bb60f807b95",
+  "reviewed": 204,
+  "total": 209,
+  "remaining": 5,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "event_permitted_forward_cleanup_gotos": 15,
+    "other_findings": 0
+  },
+  "clang_format": "19.1.7 on copies",
+  "tests": {
+    "click": "10/10 passed",
+    "js-tests": "js-tests 14/14",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "limits": [
+    "No forced GC through every event constructor getter/dispatch callback window; explicit root lifecycle reviewed.",
+    "KeyboardEvent/WheelEvent callers in bind/input.c need separate authorized scope to root returned wrappers through additional reentrant getters.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

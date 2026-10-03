@@ -27,23 +27,8 @@ GUEST_RUNTIME="${GUEST_RUNTIME:-$(pwd)/build/ws035-sq-run}"
 export GUEST_RUNTIME
 out=${1:-build/ws035-p076}
 mkdir -p "$out"
-# Runs a guest command within a host deadline per attempt (seconds); when ssh itself fails (status 255: the guest's
-# sshd did not answer in time, BUG-135), tries again, three attempts in all.  The command's own status is kept.  Each
-# retry is printed (to stderr), so that a harness failure is told from the compositor's (ws099-p020).
-guest_retry() {
-	retry_attempt=1
-	while :; do
-		retry_reply=$(timeout "$1" python3 plan/tools/guest/guest.py run "$2" 2>&1)
-		retry_status=$?
-		[ "$retry_status" -ne 255 ] && break
-		[ "$retry_attempt" -ge 3 ] && break
-		echo "harness: ssh failed, attempt $retry_attempt: $(printf '%s\n' "$retry_reply" | tail -1)" >&2
-		retry_attempt=$((retry_attempt + 1))
-	done
-	[ "$retry_status" -eq 255 ] && echo "harness: ssh failed, attempt $retry_attempt (last): $(printf '%s\n' "$retry_reply" | tail -1)" >&2
-	[ -n "$retry_reply" ] && printf '%s\n' "$retry_reply"
-	return "$retry_status"
-}
+# The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p020/p023).
+. plan/ws099/tests/guest-retry.sh
 guest() { guest_retry 90 "$1"; }
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }

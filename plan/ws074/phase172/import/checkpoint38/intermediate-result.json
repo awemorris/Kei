@@ -1,0 +1,7 @@
+{
+  "result": "resolved before final verification",
+  "failed_log": "formatter-restore-failed.log",
+  "reason": "Temporary formatting restoration pattern duplicated source around local constant initializer; compile rejected syntax. Restored only these owned edits from committed originals, reapplied intended guards/cleanup, narrowed restoration to complete initializer lines.",
+  "final_compile_exit": 0,
+  "final_native_checks": 29
+}

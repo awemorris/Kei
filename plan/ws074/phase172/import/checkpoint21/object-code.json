@@ -1,0 +1,22 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/dom/serialize.c",
+    "sha256": "7645a22d6e5403d15581fb14a7d21bd93045bf0fcdcb65a898c3c376fb4a5e50",
+    "object": "libbrowser_dom_serialize.o",
+    "text_sha256": "dd520ce4923e5eac68b682057bc175d283dadedd808999d25a07ccf5000a91a9",
+    "final_sha256": "7a9baeb052861cab4e6fc35b3b15ff8351e5d15dbb99903d5b79de908c3c83a4",
+    "final_text_sha256": "2e21ac179acafd72582b4b36698bffe430480585fdf9552bb6689dd87ed2eee8",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  },
+  {
+    "path": "userland/desktop/libbrowser/js/builtin_symbol.c",
+    "sha256": "9e3d4477b0248dccefe68d31d96edc90ab620072e985b306468c038455ed01f9",
+    "object": "libbrowser_js_builtin_symbol.o",
+    "text_sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d",
+    "final_sha256": "15a6ad149aa930a2c23d7aae5ede4cee3a21e2062dbde4e7ba96deb4121014dd",
+    "final_text_sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d",
+    "text_equal": true,
+    "C_string_literals_equal": true
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "queue": "q597",
+  "checkpoint": 69,
+  "source": "userland/desktop/libbrowser/bind/window.c",
+  "source_sha256": "658998bee4858f01595a4ad7cda499414c4462709fa7cd14c6703667a12d0175",
+  "baseline": "59460d8c6fb8955441db7114595be44e0d7f3049",
+  "reviewed": 188,
+  "total": 209,
+  "remaining": 21,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 8,
+    "all": "permitted forward cleanup jumps"
+  },
+  "tests": {
+    "frame-lifetime": "148/148",
+    "realms": "30/30",
+    "dom-tests": "23/23",
+    "settle": "14 runtime + 8 diagnostic",
+    "postMessage": "four accepted targetOrigin paths, one rejected"
+  },
+  "limits": [
+    "No isolated forced-GC injection inside postMessage was performed; ownership was reviewed statically and behavioral tests passed.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

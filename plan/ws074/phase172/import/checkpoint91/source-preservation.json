@@ -1,0 +1,7 @@
+{
+  "source": "userland/desktop/libbrowser/js/builtin_array.c",
+  "before_sha256": "1636395b0fdcdf4d62181035612acfc42c353f3a39fb2bb6a71e6ce3f53753e9",
+  "after_sha256": "10f74c7e8019705b43a96e8ff8651ce92cb77f95bdb5727ec359fd4f36424f25",
+  "C_string_literals_changed": false,
+  "public_ABI_changed": false
+}

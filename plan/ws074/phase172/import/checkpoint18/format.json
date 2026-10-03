@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/page/link.c",
+      "formatted_sha256": "557881869231b0996eedb67a790e47282a5a6efd9351bcf5956499590d53b5dd",
+      "final_sha256": "c6d05d44b74e504aa351dd598889b2a95138958c8f491bcc2523e43c7912ce1b",
+      "restorations": "definition argument tabs and compound condition clause layout"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/svg-text.c",
+      "formatted_sha256": "a40bf1b97afa0eeb332595afc15e6bdfbdfc07690e9db913c046a3bfd8056435",
+      "final_sha256": "665c2dceda133439263a59de764933bfd3ed68c18e129ede867627b27ca4af82",
+      "restorations": "definition argument tabs and compound condition clause layout"
+    },
+    {
+      "path": "plan/ws074/tests/host-resource.c",
+      "formatted_sha256": "6631f3d736e3925f629b9b4d987cc1f6b4cd9bf2b7b80da52e127457f379644d",
+      "final_sha256": "c2d0dcd5f43b01b174a46ba53bd9f8df032017e01fad92d5ec3e2bfe9d27991f",
+      "restorations": "definition argument tabs and compound condition clause layout"
+    }
+  ]
+}

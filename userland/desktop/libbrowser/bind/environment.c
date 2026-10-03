@@ -2660,11 +2660,11 @@ bind_environment_checkpoint(
 		if (observer->records == NULL)
 			continue;
 		records = observer->records;
-		vm_heap_remove_root(window->realm->heap, &observer->records);
-		observer->records = NULL;
 		status = vm_enqueue_job(window->realm, vm_value_cell(observer->callback), vm_value_cell(records));
 		if (status != 0)
 			return status;
+		vm_heap_remove_root(window->realm->heap, &observer->records);
+		observer->records = NULL;
 		*queued = 1;
 	}
 

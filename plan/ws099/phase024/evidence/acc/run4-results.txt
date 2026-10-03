@@ -1,0 +1,14 @@
+C3 p138 PASS seconds=36 p138: PASS 
+C3 c3-swipe-back PASS seconds=50 c3-swipe-back: PASS 
+C4 p137 PASS seconds=97 p137: PASS 
+C8 p134 PASS seconds=74 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p052 PASS seconds=31 p052: PASS 
+C9 p053 PASS seconds=80 p053: PASS 
+C9 p072 PASS seconds=51 zdesktop-p072: PASS (and judge the screens) 
+C9 p076 PASS seconds=67 p076: PASS 
+C9 p126 PASS seconds=107 zdesktop-p126: status=0 
+C9 p128 PASS seconds=48 zdesktop-p128: status=0 
+C9 p134 PASS seconds=79 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p137 PASS seconds=50 p137: PASS 
+C9 p138 PASS seconds=35 p138: PASS 
+C9 cursor-owner PASS seconds=23 cursor-owner: PASS 

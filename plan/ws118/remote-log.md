@@ -27,7 +27,7 @@ root の crontab（`plan/ws118/tests/root-crontab`）が 1 分ごとに kernel �
 - 固定 IP の変種: `build-remote-log-image.sh C build/rl-c-fixed 10.0.10.50/24 10.0.10.1` のように address・gateway（・DNS）を付けると、
   `ue0` を固定 IP にした `/etc/net.conf` が image に入る。後から変えるときは、USB の root の UFS の `/etc/net.conf` を書き換える
   （書き換えは zedBSD か UFS を書ける環境で。ESP の `zedbsd.cfg` では変えられない）。
-- 無線（Archer T3U、RTL8822BU）を使うとき: 有線が無いときだけ。5320 で root として `net wifi set-key 'SSID' 'PASSPHRASE' auto` を打つ
+- 無線（Archer T3U、RTL8822BU）を使うとき: 有線が無いときだけ。5320 で root として `net wifi add 'SSID'` を打ち、聞かれた鍵を入れる（2026-10-03 から set-key は add・modify・delete に置き換わった）
   （鍵は root の store `/etc/wifi.conf` に入り、起動時の `net startup` が自動で接続する）。画面に頼れないので、一度有線か C の画面の console で
   入れておく。鍵は plan・git・log に書かない。
 

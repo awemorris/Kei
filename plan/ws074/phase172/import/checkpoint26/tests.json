@@ -1,0 +1,39 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-traversal"
+    ],
+    "exit": 0,
+    "stdout_file": "traversal.stdout",
+    "stderr_file": "traversal.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-removal"
+    ],
+    "exit": 0,
+    "stdout_file": "removal.stdout",
+    "stderr_file": "removal.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/node-iterator-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "iterator.stdout",
+    "stderr_file": "iterator.stderr",
+    "pass_lines": 60,
+    "fail_lines": 0
+  }
+]

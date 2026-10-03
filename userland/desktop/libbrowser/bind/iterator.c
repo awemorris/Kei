@@ -36,13 +36,6 @@ struct iterator_state {
 
 static void iterator_trace(struct vm_heap *heap, struct vm_cell *cell);
 static void iterator_finalize(struct vm_heap *heap, struct vm_cell *cell);
-static void iterator_removed(void *context, struct dom_node *removed);
-static void iterator_adjust(struct iterator_state *state, struct iterator_pointer *pointer, struct dom_node *removed);
-static struct dom_node *iterator_following(struct dom_node *node, struct dom_node *root, int descendants);
-static struct dom_node *iterator_preceding(struct dom_node *node, struct dom_node *root);
-static int iterator_this(struct vm_realm *realm, vm_value this_value, struct iterator_state **state);
-static int iterator_filter(struct vm_realm *realm, struct iterator_state *state, struct dom_node *node, uint32_t *accepted);
-static int iterator_move(struct vm_realm *realm, vm_value this_value, int forward, vm_value *result);
 static int iterator_root(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int iterator_reference(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int iterator_before(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -53,30 +46,35 @@ static int iterator_previous(struct vm_realm *realm, vm_value this_value, const 
 static int iterator_detach(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 
 /* The native state owns its weak token and traces every in-flight Node edge. */
-static const struct vm_cell_type iterator_type = { "node-iterator", iterator_trace, iterator_finalize };
+static const struct vm_cell_type iterator_type = {"node-iterator", iterator_trace, iterator_finalize};
 
 /* Every cursor attribute is readonly, including the permanent reference position. */
 static const struct bind_attribute iterator_attributes[] = {
-	{ "root", iterator_root, NULL },
-	{ "referenceNode", iterator_reference, NULL },
-	{ "pointerBeforeReferenceNode", iterator_before, NULL },
-	{ "whatToShow", iterator_mask, NULL },
-	{ "filter", iterator_callback, NULL },
-	{ NULL, NULL, NULL }
-};
+    {"root", iterator_root, NULL},
+    {"referenceNode", iterator_reference, NULL},
+    {"pointerBeforeReferenceNode", iterator_before, NULL},
+    {"whatToShow", iterator_mask, NULL},
+    {"filter", iterator_callback, NULL},
+    {NULL, NULL, NULL}};
 
 /* Legacy detach is deliberately harmless while traversal remains fully usable. */
 static const struct bind_operation iterator_operations[] = {
-	{ "nextNode", 0, iterator_next },
-	{ "previousNode", 0, iterator_previous },
-	{ "detach", 0, iterator_detach },
-	{ NULL, 0, NULL }
-};
+    {"nextNode", 0, iterator_next},
+    {"previousNode", 0, iterator_previous},
+    {"detach", 0, iterator_detach},
+    {NULL, 0, NULL}};
 
 /* Documents construct native iterators without exposing a callable constructor. */
 const struct bind_interface bind_node_iterator_interface = {
-	"NodeIterator", BIND_NO_PARENT, 0, NULL, iterator_attributes, iterator_operations, NULL
-};
+    "NodeIterator", BIND_NO_PARENT, 0, NULL, iterator_attributes, iterator_operations, NULL};
+
+static void iterator_removed(void *context, struct dom_node *removed);
+static void iterator_adjust(struct iterator_state *state, struct iterator_pointer *pointer, struct dom_node *removed);
+static struct dom_node *iterator_following(struct dom_node *node, struct dom_node *root, int descendants);
+static struct dom_node *iterator_preceding(struct dom_node *node, struct dom_node *root);
+static int iterator_this(struct vm_realm *realm, vm_value this_value, struct iterator_state **state);
+static int iterator_filter(struct vm_realm *realm, struct iterator_state *state, struct dom_node *node, uint32_t *accepted);
+static int iterator_move(struct vm_realm *realm, vm_value this_value, int forward, vm_value *result);
 
 /*
  * Creates a NodeIterator with a weak subscription to its root's actual Document.
@@ -98,6 +96,7 @@ bind_create_node_iterator(
 	struct iterator_state *state;
 	vm_value filter;
 	vm_value snapshot;
+	vm_value argument;
 	uint32_t mask;
 	int valid;
 	int status;
@@ -110,11 +109,16 @@ bind_create_node_iterator(
 	/* Another native Node kind cannot act as a Document factory receiver. */
 	if (receiver->type != DOM_DOCUMENT) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the incompatible operation is reported as a VM exception. */
+		return 0;
 	}
 
 	/* The required root accepts any actual Node, including another Document's node. */
-	status = bind_argument_node(realm, js_argument(args, count, 0), &root);
+	argument = js_argument(args, count, 0);
+	status = bind_argument_node(realm, argument, &root);
 	if (status != 0)
 		return status;
 
@@ -134,7 +138,11 @@ bind_create_node_iterator(
 		valid = vm_value_is_object(filter);
 		if (!valid) {
 			status = vm_throw_type_error(realm, "The filter is not an object.");
-			return status;
+			if (status != 0)
+				return status;
+
+			/* Succeeded: the incompatible operation is reported as a VM exception. */
+			return 0;
 		}
 	}
 
@@ -144,6 +152,8 @@ bind_create_node_iterator(
 		status = vm_object_get(document->binding_prototypes, vm_value_int32(BIND_NODE_ITERATOR), &snapshot);
 		if (status != 0)
 			return status;
+
+		/* Uses the receiver's retained relevant-realm prototype. */
 		prototype = (struct vm_object *)vm_value_as_cell(snapshot);
 	} else {
 		/* Borrowed methods use the receiver Document owner rather than the root owner. */
@@ -169,6 +179,8 @@ bind_create_node_iterator(
 	wrapper = vm_object_create(document->heap, prototype);
 	if (wrapper == NULL)
 		return ENOMEM;
+
+	/* Publishes native state only through its correctly branded wrapper. */
 	wrapper->kind = VM_KIND_PLATFORM;
 	wrapper->internal = vm_value_cell(state);
 
@@ -206,6 +218,9 @@ iterator_trace(
 	/* The original callback argument remains independent of its adjusted position. */
 	if (state->pending != NULL)
 		vm_heap_mark(heap, &state->pending->cell);
+
+	/* Succeeded: all permanent and in-flight native edges are marked. */
+	return;
 }
 
 /* Unsubscribes using only separately allocated tokens during any heap teardown order. */
@@ -354,7 +369,11 @@ iterator_this(
 	valid = vm_value_is_object(this_value);
 	if (!valid) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the incompatible operation is reported as a VM exception. */
+		return 0;
 	}
 
 	/* Fake prototype inheritors and other object kinds have no iterator brand. */
@@ -362,14 +381,22 @@ iterator_this(
 	valid = vm_value_is_cell(wrapper->internal);
 	if (wrapper->kind != VM_KIND_PLATFORM || !valid) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the incompatible operation is reported as a VM exception. */
+		return 0;
 	}
 
 	/* Other native platform objects cannot substitute their own internal cell. */
 	cell = vm_value_as_cell(wrapper->internal);
 	if (cell->type != &iterator_type) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the incompatible operation is reported as a VM exception. */
+		return 0;
 	}
 
 	/* Succeeded: this wrapper owns the genuine native iterator state. */
@@ -404,9 +431,13 @@ iterator_filter(
 	/* The active guard covers operation lookup, invocation and unsigned-short conversion. */
 	state->active = 1;
 	status = bind_filter_callback(realm, state->filter, node, accepted);
-	state->active = 0;
-	if (status != 0)
+	if (status != 0) {
+		state->active = 0;
 		return status;
+	}
+
+	/* Unwinds the guard after a successful callback and conversion. */
+	state->active = 0;
 
 	/* Succeeded: the shared callback operation produced a converted decision. */
 	return 0;
@@ -433,7 +464,11 @@ iterator_move(
 	/* Nested traversal cannot overwrite an outer operation's candidate and pending edge. */
 	if (state->active) {
 		status = bind_throw_dom(realm, "InvalidStateError", "The iterator filter is active.");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the incompatible operation is reported as a VM exception. */
+		return 0;
 	}
 
 	/* Each attempt begins with a distinct copy of the permanent reference position. */
@@ -469,12 +504,16 @@ iterator_move(
 		/* Wrapping the accepted original node happens before publishing adjusted reference state. */
 		if (accepted == 1U) {
 			status = bind_wrap(bind_window_of(realm), node, result);
-			if (status == 0)
-				state->reference = state->candidate;
+			if (status != 0) {
+				state->candidate.node = NULL;
+				state->pending = NULL;
+				return status;
+			}
+
+			/* Publishes the repaired reference only after wrapping succeeds. */
+			state->reference = state->candidate;
 			state->candidate.node = NULL;
 			state->pending = NULL;
-			if (status != 0)
-				return status;
 
 			/* Succeeded: a possibly detached original node and its repaired cursor are available. */
 			return 0;

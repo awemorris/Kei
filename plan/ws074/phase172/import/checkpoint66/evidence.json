@@ -1,0 +1,31 @@
+{
+  "queue": "q597",
+  "checkpoint": 66,
+  "source": "userland/desktop/libbrowser/layout/box.c",
+  "source_sha256": "d746b18fca24166ba111c18f8f64fcd0a2f9709c96db67563690324d4e0fe12e",
+  "baseline": "d7c44f6aa7d33cde9d8346353f7f5357cd11a43e",
+  "reviewed": 185,
+  "total": 209,
+  "remaining": 24,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "tests": {
+    "unit conversion": "5 expected values under UBSan float-cast-overflow",
+    "host-relayout": "21 checks, 0 failed",
+    "host-position": "22 checks, 0 failed",
+    "host-table-row": "75/75",
+    "dom-tests": "23/23",
+    "style goldens": "4 exact byte matches"
+  },
+  "limits": [
+    "Only the conversion function is protected for extreme inputs; downstream geometry arithmetic has separate limits.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

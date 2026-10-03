@@ -1907,6 +1907,13 @@ zwl_glass_mapped(
 	if (!launched)
 		return;
 
+	/* A window that came late is named as the launch's (the tests find it so) but does not grow. */
+	if (launched == 2) {
+		body_rect(server, surface, &to);
+		printf("ZWL GLASS launch-late surface=%u from=%d,%d to=%d,%d size=%dx%d\n", surface->id, from[0], from[1], to.x, to.y, to.width, to.height);
+		return;
+	}
+
 	/* From the icon's rectangle to the window's own. */
 	body_rect(server, surface, &to);
 	memcpy(server->anim_from, from, sizeof(server->anim_from));

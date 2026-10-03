@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/select.c",
+      "formatted_sha256": "9e507af6ff8bb2215db9ebf1a940fed9db3063472af63fd4e77a803f1841a0f1",
+      "final_sha256": "80fbe4baa30cfc48997cb66898574b34a37e4b60f41eead0ec6daacde74df016",
+      "restorations": "definition argument tabs and compound layout"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/table.c",
+      "formatted_sha256": "943ff60a80d63ba052d43cda2cc912f203fae316033e05ef600943e9cf0e01e1",
+      "final_sha256": "8f4cc0a9baebe90a01d0de73d4acffc9b399015b168d2071ca76d751c2ebcfdd",
+      "restorations": "definition argument tabs and compound layout"
+    }
+  ]
+}

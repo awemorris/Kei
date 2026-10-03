@@ -1,0 +1,12 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/frame-load.c",
+    "sha256": "34aa534a4dd6eaf3e57004987b23786ec508267f8da1ad9b8c27a3f3b467c60b",
+    "object": "libbrowser_page_frame-load.o",
+    "text_sha256": "2aab38785a70c9370efab252419822ad460de5b23d11fbddc89ef3e3ccf2b8d9",
+    "final_sha256": "24643fc375d0ada1ea43b3305f062883d59342b82ac1429055c56f0828bd5a74",
+    "final_text_sha256": "3aa4ee2cd257b16b7e6926d8a18b86d2a128eb63df882fa712162856b599629d",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  }
+]

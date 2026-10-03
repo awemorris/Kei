@@ -99,7 +99,7 @@ logout
 serial --user kei login
 step kei 'id'
 step kei 'net wifi list'
-step kei 'net wifi set-key P019-FAKE-SSID p019-fake-passphrase auto'
+step kei 'net wifi add P019-FAKE-SSID --password p019-fake-passphrase --auto yes'
 step kei 'net wifi connect P019-FAKE-SSID'
 step kei 'net wifi disable'
 step kei 'net wifi connect P019-FAKE-SSID'
@@ -114,5 +114,5 @@ ZEDBSD_GUEST_PASSWORD=kei serial --user guest login
 step guest 'id'
 step guest 'net wifi list'
 step guest 'net wifi disable'
-step guest 'net wifi set-key P019-FAKE-SSID p019-fake-passphrase auto'
+step guest 'net wifi add P019-FAKE-SSID --password p019-fake-passphrase --auto yes'
 step guest 'net wifi connect P019-FAKE-SSID'

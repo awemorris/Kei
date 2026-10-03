@@ -22,20 +22,19 @@
 
 /* The well-known symbols as properties of Symbol, in the order of enum vm_well_known. */
 static const char *const symbol_names[VM_SYMBOLS] = {
-	"asyncIterator",
-	"hasInstance",
-	"isConcatSpreadable",
-	"iterator",
-	"match",
-	"matchAll",
-	"replace",
-	"search",
-	"species",
-	"split",
-	"toPrimitive",
-	"toStringTag",
-	"unscopables"
-};
+    "asyncIterator",
+    "hasInstance",
+    "isConcatSpreadable",
+    "iterator",
+    "match",
+    "matchAll",
+    "replace",
+    "search",
+    "species",
+    "split",
+    "toPrimitive",
+    "toStringTag",
+    "unscopables"};
 
 static int symbol_call(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int symbol_for(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -47,8 +46,8 @@ static int symbol_this(struct vm_realm *realm, vm_value value, struct vm_symbol 
 static int symbol_species(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 
 /*
- * Installs Symbol: the function (which new cannot use) with the well-known
- * symbols, for and keyFor, and its prototype.
+ * Installs Symbol and its prototype, registry methods and well-known symbols.
+ * The function cannot be used as a constructor.
  */
 int
 js_builtin_install_symbol(
@@ -66,6 +65,8 @@ js_builtin_install_symbol(
 	prototype = vm_object_create(realm->heap, realm->object_prototype);
 	if (prototype == NULL)
 		return ENOMEM;
+
+	/* Roots the prototype before constructing its public function. */
 	realm->intrinsics[VM_INTRINSIC_SYMBOL_PROTOTYPE] = prototype;
 	error = js_builtin_constructor(realm, "Symbol", 0, symbol_call, NULL, prototype, &constructor);
 	if (error != 0)
@@ -82,19 +83,30 @@ js_builtin_install_symbol(
 	registry = vm_object_create(realm->heap, NULL);
 	if (registry == NULL)
 		return ENOMEM;
+
+	/* Roots the private registry before publishing methods that use it. */
 	realm->intrinsics[VM_INTRINSIC_SYMBOL_REGISTRY] = registry;
 	error = js_builtin_method(realm, &constructor->object, "for", 1, symbol_for);
-	if (error == 0)
-		error = js_builtin_method(realm, &constructor->object, "keyFor", 1, symbol_key_for);
+	if (error != 0)
+		return error;
+
+	/* Exposes reverse lookup of registered symbols. */
+	error = js_builtin_method(realm, &constructor->object, "keyFor", 1, symbol_key_for);
 	if (error != 0)
 		return error;
 
 	/* The prototype's methods and description. */
 	error = js_builtin_method(realm, prototype, "toString", 0, symbol_to_string);
-	if (error == 0)
-		error = js_builtin_method(realm, prototype, "valueOf", 0, symbol_value_of);
-	if (error == 0)
-		error = js_builtin_accessor(realm, prototype, "description", symbol_description, NULL);
+	if (error != 0)
+		return error;
+
+	/* Exposes the primitive symbol behind a symbol or wrapper. */
+	error = js_builtin_method(realm, prototype, "valueOf", 0, symbol_value_of);
+	if (error != 0)
+		return error;
+
+	/* Exposes the optional description through a getter. */
+	error = js_builtin_accessor(realm, prototype, "description", symbol_description, NULL);
 	if (error != 0)
 		return error;
 
@@ -102,14 +114,19 @@ js_builtin_install_symbol(
 	error = js_builtin_function(realm, "[Symbol.toPrimitive]", 1, symbol_value_of, NULL, &function);
 	if (error != 0)
 		return error;
+
+	/* Publishes the primitive conversion method with configurable attributes. */
 	error = js_builtin_symbol_value(realm, prototype, VM_SYMBOL_TO_PRIMITIVE, vm_value_cell(function), VM_PROPERTY_CONFIGURABLE);
 	if (error != 0)
 		return error;
 
 	/* Symbol.prototype[Symbol.toStringTag]. */
 	error = js_builtin_string(realm, "Symbol", &tag);
-	if (error == 0)
-		error = js_builtin_symbol_value(realm, prototype, VM_SYMBOL_TO_STRING_TAG, tag, VM_PROPERTY_CONFIGURABLE);
+	if (error != 0)
+		return error;
+
+	/* Publishes the configurable prototype tag. */
+	error = js_builtin_symbol_value(realm, prototype, VM_SYMBOL_TO_STRING_TAG, tag, VM_PROPERTY_CONFIGURABLE);
 	if (error != 0)
 		return error;
 
@@ -118,8 +135,7 @@ js_builtin_install_symbol(
 }
 
 /*
- * Defines a property of a built-in object whose key is a well-known
- * symbol.
+ * Defines a built-in object property keyed by a well-known symbol.
  */
 int
 js_builtin_symbol_value(
@@ -141,8 +157,8 @@ js_builtin_symbol_value(
 }
 
 /*
- * Defines a built-in object's Symbol.toStringTag (configurable only), the
- * name Object.prototype.toString gives its objects.
+ * Defines a built-in object's configurable Symbol.toStringTag.
+ * The tag supplies the name reported by Object.prototype.toString.
  */
 int
 js_builtin_tag(
@@ -168,8 +184,8 @@ js_builtin_tag(
 }
 
 /*
- * Makes the descriptive string of a symbol (SymbolDescriptiveString):
- * "Symbol(" and its description and ")".
+ * Makes a symbol's descriptive string for SymbolDescriptiveString.
+ * Joins "Symbol(" with its optional description and ")".
  */
 int
 js_symbol_descriptive_string(
@@ -185,6 +201,8 @@ js_symbol_descriptive_string(
 	open = vm_string_from_utf8(realm->heap, "Symbol(", 7);
 	if (open == NULL)
 		return ENOMEM;
+
+	/* Starts the result with the opening delimiter. */
 	text = open;
 
 	/* The description, when there is one. */
@@ -198,18 +216,22 @@ js_symbol_descriptive_string(
 	close = vm_string_from_utf8(realm->heap, ")", 1);
 	if (close == NULL)
 		return ENOMEM;
+
+	/* Joins the completed description with its closing delimiter. */
 	text = vm_string_concat(realm->heap, text, close);
 	if (text == NULL)
 		return ENOMEM;
 
-	/* Succeeded: the string. */
+	/* Publishes the result to the caller. */
 	*result = vm_value_cell(text);
+
+	/* Succeeded: the string. */
 	return 0;
 }
 
 /*
- * Gives a built-in constructor its get [Symbol.species], which returns
- * this (the constructor its derived objects are made with).
+ * Defines a built-in constructor's Symbol.species getter.
+ * Returns this, the constructor used for derived objects.
  */
 int
 js_builtin_species(
@@ -229,6 +251,8 @@ js_builtin_species(
 	accessor = vm_accessor_create(realm->heap, vm_value_cell(getter), VM_VALUE_UNDEFINED);
 	if (accessor == NULL)
 		return ENOMEM;
+
+	/* Publishes the getter as a configurable accessor. */
 	error = js_builtin_symbol_value(realm, constructor, VM_SYMBOL_SPECIES, vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_CONFIGURABLE);
 	if (error != 0)
 		return error;
@@ -238,16 +262,16 @@ js_builtin_species(
 }
 
 /*
- * Gives the built-ins made before the symbols mattered their
- * Symbol.toStringTag and Symbol.species: Math, JSON, the prototypes of
- * promises, generators and async functions, and Array, Promise and RegExp.
+ * Installs tags and species on built-ins created before Symbol.
+ * Covers Math, JSON, promise/generator/async prototypes, and the Array,
+ * Promise and RegExp constructors.
  */
 int
 js_builtin_install_tags(
 	struct vm_realm *realm)
 {
-	const char *const globals[2] = { "Math", "JSON" };
-	const char *const species[3] = { "Array", "Promise", "RegExp" };
+	const char *const globals[2] = {"Math", "JSON"};
+	const char *const species[3] = {"Array", "Promise", "RegExp"};
 	struct vm_property property;
 	vm_value key;
 	int found;
@@ -259,6 +283,8 @@ js_builtin_install_tags(
 		key = vm_key_from_ascii(realm->heap, globals[index]);
 		if (key == VM_VALUE_EMPTY)
 			return ENOMEM;
+
+		/* Reads only the constructor or namespace's own global binding. */
 		found = vm_object_get_own(realm->global, key, &property);
 		if (found < 0)
 			return -found;
@@ -266,6 +292,8 @@ js_builtin_install_tags(
 		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
+
+		/* Assigns the namespace object its built-in tag. */
 		error = js_builtin_tag(realm, (struct vm_object *)vm_value_as_cell(*property.value), globals[index]);
 		if (error != 0)
 			return error;
@@ -273,12 +301,21 @@ js_builtin_install_tags(
 
 	/* The prototypes. */
 	error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_PROMISE_PROTOTYPE], "Promise");
-	if (error == 0)
-		error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_GENERATOR_PROTOTYPE], "Generator");
-	if (error == 0)
-		error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_GENERATOR_FUNCTION_PROTOTYPE], "GeneratorFunction");
-	if (error == 0)
-		error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_ASYNC_FUNCTION_PROTOTYPE], "AsyncFunction");
+	if (error != 0)
+		return error;
+
+	/* Identifies generator instances through their prototype tag. */
+	error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_GENERATOR_PROTOTYPE], "Generator");
+	if (error != 0)
+		return error;
+
+	/* Identifies generator functions through their prototype tag. */
+	error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_GENERATOR_FUNCTION_PROTOTYPE], "GeneratorFunction");
+	if (error != 0)
+		return error;
+
+	/* Identifies async functions through their prototype tag. */
+	error = js_builtin_tag(realm, realm->intrinsics[VM_INTRINSIC_ASYNC_FUNCTION_PROTOTYPE], "AsyncFunction");
 	if (error != 0)
 		return error;
 
@@ -287,6 +324,8 @@ js_builtin_install_tags(
 		key = vm_key_from_ascii(realm->heap, species[index]);
 		if (key == VM_VALUE_EMPTY)
 			return ENOMEM;
+
+		/* Reads only the constructor or namespace's own global binding. */
 		found = vm_object_get_own(realm->global, key, &property);
 		if (found < 0)
 			return -found;
@@ -294,6 +333,8 @@ js_builtin_install_tags(
 		/* A missing descriptor follows the absence path after errors have been excluded. */
 		if (!found)
 			continue;
+
+		/* Assigns the constructor its default species getter. */
 		error = js_builtin_species(realm, (struct vm_object *)vm_value_as_cell(*property.value));
 		if (error != 0)
 			return error;
@@ -326,6 +367,8 @@ symbol_call(
 		status = vm_to_string(realm, description, &string);
 		if (status != 0)
 			return status;
+
+		/* Retains the converted description for symbol allocation. */
 		description = vm_value_cell(string);
 	}
 
@@ -334,8 +377,10 @@ symbol_call(
 	if (symbol == NULL)
 		return ENOMEM;
 
-	/* Succeeded: the new symbol. */
+	/* Publishes the result to the caller. */
 	*result = vm_value_cell(symbol);
+
+	/* Succeeded: the new symbol. */
 	return 0;
 }
 
@@ -352,6 +397,7 @@ symbol_for(
 	struct vm_property property;
 	struct vm_symbol *symbol;
 	struct vm_string *string;
+	vm_value argument;
 	vm_value key;
 	int found;
 	int status;
@@ -360,9 +406,12 @@ symbol_for(
 
 	/* The key's string, as a property key of the registry. */
 	*result = VM_VALUE_UNDEFINED;
-	status = vm_to_string(realm, js_argument(args, count, 0), &string);
+	argument = js_argument(args, count, 0);
+	status = vm_to_string(realm, argument, &string);
 	if (status != 0)
 		return status;
+
+	/* Interns the description as the registry's property key. */
 	status = vm_key_from_string(realm->heap, string, &key);
 	if (status != 0)
 		return status;
@@ -383,13 +432,17 @@ symbol_for(
 	symbol = vm_symbol_create(realm->heap, vm_value_cell(string));
 	if (symbol == NULL)
 		return ENOMEM;
+
+	/* Marks the new symbol before exposing it through the registry. */
 	symbol->registered = 1;
 	status = vm_object_define(realm->heap, registry, key, vm_value_cell(symbol), VM_PROPERTY_DEFAULT);
 	if (status != 0)
 		return status;
 
-	/* Succeeded: the registered symbol. */
+	/* Publishes the result to the caller. */
 	*result = vm_value_cell(symbol);
+
+	/* Succeeded: the registered symbol. */
 	return 0;
 }
 
@@ -417,9 +470,15 @@ symbol_key_for(
 	cell = NULL;
 	if (is_cell)
 		cell = vm_value_as_cell(value);
+
+	/* Rejects non-symbols without consulting the registry. */
 	if (cell == NULL || cell->type != &vm_symbol_type) {
 		status = vm_throw_type_error(realm, "Symbol.keyFor: value is not a symbol");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the incompatible argument is reported as a VM exception. */
+		return 0;
 	}
 
 	/* A registered symbol's key is its description. */
@@ -482,8 +541,10 @@ symbol_value_of(
 	if (status != 0)
 		return status;
 
-	/* Succeeded: the symbol's value. */
+	/* Publishes the result to the caller. */
 	*result = vm_value_cell(symbol);
+
+	/* Succeeded: the symbol's value. */
 	return 0;
 }
 
@@ -508,8 +569,10 @@ symbol_description(
 	if (status != 0)
 		return status;
 
-	/* Succeeded: its description (undefined for none). */
+	/* Publishes the result to the caller. */
 	*result = symbol->description;
+
+	/* Succeeded: its description (undefined for none). */
 	return 0;
 }
 
@@ -549,7 +612,11 @@ symbol_this(
 
 	/* Anything else. */
 	status = vm_throw_type_error(realm, "Symbol.prototype method called on incompatible receiver");
-	return status;
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the incompatible receiver is reported as a VM exception. */
+	return 0;
 }
 
 /* get [Symbol.species] of the built-in constructors: this. */
@@ -565,7 +632,9 @@ symbol_species(
 	UNUSED_PARAMETER(args);
 	UNUSED_PARAMETER(count);
 
-	/* Succeeded: this. */
+	/* Publishes the result to the caller. */
 	*result = this_value;
+
+	/* Succeeded: this. */
 	return 0;
 }

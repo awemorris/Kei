@@ -170,16 +170,47 @@ dom_doctype_create(
 	struct vm_string *system_id)
 {
 	struct dom_doctype *doctype;
+	struct vm_cell *roots[3];
+	unsigned index;
+	unsigned registered;
+	int error;
+
+	/* A collector during node allocation must retain all supplied identifiers. */
+	roots[0] = &name->cell;
+	roots[1] = &public_id->cell;
+	roots[2] = &system_id->cell;
+	doctype = NULL;
+	registered = 0;
+	error = 0;
+	for (index = 0; index < 3U; index++) {
+		error = vm_heap_add_root(document->heap, &roots[index]);
+		if (error != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* Allocates the node's cell. */
 	doctype = (struct dom_doctype *)node_alloc(document, &doctype_type, sizeof(*doctype), DOM_DOCUMENT_TYPE);
-	if (doctype == NULL)
-		return NULL;
+	if (doctype == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
 
 	/* Records the name and the identifiers. */
 	doctype->name = name;
 	doctype->public_id = public_id;
 	doctype->system_id = system_id;
+
+cleanup:
+	/* The completed node traces its identifiers after these temporary roots leave. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(document->heap, &roots[registered]);
+	}
+
+	/* A failed root registration or node allocation publishes no DocumentType. */
+	if (error != 0)
+		return NULL;
 
 	/* Succeeded: the DOCTYPE is detached. */
 	return &doctype->node;
@@ -362,9 +393,13 @@ dom_element_add_attribute(
 
 	/* Grows the array when it is full. */
 	if (element->attribute_count == element->attribute_capacity) {
+		if (element->attribute_capacity > SIZE_MAX / 2U)
+			return ENOMEM;
 		capacity = element->attribute_capacity * 2U;
 		if (capacity < 4U)
 			capacity = 4U;
+		if (capacity > SIZE_MAX / sizeof(*attributes))
+			return ENOMEM;
 
 		/* Moves the attributes to larger storage. */
 		attributes = realloc(element->attributes, capacity * sizeof(*attributes));

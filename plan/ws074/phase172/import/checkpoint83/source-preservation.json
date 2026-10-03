@@ -1,0 +1,9 @@
+{
+  "before_lines": 2082,
+  "after_lines": 2478,
+  "before_sha256": "37d807766b62ebbb0653624bb90467bcdcca3554d666861143ba096cb5abea9e",
+  "after_sha256": "e0734fbf821ed686dc1e800d88ee51684f41958520c7000b043aa397115c734c",
+  "changed_C_string_literal_lines": 2,
+  "changed_C_string_literal_contents": false,
+  "public_ABI_changed": false
+}

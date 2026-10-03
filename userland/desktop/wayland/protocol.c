@@ -68,6 +68,7 @@ static const struct zwl_global globals[] = {
 	{ 21, "keiland_desktop_manager_v1", 1, ZWL_DESKTOP_MANAGER },
 	{ 22, "keiland_keyboard_inset_manager_v1", 1, ZWL_KEYBOARD_INSET_MANAGER },
 	{ 23, "keiland_edit_manager_v1", 1, ZWL_EDIT_MANAGER },
+	{ 24, "org_kde_kwin_server_decoration_manager", 1, ZWL_KDE_DECORATION_MANAGER },
 };
 
 static void global_identity(const struct zwl_global *global, const char **interface, uint32_t *version);
@@ -243,7 +244,9 @@ zwl_dispatch(
 		break;
 	case ZWL_DECORATION_MANAGER:
 	case ZWL_DECORATION:
-		/* xdg-decoration (decoration.c). */
+	case ZWL_KDE_DECORATION_MANAGER:
+	case ZWL_KDE_DECORATION:
+		/* xdg-decoration and KDE's server decoration (decoration.c). */
 		error = zwl_decoration_request(object, opcode, bytes, size);
 		break;
 	case ZWL_CURSOR_SHAPE_MANAGER:
@@ -634,6 +637,13 @@ bind_global(
 		/* wl_shm bindings learn the formats they may use. */
 		if (object->kind == ZWL_SHM) {
 			error = zwl_shm_bind(object);
+			if (error != 0)
+				return error;
+		}
+
+		/* KDE's server decoration manager tells the default mode at once: the compositor's. */
+		if (object->kind == ZWL_KDE_DECORATION_MANAGER) {
+			error = zwl_decoration_kde_bind(object);
 			if (error != 0)
 				return error;
 		}

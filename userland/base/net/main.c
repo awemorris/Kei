@@ -27,6 +27,7 @@
 #include <limits.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +37,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/un.h>
+#include <termios.h>
 #include <unistd.h>
 
 #define NET_DNS_LIMIT 8
@@ -92,9 +94,13 @@ static int interface_name_valid(const char *name);
 static int show_configuration(const struct netconf *configuration);
 static int dispatch(int argc, char **argv);
 static int command_help(void);
-static int wifi_set_key_command(int argc, char **argv);
+static int wifi_store_command(int argc, char **argv);
+static int wifi_store_options(int argc, char **argv, enum wifi_store_edit_kind kind, char **password, int *automatic);
+static int read_password(char *password, size_t capacity);
 static int wifi_command(int argc, char **argv);
 static int wifi_backend(uint32_t, const unsigned char *, size_t, int);
+static int wifi_session_command(int argc, char **argv);
+static int session_account(const char *, uint32_t *);
 static int lan_command(int argc, char **argv);
 static int startup_command(void);
 static int start_detached(uint32_t opcode);
@@ -337,7 +343,8 @@ interactive(
 			continue;
 		}
 		secret_line = count >= 2 && strcmp(words[0], "wifi") == 0 &&
-		    strcmp(words[1], "set-key") == 0;
+		    (strcmp(words[1], "add") == 0 ||
+		     strcmp(words[1], "modify") == 0);
 		if (!secret_line)
 			add_history(history_line);
 		release_console_line(history_line, line_length);
@@ -540,7 +547,9 @@ console_help(
 		     "  show interfaces|interface "
 		     "NAME|running-config|startup-config|candidate\n"
 		     "  up NAME | down NAME | dhcp NAME [timeout SECONDS]\n"
-		     "  wifi set-key SSID PASSPHRASE [auto]\n"
+		     "  wifi add SSID [--password PASSWORD] [--auto yes|no]\n"
+		     "  wifi modify SSID [--password PASSWORD|-] [--auto yes|no]\n"
+		     "  wifi delete SSID\n"
 		     "  wifi enable | wifi disable | wifi list\n"
 		     "  wifi connect SSID | wifi disconnect\n"
 		     "  configure\n"
@@ -1299,8 +1308,19 @@ dispatch(
 
 	/* Handles the selected command-line operation. */
 	if (argc >= 3 && strcmp(argv[1], "wifi") == 0 &&
-	    strcmp(argv[2], "set-key") == 0) {
-		function_result = wifi_set_key_command(argc, argv);
+	    (strcmp(argv[2], "add") == 0 ||
+	     strcmp(argv[2], "modify") == 0 ||
+	     strcmp(argv[2], "delete") == 0)) {
+		function_result = wifi_store_command(argc, argv);
+
+		/* Returns the computed result. */
+		return function_result;
+	}
+
+	/* Tells networkd that a login session opened or closed. */
+	if (argc >= 3 && strcmp(argv[1], "wifi") == 0 &&
+	    strcmp(argv[2], "session") == 0) {
+		function_result = wifi_session_command(argc, argv);
 
 		/* Returns the computed result. */
 		return function_result;
@@ -1451,14 +1471,24 @@ command_help(
 	     "                              configure a static IPv4 address\n"
 	     "  net defaultroute gateway    set the default IPv4 route\n"
 	     "  net dns address...          replace resolver name servers\n"
-	     "  net wifi set-key SSID PASSPHRASE [auto]\n"
-	     "                              save a local WPA2 profile\n"
+	     "  net wifi add SSID [--password PASSWORD] [--auto yes|no]\n"
+	     "                              save a WPA2 network in your own store (root:\n"
+	     "                              the system's); without --password the key is\n"
+	     "                              read from standard input; --auto defaults to yes\n"
+	     "  net wifi modify SSID [--password PASSWORD|-] [--auto yes|no]\n"
+	     "                              change a saved network (- reads the key from\n"
+	     "                              standard input)\n"
+	     "  net wifi delete SSID        forget a saved network\n"
 	     "  net wifi enable             enable policy; association runs in background\n"
 	     "                              use net wifi list to observe connection state\n"
 	     "  net wifi disable            disable managed Wi-Fi\n"
 	     "  net wifi list               show managed Wi-Fi state\n"
 	     "  net wifi connect SSID       connect a saved profile\n"
 	     "  net wifi disconnect         disconnect managed Wi-Fi\n"
+	     "  net wifi session open|close [account]\n"
+	     "                              tell networkd a login session of the account\n"
+	     "                              (yourself unless root) opened or closed: its\n"
+	     "                              saved networks are joined only while it is open\n"
 	     "  net lan enable              manage the wired interfaces\n"
 	     "  net lan disable             stop managing the wired interfaces\n"
 	     "  net startup                 bring the network up, as a boot does");
@@ -1470,62 +1500,291 @@ command_help(
 	return function_result;
 }
 
-/* Supports the local Wi-Fi credential update operation. */
+/*
+ * Adds, changes or deletes a saved network in the invoking account's store.
+ *
+ * net wifi add SSID [--password PASSWORD] [--auto yes|no] saves a network
+ * that is not saved yet; modify changes only what it is given; delete
+ * forgets the network.  A key not given on the command line is read from
+ * standard input, without echo on a terminal, so that it need not appear
+ * in a process listing or a shell's history (2026-10-03 user decision).
+ * networkd is told afterwards, and joins a newly usable network in the
+ * background while it is not on one.
+ */
 static int
-wifi_set_key_command(
+wifi_store_command(
 	int argc,
 	char **argv)
 {
-	int function_result;
-	char error[WIFI_CONF_DIAGNOSTIC_MAX] = "";
-	size_t passphrase_length;
+	char diagnostic[WIFI_CONF_DIAGNOSTIC_MAX];
+	char typed[WIFI_CONF_PASSPHRASE_MAX + 2U];
+	struct wifi_store_edit edit;
+	enum wifi_store_edit_kind kind;
+	char *password;
 	int automatic;
-	int notification_result;
-	int result;
+	int parsed;
+	int read_error;
+	int edited;
+	int saved;
+	int notified;
+	int differs;
+	int from_input;
 
-	/* A passphrase does not exist yet when the command is incomplete. */
-	if (argc < 5) {
-		/* Obtains the usage result. */
-		function_result = usage();
+	/* The kind of change: dispatch admitted only add, modify and delete. */
+	kind = WIFI_STORE_EDIT_DELETE;
+	differs = strcmp(argv[2], "add");
+	if (differs == 0)
+		kind = WIFI_STORE_EDIT_ADD;
+	differs = strcmp(argv[2], "modify");
+	if (differs == 0)
+		kind = WIFI_STORE_EDIT_MODIFY;
 
-		/* Returns the computed result. */
-		return function_result;
+	/* Every change names its SSID. */
+	if (argc < 4 || argv[3][0] == '\0') {
+		(void)usage();
+		return 2;
 	}
-	passphrase_length = strlen(argv[4]);
 
-	/* Clear a supplied secret even when the remaining syntax is invalid. */
-	if ((argc != 5 && argc != 6) ||
-	    (argc == 6 && strcmp(argv[5], "auto") != 0)) {
-		explicit_bzero(argv[4], passphrase_length);
+	/* The options; a key on the command line is wiped from it once copied. */
+	password = NULL;
+	automatic = -1;
+	parsed = wifi_store_options(argc, argv, kind, &password, &automatic);
+	if (parsed != 0)
+		return 2;
 
-		/* Obtains the usage result. */
-		function_result = usage();
-
-		/* Returns the computed result. */
-		return function_result;
+	/* A key comes from standard input for an add without --password, and for modify --password -. */
+	from_input = 0;
+	if (kind == WIFI_STORE_EDIT_ADD && password == NULL)
+		from_input = 1;
+	if (kind == WIFI_STORE_EDIT_MODIFY && password != NULL) {
+		differs = strcmp(password, "-");
+		if (differs == 0)
+			from_input = 1;
 	}
-	automatic = argc == 6;
-	result = wifi_store_set_key_for_effective_user(argv[3], argv[4],
-	    automatic, error, sizeof(error));
-	explicit_bzero(argv[4], passphrase_length);
 
-	/* Reports a credential store failure without retaining diagnostics. */
-	if (result != 0) {
-		fprintf(stderr, "net: Wi-Fi credential update failed: %s\n",
-		    error[0] != '\0' ? error : strerror(errno));
+	/* Reads that key. */
+	memset(typed, 0, sizeof(typed));
+	if (from_input) {
+		read_error = read_password(typed, sizeof(typed));
+		if (read_error != 0)
+			return 1;
+		password = typed;
 	}
-	wifi_conf_explicit_clear(error, sizeof(error));
-	if (result != 0)
+
+	/* An add is automatic unless told otherwise. */
+	if (kind == WIFI_STORE_EDIT_ADD && automatic == -1)
+		automatic = 1;
+
+	/* A modify must change something. */
+	if (kind == WIFI_STORE_EDIT_MODIFY &&
+	    password == NULL &&
+	    automatic == -1) {
+		fprintf(stderr, "net: wifi modify needs --password or --auto\n");
+		return 2;
+	}
+
+	/* The change, in the account's own store; the typed key is wiped either way. */
+	memset(&edit, 0, sizeof(edit));
+	edit.kind = kind;
+	edit.ssid = argv[3];
+	edit.passphrase = password;
+	edit.automatic = automatic;
+	memset(diagnostic, 0, sizeof(diagnostic));
+	edited = wifi_store_edit_for_effective_user(&edit, diagnostic, sizeof(diagnostic));
+	saved = errno;
+	explicit_bzero(typed, sizeof(typed));
+	if (password != NULL && password != typed)
+		explicit_bzero(password, strlen(password));
+
+	/* A refusal says why, in terms of the command. */
+	if (edited != 0 && saved == EEXIST) {
+		fprintf(stderr, "net: Wi-Fi network %s is saved already; use net wifi modify to change it\n", argv[3]);
+	} else if (edited != 0 && saved == ENOENT) {
+		fprintf(stderr, "net: Wi-Fi network %s is not saved\n", argv[3]);
+	} else if (edited != 0) {
+		fprintf(stderr, "net: Wi-Fi credential update failed: %s\n", diagnostic[0] != '\0' ? diagnostic : strerror(saved));
+	}
+	wifi_conf_explicit_clear(diagnostic, sizeof(diagnostic));
+	if (edited != 0)
 		return 1;
 
-	/* Notifies a running daemon without sending identity or credentials. */
-	notification_result = wifi_backend(NETWORKD_OP_WIFI_PROFILES_CHANGED,
-	    NULL, 0U, 0);
-	if (notification_result != 0)
-		fprintf(stderr,
-		    "net: warning: Wi-Fi profile saved; networkd notification failed\n");
+	/* networkd is told without any identity or key; the saved change stands either way. */
+	notified = wifi_backend(NETWORKD_OP_WIFI_PROFILES_CHANGED, NULL, 0U, 0);
+	if (notified != 0)
+		fprintf(stderr, "net: warning: Wi-Fi network saved; networkd notification failed\n");
 
-	/* The durable local update remains authoritative for command success. */
+	/* Succeeded: the store holds the change. */
+	return 0;
+}
+
+/*
+ * Reads the options of wifi add and modify: --password PASSWORD (modify
+ * also takes - for standard input) and --auto yes|no.  delete takes none.
+ * Returns 0, or prints why and returns -1.
+ */
+static int
+wifi_store_options(
+	int argc,
+	char **argv,
+	enum wifi_store_edit_kind kind,
+	char **password,
+	int *automatic)
+{
+	int index;
+	int differs;
+	int is_password;
+	int is_auto;
+	int is_yes;
+	int is_no;
+
+	/* Each option and its value. */
+	for (index = 4; index < argc; index += 2) {
+		/* Which option this is. */
+		is_password = 0;
+		differs = strcmp(argv[index], "--password");
+		if (differs == 0)
+			is_password = 1;
+		is_auto = 0;
+		differs = strcmp(argv[index], "--auto");
+		if (differs == 0)
+			is_auto = 1;
+
+		/* delete takes no option, and nothing takes an unknown one. */
+		if (kind == WIFI_STORE_EDIT_DELETE || (!is_password && !is_auto)) {
+			fprintf(stderr, "net: unknown option %s\n", argv[index]);
+			(void)usage();
+			return -1;
+		}
+
+		/* Every option has a value. */
+		if (index + 1 >= argc) {
+			fprintf(stderr, "net: %s needs a value\n", argv[index]);
+			return -1;
+		}
+
+		/* A key, once. */
+		if (is_password && *password != NULL) {
+			fprintf(stderr, "net: --password is given twice\n");
+			return -1;
+		}
+
+		/* An add reads its key from standard input by leaving --password out, not with -. */
+		differs = strcmp(argv[index + 1], "-");
+		if (is_password && kind == WIFI_STORE_EDIT_ADD && differs == 0) {
+			fprintf(stderr, "net: wifi add reads the key from standard input when --password is left out\n");
+			return -1;
+		}
+
+		/* The key (or - for standard input). */
+		if (is_password) {
+			*password = argv[index + 1];
+			continue;
+		}
+
+		/* The mode, once. */
+		if (*automatic != -1) {
+			fprintf(stderr, "net: --auto is given twice\n");
+			return -1;
+		}
+
+		/* The mode as yes or no. */
+		is_yes = 0;
+		differs = strcmp(argv[index + 1], "yes");
+		if (differs == 0)
+			is_yes = 1;
+		is_no = 0;
+		differs = strcmp(argv[index + 1], "no");
+		if (differs == 0)
+			is_no = 1;
+		if (is_yes) {
+			*automatic = 1;
+		} else if (is_no) {
+			*automatic = 0;
+		} else {
+			fprintf(stderr, "net: --auto takes yes or no\n");
+			return -1;
+		}
+	}
+
+	/* Succeeded: the options are read. */
+	return 0;
+}
+
+/*
+ * Reads one key from standard input: on a terminal after a prompt and with
+ * echo off (the terminal is put back as it was), from a pipe as one line.
+ * The line's end is not part of the key.  Returns 0, or prints why and
+ * returns -1 (an empty line, a line too long, or nothing to read).
+ */
+static int
+read_password(
+	char *password,
+	size_t capacity)
+{
+	struct termios saved_modes;
+	struct termios quiet_modes;
+	size_t length;
+	int terminal;
+	int quiet;
+	int modes_error;
+	char *line;
+
+	/* A terminal's modes, to turn its echo off while the key is typed. */
+	terminal = isatty(STDIN_FILENO);
+	quiet = 0;
+	modes_error = -1;
+	if (terminal)
+		modes_error = tcgetattr(STDIN_FILENO, &saved_modes);
+
+	/* The echo goes off; quiet tells that the modes must be put back. */
+	if (modes_error == 0) {
+		quiet_modes = saved_modes;
+		quiet_modes.c_lflag &= (tcflag_t)~ECHO;
+		modes_error = tcsetattr(STDIN_FILENO, TCSAFLUSH, &quiet_modes);
+		if (modes_error == 0)
+			quiet = 1;
+	}
+
+	/* A terminal is asked for the key; a pipe is not. */
+	if (terminal) {
+		fputs("Password: ", stderr);
+		fflush(stderr);
+	}
+
+	/* One line; the terminal gets its echo back and a new line. */
+	line = fgets(password, (int)capacity, stdin);
+	if (quiet)
+		(void)tcsetattr(STDIN_FILENO, TCSAFLUSH, &saved_modes);
+	if (terminal)
+		fputc('\n', stderr);
+
+	/* Nothing to read is no key. */
+	if (line == NULL) {
+		fprintf(stderr, "net: no Wi-Fi key was given\n");
+		return -1;
+	}
+
+	/* The line's end goes; a line without one that fills the buffer is too long. */
+	length = strlen(password);
+	if (length > 0U && password[length - 1U] == '\n') {
+		password[--length] = '\0';
+	} else if (length + 1U == capacity) {
+		explicit_bzero(password, capacity);
+		fprintf(stderr, "net: the Wi-Fi key is longer than %u characters\n", WIFI_CONF_PASSPHRASE_MAX);
+		return -1;
+	}
+
+	/* A carriage return before the line's end goes too. */
+	if (length > 0U && password[length - 1U] == '\r')
+		password[--length] = '\0';
+
+	/* An empty key is no key. */
+	if (length == 0U) {
+		fprintf(stderr, "net: no Wi-Fi key was given\n");
+		return -1;
+	}
+
+	/* Succeeded: the key is in the buffer, for the caller to wipe. */
 	return 0;
 }
 
@@ -1613,6 +1872,103 @@ wifi_backend(
 
 	/* Returns the request result. */
 	return result;
+}
+
+/*
+ * Tells networkd that a login session opened or closed (ws005-p024).
+ *
+ * sessiond runs "net wifi session open UID" after a login and "net wifi
+ * session close UID" after the logout, as root.  While the session is open,
+ * networkd may join the networks saved in that account's own store; the
+ * request names only the account, and networkd finds the store itself.
+ * Without an account the command is about the account running it.
+ */
+static int
+wifi_session_command(
+	int argc,
+	char **argv)
+{
+	struct networkd_field_writer writer;
+	unsigned char payload[NETWORKD_REQUEST_MAX];
+	unsigned response_seconds;
+	uint32_t opcode;
+	uint32_t account;
+	int differs;
+	int error;
+	int result;
+
+	/* "open" or "close", and at most one account. */
+	if (argc != 4 && argc != 5)
+		return usage();
+	differs = strcmp(argv[3], "open");
+	if (differs == 0) {
+		opcode = NETWORKD_OP_WIFI_SESSION_OPEN;
+	} else {
+		differs = strcmp(argv[3], "close");
+		if (differs != 0)
+			return usage();
+		opcode = NETWORKD_OP_WIFI_SESSION_CLOSE;
+	}
+
+	/* The account named, or the one running the command. */
+	account = (uint32_t)geteuid();
+	if (argc == 5) {
+		error = session_account(argv[4], &account);
+		if (error != 0) {
+			fprintf(stderr, "net: %s: no such account\n", argv[4]);
+			return 1;
+		}
+	}
+
+	/* The request carries the account's number and nothing else. */
+	networkd_field_writer_init(&writer, payload, sizeof(payload));
+	error = networkd_field_write_u32(&writer, NETWORKD_FIELD_ACCOUNT, account);
+	if (error != 0)
+		return 1;
+
+	/* Sends it and waits for networkd's answer. */
+	response_seconds = NETWORKD_WIFI_REQUEST_SECONDS(opcode) +
+	    NETWORKD_WIFI_TRANSPORT_MARGIN;
+	result = backend_exchange(opcode, payload, writer.used, 0,
+	    response_seconds, 1);
+	networkd_protocol_clear(payload, sizeof(payload));
+
+	/* Reports a refused or failed request. */
+	if (result != 0)
+		return result;
+
+	/* Succeeded: networkd has the session's store or has dropped it. */
+	return 0;
+}
+
+/* Reads an account given by name or by number. */
+static int
+session_account(
+	const char *text,
+	uint32_t *account)
+{
+	const struct passwd *entry;
+	unsigned long number;
+	char *end;
+
+	/* A number names the account directly. */
+	if (text[0] >= '0' && text[0] <= '9') {
+		errno = 0;
+		number = strtoul(text, &end, 10);
+		if (errno != 0 || *end != '\0' || number > 0xffffffffUL)
+			return EINVAL;
+		*account = (uint32_t)number;
+		return 0;
+	}
+
+	/* A name is looked up in the account database. */
+	entry = getpwnam(text);
+	if (entry == NULL)
+		return ENOENT;
+
+	/* Succeeded: the name's account number. */
+	*account = (uint32_t)entry->pw_uid;
+	return 0;
 }
 
 /* Supports the decimal timeout operation. */
@@ -2006,6 +2362,8 @@ static int
 startup_command(
 	void)
 {
+	int remembered_off;
+
 	/* Handles a failed enable, which leaves nothing to wait for. */
 	if (lan_send_policy() != 0)
 		return 1;
@@ -2013,9 +2371,15 @@ startup_command(
 	/*
 	 * The radio is started in a process of its own.  Associating takes
 	 * as long as it takes, and the wired side has no reason to stand
-	 * behind it; what the attempt reports goes to the log.
+	 * behind it; what the attempt reports goes to the log.  Wi-Fi that
+	 * was turned off before stays off (2026-10-03 user decision).
 	 */
-	(void)start_detached(NETWORKD_OP_WIFI_ENABLE);
+	remembered_off = access(NETWORKD_WIFI_OFF_PATH, F_OK);
+	if (remembered_off == 0) {
+		fprintf(stderr, "net: Wi-Fi stays off, as it was turned off\n");
+	} else {
+		(void)start_detached(NETWORKD_OP_WIFI_ENABLE);
+	}
 
 	/* A machine that was not told to wait is started. */
 	if (!wait_requested())
@@ -2080,9 +2444,12 @@ usage(
 		"       net static interface ipv4 address netmask mask\n"
 		"       net defaultroute gateway\n"
 		"       net dns address...\n"
-		"       net wifi set-key SSID PASSPHRASE [auto]\n"
+		"       net wifi add SSID [--password PASSWORD] [--auto yes|no]\n"
+		"       net wifi modify SSID [--password PASSWORD|-] [--auto yes|no]\n"
+		"       net wifi delete SSID\n"
 		"       net wifi enable|disable|list|disconnect\n"
 		"       net wifi connect SSID\n"
+		"       net wifi session open|close [account]\n"
 		"       net lan enable\n"
 		"       net lan disable\n"
 		"       net startup\n");

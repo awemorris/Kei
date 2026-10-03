@@ -24,6 +24,7 @@ struct viewport_fixture {
 
 /* Independent dimension and lifetime observations survive fixture teardown. */
 static unsigned checks;
+
 /* All failed observations remain visible in the final native result. */
 static unsigned failures;
 
@@ -52,7 +53,11 @@ main(
 	status = vm_heap_create(&heap, 0);
 	if (status != 0)
 		return 2;
+
+	/* Conservative roots protect the native installation before the focused case. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+
+	/* Creates the realm whose script bindings own the primary Document. */
 	status = vm_realm_create(heap, &realm);
 	if (status != 0) {
 		vm_heap_destroy(heap);
@@ -79,9 +84,13 @@ main(
 	memset(&fixture, 0, sizeof(fixture));
 	fixture.heap = heap;
 	fixture.found = 1;
+
+	/* Gives the production binding a real geometry callback for connected frames. */
 	memset(&host, 0, sizeof(host));
 	host.context = &fixture;
 	host.node_box = viewport_box;
+
+	/* Attaches the primary Window only after its Document and host are ready. */
 	status = bind_window_create(realm, document, &host, &window);
 	if (status != 0) {
 		vm_realm_destroy(realm);
@@ -91,12 +100,19 @@ main(
 
 	/* Direct native invocation disables conservative stack scanning only inside this case. */
 	status = viewport_case(realm, window, &fixture);
+	if (status != 0) {
+		vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Releases the primary binding after restoring its normal stack-root contract. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Publish complete observations after the embedding has released its roots. */
 	printed = printf("native iframe viewport: %u/%u passed\n", checks - failures, checks);
@@ -127,6 +143,9 @@ viewport_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: this observation remains in the final check and failure counts. */
+	return;
 }
 
 /* Constructs genuine DOM and observer participants through the ordinary interpreter. */
@@ -148,11 +167,15 @@ viewport_script(
 		return status;
 	}
 
-	/* Ordinary script execution provides the actual registered Range private cell. */
+	/* Ordinary script execution creates the iframe and its managed child realm. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* The interpreter result no longer borrows the temporary source buffer. */
+	wb_units_release(&units);
 
 	/* Succeeded: a normal interpreter value is available to the embedding. */
 	return 0;
@@ -191,6 +214,7 @@ viewport_case(
 	struct vm_realm *child_realm;
 	struct dom_node *frame_node;
 	struct bind_window *child;
+	struct css_engine *engine;
 	struct vm_cell *found;
 	struct vm_heap_stats before;
 	struct vm_heap_stats after;
@@ -199,16 +223,31 @@ viewport_case(
 	unsigned callbacks;
 	int status;
 
-	/* Build a genuine connected iframe and then discard script references to its child. */
-	status = viewport_script(realm,
-				 "var root=document.createElement('div');document.appendChild(root);"
-				 "var f=document.createElement('iframe');root.appendChild(f);var w=f.contentWindow;f",
-				 &answer);
+	/* Builds a genuine connected iframe through the ordinary interpreter. */
+	status = viewport_script(
+	    realm,
+	    "var root=document.createElement('div');document.appendChild(root);"
+	    "var f=document.createElement('iframe');root.appendChild(f);var w=f.contentWindow;f",
+	    &answer);
 	if (status != 0)
 		return status;
+
+	/* A failed native binding must reject the fixture instead of supplying a raw address. */
 	frame_node = bind_node_of(answer);
+	if (frame_node == NULL || frame_node->type != DOM_ELEMENT)
+		return EINVAL;
+
+	/* The connected frame must already own its genuine managed realm. */
 	child_realm = (struct vm_realm *)((struct dom_element *)frame_node)->child_context;
+	if (child_realm == NULL)
+		return EINVAL;
+
+	/* The child address is observed after its registered ownership has been released. */
 	child = child_realm->host;
+	if (child == NULL)
+		return EINVAL;
+
+	/* Discards script aliases so only the real frame graph retains the managed child. */
 	child_address = (uintptr_t)&child_realm->cell;
 	status = viewport_script(realm, "w=null;f=null", &answer);
 	if (status != 0)
@@ -218,9 +257,11 @@ viewport_case(
 	vm_heap_set_stack_base(realm->heap, NULL);
 	vm_heap_stats(realm->heap, &before);
 	status = bind_frame_viewport(child);
-	vm_heap_stats(realm->heap, &after);
 	if (status != 0)
 		return status;
+
+	/* Confirms that geometry used a real collection while retaining its temporary roots. */
+	vm_heap_stats(realm->heap, &after);
 	viewport_check(child->viewport_width == 0 && child->viewport_height == 0, "zero box produces exact zero child viewport");
 	viewport_check(after.collections > before.collections, "real layout callback GC occurs with stack scanning disabled");
 
@@ -277,13 +318,17 @@ viewport_case(
 	status = bind_frame_viewport(child);
 	viewport_check(status == EOVERFLOW && child->viewport_width == 0 && child->viewport_height == 100, "out-of-int geometry leaves previous viewport unchanged");
 
-	/* Retirement destroys the ordinary frame edge before GC while the helper alone owns the child. */
+	/* Cascade refresh can retire the frame during its ordinary geometry callback. */
 	fixture->box.width = 140;
 	fixture->retire = 1;
-	status = bind_frame_viewport(child);
+	status = bind_style_context_engine(child, &engine);
 	if (status != 0)
 		return status;
 	viewport_check(child->detached && child->frame == NULL && child->viewport_width == 0, "callback retirement preserves detached state instead of publishing geometry");
+
+	/* Retirement must prevent a later cascade allocation or borrowed engine publication. */
+	viewport_check(engine == NULL, "callback retirement supplies no child cascade");
+	viewport_check(child->style_context == NULL, "callback retirement creates no replacement style cache");
 
 	/* Released helper roots leave the retired managed context collectible. */
 	vm_heap_collect(realm->heap);

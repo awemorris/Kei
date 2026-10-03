@@ -1,0 +1,2 @@
+boot-test: saw '^(?:\\S+ )?login: ?'
+boot-test: PASS build/browser3-p172/final-boot-retry/login.png

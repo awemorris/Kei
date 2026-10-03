@@ -23,6 +23,7 @@ int zwl_decoration_ack(struct zwl_object *surface, uint32_t serial);
 void zwl_decoration_commit(struct zwl_object *surface);
 int zwl_decoration_server(const struct zwl_object *surface);
 int zwl_decoration_native_changed(struct zwl_object *toplevel);
+int zwl_decoration_kde_bind(struct zwl_object *manager);
 void zwl_decoration_geometry(const struct zwl_object *surface, uint32_t *width, uint32_t *height);
 
 int zwl_cursor_shape_request(struct zwl_object *object, uint32_t opcode, const unsigned char *bytes, size_t size);

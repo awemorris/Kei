@@ -1,0 +1,66 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-click"
+    ],
+    "exit": 0,
+    "stdout": "click lifetime checks: 10/10 passed\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-submit"
+    ],
+    "exit": 0,
+    "stdout": "submit lifetime checks: 13/13 passed\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout": "frame lifetime checks: 148/148 passed\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--settle-ms=5000",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/click-activation-probe.html"
+    ],
+    "environment": {
+      "XDG_DATA_HOME": "/home/awe/zedBSD-claude2/build/browser3-p172/review17/data"
+    },
+    "exit": 0,
+    "pass_lines": 57,
+    "fail_lines": 0,
+    "stdout_file": "click-page.stdout",
+    "stderr_file": "click-page.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "60",
+      "python3",
+      "plan/ws074/tests/run-settle-tests.py",
+      "--program",
+      "/home/awe/zedBSD-claude2/build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout_file": "settle.stdout",
+    "stderr_file": "settle.stderr"
+  }
+]

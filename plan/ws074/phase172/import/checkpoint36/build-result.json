@@ -1,0 +1,12 @@
+{
+  "command": "BROWSER_HOST_BUILD=build/browser3-p172 sh plan/ws074/tests/host-build.sh plain",
+  "compiler": "GCC14.2.0",
+  "initial_exit": 0,
+  "final_exit": 0,
+  "warning_count": 0,
+  "final_log": "final-build.log",
+  "initial_log": "plain-build.log",
+  "reason_for_final_build": "Initial builder overlapped final Range fixture edits; final builder completed after both selected sources were stable, then all three native tests ran.",
+  "scoped_range_compile_link": "range-pre-final-compile-link.log",
+  "scoped_exit": 0
+}

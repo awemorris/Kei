@@ -24,3 +24,33 @@ LIBWAYLAND_SOURCES := userland/desktop/libwayland/client.c \
 # The public SONAME follows the standard client library spelling.
 LIBWAYLAND_IMAGE_DATA := $(if $(ZEDBSD_TOPLEVEL_BUILD),/lib/libwayland-client.so=$(BUILD)/dynamic/libwayland-client.so)
 $(eval $(call ZEDBSD_USERLAND_PACKAGE,libwayland-client,Wayland client,amd64,y,library,$(LIBWAYLAND_SOURCES),y,desktop,desktop/libwayland,,,shared-library,$(LIBWAYLAND_IMAGE_DATA),,lib))
+
+# ------------------------------------------------- the stage for packages
+
+# A package built with Meson finds libraries through pkg-config, which looks
+# only in the view of the external packages it depends on
+# (userland/packages/external.mk).  This stage puts the client library, the
+# EGL window library and their .pc files there under the name wayland-client,
+# so such a package (GTK, WS115) depends on wayland-client like on any other.
+# The headers are the sysroot's.
+include userland/packages/external.mk
+
+LIBWAYLAND_PC_DIR := userland/desktop/libwayland/pkgconfig
+LIBWAYLAND_STAGE := $(ZEDBSD_EXTERNAL_WORKROOT)/wayland-client/stage
+LIBWAYLAND_STAGED := $(LIBWAYLAND_STAGE)/.zedbsd-staged
+LIBWAYLAND_STAGE_INPUTS := $(BUILD)/dynamic/libwayland-client.so $(BUILD)/dynamic/libwayland-egl.so \
+	$(LIBWAYLAND_PC_DIR)/wayland-client.pc $(LIBWAYLAND_PC_DIR)/wayland-egl.pc
+
+# Replaces the stage as a whole from the libraries just built.
+$(LIBWAYLAND_STAGED): $(LIBWAYLAND_STAGE_INPUTS)
+	@rm -rf '$(LIBWAYLAND_STAGE)'
+	@mkdir -p '$(LIBWAYLAND_STAGE)/usr/lib/pkgconfig'
+	@cp '$(BUILD)/dynamic/libwayland-client.so' '$(BUILD)/dynamic/libwayland-egl.so' \
+		'$(LIBWAYLAND_STAGE)/usr/lib/'
+	@cp '$(LIBWAYLAND_PC_DIR)/wayland-client.pc' '$(LIBWAYLAND_PC_DIR)/wayland-egl.pc' \
+		'$(LIBWAYLAND_STAGE)/usr/lib/pkgconfig/'
+	@touch '$@'
+
+.PHONY: wayland-client
+wayland-client: $(LIBWAYLAND_STAGED)
+	@:

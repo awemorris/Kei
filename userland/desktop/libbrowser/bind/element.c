@@ -620,7 +620,9 @@ element_hidden_set(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *roots[2];
 	vm_value pair[2];
+	unsigned registered;
 	int hidden;
 	int status;
 
@@ -628,16 +630,37 @@ element_hidden_set(
 	*result = VM_VALUE_UNDEFINED;
 	hidden = vm_to_boolean(js_argument(args, count, 0));
 	status = bind_string(realm, "hidden", &pair[0]);
-	if (status == 0)
-		status = bind_string(realm, "", &pair[1]);
 	if (status != 0)
 		return status;
+	roots[0] = vm_value_as_cell(pair[0]);
+	registered = 0;
+	status = vm_heap_add_root(realm->heap, &roots[0]);
+	if (status != 0)
+		return status;
+	registered++;
+
+	/* The name stays live while the empty value is allocated. */
+	status = bind_string(realm, "", &pair[1]);
+	if (status != 0)
+		goto cleanup;
+	roots[1] = vm_value_as_cell(pair[1]);
+	status = vm_heap_add_root(realm->heap, &roots[1]);
+	if (status != 0)
+		goto cleanup;
+	registered++;
 
 	/* Added for true, removed for false. */
 	if (hidden) {
 		status = element_set_attribute(realm, this_value, pair, 2, result);
 	} else {
 		status = element_remove_attribute(realm, this_value, pair, 1, result);
+	}
+
+cleanup:
+	/* Both temporary arguments leave the root set on every outcome. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
 	}
 
 	/* Either may have thrown. */
@@ -970,7 +993,9 @@ script_async_set(
 	vm_value *result)
 {
 	struct dom_element *element;
+	struct vm_cell *roots[2];
 	vm_value pair[2];
+	unsigned registered;
 	int asynchronous;
 	int status;
 
@@ -978,14 +1003,37 @@ script_async_set(
 	*result = VM_VALUE_UNDEFINED;
 	asynchronous = vm_to_boolean(js_argument(args, count, 0));
 	status = bind_string(realm, "async", &pair[0]);
-	if (status == 0)
-		status = bind_string(realm, "", &pair[1]);
 	if (status != 0)
 		return status;
+	roots[0] = vm_value_as_cell(pair[0]);
+	registered = 0;
+	status = vm_heap_add_root(realm->heap, &roots[0]);
+	if (status != 0)
+		return status;
+	registered++;
+
+	/* The name stays live while the empty value is allocated. */
+	status = bind_string(realm, "", &pair[1]);
+	if (status != 0)
+		goto cleanup;
+	roots[1] = vm_value_as_cell(pair[1]);
+	status = vm_heap_add_root(realm->heap, &roots[1]);
+	if (status != 0)
+		goto cleanup;
+	registered++;
+
+	/* The requested Boolean chooses addition or removal. */
 	if (asynchronous) {
 		status = element_set_attribute(realm, this_value, pair, 2, result);
 	} else {
 		status = element_remove_attribute(realm, this_value, pair, 1, result);
+	}
+
+cleanup:
+	/* Both temporary arguments leave the root set on every outcome. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
 	}
 
 	/* A failed attribute change leaves the ordering flag alone. */

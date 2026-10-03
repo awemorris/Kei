@@ -1,0 +1,42 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review44/host-insertion"
+    ],
+    "exit": 0,
+    "stdout_file": "host-insertion.stdout",
+    "stderr_file": "host-insertion.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review44/host-mutation-record"
+    ],
+    "exit": 0,
+    "stdout_file": "host-mutation-record.stdout",
+    "stderr_file": "host-mutation-record.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review44/host-style-sheet"
+    ],
+    "exit": 0,
+    "stdout_file": "host-style-sheet.stdout",
+    "stderr_file": "host-style-sheet.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review44/host-submit"
+    ],
+    "exit": 0,
+    "stdout_file": "host-submit.stdout",
+    "stderr_file": "host-submit.stderr"
+  }
+]

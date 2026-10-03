@@ -13,6 +13,11 @@
  * and a join with a new key (the key saved, the daemon told, the network
  * joined, one request after the other).
  *
+ * libkeiland carries one request at a time.  A switch, a disconnect or a
+ * join asked for while another request is out waits in one slot and is
+ * sent when that one is answered, rather than being refused (ws089-p012
+ * C1, the system bar's way since ws005-p019); a scan is not kept.
+ *
  * Nothing here waits: the main loop calls se_network_poll often while a
  * network page is shown or a request is outstanding, and the answers
  * arrive through it.  Settings never speaks networkd's protocol itself
@@ -38,6 +43,9 @@
 static void network_read_files(struct se_app *app);
 static int network_read_links(struct se_app *app, uint64_t now);
 static void network_finished(struct se_app *app);
+static void network_outcome(struct se_app *app);
+static void network_ask(struct se_app *app, unsigned request, const char *ssid, unsigned step);
+static void network_send_waiting(struct se_app *app);
 static void network_send(struct se_app *app, unsigned request, const char *ssid);
 static void network_message(struct se_app *app, int bad, const char *format, const char *ssid);
 static int network_page_shown(const struct se_app *app);
@@ -61,9 +69,10 @@ se_network_open(
 		return;
 	}
 
-	/* The watch is live, and no request is outstanding. */
+	/* The watch is live, and no request is outstanding or waiting. */
 	network->live = 1;
 	network->request = KEILAND_NETWORK_REQUEST_NONE;
+	network->pending_request = KEILAND_NETWORK_REQUEST_NONE;
 
 	/* What is known without the daemon: the interfaces, the servers and the saved networks. */
 	(void)network_read_links(app, app->now);
@@ -111,6 +120,7 @@ se_network_poll(
 		if (network->scan_count > SE_NETWORK_SCAN)
 			network->scan_count = SE_NETWORK_SCAN;
 		network->scanned_at = now;
+		network->scan_received = 1;
 		se_log("NETWORK scan count=%lu", (unsigned long)network->scan_count);
 		app->dirty = 1;
 	}
@@ -145,7 +155,7 @@ se_network_poll(
 	if (network->scanned_at != 0U && now - network->scanned_at < NETWORK_SCAN_MS)
 		return;
 	network->scanned_at = now;
-	network_send(app, KEILAND_NETWORK_REQUEST_SCAN, NULL);
+	network_ask(app, KEILAND_NETWORK_REQUEST_SCAN, NULL, SE_JOIN_NONE);
 }
 
 /*
@@ -179,11 +189,12 @@ void
 se_network_close(
 	struct se_app *app)
 {
-	/* The key, then the watch. */
+	/* The key, then the watch; a request waiting in the slot is dropped with it. */
 	se_field_clear(&app->network.key);
 	keiland_network_close(app->network.handle);
 	app->network.handle = NULL;
 	app->network.live = 0;
+	app->network.pending_request = KEILAND_NETWORK_REQUEST_NONE;
 }
 
 /*
@@ -194,11 +205,11 @@ se_network_wifi(
 	struct se_app *app,
 	int on)
 {
-	/* The switch's request. */
+	/* The switch's request, sent or kept until the outstanding one is answered. */
 	if (on != 0) {
-		network_send(app, KEILAND_NETWORK_REQUEST_WIFI_ON, NULL);
+		network_ask(app, KEILAND_NETWORK_REQUEST_WIFI_ON, NULL, SE_JOIN_NONE);
 	} else {
-		network_send(app, KEILAND_NETWORK_REQUEST_WIFI_OFF, NULL);
+		network_ask(app, KEILAND_NETWORK_REQUEST_WIFI_OFF, NULL, SE_JOIN_NONE);
 	}
 }
 
@@ -209,9 +220,9 @@ void
 se_network_scan(
 	struct se_app *app)
 {
-	/* The scan's request. */
+	/* The scan's request (not kept when another request is out: that one's answer comes first). */
 	app->network.scanned_at = app->now;
-	network_send(app, KEILAND_NETWORK_REQUEST_SCAN, NULL);
+	network_ask(app, KEILAND_NETWORK_REQUEST_SCAN, NULL, SE_JOIN_NONE);
 }
 
 /*
@@ -222,11 +233,14 @@ se_network_join(
 	struct se_app *app,
 	const char *ssid)
 {
-	/* The join, named. */
-	(void)snprintf(app->network.join_ssid, sizeof(app->network.join_ssid), "%s", ssid);
-	app->network.join_step = SE_JOIN_CONNECT;
-	network_send(app, KEILAND_NETWORK_REQUEST_JOIN, ssid);
-	if (app->network.request == KEILAND_NETWORK_REQUEST_JOIN)
+	struct se_network *network;
+
+	/* The join, sent or kept until the outstanding request is answered. */
+	network = &app->network;
+	network_ask(app, KEILAND_NETWORK_REQUEST_JOIN, ssid, SE_JOIN_CONNECT);
+
+	/* A join sent or waiting says so (a refusal has said why instead). */
+	if (network->request == KEILAND_NETWORK_REQUEST_JOIN || network->pending_request == KEILAND_NETWORK_REQUEST_JOIN)
 		network_message(app, 0, "Joining %s...", ssid);
 }
 
@@ -243,14 +257,8 @@ se_network_join_key(
 	struct se_network *network;
 	int error;
 
-	/* One request at a time. */
-	network = &app->network;
-	if (network->request != KEILAND_NETWORK_REQUEST_NONE) {
-		network_message(app, 1, "Wait for the network to answer, then try %s again.", ssid);
-		return;
-	}
-
 	/* The key, saved (the store checks its length too); a refusal says why. */
+	network = &app->network;
 	error = keiland_network_save_key(ssid, key);
 	if (error == EINVAL) {
 		network_message(app, 1, "The key of %s must be 8 to 63 characters.", ssid);
@@ -264,12 +272,12 @@ se_network_join_key(
 	/* The log line the tests read (never the key). */
 	se_log("NETWORK save-key ok");
 
-	/* The saved networks as they are now, and the daemon told; the join follows its answer. */
+	/* The saved networks as they are now, and the daemon told (now, or after the outstanding request); the join follows its answer. */
 	network_read_files(app);
-	(void)snprintf(network->join_ssid, sizeof(network->join_ssid), "%s", ssid);
-	network->join_step = SE_JOIN_PROFILES;
-	network_send(app, KEILAND_NETWORK_REQUEST_PROFILES, NULL);
-	if (network->request == KEILAND_NETWORK_REQUEST_PROFILES)
+	network_ask(app, KEILAND_NETWORK_REQUEST_PROFILES, ssid, SE_JOIN_PROFILES);
+
+	/* A join under way or waiting says so (a refusal has said why instead). */
+	if (network->request == KEILAND_NETWORK_REQUEST_PROFILES || network->pending_request == KEILAND_NETWORK_REQUEST_PROFILES)
 		network_message(app, 0, "Joining %s...", ssid);
 }
 
@@ -280,8 +288,8 @@ void
 se_network_disconnect(
 	struct se_app *app)
 {
-	/* The disconnect's request. */
-	network_send(app, KEILAND_NETWORK_REQUEST_DISCONNECT, NULL);
+	/* The disconnect's request, sent or kept until the outstanding one is answered. */
+	network_ask(app, KEILAND_NETWORK_REQUEST_DISCONNECT, NULL, SE_JOIN_NONE);
 }
 
 /* Reads the DNS servers and the saved networks. */
@@ -388,12 +396,25 @@ network_read_links(
 	return moved;
 }
 
-/* Carries on after a request finished: the next step of a join, or a message about the outcome. */
+/* Carries on after a request finished: its outcome, then the request that waited in the slot. */
 static void
 network_finished(
 	struct se_app *app)
 {
+	/* The next step of a join, or a message about the outcome. */
+	network_outcome(app);
+
+	/* The request that waited is sent once nothing is outstanding (a join's next step goes first). */
+	network_send_waiting(app);
+}
+
+/* Takes a finished request's outcome: the next step of a join, or a message about it. */
+static void
+network_outcome(
+	struct se_app *app)
+{
 	struct se_network *network;
+	char reason[SE_MESSAGE];
 	unsigned request;
 	int error;
 
@@ -420,6 +441,12 @@ network_finished(
 			network_message(app, 0, "Connected to %s.", network->join_ssid);
 		} else if (error == ENOENT) {
 			network_message(app, 1, "%s has no saved key.", network->join_ssid);
+		} else if (error == EACCES) {
+			/* The network refused the key during its handshake (ws005-p020, q631). */
+			network_message(app, 1, "%s did not accept the key. Check the key and try again.", network->join_ssid);
+		} else if (error == ENETUNREACH) {
+			/* No radio sees the network. */
+			network_message(app, 1, "%s is not in reach.", network->join_ssid);
 		} else if (error == EPERM && network->state.wifi == KEILAND_WIFI_OFF) {
 			/* networkd refuses a join while Wi-Fi is off. */
 			network_message(app, 1, "Wi-Fi is off. Turn it on to join %s.", network->join_ssid);
@@ -427,7 +454,9 @@ network_finished(
 			/* Only root and the network group may control Wi-Fi (2026-10-02, ws005-p019). */
 			network_message(app, 1, "This account may not control Wi-Fi, so it cannot join %s. Ask an administrator to add it to the network group.", network->join_ssid);
 		} else {
-			network_message(app, 1, "Could not join %s. Check the key and that the network is in reach.", network->join_ssid);
+			/* Any other failure names its reason. */
+			(void)snprintf(reason, sizeof(reason), "Could not join %%s (%s).", strerror(error));
+			network_message(app, 1, reason, network->join_ssid);
 		}
 
 		/* The join is over. */
@@ -444,6 +473,91 @@ network_finished(
 	/* The switch's and the disconnect's success need no words; the state shows them. */
 	if (request == KEILAND_NETWORK_REQUEST_WIFI_OFF || request == KEILAND_NETWORK_REQUEST_DISCONNECT)
 		network->message[0] = '\0';
+}
+
+/*
+ * Asks the daemon for something: sent now, or kept in the slot while
+ * another request is outstanding (a later ask replaces what waited; a scan
+ * is not kept).  step is the join's step the request starts (SE_JOIN_NONE
+ * for a request that is no join), and ssid names the join's network.
+ */
+static void
+network_ask(
+	struct se_app *app,
+	unsigned request,
+	const char *ssid,
+	unsigned step)
+{
+	struct se_network *network;
+
+	/* Without a watch nothing is sent or kept. */
+	network = &app->network;
+	if (network->live == 0) {
+		network_message(app, 1, "%s", "The network service is not running.");
+		return;
+	}
+
+	/* Another request is out: a scan is dropped (that request's answer comes first anyway). */
+	if (network->request != KEILAND_NETWORK_REQUEST_NONE && request == KEILAND_NETWORK_REQUEST_SCAN) {
+		se_log("NETWORK request=%u skipped busy=%u", request, network->request);
+		return;
+	}
+
+	/* Another request is out: anything else waits in the slot for its answer, in place of what waited before. */
+	if (network->request != KEILAND_NETWORK_REQUEST_NONE) {
+		network->pending_request = request;
+		network->pending_step = step;
+		network->pending_ssid[0] = '\0';
+		if (ssid != NULL)
+			(void)snprintf(network->pending_ssid, sizeof(network->pending_ssid), "%s", ssid);
+		se_log("NETWORK request=%u waits busy=%u", request, network->request);
+		app->dirty = 1;
+		return;
+	}
+
+	/* A join's first step carries its network through the steps. */
+	network->join_step = step;
+	if (step != SE_JOIN_NONE && ssid != NULL)
+		(void)snprintf(network->join_ssid, sizeof(network->join_ssid), "%s", ssid);
+
+	/* Only a join names its network to the daemon. */
+	if (request == KEILAND_NETWORK_REQUEST_JOIN) {
+		network_send(app, request, ssid);
+	} else {
+		network_send(app, request, NULL);
+	}
+}
+
+/* Sends the request that waited in the slot, once no request is outstanding. */
+static void
+network_send_waiting(
+	struct se_app *app)
+{
+	struct se_network *network;
+	char ssid[KEILAND_NETWORK_SSID_MAX];
+	unsigned request;
+	unsigned step;
+
+	/* Nothing waits, or the outstanding request (a join's next step) still has to be answered. */
+	network = &app->network;
+	if (network->pending_request == KEILAND_NETWORK_REQUEST_NONE)
+		return;
+	if (network->request != KEILAND_NETWORK_REQUEST_NONE)
+		return;
+
+	/* The slot is emptied before the request goes (the ask may keep nothing again). */
+	request = network->pending_request;
+	step = network->pending_step;
+	(void)snprintf(ssid, sizeof(ssid), "%s", network->pending_ssid);
+	network->pending_request = KEILAND_NETWORK_REQUEST_NONE;
+	se_log("NETWORK request=%u from-slot", request);
+
+	/* The request, as if it were asked now. */
+	if (ssid[0] != '\0') {
+		network_ask(app, request, ssid, step);
+	} else {
+		network_ask(app, request, NULL, step);
+	}
 }
 
 /* Sends a request, unless one is outstanding or there is no watch; a refusal is shown. */

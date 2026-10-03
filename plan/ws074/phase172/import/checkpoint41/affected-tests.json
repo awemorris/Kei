@@ -1,0 +1,52 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-interp"
+    ],
+    "exit": 0,
+    "stdout_file": "host-interp.stdout",
+    "stderr_file": "host-interp.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-realms"
+    ],
+    "exit": 0,
+    "stdout_file": "host-realms.stdout",
+    "stderr_file": "host-realms.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-context-ownership"
+    ],
+    "exit": 0,
+    "stdout_file": "host-context-ownership.stdout",
+    "stderr_file": "host-context-ownership.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-realm-retirement"
+    ],
+    "exit": 0,
+    "stdout_file": "host-realm-retirement.stdout",
+    "stderr_file": "host-realm-retirement.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-heap"
+    ],
+    "exit": 0,
+    "stdout_file": "host-heap.stdout",
+    "stderr_file": "host-heap.stderr"
+  }
+]

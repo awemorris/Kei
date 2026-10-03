@@ -235,9 +235,17 @@ ipv4_output_common(
 	if (packet == NULL)
 		return EINVAL;
 
-	/* Takes the route, and from it the device when none was given. */
+	/*
+	 * Takes the route, and from it the device when none was given.  A
+	 * given device uses only its own routes, so that a socket bound to it
+	 * never sends to another device's gateway.
+	 */
 	have_route = 0;
-	if (route_lookup_ref(destination, &route) == 0)
+	if (device != NULL)
+		error = route_lookup_device_ref(destination, device, &route);
+	else
+		error = route_lookup_ref(destination, &route);
+	if (error == 0)
 		have_route = 1;
 	if (device == NULL && have_route)
 		device = route.device;
@@ -288,8 +296,13 @@ ipv4_output_common(
 		device = loopback;
 	}
 
-	/* Resolves the next hop, which is the gateway when the route has one. */
-	if (have_route && route.gateway != 0)
+	/*
+	 * Resolves the next hop, which is the gateway when the route has one.
+	 * The limited broadcast stays on the link and never goes to a gateway.
+	 */
+	if (destination == INADDR_BROADCAST)
+		next_hop = destination;
+	else if (have_route && route.gateway != 0)
 		next_hop = route.gateway;
 	else
 		next_hop = destination;

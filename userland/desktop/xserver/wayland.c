@@ -39,6 +39,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <primary-selection-unstable-v1-client-protocol.h>
+#include <keiland.h>
 #include <wayland-client.h>
 #include <xdg-shell-client-protocol.h>
 
@@ -89,6 +90,14 @@ struct x11_wayland_window {
 	struct xdg_surface *role;
 	struct xdg_toplevel *toplevel;
 	int configured;
+
+	/*
+	 * zdesktop's titlebar for the X window: an X client draws no
+	 * decoration of its own, so the desktop window asks for the
+	 * compositor's (NULL from a compositor without it; ws099-p023,
+	 * BUG-136).
+	 */
+	struct keiland_titlebar *titlebar;
 
 	/* Its swapchain when Vulkan shows it (NULL: the wl_shm buffers below do). */
 	struct x11_vulkan_window *vulkan;
@@ -252,6 +261,11 @@ static const struct xdg_wm_base_listener wayland_shell_listener = {
 /* A window role's configure. */
 static const struct xdg_surface_listener wayland_surface_listener = {
 	wayland_configure
+};
+
+/* The titlebar's events: an X window's titlebar has no controls or tabs, so it hears none. */
+static const struct keiland_titlebar_listener wayland_titlebar_listener = {
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
 /* A toplevel's size, close request and bounds. */
@@ -800,6 +814,13 @@ x11_wayland_window_open(
 	if (app_id == NULL)
 		app_id = WAYLAND_APP_ID;
 	xdg_toplevel_set_app_id(window->toplevel, app_id);
+
+	/* zdesktop's titlebar, asked for before the first commit so that the first configure carries it. */
+	window->titlebar = keiland_titlebar_create(wayland->display, window->toplevel, &wayland_titlebar_listener, window);
+	if (window->titlebar == NULL)
+		fprintf(stderr, "X11SERVER TITLEBAR none errno=%d\n", errno);
+
+	/* The first commit, without an image, asks for the first configure. */
 	wl_surface_commit(window->surface);
 	status = wl_display_roundtrip(wayland->display);
 	if (status < 0 || !window->configured) {
@@ -986,6 +1007,8 @@ x11_wayland_window_close(
 	if (window->vulkan != NULL)
 		x11_vulkan_window_close(window->vulkan);
 	wayland_buffers_free(window);
+	if (window->titlebar != NULL)
+		keiland_titlebar_destroy(window->titlebar);
 	if (window->toplevel != NULL)
 		xdg_toplevel_destroy(window->toplevel);
 	if (window->role != NULL)

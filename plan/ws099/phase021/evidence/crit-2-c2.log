@@ -1,0 +1,25 @@
+Files: surface 8, 1120x720 at 400,271 (title bar top) to 1520,1043
+bottom-right: 1120x720 at 400,271 -> 1160x760 at 400,271
+resize bottom-right (edges=10) ok
+top-left: 1160x760 at 400,271 -> 1200x800 at 360,231
+resize top-left (edges=5) ok
+top-right: 1200x800 at 360,231 -> 1240x840 at 360,191
+resize top-right (edges=9) ok
+bottom-left: 1240x840 at 360,191 -> 1280x880 at 320,191
+resize bottom-left (edges=6) ok
+right: 1280x880 at 320,191 -> 1320x880 at 320,191
+resize right (edges=8) ok
+left: 1320x880 at 320,191 -> 1360x880 at 280,191
+resize left (edges=4) ok
+bottom: 1360x880 at 280,191 -> 1360x920 at 280,191
+resize bottom (edges=2) ok
+top: 1360x920 at 280,191 -> 1360x960 at 280,151
+resize top (edges=1) ok
+move title-bar by 60,40 (280,203 -> 340,243) ok
+maximize: docked 1920x1242 at 0,38 ok
+unmaximize: back to 340,243 1360x960 (was 340,243 1360x960) ok
+minimize ok
+unminimize from Wiseview ok
+move after unminimize (from its place) by 10,0 (340,243 -> 350,243) ok
+C2 RESULT pass=14 fail=0
+C2: PASS

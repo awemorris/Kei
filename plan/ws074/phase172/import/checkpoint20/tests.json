@@ -1,0 +1,52 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-traversal"
+    ],
+    "exit": 0,
+    "stdout_file": "host-traversal.stdout",
+    "stderr_file": "host-traversal.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-range-mutation"
+    ],
+    "exit": 0,
+    "stdout_file": "host-range-mutation.stdout",
+    "stderr_file": "host-range-mutation.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-option-state"
+    ],
+    "exit": 0,
+    "stdout_file": "host-option-state.stdout",
+    "stderr_file": "host-option-state.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-form-owner"
+    ],
+    "exit": 0,
+    "stdout_file": "host-form-owner.stdout",
+    "stderr_file": "host-form-owner.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-node-cloning"
+    ],
+    "exit": 0,
+    "stdout_file": "host-node-cloning.stdout",
+    "stderr_file": "host-node-cloning.stderr"
+  }
+]

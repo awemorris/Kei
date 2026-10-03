@@ -43,9 +43,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = traversal_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Releases the embedding only after its complete result is checked. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("traversal GC checks: %u/%u passed\n", checks - failures, checks);
@@ -102,9 +106,13 @@ traversal_script(
 
 	/* The actual script engine creates every node, walker and callback object. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Source conversion storage is no longer borrowed after script execution. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -121,6 +129,7 @@ traversal_filter(
 {
 	struct dom_node *node;
 	struct vm_cell *found;
+	vm_value argument;
 	uintptr_t address;
 	int same;
 	int status;
@@ -128,7 +137,8 @@ traversal_filter(
 	UNUSED_PARAMETER(this_value);
 
 	/* The callback's argument is a genuine production Node wrapper. */
-	status = bind_argument_node(realm, js_argument(args, count, 0), &node);
+	argument = js_argument(args, count, 0);
+	status = bind_argument_node(realm, argument, &node);
 	if (status != 0)
 		return status;
 
@@ -167,6 +177,7 @@ traversal_case(
 	uintptr_t child_address;
 	uintptr_t iterator_address;
 	int same;
+	int valid;
 	int error;
 
 	/* The primary embedding uses ordinary manual ownership and realm tracing. */
@@ -256,8 +267,24 @@ traversal_case(
 	}
 
 	/* The native iterator cell address is observed without registering it as a root. */
+	valid = vm_value_is_object(answer);
+	if (!valid) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Only an actual native iterator wrapper exposes the observed weak state. */
 	weak_wrapper = (struct vm_object *)vm_value_as_cell(answer);
-	iterator_address = (uintptr_t)vm_value_as_cell(weak_wrapper->internal);
+	found = vm_value_as_cell(weak_wrapper->internal);
+	if (weak_wrapper->kind != VM_KIND_PLATFORM || found == NULL) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Observes state identity without adding a strong collector edge. */
+	iterator_address = (uintptr_t)found;
 	error = traversal_script(realm, "discarded=null;true", &answer);
 	if (error != 0) {
 		bind_window_destroy(window);
@@ -310,6 +337,15 @@ traversal_case(
 
 	/* Captures the foreign owner address without registering it as an embedding root. */
 	node = bind_node_of(answer);
+	if (node == NULL ||
+	    node->document == NULL ||
+	    node->document->context == NULL) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Saves the managed owner identity before excluding conservative roots. */
 	child_address = (uintptr_t)node->document->context;
 	vm_heap_set_stack_base(heap, NULL);
 	vm_heap_collect(heap);

@@ -1,0 +1,38 @@
+{
+  "queue": "q597",
+  "checkpoint": 52,
+  "source": "userland/desktop/libbrowser/js/builtin_function.c",
+  "source_sha256": "63621c17e014184f43842353217967c394d0f7e97cc31cd03f3286938f3433e8",
+  "baseline": "cefa1f1b800a7f8c0ff72e9c870178536c7f6212",
+  "reviewed": 172,
+  "total": 209,
+  "remaining": 37,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 30,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "tests": {
+    "js-tests": "js-tests 14/14",
+    "host-vm-factory": "native VM factory GC: 56/56 passed",
+    "host-object": "host-object: 100 checks, 0 failed",
+    "host-heap": "host-heap: 31 checks, 0 failed"
+  },
+  "before_probes": {
+    "probe-function-apply": 1,
+    "probe-function-bind": -11
+  },
+  "after_probes": {
+    "probe-function-apply": "apply result=42 is_number=1 actual_collections=1",
+    "probe-function-bind": "bound output live=1 actual_collections=1"
+  },
+  "limits": [
+    "Only builtin_function.c is newly full-reviewed. Original whole p172 final gates and37 production files remain.",
+    "No target/boot/ASan or current Acid3 pixel comparison was run."
+  ]
+}

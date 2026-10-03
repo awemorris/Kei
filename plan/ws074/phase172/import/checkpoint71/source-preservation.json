@@ -1,0 +1,9 @@
+{
+  "before_lines": 1529,
+  "after_lines": 1778,
+  "before_sha256": "a31740de92a21528c7d9ccdac9557eb5a864462e49e67eb1cad17134a6230d50",
+  "after_sha256": "d9f4151f7cb61242cbdd99012774dc089439275f5bd6b287bd6c6e0e178147c5",
+  "literal_multiset_identical": true,
+  "literal_instances": 34,
+  "public_ABI_changed": false
+}

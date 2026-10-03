@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/css/rule-model.c",
+      "formatted_sha256": "724dcf1cf9101903d7ac28ca7d12f374543dad79543427bc0a5efce0b0ef2fa0",
+      "final_sha256": "f7ebfdc79a8821f83ecfc3ebd9842f7775501b29cc8ec07b27418a48578f6441",
+      "restorations": "definition argument tabs/compound and nonstandard loop lines"
+    },
+    {
+      "path": "plan/ws074/tests/host-range-delete-contents.c",
+      "formatted_sha256": "7cc9d9a538b46f0e90098a403cc1a8d7baf10fa232958d2d18e4803ca99a4ac2",
+      "final_sha256": "f6923c0b1b88593d10352b4aeb0bd421fb6c6d2ec69d76ec7a4dd5b9a5c8a118",
+      "restorations": "definition argument tabs/constant layout and semantic cleanup/publication paragraphs"
+    }
+  ]
+}

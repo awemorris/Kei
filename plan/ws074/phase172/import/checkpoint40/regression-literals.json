@@ -1,0 +1,31 @@
+{
+  "path": "plan/ws074/tests/host-collection.c",
+  "final_source_sha256": "6243ae1118603f6c06c74b0c911d23cf5ec16f4a48c0c0cc2d9daf4915bea718",
+  "original_ordered_literals_preserved": true,
+  "added_literals": [
+    "\"collection-wrapper-pressure\"",
+    "\"collection wrapper allocation triggers actual GC without stack roots\"",
+    "\"unpublished collection state survives wrapper allocation GC\"",
+    "\"allocation GC collection length uses genuine complete state\"",
+    "\"allocation GC preserves published SameObject wrapper identity\"",
+    "\"native collection constructor roots are released after embedding retirement\"",
+    "\"native collection state survives argument conversion GC without caller roots\"",
+    "\"held\"",
+    "\"held\"",
+    "\"collectCollection\"",
+    "\"(function(){var d=document.implementation.createDocument(null,'root',null);\"",
+    "\"var x=d.createElement('x');x.setAttribute('id','held');d.documentElement.appendChild(x);\"",
+    "\"return d.documentElement.children;})()\"",
+    "\"(function(){var d=document.implementation.createDocument(null,'root',null),ns='http://www.w3.org/1999/xhtml';\"",
+    "\"var f=d.createElementNS(ns,'form');d.documentElement.appendChild(f);\"",
+    "\"for(var i=0;i<2;i++){var x=d.createElementNS(ns,'input');x.setAttribute('type','radio');\"",
+    "\"x.setAttribute('name','held');x.setAttribute('value','held');f.appendChild(x);}\"",
+    "\"return f.elements;})()\"",
+    "\"({valueOf:collectCollection,toString:collectCollection})\"",
+    "\"native collection argument conversion executes exactly once\"",
+    "\"native radio assignment completes after conversion collection\"",
+    "\"native collection lookup returns genuine member or duplicate after conversion GC\"",
+    "\"native collection temporary root is released after argument conversion\""
+  ],
+  "scope": "Only actual unpublished-state/argument-conversion GC regressions and native-root retirement observations. No original corpus or production literal replaced."
+}

@@ -1,0 +1,10 @@
+{
+  "before_lines": 906,
+  "after_lines": 931,
+  "literals_identical": false,
+  "before_literals": 65,
+  "after_literals": 66,
+  "before_sha256": "8b20d2b754ce373260c8d79aee8d997c9472c428aca85d46cc6580a54e2dbce5",
+  "after_sha256": "75ad356ede3d8a5d29ccd2fa3e224aea44ab49e805936f8096123d3aee2b9470",
+  "added_diagnostic": "browser: cannot write page console: %s\\n"
+}

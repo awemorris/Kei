@@ -1,0 +1,52 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "stdout_file": "host-vm-factory.stdout",
+    "stderr_file": "host-vm-factory.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-heap"
+    ],
+    "exit": 0,
+    "stdout_file": "host-heap.stdout",
+    "stderr_file": "host-heap.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/class.js"
+    ],
+    "exit": 0,
+    "stdout_file": "class.stdout",
+    "stderr_file": "class.stderr",
+    "expected": "plan/ws074/tests/js/class.expected",
+    "exact_output_equal": true,
+    "lines": 17
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/builtins.js"
+    ],
+    "exit": 0,
+    "stdout_file": "builtins.stdout",
+    "stderr_file": "builtins.stderr",
+    "expected": "plan/ws074/tests/js/builtins.expected",
+    "exact_output_equal": true,
+    "lines": 30
+  }
+]

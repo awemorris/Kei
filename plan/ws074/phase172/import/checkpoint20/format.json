@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/dom/removal.c",
+      "formatted_sha256": "c89cdae15424bcc3ef9235aec711c06a24fb76dbad5153c4aefdfbdd79877cc9",
+      "final_sha256": "a7daa28908d0e4c4ca00e09503f77593e8b60db02b9f5d0f0cda92a386531edb",
+      "restorations": "definition argument tabs and compound condition layout"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/control.c",
+      "formatted_sha256": "51e3136f22edca19c2dd054f7a0b4ec0142ae3737d2d98877dd9fb9b91299beb",
+      "final_sha256": "0fde4b2727229660dbbbf0e3f60a1e980f62c605a80f06357420a554ce9afade",
+      "restorations": "definition argument tabs and compound condition layout"
+    }
+  ]
+}

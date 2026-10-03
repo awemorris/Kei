@@ -27,7 +27,7 @@ effort: high
 - 依頼された Phase の範囲だけを扱う。範囲外の作業や新しい目標を足さない。無関係な変更を壊さない。
 - HAL（`include/hal/hal.h`、`src/hal/` 配下）の変更は、具体的な差分ごとにユーザーの事前承認が要る。
   必要になったら実装せずに止め、提案する差分と理由を報告する。
-- aggregate `make check` は実行しない。Phaseに必要な有限の確認（対象build、host試験、QEMU）だけを行う。
+- aggregate `make check` は実行しない。細かい修正ごとに回帰を回さない（2026-10-03 ユーザー）: 実装をレビューして確信を持ち、build（warning 0）と変えた所の短い host 試験まで。QEMU・実機の試験は WS の最後に試験の担当 T1 に依頼し、自分で QEMU を起動しない（`plan/agents/protocol.md` の「試験の担当 T1」）。
   各コマンドとVMには時間の上限を付ける。同じ条件で変更なしのretryは3回まで。
 - **共有の `build/` を消さない。** `build/llvm`、`build/NoctLang`、`build/host-noct-state`、`build/sources`、
   `build/distfiles`、`build/amd64` などは、再取得・再buildに時間がかかる共有の成果物である。自分のPhaseで

@@ -1,0 +1,39 @@
+{
+  "original_source_sha256": "707677d773dddd712acf9d481f6bc40bcd24519f1e4dc281cee7a76c0ae9c71f",
+  "current_source_sha256": "be2441dd77dbdd2a803811abdfed3a21651685ad0f2374753edf739918800c45",
+  "original_object_text_sha256": "f1aa97d04a14810c179c4bc4fff3112b3531c7b9e6f99fd72215a33b0fb42d20",
+  "current_object_text_sha256": "848d36650eb67159cbc35e2021d0ea56fc64f560a672b315a64dd4721e5ed93c",
+  "before_exit": -11,
+  "after_exit": 0,
+  "before_production_sha256": "707677d773dddd712acf9d481f6bc40bcd24519f1e4dc281cee7a76c0ae9c71f",
+  "after_production_sha256": "be2441dd77dbdd2a803811abdfed3a21651685ad0f2374753edf739918800c45",
+  "probe_source_sha256": "5030a1528c83220aef6cf7aa5b390bf3f5d7b1ff3d2d16f92b861f9a29cb755e",
+  "scoped_compile": {
+    "argv": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/browser3-p172/include",
+      "-I.",
+      "-c",
+      "userland/desktop/libbrowser/vm/spread.c",
+      "-o",
+      "build/browser3-p172/plain/obj/libbrowser_vm_spread.o"
+    ],
+    "exit": 0,
+    "warnings": 0
+  },
+  "whole_builder_exit": "unknown: unified shell session did not survive interruption",
+  "other_source_hashes_equal": true,
+  "full_spread_review": false,
+  "whole_phase_cleared": false
+}

@@ -1,0 +1,37 @@
+{
+  "phase": "ws074-p172",
+  "attempt": "q590-i01",
+  "checkpoint": 15,
+  "scope": [
+    "userland/desktop/libbrowser/bind/style-context.c",
+    "userland/desktop/libbrowser/bind/implementation.c",
+    "plan/ws074/tests/host-frame-viewport.c"
+  ],
+  "build": {
+    "argv": [
+      "sh",
+      "plan/ws074/tests/host-build.sh",
+      "plain"
+    ],
+    "environment": {
+      "BROWSER_HOST_BUILD": "build/browser3-p172"
+    },
+    "exit": 0,
+    "warnings": 0,
+    "compiler": "GCC 14.2.0",
+    "flags_path": "build/browser3-p172/plain/flags"
+  },
+  "style_exit": 0,
+  "diff_check_exit": 0,
+  "reviewed": 100,
+  "remaining_C_header": 109,
+  "whole_phase_cleared": false,
+  "skipped": [
+    "new target build",
+    "new zedBSD boot",
+    "ASan campaign",
+    "whole final conformance",
+    "Acid3/downstream suites"
+  ],
+  "limits": "Focused host evidence; no target or final whole acceptance asserted."
+}

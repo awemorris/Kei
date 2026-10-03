@@ -1,0 +1,18 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/link.c",
+    "function": "page_fetch_response",
+    "jumps": 10,
+    "single_target": "cleanup",
+    "all_forward": true,
+    "manual_disposition": "permitted C full standard section14 shared cleanup; no loop/retry or cross-function jump"
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/svg-text.c",
+    "function": "svg_text_chars",
+    "jumps": 2,
+    "single_target": "cleanup",
+    "all_forward": true,
+    "manual_disposition": "permitted C full standard section14 shared cleanup; no loop/retry or cross-function jump"
+  }
+]

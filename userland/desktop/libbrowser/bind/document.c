@@ -143,20 +143,37 @@ bind_create_element_ns(
 	struct dom_element *element;
 	struct vm_string *prefix;
 	struct vm_string *local;
+	struct vm_cell *roots[4];
 	struct wb_units units;
 	size_t colon;
+	unsigned registered;
 	int ns;
 	int valid;
 	int xml_prefix;
 	int xmlns_name;
 	int status;
 
+	/* Retains caller strings and the new name slices until the element owns them. */
+	roots[0] = NULL;
+	if (uri != NULL)
+		roots[0] = &uri->cell;
+	roots[1] = &qualified->cell;
+	roots[2] = NULL;
+	roots[3] = NULL;
+	registered = 0;
+	while (registered < 4U) {
+		status = vm_heap_add_root(document->heap, &roots[registered]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
 	/* Copies both string representations into checked UTF-16 slice storage. */
 	wb_units_init(&units);
 	status = vm_string_append_units(qualified, &units);
 	if (status != 0) {
 		wb_units_release(&units);
-		return status;
+		goto cleanup;
 	}
 
 	/* The first colon separates the prefix from the remaining local name. */
@@ -172,15 +189,23 @@ bind_create_element_ns(
 		prefix = vm_atom_from_units(realm->heap, units.data, colon);
 		if (prefix == NULL) {
 			wb_units_release(&units);
-			return ENOMEM;
+			status = ENOMEM;
+			goto cleanup;
 		}
+
+		/* The prefix survives allocation of the local-name atom. */
+		roots[2] = &prefix->cell;
 
 		/* The local name excludes the separator but preserves all later code units. */
 		local = vm_atom_from_units(realm->heap, units.data + colon + 1U, units.length - colon - 1U);
 		if (local == NULL) {
 			wb_units_release(&units);
-			return ENOMEM;
+			status = ENOMEM;
+			goto cleanup;
 		}
+
+		/* The local name survives validation and native element allocation. */
+		roots[3] = &local->cell;
 	}
 
 	/* Name atoms now own their data independently of temporary slice storage. */
@@ -191,7 +216,7 @@ bind_create_element_ns(
 		valid = document_prefix_valid(prefix);
 		if (!valid) {
 			status = bind_throw_dom(realm, "InvalidCharacterError", "The namespace prefix is not valid.");
-			return status;
+			goto cleanup;
 		}
 	}
 
@@ -199,14 +224,14 @@ bind_create_element_ns(
 	valid = document_element_name_valid(local);
 	if (!valid) {
 		status = bind_throw_dom(realm, "InvalidCharacterError", "The local name is not valid.");
-		return status;
+		goto cleanup;
 	}
 
 	/* A nonempty prefix cannot be bound to a missing namespace. */
 	ns = document_namespace_id(uri);
 	if (prefix != NULL && ns == DOM_NS_NONE) {
 		status = bind_throw_dom(realm, "NamespaceError", "A prefix requires a namespace.");
-		return status;
+		goto cleanup;
 	}
 
 	/* The xml prefix is reserved for the exact XML namespace URI. */
@@ -217,7 +242,7 @@ bind_create_element_ns(
 	/* A reserved XML prefix cannot name any unrelated namespace. */
 	if (xml_prefix && ns != DOM_NS_XML) {
 		status = bind_throw_dom(realm, "NamespaceError", "The xml prefix requires the XML namespace.");
-		return status;
+		goto cleanup;
 	}
 
 	/* The xmlns name or prefix is reserved for the XMLNS namespace URI. */
@@ -231,23 +256,41 @@ bind_create_element_ns(
 	/* Namespace declarations cannot be represented in an unrelated namespace. */
 	if (xmlns_name && ns != DOM_NS_XMLNS) {
 		status = bind_throw_dom(realm, "NamespaceError", "The xmlns name requires the XMLNS namespace.");
-		return status;
+		goto cleanup;
 	}
 
 	/* The XMLNS namespace is reserved exclusively for xmlns names. */
 	if (ns == DOM_NS_XMLNS && !xmlns_name) {
 		status = bind_throw_dom(realm, "NamespaceError", "The XMLNS namespace requires the xmlns name.");
-		return status;
+		goto cleanup;
 	}
 
 	/* Records the complete namespace identity before allocating its wrapper. */
 	element = dom_element_create(document, ns, local, prefix);
-	if (element == NULL)
-		return ENOMEM;
+	if (element == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The newly allocated element retains the full namespace identity. */
 	element->namespace_uri = uri;
 
 	/* Succeeded: the validated element retains the complete namespace identity. */
 	*created = element;
+	status = 0;
+
+cleanup:
+	/* The caller or new element owns every name after this factory returns. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(document->heap, &roots[registered]);
+	}
+
+	/* A failed validation or allocation leaves no published element. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the new element is available for publication. */
 	return 0;
 }
 
@@ -752,6 +795,7 @@ document_stream_open(
 {
 	struct html_parser *parser;
 	struct dom_node *removed;
+	struct vm_cell *removed_root;
 	int status;
 
 	/* Prepare the real HTML parser before abandoning any previous input or DOM. */
@@ -769,8 +813,19 @@ document_stream_open(
 	/* Native removals repair ranges, iterators and nested frame retirement before notification. */
 	while (window->document->node.first_child != NULL) {
 		removed = window->document->node.first_child;
+		removed_root = &removed->cell;
+		status = vm_heap_add_root(window->document->heap, &removed_root);
+		if (status != 0) {
+			html_parser_destroy(window->document_parser);
+			window->document_parser = NULL;
+			window->ready_state = "complete";
+			return status;
+		}
+
+		/* Mutation callbacks may collect while they inspect the detached child. */
 		dom_remove(removed);
 		status = bind_environment_child_mutation(window, &window->document->node, NULL, removed);
+		vm_heap_remove_root(window->document->heap, &removed_root);
 		if (status != 0) {
 			html_parser_destroy(window->document_parser);
 			window->document_parser = NULL;
@@ -1080,6 +1135,8 @@ document_title_set(
 	struct dom_node *text;
 	struct vm_string *string;
 	struct vm_string *name;
+	struct vm_cell *string_root;
+	struct vm_cell *name_root;
 	struct wb_units units;
 	int status;
 
@@ -1091,19 +1148,44 @@ document_title_set(
 	status = bind_to_string(realm, js_argument(args, count, 0), &string);
 	if (status != 0)
 		return status;
+	string_root = &string->cell;
+	status = vm_heap_add_root(realm->heap, &string_root);
+	if (status != 0)
+		return status;
 
 	/* The <title>, or a new one at the end of the head (without a head, nothing changes). */
 	title = document_find_title(document);
 	if (title == NULL) {
 		head = document_html_child(document, DOM_TAG_HEAD);
-		if (head == NULL)
+		if (head == NULL) {
+			vm_heap_remove_root(realm->heap, &string_root);
 			return 0;
+		}
+
+		/* Allocates the title name before making its element. */
 		name = vm_atom_from_ascii(realm->heap, "title");
-		if (name == NULL)
+		if (name == NULL) {
+			vm_heap_remove_root(realm->heap, &string_root);
 			return ENOMEM;
+		}
+
+		/* The title name survives the native element allocation. */
+		name_root = &name->cell;
+		status = vm_heap_add_root(document->heap, &name_root);
+		if (status != 0) {
+			vm_heap_remove_root(realm->heap, &string_root);
+			return status;
+		}
+
+		/* Creates and attaches the missing title element. */
 		created = dom_element_create(document, DOM_NS_HTML, name, NULL);
-		if (created == NULL)
+		vm_heap_remove_root(document->heap, &name_root);
+		if (created == NULL) {
+			vm_heap_remove_root(realm->heap, &string_root);
 			return ENOMEM;
+		}
+
+		/* The head now owns the new title before text replacement begins. */
 		title = &created->node;
 		dom_append_child(&head->node, title);
 	}
@@ -1113,6 +1195,7 @@ document_title_set(
 		dom_remove(title->first_child);
 	wb_units_init(&units);
 	status = vm_string_append_units(string, &units);
+	vm_heap_remove_root(realm->heap, &string_root);
 	text = NULL;
 	if (status == 0 && units.length != 0) {
 		text = dom_text_create(document, units.data, units.length);
@@ -1195,6 +1278,7 @@ document_cookie_get(
 	/* The host writes the cookies. */
 	window = bind_window_of(realm);
 	wb_buffer_init(&text);
+	status = 0;
 	if (window->host.cookie_get != NULL)
 		status = window->host.cookie_get(window->host.context, &text);
 	if (status != 0) {
@@ -1557,6 +1641,7 @@ document_get_element_by_id(
 	struct dom_attribute *attribute;
 	struct vm_string *id;
 	struct vm_string *name;
+	struct vm_cell *id_root;
 	int same;
 	int status;
 
@@ -1567,7 +1652,12 @@ document_get_element_by_id(
 	status = bind_to_string(realm, js_argument(args, count, 0), &id);
 	if (status != 0)
 		return status;
+	id_root = &id->cell;
+	status = vm_heap_add_root(realm->heap, &id_root);
+	if (status != 0)
+		return status;
 	name = vm_atom_from_ascii(realm->heap, "id");
+	vm_heap_remove_root(realm->heap, &id_root);
 	if (name == NULL)
 		return ENOMEM;
 
@@ -1606,6 +1696,8 @@ document_create_element(
 	struct dom_document *document;
 	struct dom_element *element;
 	struct vm_string *name;
+	struct vm_cell *element_root;
+	struct vm_cell *name_root;
 	int valid;
 	int lower;
 	int ns;
@@ -1635,12 +1727,22 @@ document_create_element(
 	ns = DOM_NS_NONE;
 	if (document->content == DOM_CONTENT_HTML || document->content == DOM_CONTENT_XHTML)
 		ns = DOM_NS_HTML;
+	name_root = &name->cell;
+	status = vm_heap_add_root(document->heap, &name_root);
+	if (status != 0)
+		return status;
 	element = dom_element_create(document, ns, name, NULL);
+	vm_heap_remove_root(document->heap, &name_root);
 	if (element == NULL)
 		return ENOMEM;
+	element_root = &element->node.cell;
+	status = vm_heap_add_root(document->heap, &element_root);
+	if (status != 0)
+		return status;
 
 	/* Its object. */
 	status = bind_wrap(bind_window_of(realm), &element->node, result);
+	vm_heap_remove_root(document->heap, &element_root);
 	if (status != 0)
 		return status;
 
@@ -1661,6 +1763,8 @@ document_create_element_ns(
 	struct dom_element *element;
 	struct vm_string *uri;
 	struct vm_string *qualified;
+	struct vm_cell *uri_root;
+	struct vm_cell *element_root;
 	vm_value given;
 	int status;
 
@@ -1689,7 +1793,14 @@ document_create_element_ns(
 	}
 
 	/* Namespaced names retain their case instead of applying HTML ASCII folding. */
+	uri_root = NULL;
+	if (uri != NULL)
+		uri_root = &uri->cell;
+	status = vm_heap_add_root(realm->heap, &uri_root);
+	if (status != 0)
+		return status;
 	status = bind_to_atom(realm, args[1], 0, &qualified);
+	vm_heap_remove_root(realm->heap, &uri_root);
 	if (status != 0)
 		return status;
 
@@ -1697,9 +1808,14 @@ document_create_element_ns(
 	status = bind_create_element_ns(realm, document, uri, qualified, &element);
 	if (status != 0)
 		return status;
+	element_root = &element->node.cell;
+	status = vm_heap_add_root(document->heap, &element_root);
+	if (status != 0)
+		return status;
 
 	/* Publishes the wrapper only after complete namespace validation. */
 	status = bind_wrap(bind_window_of(realm), &element->node, result);
+	vm_heap_remove_root(document->heap, &element_root);
 	if (status != 0)
 		return status;
 
@@ -1902,6 +2018,7 @@ document_create_fragment(
 {
 	struct dom_document *document;
 	struct dom_node *fragment;
+	struct vm_cell *fragment_root;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -1916,9 +2033,14 @@ document_create_fragment(
 	fragment = dom_fragment_create(document);
 	if (fragment == NULL)
 		return ENOMEM;
+	fragment_root = &fragment->cell;
+	status = vm_heap_add_root(document->heap, &fragment_root);
+	if (status != 0)
+		return status;
 
 	/* Its object. */
 	status = bind_wrap(bind_window_of(realm), fragment, result);
+	vm_heap_remove_root(document->heap, &fragment_root);
 	if (status != 0)
 		return status;
 
@@ -1939,6 +2061,7 @@ document_create_character_data(
 	struct dom_document *document;
 	struct dom_node *node;
 	struct vm_string *string;
+	struct vm_cell *node_root;
 	struct wb_units units;
 	int status;
 
@@ -1967,9 +2090,14 @@ document_create_character_data(
 	wb_units_release(&units);
 	if (node == NULL)
 		return ENOMEM;
+	node_root = &node->cell;
+	status = vm_heap_add_root(document->heap, &node_root);
+	if (status != 0)
+		return status;
 
 	/* Its object. */
 	status = bind_wrap(bind_window_of(realm), node, result);
+	vm_heap_remove_root(document->heap, &node_root);
 	if (status != 0)
 		return status;
 

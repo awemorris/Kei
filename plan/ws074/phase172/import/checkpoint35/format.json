@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-xml-binding.c",
+      "formatted_sha256": "25fbb6dd23ab2d8619d951afb6beeb18ab626fadad190eb55e0a6bb84f81538c",
+      "final_sha256": "6865ba46d694b7c164a0ceab0576f5be44de2a8700c19233a2aa43d5bfdc1347",
+      "restorations": "definition argument tabs; original constant table layout; semantic failure/traversal paragraphs"
+    },
+    {
+      "path": "plan/ws074/tests/host-document-parser.c",
+      "formatted_sha256": "340392e30bcb9bdfd2bf890641b814673a5ec4416b85e277ee6513b443762d2c",
+      "final_sha256": "8ddc71e65f4372dcc8f952908fec7ecf4ba949b2b85c25fd5598bbf5c60733ff",
+      "restorations": "definition argument tabs; original constant table layout; semantic failure/traversal paragraphs"
+    },
+    {
+      "path": "plan/ws074/tests/host-document-stream.c",
+      "formatted_sha256": "79f82b5fecb6bb64bac242bf31d208a86bb84722597217d013ea8c3a9fbd3814",
+      "final_sha256": "1bd95c0456bcbabb6e729a7ec94fc2dfa213165d0a0d7b41d727489e19ca705a",
+      "restorations": "definition argument tabs; original constant table layout; semantic failure/traversal paragraphs"
+    }
+  ]
+}

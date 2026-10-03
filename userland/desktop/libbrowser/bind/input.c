@@ -734,6 +734,7 @@ input_construct_keyboard(
 	vm_value *result)
 {
 	struct bind_event *event;
+	struct vm_cell *event_root;
 	vm_value init;
 	vm_value value;
 	int present;
@@ -745,26 +746,36 @@ input_construct_keyboard(
 	status = bind_event_construct(realm, BIND_KEYBOARD_EVENT, args, count, result, &event);
 	if (status != 0)
 		return status;
+	event_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* The key. */
 	init = js_argument(args, count, 1);
 	status = input_init_string(realm, init, "key", &event->key);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* The code. */
 	status = input_init_string(realm, init, "code", &event->code);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* Whether it repeats. */
 	status = bind_get_option(realm, init, "repeat", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	event->repeat = vm_to_boolean(value);
 
 	/* The modifiers. */
 	status = bind_event_init_modifiers(realm, init, event);
+	if (status != 0)
+		goto cleanup;
+
+	/* The initialized event now belongs to the constructor's caller. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &event_root);
 	if (status != 0)
 		return status;
 
@@ -782,6 +793,7 @@ input_construct_wheel(
 	vm_value *result)
 {
 	struct bind_event *event;
+	struct vm_cell *event_root;
 	vm_value init;
 	int status;
 
@@ -791,20 +803,30 @@ input_construct_wheel(
 	status = bind_event_construct(realm, BIND_WHEEL_EVENT, args, count, result, &event);
 	if (status != 0)
 		return status;
+	event_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* The pointer's part of the init. */
 	init = js_argument(args, count, 1);
 	status = bind_event_init_mouse(realm, init, event);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* The horizontal distance. */
 	status = input_init_number(realm, init, "deltaX", &event->mouse.delta_x);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* The vertical distance. */
 	status = input_init_number(realm, init, "deltaY", &event->mouse.delta_y);
+	if (status != 0)
+		goto cleanup;
+
+	/* The initialized event now belongs to the constructor's caller. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &event_root);
 	if (status != 0)
 		return status;
 

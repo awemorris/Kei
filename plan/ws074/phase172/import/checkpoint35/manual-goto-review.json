@@ -1,0 +1,34 @@
+[
+  {
+    "path": "plan/ws074/tests/host-document-parser.c",
+    "function": "parser_case",
+    "target": "cleanup",
+    "lines": [
+      225,
+      229,
+      236,
+      244,
+      251,
+      256,
+      262,
+      269,
+      276,
+      283,
+      290,
+      306,
+      312,
+      315,
+      318,
+      334,
+      339,
+      343,
+      361,
+      365,
+      372,
+      380,
+      386,
+      389
+    ],
+    "classification": "Only forward jumps to the sole shared cleanup label; independently owned parser and registered root are released, full C section14 permits this pattern."
+  }
+]

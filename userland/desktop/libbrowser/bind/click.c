@@ -50,8 +50,12 @@ bind_click(
 	kind = click_kind(element);
 	checked = dom_control_checked(element);
 	indeterminate = 0;
+
+	/* An existing control carries the preactivation indeterminate state. */
 	if (element->control != NULL)
 		indeterminate = element->control->indeterminate;
+
+	/* Retains the previously selected radio when current group selection can change. */
 	previous = NULL;
 	if (kind == DOM_CONTROL_RADIO)
 		previous = dom_input_checked_radio(element);
@@ -63,9 +67,12 @@ bind_click(
 		roots[1] = &previous->node.cell;
 	roots[2] = NULL;
 	for (index = 0; index < 3U; index++) {
+		/* Registers each stable stack slot before any listener can collect. */
 		status = vm_heap_add_root(window->realm->heap, &roots[index]);
-		if (status != 0)
-			return click_finish(window, element, roots, index, status);
+		if (status != 0) {
+			status = click_finish(window, element, roots, index, status);
+			return status;
+		}
 	}
 
 	/* The guard covers click, cancellation and subsequent input/change listeners. */
@@ -74,15 +81,21 @@ bind_click(
 	/* Checkbox listeners observe the flipped checkedness and cleared indeterminateness. */
 	if (kind == DOM_CONTROL_CHECKBOX) {
 		status = dom_input_set_checked(element, !checked, 1);
-		if (status != 0)
-			return click_finish(window, element, roots, 3U, status);
+		if (status != 0) {
+			status = click_finish(window, element, roots, 3U, status);
+			return status;
+		}
+
+		/* Checkbox preactivation clears the existing control's indeterminate flag. */
 		control = element->control;
 		control->indeterminate = 0;
 	} else if (kind == DOM_CONTROL_RADIO) {
 		/* Radio listeners observe the new actual group selection before any dispatch. */
 		status = dom_input_set_checked(element, 1, 1);
-		if (status != 0)
-			return click_finish(window, element, roots, 3U, status);
+		if (status != 0) {
+			status = click_finish(window, element, roots, 3U, status);
+			return status;
+		}
 	}
 
 	/* The established MouseEvent interface supplies a bubbling cancelable synthetic click. */
@@ -92,20 +105,50 @@ bind_click(
 		restored = click_restore(element, previous, checked, indeterminate);
 		if (restored != 0)
 			status = restored;
-		return click_finish(window, element, roots, 3U, status);
+
+		/* Releases the activation protocol with the original or restoration failure. */
+		status = click_finish(window, element, roots, 3U, status);
+		return status;
 	}
 
 	/* Cancellation restores native current state using the post-listener radio group. */
 	if (canceled) {
 		status = click_restore(element, previous, checked, indeterminate);
-		return click_finish(window, element, roots, 3U, status);
+		if (status != 0) {
+			status = click_finish(window, element, roots, 3U, status);
+			return status;
+		}
+
+		/* Ends the canceled activation after restoring ordinary control state. */
+		status = click_finish(window, element, roots, 3U, 0);
+		if (status != 0)
+			return status;
+
+		/* Succeeded: canceled activation has restored state and released every root. */
+		return 0;
 	}
 
 	/* Only eligible connected current checkbox/radio state produces activation notifications. */
 	status = click_notify(window, element, checked, &roots[2]);
-	if (status == 0)
-		status = click_submit(window, element);
-	return click_finish(window, element, roots, 3U, status);
+	if (status != 0) {
+		status = click_finish(window, element, roots, 3U, status);
+		return status;
+	}
+
+	/* Runs submission activation only after ordinary notifications succeeded. */
+	status = click_submit(window, element);
+	if (status != 0) {
+		status = click_finish(window, element, roots, 3U, status);
+		return status;
+	}
+
+	/* Succeeded: releases the recursion protocol and all temporary graph roots. */
+	status = click_finish(window, element, roots, 3U, 0);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: all activation callbacks finished and released their temporary roots. */
+	return 0;
 }
 
 /* Distinguishes actual HTML local names from folded XML tags or foreign namespaces. */
@@ -120,9 +163,15 @@ click_html(
 	/* Internal tag numbers alone cannot authorize native form-control behavior. */
 	if (element->ns != DOM_NS_HTML || element->tag != tag)
 		return 0;
+
+	/* Verifies case-sensitive local identity rather than only the folded tag number. */
 	name = dom_tag_name(tag);
 	same = vm_string_equal_ascii(element->local_name, name);
-	return same;
+	if (!same)
+		return 0;
+
+	/* Succeeded: the element has this exact HTML local identity. */
+	return 1;
 }
 
 /* Checks effective disabling, including each disabled fieldset's first legend exception. */
@@ -142,6 +191,8 @@ click_disabled(
 
 	/* Only the built-in disabling-capable controls honor their disabled attribute. */
 	control = 0;
+
+	/* Selects only HTML interfaces that implement built-in disabling. */
 	switch (element->tag) {
 	case DOM_TAG_INPUT:
 	case DOM_TAG_BUTTON:
@@ -159,6 +210,8 @@ click_disabled(
 	/* An ordinary element's unrelated disabled attribute does not suppress its click. */
 	if (!control)
 		return 0;
+
+	/* An eligible control's own disabled attribute suppresses activation. */
 	attribute = dom_attribute_ascii(element, "disabled");
 	if (attribute != NULL)
 		return 1;
@@ -172,10 +225,14 @@ click_disabled(
 		/* A fragment or non-element ancestor cannot be a disabling fieldset. */
 		if (node->type != DOM_ELEMENT)
 			continue;
+
+		/* An actual HTML fieldset can impose inherited disabling. */
 		ancestor = (struct dom_element *)node;
 		fieldset = click_html(ancestor, DOM_TAG_FIELDSET);
 		if (!fieldset)
 			continue;
+
+		/* Only a disabled ancestor needs a legend exception check. */
 		attribute = dom_attribute_ascii(ancestor, "disabled");
 		if (attribute == NULL)
 			continue;
@@ -186,6 +243,8 @@ click_disabled(
 			/* Non-elements and foreign legends do not occupy the first legend slot. */
 			if (child->type != DOM_ELEMENT)
 				continue;
+
+			/* The first genuine HTML legend alone occupies the exemption slot. */
 			actual = click_html((struct dom_element *)child, DOM_TAG_LEGEND);
 			if (actual) {
 				legend = child;
@@ -197,6 +256,8 @@ click_disabled(
 		path = &element->node;
 		while (path->parent != node)
 			path = path->parent;
+
+		/* An ordinary child outside the first legend subtree remains disabled. */
 		if (path != legend)
 			return 1;
 	}
@@ -217,7 +278,11 @@ click_kind(
 	input = click_html(element, DOM_TAG_INPUT);
 	if (!input)
 		return DOM_CONTROL_NONE;
+
+	/* Returns the genuine control kind for this current HTML input. */
 	kind = dom_control_kind(element);
+
+	/* Succeeded: the caller receives the current native input kind. */
 	return kind;
 }
 
@@ -241,6 +306,8 @@ click_event(
 	status = bind_event_prepare(window, &element->node, interface, type, flags, &value, &target, &event);
 	if (status != 0)
 		return status;
+
+	/* The registered slot retains the prepared event across listener callbacks. */
 	*root = vm_value_as_cell(value);
 
 	/* Script click is untrusted; activation-generated input/change retain trusted defaults. */
@@ -251,7 +318,11 @@ click_event(
 
 	/* The root slot follows this event through every listener and dispatcher checkpoint. */
 	status = bind_dispatch(window, target, value, canceled);
-	return status;
+	if (status != 0)
+		return status;
+
+	/* Succeeded: every listener saw the retained actual event graph. */
+	return 0;
 }
 
 /* Releases the recursion protocol and every root registered by this attempt. */
@@ -273,7 +344,11 @@ click_finish(
 		vm_heap_remove_root(window->realm->heap, &roots[index]);
 
 	/* The caller receives the original dispatch or state-update outcome. */
-	return status;
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the recursion guard and registered root slots are released. */
+	return 0;
 }
 
 /* Restores checkbox state or the retained radio only when it still belongs to the current group. */
@@ -294,22 +369,32 @@ click_restore(
 		status = dom_input_set_checked(element, checked, 0);
 		if (status != 0)
 			return status;
+
+		/* Restores indeterminateness after checkedness has been restored. */
 		element->control->indeterminate = indeterminate;
+
+		/* Succeeded: both checkbox state fields match the preactivation snapshot. */
 		return 0;
 	}
 
 	/* Other current input types have no selected cancellation behavior in this increment. */
 	if (kind != DOM_CONTROL_RADIO)
 		return 0;
+
+	/* Current ordinary group membership decides which radio can be restored. */
 	same = dom_input_same_radio_group(element, previous);
 	if (same) {
 		status = dom_input_set_checked(previous, 1, 0);
+		if (status != 0)
+			return status;
 	} else {
 		status = dom_input_set_checked(element, 0, 0);
+		if (status != 0)
+			return status;
 	}
 
 	/* Restore uses current ordinary membership, retaining existing dirty flags. */
-	return status;
+	return 0;
 }
 
 /* Emits native activation notifications only for a connected eligible current control. */
@@ -342,6 +427,8 @@ click_notify(
 	node = &element->node;
 	while (node->parent != NULL)
 		node = node->parent;
+
+	/* Only a node connected to an actual Document emits these notifications. */
 	if (node->type != DOM_DOCUMENT)
 		return 0;
 
@@ -349,8 +436,14 @@ click_notify(
 	status = click_event(window, element, "input", BIND_EVENT, BIND_EVENT_BUBBLES, root, &canceled);
 	if (status != 0)
 		return status;
+
+	/* Delivers change only after input listeners finish successfully. */
 	status = click_event(window, element, "change", BIND_EVENT, BIND_EVENT_BUBBLES, root, &canceled);
-	return status;
+	if (status != 0)
+		return status;
+
+	/* Succeeded: connected current activation delivered input followed by change. */
+	return 0;
 }
 
 /* Invokes the finite native submission-event stage for a current actual input Submit button. */
@@ -375,6 +468,8 @@ click_submit(
 	disabled = click_disabled(element);
 	if (disabled)
 		return 0;
+
+	/* Recomputes the submitter's live form owner after arbitrary click listeners. */
 	form = dom_form_owner(element);
 	if (form == NULL)
 		return 0;
@@ -383,6 +478,8 @@ click_submit(
 	root = &element->node;
 	while (root->parent != NULL)
 		root = root->parent;
+
+	/* A connected ordinary form needs a real browsing Document. */
 	if (root->type != DOM_DOCUMENT || root->document->view == NULL)
 		return 0;
 
@@ -390,10 +487,14 @@ click_submit(
 	status = bind_submit_event(window, form, element, &canceled);
 	if (status != 0)
 		return status;
+
+	/* A canceled submission has no subsequent navigation stage. */
 	if (canceled)
 		return 0;
 
 	/* The host currently has no script navigation protocol; preserve that explicit capability boundary. */
 	bind_console(window, BIND_CONSOLE_WARN, "form: script submission navigation is not implemented");
+
+	/* Succeeded: the event stage completed within the existing navigation boundary. */
 	return 0;
 }

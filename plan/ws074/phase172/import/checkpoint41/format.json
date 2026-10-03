@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "formatted_sha256": "6c01f6fe6fe83f2455cad6edb9c2adb22497a3b34b5f3f39a7694f5383e7808a",
+      "final_sha256": "9e0004090aa1e2f39b0e65589936ea6cc4e9a3aa0a5dd51e0abaee19ba27f5f3",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; both original multiline cell initializer blocks restored byte-for-byte"
+    },
+    {
+      "path": "plan/ws074/tests/host-vm-factory.c",
+      "formatted_sha256": "c4e04d7973a43fb119013d9be137bc1d173dc9ef1cbfa01927e8079f1ca10c6e",
+      "final_sha256": "6941424400a9998da7714e9232f1c48fe0b3259a4ad23452a39a67908be24bef",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    }
+  ]
+}

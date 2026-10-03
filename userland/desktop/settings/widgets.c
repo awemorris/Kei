@@ -324,6 +324,8 @@ se_slider_draw(
 	struct fm_rect *rect)
 {
 	fm_color fill;
+	fm_color knob;
+	fm_color ring;
 	float knob_x;
 	float middle;
 
@@ -342,9 +344,17 @@ se_slider_draw(
 	fm_canvas_round(canvas, (float)x, middle - 3.0f, (float)width, 6.0f, 3.0f, FM_RGB(0xd3d9e2));
 	fm_canvas_round(canvas, (float)x, middle - 3.0f, knob_x - (float)x, 6.0f, 3.0f, fill);
 
-	/* The knob, with a quiet ring round it. */
-	fm_canvas_circle(canvas, knob_x, middle, 11.0f, FM_RGBA(0x5a6b85, 50));
-	fm_canvas_circle(canvas, knob_x, middle, 10.0f, FM_RGB(0xffffff));
+	/* The knob, with a quiet ring round it; greyed when the slider does nothing (ws089-p012 C4), so it does not look as if it could be dragged. */
+	knob = FM_RGB(0xffffff);
+	ring = FM_RGBA(0x5a6b85, 50);
+	if (enabled == 0) {
+		knob = FM_RGB(0xeef1f5);
+		ring = FM_RGBA(0x5a6b85, 24);
+	}
+
+	/* The ring, then the knob in it. */
+	fm_canvas_circle(canvas, knob_x, middle, 11.0f, ring);
+	fm_canvas_circle(canvas, knob_x, middle, 10.0f, knob);
 
 	/* The whole track takes presses and drags (a little taller than it looks). */
 	rect->x = x - 12;

@@ -1,0 +1,15 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/css/rule-model.c",
+    "sha256": "79ba855773036c811547b9d5379491d50a65891e40d079161967d4c9dee0b61c",
+    "object": "libbrowser_css_rule-model.o",
+    "text_sha256": "559ed58793aca69e13074fd2aa68e3f596e1d80e747cff2c1f947988c6146556"
+  },
+  {
+    "path": "plan/ws074/tests/host-range-delete-contents.c",
+    "sha256": "7b8ac20e14bfcec468b196de80375b02ac00d82537414ca02a1783801314beb6",
+    "object": "host-range-delete-contents.o",
+    "object_path": "build/browser3-p172/review37/host-range-delete-contents.o",
+    "text_sha256": "8d48cdc288a0e179ebc73dc25b41aa79b0d9744483467ccfb4a1095d685079c5"
+  }
+]

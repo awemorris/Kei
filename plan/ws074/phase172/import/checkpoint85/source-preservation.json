@@ -1,0 +1,10 @@
+{
+  "userland/desktop/libbrowser/bind/event.c": {
+    "before_lines": 2496,
+    "after_lines": 2603,
+    "before_sha256": "b787a24d2c3f54640a24432e04945e47d1f25e113a537c5d501689a029e1f54b",
+    "after_sha256": "d50480a135da16cd308cc92c64d6366b853ba01bec61e44b55c3a6d55e03e040",
+    "C_string_literal_contents_changed": false,
+    "public_ABI_changed": false
+  }
+}

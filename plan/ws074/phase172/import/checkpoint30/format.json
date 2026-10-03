@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-css-rule-model.c",
+      "formatted_sha256": "ad89b592e8710768c583fc5897c5bd5c7c698c2822d7b2a7a2237e045673761f",
+      "final_sha256": "b9e9ce9c81d928f2db88ce5d1311da7eb2b8efb3625d571c2ee0691ed6526e98",
+      "restorations": "definition argument tabs and compound observations"
+    },
+    {
+      "path": "plan/ws074/tests/host-cssom-mutation.c",
+      "formatted_sha256": "6780ea8060b5b2f7372a0debffe197f50d732ef703d771ff8d7f28e790515792",
+      "final_sha256": "24356283422b956385c4fd722e497d3a142dfe3345e8f6d0b159d58b5d62762a",
+      "restorations": "definition argument tabs and compound observations"
+    }
+  ]
+}

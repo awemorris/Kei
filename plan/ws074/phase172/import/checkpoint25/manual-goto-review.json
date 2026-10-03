@@ -1,0 +1,14 @@
+{
+  "standard": "plan/coding-style.md section14",
+  "scope": "userland/desktop/libbrowser/net/data.c",
+  "findings": 14,
+  "groups": {
+    "net_data_parse": {
+      "release_buffers": 10
+    },
+    "data_base64": {
+      "release_clean": 4
+    }
+  },
+  "classification": "Each is a single forward jump to its function's one shared owning buffer cleanup label, no loop/retry/cross-function jump; permitted by the full standard, not a waiver."
+}

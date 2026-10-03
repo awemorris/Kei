@@ -20,12 +20,6 @@ enum input_value_mode {
 	INPUT_FILENAME
 };
 
-static int input_this(struct vm_realm *realm, vm_value receiver, struct dom_element **out);
-static int input_attribute_get(struct vm_realm *realm, vm_value receiver, const char *name, vm_value *result);
-static int input_attribute_set(struct vm_realm *realm, vm_value receiver, const char *name, const vm_value *args, unsigned count, vm_value *result);
-static const char *input_type(const struct dom_element *element);
-static enum input_value_mode input_mode(const char *type);
-static void input_strip_lines(struct wb_units *units, const char *type);
 static int input_name_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int input_name_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int input_type_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
@@ -68,6 +62,13 @@ static const struct bind_attribute input_attributes[] = {
 const struct bind_interface bind_html_input_element_interface = {
 	"HTMLInputElement", BIND_HTML_ELEMENT, 0, NULL, input_attributes, NULL, NULL
 };
+
+static int input_this(struct vm_realm *realm, vm_value receiver, struct dom_element **out);
+static int input_attribute_get(struct vm_realm *realm, vm_value receiver, const char *name, vm_value *result);
+static int input_attribute_set(struct vm_realm *realm, vm_value receiver, const char *name, const vm_value *args, unsigned count, vm_value *result);
+static const char *input_type(const struct dom_element *element);
+static enum input_value_mode input_mode(const char *type);
+static void input_strip_lines(struct wb_units *units, const char *type);
 
 /* Reads the input's name content attribute through its native brand. */
 static int
@@ -290,11 +291,13 @@ input_value_set(
 	struct dom_element *element;
 	struct vm_string *text;
 	struct vm_string *name;
+	struct vm_cell *roots[2];
 	struct wb_units units;
 	vm_value argument;
 	const char *type;
 	enum input_value_mode mode;
 	size_t index;
+	unsigned registered;
 	uint16_t unit;
 	int status;
 
@@ -331,10 +334,35 @@ input_value_set(
 
 	/* Reflected value modes update the actual attribute without setting a text dirty flag. */
 	if (mode != INPUT_VALUE) {
+		/* Text is not yet owned by the DOM while the attribute atom allocates. */
+		roots[0] = &text->cell;
+		roots[1] = NULL;
+		registered = 0;
+		for (index = 0; index < 2U; index++) {
+			status = vm_heap_add_root(realm->heap, &roots[index]);
+			if (status != 0)
+				goto cleanup;
+			registered++;
+		}
+
+		/* The freshly allocated attribute atom also needs a registered slot. */
 		name = vm_atom_from_ascii(realm->heap, "value");
-		if (name == NULL)
-			return ENOMEM;
+		if (name == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+
+		/* The actual DOM mutation takes ownership before temporary roots leave. */
+		roots[1] = &name->cell;
 		status = dom_element_set_attribute(element, name, text);
+
+cleanup:
+		while (registered != 0) {
+			registered--;
+			vm_heap_remove_root(realm->heap, &roots[registered]);
+		}
+
+		/* Failed publication leaves the previous reflected value intact. */
 		if (status != 0)
 			return status;
 		return 0;
@@ -475,6 +503,9 @@ input_attribute_set(
 	struct dom_element *element;
 	struct vm_string *attribute;
 	struct vm_string *text;
+	struct vm_cell *roots[2];
+	unsigned index;
+	unsigned registered;
 	int status;
 
 	/* A receiver error must precede every user-provided argument side effect. */
@@ -485,12 +516,38 @@ input_attribute_set(
 	status = bind_to_string(realm, js_argument(args, count, 0), &text);
 	if (status != 0)
 		return status;
+
+	/* Converted text remains live while creating and publishing the attribute. */
+	roots[0] = &text->cell;
+	roots[1] = NULL;
+	registered = 0;
+	for (index = 0; index < 2U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* The constant name allocates only after the converted value has a root. */
 	attribute = vm_atom_from_ascii(realm->heap, name);
-	if (attribute == NULL)
-		return ENOMEM;
+	if (attribute == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The second root retains the name through ordinary DOM mutation. */
+	roots[1] = &attribute->cell;
 
 	/* Generation invalidation and live collection names follow the real attribute. */
 	status = dom_element_set_attribute(element, attribute, text);
+
+cleanup:
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Failed mutation cannot be reported as a successful reflection. */
 	if (status != 0)
 		return status;
 
@@ -721,6 +778,9 @@ input_disabled_set(
 	struct dom_element *element;
 	struct vm_string *name;
 	struct vm_string *value;
+	struct vm_cell *roots[2];
+	unsigned index;
+	unsigned registered;
 	int disabled;
 	int status;
 
@@ -734,19 +794,41 @@ input_disabled_set(
 	if (name == NULL)
 		return ENOMEM;
 
+	/* The attribute atom must survive both native mutation paths. */
+	roots[0] = &name->cell;
+	roots[1] = NULL;
+	registered = 0;
+	for (index = 0; index < 2U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
 	/* False removes the attribute through ordinary DOM mutation. */
 	if (!disabled) {
 		status = dom_element_remove_attribute(element, name);
-		if (status != 0)
-			return status;
-		return 0;
+		goto cleanup;
 	}
 
 	/* True uses the canonical empty content value, preserving ordinary generation hooks. */
 	value = vm_atom_from_ascii(realm->heap, "");
-	if (value == NULL)
-		return ENOMEM;
+	if (value == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The empty attribute value remains live until the actual DOM owns it. */
+	roots[1] = &value->cell;
 	status = dom_element_set_attribute(element, name, value);
+
+cleanup:
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Return the native mutation error after removing acquired roots. */
 	if (status != 0)
 		return status;
 

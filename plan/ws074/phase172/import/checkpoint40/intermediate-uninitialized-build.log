@@ -1,0 +1,8 @@
+userland/desktop/libbrowser/bind/collection.c: In function ‘radio_value_set’:
+userland/desktop/libbrowser/bind/collection.c:1901:28: error: ‘state’ is used uninitialized [-Werror=uninitialized]
+ 1901 |         state_root = &state->cell;
+      |                            ^~
+userland/desktop/libbrowser/bind/collection.c:1888:34: note: ‘state’ declared here
+ 1888 |         struct collection_state *state;
+      |                                  ^~~~~
+cc1: all warnings being treated as errors

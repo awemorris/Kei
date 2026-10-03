@@ -77,12 +77,19 @@ main(
 
 	/* The native case temporarily disables stack scanning only around the actual operation. */
 	status = contents_case(realm, window);
+	if (status != 0) {
+		vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Restore ordinary stack policy before completed embedding teardown. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Print all observations after the production embedding has released its participants. */
 	printed = printf("native Range clone contents: %u/%u passed\n", checks - failures, checks);
@@ -113,6 +120,9 @@ contents_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: the named observation contributes to the final fixture outcome. */
+	return;
 }
 
 /* Constructs genuine native factory outputs through the ordinary production interpreter. */
@@ -136,9 +146,13 @@ contents_script(
 
 	/* No alternate constructor or test-only brand supplies the XML Document. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Release source storage only after interpreter completion was checked. */
+	wb_units_release(&units);
 
 	/* Succeeded: the ordinary native factory completion is available to the embedding. */
 	return 0;
@@ -179,6 +193,8 @@ contents_case(
 	unsigned copied;
 	int intact;
 	int status;
+	int is_object;
+	int is_cell;
 
 	/* Null result slots hold no participant before explicit construction ownership is installed. */
 	roots[0] = NULL;
@@ -204,226 +220,318 @@ contents_case(
 	}
 
 	/* All normal and failed construction paths share explicit root cleanup after this bounded attempt. */
-	do {
-		status = contents_script(realm, "document.implementation.createDocument(null,null,null)", &creator);
-		if (status != 0)
-			break;
-		document = (struct dom_document *)bind_node_of(creator);
-		roots[0] = &document->node.cell;
-		source = dom_fragment_create(document);
-		if (source == NULL) {
+	status = contents_script(realm, "document.implementation.createDocument(null,null,null)", &creator);
+	if (status != 0)
+		goto cleanup;
+	document = (struct dom_document *)bind_node_of(creator);
+	if (document == NULL || document->node.type != DOM_DOCUMENT) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Retain the actual creator before allocating its detached native graph. */
+	roots[0] = &document->node.cell;
+	source = dom_fragment_create(document);
+	if (source == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The detached native graph traces its current creator before child factories run. */
+	roots[0] = &source->cell;
+	name = vm_atom_from_ascii(realm->heap, "content-node");
+	if (name == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* A bounded wide graph crosses the ordinary collector threshold while preserving fixture time. */
+	for (index = 0; index < 6000U; index++) {
+		element = dom_element_create(document, DOM_NS_NONE, name, NULL);
+		if (element == NULL) {
 			status = ENOMEM;
-			break;
+			goto cleanup;
 		}
 
-		/* The detached native graph traces its current creator before child factories run. */
-		roots[0] = &source->cell;
-		name = vm_atom_from_ascii(realm->heap, "content-node");
-		if (name == NULL) {
+		/* Native parent ownership protects the Element during its following Text allocation. */
+		dom_append_child(source, &element->node);
+		text = dom_text_create(document, units, 2);
+		if (text == NULL) {
 			status = ENOMEM;
-			break;
+			goto cleanup;
 		}
 
-		/* A bounded wide graph crosses the ordinary collector threshold while preserving fixture time. */
-		for (index = 0; index < 6000U; index++) {
-			element = dom_element_create(document, DOM_NS_NONE, name, NULL);
-			if (element == NULL) {
-				status = ENOMEM;
-				break;
-			}
+		/* Every copy later needs an independent exact character buffer and corresponding native link. */
+		dom_append_child(&element->node, text);
+	}
 
-			/* Native parent ownership protects the Element during its following Text allocation. */
-			dom_append_child(source, &element->node);
-			text = dom_text_create(document, units, 2);
-			if (text == NULL) {
-				status = ENOMEM;
-				break;
-			}
+	/* A partial source construction cannot exercise the intended complete interval. */
+	if (status != 0)
+		goto cleanup;
 
-			/* Every copy later needs an independent exact character buffer and corresponding native link. */
-			dom_append_child(&element->node, text);
+	/* Production factories and registered selection methods supply genuine private Range state. */
+	status = bind_wrap(window, source, &source_value);
+	if (status != 0)
+		goto cleanup;
+	status = bind_create_range(realm, creator, NULL, 0, &receiver);
+	if (status != 0)
+		goto cleanup;
+	is_object = vm_value_is_object(receiver);
+	if (!is_object) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Root only the verified production-created receiver during selection. */
+	roots[1] = vm_value_as_cell(receiver);
+	status = bind_range_interface.operations[7].method(realm, receiver, &source_value, 1, &answer);
+	if (status != 0)
+		goto cleanup;
+
+	/* Partial first and last Text boundaries require actual shell cloning around contained middle siblings. */
+	if (source->first_child == NULL ||
+	    source->last_child == NULL ||
+	    source->first_child->first_child == NULL ||
+	    source->last_child->first_child == NULL) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Select the real first partial Text after complete graph construction. */
+	status = bind_wrap(window, source->first_child->first_child, &arguments[0]);
+	if (status != 0)
+		goto cleanup;
+	arguments[1] = vm_value_number(1);
+	status = bind_range_interface.operations[0].method(realm, receiver, arguments, 2, &answer);
+	if (status != 0)
+		goto cleanup;
+	status = bind_wrap(window, source->last_child->first_child, &arguments[0]);
+	if (status != 0)
+		goto cleanup;
+	status = bind_range_interface.operations[1].method(realm, receiver, arguments, 2, &answer);
+	if (status != 0)
+		goto cleanup;
+
+	/* Record genuine private state and integer-only lifetime observations before releasing construction roots. */
+	is_object = vm_value_is_object(receiver);
+	if (!is_object) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Decode the verified generated platform wrapper's private native state. */
+	wrapper = (struct vm_object *)vm_value_as_cell(receiver);
+	is_cell = vm_value_is_cell(wrapper->internal);
+	if (wrapper->kind != VM_KIND_PLATFORM || !is_cell) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Publish only verified construction state before preparing collector pressure. */
+	state = vm_value_as_cell(wrapper->internal);
+	source_address = (uintptr_t)source;
+	state_address = (uintptr_t)state;
+	creator_address = (uintptr_t)document;
+
+	/* Only explicit construction slots participate in this known-threshold collection. */
+	vm_heap_set_stack_base(realm->heap, NULL);
+	vm_heap_collect(realm->heap);
+	pressure = vm_heap_alloc(realm->heap, &pressure_type, 7U * 1024U * 1024U);
+	if (pressure == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The native method alone holds genuine state and source across allocation-triggered collection. */
+	vm_heap_stats(realm->heap, &before);
+	roots[0] = NULL;
+	roots[1] = NULL;
+	status = bind_range_interface.operations[14].method(realm, receiver, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+
+	/* Sample post-call accounting only after complete native success. */
+	vm_heap_stats(realm->heap, &after);
+
+	/* Post-call ownership begins only after the registered operation has returned its complete result. */
+	state = vm_heap_find_cell(realm->heap, state_address);
+	if (state == NULL) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Retain the surviving actual state only after native operation completion. */
+	roots[1] = state;
+	is_object = vm_value_is_object(answer);
+	if (!is_object) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Root the verified returned wrapper before examining its complete native graph. */
+	roots[2] = vm_value_as_cell(answer);
+	copy = bind_node_of(answer);
+	if (copy == NULL || copy->type != DOM_DOCUMENT_FRAGMENT) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Observe the complete graph only after its native kind was verified. */
+	copy_address = (uintptr_t)copy;
+	contents_check(after.collections > before.collections, "registered cloneContents allocation caused real GC without caller roots");
+	contents_check(
+		copy != NULL &&
+		copy != source &&
+		copy->type == DOM_DOCUMENT_FRAGMENT,
+		"complete genuine native Fragment result published");
+	contents_check(
+		source->document == document &&
+		copy->document == document &&
+		source->parent == NULL,
+		"source and clone retain exact actual owner and detached source identity");
+
+	/* Observe every copied native link and unpaired code unit after mid-clone collection. */
+	copied = 0;
+	intact = 1;
+	for (child = copy->first_child;
+	     child != NULL;
+	     child = child->next) {
+		if (child->type != DOM_ELEMENT) {
+			status = EIO;
+			goto cleanup;
 		}
 
-		/* A partial source construction cannot exercise the intended complete interval. */
-		if (status != 0)
-			break;
-
-		/* Production factories and registered selection methods supply genuine private Range state. */
-		status = bind_wrap(window, source, &source_value);
-		if (status != 0)
-			break;
-		status = bind_create_range(realm, creator, NULL, 0, &receiver);
-		if (status != 0)
-			break;
-		roots[1] = vm_value_as_cell(receiver);
-		status = bind_range_interface.operations[7].method(realm, receiver, &source_value, 1, &answer);
-		if (status != 0)
-			break;
-		/* Partial first and last Text boundaries require actual shell cloning around contained middle siblings. */
-		status = bind_wrap(window, source->first_child->first_child, &arguments[0]);
-		if (status != 0)
-			break;
-		arguments[1] = vm_value_number(1);
-		status = bind_range_interface.operations[0].method(realm, receiver, arguments, 2, &answer);
-		if (status != 0)
-			break;
-		status = bind_wrap(window, source->last_child->first_child, &arguments[0]);
-		if (status != 0)
-			break;
-		status = bind_range_interface.operations[1].method(realm, receiver, arguments, 2, &answer);
-		if (status != 0)
-			break;
-
-		/* Record genuine private state and integer-only lifetime observations before releasing construction roots. */
-		wrapper = (struct vm_object *)vm_value_as_cell(receiver);
-		state = vm_value_as_cell(wrapper->internal);
-		source_address = (uintptr_t)source;
-		state_address = (uintptr_t)state;
-		creator_address = (uintptr_t)document;
-
-		/* Only explicit construction slots participate in this known-threshold collection. */
-		vm_heap_set_stack_base(realm->heap, NULL);
-		vm_heap_collect(realm->heap);
-		pressure = vm_heap_alloc(realm->heap, &pressure_type, 7U * 1024U * 1024U);
-		if (pressure == NULL) {
-			status = ENOMEM;
-			break;
+		/* Read the verified Element's genuine Text storage. */
+		text = child->first_child;
+		copied++;
+		if (text != NULL && text->type != DOM_TEXT) {
+			status = EIO;
+			goto cleanup;
 		}
 
-		/* The native method alone holds genuine state and source across allocation-triggered collection. */
-		vm_heap_stats(realm->heap, &before);
-		roots[0] = NULL;
-		roots[1] = NULL;
-		status = bind_range_interface.operations[14].method(realm, receiver, NULL, 0, &answer);
-		vm_heap_stats(realm->heap, &after);
-		if (status != 0)
-			break;
+		/* Copied links, names and buffer contents come from native fields alone. */
+		if (child->parent != copy ||
+		    child->document != document ||
+		    ((struct dom_element *)child)->local_name != name ||
+		    text == NULL ||
+		    text->parent != child)
+			intact = 0;
 
-		/* Post-call ownership begins only after the registered operation has returned its complete result. */
-		roots[1] = state;
-		roots[2] = vm_value_as_cell(answer);
-		copy = bind_node_of(answer);
-		copy_address = (uintptr_t)copy;
-		contents_check(after.collections > before.collections, "registered cloneContents allocation caused real GC without caller roots");
-		contents_check(copy != NULL && copy != source && copy->type == DOM_DOCUMENT_FRAGMENT,
-			"complete genuine native Fragment result published");
-		contents_check(source->document == document && copy->document == document && source->parent == NULL,
-			"source and clone retain exact actual owner and detached source identity");
-
-		/* Observe every copied native link and unpaired code unit after mid-clone collection. */
-		copied = 0;
-		intact = 1;
-		for (child = copy->first_child; child != NULL; child = child->next) {
-			text = child->first_child;
-			copied++;
-
-			/* Copied links, names and buffer contents come from native fields alone. */
-			if (child->parent != copy ||
-			    child->document != document ||
-			    ((struct dom_element *)child)->local_name != name ||
-			    text == NULL ||
-			    text->parent != child)
-				intact = 0;
-
-			/* First and last partial slices retain exact native character identity after collection. */
-			if (text != NULL) {
-				if (copied == 1U) {
-					/* The first partially contained Element contains only the selected high surrogate. */
-					if (((struct dom_character_data *)text)->data.length != 1 ||
-					    ((struct dom_character_data *)text)->data.data[0] != 0xd800)
-						intact = 0;
-				} else if (copied == 6000U) {
-					/* The final partially contained Element contains only its selected prefix. */
-					if (((struct dom_character_data *)text)->data.length != 1 ||
-					    ((struct dom_character_data *)text)->data.data[0] != 'X')
-						intact = 0;
-				} else {
-					/* Fully contained middle siblings preserve their complete independent native buffers. */
-					if (((struct dom_character_data *)text)->data.length != 2 ||
-					    ((struct dom_character_data *)text)->data.data[0] != 'X' ||
-					    ((struct dom_character_data *)text)->data.data[1] != 0xd800)
-						intact = 0;
-				}
-			}
-		}
-
-		/* Every expected descendant must be present rather than a silently truncated successful result. */
-		contents_check(intact && copied == 6000U, "all6000 native partial shells and contained copies survived actual collection");
-		contents_check(source->first_child != copy->first_child && source->last_child != copy->last_child,
-			"native content cloning does not move or alias original node identities");
-
-		/* Every original character buffer and native link remains complete after cloning collection. */
-		copied = 0;
-		intact = 1;
-		for (child = source->first_child; child != NULL; child = child->next) {
-			text = child->first_child;
-			copied++;
-
-			/* Source nodes retain their original owner, parent and exact independent buffer. */
-			if (child->parent != source || child->document != document || text == NULL)
-				intact = 0;
-
-			/* Native source units stay unchanged instead of being sliced or moved into the output. */
-			if (text != NULL) {
+		/* First and last partial slices retain exact native character identity after collection. */
+		if (text != NULL) {
+			if (copied == 1U) {
+				/* The first partially contained Element contains only the selected high surrogate. */
+				if (((struct dom_character_data *)text)->data.length != 1 ||
+				    ((struct dom_character_data *)text)->data.data[0] != 0xd800)
+					intact = 0;
+			} else if (copied == 6000U) {
+				/* The final partially contained Element contains only its selected prefix. */
+				if (((struct dom_character_data *)text)->data.length != 1 ||
+				    ((struct dom_character_data *)text)->data.data[0] != 'X')
+					intact = 0;
+			} else {
+				/* Fully contained middle siblings preserve their complete independent native buffers. */
 				if (((struct dom_character_data *)text)->data.length != 2 ||
 				    ((struct dom_character_data *)text)->data.data[0] != 'X' ||
 				    ((struct dom_character_data *)text)->data.data[1] != 0xd800)
 					intact = 0;
 			}
 		}
+	}
 
-		/* Complete source size and data are independent of the copied graph's observations. */
-		contents_check(intact && copied == 6000U, "all6000 original Element and Text pairs remain unchanged after cloning GC");
+	/* Every expected descendant must be present rather than a silently truncated successful result. */
+	contents_check(intact && copied == 6000U, "all6000 native partial shells and contained copies survived actual collection");
+	contents_check(
+		source->first_child != copy->first_child &&
+		source->last_child != copy->last_child,
+		"native content cloning does not move or alias original node identities");
 
-		/* Reconstruct only a temporary receiver around the surviving genuine private cell for getter inspection. */
-		wrapper = vm_object_create(realm->heap, NULL);
-		if (wrapper == NULL) {
-			status = ENOMEM;
-			break;
+	/* Every original character buffer and native link remains complete after cloning collection. */
+	copied = 0;
+	intact = 1;
+	for (child = source->first_child;
+	     child != NULL;
+	     child = child->next) {
+		if (child->type != DOM_ELEMENT) {
+			status = EIO;
+			goto cleanup;
 		}
 
-		/* Private state branding remains real; no JS-visible prototype or property can synthesize this cell. */
-		wrapper->kind = VM_KIND_PLATFORM;
-		wrapper->internal = vm_value_cell(state);
-		roots[0] = &wrapper->cell;
-		receiver = vm_value_cell(wrapper);
-		status = bind_abstract_range_interface.attributes[2].getter(realm, receiver, NULL, 0, &answer);
-		if (status != 0)
-			break;
-		contents_check(answer == vm_value_number(1), "source private start offset unchanged after actual cloning GC");
-		status = bind_abstract_range_interface.attributes[3].getter(realm, receiver, NULL, 0, &answer);
-		if (status != 0)
-			break;
-		contents_check(answer == vm_value_number(1), "source private end offset unchanged after actual cloning GC");
+		/* Read the verified Element's genuine Text storage. */
+		text = child->first_child;
+		copied++;
+		if (text != NULL && text->type != DOM_TEXT) {
+			status = EIO;
+			goto cleanup;
+		}
 
-		/* Only the complete result owns its actual creator after source and genuine state release. */
-		roots[0] = NULL;
-		roots[1] = NULL;
-		vm_heap_collect(realm->heap);
-		found = vm_heap_find_cell(realm->heap, source_address);
-		contents_check(found == NULL, "callee source graph collectible after explicit post-call inspection roots release");
-		found = vm_heap_find_cell(realm->heap, state_address);
-		contents_check(found == NULL, "genuine native Range state collectible after callee and inspection roots release");
-		found = vm_heap_find_cell(realm->heap, creator_address);
-		contents_check(found != NULL, "complete result alone retains actual creator Document");
-		found = vm_heap_find_cell(realm->heap, copy_address);
-		contents_check(found != NULL, "explicit wrapped result retains complete native content graph");
+		/* Source nodes retain their original owner, parent and exact independent buffer. */
+		if (child->parent != source ||
+		    child->document != document ||
+		    text == NULL)
+			intact = 0;
 
-		/* Release the final result root before testing independent graph and owner reclamation. */
-		roots[2] = NULL;
-		vm_heap_collect(realm->heap);
-		found = vm_heap_find_cell(realm->heap, copy_address);
-		contents_check(found == NULL, "complete native clone graph collectible after result release");
-		found = vm_heap_find_cell(realm->heap, creator_address);
-		contents_check(found == NULL, "actual creator Document collectible after result release");
+		/* Native source units stay unchanged instead of being sliced or moved into the output. */
+		if (text != NULL) {
+			if (((struct dom_character_data *)text)->data.length != 2 ||
+			    ((struct dom_character_data *)text)->data.data[0] != 'X' ||
+			    ((struct dom_character_data *)text)->data.data[1] != 0xd800)
+				intact = 0;
+		}
+	}
 
-		/* Wrong receivers cannot publish a partial result through the registered native operation. */
-		answer = VM_VALUE_NULL;
-		status = bind_range_interface.operations[14].method(realm, VM_VALUE_UNDEFINED, NULL, 0, &answer);
-		contents_check(status == VM_THROWN && answer == VM_VALUE_NULL, "direct wrong-brand call rejects before result publication");
-		status = 0;
-	} while (0);
+	/* Complete source size and data are independent of the copied graph's observations. */
+	contents_check(intact && copied == 6000U, "all6000 original Element and Text pairs remain unchanged after cloning GC");
 
+	/* Reconstruct only a temporary receiver around the surviving genuine private cell for getter inspection. */
+	wrapper = vm_object_create(realm->heap, NULL);
+	if (wrapper == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Private state branding remains real; no JS-visible prototype or property can synthesize this cell. */
+	wrapper->kind = VM_KIND_PLATFORM;
+	wrapper->internal = vm_value_cell(state);
+	roots[0] = &wrapper->cell;
+	receiver = vm_value_cell(wrapper);
+	status = bind_abstract_range_interface.attributes[2].getter(realm, receiver, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+	contents_check(answer == vm_value_number(1), "source private start offset unchanged after actual cloning GC");
+	status = bind_abstract_range_interface.attributes[3].getter(realm, receiver, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+	contents_check(answer == vm_value_number(1), "source private end offset unchanged after actual cloning GC");
+
+	/* Only the complete result owns its actual creator after source and genuine state release. */
+	roots[0] = NULL;
+	roots[1] = NULL;
+	vm_heap_collect(realm->heap);
+	found = vm_heap_find_cell(realm->heap, source_address);
+	contents_check(found == NULL, "callee source graph collectible after explicit post-call inspection roots release");
+	found = vm_heap_find_cell(realm->heap, state_address);
+	contents_check(found == NULL, "genuine native Range state collectible after callee and inspection roots release");
+	found = vm_heap_find_cell(realm->heap, creator_address);
+	contents_check(found != NULL, "complete result alone retains actual creator Document");
+	found = vm_heap_find_cell(realm->heap, copy_address);
+	contents_check(found != NULL, "explicit wrapped result retains complete native content graph");
+
+	/* Release the final result root before testing independent graph and owner reclamation. */
+	roots[2] = NULL;
+	vm_heap_collect(realm->heap);
+	found = vm_heap_find_cell(realm->heap, copy_address);
+	contents_check(found == NULL, "complete native clone graph collectible after result release");
+	found = vm_heap_find_cell(realm->heap, creator_address);
+	contents_check(found == NULL, "actual creator Document collectible after result release");
+
+	/* Wrong receivers cannot publish a partial result through the registered native operation. */
+	answer = VM_VALUE_NULL;
+	status = bind_range_interface.operations[14].method(realm, VM_VALUE_UNDEFINED, NULL, 0, &answer);
+	contents_check(status == VM_THROWN && answer == VM_VALUE_NULL, "direct wrong-brand call rejects before result publication");
+	status = 0;
+
+cleanup:
 	/* Every temporary root registered by fixture construction is removed even after a failed attempt. */
 	while (registered != 0) {
 		registered--;

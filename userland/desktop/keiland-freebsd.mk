@@ -99,6 +99,7 @@ KEILAND_FREEBSD_PACKAGES ?= userland/base/libz-compat/Makefile.freebsd \
 	userland/desktop/libwayland/Makefile.freebsd \
 	userland/desktop/libtruetype/Makefile.freebsd \
 	userland/desktop/libvulkan-compat/Makefile.freebsd \
+	userland/desktop/libkeiland-backend-freebsd/Makefile.freebsd \
 	userland/desktop/libkeiland/Makefile.freebsd \
 	userland/desktop/libkeiui/Makefile.freebsd \
 	userland/base/libpdf/Makefile.freebsd \

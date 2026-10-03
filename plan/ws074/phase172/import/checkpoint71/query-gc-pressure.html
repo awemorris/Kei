@@ -1,0 +1,23 @@
+<!doctype html><div id="owner" data-first="one" data-two-words="two" class="one two"></div><script>
+var owner = document.getElementById('owner');
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < 3000; i++) {
+  var item = document.createElement('p');
+  item.className = 'target';
+  fragment.appendChild(item);
+}
+document.body.appendChild(fragment);
+var all = document.querySelectorAll('p.target');
+console.log('query', all.length, all[0] === document.querySelector('p.target'));
+var list = owner.classList;
+for (var j = 0; j < 400; j++) {
+  list.add('new' + j);
+  list.remove('new' + j);
+}
+list.replace('one', 'three');
+list.toggle('four', true);
+console.log('class', list.contains('three'), list.contains('four'), list.contains('one'), list.length);
+var map = owner.dataset;
+map.first = 'changed';
+console.log('dataset', map.first, map.twoWords, owner.getAttribute('data-first'));
+</script>

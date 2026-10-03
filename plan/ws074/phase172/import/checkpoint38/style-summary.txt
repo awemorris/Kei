@@ -1,0 +1,3 @@
+plan/ws074/tests/host-range-clone-contents.c goto=30
+plan/ws074/tests/host-range-extract-contents.c goto=23
+total 53

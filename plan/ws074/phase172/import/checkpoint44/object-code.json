@@ -1,0 +1,46 @@
+[
+  {
+    "path": "plan/ws074/tests/host-insertion.c",
+    "sha256": "ae4d6d1574b343439ffa7c6c37b552e9512fa7421f119119a487d6e92cadd483",
+    "object": "host-insertion.o",
+    "object_path": "build/browser3-p172/review44/host-insertion.o",
+    "text_sha256": "836d7de86442f375d9b51905eccea664772e69814e5f28ef00e1f61181bcd497",
+    "final_sha256": "92b1ed69604a81eb71eb5be9ad80c109be181657145b7cdc18574e336c1a3149",
+    "final_text_sha256": "356eb7fa5a2921389a31ccd07620362ac8d14d36d3677095825253986aa8d0fc",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-mutation-record.c",
+    "sha256": "43d5ea7b51f5b452ca306e100f407922a149018c9e9e07356b32e9932c7e8743",
+    "object": "host-mutation-record.o",
+    "object_path": "build/browser3-p172/review44/host-mutation-record.o",
+    "text_sha256": "fea15dd876b407c4ad71b0a50ff52dcd17d02729044c998b529a3fe49cc9815e",
+    "final_sha256": "a665a4cc87e772cc3cd1b10e0a446a0ce445342e0070ce5d06da89aabb5894d8",
+    "final_text_sha256": "aa303a13b7e8ae19026f3bb43c44e8d6ac5dfbea121bf06a3d1f2a7f270ac948",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-style-sheet.c",
+    "sha256": "62ce8fc85edaecc153175945e186d0d38f597fc9e2dd459458115ea0bc9c5205",
+    "object": "host-style-sheet.o",
+    "object_path": "build/browser3-p172/review44/host-style-sheet.o",
+    "text_sha256": "305cb55220b335b6ca8855ce37ad3f74f9e4d6a21185b5ac6db182fa81293021",
+    "final_sha256": "fe3fab4be2f1e907775ec4f782b4a8c322b7840a9207b6f25afa237fb38794ef",
+    "final_text_sha256": "578c65bcff326260b718495767eecaf9860a6cb7e6b2d83d839421b0c372b6af",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-submit.c",
+    "sha256": "1ae74bec843c29a27adf242612c158ae45133bcbf5515213625190799aeb4574",
+    "object": "host-submit.o",
+    "object_path": "build/browser3-p172/review44/host-submit.o",
+    "text_sha256": "ef64d4304948b9274f510b11c0e7e8801f8d41fa99d0899095f0339142c73e36",
+    "final_sha256": "d2c763a713486d5d7f847a0bafa08108fb1067e65f30b308e376d97e6391def1",
+    "final_text_sha256": "ee2c72514a439517601ad3525f3a826f71f717b979b8945bfdbb65fc03c01db2",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

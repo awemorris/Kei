@@ -1,0 +1,6 @@
+run 1 fails=2 lines=14
+run 2 fails=0 lines=14
+run 3 fails=0 lines=14
+run 4 (p052-p053 in acc-4, rest in acc-4b) fails=0 lines=14
+run 5 fails=0 lines=14
+done

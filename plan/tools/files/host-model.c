@@ -57,9 +57,12 @@ main(
 	struct fm_task *folder_task;
 	struct fm_undo history;
 	struct fm_undo_item item;
+	struct fm_listing listing;
 	unsigned mode;
 	size_t count;
+	size_t index;
 	ssize_t length;
+	int shown;
 	time_t deleted;
 	int error;
 
@@ -415,6 +418,22 @@ main(
 	check(exists(path), "trash: the second of one name is name.2");
 	fm_task_free(task);
 
+	/* 7b. The trash's listing shows both under the name they had, of its kind (BUG-140, ws127-p002). */
+	memset(&listing, 0, sizeof(listing));
+	error = fm_dir_read_trash(&listing, trash);
+	shown = 0;
+	for (index = 0; error == 0 && index < listing.count; index++) {
+		if (strcmp(listing.entries[index].name, "Report 2.pdf.2") == 0)
+			shown = -100;
+		if (strcmp(listing.entries[index].name, "Report 2.pdf") != 0)
+			continue;
+		if (listing.entries[index].mime == NULL || listing.entries[index].mime != fm_mime_guess("Report 2.pdf", listing.entries[index].mode))
+			continue;
+		shown++;
+	}
+	check(error == 0 && shown == 2, "trash listing: name.2 shows as the name it had, of that kind");
+	fm_dir_free(&listing);
+
 	/* 8. Put back: the first one returns to where it was, its record goes. */
 	snprintf(path, sizeof(path), "%s/files/Report 2.pdf", trash);
 	sources[2] = strdup(path);
@@ -573,6 +592,18 @@ main(
 		thumb = fm_thumb_get(&pictures, path, 8);
 		check(thumb == NULL && pictures.thumb_wanted[0] != '\0', "thumbs: a changed file is asked for again");
 		fm_thumb_release(&pictures);
+
+		/* The thumbnail kept on disk (ws127-p002, F-035): written by the round above, read back alike; stale once the file changes. */
+		memset(&image, 0, sizeof(image));
+		check(fm_thumb_cache_read(path, &image) == 0 && image.width == 256 && image.height == 170 && (image.pixels[0] & 0x00ffffffU) == 0x404040U, "thumb cache: the made thumbnail is kept and read back");
+		fm_image_release(&image);
+		{
+			FILE *file = fopen(path, "ab");
+			fputc(0, file);
+			fclose(file);
+		}
+		check(fm_thumb_cache_read(path, &image) == ENOENT, "thumb cache: a changed file's record is stale");
+		check(fm_thumb_is_pdf((const unsigned char *)"%PDF-1.4\n", 9) == 1 && fm_thumb_is_pdf((const unsigned char *)"P6\n1 1", 6) == 0, "thumb: a PDF is told by its signature");
 
 		snprintf(path, sizeof(path), "%s/notes", root);
 		make_file(path, "one\ttwo\r\nthree\nfour");

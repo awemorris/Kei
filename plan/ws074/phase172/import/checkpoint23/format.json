@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/page/geometry.c",
+      "formatted_sha256": "324dee0b95cf35adb9357603bfe43b94f3fdd4c1be1797de76cf6f17a1b89472",
+      "final_sha256": "445dc346e410a02305f8ac928a0774e35525bbf136b3a6ecc75b9d1c2a1b5059",
+      "restorations": "definition argument tabs and compound clause layout"
+    }
+  ]
+}

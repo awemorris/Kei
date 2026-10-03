@@ -16,6 +16,8 @@ KEILAND_LINUX_FILES_SOURCES := userland/desktop/files/main.c \
 	userland/desktop/files/mntent/mounts-mntent.c \
 	userland/desktop/files/ui-input.c \
 	userland/desktop/files/ui-list.c \
+	userland/desktop/files/ui-scrollbar.c \
+	userland/desktop/libkeiui/scroll-bar.c \
 	userland/desktop/files/ui-field.c \
 	userland/desktop/files/select.c \
 	userland/desktop/files/task.c \
@@ -29,6 +31,7 @@ KEILAND_LINUX_FILES_SOURCES := userland/desktop/files/main.c \
 	userland/desktop/files/ui-search.c \
 	userland/desktop/files/ui-home.c \
 	userland/desktop/files/thumb.c \
+	userland/desktop/files/thumb-cache.c \
 	userland/desktop/files/peek.c \
 	userland/desktop/files/ui-preview.c \
 	userland/desktop/files/apps.c \

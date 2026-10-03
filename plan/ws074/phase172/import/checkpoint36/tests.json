@@ -1,0 +1,35 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-css-rule-model"
+    ],
+    "exit": 0,
+    "stdout_file": "css-rule-model.stdout",
+    "stderr_file": "css-rule-model.stderr",
+    "after_final_builder_exit": 0
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-cssom-mutation"
+    ],
+    "exit": 0,
+    "stdout_file": "cssom-mutation.stdout",
+    "stderr_file": "cssom-mutation.stderr",
+    "after_final_builder_exit": 0
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-range-delete-contents"
+    ],
+    "exit": 0,
+    "stdout_file": "range-delete-contents.stdout",
+    "stderr_file": "range-delete-contents.stderr",
+    "after_final_builder_exit": 0
+  }
+]

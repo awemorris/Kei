@@ -90,6 +90,7 @@ struct zwl_server;
 struct zwl_client;
 struct zwl_object;
 struct zwl_compose;
+struct kl_backend;
 struct zwl_import;
 struct zwl_panels;
 struct zwl_ime;
@@ -165,6 +166,9 @@ enum zwl_kind {
 	/* The editing operations (edit.c, ws102-p017). */
 	ZWL_EDIT_MANAGER,
 	ZWL_EDIT,
+	/* KDE's server decoration, which GTK declares its decoration with (decoration.c, ws114-p008). */
+	ZWL_KDE_DECORATION_MANAGER,
+	ZWL_KDE_DECORATION,
 };
 
 /*
@@ -517,6 +521,17 @@ struct zwl_object {
 	unsigned decoration_acked;
 	unsigned decoration_reset;
 	struct zwl_decoration_configure *decoration_configures;
+	/*
+	 * ws114-p008: a toplevel whose xdg-decoration object was destroyed keeps
+	 * the client's decoration (withdrawn, until a new object is made).  A
+	 * surface's org_kde_kwin_server_decoration, and on that object the
+	 * surface it decorates and the mode the client asked for (KDE_MODE_*,
+	 * decoration.c); each is cleared from both ends when either goes.
+	 */
+	unsigned decoration_withdrawn;
+	struct zwl_object *kde_decoration;
+	struct zwl_object *kde_surface;
+	uint32_t kde_mode;
 	struct zwl_object *shape_pointer;
 	struct zwl_object *viewport;
 	int32_t pending_source[4];
@@ -580,6 +595,15 @@ struct zwl_client {
 	 * binds the input method's globals.
 	 */
 	unsigned ime;
+	/*
+	 * Nonzero once the client bound KDE's server decoration manager
+	 * (decoration.c, ws114-p008).  Under KDE's protocol a window is the
+	 * compositor's to decorate only through a decoration object, so such a
+	 * client's windows without one keep their own decoration: GTK4 binds
+	 * the manager and makes an object only for a window it wants
+	 * decorated.
+	 */
+	unsigned kde_bound;
 };
 
 /* Cycle counts of the event loop, reported every few seconds (ZWL PERF). */
@@ -678,6 +702,8 @@ struct zwl_server {
 	uint32_t locked_modifiers;
 	/* Window mode: the Vulkan output, whether a frame is due, and the fence fd of the frame in flight. */
 	struct zwl_compose *compose;
+	/* The operating system's side (libkeiland-backend, WS131): opened before the OS resources, closed after them; NULL before. */
+	struct kl_backend *backend;
 	/* OS device authority can pause composition; zedBSD always leaves this zero. */
 	unsigned os_paused;
 	unsigned windowed;

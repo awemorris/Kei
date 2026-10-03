@@ -1,0 +1,8 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/frame-load.c",
+    "sha256": "34aa534a4dd6eaf3e57004987b23786ec508267f8da1ad9b8c27a3f3b467c60b",
+    "object": "libbrowser_page_frame-load.o",
+    "text_sha256": "2aab38785a70c9370efab252419822ad460de5b23d11fbddc89ef3e3ccf2b8d9"
+  }
+]

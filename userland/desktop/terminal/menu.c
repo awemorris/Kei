@@ -13,8 +13,9 @@
  * (the System Menu, WS070).  A choice arrives as an action number while the
  * window's events are dispatched; it is queued here and carried out by the
  * main loop, which then tells the menus the terminal's state (Copy and
- * Paste enabled, the font's size checked, Fullscreen checked) in one
- * transaction.  Without the System Menu the terminal simply has no menus.
+ * Paste enabled, the font's size checked, Fullscreen and Treat
+ * Ambiguous-Width Characters as Wide checked) in one transaction.  Without
+ * the System Menu the terminal simply has no menus.
  */
 
 #include "terminal.h"
@@ -50,6 +51,7 @@
 #define MENU_TEXT_SIZE		33U
 #define MENU_VIEW_LINE		34U
 #define MENU_FULLSCREEN		35U
+#define MENU_AMBIGUOUS_WIDE	36U
 #define MENU_SIZE_SMALL		40U
 #define MENU_SIZE_MEDIUM	41U
 #define MENU_SIZE_LARGE		42U
@@ -110,6 +112,7 @@ static const struct menu_item menu_items[] = {
 	{ MENU_SIZE_HUGE, MENU_TEXT_SIZE, KEILAND_MENU_ITEM_RADIO, "Huge", TERMINAL_ACTION_SIZE_HUGE, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_VIEW_LINE, MENU_VIEW, KEILAND_MENU_ITEM_SEPARATOR, "", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_FULLSCREEN, MENU_VIEW, KEILAND_MENU_ITEM_CHECKBOX, "Fullscreen", TERMINAL_ACTION_FULLSCREEN, KEILAND_MENU_ROLE_FULLSCREEN, 0U, MENU_KEY_F11 },
+	{ MENU_AMBIGUOUS_WIDE, MENU_VIEW, KEILAND_MENU_ITEM_CHECKBOX, "Treat Ambiguous-Width Characters as Wide", TERMINAL_ACTION_AMBIGUOUS_WIDE, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_SESSION, KEILAND_MENU_ROOT, KEILAND_MENU_ITEM_SUBMENU, "Session", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_INTERRUPT, MENU_SESSION, KEILAND_MENU_ITEM_NORMAL, "Send Interrupt", TERMINAL_ACTION_INTERRUPT, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_END_OF_FILE, MENU_SESSION, KEILAND_MENU_ITEM_NORMAL, "Send End of File", TERMINAL_ACTION_END_OF_FILE, KEILAND_MENU_ROLE_NONE, 0U, 0U },
@@ -327,8 +330,8 @@ menu_build(
 
 /*
  * Shows a state in the menus in one transaction: Copy and Paste enabled,
- * Zoom In and Out within the sizes, the size's radio item and Fullscreen
- * checked.
+ * Zoom In and Out within the sizes, the size's radio item, Fullscreen and
+ * Treat Ambiguous-Width Characters as Wide checked.
  */
 static int
 menu_state(
@@ -391,6 +394,10 @@ menu_state(
 	if (error == 0)
 		error = keiland_menu_set_checked(menu, MENU_FULLSCREEN, state->fullscreen);
 
+	/* Treat Ambiguous-Width Characters as Wide is checked while the setting is on (ws128-p009). */
+	if (error == 0)
+		error = keiland_menu_set_checked(menu, MENU_AMBIGUOUS_WIDE, state->ambiguous_wide);
+
 	/*
 	 * A refused change still ends the transaction, so that the menu is not
 	 * left open for changes; the refusal is reported.
@@ -407,7 +414,7 @@ menu_state(
 
 	/* Succeeded: the menus show the state. */
 	window->menu_state = *state;
-	printf("ZTERM MENU state selection=%d clipboard=%d pixels=%u fullscreen=%d\n", state->selection, state->clipboard, state->pixels, state->fullscreen);
+	printf("ZTERM MENU state selection=%d clipboard=%d pixels=%u fullscreen=%d ambiguous_wide=%d\n", state->selection, state->clipboard, state->pixels, state->fullscreen, state->ambiguous_wide);
 	fflush(stdout);
 	return 0;
 }

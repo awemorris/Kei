@@ -1,0 +1,27 @@
+[
+  {
+    "program": "build/browser3-p172/plain/host-color-media",
+    "exit": 0,
+    "last_line": "native color media: 39/39 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-css-rule-model",
+    "exit": 0,
+    "last_line": "native CSS rule model: 44/44 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-cssom",
+    "exit": 0,
+    "last_line": "native CSSOM: 12/12 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-cssom-mutation",
+    "exit": 0,
+    "last_line": "native CSSOM mutation: 12/12 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-style-sheet",
+    "exit": 0,
+    "last_line": "native style source: 21/21 passed"
+  }
+]

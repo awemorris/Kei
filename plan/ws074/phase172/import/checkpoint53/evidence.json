@@ -1,0 +1,30 @@
+{
+  "queue": "q597",
+  "checkpoint": 53,
+  "source": "userland/desktop/libbrowser/bind/mixin.c",
+  "source_sha256": "f51ce61227afde791ab4893bb0287a6d0a7f92486dd7e9bebe112d3f412db838",
+  "baseline": "c4b8dfa555347f94197c7b944446d9da3f0c46b7",
+  "reviewed": 173,
+  "total": 209,
+  "remaining": 36,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 19,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "dom_tests": "23/23",
+  "selected_native": {
+    "host-insertion": "pre-insertion native checks: 29/29 passed",
+    "host-tree": "exit0",
+    "host-mutation-record": "native mutation record GC: 16/16 passed"
+  },
+  "limits": [
+    "Only bind/mixin.c is newly full-reviewed; original whole p172 gates and36 production files remain.",
+    "No target/boot/ASan or current Acid3 pixel comparison was run."
+  ]
+}

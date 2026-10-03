@@ -1,0 +1,16 @@
+[
+  {
+    "path": "plan/ws074/tests/host-svg-length.c",
+    "sha256": "e09e5b03a0d7ecf79af8b0ef78461032bd64e0c454e75e72732e674a205bc57c",
+    "object": "host-svg-length.o",
+    "object_path": "build/browser3-p172/review45/host-svg-length.o",
+    "text_sha256": "2294816caa2ad773d5a8a8ddfd4c699c63fcef437c6ccdd30d522e82e6b624c9"
+  },
+  {
+    "path": "plan/ws074/tests/host-svg-text.c",
+    "sha256": "8ab0263a73bfc98e954de755821c82aeabe2a0601f9f2aa0046e99939563caf2",
+    "object": "host-svg-text.o",
+    "object_path": "build/browser3-p172/review45/host-svg-text.o",
+    "text_sha256": "c0cfba89d7d426ea1098c3a3ccf758643d1b6379158f89abc3f01571c8e41e5a"
+  }
+]

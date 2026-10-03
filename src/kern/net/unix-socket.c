@@ -2520,7 +2520,14 @@ unix_poll(
 		result |= POLLERR;
 	if (socket->read_shutdown || socket->lifecycle != SOCKET_OPEN)
 		result |= POLLHUP;
-	if (socket->write_shutdown || socket->lifecycle != SOCKET_OPEN)
+
+	/*
+	 * A socket being closed reports an error.  This end's own write
+	 * shutdown is not one: it only withholds POLLOUT below, so a client
+	 * that sent its request and shut its writing down still waits in poll
+	 * for the answer (BUG-149).
+	 */
+	if (socket->lifecycle != SOCKET_OPEN)
 		result |= POLLERR;
 	send_hiwat = socket->send_hiwat_bytes;
 	local_writable =

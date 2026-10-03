@@ -1,0 +1,13 @@
+[
+  {
+    "path": "plan/ws074/tests/host-frame-load.c",
+    "sha256": "0f969a8e4e3f910a290efb5696b69467cd345ae4538a2ac9143cc8904c994f3e",
+    "object": "host-frame-load.o",
+    "object_path": "build/browser3-p172/review48/host-frame-load.o",
+    "text_sha256": "7ddd3cce70ff84e6694ab1ee325e6b1b11b26db9cdf98639ecf890b549896ec7",
+    "final_sha256": "a3978e45a4e35d4f7a751f1e2e02c204b6e9d4938a759d2055ef0de98f784d3e",
+    "final_text_sha256": "29509724c583a8c94f3a29332eaf896bef60aecdb9b73cba48f0e006e2ed29a0",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

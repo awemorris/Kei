@@ -1,0 +1,27 @@
+PASS unsupported native Document kind preserves output
+PASS missing embedding output slot rejected
+PASS clone allocation caused actual collection without stack roots
+PASS callee retained source identity and current owner
+PASS source graph and every UTF16 buffer preserved
+PASS complete copy published after successful allocation
+PASS copied element retains native prefix and arbitrary namespace URI
+PASS copied native attribute retains namespaced identity
+PASS copied native attribute retains prefix local name and value
+PASS every copied child survived allocation collection
+PASS source graph collectible after callee roots released
+PASS complete copy retains creator Document
+PASS post-call root retains copied graph
+PASS creator collectible after all output roots released
+PASS complete copy collectible after output release
+PASS invalid embedding arguments rejected without publication
+PASS unsupported native Document kind preserves output
+PASS missing embedding output slot rejected
+PASS clone allocation caused actual collection without stack roots
+PASS callee retained source identity and current owner
+PASS source graph and every UTF16 buffer preserved
+PASS real ENOMEM preserves unpublished output sentinel
+PASS source graph collectible after callee roots released
+PASS failed partial graph and Document collectible
+PASS creator collectible after all output roots released
+PASS invalid embedding arguments rejected without publication
+native node cloning: 26 checks, 0 failures

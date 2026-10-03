@@ -1,0 +1,30 @@
+error true true TypeError true
+made RangeError: too far too far reason [object Error]
+error-call true N
+syntax SyntaxError
+number 0.30000000000000004 1e+21 1e-7 123456789012345680000 -0.0000015 ff 0.1
+fixed 1.00 2 3 -2 1e+21 0.0000010
+exponential 1.23e+5 0e+0 1.3e+0 5e-7
+precision 123.5 0.00012 1.2e+5 1.00e+21
+constants 9007199254740991 true 5e-324 true false
+parse 42 31 35 0 NaN 3.14 5 -Infinity
+convert 12 5 Infinity 0 NaN NaN true true
+boolean false true object truthy false true
+wrapper object 8 7.0 [object Number] true
+math 5 Infinity -Infinity 3 -2 0 3 -2 2
+math2 -1 -4 4 256 5 31 12 5.5
+random true
+define 1 false false false 1 shown
+redefine TypeError
+freeze 1 true true false
+create true yes true false true
+assign 1 2 true false
+names 2 v v
+null-proto null undefined
+accessor 1 2 4 function
+call Hello, Ada! Hi, Ada?
+bind Hey, Ada. bound describe 1
+bound-new 1 2 true
+function 5 function 7
+eval 3 10 number 42
+tostring [object Null] [object Array] [object Function] [object Object]

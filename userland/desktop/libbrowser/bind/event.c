@@ -284,6 +284,8 @@ bind_event_create(
 {
 	struct bind_event *state;
 	struct vm_object *object;
+	struct vm_cell *state_root;
+	int status;
 
 	/* The state, zeroed: no flags, no phase. */
 	state = vm_heap_alloc(window->realm->heap, &event_type_cell, sizeof(*state));
@@ -312,11 +314,20 @@ bind_event_create(
 	state->time_stamp = window->now;
 
 	/* The object with the interface's prototype. */
+	state_root = &state->cell;
+	status = vm_heap_add_root(window->realm->heap, &state_root);
+	if (status != 0)
+		return status;
 	object = vm_object_create(window->realm->heap, window->prototypes[interface]);
-	if (object == NULL)
+	if (object == NULL) {
+		vm_heap_remove_root(window->realm->heap, &state_root);
 		return ENOMEM;
+	}
+
+	/* The wrapper now owns the event state through its internal slot. */
 	object->kind = VM_KIND_PLATFORM;
 	object->internal = vm_value_cell(state);
+	vm_heap_remove_root(window->realm->heap, &state_root);
 
 	/* Succeeded: the event is made. */
 	*value = vm_value_cell(object);
@@ -634,6 +645,7 @@ bind_event_construct(
 {
 	struct bind_window *window;
 	struct vm_string *type;
+	struct vm_cell *event_root;
 	vm_value value;
 	int present;
 	int status;
@@ -654,16 +666,26 @@ bind_event_construct(
 	status = bind_event_create(window, interface, type, result, event);
 	if (status != 0)
 		return status;
+	event_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* The init's flags. */
 	status = bind_get_option(realm, js_argument(args, count, 1), "bubbles", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	(*event)->bubbles = vm_to_boolean(value);
 	status = bind_get_option(realm, js_argument(args, count, 1), "cancelable", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	(*event)->cancelable = vm_to_boolean(value);
+
+	/* The constructed wrapper now carries the initialized state. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the event is made. */
 	return 0;
@@ -748,6 +770,8 @@ bind_event_prepare(
 	struct bind_event **event)
 {
 	struct vm_string *name;
+	struct vm_cell *event_root;
+	struct vm_cell *target_root;
 	int status;
 
 	/* The type's atom and the event. */
@@ -757,6 +781,17 @@ bind_event_prepare(
 	status = bind_event_create(window, interface, name, event_value, event);
 	if (status != 0)
 		return status;
+	event_root = vm_value_as_cell(*event_value);
+	status = vm_heap_add_root(window->realm->heap, &event_root);
+	if (status != 0)
+		return status;
+	*target_value = vm_value_cell(window->realm->global);
+	target_root = vm_value_as_cell(*target_value);
+	status = vm_heap_add_root(window->realm->heap, &target_root);
+	if (status != 0) {
+		vm_heap_remove_root(window->realm->heap, &event_root);
+		return status;
+	}
 
 	/*
 	 * The browser fires it: trusted, with the flags asked for.  bubbles and
@@ -769,19 +804,26 @@ bind_event_prepare(
 		(*event)->cancelable = 1;
 
 	/* The target: the node's object, or the window. */
-	*target_value = vm_value_cell(window->realm->global);
 	if (target != NULL) {
 		status = bind_wrap(window, target, target_value);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		target_root = vm_value_as_cell(*target_value);
 	}
 
 	/* The window's load reports the document as its target. */
 	if ((flags & BIND_EVENT_DOCUMENT) != 0) {
 		status = bind_wrap(window, &window->document->node, &(*event)->target_override);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
+
+	/* Both values are handed to dispatch after wrapping is complete. */
+cleanup:
+	vm_heap_remove_root(window->realm->heap, &target_root);
+	vm_heap_remove_root(window->realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the event is ready to dispatch. */
 	return 0;
@@ -984,6 +1026,8 @@ event_target_construct(
 	struct bind_window *window;
 	struct vm_object *object;
 	struct vm_cell *listeners;
+	struct vm_cell *listeners_root;
+	int status;
 
 	UNUSED_PARAMETER(this_value);
 	UNUSED_PARAMETER(args);
@@ -996,11 +1040,20 @@ event_target_construct(
 		return ENOMEM;
 
 	/* The object that holds them. */
+	listeners_root = listeners;
+	status = vm_heap_add_root(realm->heap, &listeners_root);
+	if (status != 0)
+		return status;
 	object = vm_object_create(realm->heap, window->prototypes[BIND_EVENT_TARGET]);
-	if (object == NULL)
+	if (object == NULL) {
+		vm_heap_remove_root(realm->heap, &listeners_root);
 		return ENOMEM;
+	}
+
+	/* The wrapper now owns the listener cell through its internal slot. */
 	object->kind = VM_KIND_PLATFORM;
 	object->internal = vm_value_cell(listeners);
+	vm_heap_remove_root(realm->heap, &listeners_root);
 
 	/* Succeeded: the target is made. */
 	*result = vm_value_cell(object);
@@ -1268,6 +1321,7 @@ event_construct_mouse(
 	vm_value *result)
 {
 	struct bind_event *event;
+	struct vm_cell *event_root;
 	int status;
 
 	UNUSED_PARAMETER(this_value);
@@ -1278,7 +1332,12 @@ event_construct_mouse(
 		return status;
 
 	/* The pointer's part of the init. */
+	event_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 	status = bind_event_init_mouse(realm, js_argument(args, count, 1), event);
+	vm_heap_remove_root(realm->heap, &event_root);
 	if (status != 0)
 		return status;
 
@@ -1296,6 +1355,7 @@ event_construct_custom(
 	vm_value *result)
 {
 	struct bind_event *event;
+	struct vm_cell *event_root;
 	vm_value value;
 	int present;
 	int status;
@@ -1308,11 +1368,16 @@ event_construct_custom(
 		return status;
 
 	/* The detail. */
-	status = bind_get_option(realm, js_argument(args, count, 1), "detail", &present, &value);
+	event_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &event_root);
 	if (status != 0)
 		return status;
-	if (present)
+	status = bind_get_option(realm, js_argument(args, count, 1), "detail", &present, &value);
+	if (status == 0 && present)
 		event->detail = value;
+	vm_heap_remove_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the event is made. */
 	return 0;
@@ -1329,6 +1394,7 @@ event_construct_message(
 {
 	struct bind_event *event;
 	struct vm_string *text;
+	struct vm_cell *event_root;
 	vm_value value;
 	int present;
 	int status;
@@ -1339,52 +1405,62 @@ event_construct_message(
 	status = bind_event_construct(realm, BIND_MESSAGE_EVENT, args, count, result, &event);
 	if (status != 0)
 		return status;
+	event_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* Its cloned value (the constructor keeps the value itself). */
 	status = bind_get_option(realm, js_argument(args, count, 1), "data", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	if (present)
 		event->detail = value;
 
 	/* The origin and the last event id are strings. */
 	status = bind_get_option(realm, js_argument(args, count, 1), "origin", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	if (present) {
 		status = bind_to_string(realm, value, &text);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		event->origin = text;
 	}
 
 	/* The second string follows the same conversion. */
 	status = bind_get_option(realm, js_argument(args, count, 1), "lastEventId", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	if (present) {
 		status = bind_to_string(realm, value, &text);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		event->last_event_id = text;
 	}
 
 	/* The sending context and transferred ports. */
 	status = bind_get_option(realm, js_argument(args, count, 1), "source", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	if (present)
 		event->source = value;
 	status = bind_get_option(realm, js_argument(args, count, 1), "ports", &present, &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	if (present) {
 		event->ports = value;
 	} else {
 		status = js_builtin_array(realm, NULL, 0, &event->ports);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
+
+	/* The message fields are now stored on its traced event state. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &event_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the event is made. */
 	return 0;
@@ -2180,8 +2256,14 @@ event_message_origin(
 	status = event_this(realm, this_value, &event);
 	if (status != 0)
 		return status;
-	if (event->origin == NULL)
-		return bind_string(realm, "", result);
+	if (event->origin == NULL) {
+		status = bind_string(realm, "", result);
+		if (status != 0)
+			return status;
+		return 0;
+	}
+
+	/* A stored origin is already owned by the event state. */
 	*result = vm_value_cell(event->origin);
 	return 0;
 }
@@ -2203,8 +2285,14 @@ event_message_last_id(
 	status = event_this(realm, this_value, &event);
 	if (status != 0)
 		return status;
-	if (event->last_event_id == NULL)
-		return bind_string(realm, "", result);
+	if (event->last_event_id == NULL) {
+		status = bind_string(realm, "", result);
+		if (status != 0)
+			return status;
+		return 0;
+	}
+
+	/* A stored id is already owned by the event state. */
 	*result = vm_value_cell(event->last_event_id);
 	return 0;
 }
@@ -2247,8 +2335,14 @@ event_message_ports(
 	status = event_this(realm, this_value, &event);
 	if (status != 0)
 		return status;
-	if (event->ports == VM_VALUE_NULL)
-		return js_builtin_array(realm, NULL, 0, result);
+	if (event->ports == VM_VALUE_NULL) {
+		status = js_builtin_array(realm, NULL, 0, result);
+		if (status != 0)
+			return status;
+		return 0;
+	}
+
+	/* Transferred ports remain owned by the event state. */
 	*result = event->ports;
 	return 0;
 }
@@ -2312,6 +2406,7 @@ event_invoke(
 	struct bind_listeners *listeners;
 	struct bind_listener *listener;
 	struct vm_object *snapshot;
+	struct vm_cell *snapshot_root;
 	vm_value callback;
 	vm_value returned;
 	size_t index;
@@ -2343,6 +2438,12 @@ event_invoke(
 	if (status != 0)
 		return status;
 	status = bind_array_create(window->realm, &snapshot);
+	if (status != 0)
+		return status;
+	snapshot_root = &snapshot->cell;
+	status = vm_heap_add_root(window->realm->heap, &snapshot_root);
+	if (status != 0)
+		return status;
 	for (index = 0; status == 0 && index < listeners->count; index++) {
 		listener = &listeners->items[index];
 		if (listener->type != event->type)
@@ -2362,7 +2463,7 @@ event_invoke(
 
 	/* The copy may have run out of memory. */
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* Each one that is still there, in order, until a listener stops the event at once. */
 	capture = 0;
@@ -2377,7 +2478,7 @@ event_invoke(
 		/* A listener removed by an earlier one does not run; a once listener is removed before it runs. */
 		status = bind_listeners_of(window, current, 0, &listeners);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		present = bind_listeners_find(listeners, event->type, callback, capture, handler, &found);
 		if (!present)
 			continue;
@@ -2387,10 +2488,16 @@ event_invoke(
 		/* The call; a handler that returns false cancels the event. */
 		status = event_call_listener(window, callback, current, event_value, &returned);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		if (handler && returned == VM_VALUE_FALSE && event->cancelable)
 			event->canceled = 1;
 	}
+
+	/* The detached callback snapshot no longer spans user code. */
+cleanup:
+	vm_heap_remove_root(window->realm->heap, &snapshot_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the target's listeners have run. */
 	return 0;

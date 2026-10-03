@@ -1,0 +1,42 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "60",
+      "python3",
+      "plan/ws074/tests/run-frame-load-tests.py",
+      "--program",
+      "/home/awe/zedBSD-claude2/build/browser3-p172/plain/host-frame-load"
+    ],
+    "exit": 0,
+    "stdout_file": "frame-load.stdout",
+    "stderr_file": "frame-load.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout_file": "frame-lifetime.stdout",
+    "stderr_file": "frame-lifetime.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/iframe-safety-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "iframe-safety.stdout",
+    "stderr_file": "iframe-safety.stderr",
+    "pass_lines": 14,
+    "fail_lines": 0
+  }
+]

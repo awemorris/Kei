@@ -1,0 +1,29 @@
+{
+  "queue": "q597",
+  "checkpoint": 70,
+  "source": "userland/desktop/libbrowser/bind/cssom.c",
+  "source_sha256": "bddeeb49e12c795218229b9beb932819909dd552f2750c91629c86c051f7eb41",
+  "baseline": "2c39588ccb6de530f27781fa74679dee1a49ee60",
+  "reviewed": 189,
+  "total": 209,
+  "remaining": 20,
+  "source_changed": false,
+  "whole_host_build": "checkpoint69 whole-host-build exit0 warning0; unchanged production source since that build",
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "tests": {
+    "native-cssom": "12/12",
+    "native-cssom-mutation": "12/12",
+    "native-css-rule-model": "44/44",
+    "style-sheet-probe": "22 PASS / 0 FAIL",
+    "style-sheet-mutation-probe": "23 PASS / 0 FAIL",
+    "dom-tests": "23/23"
+  },
+  "limits": [
+    "Initial page mutation probe without repository font arguments had 15 FAIL readings; rerun with all three required fonts passed23/23. Only configured run is counted.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

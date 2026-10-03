@@ -1,0 +1,8 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/js/builtin_json.c",
+    "sha256": "5c1a570121eae461b25f30e29f8182226b78261043db513c4f38f4f011c10788",
+    "object": "libbrowser_js_builtin_json.o",
+    "text_sha256": "00a07bc1c764e7ffbcff2d70402c828759c9c9498f2947739d5b1bda5020f218"
+  }
+]

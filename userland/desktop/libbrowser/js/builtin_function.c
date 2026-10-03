@@ -18,6 +18,7 @@
 #include "js/builtin.h"
 
 #include <errno.h>
+#include <limits.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +28,13 @@
 #define FUNCTION_BOUND_THIS	1U
 #define FUNCTION_BOUND_ARGS	2U
 
+/* The portion of an apply argument buffer already published by getters. */
+struct function_apply_args {
+	vm_value *values;
+	uint32_t filled;
+};
+
+static void function_apply_args_trace(struct vm_heap *heap, void *context);
 static int function_has_instance(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int function_call_constructor(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int function_call(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -51,6 +59,7 @@ js_builtin_install_function(
 	struct vm_function *has_instance;
 	struct vm_object *prototype;
 	struct vm_accessor *accessor;
+	struct vm_cell *temporary;
 	vm_value thrower;
 	int error;
 
@@ -62,37 +71,75 @@ js_builtin_install_function(
 
 	/* The prototype's methods. */
 	error = js_builtin_method(realm, prototype, "apply", 2, function_apply);
-	if (error == 0)
-		error = js_builtin_method(realm, prototype, "bind", 1, function_bind);
-	if (error == 0)
-		error = js_builtin_method(realm, prototype, "call", 1, function_call);
-	if (error == 0)
-		error = js_builtin_method(realm, prototype, "toString", 0, function_to_string);
+	if (error != 0)
+		return error;
+	error = js_builtin_method(realm, prototype, "bind", 1, function_bind);
+	if (error != 0)
+		return error;
+	error = js_builtin_method(realm, prototype, "call", 1, function_call);
+	if (error != 0)
+		return error;
+	error = js_builtin_method(realm, prototype, "toString", 0, function_to_string);
+	if (error != 0)
+		return error;
+
+	/* Retain unpublished method and accessor cells before their property keys allocate. */
+	temporary = NULL;
+	error = vm_heap_add_root(realm->heap, &temporary);
 	if (error != 0)
 		return error;
 
 	/* Symbol.hasInstance (neither writable, enumerable nor configurable), which instanceof recognizes (ws074-p087). */
 	error = js_builtin_function(realm, "[Symbol.hasInstance]", 1, function_has_instance, NULL, &has_instance);
 	if (error != 0)
-		return error;
+		goto cleanup;
+	temporary = &has_instance->object.cell;
 	error = js_builtin_symbol_value(realm, prototype, VM_SYMBOL_HAS_INSTANCE, vm_value_cell(has_instance), 0);
 	if (error != 0)
-		return error;
+		goto cleanup;
 	realm->intrinsics[VM_INTRINSIC_HAS_INSTANCE] = &has_instance->object;
+	temporary = NULL;
 
 	/* caller and arguments: accessors that throw (AddRestrictedFunctionProperties). */
 	thrower = vm_value_cell(realm->intrinsics[VM_INTRINSIC_THROW_TYPE_ERROR]);
 	accessor = vm_accessor_create(realm->heap, thrower, thrower);
-	if (accessor == NULL)
-		return ENOMEM;
+	if (accessor == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The first property definition can allocate before publishing the accessor. */
+	temporary = &accessor->cell;
 	error = js_builtin_value(realm, prototype, "caller", vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_CONFIGURABLE);
-	if (error == 0)
-		error = js_builtin_value(realm, prototype, "arguments", vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_CONFIGURABLE);
+	if (error != 0)
+		goto cleanup;
+	error = js_builtin_value(realm, prototype, "arguments", vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_CONFIGURABLE);
+
+cleanup:
+	/* Publication has transferred ownership, or an error ends this attempt. */
+	vm_heap_remove_root(realm->heap, &temporary);
+
+	/* Report a failed installation without claiming all methods exist. */
 	if (error != 0)
 		return error;
 
 	/* Succeeded: Function is installed. */
 	return 0;
+}
+
+/* Marks only argument values already returned by apply's indexed getters. */
+static void
+function_apply_args_trace(
+	struct vm_heap *heap,
+	void *context)
+{
+	struct function_apply_args *held;
+	uint32_t index;
+
+	/* Unfilled native slots have no VM value for the collector to mark. */
+	held = context;
+	for (index = 0; index < held->filled; index++)
+		vm_heap_mark_value(heap, held->values[index]);
 }
 
 /* Function(p1, ..., pn, body): a function made from the parameters and the body, in the global scope. */
@@ -115,38 +162,57 @@ function_call_constructor(
 	/* The source: (function anonymous(p1,...,pn\n) {\nbody\n}). */
 	wb_units_init(&source);
 	status = function_append_text(&source, "(function anonymous(");
-	for (index = 0; status == 0 && index + 1U < count; index++) {
-		if (index > 0)
+	if (status != 0)
+		goto cleanup;
+	for (index = 0; index + 1U < count; index++) {
+		if (index > 0) {
 			status = function_append_text(&source, ",");
-		if (status == 0)
-			status = vm_to_string(realm, args[index], &part);
-		if (status == 0)
-			status = vm_string_append_units(part, &source);
+			if (status != 0)
+				goto cleanup;
+		}
+
+		/* Each parameter is converted before the next one is observed. */
+		status = vm_to_string(realm, args[index], &part);
+		if (status != 0)
+			goto cleanup;
+		status = vm_string_append_units(part, &source);
+		if (status != 0)
+			goto cleanup;
 	}
 
 	/* The end of the parameters, the body and the end. */
-	if (status == 0)
-		status = function_append_text(&source, "\n) {\n");
-	if (status == 0 && count > 0) {
+	status = function_append_text(&source, "\n) {\n");
+	if (status != 0)
+		goto cleanup;
+	if (count > 0) {
 		status = vm_to_string(realm, args[count - 1U], &part);
-		if (status == 0)
-			status = vm_string_append_units(part, &source);
+		if (status != 0)
+			goto cleanup;
+		status = vm_string_append_units(part, &source);
+		if (status != 0)
+			goto cleanup;
 	}
 
 	/* The end of the function expression. */
-	if (status == 0)
-		status = function_append_text(&source, "\n})");
-	if (status != 0) {
-		wb_units_release(&source);
-		return status;
-	}
+	status = function_append_text(&source, "\n})");
+	if (status != 0)
+		goto cleanup;
 
 	/* The source as a string, evaluated in the global scope. */
 	text = vm_string_from_units(realm->heap, source.data, source.length);
-	wb_units_release(&source);
-	if (text == NULL)
-		return ENOMEM;
+	if (text == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Evaluation reads the completed UTF-16 source and publishes its result. */
 	status = js_builtin_evaluate(realm, text, 0, result);
+
+cleanup:
+	/* The native source buffer is released on success and every failure. */
+	wb_units_release(&source);
+
+	/* Parsing or evaluation failure cannot publish a constructed function. */
 	if (status != 0)
 		return status;
 
@@ -197,12 +263,15 @@ function_apply(
 	unsigned count,
 	vm_value *result)
 {
+	struct function_apply_args held;
 	vm_value *list;
 	vm_value array;
+	size_t allocation_count;
 	uint32_t length;
 	uint32_t index;
 	int callable;
 	int is_object;
+	int tracer_registered;
 	int status;
 
 	/* Only a function can be called. */
@@ -230,19 +299,43 @@ function_apply(
 	status = js_builtin_length(realm, array, &length);
 	if (status != 0)
 		return status;
-	list = calloc((size_t)length + 1U, sizeof(vm_value));
+	allocation_count = (size_t)length;
+	if (allocation_count > SIZE_MAX / sizeof(vm_value) - 1U)
+		return EOVERFLOW;
+	allocation_count++;
+	list = calloc(allocation_count, sizeof(vm_value));
 	if (list == NULL)
 		return ENOMEM;
 
-	/* Each element (the list is not seen by the collector, but every element is also held by the array). */
-	status = 0;
-	for (index = 0; status == 0 && index < length; index++)
+	/* Returned getter values may have no other owner before the call. */
+	held.values = list;
+	held.filled = 0;
+	tracer_registered = 0;
+	status = vm_heap_add_tracer(realm->heap, function_apply_args_trace, &held);
+	if (status != 0)
+		goto cleanup;
+	tracer_registered = 1;
+	for (index = 0; index < length; index++) {
 		status = vm_get(realm, array, vm_value_int32((int32_t)index), &list[index]);
+		if (status != 0)
+			goto cleanup;
+
+		/* The next getter may collect this previously returned cell. */
+		held.filled = index + 1U;
+	}
 
 	/* The call. */
-	if (status == 0)
-		status = vm_call(realm, this_value, js_argument(args, count, 0), list, length, result);
+	status = vm_call(realm, this_value, js_argument(args, count, 0), list, length, result);
+
+cleanup:
+	/* The tracer must stop before the native buffer is freed. */
+	if (tracer_registered)
+		vm_heap_remove_tracer(realm->heap, function_apply_args_trace, &held);
+
+	/* No registered collector callback retains the argument list. */
 	free(list);
+
+	/* A getter or call failure does not publish the function result. */
 	if (status != 0)
 		return status;
 
@@ -261,13 +354,16 @@ function_bind(
 {
 	struct vm_function *target;
 	struct vm_function *bound;
+	struct vm_cell *roots[3];
 	vm_native construct;
 	vm_value *data;
+	size_t allocation_count;
 	vm_value data_array;
 	vm_value length;
 	vm_value name;
 	unsigned bound_count;
 	unsigned index;
+	unsigned registered;
 	int callable;
 	int constructor;
 	int status;
@@ -286,17 +382,41 @@ function_bind(
 	bound_count = 0;
 	if (count > 1U)
 		bound_count = count - 1U;
-	data = calloc(FUNCTION_BOUND_ARGS + (size_t)bound_count, sizeof(vm_value));
+	allocation_count = (size_t)bound_count;
+	if (allocation_count > SIZE_MAX / sizeof(vm_value) - FUNCTION_BOUND_ARGS)
+		return EOVERFLOW;
+	allocation_count += FUNCTION_BOUND_ARGS;
+	data = calloc(allocation_count, sizeof(vm_value));
 	if (data == NULL)
 		return ENOMEM;
 	data[FUNCTION_BOUND_TARGET] = this_value;
 	data[FUNCTION_BOUND_THIS] = js_argument(args, count, 0);
 	for (index = 0; index < bound_count; index++)
 		data[FUNCTION_BOUND_ARGS + index] = args[index + 1U];
+
+	/* Retain the collectible realm, private data array and unpublished bound function. */
+	roots[0] = NULL;
+	if (realm->managed)
+		roots[0] = &realm->cell;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	for (index = 0; index < 3U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+
+		/* Cleanup releases only acquired registrations. */
+		registered++;
+	}
+
+	/* The data array owns every copied bound argument before native storage ends. */
 	status = js_builtin_array(realm, data, FUNCTION_BOUND_ARGS + bound_count, &data_array);
-	free(data);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = vm_value_as_cell(data_array);
+	free(data);
+	data = NULL;
 
 	/* The bound function: a constructor when its target is one, with the target's prototype. */
 	constructor = vm_value_is_constructor(this_value);
@@ -305,23 +425,47 @@ function_bind(
 		construct = function_bound_construct;
 	status = js_builtin_function(realm, "", 0, function_bound_call, construct, &bound);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[2] = &bound->object.cell;
 	bound->data = data_array;
 	bound->object.prototype = target->object.prototype;
 
 	/* Its length and name from the target's. */
+	name = VM_VALUE_UNDEFINED;
 	status = function_bound_length(realm, this_value, bound_count, &length);
-	if (status == 0)
-		status = js_builtin_value(realm, &bound->object, "length", length, VM_PROPERTY_CONFIGURABLE);
-	if (status == 0)
-		status = function_bound_name(realm, this_value, &name);
-	if (status == 0)
-		status = js_builtin_value(realm, &bound->object, "name", name, VM_PROPERTY_CONFIGURABLE);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	status = js_builtin_value(realm, &bound->object, "length", length, VM_PROPERTY_CONFIGURABLE);
+	if (status != 0)
+		goto cleanup;
+
+	/* The name getter can run user code while the bound result is unpublished. */
+	status = function_bound_name(realm, this_value, &name);
+	if (status != 0)
+		goto cleanup;
+	status = js_builtin_value(realm, &bound->object, "name", name, VM_PROPERTY_CONFIGURABLE);
+	if (status != 0)
+		goto cleanup;
 
 	/* Succeeded: the bound function. */
 	*result = vm_value_cell(bound);
+	status = 0;
+
+cleanup:
+	/* A failed factory may still own its native temporary argument array. */
+	free(data);
+
+	/* No root points into this native frame after return. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed bind never publishes the incomplete native function. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the caller owns the fully bound function. */
 	return 0;
 }
 
@@ -355,24 +499,37 @@ function_to_string(
 	/* function NAME() { [native code] }, the name when it is a string. */
 	wb_buffer_init(&text);
 	status = wb_buffer_append_string(&text, "function ");
+	if (status != 0)
+		goto cleanup;
 	key = vm_key_from_ascii(realm->heap, "name");
-	if (key == VM_VALUE_EMPTY)
+	if (key == VM_VALUE_EMPTY) {
 		status = ENOMEM;
-	if (status == 0) {
-		status = vm_get(realm, this_value, key, &value);
-		is_string = vm_value_is_string(value);
-		if (status == 0 && is_string) {
-			name = (struct vm_string *)vm_value_as_cell(value);
-			status = vm_string_to_utf8(name, &text);
-		}
+		goto cleanup;
+	}
+
+	/* A user-defined name getter may fail before text conversion. */
+	status = vm_get(realm, this_value, key, &value);
+	if (status != 0)
+		goto cleanup;
+	is_string = vm_value_is_string(value);
+	if (is_string) {
+		name = (struct vm_string *)vm_value_as_cell(value);
+		status = vm_string_to_utf8(name, &text);
+		if (status != 0)
+			goto cleanup;
 	}
 
 	/* The rest of the text, as a string. */
-	if (status == 0)
-		status = wb_buffer_append_string(&text, "() { [native code] }");
-	if (status == 0)
-		status = js_builtin_string(realm, wb_buffer_string(&text), result);
+	status = wb_buffer_append_string(&text, "() { [native code] }");
+	if (status != 0)
+		goto cleanup;
+	status = js_builtin_string(realm, wb_buffer_string(&text), result);
+
+cleanup:
+	/* No native text buffer survives either successful output or failure. */
 	wb_buffer_release(&text);
+
+	/* A name getter or native-text conversion error is returned immediately. */
 	if (status != 0)
 		return status;
 
@@ -464,14 +621,21 @@ function_bound_arguments(
 	unsigned *all_count)
 {
 	struct vm_object *data;
+	size_t allocation_count;
 	unsigned bound_count;
 	unsigned index;
 
 	/* The list (the collector need not see it: the bound arguments are held by the data, the rest by the caller). */
 	data = (struct vm_object *)vm_value_as_cell(bound->data);
 	bound_count = data->length - FUNCTION_BOUND_ARGS;
+	if (count > UINT_MAX - bound_count)
+		return EOVERFLOW;
 	*all_count = bound_count + count;
-	*all = calloc((size_t)*all_count + 1U, sizeof(vm_value));
+	allocation_count = (size_t)*all_count;
+	if (allocation_count > SIZE_MAX / sizeof(vm_value) - 1U)
+		return EOVERFLOW;
+	allocation_count++;
+	*all = calloc(allocation_count, sizeof(vm_value));
 	if (*all == NULL)
 		return ENOMEM;
 
@@ -551,8 +715,11 @@ function_bound_name(
 {
 	struct vm_string *prefix;
 	struct vm_string *joined;
+	struct vm_cell *roots[2];
 	vm_value key;
 	vm_value value;
+	unsigned index;
+	unsigned registered;
 	int is_string;
 	int status;
 
@@ -570,16 +737,50 @@ function_bound_name(
 			return status;
 	}
 
+	/* Retain a getter-created target name and unpublished prefix during concat. */
+	roots[0] = vm_value_as_cell(value);
+	roots[1] = NULL;
+	registered = 0;
+	for (index = 0; index < 2U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+
+		/* Only acquired registrations are released below. */
+		registered++;
+	}
+
 	/* With the prefix. */
 	prefix = vm_string_from_utf8(realm->heap, "bound ", 6);
-	if (prefix == NULL)
-		return ENOMEM;
+	if (prefix == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The prefix stays alive until the joined name owns its characters. */
+	roots[1] = &prefix->cell;
 	joined = vm_string_concat(realm->heap, prefix, (struct vm_string *)vm_value_as_cell(value));
-	if (joined == NULL)
-		return ENOMEM;
+	if (joined == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
 
 	/* Succeeded: the name. */
 	*name = vm_value_cell(joined);
+	status = 0;
+
+cleanup:
+	/* Neither native root slot survives the function result. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed prefix or concat cannot publish a partial name. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the caller receives the completed bound name. */
 	return 0;
 }
 

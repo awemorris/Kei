@@ -1,0 +1,1 @@
+Native property617/shared-heap probe337 full reviews; actual65+8=73 native checks/scoped warning0; 0 permitted forward cleanup jumps; original native property policies/errors/GC and8 realm identity cases/C strings retained.

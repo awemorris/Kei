@@ -27,33 +27,32 @@ static const struct xml_binding_probe probes[] = {
 	{ "native XML character prototypes", "cd instanceof CDATASection && cd instanceof Text && cd instanceof CharacterData && pi instanceof ProcessingInstruction && pi instanceof CharacterData && !(pi instanceof Text)" },
 	{ "actual node type and name", "cd.nodeType===4 && cd.nodeName==='#cdata-section' && pi.nodeType===7 && pi.nodeName==='probe-target' && pi.target==='probe-target'" },
 	{ "actual character data properties", "cd.data==='abcd' && cd.length===4 && cd.nodeValue==='abcd' && cd.textContent==='abcd' && pi.data==='wxyz' && pi.nodeValue==='wxyz' && pi.textContent==='wxyz'" },
-	{ "immutable PI target native brand", "(function(){var get=Object.getOwnPropertyDescriptor(ProcessingInstruction.prototype,'target').get;try{get.call({target:'fake'});}catch(e){return e instanceof TypeError;}return false;})()" },
-	{ "CharacterData rejects prototype lookalike", "(function(){try{CharacterData.prototype.appendData.call(Object.create(CDATASection.prototype),'x');}catch(e){return e instanceof TypeError;}return false;})()" },
-	{ "native character clones", "(function(){var a=cd.cloneNode(),b=pi.cloneNode();return a.nodeType===4&&a.data==='abcd'&&b.nodeType===7&&b.target==='probe-target'&&b.data==='wxyz'&&a.ownerDocument===x&&b.ownerDocument===x;})()" },
-	{ "PI Document child and CDATA element child", "(function(){x.insertBefore(pi,x.documentElement);x.documentElement.appendChild(cd);return x.firstChild===pi&&x.documentElement.firstChild===cd&&x.documentElement.textContent==='abcd';})()" },
-	{ "CDATA Document hierarchy rejection", "(function(){try{x.appendChild(cd.cloneNode());}catch(e){return e.name==='HierarchyRequestError';}return false;})()" },
-	{ "CDATA fragment Document hierarchy rejection", "(function(){var f=x.createDocumentFragment();f.appendChild(cd.cloneNode());try{x.appendChild(f);}catch(e){return e.name==='HierarchyRequestError'&&f.firstChild.nodeType===4;}return false;})()" },
-	{ "PI omitted from descendant text", "(function(){var a=x.createElement('a');a.appendChild(pi.cloneNode());a.appendChild(cd.cloneNode());return a.textContent==='abcd';})()" },
-	{ "PI native Range length and clone slice", "(function(){var r=x.createRange();r.setStart(pi,1);r.setEnd(pi,3);var f=r.cloneContents();return f.firstChild.nodeType===7&&f.firstChild.target==='probe-target'&&f.firstChild.data==='xy'&&r.toString()==='';})()" },
-	{ "PI native Range bounds", "(function(){var r=x.createRange();try{r.setStart(pi,5);}catch(e){return e.name==='IndexSizeError';}return false;})()" },
-	{ "PI native Range extraction", "(function(){var p=pi.cloneNode(),r=x.createRange();r.setStart(p,1);r.setEnd(p,3);var f=r.extractContents();return p.data==='wz'&&f.firstChild.nodeType===7&&f.firstChild.target==='probe-target'&&f.firstChild.data==='xy'&&r.collapsed;})()" },
-	{ "PI native Range deletion", "(function(){var p=pi.cloneNode(),r=x.createRange();r.setStart(p,1);r.setEnd(p,3);r.deleteContents();return p.data==='wz'&&p.target==='probe-target'&&r.collapsed;})()" },
-	{ "PI Range insertion refusal", "(function(){var r=x.createRange();r.setStart(pi,1);r.collapse(true);try{r.insertNode(x.createElement('q'));}catch(e){return e.name==='HierarchyRequestError'&&pi.data==='wxyz';}return false;})()" },
-	{ "PI partial Range surround refusal", "(function(){var a=x.createElement('a'),p=pi.cloneNode();a.appendChild(p);a.appendChild(x.createTextNode('t'));var r=x.createRange();r.setStart(p,1);r.setEnd(a,2);try{r.surroundContents(x.createElement('q'));}catch(e){return e.name==='InvalidStateError'&&p.data==='wxyz';}return false;})()" },
-	{ "CDATA Range string and slice kind", "(function(){var r=x.createRange();r.setStart(cd,1);r.setEnd(cd,3);var f=r.cloneContents();return r.toString()==='bc'&&f.firstChild.nodeType===4&&f.firstChild.data==='bc';})()" },
-	{ "CDATA Text split original subtype and ordinary suffix", "(function(){var a=x.createElement('a'),c=cd.cloneNode(),r=x.createRange();a.appendChild(c);r.setStart(c,3);r.setEnd(c,4);var t=c.splitText(2);return c.nodeType===4&&c.data==='ab'&&t.nodeType===3&&t.data==='cd'&&t.previousSibling===c&&r.startContainer===t&&r.startOffset===1&&r.endOffset===2;})()" },
-	{ "PI rejected by Text split native brand", "(function(){try{Text.prototype.splitText.call(pi,2);}catch(e){return e instanceof TypeError;}return false;})()" },
-	{ "CDATA Range insertion uses Text split", "(function(){var a=x.createElement('a'),c=cd.cloneNode(),r=x.createRange();a.appendChild(c);r.setStart(c,2);r.collapse(true);var q=x.createElement('q');r.insertNode(q);return a.firstChild===c&&c.data==='ab'&&c.nextSibling===q&&q.nextSibling.nodeType===3&&q.nextSibling.data==='cd';})()" },
-	{ "CDATA partially contained Range surround", "(function(){var a=x.createElement('a'),c=cd.cloneNode(),r=x.createRange();a.appendChild(c);a.appendChild(x.createTextNode('tail'));r.setStart(c,1);r.setEnd(a,2);var q=x.createElement('q');r.surroundContents(q);return q.textContent==='bcdtail'&&a.textContent==='abcdtail';})()" },
-	{ "CDATA traversal mask and element collection", "(function(){var w=x.createTreeWalker(x.documentElement,NodeFilter.SHOW_CDATA_SECTION);return w.nextNode()===cd&&x.documentElement.children.length===0;})()" },
-	{ "PI traversal mask", "(function(){var w=x.createTreeWalker(x,NodeFilter.SHOW_PROCESSING_INSTRUCTION);return w.nextNode()===pi;})()" },
-	{ "CDATA and PI CharacterData append", "(function(){var c=cd.cloneNode(),p=pi.cloneNode();c.appendData('!');p.appendData('?');return c.data==='abcd!'&&p.data==='wxyz?'&&p.target==='probe-target';})()" },
-	{ "CDATA and PI Node value setters", "(function(){var c=cd.cloneNode(),p=pi.cloneNode();c.nodeValue='u';p.textContent=null;return c.data==='u'&&p.data===''&&p.target==='probe-target';})()" },
-	{ "HTML serialization actual XML character kinds", "(function(){var a=document.createElement('div'),c=cd.cloneNode(),p=pi.cloneNode();c.data='<&';a.appendChild(c);a.appendChild(p);return a.innerHTML==='&lt;&amp;<?probe-target wxyz?>';})()" },
-	{ "actual CDATA text layout", "(function(){var a=document.createElement('div'),c=cd.cloneNode();a.style.cssText='display:block;width:120px;font-size:16px';a.appendChild(c);document.body.appendChild(a);var h=a.getBoundingClientRect().height;a.remove();return h>0;})()" },
-	{ "actual CDATA inline CSS source", "(function(){var s=document.createElement('style'),c=cd.cloneNode();c.data='img{height:19px}';s.appendChild(c);document.body.appendChild(s);var a=s.sheet.cssRules.length;c.data='img{height:23px}';var b=s.sheet.cssRules.length;s.remove();return a===1&&b===1;})()" },
-	{ "actual CDATA inline script text", "(function(){var s=document.createElement('script'),c=cd.cloneNode();c.data='window.xmlInlineValue=23';s.appendChild(c);document.body.appendChild(s);s.remove();return window.xmlInlineValue===23;})()" }
-};
+	{ "immutable PI target native brand", "(function(){var get=Object.getOwnPropertyDescriptor(ProcessingInstruction.prototype,'target').get;try{get.call({target:'fake'});}catch(e){return e instanceof TypeError;}return false;})()"},
+    {"CharacterData rejects prototype lookalike", "(function(){try{CharacterData.prototype.appendData.call(Object.create(CDATASection.prototype),'x');}catch(e){return e instanceof TypeError;}return false;})()"},
+    {"native character clones", "(function(){var a=cd.cloneNode(),b=pi.cloneNode();return a.nodeType===4&&a.data==='abcd'&&b.nodeType===7&&b.target==='probe-target'&&b.data==='wxyz'&&a.ownerDocument===x&&b.ownerDocument===x;})()"},
+    {"PI Document child and CDATA element child", "(function(){x.insertBefore(pi,x.documentElement);x.documentElement.appendChild(cd);return x.firstChild===pi&&x.documentElement.firstChild===cd&&x.documentElement.textContent==='abcd';})()"},
+    {"CDATA Document hierarchy rejection", "(function(){try{x.appendChild(cd.cloneNode());}catch(e){return e.name==='HierarchyRequestError';}return false;})()"},
+    {"CDATA fragment Document hierarchy rejection", "(function(){var f=x.createDocumentFragment();f.appendChild(cd.cloneNode());try{x.appendChild(f);}catch(e){return e.name==='HierarchyRequestError'&&f.firstChild.nodeType===4;}return false;})()"},
+    {"PI omitted from descendant text", "(function(){var a=x.createElement('a');a.appendChild(pi.cloneNode());a.appendChild(cd.cloneNode());return a.textContent==='abcd';})()"},
+    {"PI native Range length and clone slice", "(function(){var r=x.createRange();r.setStart(pi,1);r.setEnd(pi,3);var f=r.cloneContents();return f.firstChild.nodeType===7&&f.firstChild.target==='probe-target'&&f.firstChild.data==='xy'&&r.toString()==='';})()"},
+    {"PI native Range bounds", "(function(){var r=x.createRange();try{r.setStart(pi,5);}catch(e){return e.name==='IndexSizeError';}return false;})()"},
+    {"PI native Range extraction", "(function(){var p=pi.cloneNode(),r=x.createRange();r.setStart(p,1);r.setEnd(p,3);var f=r.extractContents();return p.data==='wz'&&f.firstChild.nodeType===7&&f.firstChild.target==='probe-target'&&f.firstChild.data==='xy'&&r.collapsed;})()"},
+    {"PI native Range deletion", "(function(){var p=pi.cloneNode(),r=x.createRange();r.setStart(p,1);r.setEnd(p,3);r.deleteContents();return p.data==='wz'&&p.target==='probe-target'&&r.collapsed;})()"},
+    {"PI Range insertion refusal", "(function(){var r=x.createRange();r.setStart(pi,1);r.collapse(true);try{r.insertNode(x.createElement('q'));}catch(e){return e.name==='HierarchyRequestError'&&pi.data==='wxyz';}return false;})()"},
+    {"PI partial Range surround refusal", "(function(){var a=x.createElement('a'),p=pi.cloneNode();a.appendChild(p);a.appendChild(x.createTextNode('t'));var r=x.createRange();r.setStart(p,1);r.setEnd(a,2);try{r.surroundContents(x.createElement('q'));}catch(e){return e.name==='InvalidStateError'&&p.data==='wxyz';}return false;})()"},
+    {"CDATA Range string and slice kind", "(function(){var r=x.createRange();r.setStart(cd,1);r.setEnd(cd,3);var f=r.cloneContents();return r.toString()==='bc'&&f.firstChild.nodeType===4&&f.firstChild.data==='bc';})()"},
+    {"CDATA Text split original subtype and ordinary suffix", "(function(){var a=x.createElement('a'),c=cd.cloneNode(),r=x.createRange();a.appendChild(c);r.setStart(c,3);r.setEnd(c,4);var t=c.splitText(2);return c.nodeType===4&&c.data==='ab'&&t.nodeType===3&&t.data==='cd'&&t.previousSibling===c&&r.startContainer===t&&r.startOffset===1&&r.endOffset===2;})()"},
+    {"PI rejected by Text split native brand", "(function(){try{Text.prototype.splitText.call(pi,2);}catch(e){return e instanceof TypeError;}return false;})()"},
+    {"CDATA Range insertion uses Text split", "(function(){var a=x.createElement('a'),c=cd.cloneNode(),r=x.createRange();a.appendChild(c);r.setStart(c,2);r.collapse(true);var q=x.createElement('q');r.insertNode(q);return a.firstChild===c&&c.data==='ab'&&c.nextSibling===q&&q.nextSibling.nodeType===3&&q.nextSibling.data==='cd';})()"},
+    {"CDATA partially contained Range surround", "(function(){var a=x.createElement('a'),c=cd.cloneNode(),r=x.createRange();a.appendChild(c);a.appendChild(x.createTextNode('tail'));r.setStart(c,1);r.setEnd(a,2);var q=x.createElement('q');r.surroundContents(q);return q.textContent==='bcdtail'&&a.textContent==='abcdtail';})()"},
+    {"CDATA traversal mask and element collection", "(function(){var w=x.createTreeWalker(x.documentElement,NodeFilter.SHOW_CDATA_SECTION);return w.nextNode()===cd&&x.documentElement.children.length===0;})()"},
+    {"PI traversal mask", "(function(){var w=x.createTreeWalker(x,NodeFilter.SHOW_PROCESSING_INSTRUCTION);return w.nextNode()===pi;})()"},
+    {"CDATA and PI CharacterData append", "(function(){var c=cd.cloneNode(),p=pi.cloneNode();c.appendData('!');p.appendData('?');return c.data==='abcd!'&&p.data==='wxyz?'&&p.target==='probe-target';})()"},
+    {"CDATA and PI Node value setters", "(function(){var c=cd.cloneNode(),p=pi.cloneNode();c.nodeValue='u';p.textContent=null;return c.data==='u'&&p.data===''&&p.target==='probe-target';})()"},
+    {"HTML serialization actual XML character kinds", "(function(){var a=document.createElement('div'),c=cd.cloneNode(),p=pi.cloneNode();c.data='<&';a.appendChild(c);a.appendChild(p);return a.innerHTML==='&lt;&amp;<?probe-target wxyz?>';})()"},
+    {"actual CDATA text layout", "(function(){var a=document.createElement('div'),c=cd.cloneNode();a.style.cssText='display:block;width:120px;font-size:16px';a.appendChild(c);document.body.appendChild(a);var h=a.getBoundingClientRect().height;a.remove();return h>0;})()"},
+    {"actual CDATA inline CSS source", "(function(){var s=document.createElement('style'),c=cd.cloneNode();c.data='img{height:19px}';s.appendChild(c);document.body.appendChild(s);var a=s.sheet.cssRules.length;c.data='img{height:23px}';var b=s.sheet.cssRules.length;s.remove();return a===1&&b===1;})()"},
+    {"actual CDATA inline script text", "(function(){var s=document.createElement('script'),c=cd.cloneNode();c.data='window.xmlInlineValue=23';s.appendChild(c);document.body.appendChild(s);s.remove();return window.xmlInlineValue===23;})()"}};
 /* Count independent contracts and actual native collector observations. */
 static unsigned checks;
 /* Preserve every failure through normal resource teardown. */
@@ -103,14 +102,24 @@ main(
 
 	/* All early verification returns pass through root and Page teardown here. */
 	status = xml_binding_case(page, &held);
+	if (status != 0) {
+		vm_heap_remove_root(page->heap, &held);
+		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
+		page_destroy(page);
+		return 2;
+	}
+
+	/* Release the completed fixture root before Page destruction. */
 	vm_heap_remove_root(page->heap, &held);
 	vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
 	page_destroy(page);
-	if (status != 0)
-		return 2;
+
+	/* Publish every recorded XML contract after native teardown. */
 	printed = printf("native XML bindings: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Reject every failed native observation independently of fixture setup. */
 	if (failures != 0)
 		return 1;
 
@@ -134,6 +143,9 @@ xml_binding_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: this independent observation contributes to the final outcome. */
+	return;
 }
 
 /* Executes ordinary script text through the production VM parser and interpreter. */
@@ -150,12 +162,23 @@ xml_binding_script(
 	/* Source is fixture-owned C storage, converted before any actual script invocation. */
 	wb_units_init(&units);
 	status = wb_utf8_to_units((const unsigned char *)source, strlen(source), &units);
-	if (status == 0)
-		status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Execute ordinary script only after conversion supplies complete input. */
+	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Release the borrowed source after checked script execution. */
 	wb_units_release(&units);
 
-	/* Succeeded or failed: temporary source ownership has ended. */
-	return status;
+	/* Succeeded: the ordinary completion value is available. */
+	return 0;
 }
 
 /* Publishes an already rooted genuine wrapper to an ordinary script global. */
@@ -172,10 +195,14 @@ xml_binding_publish(
 	key = vm_key_from_ascii(page->heap, name);
 	if (key == VM_VALUE_EMPTY)
 		return ENOMEM;
-	status = vm_set(page->realm, vm_value_cell(page->realm->global), key, value, 0);
 
-	/* Succeeded or failed: no shadow native property table supplied the wrapper. */
-	return status;
+	/* Store the genuine wrapper in the actual VM global object. */
+	status = vm_set(page->realm, vm_value_cell(page->realm->global), key, value, 0);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the ordinary global now retains the genuine wrapper. */
+	return 0;
 }
 
 /* Verifies actual XML interfaces and a caller-root-free native wrapper allocation. */
@@ -209,17 +236,34 @@ xml_binding_case(
 	node = bind_node_of(answer);
 	if (node == NULL || node->type != DOM_DOCUMENT)
 		return EINVAL;
+
+	/* Resolve the genuine XML Document owner before native character allocation. */
 	document = node->document;
+
+	/* Allocate the non-atom target independently of character-data input. */
 	target = vm_string_from_utf8(page->heap, "probe-target", 12);
 	if (target == NULL)
 		return ENOMEM;
+
+	/* Convert the fixture-owned character-data input before native publication. */
 	wb_units_init(&units);
 	status = wb_utf8_to_units((const unsigned char *)"wxyz", 4, &units);
-	if (status == 0)
-		status = dom_pi_create(document, target, units.data, units.length, &pi);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Construct the native character node from the checked borrowed units. */
+	status = dom_pi_create(document, target, units.data, units.length, &pi);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Release temporary input after native construction was checked. */
+	wb_units_release(&units);
+
+	/* Integer addresses observe collection without retaining native owners. */
 	document_address = (uintptr_t)document;
 	target_address = (uintptr_t)target;
 
@@ -230,9 +274,11 @@ xml_binding_case(
 		return ENOMEM;
 	vm_heap_stats(page->heap, &before);
 	status = bind_wrap(NULL, pi, &wrapper);
-	vm_heap_stats(page->heap, &after);
 	if (status != 0)
 		return status;
+
+	/* Observe completed native allocation before publishing the caller wrapper root. */
+	vm_heap_stats(page->heap, &after);
 	*held = vm_value_as_cell(wrapper);
 	xml_binding_check(after.collections > before.collections, "callee wrapper allocation caused actual threshold collection");
 	status = xml_binding_publish(page, "pi", wrapper);
@@ -242,11 +288,22 @@ xml_binding_case(
 	/* The second real native kind enters script through the same owner snapshot and native wrapper path. */
 	wb_units_init(&units);
 	status = wb_utf8_to_units((const unsigned char *)"abcd", 4, &units);
-	if (status == 0)
-		status = dom_cdata_create(document, units.data, units.length, &cdata);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Construct the native character node from the checked borrowed units. */
+	status = dom_cdata_create(document, units.data, units.length, &cdata);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Release temporary input after native construction was checked. */
+	wb_units_release(&units);
+
+	/* Publish only a successfully created native CDATA wrapper. */
 	status = bind_wrap(NULL, cdata, &wrapper);
 	if (status != 0)
 		return status;

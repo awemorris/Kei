@@ -101,6 +101,7 @@ static int interpreter_throw_error(struct vm_realm *realm, uint32_t kind, vm_val
 static int interpreter_spread(struct interpreter *run, const uint32_t *words, vm_value *registers);
 static int interpreter_class(struct interpreter *run, const uint32_t *words, vm_value *registers);
 static int interpreter_super_construct(struct interpreter *run, const vm_value *args, unsigned count, vm_value *result);
+static int interpreter_super_construct_array(struct interpreter *run, vm_value array, vm_value *result);
 static int interpreter_args_rest(struct vm_realm *realm, vm_value arguments, uint32_t first, vm_value *result);
 static struct vm_function *interpreter_function(const struct vm_realm *realm, uint32_t base);
 static int interpreter_is_strict(const struct interpreter *run);
@@ -245,6 +246,7 @@ vm_interpret_resume(
 	/* The entry frame as it was when it suspended. */
 	memset(&run, 0, sizeof(run));
 	run.realm = realm;
+	run.result = VM_VALUE_UNDEFINED;
 	run.entry = realm->stack_top;
 	run.base = run.entry;
 	frame = &realm->stack[run.base];
@@ -392,6 +394,7 @@ interpreter_push(
 
 	/* The arguments object, made once the frame is whole (making it may collect). */
 	if ((code->flags & VM_CODE_ARGUMENTS) != 0U) {
+		arguments = VM_VALUE_UNDEFINED;
 		status = interpreter_arguments(realm, function, args, count, &arguments);
 		if (status != 0) {
 			realm->stack_top = *base;
@@ -422,62 +425,110 @@ interpreter_arguments(
 {
 	struct vm_object *object;
 	struct vm_accessor *accessor;
+	struct vm_cell *roots[3];
 	vm_value key;
 	vm_value thrower;
 	unsigned index;
+	unsigned registered;
 	int error;
+
+	/* Stable slots retain the unpublished object, current key and accessor. */
+	roots[0] = NULL;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	while (registered < 3U) {
+		error = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (error != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* The object. */
 	object = vm_object_create(realm->heap, realm->object_prototype);
-	if (object == NULL)
-		return ENOMEM;
+	if (object == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The arguments object stays live through indexed property insertion. */
+	roots[0] = &object->cell;
 	object->kind = VM_KIND_ARGUMENTS;
 
 	/* Each argument as an element. */
 	for (index = 0; index < count; index++) {
 		error = vm_object_define(realm->heap, object, vm_value_int32((int32_t)index), args[index], VM_PROPERTY_DEFAULT);
 		if (error != 0)
-			return error;
+			goto cleanup;
 	}
 
 	/* The length: writable and configurable, not enumerable. */
 	key = vm_key_from_ascii(realm->heap, "length");
-	if (key == VM_VALUE_EMPTY)
-		return ENOMEM;
+	if (key == VM_VALUE_EMPTY) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Retains the length key until the object stores it. */
+	roots[1] = vm_value_as_cell(key);
 	error = vm_object_define(realm->heap, object, key, vm_value_int32((int32_t)count),
 	    VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
 	if (error != 0)
-		return error;
+		goto cleanup;
 
 	/* Symbol.iterator: Array.prototype.values, once the built-ins exist (ws074-p087). */
 	if (realm->intrinsics[VM_INTRINSIC_ARRAY_VALUES] != NULL) {
 		error = vm_object_define(realm->heap, object, vm_symbol_key(realm, VM_SYMBOL_ITERATOR),
 		    vm_value_cell(realm->intrinsics[VM_INTRINSIC_ARRAY_VALUES]), VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
 		if (error != 0)
-			return error;
+			goto cleanup;
 	}
 
 	/* callee: the function for sloppy code, an accessor that throws for strict code (once the realm has one). */
 	key = vm_key_from_ascii(realm->heap, "callee");
-	if (key == VM_VALUE_EMPTY)
-		return ENOMEM;
+	if (key == VM_VALUE_EMPTY) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Retains the callee key during accessor or data publication. */
+	roots[1] = vm_value_as_cell(key);
 	if ((function->code->flags & VM_CODE_STRICT) == 0U) {
 		error = vm_object_define(realm->heap, object, key, vm_value_cell(function),
 		    VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
 		if (error != 0)
-			return error;
+			goto cleanup;
 	} else if (realm->intrinsics[VM_INTRINSIC_THROW_TYPE_ERROR] != NULL) {
 		thrower = vm_value_cell(realm->intrinsics[VM_INTRINSIC_THROW_TYPE_ERROR]);
 		accessor = vm_accessor_create(realm->heap, thrower, thrower);
-		if (accessor == NULL)
-			return ENOMEM;
+		if (accessor == NULL) {
+			error = ENOMEM;
+			goto cleanup;
+		}
+
+		/* The strict callee accessor remains live until its property is installed. */
+		roots[2] = &accessor->cell;
 		error = vm_object_define(realm->heap, object, key, vm_value_cell(accessor), VM_PROPERTY_ACCESSOR);
 		if (error != 0)
-			return error;
+			goto cleanup;
 	}
 
 	/* Succeeded: the arguments object. */
 	*arguments = vm_value_cell(object);
+	error = 0;
+
+cleanup:
+	/* The frame takes ownership of a successfully built arguments object. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Reports any failed allocation or property definition. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the caller can publish the complete object. */
 	return 0;
 }
 
@@ -789,7 +840,8 @@ interpreter_operator(
 		break;
 	case VM_OP_LOOSE_EQ:
 		status = vm_loose_equals(realm, left, right, &equal);
-		*value = vm_value_boolean(equal);
+		if (status == 0)
+			*value = vm_value_boolean(equal);
 		break;
 	case VM_OP_INSTANCEOF:
 		status = vm_instanceof(realm, left, right, value);
@@ -1795,12 +1847,8 @@ interpreter_class(
 {
 	struct vm_realm *realm;
 	struct vm_function *function;
-	struct vm_object *array;
 	struct vm_symbol *symbol;
-	vm_value *args;
 	vm_value value;
-	uint32_t count;
-	uint32_t index;
 	int status;
 
 	/* Each instruction; one that computes a value writes it only when it succeeds. */
@@ -1829,20 +1877,8 @@ interpreter_class(
 		status = interpreter_super_construct(run, &registers[words[2]], words[3], &value);
 		break;
 	case VM_OP_SUPER_CONSTRUCT_ARRAY:
-		/* The arguments copied out of the array (it stays in its register). */
-		array = (struct vm_object *)vm_value_as_cell(registers[words[2]]);
-		count = array->length;
-		args = calloc((size_t)count + 1U, sizeof(vm_value));
-		if (args == NULL)
-			return ENOMEM;
-		status = 0;
-		for (index = 0; index < count && status == 0; index++)
-			status = vm_get(realm, registers[words[2]], vm_value_int32((int32_t)index), &args[index]);
-
-		/* The construction with them. */
-		if (status == 0)
-			status = interpreter_super_construct(run, args, count, &value);
-		free(args);
+		/* Copied argument values stay rooted across later element getters. */
+		status = interpreter_super_construct_array(run, registers[words[2]], &value);
 		break;
 	case VM_OP_NEW_PRIVATE_NAME:
 		/* A symbol marked as a private name, described by the constant. */
@@ -1933,6 +1969,78 @@ interpreter_super_construct(
 	return 0;
 }
 
+/* Constructs super from indexed array values while retaining earlier getter results. */
+static int
+interpreter_super_construct_array(
+	struct interpreter *run,
+	vm_value array_value,
+	vm_value *result)
+{
+	struct vm_object *array;
+	struct vm_cell **roots;
+	vm_value *args;
+	size_t slots;
+	uint32_t count;
+	uint32_t index;
+	uint32_t registered;
+	int is_cell;
+	int status;
+
+	/* Reserves native argument and collector-root arrays before invoking getters. */
+	array = (struct vm_object *)vm_value_as_cell(array_value);
+	count = array->length;
+	slots = (size_t)count + 1U;
+	if (slots > SIZE_MAX / sizeof(*args) || slots > SIZE_MAX / sizeof(*roots))
+		return EOVERFLOW;
+	args = calloc(slots, sizeof(*args));
+	if (args == NULL)
+		return ENOMEM;
+	roots = calloc(slots, sizeof(*roots));
+	if (roots == NULL) {
+		free(args);
+		return ENOMEM;
+	}
+
+	/* Every native slot survives later property getters and construction. */
+	registered = 0;
+	status = 0;
+	for (index = 0; index < count; index++) {
+		status = vm_heap_add_root(run->realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* Getters may execute script and collect values already copied out. */
+	for (index = 0; index < count; index++) {
+		status = vm_get(run->realm, array_value, vm_value_int32((int32_t)index), &args[index]);
+		if (status != 0)
+			goto cleanup;
+		is_cell = vm_value_is_cell(args[index]);
+		if (is_cell)
+			roots[index] = vm_value_as_cell(args[index]);
+	}
+
+	/* The native constructor boundary receives every protected argument. */
+	status = interpreter_super_construct(run, args, count, result);
+
+cleanup:
+	/* Stops retaining copied cells after the super call returns. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(run->realm->heap, &roots[registered]);
+	}
+
+	/* Native storage is no longer needed after the protected call. */
+	free(roots);
+	free(args);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the result was published to the active constructor frame. */
+	return 0;
+}
+
 /* Makes the array of a rest parameter: the arguments object's elements from a first index. */
 static int
 interpreter_args_rest(
@@ -1941,6 +2049,7 @@ interpreter_args_rest(
 	uint32_t first,
 	vm_value *result)
 {
+	struct vm_cell *iterator_root;
 	vm_value iterator;
 	vm_value value;
 	uint32_t index;
@@ -1951,14 +2060,22 @@ interpreter_args_rest(
 	status = vm_iter_start(realm, arguments, &iterator);
 	if (status != 0)
 		return status;
+	iterator_root = vm_value_as_cell(iterator);
+	status = vm_heap_add_root(realm->heap, &iterator_root);
+	if (status != 0)
+		return status;
 	for (index = 0; index < first; index++) {
 		status = vm_iter_next(realm, iterator, &value, &done);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* The rest as an array. */
 	status = vm_iter_rest(realm, iterator, result);
+
+cleanup:
+	/* The iterator is no longer needed after exhaustion or failure. */
+	vm_heap_remove_root(realm->heap, &iterator_root);
 	if (status != 0)
 		return status;
 

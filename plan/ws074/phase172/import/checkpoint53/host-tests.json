@@ -1,0 +1,35 @@
+[
+  {
+    "name": "host-insertion",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-insertion"
+    ],
+    "exit": 0,
+    "stdout": "pre-insertion native checks: 29/29 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-tree",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-tree"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "host-mutation-record",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-mutation-record"
+    ],
+    "exit": 0,
+    "stdout": "native mutation record GC: 16/16 passed\n",
+    "stderr": ""
+  }
+]

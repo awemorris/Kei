@@ -1,0 +1,35 @@
+[
+  {
+    "path": "plan/ws074/tests/host-range-insert.c",
+    "sha256": "21e9f1f9a6136f4421a0dab2daae993b718fddc6d8f0e98a3ff03ed0f5fe0ccd",
+    "object": "host-range-insert.o",
+    "object_path": "build/browser3-p172/review39/host-range-insert.o",
+    "text_sha256": "dca0190e57a5e6999cc8bcb464ff8a08dbd2f2b36104ddada496b75ce86970e0",
+    "final_sha256": "c7186454c1ad7bfe1ad0561ee35a685f7e3855b73a6fac616f5aefea593fd4ea",
+    "final_text_sha256": "857b0b2226f21351e8f7cb40511a185c0b8407befdde8e0d37d11289cbf2c11b",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-range-mutation.c",
+    "sha256": "e3fe836215a202a1b1f6eb3123be9061de7800945103629b53e0f997da07f6bd",
+    "object": "host-range-mutation.o",
+    "object_path": "build/browser3-p172/review39/host-range-mutation.o",
+    "text_sha256": "1cbd03aaa195f70fb788830b9d7c22b078b2f529455e597e93a90fc768b0c032",
+    "final_sha256": "ae8ce97f8de93829a2d136623c2df610d8a7b70fbc13d0a4693ec9d044946001",
+    "final_text_sha256": "ee7d843771553a6111c1e220658b8e14488d6ef4e983c628cf876631013d4c5d",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-range-surround-contents.c",
+    "sha256": "0d7d0b5ad9ba056e3baa42b6fa03de64fc8061f1d4d9e7f6ecf8b62a053c5ab6",
+    "object": "host-range-surround-contents.o",
+    "object_path": "build/browser3-p172/review39/host-range-surround-contents.o",
+    "text_sha256": "b87e2df616263b5902dcd396658e1856ef011d2e992d7cda99c4789d59a708a6",
+    "final_sha256": "1cc561527532536a5ca47ae4b3c39c4504ee4a20267627163127f16250d841b7",
+    "final_text_sha256": "ff47696dfcfa0c897777fa7d5274b258e62cd386690be4607f1254fdab26ad27",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

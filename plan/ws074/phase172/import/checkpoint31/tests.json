@@ -1,0 +1,89 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-select"
+    ],
+    "exit": 0,
+    "stdout_file": "select.stdout",
+    "stderr_file": "select.stderr",
+    "after_builder_exit": true
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-option-state"
+    ],
+    "exit": 0,
+    "stdout_file": "option-state.stdout",
+    "stderr_file": "option-state.stderr",
+    "after_builder_exit": true
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-table-mutation"
+    ],
+    "exit": 0,
+    "stdout_file": "table-mutation.stdout",
+    "stderr_file": "table-mutation.stderr",
+    "after_builder_exit": true
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/select-options-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "select-options.stdout",
+    "stderr_file": "select-options.stderr",
+    "pass_lines": 72,
+    "fail_lines": 0,
+    "after_builder_exit": true
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/option-selectedness-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "option-selectedness.stdout",
+    "stderr_file": "option-selectedness.stderr",
+    "pass_lines": 73,
+    "fail_lines": 0,
+    "after_builder_exit": true
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/table-structure-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "table-structure.stdout",
+    "stderr_file": "table-structure.stderr",
+    "pass_lines": 68,
+    "fail_lines": 0,
+    "after_builder_exit": true
+  }
+]

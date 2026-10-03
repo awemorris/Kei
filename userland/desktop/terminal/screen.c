@@ -30,6 +30,13 @@
 #define SCREEN_CHARSET		5
 
 /*
+ * The final bytes of the control sequences that move the cursor or edit
+ * the grid, and so cancel a pending wrap; SGR, the modes and the reports
+ * keep it, as on xterm (ws128-p010).
+ */
+#define SCREEN_WRAP_CANCELS	"ABCDEFGHJKLMPSTXadefru`@"
+
+/*
  * The 16 colours of the SGR sequences 30-37 and 90-97, as 0xRRGGBB.
  *
  * They are the xterm defaults, a little softened for the dark background.
@@ -60,7 +67,6 @@ static void screen_clear_grid(struct terminal_screen *screen);
 static void screen_scroll_down(struct terminal_screen *screen, unsigned top, unsigned bottom, unsigned count);
 static void screen_utf8(struct terminal_screen *screen, unsigned char byte);
 static void screen_put(struct terminal_screen *screen, uint32_t codepoint);
-static int screen_wide(uint32_t codepoint);
 static void screen_move(struct terminal_screen *screen, unsigned column, unsigned row);
 static void screen_osc(struct terminal_screen *screen);
 
@@ -103,6 +109,25 @@ terminal_screen_init(
 
 	/* The first frame shows the empty grid. */
 	screen->changed = 1;
+}
+
+/*
+ * Sets whether Ambiguous-width characters written from now on take two
+ * cells (ws128-p009).
+ *
+ * The cells already on the screen and in the scrollback keep the width
+ * they were written with, so nothing shown moves; only new output follows
+ * the new setting.
+ */
+void
+terminal_screen_set_ambiguous_wide(
+	struct terminal_screen *screen,
+	int ambiguous_wide)
+{
+	/* The width screen_put gives the next Ambiguous characters. */
+	screen->ambiguous_wide = 0;
+	if (ambiguous_wide)
+		screen->ambiguous_wide = 1;
 }
 
 /*
@@ -156,11 +181,12 @@ terminal_screen_resize(
 	for (row = 0U; row < copy_rows; row++)
 		memcpy(&screen->cells[row * columns], &old[row * old_columns], (size_t)copy_columns * sizeof(old[0]));
 
-	/* The cursor and the scrolling region stay inside the grid. */
+	/* The cursor and the scrolling region stay inside the grid, and a wrap pending at the old margin is dropped. */
 	if (screen->cursor_column >= columns)
 		screen->cursor_column = columns - 1U;
 	if (screen->cursor_row >= rows)
 		screen->cursor_row = rows - 1U;
+	screen->wrap_pending = 0;
 	screen->scroll_top = 0U;
 	screen->scroll_bottom = rows - 1U;
 
@@ -544,15 +570,19 @@ screen_byte(
 		screen->utf8_remaining = 0U;
 		screen->parser_state = SCREEN_ESCAPE;
 	} else if (byte == '\r') {
+		/* A carriage return goes to the first column; a wrap pending at the last one is not done. */
+		screen->wrap_pending = 0;
 		screen->cursor_column = 0U;
 	} else if (byte == '\n' || byte == 0x0bU || byte == 0x0cU) {
 		screen_line_feed(screen);
 	} else if (byte == '\b') {
-		/* Backspace stops at the left edge. */
+		/* Backspace stops at the left edge; from a pending wrap it goes to the column before the last, as on xterm. */
+		screen->wrap_pending = 0;
 		if (screen->cursor_column != 0U)
 			screen->cursor_column--;
 	} else if (byte == '\t') {
 		/* A tab moves to the next multiple of eight, or the last column. */
+		screen->wrap_pending = 0;
 		screen->cursor_column = (screen->cursor_column + 8U) & ~7U;
 		if (screen->cursor_column >= screen->columns)
 			screen->cursor_column = screen->columns - 1U;
@@ -682,6 +712,7 @@ screen_csi(
 	struct terminal_screen *screen,
 	unsigned char final)
 {
+	const char *cancels;
 	unsigned count;
 	unsigned row;
 	unsigned column;
@@ -691,6 +722,11 @@ screen_csi(
 	/* The modes (h, l) are the only private sequences taken; any other private one is ignored. */
 	if (screen->private_mode != 0 && final != 'h' && final != 'l')
 		return;
+
+	/* A sequence that moves the cursor or edits the grid cancels a pending wrap. */
+	cancels = strchr(SCREEN_WRAP_CANCELS, final);
+	if (cancels != NULL)
+		screen->wrap_pending = 0;
 
 	/* Most sequences take a count that defaults to one. */
 	count = (unsigned)screen_parameter(screen, 0, 1);
@@ -998,6 +1034,9 @@ static void
 screen_line_feed(
 	struct terminal_screen *screen)
 {
+	/* The row below is where the cursor shows, so a wrap pending at the last column is not done first. */
+	screen->wrap_pending = 0;
+
 	/* At the region's bottom the region scrolls; elsewhere the cursor moves down. */
 	if (screen->cursor_row == screen->scroll_bottom) {
 		screen_scroll_up(screen, screen->scroll_top, screen->scroll_bottom, 1U, 1);
@@ -1011,6 +1050,9 @@ static void
 screen_reverse_index(
 	struct terminal_screen *screen)
 {
+	/* A move up cancels a pending wrap. */
+	screen->wrap_pending = 0;
+
 	/* At the region's top the region scrolls down; elsewhere the cursor moves up. */
 	if (screen->cursor_row == screen->scroll_top) {
 		screen_scroll_down(screen, screen->scroll_top, screen->scroll_bottom, 1U);
@@ -1188,6 +1230,7 @@ screen_clear_grid(
 	screen->bold = 0;
 	screen->cursor_column = 0U;
 	screen->cursor_row = 0U;
+	screen->wrap_pending = 0;
 	screen->saved_column = 0U;
 	screen->saved_row = 0U;
 	screen->cursor_visible = 1;
@@ -1261,7 +1304,7 @@ screen_utf8(
 	screen_put(screen, codepoint);
 }
 
-/* Places a character at the cursor and moves past it, wrapping at the right edge. */
+/* Places a character at the cursor and moves past it, leaving a wrap pending at the right edge. */
 static void
 screen_put(
 	struct terminal_screen *screen,
@@ -1273,11 +1316,22 @@ screen_put(
 	uint32_t background;
 	int wide;
 
-	/* A wide character takes two cells. */
+	/*
+	 * A wide character takes two cells, and so does an Ambiguous one while
+	 * the setting is on (ws128-p009).  The width is decided here, once, and
+	 * kept in the cells: a later change of the setting leaves the
+	 * characters already placed as they are.
+	 */
 	width = 1U;
-	wide = screen_wide(codepoint);
+	wide = terminal_width_wide(codepoint, screen->ambiguous_wide);
 	if (wide)
 		width = 2U;
+
+	/* A wrap left pending by a character in the last column is done now, before this one is placed. */
+	if (screen->wrap_pending) {
+		screen->cursor_column = 0U;
+		screen_line_feed(screen);
+	}
 
 	/* A character that does not fit on the row starts the next one. */
 	if (screen->cursor_column + width > screen->columns) {
@@ -1309,45 +1363,19 @@ screen_put(
 		cell->continuation = 1;
 	}
 
-	/* The cursor moves past it, wrapping at the right edge. */
-	screen->cursor_column += width;
-	if (screen->cursor_column >= screen->columns) {
-		screen->cursor_column = 0U;
-		screen_line_feed(screen);
+	/*
+	 * The cursor moves past it.  A character that ends in the last column
+	 * leaves the cursor there and the wrap pending, so a program that fills
+	 * the row and then writes CR LF (Emacs's menu bar and mode line,
+	 * BUG-150) moves down one row, not two, and a full last row does not
+	 * scroll the screen.
+	 */
+	if (screen->cursor_column + width >= screen->columns) {
+		screen->cursor_column = screen->columns - 1U;
+		screen->wrap_pending = 1;
+	} else {
+		screen->cursor_column += width;
 	}
-}
-
-/* Tells whether a character is drawn two cells wide (East Asian wide and fullwidth). */
-static int
-screen_wide(
-	uint32_t codepoint)
-{
-	/* Hangul Jamo, and the angle brackets. */
-	if (codepoint >= 0x1100U && codepoint <= 0x115fU)
-		return 1;
-	if (codepoint == 0x2329U || codepoint == 0x232aU)
-		return 1;
-
-	/* CJK radicals to Yi, Hangul syllables, compatibility ideographs and forms. */
-	if (codepoint >= 0x2e80U && codepoint <= 0xa4cfU)
-		return 1;
-	if (codepoint >= 0xac00U && codepoint <= 0xd7a3U)
-		return 1;
-	if (codepoint >= 0xf900U && codepoint <= 0xfaffU)
-		return 1;
-	if (codepoint >= 0xfe10U && codepoint <= 0xfe6fU)
-		return 1;
-
-	/* Fullwidth forms, and the ideographs of the supplementary planes. */
-	if (codepoint >= 0xff01U && codepoint <= 0xff60U)
-		return 1;
-	if (codepoint >= 0xffe0U && codepoint <= 0xffe6U)
-		return 1;
-	if (codepoint >= 0x20000U && codepoint <= 0x3fffdU)
-		return 1;
-
-	/* Everything else is one cell. */
-	return 0;
 }
 
 /* Moves the cursor to a column and a row, clipped to the grid. */
@@ -1363,9 +1391,10 @@ screen_move(
 	if (row >= screen->rows)
 		row = screen->rows - 1U;
 
-	/* The new position. */
+	/* The new position, with no wrap pending at the old one. */
 	screen->cursor_column = column;
 	screen->cursor_row = row;
+	screen->wrap_pending = 0;
 }
 
 /*

@@ -1,0 +1,7 @@
+userland/desktop/libbrowser/bind/traversal.c:147: goto: goto cleanup;
+userland/desktop/libbrowser/bind/traversal.c:299: goto: goto cleanup;
+userland/desktop/libbrowser/bind/traversal.c:306: goto: goto cleanup;
+userland/desktop/libbrowser/bind/traversal.c:318: goto: goto cleanup;
+userland/desktop/libbrowser/bind/traversal.c:324: goto: goto cleanup;
+userland/desktop/libbrowser/bind/traversal.c:330: goto: goto cleanup;
+userland/desktop/libbrowser/bind/traversal.c:345: goto: goto cleanup;

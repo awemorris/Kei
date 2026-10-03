@@ -25,6 +25,7 @@
 #include "app.h"
 
 #include <errno.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 
@@ -40,6 +41,11 @@ static void window_key(struct notes_window *window, const struct kui_window_even
 static void window_pointer_event(struct notes_window *window, unsigned kind, const struct kui_window_event *event);
 static void window_touch_push(struct notes_window *window, unsigned type, const struct kui_window_event *event);
 static uint32_t window_modifiers(unsigned modifiers);
+
+/* The titlebar's events: Notes' titlebar shows only its menus (menu.c), so it hears none. */
+static const struct keiland_titlebar_listener titlebar_listener = {
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+};
 
 /* Notes' registry: the tablet manager. */
 static const struct wl_registry_listener registry_listener = {
@@ -83,6 +89,15 @@ notes_window_open(
 	window->toplevel = kui_window_toplevel(window->kui);
 	kui_window_size(window->kui, &window->width, &window->height);
 	window->fullscreen = kui_window_fullscreen(window->kui);
+
+	/*
+	 * zdesktop's titlebar, asked for before anything is drawn: the
+	 * roundtrip below acknowledges the configure it brings, so the first
+	 * image is shown with it.
+	 */
+	window->titlebar = keiland_titlebar_create(window->display, window->toplevel, &titlebar_listener, window);
+	if (window->titlebar == NULL)
+		printf("NOTES TITLEBAR none errno=%d\n", errno);
 
 	/* Notes' registry, for the tablet manager. */
 	window->registry = wl_display_get_registry(window->display);
@@ -151,6 +166,10 @@ notes_window_close(
 	/* The menus, before the window they are shown on, and the pen before the seat. */
 	notes_menu_close(window);
 	notes_tablet_close(window);
+
+	/* The titlebar, before the toplevel it is tied to. */
+	if (window->titlebar != NULL)
+		keiland_titlebar_destroy(window->titlebar);
 
 	/* Notes' registry, then the window and its connection. */
 	if (window->registry != NULL)

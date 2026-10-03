@@ -133,20 +133,6 @@ sequence for another profile; each selected profile publishes its image at
 `build/amd64/hdd-image.img`, so preserve a copy elsewhere if multiple outputs
 are needed simultaneously. Do not hand-edit generated `config.mk`.
 
-The maintained six-cell positive/negative verification uses private build and
-image paths and therefore does not replace `config.mk` or the ordinary output:
-
-```sh
-build/NoctLang/build-static/noct --path=tools/build \
-  plan/ws020/tests/qemu-variant-matrix.noct \
-  . plan/ws020/temp/p003-qemu
-```
-
-It requires the locally documented SeaBIOS and OVMF firmware files and verifies
-all three profiles against both firmware families. See the
-[WS020 test index](../../plan/ws020/tests/README.md) before running
-this longer acceptance matrix.
-
 The maintained x86 output directories are:
 
 | Selection | Build directory | Disk image | Emulator |
@@ -182,8 +168,7 @@ make -j16 bootloader  # selected bootloader
 ```
 
 A successful disk-image build runs the target's structural validators. The
-project does not use `make check` as the acceptance interface; an active Phase
-names its focused tests under `plan/wsXXX-*/tests/`.
+project does not use `make check` as the acceptance interface.
 
 ## 5. Start QEMU
 

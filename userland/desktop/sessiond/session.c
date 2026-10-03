@@ -19,6 +19,13 @@
  * decision, ws035-p104): networkd's socket admits that group, and the
  * system bar's network menu speaks to networkd as the session's user.
  *
+ * networkd is told when the session opens and when it has ended
+ * (2026-10-02 user decision, ws005-p024): while the session is open, the
+ * Wi-Fi networks saved in the user's own store are ones networkd joins on its
+ * own; after the logout they are not, and what was joined with them ends.
+ * The telling runs "net wifi session open|close UID" in the background, so a
+ * slow or absent networkd never holds up a login or a logout.
+ *
  * The session ends when the script ends (zdesktop's Log Out).  Whatever of
  * it is left is ended too: its process group, and every process of the
  * user (not for root, whose processes are the system's).
@@ -70,6 +77,9 @@
 /* The most groups a session's user is read with. */
 #define SESSION_GROUPS_MAX	64
 
+/* The command that tells networkd about the session (ws005-p024). */
+#define SESSION_NET_COMMAND	"/sbin/net"
+
 /* How long the greeter stays on the screen for a session that does not say READY (seconds). */
 #define SESSION_READY_SECONDS	30
 
@@ -85,6 +95,7 @@ static void session_home(struct sessiond_account *account);
 static void session_runtime_clean(const char *directory);
 static void session_child(struct sessiond *daemon, struct sessiond_account *account, const char *directory, int control);
 static void session_network_group(void);
+static void session_network_notify(const struct sessiond_account *account, const char *change);
 static void session_handoff(struct sessiond *daemon, int control);
 static int session_request(struct sessiond *daemon, struct sessiond_account *account, int control);
 static void session_logout(struct sessiond *daemon, int control);
@@ -162,6 +173,9 @@ sessiond_session_run(
 	session_record(USER_PROCESS, child, account->passwd.pw_name);
 	sessiond_log("SESSIOND SESSION start user=%s uid=%u pid=%ld runtime=%s", account->passwd.pw_name, (unsigned)account->passwd.pw_uid, (long)child, directory);
 
+	/* networkd may join the user's saved Wi-Fi networks while the session is open. */
+	session_network_notify(account, "open");
+
 	/* The display goes from the greeter to the session. */
 	session_handoff(daemon, control);
 
@@ -212,6 +226,9 @@ sessiond_session_run(
 	session_sweep(account, child);
 	session_record(DEAD_PROCESS, child, "");
 	session_runtime_clean(directory);
+
+	/* The user's saved Wi-Fi networks are no longer joined, and a connection made with them ends. */
+	session_network_notify(account, "close");
 
 	/* Succeeded: the session ran and ended. */
 	return 0;
@@ -667,6 +684,56 @@ session_network_group(
 	error = setgroups((size_t)count + 1U, groups);
 	if (error != 0)
 		syslog(LOG_WARNING, "the session could not join the group %s: %s", SESSION_NETWORK_GROUP, strerror(errno));
+}
+
+/*
+ * Tells networkd that the session opened or closed ("open" or "close"),
+ * without waiting for its answer.
+ *
+ * A child starts a grandchild that runs the net command and ends at once,
+ * so sessiond reaps the child now and the grandchild is init's.  sessiond is
+ * root, which networkd lets name the session's account.
+ */
+static void
+session_network_notify(
+	const struct sessiond_account *account,
+	const char *change)
+{
+	char *arguments[6];
+	char uid[16];
+	pid_t child;
+	pid_t worker;
+	int status;
+
+	/* The account's number, as the command takes it. */
+	(void)snprintf(uid, sizeof(uid), "%u", (unsigned)account->passwd.pw_uid);
+	sessiond_log("SESSIOND NETWORK session %s uid=%s", change, uid);
+
+	/* The child, which only starts the worker. */
+	child = fork();
+	if (child < 0) {
+		sessiond_log("SESSIOND NETWORK fork errno=%d", errno);
+		return;
+	}
+
+	/* The worker runs the command; the child ends at once. */
+	if (child == 0) {
+		worker = fork();
+		if (worker == 0) {
+			arguments[0] = "net";
+			arguments[1] = "wifi";
+			arguments[2] = "session";
+			arguments[3] = (char *)change;
+			arguments[4] = uid;
+			arguments[5] = NULL;
+			(void)execv(SESSION_NET_COMMAND, arguments);
+			_exit(127);
+		}
+		_exit(worker < 0 ? 1 : 0);
+	}
+
+	/* The child is reaped; the worker is left to init. */
+	(void)waitpid(child, &status, 0);
 }
 
 /* Writes the session's utmpx record: logged in, or ended. */

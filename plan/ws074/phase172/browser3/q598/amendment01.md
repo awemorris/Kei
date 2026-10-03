@@ -1,0 +1,5 @@
+# q598-i01 amendment01 / origin/main integration for native shell gate
+
+User decision (2026-10-03 JST): 「origin/mainをマージすれば継続できると思います。」 This authorizes integrating `origin/main` 483531ebed6f134e09514f28f954fcc5c898190a before rechecking q598's selected native/browser/target gates. The purpose is to bring in WS114 p008's SSD/CSD default changes, which may resolve the failed titlebar test. The original five full-review paths, adjacent input repair, 209-file inventory and p172 acceptance remain unchanged; p100 is still unselected.
+
+The merge has four shared plan projection conflicts and reused q594–q598 IDs. The shared projections were subsequently restored to origin/main so Agent A's current state is retained; both browser3 and incoming versions and the pending semantic mapping are preserved at [merge conflict record](../../../../agents/browser3/main-merge-483531ebe/README.md). No Agent A Queue outcome is overwritten in the incoming parent. After merge, rerun affected host, target and Venus native checks; do not infer clearance from a merge alone. GitHub Issue/Project publication remains deferred.

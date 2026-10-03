@@ -1,0 +1,31 @@
+{
+  "queue": "q597",
+  "checkpoint": 79,
+  "source": "userland/desktop/libbrowser/bind/node.c",
+  "source_sha256": "bcd319b4aa833ac51d288e23e34c6e4646103162cbfdc62943ac63192e31669d",
+  "baseline": "2c96d45fd81b5c8e47190d9af8ec7be1dae61fad",
+  "reviewed": 198,
+  "total": 209,
+  "remaining": 11,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "dom-tests": "23/23",
+    "insertion": "29/29",
+    "node-cloning": "26 checks, 0 failures",
+    "collection-GC": "37/37",
+    "xml-binding": "34/34"
+  },
+  "limits": [
+    "No forced collector allocation exactly inside bind_array_push_node after wrapper creation; root ownership reviewed statically.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

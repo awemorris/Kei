@@ -1,0 +1,39 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-insertion.c",
+      "formatted_sha256": "f591350aa49abcb698339fcd42ef517c00c64790fe766da4e6956b9ee53538fc",
+      "final_sha256": "7d6ec3161d752e2c66581172e74b5065c7a309bae98d9583043a791de4bf9317",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; all split script calls preserve one argument per physical line"
+    },
+    {
+      "path": "plan/ws074/tests/host-mutation-record.c",
+      "formatted_sha256": "d0f811ba5439e128b9a4f78f44c11cc8903ecceb519596e851f472e99e0c1a19",
+      "final_sha256": "d536dfe2c1033f0943a4c13d3f5eab807841e0b7000c58eb94aa3bf52e5453c7",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; all split script calls preserve one argument per physical line"
+    },
+    {
+      "path": "plan/ws074/tests/host-style-sheet.c",
+      "formatted_sha256": "af750c240cd4ba466fe35d5d951711d37a56bc53c932e19fee2bd5bb68e283e9",
+      "final_sha256": "5181846887ac66d1f62dd2cc645ff0725be67167a0e1c87b3822902a01b500f1",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; all split script calls preserve one argument per physical line"
+    },
+    {
+      "path": "plan/ws074/tests/host-submit.c",
+      "formatted_sha256": "750aa9ff9df90f19baf76e87319f43fe3f796cbfb371985177ff943ffc141a13",
+      "final_sha256": "d5b70d53343a8e6559f99e4ddd3a412f04fbbf683afafa617affc151cdba4f65",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; all split script calls preserve one argument per physical line"
+    }
+  ],
+  "final_manual_restoration": "Split original multi-line script calls with every argument on its own physical line; clang-format not rerun after restoration",
+  "final_source_hashes": {
+    "plan/ws074/tests/host-insertion.c": "92b1ed69604a81eb71eb5be9ad80c109be181657145b7cdc18574e336c1a3149",
+    "plan/ws074/tests/host-mutation-record.c": "a665a4cc87e772cc3cd1b10e0a446a0ce445342e0070ce5d06da89aabb5894d8",
+    "plan/ws074/tests/host-style-sheet.c": "fe3fab4be2f1e907775ec4f782b4a8c322b7840a9207b6f25afa237fb38794ef",
+    "plan/ws074/tests/host-submit.c": "d2c763a713486d5d7f847a0bafa08108fb1067e65f30b308e376d97e6391def1",
+    "plan/ws074/tests/host-table-mutation.c": "15443867e70fe15cc65fb07ba00bf05414bc94393f972013c1e478e07f46996a",
+    "plan/ws074/tests/host-table-row.c": "8a8c5702d16dd517ce120c04dbb6cd862ed70369fb33375727f4b8d9b9512e45"
+  }
+}

@@ -205,6 +205,7 @@ home_state(
 	const char *address;
 	char free_text[32];
 	int running;
+	int available;
 	int live;
 
 	/* No dot unless a connection is described. */
@@ -274,12 +275,22 @@ home_state(
 		(void)snprintf(text, size, "%s available", free_text);
 		return 1;
 	case SE_PAGE_SOUND:
-		/* Whether the sound service runs. */
+		/*
+		 * Whether the sound service runs, and then what the Sound page shows of
+		 * it in the same words: no output, or the volume (ws089-p012 C4).
+		 */
 		running = keiland_audio_available();
-		if (running != 0) {
-			(void)snprintf(text, size, "%s", "Sound service running");
-		} else {
+		available = se_sound_available(app);
+		if (running == 0) {
 			(void)snprintf(text, size, "%s", "No sound service");
+		} else if (app->sound.state.reachable != 0 && app->sound.state.device == 0) {
+			(void)snprintf(text, size, "%s", "Running, no sound output");
+		} else if (available != 0 && app->sound.muted != 0) {
+			(void)snprintf(text, size, "%s", "Muted");
+		} else if (available != 0) {
+			(void)snprintf(text, size, "Volume %d%%", app->sound.value);
+		} else {
+			(void)snprintf(text, size, "%s", "Sound service running");
 		}
 
 		/* The state is in the text. */

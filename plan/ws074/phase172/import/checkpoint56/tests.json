@@ -1,0 +1,34 @@
+[
+  {
+    "name": "dom-tests",
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-form",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-form",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "host-form: 29 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-url",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-url"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,4 @@
+userland/desktop/libbrowser/bind/element.c:645: goto: goto cleanup;
+userland/desktop/libbrowser/bind/element.c:649: goto: goto cleanup;
+userland/desktop/libbrowser/bind/element.c:1018: goto: goto cleanup;
+userland/desktop/libbrowser/bind/element.c:1022: goto: goto cleanup;

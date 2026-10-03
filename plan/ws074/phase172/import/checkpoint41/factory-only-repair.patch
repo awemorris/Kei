@@ -1,0 +1,740 @@
+diff --git a/userland/desktop/libbrowser/vm/function.c b/userland/desktop/libbrowser/vm/function.c
+index c95372f7d..dd7240c2a 100644
+--- a/userland/desktop/libbrowser/vm/function.c
++++ b/userland/desktop/libbrowser/vm/function.c
+@@ -43,9 +43,10 @@ static int function_run_native(struct vm_function *function, vm_native native, v
+ static void function_transfer_exception(struct vm_realm *caller, struct vm_realm *callee, int status);
+ 
+ /*
+- * Makes a native function of a realm with its name and length properties
+- * (neither writable nor enumerable, but configurable, as for built-ins);
+- * NULL when out of memory.
++ * Makes a native function with its realm, name and length properties.
++ *
++ * The configurable properties are neither writable nor enumerable.
++ * Returns NULL when allocation or root registration fails.
+  */
+ struct vm_function *
+ vm_function_create_native(
+@@ -54,21 +55,46 @@ vm_function_create_native(
+ 	unsigned length,
+ 	vm_native native)
+ {
++	struct vm_heap *heap;
+ 	struct vm_function *function;
+ 	struct vm_string *text;
++	struct vm_cell *roots[3];
+ 	vm_value key;
++	unsigned index;
++	unsigned registered;
+ 	int error;
+ 
+-	/* The cell, an object whose prototype is Function.prototype. */
+-	function = vm_heap_alloc(realm->heap, &vm_function_type, sizeof(*function));
+-	if (function == NULL)
+-		return NULL;
+-	error = vm_object_init(realm->heap, &function->object, realm->function_prototype);
++	/* Retains a collectible realm before the first allocation and both unpublished cells. */
++	heap = realm->heap;
++	function = NULL;
++	roots[0] = NULL;
++	if (realm->managed)
++		roots[0] = &realm->cell;
++	roots[1] = NULL;
++	roots[2] = NULL;
++	registered = 0;
++	for (index = 0; index < 3U; index++) {
++		error = vm_heap_add_root(heap, &roots[index]);
++		if (error != 0)
++			goto cleanup;
++		registered++;
++	}
++
++	/* Allocates the function before publishing its shape or native state. */
++	function = vm_heap_alloc(heap, &vm_function_type, sizeof(*function));
++	if (function == NULL) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Protects the newborn while initialization may allocate a cold root shape. */
++	roots[1] = &function->object.cell;
++	error = vm_object_init(heap, &function->object, realm->function_prototype);
+ 	if (error != 0)
+-		return NULL;
+-	function->realm = realm;
++		goto cleanup;
+ 
+ 	/* Retains only collectible realms without consulting retired manual owners. */
++	function->realm = realm;
+ 	if (realm->managed)
+ 		function->realm_owner = &realm->cell;
+ 
+@@ -77,55 +103,102 @@ vm_function_create_native(
+ 	function->object.kind = VM_KIND_FUNCTION;
+ 	function->data = VM_VALUE_UNDEFINED;
+ 
+-	/* Its length: how many arguments it expects. */
+-	key = vm_key_from_ascii(realm->heap, "length");
+-	if (key == VM_VALUE_EMPTY)
+-		return NULL;
+-	error = vm_object_define(realm->heap, &function->object, key, vm_value_int32((int32_t)length), VM_PROPERTY_CONFIGURABLE);
++	/* Acquires the heap-owned length key before defining its configurable property. */
++	key = vm_key_from_ascii(heap, "length");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Records the native argument count without writable or enumerable attributes. */
++	error = vm_object_define(heap, &function->object, key, vm_value_int32((int32_t)length), VM_PROPERTY_CONFIGURABLE);
+ 	if (error != 0)
+-		return NULL;
++		goto cleanup;
+ 
+-	/* Its name. */
+-	text = vm_string_from_utf8(realm->heap, name, strlen(name));
+-	if (text == NULL)
+-		return NULL;
+-	key = vm_key_from_ascii(realm->heap, "name");
+-	if (key == VM_VALUE_EMPTY)
+-		return NULL;
+-	error = vm_object_define(realm->heap, &function->object, key, vm_value_cell(text), VM_PROPERTY_CONFIGURABLE);
++	/* Allocates the name before protecting it across subsequent key and shape allocations. */
++	text = vm_string_from_utf8(heap, name, strlen(name));
++	if (text == NULL) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Keeps the private name alive until its completed property owns it. */
++	roots[2] = &text->cell;
++	key = vm_key_from_ascii(heap, "name");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Publishes the name only after its key is available. */
++	error = vm_object_define(heap, &function->object, key, vm_value_cell(text), VM_PROPERTY_CONFIGURABLE);
++	if (error != 0)
++		goto cleanup;
++
++cleanup:
++	/* Releases only registrations acquired by this invocation on every outcome. */
++	while (registered != 0) {
++		registered--;
++		vm_heap_remove_root(heap, &roots[registered]);
++	}
+ 	if (error != 0)
+ 		return NULL;
+ 
+-	/* Succeeded: the function. */
++	/* Succeeded: the complete native function owns its realm and name. */
+ 	return function;
+ }
+ 
+ /*
+- * Makes a bytecode function of a realm from a checked code unit, with its
+- * name (the code's) and length (its parameter count); NULL when out of
+- * memory.
++ * Makes a bytecode function from a realm and a checked code unit.
++ *
++ * Its name and length come from the code. Returns NULL on allocation failure.
+  */
+ struct vm_function *
+ vm_function_create(
+ 	struct vm_realm *realm,
+ 	struct vm_code *code)
+ {
++	struct vm_heap *heap;
+ 	struct vm_function *function;
++	struct vm_cell *roots[3];
+ 	vm_value key;
+ 	vm_value name;
+ 	uint32_t length;
++	unsigned index;
++	unsigned registered;
+ 	int error;
+ 
+-	/* The cell, an object whose prototype is Function.prototype, running the code. */
+-	function = vm_heap_alloc(realm->heap, &vm_function_type, sizeof(*function));
+-	if (function == NULL)
+-		return NULL;
+-	error = vm_object_init(realm->heap, &function->object, realm->function_prototype);
++	/* Retains the input code, collectible realm and unpublished function for the whole factory. */
++	heap = realm->heap;
++	function = NULL;
++	roots[0] = &code->cell;
++	roots[1] = NULL;
++	if (realm->managed)
++		roots[1] = &realm->cell;
++	roots[2] = NULL;
++	registered = 0;
++	for (index = 0; index < 3U; index++) {
++		error = vm_heap_add_root(heap, &roots[index]);
++		if (error != 0)
++			goto cleanup;
++		registered++;
++	}
++
++	/* Allocates a function without borrowing conservative caller retention. */
++	function = vm_heap_alloc(heap, &vm_function_type, sizeof(*function));
++	if (function == NULL) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Protects the partially initialized cell before any shape allocation. */
++	roots[2] = &function->object.cell;
++	error = vm_object_init(heap, &function->object, realm->function_prototype);
+ 	if (error != 0)
+-		return NULL;
+-	function->realm = realm;
++		goto cleanup;
+ 
+ 	/* Retains only collectible realms without consulting retired manual owners. */
++	function->realm = realm;
+ 	if (realm->managed)
+ 		function->realm_owner = &realm->cell;
+ 
+@@ -134,44 +207,66 @@ vm_function_create(
+ 	function->object.kind = VM_KIND_FUNCTION;
+ 	function->data = VM_VALUE_UNDEFINED;
+ 
+-	/* Its length: how many parameters it declares (those before a default or a rest when the code says so). */
++	/* Uses the parameter count before a default or rest parameter when the code records it. */
+ 	length = code->parameter_count;
+ 	if ((code->flags & VM_CODE_LENGTH) != 0U)
+ 		length = code->length;
+-	key = vm_key_from_ascii(realm->heap, "length");
+-	if (key == VM_VALUE_EMPTY)
+-		return NULL;
+-	error = vm_object_define(realm->heap, &function->object, key, vm_value_int32((int32_t)length), VM_PROPERTY_CONFIGURABLE);
++	key = vm_key_from_ascii(heap, "length");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Defines the ordinary configurable length after acquiring its heap-owned key. */
++	error = vm_object_define(heap, &function->object, key, vm_value_int32((int32_t)length), VM_PROPERTY_CONFIGURABLE);
+ 	if (error != 0)
+-		return NULL;
++		goto cleanup;
+ 
+-	/* Its name: the code's, or the empty string. */
++	/* Uses the code-owned name, creating an empty string only when necessary. */
+ 	name = VM_VALUE_EMPTY;
+ 	if (code->name != NULL)
+ 		name = vm_value_cell(code->name);
+ 	if (name == VM_VALUE_EMPTY) {
+-		code->name = vm_string_from_utf8(realm->heap, "", 0);
+-		if (code->name == NULL)
+-			return NULL;
++		code->name = vm_string_from_utf8(heap, "", 0);
++		if (code->name == NULL) {
++			error = ENOMEM;
++			goto cleanup;
++		}
++
++		/* The already rooted code now owns the generated name. */
+ 		name = vm_value_cell(code->name);
+ 	}
+ 
+-	/* The name property. */
+-	key = vm_key_from_ascii(realm->heap, "name");
+-	if (key == VM_VALUE_EMPTY)
+-		return NULL;
+-	error = vm_object_define(realm->heap, &function->object, key, name, VM_PROPERTY_CONFIGURABLE);
++	/* Acquires the property key before publishing the protected name. */
++	key = vm_key_from_ascii(heap, "name");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Completes the bytecode function's name property. */
++	error = vm_object_define(heap, &function->object, key, name, VM_PROPERTY_CONFIGURABLE);
++	if (error != 0)
++		goto cleanup;
++
++cleanup:
++	/* No input or partially initialized function remains pinned after return. */
++	while (registered != 0) {
++		registered--;
++		vm_heap_remove_root(heap, &roots[registered]);
++	}
+ 	if (error != 0)
+ 		return NULL;
+ 
+-	/* Succeeded: the function. */
++	/* Succeeded: the function owns its checked code unit and name. */
+ 	return function;
+ }
+ 
+ /*
+- * Makes a closure: a bytecode function of a realm that runs a code unit in
+- * an environment (NULL for none).  A code unit that can construct gives
+- * its closure a prototype object.  NULL when out of memory.
++ * Makes a bytecode closure with its realm, code unit and captured environment.
++ *
++ * The environment may be NULL. Constructible code gives its closure a
++ * prototype object. Returns NULL on allocation failure.
+  */
+ struct vm_function *
+ vm_closure_create(
+@@ -179,42 +274,76 @@ vm_closure_create(
+ 	struct vm_code *code,
+ 	struct vm_env *env)
+ {
++	struct vm_heap *heap;
+ 	struct vm_function *function;
++	struct vm_cell *roots[2];
++	unsigned index;
++	unsigned registered;
+ 	int error;
+ 
+-	/* The function with its length and name. */
++	/* Retains the captured environment while the bytecode factory owns code and realm inputs. */
++	heap = realm->heap;
++	function = NULL;
++	roots[0] = NULL;
++	if (env != NULL)
++		roots[0] = &env->cell;
++	roots[1] = NULL;
++	registered = 0;
++	for (index = 0; index < 2U; index++) {
++		error = vm_heap_add_root(heap, &roots[index]);
++		if (error != 0)
++			goto cleanup;
++		registered++;
++	}
++
++	/* Creates the function before allocating any private constructor prototype. */
+ 	function = vm_function_create(realm, code);
+-	if (function == NULL)
+-		return NULL;
+-	function->env = env;
++	if (function == NULL) {
++		error = ENOMEM;
++		goto cleanup;
++	}
+ 
+-	/* A constructor's prototype object (a class's comes from class_setup). */
++	/* Publishes the captured environment under a root retained until all properties are complete. */
++	roots[1] = &function->object.cell;
++	function->env = env;
+ 	if ((code->flags & VM_CODE_CONSTRUCTOR) != 0U && (code->flags & VM_CODE_CLASS) == 0U) {
+ 		error = function_add_prototype(realm, function);
+ 		if (error != 0)
+-			return NULL;
++			goto cleanup;
+ 	}
+ 
+-	/* A generator function: its prototype object (its generators' prototype), and it inherits from %GeneratorFunction.prototype%. */
++	/* A generator keeps its private prototype and inherits from the realm's generator function prototype. */
+ 	if ((code->flags & VM_CODE_GENERATOR) != 0U) {
+ 		error = function_add_generator_prototype(realm, function);
+ 		if (error != 0)
+-			return NULL;
++			goto cleanup;
++
++		/* The completed generator properties permit publishing its intrinsic parent. */
+ 		if (realm->intrinsics[VM_INTRINSIC_GENERATOR_FUNCTION_PROTOTYPE] != NULL)
+ 			function->object.prototype = realm->intrinsics[VM_INTRINSIC_GENERATOR_FUNCTION_PROTOTYPE];
+ 	}
+ 
+-	/* An async function inherits from %AsyncFunction.prototype%. */
++	/* An async function inherits from the realm's async function prototype. */
+ 	if ((code->flags & VM_CODE_ASYNC) != 0U && realm->intrinsics[VM_INTRINSIC_ASYNC_FUNCTION_PROTOTYPE] != NULL)
+ 		function->object.prototype = realm->intrinsics[VM_INTRINSIC_ASYNC_FUNCTION_PROTOTYPE];
+ 
+-	/* Succeeded: the closure. */
++cleanup:
++	/* Removes only this factory's successful root registrations. */
++	while (registered != 0) {
++		registered--;
++		vm_heap_remove_root(heap, &roots[registered]);
++	}
++	if (error != 0)
++		return NULL;
++
++	/* Succeeded: the complete closure owns its code, environment and prototype. */
+ 	return function;
+ }
+ 
+ /*
+- * Makes an environment with a parent (NULL for none) and count slots, each
+- * undefined; NULL when out of memory.
++ * Makes an environment with a parent and initialized undefined slots.
++ *
++ * The parent may be NULL. Returns NULL on allocation or size overflow.
+  */
+ struct vm_env *
+ vm_env_create(
+@@ -223,22 +352,43 @@ vm_env_create(
+ 	uint32_t count)
+ {
+ 	struct vm_env *env;
++	struct vm_cell *root;
+ 	vm_value *slots;
++	size_t slot_count;
++	size_t capacity;
++	size_t size;
+ 	uint32_t index;
++	int error;
+ 
+-	/* The cell, its slots after the header. */
+-	env = vm_heap_alloc(heap, &vm_env_type, sizeof(*env) + (size_t)count * sizeof(vm_value));
++	/* Rejects a slot count whose complete allocation would overflow the host's size type. */
++	slot_count = count;
++	capacity = (SIZE_MAX - sizeof(*env)) / sizeof(vm_value);
++	if (slot_count > capacity)
++		return NULL;
++
++	/* Retains an otherwise unowned parent before the allocation can trigger collection. */
++	root = NULL;
++	if (parent != NULL)
++		root = &parent->cell;
++	error = vm_heap_add_root(heap, &root);
++	if (error != 0)
++		return NULL;
++
++	/* Allocates the header and slots before releasing temporary parent ownership. */
++	size = sizeof(*env) + slot_count * sizeof(vm_value);
++	env = vm_heap_alloc(heap, &vm_env_type, size);
++	vm_heap_remove_root(heap, &root);
+ 	if (env == NULL)
+ 		return NULL;
++
++	/* Publishes the parent and slot count without a further allocation. */
+ 	env->parent = parent;
+ 	env->count = count;
+-
+-	/* Every slot starts undefined. */
+ 	slots = vm_env_slots(env);
+ 	for (index = 0; index < count; index++)
+ 		slots[index] = VM_VALUE_UNDEFINED;
+ 
+-	/* Succeeded: the environment. */
++	/* Succeeded: the environment retains its parent and initialized slots. */
+ 	return env;
+ }
+ 
+@@ -249,7 +399,7 @@ vm_value *
+ vm_env_slots(
+ 	struct vm_env *env)
+ {
+-	/* They follow the header. */
++	/* Succeeded: the slots follow the environment header. */
+ 	return (vm_value *)(env + 1);
+ }
+ 
+@@ -270,16 +420,17 @@ vm_value_is_callable(
+ 
+ 	/* A function cell. */
+ 	cell = vm_value_as_cell(value);
+-	if (cell->type == &vm_function_type)
+-		return 1;
++	if (cell->type != &vm_function_type)
++		return 0;
+ 
+-	/* Any other cell. */
+-	return 0;
++	/* Succeeded: a function cell can be called. */
++	return 1;
+ }
+ 
+ /*
+- * Tells whether a value can be called with new (a bytecode function whose
+- * code can construct, or a native function with a construct behaviour).
++ * Tells whether a value can construct with new.
++ *
++ * Bytecode must permit construction; natives need construction behavior.
+  */
+ int
+ vm_value_is_constructor(
+@@ -295,19 +446,23 @@ vm_value_is_constructor(
+ 
+ 	/* A code unit that can, or a native constructor. */
+ 	function = (struct vm_function *)vm_value_as_cell(value);
+-	if (function->code != NULL && (function->code->flags & VM_CODE_CONSTRUCTOR) != 0U)
+-		return 1;
+-	if (function->construct != NULL)
++	if (function->code != NULL && (function->code->flags & VM_CODE_CONSTRUCTOR) != 0U) {
++		/* Succeeded: the bytecode explicitly permits construction. */
+ 		return 1;
++	}
+ 
+-	/* Anything else. */
+-	return 0;
++	/* A native without construction behavior cannot be used with new. */
++	if (function->construct == NULL)
++		return 0;
++
++	/* Succeeded: the native supplies its construction behavior. */
++	return 1;
+ }
+ 
+ /*
+- * Finds the prototype of an object new makes (GetPrototypeFromConstructor):
+- * new.target's prototype property, or a fallback when that is not an
+- * object.
++ * Finds a new object's prototype through GetPrototypeFromConstructor.
++ *
++ * Uses new.target's prototype property or a realm-specific fallback.
+  */
+ int
+ vm_construct_prototype(
+@@ -343,9 +498,9 @@ vm_construct_prototype(
+ }
+ 
+ /*
+- * Makes the object new makes for a constructor: its prototype is the
+- * constructor's prototype property, or Object.prototype when that is not
+- * an object.
++ * Makes a constructor's receiver from its prototype property.
++ *
++ * Uses Object.prototype when the constructor's property is not an object.
+  */
+ int
+ vm_construct_this(
+@@ -373,8 +528,9 @@ vm_construct_this(
+ }
+ 
+ /*
+- * Calls a function with a this value and arguments and stores its result;
+- * returns 0, VM_THROWN with the realm's exception set, or an errno value.
++ * Calls a function with its receiver and arguments and stores its result.
++ *
++ * Returns 0, VM_THROWN with the realm's exception set, or an errno value.
+  */
+ int
+ vm_call(
+@@ -394,7 +550,11 @@ vm_call(
+ 	callable = vm_value_is_callable(callee);
+ 	if (!callable) {
+ 		status = vm_throw(realm, VM_VALUE_UNDEFINED);
+-		return status;
++		if (status != 0)
++			return status;
++
++		/* Succeeded: the refusal follows its existing native throw contract. */
++		return 0;
+ 	}
+ 
+ 	/* Rejects a class constructor invoked without new. */
+@@ -402,7 +562,11 @@ vm_call(
+ 	if (function->code != NULL &&
+ 	    (function->code->flags & VM_CODE_CLASS) != 0U) {
+ 		status = vm_throw_class_call(realm, function);
+-		return status;
++		if (status != 0)
++			return status;
++
++		/* Succeeded: the refusal follows its existing native throw contract. */
++		return 0;
+ 	}
+ 
+ 	/* Runs script code in the callee's realm, including suspended functions. */
+@@ -443,9 +607,10 @@ vm_call(
+ }
+ 
+ /*
+- * Constructs with a constructor and a new.target (new, from C): a bytecode
+- * constructor runs with a new object from new.target's prototype; a native
+- * one makes its own.  Returns 0, VM_THROWN or an errno value.
++ * Constructs an object with a constructor and new.target from C.
++ *
++ * Bytecode runs with a new receiver from new.target's prototype; a native
++ * makes its own. Returns 0, VM_THROWN or an errno value.
+  */
+ int
+ vm_construct(
+@@ -467,7 +632,11 @@ vm_construct(
+ 	is_constructor = vm_value_is_constructor(constructor);
+ 	if (!is_constructor) {
+ 		status = vm_throw_type_error(realm, "value is not a constructor");
+-		return status;
++		if (status != 0)
++			return status;
++
++		/* Succeeded: the refusal follows its existing native throw contract. */
++		return 0;
+ 	}
+ 
+ 	/* A native constructor creates its object in its own realm. */
+@@ -536,8 +705,9 @@ vm_construct(
+ }
+ 
+ /*
+- * Throws a value: it becomes the realm's exception.  Returns VM_THROWN, so
+- * a native function can end with "return vm_throw(...)".
++ * Stores a thrown value in the realm's pending exception.
++ *
++ * Returns VM_THROWN for the caller to propagate through its failure path.
+  */
+ int
+ vm_throw(
+@@ -716,6 +886,9 @@ function_trace(
+ 	if (function->env != NULL)
+ 		vm_heap_mark(heap, &function->env->cell);
+ 	vm_heap_mark_value(heap, function->data);
++
++	/* Succeeded: the function's owned graph was marked. */
++	return;
+ }
+ 
+ /* Marks what an environment refers to: its parent and the values in its slots. */
+@@ -737,6 +910,9 @@ function_env_trace(
+ 	slots = vm_env_slots(env);
+ 	for (index = 0; index < env->count; index++)
+ 		vm_heap_mark_value(heap, slots[index]);
++
++	/* Succeeded: the parent and initialized environment slots were marked. */
++	return;
+ }
+ 
+ /* Gives a constructor its prototype object, whose constructor property points back. */
+@@ -745,33 +921,60 @@ function_add_prototype(
+ 	struct vm_realm *realm,
+ 	struct vm_function *function)
+ {
++	struct vm_heap *heap;
++	struct vm_object *parent;
+ 	struct vm_object *prototype;
++	struct vm_cell *root;
+ 	vm_value key;
+ 	int error;
+ 
+-	/* The object, from Object.prototype. */
+-	prototype = vm_object_create(realm->heap, realm->object_prototype);
+-	if (prototype == NULL)
+-		return ENOMEM;
+-
+-	/* Its constructor: writable and configurable, not enumerable. */
+-	key = vm_key_from_ascii(realm->heap, "constructor");
+-	if (key == VM_VALUE_EMPTY)
+-		return ENOMEM;
+-	error = vm_object_define(realm->heap, prototype, key, vm_value_cell(function),
+-	    VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
++	/* The closure factory owns its function while this helper protects the unpublished prototype. */
++	heap = realm->heap;
++	root = NULL;
++	error = vm_heap_add_root(heap, &root);
+ 	if (error != 0)
+ 		return error;
+ 
+-	/* The function's prototype property: writable only. */
+-	key = vm_key_from_ascii(realm->heap, "prototype");
+-	if (key == VM_VALUE_EMPTY)
+-		return ENOMEM;
+-	error = vm_object_define(realm->heap, &function->object, key, vm_value_cell(prototype), VM_PROPERTY_WRITABLE);
++	/* Chooses the realm's ordinary prototype before allocating the private child. */
++	parent = realm->object_prototype;
++	prototype = vm_object_create(heap, parent);
++	if (prototype == NULL) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* The completed object remains protected until the function owns its property. */
++	root = &prototype->cell;
++	key = vm_key_from_ascii(heap, "constructor");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Defines the reciprocal writable and configurable constructor property. */
++	error = vm_object_define(heap, prototype, key, vm_value_cell(function), VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
++	if (error != 0)
++		goto cleanup;
++
++	/* Acquires the heap-owned key before linking the private prototype to its function. */
++	key = vm_key_from_ascii(heap, "prototype");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Publishes the private prototype with the ordinary writable-only descriptor. */
++	error = vm_object_define(heap, &function->object, key, vm_value_cell(prototype), VM_PROPERTY_WRITABLE);
++	if (error != 0)
++		goto cleanup;
++
++cleanup:
++	/* Releases the temporary prototype root on both failure and successful publication. */
++	vm_heap_remove_root(heap, &root);
+ 	if (error != 0)
+ 		return error;
+ 
+-	/* Succeeded: the constructor has its prototype. */
++	/* Succeeded: the function owns its completed prototype. */
+ 	return 0;
+ }
+ 
+@@ -785,27 +988,49 @@ function_add_generator_prototype(
+ 	struct vm_realm *realm,
+ 	struct vm_function *function)
+ {
++	struct vm_heap *heap;
+ 	struct vm_object *parent;
+ 	struct vm_object *prototype;
++	struct vm_cell *root;
+ 	vm_value key;
+ 	int error;
+ 
+-	/* The object, from %GeneratorPrototype% (Object.prototype before the built-ins). */
+-	parent = realm->intrinsics[VM_INTRINSIC_GENERATOR_PROTOTYPE];
+-	if (parent == NULL)
+-		parent = realm->object_prototype;
+-	prototype = vm_object_create(realm->heap, parent);
+-	if (prototype == NULL)
+-		return ENOMEM;
++	/* The closure factory owns its function while this helper protects the unpublished prototype. */
++	heap = realm->heap;
++	root = NULL;
++	error = vm_heap_add_root(heap, &root);
++	if (error != 0)
++		return error;
+ 
+-	/* The function's prototype property: writable only. */
+-	key = vm_key_from_ascii(realm->heap, "prototype");
+-	if (key == VM_VALUE_EMPTY)
+-		return ENOMEM;
+-	error = vm_object_define(realm->heap, &function->object, key, vm_value_cell(prototype), VM_PROPERTY_WRITABLE);
++	/* Chooses the realm's ordinary prototype before allocating the private child. */
++	parent = realm->object_prototype;
++	if (realm->intrinsics[VM_INTRINSIC_GENERATOR_PROTOTYPE] != NULL)
++		parent = realm->intrinsics[VM_INTRINSIC_GENERATOR_PROTOTYPE];
++	prototype = vm_object_create(heap, parent);
++	if (prototype == NULL) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* The completed object remains protected until the function owns its property. */
++	root = &prototype->cell;
++	key = vm_key_from_ascii(heap, "prototype");
++	if (key == VM_VALUE_EMPTY) {
++		error = ENOMEM;
++		goto cleanup;
++	}
++
++	/* Publishes the private prototype with the ordinary writable-only descriptor. */
++	error = vm_object_define(heap, &function->object, key, vm_value_cell(prototype), VM_PROPERTY_WRITABLE);
++	if (error != 0)
++		goto cleanup;
++
++cleanup:
++	/* Releases the temporary prototype root on both failure and successful publication. */
++	vm_heap_remove_root(heap, &root);
+ 	if (error != 0)
+ 		return error;
+ 
+-	/* Succeeded: the generator function has its prototype. */
++	/* Succeeded: the function owns its completed prototype. */
+ 	return 0;
+ }

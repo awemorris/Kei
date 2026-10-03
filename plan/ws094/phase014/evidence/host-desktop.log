@@ -1,0 +1,156 @@
+ZFILES DESKTOP saved name=photo.png column=3 row=2 error=0
+ZFILES DESKTOP saved name=photo.png column=4 row=1 error=0
+ZFILES DESKTOP clean-up error=0
+ZFILES DESKTOP saved name=c column=5 row=4 error=0
+ZFILES DESKTOP saved-rename from=c to=e error=0
+ZFILES DESKTOP clean-up error=0
+ZFILES LOCATION kind=folder path=/tmp/tmp.zxsWvh55N1/Desktop items=2 error=0
+ZFILES ACTION action=14
+ZFILES RENAME from=/tmp/tmp.zxsWvh55N1/Desktop/notes.txt to=/tmp/tmp.zxsWvh55N1/Desktop/todo.txt
+ZFILES LOCATION kind=folder path=/tmp/tmp.zxsWvh55N1/Desktop items=2 error=0
+ZFILES DESKTOP rename from=notes.txt to=todo.txt error=0
+ZFILES LOCATION kind=folder path=/tmp/tmp.zxsWvh55N1/Desktop items=2 error=0
+ZFILES DESKTOP saved name=todo.txt column=3 row=2 error=0
+ZFILES DESKTOP move name=todo.txt column=3 row=2 error=0
+ZFILES DESKTOP move name=todo.txt kept reason=taken
+ZFILES DESKTOP saved name=a.txt column=0 row=2 error=0
+ZFILES DESKTOP dropped name=a.txt column=0 row=2 error=0
+ZFILES DESKTOP saved name=b.txt column=0 row=3 error=0
+ZFILES DESKTOP dropped name=b.txt column=0 row=3 error=0
+ZFILES LOCATION kind=folder path=/tmp/tmp.zxsWvh55N1/partial items=9 error=0
+ZFILES DESKTOP layout saved=3 error=0
+ZFILES DESKTOP prune removed=3 kept=0
+ZFILES DESKTOP grid width=1280 height=766 columns=13 rows=7
+ZFILES DESKTOP place name=folder-2 column=0 row=0 x=1168 y=16
+ZFILES DESKTOP place name=folder-5 column=0 row=1 x=1168 y=120
+ZFILES DESKTOP place name=folder-8 column=0 row=2 x=1168 y=224
+ZFILES DESKTOP place name=a-name-much-longer-than-its-cell-4.txt column=0 row=3 x=1168 y=328
+ZFILES DESKTOP place name=note-0.txt column=0 row=4 x=1168 y=432
+ZFILES DESKTOP place name=note-1.txt column=0 row=5 x=1168 y=536
+ZFILES DESKTOP place name=note-3.txt column=0 row=6 x=1168 y=640
+ZFILES DESKTOP place name=note-6.txt column=1 row=0 x=1072 y=16
+ZFILES DESKTOP place name=note-7.txt column=1 row=1 x=1072 y=120
+ZFILES DESKTOP ready items=9 cells=9 width=1280 height=766 at_ms=643402940 newest_age_ms=14 hidden=0
+ZFILES DESKTOP saved name=missing.txt column=8 row=6 error=0
+ZFILES DESKTOP place name=folder-2 column=0 row=0 x=1168 y=16
+ZFILES DESKTOP place name=folder-5 column=0 row=1 x=1168 y=120
+ZFILES DESKTOP place name=folder-8 column=0 row=2 x=1168 y=224
+ZFILES DESKTOP place name=a-name-much-longer-than-its-cell-4.txt column=0 row=3 x=1168 y=328
+ZFILES DESKTOP place name=note-0.txt column=0 row=4 x=1168 y=432
+ZFILES DESKTOP place name=note-1.txt column=0 row=5 x=1168 y=536
+ZFILES DESKTOP place name=note-3.txt column=0 row=6 x=1168 y=640
+ZFILES DESKTOP place name=note-6.txt column=1 row=0 x=1072 y=16
+ZFILES DESKTOP place name=note-7.txt column=1 row=1 x=1072 y=120
+ZFILES DESKTOP ready items=9 cells=9 width=1280 height=766 at_ms=643402943 newest_age_ms=17 hidden=0
+ZFILES DESKTOP prune removed=1 kept=0
+ZFILES DESKTOP place name=folder-2 column=0 row=0 x=1168 y=16
+ZFILES DESKTOP place name=folder-5 column=0 row=1 x=1168 y=120
+ZFILES DESKTOP place name=folder-8 column=0 row=2 x=1168 y=224
+ZFILES DESKTOP place name=a-name-much-longer-than-its-cell-4.txt column=0 row=3 x=1168 y=328
+ZFILES DESKTOP place name=note-0.txt column=0 row=4 x=1168 y=432
+ZFILES DESKTOP place name=note-1.txt column=0 row=5 x=1168 y=536
+ZFILES DESKTOP place name=note-3.txt column=0 row=6 x=1168 y=640
+ZFILES DESKTOP place name=note-6.txt column=1 row=0 x=1072 y=16
+ZFILES DESKTOP place name=note-7.txt column=1 row=1 x=1072 y=120
+ZFILES DESKTOP ready items=9 cells=9 width=1280 height=766 at_ms=643402946 newest_age_ms=21 hidden=0
+ZFILES DESKTOP prune removed=1 kept=2
+ZFILES DESKTOP saved name=a.txt column=3 row=3 error=0
+ZFILES DESKTOP prune removed=2 kept=0
+ok: grid 13 x 7
+ok: cell 0,0 at the top right (1168,16)
+ok: cell 0,1 under it (1168,120)
+ok: cell 1,0 to the left (1072,16)
+ok: no cell past the grid
+ok: in order down the first column
+ok: c where it was put (2,5)
+ok: a (saved outside the grid) fills the first free cell
+ok: b fills the next
+ok: d (its cell taken by c) fills the next
+ok: a tiny desktop has one cell
+ok: a place set
+ok: the layout file's path
+ok: the place read back
+ok: the same item placed again: one line
+ok: Clean Up forgets every place
+ok: the places shown remembered
+ok: b stays at 0,0
+ok: d stays at 0,2
+ok: the new a takes the free cell 0,3
+ok: the rename carries the place shown
+ok: the rename carries the saved place in the file
+ok: Clean Up forgets the places shown
+ok: the model over the desktop's folder
+ok: two items on the desktop
+ok: the empty desktop's menu: New Folder, Paste, Clean Up
+ok: ... Show Desktop in Files, and no View or Sort By
+ok: an item's menu: Open, Copy, Rename, Move to Trash
+ok: ... Show in Files, no Get Info or Open in New Tab
+ok: Rename opens the field
+ok: the file renamed to todo.txt
+ok: the cell at (1200,50) is 0,0
+ok: the cell at (1100,150) is 1,1
+ok: no cell in the right margin
+ok: the model for the drag
+ok: todo.txt moved to 3,2 and saved
+ok: a drop on another item's cell keeps todo.txt where it was saved
+ok: the dropped a.txt and b.txt placed at 0,2 and 0,3
+ok: partial: the font
+ok: partial: the canvas
+ok: partial: the model
+ok: partial: nine items
+ok: partial: the first frame is kept
+ok: prune: saved name prepared before a failed listing
+ok: prune: failed listing preserves saved names
+ok: prune: successful listing removes absent names
+ok: partial: one item selected
+ok: partial: the long name added
+ok: partial: none selected
+ok: label: the fonts
+label 0: "notes.txt" / ""
+ok: label: both lines fit the cell
+ok: label: a first line
+label 1: "Budget notes" / "2026.pdf"
+ok: label: both lines fit the cell
+ok: label: a first line
+label 2: "Quarterly rep" / "ort draft.pdf"
+ok: label: both lines fit the cell
+ok: label: a first line
+label 3: "a_forty_chara" / "…or_tests.txt"
+ok: label: both lines fit the cell
+ok: label: a first line
+label 4: "長い名前のフ" / "…録と末尾.txt"
+ok: label: both lines fit the cell
+ok: label: a first line
+ok: label: a short name in one line
+ok: label: a longer name in two lines, broken at a space
+ok: label: broken where the first line is full, whole
+ok: label: the first line is the name's start
+ok: label: the second line starts with the ellipsis
+ok: label: the second line ends with the extension
+ok: label: the middle is left out
+ok: label: the first line is the name's start
+ok: label: the second line starts with the ellipsis
+ok: label: the second line ends with the extension
+ok: label: the middle is left out
+ok: resize: the 1920x1046 grid is 19 x 9
+ok: resize: 1920, left.txt at its saved 3,2
+ok: resize: 1920, far.txt at its saved 16,8
+ok: resize: 1920, new.txt in the first free cell
+ok: resize: 1280, left.txt still at 3,2
+ok: resize: 1280, far.txt in the first free cell
+ok: resize: 1280, new.txt in the next
+ok: resize: 1920 again, far.txt back at 16,8
+ok: prune: room for saved places
+ok: prune: layout path
+ok: prune: original layout written
+ok: prune: only existing names retained
+ok: prune: visible name retains its place
+ok: prune: off-grid name retains its place
+ok: prune: pruning alone does not write the file
+ok: prune: repeated listing preserves retained names
+ok: prune: next placement written
+ok: prune: next save omits the stale name
+ok: prune: first saved name moved
+ok: prune: overflow saved name persists
+ok: prune: empty listing removes remaining names
+host-desktop: PASS

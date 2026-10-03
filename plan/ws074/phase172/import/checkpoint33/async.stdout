@@ -1,0 +1,49 @@
+made the generator
+counter starts at 10
+10 false
+counter got hello
+11 false
+counter's finally
+early true
+undefined true
+caught in the generator: oops
+waiting
+thrown out: before start
+5 3 true
+21 42
+0,1,2
+function function true
+true [object Generator]
+new of a generator: TypeError
+sync 1
+executor runs now
+sync 2
+true [object Promise] true
+Promise without new: TypeError
+add starts
+add returned a promise: true
+false function 2
+end of the script
+then A 1
+then B 2
+then C
+all of nothing 0
+careful caught rejected
+then C2
+from a thenable
+all 1,2,3
+all rejected no
+race fast
+allSettled rejected bad fulfilled good
+any first good
+add has 1 2
+careful done
+failing rejected SyntaxError
+arrow 42
+nested
+sum 3
+chain caught RangeError too big: 6
+service ready1
+chain finally
+waiter:012
+after finally recovered

@@ -22,36 +22,45 @@ struct media_case {
 
 /* The bounded numeric/Boolean/range/syntax corpus lives for the fixture process. */
 static const struct media_case media_cases[] = {
-	{ "(color)", 1 },
-	{ "(monochrome)", 0 },
-	{ "(color: 8)", 1 },
-	{ "(color: 7)", 0 },
-	{ "(monochrome: 0)", 1 },
-	{ "(monochrome: 1)", 0 },
-	{ "(min-color: 0)", 1 },
-	{ "(min-color: 8)", 1 },
-	{ "(min-color: 9)", 0 },
-	{ "(max-color: 7)", 0 },
-	{ "(max-color: 8)", 1 },
-	{ "(max-monochrome: 0)", 1 },
-	{ "(min-monochrome: 0)", 1 },
-	{ "(min-monochrome: 1)", 0 },
-	{ "(color >= 8)", 1 },
-	{ "(color > 8)", 0 },
-	{ "(7 < color <= 8)", 1 },
-	{ "(8 < color < 10)", 0 },
-	{ "(0 <= monochrome < 1)", 1 },
-	{ "(min-color: -1)", 0 },
-	{ "(color: 8.5)", 0 },
-	{ "(color: 8px)", 0 },
-	{ "(color: 8 extra)", 0 },
-	{ "(color: 8 9)", 0 },
-	{ "not all and (monochrome)", 1 },
-	{ "only screen and (color)", 1 },
-	{ "(max-color: 0), (min-monochrome: 0)", 1 },
-	{ "(max-width: 0px) and (min-color: 8)", 1 },
-	{ "(min-width: 1em) and (color)", 0 }
-};
+    {"(color)", 1},
+    {"(monochrome)", 0},
+    {"(color: 8)", 1},
+    {"(color: 7)", 0},
+    {"(monochrome: 0)", 1},
+    {"(monochrome: 1)", 0},
+    {"(min-color: 0)", 1},
+    {"(min-color: 8)", 1},
+    {"(min-color: 9)", 0},
+    {"(max-color: 7)", 0},
+    {"(max-color: 8)", 1},
+    {"(max-monochrome: 0)", 1},
+    {"(min-monochrome: 0)", 1},
+    {"(min-monochrome: 1)", 0},
+    {"(color >= 8)", 1},
+    {"(color > 8)", 0},
+    {"(7 < color <= 8)", 1},
+    {"(8 < color < 10)", 0},
+    {"(0 <= monochrome < 1)", 1},
+    {"(min-color: -1)", 0},
+    {"(color: 8.5)", 0},
+    {"(color: 8px)", 0},
+    {"(color: 8 extra)", 0},
+    {"(color: 8 9)", 0},
+    {"not all and (monochrome)", 1},
+    {"only screen and (color)", 1},
+    {"(max-color: 0), (min-monochrome: 0)", 1},
+    {"(max-width: 0px) and (min-color: 8)", 1},
+    {"(min-width: 1em) and (color)", 0},
+    {"(max-width: 0px extra)", 0},
+    {"(max-height: 0 extra)", 0},
+    {"(aspect-ratio: 0/1 extra)", 0},
+    {"(orientation: portrait extra)", 0},
+    {"(resolution: 1px)", 0},
+    {"(hover: hover extra)", 0},
+    {"(min-resolution: 1dppx)", 1},
+    {"(resolution: 96dpi)", 1},
+    {"(min-resolution: 37dpcm)", 1},
+    {"(resolution: 1x)", 1}};
 
 static int media_run(const struct media_case *test, int *matches);
 
@@ -124,11 +133,14 @@ media_run(
 
 	/* Tokenize the same UTF16 syntax consumed by actual stylesheet media preludes. */
 	error = css_tokenize(&arena, units.data, units.length, &tokens, &count);
-	wb_units_release(&units);
 	if (error != 0) {
+		wb_units_release(&units);
 		wb_arena_release(&arena);
 		return error;
 	}
+
+	/* Tokens now refer only to checked arena-owned storage. */
+	wb_units_release(&units);
 
 	/* A stylesheet prelude excludes the tokenizer's terminal EOF token. */
 	if (count != 0 && tokens[count - 1U].type == CSS_TOKEN_EOF)

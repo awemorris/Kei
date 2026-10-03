@@ -1,0 +1,3 @@
+userland/desktop/libbrowser/vm/object.c:1282: goto: goto cleanup;
+userland/desktop/libbrowser/vm/object.c:1290: goto: goto cleanup;
+userland/desktop/libbrowser/vm/object.c:1297: goto: goto cleanup;

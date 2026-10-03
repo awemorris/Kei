@@ -1,0 +1,4 @@
+ZBROWSER READY width=900 height=640 document=406
+ZBROWSER NAVIGATE path=/usr/share/browser-tests/first.html title=browser: the first page
+ZBROWSER TITLEBAR back=0 forward=0 path=/usr/share/browser-tests/first.html
+ZBROWSER FRAME scroll=0 width=900 height=640

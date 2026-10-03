@@ -1,0 +1,8 @@
+{
+  "path": "userland/desktop/libbrowser/js/builtin.c",
+  "function": "js_builtin_array",
+  "jumps": 3,
+  "single_target": "cleanup",
+  "all_forward": true,
+  "manual_disposition": "permitted full C section14; frees all registered stable input/Array root slots and C table"
+}

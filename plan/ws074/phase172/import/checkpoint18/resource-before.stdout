@@ -1,0 +1,9 @@
+
+=================================================================
+==411236==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 512 byte(s) in 8 object(s) allocated from:
+    #0 0x7f011e414556 in realloc ../../../../src/libsanitizer/lsan/lsan_interceptors.cpp:98
+    #1 0x5581bf89595b in wb_buffer_reserve userland/desktop/libbrowser/base/buffer.c:62
+
+SUMMARY: LeakSanitizer: 512 byte(s) leaked in 8 allocation(s).

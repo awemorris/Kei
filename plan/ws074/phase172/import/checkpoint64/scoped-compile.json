@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "cc",
+    "-std=gnu11",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/browser3-p172/include",
+    "-I.",
+    "-c",
+    "userland/desktop/libbrowser/css/tokenizer.c",
+    "-o",
+    "build/browser3-p172/review64/tokenizer-confirm.o"
+  ],
+  "exit": 0,
+  "stderr": ""
+}

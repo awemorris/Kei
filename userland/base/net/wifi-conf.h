@@ -54,6 +54,25 @@ int wifi_conf_set_key(struct wifi_conf_model *, const void *, size_t,
 		      const void *, size_t, int, char *, size_t);
 
 /*
+ * Add a profile for an SSID the model does not hold yet (EEXIST when it
+ * does), as `net wifi add` does.
+ */
+int wifi_conf_add(struct wifi_conf_model *, const void *, size_t,
+		  const void *, size_t, int, char *, size_t);
+
+/*
+ * Change a saved profile in place (ENOENT when the SSID is not saved): a
+ * NULL passphrase keeps the saved one, and an automatic of -1 keeps the
+ * saved mode, as `net wifi modify` does.
+ */
+int wifi_conf_modify(struct wifi_conf_model *, const void *, size_t,
+		     const void *, size_t, int, char *, size_t);
+
+/* Remove a saved profile (ENOENT when the SSID is not saved), as `net wifi delete` does. */
+int wifi_conf_delete(struct wifi_conf_model *, const void *, size_t, char *,
+		     size_t);
+
+/*
  * Serialize one canonical v1 generation.  output_length excludes an optional
  * convenience NUL.  The final newline is included in output_length.
  */

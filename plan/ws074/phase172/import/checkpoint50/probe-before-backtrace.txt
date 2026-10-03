@@ -1,0 +1,10 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Program received signal SIGSEGV, Segmentation fault.
+object_sync_length (heap=heap@entry=0x55555569c2a0, object=object@entry=0x5555556a0f10) at userland/desktop/libbrowser/vm/vm.h:775
+775		return result;
+#0  object_sync_length (heap=heap@entry=0x55555569c2a0, object=object@entry=0x5555556a0f10) at userland/desktop/libbrowser/vm/vm.h:775
+#1  0x000055555562642d in vm_object_define (heap=0x55555569c2a0, object=object@entry=0x5555556a0f10, key=<optimized out>, value=18446181123756130346, attributes=attributes@entry=7) at userland/desktop/libbrowser/vm/object.c:624
+#2  0x0000555555629f50 in vm_iter_rest (realm=0x55555569c4a0, iterator=140737347730864, array=array@entry=0x7fffffffda60) at userland/desktop/libbrowser/vm/spread.c:313
+#3  0x000055555557cc83 in main () at build/browser3-p172/review50/probe-rest.c:61

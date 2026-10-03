@@ -61,9 +61,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Release the completed fixture heap before reporting its observations. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("select addition lifetime checks: %u/%u passed\n", checks - failures, checks);
@@ -120,9 +124,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release the borrowed script input after checking execution. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -145,6 +153,12 @@ table_collect(
 
 	/* The actual host context stays intact for unrelated environment collaborators. */
 	observer = active_observer;
+	if (observer == NULL ||
+	    node == NULL ||
+	    node->parent == NULL)
+		return EIO;
+
+	/* Publish the callback observation only after checking the incoming parent. */
 	observer->calls++;
 	owner = node->parent;
 	anchor = NULL;
@@ -213,6 +227,10 @@ index_collect(
 	UNUSED_PARAMETER(receiver);
 	UNUSED_PARAMETER(args);
 	UNUSED_PARAMETER(count);
+
+	/* Reject an invocation outside the finite observer lifetime. */
+	if (active_observer == NULL)
+		return EIO;
 
 	/* The direct native invocation has no script argument frame independently retaining the receiver. */
 	active_observer->conversions++;
@@ -294,8 +312,14 @@ collection_case(
 		window->host.node_inserted = NULL;
 		status = collection_script(realm, "document.createElement('select')", &receiver);
 		if (status != 0)
-			break;
+			goto cleanup;
 		table = bind_node_of(receiver);
+		if (table == NULL || table->type != DOM_ELEMENT) {
+			status = EIO;
+			goto cleanup;
+		}
+
+		/* Begin each independent observation with the primary native owner. */
 		actual = window;
 		memset(&observer, 0, sizeof(observer));
 		observer.heap = heap;
@@ -308,8 +332,16 @@ collection_case(
 						   "s.appendChild(g);g.appendChild(document.createElement('option'));return s;})()",
 						   &receiver);
 			if (status != 0)
-				break;
+				goto cleanup;
 			table = bind_node_of(receiver);
+			if (table == NULL ||
+			    table->first_child == NULL ||
+			    table->first_child->first_child == NULL) {
+				status = EIO;
+				goto cleanup;
+			}
+
+			/* The grouped anchor is an integer observation without a retaining root. */
 			observer.anchor = (uintptr_t)table->first_child->first_child;
 		}
 
@@ -322,8 +354,16 @@ collection_case(
 						   "var s=f.contentDocument.createElement('select');f.remove();return s;})()",
 						   &receiver);
 			if (status != 0)
-				break;
+				goto cleanup;
 			table = bind_node_of(receiver);
+			if (table == NULL ||
+			    table->document == NULL ||
+			    table->document->view == NULL) {
+				status = EIO;
+				goto cleanup;
+			}
+
+			/* Use the actual child owner after checking its live native view. */
 			actual = table->document->view;
 		}
 
@@ -339,14 +379,14 @@ collection_case(
 
 		/* A failed fixture allocation cannot publish a partially initialized invocation. */
 		if (status != 0)
-			break;
+			goto cleanup;
 		observer.old = (uintptr_t)bind_node_of(incoming);
 
 		/* The numeric conversion argument is otherwise reachable only from the native root slot. */
 		if (kind == 4) {
 			status = collection_script(realm, "({valueOf:collectIndex})", &argument);
 			if (status != 0)
-				break;
+				goto cleanup;
 			observer.argument = (uintptr_t)vm_value_as_cell(argument);
 		}
 
@@ -367,10 +407,18 @@ collection_case(
 		arguments[0] = incoming;
 		arguments[1] = argument;
 		status = bind_html_select_element_interface.operations[0].method(realm, receiver, arguments, 2, &answer);
-		collection_check(status == expected, "exact select host outcome propagated");
-		collection_check(observer.calls == 1U, "one actual owner insertion notification");
+		if (status != expected) {
+			actual->host.node_inserted = NULL;
+			active_observer = NULL;
+			status = EIO;
+			goto cleanup;
+		}
+
+		/* Release the finite host callback before recording its checked outcome. */
 		actual->host.node_inserted = NULL;
 		active_observer = NULL;
+		collection_check(status == expected, "exact select host outcome propagated");
+		collection_check(observer.calls == 1U, "one actual owner insertion notification");
 
 		/* Successful addition returns undefined even after callback removal of the incoming node. */
 		if (status == 0)
@@ -412,7 +460,13 @@ collection_case(
 		status = 0;
 	}
 
-	/* Primary teardown observes no root slot pointing into an expired native invocation. */
+	/* Succeeded: every native sample completed before shared teardown. */
+	status = 0;
+
+cleanup:
+	/* Primary teardown observes no expired callback or construction stack contract. */
+	active_observer = NULL;
+	vm_heap_set_stack_base(heap, construction_stack);
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	if (status != 0)

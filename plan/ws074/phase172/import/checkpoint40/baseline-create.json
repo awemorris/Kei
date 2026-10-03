@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "timeout",
+    "30",
+    "build/browser3-p172/review40/host-collection"
+  ],
+  "exit": 2,
+  "production_source": "1f3b3c90d",
+  "reason": "Actual8MiB threshold crossed by32-byte state, wrapper allocation collected unpublished state; explicit no C-stack scan and normal native getter. Existing original observations retained.",
+  "fixture_sha256": "a058efd18c3172af7ab8eecc8f525eb78d90abcfd702a298fad196b156a132b5"
+}

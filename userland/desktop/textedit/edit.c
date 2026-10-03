@@ -681,6 +681,174 @@ te_edit_find(
 		te_app_message(app, "Search wrapped");
 }
 
+/*
+ * Replaces the place found and moves on (Edit > Replace, ws128-p003): when
+ * the selection is the find text (in either case of ASCII letters, as the
+ * search finds it), it becomes the replacement as one undo step, and the
+ * next place is selected; otherwise the next place is only selected, so
+ * that the next Replace replaces what is shown.  Returns 1 when a place
+ * was replaced, 0 when not (nothing to find, or only a place selected).
+ */
+int
+te_edit_replace(
+	struct te_app *app,
+	const char *with,
+	size_t with_length)
+{
+	size_t start;
+	size_t end;
+	int matched;
+	int error;
+
+	/* Nothing to find. */
+	if (app->find_length == 0U)
+		return 0;
+
+	/* The selection is the place to replace when it holds the find text. */
+	te_edit_selection(app, &start, &end);
+	matched = 0;
+	if (end - start == app->find_length)
+		matched = te_find_at(&app->buffer, app->find, app->find_length, start);
+
+	/* Not a place found: the next one is selected and shown. */
+	if (!matched) {
+		te_edit_find(app, 1, 1);
+		return 0;
+	}
+
+	/* The replacement over the selection, as one step (an empty one deletes it). */
+	error = te_edit_insert_text(app, with, with_length, TE_MERGE_NONE);
+	if (error != 0) {
+		te_app_message(app, "Not enough memory to replace.");
+		return 0;
+	}
+
+	/* The next place after it, selected. */
+	te_edit_find(app, 1, 0);
+
+	/* Succeeded: one place was replaced. */
+	return 1;
+}
+
+/*
+ * Replaces every place the find text occurs (Edit > Replace All,
+ * ws128-p003), as one undo group, so that one Undo puts them all back.
+ * The places are found first, from the start and not overlapping, then
+ * replaced from the last back, so that each place found stays where it
+ * was.  The cursor goes after the first replacement.  Returns how many
+ * were replaced (0 when the text does not occur, or memory runs out
+ * before anything changed).
+ */
+size_t
+te_edit_replace_all(
+	struct te_app *app,
+	const char *with,
+	size_t with_length)
+{
+	size_t *places;
+	size_t *grown;
+	char *removed;
+	size_t capacity;
+	size_t count;
+	size_t total;
+	size_t position;
+	size_t index;
+	size_t cursor_before;
+	size_t anchor_before;
+	unsigned group;
+	int matched;
+	int error;
+
+	/* Nothing to find. */
+	if (app->find_length == 0U)
+		return 0;
+
+	/* The places, from the start, each after the one before. */
+	places = NULL;
+	capacity = 0;
+	count = 0;
+	total = te_buffer_length(&app->buffer);
+	position = 0;
+	while (position + app->find_length <= total) {
+		matched = te_find_at(&app->buffer, app->find, app->find_length, position);
+		if (!matched) {
+			position++;
+			continue;
+		}
+
+		/* A full list grows (doubling). */
+		if (count == capacity) {
+			capacity = capacity * 2U + 16U;
+			grown = realloc(places, capacity * sizeof(places[0]));
+			if (grown == NULL) {
+				free(places);
+				te_app_message(app, "Not enough memory to replace.");
+				return 0;
+			}
+
+			/* The list from now on is the grown one. */
+			places = grown;
+		}
+
+		/* The place, and the search goes on after it. */
+		places[count] = position;
+		count++;
+		position += app->find_length;
+	}
+
+	/* The text occurs nowhere. */
+	if (count == 0U) {
+		free(places);
+		return 0;
+	}
+
+	/* Room for each place's text, kept for Undo. */
+	removed = malloc(app->find_length);
+	if (removed == NULL) {
+		free(places);
+		te_app_message(app, "Not enough memory to replace.");
+		return 0;
+	}
+
+	/* Where the cursor was (Undo puts it back), and the group the steps share. */
+	cursor_before = app->cursor;
+	anchor_before = app->anchor;
+	group = te_undo_group(&app->undo);
+	for (index = count; index > 0U; index--) {
+		/* The place's text goes, kept for Undo. */
+		position = places[index - 1U];
+		te_buffer_copy(&app->buffer, position, position + app->find_length, removed);
+		edit_delete_raw(app, position, position + app->find_length);
+		app->cursor = position;
+		app->anchor = position;
+		(void)edit_record(app, TE_UNDO_DELETE, position, removed, app->find_length, cursor_before, anchor_before, group, TE_MERGE_NONE);
+
+		/* The replacement comes in its place (none for an empty one). */
+		if (with_length == 0U)
+			continue;
+		error = edit_insert_raw(app, position, with, with_length);
+		if (error != 0) {
+			te_app_message(app, "Not enough memory: some places were not replaced.");
+			break;
+		}
+
+		/* The cursor after it, and the step. */
+		app->cursor = position + with_length;
+		app->anchor = app->cursor;
+		(void)edit_record(app, TE_UNDO_INSERT, position, with, with_length, cursor_before, anchor_before, group, TE_MERGE_NONE);
+	}
+
+	/* The cursor after the first replacement, and the frame drawn again. */
+	app->cursor = places[0] + with_length;
+	app->anchor = app->cursor;
+	free(removed);
+	free(places);
+	edit_changed(app);
+
+	/* Succeeded: how many places were replaced. */
+	return count;
+}
+
 /* Inserts text at a position and keeps the rows laid out; returns 0 or ENOMEM. */
 static int
 edit_insert_raw(
@@ -838,6 +1006,9 @@ edit_command_key(
 			te_app_action(app, TE_ACTION_FIND_PREVIOUS);
 		else
 			te_app_action(app, TE_ACTION_FIND_NEXT);
+		return 1;
+	case TE_KEY_H:
+		te_app_action(app, TE_ACTION_REPLACE);
 		return 1;
 	case TE_KEY_N:
 		te_app_action(app, TE_ACTION_NEW);

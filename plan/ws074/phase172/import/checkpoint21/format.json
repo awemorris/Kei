@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/dom/serialize.c",
+      "formatted_sha256": "27a9a827ee36d2d72f915a06bc8b28ca2aa313eb88f1e39bf82156d4321fa6de",
+      "final_sha256": "7a9baeb052861cab4e6fc35b3b15ff8351e5d15dbb99903d5b79de908c3c83a4",
+      "restorations": "definition argument tabs and compound condition layout"
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_symbol.c",
+      "formatted_sha256": "4c884462e4beb3571a8f5f88b8b5124bfbccc0ba61131a646076b9ec678d3500",
+      "final_sha256": "15a6ad149aa930a2c23d7aae5ede4cee3a21e2062dbde4e7ba96deb4121014dd",
+      "restorations": "definition argument tabs and compound condition layout"
+    }
+  ]
+}

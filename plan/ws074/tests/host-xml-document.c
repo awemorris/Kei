@@ -94,11 +94,14 @@ xml_sample(
 	vm_value key;
 	vm_value document_value;
 	int error;
+	int is_cell;
 
 	/* The primary embedding explicitly owns the realm, as an ordinary browser tab does. */
 	error = vm_realm_create(heap, &realm);
 	if (error != 0)
 		return error;
+
+	/* Installs the actual constructors before XML creation. */
 	error = js_install_builtins(realm);
 	if (error != 0) {
 		vm_realm_destroy(realm);
@@ -122,17 +125,17 @@ xml_sample(
 
 	/* The connected case retains an XML document root solely through its saved descendant. */
 	source = "var xml=document.implementation.createDocument('urn:runtime','Root');"
-		"var held=xml.createElement('Held');xml.documentElement.appendChild(held);"
-		"held.appendChild(xml.createTextNode('survives'));held";
+		 "var held=xml.createElement('Held');xml.documentElement.appendChild(held);"
+		 "held.appendChild(xml.createTextNode('survives'));held";
 	if (kind == 1) {
 		/* A detached parent is likewise retained through the selected child edge. */
 		source = "var xml=document.implementation.createDocument(null,null);"
-			"var parent=xml.createElement('Detached');var held=xml.createElement('Held');"
-			"parent.appendChild(held);held.appendChild(xml.createTextNode('survives'));held";
+			 "var parent=xml.createElement('Detached');var held=xml.createElement('Held');"
+			 "parent.appendChild(held);held.appendChild(xml.createTextNode('survives'));held";
 	} else if (kind == 2) {
 		/* The native implementation's associated-document trace is the only remaining edge. */
 		source = "var xml=document.implementation.createDocument('urn:runtime','Root');"
-			"xml.documentElement.appendChild(xml.createTextNode('survives'));xml.implementation";
+			 "xml.documentElement.appendChild(xml.createTextNode('survives'));xml.implementation";
 	}
 
 	/* Converts the selected fixture before production parsing and execution. */
@@ -147,12 +150,15 @@ xml_sample(
 
 	/* Executes creation, insertion and implementation caching on the default production paths. */
 	error = js_run_script(realm, units.data, units.length, 0, &answer, &syntax);
-	wb_units_release(&units);
 	if (error != 0) {
+		wb_units_release(&units);
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
 		return error;
 	}
+
+	/* Releases the temporary source representation after successful execution. */
+	wb_units_release(&units);
 
 	/* Captures the expected Document as an observation pointer, not a registered root. */
 	key = vm_key_from_ascii(heap, "xml");
@@ -172,10 +178,32 @@ xml_sample(
 
 	/* Selects raw node roots independently of wrappers, or only the implementation wrapper. */
 	node = bind_node_of(document_value);
+	if (node == NULL) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EINVAL;
+	}
+
+	/* Publishes the observed owner and the sole selected graph root. */
 	*expected = node->document;
+	is_cell = vm_value_is_cell(answer);
+	if (!is_cell) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EINVAL;
+	}
+
+	/* Retains the actual returned object before retiring the primary host. */
 	*root = vm_value_as_cell(answer);
 	if (kind != 2) {
 		node = bind_node_of(answer);
+		if (node == NULL) {
+			bind_window_destroy(window);
+			vm_realm_destroy(realm);
+			return EINVAL;
+		}
+
+		/* Uses native node identity independently of the wrapper. */
 		*root = &node->cell;
 	}
 
@@ -232,11 +260,25 @@ xml_case(
 		return error;
 	}
 
+	/* Saves an observation address without adding another graph root. */
+	document_address = (uintptr_t)document;
+
 	/* Only the explicit root can preserve objects across both real collections. */
 	vm_heap_set_stack_base(heap, NULL);
 	vm_heap_collect(heap);
 	vm_heap_collect(heap);
 	vm_heap_stats(heap, &retained);
+
+	/* Refuses to dereference an owner that the tested graph failed to retain. */
+	remaining_document = vm_heap_find_cell(heap, document_address);
+	if (remaining_document == NULL) {
+		vm_heap_remove_root(heap, &root);
+		vm_heap_destroy(heap);
+		return EINVAL;
+	}
+
+	/* Observes the verified surviving owner through its native document type. */
+	document = (struct dom_document *)remaining_document;
 	same = 0;
 	if (document->node.type == DOM_DOCUMENT && document->content == DOM_CONTENT_XML)
 		same = 1;
@@ -252,7 +294,9 @@ xml_case(
 	if (kind != 2) {
 		node = (struct dom_node *)root;
 		same = 0;
-		if (node->document == document && node->parent != NULL && node->first_child != NULL)
+		if (node->document == document &&
+		    node->parent != NULL &&
+		    node->first_child != NULL)
 			same = 1;
 		xml_check(same, "raw XML child retains parent and text links");
 	} else {
@@ -298,12 +342,15 @@ xml_case(
 
 		/* Direct native access only observes the already-created SameObject cache. */
 		error = bind_document_implementation(caller, vm_value_cell(document->node.wrapper), NULL, 0, &implementation);
-		vm_realm_destroy(caller);
 		if (error != 0) {
+			vm_realm_destroy(caller);
 			vm_heap_remove_root(heap, &root);
 			vm_heap_destroy(heap);
 			return error;
 		}
+
+		/* Releases the unrelated caller after successful native access. */
+		vm_realm_destroy(caller);
 
 		/* The cached implementation remains the same object after its Document-only edge survived GC. */
 		retained_implementation = vm_value_cell(root);
@@ -325,7 +372,7 @@ xml_case(
 	vm_heap_collect(heap);
 	vm_heap_stats(heap, &dropped);
 	same = 0;
-remaining_document = vm_heap_find_cell(heap, document_address);
+	remaining_document = vm_heap_find_cell(heap, document_address);
 	remaining_snapshot = vm_heap_find_cell(heap, snapshot_address);
 	remaining_root = vm_heap_find_cell(heap, root_address);
 	if (dropped.live_cells < retained.live_cells &&
@@ -334,6 +381,8 @@ remaining_document = vm_heap_find_cell(heap, document_address);
 	    remaining_root == NULL)
 		same = 1;
 	xml_check(same, "dropping the XML root reclaims nodes and private prototype graph");
+
+	/* Removes the final nullable registration before destroying the heap. */
 	vm_heap_remove_root(heap, &root);
 	vm_heap_destroy(heap);
 

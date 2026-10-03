@@ -1,0 +1,69 @@
+PASS empty accessors return null
+PASS native caption inheritance
+PASS native created section classes
+PASS created members exposed
+PASS canonical creation order
+PASS repeated create identity
+PASS native method lengths
+PASS caption direct construction illegal
+PASS self replacement identity and count
+PASS structural operations preserve collection caches
+PASS delete caption return and effect
+PASS delete head return and effect
+PASS delete foot return and effect
+PASS empty deletion is noop
+PASS head skips non-elements and prefix colgroup
+PASS caption precedes first non-element node
+PASS foot appended after final text
+PASS structural children feed logical live rows
+PASS first matching getter with duplicates
+PASS delete first head only and live rows
+PASS delete first caption only
+PASS delete first foot only
+PASS caption setter replacement position
+PASS head setter canonical replacement
+PASS foot setter canonical replacement
+PASS nullable undefined/null setters remove
+PASS all prefix head appended
+PASS nested child accessors excluded
+PASS wrong genuine section throws before head removal
+PASS wrong genuine section throws before foot removal
+PASS typed caption conversion 0
+PASS typed caption conversion 1
+PASS typed caption conversion 2
+PASS typed caption conversion 3
+PASS typed caption conversion 4
+PASS typed caption conversion 5
+PASS typed caption conversion 6
+PASS typed caption conversion 7
+PASS typed section conversion rejects caption
+PASS getter object brand 0
+PASS setter other element brand 0
+PASS getter object brand 1
+PASS setter other element brand 1
+PASS getter object brand 2
+PASS setter other element brand 2
+PASS method forged receiver 0
+PASS method forged receiver 1
+PASS method forged receiver 2
+PASS method forged receiver 3
+PASS method forged receiver 4
+PASS method forged receiver 5
+PASS cycle error preserves specified old removal
+PASS move member from another table
+PASS factory creates exact HTML caption in actual XML owner
+PASS XML section creation and native accessors
+PASS uppercase/foreign caption filtering and prototypes
+PASS uppercase caption setter rejected
+PASS foreign caption setter rejected
+PASS uppercase section setter rejected
+PASS uppercase table method rejected
+PASS deletion preserves foreign/uppercase children
+PASS foreign colgroup is head anchor
+PASS clone native caption independent
+PASS clone structural operations independent
+PASS borrowed create caption uses actual child realm
+PASS borrowed create head uses actual child realm
+PASS saved child creates after frame removal
+PASS cross-Document setter adopts complete subtree
+table structure probe done

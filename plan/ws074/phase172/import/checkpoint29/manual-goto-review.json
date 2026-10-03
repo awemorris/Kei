@@ -1,0 +1,36 @@
+{
+  "checker_exit": 1,
+  "goto_total": 48,
+  "functions": [
+    {
+      "function": "json_stringify",
+      "goto_count": 8,
+      "one_forward_cleanup_label": "cleanup",
+      "classification": "full C section14 permits a forward jump to one common resource cleanup point"
+    },
+    {
+      "function": "json_string",
+      "goto_count": 8,
+      "one_forward_cleanup_label": "cleanup",
+      "classification": "full C section14 permits a forward jump to one common resource cleanup point"
+    },
+    {
+      "function": "json_internalize",
+      "goto_count": 7,
+      "one_forward_cleanup_label": "cleanup",
+      "classification": "full C section14 permits a forward jump to one common resource cleanup point"
+    },
+    {
+      "function": "json_serialize_object",
+      "goto_count": 16,
+      "one_forward_cleanup_label": "cleanup",
+      "classification": "full C section14 permits a forward jump to one common resource cleanup point"
+    },
+    {
+      "function": "json_serialize_array",
+      "goto_count": 9,
+      "one_forward_cleanup_label": "cleanup",
+      "classification": "full C section14 permits a forward jump to one common resource cleanup point"
+    }
+  ]
+}

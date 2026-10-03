@@ -1,0 +1,2 @@
+cc (Debian 14.2.0-19) 14.2.0
+Debian clang-format version 19.1.7 (3+b1)

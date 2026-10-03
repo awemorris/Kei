@@ -8,4 +8,4 @@ KEILAND_X11SERVER_SOURCES := userland/desktop/xserver/main.c \
 	userland/desktop/xserver/wayland.c userland/desktop/xserver/keymap.c \
 	userland/desktop/xserver/glyphs.c userland/desktop/xserver/glx.c \
 	userland/desktop/xserver/vulkan.c userland/desktop/xserver/selection.c
-$(eval $(call ZEDBSD_USERLAND_PACKAGE,xserver,X11 server for the compositor,amd64,y,basic,$(KEILAND_X11SERVER_SOURCES),y,desktop,desktop/xserver,desktop/libvulkan desktop/libwayland desktop/libtruetype,0755,program,,,bin))
+$(eval $(call ZEDBSD_USERLAND_PACKAGE,xserver,X11 server for the compositor,amd64,y,basic,$(KEILAND_X11SERVER_SOURCES),y,desktop,desktop/xserver,desktop/libvulkan desktop/libwayland desktop/libkeiland desktop/libtruetype,0755,program,,,bin))

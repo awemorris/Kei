@@ -16,7 +16,7 @@
  * are dispatched and waits in the window's queue for the main loop.
  *
  * The shortcuts are the standard ones (design-input-notes.md D8): Ctrl+N a
- * new page, Ctrl+O open, Ctrl+S save, Ctrl+W close, Ctrl+Z undo,
+ * new page, Ctrl+O open, Ctrl+S save, Ctrl+Shift+S save as, Ctrl+W close, Ctrl+Z undo,
  * Ctrl+Shift+Z redo (Ctrl+Y too, as a key of Notes'), Page Up and Page Down
  * the previous and next page, F11 fullscreen.
  */
@@ -40,6 +40,7 @@
 #define MENU_SAVE		12U
 #define MENU_FILE_LINE		13U
 #define MENU_CLOSE		14U
+#define MENU_SAVE_AS		15U
 
 /* Edit. */
 #define MENU_UNDO		20U
@@ -83,6 +84,7 @@ static const struct menu_item menu_items[] = {
 	{ MENU_NEW_PAGE, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "New Page", NOTES_ACTION_NEW_PAGE, KEILAND_MENU_ROLE_NEW, KEILAND_MENU_CTRL, 'n' },
 	{ MENU_OPEN, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Open...", NOTES_ACTION_OPEN, KEILAND_MENU_ROLE_OPEN, KEILAND_MENU_CTRL, 'o' },
 	{ MENU_SAVE, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Save", NOTES_ACTION_SAVE, KEILAND_MENU_ROLE_SAVE, KEILAND_MENU_CTRL, 's' },
+	{ MENU_SAVE_AS, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Save As...", NOTES_ACTION_SAVE_AS, KEILAND_MENU_ROLE_NONE, KEILAND_MENU_CTRL | KEILAND_MENU_SHIFT, 's' },
 	{ MENU_FILE_LINE, MENU_FILE, KEILAND_MENU_ITEM_SEPARATOR, "", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_CLOSE, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Close", NOTES_ACTION_CLOSE, KEILAND_MENU_ROLE_CLOSE, KEILAND_MENU_CTRL, 'w' },
 	{ MENU_EDIT, KEILAND_MENU_ROOT, KEILAND_MENU_ITEM_SUBMENU, "Edit", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },

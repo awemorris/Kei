@@ -95,6 +95,14 @@ expect_log() {
 	fi
 }
 
+# Makes ~/Desktop the five items again (a folder, a text, a picture, a PDF and a script), as install leaves it.  saved and
+# prune start from it, since menu and drag rename, move and delete items (ws099-p024: saved after menu found no notes.txt).
+fresh_desktop() {
+	guest 'rm -rf /tmp/dhome/Desktop; mkdir -p /tmp/dhome/Desktop/Projects; printf "Meeting notes\n" > /tmp/dhome/Desktop/notes.txt; printf "#!/bin/sh\necho hi\n" > /tmp/dhome/Desktop/script.sh; chmod 755 /tmp/dhome/Desktop/script.sh' >/dev/null
+	put build/ws094-images/01-splash.png /tmp/dhome/Desktop/photo.png
+	put build/ws094-images/report.pdf /tmp/dhome/Desktop/report.pdf
+}
+
 for step in "$@"; do
 	case "$step" in
 	install)
@@ -114,10 +122,9 @@ for step in "$@"; do
 		for library in $(cd "$bin/dynamic" && ls *.so | grep -vE '^(libc|ld)\.so$'); do
 			put "$bin/dynamic/$library" "/lib/$library"
 		done
-		guest 'chmod 755 /bin/wayland /bin/files; rm -rf /tmp/dhome; mkdir -p /tmp/dhome/Desktop/Projects; printf "Meeting notes\n" > /tmp/dhome/Desktop/notes.txt; printf "#!/bin/sh\necho hi\n" > /tmp/dhome/Desktop/script.sh; chmod 755 /tmp/dhome/Desktop/script.sh' >/dev/null
-		put build/ws094-images/01-splash.png /tmp/dhome/Desktop/photo.png
+		guest 'chmod 755 /bin/wayland /bin/files; rm -rf /tmp/dhome' >/dev/null
 		python3 plan/ws081/tests/make-touch-pdf.py build/ws094-images/report.pdf >/dev/null
-		put build/ws094-images/report.pdf /tmp/dhome/Desktop/report.pdf
+		fresh_desktop
 		;;
 	show)
 		guest "$stop_all" >/dev/null
@@ -189,6 +196,7 @@ i=0; while ! grep -aq 'ZFILES READY' /tmp/zdesktop.log && [ \$i -lt 60 ]; do sle
 	saved)
 		# notes.txt kept at column 2, row 3 before Files starts; the compositor started again with Files.
 		guest "$stop_all" >/dev/null
+		fresh_desktop
 		guest 'mkdir -p /tmp/dhome/.config/keiland; printf "notes.txt\t2\t3\n" > /tmp/dhome/.config/keiland/desktop-layout' >/dev/null
 		guest "export XDG_RUNTIME_DIR=/tmp HOME=/tmp/dhome; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass \$picture --desktop-client='/bin/files --desktop' > /tmp/zdesktop.log 2>&1 </dev/null &
@@ -204,6 +212,7 @@ i=0; while ! grep -aq 'ZFILES READY' /tmp/zdesktop.log && [ \$i -lt 60 ]; do sle
 	prune)
 		# Keep notes.txt at its saved cell, and prune only the name absent from the successful listing.
 		guest "$stop_all" >/dev/null
+		fresh_desktop
 		guest 'mkdir -p /tmp/dhome/.config/keiland; printf "notes.txt\t2\t3\nghost.txt\t4\t4\n" > /tmp/dhome/.config/keiland/desktop-layout' >/dev/null
 		guest "export XDG_RUNTIME_DIR=/tmp HOME=/tmp/dhome; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass \$picture --desktop-client='/bin/files --desktop' > /tmp/zdesktop.log 2>&1 </dev/null &

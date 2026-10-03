@@ -1,0 +1,103 @@
+[
+  {
+    "name": "dump-dom",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--dump=dom",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/sheets.html"
+    ],
+    "exit": 0,
+    "stdout_len": 1481,
+    "stderr": ""
+  },
+  {
+    "name": "dump-style",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--dump=style",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/sheets.html"
+    ],
+    "exit": 0,
+    "stdout_len": 3353,
+    "stderr": ""
+  },
+  {
+    "name": "run-page",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/input-reflection-probe.html"
+    ],
+    "exit": 0,
+    "stdout_len": 3469,
+    "stderr": ""
+  },
+  {
+    "name": "render",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--render",
+      "--output=build/browser3-p172/review61/sheets.ppm",
+      "--width=32",
+      "--height=32",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/sheets.html"
+    ],
+    "exit": 0,
+    "stdout_len": 0,
+    "stderr": ""
+  },
+  {
+    "name": "dump-full",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--dump=dom",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/sheets.html"
+    ],
+    "exit": 1,
+    "stderr": "browser: cannot dump plan/ws074/tests/pages/sheets.html: Input/output error\n"
+  },
+  {
+    "name": "run-full",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/input-reflection-probe.html"
+    ],
+    "exit": 1,
+    "stderr": "browser: cannot write page console: Input/output error\n"
+  },
+  {
+    "name": "render-full",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--render",
+      "--output=/dev/full",
+      "--width=32",
+      "--height=32",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/sheets.html"
+    ],
+    "exit": 1,
+    "stderr": "browser: cannot write /dev/full: No space left on device\n"
+  }
+]

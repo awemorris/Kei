@@ -95,6 +95,16 @@ terminal_window_open(
 	kui_window_size(window->kui, &window->width, &window->height);
 	window->fullscreen = kui_window_fullscreen(window->kui);
 
+	/*
+	 * zdesktop's titlebar with the tabs (tabs.c), asked for before anything
+	 * is drawn: the roundtrip below acknowledges the configure it brings, so
+	 * the first image is shown with its titlebar.  Asked for after the
+	 * renderer and the menus, the first image was committed before that
+	 * configure was acknowledged, and the titlebar came only with a later
+	 * image, seconds after the window (ws099-p023, BUG-137).
+	 */
+	terminal_tabs_open(window);
+
 	/* The terminal's registry, for the clipboard's and the primary selection's managers. */
 	window->registry = wl_display_get_registry(window->display);
 	if (window->registry == NULL)

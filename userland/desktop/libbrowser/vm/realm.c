@@ -24,41 +24,39 @@
 #include <string.h>
 
 /* How many 64-bit slots the VM stack of a realm has (2 MiB). */
-#define REALM_STACK_SLOTS	(256U * 1024U)
+#define REALM_STACK_SLOTS (256U * 1024U)
 
-static int realm_create(struct vm_heap *heap, int managed, struct vm_realm **realm);
 static void realm_cell_trace(struct vm_heap *heap, struct vm_cell *cell);
 static void realm_cell_finalize(struct vm_heap *heap, struct vm_cell *cell);
-static void realm_release(struct vm_realm *realm);
 
 /* A managed realm owns its C stack and host until no cell reaches it. */
 static const struct vm_cell_type realm_type = {
-	"realm", realm_cell_trace, realm_cell_finalize
-};
+    "realm", realm_cell_trace, realm_cell_finalize};
 
+/* The descriptions of the well-known symbols, in the order of enum vm_well_known. */
+static const char *const realm_symbol_names[VM_SYMBOLS] = {
+    "Symbol.asyncIterator",
+    "Symbol.hasInstance",
+    "Symbol.isConcatSpreadable",
+    "Symbol.iterator",
+    "Symbol.match",
+    "Symbol.matchAll",
+    "Symbol.replace",
+    "Symbol.search",
+    "Symbol.species",
+    "Symbol.split",
+    "Symbol.toPrimitive",
+    "Symbol.toStringTag",
+    "Symbol.unscopables"};
+
+static int realm_create(struct vm_heap *heap, int managed, struct vm_realm **realm);
+static void realm_release(struct vm_realm *realm);
 static int realm_fill(struct vm_realm *realm);
 static void realm_trace(struct vm_heap *heap, void *context);
 static int realm_empty_function(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int realm_define_value(struct vm_realm *realm, const char *name, vm_value value);
 static void realm_report_rejections(struct vm_realm *realm, vm_job_report report, void *context);
 static int realm_make_symbols(struct vm_realm *realm);
-
-/* The descriptions of the well-known symbols, in the order of enum vm_well_known. */
-static const char *const realm_symbol_names[VM_SYMBOLS] = {
-	"Symbol.asyncIterator",
-	"Symbol.hasInstance",
-	"Symbol.isConcatSpreadable",
-	"Symbol.iterator",
-	"Symbol.match",
-	"Symbol.matchAll",
-	"Symbol.replace",
-	"Symbol.search",
-	"Symbol.species",
-	"Symbol.split",
-	"Symbol.toPrimitive",
-	"Symbol.toStringTag",
-	"Symbol.unscopables"
-};
 
 /*
  * Makes an explicitly owned primary realm with a permanent tracer.
@@ -119,8 +117,7 @@ vm_realm_destroy(
 }
 
 /*
- * Adds a microtask to the end of a realm's queue: a call of callback with
- * one argument at the next checkpoint.
+ * Adds a callback microtask to the end of a realm's queue for the next checkpoint.
  */
 int
 vm_enqueue_job(
@@ -143,8 +140,7 @@ vm_enqueue_job(
 }
 
 /*
- * Runs a microtask checkpoint: every queued job in order, including the
- * jobs the jobs queue, until the queue is empty.
+ * Runs every queued microtask in order, including new jobs, until the queue is empty.
  *
  * A job that throws is reported to report (with context) and the rest
  * still run.  Returns 0, or ENOMEM when a job ran out of memory.
@@ -261,7 +257,7 @@ realm_fill(
 	if (key == VM_VALUE_EMPTY)
 		return ENOMEM;
 	error = vm_object_define(realm->heap, realm->global, key, vm_value_cell(realm->global),
-	    VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
+				 VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
 	if (error != 0)
 		return error;
 
@@ -476,6 +472,9 @@ realm_trace(
 	/* Every word of the used stack that could point at a cell (boxed and raw values share it). */
 	for (slot = 0; slot < realm->stack_top; slot++)
 		vm_heap_mark_word(heap, (uintptr_t)realm->stack[slot]);
+
+	/* Succeeded: all currently retained realm values were traced. */
+	return;
 }
 
 /* Function.prototype's own behaviour: it takes anything and returns undefined. */
@@ -557,6 +556,9 @@ realm_report_rejections(
 
 	/* The list is spent. */
 	wb_vector_clear(&realm->rejections);
+
+	/* Succeeded: every unhandled rejection was considered and the list released. */
+	return;
 }
 
 /* Makes the well-known symbols of a realm, each with its description. */
@@ -565,11 +567,13 @@ realm_make_symbols(
 	struct vm_realm *realm)
 {
 	struct vm_string *description;
+	size_t length;
 	int index;
 
 	/* Each symbol, held by the realm as soon as it is made. */
 	for (index = 0; index < (int)VM_SYMBOLS; index++) {
-		description = vm_string_from_utf8(realm->heap, realm_symbol_names[index], strlen(realm_symbol_names[index]));
+		length = strlen(realm_symbol_names[index]);
+		description = vm_string_from_utf8(realm->heap, realm_symbol_names[index], length);
 		if (description == NULL)
 			return ENOMEM;
 		realm->symbols[index] = vm_symbol_create(realm->heap, vm_value_cell(description));

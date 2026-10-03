@@ -1,0 +1,65 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/iteration.js"
+    ],
+    "exit": 0,
+    "stdout_file": "iteration.stdout",
+    "stderr_file": "iteration.stderr",
+    "expected": "plan/ws074/tests/js/iteration.expected",
+    "exact_output_equal": true,
+    "lines": 47
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/dom/markup.html"
+    ],
+    "exit": 0,
+    "stdout_file": "markup.stdout",
+    "stderr_file": "markup.stderr",
+    "expected": "plan/ws074/tests/dom/markup.expected",
+    "exact_output_equal": true,
+    "lines": 22
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-xml-node"
+    ],
+    "exit": 0,
+    "stdout_file": "host-xml-node.stdout",
+    "stderr_file": "host-xml-node.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-attribute-namespace"
+    ],
+    "exit": 0,
+    "stdout_file": "host-attribute-namespace.stdout",
+    "stderr_file": "host-attribute-namespace.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "stdout_file": "host-vm-factory.stdout",
+    "stderr_file": "host-vm-factory.stderr"
+  }
+]

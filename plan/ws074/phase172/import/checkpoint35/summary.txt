@@ -1,0 +1,1 @@
+XML binding/parser/stream fixture full reviews, native51/scoped warning0;24 permitted cleanup findings; original native scripts and GC contracts unchanged.

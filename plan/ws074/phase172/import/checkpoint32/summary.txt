@@ -1,0 +1,1 @@
+Full select/option/table collection fixture reviews, native123/scoped warning0;19 permitted cleanup findings, original GC corpus unchanged.

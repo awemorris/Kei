@@ -1,0 +1,30 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-image-geometry.c",
+      "formatted_sha256": "1c75524a7c04b98af26aa879eca01dde26ab894e4efdeed5c20b9390058b3fdf",
+      "final_sha256": "3d2539e4a776c81793d076a3f7b222a27731e90097107345631f13b9eae0c537",
+      "restorations": "mandatory function definition argument tabs"
+    },
+    {
+      "path": "plan/ws074/tests/host-document-images.c",
+      "formatted_sha256": "e979012e8cb40eaebde891a35c07768c1c2b7596e20a6ceed4d62f7058f32a95",
+      "final_sha256": "03fbe6e1b865bf52fc330fbfd0dd776a10599f05091eb2e367c074d6b0b62dde",
+      "restorations": "mandatory function definition argument tabs"
+    },
+    {
+      "path": "plan/ws074/tests/host-cssom.c",
+      "formatted_sha256": "5bbbd1760c7cdacde7fab80d73f8a1001131a6b2ee1313674f00ce5c19116a31",
+      "final_sha256": "cbbd64b201ff3ff09276d854ff40b637246cd14fa509fcb17bc420cf3a492e0c",
+      "restorations": "mandatory function definition argument tabs"
+    },
+    {
+      "path": "plan/ws074/tests/host-select-collection.c",
+      "formatted_sha256": "39e6045ea70f3fcd5ab0b088d7a41b9b79fb58e3dc7a43be496d755bf8911f27",
+      "final_sha256": "cd377f4a8a54bce0b7e5e9a8b96dbb8f36a591de5b4073211f3567cdddd9d136",
+      "restorations": "mandatory function definition argument tabs"
+    }
+  ]
+}

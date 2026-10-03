@@ -42,4 +42,3 @@ Without operands it uses zedBSD's synchronous mount flush; this libc reports
 its errors through errno even though sync has a void return type. Other sync
 options are currently unsupported.
 
-Acceptance evidence belongs to [WS019-p015](../../plan/ws019/phase015/phase.md).

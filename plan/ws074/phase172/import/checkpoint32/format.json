@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-option-state.c",
+      "formatted_sha256": "6c32bdd2e49619936aa96b84e9875c472337ff38aac2830b6538dcf51fdcb01a",
+      "final_sha256": "819fd0968e17791c96476aef58bc3f1e112cef4086fcee78530e1b05bc9e3aed",
+      "restorations": "definition argument tabs and compound precondition lines"
+    },
+    {
+      "path": "plan/ws074/tests/host-table-collection.c",
+      "formatted_sha256": "a0b2d2880aaf271c60a7c6395b25a20e5ede4d3a221f08d29851eb68d146c2d5",
+      "final_sha256": "fce61a60b99ee64ec04856e408ed5e2adaf808195deb671052dc881eca9d4ed0",
+      "restorations": "definition argument tabs and compound precondition lines"
+    },
+    {
+      "path": "plan/ws074/tests/host-select.c",
+      "formatted_sha256": "43965a338427e8a7753b3adfaefc7c5bbf5b9d549ec4a90bb93898828ab0296e",
+      "final_sha256": "1b46877abe1ae86e31de4f3a7e59d6df1924d13653beb55d075a6d77f759a5e3",
+      "restorations": "definition argument tabs and compound precondition lines"
+    }
+  ]
+}

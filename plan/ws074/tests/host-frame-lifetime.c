@@ -71,6 +71,8 @@ main(
 	error = frame_retention(7);
 	if (error != 0)
 		return 2;
+
+	/* A sole implementation object supplies the second independent XML owner edge. */
 	error = frame_retention(8);
 	if (error != 0)
 		return 2;
@@ -129,6 +131,8 @@ main(
 	error = frame_retention(19);
 	if (error != 0)
 		return 2;
+
+	/* A sole row cells collection supplies its independent native child edge. */
 	error = frame_retention(20);
 	if (error != 0)
 		return 2;
@@ -317,11 +321,15 @@ frame_check(
 	int condition,
 	const char *name)
 {
+	int printed;
+
 	/* Each observation contributes to the final failing exit status. */
 	checks++;
 	if (!condition) {
 		failures++;
-		fprintf(stderr, "FAIL %s\n", name);
+		printed = fprintf(stderr, "FAIL %s\n", name);
+		if (printed < 0)
+			failures++;
 	}
 
 	/* Succeeded: the observation is recorded. */
@@ -362,9 +370,13 @@ frame_source(
 
 	/* The script uses the same binding and collector as a browser tab. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Completed ordinary execution no longer borrows the fixture source. */
+	wb_units_release(&units);
 
 	/* Succeeded: the script completion is available. */
 	return 0;
@@ -414,89 +426,140 @@ frame_sample(
 	}
 
 	/* Creates a connected iframe and obtains its genuine managed child. */
-	error = frame_source(realm,
-			     "document.appendChild(document.createElement('html'));"
-			     "document.documentElement.appendChild(document.createElement('body'));"
-			     "var f=document.createElement('iframe');document.body.appendChild(f);"
-			     "var w=f.contentWindow;var d=f.contentDocument;f",
-			     &answer);
-	if (error != 0) {
-		bind_window_destroy(window);
-		vm_realm_destroy(realm);
-		return error;
-	}
+	error = frame_source(
+	    realm,
+	    "document.appendChild(document.createElement('html'));"
+	    "document.documentElement.appendChild(document.createElement('body'));"
+	    "var f=document.createElement('iframe');document.body.appendChild(f);"
+	    "var w=f.contentWindow;var d=f.contentDocument;f",
+	    &answer);
+	if (error != 0)
+		goto cleanup;
 
 	/* Observes cleanup through the actual published iframe child owner. */
 	node = bind_node_of(answer);
+	if (node == NULL || node->type != DOM_ELEMENT) {
+		error = EINVAL;
+		goto cleanup;
+	}
+
+	/* The actual element owns the complete managed child context being observed. */
 	element = (struct dom_element *)node;
+	if (element->child_context == NULL) {
+		error = EINVAL;
+		goto cleanup;
+	}
+
+	/* Published child ownership supplies its real native host cleanup hook. */
 	child = (struct vm_realm *)element->child_context;
+	if (child->host_release == NULL || child->host == NULL) {
+		error = EINVAL;
+		goto cleanup;
+	}
+
+	/* Install the observation hook only after complete native host ownership is validated. */
 	original_release = child->host_release;
 	child->host_release = frame_release;
 
 	/* Observes the second managed owner in an actual nested context graph. */
 	if (kind == 4) {
-		error = frame_source(realm,
-				     "var nested=d.createElement('iframe');d.body.appendChild(nested);"
-				     "var saved=nested.contentWindow;nested",
-				     &answer);
-		if (error != 0) {
-			bind_window_destroy(window);
-			vm_realm_destroy(realm);
-			return error;
-		}
+		error = frame_source(
+		    realm,
+		    "var nested=d.createElement('iframe');d.body.appendChild(nested);"
+		    "var saved=nested.contentWindow;nested",
+		    &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The nested host uses the same real binding cleanup as its parent. */
 		node = bind_node_of(answer);
+		if (node == NULL || node->type != DOM_ELEMENT) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* The actual element owns the complete managed child context being observed. */
 		element = (struct dom_element *)node;
+		if (element->child_context == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Published child ownership supplies its real native host cleanup hook. */
 		child = (struct vm_realm *)element->child_context;
+		if (child->host_release == NULL || child->host == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Install the observation hook only after complete native host ownership is validated. */
 		child->host_release = frame_release;
 	}
 
 	/* A second independent child becomes the adopted subtree's current Document owner. */
 	if (kind == 22 || kind == 27) {
-		error = frame_source(realm,
-				     "var g=document.createElement('iframe');document.body.appendChild(g);"
-				     "var gd=g.contentDocument;g",
-				     &answer);
-		if (error != 0) {
-			bind_window_destroy(window);
-			vm_realm_destroy(realm);
-			return error;
-		}
+		error = frame_source(
+		    realm,
+		    "var g=document.createElement('iframe');document.body.appendChild(g);"
+		    "var gd=g.contentDocument;g",
+		    &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* Both managed owners use their real original binding cleanup callback. */
 		node = bind_node_of(answer);
+		if (node == NULL || node->type != DOM_ELEMENT) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* The actual element owns the complete managed child context being observed. */
 		element = (struct dom_element *)node;
+		if (element->child_context == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Published child ownership supplies its real native host cleanup hook. */
 		child = (struct vm_realm *)element->child_context;
+		if (child->host_release == NULL || child->host == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Install the observation hook only after complete native host ownership is validated. */
 		child->host_release = frame_release;
 	}
 
 	/* Builds real child CSS C caches before exercising collection or heap teardown. */
-	error = frame_source(realm,
-			     "var sheet=d.createElement('style');sheet.textContent='body {color:red;}';"
-			     "d.head.appendChild(sheet);w.getComputedStyle(d.body).color",
-			     &answer);
-	if (error != 0) {
-		bind_window_destroy(window);
-		vm_realm_destroy(realm);
-		return error;
-	}
+	error = frame_source(
+	    realm,
+	    "var sheet=d.createElement('style');sheet.textContent='body {color:red;}';"
+	    "d.head.appendChild(sheet);w.getComputedStyle(d.body).color",
+	    &answer);
+	if (error != 0)
+		goto cleanup;
 
 	/* Checks active child cache lifetime and viewport invalidation in one bounded case. */
 	if (kind == 5) {
 		/* Confirms the default production cascade before changing its viewport. */
+		same = vm_value_is_string(answer);
+		if (!same) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* The actual computed value supplies the original native CSS color observation. */
 		same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "rgb(255, 0, 0)");
 		frame_check(same, "active child CSS context computes before collection");
 
 		/* A connected frame remains reachable through the primary Document tracer. */
 		vm_heap_collect(heap);
-		error = frame_source(realm,
-				     "w.getComputedStyle(d.body).color==='rgb(255, 0, 0)'", &answer);
-		if (error != 0) {
-			bind_window_destroy(window);
-			vm_realm_destroy(realm);
-			return error;
-		}
+		error = frame_source(
+		    realm,
+		    "w.getComputedStyle(d.body).color==='rgb(255, 0, 0)'", &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The C cache does not replace ordinary DOM and owner tracing. */
 		same = 0;
@@ -506,15 +569,13 @@ frame_sample(
 
 		/* A fixed media rule exercises both sides of the inherited viewport contract. */
 		bind_window_set_viewport(child->host, 400, 300);
-		error = frame_source(realm,
-				     "sheet.textContent='body {z-index:1;} @media (min-width:500px) {body {z-index:2;}}';"
-				     "w.getComputedStyle(d.body).zIndex==='1'",
-				     &answer);
-		if (error != 0) {
-			bind_window_destroy(window);
-			vm_realm_destroy(realm);
-			return error;
-		}
+		error = frame_source(
+		    realm,
+		    "sheet.textContent='body {z-index:1;} @media (min-width:500px) {body {z-index:2;}}';"
+		    "w.getComputedStyle(d.body).zIndex==='1'",
+		    &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The initial narrow viewport excludes the conditional rule. */
 		same = 0;
@@ -524,13 +585,11 @@ frame_sample(
 
 		/* The same Document generation must invalidate styles when the width changes. */
 		bind_window_set_viewport(child->host, 800, 300);
-		error = frame_source(realm,
-				     "w.getComputedStyle(d.body).zIndex==='2'", &answer);
-		if (error != 0) {
-			bind_window_destroy(window);
-			vm_realm_destroy(realm);
-			return error;
-		}
+		error = frame_source(
+		    realm,
+		    "w.getComputedStyle(d.body).zIndex==='2'", &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The changed viewport enables the same cached media list. */
 		same = 0;
@@ -541,37 +600,43 @@ frame_sample(
 
 	/* Selects one graph while discarding the other script-held child references. */
 	if (kind == 0) {
-		error = frame_source(realm,
-				     "var saved=w.Function('return document.body.nodeName===\"BODY\" && document.defaultView===null;');"
-				     "document.body.removeChild(f);w=null;d=null;f=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=w.Function('return document.body.nodeName===\"BODY\" && document.defaultView===null;');"
+		    "document.body.removeChild(f);w=null;d=null;f=null;saved",
+		    &answer);
 	} else if (kind == 1) {
-		error = frame_source(realm,
-				     "var saved=d;document.body.removeChild(f);w=null;d=null;f=null;saved", &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=d;document.body.removeChild(f);w=null;d=null;f=null;saved", &answer);
 	} else if (kind == 5) {
-		error = frame_source(realm,
-				     "var saved=w.getComputedStyle(d.body);"
-				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=w.getComputedStyle(d.body);"
+		    "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 6) {
-		error = frame_source(realm,
-				     "var saved=document.createEvent('UIEvents');saved.initUIEvent('held',false,false,w,7);"
-				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=document.createEvent('UIEvents');saved.initUIEvent('held',false,false,w,7);"
+		    "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 7) {
-		error = frame_source(realm,
-				     "var xml=d.implementation.createDocument('urn:held','Root');"
-				     "var saved=xml.createElement('Held');xml.documentElement.appendChild(saved);"
-				     "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var xml=d.implementation.createDocument('urn:held','Root');"
+		    "var saved=xml.createElement('Held');xml.documentElement.appendChild(saved);"
+		    "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 22) {
 		/* The iterator's creator realm and root's new owner are different actual children. */
-		error = frame_source(realm,
-				     "var table=d.createElement('table');var row=d.createElement('tr');table.appendChild(row);"
-				     "var saved=d.createNodeIterator(table,1);saved.nextNode();saved.nextNode();"
-				     "gd.body.appendChild(table);document.body.removeChild(f);document.body.removeChild(g);"
-				     "table=null;row=null;w=null;d=null;f=null;g=null;gd=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var table=d.createElement('table');var row=d.createElement('tr');table.appendChild(row);"
+		    "var saved=d.createNodeIterator(table,1);saved.nextNode();saved.nextNode();"
+		    "gd.body.appendChild(table);document.body.removeChild(f);document.body.removeChild(g);"
+		    "table=null;row=null;w=null;d=null;f=null;g=null;gd=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 28) {
 		/* Only the independent clone survives; the original weak subscriber must become collectible. */
 		error = frame_source(
@@ -598,123 +663,159 @@ frame_sample(
 		    &answer);
 	} else if (kind == 25) {
 		/* Only the actual native option and its creator prototypes retain the child owner. */
-		error = frame_source(realm,
-				     "var saved=d.createElement('option');saved.selected=true;document.body.removeChild(f);"
-				     "w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=d.createElement('option');saved.selected=true;document.body.removeChild(f);"
+		    "w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 24) {
 		/* Neither the select nor its child global remains an independent script root. */
-		error = frame_source(realm,
-				     "var select=d.createElement('select');var option=d.createElement('option');option.id='held';"
-				     "select.add(option);var saved=select.options;document.body.removeChild(f);"
-				     "select=null;option=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var select=d.createElement('select');var option=d.createElement('option');option.id='held';"
+		    "select.add(option);var saved=select.options;document.body.removeChild(f);"
+		    "select=null;option=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 21 || kind == 23) {
 		/* Only the native table retains its actual managed child. */
-		error = frame_source(realm,
-				     "var saved=d.createElement('table');document.body.removeChild(f);"
-				     "w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=d.createElement('table');document.body.removeChild(f);"
+		    "w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 19 || kind == 20) {
 		/* Neither the table nor frame remains as an independent script root. */
-		error = frame_source(realm,
-				     "var table=d.createElement('table');d.body.appendChild(table);"
-				     "table.innerHTML='<tbody><tr><td id=held></td></tr></tbody>';"
-				     "var saved=table.rows;table=null;document.body.removeChild(f);"
-				     "w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var table=d.createElement('table');d.body.appendChild(table);"
+		    "table.innerHTML='<tbody><tr><td id=held></td></tr></tbody>';"
+		    "var saved=table.rows;table=null;document.body.removeChild(f);"
+		    "w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 
 		/* The second sample keeps only the child row's cells collection instead. */
-		if (error == 0 && kind == 20)
+		if (error != 0)
+			goto cleanup;
+
+		/* Only the second original table sample selects the current row cells. */
+		if (kind == 20) {
 			error = frame_source(realm, "saved=saved[0].cells;saved", &answer);
+			if (error != 0)
+				goto cleanup;
+		}
 	} else if (kind == 18) {
 		/* Only the native Event's submitter edge retains the detached child input. */
-		error = frame_source(realm,
-				     "var saved=new w.SubmitEvent('submit',{submitter:d.createElement('input')});"
-				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=new w.SubmitEvent('submit',{submitter:d.createElement('input')});"
+		    "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 17) {
 		/* The saved child input must select its retained actual child event owner. */
-		error = frame_source(realm,
-				     "var saved=d.createElement('input');saved.type='checkbox';d.body.appendChild(saved);"
-				     "saved.onclick=w.Function('e','this.value=e.isTrusted ? \"bad\" : \"owned\";');"
-				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=d.createElement('input');saved.type='checkbox';d.body.appendChild(saved);"
+		    "saved.onclick=w.Function('e','this.value=e.isTrusted ? \"bad\" : \"owned\";');"
+		    "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 16) {
 		/* Only the native duplicate list survives with its actual group's current state. */
-		error = frame_source(realm,
-				     "var form=d.createElement('form');d.body.appendChild(form);"
-				     "form.innerHTML='<input type=radio name=pair value=owned><input type=radio name=pair value=other>';"
-				     "form.elements[0].checked=true;var saved=form.elements.pair;"
-				     "document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var form=d.createElement('form');d.body.appendChild(form);"
+		    "form.innerHTML='<input type=radio name=pair value=owned><input type=radio name=pair value=other>';"
+		    "form.elements[0].checked=true;var saved=form.elements.pair;"
+		    "document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 15) {
 		/* Only the actual input remains after its frame and primary owner retire. */
-		error = frame_source(realm,
-				     "var saved=d.createElement('input');saved.value='owned';d.body.appendChild(saved);"
-				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=d.createElement('input');saved.value='owned';d.body.appendChild(saved);"
+		    "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 13 || kind == 14) {
 		/* Neither a form nor a separate child global survives as an independent script root. */
-		error = frame_source(realm,
-				     "var form=d.createElement('form');d.body.appendChild(form);"
-				     "form.innerHTML='<input name=Next><input id=Next>';"
-				     "var saved=form.elements;",
-				     &answer);
-		if (error == 0 && kind == 14)
+		error = frame_source(
+		    realm,
+		    "var form=d.createElement('form');d.body.appendChild(form);"
+		    "form.innerHTML='<input name=Next><input id=Next>';"
+		    "var saved=form.elements;",
+		    &answer);
+		if (error != 0)
+			goto cleanup;
+
+		/* Only the duplicate-list sample selects its original live name filter. */
+		if (kind == 14) {
 			error = frame_source(realm, "saved=saved.Next", &answer);
+			if (error != 0)
+				goto cleanup;
+		}
+
+		/* Discard ordinary script aliases after the selected collection has been created. */
 		if (error == 0) {
-			error = frame_source(realm,
-					     "document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved", &answer);
+			error = frame_source(
+			    realm,
+			    "document.body.removeChild(f);form=null;w=null;d=null;f=null;sheet=null;saved", &answer);
 		}
 	} else if (kind == 12) {
 		/* The sole live forms collection has no independent child Window variable. */
-		error = frame_source(realm,
-				     "var form=d.createElement('form');form.id='Next';d.body.appendChild(form);"
-				     "var saved=d.forms;document.body.removeChild(f);"
-				     "form=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var form=d.createElement('form');form.id='Next';d.body.appendChild(form);"
+		    "var saved=d.forms;document.body.removeChild(f);"
+		    "form=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 11) {
 		/* A live child collection is the sole surviving DOM binding graph. */
-		error = frame_source(realm,
-				     "var xml=d.implementation.createDocument(null,'Held');"
-				     "xml.documentElement.appendChild(xml.createElement('Next'));"
-				     "var saved=xml.documentElement.children;"
-				     "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var xml=d.implementation.createDocument(null,'Held');"
+		    "xml.documentElement.appendChild(xml.createElement('Next'));"
+		    "var saved=xml.documentElement.children;"
+		    "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 10) {
 		/* A consumed root leaves the child iterator ready to traverse to Next. */
-		error = frame_source(realm,
-				     "var xml=d.implementation.createDocument(null,'Held');"
-				     "xml.documentElement.appendChild(xml.createElement('Next'));"
-				     "var saved=xml.createNodeIterator(xml.documentElement,1,w.Function('return true;'));"
-				     "saved.nextNode();document.body.removeChild(f);"
-				     "xml=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var xml=d.implementation.createDocument(null,'Held');"
+		    "xml.documentElement.appendChild(xml.createElement('Next'));"
+		    "var saved=xml.createNodeIterator(xml.documentElement,1,w.Function('return true;'));"
+		    "saved.nextNode();document.body.removeChild(f);"
+		    "xml=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 8) {
-		error = frame_source(realm,
-				     "var saved=d.implementation;"
-				     "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=d.implementation;"
+		    "document.body.removeChild(f);w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 9) {
-		error = frame_source(realm,
-				     "var xml=d.implementation.createDocument(null,'Held');"
-				     "xml.documentElement.appendChild(xml.createElement('Next'));"
-				     "var saved=xml.createTreeWalker(xml.documentElement,1,w.Function('return true;'));"
-				     "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
-				     &answer);
+		error = frame_source(
+		    realm,
+		    "var xml=d.implementation.createDocument(null,'Held');"
+		    "xml.documentElement.appendChild(xml.createElement('Next'));"
+		    "var saved=xml.createTreeWalker(xml.documentElement,1,w.Function('return true;'));"
+		    "document.body.removeChild(f);xml=null;w=null;d=null;f=null;sheet=null;saved",
+		    &answer);
 	} else if (kind == 4) {
 		error = frame_source(realm, "w=null;d=null;f=null;nested=null;saved", &answer);
 	} else {
-		error = frame_source(realm,
-				     "var saved=w;w=null;d=null;f=null;saved", &answer);
+		error = frame_source(
+		    realm,
+		    "var saved=w;w=null;d=null;f=null;saved", &answer);
 	}
 
 	/* A failed fixture must not publish an arbitrary cell as a saved reference. */
-	if (error != 0) {
-		bind_window_destroy(window);
-		vm_realm_destroy(realm);
-		return error;
+	if (error != 0)
+		goto cleanup;
+
+	/* A successful fixture must publish an actual object or callable cell. */
+	same = vm_value_is_object(answer);
+	if (!same) {
+		error = EINVAL;
+		goto cleanup;
 	}
 
 	/* Publishes the selected cell before the embedding destroys its parent. */
@@ -722,11 +823,18 @@ frame_sample(
 
 	/* Closing the primary retires still-connected children before freeing C hosts. */
 	bind_window_destroy(window);
+	window = NULL;
 	same = 0;
 	if (document->view == NULL && document->removed == NULL)
 		same = 1;
 	frame_check(same, "explicit parent releases Document hooks");
+
+cleanup:
+	/* Failed selection releases its primary while successful selection already retired it. */
+	bind_window_destroy(window);
 	vm_realm_destroy(realm);
+	if (error != 0)
+		return error;
 
 	/* Succeeded: the caller receives a cell rather than an unrooted C child pointer. */
 	return 0;
@@ -769,6 +877,7 @@ frame_retention(
 	}
 
 	/* Captures cleanup counts before constructing this sample's child. */
+	caller = NULL;
 	before = released;
 	owners = 1U;
 	if (kind == 4 ||
@@ -790,6 +899,8 @@ frame_retention(
 		if (released == before + 1U)
 			same = 1;
 		frame_check(same, "whole heap releases child exactly once");
+
+		/* Succeeded: direct whole-heap teardown finalized this actual child exactly once. */
 		return 0;
 	}
 
@@ -801,30 +912,41 @@ frame_retention(
 	if (released == before)
 		same = 1;
 	frame_check(same, "saved child graph survives parent destruction and GC");
+	if (!same) {
+		error = EINVAL;
+		goto cleanup;
+	}
 
 	/* An unrelated live caller can execute a surviving child-owned function. */
 	error = vm_realm_create(heap, &caller);
-	if (error != 0) {
-		vm_heap_remove_root(heap, &root);
-		vm_heap_destroy(heap);
-		return error;
-	}
+	if (error != 0)
+		goto cleanup;
 
 	/* Dispatches through the surviving object graph selected by this sample. */
 	saved = vm_value_cell(root);
 	if (kind == 0) {
 		error = vm_call(caller, saved, VM_VALUE_UNDEFINED, NULL, 0, &answer);
+		if (error != 0)
+			goto cleanup;
 	} else if (kind == 1) {
 		/* The raw Document edge preserves both its wrapper and actual bound owner. */
 		node = bind_node_of(vm_value_cell(root));
-		window = node->document->view;
-		error = bind_wrap(window, node, &answer);
-		if (error != 0) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return error;
+		if (node == NULL) {
+			error = EINVAL;
+			goto cleanup;
 		}
+
+		/* The genuine saved Document supplies its retained native child host. */
+		window = node->document->view;
+		if (window == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Invoke the original native access only after checked owner or key construction. */
+		error = bind_wrap(window, node, &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The wrapper stays in its original child realm after removal. */
 		same = 0;
@@ -835,331 +957,413 @@ frame_retention(
 	} else if (kind == 5) {
 		/* A detached declaration remains safe while its values become empty. */
 		key = vm_key_from_ascii(heap, "color");
-		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "");
-			answer = vm_value_boolean(same);
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
 		}
+
+		/* Invoke the original native access only after checked owner or key construction. */
+		error = vm_get(caller, saved, key, &answer);
+		if (error != 0)
+			goto cleanup;
+
+		/* Native string observations require the successfully returned string brand. */
+		same = vm_value_is_string(answer);
+		if (!same) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Compare only the successfully returned native string value. */
+		same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "");
+		answer = vm_value_boolean(same);
 	} else if (kind == 6) {
 		/* The primary prototype has no managed child owner; only UI view retains it. */
 		event = bind_event_of(saved);
+		if (event == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Resolve the native accessor key only after successful wrapper branding. */
 		key = vm_key_from_ascii(heap, "closed");
-		if (event == NULL || key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return EINVAL;
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Reads through the retained child's own live realm, not the retired parent prototype. */
 		error = vm_get(caller, event->view, key, &answer);
+		if (error != 0)
+			goto cleanup;
 	} else if (kind == 7) {
 		/* The saved XML node retains its own realm while defaultView remains null. */
 		node = bind_node_of(saved);
+		if (node == NULL) {
+			error = EINVAL;
+			goto cleanup;
+		}
+
+		/* Resolve the native accessor key only after successful wrapper branding. */
 		key = vm_key_from_ascii(heap, "tagName");
-		if (node == NULL || key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return EINVAL;
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Calls the surviving child's Element accessor through an unrelated caller. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "Held");
-			answer = vm_value_boolean(same);
+		if (error != 0)
+			goto cleanup;
+
+		/* Native string observations require the successfully returned string brand. */
+		same = vm_value_is_string(answer);
+		if (!same) {
+			error = EINVAL;
+			goto cleanup;
 		}
+
+		/* Compare only the successfully returned native string value. */
+		same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "Held");
+		answer = vm_value_boolean(same);
 	} else if (kind == 8) {
 		/* A sole implementation reference retains its associated detached Document. */
 		key = vm_key_from_ascii(heap, "createDocument");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Resolves and invokes the real child's factory after the parent has been destroyed. */
 		error = vm_get(caller, saved, key, &factory);
-		if (error == 0) {
-			arguments[0] = VM_VALUE_NULL;
-			arguments[1] = VM_VALUE_NULL;
-			error = vm_call(caller, factory, saved, arguments, 2, &answer);
-		}
+		if (error != 0)
+			goto cleanup;
+
+		/* Supply the original independent factory arguments after checked method lookup. */
+		arguments[0] = VM_VALUE_NULL;
+		arguments[1] = VM_VALUE_NULL;
+		error = vm_call(caller, factory, saved, arguments, 2, &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The new result retains XML kind without acquiring a browsing-context view. */
-		if (error == 0) {
-			node = bind_node_of(answer);
-			same = 0;
-			if (node != NULL && node->type == DOM_DOCUMENT) {
-				if (node->document->content == DOM_CONTENT_XML && node->document->view == NULL)
-					same = 1;
-			}
-
-			/* The generic lifetime assertion consumes the independent factory observation. */
-			answer = vm_value_boolean(same);
+		node = bind_node_of(answer);
+		same = 0;
+		if (node != NULL && node->type == DOM_DOCUMENT) {
+			if (node->document->content == DOM_CONTENT_XML && node->document->view == NULL)
+				same = 1;
 		}
+
+		/* The generic lifetime assertion consumes the independent factory observation. */
+		answer = vm_value_boolean(same);
 	} else if (kind == 22) {
 		/* The old native iterator getter retains its creator while its root retains the new owner. */
 		key = vm_key_from_ascii(heap, "root");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Actual current-Document removal must repair the migrated native iterator after primary destruction. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			node = bind_node_of(answer);
-			dom_remove(node->first_child);
-			key = vm_key_from_ascii(heap, "referenceNode");
-			if (key == VM_VALUE_EMPTY) {
-				error = ENOMEM;
-			} else {
-				error = vm_get(caller, saved, key, &answer);
-			}
+		if (error != 0)
+			goto cleanup;
 
-			/* Cursor repair to the actual root proves that the migrated subscription remains live. */
-			if (error == 0) {
-				same = 0;
-				reference = bind_node_of(answer);
-				if (reference == node)
-					same = 1;
-				answer = vm_value_boolean(same);
-			}
+		/* Inspect only a completed genuine native operation result. */
+		node = bind_node_of(answer);
+		if (node == NULL || node->first_child == NULL) {
+			error = EINVAL;
+			goto cleanup;
 		}
+
+		/* Remove only the actual retained native endpoint graph. */
+		dom_remove(node->first_child);
+		key = vm_key_from_ascii(heap, "referenceNode");
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
+		}
+
+		/* Resolve the original surviving native property after checked key allocation. */
+		error = vm_get(caller, saved, key, &answer);
+		if (error != 0)
+			goto cleanup;
+
+		/* Cursor repair to the actual root proves that the migrated subscription remains live. */
+		same = 0;
+		reference = bind_node_of(answer);
+		if (reference == node)
+			same = 1;
+		answer = vm_value_boolean(same);
 	} else if (kind == 27) {
 		/* The original creator getter resolves a current endpoint owned by the second retained child. */
 		key = vm_key_from_ascii(heap, "startContainer");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Actual removal in the destination Document invokes the migrated native Range token. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			node = bind_node_of(answer);
-			dom_remove(node->parent);
-			key = vm_key_from_ascii(heap, "collapsed");
-			if (key == VM_VALUE_EMPTY) {
-				error = ENOMEM;
-			} else {
-				error = vm_get(caller, saved, key, &answer);
-			}
+		if (error != 0)
+			goto cleanup;
+
+		/* Inspect only a completed genuine native operation result. */
+		node = bind_node_of(answer);
+		if (node == NULL || node->parent == NULL) {
+			error = EINVAL;
+			goto cleanup;
 		}
+
+		/* Remove only the actual retained native endpoint graph. */
+		dom_remove(node->parent);
+		key = vm_key_from_ascii(heap, "collapsed");
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
+		}
+
+		/* Resolve the original surviving native property after checked key allocation. */
+		error = vm_get(caller, saved, key, &answer);
+		if (error != 0)
+			goto cleanup;
 	} else if (kind == 26 || kind == 28) {
 		/* Resolve the retained child's native readonly boundary after manual primary destruction. */
 		key = vm_key_from_ascii(heap, "endOffset");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* The sole Range still owns the complete detached text interval. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			same = 0;
-			factory = vm_value_int32(4);
-			if (answer == factory)
-				same = 1;
-			answer = vm_value_boolean(same);
-		}
+		if (error != 0)
+			goto cleanup;
+		same = 0;
+		factory = vm_value_int32(4);
+		if (answer == factory)
+			same = 1;
+		answer = vm_value_boolean(same);
 	} else if (kind == 25) {
 		/* Resolve the retained child's actual native getter after primary C ownership is gone. */
 		key = vm_key_from_ascii(heap, "selected");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Owned selectedness remains true independently of a default attribute or live UI. */
 		error = vm_get(caller, saved, key, &answer);
+		if (error != 0)
+			goto cleanup;
 	} else if (kind == 21 || kind == 23) {
 		/* The native method resolves its retained actual child after manual primary destruction. */
-		key = vm_key_from_ascii(heap, "createCaption");
-		if (kind == 23)
+		if (kind != 23) {
+			key = vm_key_from_ascii(heap, "createCaption");
+			if (key == VM_VALUE_EMPTY) {
+				error = ENOMEM;
+				goto cleanup;
+			}
+		} else {
 			key = vm_key_from_ascii(heap, "insertRow");
-		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			if (key == VM_VALUE_EMPTY) {
+				error = ENOMEM;
+				goto cleanup;
+			}
 		}
 
 		/* The returned caption uses the retained child's exact native interface and Document. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0)
-			error = vm_call(caller, answer, saved, NULL, 0, &answer);
-		if (error == 0) {
-			node = bind_node_of(answer);
-			same = 0;
-			if (node != NULL && node->type == DOM_ELEMENT)
-				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "caption");
-			if (kind == 23 && node != NULL)
-				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "tr");
-			answer = vm_value_boolean(same);
-		}
+		if (error != 0)
+			goto cleanup;
+
+		/* Invoke the retained child callable through the original unrelated caller. */
+		error = vm_call(caller, answer, saved, NULL, 0, &answer);
+		if (error != 0)
+			goto cleanup;
+
+		/* Inspect only a completed genuine native operation result. */
+		node = bind_node_of(answer);
+		same = 0;
+		if (node != NULL && node->type == DOM_ELEMENT)
+			same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "caption");
+		if (kind == 23 &&
+		    node != NULL &&
+		    node->type == DOM_ELEMENT)
+			same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "tr");
+		answer = vm_value_boolean(same);
 	} else if (kind == 18) {
 		/* The retained managed child's readonly getter returns the actual detached input. */
 		key = vm_key_from_ascii(heap, "submitter");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Reading this field invokes the native child SubmitEvent accessor after primary destruction. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			node = bind_node_of(answer);
-			same = 0;
-			if (node != NULL && node->type == DOM_ELEMENT)
-				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "input");
-			answer = vm_value_boolean(same);
-		}
+		if (error != 0)
+			goto cleanup;
+
+		/* Inspect only a completed genuine native operation result. */
+		node = bind_node_of(answer);
+		same = 0;
+		if (node != NULL && node->type == DOM_ELEMENT)
+			same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "input");
+		answer = vm_value_boolean(same);
 	} else if (kind == 17) {
 		/* Calling click resolves a retained child native method without its former primary. */
 		key = vm_key_from_ascii(heap, "click");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* The child-created handler outlives the manually retired primary callback realm. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0)
-			error = vm_call(caller, answer, saved, NULL, 0, &answer);
+		if (error != 0)
+			goto cleanup;
+
+		/* Invoke the retained child callable through the original unrelated caller. */
+		error = vm_call(caller, answer, saved, NULL, 0, &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The handler value proves that actual untrusted event dispatch occurred after teardown. */
-		if (error == 0) {
-			key = vm_key_from_ascii(heap, "value");
-			if (key == VM_VALUE_EMPTY) {
-				error = ENOMEM;
-			} else {
-				error = vm_get(caller, saved, key, &answer);
-			}
+		key = vm_key_from_ascii(heap, "value");
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
 		}
 
+		/* Resolve the original surviving native property after checked key allocation. */
+		error = vm_get(caller, saved, key, &answer);
+		if (error != 0)
+			goto cleanup;
+
 		/* The shared lifetime assertion records both the invocation and child accessor result. */
-		if (error == 0) {
-			same = vm_value_is_string(answer);
-			if (same)
-				same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "owned");
-			answer = vm_value_boolean(same);
+		same = vm_value_is_string(answer);
+		if (!same) {
+			error = EINVAL;
+			goto cleanup;
 		}
+
+		/* Compare only the successfully returned native string value. */
+		same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "owned");
+		answer = vm_value_boolean(same);
 	} else if (kind == 15 || kind == 16) {
 		/* Reading value invokes the retained managed child's branded native accessor. */
 		key = vm_key_from_ascii(heap, "value");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Resolve the current value through the surviving child native getter. */
 		error = vm_get(caller, saved, key, &answer);
-		if (error == 0) {
-			/* The owned value remains available without a raw primary Window dependency. */
-			same = vm_value_is_string(answer);
-			if (same)
-				same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "owned");
-			answer = vm_value_boolean(same);
+		if (error != 0)
+			goto cleanup;
+
+		/* The owned value remains available without a raw primary Window dependency. */
+		same = vm_value_is_string(answer);
+		if (!same) {
+			error = EINVAL;
+			goto cleanup;
 		}
+
+		/* Compare only the successfully returned native string value. */
+		same = vm_string_equal_ascii((struct vm_string *)vm_value_as_cell(answer), "owned");
+		answer = vm_value_boolean(same);
 	} else if (kind == 11 ||
-	           kind == 12 ||
-	           kind == 13 ||
-	           kind == 14 ||
-	           kind == 19 ||
-	           kind == 20 ||
-	           kind == 24) {
+		   kind == 12 ||
+		   kind == 13 ||
+		   kind == 14 ||
+		   kind == 19 ||
+		   kind == 20 ||
+		   kind == 24) {
 		/* Resolve the child method after primary teardown, then invoke its live indexed getter. */
 		key = vm_key_from_ascii(heap, "item");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* The saved wrapper retains the child native function owner and its XML root. */
 		error = vm_get(caller, saved, key, &factory);
-		if (error == 0) {
-			arguments[0] = vm_value_int32(0);
-			error = vm_call(caller, factory, saved, arguments, 1, &answer);
-		}
+		if (error != 0)
+			goto cleanup;
+
+		/* Supply the original independent factory arguments after checked method lookup. */
+		arguments[0] = vm_value_int32(0);
+		error = vm_call(caller, factory, saved, arguments, 1, &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* Its current member can acquire a wrapper after all primary C ownership is gone. */
-		if (error == 0) {
-			node = bind_node_of(answer);
-			same = 0;
-			if (node != NULL && node->type == DOM_ELEMENT) {
-				if (kind == 11) {
-					same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "Next");
-				} else if (kind == 19) {
-					/* A table rows collection returns a real current child tr. */
-					same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "tr");
-				} else if (kind == 20) {
-					/* A sole cells collection returns its actual retained child td. */
-					same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "td");
-				} else if (kind == 24) {
-					/* A sole options collection returns an actual retained child option. */
-					same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "option");
-				} else if (kind == 13 || kind == 14) {
-					/* Both control families resolve members in the retained child realm. */
-					same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "input");
-				} else {
-					/* HTML parser Documents wrap form nodes in their managed child realm. */
-					same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "form");
-				}
+		node = bind_node_of(answer);
+		same = 0;
+		if (node != NULL && node->type == DOM_ELEMENT) {
+			if (kind == 11) {
+				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "Next");
+			} else if (kind == 19) {
+				/* A table rows collection returns a real current child tr. */
+				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "tr");
+			} else if (kind == 20) {
+				/* A sole cells collection returns its actual retained child td. */
+				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "td");
+			} else if (kind == 24) {
+				/* A sole options collection returns an actual retained child option. */
+				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "option");
+			} else if (kind == 13 || kind == 14) {
+				/* Both control families resolve members in the retained child realm. */
+				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "input");
+			} else {
+				/* HTML parser Documents wrap form nodes in their managed child realm. */
+				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "form");
 			}
-
-			/* The generic assertion records this independent live collection observation. */
-			answer = vm_value_boolean(same);
 		}
+
+		/* The generic assertion records this independent live collection observation. */
+		answer = vm_value_boolean(same);
 	} else if (kind == 9 || kind == 10) {
 		/* Child-created traversal retains both an XML root and its actual callback. */
 		key = vm_key_from_ascii(heap, "nextNode");
 		if (key == VM_VALUE_EMPTY) {
-			vm_realm_destroy(caller);
-			vm_heap_remove_root(heap, &root);
-			vm_heap_destroy(heap);
-			return ENOMEM;
+			error = ENOMEM;
+			goto cleanup;
 		}
 
 		/* Invokes surviving child navigation and filtering after primary teardown. */
 		error = vm_get(caller, saved, key, &factory);
-		if (error == 0)
-			error = vm_call(caller, factory, saved, NULL, 0, &answer);
+		if (error != 0)
+			goto cleanup;
+
+		/* Invoke the retained child callable through the original unrelated caller. */
+		error = vm_call(caller, factory, saved, NULL, 0, &answer);
+		if (error != 0)
+			goto cleanup;
 
 		/* The accepted XML node preserves its original spelling and owner Document. */
-		if (error == 0) {
-			node = bind_node_of(answer);
-			same = 0;
-			if (node != NULL && node->type == DOM_ELEMENT) {
-				same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "Next");
-			}
-
-			/* The generic lifetime observation consumes this independent navigation result. */
-			answer = vm_value_boolean(same);
+		node = bind_node_of(answer);
+		same = 0;
+		if (node != NULL && node->type == DOM_ELEMENT) {
+			same = vm_string_equal_ascii(((struct dom_element *)node)->local_name, "Next");
 		}
+
+		/* The generic lifetime observation consumes this independent navigation result. */
+		answer = vm_value_boolean(same);
 	} else {
 		/* A retained Window keeps its own closed getter and realm usable. */
 		key = vm_key_from_ascii(heap, "closed");
+		if (key == VM_VALUE_EMPTY) {
+			error = ENOMEM;
+			goto cleanup;
+		}
+
+		/* Invoke the original native access only after checked owner or key construction. */
 		error = vm_get(caller, vm_value_cell(root), key, &answer);
+		if (error != 0)
+			goto cleanup;
 	}
 
 	/* The selected child API must complete successfully with its expected state. */
@@ -1168,6 +1372,7 @@ frame_retention(
 		same = 1;
 	frame_check(same, "saved child remains usable after parent teardown");
 	vm_realm_destroy(caller);
+	caller = NULL;
 
 	/* Releasing the last selected cell permits the managed host to be reclaimed. */
 	root = NULL;
@@ -1182,8 +1387,15 @@ frame_retention(
 	if (released == before + owners)
 		same = 1;
 	frame_check(same, "repeated collection does not release iframe twice");
+
+cleanup:
+	/* Release the unrelated caller and original acquired saved slot on every native refusal. */
+	vm_heap_set_stack_base(heap, stack_base);
+	vm_realm_destroy(caller);
 	vm_heap_remove_root(heap, &root);
 	vm_heap_destroy(heap);
+	if (error != 0)
+		return error;
 
 	/* Succeeded: this selected saved-reference path was exercised completely. */
 	return 0;

@@ -63,7 +63,7 @@ WAYLAND_LINUX_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/wayland/dmabuf/gpu-dmabuf.c \
 	userland/desktop/wayland/linux/sync-linux.c \
 	userland/desktop/wayland/linux/input-seat-linux.c
-$(eval $(call KEILAND_LINUX_PROGRAM,wayland,bin,$(WAYLAND_LINUX_SOURCES),libkeiland.so libtruetype.so libpng-compat.so libz-compat.so libvulkan.so.1,-lm))
+$(eval $(call KEILAND_LINUX_PROGRAM,wayland,bin,$(WAYLAND_LINUX_SOURCES),libkeiland.so libkeiland-backend.a libtruetype.so libpng-compat.so libz-compat.so libvulkan.so.1,-lm))
 
 $(eval $(call KEILAND_LINUX_DATA,share/fonts/keiland.ttf,userland/desktop/fonts/Inter.ttf))
 $(eval $(call KEILAND_LINUX_DATA,share/fonts/keiland-mono.ttf,userland/desktop/fonts/JetBrainsMono-Regular.ttf))

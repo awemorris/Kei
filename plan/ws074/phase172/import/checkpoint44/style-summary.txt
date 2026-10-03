@@ -1,0 +1,7 @@
+plan/ws074/tests/host-insertion.c goto=9
+plan/ws074/tests/host-mutation-record.c goto=15
+plan/ws074/tests/host-style-sheet.c goto=31
+plan/ws074/tests/host-submit.c goto=10
+plan/ws074/tests/host-table-mutation.c goto=8
+plan/ws074/tests/host-table-row.c goto=12
+total 85

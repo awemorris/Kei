@@ -1,0 +1,46 @@
+map 3-1-2 6,2,4 2
+sort 1,10,2,5 1,2,5,10 4
+stable bdac
+splice 2,3 1,a,b,c,4,5 6
+search 2 false true -1 4,5 5,4,c,b,a,1
+make 1,2,3,4 1,2,3,4 true 3 7
+reduce 6 321 1,2,3 ,1 1
+ends 0,1,2 0 2 1
+copies 1,2,3 1,9,3 3,2,1 1,4
+find 2 1 undefined
+every true true 0,7,7 4,5,3,4,5
+from x,y 0,1,4 2
+holes 3 false 3 0,2
+length 2 undefined p+q
+case HELLO, WORLD hello, world STRASSE ας σας 2
+search 4 8 true true true World Hello Wor
+pad x| ababab 005 5-- o 72 128512 2
+make Hi 2 a,bc1 1 d 123 1
+wrapper object [object String] xy b 0,1
+trim 1 a |  a| undefined 
+wellformed false 65533 true
+positions true true false 2
+repeat RangeError
+parse 5 -300 3 a,b,__proto__
+stringify {"a":[1,2.5,-300,true,null],"b":{"c":"xA\n"},"__proto__":1} [null,null,null,"q\"\\"] {"d":1}
+indent {
+  "a": 1,
+  "b": [
+    1,
+    2
+  ],
+  "e": {},
+  "f": []
+}
+indent-string [
+--1,
+--{
+----"x": 2
+--}
+]
+replacer {"a":1,"c":3} {"a":10}
+reviver 2,3,4
+cycle TypeError
+bad SyntaxError
+special "\ud800" 5 undefined 3 0
+numbers [1e+21,0.1,-1.5e-7,null] true 100

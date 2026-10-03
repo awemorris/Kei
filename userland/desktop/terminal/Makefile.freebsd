@@ -10,5 +10,7 @@ KEILAND_FREEBSD_TERMINAL_SOURCES := userland/desktop/terminal/main.c \
 	userland/desktop/terminal/clipboard.c \
 	userland/desktop/terminal/tabs.c \
 	userland/desktop/terminal/primary.c \
-	userland/desktop/terminal/touch.c
+	userland/desktop/terminal/touch.c \
+	userland/desktop/terminal/width.c \
+	userland/desktop/terminal/settings.c
 $(eval $(call KEILAND_FREEBSD_PROGRAM,terminal,bin,$(KEILAND_FREEBSD_TERMINAL_SOURCES),libkeiui.so libkeiland.so libwayland-client.so libtruetype.so libvulkan.so.1,-lm -lutil))

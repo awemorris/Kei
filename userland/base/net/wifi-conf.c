@@ -9,6 +9,8 @@
 #define WIFI_CONF_HEADER "wifi-conf 1\n"
 #define WIFI_CONF_SECURITY "wpa2-personal-ccmp"
 
+static int conf_find(const struct wifi_conf_model *model, const void *ssid, size_t ssid_length);
+
 static int
 wifi_conf_fail(char *error, size_t capacity, int number, const char *format,
 	       ...)
@@ -831,6 +833,208 @@ wifi_conf_set_key(struct wifi_conf_model *model, const void *ssid_pointer,
 
 	/* Reports successful completion. */
 	return 0;
+}
+
+/*
+ * Adds a profile for an SSID the model does not hold yet.
+ *
+ * A saved SSID is refused with EEXIST, so that a typing mistake never
+ * replaces a working key without being asked to (`net wifi modify` does
+ * that); everything else is wifi_conf_set_key's.
+ */
+int
+wifi_conf_add(
+	struct wifi_conf_model *model,
+	const void *ssid,
+	size_t ssid_length,
+	const void *passphrase,
+	size_t passphrase_length,
+	int automatic,
+	char *error,
+	size_t error_capacity)
+{
+	int found;
+	int added;
+
+	/* Refuses a missing model. */
+	if (model == NULL) {
+		(void)wifi_conf_fail(error, error_capacity, EINVAL, "wifi.conf: invalid add arguments");
+		return -1;
+	}
+
+	/* Refuses an SSID that is saved already. */
+	found = conf_find(model, ssid, ssid_length);
+	if (found >= 0) {
+		(void)wifi_conf_fail(error, error_capacity, EEXIST, "wifi.conf: the network is saved already; use modify to change it");
+		return -1;
+	}
+
+	/* Appends the profile, which checks its fields and the store's limits. */
+	added = wifi_conf_set_key(model, ssid, ssid_length, passphrase, passphrase_length, automatic, error, error_capacity);
+	if (added != 0)
+		return -1;
+
+	/* Succeeded: the model holds the new profile. */
+	return 0;
+}
+
+/*
+ * Changes a saved profile in place.
+ *
+ * Only what is given changes: a NULL passphrase keeps the saved key and an
+ * automatic of -1 keeps the saved mode.  An SSID that is not saved is
+ * refused with ENOENT.
+ */
+int
+wifi_conf_modify(
+	struct wifi_conf_model *model,
+	const void *ssid,
+	size_t ssid_length,
+	const void *passphrase,
+	size_t passphrase_length,
+	int automatic,
+	char *error,
+	size_t error_capacity)
+{
+	unsigned char kept[WIFI_CONF_PASSPHRASE_MAX];
+	const struct wifi_conf_profile *profile;
+	size_t kept_length;
+	int found;
+	int changed;
+
+	/* Refuses a missing model. */
+	if (model == NULL) {
+		(void)wifi_conf_fail(error, error_capacity, EINVAL, "wifi.conf: invalid modify arguments");
+		return -1;
+	}
+
+	/* Refuses a request that changes nothing. */
+	if (passphrase == NULL && automatic == -1) {
+		(void)wifi_conf_fail(error, error_capacity, EINVAL, "wifi.conf: modify needs a new key or mode");
+		return -1;
+	}
+
+	/* Refuses a mode that is neither kept, manual nor automatic. */
+	if (automatic != -1 &&
+	    automatic != 0 &&
+	    automatic != 1) {
+		(void)wifi_conf_fail(error, error_capacity, EINVAL, "wifi.conf: command mode is invalid");
+		return -1;
+	}
+
+	/* Refuses an SSID that is not saved. */
+	found = conf_find(model, ssid, ssid_length);
+	if (found < 0) {
+		(void)wifi_conf_fail(error, error_capacity, ENOENT, "wifi.conf: the network is not saved");
+		return -1;
+	}
+
+	/* A mode not given is the saved profile's. */
+	profile = &model->profiles[found];
+	if (automatic == -1)
+		automatic = profile->automatic;
+
+	/* A key not given is the saved profile's, copied because the replacement wipes the slot. */
+	kept_length = 0U;
+	if (passphrase == NULL) {
+		kept_length = profile->passphrase_length;
+		memcpy(kept, profile->passphrase, kept_length);
+		passphrase = kept;
+		passphrase_length = kept_length;
+	}
+
+	/* Replaces the profile where it stands; the copy of a kept key is wiped either way. */
+	changed = wifi_conf_set_key(model, ssid, ssid_length, passphrase, passphrase_length, automatic, error, error_capacity);
+	wifi_conf_explicit_clear(kept, sizeof(kept));
+	if (changed != 0)
+		return -1;
+
+	/* Succeeded: the profile holds the new key or mode. */
+	return 0;
+}
+
+/*
+ * Removes a saved profile.
+ *
+ * The profiles after it keep their order, and the removed key is wiped
+ * from the model.  An SSID that is not saved is refused with ENOENT.
+ */
+int
+wifi_conf_delete(
+	struct wifi_conf_model *model,
+	const void *ssid,
+	size_t ssid_length,
+	char *error,
+	size_t error_capacity)
+{
+	struct wifi_conf_profile *profile;
+	size_t slot;
+	size_t after;
+	int found;
+
+	/* Refuses a missing model or SSID. */
+	if (model == NULL || ssid == NULL) {
+		(void)wifi_conf_fail(error, error_capacity, EINVAL, "wifi.conf: invalid delete arguments");
+		return -1;
+	}
+
+	/* Refuses an SSID outside a profile's bounds. */
+	if (ssid_length == 0U || ssid_length > WIFI_CONF_SSID_MAX) {
+		(void)wifi_conf_fail(error, error_capacity, EINVAL, "wifi.conf: command SSID is outside length bounds");
+		return -1;
+	}
+
+	/* Refuses an SSID that is not saved. */
+	found = conf_find(model, ssid, ssid_length);
+	if (found < 0) {
+		(void)wifi_conf_fail(error, error_capacity, ENOENT, "wifi.conf: the network is not saved");
+		return -1;
+	}
+
+	/* The key leaves the model's total, and the later profiles move down over it. */
+	slot = (size_t)found;
+	profile = &model->profiles[slot];
+	model->passphrase_bytes -= profile->passphrase_length;
+	after = model->profile_count - slot - 1U;
+	wifi_conf_explicit_clear(profile, sizeof(*profile));
+	memmove(profile, profile + 1, after * sizeof(*profile));
+	model->profile_count--;
+	wifi_conf_explicit_clear(&model->profiles[model->profile_count], sizeof(*profile));
+
+	/* Succeeded: the SSID is no longer saved. */
+	return 0;
+}
+
+/* Finds a saved SSID; returns its slot, or -1 when it is not saved. */
+static int
+conf_find(
+	const struct wifi_conf_model *model,
+	const void *ssid,
+	size_t ssid_length)
+{
+	const struct wifi_conf_profile *profile;
+	size_t index;
+	int differs;
+
+	/* An SSID without bytes or longer than a profile holds is never saved. */
+	if (ssid == NULL || ssid_length == 0U || ssid_length > WIFI_CONF_SSID_MAX)
+		return -1;
+
+	/* Each profile, compared by its whole SSID. */
+	for (index = 0U; index < model->profile_count; index++) {
+		profile = &model->profiles[index];
+		if (profile->ssid_length != ssid_length)
+			continue;
+		differs = memcmp(profile->ssid, ssid, ssid_length);
+		if (differs != 0)
+			continue;
+
+		/* Succeeded: the SSID is saved in this slot. */
+		return (int)index;
+	}
+
+	/* The SSID is not saved. */
+	return -1;
 }
 
 static size_t

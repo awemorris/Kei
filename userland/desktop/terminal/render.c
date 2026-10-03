@@ -1093,6 +1093,7 @@ render_build(
 {
 	static const struct terminal_cell empty = { ' ', TERMINAL_FOREGROUND, TERMINAL_BACKGROUND, 0 };
 	const struct terminal_cell *cell;
+	const struct terminal_cell *next;
 	float *vertex;
 	float *start;
 	uint32_t foreground;
@@ -1110,6 +1111,9 @@ render_build(
 	int last_row;
 	int inside;
 	int selected;
+	int wide;
+	int cursor_here;
+	unsigned cells;
 	unsigned slot;
 	unsigned blank;
 	float x;
@@ -1159,33 +1163,73 @@ render_build(
 			if (cell == NULL)
 				cell = &empty;
 
-			/* The glyph's slot: the blank for spaces and continuations. */
+			/*
+			 * A character whose right half is the next cell is drawn once,
+			 * two cells wide, and the right half is not drawn on its own
+			 * (ws128-p009).  A left half whose right half was written over
+			 * is drawn in its one cell.
+			 */
+			wide = 0;
+			if (cell->continuation == 0 &&
+			    cell->codepoint != 0U &&
+			    column + 1U < screen->columns) {
+				/* The cell to the right, which is this one's right half when it is a continuation. */
+				next = terminal_screen_line_cell(screen, column + 1U, line);
+				if (next != NULL && next->continuation != 0)
+					wide = 1;
+			}
+
+			/* The glyph's slot: the blank for spaces and continuations, two slots for a wide character. */
+			cells = 1U;
 			slot = blank;
-			if (cell->continuation == 0 && cell->codepoint != ' ' && cell->codepoint != 0U)
+			if (wide) {
+				cells = 2U;
+				slot = terminal_font_wide_slot(font, cell->codepoint);
+			} else if (cell->continuation == 0 &&
+				   cell->codepoint != ' ' &&
+				   cell->codepoint != 0U) {
 				slot = terminal_font_slot(font, cell->codepoint);
+			}
 
 			/*
 			 * A selected screen (Edit > Select All, the live screen's lines)
-			 * or cell (the pointer's range) has the selection's background.
+			 * or cell (the pointer's range, either half of a wide
+			 * character) has the selection's background.
 			 */
 			foreground = cell->foreground;
 			background = cell->background;
 			inside = terminal_screen_in_range(screen, column, line);
+			if (!inside && wide)
+				inside = terminal_screen_in_range(screen, column + 1U, line);
 			selected = 0;
 			if (screen->selected && line >= screen->scrolled)
 				selected = 1;
 			if (selected || inside)
 				background = TERMINAL_SELECTION;
 
+			/* Whether the cursor is on this cell, or on the right half of this wide character. */
+			cursor_here = 0;
+			if (screen->cursor_visible && line == cursor_line) {
+				/* The cursor's column is this cell, or the right half drawn with it. */
+				if (column == screen->cursor_column)
+					cursor_here = 1;
+				else if (wide && column + 1U == screen->cursor_column)
+					cursor_here = 1;
+			}
+
 			/* The cursor's cell is drawn with its colours swapped: a block cursor. */
-			if (screen->cursor_visible && column == screen->cursor_column && line == cursor_line) {
+			if (cursor_here) {
 				foreground = cell->background;
 				background = cell->foreground;
 			}
 
-			/* The cell's two triangles. */
+			/* The cell's two triangles, over both cells of a wide character. */
 			x = (float)(TERMINAL_PADDING + column * font->cell_width);
-			vertex = render_quad(vertex, font, x, y, (float)font->cell_width, (float)font->cell_height, slot, foreground, background);
+			vertex = render_quad(vertex, font, x, y, (float)(cells * font->cell_width), (float)font->cell_height, slot, foreground, background);
+
+			/* The right half of a wide character is drawn with its left. */
+			if (wide)
+				column++;
 		}
 	}
 
@@ -1193,7 +1237,11 @@ render_build(
 	return (uint32_t)((size_t)(vertex - start) / RENDER_VERTEX_FLOATS);
 }
 
-/* Writes the six vertices of one quad showing a slot of the atlas, and returns where the next quad goes. */
+/*
+ * Writes the six vertices of one quad showing a slot of the atlas (as wide
+ * as the quad: two slots side by side for a wide character), and returns
+ * where the next quad goes.
+ */
 static float *
 render_quad(
 	float *vertex,
@@ -1221,7 +1269,7 @@ render_quad(
 	per_row = font->atlas_width / font->cell_width;
 	u = (float)((slot % per_row) * font->cell_width) / (float)font->atlas_width;
 	v = (float)((slot / per_row) * font->cell_height) / (float)font->atlas_height;
-	slot_width = (float)font->cell_width / (float)font->atlas_width;
+	slot_width = width / (float)font->atlas_width;
 	slot_height = (float)font->cell_height / (float)font->atlas_height;
 
 	/* Each corner: position and atlas place, then the two colours. */

@@ -47,8 +47,8 @@
 extern "C" {
 #endif
 
-/* The interface version this header describes (1: the drawing -- canvas, text, icons and the theme; 2: the scroll, the input and the text view's touch; 3: the window, the clipboard and the primary selection; 4: the widgets, the keyboard's focus and the theme's controls; 5: the file chooser, moved from libkeiland, and a list's touched rows; 6: the window's text input, text an input method or the on-screen keyboard sends; 7: the on-screen keyboard's inset and the caret kept in sight; 8: the editing operations of the on-screen keyboard's buttons; 9: colour emoji from the emoji font, a third face; 10: the window's full screen, asked for and as configured; 11: waiting for other descriptors with the compositor, the pointer's input at the compositor's time, and a window made fullscreen). */
-#define KUI_VERSION	11U
+/* The interface version this header describes (1: the drawing -- canvas, text, icons and the theme; 2: the scroll, the input and the text view's touch; 3: the window, the clipboard and the primary selection; 4: the widgets, the keyboard's focus and the theme's controls; 5: the file chooser, moved from libkeiland, and a list's touched rows; 6: the window's text input, text an input method or the on-screen keyboard sends; 7: the on-screen keyboard's inset and the caret kept in sight; 8: the editing operations of the on-screen keyboard's buttons; 9: colour emoji from the emoji font, a third face; 10: the window's full screen, asked for and as configured; 11: waiting for other descriptors with the compositor, the pointer's input at the compositor's time, and a window made fullscreen; 12: the overlay scroll bar). */
+#define KUI_VERSION	12U
 
 /*
  * Reports the interface version of the library that was loaded.
@@ -416,6 +416,71 @@ int kui_scroll_step(struct kui_scroll *scroll, uint64_t now_us);
 double kui_scroll_limit_x(const struct kui_scroll *scroll);
 double kui_scroll_limit_y(const struct kui_scroll *scroll);
 int kui_scroll_draw_bars(const struct kui_scroll *scroll, struct kui_canvas *canvas, const struct kui_rect *viewport, const struct kui_theme *theme, uint64_t now_us);
+
+/*
+ * The overlay scroll bar (scroll-bar.c, KUI_VERSION 12, ws127-p002): the
+ * vertical bar of a view, drawn over its content's right edge the way
+ * macOS draws one (the user's choice of 2026-10-02).  It comes out thin
+ * while the content moves, grows thick (with a faint track) while the
+ * pointer is near the edge or drags it, and fades a while after the last
+ * of these.  A press on the thumb drags the content; a press on the track
+ * moves it a page towards the press.
+ *
+ * The state knows nothing of the window or of drawing: the application
+ * tells it what happened (its sizes are in the content's pixels, offset
+ * is how far the content is scrolled), asks for the shape to draw with its
+ * own canvas (kui_scroll_bar_draw draws it on a kui_canvas), and draws
+ * again while kui_scroll_bar_busy says the bar still changes.  The times
+ * are microseconds of one clock.
+ */
+#define KUI_SCROLL_BAR_THIN	6
+#define KUI_SCROLL_BAR_THICK	11
+#define KUI_SCROLL_BAR_REACH	16
+#define KUI_SCROLL_BAR_GAP	2
+#define KUI_SCROLL_BAR_MIN	28
+#define KUI_SCROLL_BAR_SHOW_US	1000000U
+#define KUI_SCROLL_BAR_FADE_US	400000U
+
+/*
+ * The state of one overlay bar.  active_us is when the content last moved
+ * or the pointer last came near or dragged (0 before any); near says the
+ * pointer is over the bar's band; dragging and grab (where in the thumb the
+ * drag holds it) belong to a press on the thumb.  Zeroed, it is a bar that
+ * has not shown yet.
+ */
+struct kui_scroll_bar {
+	uint64_t active_us;
+	int near;
+	int dragging;
+	double grab;
+};
+
+/*
+ * What to draw now: the track (shown while the bar is thick) and the
+ * thumb, in the window's pixels, and the strength of the ink (0 to 1).
+ */
+struct kui_scroll_bar_shape {
+	double track_x;
+	double track_y;
+	double track_width;
+	double track_height;
+	double thumb_x;
+	double thumb_y;
+	double thumb_width;
+	double thumb_height;
+	double alpha;
+	int thick;
+};
+
+void kui_scroll_bar_moved(struct kui_scroll_bar *bar, uint64_t now_us);
+int kui_scroll_bar_hover(struct kui_scroll_bar *bar, const struct kui_rect *viewport, double content, double x, double y, uint64_t now_us);
+int kui_scroll_bar_leave(struct kui_scroll_bar *bar, uint64_t now_us);
+int kui_scroll_bar_shape(const struct kui_scroll_bar *bar, const struct kui_rect *viewport, double content, double offset, uint64_t now_us, struct kui_scroll_bar_shape *shape);
+int kui_scroll_bar_press(struct kui_scroll_bar *bar, const struct kui_rect *viewport, double content, double offset, double x, double y, uint64_t now_us, double *new_offset);
+int kui_scroll_bar_drag(struct kui_scroll_bar *bar, const struct kui_rect *viewport, double content, double y, uint64_t now_us, double *new_offset);
+int kui_scroll_bar_release(struct kui_scroll_bar *bar, uint64_t now_us);
+int kui_scroll_bar_busy(const struct kui_scroll_bar *bar, uint64_t now_us);
+int kui_scroll_bar_draw(const struct kui_scroll_bar *bar, struct kui_canvas *canvas, const struct kui_rect *viewport, double content, double offset, uint64_t now_us);
 
 /*
  * The keys (input.c, KUI_VERSION 2).  zdesktop forwards evdev key codes

@@ -37,31 +37,30 @@ struct control_type {
  * the life of the program and ends with a NULL name.
  */
 static const struct control_type control_types[] = {
-	{ "text", DOM_CONTROL_TEXT },
-	{ "search", DOM_CONTROL_TEXT },
-	{ "email", DOM_CONTROL_TEXT },
-	{ "url", DOM_CONTROL_TEXT },
-	{ "tel", DOM_CONTROL_TEXT },
-	{ "number", DOM_CONTROL_TEXT },
-	{ "password", DOM_CONTROL_PASSWORD },
-	{ "button", DOM_CONTROL_BUTTON },
-	{ "submit", DOM_CONTROL_SUBMIT },
-	{ "image", DOM_CONTROL_SUBMIT },
-	{ "reset", DOM_CONTROL_RESET },
-	{ "checkbox", DOM_CONTROL_CHECKBOX },
-	{ "radio", DOM_CONTROL_RADIO },
-	{ "hidden", DOM_CONTROL_HIDDEN },
-	{ NULL, DOM_CONTROL_NONE }
-};
+    {"text", DOM_CONTROL_TEXT},
+    {"search", DOM_CONTROL_TEXT},
+    {"email", DOM_CONTROL_TEXT},
+    {"url", DOM_CONTROL_TEXT},
+    {"tel", DOM_CONTROL_TEXT},
+    {"number", DOM_CONTROL_TEXT},
+    {"password", DOM_CONTROL_PASSWORD},
+    {"button", DOM_CONTROL_BUTTON},
+    {"submit", DOM_CONTROL_SUBMIT},
+    {"image", DOM_CONTROL_SUBMIT},
+    {"reset", DOM_CONTROL_RESET},
+    {"checkbox", DOM_CONTROL_CHECKBOX},
+    {"radio", DOM_CONTROL_RADIO},
+    {"hidden", DOM_CONTROL_HIDDEN},
+    {NULL, DOM_CONTROL_NONE}};
 
 static int control_equal_folded(const struct vm_string *string, const char *ascii);
 static int control_text_of(const struct dom_node *node, struct wb_units *out);
 
 /*
- * Tells which kind of form control an element is: an <input> by its type
- * (a missing or unknown type is a text field), a <button> by its type (a
- * submit button unless it says otherwise), a <textarea>; DOM_CONTROL_NONE
- * for any other element.
+ * Classifies an element's current native form-control kind.
+ *
+ * Missing or unknown input types are text fields; buttons submit by default.
+ * Textarea and select retain their own kinds; other elements have no control.
  */
 int
 dom_control_kind(
@@ -78,16 +77,22 @@ dom_control_kind(
 	/* A textarea and a select are always one. */
 	if (element->tag == DOM_TAG_TEXTAREA)
 		return DOM_CONTROL_TEXTAREA;
+
+	/* A select owns its option state independently of any type attribute. */
 	if (element->tag == DOM_TAG_SELECT)
 		return DOM_CONTROL_SELECT;
 
 	/* A <button> submits unless its type makes it a plain or a reset button. */
 	type = dom_attribute_ascii(element, "type");
 	if (element->tag == DOM_TAG_BUTTON) {
+		/* Only an actual type attribute can override the button's submit default. */
 		if (type != NULL) {
+			/* The plain button type suppresses submission behavior. */
 			same = control_equal_folded(type, "button");
 			if (same)
 				return DOM_CONTROL_BUTTON;
+
+			/* The reset type selects the established form-reset behavior. */
 			same = control_equal_folded(type, "reset");
 			if (same)
 				return DOM_CONTROL_RESET;
@@ -107,18 +112,20 @@ dom_control_kind(
 
 	/* The type's kind, by its name in any case. */
 	for (index = 0; control_types[index].name != NULL; index++) {
+		/* Content input types match their ordinary ASCII names without case sensitivity. */
 		same = control_equal_folded(type, control_types[index].name);
 		if (same)
 			return control_types[index].kind;
 	}
 
-	/* An unknown type is a text field. */
+	/* Succeeded: an unknown content type uses the ordinary text-field default. */
 	return DOM_CONTROL_TEXT;
 }
 
 /*
- * Finds an element's control state, making an empty one the first time
- * (it follows the attributes until it is made dirty); NULL without memory.
+ * Resolves an element's control state or creates its first clean state.
+ *
+ * Clean state follows content attributes; allocation failure returns NULL.
  */
 struct dom_control *
 dom_control_of(
@@ -134,17 +141,22 @@ dom_control_of(
 	control = calloc(1, sizeof(*control));
 	if (control == NULL)
 		return NULL;
+
+	/* Clean native text state starts without an independently owned value buffer. */
 	wb_units_init(&control->value);
 
 	/* The element owns it from now on. */
 	element->control = control;
+
+	/* Succeeded: the element retains this clean control until normal finalization. */
 	return control;
 }
 
 /*
- * Writes a control's value into out (which it clears first): its own value
- * once dirty, else a textarea's text or the value attribute (empty when
- * there is none).
+ * Writes a control's current native value into cleared output storage.
+ *
+ * Dirty state overrides textarea text or the input value attribute;
+ * an absent clean value remains empty.
  */
 int
 dom_control_value(
@@ -158,15 +170,25 @@ dom_control_value(
 
 	/* A dirty value is the control's own. */
 	wb_units_clear(out);
+
+	/* Dirty state remains independent of later default text and attribute changes. */
 	if (element->control != NULL && element->control->dirty) {
 		error = wb_units_append(out, element->control->value.data, element->control->value.length);
-		return error;
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the caller receives the control's owned dirty value. */
+		return 0;
 	}
 
 	/* A textarea's default value is its text. */
 	if (element->tag == DOM_TAG_TEXTAREA) {
 		error = control_text_of(&element->node, out);
-		return error;
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the caller receives the textarea's ordinary default text. */
+		return 0;
 	}
 
 	/* An input's default value is its value attribute. */
@@ -176,6 +198,7 @@ dom_control_value(
 
 	/* The attribute's units. */
 	for (index = 0; index < attribute->length; index++) {
+		/* Copies each actual attribute unit without changing its owning atom. */
 		unit = vm_string_at(attribute, index);
 		error = wb_units_append(out, &unit, 1);
 		if (error != 0)
@@ -187,8 +210,9 @@ dom_control_value(
 }
 
 /*
- * Sets a control's value, making it dirty (the attribute no longer counts),
- * and puts the caret at its end.
+ * Replaces a control's native value and sets its dirty state and caret.
+ *
+ * The content value attribute no longer overrides the completed replacement.
  */
 int
 dom_control_set_value(
@@ -222,9 +246,9 @@ dom_control_set_value(
 }
 
 /*
- * Writes the text a button shows into out (which it clears first): its
- * value attribute, or else the label its kind has by default ("Submit",
- * "Reset", nothing for a plain button).
+ * Writes a button's current native label into cleared output storage.
+ *
+ * The value attribute overrides Submit, Reset or the plain button's empty label.
  */
 int
 dom_control_label(
@@ -242,7 +266,9 @@ dom_control_label(
 	wb_units_clear(out);
 	attribute = dom_attribute_ascii(element, "value");
 	if (attribute != NULL) {
+		/* Copies the complete content value instead of a default button-kind label. */
 		for (index = 0; index < attribute->length; index++) {
+			/* Appends each actual attribute unit in its original order. */
 			unit = vm_string_at(attribute, index);
 			error = wb_units_append(out, &unit, 1);
 			if (error != 0)
@@ -258,11 +284,14 @@ dom_control_label(
 	fallback = "";
 	if (kind == DOM_CONTROL_SUBMIT)
 		fallback = "Submit";
+
+	/* Only an actual reset kind overrides the remaining empty default. */
 	if (kind == DOM_CONTROL_RESET)
 		fallback = "Reset";
 
 	/* Its characters, which are ASCII. */
 	for (index = 0; fallback[index] != '\0'; index++) {
+		/* Each established default-label byte is one ordinary ASCII unit. */
 		unit = (uint16_t)(unsigned char)fallback[index];
 		error = wb_units_append(out, &unit, 1);
 		if (error != 0)
@@ -286,26 +315,30 @@ dom_select_chosen(
 	/* The consumer observes owned state without changing a script's explicit empty selection. */
 	node = dom_select_option_next(&select->node, NULL);
 	while (node != NULL) {
+		/* The live option's own selected state decides whether it is displayed. */
 		option = (struct dom_element *)node;
 		if (option->option_selected)
 			return option;
+
+		/* Advances in the select's actual option order without mutating selection. */
 		node = dom_select_option_next(&select->node, node);
 	}
 
-	/* No current option is selected, including an explicitly cleared single-select list. */
+	/* Succeeded: the actual list has no selection, including an explicitly cleared single select. */
 	return NULL;
 }
 
 /*
- * Writes an option's label into out (which it clears first): its text,
- * with runs of whitespace collapsed to one space and the ends trimmed, as
- * a select shows it.
+ * Writes an option's collapsed native text label into cleared output storage.
+ *
+ * Leading and trailing whitespace is trimmed; internal runs become one space.
  */
 int
 dom_option_text(
 	const struct dom_element *option,
 	struct wb_units *out)
 {
+	/* Each collapsed internal whitespace run contributes this single ordinary space. */
 	static const uint16_t space = 0x20U;
 	struct wb_units text;
 	size_t index;
@@ -318,10 +351,15 @@ dom_option_text(
 	wb_units_clear(out);
 	wb_units_init(&text);
 	error = control_text_of(&option->node, &text);
+	if (error != 0) {
+		wb_units_release(&text);
+		return error;
+	}
 
 	/* Each character, a run of spaces kept as one space between words. */
 	pending = 0;
 	for (index = 0; index < text.length && error == 0; index++) {
+		/* Classifies each actual text unit before extending the normalized label. */
 		unit = text.data[index];
 		is_space = 0;
 
@@ -345,25 +383,34 @@ dom_option_text(
 		}
 
 		/* A space goes before a word that follows another. */
-		if (pending && out->length != 0)
+		if (pending && out->length != 0) {
 			error = wb_units_append(out, &space, 1);
+			if (error != 0) {
+				wb_units_release(&text);
+				return error;
+			}
+		}
+
+		/* Appends the current word unit only after any internal separator succeeded. */
 		pending = 0;
-		if (error == 0)
-			error = wb_units_append(out, &unit, 1);
+		error = wb_units_append(out, &unit, 1);
+		if (error != 0) {
+			wb_units_release(&text);
+			return error;
+		}
 	}
 
 	/* The text is no longer needed. */
 	wb_units_release(&text);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: the label is written. */
 	return 0;
 }
 
 /*
- * Tells whether a checkbox or a radio button is checked: its own
- * checkedness once the user changed it, else its checked attribute.
+ * Reports a checkbox's or radio's current native checkedness.
+ *
+ * Initialized or dirty state overrides the default checked attribute.
  */
 int
 dom_control_checked(
@@ -381,13 +428,12 @@ dom_control_checked(
 	if (attribute == NULL)
 		return 0;
 
-	/* The attribute is there. */
+	/* Succeeded: the actual default checked attribute is present. */
 	return 1;
 }
 
 /*
- * Frees an element's control state (its finalizer's part; the element keeps
- * no pointer to it afterwards).
+ * Releases an element's owned control state during native finalization.
  */
 void
 dom_control_free(
@@ -401,12 +447,15 @@ dom_control_free(
 	wb_units_release(&element->control->value);
 	free(element->control);
 	element->control = NULL;
+
+	/* Succeeded: the element owns no control buffer or stale state pointer. */
+	return;
 }
 
 /*
- * Finds the value of an element's attribute in no namespace by its ASCII
- * name in lower case (the parser folds HTML attribute names); NULL when the
- * element has none.
+ * Resolves an element's no-namespace attribute by its exact ASCII name.
+ *
+ * HTML parsing already folds attribute names; absence returns NULL.
  */
 struct vm_string *
 dom_attribute_ascii(
@@ -419,19 +468,24 @@ dom_attribute_ascii(
 
 	/* Each attribute in no namespace, by its name. */
 	for (index = 0; index < element->attribute_count; index++) {
+		/* Namespaced attributes cannot impersonate ordinary HTML content attributes. */
 		attribute = &element->attributes[index];
 		if (attribute->ns != DOM_NS_NONE)
 			continue;
+
+		/* The actual interned local name must match this complete ASCII name. */
 		same = vm_string_equal_ascii(attribute->name, name);
 		if (same)
 			return attribute->value;
 	}
 
-	/* The element has no such attribute. */
+	/* Succeeded: the actual no-namespace attribute inventory contains no matching name. */
 	return NULL;
 }
 
-/* Prepares input text before changing the control's owned value or dirty flag. */
+/*
+ * Prepares input text before changing its owned value or dirty state.
+ */
 int
 dom_input_set_value(
 	struct dom_element *element,
@@ -472,7 +526,9 @@ dom_input_set_value(
 	return 0;
 }
 
-/* Copies only dirty input value state, leaving visual geometry and caches independent. */
+/*
+ * Copies an input's dirty value into independent native clone storage.
+ */
 int
 dom_input_clone_value(
 	struct dom_element *destination,
@@ -484,6 +540,8 @@ dom_input_clone_value(
 	/* Other elements retain their established clone semantics. */
 	if (source->ns != DOM_NS_HTML || source->tag != DOM_TAG_INPUT)
 		return 0;
+
+	/* Exact input identity excludes folded XML spellings from this clone behavior. */
 	input = vm_string_equal_ascii(source->local_name, "input");
 	if (!input)
 		return 0;
@@ -491,6 +549,8 @@ dom_input_clone_value(
 	/* Clean inputs follow copied content attributes without allocating dirty state. */
 	if (source->control == NULL || !source->control->dirty)
 		return 0;
+
+	/* Prepares independent replacement storage under the established input setter contract. */
 	status = dom_input_set_value(destination, source->control->value.data, source->control->value.length);
 	if (status != 0)
 		return status;
@@ -521,14 +581,17 @@ control_equal_folded(
 
 	/* Each unit, folded to lower case. */
 	for (index = 0; index < length; index++) {
+		/* Only uppercase ASCII units participate in case folding for type names. */
 		unit = vm_string_at(string, index);
 		if (unit >= 'A' && unit <= 'Z')
 			unit = (uint16_t)(unit - 'A' + 'a');
+
+		/* Any unmatched folded unit rejects the complete ordinary type name. */
 		if (unit != (uint16_t)(unsigned char)ascii[index])
 			return 0;
 	}
 
-	/* The same word. */
+	/* Succeeded: every folded unit matches the complete ordinary type name. */
 	return 1;
 }
 
@@ -544,8 +607,11 @@ control_text_of(
 
 	/* Each text child in order (a textarea holds only text). */
 	for (child = node->first_child; child != NULL; child = child->next) {
+		/* Only direct Text children contribute to this existing default-value operation. */
 		if (child->type != DOM_TEXT)
 			continue;
+
+		/* Copies the actual character storage without borrowing it past the append. */
 		text = (const struct dom_character_data *)child;
 		error = wb_units_append(out, text->data.data, text->data.length);
 		if (error != 0)

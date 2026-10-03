@@ -42,9 +42,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Release the completed fixture's embedding before reporting its observations. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("form collection GC checks: %u/%u passed\n", checks - failures, checks);
@@ -101,9 +105,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release borrowed source storage after checking interpreter completion. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -173,6 +181,15 @@ collection_case(
 
 	/* Selected addresses are observations, not registered roots or raw post-GC dereferences. */
 	node = bind_node_of(answer);
+	if (node == NULL ||
+	    node->type != DOM_ELEMENT ||
+	    node->first_child == NULL) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Save nonretaining addresses only after the actual native form was verified. */
 	form = (struct dom_element *)node;
 	form_address = (uintptr_t)form;
 	cache_address = (uintptr_t)form->controls_collection;

@@ -121,7 +121,7 @@ shot restart.png
 
 # 7. zdesktop saw no error.
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
-[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
+[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; guest "grep ERROR /tmp/zdesktop.log | head -5"; status=1; }
 guest 'grep -E "PREFERENCES|GLASS wallpaper|STARTUP step=wallpaper" /tmp/zdesktop.log' > "$out/preferences.log"
 guest "$stop_all" >/dev/null
 guest "rm -f $conf" >/dev/null

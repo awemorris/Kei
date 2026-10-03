@@ -1,0 +1,38 @@
+[
+  {
+    "name": "html-reflection-probe",
+    "argv": [
+      "timeout",
+      "120",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/html-reflection-probe.html"
+    ],
+    "exit": 0,
+    "passes": 40,
+    "failures": [],
+    "stdout": "PASS button interface identity\nPASS label interface identity\nPASS meta interface identity\nPASS unrelated element no special property\nPASS button missing type\nPASS canonical button raw content\nPASS button setter raw reflection\nPASS button invalid type Auto\nPASS keyword whitespace not trimmed\nPASS removed type restores default\nPASS Auto command context\nPASS explicit submit overrides command context\nPASS Auto commandfor context\nPASS Auto select parent context\nPASS Auto removed select context\nPASS missing button value independent of label\nPASS button value from content\nPASS button value writes content\nPASS button value removed\nPASS missing alias values empty\nPASS label property reflects for\nPASS label content reflects property\nPASS label for expando distinct\nPASS label expando cannot change reflection\nPASS meta property preserves raw content\nPASS meta content reflects property\nPASS meta expando name distinct\nPASS meta expando cannot change reflection\nPASS DOMString conversion once\nPASS DOMString null literal\nPASS conversion exception preserves content\nPASS Symbol conversion rejected\nPASS receiver brand before conversion\nPASS foreign namespace cannot borrow button brand\nPASS clone interface and attribute preserved\nPASS parser chooses specialized button\nPASS parser chooses specialized label meta\nPASS child interface owner\nPASS borrowed child receiver writes own DOM\nPASS child getter exception realm\n",
+    "stderr": ""
+  },
+  {
+    "name": "object-url-probe",
+    "argv": [
+      "timeout",
+      "120",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/object-url-probe.html"
+    ],
+    "exit": 0,
+    "passes": 44,
+    "failures": [],
+    "stdout": "PASS actual object interface\nPASS absent is empty\nPASS relative URL\nPASS setter raw attribute\nPASS prototype getter not expando\nPASS dot segment normalized\nPASS parent segment normalized\nPASS present empty resolves\nPASS relative query\nPASS relative fragment\nPASS root path\nPASS absolute canonical URL\nPASS invalid raw fallback\nPASS invalid getter scalar\nPASS setter USVString repairs\nPASS getAttribute raw UTF16 remains\nPASS getter repairs content without mutation\nPASS nonASCII URL encoding\nPASS surrogate pair retained\nPASS null conversion\nPASS undefined conversion\nPASS one user conversion\nPASS conversion exception identity\nPASS wrong HTML tag rejected\nPASS foreign namespace rejected\nPASS brand before argument conversion\nPASS clone interface and URL\nPASS parser object interface\nPASS ordinary object children\nPASS first base URL\nPASS later base ignored\nPASS live base mutation\nPASS invalid first blocks later\nPASS javascript base ignored\nPASS data base ignored\nPASS base without href skips\nPASS base removal restores document\nPASS relative base against document\nPASS child object interface\nPASS own child explicit base\nPASS borrowed parent getter uses child document\nPASS borrowed child getter uses parent document\nPASS detached node retains document base\nPASS removal returns absent empty\n",
+    "stderr": ""
+  }
+]

@@ -18,11 +18,11 @@
 #include <string.h>
 
 /* The MIME type of a data: URL whose own does not parse. */
-#define DATA_DEFAULT_MIME	"text/plain;charset=US-ASCII"
+#define DATA_DEFAULT_MIME "text/plain;charset=US-ASCII"
 
 /* The whitespace data_trim takes away: ASCII whitespace, or HTTP whitespace. */
-#define DATA_ASCII_SPACE	0
-#define DATA_HTTP_SPACE		1
+#define DATA_ASCII_SPACE 0
+#define DATA_HTTP_SPACE 1
 
 /*
  * The MIME type being parsed: its text, where the parser stands, and the
@@ -51,8 +51,8 @@ static int data_quoted(const char *text, size_t end, size_t *position, struct wb
 static int data_has_parameter(const struct wb_buffer *serialized, size_t start, const char *name, size_t length);
 
 /*
- * Processes a data: URL into its MIME type and body.  Returns EINVAL when
- * the URL is not a valid data: URL (the Standard's failure).
+ * Processes a data URL into its MIME type and body.
+ * Returns EINVAL for invalid URL or body syntax.
  */
 int
 net_data_parse(
@@ -72,75 +72,91 @@ net_data_parse(
 	int differs;
 	int error;
 
-	/* The URL without its fragment. */
+	/* Prepares every output and temporary owner before fallible decoding. */
 	wb_buffer_init(&data->mime);
 	wb_buffer_init(&data->body);
 	wb_buffer_init(&serialized);
+	wb_buffer_init(&decoded);
+	wb_buffer_init(&mime);
 	error = net_url_serialize(url, 1, &serialized);
-	if (error != 0) {
-		wb_buffer_release(&serialized);
-		return error;
-	}
+	if (error != 0)
+		goto release_buffers;
 
-	/* Only a data: URL is one. */
+	/* Requires the serialized data scheme before interpreting its opaque path. */
 	input = wb_buffer_string(&serialized);
 	differs = strncmp(input, "data:", 5);
 	if (differs != 0) {
-		wb_buffer_release(&serialized);
-		return EINVAL;
+		error = EINVAL;
+		goto release_buffers;
 	}
 
-	/* The MIME type is what comes between "data:" and the comma, without surrounding whitespace. */
+	/* Separates the MIME declaration from the body at the first comma. */
 	input += 5;
 	length = serialized.length - 5U;
 	comma = 0;
 	while (comma < length && input[comma] != ',')
 		comma++;
 	if (comma == length) {
-		wb_buffer_release(&serialized);
-		return EINVAL;
+		error = EINVAL;
+		goto release_buffers;
 	}
 
-	/* The type without surrounding whitespace. */
+	/* Removes surrounding ASCII whitespace from the declaration. */
 	start = 0;
 	end = comma;
 	data_trim(input, &start, &end, DATA_ASCII_SPACE);
 
-	/* The body is the rest, percent-decoded. */
+	/* Percent-decodes the complete body before any MIME fallback can apply. */
 	error = net_percent_decode(input + comma + 1U, length - comma - 1U, &data->body);
+	if (error != 0)
+		goto release_buffers;
 
-	/* ";base64" at the end of the type (spaces allowed before it) asks for the body to be decoded. */
-	base64 = 0;
-	if (error == 0)
-		base64 = data_find_base64(input, start, end, &cut);
+	/* A trailing base64 marker selects forgiving decoding of those actual bytes. */
+	base64 = data_find_base64(input, start, end, &cut);
 	if (base64) {
-		wb_buffer_init(&decoded);
 		error = data_base64(data->body.data, data->body.length, &decoded);
+		if (error != 0)
+			goto release_buffers;
+
+		/* Replaces percent-decoded input only after base64 decoding succeeds. */
 		wb_buffer_clear(&data->body);
-		if (error == 0)
-			error = wb_buffer_append(&data->body, decoded.data, decoded.length);
-		wb_buffer_release(&decoded);
+		error = wb_buffer_append(&data->body, decoded.data, decoded.length);
+		if (error != 0)
+			goto release_buffers;
+
+		/* Excludes the marker from the MIME declaration. */
 		end = cut;
 	}
 
-	/* A type that starts with ; gives text/plain's parameters. */
-	wb_buffer_init(&mime);
-	if (error == 0 && start < end && input[start] == ';')
+	/* A declaration starting with parameters uses the text/plain essence. */
+	if (start < end && input[start] == ';') {
 		error = wb_buffer_append_string(&mime, "text/plain");
-	if (error == 0)
-		error = wb_buffer_append(&mime, input + start, end - start);
-
-	/* MIME-only fallback cannot erase an earlier body-decoding or allocation failure. */
-	if (error == 0) {
-		error = data_mime(wb_buffer_string(&mime), mime.length, &data->mime);
-		if (error == EINVAL) {
-			wb_buffer_clear(&data->mime);
-			error = wb_buffer_append_string(&data->mime, DATA_DEFAULT_MIME);
-		}
+		if (error != 0)
+			goto release_buffers;
 	}
 
-	/* The working buffers go. */
+	/* Copies the remaining declaration independently of the decoded body. */
+	error = wb_buffer_append(&mime, input + start, end - start);
+	if (error != 0)
+		goto release_buffers;
+
+	/* Only malformed MIME syntax uses the default, never earlier body/allocation errors. */
+	error = data_mime(wb_buffer_string(&mime), mime.length, &data->mime);
+	if (error != 0) {
+		if (error != EINVAL)
+			goto release_buffers;
+
+		/* Replaces partial MIME serialization with the specified default. */
+		wb_buffer_clear(&data->mime);
+		error = wb_buffer_append_string(&data->mime, DATA_DEFAULT_MIME);
+		if (error != 0)
+			goto release_buffers;
+	}
+
+release_buffers:
+	/* Releases temporaries and refuses partial outputs on either failure path. */
 	wb_buffer_release(&mime);
+	wb_buffer_release(&decoded);
 	wb_buffer_release(&serialized);
 	if (error != 0) {
 		net_data_release(data);
@@ -161,6 +177,9 @@ net_data_release(
 	/* The two buffers. */
 	wb_buffer_release(&data->mime);
 	wb_buffer_release(&data->body);
+
+	/* Succeeded: no decoded MIME or body allocation remains owned. */
+	return;
 }
 
 /* Tells whether a byte is ASCII whitespace (with form feed) or HTTP whitespace (without). */
@@ -170,7 +189,10 @@ data_is_space(
 	int kind)
 {
 	/* Tab, line feed, carriage return and space are both. */
-	if (c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20)
+	if (c == 0x09 ||
+	    c == 0x0a ||
+	    c == 0x0d ||
+	    c == 0x20)
 		return 1;
 
 	/* Form feed is ASCII whitespace only. */
@@ -204,6 +226,9 @@ data_trim(
 			break;
 		(*end)--;
 	}
+
+	/* Succeeded: both range boundaries exclude the selected whitespace. */
+	return;
 }
 
 /* Tells whether every byte of a text passes a test. */
@@ -235,7 +260,9 @@ data_is_token(
 	const char *found;
 
 	/* Letters and digits. */
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+	if ((c >= 'a' && c <= 'z') ||
+	    (c >= 'A' && c <= 'Z') ||
+	    (c >= '0' && c <= '9'))
 		return 1;
 
 	/* The punctuation tokens allow. */
@@ -253,7 +280,9 @@ data_is_quoted_token(
 	int c)
 {
 	/* Tab, the printable ASCII range, and the Latin-1 range. */
-	if (c == 0x09 || (c >= 0x20 && c <= 0x7e) || (c >= 0x80 && c <= 0xff))
+	if (c == 0x09 ||
+	    (c >= 0x20 && c <= 0x7e) ||
+	    (c >= 0x80 && c <= 0xff))
 		return 1;
 	return 0;
 }
@@ -270,17 +299,14 @@ data_append_lower(
 	int error;
 
 	/* Each byte, folded. */
-	error = 0;
-	for (index = 0; error == 0 && index < length; index++) {
+	for (index = 0; index < length; index++) {
 		c = (unsigned char)text[index];
 		if (c >= 'A' && c <= 'Z')
 			c += 0x20;
 		error = wb_buffer_append_byte(out, (unsigned char)c);
+		if (error != 0)
+			return error;
 	}
-
-	/* A buffer that could not grow. */
-	if (error != 0)
-		return error;
 
 	/* Succeeded: the text is appended. */
 	return 0;
@@ -339,33 +365,40 @@ data_base64(
 	/* The characters without whitespace. */
 	wb_buffer_init(&clean);
 	error = 0;
-	for (index = 0; error == 0 && index < length; index++) {
+	for (index = 0; index < length; index++) {
 		space = data_is_space(text[index], DATA_ASCII_SPACE);
-		if (!space)
+		if (!space) {
 			error = wb_buffer_append_byte(&clean, text[index]);
+			if (error != 0)
+				goto release_clean;
+		}
 	}
 
 	/* One or two = at the end of a whole number of quartets go. */
-	if (error == 0 && clean.length % 4U == 0U && clean.length > 0 && clean.data[clean.length - 1U] == '=') {
+	if (clean.length % 4U == 0U &&
+	    clean.length > 0 &&
+	    clean.data[clean.length - 1U] == '=') {
 		clean.length--;
 		if (clean.length > 0 && clean.data[clean.length - 1U] == '=')
 			clean.length--;
 	}
 
 	/* A lone character past the quartets is not base64. */
-	if (error == 0 && clean.length % 4U == 1U)
+	if (clean.length % 4U == 1U) {
 		error = EINVAL;
+		goto release_clean;
+	}
 
 	/* Six bits a character, a byte out for each eight. */
 	bits = 0;
 	count = 0;
-	for (index = 0; error == 0 && index < clean.length; index++) {
+	for (index = 0; index < clean.length; index++) {
 		found = NULL;
 		if (clean.data[index] != 0)
 			found = strchr(alphabet, clean.data[index]);
 		if (found == NULL) {
 			error = EINVAL;
-			break;
+			goto release_clean;
 		}
 
 		/* The six bits join the ones waiting; a whole byte goes out. */
@@ -374,9 +407,12 @@ data_base64(
 		if (count >= 8) {
 			count -= 8;
 			error = wb_buffer_append_byte(out, (unsigned char)(bits >> count));
+			if (error != 0)
+				goto release_clean;
 		}
 	}
 
+release_clean:
 	/* The cleaned copy goes. */
 	wb_buffer_release(&clean);
 	if (error != 0)
@@ -400,6 +436,7 @@ data_mime(
 	size_t type_end;
 	size_t subtype;
 	size_t subtype_end;
+	int space;
 	int tokens;
 	int error;
 
@@ -425,7 +462,16 @@ data_mime(
 	while (parser.position < end && text[parser.position] != ';')
 		parser.position++;
 	subtype_end = parser.position;
-	data_trim(text, &subtype, &subtype_end, DATA_HTTP_SPACE);
+
+	/* Only trailing whitespace may be removed from the subtype. */
+	while (subtype_end > subtype) {
+		space = data_is_space((unsigned char)text[subtype_end - 1U], DATA_HTTP_SPACE);
+		if (!space)
+			break;
+		subtype_end--;
+	}
+
+	/* Requires a nonempty token subtype after trailing whitespace removal. */
 	if (subtype_end == subtype)
 		return EINVAL;
 	tokens = data_all(text + subtype, subtype_end - subtype, data_is_token);
@@ -434,10 +480,16 @@ data_mime(
 
 	/* The type and subtype in lower case. */
 	error = data_append_lower(out, text + start, type_end - start);
-	if (error == 0)
-		error = wb_buffer_append_byte(out, '/');
-	if (error == 0)
-		error = data_append_lower(out, text + subtype, subtype_end - subtype);
+	if (error != 0)
+		return error;
+
+	/* Separates the serialized type from the validated subtype. */
+	error = wb_buffer_append_byte(out, '/');
+	if (error != 0)
+		return error;
+
+	/* Serializes the validated subtype in lowercase. */
+	error = data_append_lower(out, text + subtype, subtype_end - subtype);
 	if (error != 0)
 		return error;
 
@@ -447,11 +499,16 @@ data_mime(
 	parser.out = out;
 	parser.parameters = out->length;
 	wb_buffer_init(&value);
-	while (error == 0 && parser.position < end)
+	while (parser.position < end) {
 		error = data_parameter(&parser, &value);
+		if (error != 0) {
+			wb_buffer_release(&value);
+			return error;
+		}
+	}
+
+	/* Releases the reusable parameter buffer after the complete declaration. */
 	wb_buffer_release(&value);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: the MIME type is serialized. */
 	return 0;
@@ -483,7 +540,9 @@ data_parameter(
 
 	/* The name. */
 	name_start = parser->position;
-	while (parser->position < parser->end && text[parser->position] != ';' && text[parser->position] != '=')
+	while (parser->position < parser->end &&
+	       text[parser->position] != ';' &&
+	       text[parser->position] != '=')
 		parser->position++;
 	name_end = parser->position;
 
@@ -499,6 +558,10 @@ data_parameter(
 	wb_buffer_clear(value);
 	if (text[parser->position] == '"') {
 		error = data_quoted(text, parser->end, &parser->position, value);
+		if (error != 0)
+			return error;
+
+		/* Ignores trailing material after the quoted value. */
 		while (parser->position < parser->end && text[parser->position] != ';')
 			parser->position++;
 	} else {
@@ -515,13 +578,16 @@ data_parameter(
 
 		/* The value without its trailing whitespace (its leading whitespace stays). */
 		error = wb_buffer_append(value, text + value_start, value_end - value_start);
-		if (error == 0 && value->length == 0)
+		if (error != 0)
+			return error;
+
+		/* Empty unquoted values contribute no parameter. */
+		if (value->length == 0)
 			return 0;
 	}
 
 	/* The parameter, when it is valid. */
-	if (error == 0)
-		error = data_add_parameter(parser, name_start, name_end, value);
+	error = data_add_parameter(parser, name_start, name_end, value);
 	if (error != 0)
 		return error;
 
@@ -568,26 +634,50 @@ data_add_parameter(
 	if (value->length == 0 || !valid)
 		quotes = 1;
 
-	/* ;name= and the value, quotes and backslashes escaped inside quotes. */
+	/* Separates this parameter from the preceding serialized field. */
 	error = wb_buffer_append_byte(parser->out, ';');
-	if (error == 0)
-		error = data_append_lower(parser->out, name, length);
-	if (error == 0)
-		error = wb_buffer_append_byte(parser->out, '=');
-	if (error == 0 && quotes)
-		error = wb_buffer_append_byte(parser->out, '"');
-	for (index = 0; error == 0 && index < value->length; index++) {
-		if (quotes && (value->data[index] == '"' || value->data[index] == '\\'))
-			error = wb_buffer_append_byte(parser->out, '\\');
-		if (error == 0)
-			error = wb_buffer_append_byte(parser->out, value->data[index]);
-	}
-
-	/* The closing quote. */
-	if (error == 0 && quotes)
-		error = wb_buffer_append_byte(parser->out, '"');
 	if (error != 0)
 		return error;
+
+	/* Canonicalizes the validated parameter name. */
+	error = data_append_lower(parser->out, name, length);
+	if (error != 0)
+		return error;
+
+	/* Separates the canonical name from its value. */
+	error = wb_buffer_append_byte(parser->out, '=');
+	if (error != 0)
+		return error;
+
+	/* Quotes values that contain non-token characters or are empty. */
+	if (quotes) {
+		error = wb_buffer_append_byte(parser->out, '"');
+		if (error != 0)
+			return error;
+	}
+
+	/* Preserves each value byte, escaping quote/backslash only inside quotes. */
+	for (index = 0; index < value->length; index++) {
+		if (quotes &&
+		    (value->data[index] == '"' ||
+		     value->data[index] == '\\')) {
+			error = wb_buffer_append_byte(parser->out, '\\');
+			if (error != 0)
+				return error;
+		}
+
+		/* Writes the actual byte after any escape prefix succeeds. */
+		error = wb_buffer_append_byte(parser->out, value->data[index]);
+		if (error != 0)
+			return error;
+	}
+
+	/* Closes only a value whose opening quote was written. */
+	if (quotes) {
+		error = wb_buffer_append_byte(parser->out, '"');
+		if (error != 0)
+			return error;
+	}
 
 	/* Succeeded: the parameter is added. */
 	return 0;
@@ -605,8 +695,7 @@ data_quoted(
 
 	/* Past the opening quote, up to the closing one. */
 	(*position)++;
-	error = 0;
-	while (error == 0 && *position < end) {
+	while (*position < end) {
 		/* The closing quote ends it. */
 		if (text[*position] == '"') {
 			(*position)++;
@@ -618,18 +707,22 @@ data_quoted(
 			(*position)++;
 			if (*position >= end) {
 				error = wb_buffer_append_byte(value, '\\');
+				if (error != 0)
+					return error;
+
+				/* The final unpaired backslash is part of the collected value. */
 				break;
 			}
 		}
 
 		/* The character. */
 		error = wb_buffer_append_byte(value, (unsigned char)text[*position]);
+		if (error != 0)
+			return error;
+
+		/* Advances only after this value byte is copied. */
 		(*position)++;
 	}
-
-	/* A buffer that could not grow. */
-	if (error != 0)
-		return error;
 
 	/* Succeeded: the value is collected. */
 	return 0;
@@ -648,11 +741,37 @@ data_has_parameter(
 	size_t at;
 	int c;
 	int same;
+	int quoted;
 
 	/* Each ";name=" in the serialization. */
 	text = (const char *)serialized->data;
+	quoted = 0;
 	for (at = start; at < serialized->length; at++) {
-		if (text[at] != ';' || at + 1U + length >= serialized->length || text[at + 1U + length] != '=')
+		/* Ignores delimiters within values and consumes escaped quoted bytes together. */
+		if (quoted) {
+			if (text[at] == '\\' && at + 1U < serialized->length) {
+				at++;
+				continue;
+			}
+
+			/* An unescaped quote ends the serialized value. */
+			if (text[at] == '"')
+				quoted = 0;
+			continue;
+		}
+
+		/* A serialized quoted value begins only outside another quoted value. */
+		if (text[at] == '"') {
+			quoted = 1;
+			continue;
+		}
+
+		/* Only a real field delimiter can begin an existing parameter name. */
+		if (text[at] != ';')
+			continue;
+		if (length >= serialized->length - at - 1U)
+			continue;
+		if (text[at + 1U + length] != '=')
 			continue;
 
 		/* The name, compared folded. */

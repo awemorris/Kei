@@ -1,0 +1,34 @@
+[
+  {
+    "name": "host-traversal",
+    "argv": [
+      "build/browser3-p172/plain/host-traversal"
+    ],
+    "exit": 0,
+    "stdout": "traversal GC checks: 9/9 passed\n"
+  },
+  {
+    "name": "tree-walker-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/tree-walker-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS default walker state\nPASS NodeFilter callback namespace\nPASS unsigned constant SHOW_ELEMENT\nPASS unsigned constant SHOW_ATTRIBUTE\nPASS unsigned constant SHOW_TEXT\nPASS unsigned constant SHOW_CDATA_SECTION\nPASS unsigned constant SHOW_ENTITY_REFERENCE\nPASS unsigned constant SHOW_ENTITY\nPASS unsigned constant SHOW_PROCESSING_INSTRUCTION\nPASS unsigned constant SHOW_COMMENT\nPASS unsigned constant SHOW_DOCUMENT\nPASS unsigned constant SHOW_DOCUMENT_TYPE\nPASS unsigned constant SHOW_DOCUMENT_FRAGMENT\nPASS unsigned constant SHOW_NOTATION\nPASS root parent boundary\nPASS first child\nPASS last child\nPASS text next node\nPASS preceding parent\nPASS parent navigation\nPASS next sibling\nPASS previous sibling\nPASS last root child\nPASS forward end retains current\nPASS complete forward order\nPASS complete backward order\nPASS backward root end\nPASS mask skips hidden kinds and descends\nPASS null mask zero\nPASS undefined mask default\nPASS mask unsigned wrap\nPASS mask converts once\nPASS REJECT prunes entire subtree\nPASS SKIP descends subtree\nPASS SKIP parent goes past invisible ancestor\nPASS SKIP sibling hierarchy\nPASS REJECT child navigation\nPASS callback object identity and receiver\nPASS callback operation is read dynamically\nPASS acceptNode getter invocation\nPASS filter ushort conversion\nPASS filter exception exact identity and current unchanged\nPASS filter recovers after exception\nPASS result conversion exception identity\nPASS result conversion clears active state\nPASS recursive filter throws InvalidStateError\nPASS active flag resets after successful callback\nPASS missing acceptNode deferred until traversal\nPASS primitive filter\nPASS missing root\nPASS fake root prototype\nPASS factory receiver brand\nPASS walker method fake prototype\nPASS walker accessor brand\nPASS currentNode rejects null\nPASS illegal walker constructor\nPASS NodeFilter is not constructible\nPASS current outside root is permitted\nPASS outside ancestor traversal\nPASS borrowed factory receiver prototype\nPASS XML snapshot walker prototype\nPASS foreign current node accepted\nPASS walker survives iframe removal\nPASS regraft initial last child\nPASS removed current root still traversable\nPASS outside regrafted current follows actual tree\nPASS walk back into actual root\nPASS accepted removed candidate is returned\nPASS removed candidate has no implicit ancestor\nPASS readonly walker state and constants\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  }
+]

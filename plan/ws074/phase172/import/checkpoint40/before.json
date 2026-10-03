@@ -1,0 +1,22 @@
+[
+  {
+    "path": "plan/ws074/tests/host-collection.c",
+    "sha256": "152099ba7868578d4855a397200d1e0475376161274e60da10dcedabdac3e987",
+    "object": "host-collection.o",
+    "object_path": "build/browser3-p172/review40/host-collection.o",
+    "text_sha256": "41a4dcf29265c413fc6255222e812f70f9996b35519cae5fa0f5ab5918ea5541"
+  },
+  {
+    "path": "plan/ws074/tests/host-form-collection.c",
+    "sha256": "a6be86a2670ee8baf288f3fc43533f901a4571ad266b76bd074fef11351b9b90",
+    "object": "host-form-collection.o",
+    "object_path": "build/browser3-p172/review40/host-form-collection.o",
+    "text_sha256": "e2d1a28a23ec8e44148e3e9f113c9007a1757fa266cdfe37b98dbb24fc263def"
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/collection.c",
+    "sha256": "75545aec575b71c6fe6fc72a468e4ee11af6dba24b083810b821bae34927c99f",
+    "object": "libbrowser_bind_collection.o",
+    "text_sha256": "a26f30c2ad790da846bafd7af0099f7deaf4d8cc0db2e1425e308e7de07f10b8"
+  }
+]

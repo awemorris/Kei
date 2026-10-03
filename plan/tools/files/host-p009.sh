@@ -10,6 +10,8 @@
 #  3. In the trash, a right press on an item: Put Back, Delete Immediately, Empty Trash.
 #  4. A right press on a place of the sidebar (Downloads): Open in New Tab, Remove from Sidebar; the
 #     context menu's own action opens it in a new tab.
+#  5. (ws127-p002) Move To: the items' menu has the submenu with the sidebar's folders but not the folder shown
+#     (Documents); its Downloads row moves the item there.
 #
 #   plan/tools/files/host-p009.sh [OUTDIR]
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
@@ -72,5 +74,21 @@ expect place "^context request=5 where=2 place=3 "
 expect place "^row id=1049 parent=0 kind=0 enabled=1 checked=0 action=49 label=Open in New Tab\$"
 expect place "^row id=1050 .* label=Remove from Sidebar\$"
 expect place "^tabs count=2 shown=1 0=$docs 1=$home/Downloads\$"
+
+# 5. Move To (ws127-p002): Budget.csv to Downloads.
+run moveto "--start=$docs" right=446,150 context action=503 wait=1500
+expect moveto "^row id=105 parent=0 kind=4 enabled=1 checked=0 action=0 label=Move To\$"
+expect moveto "^row id=1503 parent=105 kind=0 enabled=1 checked=0 action=503 label=Downloads\$"
+if grep -qE "^row id=15[0-9][0-9] parent=105 .* label=Documents\$" "$out/moveto.txt"; then
+	echo "moveto: the folder shown is offered MISSING"
+	status=1
+fi
+expect moveto "CONTEXT move-to place=3 path=$home/Downloads count=1"
+if [ -f "$home/Downloads/Budget.csv" ] && [ ! -e "$docs/Budget.csv" ]; then
+	echo "moveto: Budget.csv is in Downloads ok"
+else
+	echo "moveto: Budget.csv is in Downloads MISSING"
+	status=1
+fi
 
 exit $status

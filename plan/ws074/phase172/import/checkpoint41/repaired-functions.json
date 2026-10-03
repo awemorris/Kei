@@ -1,0 +1,48 @@
+{
+  "results": [
+    {
+      "argv": [
+        "timeout",
+        "30",
+        "build/browser3-p172/review41/function-probe",
+        "0"
+      ],
+      "exit": 0,
+      "stdout_file": "repaired-function-0.stdout",
+      "stderr_file": "repaired-function-0.stderr"
+    },
+    {
+      "argv": [
+        "timeout",
+        "30",
+        "build/browser3-p172/review41/function-probe",
+        "1"
+      ],
+      "exit": 0,
+      "stdout_file": "repaired-function-1.stdout",
+      "stderr_file": "repaired-function-1.stderr"
+    },
+    {
+      "argv": [
+        "timeout",
+        "30",
+        "build/browser3-p172/review41/function-probe",
+        "2"
+      ],
+      "exit": 0,
+      "stdout_file": "repaired-function-2.stdout",
+      "stderr_file": "repaired-function-2.stderr"
+    },
+    {
+      "argv": [
+        "timeout",
+        "30",
+        "build/browser3-p172/review41/function-probe",
+        "3"
+      ],
+      "exit": 0,
+      "stdout_file": "repaired-function-3.stdout",
+      "stderr_file": "repaired-function-3.stderr"
+    }
+  ]
+}

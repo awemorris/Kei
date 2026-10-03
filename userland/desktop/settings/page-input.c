@@ -186,10 +186,16 @@ se_sound_draw(
 	y = se_card_begin(app, canvas, x, card, width, height, "Volume", NULL);
 	fm_text_metrics(app->text, INPUT_TEXT_TITLE, &line);
 	(void)fm_text_draw_fit(app->text, canvas, x + INPUT_PAD + 2, y + line.ascent, "Output volume", INPUT_TEXT_TITLE, 1, width / 2, SE_COLOR_TEXT);
-	if (app->sound.muted)
-		(void)snprintf(value, sizeof(value), "Muted");
-	else
+	if (available == 0) {
+		/* Without a sound output there is no volume to show (ws089-p012 C4). */
+		(void)snprintf(value, sizeof(value), "%s", "\xe2\x80\x94");
+	} else if (app->sound.muted) {
+		(void)snprintf(value, sizeof(value), "%s", "Muted");
+	} else {
 		(void)snprintf(value, sizeof(value), "%d%%", app->sound.value);
+	}
+
+	/* The value at the right, then the slider (greyed without a sound output). */
 	value_width = fm_text_width(app->text, value, strlen(value), INPUT_TEXT_TITLE, 0);
 	(void)fm_text_draw(app->text, canvas, x + width - INPUT_PAD - value_width, y + line.ascent, value, strlen(value), INPUT_TEXT_TITLE, 0, SE_COLOR_TEXT_SECONDARY);
 	se_slider_draw(app, canvas, x + INPUT_PAD + 14, y + 24, width - 2 * INPUT_PAD - 28, (float)app->sound.value / 100.0f, available, SE_SOUND_VOLUME, &app->sound.slider);

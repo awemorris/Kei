@@ -1,0 +1,30 @@
+a(b+)c g true false 0 /a(b+)c/g
+["abbc","abc"] 0
+["123-456","123","456"] 4 tel 123-456 end undefined
+["a","b","","c"] ["a","b","c"] ["a","b","c"]
+["x","-","y","_","z"] ["a","b"] [""]
+Smith, John 012
+xx a[b]c a+b+c aa|cc
+abb$2$c k-j-a
+4 2 -1
+true false ABC
+2026 09 09/2026
+42 7 1
+undefined ababc aaa aa
+zaacbbbcac,z,ac,a,,c , abcd,a,bcd,
+true true false true
+true cc true true true
+true 5 false 0
+gi ab i (?:) undefined
+a\/b /(?:)/ true false
+true true true true true true
+me@host.com true true
+[[1,2],[1,2],null] {"a":[1,2]}
+1@1,2@3,3@5 0
+null ["X","X"] [""]
+SyntaxError
+SyntaxError
+SyntaxError
+TypeError
+TypeError
+[object RegExp] object true 2 RegExp

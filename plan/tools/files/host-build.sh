@@ -16,7 +16,9 @@ src=userland/desktop/files
 mkdir -p "$out/include" "$out/obj"
 ln -sf "$(pwd)/userland/desktop/keiland/truetype.h" "$out/include/truetype.h"
 ln -sf "$(pwd)/userland/desktop/keiland/keiland.h" "$out/include/keiland.h"
+ln -sf "$(pwd)/userland/desktop/keiland/keiui.h" "$out/include/keiui.h"
 ln -sf "$(pwd)/include/libc/sha2.h" "$out/include/sha2.h"
+ln -sf "$(pwd)/include/libc/pdf.h" "$out/include/pdf.h"
 ln -sfn "$(pwd)/include/libc/compat" "$out/include/compat"
 cc=${CC:-cc}
 flags="-O2 -g -Wall -Wextra -Werror -Wno-unused-parameter -D_GNU_SOURCE -I$out/include -I$src -I."
@@ -49,6 +51,10 @@ if [ -f userland/desktop/libkeiland/recent.c ]; then
 	objects="$objects $out/obj/zdesktop-recent.o"
 fi
 
+# libkeiui's overlay scroll bar (files/ui-scrollbar.c uses it since ws127-p002), which needs no canvas.
+"$cc" $flags -c userland/desktop/libkeiui/scroll-bar.c -o "$out/obj/keiui-scroll-bar.o"
+objects="$objects $out/obj/keiui-scroll-bar.o"
+
 # libkeiland's gesture, scroller and motion (files/touch.c uses them since ws081-p010; ws093-p003).
 for file in userland/desktop/libkeiland/gesture.c userland/desktop/libkeiland/scroll.c userland/desktop/libkeiland/motion.c; do
 	object="$out/obj/keiland-$(basename "$file" .c).o"
@@ -80,7 +86,7 @@ for test in render model; do
 			"$cc" $flags -c plan/tools/files/host-glass.c -o "$out/obj/host-glass.o"
 			extra="$out/obj/host-glass.o"
 		fi
-		"$cc" -o "$out/files-$test" "$out/obj/host-$test.o" $extra $objects -lm
+		"$cc" -o "$out/files-$test" "$out/obj/host-$test.o" $extra $objects -lm -ldl
 		echo "built $out/files-$test"
 	fi
 done

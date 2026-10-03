@@ -1,0 +1,26 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/link.c",
+    "before_sha256": "4da7ba93b718b55c1c59bf7dd1bbf36af4e658e39de297aec191c9c94e4400b5",
+    "before_text_sha256": "b24f3eae8e5293e8814a8699b5c50a27c930d4a247d93a3161a2e9c725dc196f",
+    "after_sha256": "c6d05d44b74e504aa351dd598889b2a95138958c8f491bcc2523e43c7912ce1b",
+    "after_text_sha256": "8cc294b75674d8371aa6e36bc432f769e03a947d4c92fdf71ae49eab4f0a4295",
+    "text_equal": false
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/svg-text.c",
+    "before_sha256": "b1b92fe4befaa0be4a74cea70741fceea2318554732864a2a8bf2d4584eca1a4",
+    "before_text_sha256": "b08d67882ec1cf1a25a37b17ba6d8fabb4f5b77c2cec8c62b52f06e27e3dd1ce",
+    "after_sha256": "665c2dceda133439263a59de764933bfd3ed68c18e129ede867627b27ca4af82",
+    "after_text_sha256": "1b06c2a68de681273b5bca45b9bd3e260d0b160fe712aebfe756e2391191a456",
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-resource.c",
+    "before_sha256": "ac4419c5b331a3930c59296335967628dd87e88d8443f1cda880d4c6965f57f9",
+    "before_text_sha256": "34bc1e9585642c24f323a3ef2e08909c9f9a14ee8b5b63c9b8b14c9572147e8b",
+    "after_sha256": "c2d0dcd5f43b01b174a46ba53bd9f8df032017e01fad92d5ec3e2bfe9d27991f",
+    "after_text_sha256": "cd4cedbae77b73a7b1f8b436d15578f7eb1291ec8acc6cff5b3b65cc0f244b33",
+    "text_equal": false
+  }
+]

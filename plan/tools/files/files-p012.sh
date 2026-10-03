@@ -7,8 +7,9 @@
 #  2. Meeting notes.txt, Ctrl+I: the card (INFO ... openers=), info.png; Compute: the SHA-256 of the
 #     file (CHECKSUM done), info-sum.png; Esc closes it (INFO close).
 #  3. Sunset.ppm in Pictures double-clicked: Quick Look (OPEN app=Quick Look, LOOK open); Esc.
-#  4. Budget.csv (text/csv, not in the user's list) double-clicked: the built-in "Terminal (less)"
-#     starts terminal (LAUNCH, a second client's window in zdesktop): terminal.png.
+#  4. Budget.csv (text/csv, not in the user's list) double-clicked: the built-in default for text, Text Editor
+#     (since WS128 made it the text default; ws127-p002 updated this check from "Terminal (less)"), starts
+#     (LAUNCH, a second client's window in zdesktop): terminal.png.
 #
 #   plan/tools/files/files-guest.sh start     (the guest must be up)
 #   plan/tools/files/files-p012.sh [OUTDIR]
@@ -89,10 +90,10 @@ keys '<esc>'
 # 4. Budget.csv (the second row of Documents) in a terminal.
 click 100 125
 double 400 142 4000
-expect_log /tmp/f.log 'ZFILES LAUNCH name=Terminal \(less\) command=@terminal less ./tmp/fhome/Documents/Budget.csv.$'
+expect_log /tmp/f.log 'ZFILES LAUNCH name=Text Editor command=/bin/textedit ./tmp/fhome/Documents/Budget.csv.$'
 expect_log /tmp/zdesktop.log 'ZWL MAP client=2 '
-running=$(guest "ps -A -o args | grep -c '[t]erminal'" | tail -1)
-[ "${running:-0}" -ge 1 ] && echo "terminal: running" || { echo "terminal: MISSING"; status=1; }
+running=$(guest "ps -A -o args | grep -c '[t]extedit'" | tail -1)
+[ "${running:-0}" -ge 1 ] && echo "textedit: running" || { echo "textedit: MISSING"; status=1; }
 shot terminal.png
 
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)

@@ -1,0 +1,63 @@
+[
+  {
+    "name": "resource",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-resource-tests.py",
+      "--program",
+      "build/browser3-p172/plain/host-resource"
+    ],
+    "exit": 0,
+    "stdout": "native resource metadata: 105/105 passed\n"
+  },
+  {
+    "name": "settle",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-settle-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "settle: 14 runtime checks and 8 diagnostic checks passed\n"
+  },
+  {
+    "name": "write",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-write-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "write late: PASS\nwrite bound: PASS\nwrite gc: PASS\n"
+  },
+  {
+    "name": "frame-load",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-frame-load-tests.py",
+      "--program",
+      "build/browser3-p172/plain/host-frame-load"
+    ],
+    "exit": 0,
+    "stdout": "native child loading: 52/52 passed; error=0\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  },
+  {
+    "name": "missing external script",
+    "source": "<script src=\"missing-local-script.js\"></script><script>console.log(\"PASS later inline script runs\")</script>",
+    "exit": 0,
+    "stdout": "Failed to load the script missing-local-script.js: No such file or directory\nPASS later inline script runs\n"
+  }
+]

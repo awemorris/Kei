@@ -33,6 +33,14 @@
 #define NETWORKD_ROLLBACK_DIAGNOSTIC_MAX	512U
 #define NETWORKD_ROLLBACK_PATH_MAX	255U
 
+/*
+ * Present while Wi-Fi was last turned off by request: networkd makes it on
+ * an explicit off and removes it on an explicit on, and a boot (net startup)
+ * leaves Wi-Fi off while it is there (2026-10-03 user decision, ws005-p020).
+ */
+#define NETWORKD_WIFI_OFF_DIRECTORY	"/var/db"
+#define NETWORKD_WIFI_OFF_PATH		"/var/db/wifi-off"
+
 /* One daemon transaction, including teardown; clients allow transport margin. */
 #define NETWORKD_WIFI_CLEANUP_SECONDS	10U
 #define NETWORKD_WIFI_TRANSPORT_MARGIN	15U
@@ -40,7 +48,8 @@
 #define NETWORKD_CONTROL_YIELD_SECONDS	(NETWORKD_WIFI_CLEANUP_SECONDS + 5U)
 #define NETWORKD_WIFI_REQUEST_SECONDS(op) \
 	((op) == NETWORKD_OP_WIFI_CONNECT || (op) == NETWORKD_OP_WIFI_ENABLE ? \
-	90U : ((op) == NETWORKD_OP_WIFI_PROFILES_CHANGED ? 2U : 30U))
+	90U : ((op) == NETWORKD_OP_WIFI_PROFILES_CHANGED || \
+	(op) == NETWORKD_OP_WIFI_SESSION_OPEN ? 2U : 30U))
 
 enum networkd_opcode {
 	NETWORKD_OP_SHOW = 1,
@@ -63,6 +72,19 @@ enum networkd_opcode {
 	NETWORKD_OP_WIFI_CONNECT = 35,
 	NETWORKD_OP_WIFI_DISCONNECT = 36,
 	NETWORKD_OP_WIFI_PROFILES_CHANGED = 37,
+
+	/*
+	 * A login session opened or closed (ws005-p024, the user's decision
+	 * of 2026-10-02).  While an account's session is open, the store of
+	 * that account's saved networks is one networkd may join from on its
+	 * own; when it closes, the store is dropped again and a connection made
+	 * from it is ended.  The request names the account (ACCOUNT); networkd
+	 * finds the store from the account database, never from a path a
+	 * client sends, and keys never travel on this socket.  Root (sessiond)
+	 * may name any account; a member of the network group only itself.
+	 */
+	NETWORKD_OP_WIFI_SESSION_OPEN = 38,
+	NETWORKD_OP_WIFI_SESSION_CLOSE = 39,
 
 	/*
 	 * Wired management.  These say what the daemon is to do from now on
@@ -114,7 +136,9 @@ enum networkd_field_type {
 	NETWORKD_FIELD_DNS = 21,
 	NETWORKD_FIELD_PATH = 22,
 	NETWORKD_FIELD_TOKEN = 23,
-	NETWORKD_FIELD_SSID = 32
+	NETWORKD_FIELD_SSID = 32,
+	/* The numeric user ID of the account a session request is about. */
+	NETWORKD_FIELD_ACCOUNT = 33
 };
 
 enum networkd_result_status {

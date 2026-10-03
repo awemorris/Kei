@@ -1,0 +1,70 @@
+{
+  "queue": "q598-i01",
+  "phase": "ws074-p172",
+  "checkpoint": 96,
+  "status": "in-progress",
+  "inventory": "checkpoint95/review-inventory.json:209/209 current source hashes verified",
+  "adjacent_input_sha256": "1d8a8856d94d5c0858f21eb27a6a7262382f7a316dcd3e6692e4d95f5fd9e1bc",
+  "adjacent_input_full_source_review": "1007 lines; seven forward cleanup goto candidates only",
+  "browser2_provenance": {
+    "pinned_commit": "e53ef03b80113aec959deb67f828cba21d68d4be",
+    "manifest_entries": 569,
+    "applied": 209,
+    "archived_and_hash_verified": 356,
+    "excluded_unrelated_current_boards": 4,
+    "unresolved": 0,
+    "historical_phase_records": 71
+  },
+  "source_conformance": {
+    "reviewed": 209,
+    "source_hashes_match": 209,
+    "C_files": 138,
+    "style_findings_other_than_forward_cleanup_goto": 0,
+    "forward_cleanup_goto_candidates": 1039,
+    "clang_format": "19.1.7 on cascade copy; canonical full C style retained"
+  },
+  "host": {
+    "plain_build": "exit0 warning0",
+    "asan_ubsan_build": "exit0 warning0",
+    "regression_groups": {
+      "plain": 98,
+      "asan": 98,
+      "failures": 0,
+      "sanitizer_reports": 0
+    },
+    "goldens": {
+      "plain": 81,
+      "asan": 81,
+      "failures": 0
+    },
+    "acid2_pixels": {
+      "plain": "120000/120000 exact",
+      "asan": "120000/120000 exact"
+    },
+    "css_media_boundary": "3/3 pass",
+    "independent_client": "C89/C++11 headers compile; CPU/GPU actual 800x600 renders, 0/480000 pixels over 2-channel tolerance"
+  },
+  "boundary": {
+    "libbrowser_soname": "libbrowser.so",
+    "exports": 39,
+    "exports_equal_checkpoint03": true,
+    "engine_sources": 167,
+    "include_paths": 377,
+    "forbidden_project_dependencies": 0
+  },
+  "target": {
+    "first_full_build": "exit0, check-amd64-native-image OK",
+    "full_build_warning_lines": 233,
+    "browser_project_warning_lines": 0,
+    "external_package_warnings": true,
+    "boot_login_png": "boot-login.png; QEMU uefi-nvme login visually verified",
+    "final_warm_warning0_rebuild": "pending disk image writeback",
+    "native_shell_p014": "pending"
+  },
+  "limits": [
+    "Final image after warm rebuild not yet booted",
+    "Target full build includes external package warnings; final selected-browser warning0 rebuild pending",
+    "Native Venus shell p014 not yet run",
+    "Whole Phase not cleared; p100 unselected and not executed"
+  ]
+}

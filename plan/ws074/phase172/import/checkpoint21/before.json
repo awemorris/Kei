@@ -1,0 +1,14 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/dom/serialize.c",
+    "sha256": "7645a22d6e5403d15581fb14a7d21bd93045bf0fcdcb65a898c3c376fb4a5e50",
+    "object": "libbrowser_dom_serialize.o",
+    "text_sha256": "dd520ce4923e5eac68b682057bc175d283dadedd808999d25a07ccf5000a91a9"
+  },
+  {
+    "path": "userland/desktop/libbrowser/js/builtin_symbol.c",
+    "sha256": "9e3d4477b0248dccefe68d31d96edc90ab620072e985b306468c038455ed01f9",
+    "object": "libbrowser_js_builtin_symbol.o",
+    "text_sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d"
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-color-media"
+    ],
+    "exit": 0,
+    "stdout_file": "media.stdout",
+    "stderr_file": "media.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/text-transform-media-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "media-page.stdout",
+    "stderr_file": "media-page.stderr",
+    "pass_lines": 38,
+    "fail_lines": 0
+  }
+]

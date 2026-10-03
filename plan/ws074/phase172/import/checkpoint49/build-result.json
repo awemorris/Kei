@@ -1,0 +1,10 @@
+{
+  "kind": "GCC14.2 scoped compile/link against current unchanged own engine objects",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-frame-lifetime.c": "9a09feb37640034414f696385586b57da9d19964d13c505a5e403b6fcfa4967b"
+  }
+}

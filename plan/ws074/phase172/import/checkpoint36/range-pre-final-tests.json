@@ -1,0 +1,12 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review37/host-range-delete-contents"
+    ],
+    "exit": 0,
+    "stdout_file": "range-delete.stdout",
+    "stderr_file": "range-delete.stderr"
+  }
+]

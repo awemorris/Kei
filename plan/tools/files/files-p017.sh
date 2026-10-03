@@ -134,7 +134,8 @@ click $(( $(popup_x 2) + 60 )) "$(row_y 1016)" 1200
 expect_log /tmp/f.log 'ZFILES ACTION action=16'
 
 # 3. Restored.
-double 190 17
+# The docked bar's name "Files" (120,17) undocks on a double click; (190,17) is the Forward control now (ws127-p001 T1).
+double 120 17
 expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
 expect_log /tmp/zdesktop.log "ZWL TITLEBAR control client=1 surface=$surface where=floating id=1 .* shown=1"
 floating=$(guest "grep -c 'ZWL GLASS client=[0-9]* surface=$surface panels=2 card:0,0,212,640,16 card:220,0,780,640,16' /tmp/zdesktop.log" | tail -1)

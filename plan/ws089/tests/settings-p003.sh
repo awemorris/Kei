@@ -5,7 +5,7 @@
 #     its address and the DNS servers (network-real.png); Ethernet shows the interface (ethernet.png); Wi-Fi says
 #     there is no radio (wifi-absent.png).
 #  2. The networkd stand-in with a Wi-Fi radio (network-probe; networkd's socket moved aside meanwhile), with a key
-#     saved beforehand for "Kei Lab" (net wifi set-key, against the real networkd):
+#     saved beforehand for "Kei Lab" (net wifi add, against the real networkd):
 #     a. the Wi-Fi page scans (NETWORK scan count=3) and lists Kei Lab as Saved (wifi-list.png);
 #     b. a click on Kei Lab joins it (probe: op=35 ssid=Kei Lab; Connected) (wifi-joined.png);
 #     c. a click on Neighbor 5G opens the key's line; a key typed and Enter saves it (NETWORK save-key ok, the SSID
@@ -33,6 +33,7 @@ stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | g
 start_desktop='export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4; echo started'
 status=0
+. plan/ws089/tests/settings-wait.sh
 
 # Fails the run unless a log has a line matching a pattern (within a few seconds).
 expect_log() {
@@ -55,8 +56,7 @@ expect_log() {
 # Starts settings on a page (its log in /tmp/s.log) and finds its window.
 start_settings() {
 	guest "export XDG_RUNTIME_DIR=/tmp HOME=/root; /bin/settings --timeout-s=800 $1 > /tmp/s.log 2>&1 </dev/null & sleep 5; echo started" >/dev/null
-	set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
-	wx=${2:-0}; wy=${3:-0}
+	find_window
 	echo "settings: window at $wx,$wy"
 }
 
@@ -100,7 +100,7 @@ shot wifi-absent.png
 
 # 2. The stand-in, with a key saved for Kei Lab first (against the real networkd).
 guest "$stop_all" >/dev/null
-guest 'rm -f /etc/wifi.conf; net wifi set-key "Kei Lab" keilab-2026 auto; echo saved' >/dev/null
+guest 'rm -f /etc/wifi.conf; net wifi add "Kei Lab" --password keilab-2026 --auto yes; echo saved' >/dev/null
 guest 'mv /run/networkd.sock /run/networkd.sock.real; /bin/network-probe 600 > /tmp/probe.log 2>&1 </dev/null & sleep 1; echo started' >/dev/null
 expect_log /tmp/probe.log 'NETPROBE listening'
 guest "$start_desktop" >/dev/null
@@ -151,7 +151,7 @@ shot network-probe.png
 
 # 3. zdesktop saw no error; networkd's socket back.
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
-[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
+[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; guest "grep ERROR /tmp/zdesktop.log | head -5"; status=1; }
 guest 'cat /tmp/s.log' > "$out/settings.log"
 guest 'cat /tmp/probe.log' > "$out/probe.log"
 guest "$stop_all" >/dev/null

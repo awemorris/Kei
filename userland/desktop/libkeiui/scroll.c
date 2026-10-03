@@ -612,3 +612,45 @@ scroll_within(
 	/* Within. */
 	return value;
 }
+
+/*
+ * Draws an overlay scroll bar (scroll-bar.c) on a canvas: the faint track
+ * while the bar is thick, and the thumb.  Returns 1 while the bar still
+ * changes with time (the window should draw again), 0 otherwise.
+ */
+int
+kui_scroll_bar_draw(
+	const struct kui_scroll_bar *bar,
+	struct kui_canvas *canvas,
+	const struct kui_rect *viewport,
+	double content,
+	double offset,
+	uint64_t now_us)
+{
+	struct kui_scroll_bar_shape shape;
+	kui_color track;
+	kui_color thumb;
+	int shown;
+	int busy;
+
+	/* What shows now; nothing is drawn of a bar that does not. */
+	shown = kui_scroll_bar_shape(bar, viewport, content, offset, now_us, &shape);
+	busy = kui_scroll_bar_busy(bar, now_us);
+	if (shown == 0)
+		return busy;
+
+	/* The track, light and faint, only while the bar is thick. */
+	if (shape.thick != 0) {
+		track = 0x00f4f4f4U | ((uint32_t)(150.0 * shape.alpha) << 24);
+		kui_canvas_round(canvas, (float)shape.track_x, (float)shape.track_y, (float)shape.track_width,
+				 (float)shape.track_height, (float)shape.track_width / 2.0f, track);
+	}
+
+	/* The thumb, a dark grey rounded at its ends. */
+	thumb = 0x00303030U | ((uint32_t)(SCROLL_BAR_ALPHA * shape.alpha) << 24);
+	kui_canvas_round(canvas, (float)shape.thumb_x, (float)shape.thumb_y, (float)shape.thumb_width,
+			 (float)shape.thumb_height, (float)shape.thumb_width / 2.0f, thumb);
+
+	/* Succeeded: reports whether it changes on. */
+	return busy;
+}

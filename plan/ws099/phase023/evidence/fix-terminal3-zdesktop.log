@@ -1,0 +1,121 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=211
+ZWL STARTUP step=vulkan-objects-arrow ms=265
+ZWL STARTUP step=wallpaper-picture ms=1743
+ZWL STARTUP step=wallpaper ms=1974
+ZWL STARTUP step=glyphs-text ms=26
+ZWL STARTUP step=glyphs-icons ms=12
+ZWL STARTUP step=glyphs-mark ms=22
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=162
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=2692 at_ms=91388
+ZWL INPUT device=/dev/input/event0 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event1 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL STARTUP step=input ms=1 at_ms=91389
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=91389
+ZWL STARTUP step=socket ms=1 at_ms=91390
+ZWL IME none program=/usr/libexec/keiland-ime errno=6
+ZWL READY socket=/tmp/wayland-0 width=1280 height=800 timeout_ms=300000 pid=155
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL STARTUP step=output-display ms=108
+ZWL STARTUP step=output-pipelines ms=161
+ZWL STARTUP step=output-swapchain ms=387
+ZWL STARTUP step=output-targets ms=90
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=746 at_ms=95831
+ZWL LAT draw frame=1 at_us=95831000
+ZWL LAT acquired frame=1 at_us=95831000
+ZWL GLASS desktops x=822 step=46 width=40
+ZWL NETWORK icon x=1066 y=3 width=30 height=28
+ZWL VOLUME icon x=1033 y=3 width=30 height=28
+ZWL LAT recorded frame=1 at_us=95853000
+ZWL COMPOSE frame=1 image=0 windows=0 at_ms=95923
+ZWL LAT submit frame=1 at_us=95923000
+ZWL LAT shown frame=1 at_us=95933000
+ZWL HOME skip name=Image Viewer missing=/bin/imageview
+ZWL HOME skip name=Text Editor missing=/bin/textedit
+ZWL HOME skip name=Browser missing=/bin/browser
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=ue0 wifi=absent ssid=
+ZWL LAT draw frame=2 at_us=95935000
+ZWL LAT acquired frame=2 at_us=95958000
+ZWL LAT recorded frame=2 at_us=95978000
+ZWL COMPOSE frame=2 image=1 windows=0 at_ms=96048
+ZWL LAT submit frame=2 at_us=96048000
+ZWL LAT shown frame=2 at_us=96058000
+ZWL CLIENT client=1 fd=17
+ZWL LAT draw frame=3 at_us=97499000
+ZWL LAT acquired frame=3 at_us=97499000
+ZWL LAT recorded frame=3 at_us=97521000
+ZWL COMPOSE frame=3 image=2 windows=0 at_ms=97592
+ZWL LAT submit frame=3 at_us=97592000
+ZWL LAT shown frame=3 at_us=97602000
+ZWL INSET create client=1 inset=20 toplevel=16
+ZWL EDIT create client=1 edit=24 toplevel=16
+ZWL BOUNDS client=1 surface=14 width=1256 height=690
+ZWL CONFIGURE client=1 surface=14 serial=1 width=0 height=0 fullscreen=0
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=1 pointer=1 keyboard=1 touch=0
+ZWL TITLEBAR create client=1 titlebar=31 toplevel=16
+ZWL BOUNDS client=1 surface=14 width=1256 height=690
+ZWL CONFIGURE client=1 surface=14 serial=2 width=0 height=0 fullscreen=0
+ZWL VULKAN_IMPORT client=1 buffer=41 width=916 height=632
+ZWL IMPORT client=1 buffer=41 width=916 height=632 bytes=2347008
+ZWL VULKAN_IMPORT client=1 buffer=42 width=916 height=632
+ZWL IMPORT client=1 buffer=42 width=916 height=632 bytes=2347008
+ZWL VULKAN_IMPORT client=1 buffer=43 width=916 height=632
+ZWL IMPORT client=1 buffer=43 width=916 height=632 bytes=2347008
+ZWL MENU commit client=1 menu=47 serial=1 items=30 generation=1
+ZWL MENU set client=1 place=48 menu=47
+ZWL LAT draw frame=4 at_us=98856000
+ZWL LAT acquired frame=4 at_us=98857000
+ZWL LAT recorded frame=4 at_us=98878000
+ZWL COMPOSE frame=4 image=0 windows=0 at_ms=98948
+ZWL LAT submit frame=4 at_us=98948000
+ZWL LAT shown frame=4 at_us=98959000
+ZWL MENU commit client=1 menu=47 serial=2 items=30 generation=2
+ZWL EDIT state client=1 edit=24 actions=0xff flags=0xd
+ZWL LAT draw frame=5 at_us=98959000
+ZWL LAT acquired frame=5 at_us=98987000
+ZWL LAT recorded frame=5 at_us=99007000
+ZWL COMPOSE frame=5 image=1 windows=0 at_ms=99078
+ZWL LAT submit frame=5 at_us=99078000
+ZWL LAT shown frame=5 at_us=99088000
+ZWL TITLEBAR commit client=1 titlebar=31 serial=1 mode=0 controls=0 tabs=1 generation=1
+ZWL LAT draw frame=6 at_us=99860000
+ZWL LAT acquired frame=6 at_us=99861000
+ZWL LAT recorded frame=6 at_us=99882000
+ZWL COMPOSE frame=6 image=2 windows=0 at_ms=99942
+ZWL LAT submit frame=6 at_us=99942000
+ZWL LAT shown frame=6 at_us=99943000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL DECORATION applied client=1 surface=14 mode=2
+ZWL COMMIT client=1 surface=14 buffer=41 queued=0
+ZWL LAT adopt surface=14 at_us=99955000
+ZWL MAP client=1 surface=14 x=182 y=127
+ZWL LAT draw frame=7 at_us=99955000
+ZWL LAT acquired frame=7 at_us=99960000
+ZWL MENU bar client=1 surface=14 where=floating item=1 offset=127 top=75 width=55 height=44
+ZWL MENU bar client=1 surface=14 where=floating item=2 offset=184 top=75 width=47 height=44
+ZWL MENU bar client=1 surface=14 where=floating item=3 offset=233 top=75 width=55 height=44
+ZWL MENU bar client=1 surface=14 where=floating item=4 offset=290 top=75 width=76 height=44
+ZWL MENU bar client=1 surface=14 where=floating item=5 offset=368 top=75 width=53 height=44
+ZWL LAT recorded frame=7 at_us=99981000
+ZWL COMPOSE frame=7 image=0 windows=1 at_ms=100051
+ZWL LAT submit frame=7 at_us=100051000
+ZWL LAT shown frame=7 at_us=100062000
+ZWL PERF 5008ms: passes=351 timeouts=318 | poll 75.7% work 45.1%
+ZWL PERF compose frames=7 draw_ms=121.46 (acquire 14.08 submit+present 82.33) frame_ms=132.21
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=42 queued=0
+ZWL LAT adopt surface=14 at_us=102440000
+ZWL RELEASE client=1 buffer=41 dead=0
+ZWL LAT draw frame=8 at_us=102440000
+ZWL LAT acquired frame=8 at_us=102440000
+ZWL LAT recorded frame=8 at_us=102462000

@@ -23,6 +23,7 @@ struct image_fixture {
 
 /* Count independent geometry and lifetime observations across the native fixture. */
 static unsigned checks;
+
 /* Preserve failed observations until the final result is printed. */
 static unsigned failures;
 
@@ -48,25 +49,41 @@ main(
 	paths.sans = "userland/desktop/fonts/Inter.ttf";
 	paths.mono = "userland/desktop/fonts/JetBrainsMono-Regular.ttf";
 	paths.fallback = "userland/desktop/fonts/DroidSansFallbackFull.ttf";
+
+	/* Allocates the real Page before installing its borrowed font paths. */
 	status = page_create(&page, __builtin_frame_address(0));
 	if (status != 0)
 		return 2;
+
+	/* Gives ordinary layout its fonts and primary viewport. */
 	page_set_fonts(page, &paths);
 	page_set_viewport(page, 800, 600);
 
 	/* Load a genuine primary Page before constructing the binding-owned child. */
 	status = page_load_html(page, html, sizeof(html) - 1U);
-	if (status == 0)
-		status = image_case(page);
+	if (status != 0) {
+		page_destroy(page);
+		return 2;
+	}
+
+	/* Exercises child layout before releasing the primary Page. */
+	status = image_case(page);
+	if (status != 0) {
+		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
+		page_destroy(page);
+		return 2;
+	}
+
+	/* Restores normal stack ownership before releasing the complete Page. */
 	vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
 	page_destroy(page);
-	if (status != 0)
-		return 2;
 
 	/* Publish complete observations after every production resource was released. */
 	printed = printf("native image geometry: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Any failed independent geometry or lifetime check rejects this fixture. */
 	if (failures != 0)
 		return 1;
 
@@ -90,6 +107,9 @@ image_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: the observation remains in the final result. */
+	return;
 }
 
 /* Executes ordinary scripts to construct production managed child contexts. */
@@ -113,9 +133,13 @@ image_script(
 
 	/* Execute genuine DOM operations without a production test switch. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Releases source storage after the interpreter has finished borrowing it. */
+	wb_units_release(&units);
 
 	/* Succeeded: the script supplied actual native state. */
 	return 0;
@@ -135,6 +159,8 @@ image_box(
 	fixture->callbacks++;
 	if (fixture->retire)
 		dom_remove(node);
+
+	/* Only the production geometry helper's roots protect the retired child. */
 	vm_heap_collect(fixture->heap);
 
 	/* Ordinary host geometry supplies a real content viewport to the child engine. */
@@ -173,8 +199,18 @@ image_case(
 			      &receiver);
 	if (status != 0)
 		return status;
+
+	/* Rejects failed native binding before reading its owner graph. */
 	node = bind_node_of(receiver);
+	if (node == NULL)
+		return EINVAL;
+
+	/* The genuine child image must have a managed layout owner. */
 	owner = node->document->view;
+	if (owner == NULL)
+		return EINVAL;
+
+	/* Integer addresses observe collection without adding conservative roots. */
 	owner_address = (uintptr_t)&owner->realm->cell;
 	document_address = (uintptr_t)&node->document->node.cell;
 	image_address = (uintptr_t)&node->cell;
@@ -182,10 +218,14 @@ image_case(
 	/* Native Page queries borrow ordinary fonts and the actual child content viewport. */
 	laid_out = page_node_box(page, node, &box);
 	image_check(laid_out == 1 && box.width == 60 && box.height == 20, "real child layout resolves image percentages");
+
+	/* Reads rendered height through the actual native image binding. */
 	status = bind_html_image_element_interface.attributes[3].getter(page->realm, receiver, NULL, 0, &answer);
 	if (status != 0)
 		return status;
 	image_check(answer == vm_value_int32(20), "direct native getter returns actual Page content height");
+
+	/* Removes script aliases before testing native ownership alone. */
 	status = image_script(page->realm, "f=null;d=null", &answer);
 	if (status != 0)
 		return status;
@@ -201,6 +241,8 @@ image_case(
 	vm_heap_stats(page->heap, &after);
 	image_check(laid_out == 1 && box.height == 20, "direct Page query protects actual child graph through callback GC");
 	image_check(after.collections > before.collections && fixture.callbacks != 0, "real callback GC runs without conservative stack roots");
+
+	/* Repeats the actual image getter while callback collection is active. */
 	status = bind_html_image_element_interface.attributes[3].getter(page->realm, receiver, NULL, 0, &answer);
 	if (status != 0)
 		return status;

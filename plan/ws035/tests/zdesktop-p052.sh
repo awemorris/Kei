@@ -20,7 +20,9 @@ out=${1:-build/ws035-p052}
 mkdir -p "$out"
 full=${FULL:-60}
 back=${BACK:-160}
-guest() { timeout 60 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
+# The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p023).
+. plan/ws099/tests/guest-retry.sh
+guest() { guest_retry 60 "$1"; }
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 
 # Waits until a guest command prints something, up to about two minutes.

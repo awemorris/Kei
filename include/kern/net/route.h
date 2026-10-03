@@ -52,6 +52,11 @@ route_lookup_ref(
 	uint32_t destination,
 	struct net_route *result);
 int
+route_lookup_device_ref(
+	uint32_t destination,
+	const struct net_device *device,
+	struct net_route *result);
+int
 route_get_ref(
 	unsigned ordinal,
 	struct net_route *result);

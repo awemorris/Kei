@@ -1,0 +1,21 @@
+{
+  "authority": "full C section14 single forward shared cleanup",
+  "findings": 79,
+  "functions": [
+    {
+      "path": "plan/ws074/tests/host-frame-lifetime.c",
+      "function": "frame_sample",
+      "forward_cleanup_jumps": 23,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-lifetime.c",
+      "function": "frame_retention",
+      "forward_cleanup_jumps": 56,
+      "one_label": true,
+      "all_jumps_forward": true
+    }
+  ],
+  "other_findings": 0
+}

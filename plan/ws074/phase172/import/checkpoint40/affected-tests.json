@@ -1,0 +1,52 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-select-collection"
+    ],
+    "exit": 0,
+    "stdout_file": "host-select-collection.stdout",
+    "stderr_file": "host-select-collection.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-table-collection"
+    ],
+    "exit": 0,
+    "stdout_file": "host-table-collection.stdout",
+    "stderr_file": "host-table-collection.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-document-images"
+    ],
+    "exit": 0,
+    "stdout_file": "host-document-images.stdout",
+    "stderr_file": "host-document-images.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-native-properties"
+    ],
+    "exit": 0,
+    "stdout_file": "host-native-properties.stdout",
+    "stderr_file": "host-native-properties.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-form-owner"
+    ],
+    "exit": 0,
+    "stdout_file": "host-form-owner.stdout",
+    "stderr_file": "host-form-owner.stderr"
+  }
+]

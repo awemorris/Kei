@@ -1,0 +1,319 @@
+/*
+ * zedBSD
+ * Copyright (C) 2026 Awe Morris
+ *
+ * SPDX-License-Identifier: Zlib
+ */
+
+/* Exercises ordinary function/environment factories without conservative caller retention. */
+
+#include "js/builtin.h"
+#include "vm/bytecode.h"
+
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+
+/* Inert allocation advances the ordinary default collector accounting. */
+static const struct vm_cell_type pressure_type = { "function-factory-pressure", NULL, NULL };
+
+static int probe_native(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+static int probe_script(struct vm_realm *realm, const char *source, vm_value *result);
+static int probe_case(unsigned mode);
+
+/*
+ * Runs one bounded native, bytecode, closure or environment ownership probe.
+ */
+int
+main(
+	int argc,
+	char **argv)
+{
+	unsigned mode;
+	int status;
+
+	/* Each baseline subprocess selects exactly one ownership family. */
+	if (argc != 2)
+		return 2;
+	if (argv[1][0] < '0' || argv[1][0] > '3' || argv[1][1] != '\0')
+		return 2;
+	mode = (unsigned)(argv[1][0] - '0');
+	status = probe_case(mode);
+	if (status != 0)
+		return 2;
+
+	/* Succeeded: the ordinary factory retained its complete input and output graph. */
+	return 0;
+}
+
+/* Supplies a real native entry without allocation or host effects. */
+static int
+probe_native(
+	struct vm_realm *realm,
+	vm_value receiver,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	UNUSED_PARAMETER(realm);
+	UNUSED_PARAMETER(receiver);
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* Succeeded: the native remains callable after complete factory publication. */
+	*result = VM_VALUE_UNDEFINED;
+	return 0;
+}
+
+/* Builds bytecode and captured environments through the actual production compiler. */
+static int
+probe_script(
+	struct vm_realm *realm,
+	const char *source,
+	vm_value *result)
+{
+	struct wb_units units;
+	struct js_syntax_error syntax;
+	int status;
+
+	/* Decode ordinary script before invoking the real compiler/interpreter. */
+	wb_units_init(&units);
+	status = wb_utf8_to_units((const unsigned char *)source, strlen(source), &units);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Generated functions provide real production code and closure objects. */
+	status = js_run_script(realm, units.data, units.length, 0, result, &syntax);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Release source storage after successful execution has been checked. */
+	wb_units_release(&units);
+
+	/* Succeeded: the real function completion is available. */
+	return 0;
+}
+
+/* Validates factory ownership through real threshold collection, calls and root retirement. */
+static int
+probe_case(
+	unsigned mode)
+{
+	struct vm_heap *heap;
+	struct vm_realm *realm;
+	struct vm_function *original;
+	struct vm_function *function;
+	struct vm_env *parent;
+	struct vm_env *created;
+	struct vm_code *code;
+	struct vm_cell *roots[3];
+	struct vm_cell *pressure;
+	struct vm_cell *found;
+	struct vm_heap_stats before;
+	struct vm_heap_stats after;
+	vm_value answer;
+	vm_value argument;
+	uintptr_t input_address;
+	uintptr_t output_address;
+	size_t pressure_size;
+	unsigned index;
+	unsigned registered;
+	int callable;
+	int printed;
+	int status;
+
+	/* Ordinary heap and realm setup owns only builtins, not the isolated factory participants. */
+	status = vm_heap_create(&heap, 0);
+	if (status != 0)
+		return status;
+	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+	status = vm_realm_create(heap, &realm);
+	if (status != 0) {
+		vm_heap_destroy(heap);
+		return status;
+	}
+
+	/* Populate the normal intrinsic prototypes before any pressure is introduced. */
+	status = js_install_builtins(realm);
+	if (status != 0) {
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return status;
+	}
+
+	/* Construction slots stop retaining inputs before each actual native factory begins. */
+	memset(roots, 0, sizeof(roots));
+	registered = 0;
+	for (index = 0; index < 3U; index++) {
+		status = vm_heap_add_root(heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* Standalone environment parents have no realm or function owner. */
+	function = NULL;
+	parent = NULL;
+	code = NULL;
+	input_address = 0;
+	if (mode == 0U) {
+		parent = vm_env_create(heap, NULL, 1);
+		if (parent == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+
+		/* Keep the actual parent only during subsequent fixture construction. */
+		roots[0] = &parent->cell;
+		input_address = (uintptr_t)parent;
+	} else if (mode >= 2U) {
+		/* Real bytecode has a distinct captured environment only in the closure case. */
+		if (mode == 2U) {
+			status = probe_script(realm, "(function(n){return n+17;})", &answer);
+			if (status != 0)
+				goto cleanup;
+		} else {
+			status = probe_script(realm, "(function(){var secret=17;return function(n){return secret+n;};})()", &answer);
+			if (status != 0)
+				goto cleanup;
+		}
+
+		/* Inspect only an actual generated callable before capturing its private inputs. */
+		callable = vm_value_is_callable(answer);
+		if (!callable) {
+			status = EIO;
+			goto cleanup;
+		}
+
+		/* Generated code and environment are owned only through construction slots. */
+		original = (struct vm_function *)vm_value_as_cell(answer);
+		code = original->code;
+		parent = original->env;
+		roots[0] = &code->cell;
+		if (parent != NULL)
+			roots[2] = &parent->cell;
+		input_address = (uintptr_t)code;
+	}
+
+	/* Reset accounting with no conservative root while preserving only temporary construction slots. */
+	vm_heap_set_stack_base(heap, NULL);
+	vm_heap_collect(heap);
+	pressure_size = 8U * 1024U * 1024U;
+	if (mode == 1U)
+		pressure_size -= 16U;
+	pressure = vm_heap_alloc(heap, &pressure_type, pressure_size);
+	if (pressure == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The real callee must take ownership before the next default allocation collects. */
+	roots[0] = NULL;
+	roots[2] = NULL;
+	vm_heap_stats(heap, &before);
+	if (mode == 0U) {
+		created = vm_env_create(heap, parent, 4096U);
+		if (created == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+		output_address = (uintptr_t)created;
+	} else if (mode == 1U) {
+		function = vm_function_create_native(realm, "owned-native", 1, probe_native);
+		if (function == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+		output_address = (uintptr_t)function;
+	} else if (mode == 2U) {
+		function = vm_function_create(realm, code);
+		if (function == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+		output_address = (uintptr_t)function;
+	} else {
+		function = vm_closure_create(realm, code, parent);
+		if (function == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+		output_address = (uintptr_t)function;
+	}
+
+	/* Integer-only observations prove collection occurred and the complete graph still exists. */
+	vm_heap_stats(heap, &after);
+	if (after.collections <= before.collections) {
+		status = EIO;
+		goto cleanup;
+	}
+	if (input_address != 0) {
+		found = vm_heap_find_cell(heap, input_address);
+		if (found == NULL) {
+			printed = fprintf(stderr, "FAIL mode %u: factory lost actual input during GC\n", mode);
+			if (printed < 0)
+				status = EIO;
+			status = EIO;
+			goto cleanup;
+		}
+	}
+
+	/* Only surviving complete output may receive a root after the entire factory has returned. */
+	found = vm_heap_find_cell(heap, output_address);
+	if (found == NULL) {
+		status = EIO;
+		goto cleanup;
+	}
+	roots[1] = found;
+
+	/* The published function executes real native or bytecode semantics. */
+	if (mode != 0U) {
+		if (found->type != &vm_function_type) {
+			status = EIO;
+			goto cleanup;
+		}
+		argument = vm_value_number(5);
+		status = vm_call(realm, vm_value_cell(function), VM_VALUE_UNDEFINED, &argument, 1, &answer);
+		if (status != 0)
+			goto cleanup;
+		if (mode >= 2U && answer != vm_value_number(22)) {
+			status = EIO;
+			goto cleanup;
+		}
+	}
+
+	/* No constructor slot may keep its result or isolated inputs after the caller drops output. */
+	roots[1] = NULL;
+	vm_heap_collect(heap);
+	found = vm_heap_find_cell(heap, output_address);
+	if (found != NULL) {
+		status = EIO;
+		goto cleanup;
+	}
+
+	/* Each completed standalone case records its real threshold collection. */
+	printed = printf("factory mode %u passed, collections %zu\n", mode, (size_t)(after.collections - before.collections));
+	if (printed < 0) {
+		status = EIO;
+		goto cleanup;
+	}
+
+cleanup:
+	/* Unwind only acquired construction slots, then restore ordinary embedding teardown. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(heap, &roots[registered]);
+	}
+	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+	vm_realm_destroy(realm);
+	vm_heap_destroy(heap);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: this direct factory returned a complete collectible graph. */
+	return 0;
+}

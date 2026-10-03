@@ -57,15 +57,29 @@ main(
 		return 2;
 	vm_heap_set_stack_base(heap, stack_base);
 
-	/* Exercises saved references before separate binding and failure cases. */
+	/* Exercises saved references before separate binding and retirement cases. */
 	error = ownership_references(heap, stack_base);
-	if (error == 0)
-		error = ownership_window(heap, stack_base);
-	if (error == 0)
-		error = ownership_active_timer(heap, stack_base);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Bound Window retirement is independent of saved-reference construction. */
+	error = ownership_window(heap, stack_base);
+	if (error != 0) {
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* A borrowed callback must finish while its active child host remains retained. */
+	error = ownership_active_timer(heap, stack_base);
+	if (error != 0) {
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* All actual operations completed before whole-heap finalization is checked. */
+	vm_heap_destroy(heap);
 
 	/* A limited heap bounds partial-construction failure without fault switches. */
 	error = ownership_failure();
@@ -74,11 +88,13 @@ main(
 
 	/* Reports all independently named assertions with a failing exit status. */
 	printed = printf(
-		"ownership checks: %u/%u passed\n",
-		checks - failures,
-		checks);
+	    "ownership checks: %u/%u passed\n",
+	    checks - failures,
+	    checks);
 	if (printed < 0)
 		return 2;
+
+	/* Finalizer and identity failures remain process failures after successful teardown. */
 	if (failures != 0)
 		return 1;
 
@@ -92,11 +108,15 @@ ownership_check(
 	int condition,
 	const char *name)
 {
+	int printed;
+
 	/* Each finalizer/identity assertion contributes independently to the result. */
 	checks++;
 	if (!condition) {
 		failures++;
-		fprintf(stderr, "FAIL %s\n", name);
+		printed = fprintf(stderr, "FAIL %s\n", name);
+		if (printed < 0)
+			failures++;
 	}
 
 	/* Succeeded: this assertion has been recorded. */
@@ -131,9 +151,9 @@ ownership_source(
 	/* Keeps source conversion separate from parsing and execution failures. */
 	wb_units_init(&units);
 	error = wb_utf8_to_units(
-		(const unsigned char *)source,
-		strlen(source),
-		&units);
+	    (const unsigned char *)source,
+	    strlen(source),
+	    &units);
 	if (error != 0) {
 		wb_units_release(&units);
 		return error;
@@ -141,9 +161,13 @@ ownership_source(
 
 	/* Uses the same script implementation as a bound Window. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release converted source only after the actual script outcome is checked. */
+	wb_units_release(&units);
 
 	/* Succeeded: the script's completion is available. */
 	return 0;
@@ -161,11 +185,14 @@ ownership_sample(
 	struct dom_document *document;
 	vm_value answer;
 	int error;
+	int valid;
 
 	/* Managed creation precedes built-ins, so every function has the final owner. */
 	error = vm_realm_create_managed(heap, &realm);
 	if (error != 0)
 		return error;
+
+	/* Host-release counts belong to this successfully constructed managed owner. */
 	realm->host_release = ownership_release;
 	error = js_install_builtins(realm);
 	if (error != 0)
@@ -176,11 +203,11 @@ ownership_sample(
 	if (function == NULL)
 		return ENOMEM;
 	error = js_builtin_value(
-		realm,
-		realm->global,
-		"collect",
-		vm_value_cell(function),
-		JS_BUILTIN_METHOD);
+	    realm,
+	    realm->global,
+	    "collect",
+	    vm_value_cell(function),
+	    JS_BUILTIN_METHOD);
 	if (error != 0)
 		return error;
 
@@ -192,6 +219,13 @@ ownership_sample(
 		    &answer);
 		if (error != 0)
 			return error;
+
+		/* Only the requested actual callable may become the saved function reference. */
+		valid = vm_value_is_callable(answer);
+		if (!valid)
+			return EINVAL;
+
+		/* The selected output root begins ownership after successful script completion. */
 		*root = vm_value_as_cell(answer);
 	} else if (kind == 1) {
 		*root = &realm->global->cell;
@@ -210,6 +244,13 @@ ownership_sample(
 		    &answer);
 		if (error != 0)
 			return error;
+
+		/* Suspended generator output must be an actual object before exposing its cell. */
+		valid = vm_value_is_object(answer);
+		if (!valid)
+			return EINVAL;
+
+		/* The caller owns only the successful suspended object, without an extra realm root. */
 		*root = vm_value_as_cell(answer);
 	}
 
@@ -262,12 +303,12 @@ ownership_references(
 		if (kind == 0) {
 			function = (struct vm_function *)root;
 			error = vm_call(
-				function->realm,
-				vm_value_cell(function),
-				VM_VALUE_UNDEFINED,
-				NULL,
-				0,
-				&answer);
+			    function->realm,
+			    vm_value_cell(function),
+			    VM_VALUE_UNDEFINED,
+			    NULL,
+			    0,
+			    &answer);
 			if (error != 0) {
 				vm_heap_remove_root(heap, &root);
 				return error;
@@ -322,11 +363,14 @@ ownership_references(
 
 			/* Reads the second yield independently of the call completion object. */
 			error = vm_get(realm, answer, key, &answer);
-			vm_realm_destroy(realm);
 			if (error != 0) {
+				vm_realm_destroy(realm);
 				vm_heap_remove_root(heap, &root);
 				return error;
 			}
+
+			/* The successful primitive yield no longer needs its unrelated caller realm. */
+			vm_realm_destroy(realm);
 
 			/* A post-GC resume preserves the suspended execution environment. */
 			expected = vm_value_int32(42);
@@ -381,9 +425,13 @@ ownership_window(
 	error = vm_realm_create_managed(heap, &realm);
 	if (error != 0)
 		return error;
+
+	/* Completes ordinary intrinsic initialization before exposing saved-reference behavior. */
 	error = js_install_builtins(realm);
 	if (error != 0)
 		return error;
+
+	/* Creates the native Document that will own its managed context. */
 	document = dom_document_create(heap);
 	if (document == NULL)
 		return ENOMEM;
@@ -554,11 +602,11 @@ ownership_active_timer(
 
 	/* A saved parent function is the child's timer callback. */
 	error = js_builtin_value(
-		child,
-		child->global,
-		"retire",
-		vm_value_cell(callback),
-		JS_BUILTIN_METHOD);
+	    child,
+	    child->global,
+	    "retire",
+	    vm_value_cell(callback),
+	    JS_BUILTIN_METHOD);
 	if (error != 0) {
 		vm_realm_destroy(parent);
 		return error;
@@ -753,7 +801,7 @@ ownership_fetch(
 	UNUSED_PARAMETER(done);
 	UNUSED_PARAMETER(done_context);
 
-	/* Accepted asynchronous registration is outside this ownership foundation. */
+	/* Succeeded: supplies the fixture's unsupported asynchronous-registration refusal. */
 	return ENOTSUP;
 }
 

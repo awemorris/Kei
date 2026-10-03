@@ -1,0 +1,16 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/css/media.c",
+    "sha256": "e1debeee9566a5459be1498bf84eac6172797636f19025521ec30716ff80b5cc",
+    "object": "libbrowser_css_media.o",
+    "text_sha256": "2c90cb6d24f200366945a10d421e88fb822adfc4faac04a5a3b963ed4d75bf21",
+    "final_sha256": "6461a0f92796ec72fdb8b9810c9ff48d03f03083d5ab8478c5809e736dded3ec",
+    "final_text_sha256": "75998fbbc489cc8e7ee7a576f57d049b04c8126cb64289170b98040a9ce077f8",
+    "C_string_literals_equal": false,
+    "text_equal": false,
+    "added_C_string_literals": [
+      "\"dppx\"",
+      "\"x\""
+    ]
+  }
+]

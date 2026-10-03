@@ -322,6 +322,9 @@ bind_get_elements_by_tag_name(
 	struct vm_string *name;
 	struct vm_string *lower;
 	struct vm_object *array;
+	struct vm_cell *roots[4];
+	unsigned index;
+	unsigned registered;
 	int matches;
 	int status;
 
@@ -330,15 +333,37 @@ bind_get_elements_by_tag_name(
 	status = bind_this_node(realm, this_value, &root);
 	if (status != 0)
 		return status;
+
+	/* Retain query strings and the unpublished result across wrapper allocations. */
+	roots[0] = NULL;
+	if (realm->managed)
+		roots[0] = &realm->cell;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	roots[3] = NULL;
+	registered = 0;
+	for (index = 0; index < 4U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+
+		/* Only acquired registrations belong to cleanup. */
+		registered++;
+	}
+
+	/* Both query spellings stay live until the descendant walk finishes. */
 	status = bind_to_atom(realm, js_argument(args, count, 0), 0, &name);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = &name->cell;
 	status = bind_to_atom(realm, js_argument(args, count, 0), 1, &lower);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[2] = &lower->cell;
 	status = bind_array_create(realm, &array);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[3] = &array->cell;
 
 	/* Each descendant element whose name matches. */
 	for (walk = bind_following(root, root); walk != NULL; walk = bind_following(walk, root)) {
@@ -349,11 +374,25 @@ bind_get_elements_by_tag_name(
 			continue;
 		status = bind_array_push_node(window, array, walk);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Succeeded: the list is reported. */
 	*result = vm_value_cell(array);
+	status = 0;
+
+cleanup:
+	/* No temporary query or result root outlives this native call. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed conversion or wrapper append never reports a complete list. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the caller owns the completed element list. */
 	return 0;
 }
 
@@ -376,7 +415,10 @@ bind_get_elements_by_class_name(
 	struct vm_string *name;
 	struct vm_object *names;
 	struct vm_object *array;
+	struct vm_cell *roots[4];
 	uint32_t index;
+	unsigned slot;
+	unsigned registered;
 	int has;
 	int status;
 
@@ -385,23 +427,46 @@ bind_get_elements_by_class_name(
 	status = bind_this_node(realm, this_value, &root);
 	if (status != 0)
 		return status;
+
+	/* Retain the fresh query string, token list and unpublished output. */
+	roots[0] = NULL;
+	if (realm->managed)
+		roots[0] = &realm->cell;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	roots[3] = NULL;
+	registered = 0;
+	for (slot = 0; slot < 4U; slot++) {
+		status = vm_heap_add_root(realm->heap, &roots[slot]);
+		if (status != 0)
+			goto cleanup;
+
+		/* Cleanup owns only slots successfully registered. */
+		registered++;
+	}
+
+	/* Tokenize the original string before walking any descendant. */
 	status = bind_to_string(realm, js_argument(args, count, 0), &classes);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = &classes->cell;
 	status = bind_array_create(realm, &names);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[2] = &names->cell;
 	status = bind_split_classes(realm, classes, names);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = bind_array_create(realm, &array);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[3] = &array->cell;
 
 	/* No class names match nothing. */
 	if (names->length == 0) {
 		*result = vm_value_cell(array);
-		return 0;
+		status = 0;
+		goto cleanup;
 	}
 
 	/* Each descendant element that has every class. */
@@ -421,11 +486,25 @@ bind_get_elements_by_class_name(
 			continue;
 		status = bind_array_push_node(window, array, walk);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Succeeded: the list is reported. */
 	*result = vm_value_cell(array);
+	status = 0;
+
+cleanup:
+	/* Return no root that points into the native query frame. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed token split or descendant wrapping cannot report a full list. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the caller owns the completed class match list. */
 	return 0;
 }
 
@@ -440,20 +519,37 @@ bind_split_classes(
 	struct vm_object *names)
 {
 	struct vm_string *atom;
+	struct vm_cell *roots[2];
 	struct wb_units units;
 	size_t start;
 	size_t index;
 	uint16_t unit;
+	unsigned slot;
+	unsigned registered;
 	int space;
+	int units_ready;
 	int status;
+
+	/* Keep the destination and each new atom alive until its property owns it. */
+	roots[0] = &names->cell;
+	roots[1] = NULL;
+	registered = 0;
+	units_ready = 0;
+	for (slot = 0; slot < 2U; slot++) {
+		status = vm_heap_add_root(realm->heap, &roots[slot]);
+		if (status != 0)
+			goto cleanup;
+
+		/* Only acquired roots are released by the shared exit. */
+		registered++;
+	}
 
 	/* The string's units. */
 	wb_units_init(&units);
+	units_ready = 1;
 	status = vm_string_append_units(classes, &units);
-	if (status != 0) {
-		wb_units_release(&units);
-		return status;
-	}
+	if (status != 0)
+		goto cleanup;
 
 	/* Cuts the units at ASCII whitespace; each piece is a name. */
 	start = 0;
@@ -475,24 +571,42 @@ bind_split_classes(
 		if (index > start) {
 			atom = vm_atom_from_units(realm->heap, &units.data[start], index - start);
 			if (atom == NULL) {
-				wb_units_release(&units);
-				return ENOMEM;
+				status = ENOMEM;
+				goto cleanup;
 			}
+
+			/* The new token remains owned until the destination array holds it. */
+			roots[1] = &atom->cell;
 
 			/* The name at the array's end. */
 			status = vm_object_define(realm->heap, names, vm_value_int32((int32_t)names->length), vm_value_cell(atom), VM_PROPERTY_DEFAULT);
-			if (status != 0) {
-				wb_units_release(&units);
-				return status;
-			}
+			if (status != 0)
+				goto cleanup;
 		}
 
 		/* The next name starts after the space. */
 		start = index + 1U;
 	}
 
+	/* The copied units are no longer needed after splitting. */
+	status = 0;
+
+cleanup:
+	/* Native units exist only after their buffer initialization completed. */
+	if (units_ready)
+		wb_units_release(&units);
+
+	/* Release only the native registrations acquired by this split. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* An allocation or property write failure leaves the list incomplete. */
+	if (status != 0)
+		return status;
+
 	/* Succeeded: the names are in the array. */
-	wb_units_release(&units);
 	return 0;
 }
 
@@ -506,10 +620,17 @@ mixin_insert_values(
 	struct dom_node *reference)
 {
 	struct dom_node *node;
+	struct vm_cell *node_root;
 	struct vm_string *string;
 	struct wb_units units;
 	unsigned index;
 	int status;
+
+	/* An unpublished text node survives insertion callbacks until the parent owns it. */
+	node_root = NULL;
+	status = vm_heap_add_root(realm->heap, &node_root);
+	if (status != 0)
+		return status;
 
 	/* Each argument in order. */
 	for (index = 0; index < count; index++) {
@@ -520,28 +641,43 @@ mixin_insert_values(
 		if (node == NULL) {
 			status = bind_to_string(realm, args[index], &string);
 			if (status != 0)
-				return status;
+				goto cleanup;
 			wb_units_init(&units);
 			status = vm_string_append_units(string, &units);
 			if (status == 0) {
 				node = dom_text_create(parent->document, units.data, units.length);
 				if (node == NULL)
 					status = ENOMEM;
+				else
+					node_root = &node->cell;
 			}
 
 			/* The characters are in the node now. */
 			wb_units_release(&units);
 			if (status != 0)
-				return status;
+				goto cleanup;
 		}
 
 		/* Before the reference (a reference that is being moved stays the place). */
+		node_root = &node->cell;
 		if (reference == node)
 			reference = node->next;
 		status = bind_insert(realm, parent, node, reference);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		node_root = NULL;
 	}
+
+	/* Every inserted node now has a durable parent edge. */
+	status = 0;
+
+cleanup:
+	/* The one native slot outlives no insertion attempt. */
+	vm_heap_remove_root(realm->heap, &node_root);
+
+	/* Failed conversion or insertion reports the error after cleanup. */
+	if (status != 0)
+		return status;
 
 	/* Succeeded: every argument is inserted. */
 	return 0;

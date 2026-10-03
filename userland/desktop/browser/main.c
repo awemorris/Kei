@@ -116,6 +116,7 @@ struct main_page {
 	const struct main_options *options;
 	struct browser_view *view;
 	int failed;
+	int output_failed;
 };
 
 /*
@@ -229,9 +230,11 @@ main_dump(
 	enum browser_dump kind;
 	unsigned flags;
 	size_t length;
+	size_t written;
 	char *text;
 	int status;
 	int error;
+	int flushed;
 
 	/* The dump the mode names; the layout and the display list need the page laid out with its images. */
 	flags = BROWSER_SETTLE_LAYOUT;
@@ -254,8 +257,16 @@ main_dump(
 
 	/* The dump, written out. */
 	error = browser_view_dump(page.view, kind, &text, &length);
-	if (error == 0)
-		fwrite(text, 1, length, stdout);
+	if (error == 0) {
+		written = fwrite(text, 1, length, stdout);
+		if (written != length)
+			error = EIO;
+		flushed = fflush(stdout);
+		if (flushed != 0)
+			error = EIO;
+	}
+
+	/* Releases the owned dump and view on either write outcome. */
 	free(text);
 	browser_view_destroy(page.view);
 	if (error != 0) {
@@ -343,6 +354,10 @@ main_run_page(
 
 	/* The page is no longer needed. */
 	browser_view_destroy(page.view);
+	if (page.output_failed) {
+		fprintf(stderr, "browser: cannot write page console: %s\n", strerror(EIO));
+		return 1;
+	}
 
 	/* Succeeded: the page ran. */
 	return 0;
@@ -463,14 +478,21 @@ main_console_out(
 	const char *text,
 	size_t length)
 {
-	UNUSED_PARAMETER(context);
+	struct main_page *page;
+	size_t written;
+	int newline;
+	int flushed;
+
 	UNUSED_PARAMETER(view);
 	UNUSED_PARAMETER(level);
 
-	/* The line. */
-	fwrite(text, 1, length, stdout);
-	fputc('\n', stdout);
-	fflush(stdout);
+	/* A failed write is retained until the enclosing --run call returns. */
+	page = context;
+	written = fwrite(text, 1, length, stdout);
+	newline = fputc('\n', stdout);
+	flushed = fflush(stdout);
+	if (written != length || newline == EOF || flushed != 0)
+		page->output_failed = 1;
 }
 
 /* The view's console callback of the other modes: the line on standard error, marked as the console's. */
@@ -559,6 +581,7 @@ main_write_ppm(
 	size_t index;
 	size_t written;
 	FILE *file;
+	int header;
 	int failed;
 	int closed;
 	int error;
@@ -569,23 +592,25 @@ main_write_ppm(
 		return errno;
 
 	/* The header: the magic, the size and the largest sample. */
-	fprintf(file, "P6\n%u %u\n255\n", width, height);
+	header = fprintf(file, "P6\n%u %u\n255\n", width, height);
+	error = 0;
+	if (header < 0)
+		error = EIO;
 
 	/* Each pixel's red, green and blue, while the writes go through. */
 	count = (size_t)width * (size_t)height;
-	for (index = 0; index < count; index++) {
+	for (index = 0; index < count && error == 0; index++) {
 		sample[0] = (unsigned char)(pixels[index] >> 16);
 		sample[1] = (unsigned char)(pixels[index] >> 8);
 		sample[2] = (unsigned char)pixels[index];
 		written = fwrite(sample, 1, sizeof(sample), file);
 		if (written != sizeof(sample))
-			break;
+			error = EIO;
 	}
 
 	/* A write that failed, or a close that did. */
-	error = 0;
 	failed = ferror(file);
-	if (failed)
+	if (failed && error == 0)
 		error = EIO;
 	closed = fclose(file);
 	if (closed != 0 && error == 0)

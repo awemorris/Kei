@@ -2,7 +2,7 @@
 
 # ws099-p020: BUG-125 の原因の特定と compositor の直し（ベータ1 の blocking）
 
-Status: uncleared（q591-i01 は 2026-10-02 23:40 に時限で終了、P2。原因の特定と compositor の直しはできた。受け入れの C3・C4・C8・C9 は、直す前の image でも同じ試験が落ちていて未達）
+Status: cleared（2026-10-03 Q1 判定（user「Q1の判断で閉じられるものは閉じてください。」）: p076 単独 20 回は harness の SSH の失敗を除き 19/19 PASS（2026-10-02 の Q1 の判断で SSH の失敗は harness の失敗）、C9 ×5 FAIL 0 は ws099-p024 で満たした。BUG-125 は resolved）。元の記載: uncleared（q591-i01 は 2026-10-02 23:40 に時限で終了、P2。原因の特定と compositor の直しはできた。受け入れの C3・C4・C8・C9 は、直す前の image でも同じ試験が落ちていて未達）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Queue: [q591](../../queue.md) / q591-i01（承認: 2026-10-02 ユーザー「作業を開始しましょう。」、P2、時限 4h）
@@ -106,3 +106,5 @@ p076 の試験の同期（map と最初の frame の log を待つ）は案を�
 
 - compositor の直し（`f1af6cc7f`）と harness の retry（`a781d60f5`）を main が統合する。そのうえで、base の C3・C4・C8・C9 の FAIL（title bar が出ない、p137 の focus、p134 の角、p072）を BUG-136/137 と合わせて p023 か別の bug で扱った後に、C9 の 5 回を流し直す。
 - BUG-125 の 3 症状は、原因と直しの証拠がそろった。resolved にするかは Q1 が判断する（p076 単独の受け入れは、harness の失敗を除いて 19/19 が PASS）。
+
+2026-10-03 Q1: ws099-p023（q609）で直す前からの C 基準の失敗が直り、C3/C4/C8/C9 ×5 は 4 回 FAIL 0、1 回目に p128・cursor-owner の 2 件（BUG-147、BUG-125 の症状とは別）。BUG-125 の 3 症状は QEMU で解消。p020 の「C9 ×5 FAIL 0」は厳密には未達なので uncleared のまま、BUG-147 を non-blocking として移して clear するかをユーザーに聞く（朝）。

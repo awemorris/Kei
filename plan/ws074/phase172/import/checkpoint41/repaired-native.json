@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "timeout",
+    "30",
+    "build/browser3-p172/review41/native-probe"
+  ],
+  "exit": 0,
+  "stdout_file": "repaired-native.stdout",
+  "stderr_file": "repaired-native.stderr"
+}

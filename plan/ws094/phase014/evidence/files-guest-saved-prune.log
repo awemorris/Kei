@@ -1,0 +1,14 @@
+log: ZFILES DESKTOP place name=notes.txt column=2 row=3  ok
+log: ZFILES DESKTOP place name=Projects column=0 row=0  ok
+shot saved.png
+log: ZFILES DESKTOP prune removed=1 kept=1 ok
+log: ZFILES DESKTOP place name=notes.txt column=2 row=3  ok
+log: ZFILES DESKTOP ready items=5 cells=5 .* hidden=0$ ok
+log: ^ghost.txt ok
+log: ZFILES DESKTOP move name=notes.txt column=3 row=3 error=0 ok
+shot prune.png
+log: ZFILES DESKTOP ready items=100 cells=91 .* hidden=9$ ok
+shot overflow.png
+zdesktop: no ERROR
+files: no FAILED
+files-desktop-guest: PASS

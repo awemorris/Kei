@@ -1,0 +1,34 @@
+{
+  "queue": "q597",
+  "checkpoint": 60,
+  "source": "userland/desktop/libbrowser/page/page.c",
+  "source_sha256": "2016cf37f57e59568fcdcc78d861b7f729195484257c3c9b8617f49105851357",
+  "baseline": "f936e6e6802940db235f8e7b88b546068f043d6c",
+  "reviewed": 180,
+  "total": 209,
+  "remaining": 29,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 4,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "golden": {
+    "sheets.dom": "exact",
+    "sheets.style": "exact"
+  },
+  "tests": {
+    "host-relayout": "host-relayout: 21 checks, 0 failed",
+    "host-position": "host-position: 22 checks, 0 failed",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "limits": [
+    "Only page.c is newly full-reviewed; original whole p172 gates and29 production files remain.",
+    "Allocation failure injection was not run; dump and rollback error paths were reviewed manually.",
+    "No target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

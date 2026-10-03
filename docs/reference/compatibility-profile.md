@@ -4,9 +4,7 @@ Status: current declarations; conformance work remains active
 
 zedBSD supplies a target libc and its own syscall/device ABI. A familiar
 function name or a feature-test macro is not evidence of complete POSIX/SUS
-conformance, Linux binary compatibility or BSD disk compatibility. The
-[WS001 ledger](../../plan/ws001/ws.md) owns outstanding behavior and
-acceptance; individual implementation tests establish the supported subset.
+conformance, Linux binary compatibility or BSD disk compatibility.
 
 ## Feature selection
 
@@ -53,10 +51,9 @@ These documents do not extend their tested ABI claims to every non-x86 port.
 
 Build against the [project sysroot](../howto/build-from-source.md), check the
 actual required declarations and symbols, then exercise failure paths on the
-target. For example, `isatty` checks termios support; `ttyname_r` must identify
-the actual terminal and return an error for a nonterminal. It must not label
-every graphical PTY `/dev/console`. The real Xzed/zterm PTY and error cases
-passed [q147](../../plan/history/queue-q147.md).
+target. For example, `isatty` checks termios support; `ttyname_r` must
+identify the actual terminal and return an error for a nonterminal. It must
+not label every graphical PTY `/dev/console`.
 
 Use [atomic publication](atomic-publication.md) and
 [image formatters](image-formatters.md) for their specific extensions and

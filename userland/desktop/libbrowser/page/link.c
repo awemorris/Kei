@@ -22,7 +22,7 @@
 #include <string.h>
 
 /* The deepest element nesting searched for a link (the parser caps nesting too). */
-#define LINK_DEPTH		512
+#define LINK_DEPTH 512
 
 static int link_resolve(const char *base, const char *href, struct net_url *target);
 static int link_named(const char *scheme, const char *name);
@@ -51,6 +51,8 @@ page_link_at(
 
 	/* Nothing is found until an <a href> is. */
 	*found = 0;
+
+	/* An unlaid page has no hit-tested link geometry. */
 	if (!page->laid_out)
 		return 0;
 
@@ -88,8 +90,10 @@ page_link_at(
 	if (error != 0)
 		return error;
 
-	/* Succeeded: the link is found. */
+	/* Publishes the copied href as a genuine hit-tested link. */
 	*found = 1;
+
+	/* Succeeded: the caller receives the actual ancestor link's href. */
 	return 0;
 }
 
@@ -117,9 +121,13 @@ page_resolve_file(
 
 	/* The file a file: URL names. */
 	error = net_url_file_path(&target, out);
-	net_url_release(&target);
-	if (error != 0)
+	if (error != 0) {
+		net_url_release(&target);
 		return error;
+	}
+
+	/* The copied file path no longer borrows the resolved URL. */
+	net_url_release(&target);
 
 	/* Succeeded: the target's path is written. */
 	return 0;
@@ -147,14 +155,21 @@ page_resolve_location(
 	/* A local file's path, or the URL. */
 	error = net_url_file_path(&target, out);
 	if (error == EPROTONOSUPPORT || error == ENOENT) {
+		/* Non-file schemes preserve their complete URL instead of a filesystem path. */
 		wb_buffer_clear(out);
 		error = net_url_serialize(&target, 0, out);
+		if (error != 0) {
+			net_url_release(&target);
+			return error;
+		}
+	} else if (error != 0) {
+		/* Other file-path failures retain their actual error. */
+		net_url_release(&target);
+		return error;
 	}
 
 	/* The target is written. */
 	net_url_release(&target);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: the location is written. */
 	return 0;
@@ -187,53 +202,110 @@ page_fetch(
 	error = link_resolve(base, href, &target);
 	if (error != 0)
 		return error;
-	if (final_url != NULL)
+
+	/* Publishes the initially resolved URL when the caller requested it. */
+	if (final_url != NULL) {
 		error = net_url_serialize(&target, 0, final_url);
+		if (error != 0) {
+			net_url_release(&target);
+			return error;
+		}
+	}
 
 	/* A data: URL carries its bytes. */
 	is_data = link_named(target.scheme, "data");
-	is_http = link_named(target.scheme, "http") || link_named(target.scheme, "https");
-	if (error == 0 && is_data) {
+
+	/* Tests HTTPS only when the actual scheme was not already HTTP. */
+	is_http = link_named(target.scheme, "http");
+	if (!is_http)
+		is_http = link_named(target.scheme, "https");
+
+	/* Decoded data fields are independently owned after successful parsing. */
+	if (is_data) {
 		error = net_data_parse(&target, &data);
-		if (error == 0)
-			error = wb_buffer_append(bytes, data.body.data, data.body.length);
-		if (error == 0)
+		if (error != 0) {
+			net_url_release(&target);
+			return error;
+		}
+
+		/* Copies the genuine decoded body and releases both data fields on failure. */
+		error = wb_buffer_append(bytes, data.body.data, data.body.length);
+		if (error != 0) {
 			net_data_release(&data);
+			net_url_release(&target);
+			return error;
+		}
+
+		/* The caller's copied bytes no longer borrow decoded fields or URL storage. */
+		net_data_release(&data);
 		net_url_release(&target);
-		return error;
+
+		/* Succeeded: the caller owns the decoded data resource bytes. */
+		return 0;
 	}
 
 	/* An http: URL is fetched; its final URL replaces the one asked for. */
-	if (error == 0 && is_http) {
+	if (is_http) {
 		wb_buffer_init(&text);
 		error = net_url_serialize(&target, 0, &text);
-		net_url_release(&target);
-		if (error == 0)
-			error = net_http_fetch(wb_buffer_string(&text), &response);
-		wb_buffer_release(&text);
-		if (error != 0)
+		if (error != 0) {
+			net_url_release(&target);
+			wb_buffer_release(&text);
 			return error;
+		}
+
+		/* Fetches the serialized target after its C URL storage is no longer needed. */
+		net_url_release(&target);
+		error = net_http_fetch(wb_buffer_string(&text), &response);
+		if (error != 0) {
+			wb_buffer_release(&text);
+			return error;
+		}
+
+		/* Copies the owned HTTP body after releasing its completed request text. */
+		wb_buffer_release(&text);
 		error = wb_buffer_append(bytes, response.body.data, response.body.length);
-		if (error == 0 && final_url != NULL) {
+		if (error != 0) {
+			net_response_release(&response);
+			return error;
+		}
+
+		/* Replaces the original location with the actual redirect result when requested. */
+		if (final_url != NULL) {
 			wb_buffer_clear(final_url);
 			error = wb_buffer_append(final_url, response.url.data, response.url.length);
+			if (error != 0) {
+				net_response_release(&response);
+				return error;
+			}
 		}
 
 		/* The response is copied. */
 		net_response_release(&response);
-		return error;
+
+		/* Succeeded: bytes and optional final URL reflect the actual HTTP response. */
+		return 0;
 	}
 
 	/* A file: URL names a file. */
 	wb_buffer_init(&path);
-	if (error == 0)
-		error = net_url_file_path(&target, &path);
-	net_url_release(&target);
-	if (error == 0)
-		error = wb_file_read(wb_buffer_string(&path), bytes);
-	wb_buffer_release(&path);
-	if (error != 0)
+	error = net_url_file_path(&target, &path);
+	if (error != 0) {
+		net_url_release(&target);
+		wb_buffer_release(&path);
 		return error;
+	}
+
+	/* Reads the resolved file after its URL representation is no longer needed. */
+	net_url_release(&target);
+	error = wb_file_read(wb_buffer_string(&path), bytes);
+	if (error != 0) {
+		wb_buffer_release(&path);
+		return error;
+	}
+
+	/* Releases the native path after the file operation no longer borrows it. */
+	wb_buffer_release(&path);
 
 	/* Succeeded: the bytes are read. */
 	return 0;
@@ -264,57 +336,100 @@ page_fetch_response(
 	/* Fresh output has a single cleanup owner even when embedding arguments are invalid. */
 	if (response == NULL)
 		return EINVAL;
+
+	/* Gives the caller a fresh empty response before validating its input locations. */
 	net_response_init(response);
+
+	/* Absent input cannot authorize URL parsing or resource acquisition. */
 	if (base == NULL || href == NULL)
 		return EINVAL;
+
+	/* Resolves the target before any local or network resource work begins. */
 	status = link_resolve(base, href, &target);
 	if (status != 0)
 		return status;
+
+	/* Both scratch buffers share the single forward cleanup boundary below. */
 	wb_buffer_init(&location);
 	wb_buffer_init(&path);
+
+	/* Classifies the actual resolved scheme without inspecting any document body. */
 	is_data = link_named(target.scheme, "data");
 	is_http = net_http_is_web(target.scheme);
 	is_file = link_named(target.scheme, "file");
 
 	/* HTTP metadata and final redirect URL come from the existing real network implementation. */
 	if (is_http) {
+		/* Serializes the exact HTTP target before the real network implementation uses it. */
 		status = net_url_serialize(&target, 0, &location);
-		if (status == 0)
-			status = net_http_fetch(wb_buffer_string(&location), response);
+		if (status != 0)
+			goto cleanup;
+
+		/* The network response owns its redirect URL, declared MIME and body. */
+		status = net_http_fetch(wb_buffer_string(&location), response);
+		if (status != 0)
+			goto cleanup;
 	} else if (is_data) {
 		/* A real data URL supplies its MIME and decoded body independently of any DOM root. */
 		status = net_data_parse(&target, &data);
-		if (status == 0) {
-			status = wb_buffer_append(&response->body, data.body.data, data.body.length);
-			if (status == 0)
-				status = wb_buffer_append(&response->content_type, data.mime.data, data.mime.length);
+		if (status != 0)
+			goto cleanup;
+
+		/* Copies the decoded body before its MIME fields can be published. */
+		status = wb_buffer_append(&response->body, data.body.data, data.body.length);
+		if (status != 0) {
 			net_data_release(&data);
+			goto cleanup;
 		}
+
+		/* Copies actual decoded MIME while both independent data fields remain owned. */
+		status = wb_buffer_append(&response->content_type, data.mime.data, data.mime.length);
+		if (status != 0) {
+			net_data_release(&data);
+			goto cleanup;
+		}
+
+		/* The response copies no longer borrow either decoded data field. */
+		net_data_release(&data);
 	} else if (is_file) {
 		/* Local resource metadata uses generic decoded extensions, never test names or XML contents. */
 		status = net_url_file_path(&target, &path);
-		if (status == 0)
-			status = wb_file_read(wb_buffer_string(&path), &response->body);
-		if (status == 0) {
-			mime = link_file_mime(wb_buffer_string(&path));
-			status = wb_buffer_append_string(&response->content_type, mime);
-		}
+		if (status != 0)
+			goto cleanup;
+
+		/* Reads the actual file before publishing any extension-derived metadata. */
+		status = wb_file_read(wb_buffer_string(&path), &response->body);
+		if (status != 0)
+			goto cleanup;
+
+		/* Publishes only generic metadata belonging to the real decoded extension. */
+		mime = link_file_mime(wb_buffer_string(&path));
+		status = wb_buffer_append_string(&response->content_type, mime);
+		if (status != 0)
+			goto cleanup;
 	} else {
 		/* Unsupported resource schemes cannot publish a normal response body or metadata. */
 		status = EPROTONOSUPPORT;
+		goto cleanup;
 	}
 
 	/* Successful local and data responses retain their actual URL and ordinary successful status. */
-	if (status == 0 && !is_http) {
+	if (!is_http) {
 		status = net_url_serialize(&target, 0, &response->url);
-		if (status == 0)
-			response->status = 200;
+		if (status != 0)
+			goto cleanup;
+
+		/* Only complete local/data response fields can carry successful status. */
+		response->status = 200;
 	}
 
+cleanup:
 	/* All independent C URL and working buffers are released before response publication. */
 	net_url_release(&target);
 	wb_buffer_release(&location);
 	wb_buffer_release(&path);
+
+	/* A failed operation leaves the caller the same fresh empty response contract. */
 	if (status != 0) {
 		net_response_release(response);
 		net_response_init(response);
@@ -341,22 +456,37 @@ link_resolve(
 	error = 0;
 	if (base[0] == '/') {
 		error = net_url_from_file_path(base, &base_text);
+		if (error != 0) {
+			wb_buffer_release(&base_text);
+			return error;
+		}
 	} else {
 		error = wb_buffer_append_string(&base_text, base);
+		if (error != 0) {
+			wb_buffer_release(&base_text);
+			return error;
+		}
 	}
 
 	/* The base parsed. */
-	if (error == 0)
-		error = net_url_parse(wb_buffer_string(&base_text), base_text.length, NULL, &base_url);
-	wb_buffer_release(&base_text);
-	if (error != 0)
+	error = net_url_parse(wb_buffer_string(&base_text), base_text.length, NULL, &base_url);
+	if (error != 0) {
+		wb_buffer_release(&base_text);
 		return error;
+	}
+
+	/* The parsed base owns its representation independently of the scratch text. */
+	wb_buffer_release(&base_text);
 
 	/* The target against it. */
 	error = net_url_parse(href, strlen(href), &base_url, target);
-	net_url_release(&base_url);
-	if (error != 0)
+	if (error != 0) {
+		net_url_release(&base_url);
 		return error;
+	}
+
+	/* The resolved target no longer borrows the independent base URL. */
+	net_url_release(&base_url);
 
 	/* Succeeded: the target is parsed. */
 	return 0;
@@ -374,6 +504,8 @@ link_named(
 	differs = strcmp(scheme, name);
 	if (differs != 0)
 		return 0;
+
+	/* Succeeded: the actual resolved scheme is this exact name. */
 	return 1;
 }
 
@@ -392,6 +524,7 @@ link_file_mime(
 	/* A later directory separator invalidates a dot belonging to an enclosing directory. */
 	extension = NULL;
 	for (cursor = path; *cursor != '\0'; cursor++) {
+		/* A directory boundary discards an earlier extension; a dot starts a new one. */
 		if (*cursor == '/')
 			extension = NULL;
 		else if (*cursor == '.')
@@ -401,8 +534,11 @@ link_file_mime(
 	/* Missing and long unknown extensions remain an ordinary binary resource. */
 	if (extension == NULL)
 		return "application/octet-stream";
+
+	/* Folds only a complete short ASCII path extension, bounded by local storage. */
 	index = 0;
 	while (extension[index] != '\0' && index < sizeof(lower) - 1) {
+		/* ASCII uppercase extensions share their ordinary lowercase MIME mapping. */
 		character = (unsigned char)extension[index];
 		if (character >= 'A' && character <= 'Z')
 			character += 'a' - 'A';
@@ -413,22 +549,34 @@ link_file_mime(
 	/* Only complete ordinary extensions can supply local document metadata. */
 	if (extension[index] != '\0')
 		return "application/octet-stream";
+
+	/* HTML's two ordinary decoded path suffixes share its declared local MIME. */
 	lower[index] = '\0';
 	same = strcmp(lower, "html");
 	if (same == 0)
 		return "text/html";
+
+	/* The abbreviated HTML suffix has the same processing declaration. */
 	same = strcmp(lower, "htm");
 	if (same == 0)
 		return "text/html";
+
+	/* XHTML's complete suffix declares XML-based HTML processing. */
 	same = strcmp(lower, "xhtml");
 	if (same == 0)
 		return "application/xhtml+xml";
+
+	/* The abbreviated XHTML suffix retains the same XML-based HTML declaration. */
 	same = strcmp(lower, "xht");
 	if (same == 0)
 		return "application/xhtml+xml";
+
+	/* An SVG path declares scalable vector content independently of its root markup. */
 	same = strcmp(lower, "svg");
 	if (same == 0)
 		return "image/svg+xml";
+
+	/* Generic XML paths declare ordinary XML document processing. */
 	same = strcmp(lower, "xml");
 	if (same == 0)
 		return "application/xml";

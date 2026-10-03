@@ -131,6 +131,7 @@ fm_dir_read_trash(
 	char files[FM_PATH_MAX];
 	char original[FM_PATH_MAX];
 	char *slash;
+	char *shown;
 	size_t index;
 	time_t deleted;
 	int error;
@@ -148,8 +149,23 @@ fm_dir_read_trash(
 		if (error != 0)
 			continue;
 
-		/* The folder is the original path without its last part. */
+		/*
+		 * The item shows under the name it had (BUG-140): a second item
+		 * of the same name is kept in the trash's files as "NAME.2", but
+		 * it is still NAME, of NAME's kind.  The path stays the one in
+		 * the trash, which is what Put Back and Delete Immediately use.
+		 */
 		slash = strrchr(original, '/');
+		if (slash != NULL && slash[1] != '\0') {
+			shown = strdup(slash + 1);
+			if (shown != NULL) {
+				free(entry->name);
+				entry->name = shown;
+				entry->mime = fm_mime_guess(entry->name, entry->mode);
+			}
+		}
+
+		/* The folder is the original path without its last part. */
 		if (slash != NULL && slash != original)
 			*slash = '\0';
 		entry->detail = strdup(original);

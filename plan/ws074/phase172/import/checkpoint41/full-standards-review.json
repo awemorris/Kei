@@ -1,0 +1,46 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-vm-factory.c",
+      "original_sha256": "bb651ff82a03463d0ebdbdeedf46c8b702baeb4ad2c032f5349a9e2f2bdfc9e1",
+      "final_sha256": "6941424400a9998da7714e9232f1c48fe0b3259a4ad23452a39a67908be24bef",
+      "status": "reviewed-full-file",
+      "original_lines": 335,
+      "final_lines": 942
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "original_sha256": "f3260a7276114e7ca0f183fa043e5bd628d9cfe0186c1b1c496877e6867debf0",
+      "final_sha256": "9e0004090aa1e2f39b0e65589936ea6cc4e9a3aa0a5dd51e0abaee19ba27f5f3",
+      "status": "reviewed-full-file",
+      "original_lines": 811,
+      "final_lines": 1250
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "File order/types/constants/ordinary forwards; only cell initializer callbacks retain existing early declaration exception",
+    "Complete input/unpublished-function/name/private-prototype/environment tracing and managed/manual realm distinction",
+    "Actual direct call/constructor/prototype getter ownership, preserved throw convention and foreign exception transport before root release",
+    "Native suspended callee/new.target retained while overwritten and restored before scope teardown; actual receiver/args owned through nested collection",
+    "Host-size allocation bounds, registration failure unwind and only successfully acquired slot cleanup",
+    "Leading ANSI declarations, tabbed arguments, immediate fallible checks before publication/teardown, semantic purpose paragraphs and split compound layout",
+    "Callability/construction classifiers use refusal guards and explicit successful return; ordinary code/class/generator/async/intrinsic fallback behavior retained",
+    "Original native corpora/strings preserved in order; new default regressions remove construction and conservative caller roots before tested callee",
+    "Public ABI/component exports/SONAME/Wayland layering preserved; original final boundary/target/boot/ASan gates not claimed"
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 83,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "Allocation-fault injection not performed; each acquired-count/failure/success unwind manually reviewed.",
+    "Current selected native and fixed14-JS checks are bounded; whole57 remaining reviews/final target/boot/API/ASan are required."
+  ]
+}

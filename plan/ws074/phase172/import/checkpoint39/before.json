@@ -1,0 +1,23 @@
+[
+  {
+    "path": "plan/ws074/tests/host-range-insert.c",
+    "sha256": "21e9f1f9a6136f4421a0dab2daae993b718fddc6d8f0e98a3ff03ed0f5fe0ccd",
+    "object": "host-range-insert.o",
+    "object_path": "build/browser3-p172/review39/host-range-insert.o",
+    "text_sha256": "dca0190e57a5e6999cc8bcb464ff8a08dbd2f2b36104ddada496b75ce86970e0"
+  },
+  {
+    "path": "plan/ws074/tests/host-range-mutation.c",
+    "sha256": "e3fe836215a202a1b1f6eb3123be9061de7800945103629b53e0f997da07f6bd",
+    "object": "host-range-mutation.o",
+    "object_path": "build/browser3-p172/review39/host-range-mutation.o",
+    "text_sha256": "1cbd03aaa195f70fb788830b9d7c22b078b2f529455e597e93a90fc768b0c032"
+  },
+  {
+    "path": "plan/ws074/tests/host-range-surround-contents.c",
+    "sha256": "0d7d0b5ad9ba056e3baa42b6fa03de64fc8061f1d4d9e7f6ecf8b62a053c5ab6",
+    "object": "host-range-surround-contents.o",
+    "object_path": "build/browser3-p172/review39/host-range-surround-contents.o",
+    "text_sha256": "b87e2df616263b5902dcd396658e1856ef011d2e992d7cda99c4789d59a708a6"
+  }
+]

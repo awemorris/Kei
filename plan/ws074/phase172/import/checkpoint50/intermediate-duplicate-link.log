@@ -1,0 +1,17 @@
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_iter_start':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:72: multiple definition of `vm_iter_start'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:72: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_iter_next':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:150: multiple definition of `vm_iter_next'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:150: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_iter_close':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:232: multiple definition of `vm_iter_close'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:232: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_iter_rest':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:295: multiple definition of `vm_iter_rest'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:295: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_array_spread':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:382: multiple definition of `vm_array_spread'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:332: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_copy_data_properties':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:420: multiple definition of `vm_copy_data_properties'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:370: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_object_rest':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:443: multiple definition of `vm_object_rest'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:393: first defined here
+/usr/bin/ld: build/browser3-p172/plain/obj/vm_spread.o: in function `vm_call_array':
+/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:474: multiple definition of `vm_call_array'; build/browser3-p172/plain/obj/libbrowser_vm_spread.o:/home/awe/zedBSD-claude2/userland/desktop/libbrowser/vm/spread.c:424: first defined here
+collect2: error: ld returned 1 exit status

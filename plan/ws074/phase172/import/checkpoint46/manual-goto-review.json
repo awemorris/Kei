@@ -1,0 +1,14 @@
+{
+  "authority": "full C section14 single forward shared cleanup",
+  "findings": 20,
+  "functions": [
+    {
+      "path": "plan/ws074/tests/host-xml.c",
+      "function": "xml_semantics",
+      "forward_cleanup_jumps": 20,
+      "one_label": true,
+      "all_jumps_forward": true
+    }
+  ],
+  "other_findings": 0
+}

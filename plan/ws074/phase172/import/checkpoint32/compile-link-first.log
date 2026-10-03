@@ -1,0 +1,4 @@
+plan/ws074/tests/host-option-state.c: In function ‘collection_case’:
+plan/ws074/tests/host-option-state.c:245:26: error: ‘struct dom_node’ has no member named ‘kind’
+  245 |                     table->kind != DOM_ELEMENT ||
+      |                          ^~

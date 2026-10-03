@@ -1,0 +1,20 @@
+{
+  "queue": "q594",
+  "attempt": "q594-i01",
+  "phase": "ws074-p172",
+  "partial_scope": true,
+  "selected": [
+    "plan/ws074/tests/host-xml-binding.c",
+    "plan/ws074/tests/host-document-parser.c",
+    "plan/ws074/tests/host-document-stream.c",
+    "plan/ws074/tests/host-range-delete-contents.c",
+    "userland/desktop/libbrowser/css/rule-model.c"
+  ],
+  "baseline": "c37f399f94d7e13cec7b113381dadacac49bff0c",
+  "started_utc": "2026-10-02T12:46:13+00:00",
+  "deadline_utc": "2026-10-02T14:16:13+00:00",
+  "source_hashes_verified": 209,
+  "user_source": "2026-10-02 latest user \u7d9a\u3051\u3066\u304f\u3060\u3055\u3044 after prior browser3 continuation and cleanup instructions",
+  "criteria": "All five complete full C/component reviews, necessary in-scope repairs, scoped warning0 build/compile and affected existing bounded native tests; committed exact hashes/evidence. Scoped item may clear while whole p172 remains uncleared.",
+  "maintenance": "After next actual WIP checkpoint commit, remove verified unused own build scratch and record retained current/shared/in-use artifacts."
+}

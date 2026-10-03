@@ -1,0 +1,25 @@
+{
+  "queue": "q597",
+  "checkpoint": 74,
+  "source": "userland/desktop/libbrowser/html/tokenizer.c",
+  "source_sha256": "b4e6c3466b66fa10cd7c429063761520d2dea45f47ed5ffb468fe20d0a5faca1",
+  "baseline": "c0bbc894f6174f7cc55f7158d823d15b94e467ab",
+  "reviewed": 193,
+  "total": 209,
+  "remaining": 16,
+  "source_changed": false,
+  "whole_host_build": "checkpoint73 whole-host-build exit0 warning0; unchanged production source since that build",
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "tokenizer-focused": "9 cases, whole and code-unit streaming modes, tokens/errors agree; three explicit assertions"
+  },
+  "limits": [
+    "html5lib tokenizer corpus is not present locally; no suite coverage claim.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

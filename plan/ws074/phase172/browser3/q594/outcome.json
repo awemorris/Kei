@@ -1,0 +1,35 @@
+{
+  "queue": "q594",
+  "attempt": "q594-i01",
+  "queue_status": "finished",
+  "item_status": "cleared",
+  "partial_scope": true,
+  "phase_status": "uncleared",
+  "ws_status": "incomplete",
+  "started_utc": "2026-10-02T12:46:13+00:00",
+  "finished_utc": "2026-10-02T13:07:22+00:00",
+  "deadline_utc": "2026-10-02T14:16:13+00:00",
+  "source_commit": "7889d3fc306e8094d5bd57c15eb3b88495294091",
+  "reviewed_before": 135,
+  "reviewed_after": 140,
+  "remaining_C_header": 69,
+  "remaining_other": 0,
+  "source_hashes_matched": 209,
+  "selected": [
+    "plan/ws074/tests/host-xml-binding.c",
+    "plan/ws074/tests/host-document-parser.c",
+    "plan/ws074/tests/host-document-stream.c",
+    "plan/ws074/tests/host-range-delete-contents.c",
+    "userland/desktop/libbrowser/css/rule-model.c"
+  ],
+  "native_checks": 118,
+  "scoped_build_warning_count": 0,
+  "cleanup": "completed after d9a19f28f;20 dirs/441 files/111842236 bytes",
+  "next_queue": "unselected; q591-q593 reservations retained, next unreserved q595",
+  "pending_sync": "Issues/Project deferred; configured github mode and absent .sync state preserved",
+  "limitations": [
+    "Whole final boundary/API/public-client/target/boot/ASan gates not executed in q594; earlier evidence remains historical.",
+    "No injected allocation failures; native GC pressure and caller-root exclusions remain actual.",
+    "No downstream Phase started; p099 retained cleared."
+  ]
+}

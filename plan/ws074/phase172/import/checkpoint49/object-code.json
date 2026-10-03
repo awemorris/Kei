@@ -1,0 +1,13 @@
+[
+  {
+    "path": "plan/ws074/tests/host-frame-lifetime.c",
+    "sha256": "1e9806612bf6f11801067a7e3b9bb16d13146f3fc074fd123576abe5349a9ed9",
+    "object": "host-frame-lifetime.o",
+    "object_path": "build/browser3-p172/review49/host-frame-lifetime.o",
+    "text_sha256": "3b0d575c23e60cddf1ac448e056f751a2396fda498d97364b2bcb8bb97d3f47b",
+    "final_sha256": "9a09feb37640034414f696385586b57da9d19964d13c505a5e403b6fcfa4967b",
+    "final_text_sha256": "d219e603e9c64985b0a2c1b9aadab864a5c012fd271d46571424dae407538d64",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

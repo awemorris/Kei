@@ -845,11 +845,14 @@ enum fm_action {
 	FM_ACTION_SHOW_IN_FILES,
 	FM_ACTION_CLEAN_UP,
 	FM_ACTION_CHANGE_WALLPAPER,
+	FM_ACTION_OPEN_IN_NEW_WINDOW,
 	FM_ACTION_COLUMN_FIRST = 100,
 	FM_ACTION_OPEN_WITH_FIRST = 200,
 	FM_ACTION_TAG_FIRST = 300,
 	FM_ACTION_ALWAYS_WITH_FIRST = 400,
-	FM_ACTION_USE_SYSTEM_DEFAULT = 450
+	FM_ACTION_USE_SYSTEM_DEFAULT = 450,
+	/* The context menu's Move To: the selection moved to the sidebar's place of this index (ws127-p002). */
+	FM_ACTION_MOVE_TO_FIRST = 500
 };
 
 /*
@@ -1151,6 +1154,25 @@ struct fm_app {
 	char drag_folder[FM_PATH_MAX];
 
 	/*
+	 * Spring-loaded folders and the scroll at the edges under a drag
+	 * (ws127-p002, F-039).  A folder the drag rests on opens after a
+	 * moment, which changes the listing and its selection, so a drag keeps
+	 * the paths it started with (drag_paths, drag_path_count, freed at its
+	 * end) and the folder they came from (drag_source, whose items are no
+	 * target).  spring_ms is when the drag came to rest on a folder that
+	 * springs (0 for none); edge_ms is when the content last scrolled under
+	 * the drag at an edge (0 when it did not); drag_wait_ms is the time to
+	 * the next of these steps (-1 for none), for the loop's sleep.  The
+	 * times are fm_ui_tick's (app->now).
+	 */
+	char **drag_paths;
+	size_t drag_path_count;
+	char drag_source[FM_PATH_MAX];
+	uint64_t spring_ms;
+	uint64_t edge_ms;
+	int drag_wait_ms;
+
+	/*
 	 * Drag and drop with other windows (ws035-p084): whether the dragged
 	 * items left the window (zdesktop carries them from then on).  A drop
 	 * coming in: whether one is over the window, whether it is this
@@ -1260,6 +1282,13 @@ struct fm_app {
 	/* The Help card shown (FM_HELP_NONE when none), and what the Wayland side is asked to do next. */
 	unsigned help;
 	unsigned request;
+
+	/*
+	 * The folder a new window is to show (FM_REQUEST_NEW_WINDOW), set by
+	 * Open in New Window and emptied when the window is started; empty
+	 * means the folder this window shows (New Window, Ctrl+N).
+	 */
+	char new_window_folder[FM_PATH_MAX];
 
 	/*
 	 * The last right press, for its context menu (FM_REQUEST_CONTEXT):
@@ -1379,6 +1408,15 @@ int fm_ui_wait(struct fm_app *app);
 void fm_input_motion(struct fm_app *app, const struct fm_event *event);
 void fm_input_button(struct fm_app *app, const struct fm_event *event);
 void fm_input_scroll(struct fm_app *app, int amount);
+
+/* The content's overlay scroll bar (ui-scrollbar.c, ws127-p002). */
+void fm_scrollbar_moved(struct fm_app *app);
+int fm_scrollbar_motion(struct fm_app *app, int x, int y);
+int fm_scrollbar_press(struct fm_app *app, int x, int y);
+int fm_scrollbar_release(struct fm_app *app);
+void fm_scrollbar_leave(struct fm_app *app);
+void fm_scrollbar_draw(struct fm_app *app, struct fm_canvas *canvas);
+int fm_scrollbar_busy(struct fm_app *app);
 void fm_input_key(struct fm_app *app, const struct fm_event *event);
 int fm_input_hit_at(struct fm_app *app, int x, int y, unsigned *kind, int *index);
 void fm_input_sort_by(struct fm_app *app, unsigned sort, int reverse);
@@ -1551,6 +1589,14 @@ int fm_drag_release(struct fm_app *app);
 void fm_drag_cancel(struct fm_app *app);
 void fm_drag_draw(struct fm_app *app, struct fm_canvas *canvas);
 void fm_drop_event(struct fm_app *app, const struct fm_event *event);
+int fm_drag_tick(struct fm_app *app, uint64_t now);
+
+/* PDF thumbnails and the thumbnails kept on disk (thumb-cache.c, ws127-p002). */
+int fm_thumb_kind(const struct fm_entry *entry);
+int fm_thumb_is_pdf(const unsigned char *data, size_t size);
+int fm_thumb_pdf(const unsigned char *data, size_t size, struct fm_image *image);
+int fm_thumb_cache_read(const char *path, struct fm_image *image);
+int fm_thumb_cache_write(const char *path, const struct fm_image *image);
 int fm_drop_accepts(const struct fm_app *app);
 void fm_drop_perform(struct fm_app *app, char *const *paths, size_t count);
 

@@ -61,6 +61,8 @@ css_rule_model_create(
 	made = calloc(1, sizeof(*made));
 	if (made == NULL)
 		return ENOMEM;
+
+	/* Initialize both source archives before any parser can publish entries. */
 	made->heap = heap;
 	made->next_id = 1;
 	wb_vector_init(&made->rules, sizeof(struct model_source *));
@@ -150,6 +152,7 @@ css_rule_model_source(
 	int *present)
 {
 	struct model_source *source;
+	struct model_source *entry;
 	size_t index;
 
 	/* Missing identities publish no borrowed source pointers. */
@@ -159,21 +162,25 @@ css_rule_model_source(
 	*present = 0;
 
 	/* Retired sources remain in the archive until every model handle is released. */
+	source = NULL;
 	for (index = 0; index < model->entries.count; index++) {
-		source = *(struct model_source **)wb_vector_at(&model->entries, index);
-		if (source->id != id)
-			continue;
-
-		/* Succeeded: immutable storage is borrowed only for this model's lifetime. */
-		*units = source->units.data;
-		*length = source->units.length;
-		*type = source->type;
-		*present = source->present;
-		return 0;
+		entry = *(struct model_source **)wb_vector_at(&model->entries, index);
+		if (entry->id == id) {
+			source = entry;
+			break;
+		}
 	}
 
 	/* An unknown or zero identity has no source in this model. */
-	return ENOENT;
+	if (source == NULL)
+		return ENOENT;
+
+	/* Succeeded: immutable storage is borrowed only for this model's lifetime. */
+	*units = source->units.data;
+	*length = source->units.length;
+	*type = source->type;
+	*present = source->present;
+	return 0;
 }
 
 /*
@@ -240,6 +247,8 @@ css_rule_model_insert(
 	count = model->rules.count;
 	if (index > count)
 		return ERANGE;
+
+	/* Bound retained source storage independently of live rule count. */
 	if (model->entries.count >= MODEL_ENTRIES_MAX || model->next_id == UINT32_MAX)
 		return EOVERFLOW;
 
@@ -247,10 +256,14 @@ css_rule_model_insert(
 	candidate = calloc(1, sizeof(*candidate));
 	if (candidate == NULL)
 		return ENOMEM;
+
+	/* Initialize independent ownership before strict candidate parsing. */
 	candidate->heap = model->heap;
 	candidate->next_id = 1;
 	wb_vector_init(&candidate->rules, sizeof(struct model_source *));
 	wb_vector_init(&candidate->entries, sizeof(struct model_source *));
+
+	/* Parse complete single-rule input before touching current model state. */
 	status = model_parse(candidate, units, length, 1);
 	if (status != 0) {
 		css_rule_model_destroy(candidate);
@@ -541,7 +554,10 @@ model_next(
 
 	/* Nested braces are native punctuation tokens; strings and escapes cannot imitate them. */
 	curly = 1;
-	for (index++; index < count; index++) {
+	index++;
+	for (;
+	     index < count;
+	     index++) {
 		token = tokens[index].type;
 		if (token == CSS_TOKEN_EOF) {
 			/* Record implicit block closures separately from the immutable original source. */
@@ -557,15 +573,18 @@ model_next(
 				return EOVERFLOW;
 		} else if (token == CSS_TOKEN_CLOSE_CURLY) {
 			curly--;
-			if (curly == 0) {
-				*end = index + 1U;
-				return 0;
-			}
+			if (curly == 0)
+				break;
 		}
 	}
 
 	/* A tokenizer result without a closing block or EOF is not a complete source stream. */
-	return EINVAL;
+	if (index >= count)
+		return EINVAL;
+
+	/* Succeeded: the matched outer closing brace completes this immutable source span. */
+	*end = index + 1U;
+	return 0;
 }
 
 /* Classifies supported top-level at-rule sources without claiming nested CSSOM interfaces. */
@@ -589,7 +608,7 @@ model_at_type(
 	if (same)
 		return 12;
 
-	/* Unsupported at-rule sources contribute nothing, as in the existing native parser. */
+	/* Succeeded: unsupported at-rule sources contribute no native model entry. */
 	return 0;
 }
 
@@ -609,9 +628,13 @@ model_keep(
 	/* Retired sources cannot evade this retained-entry bound. */
 	if (model->entries.count >= MODEL_ENTRIES_MAX || model->next_id == UINT32_MAX)
 		return EOVERFLOW;
+
+	/* Allocate one immutable source before initializing its borrowed metadata. */
 	source = calloc(1, sizeof(*source));
 	if (source == NULL)
 		return ENOMEM;
+
+	/* Initialize native copied-text ownership before archive publication. */
 	wb_units_init(&source->units);
 	source->type = type;
 	source->present = 1;

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "host-relayout",
+    "argv": [
+      "timeout",
+      "120",
+      "build/browser3-p172/plain/host-relayout",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/sheets.html",
+      "plan/ws074/tests/pages/position.html",
+      "plan/ws074/tests/pages/values.html"
+    ],
+    "exit": 0,
+    "stdout": "host-relayout: plan/ws074/tests/pages/sheets.html: first 0.001 s, again 0.000 s, at 800x600 0.000 s (new page 0.000 s)\nhost-relayout: plan/ws074/tests/pages/position.html: first 0.000 s, again 0.000 s, at 800x600 0.000 s (new page 0.000 s)\nhost-relayout: plan/ws074/tests/pages/values.html: first 0.000 s, again 0.000 s, at 800x600 0.000 s (new page 0.000 s)\nhost-relayout: 21 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-position",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-position",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "host-position: order below;|flow|stage;corner top-left;corner top-right;corner bottom-left;corner bottom-right;label;stretch;percent-shrink;shifted;middle;over;context-lower;context-high;context-child;\nhost-position: 22 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n",
+    "stderr": ""
+  }
+]

@@ -31,6 +31,7 @@ struct frame_load {
 
 static void frame_load_release(struct frame_load *load);
 static void frame_load_done(void *context, struct net_request *request);
+static int frame_load_drain(struct page *page, int error);
 static int frame_load_scan(struct page *page, struct bind_window *window);
 static int frame_load_start(struct page *page, struct dom_element *element, struct vm_string *source);
 static int frame_load_allowed(struct dom_document *document, const struct wb_buffer *location, int *allowed);
@@ -90,12 +91,7 @@ int
 page_frames_checkpoint(
 	struct page *page)
 {
-	struct frame_load **slot;
-	struct frame_load *load;
-	size_t index;
-	size_t count;
-	size_t kept;
-	int current;
+	int status;
 	int error;
 
 	/* Parser-time primary checkpoints and reentrant child callbacks defer to a stable outer task. */
@@ -105,6 +101,39 @@ page_frames_checkpoint(
 	/* Scanning starts actual requests; their borrowed completion callbacks only copy C bytes. */
 	page->frames_running = 1;
 	error = frame_load_scan(page, page->window);
+	if (error != 0) {
+		/* A failed scan still cancels stale/ready tasks and restores outer execution. */
+		status = frame_load_drain(page, error);
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the failed snapshot has released its terminal records. */
+		return 0;
+	}
+
+	/* Activates only current ready tasks after a successful scan. */
+	error = frame_load_drain(page, 0);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the finite completed-task snapshot has a terminal outcome. */
+	return 0;
+}
+
+/* Drains a finite task snapshot and restores the outer checkpoint state on either outcome. */
+static int
+frame_load_drain(
+	struct page *page,
+	int error)
+{
+	struct frame_load **slot;
+	struct frame_load *load;
+	size_t index;
+	size_t count;
+	size_t kept;
+	int current;
+
+	/* A prior scan failure suppresses activation but still releases terminal records. */
 	count = page->frame_loads.count;
 	for (index = 0; index < count; index++) {
 		/* Re-fetch the vector slot after any script can append and move vector storage. */
@@ -118,8 +147,15 @@ page_frames_checkpoint(
 		if (!current || load->ready) {
 			/* Remove the task's public slot before execution can cause another checkpoint. */
 			*slot = NULL;
-			if (current && error == 0)
+			if (current && error == 0) {
 				error = frame_load_activate(load);
+				if (error != 0) {
+					frame_load_release(load);
+					continue;
+				}
+			}
+
+			/* Releases the terminal record after its callbacks have unwound. */
 			frame_load_release(load);
 		}
 	}
@@ -154,6 +190,8 @@ frame_load_release(
 	/* Cancellation never runs a callback and precedes removal of its native owner root. */
 	if (load->request != NULL)
 		net_request_cancel(load->request);
+
+	/* Drops the stable native root before releasing copied response storage. */
 	vm_heap_remove_root(load->page->heap, (struct vm_cell **)&load->element);
 	net_response_release(&load->response);
 	free(load);
@@ -176,15 +214,36 @@ frame_load_done(
 	load = context;
 	load->request = NULL;
 	error = net_request_error(request);
-	if (error == 0) {
-		/* Actual metadata and complete body outlive the callback only through these owning copies. */
-		response = net_request_response(request);
-		load->response.status = response->status;
-		error = wb_buffer_append(&load->response.url, response->url.data, response->url.length);
-		if (error == 0)
-			error = wb_buffer_append(&load->response.content_type, response->content_type.data, response->content_type.length);
-		if (error == 0)
-			error = wb_buffer_append(&load->response.body, response->body.data, response->body.length);
+	if (error != 0) {
+		load->error = error;
+		load->ready = 1;
+		return;
+	}
+
+	/* Copies actual response metadata while the loader still owns the borrowed bytes. */
+	response = net_request_response(request);
+	load->response.status = response->status;
+	error = wb_buffer_append(&load->response.url, response->url.data, response->url.length);
+	if (error != 0) {
+		load->error = error;
+		load->ready = 1;
+		return;
+	}
+
+	/* Copies the declaration independently of the final URL. */
+	error = wb_buffer_append(&load->response.content_type, response->content_type.data, response->content_type.length);
+	if (error != 0) {
+		load->error = error;
+		load->ready = 1;
+		return;
+	}
+
+	/* Copies the complete body before marking the response ready. */
+	error = wb_buffer_append(&load->response.body, response->body.data, response->body.length);
+	if (error != 0) {
+		load->error = error;
+		load->ready = 1;
+		return;
 	}
 
 	/* Ready means the next outer Page checkpoint may inspect the real response outcome. */
@@ -315,15 +374,31 @@ frame_load_start(
 	allowed = blank;
 	if (!blank) {
 		error = vm_string_to_utf8(source, &raw);
-		if (error == 0)
-			error = bind_reflection_base(element->node.document, &base);
-		if (error == 0)
-			error = net_url_parse(wb_buffer_string(&raw), raw.length, &base, &parsed);
-		if (error == 0)
-			error = net_url_serialize(&parsed, 0, &location);
-		if (error == 0)
-			error = frame_load_allowed(element->node.document, &location, &allowed);
+		if (error != 0)
+			goto release_urls;
+
+		/* Uses this Document's actual base before resolving source text. */
+		error = bind_reflection_base(element->node.document, &base);
+		if (error != 0)
+			goto release_urls;
+
+		/* Parses the source against the validated native base. */
+		error = net_url_parse(wb_buffer_string(&raw), raw.length, &base, &parsed);
+		if (error != 0)
+			goto release_urls;
+
+		/* Copies the complete request location before checking origin. */
+		error = net_url_serialize(&parsed, 0, &location);
+		if (error != 0)
+			goto release_urls;
+
+		/* Allows only the established native same-origin resource profile. */
+		error = frame_load_allowed(element->node.document, &location, &allowed);
+		if (error != 0)
+			goto release_urls;
 	}
+
+release_urls:
 
 	/* Syntax and unsupported origin refusals do not expose a normal foreign Document. */
 	net_url_release(&base);
@@ -363,8 +438,20 @@ frame_load_start(
 		load->ready = 1;
 	} else if (remote && page->loader != NULL) {
 		error = net_loader_fetch(page->loader, wb_buffer_string(&location), frame_load_done, load, &load->request);
+		if (error != 0) {
+			wb_buffer_release(&location);
+			frame_load_release(load);
+			return error;
+		}
 	} else if (!remote) {
-		load->error = page_fetch_response("about:blank", wb_buffer_string(&location), &load->response);
+		error = page_fetch_response("about:blank", wb_buffer_string(&location), &load->response);
+		if (error != 0) {
+			/* A local resource refusal is the task outcome, not a setup failure. */
+			load->error = error;
+			error = 0;
+		}
+
+		/* Local completion is consumed by the same outer task as network completion. */
 		load->ready = 1;
 	} else {
 		load->error = ENOTSUP;
@@ -373,8 +460,9 @@ frame_load_start(
 
 	/* Store one task only after request setup has an explicit owning outcome. */
 	wb_buffer_release(&location);
-	if (error == 0)
-		error = wb_vector_push(&page->frame_loads, &load);
+
+	/* Publishes the stable owning task after all request setup has succeeded. */
+	error = wb_vector_push(&page->frame_loads, &load);
 	if (error != 0) {
 		frame_load_release(load);
 		return error;
@@ -410,29 +498,45 @@ frame_load_allowed(
 	memset(&parent, 0, sizeof(parent));
 	memset(&child, 0, sizeof(child));
 	error = bind_document_url(document, 1, &owner);
-	if (error == 0)
-		error = net_url_parse(wb_buffer_string(&owner), owner.length, NULL, &parent);
-	if (error == 0)
-		error = net_url_parse(wb_buffer_string(location), location->length, NULL, &child);
-	if (error == 0) {
-		/* Local file support is an explicit same-tab native file profile. */
-		parent_file = strcmp(parent.scheme, "file");
-		child_file = strcmp(child.scheme, "file");
-		web = net_http_is_web(parent.scheme);
-		if (parent_file == 0 && child_file == 0) {
-			*allowed = 1;
-		} else if (web) {
-			/* A web owner may expose only an actual matching tuple origin. */
-			error = net_url_component(&parent, NET_URL_ORIGIN, &parent_origin);
-			if (error == 0)
-				error = net_url_component(&child, NET_URL_ORIGIN, &child_origin);
-			if (error == 0 && parent_origin.length == child_origin.length) {
-				same = memcmp(parent_origin.data, child_origin.data, parent_origin.length);
-				if (same == 0)
-					*allowed = 1;
-			}
+	if (error != 0)
+		goto release_origins;
+
+	/* Parses the owner without using the possibly foreign first base. */
+	error = net_url_parse(wb_buffer_string(&owner), owner.length, NULL, &parent);
+	if (error != 0)
+		goto release_origins;
+
+	/* Parses the complete requested or redirected location. */
+	error = net_url_parse(wb_buffer_string(location), location->length, NULL, &child);
+	if (error != 0)
+		goto release_origins;
+
+	/* Local file support remains the explicit same-tab native file profile. */
+	parent_file = strcmp(parent.scheme, "file");
+	child_file = strcmp(child.scheme, "file");
+	web = net_http_is_web(parent.scheme);
+	if (parent_file == 0 && child_file == 0) {
+		*allowed = 1;
+	} else if (web) {
+		/* A web owner may expose only its actual tuple origin. */
+		error = net_url_component(&parent, NET_URL_ORIGIN, &parent_origin);
+		if (error != 0)
+			goto release_origins;
+
+		/* Compares an independently copied child origin, including default-port normalization. */
+		error = net_url_component(&child, NET_URL_ORIGIN, &child_origin);
+		if (error != 0)
+			goto release_origins;
+
+		/* Equal complete origin bytes establish accessibility. */
+		if (parent_origin.length == child_origin.length) {
+			same = memcmp(parent_origin.data, child_origin.data, parent_origin.length);
+			if (same == 0)
+				*allowed = 1;
 		}
 	}
+
+release_origins:
 
 	/* No parsed native URL or copied origin survives this verification. */
 	net_url_release(&parent);
@@ -533,7 +637,9 @@ frame_load_activate(
 	for (index = 0; index < 2U; index++) {
 		error = vm_heap_add_root(load->page->heap, &roots[index]);
 		if (error != 0)
-			break;
+			goto release_roots;
+
+		/* Keeps partial publication recoverable if the next registration fails. */
 		registered++;
 	}
 
@@ -549,47 +655,60 @@ frame_load_activate(
 	}
 
 	/* Existing initial blank ownership is distinct from replacement of a loaded resource. */
-	if (error == 0 && load->blank && window != NULL) {
+	if (load->blank && window != NULL) {
 		realm = (struct vm_realm *)load->element->child_context;
 		window = realm->host;
 		document = window->document;
 		roots[0] = &document->node.cell;
 		roots[1] = &realm->cell;
-	} else if (error == 0) {
+	} else {
 		/* No earlier blank context can stand in for a refused response. */
 		window = NULL;
 
 		/* Strict XML projection finishes before realm publication or script execution. */
 		error = frame_load_parse(load, &document);
-		if (error == 0) {
-			roots[0] = &document->node.cell;
-			if (!load->blank)
-				error = frame_load_metadata(load, document);
+		if (error != 0) {
+			/* Unsupported MIME/ordinary refusal still creates no accessible child. */
+			if (error == ENOTSUP || error == EINVAL)
+				error = 0;
+			goto release_roots;
 		}
 
-		/* Unsupported MIME types never create a normal accessible HTML child. */
-		if (error == ENOTSUP || error == EINVAL)
-			error = 0;
-		if (error == 0 && document != NULL) {
-			error = bind_frame_install(parent, load->element, document, &window);
-			if (error == 0)
-				roots[1] = &window->realm->cell;
+		/* Publishes the parsed Document root before metadata allocates VM strings. */
+		roots[0] = &document->node.cell;
+		if (!load->blank) {
+			error = frame_load_metadata(load, document);
+			if (error != 0)
+				goto release_roots;
 		}
 
-		/* HTML streaming uses the real child parser; XML runs only validated namespace-eligible scripts. */
-		if (error == 0 && window != NULL) {
-			if (document->content == DOM_CONTENT_HTML) {
-				error = frame_load_html(window, &load->response.body);
-			} else {
-				error = frame_load_xml_scripts(window);
-			}
+		/* Installs the actual parsed graph, never an earlier blank substitute. */
+		error = bind_frame_install(parent, load->element, document, &window);
+		if (error != 0)
+			goto release_roots;
+
+		/* Roots the executing child realm before the parser can invoke scripts. */
+		roots[1] = &window->realm->cell;
+		if (document->content == DOM_CONTENT_HTML) {
+			error = frame_load_html(window, &load->response.body);
+		} else {
+			error = frame_load_xml_scripts(window);
 		}
+
+		/* A parser or interpreter failure suppresses completion events. */
+		if (error != 0)
+			goto release_roots;
 	}
 
 	/* Actual completion events require the same current native attempt after all script callbacks. */
 	current = frame_load_current(load);
-	if (error == 0 && window != NULL && current)
+	if (window != NULL && current) {
 		error = frame_load_events(load, window);
+		if (error != 0)
+			goto release_roots;
+	}
+
+release_roots:
 
 	/* Temporary owners end after scripts and callbacks have unwound. */
 	while (registered != 0) {
@@ -630,6 +749,8 @@ frame_load_parse(
 		*document = dom_document_create(load->page->heap);
 		if (*document == NULL)
 			return ENOMEM;
+
+		/* Succeeded: the empty HTML owner is ready for actual parser activation. */
 		return 0;
 	}
 
@@ -639,6 +760,12 @@ frame_load_parse(
 	error = xml_document_parse(&model, load->response.body.data, load->response.body.length, &failure);
 	if (error == 0) {
 		error = xml_document_project(load->page->heap, model, content, document);
+		if (error != 0) {
+			xml_document_destroy(model);
+			return error;
+		}
+
+		/* Releases the C parse model after its native graph is complete. */
 		xml_document_destroy(model);
 	} else if (error != ENOMEM) {
 		/* Ordinary parse errors produce a real private error Document without recovered script nodes. */
@@ -670,61 +797,84 @@ frame_load_error_document(
 	int length;
 	int error;
 
-	/* Register the graph owner before constructing any native node. */
+	/* Prepares nullable ownership before any native construction. */
 	*document = NULL;
 	root = NULL;
+	wb_units_init(&units);
 	error = vm_heap_add_root(heap, &root);
 	if (error != 0)
 		return error;
+
+	/* Creates an XML error owner without any recovered original child. */
 	made = dom_document_create(heap);
 	if (made == NULL) {
-		vm_heap_remove_root(heap, &root);
-		return ENOMEM;
+		error = ENOMEM;
+		goto release_graph;
 	}
 
-	/* A failed XML parse still owns an XML Document, without any recovered original child. */
+	/* Roots the owner before allocating its error element. */
 	root = &made->node.cell;
 	made->content = DOM_CONTENT_XML;
 	name = vm_atom_from_ascii(heap, "parsererror");
-	error = 0;
-	if (name == NULL)
+	if (name == NULL) {
 		error = ENOMEM;
-	element = NULL;
-	if (error == 0) {
-		element = dom_element_create(made, DOM_NS_OTHER, name, NULL);
-		if (element == NULL) {
-			error = ENOMEM;
-		} else {
-			dom_append_child(&made->node, &element->node);
-			element->namespace_uri = vm_string_from_utf8(heap, "urn:zedbsd:xml-parser-error", 27);
-			if (element->namespace_uri == NULL)
-				error = ENOMEM;
-		}
+		goto release_graph;
 	}
 
-	/* Embed actual parser evidence, independently of resource names or suite identity. */
+	/* Constructs the private error element in the actual native graph. */
+	element = dom_element_create(made, DOM_NS_OTHER, name, NULL);
+	if (element == NULL) {
+		error = ENOMEM;
+		goto release_graph;
+	}
+
+	/* The rooted Document owns the element before its exact URI is allocated. */
+	dom_append_child(&made->node, &element->node);
+	element->namespace_uri = vm_string_from_utf8(heap, "urn:zedbsd:xml-parser-error", 27);
+	if (element->namespace_uri == NULL) {
+		error = ENOMEM;
+		goto release_graph;
+	}
+
+	/* Embeds the strict parser's status and offset independently of resource identity. */
 	length = snprintf(message, sizeof(message), "XML parse error %d at UTF16 offset %lu", failure->status, (unsigned long)failure->offset);
-	wb_units_init(&units);
-	if (error == 0 && length > 0)
-		error = wb_utf8_to_units((const unsigned char *)message, (size_t)length, &units);
-	if (error == 0) {
-		text = dom_text_create(made, units.data, units.length);
-		if (text == NULL) {
-			error = ENOMEM;
-		} else {
-			dom_append_child(&element->node, text);
-		}
+	if (length < 0) {
+		error = EIO;
+		goto release_graph;
 	}
 
-	/* Publish only the complete owning error graph. */
+	/* Refuses any truncation before the reported length can exceed stored bytes. */
+	if ((size_t)length >= sizeof(message)) {
+		error = EOVERFLOW;
+		goto release_graph;
+	}
+
+	/* Copies only the actual formatted bytes into temporary UTF-16 storage. */
+	if (length > 0) {
+		error = wb_utf8_to_units((const unsigned char *)message, (size_t)length, &units);
+		if (error != 0)
+			goto release_graph;
+	}
+
+	/* Creates the native text before publishing the complete error graph. */
+	text = dom_text_create(made, units.data, units.length);
+	if (text == NULL) {
+		error = ENOMEM;
+		goto release_graph;
+	}
+
+	/* Publishes no original script or recovered partial tree. */
+	dom_append_child(&element->node, text);
+	*document = made;
+
+release_graph:
+	/* Releases temporary representation and root ownership on either outcome. */
 	wb_units_release(&units);
-	if (error == 0)
-		*document = made;
 	vm_heap_remove_root(heap, &root);
 	if (error != 0)
 		return error;
 
-	/* Succeeded: no original script or recovered partial tree can execute. */
+	/* Succeeded: the caller receives only the complete private error graph. */
 	return 0;
 }
 
@@ -782,21 +932,21 @@ frame_load_metadata(
 		if (byte >= 'A' && byte <= 'Z')
 			byte += 'a' - 'A';
 		error = wb_buffer_append(&essence, &byte, 1U);
-		if (error != 0)
-			break;
+		if (error != 0) {
+			wb_buffer_release(&essence);
+			return error;
+		}
 	}
 
 	/* The actual declared text/xml remains text/xml even when the native content kind is XML. */
-	if (error == 0) {
-		document->resource_mime = vm_string_from_utf8(document->heap, wb_buffer_string(&essence), essence.length);
-		if (document->resource_mime == NULL)
-			error = ENOMEM;
+	document->resource_mime = vm_string_from_utf8(document->heap, wb_buffer_string(&essence), essence.length);
+	if (document->resource_mime == NULL) {
+		wb_buffer_release(&essence);
+		return ENOMEM;
 	}
 
 	/* Release normalization storage before returning either outcome. */
 	wb_buffer_release(&essence);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: metadata is owned by the actual Document graph. */
 	return 0;
@@ -813,6 +963,7 @@ frame_load_html(
 	const unsigned char *bytes;
 	size_t length;
 	int error;
+	int active;
 
 	/* UTF8 and its ordinary BOM handling match the primary production HTML input path. */
 	bytes = body->data;
@@ -825,28 +976,45 @@ frame_load_html(
 		length -= 3U;
 	}
 
-	/* Decode complete bytes before publishing a live child parser. */
+	/* Prepares both temporary input and nullable parser ownership. */
 	wb_units_init(&units);
-	error = wb_utf8_to_units(bytes, length, &units);
 	parser = NULL;
-	if (error == 0)
-		error = html_parser_create(&parser, window->document, 1);
-	if (error == 0) {
-		/* The Window trace retains parser stacks during script-triggered collection. */
-		window->document_parser = parser;
-		html_parser_transfer_ownership(parser);
-		html_parser_set_script_hook(parser, frame_load_inline, window);
-		window->document_parser_depth++;
-		error = html_parser_feed(parser, units.data, units.length);
-		if (error == 0)
-			error = html_parser_finish(parser);
+	active = 0;
+	error = wb_utf8_to_units(bytes, length, &units);
+	if (error != 0)
+		goto release_parser;
+
+	/* Creates the actual child parser only after complete byte decoding. */
+	error = html_parser_create(&parser, window->document, 1);
+	if (error != 0)
+		goto release_parser;
+
+	/* Transfers parser tracing to the Window before script-triggered allocation. */
+	window->document_parser = parser;
+	html_parser_transfer_ownership(parser);
+	html_parser_set_script_hook(parser, frame_load_inline, window);
+	window->document_parser_depth++;
+	active = 1;
+	error = html_parser_feed(parser, units.data, units.length);
+	if (error != 0)
+		goto release_parser;
+
+	/* Processes actual EOF after all fed input succeeds. */
+	error = html_parser_finish(parser);
+	if (error != 0)
+		goto release_parser;
+
+release_parser:
+	/* Removes only ownership that this call actually published. */
+	if (active) {
 		window->document_parser_depth--;
 		window->document_parser = NULL;
 		window->document_parser_close = 0;
-		html_parser_destroy(parser);
 	}
 
-	/* No parser-owned source or insertion stack survives actual EOF. */
+	/* No parser source or insertion stack survives the completed call. */
+	if (parser != NULL)
+		html_parser_destroy(parser);
 	wb_units_release(&units);
 	if (error != 0)
 		return error;
@@ -906,15 +1074,15 @@ frame_load_xml_scripts(
 			root = &walk->cell;
 		if (script) {
 			error = bind_run_inline_script(window, element);
-			if (error != 0)
-				break;
+			if (error != 0) {
+				vm_heap_remove_root(window->realm->heap, &root);
+				return error;
+			}
 		}
 	}
 
 	/* The active realm root protects the current script; release traversal ownership after callbacks. */
 	vm_heap_remove_root(window->realm->heap, &root);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: only validated namespace-eligible supported inline code executed. */
 	return 0;

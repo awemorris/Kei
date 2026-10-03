@@ -63,8 +63,8 @@ struct te_state {
  * The window's menus as given to zdesktop (menu.c): the connection's menu
  * service (NULL when the compositor has none, and the window then has no
  * menus), the window's menu and its place, the context menu's model and
- * the context menu open (NULL for none), and the state the menus last
- * showed.
+ * the context menu open (NULL for none), the state the menus last
+ * showed, and how many files File > Open Recent shows (ws128-p003).
  */
 struct te_menu {
 	struct keiland_menu_service *service;
@@ -74,6 +74,7 @@ struct te_menu {
 	struct keiland_context_menu *popup;
 	struct te_state shown;
 	struct te_window *window;
+	size_t recent_shown;
 };
 
 /*
@@ -109,6 +110,7 @@ void te_window_act(struct te_window *window, uint32_t action);
 int te_menu_open(struct te_menu *menu, struct te_window *window, const struct te_state *state);
 void te_menu_refresh(struct te_menu *menu, const struct te_state *state);
 void te_menu_popup(struct te_menu *menu, int x, int y);
+void te_menu_recent(struct te_menu *menu, const struct te_app *app);
 void te_menu_close(struct te_menu *menu);
 
 /* The titlebar's controls (titlebar.c). */

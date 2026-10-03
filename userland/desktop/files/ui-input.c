@@ -149,6 +149,11 @@ fm_input_motion(
 	app->pointer_y = event->y;
 	app->pointer_inside = 1;
 
+	/* A drag of the overlay scroll bar's thumb is the bar's alone; near the edge it grows. */
+	dragging = fm_scrollbar_motion(app, event->x, event->y);
+	if (dragging != 0)
+		return;
+
 	/* A press on an item (or a favorite) drags the selection (or the favorite) once the pointer moves away from it. */
 	if (app->pressing != 0 && (app->press_kind == FM_HIT_ITEM || app->press_kind == FM_HIT_PLACE)) {
 		dragging = fm_drag_motion(app, event->x, event->y);
@@ -181,6 +186,7 @@ fm_input_button(
 	struct fm_tab *tab;
 	unsigned kind;
 	int index;
+	int taken;
 
 	/* The right button selects the item under it (unless it is already selected) and asks for its context menu. */
 	tab = fm_ui_tab(app);
@@ -203,6 +209,13 @@ fm_input_button(
 	if (event->button != FM_BUTTON_LEFT)
 		return;
 
+	/* A press on the overlay scroll bar is the bar's (a drag of its thumb, or a page). */
+	if (event->pressed != 0) {
+		taken = fm_scrollbar_press(app, event->x, event->y);
+		if (taken != 0)
+			return;
+	}
+
 	/* A press, and the selection it left. */
 	if (event->pressed != 0) {
 		input_press(app, event);
@@ -210,7 +223,10 @@ fm_input_button(
 		return;
 	}
 
-	/* The release ends the press. */
+	/* The release ends a drag of the bar's thumb, or else the press. */
+	taken = fm_scrollbar_release(app);
+	if (taken != 0)
+		return;
 	input_release(app);
 }
 
@@ -248,13 +264,18 @@ fm_input_scroll(
 	if (limit < 0)
 		limit = 0;
 
-	/* The new scroll, inside the range. */
+	/* The new scroll, inside the range; the overlay bar comes out. */
 	tab->scroll += amount;
 	if (tab->scroll > limit)
 		tab->scroll = limit;
 	if (tab->scroll < 0)
 		tab->scroll = 0;
 	app->dirty = 1;
+	fm_scrollbar_moved(app);
+
+	/* The item under the pointer moved away with the content: nothing is lit until the pointer moves. */
+	app->hover_kind = FM_HIT_NONE;
+	app->hover_index = -1;
 
 	/* A rubber band keeps its far corner under the pointer. */
 	if (app->band != 0 && app->pressing != 0)

@@ -1,0 +1,33 @@
+{
+  "queue": "q597",
+  "checkpoint": 86,
+  "source": "userland/desktop/libbrowser/js/builtin_array.c",
+  "source_sha256": "64ec223302debd1a9d454be4f0a2597664e45967bdd778844931ca9970bbe45b",
+  "manual_status": "partial-review-unresolved",
+  "reviewed": 204,
+  "total": 209,
+  "remaining": 5,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "permitted_forward_cleanup_gotos": 5,
+    "other_findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "js_tests": "14/14",
+  "fixes": [
+    "array_has checks vm_in status before reading output",
+    "array_compare roots first converted string through second conversion",
+    "array_sorted_items roots list and scratch across accessors and comparator and checks scratch allocation before use",
+    "array_sort roots temporary list across setters",
+    "array_join_with roots separator and checks toLocaleString key allocation"
+  ],
+  "limits": [
+    "Array full-file conformance not yet cleared: additional produced array results and reentrant getters need GC root review",
+    "No forced GC in every callback or allocation failure injection",
+    "Other four C sources and original whole p172 gates remain"
+  ]
+}

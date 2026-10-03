@@ -1,0 +1,492 @@
+{
+  "cases": 9,
+  "modes": [
+    "whole",
+    "units"
+  ],
+  "passed": 9,
+  "results": [
+    {
+      "tokens": [
+        [
+          "StartTag",
+          "div",
+          {
+            "a": "x",
+            "b": "2"
+          }
+        ],
+        [
+          "Character",
+          "hi&bye"
+        ],
+        [
+          "EndTag",
+          "div"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "StartTag",
+          "div",
+          {
+            "a": "x",
+            "b": "2"
+          }
+        ],
+        [
+          "Character",
+          "h"
+        ],
+        [
+          "Character",
+          "i"
+        ],
+        [
+          "Character",
+          "&b"
+        ],
+        [
+          "Character",
+          "y"
+        ],
+        [
+          "Character",
+          "e"
+        ],
+        [
+          "EndTag",
+          "div"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "DOCTYPE",
+          "html",
+          null,
+          null,
+          true
+        ],
+        [
+          "Comment",
+          "x"
+        ],
+        [
+          "StartTag",
+          "p",
+          {
+            "id": "x"
+          }
+        ],
+        [
+          "Character",
+          "ok"
+        ],
+        [
+          "EndTag",
+          "p"
+        ]
+      ],
+      "errors": 1,
+      "codes": [
+        "duplicate-attribute"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "DOCTYPE",
+          "html",
+          null,
+          null,
+          true
+        ],
+        [
+          "Comment",
+          "x"
+        ],
+        [
+          "StartTag",
+          "p",
+          {
+            "id": "x"
+          }
+        ],
+        [
+          "Character",
+          "o"
+        ],
+        [
+          "Character",
+          "k"
+        ],
+        [
+          "EndTag",
+          "p"
+        ]
+      ],
+      "errors": 1,
+      "codes": [
+        "duplicate-attribute"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "<!--<script>foo</script>-->"
+        ],
+        [
+          "EndTag",
+          "script"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "<!"
+        ],
+        [
+          "Character",
+          "-"
+        ],
+        [
+          "Character",
+          "-"
+        ],
+        [
+          "Character",
+          "<s"
+        ],
+        [
+          "Character",
+          "c"
+        ],
+        [
+          "Character",
+          "r"
+        ],
+        [
+          "Character",
+          "i"
+        ],
+        [
+          "Character",
+          "p"
+        ],
+        [
+          "Character",
+          "t"
+        ],
+        [
+          "Character",
+          ">"
+        ],
+        [
+          "Character",
+          "f"
+        ],
+        [
+          "Character",
+          "o"
+        ],
+        [
+          "Character",
+          "o"
+        ],
+        [
+          "Character",
+          "<"
+        ],
+        [
+          "Character",
+          "/"
+        ],
+        [
+          "Character",
+          "s"
+        ],
+        [
+          "Character",
+          "c"
+        ],
+        [
+          "Character",
+          "r"
+        ],
+        [
+          "Character",
+          "i"
+        ],
+        [
+          "Character",
+          "p"
+        ],
+        [
+          "Character",
+          "t"
+        ],
+        [
+          "Character",
+          ">"
+        ],
+        [
+          "Character",
+          "-"
+        ],
+        [
+          "Character",
+          "-"
+        ],
+        [
+          "Character",
+          ">"
+        ],
+        [
+          "EndTag",
+          "script"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "\u00a9& <b>t</b>"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "\u00a9"
+        ],
+        [
+          "Character",
+          "& "
+        ],
+        [
+          "Character",
+          "<b"
+        ],
+        [
+          "Character",
+          ">"
+        ],
+        [
+          "Character",
+          "t"
+        ],
+        [
+          "Character",
+          "</b>"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "EndTag",
+          "style"
+        ],
+        [
+          "StartTag",
+          "b",
+          {}
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "EndTag",
+          "style"
+        ],
+        [
+          "StartTag",
+          "b",
+          {}
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "\ud83d\ude42 \ufffd \u20ac \u00a9=3"
+        ]
+      ],
+      "errors": 3,
+      "codes": [
+        "null-character-reference",
+        "control-character-reference",
+        "missing-semicolon-after-character-reference"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "\ud83d\ude42"
+        ],
+        [
+          "Character",
+          " "
+        ],
+        [
+          "Character",
+          "\ufffd"
+        ],
+        [
+          "Character",
+          " "
+        ],
+        [
+          "Character",
+          "\u20ac"
+        ],
+        [
+          "Character",
+          " "
+        ],
+        [
+          "Character",
+          "\u00a9="
+        ],
+        [
+          "Character",
+          "3"
+        ]
+      ],
+      "errors": 3,
+      "codes": [
+        "null-character-reference",
+        "control-character-reference",
+        "missing-semicolon-after-character-reference"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "ab"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "a"
+        ],
+        [
+          "Character",
+          "b"
+        ]
+      ],
+      "errors": 0,
+      "codes": []
+    },
+    {
+      "tokens": [
+        [
+          "StartTag",
+          "a",
+          {
+            "x": "&copy=2",
+            "y": "\u00a9"
+          }
+        ],
+        [
+          "Character",
+          "\ufffd"
+        ],
+        [
+          "EndTag",
+          "a"
+        ]
+      ],
+      "errors": 1,
+      "codes": [
+        "character-reference-outside-unicode-range"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "StartTag",
+          "a",
+          {
+            "x": "&copy=2",
+            "y": "\u00a9"
+          }
+        ],
+        [
+          "Character",
+          "\ufffd"
+        ],
+        [
+          "EndTag",
+          "a"
+        ]
+      ],
+      "errors": 1,
+      "codes": [
+        "character-reference-outside-unicode-range"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "\ud83d\ude00\ud800"
+        ]
+      ],
+      "errors": 1,
+      "codes": [
+        "surrogate-in-input-stream"
+      ]
+    },
+    {
+      "tokens": [
+        [
+          "Character",
+          "\ud83d\ude00"
+        ],
+        [
+          "Character",
+          "\ud800"
+        ]
+      ],
+      "errors": 1,
+      "codes": [
+        "surrogate-in-input-stream"
+      ]
+    }
+  ]
+}

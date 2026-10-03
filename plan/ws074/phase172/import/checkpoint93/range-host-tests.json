@@ -1,0 +1,42 @@
+[
+  {
+    "program": "build/browser3-p172/plain/host-range-boundary",
+    "exit": 0,
+    "last_line": "range boundary lifetime checks: 89/89 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-clone-contents",
+    "exit": 0,
+    "last_line": "native Range clone contents: 15/15 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-data",
+    "exit": 0,
+    "last_line": "range-data native checks: 100/100 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-delete-contents",
+    "exit": 0,
+    "last_line": "native Range delete contents: 11/11 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-extract-contents",
+    "exit": 0,
+    "last_line": "native Range extract contents: 14/14 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-insert",
+    "exit": 0,
+    "last_line": "range insertion lifetime checks: 92/92 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-mutation",
+    "exit": 0,
+    "last_line": "range-mutation native checks: 36/36 passed"
+  },
+  {
+    "program": "build/browser3-p172/plain/host-range-surround-contents",
+    "exit": 0,
+    "last_line": "native Range surround contents: 16/16 passed"
+  }
+]

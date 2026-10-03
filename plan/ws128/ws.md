@@ -3,7 +3,7 @@
 # WS128: 標準アプリ全般のベータ1 のブラッシュアップ
 
 <!-- awesome-plan-current:start -->
-Status: planned
+Status: incomplete
 Primary Milestone: MG006
 Objectives: O2
 Parent: [Master](../master.md)
@@ -34,13 +34,15 @@ Resume point（2026-10-02 計画）: **p001（棚卸し・回帰の取り直し�
 
 | Phase | 目的 | Status | 依存 | 目安 |
 | --- | --- | --- | --- | --- |
-| [ws128-p001](phase001/phase.md) | 棚卸し: アプリごとの回帰の取り直し、menu の全項目の通しと不具合の表、未完成の UI の一覧、改善の候補（価値・規模・危険・依存）。既存 WS の残りとの照合の確認。最後にユーザーが選ぶ | planned | — | 3h |
-| [ws128-p002](phase002/phase.md) | Notes の Open（file chooser で Notes の PDF・他の PDF を開く）と Save As | planned | —（p001 と並列可） | 2h |
-| [ws128-p003](phase003/phase.md) | Text Editor の Find & Replace（Replace・Replace All、undo で戻せる）と Open Recent | planned | —（p001 と並列可） | 2h |
+| [ws128-p001](phase001/phase.md) | 棚卸し: アプリごとの回帰の取り直し、menu の全項目の通しと不具合の表、未完成の UI の一覧、改善の候補（価値・規模・危険・依存）。既存 WS の残りとの照合の確認。最後にユーザーが選ぶ | cleared（2026-10-03 q623-i01、[requirements.md](requirements.md)） | — | 3h |
+| [ws128-p002](phase002/phase.md) | Notes の Open（file chooser で Notes の PDF・他の PDF を開く）と Save As | cleared（2026-10-03 q621-i01、QEMU の Venus） | —（p001 と並列可） | 2h |
+| [ws128-p003](phase003/phase.md) | Text Editor の Find & Replace（Replace・Replace All、undo で戻せる）と Open Recent | cleared（2026-10-03 q621-i01、QEMU の Venus と host） | —（p001 と並列可） | 2h |
 | [ws128-p004](phase004/phase.md) | PDF Viewer の文字の検索と選択・copy（libpdf に文字の抽出（ToUnicode）が無いので規模が大きい） | planning（p001 で規模の見積もりとユーザーの採否） | p001、libpdf（`userland/base/libpdf`） | 4h 以上 |
 | [ws128-p005](phase005/phase.md) | Image Viewer: Move to Trash・Open With・slideshow・画像の copy（p001 で選ぶ） | planning（p001 でユーザーの採否） | p001 | 2h |
 | [ws128-p006](phase006/phase.md) | Terminal: scrollback の検索・色と font の設定の保存（p001 で選ぶ） | planning（p001 でユーザーの採否。WS090 p015 と file が重なる） | p001 | 2h |
 | [ws128-p007](phase007/phase.md) | 5330 の実機で標準アプリの通し（ユーザーの目視、WS079 S8/S9・WS100 A7 と同じ回） | planning（p002〜p006 の選んだ物の後、実機とユーザーの時間） | 実装の Phase | agent 1h + ユーザー 30 分 |
+| [ws128-p009](phase009/phase.md) | Terminal: 「CJK Ambiguous Width を全角で扱う」を menu で即座に切り替える（2026-10-03 user の指示） | planned | —（p006・WS131 p018 と同時に流さない） | 2〜3h |
+| [ws128-p010](phase010/phase.md) | Terminal の右端の wrap を xterm と同じ保留にする（BUG-150、Emacs の画面が 1 行ずれる） | cleared（2026-10-03 q636-i01、FreeBSD 実機と host、Q1 の照合待ち） | — | 1〜3h |
 | [ws128-p008](phase008/phase.md) | 全文規約と回帰（WS の最後） | planning | 実装の Phase | 2h |
 
 ## 既存の WS の残りとの照合（2026-10-02、その WS で実行し WS128 では重ねない）

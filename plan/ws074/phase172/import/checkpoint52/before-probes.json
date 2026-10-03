@@ -1,0 +1,16 @@
+[
+  {
+    "name": "probe-function-apply",
+    "source_sha256": "a94b19d3561df2988bbc7e7ac5f3e2716a7f28f2d9126b48b208d71e47742e58",
+    "exit": 1,
+    "stdout": "apply result=nan is_number=1 actual_collections=1\n",
+    "stderr": ""
+  },
+  {
+    "name": "probe-function-bind",
+    "source_sha256": "a94b19d3561df2988bbc7e7ac5f3e2716a7f28f2d9126b48b208d71e47742e58",
+    "exit": -11,
+    "stdout": "",
+    "stderr": "timeout: the monitored command dumped core\n"
+  }
+]

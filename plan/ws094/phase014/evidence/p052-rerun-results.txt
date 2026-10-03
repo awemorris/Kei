@@ -1,0 +1,3 @@
+C9 p052 PASS seconds=34 p052: PASS 
+C9 p052 PASS seconds=30 p052: PASS 
+C9 p052 PASS seconds=31 p052: PASS 

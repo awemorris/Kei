@@ -1,0 +1,78 @@
+log: ZWL DESKTOP start pid=[0-9]+ command=/bin/files --desktop ok
+log: ZWL DESKTOP role client=[0-9]+ surface=[0-9]+ x=0 y=34 width=1280 height=766 ok
+log: ZFILES DESKTOP configure x=0 y=34 width=1280 height=766 ok
+log: ZFILES DESKTOP ready items=5 cells=5 width=1280 height=766 ok
+log: ZFILES DESKTOP place name=[^ ]+ column=0 row=0 x=1168 y=16 ok
+log: ZFILES DESKTOP place name=[^ ]+ column=0 row=4 x=1168 y=432 ok
+shot desktop.png
+log: ZFILES DESKTOP select name=photo.png selected=1 ok
+shot selected.png
+log: ZFILES DESKTOP select name=notes.txt selected=1 via=arrow ok
+log: ZFILES DESKTOP open via=enter ok
+log: ZFILES OPEN path=/tmp/dhome/Desktop/notes.txt app=Env error=0 ok
+token: not inherited ok
+log: ZFILES DESKTOP open name=Projects via=double-click ok
+log: ZFILES DESKTOP open-folder path=/tmp/dhome/Desktop/Projects error=0 ok
+log: ZWL MAP client=[0-9]+  ok
+shot folder.png
+shot band.png
+log: ZFILES DESKTOP band start x=1100 y=26 ok
+log: ZFILES DESKTOP band end first=0 ok
+log: ZFILES DESKTOP context empty x=700 y=366 ok
+log: ZWL MENU row item=1056 depth=1  ok
+log: ZWL MENU row item=1055 depth=1  ok
+shot menu-empty.png
+log: ZFILES NEWFOLDER path=/tmp/dhome/Desktop/untitled folder ok
+log: ZFILES DESKTOP place name=untitled folder column=0 row=5  ok
+shot rename-field.png
+log: ZFILES RENAME from=/tmp/dhome/Desktop/untitled folder to=/tmp/dhome/Desktop/Plans ok
+log: ZFILES DESKTOP rename from=untitled folder to=Plans error=0 ok
+log: ZFILES DESKTOP place name=Plans column=0 row=5  ok
+log: ZFILES DESKTOP context name=notes.txt ok
+log: ZWL MENU row item=1014 depth=1  ok
+shot menu-item.png
+log: ZFILES RENAME from=/tmp/dhome/Desktop/notes.txt to=/tmp/dhome/Desktop/todo.txt ok
+log: ZFILES DESKTOP place name=todo.txt column=0 row=1  ok
+log: ZFILES DESKTOP context name=photo.png ok
+log: ZFILES CLIPBOARD mode=[0-9]+ items=1 ok
+log: ZFILES TASK done id=[0-9]+ kind=copy state=done files=1  ok
+log: ZFILES DESKTOP ready items=7 cells=7 ok
+log: ZFILES DESKTOP place name=photo 2.png column=0 row=6  ok
+log: ZFILES DIALOG collision index=0 name=report.pdf ok
+shot collision.png
+log: ZFILES COLLISION answer= ok
+log: ZFILES DESKTOP ready items=8 cells=8 ok
+log: ZFILES DESKTOP select name=script.sh selected=1 ok
+trash: 7 items again ok
+trash: script.sh in the trash ok
+shot trash.png
+log: ZFILES DESKTOP context name=report.pdf ok
+log: ZFILES DESKTOP show-in-files path=/tmp/dhome/Desktop error=0 ok
+show-in-files: a window ok
+shot show-in-files.png
+log: ZFILES DESKTOP context empty x=40 y=466 ok
+desktop menu over a window: stays open ok
+shot menu-over-window.png
+desktop menu: a press on the window closes it ok
+desktop menu: a new window closes it ok
+log: ZFILES DESKTOP clean-up error=0 ok
+clean-up: in order ok
+shot cleanup.png
+log: ZFILES DESKTOP change-wallpaper error=0 ok
+shot wallpaper.png
+log: ZFILES DESKTOP place name=notes.txt column=2 row=3  MISSING
+log: ZFILES DESKTOP place name=Projects column=0 row=0  MISSING
+shot saved.png
+log: ZFILES DESKTOP prune removed=1 kept=1 MISSING
+log: ZFILES DESKTOP place name=notes.txt column=2 row=3  MISSING
+log: ZFILES DESKTOP ready items=5 cells=5 .* hidden=0$ MISSING
+log: ^ghost.txt ok
+log: ZFILES DESKTOP move name=notes.txt column=3 row=3 error=0 MISSING
+prune: stale saved name remains
+prune: moved saved name MISSING
+shot prune.png
+log: ZFILES DESKTOP ready items=100 cells=91 .* hidden=9$ MISSING
+shot overflow.png
+zdesktop: no ERROR
+files: no FAILED
+files-desktop-guest: FAIL

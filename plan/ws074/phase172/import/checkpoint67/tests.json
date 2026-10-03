@@ -1,0 +1,47 @@
+[
+  {
+    "name": "host-frame-lifetime",
+    "argv": [
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout": "frame lifetime checks: 148/148 passed\n"
+  },
+  {
+    "name": "child-style-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/child-style-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS child stylesheet cascade\nPASS ancestor color inheritance\nPASS ancestor font inheritance\nPASS child author sheet isolation\nPASS parent sheet preserved\nPASS computed float alias\nPASS child document query\nPASS child matches and closest\nPASS child querySelectorAll\nPASS borrowed query owner\nPASS borrowed matches owner\nPASS borrowed computed owner\nPASS live inline mutation\nPASS important author wins\nPASS class query mutation\nPASS important inline wins\nPASS removed inline and class state\nPASS inline float alias\nPASS removed inline float\nPASS sheet text replacement\nPASS live ancestor inheritance\nPASS media attribute exclusion\nPASS media attribute mutation\nPASS embedded media with nonnegative viewport\nPASS sheet removal invalidation\nPASS sibling sheet isolation\nPASS disconnected computed empty\nPASS reinserted declaration remains live\nPASS retired child computed empty\nPASS retired child selector empty\n"
+  },
+  {
+    "name": "text-transform-media-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/text-transform-media-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS default text-transform none\nPASS inline camel/CSS name and inherited computed keyword\nPASS native declaration and computed CSS spelling\nPASS invalid transform leaves previous valid declaration\nPASS capitalize computed keyword\nPASS initial resets computed keyword\nPASS explicit inherit uses native parent state\nPASS unset follows inherited property\nPASS custom variable resolves native transform\nPASS inline important wins against stylesheet important\nPASS stylesheet actual cascade after inline removal\nPASS dynamic style Text changes computed transform\nPASS computed transform observation preserves native DOM text\nPASS original46 media a\nPASS original46 media b\nPASS original46 media c\nPASS original46 media d\nPASS original46 media e\nPASS original46 media g\nPASS original46 media h\nPASS original46 media i\nPASS original46 media j\nPASS original46 media k\nPASS original46 media l\nPASS original46 media m\nPASS original46 media n\nPASS original46 media o\nPASS original46 media p\nPASS original46 media q\nPASS original46 media u\nPASS original46 media v\nPASS original46 media ww\nPASS original46 media x\nPASS original46 media y1\nPASS original46 media y2\nPASS original46 media y3\nPASS original46 media y4\nPASS borrowed computed style uses child CSS and viewport\ntext transform media probe done\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "verified_utc": "2026-10-02T13:07:22+00:00",
+  "files": {
+    "plan/history/queue-q594.md": "9b5c2dbc1071561fa5efd351f9c77a4ccaa304d0fbaab7090c585587451a6fa0",
+    "plan/ws074/phase172/browser3/q594/README.md": "8989857c9f2ed45cf77c3f971bbc181cfdf3d05bfe2f8fa7ef18b2a3d77e7386",
+    "plan/ws074/phase172/browser3/q594/approved-scope.md": "557a8cdb540a2621c593407a60fa7b7f99bca46a16f5860e25a2d46f5ed69483",
+    "plan/ws074/phase172/browser3/q594/cleanup-audit.json": "db61066d208b90eb0b71ce94214974998b87d2c82bc6825ce5281c01c0eaf14a",
+    "plan/ws074/phase172/browser3/q594/cleanup-result.json": "09b7fea02b7c8049d924f5f651fc69ef0b98a0bbfd315af0af3cc31361a7391f",
+    "plan/ws074/phase172/browser3/q594/commits.json": "34d73004f87639741a86b1ab002353927d7cc75b48c02257154ad441c1cb2873",
+    "plan/ws074/phase172/browser3/q594/outcome.json": "c7aea430606625fef85238ddee645caba0b9fb8b30892052ae0487b17e4c807b",
+    "plan/ws074/phase172/browser3/q594/remaining.json": "93ca50c70bc3249f1930edb8909ed83c1e11917f577bb399e261964e0d13df95",
+    "plan/ws074/phase172/browser3/q594/review-inventory.json": "4b0d995863b658496d60bfe22a0d4a8f31b997d7cd1a4b0c272a192727d72b1e",
+    "plan/ws074/phase172/browser3/q594/selection.json": "8f75785aa9ef448c43a1b739205ed942dfe1c2fc7fcdfd47635bc5099bbdd11e",
+    "plan/ws074/phase172/browser3/q594/source-hash-readback.json": "9f54b7cbda2756ee1c16316a4576b065c38c2fa4431244c9f78ae4510b1ea90b"
+  },
+  "source_hashes_matched": 209,
+  "selected_reviews_verified": 5,
+  "reviewed": 140,
+  "remaining": 69
+}

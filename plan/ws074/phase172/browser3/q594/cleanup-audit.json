@@ -1,0 +1,2676 @@
+{
+  "candidate_directories": [
+    "build/browser3-p172/review15",
+    "build/browser3-p172/review16",
+    "build/browser3-p172/review17",
+    "build/browser3-p172/review18",
+    "build/browser3-p172/review19",
+    "build/browser3-p172/review20",
+    "build/browser3-p172/review21",
+    "build/browser3-p172/review22",
+    "build/browser3-p172/review23",
+    "build/browser3-p172/review24",
+    "build/browser3-p172/review25",
+    "build/browser3-p172/review26",
+    "build/browser3-p172/review27",
+    "build/browser3-p172/review28",
+    "build/browser3-p172/review29",
+    "build/browser3-p172/review30",
+    "build/browser3-p172/review31",
+    "build/browser3-p172/review32",
+    "build/browser3-p172/review33",
+    "build/browser3-p172/review34"
+  ],
+  "candidate_files": [
+    {
+      "path": "build/browser3-p172/review15/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/format.json",
+      "bytes": 1177,
+      "sha256": "bf209b451580b417708d2a9d87a3fa4505892598feba986980abb5671d1a8a5f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-cssom-mutation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/format-before.json",
+      "bytes": 282,
+      "sha256": "5e9685d1465611d36985b8ea1452cdab693e65a99cb2c3a999c89c4d160d373f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/viewport-after.log",
+      "bytes": 37,
+      "sha256": "dd9e41ad3590f0e3d1d40c3052f4392914e3ec9cf6eae7e53ba8347097d1edd9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/viewport-before.log",
+      "bytes": 148,
+      "sha256": "6be1d504d4881db4cc0888d0d8674242986207b84a22c0d554b861fa485e6e6e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-frame-viewport.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-frame-lifetime.stdout",
+      "bytes": 38,
+      "sha256": "59488199b4118eca452b94185f06384d62a7e05ac13637d99b6b9dcc27a061ce",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/tests.json",
+      "bytes": 805,
+      "sha256": "38ba9b5684bd903d13bf68a8e594026abab661f1c8f91f07be2537fbd2daf665",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-cssom-mutation.stdout",
+      "bytes": 36,
+      "sha256": "7139f768e70640f1d19ddc52050b340cf31f3257e24fed4621b30c240e8136e3",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/style-context-after.text",
+      "bytes": 1461,
+      "sha256": "a8343e021ff9f2e1017db5e1886d354a879be2dfb1ca9761dfc272921750ef10",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review15/style-context-before.text",
+      "bytes": 1452,
+      "sha256": "c22cf13a3b636de258b0d28935615ca5c1a14573dd5d82ce2ce9a1336aa9b259",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-xml-document.stdout",
+      "bytes": 37,
+      "sha256": "ef2d09e7bd4ee77d6c774f341af83e512a49e1464747896ec49d0a42d1e24e6d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/before.json",
+      "bytes": 514,
+      "sha256": "c7272e8c21908a7a0e22f8566f3cf5997390b0426e8b7309dd475557adf17cb0",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-frame-viewport.stdout",
+      "bytes": 37,
+      "sha256": "dd9e41ad3590f0e3d1d40c3052f4392914e3ec9cf6eae7e53ba8347097d1edd9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-xml-document.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/implementation-after.text",
+      "bytes": 1480,
+      "sha256": "1758e1c36497272e5005420d6b9e32a43cbb0b491fab7c2d189ba5b5525818fd",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review15/viewport-before",
+      "bytes": 5782520,
+      "sha256": "be43ace629ef2c44569ed272ee6a6854a0403abaea753fcbbc99ada6c14c5070",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review15/implementation-before.text",
+      "bytes": 1480,
+      "sha256": "1758e1c36497272e5005420d6b9e32a43cbb0b491fab7c2d189ba5b5525818fd",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review15/viewport-after",
+      "bytes": 5782496,
+      "sha256": "d0dfeaf8071e9731af9d0092e8134f55056914d3a71cf5fed2bc000bacdc9ac0",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review15/object-code.json",
+      "bytes": 925,
+      "sha256": "21f3e0fb76bde5117f9614e1cfdd37d970cdc56ff3fd726411a3199d26abb14e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review15/host-frame-lifetime.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-image-geometry-before.o",
+      "bytes": 60128,
+      "sha256": "c00a7183686121231e666cc5164f7e1018d8d02e046bd8851685fe6525db6778",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/format.json",
+      "bytes": 1412,
+      "sha256": "e42b6d2e3035b8c09604c78c17494e5ff6e231b5221aade5934bc0f8a49074e3",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-select-collection-after.o",
+      "bytes": 44040,
+      "sha256": "d0fb9cd3fd5f7d6ef06f88b5aef1e3069bd2a9521367d944f143e5028ed30062",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-select-collection-before.o",
+      "bytes": 42808,
+      "sha256": "d10217359ead6e54c523984273cd5936ec648596288a2a38a4f3397474985ed0",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-cssom-before.o",
+      "bytes": 63392,
+      "sha256": "d9e53c352b18e649514c85ec511808c4d7a66a49cef3a078ae3dccef39be3d72",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-cssom-after.o",
+      "bytes": 64336,
+      "sha256": "305f6ce87826022d21cff1e2ee130c75c56d231c17e32f06c94b9efc8a46af13",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-document-images-before.o",
+      "bytes": 45544,
+      "sha256": "756dcea9cf71b38df49a68a8f7e0abf6be3655b54116bd6cebcc7fb84d5c1839",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-select-collection-after.text",
+      "bytes": 1448,
+      "sha256": "7398d314b6d0df1ca32a3212337849ac10f72a002debce071cdb158980b80eed",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-image-geometry-before.text",
+      "bytes": 1569,
+      "sha256": "b4fad924157c7cebc868b3715401f310218ff551e24a93384456adf7150dc4e1",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-cssom-before.text",
+      "bytes": 1680,
+      "sha256": "94e8d1f40388349ae54bc9023fdfbd97fc3be0b15d7a3fbf0dbc5a4001929eee",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-document-images.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-document-images.stdout",
+      "bytes": 46,
+      "sha256": "ac57e07ae8c28343bf6d130c10ba5c8d466d87a248d7460df5e6c62a20b949c8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-image-geometry.stdout",
+      "bytes": 36,
+      "sha256": "42d97ff1ddfcc9fe239189ea774188e7e1c993d586a5cdf7b74d63399d057a75",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/tests.json",
+      "bytes": 3127,
+      "sha256": "9488a5fa5d61c1fcdbff0780b35a6c619edde76d23a8d0af99e5691e05b1e181",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-document-images-after.o",
+      "bytes": 46640,
+      "sha256": "26b732f835615835ff6946c4d53e8591114bc44dc8ae61f7b3ef8184db161962",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-document-images-before.text",
+      "bytes": 1329,
+      "sha256": "63ebfcaf227a582dc961a57a93693e8217385226868cd93125190b563d0b362c",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-select-collection.stdout",
+      "bytes": 42,
+      "sha256": "d18cc454bb2f25136940e45394ea0df346c1c6b6921f060003ab9ce6b267fece",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-cssom.stdout",
+      "bytes": 27,
+      "sha256": "c305d5cb21f371d8d586cc841ea9eba1e54c2bf0a8f0dd7d1086bcf366d3c125",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-cssom.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-document-images-after.text",
+      "bytes": 1454,
+      "sha256": "ed9bb830b1b220731f695e7c6f40d29c4fc56d3a7b433ee7c2bfac0e9079f7bc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/before.json",
+      "bytes": 978,
+      "sha256": "366b575f5b01f5c6c62736e11b233adeb132c90ae49685952a02784fb9b17ed6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-cssom-after.text",
+      "bytes": 1763,
+      "sha256": "225df3475c58b5c267725ce5d8649498de72e61b1234147af54f22fb9fadd6da",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-image-geometry-after.o",
+      "bytes": 60184,
+      "sha256": "69188424706bf84ae99b3778463e709d7adb22532ce37e706ca4a4fd07622d96",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-image-geometry-after.text",
+      "bytes": 1581,
+      "sha256": "18bdb69aef708b19ad50c85fedbe793f354476a599f58e8177bcc36cdff87f81",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/link-objects.json",
+      "bytes": 11190,
+      "sha256": "aefccceaf5d924dea69bdca3ba3999c9de819cf805f7ddc7980e7e4e141d93fe",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-select-collection-before.text",
+      "bytes": 1343,
+      "sha256": "3b45db9bad8707f76c24fd37953b8d64670f969c770b70971c8a219d4276e229",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-image-geometry.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/object-code.json",
+      "bytes": 3988,
+      "sha256": "79a010ed4dc6e08d9cea7120f28f35ca1f6800b1ede695f596c2bd6ec0ff62d3",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review16/host-select-collection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/format.json",
+      "bytes": 809,
+      "sha256": "eb17fc3d8c88154da6e07fdb22b9ea7e07eb11b83f40a896c9acae400aaf6a2f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/host-click.stdout",
+      "bytes": 36,
+      "sha256": "dfaeb5adbdaf213d7ee65f4f3da89ddf52bdf9c5080467e2dffe3d5e873e9b79",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/click-before.text",
+      "bytes": 1847,
+      "sha256": "1b0b534e3780c426cd892237f52c8acaccd028f61192cd806a17b6b0e18ce0ef",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review17/host-submit.stdout",
+      "bytes": 37,
+      "sha256": "b5c99f51e998fcfd5096798a3a756b8cfa31ca0e8597facaab05446a809910c8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/settle.stdout",
+      "bytes": 57,
+      "sha256": "93283247e36421a5caf3cbe07eca1b0f8f75951c8e04cd0903748ac8c6ee70d0",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/click-page.stdout",
+      "bytes": 2393,
+      "sha256": "a9a975dacf2500ca14058fb8926b9e32ddabffc9e6fcf891461609e3eefb20fb",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/host-frame-lifetime.stdout",
+      "bytes": 38,
+      "sha256": "59488199b4118eca452b94185f06384d62a7e05ac13637d99b6b9dcc27a061ce",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/tests.json",
+      "bytes": 1527,
+      "sha256": "d429016bd2d869563849bd3832ec873a48105e681caae7ea3719ced81c46ce3e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/settle.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/before.json",
+      "bytes": 497,
+      "sha256": "1d9560f89479e1fa5243dbc4abbb08fb445040591784c37ebe4c5a945b2e380c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/click-after.text",
+      "bytes": 1878,
+      "sha256": "5c22c5608ac007118ffaa0e26b38f650fe66bb9338cc39526550ae74e8500295",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review17/timer-before.text",
+      "bytes": 2413,
+      "sha256": "be349b8e3ce67524a11b35421dd6a9e5bfa5d5c6a8241778e9e993c72149c5b7",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review17/timer-after.text",
+      "bytes": 2458,
+      "sha256": "40bfd130bec1579d2b366eea1010ca2f9dc9ceb1232f95bc0f34864b57b8f4dc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review17/host-submit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/host-click.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/object-code.json",
+      "bytes": 979,
+      "sha256": "e9490f7a61a956b4efd1174f21f94ba7e8b88a9cb3db8ffe9e39f3e7e97c744e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/host-frame-lifetime.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review17/click-page.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/style-summary.txt",
+      "bytes": 108,
+      "sha256": "43e1c76d58dafbcbce4b69dc12292d5bd1376fb007b051e9274191b0679940f1",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/format.json",
+      "bytes": 1150,
+      "sha256": "0c4d7ae6101543ce4c64d08085f89252d63afb3b0d0cb433594e00e936d3e9dc",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-link-corrected.stdout",
+      "bytes": 71,
+      "sha256": "130c7b738ac0de3b73f2a00ab49873139073890a855e3447f12b95caf7e41268",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-resource-before.o",
+      "bytes": 45112,
+      "sha256": "4d57e03f3d1a2e10106c4e1d239eaa94820fec85f17061bf7856fbd5c9a49b98",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-frame-viewport.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-link.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-after",
+      "bytes": 5794880,
+      "sha256": "72d155f0994dd107e2f8afc520b95190720bdcd44859c4423494c166f0ddd33a",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/link-after.text",
+      "bytes": 2475,
+      "sha256": "8cc294b75674d8371aa6e36bc432f769e03a947d4c92fdf71ae49eab4f0a4295",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/tests.json",
+      "bytes": 1756,
+      "sha256": "4d05c71f8bb5e23f9bbb3d2eddd1c4290b30c641ff674aa4a6cff9e05663e54f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-plain.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-plain.stdout",
+      "bytes": 41,
+      "sha256": "a4e566354b33ea8b2f2214c4a526bd4847fa13954ff62eab51d9975d5a35bcab",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/svg-text-before.text",
+      "bytes": 1692,
+      "sha256": "b08d67882ec1cf1a25a37b17ba6d8fabb4f5b77c2cec8c62b52f06e27e3dd1ce",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-resource-after.text",
+      "bytes": 3282,
+      "sha256": "cd4cedbae77b73a7b1f8b436d15578f7eb1291ec8acc6cff5b3b65cc0f244b33",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/goto-review.json",
+      "bytes": 589,
+      "sha256": "2c47244dcccd1ddc8720efc24c2609993484be7df905d4fa3e5736c13cb058ab",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-svg-text.stdout",
+      "bytes": 39,
+      "sha256": "8a3fcbd77470b677eca8b3f80c6ae0d1c237fa33fef890d4c8180458368764f0",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/before.json",
+      "bytes": 738,
+      "sha256": "c3b0ea76add6646678ba0022c29d51d73cb544ee688816a108162c63cc0ce07c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/lsan-link.json",
+      "bytes": 524,
+      "sha256": "ea3f63fc54e6d717057354e62b28d43302f4f7499d0738dc4836c6a9c5df8a3d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-resource-before.text",
+      "bytes": 3106,
+      "sha256": "34bc1e9585642c24f323a3ef2e08909c9f9a14ee8b5b63c9b8b14c9572147e8b",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-after.stdout",
+      "bytes": 41,
+      "sha256": "a4e566354b33ea8b2f2214c4a526bd4847fa13954ff62eab51d9975d5a35bcab",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/link-objects.json",
+      "bytes": 11190,
+      "sha256": "aefccceaf5d924dea69bdca3ba3999c9de819cf805f7ddc7980e7e4e141d93fe",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-frame-viewport.stdout",
+      "bytes": 37,
+      "sha256": "dd9e41ad3590f0e3d1d40c3052f4392914e3ec9cf6eae7e53ba8347097d1edd9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-svg-text.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-resource-after.o",
+      "bytes": 46840,
+      "sha256": "c5cd656992d4bc387599130f909173ad52f808a527de9c7dedfb17aa567ddebe",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-link-corrected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/link-before.text",
+      "bytes": 2247,
+      "sha256": "b24f3eae8e5293e8814a8699b5c50a27c930d4a247d93a3161a2e9c725dc196f",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-before.stdout",
+      "bytes": 424,
+      "sha256": "328427986a9c28cd6268b9ea27f4fccee384cf1220c4d4c2a6fd614ff02c1188",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/object-code.json",
+      "bytes": 1356,
+      "sha256": "e0c40703ab9b981ff14ab0785d650caa589839d1b5a619ae7e85bcf099880ddb",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/host-link.stderr",
+      "bytes": 42,
+      "sha256": "44a901358ea6d69cc76f5fd16e25d4e370aa84ba6cf98bde2059ad65e37de6ba",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review18/svg-text-after.text",
+      "bytes": 1637,
+      "sha256": "1b06c2a68de681273b5bca45b9bd3e260d0b160fe712aebfe756e2391191a456",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review18/resource-before",
+      "bytes": 5794096,
+      "sha256": "e6b3441dd26764b0ada63fc47d48ca4318b34481ee20389e2e92f1e1052dba28",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review19/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/style-summary.txt",
+      "bytes": 56,
+      "sha256": "323a9a52c825ed8ff9658a7993f3d1a3bfb5b6ac517e2d93df72e7fd6494ccd9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/format.json",
+      "bytes": 759,
+      "sha256": "4d4ebfd970bc5a8562e1b897427c61b424ce80ba162bfbf3d12c4d03bc07b5bc",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/builtin-after.text",
+      "bytes": 1642,
+      "sha256": "0c0a40c85e579d6130f3bfe85fe6bb9dcf6cb64019108932c3d7a1cc6064a67b",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review19/builtin-before.text",
+      "bytes": 1629,
+      "sha256": "4d15a3f1595ba1eb1fcd4d7e99f7bc1dfe5cfa8e46aaac7894e123898776cdc6",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review19/builtins.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/host-heap.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/host-vm-factory.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/class.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/class-before.text",
+      "bytes": 1655,
+      "sha256": "4c4a4bc5c0642c62f92a5484e7229ee2f82dae653c52f81d5260271a47fd86bc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review19/builtins.stdout",
+      "bytes": 996,
+      "sha256": "42525a0663bdd42157db30f2c6e1396f43a69d31db886810c724d09aa618e597",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/tests.json",
+      "bytes": 1103,
+      "sha256": "af7e41e3268a12eed566be80d8ab8802cacd639681d321fd4386b5226ac8c87e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/class-after.text",
+      "bytes": 1666,
+      "sha256": "50f70c94bdbbfefc95a5e75b1c4506a833fde4062bd823a8e34be7731d129118",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review19/host-vm-factory.stdout",
+      "bytes": 35,
+      "sha256": "9070efd2e380304bafc7470aeb082fb504a70fb4576f2d93b8f42adae5e8c2fe",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/goto-review.json",
+      "bytes": 276,
+      "sha256": "39ea0d9f2af47413ec0d7dc3a28dc4f69438eb441ac9d79eb1a90f61f75a9c42",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/before.json",
+      "bytes": 495,
+      "sha256": "0d0c1b02cfede9bf148d223c2c709c3297c006c22c4a2230023e05eda10a2c7a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/class.stdout",
+      "bytes": 269,
+      "sha256": "11822bd4c03915d991a435c863fe53626b0c086dc25375f23045d67d55da55d8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/object-code.json",
+      "bytes": 977,
+      "sha256": "6e3cf2b496b5f7cbd9db80ef3eec5d9136099cfbc724bac03335ffb9db867e66",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/host-heap.stdout",
+      "bytes": 133,
+      "sha256": "d7e9202e0ecb6649f529710d520ae55408cd115086ed76936045e2d1b25288c6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review19/installer-order.json",
+      "bytes": 1309,
+      "sha256": "0066cdb52630876bbcaa38763c0d52b58e96ee5dce1cb45402f858a7b710d45f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/format.json",
+      "bytes": 803,
+      "sha256": "89a2cc37fcf7185c91f89a40ed9b77d3689058e54e73273ea1072c4e6e44e22a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-traversal.stdout",
+      "bytes": 32,
+      "sha256": "6864061c52575e7033f5ec7defa757d3716c533bf54381b3c590c503030a754e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-node-cloning.stdout",
+      "bytes": 1488,
+      "sha256": "ae86c7431f890e5921ad0c95ab460ef4e8ed853a2aabd5772bcd83cd3b6ae262",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-form-owner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-traversal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/control-after.text",
+      "bytes": 1897,
+      "sha256": "810984e6b005c6f35069a9d83906fcab1a40332821f081f1d8cb554e6ad187a8",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review20/tests.json",
+      "bytes": 1089,
+      "sha256": "c77e0d54937a4fbd7a2665a2cdaf69ee8f5b6c07fdaa4f90d923fcec05c68098",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-node-cloning.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-option-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/removal-before.text",
+      "bytes": 1937,
+      "sha256": "91abec2acd4124c47b7f64ec6de63b53fd943ef9c123777247d374cb2f179647",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-form-owner.stdout",
+      "bytes": 32,
+      "sha256": "6d49cc0dedc318a4f1123975a63e26e7cc9844d44d42ecf2885b22d58566f381",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-range-mutation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-option-state.stdout",
+      "bytes": 50,
+      "sha256": "5039c0f60367b8b60295fd608563a01e699a3a8b47e97356cc7d75a8a3107484",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/before.json",
+      "bytes": 499,
+      "sha256": "da240c553666bd686f2ebed362f1624c21bad82a7cfaa8b5a014a4c10666fcf5",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/control-before.text",
+      "bytes": 1897,
+      "sha256": "d36c8f46d1df0e73867c48ddab0660a10e591804250723c9b4ffd5d50294d36d",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review20/host-range-mutation.stdout",
+      "bytes": 43,
+      "sha256": "92448ca00b71e9bfaa8b88b718702913295e9dac4b6c4938bb3ccd2757e265bf",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/removal-after.text",
+      "bytes": 1938,
+      "sha256": "154630a009366b35049eb49f3e14b4853a45b32d35dffc5a9c9e76f71450358a",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review20/control-table.json",
+      "bytes": 1019,
+      "sha256": "d90d09a072fe8d62e42fb93df4071a87e862975214fbb66e9c97fb07ffa934e9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review20/object-code.json",
+      "bytes": 985,
+      "sha256": "3e4a665db72ed92f05f7c5e8615bd79ad3686056bdf0915efe2aeb39725729f9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/format.json",
+      "bytes": 811,
+      "sha256": "faaff79f4607cf8b61bfe9ff5942e6475a5928a37585da09e3b003f43a4c77f7",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/host-xml-node.stdout",
+      "bytes": 31,
+      "sha256": "1467f0b272fc2c0bdd424f2e435edc3c06afb3304584ec6cb5bf0eee380bcb1c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/host-attribute-namespace.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/libbrowser_js_builtin_symbol.o.after.text",
+      "bytes": 2070,
+      "sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review21/markup.stdout",
+      "bytes": 1324,
+      "sha256": "b4b838441119a499395c7b14ce18ee47abe9b70443dfdeb68dfddd098df66881",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/host-vm-factory.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/host-xml-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/tests.json",
+      "bytes": 1561,
+      "sha256": "cf4769764fb60f828d03120d4bdd70b8a58b286c23b6cbf699e0c5fcdc5d0051",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/host-vm-factory.stdout",
+      "bytes": 35,
+      "sha256": "9070efd2e380304bafc7470aeb082fb504a70fb4576f2d93b8f42adae5e8c2fe",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/libbrowser_dom_serialize.o.before.text",
+      "bytes": 1658,
+      "sha256": "dd520ce4923e5eac68b682057bc175d283dadedd808999d25a07ccf5000a91a9",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review21/libbrowser_dom_serialize.o.after.text",
+      "bytes": 1691,
+      "sha256": "2e21ac179acafd72582b4b36698bffe430480585fdf9552bb6689dd87ed2eee8",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review21/before.json",
+      "bytes": 571,
+      "sha256": "644360ae2710188a0435b4b0ae3bd02b112723fa416beeaab9a8811f9e8cab15",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/iteration.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/markup.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/host-attribute-namespace.stdout",
+      "bytes": 42,
+      "sha256": "06d9825cef428a2de2534defc5a26693114c7b69675a306d2e3e806206235e2d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/libbrowser_js_builtin_symbol.o.before.text",
+      "bytes": 2070,
+      "sha256": "0b4de572ee8d3346dff1907e2e1cb6b48db6d6dc90bc686dd74900f8418c5d1d",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review21/object-code.json",
+      "bytes": 1056,
+      "sha256": "1a5a0a005690082d46029de89518cf8cfbe4ff43fcef41716d7068d32198ac89",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review21/iteration.stdout",
+      "bytes": 800,
+      "sha256": "f7552bcaf0d78858c11a96d3579e41889bcf455d9948e5955e5737f0b31a565c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/format.json",
+      "bytes": 1072,
+      "sha256": "744590459766bb6a7cc30d95c5fc1294a869fa9c5e64967452c5ccede6175f61",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node.stdout",
+      "bytes": 31,
+      "sha256": "1467f0b272fc2c0bdd424f2e435edc3c06afb3304584ec6cb5bf0eee380bcb1c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace.after.o",
+      "bytes": 48512,
+      "sha256": "f1a679720c59dc61eda085890e29ae56b2118021f862ee816aa27a2677261e77",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace.after.text",
+      "bytes": 2653,
+      "sha256": "59ec78b30baf2a3f96ab238a3e8e63122ffff79b74032ce90d914771c7f81a8d",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document.before.o",
+      "bytes": 48720,
+      "sha256": "10d73ec296c137baffbbf6e845764fdd683ed42492e375f4d2c06818ac7d1aa7",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document.after.text",
+      "bytes": 1998,
+      "sha256": "e3ae1bb7341a031be873adb30dd7974733fbc2dbc7aa0848cfca0ea9c6aad410",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node",
+      "bytes": 5783544,
+      "sha256": "5a00d4fc291bbe296351488d1ac8c12a695acb41b1eb47c5cd6475d135dcaa04",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document",
+      "bytes": 5785792,
+      "sha256": "ff64416c3b5404cc3f161301a0794d879e636f2d53298d82a92a5b15c79a33c8",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/tests.json",
+      "bytes": 678,
+      "sha256": "8ba224f1d16a042f8742f7a4f2d4e9c77d14c7c37924bdc5ac4e943f1f09136e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace.before.text",
+      "bytes": 2684,
+      "sha256": "9523e76737ac214bc5121f34206bf3f04af844f0bab984127ca1f83cd52135cc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace",
+      "bytes": 5784768,
+      "sha256": "a58ef9ae405fc9c66ce3d33727529b8761b01910485473f9c9dbf0bc2bc93d17",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document.stdout",
+      "bytes": 37,
+      "sha256": "ef2d09e7bd4ee77d6c774f341af83e512a49e1464747896ec49d0a42d1e24e6d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node.after.o",
+      "bytes": 44848,
+      "sha256": "9b565ceff50f887b7ffaca688a7c24e208675decd8ab644097eb6f75769734ce",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/before.json",
+      "bytes": 801,
+      "sha256": "22e1c2551aae7c5fa18ecabbf6c45f8c27ee1808058c589aa50de5b10a62f314",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document.after.o",
+      "bytes": 50264,
+      "sha256": "fba18a52cb1e22bd3d84c1cc037b4375af03cbd2cbb82f120f2997ce1fb904b5",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace.stdout",
+      "bytes": 42,
+      "sha256": "06d9825cef428a2de2534defc5a26693114c7b69675a306d2e3e806206235e2d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/compiles.json",
+      "bytes": 38967,
+      "sha256": "ea4730ee298332bb1e014c6e1dc39d4322623abccbfa15ef71a580537fb13681",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node.before.text",
+      "bytes": 2818,
+      "sha256": "097e8cf17127a2bbf4bef95bf905cd110ac6238f61eab8947f04238be82a2434",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-document.before.text",
+      "bytes": 1780,
+      "sha256": "3a3ee4113f033112fe9b49dd3bd5e6eb40f54f9249f1843709f8589e7f7e25c3",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node.after.text",
+      "bytes": 2745,
+      "sha256": "7588fa96e5ea848d690ac5c9205e105ea70a454bd412a54aa3f3074acd6e7ad9",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-attribute-namespace.before.o",
+      "bytes": 48336,
+      "sha256": "995bce8711639a93e936d142dfcc728c4bca3179aac51d5176a627b59b289213",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review22/object-code.json",
+      "bytes": 1530,
+      "sha256": "e665252d467c2a9598680b3623eb9e17c57c254c87ab7ef5c0f1e3727e218db8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review22/host-xml-node.before.o",
+      "bytes": 44864,
+      "sha256": "a642aa62f85112d07fc36c8ef8d2335bec57ac0072c49b5bef8a9c8783f6c107",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review23/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/style-summary.txt",
+      "bytes": 59,
+      "sha256": "599e10f318f4cb34b846207bc150bd1a3065e047fd31aba2936557edaf757742",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/format.json",
+      "bytes": 467,
+      "sha256": "7e5da3eeeccbcabb7c65b5d5d04984a47daef2a7805c1919f0033470eae5a5fd",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/geometry.stdout",
+      "bytes": 718,
+      "sha256": "65e82a20c0fcab49d85d70d7b5a62169f308313358ab9899810ec3914330cf8f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/libbrowser_page_geometry.o.before.text",
+      "bytes": 2785,
+      "sha256": "e8a78dc1012d9fe352babf145c2a5993402ab858362af71da60f74fcf59a3579",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review23/manual-goto-review.json",
+      "bytes": 365,
+      "sha256": "2c056b9c2f390b7007343b1603fc04ffaf70774312ae3e9e05a7b4c6d026368e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/host-frame-viewport.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/computed.stdout",
+      "bytes": 716,
+      "sha256": "00a867ea8722e7d71e30837c65ca848c3e424e7a42e3910c1910b375a64e9399",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/host-frame-lifetime.stdout",
+      "bytes": 38,
+      "sha256": "59488199b4118eca452b94185f06384d62a7e05ac13637d99b6b9dcc27a061ce",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/geometry.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/tests.json",
+      "bytes": 2056,
+      "sha256": "0cbfde62b17c99cb6647117fc5f90f1c4791ec0d111c644137f047b04e2c132d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/child-style.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/computed.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/before.json",
+      "bytes": 283,
+      "sha256": "5dcf2e83fe8dc534ba54b6a529b95e6a2648be174b7421aeb97052ff2f035830",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/libbrowser_page_geometry.o.after.text",
+      "bytes": 2807,
+      "sha256": "9341f4e13be3a63e0a2ffcf8fe1688905c7c7413f933d6afa16ca7e5a9840149",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review23/host-frame-viewport.stdout",
+      "bytes": 37,
+      "sha256": "dd9e41ad3590f0e3d1d40c3052f4392914e3ec9cf6eae7e53ba8347097d1edd9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/object-code.json",
+      "bytes": 526,
+      "sha256": "34e419a7eed5d7d104873bff379d65fe6928c97d7d4adfefe5d481d9feae4958",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/host-frame-lifetime.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review23/child-style.stdout",
+      "bytes": 910,
+      "sha256": "c72395c342552ddd8091fad902ada52fd49b26a1b6911f0d65481f7a0b7f2944",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/style-summary.txt",
+      "bytes": 63,
+      "sha256": "de5a424e7b4200332dd2db6984de7af4ea57f19be4f74efbe5d55792b7eb0ac4",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/format.json",
+      "bytes": 469,
+      "sha256": "19e5814071777b9dc60e9131fd093af1d2a6aea8a3b4c14393a25157cf552ca2",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/manual-goto-review.json",
+      "bytes": 633,
+      "sha256": "44396fdcb250d3fd463724cd15ed339149359acad9c977f18242cb1c120e2d01",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/frame-lifetime.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/frame-lifetime.stdout",
+      "bytes": 38,
+      "sha256": "59488199b4118eca452b94185f06384d62a7e05ac13637d99b6b9dcc27a061ce",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/frame-load.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/libbrowser_page_frame-load.o.before.text",
+      "bytes": 5773,
+      "sha256": "2aab38785a70c9370efab252419822ad460de5b23d11fbddc89ef3e3ccf2b8d9",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review24/tests.json",
+      "bytes": 1041,
+      "sha256": "66bc22eacdc331083dc85007f6b6d3be0d9515fbf0293757f822cccca4d85271",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/frame-load.stdout",
+      "bytes": 44,
+      "sha256": "b6c893bf7115edef6832ee26565ce1a797e8634c449a1e694283577219db4c6e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/iframe-safety.stdout",
+      "bytes": 486,
+      "sha256": "ead952a3b189ec42e5d09f536bca6b61675e40ad3c382f651288f131fb80fb4d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/iframe-safety.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/before.json",
+      "bytes": 287,
+      "sha256": "8846fb67f7a343ef94bc2201d5da3106c334edce401a454464bb6fd3dd0064fc",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review24/libbrowser_page_frame-load.o.after.text",
+      "bytes": 5421,
+      "sha256": "3aa4ee2cd257b16b7e6926d8a18b86d2a128eb63df882fa712162856b599629d",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review24/object-code.json",
+      "bytes": 530,
+      "sha256": "71950356c2cbf045392fa7d9d875b2258c889f70d49f7e660590ce0d1a5478e3",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/style-summary.txt",
+      "bytes": 56,
+      "sha256": "4d162e5ab43d8d73031589fcc6d810efe1777341cfcdba7b8db84857974d43c5",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/format.json",
+      "bytes": 785,
+      "sha256": "49f3d298b5e36c837068fd764db931fc67468498cecfb02500e55cfc2d102b58",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/resource.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/data.stdout",
+      "bytes": 44,
+      "sha256": "6ca7f4300680e31ff61cec08e17418602a134c117652fbb41bb411a6ac770910",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/libbrowser_net_data.o.before.text",
+      "bytes": 3161,
+      "sha256": "f6c8d631adf2c3341c90fd71c83f5c42ee795a219cb5070c5dd21f6da8aed61a",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review25/data-lsan.stdout",
+      "bytes": 44,
+      "sha256": "6ca7f4300680e31ff61cec08e17418602a134c117652fbb41bb411a6ac770910",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/data-before.stdout",
+      "bytes": 44,
+      "sha256": "33d1e8944a0ac1d51d57e5432f9eff369e2074dec9970ccbdef37033a705396f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/manual-goto-review.json",
+      "bytes": 444,
+      "sha256": "67e731fee3a49d30386172ad68db0524ee7e79ea3d3b71f0de32464f5db42cc9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/data-lsan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/data.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/libbrowser_net_data.o.after.text",
+      "bytes": 3283,
+      "sha256": "1d18e3906b7e3d024c0928c56d70ccab9ce0ee48bdfb8c0fe7918610eac97114",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review25/data-lsan",
+      "bytes": 5784560,
+      "sha256": "ebd0e1fa7b40044f0282183ed0271ad29670ae8ad4dcdb23aee3906bee95ad92",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review25/tests.json",
+      "bytes": 1084,
+      "sha256": "e8883f7e157c06a1277c387894becc81aa974133bd7443c3bb82656b48282ec6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/supporting-fixture.json",
+      "bytes": 599,
+      "sha256": "e0d3611bfd8e6590e7785ff6afd5dc74208eb2657848ecfb6b2a6357f66221af",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/resource-corrected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/resource.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/regression-before.patch",
+      "bytes": 933,
+      "sha256": "34c7a73ad6b12b56a3d763caa94f00a7e8a77495b85aad28e237d29441ce321e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/before.json",
+      "bytes": 273,
+      "sha256": "79df274854359c0cbfdcca2bfacb500a1845f7dd67d0a1ca526c948c24e50a96",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/lsan-link.json",
+      "bytes": 12177,
+      "sha256": "6681b3507b71f530ec83de0952bdeef55ef3c969528d02a4a6f1680ca3f4dc8d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/data-before",
+      "bytes": 5782448,
+      "sha256": "644460e8d35997a157cf72da58138b152653610ab0ec5f0764038ef6d81985fa",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review25/data-before.stderr",
+      "bytes": 212,
+      "sha256": "76d2c013c82c3a2e876f8553637746c175113bf4124e179143373de768d65acd",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/object-code.json",
+      "bytes": 615,
+      "sha256": "8dad5aea6a402c617af5b76409558c837cd1ccb750634a182662a58ea4008ae8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/resource-corrected.stdout",
+      "bytes": 41,
+      "sha256": "a4e566354b33ea8b2f2214c4a526bd4847fa13954ff62eab51d9975d5a35bcab",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review25/regression-before.json",
+      "bytes": 12218,
+      "sha256": "8701d0ec74e713a70652877d54b75b3995fa2268cea30f5ce4858d6697d8fb38",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/format.json",
+      "bytes": 440,
+      "sha256": "af18932dfeab0f12c795041ce18d75b00888cf0a7fd7593a73c4392ee9f2e000",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/traversal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/iterator.stdout",
+      "bytes": 2631,
+      "sha256": "86d36daa12ccab85caa126cc06b79a1787d5088b6b7b5ff4f3d99f906edfb1d4",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/removal.stdout",
+      "bytes": 42,
+      "sha256": "655e21f79ea744be49432abc4c54506cef0d01d17e38953b6f9d13b79b71b158",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/tests.json",
+      "bytes": 896,
+      "sha256": "1d81581ed5069f02e26af3c87457ea9a023ace538781ed2bf436d4bee5c17063",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/libbrowser_bind_iterator.o.before.text",
+      "bytes": 1974,
+      "sha256": "3fbe3e0e40b7f58446fbce87b96574b2f5a7a65569af5b24d89b70c4c068ef19",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review26/iterator.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/traversal.stdout",
+      "bytes": 32,
+      "sha256": "6864061c52575e7033f5ec7defa757d3716c533bf54381b3c590c503030a754e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/removal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/libbrowser_bind_iterator.o.after.text",
+      "bytes": 2009,
+      "sha256": "c4467f73aac309335eb21ca1aed14c79f23d10cf4b48c02d219164189deb844f",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review26/before.json",
+      "bytes": 283,
+      "sha256": "4df079bba529fef1a793926dd1014313577e20098d88a6a661a673bf7a374510",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/summary.txt",
+      "bytes": 114,
+      "sha256": "83378834b91c41515219ef4a11461292afe77db5e2753ef98cf3adea3fd784a7",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review26/object-code.json",
+      "bytes": 567,
+      "sha256": "149e4661c945c32d54752152de3ba1f755718e0e8b26b0a3ba68b4c8ff66b5d8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/format.json",
+      "bytes": 765,
+      "sha256": "6f76b406bff25e33677758345cb1e104c4b75799c7603cb9a84531c092b15607",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/traversal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/compile-link.json",
+      "bytes": 25197,
+      "sha256": "117ffcf9ee9bcfecae93a9c07b50a8a87f6574de36a1b86420621d0a85deeaa6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-traversal.o.before.text",
+      "bytes": 1656,
+      "sha256": "28e7967ee6df952fc948cacf8fa4c491e49662f7b10e1fee21ff954a5817d328",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/removal.stdout",
+      "bytes": 42,
+      "sha256": "655e21f79ea744be49432abc4c54506cef0d01d17e38953b6f9d13b79b71b158",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-traversal.o.after.text",
+      "bytes": 1828,
+      "sha256": "abae5291aad69aaf4694537c8519fef8699b124e1c850391965afd33bb931aa7",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-removal.o.before.text",
+      "bytes": 3291,
+      "sha256": "8239d4f68692c6211ee61abb1c97861a78e1d88d3fb0332569306ba4bad01e77",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/tests.json",
+      "bytes": 403,
+      "sha256": "cca1c45e98ae7b50338a869a79f78fe3efcdb2870b6ac99ce0a8d985296b8ec2",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/traversal.stdout",
+      "bytes": 32,
+      "sha256": "6864061c52575e7033f5ec7defa757d3716c533bf54381b3c590c503030a754e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/removal.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/compile-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/before.json",
+      "bytes": 653,
+      "sha256": "53dbf828ae39cbe2db28bf0417bcd16439844d2a973c1660a09918d68e21235a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/summary.txt",
+      "bytes": 102,
+      "sha256": "25603965df69d8e446076dadd08caa8aa9427309bfdb891c6fe8011f042a99d0",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-traversal",
+      "bytes": 5790256,
+      "sha256": "ac81fdf5ab1f332f652ccbcdbd6f7c16235b0ba112aaffb942ed8aec7df70e55",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-traversal.o",
+      "bytes": 51336,
+      "sha256": "52b6b71a148352802884a3661bc4d87e1238ad54028e5965a2147a91160e6f46",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-removal.o",
+      "bytes": 50232,
+      "sha256": "207309385d1c8b7c771e2bcae14df5cc6cd7462d60decdb373e7211724aeaf5f",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-removal",
+      "bytes": 5791680,
+      "sha256": "454094876aa962f30e86fab7416a4321945a1b7aefd5f67ad8b29d0b684dbedc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review27/object-code.json",
+      "bytes": 1139,
+      "sha256": "697eda4d83f43b89056b3b58399e821881a2e14f61d74878be22b243f6f75320",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review27/host-removal.o.after.text",
+      "bytes": 3297,
+      "sha256": "5c449e9bc42c2b6c201cc9577c601abad193f6ca638fc90896aa3e7d3e54ab3c",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review28/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/format.json",
+      "bytes": 757,
+      "sha256": "5fb7af33f65d8f30c4cbd6904eec9ff2e936795f75523181cec201da4847feaf",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/media.stdout",
+      "bytes": 33,
+      "sha256": "e08b21c3c01a01278a7c700782a6358ba4d714c021f18ce3579fa5be555e64a4",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/media-before.stderr",
+      "bytes": 170,
+      "sha256": "8a1676cfebbd9ea226de8f98630deadb0c93bec82273dddf51959e15c4d8d01d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/media.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/media-before",
+      "bytes": 5776536,
+      "sha256": "6830d2baf07fc794a9469b237cc684979460f21ef8d22179bdc269838d4ccc66",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review28/tests.json",
+      "bytes": 707,
+      "sha256": "5cb4a2ccb8bdc5e8f52d33959ab2919f6b484398c2e48d5e87b513fc75999ae4",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/supporting-fixture.json",
+      "bytes": 260,
+      "sha256": "cee6898157976312054b08e9e160355c5583e13f4490582ca6232978ec015468",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/libbrowser_css_media.o.before.text",
+      "bytes": 4704,
+      "sha256": "2c90cb6d24f200366945a10d421e88fb822adfc4faac04a5a3b963ed4d75bf21",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review28/media-page.stdout",
+      "bytes": 1291,
+      "sha256": "f0bfc6ebbc098c0deda5c98a304d5a838cb7dc2a41fef7812fd7de6114f17bac",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/regression-before.patch",
+      "bytes": 905,
+      "sha256": "7eae1210b61f75d183acdc45287f74e82edf7ce33e5ee9c5dac5c53abe28fbe9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/before.json",
+      "bytes": 275,
+      "sha256": "7df3ff102f865fe481563a8a7a4ec6a39beb3e058a18b5f0f5917a03e9436332",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/summary.txt",
+      "bytes": 122,
+      "sha256": "b6facf268dca4d9b8a9d9764799d828e154acce7e17f42ebff1cca65f9341f0f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/media-page.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/libbrowser_css_media.o.after.text",
+      "bytes": 4896,
+      "sha256": "75998fbbc489cc8e7ee7a576f57d049b04c8126cb64289170b98040a9ce077f8",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review28/media-before.stdout",
+      "bytes": 33,
+      "sha256": "57e0e5cd6aba99bb2d4f82cef200514b2e08129abc45c482ee8f87b9d0aea0f7",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/object-code.json",
+      "bytes": 591,
+      "sha256": "f02ba77ba06f4eba8a5d70a47814bb3f137ad2133daecacc93c3d64e861eaecf",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review28/regression-before.json",
+      "bytes": 12149,
+      "sha256": "0d4fc60a2536d12f48ad746fc8bdcc54cc4709027566b6e811c66b7cd0047439",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/style-summary.txt",
+      "bytes": 63,
+      "sha256": "75c7a32bf6c39926de6033e707cb9dbe2e0ca08a61dc55341e334c4505935fe9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/format.json",
+      "bytes": 513,
+      "sha256": "003dd177a73c874306081ad3fe6da0036c963e15a8c8fec108c25a8436c4e5a1",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/browser-lsan",
+      "bytes": 5804552,
+      "sha256": "8441c442ed910e4a2d81d3c1e3a0970d818d10880e6f20564d213c463e62458b",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review29/json-error-paths.js",
+      "bytes": 1758,
+      "sha256": "ac1d38073483ff1479f67da3840bfc7803aacb72e7a53325020c59b1413f14db",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/manual-goto-review.json",
+      "bytes": 1183,
+      "sha256": "522adcafab8761ebd846aa5242566e071d2630d7787276ed1c6ebd51fbb899cd",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/style-detail.txt",
+      "bytes": 3433,
+      "sha256": "27251d7ebe299819ef66b0fc5abf92c174c928ff8b5a5811e5b1bd7ddbb98923",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/json-error-lsan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/collections.stdout",
+      "bytes": 1023,
+      "sha256": "e6447a84fcce9678fdc1761449df76600f4560b7fba4dc38672586230d7ff31f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/collections.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/date.stdout",
+      "bytes": 1082,
+      "sha256": "38a9be3f056df9b1498e98810de9255ab170147edbe137afa446ee36374c298a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/tests.json",
+      "bytes": 1890,
+      "sha256": "f9f7e65506f39816fec8f9519735ec5905103dda1a08c02bce6fe5afff2b52d6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/json-error-paths.stdout",
+      "bytes": 211,
+      "sha256": "d5441a65423d06740fea71c5baff17fecf8d9f2fb21b01552db192ae3b416ca2",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/lsan-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/libbrowser_js_builtin_json.o.after.text",
+      "bytes": 8663,
+      "sha256": "ce3b119e7ded00d7ebe9075819afbf0d99838766177170c912c9bbaa4b03fa33",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review29/regexp.stdout",
+      "bytes": 652,
+      "sha256": "40d3d01041bd3ccb6726d50955311823fd94e550aac4b8e5ddb16838b941e1c1",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/json-error-paths.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/date.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/libbrowser_js_builtin_json.o.before.text",
+      "bytes": 8514,
+      "sha256": "00a07bc1c764e7ffbcff2d70402c828759c9c9498f2947739d5b1bda5020f218",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review29/json-error-lsan.stdout",
+      "bytes": 211,
+      "sha256": "d5441a65423d06740fea71c5baff17fecf8d9f2fb21b01552db192ae3b416ca2",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/compile-preformat.o",
+      "bytes": 97120,
+      "sha256": "7c176a4ae1bdcae14a688bee64bd53d0bb678c2e09e896fe2653fcb43b40c73a",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review29/before.json",
+      "bytes": 287,
+      "sha256": "0e37c16d185842d7a70b83116011ba5f388ce9013a68244943b7bf3cb098561b",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/lsan-link.json",
+      "bytes": 11867,
+      "sha256": "f981bae3cfdf5003f0ce6f26cb131d0bb6bf3014f5f04242c3026470c5cb7470",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/summary.txt",
+      "bytes": 108,
+      "sha256": "c4cf98f0f5813023c5b23f8071ac8dc588a8aabe32dba3ca6d1b389816b871cf",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/style-before-format.txt",
+      "bytes": 83,
+      "sha256": "a7ee4a08d0e855684e66f6764620f0b44ffe4b65d2fdb8a17858af851af93e14",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/json-error-paths.expected",
+      "bytes": 211,
+      "sha256": "d5441a65423d06740fea71c5baff17fecf8d9f2fb21b01552db192ae3b416ca2",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/regexp.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/style-initial.txt",
+      "bytes": 83,
+      "sha256": "933a949401ceb10c274990fe3e149e1898106dee1d31094ebc794216f8ca0ac6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review29/object-code.json",
+      "bytes": 530,
+      "sha256": "0d061ec2dc0edf5fcc8bd649b88b64846ad84a5a8c3e136de4da6929b13ab409",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/style-summary.txt",
+      "bytes": 56,
+      "sha256": "7fe435607064e431ee36e96f82523988e5610a0a2d9ac1694af40aeecb22062b",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/format.json",
+      "bytes": 789,
+      "sha256": "fba7d224b5cf2aafde53ec04c31de150cfc6ba7a33d56f0490ff090e322bb49a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-cssom-mutation",
+      "bytes": 5793792,
+      "sha256": "15b3d8b60de3bacde401e74e70b697cd5454bd47c5142b5da163a6e7b518913c",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/compile-link.json",
+      "bytes": 25245,
+      "sha256": "294e991b0db7698f5b7f40a5548236619a6b48e0628c3179849ae86a4f88b210",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/manual-goto-review.json",
+      "bytes": 233,
+      "sha256": "1798996c6bc37bd2aa6411c14e2ef7a9a60fb50b877f9b6f73d7b378643c4f3d",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/style-detail.txt",
+      "bytes": 896,
+      "sha256": "f416062840c7b51d21f33c1faa92f3b24f1e67cbbcf3765b447808455f968c5e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-cssom-mutation.o",
+      "bytes": 69728,
+      "sha256": "545dec427520cf7b48b426003b02f5cb3b9252e67135389de7a3175e68700a38",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-css-rule-model",
+      "bytes": 5802560,
+      "sha256": "bcb022266510aca29a18b3a315b1598ec9a240c7a4f6e58d4975e8f856e5dd78",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/tests.json",
+      "bytes": 439,
+      "sha256": "b2244e198dc7170ed4c065abf59e26e0f7af90e6664732c65988cd86f6879220",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-cssom-mutation.o.after.text",
+      "bytes": 2310,
+      "sha256": "e4bff1070745b0163f6a73bdc961ff928c787102e1fe38e64f9253e1fce2267a",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-css-rule-model.o.before.text",
+      "bytes": 3678,
+      "sha256": "f289063abe5eddf6d9a6963383170bbd9e04cf2ba237ac59da27ce56858bdc59",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/compile-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/css-rule-model.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/before.json",
+      "bytes": 689,
+      "sha256": "ccfcad6533ba55da08fa8d16f8b7d258bc8233bf6fd384ac9c2314c7eaa350f7",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/summary.txt",
+      "bytes": 123,
+      "sha256": "fb8ecb96483c5b231f379d402d26c995accee46a846f8e1014ce984b70f720f5",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-cssom-mutation.o.before.text",
+      "bytes": 2146,
+      "sha256": "057dcf0958781e0741c02c03078f3b9be1e2b7dc3a4bf32a744333cf89e78e08",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/cssom-mutation.stdout",
+      "bytes": 36,
+      "sha256": "7139f768e70640f1d19ddc52050b340cf31f3257e24fed4621b30c240e8136e3",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/cssom-mutation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-css-rule-model.o.after.text",
+      "bytes": 4375,
+      "sha256": "fd46d620aa8f807549b7afd6bcf9b59516f967296404fb00e66db3069d8f6ab5",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review30/css-rule-model.stdout",
+      "bytes": 36,
+      "sha256": "8f92bab1f61e5a667cf5255a6f7e1a11a750927bb740757159ccc7f2bf39ab62",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/object-code.json",
+      "bytes": 1175,
+      "sha256": "c3f41e72d40fd658840be1737e8cd2025973b90ee42a9c3cfbd3062e3b2083aa",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review30/host-css-rule-model.o",
+      "bytes": 71024,
+      "sha256": "91f823c7ff9547d578bd8e0592cb1f25c4e48cb6bbfbd103efa5ee979172a9ea",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review31/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/format.json",
+      "bytes": 782,
+      "sha256": "26da5968107ef481ca37adeaaf0a009ca0a9adb57a011bd360571178d38eae6e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/table-mutation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/option-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/libbrowser_bind_select.o.before.text",
+      "bytes": 2041,
+      "sha256": "696cbaa5e0822b7278341059170ba3e172e5de498bdab82210b08046d62352ad",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review31/option-selectedness.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/libbrowser_bind_select.o.after.text",
+      "bytes": 2005,
+      "sha256": "96656acbd4e597ffa82d1f1fc66182ed38fbd6eb4ff487bdcc51f65e2db1d7d4",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review31/tests.json",
+      "bytes": 2364,
+      "sha256": "22b324773a4d09e40198c014eed98932bd007d3a1f80d565bead46b253b48085",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/select-options.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/constant-initializers.json",
+      "bytes": 316,
+      "sha256": "f1a92506aff783e5bed3cfd148dc8f364ef47a4a4f60185b9d455029dbc06151",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/libbrowser_bind_table.o.before.text",
+      "bytes": 1562,
+      "sha256": "8f0a628ca371ddc1e9eb407e0d2961eb8067d97017001319a15358757523b79b",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review31/select.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/table-mutation.stdout",
+      "bytes": 45,
+      "sha256": "21540766952b2f5af869fe3f766072492a6f2f995deaa9240577ee1d10341b66",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/before.json",
+      "bytes": 553,
+      "sha256": "4cce01a29deed30ccc768aa73eb9559df7f758243a98479216a23b8768fc0543",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/summary.txt",
+      "bytes": 116,
+      "sha256": "f225e079af5b7a57c315543d4e3fa04ddec88ef8bc41cc1c59a49b6d47667def",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/option-state.stdout",
+      "bytes": 50,
+      "sha256": "5039c0f60367b8b60295fd608563a01e699a3a8b47e97356cc7d75a8a3107484",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/table-structure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/libbrowser_bind_table.o.after.text",
+      "bytes": 1591,
+      "sha256": "3dc7c9cdc744a34d014612182e248d1268b064ec77cbeb97e6a0d879c3a170da",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review31/option-selectedness.stdout",
+      "bytes": 3555,
+      "sha256": "9cce9bd71b67b66b174bf0decaec24fa0929a6acedfbc0562de40693c22a242f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/table-structure.stdout",
+      "bytes": 2611,
+      "sha256": "f7f27378d64dd2e2b3cee8c1493b3e64a727677042c39925b220629d47a7ec3c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/select-options.stdout",
+      "bytes": 2864,
+      "sha256": "863600ac268c3467ea75b170e21f7805bf9c7e6bbdc74451a83d5f7f7de7c599",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/select.stdout",
+      "bytes": 46,
+      "sha256": "29d50effcf363127530d82d2a96838b14a053362ad02a401a4bd5cece791b2be",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/object-code.json",
+      "bytes": 1039,
+      "sha256": "90be006b1233aef4a307c1656021ba748e5893316111a7edea62c8a9db284317",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review31/tests-before-builder-exit.json",
+      "bytes": 2172,
+      "sha256": "3cf63ca5a7a194ca4c3be45217926d06e15fc0b6ef653b66d42d60e0a1708057",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/style-summary.txt",
+      "bytes": 139,
+      "sha256": "5713366ee426007d3983553e64d23c810f659fef5e7b8f5a1108c32e606f5400",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/format.json",
+      "bytes": 1127,
+      "sha256": "1cc388f6dfef891af2e0fda4606acbfd1651f64b6c91ca06b0e41cd74c25e312",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/table-collection.stdout",
+      "bytes": 41,
+      "sha256": "a9bc1bd999b56a0f3af687d5b129e1473d2f3053746c67b82ab794b6739a2dea",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/compile-link-first.log",
+      "bytes": 272,
+      "sha256": "9a0f71aaaeadf7f4ac88b6fccf1e899edb6f124953183d578946488a3b2abcdf",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-option-state.o.before.text",
+      "bytes": 1524,
+      "sha256": "63eb4ec3476c5775cb75f033dcc637a4710b730d78ce42df6ab6cc375d55c9ad",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/manual-goto-review.json",
+      "bytes": 948,
+      "sha256": "23d5da7a4c82708db18f35c39facee79bf25da79489d0856c15c53b68e4a2bd5",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/option-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-option-state.o",
+      "bytes": 47592,
+      "sha256": "67bae011e565275b57d7d6bd4a9abb3285f9a89c6674e69a48550cce43bc54dd",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-select.o.after.text",
+      "bytes": 2625,
+      "sha256": "4f71c8c48e8aff654598b388874a8c7f48fcfefbc0ca447ed2779cf49a8e2d85",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/table-collection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-table-collection",
+      "bytes": 5785616,
+      "sha256": "957137dea3311da704352f38ee3473ecde514e1304f824929fbc9950847e89b3",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/tests.json",
+      "bytes": 633,
+      "sha256": "ffca18c95f60dd64c0d23f7e72e68df8684a16ad7a0df4a039f74148913e5373",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/select.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/compile-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-select",
+      "bytes": 5792464,
+      "sha256": "b6370bddb200dd95572f1e15fe0f46bdce283d90f42cf421d7e406b2c311332a",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/before.json",
+      "bytes": 1008,
+      "sha256": "c4cf48d6ba01b44151fbde15abd4b213dd606b7d13e199f7805c6d7383eaf18b",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/summary.txt",
+      "bytes": 140,
+      "sha256": "f812f78dfb90cb3a8727bc6d6bc4bf76a41446b91cc277252e8a4cde5e34c452",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/option-state.stdout",
+      "bytes": 50,
+      "sha256": "5039c0f60367b8b60295fd608563a01e699a3a8b47e97356cc7d75a8a3107484",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-option-state.o.after.text",
+      "bytes": 1707,
+      "sha256": "727f4bb8e6b4bd8701334b458e05e76946df172eecae45c9831c2e3db30f1215",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-select.o",
+      "bytes": 54000,
+      "sha256": "8440554b469b2c13ceb7a14f052f0a21b3b3f06e7dd31283d63d782fed96f385",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-select.o.before.text",
+      "bytes": 2446,
+      "sha256": "7ad0fbaebd4fbac630c9d4efde11c4ddd9b6b8ee76c62cd8af9f347b33a450a8",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-table-collection.o",
+      "bytes": 45064,
+      "sha256": "30132cd0305b4cecdcd3d0de98fe560c3be5231cee94eab4a0b3446a21ce2b92",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-table-collection.o.before.text",
+      "bytes": 1445,
+      "sha256": "1b7ab97c9083954139937b224149b6c80048fdb439f628393c95f4d8f21968ef",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/select.stdout",
+      "bytes": 46,
+      "sha256": "29d50effcf363127530d82d2a96838b14a053362ad02a401a4bd5cece791b2be",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-table-collection.o.after.text",
+      "bytes": 1622,
+      "sha256": "141c77f9a6b7f3ed47dd8e9127dcd9810ebee4f2055be5ee61aa1e87dce632af",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/host-option-state",
+      "bytes": 5786384,
+      "sha256": "bdc680409945b36f32ee76cc38ebf5f7e6772e23e25d21dd5d54e6df4a01568f",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review32/object-code.json",
+      "bytes": 1737,
+      "sha256": "79ef405d8d382b6b0286d7c5c6a51d427fbcab0877d212ca482a8c162eada390",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/plain-build.log",
+      "bytes": 3614,
+      "sha256": "059849b0be6a8df75b376141379308aaa06d69e24320aa0ee8cd8e3b11c4ec70",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/format.json",
+      "bytes": 476,
+      "sha256": "f6bd1d3d19f93f86c90a03cda4424d3701d4915a3cb4cb47a76d57c9b623f5ac",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/builtins.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/vm-factory.stdout",
+      "bytes": 35,
+      "sha256": "9070efd2e380304bafc7470aeb082fb504a70fb4576f2d93b8f42adae5e8c2fe",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/heap.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/libbrowser_vm_realm.o.before.text",
+      "bytes": 2023,
+      "sha256": "0220aa400cf47fbd4d3c4475dae273676808f5a0738566509e1f78e733d484fc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review33/builtins.stdout",
+      "bytes": 996,
+      "sha256": "42525a0663bdd42157db30f2c6e1396f43a69d31db886810c724d09aa618e597",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/tests.json",
+      "bytes": 1495,
+      "sha256": "59d487bdb7c7d08a484529fdaa38505d3260afaaf8a29a2c8593c5f4a4282f7c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/realms.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/realm-retirement.stdout",
+      "bytes": 36,
+      "sha256": "2f3b23c2c71f6dba0365e196f388e70645991b3921e197b7967002293e44d9d9",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/async.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/vm-factory.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/before.json",
+      "bytes": 273,
+      "sha256": "bc1d70cef728608cd773fd38ad800e78e2b646ca59d8932dd1b9d3343ab723b0",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/realm-retirement.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/summary.txt",
+      "bytes": 126,
+      "sha256": "58bb701f84fbb6b1891823face0f16da2ff2e32c85f2e951e6493237136a6e2e",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/realms.stdout",
+      "bytes": 820,
+      "sha256": "edadbf2feb586f130a1136b8eadf4891dae4e4550ee0eba8c5efd7790954c45f",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/libbrowser_vm_realm.o.after.text",
+      "bytes": 2023,
+      "sha256": "0220aa400cf47fbd4d3c4475dae273676808f5a0738566509e1f78e733d484fc",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review33/object-code.json",
+      "bytes": 515,
+      "sha256": "1e6ec2aac16488cc454e938cdf073f3f62537e3205a046f717c7bf6660e7a16c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/heap.stdout",
+      "bytes": 133,
+      "sha256": "d7e9202e0ecb6649f529710d520ae55408cd115086ed76936045e2d1b25288c6",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review33/async.stdout",
+      "bytes": 801,
+      "sha256": "a0e9d5ba6513b43806201f1b74a82dd4da4c480111ee3d0f63e67189b3027888",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/style-summary.txt",
+      "bytes": 8,
+      "sha256": "bf22d9341614e23448d92045f9ada00f2d62b00491261ec5843adca20e5a4b3a",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/format.json",
+      "bytes": 458,
+      "sha256": "ba395bf6a19afc36908819fa6f46d5493acd85fc2720aa78b8bced31b61970e8",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/click.stdout",
+      "bytes": 36,
+      "sha256": "dfaeb5adbdaf213d7ee65f4f3da89ddf52bdf9c5080467e2dffe3d5e873e9b79",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/host-click.o.before.text",
+      "bytes": 1258,
+      "sha256": "11554d2241035e6a6f612832f8ed2aa8d504418b4db6f81300a34d0743722be5",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review34/host-click.o",
+      "bytes": 49296,
+      "sha256": "3eb732c0e2fce7c1cce0a2c749b63985150660a3de29d1c47471e91ca8645e6f",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review34/tests.json",
+      "bytes": 194,
+      "sha256": "fdd701b544ac3894b3f1a620c632ed710f8bf2256343e8e6a38b39a1a882211c",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/compile-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/host-click.o.after.text",
+      "bytes": 1461,
+      "sha256": "a8d61bfb5ad7142e36473136d16deb32a4daf8f3be22f4cce6397f9445cf10e8",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review34/before.json",
+      "bytes": 319,
+      "sha256": "a2c7bb23f5618549d05888338bfe79d29b64f74c93340f06d0cb64b8fbe23a96",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/summary.txt",
+      "bytes": 123,
+      "sha256": "dc707ac77e6153f1eb497b7dfb91a6c065af7f41f9131d3c7ac1c5d86f83b3bb",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/click.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "committed duplicate evidence"
+    },
+    {
+      "path": "build/browser3-p172/review34/host-click",
+      "bytes": 5787136,
+      "sha256": "e57b889af90c6072af61609dd2193b35de0760041149b03930dd1ab11716731e",
+      "disposition": "generated executable/object/raw text, reproducible from committed source"
+    },
+    {
+      "path": "build/browser3-p172/review34/object-code.json",
+      "bytes": 562,
+      "sha256": "e42299afe14e521a1ec1e12eb55fa3ae7f840b420aeb40223591c35bd8586e53",
+      "disposition": "committed duplicate evidence"
+    }
+  ],
+  "candidate_bytes": 111842236,
+  "uses": [],
+  "retained_current_cache": "build/browser3-p172/plain",
+  "scope": "Only own completed review15\u201334 scratch; other build trees/shared toolchain/current q594 scratch retained."
+}

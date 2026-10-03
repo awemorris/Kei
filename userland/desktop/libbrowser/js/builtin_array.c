@@ -200,6 +200,8 @@ array_call(
 {
 	struct vm_object *prototype;
 	struct vm_object *made;
+	struct vm_cell *prototype_root;
+	struct vm_cell *made_root;
 	vm_value new_target;
 	double number;
 	uint32_t length;
@@ -218,11 +220,22 @@ array_call(
 			return status;
 	}
 
+	/* A getter may have supplied a fresh prototype for this construction. */
+	prototype_root = &prototype->cell;
+	status = vm_heap_add_root(realm->heap, &prototype_root);
+	if (status != 0)
+		return status;
+
 	/* The array. */
 	made = vm_array_create(realm->heap, prototype);
+	vm_heap_remove_root(realm->heap, &prototype_root);
 	if (made == NULL)
 		return ENOMEM;
 	*result = vm_value_cell(made);
+	made_root = &made->cell;
+	status = vm_heap_add_root(realm->heap, &made_root);
+	if (status != 0)
+		return status;
 
 	/* One number is a length. */
 	is_number = 0;
@@ -234,32 +247,34 @@ array_call(
 		number = vm_value_as_number(args[0]);
 		status = vm_to_uint32(realm, args[0], &length);
 		if (status != 0)
-			return status;
+			goto cleanup;
 
 		/* Fractional, non-finite and out-of-range numbers cannot be array lengths. */
 		if ((double)length != number) {
 			status = vm_throw_range_error(realm, "Invalid array length");
-			return status;
+			goto cleanup;
 		}
 
 		/* The length. */
 		status = vm_array_set_length(realm->heap, made, length);
 		if (status != 0)
-			return status;
+			goto cleanup;
 
 		/* Succeeded: only the length metadata grew; no holes were allocated. */
-		return 0;
+		goto cleanup;
 	}
 
 	/* Anything else is the elements. */
 	for (index = 0; index < count; index++) {
 		status = vm_object_define(realm->heap, made, vm_value_int32((int32_t)index), args[index], VM_PROPERTY_DEFAULT);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
-	/* Succeeded: the array. */
-	return 0;
+	/* The constructed array is now handed to the caller. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &made_root);
+	return status;
 }
 
 /* Array.isArray(value). */
@@ -311,6 +326,8 @@ array_from(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
+	struct vm_cell *source_root;
 	vm_value source;
 	vm_value mapper;
 	vm_value value;
@@ -334,12 +351,20 @@ array_from(
 	status = vm_to_object(realm, js_argument(args, count, 0), &source);
 	if (status != 0)
 		return status;
+	source_root = vm_value_as_cell(source);
+	status = vm_heap_add_root(realm->heap, &source_root);
+	if (status != 0)
+		return status;
 	status = js_builtin_length(realm, source, &length);
 	if (status != 0)
-		return status;
+		goto release_source;
 	status = array_new(realm, result);
 	if (status != 0)
-		return status;
+		goto release_source;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		goto release_source;
 
 	/* Each element, mapped when asked. */
 	for (index = 0; index < length; index++) {
@@ -354,8 +379,16 @@ array_from(
 		if (status == 0)
 			status = array_append(realm, *result, value);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
+
+	/* The completed array is returned to the caller. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &result_root);
+release_source:
+	vm_heap_remove_root(realm->heap, &source_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the array. */
 	return 0;
@@ -406,6 +439,8 @@ array_concat(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value item;
 	vm_value value;
@@ -421,9 +456,17 @@ array_concat(
 	status = vm_to_object(realm, this_value, &object);
 	if (status != 0)
 		return status;
-	status = array_new(realm, result);
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
 	if (status != 0)
 		return status;
+	status = array_new(realm, result);
+	if (status != 0)
+		goto release_object;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		goto release_object;
 
 	/* This, then each item: an array's elements (holes kept), anything else itself. */
 	next = 0;
@@ -435,7 +478,7 @@ array_concat(
 		if (!is_array) {
 			status = array_set(realm, *result, next, item);
 			if (status != 0)
-				return status;
+				goto cleanup;
 			next++;
 			continue;
 		}
@@ -443,7 +486,7 @@ array_concat(
 		/* An array's length. */
 		status = js_builtin_length(realm, item, &length);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		for (index = 0; index < length; index++) {
 			status = array_has(realm, item, index, &found);
 			if (status == 0 && found) {
@@ -454,7 +497,7 @@ array_concat(
 
 			/* A failure ends the copy. */
 			if (status != 0)
-				return status;
+				goto cleanup;
 		}
 
 		/* The next items go after these. */
@@ -463,6 +506,12 @@ array_concat(
 
 	/* Succeeded: the new array with its length. */
 	status = array_set_length(realm, *result, (double)next);
+
+/* The temporary array root covers getters and assignments above. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &result_root);
+release_object:
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -686,6 +735,7 @@ array_flat(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value depth_value;
 	uint32_t length;
@@ -706,8 +756,14 @@ array_flat(
 
 	/* The flattened array. */
 	status = array_new(realm, result);
-	if (status == 0)
-		status = array_flatten(realm, *result, object, length, depth, VM_VALUE_UNDEFINED, VM_VALUE_UNDEFINED);
+	if (status != 0)
+		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
+	status = array_flatten(realm, *result, object, length, depth, VM_VALUE_UNDEFINED, VM_VALUE_UNDEFINED);
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -720,6 +776,7 @@ array_flat_map(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value mapper;
 	uint32_t length;
@@ -734,8 +791,14 @@ array_flat_map(
 
 	/* Each element mapped, then flattened one level. */
 	status = array_new(realm, result);
-	if (status == 0)
-		status = array_flatten(realm, *result, object, length, 1.0, mapper, js_argument(args, count, 1));
+	if (status != 0)
+		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
+	status = array_flatten(realm, *result, object, length, 1.0, mapper, js_argument(args, count, 1));
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -965,8 +1028,10 @@ array_pop(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	uint32_t length;
+	int is_cell;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -984,10 +1049,19 @@ array_pop(
 
 	/* The last element, removed. */
 	status = array_get(realm, object, length - 1U, result);
-	if (status == 0)
-		status = array_remove(realm, object, length - 1U);
+	if (status != 0)
+		return status;
+	result_root = NULL;
+	is_cell = vm_value_is_cell(*result);
+	if (is_cell)
+		result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
+	status = array_remove(realm, object, length - 1U);
 	if (status == 0)
 		status = array_set_length(realm, object, (double)length - 1.0);
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1036,6 +1110,7 @@ array_reduce(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value callback;
 	vm_value value;
@@ -1044,6 +1119,7 @@ array_reduce(
 	uint32_t index;
 	int found;
 	int started;
+	int is_cell;
 	int status;
 
 	/* The object, its length and the callback. */
@@ -1057,16 +1133,29 @@ array_reduce(
 	started = count > 1U;
 	if (started)
 		*result = args[1];
+	result_root = NULL;
+	is_cell = 0;
+	if (started)
+		is_cell = vm_value_is_cell(*result);
+	if (is_cell)
+		result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	for (index = 0; index < length; index++) {
 		status = array_has(realm, object, index, &found);
 		if (status == 0 && found)
 			status = array_get(realm, object, index, &value);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		if (!found)
 			continue;
 		if (!started) {
 			*result = value;
+			result_root = NULL;
+			is_cell = vm_value_is_cell(*result);
+			if (is_cell)
+				result_root = vm_value_as_cell(*result);
 			started = 1;
 			continue;
 		}
@@ -1078,17 +1167,23 @@ array_reduce(
 		call_args[3] = object;
 		status = vm_call(realm, callback, VM_VALUE_UNDEFINED, call_args, 4, result);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		result_root = NULL;
+		is_cell = vm_value_is_cell(*result);
+		if (is_cell)
+			result_root = vm_value_as_cell(*result);
 	}
 
 	/* No element and no initial value. */
 	if (!started) {
 		status = vm_throw_type_error(realm, "Reduce of empty array with no initial value");
-		return status;
+		goto cleanup;
 	}
 
-	/* Succeeded: the accumulator. */
-	return 0;
+	/* The accumulator is handed to the caller. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &result_root);
+	return status;
 }
 
 /* Array.prototype.reduceRight(callback, initial). */
@@ -1100,6 +1195,7 @@ array_reduce_right(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value callback;
 	vm_value value;
@@ -1108,6 +1204,7 @@ array_reduce_right(
 	uint32_t index;
 	int found;
 	int started;
+	int is_cell;
 	int status;
 
 	/* The object, its length and the callback. */
@@ -1121,16 +1218,29 @@ array_reduce_right(
 	started = count > 1U;
 	if (started)
 		*result = args[1];
+	result_root = NULL;
+	is_cell = 0;
+	if (started)
+		is_cell = vm_value_is_cell(*result);
+	if (is_cell)
+		result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	for (index = length; index > 0; index--) {
 		status = array_has(realm, object, index - 1U, &found);
 		if (status == 0 && found)
 			status = array_get(realm, object, index - 1U, &value);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		if (!found)
 			continue;
 		if (!started) {
 			*result = value;
+			result_root = NULL;
+			is_cell = vm_value_is_cell(*result);
+			if (is_cell)
+				result_root = vm_value_as_cell(*result);
 			started = 1;
 			continue;
 		}
@@ -1142,17 +1252,23 @@ array_reduce_right(
 		call_args[3] = object;
 		status = vm_call(realm, callback, VM_VALUE_UNDEFINED, call_args, 4, result);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		result_root = NULL;
+		is_cell = vm_value_is_cell(*result);
+		if (is_cell)
+			result_root = vm_value_as_cell(*result);
 	}
 
 	/* No element and no initial value. */
 	if (!started) {
 		status = vm_throw_type_error(realm, "Reduce of empty array with no initial value");
-		return status;
+		goto cleanup;
 	}
 
-	/* Succeeded: the accumulator. */
-	return 0;
+	/* The accumulator is handed to the caller. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &result_root);
+	return status;
 }
 
 /* Array.prototype.reverse(). */
@@ -1164,6 +1280,8 @@ array_reverse(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *lower_root;
+	struct vm_cell *upper_root;
 	vm_value object;
 	vm_value lower_value;
 	vm_value upper_value;
@@ -1172,6 +1290,7 @@ array_reverse(
 	uint32_t upper;
 	int lower_found;
 	int upper_found;
+	int is_cell;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -1181,17 +1300,45 @@ array_reverse(
 	status = array_this(realm, this_value, &object, &length);
 	if (status != 0)
 		return status;
+	lower_root = NULL;
+	upper_root = NULL;
+	status = vm_heap_add_root(realm->heap, &lower_root);
+	if (status != 0)
+		return status;
+	status = vm_heap_add_root(realm->heap, &upper_root);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &lower_root);
+		return status;
+	}
 
 	/* Each pair from both ends (holes move too). */
 	for (lower = 0; length > 0 && lower < length / 2U; lower++) {
+		lower_root = NULL;
+		upper_root = NULL;
 		upper = length - 1U - lower;
 		status = array_has(realm, object, lower, &lower_found);
-		if (status == 0 && lower_found)
+		if (status == 0 && lower_found) {
 			status = array_get(realm, object, lower, &lower_value);
+			if (status == 0) {
+				is_cell = vm_value_is_cell(lower_value);
+				if (is_cell)
+					lower_root = vm_value_as_cell(lower_value);
+			}
+		}
+
+		/* The upper lookup may invoke user code before the lower value is written. */
 		if (status == 0)
 			status = array_has(realm, object, upper, &upper_found);
-		if (status == 0 && upper_found)
+		if (status == 0 && upper_found) {
 			status = array_get(realm, object, upper, &upper_value);
+			if (status == 0) {
+				is_cell = vm_value_is_cell(upper_value);
+				if (is_cell)
+					upper_root = vm_value_as_cell(upper_value);
+			}
+		}
+
+		/* Both fetched values remain live through the swap. */
 		if (status == 0 && upper_found)
 			status = array_set(realm, object, lower, upper_value);
 		if (status == 0 && !upper_found && lower_found)
@@ -1201,8 +1348,15 @@ array_reverse(
 		if (status == 0 && !lower_found && upper_found)
 			status = array_remove(realm, object, upper);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
+
+	/* The swapped values have been published back into the receiver. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &upper_root);
+	vm_heap_remove_root(realm->heap, &lower_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the object. */
 	*result = object;
@@ -1218,11 +1372,13 @@ array_shift(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value value;
 	uint32_t length;
 	uint32_t index;
 	int found;
+	int is_cell;
 	int status;
 
 	UNUSED_PARAMETER(args);
@@ -1240,6 +1396,15 @@ array_shift(
 
 	/* The first element, and every other one down by one. */
 	status = array_get(realm, object, 0, result);
+	if (status != 0)
+		return status;
+	result_root = NULL;
+	is_cell = vm_value_is_cell(*result);
+	if (is_cell)
+		result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	for (index = 1; status == 0 && index < length; index++) {
 		status = array_has(realm, object, index, &found);
 		if (status == 0 && found) {
@@ -1256,6 +1421,7 @@ array_shift(
 		status = array_remove(realm, object, length - 1U);
 	if (status == 0)
 		status = array_set_length(realm, object, (double)length - 1.0);
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1268,6 +1434,7 @@ array_slice(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value value;
 	uint32_t length;
@@ -1287,6 +1454,10 @@ array_slice(
 		status = array_new(realm, result);
 	if (status != 0)
 		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 
 	/* Each element of the range (holes kept). */
 	for (index = start; index < end; index++) {
@@ -1299,13 +1470,17 @@ array_slice(
 
 		/* A failure ends the reversal. */
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Succeeded: the new array with its length. */
 	if (end < start)
 		end = start;
 	status = array_set_length(realm, *result, (double)(end - start));
+
+	/* The new array is handed to the caller after every getter finishes. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1335,6 +1510,7 @@ array_sort(
 	vm_value *result)
 {
 	struct vm_object *list;
+	struct vm_cell *list_root;
 	vm_value comparator;
 	vm_value object;
 	vm_value list_value;
@@ -1361,18 +1537,28 @@ array_sort(
 
 	/* The sorted elements back, then the holes at the end. */
 	list = (struct vm_object *)vm_value_as_cell(list_value);
+	list_root = &list->cell;
+	status = vm_heap_add_root(realm->heap, &list_root);
+	if (status != 0)
+		return status;
 	for (index = 0; index < items; index++) {
 		status = array_set(realm, object, index, list->elements[index]);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Then the holes. */
 	for (index = items; index < length; index++) {
 		status = array_remove(realm, object, index);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
+
+	/* The temporary list no longer needs to survive setters. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &list_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the object. */
 	*result = object;
@@ -1388,6 +1574,7 @@ array_splice(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value value;
 	double delete_number;
@@ -1424,6 +1611,12 @@ array_splice(
 
 	/* The deleted elements, as the result. */
 	status = array_new(realm, result);
+	if (status != 0)
+		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	for (index = 0; status == 0 && index < deleted; index++) {
 		status = array_has(realm, object, start + index, &found);
 		if (status == 0 && found) {
@@ -1437,7 +1630,7 @@ array_splice(
 	if (status == 0)
 		status = array_set_length(realm, *result, (double)deleted);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* The elements after them moved to make room or close the gap. */
 	if (inserted < deleted) {
@@ -1473,6 +1666,10 @@ array_splice(
 		status = array_set(realm, object, start + index, args[index + 2U]);
 	if (status == 0)
 		status = array_set_length(realm, object, (double)length - (double)deleted + (double)inserted);
+
+	/* The removed elements survive all receiver mutations until return. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1513,6 +1710,7 @@ array_to_reversed(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value value;
 	uint32_t length;
@@ -1526,13 +1724,20 @@ array_to_reversed(
 	status = array_this(realm, this_value, &object, &length);
 	if (status == 0)
 		status = array_new(realm, result);
+	if (status != 0)
+		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	for (index = 0; status == 0 && index < length; index++) {
 		status = array_get(realm, object, length - 1U - index, &value);
 		if (status == 0)
 			status = array_set(realm, *result, index, value);
 	}
 
-	/* Reports whether the splice succeeded. */
+	/* The reversed copy is now handed to the caller. */
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1576,6 +1781,7 @@ array_to_spliced(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value value;
 	double skip_number;
@@ -1608,6 +1814,12 @@ array_to_spliced(
 
 	/* Before the start, the new items, after the skipped ones. */
 	status = array_new(realm, result);
+	if (status != 0)
+		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	next = 0;
 	for (index = 0; status == 0 && index < start; index++) {
 		status = array_get(realm, object, index, &value);
@@ -1630,7 +1842,8 @@ array_to_spliced(
 		next++;
 	}
 
-	/* Reports whether the copy succeeded. */
+	/* The copy is handed to the caller after every getter finishes. */
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1643,6 +1856,7 @@ array_to_string(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value key;
 	vm_value join;
@@ -1657,28 +1871,43 @@ array_to_string(
 	status = vm_to_object(realm, this_value, &object);
 	if (status != 0)
 		return status;
-	key = vm_key_from_ascii(realm->heap, "join");
-	if (key == VM_VALUE_EMPTY)
-		return ENOMEM;
-	status = vm_get(realm, object, key, &join);
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
 	if (status != 0)
 		return status;
+	key = vm_key_from_ascii(realm->heap, "join");
+	if (key == VM_VALUE_EMPTY) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Read the receiver's join override. */
+	status = vm_get(realm, object, key, &join);
+	if (status != 0)
+		goto cleanup;
 
 	/* A callable join is called; otherwise Object.prototype.toString. */
 	callable = vm_value_is_callable(join);
 	if (callable) {
 		status = vm_call(realm, join, object, NULL, 0, result);
-		return status;
+		goto cleanup;
 	}
 
 	/* Object.prototype.toString, called on the object. */
 	key = vm_key_from_ascii(realm->heap, "toString");
-	if (key == VM_VALUE_EMPTY)
-		return ENOMEM;
+	if (key == VM_VALUE_EMPTY) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Fall back to the base object's string method. */
 	status = vm_object_get(realm->object_prototype, key, &to_string);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = vm_call(realm, to_string, object, NULL, 0, result);
+	/* The receiver survives either dynamic method call. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -1735,6 +1964,7 @@ array_with(
 	unsigned count,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
 	vm_value object;
 	vm_value value;
 	double relative;
@@ -1759,6 +1989,12 @@ array_with(
 
 	/* The copy. */
 	status = array_new(realm, result);
+	if (status != 0)
+		return status;
+	result_root = vm_value_as_cell(*result);
+	status = vm_heap_add_root(realm->heap, &result_root);
+	if (status != 0)
+		return status;
 	for (index = 0; status == 0 && index < length; index++) {
 		value = js_argument(args, count, 1);
 		if ((double)index != target)
@@ -1767,7 +2003,8 @@ array_with(
 			status = array_set(realm, *result, index, value);
 	}
 
-	/* Reports whether the copy succeeded. */
+	/* The copy is handed to the caller after every getter finishes. */
+	vm_heap_remove_root(realm->heap, &result_root);
 	return status;
 }
 
@@ -1779,13 +2016,20 @@ array_this(
 	vm_value *object,
 	uint32_t *length)
 {
+	struct vm_cell *object_root;
 	int status;
 
 	/* The object, then its length. */
 	*length = 0;
 	status = vm_to_object(realm, this_value, object);
-	if (status == 0)
-		status = js_builtin_length(realm, *object, length);
+	if (status != 0)
+		return status;
+	object_root = vm_value_as_cell(*object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
+	status = js_builtin_length(realm, *object, length);
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -1797,13 +2041,21 @@ array_has(
 	uint32_t index,
 	int *found)
 {
+	struct vm_cell *object_root;
 	vm_value has;
 	int status;
 
 	/* The in operator's search. */
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	status = vm_in(realm, vm_value_int32((int32_t)index), object, &has);
+	vm_heap_remove_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	*found = has == VM_VALUE_TRUE;
-	return status;
+	return 0;
 }
 
 /* Gets an element. */
@@ -1814,10 +2066,16 @@ array_get(
 	uint32_t index,
 	vm_value *value)
 {
+	struct vm_cell *object_root;
 	int status;
 
 	/* Through the chain. */
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	status = vm_get(realm, object, vm_value_int32((int32_t)index), value);
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -1829,10 +2087,30 @@ array_set(
 	uint32_t index,
 	vm_value value)
 {
+	struct vm_cell *object_root;
+	struct vm_cell *value_root;
+	int is_cell;
 	int status;
 
 	/* Strictly. */
+	object_root = vm_value_as_cell(object);
+	value_root = NULL;
+	is_cell = vm_value_is_cell(value);
+	if (is_cell)
+		value_root = vm_value_as_cell(value);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &object_root);
+		return status;
+	}
+
+	/* Both receiver and assigned value survive setter code. */
 	status = vm_set(realm, object, vm_value_int32((int32_t)index), value, 1);
+	vm_heap_remove_root(realm->heap, &value_root);
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -1843,11 +2121,17 @@ array_remove(
 	vm_value object,
 	uint32_t index)
 {
+	struct vm_cell *object_root;
 	vm_value deleted;
 	int status;
 
 	/* Strictly. */
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	status = vm_delete(realm, object, vm_value_int32((int32_t)index), 1, &deleted);
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -1858,14 +2142,24 @@ array_set_length(
 	vm_value object,
 	double length)
 {
+	struct vm_cell *object_root;
 	vm_value key;
 	int status;
 
 	/* Strictly. */
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	key = vm_key_from_ascii(realm->heap, "length");
-	if (key == VM_VALUE_EMPTY)
+	if (key == VM_VALUE_EMPTY) {
+		vm_heap_remove_root(realm->heap, &object_root);
 		return ENOMEM;
+	}
+
+	/* The receiver remains live through its length setter. */
 	status = vm_set(realm, object, key, vm_value_number(length), 1);
+	vm_heap_remove_root(realm->heap, &object_root);
 	return status;
 }
 
@@ -1893,11 +2187,31 @@ array_append(
 	vm_value value)
 {
 	struct vm_object *object;
+	struct vm_cell *array_root;
+	struct vm_cell *value_root;
+	int is_cell;
 	int status;
 
 	/* At the end. */
 	object = (struct vm_object *)vm_value_as_cell(array);
+	array_root = &object->cell;
+	value_root = NULL;
+	is_cell = vm_value_is_cell(value);
+	if (is_cell)
+		value_root = vm_value_as_cell(value);
+	status = vm_heap_add_root(realm->heap, &array_root);
+	if (status != 0)
+		return status;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &array_root);
+		return status;
+	}
+
+	/* The new element and destination survive definition. */
 	status = vm_object_define(realm->heap, object, vm_value_int32((int32_t)object->length), value, VM_PROPERTY_DEFAULT);
+	vm_heap_remove_root(realm->heap, &value_root);
+	vm_heap_remove_root(realm->heap, &array_root);
 	return status;
 }
 
@@ -1934,6 +2248,8 @@ array_each(
 	int mode,
 	vm_value *result)
 {
+	struct vm_cell *result_root;
+	struct vm_cell *value_root;
 	vm_value object;
 	vm_value callback;
 	vm_value value;
@@ -1944,6 +2260,8 @@ array_each(
 	uint32_t kept;
 	int found;
 	int truth;
+	int rooted;
+	int is_cell;
 	int status;
 
 	/* The object, its length and the callback. */
@@ -1954,6 +2272,7 @@ array_each(
 		return status;
 
 	/* The answer by the mode's default. */
+	rooted = 0;
 	*result = VM_VALUE_UNDEFINED;
 	if (mode == ARRAY_EVERY)
 		*result = VM_VALUE_TRUE;
@@ -1963,51 +2282,70 @@ array_each(
 		status = array_new(realm, result);
 		if (status != 0)
 			return status;
+		result_root = vm_value_as_cell(*result);
+		status = vm_heap_add_root(realm->heap, &result_root);
+		if (status != 0)
+			return status;
+		rooted = 1;
 	}
 
 	/* map's result is as long. */
 	if (mode == ARRAY_MAP) {
 		status = array_set_length(realm, *result, (double)length);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
+
+	/* A fetched value survives a callback that removes it from the receiver. */
+	value_root = NULL;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0)
+		goto cleanup;
 
 	/* Each present element. */
 	kept = 0;
 	for (index = 0; index < length; index++) {
+		value_root = NULL;
 		status = array_has(realm, object, index, &found);
 		if (status == 0 && found)
 			status = array_get(realm, object, index, &value);
 		if (status != 0)
-			return status;
+			goto release_value;
 		if (!found)
 			continue;
+		is_cell = vm_value_is_cell(value);
+		if (is_cell)
+			value_root = vm_value_as_cell(value);
 		call_args[0] = value;
 		call_args[1] = vm_value_int32((int32_t)index);
 		call_args[2] = object;
 		status = vm_call(realm, callback, js_argument(args, count, 1), call_args, 3, &answer);
 		if (status != 0)
-			return status;
+			goto release_value;
 
 		/* What the mode does with the answer. */
 		truth = vm_to_boolean(answer);
 		if (mode == ARRAY_EVERY && !truth) {
 			*result = VM_VALUE_FALSE;
-			return 0;
+			goto release_value;
 		}
 
 		/* some stops at the first true. */
 		if (mode == ARRAY_SOME && truth) {
 			*result = VM_VALUE_TRUE;
-			return 0;
+			goto release_value;
 		}
 
 		/* map keeps each answer at its index. */
 		if (mode == ARRAY_MAP) {
+			value_root = NULL;
+			is_cell = vm_value_is_cell(answer);
+			if (is_cell)
+				value_root = vm_value_as_cell(answer);
 			status = vm_object_define(realm->heap, (struct vm_object *)vm_value_as_cell(*result), vm_value_int32((int32_t)index),
 			    answer, VM_PROPERTY_DEFAULT);
 			if (status != 0)
-				return status;
+				goto release_value;
 		}
 
 		/* filter keeps the accepted values in order. */
@@ -2015,13 +2353,18 @@ array_each(
 			status = vm_object_define(realm->heap, (struct vm_object *)vm_value_as_cell(*result), vm_value_int32((int32_t)kept),
 			    value, VM_PROPERTY_DEFAULT);
 			if (status != 0)
-				return status;
+				goto release_value;
 			kept++;
 		}
 	}
 
-	/* Succeeded: the answer. */
-	return 0;
+	/* The result is now owned by the caller. */
+release_value:
+	vm_heap_remove_root(realm->heap, &value_root);
+cleanup:
+	if (rooted)
+		vm_heap_remove_root(realm->heap, &result_root);
+	return status;
 }
 
 /* Finds the first (or last) element a predicate accepts: its value or its index (holes read as undefined). */
@@ -2035,6 +2378,7 @@ array_search(
 	int what,
 	vm_value *result)
 {
+	struct vm_cell *value_root;
 	vm_value object;
 	vm_value predicate;
 	vm_value value;
@@ -2044,6 +2388,7 @@ array_search(
 	uint32_t step;
 	uint32_t index;
 	int truth;
+	int is_cell;
 	int status;
 
 	/* The object, its length and the predicate. */
@@ -2052,35 +2397,45 @@ array_search(
 		status = array_callback(realm, args, count, &predicate);
 	if (status != 0)
 		return status;
+	value_root = NULL;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0)
+		return status;
 
 	/* Each element in the direction asked. */
 	*result = VM_VALUE_UNDEFINED;
 	if (what == ARRAY_FIND_INDEX)
 		*result = vm_value_int32(-1);
 	for (step = 0; step < length; step++) {
+		value_root = NULL;
 		index = step;
 		if (backwards)
 			index = length - 1U - step;
 		status = array_get(realm, object, index, &value);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		is_cell = vm_value_is_cell(value);
+		if (is_cell)
+			value_root = vm_value_as_cell(value);
 		call_args[0] = value;
 		call_args[1] = vm_value_int32((int32_t)index);
 		call_args[2] = object;
 		status = vm_call(realm, predicate, js_argument(args, count, 1), call_args, 3, &answer);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		truth = vm_to_boolean(answer);
 		if (!truth)
 			continue;
 		*result = value;
 		if (what == ARRAY_FIND_INDEX)
 			*result = vm_value_int32((int32_t)index);
-		return 0;
+		goto cleanup;
 	}
 
 	/* Succeeded: none accepted. */
-	return 0;
+cleanup:
+	vm_heap_remove_root(realm->heap, &value_root);
+	return status;
 }
 
 /* Converts a relative position (negative from the end) into an index from 0 to the length. */
@@ -2125,30 +2480,44 @@ array_flatten(
 	vm_value mapper,
 	vm_value this_arg)
 {
+	struct vm_cell *value_root;
 	vm_value value;
 	vm_value call_args[3];
 	uint32_t index;
 	uint32_t length;
 	int found;
 	int is_array;
+	int is_cell;
 	int status;
 
 	/* Each present element. */
+	value_root = NULL;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0)
+		return status;
 	for (index = 0; index < source_length; index++) {
 		status = array_has(realm, source, index, &found);
 		if (status == 0 && found)
 			status = array_get(realm, source, index, &value);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		if (!found)
 			continue;
+		value_root = NULL;
+		is_cell = vm_value_is_cell(value);
+		if (is_cell)
+			value_root = vm_value_as_cell(value);
 		if (mapper != VM_VALUE_UNDEFINED) {
 			call_args[0] = value;
 			call_args[1] = vm_value_int32((int32_t)index);
 			call_args[2] = source;
 			status = vm_call(realm, mapper, this_arg, call_args, 3, &value);
 			if (status != 0)
-				return status;
+				goto cleanup;
+			value_root = NULL;
+			is_cell = vm_value_is_cell(value);
+			if (is_cell)
+				value_root = vm_value_as_cell(value);
 		}
 
 		/* An array within the depth is flattened; anything else appended. */
@@ -2163,11 +2532,13 @@ array_flatten(
 
 		/* A failure ends the flattening. */
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
-	/* Succeeded: the elements are appended. */
-	return 0;
+	/* The mapped value no longer spans another getter or recursive call. */
+cleanup:
+	vm_heap_remove_root(realm->heap, &value_root);
+	return status;
 }
 
 /* Tells whether a value is an array object. */
@@ -2201,6 +2572,7 @@ array_compare(
 {
 	struct vm_string *left_string;
 	struct vm_string *right_string;
+	struct vm_cell *left_root;
 	vm_value call_args[2];
 	vm_value answer;
 	double number;
@@ -2239,11 +2611,21 @@ array_compare(
 
 	/* Otherwise the strings by code units. */
 	status = vm_to_string(realm, left, &left_string);
-	if (status == 0)
-		status = vm_to_string(realm, right, &right_string);
 	if (status != 0)
 		return status;
+	left_root = &left_string->cell;
+	status = vm_heap_add_root(realm->heap, &left_root);
+	if (status != 0)
+		return status;
+	status = vm_to_string(realm, right, &right_string);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &left_root);
+		return status;
+	}
+
+	/* Both strings remain live while their code units are compared. */
 	*order = vm_string_compare(left_string, right_string);
+	vm_heap_remove_root(realm->heap, &left_root);
 	return 0;
 }
 
@@ -2330,6 +2712,8 @@ array_sorted_items(
 {
 	struct vm_object *items;
 	struct vm_object *scratch;
+	struct vm_cell *items_root;
+	struct vm_cell *scratch_root;
 	vm_value value;
 	vm_value scratch_value;
 	uint32_t index;
@@ -2339,6 +2723,13 @@ array_sorted_items(
 	/* The list of values. */
 	*count = 0;
 	status = array_new(realm, list);
+	if (status != 0)
+		return status;
+	items = (struct vm_object *)vm_value_as_cell(*list);
+	items_root = &items->cell;
+	status = vm_heap_add_root(realm->heap, &items_root);
+	if (status != 0)
+		return status;
 	for (index = 0; status == 0 && index < length; index++) {
 		found = 1;
 		if (skip_holes)
@@ -2352,19 +2743,27 @@ array_sorted_items(
 
 	/* A failure to read. */
 	if (status != 0)
-		return status;
-	items = (struct vm_object *)vm_value_as_cell(*list);
+		goto release_items;
 	*count = items->length;
 
 	/* A scratch list as long, then the sort (the lists are dense: their elements are one array each). */
 	status = array_new(realm, &scratch_value);
-	if (status == 0 && *count > 0)
-		status = vm_array_set_length(realm->heap, (struct vm_object *)vm_value_as_cell(scratch_value), 0);
+	if (status != 0)
+		goto release_items;
 	scratch = (struct vm_object *)vm_value_as_cell(scratch_value);
+	scratch_root = &scratch->cell;
+	status = vm_heap_add_root(realm->heap, &scratch_root);
+	if (status != 0)
+		goto release_items;
+	if (*count > 0)
+		status = vm_array_set_length(realm->heap, scratch, 0);
 	for (index = 0; status == 0 && index < *count; index++)
 		status = vm_object_define(realm->heap, scratch, vm_value_int32((int32_t)index), VM_VALUE_UNDEFINED, VM_PROPERTY_DEFAULT);
 	if (status == 0 && *count > 1U)
 		status = array_merge_sort(realm, comparator, items->elements, scratch->elements, *count);
+	vm_heap_remove_root(realm->heap, &scratch_root);
+release_items:
+	vm_heap_remove_root(realm->heap, &items_root);
 	return status;
 }
 
@@ -2381,27 +2780,55 @@ array_join_with(
 	struct wb_units text;
 	struct vm_string *part;
 	struct vm_string *joined;
+	struct vm_cell *separator_root;
+	struct vm_cell *value_root;
 	vm_value value;
 	vm_value key;
 	vm_value method;
 	uint32_t index;
+	int is_cell;
 	int status;
+
+	/* The separator and current value survive reentrant string conversion. */
+	separator_root = &separator->cell;
+	status = vm_heap_add_root(realm->heap, &separator_root);
+	if (status != 0)
+		return status;
+	value_root = NULL;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &separator_root);
+		return status;
+	}
 
 	/* Each element's string after the separator. */
 	wb_units_init(&text);
 	status = 0;
 	for (index = 0; status == 0 && index < length; index++) {
+		value_root = NULL;
 		if (index > 0)
 			status = vm_string_append_units(separator, &text);
 		if (status == 0)
 			status = array_get(realm, object, index, &value);
 		if (status != 0 || value == VM_VALUE_UNDEFINED || value == VM_VALUE_NULL)
 			continue;
+		is_cell = vm_value_is_cell(value);
+		if (is_cell)
+			value_root = vm_value_as_cell(value);
 		if (locale) {
 			key = vm_key_from_ascii(realm->heap, "toLocaleString");
-			status = vm_get(realm, value, key, &method);
+			if (key == VM_VALUE_EMPTY)
+				status = ENOMEM;
+			if (status == 0)
+				status = vm_get(realm, value, key, &method);
 			if (status == 0)
 				status = vm_call(realm, method, value, NULL, 0, &value);
+			if (status == 0) {
+				value_root = NULL;
+				is_cell = vm_value_is_cell(value);
+				if (is_cell)
+					value_root = vm_value_as_cell(value);
+			}
 		}
 
 		/* Its string. */
@@ -2414,12 +2841,16 @@ array_join_with(
 	/* A failure leaves nothing. */
 	if (status != 0) {
 		wb_units_release(&text);
+		vm_heap_remove_root(realm->heap, &value_root);
+		vm_heap_remove_root(realm->heap, &separator_root);
 		return status;
 	}
 
 	/* The text as a string. */
 	joined = vm_string_from_units(realm->heap, text.data, text.length);
 	wb_units_release(&text);
+	vm_heap_remove_root(realm->heap, &value_root);
+	vm_heap_remove_root(realm->heap, &separator_root);
 	if (joined == NULL)
 		return ENOMEM;
 	*result = vm_value_cell(joined);

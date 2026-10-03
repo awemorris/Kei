@@ -97,25 +97,28 @@ data_cases(
 {
 	/* Immutable URL/body/MIME expectations belong to this one corpus traversal. */
 	const struct data_case tests[] = {
-		{ "data:application/xml;base64,!", EINVAL, "", "" },
-		{ "data:application/xml;base64,A", EINVAL, "", "" },
-		{ "data:application/xml;base64,!!!!", EINVAL, "", "" },
-		{ "data:application/xml;base64,AA=A", EINVAL, "", "" },
-		{ "data:application/xml;base64,YQ===", EINVAL, "", "" },
-		{ "data:application/xml;base64,PHIvPg=Q", EINVAL, "", "" },
-		{ "data:application/xml;base64,PHIvPg==!", EINVAL, "", "" },
-		{ "data:application/xml;base64,%00", EINVAL, "", "" },
-		{ "data:bad%20type;base64,!", EINVAL, "", "" },
-		{ "data:application/xml", EINVAL, "", "" },
-		{ "data:application/xml;base64,YQ==", 0, "a", "application/xml" },
-		{ "data:application/xml;base64,YQ", 0, "a", "application/xml" },
-		{ "data:application/xml;base64,YQ%0A==", 0, "a", "application/xml" },
-		{ "data:application/xml;base64,", 0, "", "application/xml" },
-		{ "data:bad%20type;base64,YQ==", 0, "a", "text/plain;charset=US-ASCII" },
-		{ "data:,markup", 0, "markup", "text/plain;charset=US-ASCII" },
-		{ "data:;charset=UTF-8,a", 0, "a", "text/plain;charset=UTF-8" },
-		{ "data:TEXT/HTML,%3Cp%3E#fragment", 0, "<p>", "text/html" }
-	};
+	    {"data:application/xml;base64,!", EINVAL, "", ""},
+	    {"data:application/xml;base64,A", EINVAL, "", ""},
+	    {"data:application/xml;base64,!!!!", EINVAL, "", ""},
+	    {"data:application/xml;base64,AA=A", EINVAL, "", ""},
+	    {"data:application/xml;base64,YQ===", EINVAL, "", ""},
+	    {"data:application/xml;base64,PHIvPg=Q", EINVAL, "", ""},
+	    {"data:application/xml;base64,PHIvPg==!", EINVAL, "", ""},
+	    {"data:application/xml;base64,%00", EINVAL, "", ""},
+	    {"data:bad%20type;base64,!", EINVAL, "", ""},
+	    {"data:application/xml", EINVAL, "", ""},
+	    {"data:application/xml;base64,YQ==", 0, "a", "application/xml"},
+	    {"data:application/xml;base64,YQ", 0, "a", "application/xml"},
+	    {"data:application/xml;base64,YQ%0A==", 0, "a", "application/xml"},
+	    {"data:application/xml;base64,", 0, "", "application/xml"},
+	    {"data:bad%20type;base64,YQ==", 0, "a", "text/plain;charset=US-ASCII"},
+	    {"data:,markup", 0, "markup", "text/plain;charset=US-ASCII"},
+	    {"data:;charset=UTF-8,a", 0, "a", "text/plain;charset=UTF-8"},
+	    {"data:TEXT/HTML,%3Cp%3E#fragment", 0, "<p>", "text/html"},
+	    {"data:text/ html,x", 0, "x", "text/plain;charset=US-ASCII"},
+	    {"data:text/plain;a=\";b=x\";b=y,z", 0, "z", "text/plain;a=\";b=x\";b=y"},
+	    {"data:text/plain;a=\";b=x\";B=y;b=z,k", 0, "k", "text/plain;a=\";b=x\";b=y"},
+	    {"data:text/plain;a=\"escaped\\\";b=x\";b=y,t", 0, "t", "text/plain;a=\"escaped\\\";b=x\";b=y"}};
 	size_t index;
 	int error;
 

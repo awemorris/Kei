@@ -1,0 +1,29 @@
+{
+  "userland/desktop/libbrowser/dom/node.c": {
+    "before_lines": 1104,
+    "after_lines": 1104,
+    "before_sha256": "0959155814f7d5c168d441778ab2fc528b9378b197aadfdc582a2877f5bb9549",
+    "after_sha256": "0959155814f7d5c168d441778ab2fc528b9378b197aadfdc582a2877f5bb9549",
+    "before_literals": 6,
+    "after_literals": 6,
+    "literals_identical": true
+  },
+  "userland/desktop/libbrowser/bind/implementation.c": {
+    "before_lines": 410,
+    "after_lines": 522,
+    "before_sha256": "1c9725ba5ba50c0cff9b8e38801c6488ff8c9e678ada0b8f2239aea6c2b70e1e",
+    "after_sha256": "7b0604df4bf2ed3d2c7a115a2d44f89000043e78bab9480b7223db8c986d4a71",
+    "before_literals": 13,
+    "after_literals": 13,
+    "literals_identical": true
+  },
+  "userland/desktop/libbrowser/html/modes.c": {
+    "before_lines": 2067,
+    "after_lines": 2119,
+    "before_sha256": "7acfbbf61a8947fbfaed3415a0602c24756c713be6c1173beadc7d35202b93b1",
+    "after_sha256": "e8408e3a076e01033815444e7c88ee84fede2a86d7fc93d2b0b38b6ccdf49cc6",
+    "before_literals": 94,
+    "after_literals": 94,
+    "literals_identical": true
+  }
+}

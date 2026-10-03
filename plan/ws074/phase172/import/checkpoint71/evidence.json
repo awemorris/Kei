@@ -1,0 +1,29 @@
+{
+  "queue": "q597",
+  "checkpoint": 71,
+  "source": "userland/desktop/libbrowser/bind/query.c",
+  "source_sha256": "d9f4151f7cb61242cbdd99012774dc089439275f5bd6b287bd6c6e0e178147c5",
+  "baseline": "b527d0d2943fc91070832c75bb289934c0d972ab",
+  "reviewed": 190,
+  "total": 209,
+  "remaining": 19,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 25,
+    "all": "permitted forward cleanup jumps"
+  },
+  "tests": {
+    "dom-tests": "23/23",
+    "child-style-probe": "30 PASS / 0 FAIL",
+    "query-pressure": "3000 matches, 400 class add/remove cycles, dataset PASS"
+  },
+  "limits": [
+    "The pressure page did not force GC at a selected allocation; ownership is reviewed statically and behavioral tests passed.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

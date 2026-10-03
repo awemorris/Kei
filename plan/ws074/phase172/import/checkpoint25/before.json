@@ -1,0 +1,8 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/net/data.c",
+    "sha256": "a601bb16ef8931ebcd2ae2520eaf02491ab0918c7835907ce3cb845aaaa4ad0d",
+    "object": "libbrowser_net_data.o",
+    "text_sha256": "f6c8d631adf2c3341c90fd71c83f5c42ee795a219cb5070c5dd21f6da8aed61a"
+  }
+]

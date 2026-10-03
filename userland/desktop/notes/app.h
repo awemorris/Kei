@@ -94,6 +94,7 @@
 #define NOTES_ACTION_FULLSCREEN	12U
 #define NOTES_ACTION_LEAVE_FULLSCREEN	13U
 #define NOTES_ACTION_FINGER		14U
+#define NOTES_ACTION_SAVE_AS		15U
 #define NOTES_ACTION_COLOR		20U
 #define NOTES_ACTION_WIDTH		30U
 
@@ -186,6 +187,14 @@ struct notes_window {
 	struct wl_seat *seat;
 	struct wl_surface *surface;
 	struct xdg_toplevel *toplevel;
+
+	/*
+	 * zdesktop's titlebar, Notes' explicit request for the compositor's
+	 * decoration (NULL from a compositor without it).  Without it zdesktop
+	 * leaves the decoration to the client and Notes would have no title
+	 * bar (ws114-p007, ws099-p023).
+	 */
+	struct keiland_titlebar *titlebar;
 
 	/* The size the compositor gave, whether it changed since taken, and whether the window is fullscreen. */
 	uint32_t width;

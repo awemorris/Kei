@@ -1,0 +1,11 @@
+{
+  "kind": "GCC14.2 scoped compile/link against current unchanged own engine objects",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-svg-length.c": "a3ddc059a5b06971400aeb0a93a494d9d01a445e330de731b2e55dac1e88bc58",
+    "plan/ws074/tests/host-svg-text.c": "ff4d84072e088e8b94bae26c5efd2e28b3c1470d19cfbc9d8a2d89e40223f280"
+  }
+}

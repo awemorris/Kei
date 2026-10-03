@@ -72,19 +72,20 @@ main(
 
 	/* Executes the bounded inventory before dismantling either realm. */
 	error = probe_run(&probe, parent, child);
-
-	/* Keeps both realms alive until every test call has ended. */
-	vm_realm_destroy(child);
-	vm_realm_destroy(parent);
-	vm_heap_destroy(heap);
-
-	/* Separates setup failures from reproducible semantic failures. */
 	if (error != 0) {
+		vm_realm_destroy(child);
+		vm_realm_destroy(parent);
+		vm_heap_destroy(heap);
 		printed = fprintf(stderr, "realm probe infrastructure error: %d\n", error);
 		if (printed < 0)
 			return 2;
 		return 2;
 	}
+
+	/* Successful execution ends before either independent realm is dismantled. */
+	vm_realm_destroy(child);
+	vm_realm_destroy(parent);
+	vm_heap_destroy(heap);
 
 	/* Preserves failing outcomes instead of treating reproduction as a pass. */
 	printed = printf(
@@ -93,6 +94,8 @@ main(
 	    probe.checks);
 	if (printed < 0)
 		return 2;
+
+	/* Recorded semantic failures remain reproducible process failures. */
 	if (probe.failures != 0)
 		return 1;
 
@@ -168,6 +171,8 @@ probe_run(
 	    VM_PROPERTY_DEFAULT);
 	if (error != 0)
 		return error;
+
+	/* Publish the actual child global on the independently initialized parent. */
 	error = js_builtin_value(
 	    parent,
 	    parent->global,
@@ -181,6 +186,8 @@ probe_run(
 	error = probe_check(probe, parent, "parent control", "marker === 11;");
 	if (error != 0)
 		return error;
+
+	/* Check the independent child control before transporting foreign calls. */
 	error = probe_check(probe, child, "child control", "marker === 22;");
 	if (error != 0)
 		return error;
@@ -193,6 +200,8 @@ probe_run(
 	    "child.read() === 22;");
 	if (error != 0)
 		return error;
+
+	/* Check a constructor-created function against the actual child global. */
 	error = probe_check(
 	    probe,
 	    parent,
@@ -220,6 +229,8 @@ probe_run(
 	    "e instanceof child.TypeError; } caught;");
 	if (error != 0)
 		return error;
+
+	/* Observe the actual child SyntaxError thrown by dynamic construction. */
 	error = probe_check(
 	    probe,
 	    parent,
@@ -229,6 +240,8 @@ probe_run(
 	    "e instanceof child.SyntaxError; } caught;");
 	if (error != 0)
 		return error;
+
+	/* Observe the actual child TypeError transported from bytecode. */
 	error = probe_check(
 	    probe,
 	    parent,
@@ -265,11 +278,15 @@ probe_script(
 		return error;
 	}
 
-	/* Runs and releases the source before reporting its outcome. */
+	/* Run the original source before checking its actual execution outcome. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Completed execution no longer borrows converted probe source. */
+	wb_units_release(&units);
 
 	/* Succeeded: the last expression's value is available to the assertion. */
 	return 0;

@@ -16,13 +16,13 @@
 
 /* Count independent geometry and lifetime observations across the native fixture. */
 static unsigned checks;
+
 /* Preserve failed observations until the final result is printed. */
 static unsigned failures;
 
 static void cssom_check(int condition, const char *name);
 static int cssom_script(struct vm_realm *realm, const char *source, vm_value *answer);
 static int cssom_case(struct page *page);
-
 
 /*
  * Runs real Page layout, native inline source lifecycle and collector observations.
@@ -41,25 +41,41 @@ main(
 	paths.sans = "userland/desktop/fonts/Inter.ttf";
 	paths.mono = "userland/desktop/fonts/JetBrainsMono-Regular.ttf";
 	paths.fallback = "userland/desktop/fonts/DroidSansFallbackFull.ttf";
+
+	/* Allocates the real Page before lending it font paths and viewport state. */
 	status = page_create(&page, __builtin_frame_address(0));
 	if (status != 0)
 		return 2;
+
+	/* Installs ordinary layout inputs on the completed Page. */
 	page_set_fonts(page, &paths);
 	page_set_viewport(page, 800, 600);
 
 	/* Load a genuine primary Page before constructing the binding-owned child. */
 	status = page_load_html(page, html, sizeof(html) - 1U);
-	if (status == 0)
-		status = cssom_case(page);
+	if (status != 0) {
+		page_destroy(page);
+		return 2;
+	}
+
+	/* Exercises source models and collector ownership against the actual Page. */
+	status = cssom_case(page);
+	if (status != 0) {
+		vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
+		page_destroy(page);
+		return 2;
+	}
+
+	/* Restores ordinary stack scanning before tearing down the complete Page. */
 	vm_heap_set_stack_base(page->heap, __builtin_frame_address(0));
 	page_destroy(page);
-	if (status != 0)
-		return 2;
 
 	/* Publish complete observations after every production resource was released. */
 	printed = printf("native CSSOM: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Any failed independent source or lifetime observation rejects this fixture. */
 	if (failures != 0)
 		return 1;
 
@@ -83,6 +99,9 @@ cssom_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: the observation remains in the final result. */
+	return;
 }
 
 /* Executes ordinary scripts to construct production managed child contexts. */
@@ -106,9 +125,13 @@ cssom_script(
 
 	/* Execute genuine DOM operations without a production test switch. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Releases source storage after ordinary script execution has finished. */
+	wb_units_release(&units);
 
 	/* Succeeded: the script supplied actual native state. */
 	return 0;
@@ -120,7 +143,8 @@ cssom_case(
 	struct page *page)
 {
 	/* Ordinary inert cells approach the unchanged production collector threshold. */
-	static const struct vm_cell_type pressure_type = { "cssom-pressure", NULL, NULL };
+	static const struct vm_cell_type pressure_type = {"cssom-pressure", NULL, NULL};
+	struct dom_node *node;
 	struct dom_element *element;
 	struct bind_style_sheet *source;
 	struct bind_window *owner;
@@ -148,18 +172,38 @@ cssom_case(
 			      &answer);
 	if (status != 0)
 		return status;
-	element = (struct dom_element *)bind_node_of(answer);
+
+	/* Requires an actual native style element before resolving its source model. */
+	node = bind_node_of(answer);
+	if (node == NULL || node->type != DOM_ELEMENT)
+		return EINVAL;
+
+	/* Resolves the owning source through the actual binding cache. */
+	element = (struct dom_element *)node;
 	status = bind_style_sheet_get(element, &source);
 	if (status != 0)
 		return status;
+
+	/* Converts the insertion input before editing the owning model. */
 	wb_units_init(&units);
 	status = wb_utf8_to_units((const unsigned char *)"img{height:20px}", 16U, &units);
-	if (status == 0)
-		status = css_rule_model_insert(source->model, units.data, units.length, 1);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Inserts into the genuine model before notifying its source observers. */
+	status = css_rule_model_insert(source->model, units.data, units.length, 1);
+	if (status != 0) {
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Releases converted input and announces the actual model mutation. */
+	wb_units_release(&units);
 	bind_style_sheet_changed(source);
+
+	/* Confirms that saved wrappers and real layout both see the same mutation. */
 	status = cssom_script(page->realm, "rs===old.cssRules && rs.length===2 && d.images[0].height===20 && s.firstChild.data==='img{display:block;width:10px;height:10px}'", &answer);
 	if (status != 0)
 		return status;
@@ -177,17 +221,33 @@ cssom_case(
 	status = cssom_script(page->realm, "s.firstChild.data=s.firstChild.data;old=null;rs=null;s.sheet", &receiver);
 	if (status != 0)
 		return status;
+
+	/* Resolves the latest source after native replacement has retired the old one. */
 	status = bind_style_sheet_get(element, &source);
 	if (status != 0)
 		return status;
+
+	/* Requires an actual saved sheet wrapper before adding a caller root. */
 	root = vm_value_as_cell(receiver);
+	if (root == NULL)
+		return EINVAL;
+
+	/* Requires the managed child owner before reading its realm address. */
+	owner = element->node.document->view;
+	if (owner == NULL)
+		return EINVAL;
+
+	/* Keeps the saved sheet alive while its script aliases are discarded. */
 	status = vm_heap_add_root(page->heap, &root);
 	if (status != 0)
 		return status;
-	owner = element->node.document->view;
+
+	/* Integer addresses observe collection without adding conservative roots. */
 	model_address = (uintptr_t)&source->cell;
 	document_address = (uintptr_t)&element->node.document->node.cell;
 	realm_address = (uintptr_t)&owner->realm->cell;
+
+	/* Retires the real iframe while the saved sheet remains the sole explicit root. */
 	status = cssom_script(page->realm, "f.parentNode.removeChild(f);f=null;d=null;s=null", &answer);
 	if (status != 0) {
 		vm_heap_remove_root(page->heap, &root);
@@ -199,6 +259,8 @@ cssom_case(
 	vm_heap_collect(page->heap);
 	found = vm_heap_find_cell(page->heap, model_address);
 	cssom_check(found == &source->cell && owner->detached, "saved native sheet wrapper alone retains retired source and owner");
+
+	/* Approaches the unchanged production collector threshold with inert cells. */
 	pressure = vm_heap_alloc(page->heap, &pressure_type, 8U * 1024U * 1024U);
 	if (pressure == NULL) {
 		vm_heap_remove_root(page->heap, &root);
@@ -209,11 +271,13 @@ cssom_case(
 	root = NULL;
 	vm_heap_stats(page->heap, &before);
 	status = bind_cssom_rules(page->realm, receiver, NULL, 0, &answer);
-	vm_heap_stats(page->heap, &after);
 	if (status != 0) {
 		vm_heap_remove_root(page->heap, &root);
 		return status;
 	}
+
+	/* Observes the actual collection triggered by the successful native factory. */
+	vm_heap_stats(page->heap, &after);
 
 	/* Keep only the returned public rule view during all subsequent actual collection observations. */
 	root = vm_value_as_cell(answer);
@@ -226,9 +290,16 @@ cssom_case(
 	cssom_check(found != NULL, "saved public rule view retains retired actual Document");
 	found = vm_heap_find_cell(page->heap, realm_address);
 	cssom_check(found != NULL, "saved public rule view retains actual relevant realm");
+
+	/* Reads the saved native model's rule count before numeric conversion. */
 	status = bind_cssom_rules_length(page->realm, answer, NULL, 0, &receiver);
-	if (status == 0)
-		status = vm_to_number(page->realm, receiver, &length);
+	if (status != 0) {
+		vm_heap_remove_root(page->heap, &root);
+		return status;
+	}
+
+	/* Converts the completed count value without hiding a failed native getter. */
+	status = vm_to_number(page->realm, receiver, &length);
 	if (status != 0) {
 		vm_heap_remove_root(page->heap, &root);
 		return status;

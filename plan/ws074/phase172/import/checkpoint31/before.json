@@ -1,0 +1,14 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/bind/select.c",
+    "sha256": "4fcef80d702c33314b1cf2045939f225abe3a13919b61da3f825727fc1f599a4",
+    "object": "libbrowser_bind_select.o",
+    "text_sha256": "696cbaa5e0822b7278341059170ba3e172e5de498bdab82210b08046d62352ad"
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/table.c",
+    "sha256": "1caeb76b5f59f99048fbb64e0439cf285193a8b1f5888e03cd4a288d4269543e",
+    "object": "libbrowser_bind_table.o",
+    "text_sha256": "8f0a628ca371ddc1e9eb407e0d2961eb8067d97017001319a15358757523b79b"
+  }
+]

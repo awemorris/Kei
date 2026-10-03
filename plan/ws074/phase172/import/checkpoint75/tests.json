@@ -1,0 +1,18 @@
+{
+  "cases": 5,
+  "passed": 5,
+  "inputs": [
+    "<!doctype html><html><head><title>T</title></head><body><p>x</p></body></html>",
+    "<table><tr><td>A<td>B</table>",
+    "<table>outside<tr><td>inside</td></tr></table>",
+    "<template><table><tr><td>X</table></template>",
+    "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><p>q</p>"
+  ],
+  "outputs": [
+    "| <!DOCTYPE html>\n| <html>\n|   <head>\n|     <title>\n|       \"T\"\n|   <body>\n|     <p>\n|       \"x\"\n",
+    "| <html>\n|   <head>\n|   <body>\n|     <table>\n|       <tbody>\n|         <tr>\n|           <td>\n|             \"A\"\n|           <td>\n|             \"B\"\n",
+    "| <html>\n|   <head>\n|   <body>\n|     \"outside\"\n|     <table>\n|       <tbody>\n|         <tr>\n|           <td>\n|             \"inside\"\n",
+    "| <html>\n|   <head>\n|     <template>\n|       content\n|         <table>\n|           <tbody>\n|             <tr>\n|               <td>\n|                 \"X\"\n|   <body>\n",
+    "| <!DOCTYPE html \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"\">\n| <html>\n|   <head>\n|   <body>\n|     <p>\n|       \"q\"\n"
+  ]
+}

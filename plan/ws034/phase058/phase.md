@@ -17,6 +17,9 @@ Parent: [WS034](../ws.md)
 4. `CLOCK_PROCESS_CPUTIME_ID`（と要るなら `CLOCK_THREAD_CPUTIME_ID`）を `<time.h>` と kernel の時計に（kernel の対応の要否を調べ、要るなら kernel の変更も範囲。HAL の API の変更は事前承認）。
 5. `<arpa/nameser.h>`（resolv.h にある定義を標準の場所に）。
 6. `<string.h>` から BSD・glibc と同じく `strcasecmp` などの `<strings.h>` の宣言が見えるようにするか（POSIX の名前空間を WS001 の観点で確かめて決める）。
-7. 既に追加済み（Q1、2026-10-02）: `<alloca.h>`、`getc_unlocked` ほか stdio の `*_unlocked`。
+7. C99 の `<fenv.h>` の丸めの mode（`FE_UPWARD`・`FE_DOWNWARD`・`FE_TOWARDZERO` と `fesetround`）。今は最近接への丸めだけ（GTK 4.18.6 が使う。ws115-p002）。libm（WS076）の正しさと合わせて確かめる。
+8. `uint`・`ushort`・`ulong` などの BSD・glibc の `<sys/types.h>` の型（GTK が使う。名前空間は WS001 の観点で、feature macro の下に置くかを決める）。
+9. `<malloc.h>`（非標準だが広く使われる。GTK の roaring が include）と、`sigjmp_buf` と `jmp_buf` を同じ型にするか（glibc と同じ。libpng の longjmp と sigsetjmp の組で GTK が困った）。
+10. 既に追加済み（Q1、2026-10-02）: `<alloca.h>`、`getc_unlocked` ほか stdio の `*_unlocked`。
 
 各項目は ABI を壊さないことを確かめ、libc と base の program の build（warning 0）、host の試験、boot-test。追加した API の一覧を Guardrail の索引に足す。package 側の回避の patch（glib・cairo・pango・libxkbcommon・libepoxy）は、libc に入った後に外せるかを WS115 で確かめる。

@@ -38,7 +38,7 @@ Resume point（2026-10-02 ベータ1の計画）: 2026-10-02 user「WS094 は現
 | [ws094-p010](phase010/phase.md) | L4a: 長い名前（2 行、中を省く）と画面の大きさの変更 | cleared（2026-09-30: 統合の試験 demo-s8-s9.sh で合格（ユーザーの指示）、Terminal と p088 は未切り分け、実機は未実施） | p006 |
 | [ws094-p011](phase011/phase.md) | L4b: 置き場の溢れ（grid より多い項目）と、無い名前の保存の行の掃除 | cleared（2026-10-02、q582-i01） | p010 |
 | [ws094-p012](phase012/phase.md) | L5: 実機（5330）での L1〜L3 の確認 | planned（agent 1.5h + ユーザー 20 分。WS099 p012 と同じ回にまとめられる） | p009（QEMU の値まで）、実機とユーザーの時間 |
-| [ws094-p014](phase014/phase.md) | q588 の所有外の規約の指摘（compositor の display.c・menu.c・desktop.c、Files の thumb.c・ui-context.c、Image Viewer の image.c）を直す | planned（2h） | q588 の review、WS099 p020・p021 と compositor の file を重ねない |
+| [ws094-p014](phase014/phase.md) | q588 の所有外の規約の指摘（compositor の display.c・menu.c・desktop.c、Files の thumb.c・ui-context.c、Image Viewer の image.c）を直す | cleared（2026-10-03 Q1） | q588 の review、WS099 p020・p021 と compositor の file を重ねない |
 | ws094-p015（条件つき） | p012 で (a)(c) が目標を超えたとき: Files の frame の Vulkan の呼び出しの削減（image ごとの command buffer の事前の記録、phase009「残り」の 3）。触る file: `files/present.c`・`main.c` | planning（p012 の実機の値と main の判断が要る） | p012 |
 | [ws094-p007](phase007/phase.md) | 全文の規約と回帰（WS の最後。選んだ段の Phase の後） | uncleared（q588 source/host/build部分はcleared、所有外規約/全guest/実機/最終boot未達）。次の attempt は p014・p012 の後（3h） | p014・p012（と p015 を行うならその後） |
 

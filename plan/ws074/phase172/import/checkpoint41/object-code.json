@@ -1,0 +1,53 @@
+[
+  {
+    "path": "plan/ws074/tests/host-vm-factory.c",
+    "sha256": "bb651ff82a03463d0ebdbdeedf46c8b702baeb4ad2c032f5349a9e2f2bdfc9e1",
+    "object": "host-vm-factory.o",
+    "object_path": "build/browser3-p172/review41/host-vm-factory.o",
+    "text_sha256": "c60ed9c4e375b1e205deb12db5a7f1dbca8975490dcd3334f28624a866b897eb",
+    "final_sha256": "6941424400a9998da7714e9232f1c48fe0b3259a4ad23452a39a67908be24bef",
+    "final_text_sha256": "ba2c27d9c84d110880d68f1beeb9f6528888045b07e35d398699cd2e67b5e293",
+    "C_string_literals_equal": false,
+    "text_equal": false,
+    "original_ordered_C_literals_preserved": true,
+    "added_C_string_literals": [
+      "\"vm/bytecode.h\"",
+      "\"(function(n){return n+17;})\"",
+      "\"(function(){var secret=17;return function(n){return secret+n;};})()\"",
+      "\"owned-native\"",
+      "\"owned-native\"",
+      "\"direct function/environment factory performs actual default GC\"",
+      "\"callee factory retains its unowned parent or bytecode input\"",
+      "\"factory publishes a surviving complete output cell\"",
+      "\"new environment retains exact parent and slot count\"",
+      "\"new environment initializes first and final slot\"",
+      "\"published native/bytecode/closure executes actual expected result\"",
+      "\"length\"",
+      "\"published native retains configurable length property\"",
+      "\"name\"",
+      "\"published native retains exact private name property\"",
+      "\"released function/environment output is collectible\"",
+      "\"released factory does not permanently retain input code or parent\"",
+      "\"released closure does not retain captured private environment\"",
+      "\"outer\"",
+      "\"nested native callback performs actual caller-free GC\"",
+      "\"nested native retains direct inputs and suspended callee/new.target\"",
+      "\"outer dispatch restores exact previous realm state\"",
+      "\"nested native returns its actual completion\"",
+      "\"released nested invocation does not retain isolated participant\"",
+      "\"inner\"",
+      "\"inner dispatch restores actual outer callee and call target\""
+    ]
+  },
+  {
+    "path": "userland/desktop/libbrowser/vm/function.c",
+    "sha256": "f3260a7276114e7ca0f183fa043e5bd628d9cfe0186c1b1c496877e6867debf0",
+    "object": "libbrowser_vm_function.o",
+    "text_sha256": "c57cf25f9da867c6a3f903f9b683b2b4c5378caeb6b79cd046a135dec8cf4256",
+    "final_sha256": "9e0004090aa1e2f39b0e65589936ea6cc4e9a3aa0a5dd51e0abaee19ba27f5f3",
+    "final_text_sha256": "12ae5862e82eab4e75e2a28ce7ffcc2b9272e44f02145510d84384e5f27cbdf0",
+    "C_string_literals_equal": true,
+    "text_equal": false,
+    "constant_initializers_equal": true
+  }
+]

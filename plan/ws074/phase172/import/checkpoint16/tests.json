@@ -1,0 +1,146 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-image-geometry"
+    ],
+    "exit": 0,
+    "stdout": "native image geometry: 10/10 passed\n",
+    "stderr": "",
+    "link_exit": 0,
+    "link_stderr": "",
+    "link_prefix": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/browser3-p172/include",
+      "-I.",
+      "-o",
+      "build/browser3-p172/plain/host-image-geometry",
+      "plan/ws074/tests/host-image-geometry.c"
+    ],
+    "link_objects": "link-objects.json",
+    "link_suffix": [
+      "-lvulkan",
+      "-lm"
+    ]
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-document-images"
+    ],
+    "exit": 0,
+    "stdout": "native Document.images lifetime: 10/10 passed\n",
+    "stderr": "",
+    "link_exit": 0,
+    "link_stderr": "",
+    "link_prefix": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/browser3-p172/include",
+      "-I.",
+      "-o",
+      "build/browser3-p172/plain/host-document-images",
+      "plan/ws074/tests/host-document-images.c"
+    ],
+    "link_objects": "link-objects.json",
+    "link_suffix": [
+      "-lvulkan",
+      "-lm"
+    ]
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-cssom"
+    ],
+    "exit": 0,
+    "stdout": "native CSSOM: 12/12 passed\n",
+    "stderr": "",
+    "link_exit": 0,
+    "link_stderr": "",
+    "link_prefix": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/browser3-p172/include",
+      "-I.",
+      "-o",
+      "build/browser3-p172/plain/host-cssom",
+      "plan/ws074/tests/host-cssom.c"
+    ],
+    "link_objects": "link-objects.json",
+    "link_suffix": [
+      "-lvulkan",
+      "-lm"
+    ]
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-select-collection"
+    ],
+    "exit": 0,
+    "stdout": "select collection GC checks: 12/12 passed\n",
+    "stderr": "",
+    "link_exit": 0,
+    "link_stderr": "",
+    "link_prefix": [
+      "cc",
+      "-std=gnu11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-D_GNU_SOURCE",
+      "-fPIC",
+      "-Iuserland/desktop/libbrowser",
+      "-Iuserland/desktop/browser",
+      "-Iplan/ws074/tests",
+      "-Ibuild/browser3-p172/include",
+      "-I.",
+      "-o",
+      "build/browser3-p172/plain/host-select-collection",
+      "plan/ws074/tests/host-select-collection.c"
+    ],
+    "link_objects": "link-objects.json",
+    "link_suffix": [
+      "-lvulkan",
+      "-lm"
+    ]
+  }
+]

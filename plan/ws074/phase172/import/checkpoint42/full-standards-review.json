@@ -1,0 +1,43 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-realms.c",
+      "original_sha256": "bc736df0fae86a6fc0a58a178216678987f501105fa844e09cb819d6e13d369b",
+      "final_sha256": "803ccbfd76941be4ef585ed4b65d6b558a76dc0167063f8bd6ae8e1283e77f14",
+      "status": "reviewed-full-file",
+      "original_lines": 879,
+      "final_lines": 930
+    },
+    {
+      "path": "plan/ws074/tests/host-context-ownership.c",
+      "original_sha256": "6104d95c560085949b032724e29385d314bab7de5bf79a10e73102fc3821bc1f",
+      "final_sha256": "689f2d8a5e637bf0233e516d20db79963452a1f55c4c96fe32aae13f7856bba9",
+      "status": "reviewed-full-file",
+      "original_lines": 779,
+      "final_lines": 827
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "Full actual C text read: realm calls/derived constructors/new.target/intrinsic fallback/generator/async/exceptions/source metadata/errno failure unwind",
+    "Managed saved function/global/prototype/Document/generator graphs, exact host finalizer counts, native GC and repeated finalization",
+    "Observer cycles/retirement/detached jobs/borrowed timer callback drops last connection during GC; active host must survive",
+    "Real bounded managed-construction failure, async-host refusal, whole-heap finalization without callbacks touching dead cells",
+    "Immediate operation checks before teardown and source release; only actual branded callable/object output converted to saved roots",
+    "Existing construction/caller root exclusions and normal GC inputs unchanged; no new retaining roots or production source changes",
+    "ANSI declarations/tabbed argument layout/purpose paragraphs/short-circuit compound layout/real native refusal literal contracts and explicit Succeeded result comments",
+    "Public/private component boundaries and existing APIs unchanged; final whole standards/runtime gates retained"
+  ],
+  "supporting_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "limits": [
+    "No new fault injection or new production behavior.",
+    "These two fixture reviews/native57 are scoped;55 remaining full C/header reviews and whole final gates remain."
+  ]
+}

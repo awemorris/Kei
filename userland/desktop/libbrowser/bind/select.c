@@ -13,9 +13,6 @@
 #include <stdint.h>
 
 static int select_add(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-static int select_insert(struct vm_realm *realm, struct dom_node *select, struct dom_node *incoming, vm_value before, struct vm_cell **roots);
-static int select_html(struct dom_node *node, int tag);
-static void select_unroot(struct vm_heap *heap, struct vm_cell **roots, unsigned count);
 
 static int option_default_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int option_default_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
@@ -23,42 +20,40 @@ static int option_selected_get(struct vm_realm *realm, vm_value receiver, const 
 static int option_selected_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int select_index_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int select_index_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-static int select_this(struct vm_realm *realm, vm_value receiver, int tag, struct dom_element **element);
 
 /* A select exposes its traced SameObject native options wrapper. */
 static const struct bind_attribute select_attributes[] = {
-	{ "options", bind_select_options, NULL },
-	{ "selectedIndex", select_index_get, select_index_set },
-	{ NULL, NULL, NULL }
-};
+    {"options", bind_select_options, NULL},
+    {"selectedIndex", select_index_get, select_index_set},
+    {NULL, NULL, NULL}};
 
 /* Typed addition leaves option selectedness and mutable collection setters to their own increment. */
 static const struct bind_operation select_operations[] = {
-	{ "add", 1, select_add },
-	{ NULL, 0, NULL }
-};
+    {"add", 1, select_add},
+    {NULL, 0, NULL}};
 
 /* Owned selection remains distinct from the independently reflected default attribute. */
 static const struct bind_attribute option_attributes[] = {
-	{ "defaultSelected", option_default_get, option_default_set },
-	{ "selected", option_selected_get, option_selected_set },
-	{ NULL, NULL, NULL }
-};
+    {"defaultSelected", option_default_get, option_default_set},
+    {"selected", option_selected_get, option_selected_set},
+    {NULL, NULL, NULL}};
 
 /* Native select prototypes follow actual owner Documents independently of method borrowers. */
 const struct bind_interface bind_html_select_element_interface = {
-	"HTMLSelectElement", BIND_HTML_ELEMENT, 0, NULL, select_attributes, select_operations, NULL
-};
+    "HTMLSelectElement", BIND_HTML_ELEMENT, 0, NULL, select_attributes, select_operations, NULL};
 
 /* Exact option identities establish the first typed argument of native addition. */
 const struct bind_interface bind_html_option_element_interface = {
-	"HTMLOptionElement", BIND_HTML_ELEMENT, 0, NULL, option_attributes, NULL, NULL
-};
+    "HTMLOptionElement", BIND_HTML_ELEMENT, 0, NULL, option_attributes, NULL, NULL};
 
 /* Groups can move complete option subtrees through the same checked insertion path. */
 const struct bind_interface bind_html_opt_group_element_interface = {
-	"HTMLOptGroupElement", BIND_HTML_ELEMENT, 0, NULL, NULL, NULL, NULL
-};
+    "HTMLOptGroupElement", BIND_HTML_ELEMENT, 0, NULL, NULL, NULL, NULL};
+
+static int select_insert(struct vm_realm *realm, struct dom_node *select, struct dom_node *incoming, vm_value before, struct vm_cell **roots);
+static int select_html(struct dom_node *node, int tag);
+static void select_unroot(struct vm_heap *heap, struct vm_cell **roots, unsigned count);
+static int select_this(struct vm_realm *realm, vm_value receiver, int tag, struct dom_element **element);
 
 /* Validates native brands and protects every conversion and insertion participant. */
 static int
@@ -73,6 +68,7 @@ select_add(
 	struct dom_node *incoming;
 	struct vm_cell *roots[5];
 	vm_value before;
+	vm_value argument;
 	unsigned index;
 	int actual;
 	int cell;
@@ -85,17 +81,26 @@ select_add(
 	actual = select_html(select, DOM_TAG_SELECT);
 	if (!actual) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the VM accepted this native operation exception. */
+		return 0;
 	}
 
 	/* Only actual option and optgroup instances satisfy the typed required union. */
-	incoming = bind_node_of(js_argument(args, count, 0));
+	argument = js_argument(args, count, 0);
+	incoming = bind_node_of(argument);
 	actual = select_html(incoming, DOM_TAG_OPTION);
 	if (!actual)
 		actual = select_html(incoming, DOM_TAG_OPTGROUP);
 	if (!actual) {
 		status = vm_throw_type_error(realm, "The element must be an actual option or optgroup.");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the VM accepted this native operation exception. */
+		return 0;
 	}
 
 	/* Conversion can detach every node otherwise held by the calling script. */
@@ -120,9 +125,13 @@ select_add(
 
 	/* The shared checked insertion algorithm never consults script-visible collections. */
 	status = select_insert(realm, select, incoming, before, roots);
-	select_unroot(realm->heap, roots, 5);
-	if (status != 0)
+	if (status != 0) {
+		select_unroot(realm->heap, roots, 5);
 		return status;
+	}
+
+	/* Releases the rooted graph after its complete insertion outcome. */
+	select_unroot(realm->heap, roots, 5);
 
 	/* Succeeded: typed addition has no script result beyond its current DOM mutation. */
 	*result = VM_VALUE_UNDEFINED;
@@ -175,7 +184,11 @@ select_insert(
 	while (node != NULL) {
 		if (node == incoming) {
 			status = bind_throw_dom(realm, "HierarchyRequestError", "The incoming element contains this select.");
-			return status;
+			if (status != 0)
+				return status;
+
+			/* Succeeded: the VM accepted this native operation exception. */
+			return 0;
 		}
 
 		/* Continue checking the select's current ancestor chain. */
@@ -191,7 +204,11 @@ select_insert(
 		/* A sibling, detached node or the select itself does not supply a descendant reference. */
 		if (node != select) {
 			status = bind_throw_dom(realm, "NotFoundError", "The reference is not a descendant of this select.");
-			return status;
+			if (status != 0)
+				return status;
+
+			/* Succeeded: the VM accepted this native operation exception. */
+			return 0;
 		}
 
 		/* Re-adding an element before itself is a successful mutation-free operation. */
@@ -259,8 +276,9 @@ select_unroot(
 	unsigned index;
 
 	/* Root slots protect only the synchronous invocation, leaving no lasting ownership cycle. */
-	for (index = 0; index < count; index++)
+	for (index = 0; index < count; index++) {
 		vm_heap_remove_root(heap, &roots[index]);
+	}
 
 	/* Succeeded: normal, conversion-failure and host-failure exits share complete cleanup. */
 	return;
@@ -336,6 +354,8 @@ option_default_set(
 	empty = vm_atom_from_ascii(realm->heap, "");
 	if (empty == NULL)
 		return ENOMEM;
+
+	/* Publishes the completely allocated default attribute value. */
 	status = dom_element_set_attribute(option, name, empty);
 	if (status != 0)
 		return status;
@@ -530,7 +550,11 @@ select_this(
 	actual = select_html(node, tag);
 	if (!actual) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the VM accepted this native operation exception. */
+		return 0;
 	}
 
 	/* Succeeded: this exact node supports the requested owned-state accessor. */

@@ -1,0 +1,35 @@
+{
+  "authority": "full C section14 single forward shared cleanup",
+  "findings": 34,
+  "functions": [
+    {
+      "path": "plan/ws074/tests/host-svg-length.c",
+      "function": "main",
+      "forward_cleanup_jumps": 14,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-length.c",
+      "function": "svg_retention",
+      "forward_cleanup_jumps": 4,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-text.c",
+      "function": "main",
+      "forward_cleanup_jumps": 11,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-text.c",
+      "function": "svg_retention",
+      "forward_cleanup_jumps": 5,
+      "one_label": true,
+      "all_jumps_forward": true
+    }
+  ],
+  "other_findings": 0
+}

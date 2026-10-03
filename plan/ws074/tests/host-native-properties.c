@@ -31,16 +31,12 @@ static unsigned checks;
 /* Failure accounting stays available after individual independent observations. */
 static unsigned failures;
 
-static void native_check(int condition, const char *name);
 static void native_trace(struct vm_heap *heap, struct vm_cell *cell);
 static int native_own(struct vm_object *object, vm_value key, struct vm_property *property);
 static int native_keys(struct vm_heap *heap, struct vm_object *object, struct wb_vector *keys);
 static int native_define(struct vm_realm *realm, struct vm_object *object, vm_value key, const struct vm_descriptor *descriptor, int *handled, int *done);
 static int native_delete(struct vm_heap *heap, struct vm_object *object, vm_value key, int *handled, int *deleted);
 static int native_extensions(struct vm_object *object, int *allowed);
-static int native_script(struct vm_realm *realm, const char *source, vm_value *answer);
-static void native_expect(struct vm_realm *realm, const char *source, const char *name, int expected_error);
-static int native_case(struct vm_heap *heap);
 
 /* The owner traces its payload while the ordinary object traces internal native state. */
 static const struct vm_cell_type native_type = { "native-property-test", native_trace, NULL };
@@ -49,6 +45,11 @@ static const struct vm_cell_type native_type = { "native-property-test", native_
 static const struct vm_native_operations native_operations = {
 	native_own, native_keys, native_define, native_delete, native_extensions
 };
+
+static void native_check(int condition, const char *name);
+static int native_script(struct vm_realm *realm, const char *source, vm_value *answer);
+static void native_expect(struct vm_realm *realm, const char *source, const char *name, int expected_error);
+static int native_case(struct vm_heap *heap);
 
 /*
  * Verifies changing native properties and error propagation through real VM entry points.
@@ -67,9 +68,13 @@ main(
 		return 2;
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	error = native_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Complete the actual native protocol inventory before successful heap finalization. */
+	vm_heap_destroy(heap);
 
 	/* All native protocol observations contribute to the process status. */
 	printed = printf("native property checks: %u/%u passed\n", checks - failures, checks);
@@ -117,6 +122,9 @@ native_trace(
 	state = (struct native_state *)cell;
 	vm_heap_mark_word(heap, state->payload);
 	vm_heap_mark_word(heap, state->accessor);
+
+	/* Succeeded: both actual native edges participated in this collector visit. */
+	return;
 }
 
 /* Exposes virtual indices and one readonly named value without storing property slots. */
@@ -337,9 +345,13 @@ native_script(
 
 	/* Script semantic operations dispatch the same native hooks as production objects. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Completed native execution no longer borrows converted fixture source. */
+	wb_units_release(&units);
 
 	/* Succeeded: the completion value is available. */
 	return 0;
@@ -409,6 +421,11 @@ native_case(
 		return ENOMEM;
 	}
 
+	/* Initialize traceable native values before the next actual heap allocation. */
+	state->payload = VM_VALUE_UNDEFINED;
+	state->accessor = VM_VALUE_UNDEFINED;
+	state->count = 2;
+
 	/* A genuine ordinary object is the named virtual property's collectible payload. */
 	payload = vm_object_create(heap, realm->object_prototype);
 	if (payload == NULL) {
@@ -418,8 +435,6 @@ native_case(
 
 	/* Native owner state supplies all changing data without a raw callback context pointer. */
 	state->payload = vm_value_cell(payload);
-	state->accessor = VM_VALUE_UNDEFINED;
-	state->count = 2;
 	object = vm_object_create(heap, realm->object_prototype);
 	if (object == NULL) {
 		vm_realm_destroy(realm);
@@ -560,7 +575,13 @@ native_case(
 
 	/* The ordinary source property must exist before its accessor pair can be retained. */
 	found = vm_object_get_own_ordinary(object, key, &property);
-	if (!found) {
+	if (found < 0) {
+		vm_realm_destroy(realm);
+		return -found;
+	}
+
+	/* A present native source accessor must expose its complete ordinary value slot. */
+	if (found == 0 || property.value == NULL) {
 		vm_realm_destroy(realm);
 		return EINVAL;
 	}

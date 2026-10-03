@@ -1,7 +1,8 @@
 #!/bin/sh
 # ws099-p001, C2: a window's move, its four corners' and four sides' resize, maximize and back, minimize and back
 # each end at the intended place and size, on the Venus guest of the criteria image (kei's session at boot).
-# Files is opened from App Home (ZWL GLASS launch ... to=X,Y size=WxH), then:
+# Files is opened from App Home (ZWL GLASS launch ... to=X,Y size=WxH; launch-late when its window came after
+# the 5 s the grow waits for, ws099-p024 BUG-147), then:
 #  1. corners and sides: each dragged STEP pixels outwards (ws035-p128's way): the size grows by STEP in the dragged
 #     directions, the opposite corner or side stays (ZWL RESIZE settled x= y= width= height=).
 #  2. move: its title bar dragged by (MOVE_DX, MOVE_DY): ZWL GLASS moved x= y= is the old place plus that.
@@ -26,7 +27,9 @@ MOVE_DY=${MOVE_DY:-40}
 size=${VENUS_SIZE:-1920x1280}
 mkdir -p "$out"
 log=/run/user/1000/session.log
-guest() { timeout 120 python3 plan/tools/guest/guest.py run "$1" 2>&1 </dev/null; }
+# The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p024).
+. plan/ws099/tests/guest-retry.sh
+guest() { guest_retry 120 "$1" </dev/null; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py --width "${size%x*}" --height "${size#*x}" "$GUEST_RUNTIME/qmp.sock" "$@"; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.8; }
 shot() { python3 plan/ws035/tests/zdesktop-check.py "$out/$1.png" --runtime "$GUEST_RUNTIME" >/dev/null 2>&1; }
@@ -73,7 +76,7 @@ last() {
 
 # Reads the window's outline (the body; its title bar is 52 pixels above it) from the last settled resize or move.
 geometry() {
-	line=$(last "ZWL (RESIZE settled|GLASS moved|GLASS launch) surface=$surface ")
+	line=$(last "ZWL (RESIZE settled|GLASS moved|GLASS launch|GLASS launch-late) surface=$surface ")
 	case $line in
 	*launch*) set -- $(echo "$line" | sed -n 's/.* to=\(-*[0-9]*\),\(-*[0-9]*\) size=\([0-9]*\)x\([0-9]*\).*/\1 \2 \3 \4/p') ;;
 	*moved*) set -- $(echo "$line" | sed -n 's/.* x=\(-*[0-9]*\) y=\(-*[0-9]*\).*/\1 \2/p') "$width" "$height" ;;
@@ -126,14 +129,14 @@ move() {
 # kei's session, then Files from App Home.
 expect_more 'ZWL HANDOFF go=1' 0 90 || { echo "C2 RESULT pass=0 fail=1"; echo "C2: FAIL"; exit 1; }
 sleep 3
-launches=$(count 'ZWL GLASS launch surface=')
+launches=$(count 'ZWL GLASS launch(-late)? surface=')
 pointer move 23 17 sleep 300 down sleep 60 up sleep 1500
 set -- $(last 'ZWL HOME icon name="Files"' | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\).*/\1 \2/p')
 [ -n "${1:-}" ] || { echo "no Files icon"; echo "C2 RESULT pass=0 fail=1"; echo "C2: FAIL"; exit 1; }
 pointer move "$1" "$2" sleep 200 down sleep 60 up
-expect_more 'ZWL GLASS launch surface=' "$launches" 20 || { echo "C2 RESULT pass=$pass fail=$fail"; echo "C2: FAIL"; exit 1; }
+expect_more 'ZWL GLASS launch(-late)? surface=' "$launches" 20 || { echo "C2 RESULT pass=$pass fail=$fail"; echo "C2: FAIL"; exit 1; }
 sleep 3
-surface=$(last 'ZWL GLASS launch surface=' | sed -n 's/.*surface=\([0-9]*\) .*/\1/p')
+surface=$(last 'ZWL GLASS launch(-late)? surface=' | sed -n 's/.*surface=\([0-9]*\) .*/\1/p')
 width=0 height=0
 geometry
 echo "Files: surface $surface, ${width}x$height at $left,$top (title bar top) to $right,$bottom"

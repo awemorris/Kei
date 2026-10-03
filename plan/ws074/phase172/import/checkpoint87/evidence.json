@@ -1,0 +1,35 @@
+{
+  "queue": "q597",
+  "attempt": "q597-i01",
+  "checkpoint": 87,
+  "source": "userland/desktop/libbrowser/js/builtin_array.c",
+  "source_sha256": "434138923b06c55bc99114c2ac1512cd6e6e19e078fe51745f13a0a55bbe9a6e",
+  "manual_status": "partial-review-unresolved",
+  "reviewed": 204,
+  "total": 209,
+  "remaining": 5,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "permitted_forward_cleanup_gotos": 16,
+    "other_findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "click": "10/10",
+    "js": "14/14",
+    "dom": "23/23"
+  },
+  "fixes": [
+    "Array.from, concat, flat, flatMap and map/filter produced arrays rooted across reentrant getters/callbacks"
+  ],
+  "limits": [
+    "Other produced array methods retain unresolved reentrant GC root review",
+    "No forced GC for every callback or allocation failure injection",
+    "Five full file reviews and original whole p172 gates remain"
+  ],
+  "recorded_utc": "2026-10-03T03:01:08.825390+00:00"
+}

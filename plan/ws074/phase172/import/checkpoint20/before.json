@@ -1,0 +1,12 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/dom/removal.c",
+    "before_sha256": "19dc02259cc840d3b6e9e213713f90b79c25be4a478c96874ebf971bc8ddfb5d",
+    "before_text_sha256": "91abec2acd4124c47b7f64ec6de63b53fd943ef9c123777247d374cb2f179647"
+  },
+  {
+    "path": "userland/desktop/libbrowser/dom/control.c",
+    "before_sha256": "ca832a8893497c6af51431dc3feb068c7771d39618aa2e190f1de543b4d70f0b",
+    "before_text_sha256": "d36c8f46d1df0e73867c48ddab0660a10e591804250723c9b4ffd5d50294d36d"
+  }
+]

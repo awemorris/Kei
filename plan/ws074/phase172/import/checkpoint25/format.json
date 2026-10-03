@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/net/data.c",
+      "formatted_sha256": "4379c1ce96cb7eea6c008a394cac3c5517e44538b4ad83c9ad02f3db38758dcd",
+      "final_sha256": "5a82798865ee59c0572bf988943a7e2d4085c90a29938395e7244cfbfd9bc848",
+      "restorations": "definition argument tabs and compound clause layout"
+    },
+    {
+      "path": "plan/ws074/tests/host-data-url.c",
+      "formatted_sha256": "57bda809c60b80b1309b901cc2c876908dc37d93ba7ad6643771dd4007dc8446",
+      "final_sha256": "0ed96cf67bf1188e8c595dde6ccfe18dec7b21cd973ba0038ca37bf8ddd0f7d6",
+      "restorations": "definition argument tabs and compound clause layout"
+    }
+  ]
+}

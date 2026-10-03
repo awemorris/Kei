@@ -1,0 +1,11 @@
+{
+  "kind": "GCC14.2 scoped compile/link against current unchanged own engine objects",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-native-properties.c": "54ea416fa98c301d9b2c44996ed2b85f582ce3568bceb85381c979b5ab9f9823",
+    "plan/ws074/tests/realm-context-probe.c": "7f3362d6ea856e91e82ca9a26961b609552d66b560e37e7c42078bf9c80c3667"
+  }
+}

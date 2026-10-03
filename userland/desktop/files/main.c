@@ -917,11 +917,14 @@ main_new_window(
 	int count;
 	int error;
 
-	/* The folder shown, or the home dashboard when none is. */
+	/* The folder asked for (Open in New Window), else the folder shown, or the home dashboard when none is. */
 	shown = fm_current_folder(&main_app);
+	if (main_app.new_window_folder[0] != '\0')
+		shown = main_app.new_window_folder;
 	folder[0] = '\0';
 	if (shown != NULL)
 		snprintf(folder, sizeof(folder), "%s", shown);
+	main_app.new_window_folder[0] = '\0';
 
 	/* The program, its fonts and its size. */
 	count = 0;
@@ -1042,6 +1045,7 @@ main_touch_round(void)
 	if (moved && which == FM_TOUCH_CONTENT) {
 		tab->scroll = scroll;
 		main_app.dirty = 1;
+		fm_scrollbar_moved(&main_app);
 	} else if (moved && which == FM_TOUCH_SIDEBAR) {
 		main_app.sidebar_scroll = scroll;
 		main_app.dirty = 1;

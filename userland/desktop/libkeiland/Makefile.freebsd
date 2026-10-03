@@ -13,8 +13,6 @@ KEILAND_FREEBSD_KEILAND_SOURCES := userland/desktop/libkeiland/version.c \
 	userland/desktop/libkeiland/desktop.c \
 	userland/desktop/libkeiland/keyboard-inset.c \
 	userland/desktop/libkeiland/edit.c \
-	userland/desktop/libkeiland/wpa/network-wpa.c \
-	userland/desktop/libkeiland/wpa/network-config-wpa.c \
-	userland/desktop/libkeiland/freebsd/network-link-freebsd.c \
+	userland/desktop/libkeiland/system-compat.c \
 	userland/desktop/libkeiland/freebsd/audio-freebsd.c
-$(eval $(call KEILAND_FREEBSD_LIBRARY,keiland,libkeiland.so,$(KEILAND_FREEBSD_KEILAND_SOURCES),libwayland-client.so,-lm,userland/desktop/libkeiland/exports.map))
+$(eval $(call KEILAND_FREEBSD_LIBRARY,keiland,libkeiland.so,$(KEILAND_FREEBSD_KEILAND_SOURCES),libwayland-client.so libkeiland-backend.a,-lm,userland/desktop/libkeiland/exports.map))

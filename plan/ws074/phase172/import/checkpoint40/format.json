@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "formatted_sha256": "f90422017419e1066f24e2c83136c144049be1caecd27f3959978497a58efcb0",
+      "final_sha256": "6243ae1118603f6c06c74b0c911d23cf5ec16f4a48c0c0cc2d9daf4915bea718",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "plan/ws074/tests/host-form-collection.c",
+      "formatted_sha256": "59c3bf687b79da4c5c494cd664bb5bdc3218fb96ebdfbaa6fe1d0179bfd775dd",
+      "final_sha256": "cf12eae42e73070f5423745c67b382076598f24a011e9fcb982ab6e8a34eb12b",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "formatted_sha256": "b81f6b1fb8d3967a2ac8c207f13f0e6fb5bdf7058a0d02109a8257f2c6e5f40b",
+      "final_sha256": "5a7dd66bc9ae52e858e962de9e5dac809b0a48f2276ca0800bba5ed8ae7b2bed",
+      "restorations": "definition tabs, compound clauses, pointer/empty-init loop controls; all23 constant initializer blocks restored verbatim"
+    }
+  ]
+}

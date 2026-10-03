@@ -1,0 +1,6 @@
+C3 p138 PASS seconds=36 p138: PASS 
+C3 c3-swipe-back PASS seconds=49 c3-swipe-back: PASS 
+C4 p137 PASS seconds=50 p137: PASS 
+C8 p134 PASS seconds=70 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p052 PASS seconds=34 p052: PASS 
+C9 p053 PASS seconds=68 p053: PASS 

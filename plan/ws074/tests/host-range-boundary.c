@@ -58,9 +58,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = range_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Release the embedding only after its native case completed. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("range boundary lifetime checks: %u/%u passed\n", checks - failures, checks);
@@ -117,9 +121,13 @@ range_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release borrowed source storage after interpreter completion is checked. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -183,7 +191,11 @@ offset_collect(
 	/* Preserve a genuine engine exception rather than converting it to a successful offset. */
 	if (active_observer->failure == 2) {
 		status = vm_throw_type_error(realm, "Range conversion test exception.");
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested genuine exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* Succeeded: the caller observes one child added during conversion. */
@@ -214,6 +226,8 @@ range_case(
 	unsigned kind;
 	int status;
 	int expected;
+	int is_object;
+	int is_cell;
 
 	/* Install the production primary binding for creation only, without behavior switches. */
 	status = vm_realm_create(heap, &realm);
@@ -260,19 +274,45 @@ range_case(
 			break;
 
 		/* Observe native cells only by integer addresses after setup. */
+		is_object = vm_value_is_object(receiver);
+		if (!is_object) {
+			status = EIO;
+			break;
+		}
+
+		/* Read only the generated platform wrapper's actual private cell. */
 		wrapper = (struct vm_object *)vm_value_as_cell(receiver);
+		is_cell = vm_value_is_cell(wrapper->internal);
+		if (wrapper->kind != VM_KIND_PLATFORM || !is_cell) {
+			status = EIO;
+			break;
+		}
+
+		/* Save only nonretaining observer addresses for this conversion. */
 		memset(&observer, 0, sizeof(observer));
 		observer.state = (uintptr_t)vm_value_as_cell(wrapper->internal);
 		status = bind_abstract_range_interface.attributes[0].getter(realm, receiver, NULL, 0, &answer);
 		if (status != 0)
 			break;
 		previous = bind_node_of(answer);
+		if (previous == NULL) {
+			status = EIO;
+			break;
+		}
+
+		/* Save addresses without adding a native retaining edge. */
 		observer.creator = (uintptr_t)&previous->document->node;
 		observer.old = (uintptr_t)previous;
 		status = range_script(realm, "document.createElement('div')", &arguments[0]);
 		if (status != 0)
 			break;
 		target = bind_node_of(arguments[0]);
+		if (target == NULL) {
+			status = EIO;
+			break;
+		}
+
+		/* Observe the incoming native node without rooting it. */
 		observer.target = (uintptr_t)target;
 		status = range_script(realm, "({valueOf:collectOffset})", &arguments[1]);
 		if (status != 0)
@@ -281,22 +321,37 @@ range_case(
 		observer.failure = kind;
 
 		/* The native implementation must retain every input during its own synchronous callback. */
-		active_observer = &observer;
-		status = bind_range_interface.operations[0].method(realm, receiver, arguments, 2, &answer);
-		active_observer = NULL;
 		expected = 0;
 		if (kind == 1)
 			expected = EIO;
 		if (kind == 2)
 			expected = VM_THROWN;
+
+		/* Publish C observer data only for the direct native invocation. */
+		active_observer = &observer;
+		status = bind_range_interface.operations[0].method(realm, receiver, arguments, 2, &answer);
+		if (status != expected) {
+			active_observer = NULL;
+			break;
+		}
+
+		/* Release the synchronous observer only after its expected outcome is checked. */
+		active_observer = NULL;
 		range_check(status == expected, "exact numeric conversion outcome propagated");
 		range_check(observer.conversions == 1U, "offset conversion runs once during real GC");
 
 		/* The wrapper may be collected; an explicit post-call state root permits native endpoint inspection. */
-		state_root = (struct vm_cell *)observer.state;
+		state_root = vm_heap_find_cell(heap, observer.state);
+		if (state_root == NULL) {
+			status = EIO;
+			break;
+		}
+
+		/* Acquire the post-call root only for a verified live private cell. */
 		status = vm_heap_add_root(heap, &state_root);
 		if (status != 0)
 			break;
+
 		/* Only native state remains rooted; a successful point replacement must still retain its distinct creator. */
 		vm_heap_set_stack_base(heap, NULL);
 		vm_heap_collect(heap);
@@ -328,19 +383,29 @@ range_case(
 		wrapper->internal = vm_value_cell(state_root);
 		receiver = vm_value_cell(wrapper);
 		status = bind_abstract_range_interface.attributes[0].getter(realm, receiver, NULL, 0, &answer);
-		if (status == 0) {
-			previous = bind_node_of(answer);
-			expected = 0;
-			if (kind == 0 && (uintptr_t)previous == observer.target)
-				expected = 1;
-			if (kind != 0 && (uintptr_t)previous == observer.old)
-				expected = 1;
-			range_check(expected, "successful conversion commits target while failed conversion preserves boundary");
+		if (status != 0) {
+			vm_heap_remove_root(heap, &state_root);
+			break;
 		}
 
+		/* Observe the verified accessor without allocating another retaining wrapper. */
+		previous = bind_node_of(answer);
+		expected = 0;
+		if (kind == 0 && (uintptr_t)previous == observer.target)
+			expected = 1;
+		if (kind != 0 && (uintptr_t)previous == observer.old)
+			expected = 1;
+		range_check(expected, "successful conversion commits target while failed conversion preserves boundary");
+
 		/* The successful offset uses the callback's current child count rather than its original zero length. */
-		if (status == 0 && kind == 0) {
+		if (kind == 0) {
 			status = bind_abstract_range_interface.attributes[2].getter(realm, receiver, NULL, 0, &answer);
+			if (status != 0) {
+				vm_heap_remove_root(heap, &state_root);
+				break;
+			}
+
+			/* The checked getter reports the current native offset. */
 			range_check(answer == vm_value_int32(1), "offset validated against post-conversion current length");
 		}
 
@@ -390,14 +455,48 @@ range_case(
 
 		/* Observe integer addresses only, so explicit collector pressure tests the native invocation's roots. */
 		memset(&observer, 0, sizeof(observer));
+		is_object = vm_value_is_object(receiver);
+		if (!is_object) {
+			status = EIO;
+			break;
+		}
+
+		/* Read only the generated platform wrapper's actual private cell. */
 		wrapper = (struct vm_object *)vm_value_as_cell(receiver);
+		is_cell = vm_value_is_cell(wrapper->internal);
+		if (wrapper->kind != VM_KIND_PLATFORM || !is_cell) {
+			status = EIO;
+			break;
+		}
+
+		/* Observe the receiver state without retaining its wrapper. */
 		observer.state = (uintptr_t)vm_value_as_cell(wrapper->internal);
+		is_object = vm_value_is_object(other);
+		if (!is_object) {
+			status = EIO;
+			break;
+		}
+
+		/* The cloned comparison source must own an actual private cell too. */
 		wrapper = (struct vm_object *)vm_value_as_cell(other);
+		is_cell = vm_value_is_cell(wrapper->internal);
+		if (wrapper->kind != VM_KIND_PLATFORM || !is_cell) {
+			status = EIO;
+			break;
+		}
+
+		/* Observe the verified comparison state without a new trace edge. */
 		observer.source_state = (uintptr_t)vm_value_as_cell(wrapper->internal);
 		status = bind_abstract_range_interface.attributes[0].getter(realm, receiver, NULL, 0, &answer);
 		if (status != 0)
 			break;
 		target = bind_node_of(answer);
+		if (target == NULL || target->first_child == NULL) {
+			status = EIO;
+			break;
+		}
+
+		/* Save the complete original interval as nonretaining addresses. */
 		observer.target = (uintptr_t)target;
 		observer.old = (uintptr_t)target->first_child;
 		observer.creator = (uintptr_t)&target->document->node;
@@ -409,9 +508,6 @@ range_case(
 		comparison_args[1] = other;
 
 		/* Mode one compares this actual end against the source start after conversion has collected. */
-		active_observer = &observer;
-		status = bind_range_interface.operations[11].method(realm, receiver, comparison_args, 2, &answer);
-		active_observer = NULL;
 		expected = 0;
 		if (kind == 1)
 			expected = EIO;
@@ -419,6 +515,17 @@ range_case(
 		/* A genuine JavaScript exception preserves its native VM_THROWN outcome. */
 		if (kind == 2)
 			expected = VM_THROWN;
+
+		/* Publish C observer data only for the direct native invocation. */
+		active_observer = &observer;
+		status = bind_range_interface.operations[11].method(realm, receiver, comparison_args, 2, &answer);
+		if (status != expected) {
+			active_observer = NULL;
+			break;
+		}
+
+		/* Release the synchronous observer only after its expected outcome is checked. */
+		active_observer = NULL;
 		range_check(status == expected, "exact comparison numeric conversion outcome propagated");
 		range_check(observer.conversions == 1U, "comparison mode converts once during actual GC");
 

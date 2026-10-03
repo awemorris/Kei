@@ -109,6 +109,7 @@ struct wl_display {
 	uint32_t protocol_code;
 	uint32_t protocol_id;
 	const struct wl_interface *protocol_interface;
+	char *protocol_report;
 };
 
 struct wl_proxy *wlc_proxy_real(struct wl_proxy *proxy);
@@ -119,6 +120,7 @@ void wlc_proxy_unref(struct wl_proxy *proxy);
 void wlc_proxy_remove(struct wl_proxy *proxy);
 void wlc_proxy_destroy(struct wl_proxy *proxy);
 void wlc_display_error(struct wl_display *display, int error);
+char *wlc_protocol_report(const struct wl_interface *interface, uint32_t id, uint32_t code, const char *message);
 const char *wlc_signature_start(const char *signature, uint32_t *version);
 const char *wlc_signature_next(const char *signature, char *type, int *nullable);
 size_t wlc_signature_count(const char *signature);

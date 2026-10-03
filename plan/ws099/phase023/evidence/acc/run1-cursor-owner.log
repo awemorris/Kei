@@ -1,0 +1,121 @@
+window at 440,250
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 96, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 48, in main
+    connection.connect(arguments.socket)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 61, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 35, in main
+    report = capture(str(Path(arguments.runtime).resolve() / "vnc.sock"), ppm, 10)
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws014/tests/venus_rfb.py", line 119, in capture
+    stream.connect(str(socket_path))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+log: ZWL CURSOR client=[0-9]+ shown=1 (1) MISSING (found guest: no guest is running (start one first))
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 96, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 48, in main
+    connection.connect(arguments.socket)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 61, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 35, in main
+    report = capture(str(Path(arguments.runtime).resolve() / "vnc.sock"), ppm, 10)
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws014/tests/venus_rfb.py", line 119, in capture
+    stream.connect(str(socket_path))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+log: ZWL CURSOR client=[0-9]+ shown=0 (1) MISSING (found guest: no guest is running (start one first))
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 96, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 48, in main
+    connection.connect(arguments.socket)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 61, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 35, in main
+    report = capture(str(Path(arguments.runtime).resolve() / "vnc.sock"), ppm, 10)
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws014/tests/venus_rfb.py", line 119, in capture
+    stream.connect(str(socket_path))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 96, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 48, in main
+    connection.connect(arguments.socket)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 61, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 35, in main
+    report = capture(str(Path(arguments.runtime).resolve() / "vnc.sock"), ppm, 10)
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws014/tests/venus_rfb.py", line 119, in capture
+    stream.connect(str(socket_path))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 96, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/qmp-pointer.py", line 48, in main
+    connection.connect(arguments.socket)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 61, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws035/tests/zdesktop-check.py", line 35, in main
+    report = capture(str(Path(arguments.runtime).resolve() / "vnc.sock"), ppm, 10)
+  File "/home/awe/zedBSD-worktrees/p2/plan/ws014/tests/venus_rfb.py", line 119, in capture
+    stream.connect(str(socket_path))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+log: ZWL CURSOR client=[0-9]+ shown=1 (2) MISSING (found guest: no guest is running (start one first))
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 3465, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'build/p2-p023/acc-1/c9-cursor-owner/desktop.png'
+desktop: no arrow at the pointer ( pixels) FAIL
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 3465, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'build/p2-p023/acc-1/c9-cursor-owner/title.png'
+title bar: no arrow at the pointer ( pixels) FAIL
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 3465, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'build/p2-p023/acc-1/c9-cursor-owner/body.png'
+body: nothing drawn at the pointer ( pixels) ok
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 3465, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'build/p2-p023/acc-1/c9-cursor-owner/body-again.png'
+body again: nothing drawn at the pointer ( pixels) ok
+wlshm pointer leaves: guest: no guest is running (start one first)
+guest: no guest is running (start one first)
+cursor-owner: FAIL

@@ -1,0 +1,2 @@
+ZWL EXIT frames=660 error=0 cleanup_failed=0 pid=911 input_events=0 seat_events=16 at_ms=285162
+QEMU did not exit within ~35 s of systemctl poweroff; TERM sent to the owned QEMU pid; port 10222 free afterwards; overlay build/p2-p008/guest/overlay.qcow2 kept.

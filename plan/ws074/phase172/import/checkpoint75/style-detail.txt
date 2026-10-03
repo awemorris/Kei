@@ -1,0 +1,5 @@
+userland/desktop/libbrowser/html/modes.c:1691: goto: goto cleanup;
+userland/desktop/libbrowser/html/modes.c:1699: goto: goto cleanup;
+userland/desktop/libbrowser/html/modes.c:1709: goto: goto cleanup;
+userland/desktop/libbrowser/html/modes.c:1719: goto: goto cleanup;
+userland/desktop/libbrowser/html/modes.c:1729: goto: goto cleanup;

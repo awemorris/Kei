@@ -1,8 +1,8 @@
 #!/bin/sh
 # ws071-p011: files from App Home on the Venus guest (the lean image, build-files-image.sh).
 # zdesktop --glass at 1280x800 with no /etc/keiland/apps.conf (the built-in list):
-#  1. home.png: the launcher opens Home with 7 applications, Files among them (8 with the Browser, shown when
-#     the image has browser and its start page).
+#  1. home.png: the launcher opens Home with the built-in list, Files among them (at least 7 tiles; the list has
+#     grown since ws071, e.g. 11 on 2026-10-03 with Lock Screen and Log Out, so ws127-p002 checks no exact count).
 #  2. files.png: the Files icon starts files (HOME LAUNCH name=Files), which maps its window and gives
 #     its titlebar the controls (ZWL TITLEBAR control ... where=floating id=1 ... shown=1).
 #
@@ -53,7 +53,7 @@ picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/sh
 pointer move 23 17 sleep 300 down sleep 60 up sleep 1500
 pointer move 700 500 sleep 400
 check "$out/home.png" >/dev/null
-expect_log 'ZWL HOME opened apps=[78] '
+expect_log 'ZWL HOME opened apps=([7-9]|[1-9][0-9]) '
 expect_log 'ZWL HOME icon name="Files"'
 
 # 2. Files.

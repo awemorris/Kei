@@ -25,6 +25,7 @@ pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; sleep 0.7; }
 stop_all='service stop greeter >/dev/null 2>&1; for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[s]ettings" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[s]ettings" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
 status=0
+. plan/ws089/tests/settings-wait.sh
 
 # Fails the run unless a log has a line matching a pattern (within a few seconds).
 expect_log() {
@@ -55,9 +56,9 @@ place() {
 	    sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 
-# Clicks a titlebar control of client 1, at its centre or at an offset from its left edge.
+# Clicks a titlebar control of Settings' client (find_window), at its centre or at an offset from its left edge.
 control() {
-	set -- $(place 1 "$1") "${2:-}"
+	set -- $(place "${wclient:-1}" "$1") "${2:-}"
 	if [ -n "${5:-}" ]; then
 		set -- $((${1:-0} + $5)) $((${2:-0} + ${4:-0} / 2))
 	else
@@ -78,8 +79,7 @@ guest 'export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0
 picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=900 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4
 HOME=/root /bin/settings --timeout-s=800 > /tmp/s.log 2>&1 </dev/null & sleep 5; echo started' >/dev/null
-set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
-wx=${2:-0}; wy=${3:-0}
+find_window
 echo "settings: window at $wx,$wy"
 
 # 1. Home.
@@ -137,11 +137,11 @@ echo "Settings icon at ${1:-?},${2:-?}"
 pointer move ${1:-0} ${2:-0} sleep 400 down sleep 60 up sleep 8000
 shot apphome-settings.png
 expect_log /tmp/zdesktop.log 'ZWL HOME launch name=Settings pid='
-expect_log /tmp/zdesktop.log 'ZWL TITLEBAR control client=1 .* where=floating id=1 .* shown=1'
+expect_log /tmp/zdesktop.log 'ZWL TITLEBAR control client=[0-9]+ .* where=floating id=1 .* shown=1'
 
 # 8. zdesktop saw no error.
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
-[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
+[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; guest "grep ERROR /tmp/zdesktop.log | head -5"; status=1; }
 guest "$stop_all" >/dev/null
 [ $status = 0 ] && echo "settings-p002: PASS" || echo "settings-p002: FAIL"
 exit $status

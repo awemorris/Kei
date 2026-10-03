@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-traversal.c",
+      "formatted_sha256": "2459cc3ef8ea4f0cf669cc5a6dcffec8633a6add82088afddf92d33ba48df770",
+      "final_sha256": "0c8dd5cd3db49bb3ae0a81717354ecacd42d46111166b2d860d9437b4a397160",
+      "restorations": "definition argument tabs and compound layout"
+    },
+    {
+      "path": "plan/ws074/tests/host-removal.c",
+      "formatted_sha256": "024840285eda9fe659e0b1f14a5c01359abd6c4a7a2e15aed1d74d20fcf1046e",
+      "final_sha256": "143da884add7bb8ad8203b077eb3aa9000501a8c1c89473df11b57ceae77f755",
+      "restorations": "definition argument tabs and compound layout"
+    }
+  ]
+}

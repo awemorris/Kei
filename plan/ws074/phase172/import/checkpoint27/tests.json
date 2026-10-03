@@ -1,0 +1,22 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review27/host-traversal"
+    ],
+    "exit": 0,
+    "stdout_file": "traversal.stdout",
+    "stderr_file": "traversal.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review27/host-removal"
+    ],
+    "exit": 0,
+    "stdout_file": "removal.stdout",
+    "stderr_file": "removal.stderr"
+  }
+]

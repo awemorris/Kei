@@ -1,4 +1,6 @@
-include $(dir $(lastword $(MAKEFILE_LIST)))../package.mk
+LIBKEILAND_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+include $(LIBKEILAND_MAKEFILE_DIR)../package.mk
+include $(LIBKEILAND_MAKEFILE_DIR)../libkeiland-backend-zedbsd/sources.mk
 
 # The desktop's single way into the operating system, other than Vulkan and
 # Wayland, and the wrapper of zdesktop's own Wayland extensions (the System
@@ -14,12 +16,12 @@ LIBKEILAND_SOURCES := userland/desktop/libkeiland/version.c userland/desktop/lib
 	userland/desktop/libkeiland/desktop.c \
 	userland/desktop/libkeiland/keyboard-inset.c userland/desktop/libkeiland/edit.c
 
-# The zedBSD side of the library: networkd, the interfaces and the saved keys,
-# audiod (WS104).  WS105 has the Linux side in Makefile.linux.
-LIBKEILAND_ZEDBSD_SOURCES := userland/desktop/libkeiland/zedbsd/network-zedbsd.c \
-	userland/desktop/libkeiland/zedbsd/network-link-zedbsd.c \
-	userland/desktop/libkeiland/zedbsd/audio-zedbsd.c \
-	userland/base/net/protocol.c userland/base/net/wifi-conf.c userland/base/net/wifi-store.c
+# The zedBSD side of the library: audiod (WS104).  The network moved to libkeiland-backend (ws131-p003);
+# keiland_network_* forwards to it (system-compat.c) until Settings uses the compositor's extension
+# (ws131-p011), so the backend's zedBSD sources are built in here too.
+LIBKEILAND_ZEDBSD_SOURCES := userland/desktop/libkeiland/zedbsd/audio-zedbsd.c \
+	userland/desktop/libkeiland/system-compat.c \
+	$(KL_BACKEND_ZEDBSD_SOURCES)
 
 LIBZDESKTOP_IMAGE_DATA := $(if $(ZEDBSD_TOPLEVEL_BUILD),/lib/libkeiland.so=$(BUILD)/dynamic/libkeiland.so)
 $(eval $(call ZEDBSD_USERLAND_PACKAGE,libkeiland,Desktop system library,amd64,y,library,$(LIBKEILAND_SOURCES) $(LIBKEILAND_ZEDBSD_SOURCES),y,desktop,desktop/libkeiland,desktop/libwayland desktop/libtruetype,,shared-library,$(LIBZDESKTOP_IMAGE_DATA),,lib))

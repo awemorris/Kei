@@ -77,12 +77,19 @@ main(
 
 	/* The native case temporarily disables stack scanning only around the actual operation. */
 	status = mutation_case(realm, window);
+	if (status != 0) {
+		vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* The completed native record campaign precedes normal embedding teardown. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Print all observations after the production embedding has released its participants. */
 	printed = printf("native mutation record GC: %u/%u passed\n", checks - failures, checks);
@@ -113,6 +120,9 @@ mutation_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: every failed observation remains in the final fixture count. */
+	return;
 }
 
 /* Constructs genuine native factory outputs through the ordinary production interpreter. */
@@ -136,9 +146,13 @@ mutation_script(
 
 	/* No alternate constructor or test-only brand supplies the XML Document. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Checked script completion no longer borrows converted fixture storage. */
+	wb_units_release(&units);
 
 	/* Succeeded: the ordinary native factory completion is available to the embedding. */
 	return 0;
@@ -175,139 +189,159 @@ mutation_case(
 	for (index = 0; index < 2U; index++) {
 		status = vm_heap_add_root(realm->heap, &roots[index]);
 		if (status != 0)
-			break;
+			goto cleanup;
+
+		/* Cleanup owns only this successfully registered construction slot. */
 		registered++;
 	}
 
-	/* Each case uses a distinct near-threshold allocation and native record shape. */
-	if (status == 0) {
-		for (mode = 0; mode < 3U; mode++) {
-			/* Genuine observers use their ordinary native target registrations. */
-			vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
-			status = mutation_script(realm,
-						 "var parent=document.createElement('div');var child=document.createElement('b');"
-						 "var removed=document.createComment('removed');parent.appendChild(removed);"
-						 "var one=new MutationObserver(function(){}),two=new MutationObserver(function(){});"
-						 "one.observe(parent,{childList:true});two.observe(parent,{childList:true,subtree:true});parent",
-						 &answer);
-			if (status != 0)
-				break;
-			parent = bind_node_of(answer);
-
-			/* Capture exact native input identities while script globals still protect them. */
-			status = mutation_script(realm, "child", &answer);
-			if (status != 0)
-				break;
-			added = bind_node_of(answer);
-			roots[0] = &added->cell;
-
-			/* Detached removal input has no parent link when its record is constructed. */
-			status = mutation_script(realm, "removed", &answer);
-			if (status != 0)
-				break;
-			removed = bind_node_of(answer);
-			roots[1] = &removed->cell;
-			removed_address = (uintptr_t)removed;
-			dom_remove(removed);
-
-			/* Native source links match the supplied added-only or combined record shape. */
-			if (mode != 2U) {
-				dom_append_child(parent, added);
-			}
-
-			/* The fixture gives no script global or conservative stack edge to the detached node. */
-			status = mutation_script(realm, "child=null;removed=null", &answer);
-			if (status != 0)
-				break;
-			vm_heap_set_stack_base(realm->heap, NULL);
-			vm_heap_collect(realm->heap);
-
-			/* Ordinary inert allocation approaches the unchanged production threshold. */
-			margin = 128U + mode * 256U;
-			pressure = vm_heap_alloc(realm->heap, &pressure_type, 8U * 1024U * 1024U - margin);
-			if (pressure == NULL) {
-				status = ENOMEM;
-				break;
-			}
-
-			/* Only the native callee owns the supplied participants during its allocations. */
-			roots[0] = NULL;
-			roots[1] = NULL;
-			vm_heap_stats(realm->heap, &before);
-			if (mode == 0U) {
-				status = bind_environment_child_mutation(window, parent, added, removed);
-			} else if (mode == 1U) {
-				status = bind_environment_child_mutation(window, parent, added, NULL);
-			} else {
-				status = bind_environment_child_mutation(window, parent, NULL, removed);
-			}
-
-			/* Actual collector statistics prove collection occurred inside record construction. */
-			vm_heap_stats(realm->heap, &after);
-			if (status != 0)
-				break;
-			mutation_check(after.collections > before.collections, "direct child-list callee triggered actual GC without caller stack roots");
-
-			/* Both observers publish independent complete records through their existing takeRecords API. */
-			vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
-			status = mutation_script(realm,
-						 "var first=one.takeRecords(),second=two.takeRecords();"
-						 "first.length===1&&second.length===1&&first!==second&&first[0]!==second[0]&&"
-						 "first[0].type==='childList'&&first[0].target===parent&&second[0].target===parent&&"
-						 "first[0].addedNodes.constructor.name==='NodeList'&&first[0].removedNodes.constructor.name==='NodeList'&&"
-						 "first[0].addedNodes!==second[0].addedNodes&&first[0].removedNodes!==second[0].removedNodes&&"
-						 "first[0].previousSibling===null&&first[0].nextSibling===null&&first[0].attributeName===null&&"
-						 "first[0].attributeNamespace===null&&first[0].oldValue===null",
-						 &answer);
-			if (status != 0)
-				break;
-			truth = vm_to_boolean(answer);
-			mutation_check(truth, "complete independent record fields and NodeList constructors survive mid-construction GC");
-
-			/* Added-node identity is the actual native child, including an empty removed sequence. */
-			if (mode != 2U) {
-				status = mutation_script(realm, "first[0].addedNodes[0]", &answer);
-				if (status != 0)
-					break;
-				reported = bind_node_of(answer);
-				mutation_check(reported == added, "added record preserves exact native node identity");
-			}
-
-			/* Detached removed-node identity remains owned by the published record. */
-			if (mode != 1U) {
-				status = mutation_script(realm, "first[0].removedNodes[0]", &answer);
-				if (status != 0)
-					break;
-				reported = bind_node_of(answer);
-				mutation_check(reported == removed && reported->parent == NULL, "removed record preserves exact detached native node identity");
-			}
-
-			/* The three finite shapes preserve empty and single-entry collection lengths. */
-			if (mode == 0U) {
-				status = mutation_script(realm, "first[0].addedNodes.length===1&&first[0].removedNodes.length===1", &answer);
-			} else if (mode == 1U) {
-				status = mutation_script(realm, "first[0].addedNodes.length===1&&first[0].removedNodes.length===0", &answer);
-			} else {
-				status = mutation_script(realm, "first[0].addedNodes.length===0&&first[0].removedNodes.length===1", &answer);
-			}
-
-			/* No list decoration or record construction changes collection cardinality. */
-			if (status != 0)
-				break;
-			truth = vm_to_boolean(answer);
-			mutation_check(truth, "zero and one entry NodeList-shaped sequences retain exact lengths");
-
-			/* Disconnect and release both returned arrays before inspecting native collection. */
-			status = mutation_script(realm, "one.disconnect();two.disconnect();first=null;second=null;parent=null;one=null;two=null", &answer);
-			if (status != 0)
-				break;
-			vm_heap_set_stack_base(realm->heap, NULL);
-			vm_heap_collect(realm->heap);
-			found = vm_heap_find_cell(realm->heap, removed_address);
-			mutation_check(found == NULL, "released detached node is collectible after callee roots and record arrays disappear");
+	/* Combined, added-only and removed-only records each use a finite default-GC threshold. */
+	for (mode = 0; mode < 3U; mode++) {
+		/* Genuine observers use their ordinary native target registrations. */
+		vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
+		status = mutation_script(
+		    realm,
+		    "var parent=document.createElement('div');var child=document.createElement('b');"
+		    "var removed=document.createComment('removed');parent.appendChild(removed);"
+		    "var one=new MutationObserver(function(){}),two=new MutationObserver(function(){});"
+		    "one.observe(parent,{childList:true});two.observe(parent,{childList:true,subtree:true});parent",
+		    &answer);
+		if (status != 0)
+			goto cleanup;
+		parent = bind_node_of(answer);
+		if (parent == NULL) {
+			status = EINVAL;
+			goto cleanup;
 		}
-	}
 
+		/* Capture exact native input identities while script globals still protect them. */
+		status = mutation_script(realm, "child", &answer);
+		if (status != 0)
+			goto cleanup;
+		added = bind_node_of(answer);
+		if (added == NULL) {
+			status = EINVAL;
+			goto cleanup;
+		}
+
+		/* Construction owns the actual added node only until the direct notification begins. */
+		roots[0] = &added->cell;
+
+		/* Detached removal input has no parent link when its record is constructed. */
+		status = mutation_script(realm, "removed", &answer);
+		if (status != 0)
+			goto cleanup;
+		removed = bind_node_of(answer);
+		if (removed == NULL) {
+			status = EINVAL;
+			goto cleanup;
+		}
+
+		/* Construction protects the disconnected removal input before tested callee ownership. */
+		roots[1] = &removed->cell;
+		removed_address = (uintptr_t)removed;
+		dom_remove(removed);
+
+		/* Native source links match the supplied added-only or combined record shape. */
+		if (mode != 2U) {
+			dom_append_child(parent, added);
+		}
+
+		/* The fixture gives no script global or conservative stack edge to the detached node. */
+		status = mutation_script(realm, "child=null;removed=null", &answer);
+		if (status != 0)
+			goto cleanup;
+		vm_heap_set_stack_base(realm->heap, NULL);
+		vm_heap_collect(realm->heap);
+
+		/* Ordinary inert allocation approaches the unchanged production threshold. */
+		margin = 128U + mode * 256U;
+		pressure = vm_heap_alloc(realm->heap, &pressure_type, 8U * 1024U * 1024U - margin);
+		if (pressure == NULL) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+
+		/* Only the native callee owns the supplied participants during its allocations. */
+		roots[0] = NULL;
+		roots[1] = NULL;
+		vm_heap_stats(realm->heap, &before);
+		if (mode == 0U) {
+			status = bind_environment_child_mutation(window, parent, added, removed);
+		} else if (mode == 1U) {
+			status = bind_environment_child_mutation(window, parent, added, NULL);
+		} else {
+			status = bind_environment_child_mutation(window, parent, NULL, removed);
+		}
+
+		/* Actual collector statistics prove collection occurred inside record construction. */
+		if (status != 0)
+			goto cleanup;
+
+		/* Only successful native record construction contributes its actual GC count. */
+		vm_heap_stats(realm->heap, &after);
+		mutation_check(after.collections > before.collections, "direct child-list callee triggered actual GC without caller stack roots");
+
+		/* Both observers publish independent complete records through their existing takeRecords API. */
+		vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
+		status = mutation_script(
+		    realm,
+		    "var first=one.takeRecords(),second=two.takeRecords();"
+		    "first.length===1&&second.length===1&&first!==second&&first[0]!==second[0]&&"
+		    "first[0].type==='childList'&&first[0].target===parent&&second[0].target===parent&&"
+		    "first[0].addedNodes.constructor.name==='NodeList'&&first[0].removedNodes.constructor.name==='NodeList'&&"
+		    "first[0].addedNodes!==second[0].addedNodes&&first[0].removedNodes!==second[0].removedNodes&&"
+		    "first[0].previousSibling===null&&first[0].nextSibling===null&&first[0].attributeName===null&&"
+		    "first[0].attributeNamespace===null&&first[0].oldValue===null",
+		    &answer);
+		if (status != 0)
+			goto cleanup;
+		truth = vm_to_boolean(answer);
+		mutation_check(truth, "complete independent record fields and NodeList constructors survive mid-construction GC");
+
+		/* Added-node identity is the actual native child, including an empty removed sequence. */
+		if (mode != 2U) {
+			status = mutation_script(realm, "first[0].addedNodes[0]", &answer);
+			if (status != 0)
+				goto cleanup;
+			reported = bind_node_of(answer);
+			mutation_check(reported == added, "added record preserves exact native node identity");
+		}
+
+		/* Detached removed-node identity remains owned by the published record. */
+		if (mode != 1U) {
+			status = mutation_script(realm, "first[0].removedNodes[0]", &answer);
+			if (status != 0)
+				goto cleanup;
+			reported = bind_node_of(answer);
+			mutation_check(reported == removed && reported->parent == NULL, "removed record preserves exact detached native node identity");
+		}
+
+		/* The three finite shapes preserve empty and single-entry collection lengths. */
+		if (mode == 0U) {
+			status = mutation_script(realm, "first[0].addedNodes.length===1&&first[0].removedNodes.length===1", &answer);
+		} else if (mode == 1U) {
+			status = mutation_script(realm, "first[0].addedNodes.length===1&&first[0].removedNodes.length===0", &answer);
+		} else {
+			status = mutation_script(realm, "first[0].addedNodes.length===0&&first[0].removedNodes.length===1", &answer);
+		}
+
+		/* No list decoration or record construction changes collection cardinality. */
+		if (status != 0)
+			goto cleanup;
+		truth = vm_to_boolean(answer);
+		mutation_check(truth, "zero and one entry NodeList-shaped sequences retain exact lengths");
+
+		/* Disconnect and release both returned arrays before inspecting native collection. */
+		status = mutation_script(realm, "one.disconnect();two.disconnect();first=null;second=null;parent=null;one=null;two=null", &answer);
+		if (status != 0)
+			goto cleanup;
+		vm_heap_set_stack_base(realm->heap, NULL);
+		vm_heap_collect(realm->heap);
+		found = vm_heap_find_cell(realm->heap, removed_address);
+		mutation_check(found == NULL, "released detached node is collectible after callee roots and record arrays disappear");
+	}
+cleanup:
 	/* Restore fixture stack scanning and remove only successfully registered construction slots. */
 	vm_heap_set_stack_base(realm->heap, __builtin_frame_address(0));
 	while (registered != 0) {

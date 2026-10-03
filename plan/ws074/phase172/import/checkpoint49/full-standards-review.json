@@ -1,0 +1,35 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-frame-lifetime.c",
+      "original_sha256": "1e9806612bf6f11801067a7e3b9bb16d13146f3fc074fd123576abe5349a9ed9",
+      "final_sha256": "9a09feb37640034414f696385586b57da9d19964d13c505a5e403b6fcfa4967b",
+      "status": "reviewed-full-file",
+      "original_lines": 1190,
+      "final_lines": 1402
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "All original1190 frame lifetime fixture lines; exact29 selected native graph families plus genuine1MiB/256-child bounded allocation failure, original scripted samples and finalizer/counter operations.",
+    "Bytecode function/Document/Window/nested ancestors/computed CSS/UIEvent/XML node/implementation/TreeWalker/NodeIterator/collections/forms/controls/duplicate list/input/radio/click/SubmitEvent/table/row/cells/options/option/Range/adopted Range/clone lifetimes reviewed against actual private APIs.",
+    "Each sample uses only original acquired nullable saved result slot; complete native Element/managed child cleanup callback and CSS string brands checked before private fields. All alias-removal scripts and parent teardown intervals unchanged; no extra tested participant roots.",
+    "Source/get/call/key operations checked before significant next operation or converted source release. Ordinary native result/string/node/endpoint guards prevent unchecked private-field use. Selection and unrelated caller share single forward per-function cleanup while optional primary is destroyed only once.",
+    "Success dispatch verified before manual caller teardown and last-root GC. Unexpected saved-owner finalization stops before foreign host reuse. Original owner counts1/2, whole-heap no-GC finalizer case, repeated finalization and capped child failure observations retained.",
+    "Full C/component ANSI declarations/ordering/physical script-call argument lines/conditions/loop controls/purpose/refusal-final-Succeeded/flags-counter/cleanup ownership checked. Actual final148 observations pass, supporting checker only allowed forward cleanups."
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 79,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production edit, new fault switch, reference change or additional caller root.",
+    "No new production behavior, root, synthetic fault switch or additional corpus. Original148 observations including real capped failure pass. Whole p17239 production C/header and original final gates remain."
+  ]
+}

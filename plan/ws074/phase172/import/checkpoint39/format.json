@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-range-insert.c",
+      "formatted_sha256": "688ca85cb562c9d476da7427f07f5139d3ea6f33eae274abbdfc66850048ccfe",
+      "final_sha256": "c7186454c1ad7bfe1ad0561ee35a685f7e3855b73a6fac616f5aefea593fd4ea",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "plan/ws074/tests/host-range-mutation.c",
+      "formatted_sha256": "43454403afeaadd3f9a70190b4e8547825441d0e6acedce5790035dbd13f6400",
+      "final_sha256": "ae8ce97f8de93829a2d136623c2df610d8a7b70fbc13d0a4693ec9d044946001",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "plan/ws074/tests/host-range-surround-contents.c",
+      "formatted_sha256": "52ae9b147dc785c38b7f1aa1dd8695be1c4a02366e62f715e004a5d331d950b2",
+      "final_sha256": "1cc561527532536a5ca47ae4b3c39c4504ee4a20267627163127f16250d841b7",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    }
+  ]
+}

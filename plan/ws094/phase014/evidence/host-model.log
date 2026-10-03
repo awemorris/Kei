@@ -1,0 +1,116 @@
+built build/ws071-host/files-render
+built build/ws071-host/files-model
+ZFILES THUMB path=/tmp/tmp.Ojb4t2KRSp/big.ppm error=0 width=256 height=170 cached=0
+ZFILES PEEK path=/tmp/tmp.Ojb4t2KRSp/notes type=text/plain lines=3
+ZFILES LAUNCH name=Record command=echo '/tmp/tmp.Ojb4t2KRSp/it'\''s a file.txt' > '/tmp/tmp.Ojb4t2KRSp/opened'
+ok: xattr set on the source (the host's file system has user xattrs)
+ok: copy: no error
+ok: copy: four items (the top file, two nested files, a link)
+ok: copy: the file's contents
+ok: copy: the tag (xattr) came along
+ok: copy: a nested file
+ok: copy: the link is a link
+ok: copy again: Report 2.pdf
+ok: copy again: Folder.v1 2
+ok: collision: both names are taken
+ok: collision: skip leaves the items there
+ok: collision: a skipped source has no result and did not fail
+ok: collision: skip makes no new name
+ok: collision: replace, no error
+ok: collision: replace puts the file in the item's place
+ok: collision: replace removes the folder that was there (its extra file too)
+ok: collision: replace copies the folder in its place
+ok: collision: replace makes no new name
+ok: replace: the replaced file is in the trash
+ok: replace: the replaced folder is in the trash with its contents
+ok: replace: undo puts the replaced file back under its name
+ok: collision: a move replaces the item there
+ok: merge: two folders can be merged
+ok: merge: the folder's three items take its place
+ok: merge: the items go into the merged folder
+ok: merge: the sub-folder merges again
+ok: merge: only one.txt is taken inside, and it is a file
+ok: merge: copy, no error
+ok: merge: the taken file is replaced
+ok: merge: the new file joins the one that was there
+ok: merge: the sub-folders' contents are combined
+ok: merge: no second folder is made
+ok: merge: a copy leaves the source
+ok: merge: the replaced file is in the trash
+ok: merge: undo puts back what the folder held
+ok: merge: undo keeps the merged sub-folder as it was
+ok: merge: move, no error
+ok: merge: a move moves the items
+ok: merge: the emptied folder goes, the skipped item stays
+ok: merge: undo of the move puts the items back in their folders
+ok: merge: redo gives an item its own folder
+ok: merge: a redo puts each item where it went
+skip: replace across file systems (no second folder)
+ok: duplicate: Report copy.pdf
+ok: duplicate: the result names the copy
+ok: copy into itself: refused
+ok: move: renamed into the folder
+ok: move: one rename step
+ok: trash: the trash's folders are made
+ok: trash: the file is in the trash
+ok: trash: the record says where and when
+ok: trash: the record file
+ok: trash: the second of one name is name.2
+ok: trash listing: name.2 shows as the name it had, of that kind
+ok: put back: the file is where it was
+ok: put back: the record is gone
+ok: delete: the tree is gone
+skip: move across file systems (no second folder)
+ok: undo: the newest change
+ok: undo: kept for redo
+ok: undo: a new change empties the redo
+ok: clipboard: set
+ok: clipboard: read back
+ok: clipboard: cleared
+ok: free name: Report 3.pdf after Report.pdf and Report 2.pdf
+ok: recent: add
+ok: recent: add another
+ok: recent: add the first again
+ok: recent: newest first, once each
+ok: recent: remove
+ok: recent: the other is left
+ok: tags: the five defaults
+ok: tags: Work read (Mine unknown)
+ok: tags: write Work and Ideas
+ok: tags: the unknown name kept
+ok: tags: the index lists the file under Ideas
+ok: tags: clear the known ones
+ok: tags: the index forgets it
+ok: picture: a PPM with a comment read, red then blue
+ok: picture: a PGM read as grey
+ok: picture: missing pixels refused
+ok: picture: 16-bit values refused
+ok: picture: a huge width refused
+ok: picture: a damaged PNG refused
+ok: thumbnail: 300x200 shrunk to 256x170
+ok: fit: a tall picture fills the box's height
+ok: fit: a wide picture fills the box's width
+ok: thumbs: a new file is asked for
+ok: thumbs: made in a round, then kept
+ok: thumbs: a changed file is asked for again
+ok: thumb cache: the made thumbnail is kept and read back
+ok: thumb cache: a changed file's record is stale
+ok: thumb: a PDF is told by its signature
+ok: peek: text without an extension sniffed, its lines kept (tab a space, CR gone)
+ok: peek: its type is text/plain
+ok: open: the user's list first, then the built-in viewer
+ok: open: a program runs in a terminal first
+ok: open: a picture opens in Quick Look
+ok: open: a list's line comes before the built-in way
+ok: open: launched
+ok: open: the coZFILES INFO path=/tmp/tmp.Ojb4t2KRSp/abc mode=0664 uid=1000 attributes=1 openers=4
+ZFILES CHECKSUM start path=/tmp/tmp.Ojb4t2KRSp/abc
+ZFILES CHECKSUM done path=/tmp/tmp.Ojb4t2KRSp/abc sha256=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+mmand got the path with its quote and spaces
+ok: info: set-user-ID shown as s
+ok: info: a sticky folder shown as t
+ok: info: gathered, with the attribute and its size
+ok: info: checksum started
+ok: info: SHA-256 of abc
+ok: info: a missing path says ENOENT
+files-model: PASS

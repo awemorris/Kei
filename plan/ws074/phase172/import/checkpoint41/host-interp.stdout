@@ -1,0 +1,3 @@
+host-interp: fib(20) ran; 0 collections so far
+host-interp: the run collected 2 times, 103852 live cells
+host-interp: 45 checks, 0 failed

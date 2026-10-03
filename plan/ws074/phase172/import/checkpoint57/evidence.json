@@ -1,0 +1,37 @@
+{
+  "queue": "q597",
+  "checkpoint": 57,
+  "source": "userland/desktop/libbrowser/bind/html-input.c",
+  "source_sha256": "b59a1b27cebbb6fb2603bca219e3e4f252f7b4e7a641ef8dadd668549e820efb",
+  "baseline": "c378513ab68d83d264e192d4d0f108639419235d",
+  "reviewed": 177,
+  "total": 209,
+  "remaining": 32,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 7,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "page_probes": {
+    "input-reflection-probe": 94,
+    "form-controls-probe": 100
+  },
+  "tests": {
+    "dom-tests": "dom-tests 23/23",
+    "host-form": "host-form: 29 checks, 0 failed",
+    "host-form-owner": "form owner checks: 56/56 passed",
+    "host-form-collection": "form collection GC checks: 13/13 passed",
+    "host-radio-state": "radio state checks: 12/12 passed",
+    "host-option-state": "option selectedness lifetime checks: 20/20 passed"
+  },
+  "limits": [
+    "Only html-input.c is newly full-reviewed; original whole p172 gates and32 production files remain.",
+    "No isolated before/after GC crash is claimed for this setter repair.",
+    "No target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

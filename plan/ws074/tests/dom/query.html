@@ -33,6 +33,11 @@ var threw = [];
   try { document.querySelector(text); threw.push("no"); } catch (error) { threw.push(error.name + " " + error.code); }
 });
 console.log(threw.join(","));
+threw = [];
+["a[foo", "a[foo=bar junk]", "li:nth-child(2n", "li:nth-child(2.5n)", "li:nth-child(999999999999999999999n)"].forEach(function (text) {
+  try { document.querySelector(text); threw.push("no"); } catch (error) { threw.push(error.name); }
+});
+console.log(threw.join(","));
 try { inner.matches("::"); console.log("no"); } catch (error) { console.log("matches threw " + error.name); }
 console.log(document.querySelector("p::before"), document.querySelectorAll("li:hover").length);
 var all = document.querySelectorAll("li");

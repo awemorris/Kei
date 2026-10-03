@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/css/media.c",
+      "formatted_sha256": "248e18044f5f5e600e1018dd52dc2ae6e13801e13db2d3c486bd338cba03be92",
+      "final_sha256": "6461a0f92796ec72fdb8b9810c9ff48d03f03083d5ab8478c5809e736dded3ec",
+      "restorations": "definition tabs and compound layout"
+    },
+    {
+      "path": "plan/ws074/tests/host-color-media.c",
+      "formatted_sha256": "15c80e9d8226ec01cc395fb01bcc7aa414d1df6c84cdc61d0fde97a429aecfa2",
+      "final_sha256": "9bf1f6cc3fefc6b89369d808f0f36e337e53b1dd4f38386b69d1978067f95908",
+      "restorations": "definition tabs and compound layout"
+    }
+  ]
+}

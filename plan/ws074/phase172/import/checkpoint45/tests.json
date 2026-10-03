@@ -1,0 +1,22 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review45/host-svg-length"
+    ],
+    "exit": 0,
+    "stdout_file": "host-svg-length.stdout",
+    "stderr_file": "host-svg-length.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review45/host-svg-text"
+    ],
+    "exit": 0,
+    "stdout_file": "host-svg-text.stdout",
+    "stderr_file": "host-svg-text.stderr"
+  }
+]

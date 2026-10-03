@@ -98,21 +98,15 @@ PARTUUID selector. It creates `/swapfile` on UFS and an `/etc/fstab` swap entry;
 normal startup activates the file after mounting root. There is no separate
 swap partition or FAT `swap0` setting in this mode.
 
-The [retained root-mode acceptance](../../plan/history/queue-q015.md) covers native and
-overlay roots and selector reordering; later
-[configured-loader gates](../../plan/history/queue-q032.md) establish required-file
-behavior. Those historical gates do not constitute acceptance of a new native
-installer or every hardware storage controller. Current formatter and
-publication gates are [q148](../../plan/history/queue-q148.md) and
-[q149](../../plan/history/queue-q149.md).
+Those historical gates do not constitute acceptance of a new native installer
+or every hardware storage controller.
 
 ## Mount paths
 
 Public mount/unmount calls resolve existing directory paths using the caller's
 root and working directory, including nested paths and symbolic links. Both
-require superuser authority. A child mount or an open file keeps its mount busy;
-an ordinary directory is not an unmount target. See
-[path acceptance](../../plan/ws019/phase021/results.md).
+require superuser authority. A child mount or an open file keeps its mount
+busy; an ordinary directory is not an unmount target.
 
 If a removable UFS medium has already been lost, ordinary `umount` preserves its
 failed synchronization result. Root can use `umount -f /mount/point` to explicitly
@@ -122,10 +116,9 @@ are refused, as is a still-live medium. Success reports local disposal, not save
 data. Physical buffers and replacement-media publication remain owned by disk
 retirement after all old-device users are gone.
 
-Populated tmpfs unmount reclaims its directory entries and data after all users
-close; it does not require empty directories. A failed busy/sync/prepare check
-preserves the contents for retry. See
-[p022 acceptance](../../plan/ws019/phase022/results.md).
+Populated tmpfs unmount reclaims its directory entries and data after all
+users close; it does not require empty directories. A failed busy/sync/prepare
+check preserves the contents for retry.
 
 ## USB trial and installation boundary
 
@@ -137,12 +130,10 @@ onto an existing disk have different effects. Read-only
 [diskpart/blkid output](../reference/block-command-output.md) helps establish
 device identity before any separately authorized media preparation.
 
-USB-root QEMU acceptance includes xHCI and paired EHCI/UHCI operation, input
-and checked shutdown ([q141](../../plan/history/queue-q141.md),
-[q147](../../plan/history/queue-q147.md)). Shut down through `halt`; wait for completed
-shutdown before removing the medium. A failed storage sync or controller
-quiesce is an error to investigate, not permission to report a clean halt.
-These tests are not a new physical USB acceptance campaign.
+Shut down through `halt`; wait for completed shutdown before removing the
+medium. A failed storage sync or controller quiesce is an error to
+investigate, not permission to report a clean halt. These tests are not a new
+physical USB acceptance campaign.
 
 ## Install from the running installation disk
 
@@ -267,14 +258,9 @@ managed file merely to suppress a conflict. Dedicated formatting cannot restore
 the previous disk contents. Cancellation before confirmation leaves installation
 unauthorized; a later I/O failure is not equivalent to cancellation.
 
-Accepted normal paths and target-only boots are recorded in
-[amd64 native integration](../../plan/ws019/phase049/phase.md),
-[graphical installation](../../plan/ws019/phase029/results.md)
-and [PC98 FAT installation](../../plan/ws019/phase050/results.md).
-[Multiple-NVMe acceptance](../../plan/ws004/phase050/results.md)
-also verifies installed-root boot under both enumeration orders. There is no
-longer a one-controller NVMe limit; current support remains one active namespace
-per controller, bounded by resources and the shared disk registry.
+There is no longer a one-controller NVMe limit; current support remains one
+active namespace per controller, bounded by resources and the shared disk
+registry.
 
 ## Failure diagnosis
 
@@ -289,7 +275,5 @@ per controller, bounded by resources and the shared disk registry.
   copy with the matching controller. Do not repair by formatting the live root.
 
 q190 updates these instructions against current installer sources and retained
-normal-path producer evidence. Earlier clean-build evidence remains in
-[WS009-p002](../../plan/ws009/phase002/phase.md).
-This documentation update performs no new physical installation or exhaustive
-installer fault campaign.
+normal-path producer evidence. This documentation update performs no new
+physical installation or exhaustive installer fault campaign. 

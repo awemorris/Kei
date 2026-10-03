@@ -1,0 +1,8 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/geometry.c",
+    "sha256": "59152bffd582f729d8e9c044acca2c9dc7621f5ae69a10a423e89c8048ec34a2",
+    "object": "libbrowser_page_geometry.o",
+    "text_sha256": "e8a78dc1012d9fe352babf145c2a5993402ab858362af71da60f74fcf59a3579"
+  }
+]

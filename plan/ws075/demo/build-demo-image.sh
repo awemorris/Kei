@@ -31,9 +31,10 @@ extra="--file /etc/keiland/apps.conf=plan/ws035/demo/apps.conf"
 # The fonts and their licenses come with the compositor's package (userland/desktop/fonts/).
 [ -f build/ws035-wallpaper/wallpaper-1080.ppm ] && extra="$extra --file /usr/share/keiland/wallpaper.ppm=build/ws035-wallpaper/wallpaper-1080.ppm"
 mkdir -p "$build"
-# ws089-p009: the wallpapers Settings offers, drawn now (not in git), in /usr/share/keiland/wallpapers.
+# ws089-p009: the wallpapers Settings offers, drawn now (not in git), in /usr/share/keiland/wallpapers, with the
+# pictures kept in the source tree (userland/desktop/keiland/wallpapers/, 2026-10-03 user).
 python3 userland/desktop/wallpapers/generate.py "$build/wallpapers" >/dev/null
-for picture in "$build"/wallpapers/*.ppm; do
+for picture in "$build"/wallpapers/*.ppm userland/desktop/keiland/wallpapers/*.ppm; do
 	extra="$extra --file /usr/share/keiland/wallpapers/$(basename "$picture")=$picture"
 done
 accounts=$build/demo-accounts

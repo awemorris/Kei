@@ -115,12 +115,17 @@ release
 expect_log /tmp/f.log 'ZFILES DRAG drop operation=move items=1 destination=/tmp/fhome/Projects/zedBSD/docs$'
 expect_guest '[ -f /tmp/fhome/Projects/zedBSD/docs/README.md ] && [ ! -e /tmp/fhome/Projects/zedBSD/README.md ]' 'README.md moved to docs'
 shot moved.png
+# The drag's hold on docs (the screenshot with the button down) springs docs open (ws127-p002, F-039): the
+# window goes back to Projects/zedBSD for the next drag.
+start /tmp/fhome/Projects/zedBSD
+expect_log /tmp/f.log 'ZFILES LOCATION kind=folder path=/tmp/fhome/Projects/zedBSD items=3 error=0'
 drag 554 110 442 110
 keys '<esc>'
 release
 expect_log /tmp/f.log 'ZFILES DRAG cancel$'
 cancelled=$(guest "grep -c 'DRAG drop' /tmp/f.log" | tail -1)
-[ "${cancelled:-0}" = 1 ] && echo "cancel: no second drop ok" || { echo "cancel: drops $cancelled MISSING"; status=1; }
+# The window was started again before this drag, so its log has no drop at all.
+[ "${cancelled:-0}" = 0 ] && echo "cancel: no drop ok" || { echo "cancel: drops $cancelled MISSING"; status=1; }
 expect_guest '[ -f /tmp/fhome/Projects/zedBSD/Makefile ] && [ ! -e /tmp/fhome/Projects/zedBSD/src/Makefile ]' 'Makefile stayed'
 
 # 4. Pictures (the fifth place) dragged onto Desktop (the second) in the sidebar: first of the Favorites.

@@ -1,0 +1,32 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review35/host-xml-binding"
+    ],
+    "exit": 0,
+    "stdout_file": "xml-binding.stdout",
+    "stderr_file": "xml-binding.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review35/host-document-parser"
+    ],
+    "exit": 0,
+    "stdout_file": "document-parser.stdout",
+    "stderr_file": "document-parser.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review35/host-document-stream"
+    ],
+    "exit": 0,
+    "stdout_file": "document-stream.stdout",
+    "stderr_file": "document-stream.stderr"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "checker_exit": 1,
+  "function": "mutation_case",
+  "goto_count": 14,
+  "one_forward_cleanup_label": "cleanup",
+  "classification": "full C section14 permits one forward common cleanup point; only registered roots are unwound"
+}

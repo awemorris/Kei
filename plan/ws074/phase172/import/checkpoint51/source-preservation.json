@@ -1,0 +1,10 @@
+{
+  "old_lines": 837,
+  "new_lines": 1214,
+  "strings_identical": true,
+  "old_literals": 13,
+  "new_literals": 13,
+  "iterator_table_same": true,
+  "before_sha256": "be2441dd77dbdd2a803811abdfed3a21651685ad0f2374753edf739918800c45",
+  "after_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a"
+}

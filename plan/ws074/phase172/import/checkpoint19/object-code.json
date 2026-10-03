@@ -1,0 +1,20 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/js/builtin.c",
+    "before_sha256": "5a225618c5bce38f5d719b1235124fb8cc8d88bf5d474f0d3e5e6b52474faa4f",
+    "before_text_sha256": "4d15a3f1595ba1eb1fcd4d7e99f7bc1dfe5cfa8e46aaac7894e123898776cdc6",
+    "after_sha256": "0d8811cf2538ab858fd594ad4700fda7acfe6e42fb805183dd05a319b67ecfa3",
+    "after_text_sha256": "0c0a40c85e579d6130f3bfe85fe6bb9dcf6cb64019108932c3d7a1cc6064a67b",
+    "text_equal": false,
+    "string_literals_equal": true
+  },
+  {
+    "path": "userland/desktop/libbrowser/vm/class.c",
+    "before_sha256": "9daa046c522b6c13830939061fda50d78a2cc277773bd2020c418b09be0cb525",
+    "before_text_sha256": "4c4a4bc5c0642c62f92a5484e7229ee2f82dae653c52f81d5260271a47fd86bc",
+    "after_sha256": "93dbdf541f6bec51dc2539f6a66fd7309859fbb299dce78166f33af39ca38c13",
+    "after_text_sha256": "50f70c94bdbbfefc95a5e75b1c4506a833fde4062bd823a8e34be7731d129118",
+    "text_equal": false,
+    "string_literals_equal": true
+  }
+]

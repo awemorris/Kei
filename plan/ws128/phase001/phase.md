@@ -2,10 +2,10 @@
 
 # ws128-p001: 標準アプリの棚卸し・回帰の取り直し・改善の候補
 
-Status: planned（2026-10-02。Queue なし）
+Status: cleared（q623-i01、P1 generation4、2026-10-03。QEMU の Venus と host。結果は [requirements.md](../requirements.md)）
 Disposition: normal
 Parent: [WS128](../ws.md)
-Queue: なし
+Queue: q623 / q623-i01（Q1 の dispatch、2026-10-03。承認: 自走の指示（planned の Phase と試験の直し）。時限 3 時間。所有 path に `plan/ws079/tests/` を加えた（demo-s8-s9.sh の待ち））
 依存: なし
 目安: 3h（1 Queue）。実行者の目安: phase-runner-mid
 所有 path: `plan/ws128/`（`requirements.md`・`tests/`）だけ。product の source は変えない
@@ -35,3 +35,16 @@ QEMU の Venus と host。console・serial の log では判定しない。sourc
 ## Event
 
 2026-10-02 / ws128-beta1-plan: fg019 の計画で新設。
+
+## q623-i01 の結果（P1 generation4、2026-10-03 06:32〜07:16、base main `6df847d54`）
+
+- 1〜5 は [requirements.md](../requirements.md)（基準の回帰の command・image の hash・結果、menu の全項目と確かめの印、不具合の表、未完成の UI、
+  候補 C1〜C15、既存 WS との照合）。source は変えていない。
+- 基準の回帰（全て最終は PASS）: Text Editor host 53/53、Image Viewer host と guest（1 回目は build の負荷で install の put が timeout、流し直しで ok）、
+  PDF Viewer host、Notes host、S8・S9（1 回目は host の負荷で 203 ms、2 回目 PASS）、Terminal の menu（menu-p003）、音量 p004・p005、
+  スクリーンキーボード（history の file の読み出しの SSH timeout → `install tools history` で PASS）。
+- 不具合: 重い・中は 0、新しい軽い物も 0。試験の基盤の 3 件（T1 は直した、T2・T3 は Q1 へ）。Bug Board の候補は無い。
+- 試験の直し（F-062）: `plan/ws079/tests/demo-s8-s9.sh` の `sleep 20` を `guest.py wait --timeout 180` に（commit `0a5e8ae42`）。直した版で PASS。
+- 照合: ws.md の「既存の WS の残りとの照合」は各 WS の最新の表と一致。
+- 未実施: スクリーンキーボードの send・hand（ime-probe が image に無い）・roll・large、Image Viewer の touch、実機。
+- 代表の画面 9 枚: worktree の `build/ws128-p001/reps/`（まとめ `reps-sheet.png`）。

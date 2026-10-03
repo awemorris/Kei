@@ -29,6 +29,7 @@
 /* The items of File. */
 #define MENU_NEW		10U
 #define MENU_OPEN		11U
+#define MENU_RECENT		18U
 #define MENU_FILE_LINE		12U
 #define MENU_SAVE		13U
 #define MENU_SAVE_AS		14U
@@ -48,6 +49,7 @@
 #define MENU_FIND		28U
 #define MENU_FIND_NEXT		29U
 #define MENU_FIND_PREVIOUS	30U
+#define MENU_REPLACE		31U
 
 /* The items of View. */
 #define MENU_LINE_NUMBERS	40U
@@ -69,6 +71,14 @@
 #define MENU_CONTEXT_PASTE	65U
 #define MENU_CONTEXT_LINE_2	66U
 #define MENU_CONTEXT_ALL	67U
+
+/*
+ * The items of File > Open Recent (ws128-p003): one a file from the first,
+ * and the line that says there is none.  They are made anew whenever the
+ * recent files change (te_menu_recent).
+ */
+#define MENU_RECENT_FIRST	70U
+#define MENU_RECENT_NONE	80U
 
 /* The keysyms of the shortcuts' keys that are not letters. */
 #define MENU_KEY_EQUAL		0x3dU
@@ -95,6 +105,7 @@ static const struct menu_item menu_items[] = {
 	{ MENU_FILE, KEILAND_MENU_ROOT, KEILAND_MENU_ITEM_SUBMENU, "File", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_NEW, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "New", TE_ACTION_NEW, KEILAND_MENU_ROLE_NEW, KEILAND_MENU_CTRL, 'n' },
 	{ MENU_OPEN, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Open...", TE_ACTION_OPEN, KEILAND_MENU_ROLE_OPEN, KEILAND_MENU_CTRL, 'o' },
+	{ MENU_RECENT, MENU_FILE, KEILAND_MENU_ITEM_SUBMENU, "Open Recent", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_FILE_LINE, MENU_FILE, KEILAND_MENU_ITEM_SEPARATOR, "", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_SAVE, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Save", TE_ACTION_SAVE, KEILAND_MENU_ROLE_SAVE, KEILAND_MENU_CTRL, 's' },
 	{ MENU_SAVE_AS, MENU_FILE, KEILAND_MENU_ITEM_NORMAL, "Save As...", TE_ACTION_SAVE_AS, KEILAND_MENU_ROLE_NONE, KEILAND_MENU_CTRL | KEILAND_MENU_SHIFT, 's' },
@@ -113,6 +124,7 @@ static const struct menu_item menu_items[] = {
 	{ MENU_FIND, MENU_EDIT, KEILAND_MENU_ITEM_NORMAL, "Find...", TE_ACTION_FIND, KEILAND_MENU_ROLE_FIND, KEILAND_MENU_CTRL, 'f' },
 	{ MENU_FIND_NEXT, MENU_EDIT, KEILAND_MENU_ITEM_NORMAL, "Find Next", TE_ACTION_FIND_NEXT, KEILAND_MENU_ROLE_NONE, KEILAND_MENU_CTRL, 'g' },
 	{ MENU_FIND_PREVIOUS, MENU_EDIT, KEILAND_MENU_ITEM_NORMAL, "Find Previous", TE_ACTION_FIND_PREVIOUS, KEILAND_MENU_ROLE_NONE, KEILAND_MENU_CTRL | KEILAND_MENU_SHIFT, 'g' },
+	{ MENU_REPLACE, MENU_EDIT, KEILAND_MENU_ITEM_NORMAL, "Replace...", TE_ACTION_REPLACE, KEILAND_MENU_ROLE_NONE, KEILAND_MENU_CTRL, 'h' },
 	{ MENU_VIEW, KEILAND_MENU_ROOT, KEILAND_MENU_ITEM_SUBMENU, "View", 0U, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_LINE_NUMBERS, MENU_VIEW, KEILAND_MENU_ITEM_CHECKBOX, "Line Numbers", TE_ACTION_LINE_NUMBERS, KEILAND_MENU_ROLE_NONE, 0U, 0U },
 	{ MENU_WORD_WRAP, MENU_VIEW, KEILAND_MENU_ITEM_CHECKBOX, "Word Wrap", TE_ACTION_WORD_WRAP, KEILAND_MENU_ROLE_NONE, 0U, 0U },
@@ -240,6 +252,72 @@ te_menu_refresh(
 	error = menu_state(menu, state);
 	if (error != 0)
 		te_log("MENU update-failed errno=%d", error);
+}
+
+/*
+ * Shows the recent files in File > Open Recent (ws128-p003): the items of
+ * the last list go, and one comes for each file, newest first, greyed when
+ * the file is no longer there; without any, one greyed line says so.
+ */
+void
+te_menu_recent(
+	struct te_menu *menu,
+	const struct te_app *app)
+{
+	struct keiland_menu *model;
+	const char *name;
+	const char *slash;
+	uint32_t id;
+	size_t index;
+	int error;
+
+	/* Without menus nothing is sent. */
+	if (menu->menu == NULL)
+		return;
+
+	/* The last list's items go (an item that is not there is no error worth reporting). */
+	model = menu->menu;
+	error = keiland_menu_begin(model);
+	if (error != 0) {
+		te_log("MENU recent-failed errno=%d", error);
+		return;
+	}
+
+	/* Each item of the last list, and the line for none. */
+	for (index = 0; index < menu->recent_shown; index++)
+		(void)keiland_menu_remove(model, MENU_RECENT_FIRST + (uint32_t)index);
+	(void)keiland_menu_remove(model, MENU_RECENT_NONE);
+
+	/* A file an item, named by its file name; one that is gone is greyed. */
+	error = 0;
+	for (index = 0; index < app->recent_count && error == 0; index++) {
+		name = app->recent[index];
+		slash = strrchr(name, '/');
+		if (slash != NULL && slash[1] != '\0')
+			name = slash + 1;
+		id = MENU_RECENT_FIRST + (uint32_t)index;
+		error = keiland_menu_append(model, id, MENU_RECENT, KEILAND_MENU_ITEM_NORMAL, name, TE_ACTION_RECENT_FIRST + (uint32_t)index);
+		if (error == 0)
+			error = keiland_menu_set_enabled(model, id, app->recent_present[index]);
+	}
+
+	/* No recent file: a greyed line says so. */
+	if (error == 0 && app->recent_count == 0U) {
+		error = keiland_menu_append(model, MENU_RECENT_NONE, MENU_RECENT, KEILAND_MENU_ITEM_NORMAL, "No Recent Files", 0U);
+		if (error == 0)
+			error = keiland_menu_set_enabled(model, MENU_RECENT_NONE, 0);
+	}
+
+	/* The list is shown together (a refusal still ends the transaction). */
+	menu->recent_shown = app->recent_count;
+	(void)keiland_menu_commit(model);
+	if (error != 0) {
+		te_log("MENU recent-failed errno=%d", error);
+		return;
+	}
+
+	/* The log says how many are shown. */
+	te_log("MENU recent count=%lu", (unsigned long)app->recent_count);
 }
 
 /*

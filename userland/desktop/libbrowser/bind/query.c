@@ -36,18 +36,6 @@
 /* The length of that prefix. */
 #define QUERY_DATA_PREFIX_LENGTH	5U
 
-static int query_parse(struct vm_realm *realm, vm_value argument, const char *method, struct css_query **query);
-static int query_engine(struct bind_window *window, struct css_engine **engine);
-static int query_root(struct vm_realm *realm, vm_value this_value, struct dom_node **root);
-static int query_element_this(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
-static int query_find(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, int all, vm_value *result);
-static int token_list_element(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
-static int token_list_read(struct vm_realm *realm, struct dom_element *element, struct vm_object **tokens);
-static int token_list_write(struct vm_realm *realm, struct dom_element *element, struct vm_object *tokens);
-static int token_list_index(const struct vm_object *tokens, const struct vm_string *token, uint32_t *index);
-static int token_list_append(struct vm_realm *realm, struct vm_object *tokens, struct vm_string *token);
-static int token_list_remove_at(struct vm_realm *realm, struct vm_object *tokens, uint32_t index);
-static int token_list_token(struct vm_realm *realm, vm_value value, struct vm_string **token);
 static int token_list_length(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int token_list_value_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int token_list_value_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
@@ -57,13 +45,6 @@ static int token_list_add(struct vm_realm *realm, vm_value this_value, const vm_
 static int token_list_remove(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int token_list_toggle(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int token_list_replace(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int string_map_accessor(struct vm_realm *realm, struct vm_object *map, const struct dom_attribute *attribute);
-static int string_map_name(struct vm_realm *realm, const struct vm_string *attribute, struct vm_string **name);
-static int string_map_element(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
-static int string_map_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int string_map_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int query_is_space(uint16_t unit);
-static int query_has_prefix(const struct vm_string *string, const char *ascii);
 
 /*
  * The attributes of DOMTokenList.  The table is constant for the life of
@@ -104,6 +85,26 @@ const struct bind_interface bind_dom_token_list_interface = {
 const struct bind_interface bind_dom_string_map_interface = {
 	"DOMStringMap", BIND_NO_PARENT, 0, NULL, NULL, NULL, NULL
 };
+
+static int query_parse(struct vm_realm *realm, vm_value argument, const char *method, struct css_query **query);
+static int query_engine(struct bind_window *window, struct css_engine **engine);
+static int query_root(struct vm_realm *realm, vm_value this_value, struct dom_node **root);
+static int query_element_this(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
+static int query_find(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, int all, vm_value *result);
+static int token_list_element(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
+static int token_list_read(struct vm_realm *realm, struct dom_element *element, struct vm_object **tokens);
+static int token_list_write(struct vm_realm *realm, struct dom_element *element, struct vm_object *tokens);
+static int token_list_index(const struct vm_object *tokens, const struct vm_string *token, uint32_t *index);
+static int token_list_append(struct vm_realm *realm, struct vm_object *tokens, struct vm_string *token);
+static int token_list_remove_at(struct vm_realm *realm, struct vm_object *tokens, uint32_t index);
+static int token_list_token(struct vm_realm *realm, vm_value value, struct vm_string **token);
+static int string_map_accessor(struct vm_realm *realm, struct vm_object *map, const struct dom_attribute *attribute);
+static int string_map_name(struct vm_realm *realm, const struct vm_string *attribute, struct vm_string **name);
+static int string_map_element(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
+static int string_map_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int string_map_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int query_is_space(uint16_t unit);
+static int query_has_prefix(const struct vm_string *string, const char *ascii);
 
 /*
  * Finds the first element a selector list matches among the descendants
@@ -328,6 +329,7 @@ bind_dataset(
 	struct dom_element *element;
 	struct dom_attribute *attribute;
 	struct vm_object *map;
+	struct vm_cell *map_root;
 	size_t index;
 	int prefixed;
 	int status;
@@ -347,6 +349,10 @@ bind_dataset(
 		return ENOMEM;
 	map->kind = VM_KIND_PLATFORM;
 	map->internal = this_value;
+	map_root = &map->cell;
+	status = vm_heap_add_root(realm->heap, &map_root);
+	if (status != 0)
+		return status;
 
 	/* An accessor for each data-* attribute without a namespace, in the attributes' order. */
 	for (index = 0; index < element->attribute_count; index++) {
@@ -363,12 +369,15 @@ bind_dataset(
 
 		/* The attribute's accessor. */
 		status = string_map_accessor(realm, map, attribute);
-		if (status != 0)
+		if (status != 0) {
+			vm_heap_remove_root(realm->heap, &map_root);
 			return status;
+		}
 	}
 
 	/* Succeeded: the map. */
 	*result = vm_value_cell(map);
+	vm_heap_remove_root(realm->heap, &map_root);
 	return 0;
 }
 
@@ -389,6 +398,7 @@ query_find(
 	struct css_engine *engine;
 	struct css_query *query;
 	struct vm_object *array;
+	struct vm_cell *array_root;
 	struct dom_node *root;
 	struct dom_node *walk;
 	const char *method;
@@ -422,8 +432,17 @@ query_find(
 
 	/* The list querySelectorAll fills. */
 	array = NULL;
+	array_root = NULL;
 	if (all) {
 		status = bind_array_create(realm, &array);
+		if (status != 0) {
+			css_query_destroy(query);
+			return status;
+		}
+
+		/* The partial result remains live while each matched node is wrapped. */
+		array_root = &array->cell;
+		status = vm_heap_add_root(realm->heap, &array_root);
 		if (status != 0) {
 			css_query_destroy(query);
 			return status;
@@ -447,6 +466,7 @@ query_find(
 		if (matches) {
 			status = bind_array_push_node(window, array, walk);
 			if (status != 0) {
+				vm_heap_remove_root(realm->heap, &array_root);
 				css_query_destroy(query);
 				return status;
 			}
@@ -462,6 +482,7 @@ query_find(
 	/* querySelectorAll's list. */
 	if (all) {
 		*result = vm_value_cell(array);
+		vm_heap_remove_root(realm->heap, &array_root);
 		return 0;
 	}
 
@@ -484,6 +505,7 @@ query_parse(
 	struct css_query **query)
 {
 	struct vm_string *text;
+	struct vm_cell *text_root;
 	struct wb_units units;
 	struct wb_buffer message;
 	int status;
@@ -492,22 +514,31 @@ query_parse(
 	status = bind_to_string(realm, argument, &text);
 	if (status != 0)
 		return status;
+	text_root = &text->cell;
+	status = vm_heap_add_root(realm->heap, &text_root);
+	if (status != 0)
+		return status;
 	wb_units_init(&units);
 	status = vm_string_append_units(text, &units);
 	if (status != 0) {
 		wb_units_release(&units);
+		vm_heap_remove_root(realm->heap, &text_root);
 		return status;
 	}
 
 	/* The list. */
 	status = css_query_parse(realm->heap, units.data, units.length, query);
 	wb_units_release(&units);
-	if (status == 0)
+	if (status == 0) {
+		vm_heap_remove_root(realm->heap, &text_root);
 		return 0;
+	}
 
 	/* Anything but a syntax error is the engine's failure. */
-	if (status != EINVAL)
+	if (status != EINVAL) {
+		vm_heap_remove_root(realm->heap, &text_root);
 		return status;
+	}
 
 	/* The message names the method and the text, as other browsers do. */
 	wb_buffer_init(&message);
@@ -518,12 +549,14 @@ query_parse(
 		status = wb_buffer_append_string(&message, "' is not a valid selector.");
 	if (status != 0) {
 		wb_buffer_release(&message);
+		vm_heap_remove_root(realm->heap, &text_root);
 		return status;
 	}
 
 	/* The exception. */
 	status = bind_throw_dom(realm, "SyntaxError", wb_buffer_string(&message));
 	wb_buffer_release(&message);
+	vm_heap_remove_root(realm->heap, &text_root);
 	return status;
 }
 
@@ -661,31 +694,51 @@ token_list_read(
 	struct dom_attribute *attribute;
 	struct vm_object *words;
 	struct vm_object *unique;
+	struct vm_cell *roots[2];
 	struct vm_string *class_atom;
 	struct vm_string *word;
 	uint32_t index;
 	uint32_t found;
+	unsigned registered;
+	unsigned slot;
 	int present;
 	int status;
 
 	/* The words of the attribute, when there is one. */
+	roots[0] = NULL;
+	roots[1] = NULL;
+	registered = 0;
+	for (slot = 0; slot < 2U; slot++) {
+		status = vm_heap_add_root(realm->heap, &roots[slot]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* The first array retains all parsed words while the unique set is built. */
 	status = bind_array_create(realm, &words);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[0] = &words->cell;
 	class_atom = vm_atom_from_ascii(realm->heap, "class");
-	if (class_atom == NULL)
-		return ENOMEM;
+	if (class_atom == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Existing class text supplies the words to split. */
 	attribute = dom_element_find_attribute(element, DOM_NS_NONE, class_atom);
 	if (attribute != NULL) {
 		status = bind_split_classes(realm, attribute->value, words);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* The set: each word once, where it first appears. */
 	status = bind_array_create(realm, &unique);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = &unique->cell;
 	for (index = 0; index < words->length; index++) {
 		word = (struct vm_string *)vm_value_as_cell(words->elements[index]);
 		present = token_list_index(unique, word, &found);
@@ -695,12 +748,21 @@ token_list_read(
 		/* A word not seen before. */
 		status = token_list_append(realm, unique, word);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Succeeded: the set. */
 	*tokens = unique;
-	return 0;
+
+cleanup:
+	/* The caller receives the completed set after temporary roots end. */
+	while (registered > 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Return the parser or allocation result after releasing the roots. */
+	return status;
 }
 
 /* Writes a set of words to an element's class attribute, separated by spaces. */
@@ -714,11 +776,25 @@ token_list_write(
 	struct vm_string *class_atom;
 	struct vm_string *value;
 	struct vm_string *word;
+	struct vm_cell *roots[2];
 	struct wb_units units;
 	uint32_t index;
+	unsigned registered;
+	unsigned slot;
 	int status;
 
 	/* The words joined by single spaces. */
+	roots[0] = &tokens->cell;
+	roots[1] = NULL;
+	registered = 0;
+	for (slot = 0; slot < 2U; slot++) {
+		status = vm_heap_add_root(realm->heap, &roots[slot]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* Copy the rooted words into independent UTF16 storage. */
 	wb_units_init(&units);
 	status = 0;
 	for (index = 0; index < tokens->length && status == 0; index++) {
@@ -732,20 +808,38 @@ token_list_write(
 	/* A text that could not grow. */
 	if (status != 0) {
 		wb_units_release(&units);
-		return status;
+		goto cleanup;
 	}
 
 	/* The attribute's new value. */
 	value = vm_string_from_units(realm->heap, units.data, units.length);
 	wb_units_release(&units);
-	if (value == NULL)
-		return ENOMEM;
+	if (value == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Retain the new string through atom lookup and attribute publication. */
+	roots[1] = &value->cell;
 
 	/* The attribute takes it. */
 	class_atom = vm_atom_from_ascii(realm->heap, "class");
-	if (class_atom == NULL)
-		return ENOMEM;
+	if (class_atom == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Publish the joined text on its owner element. */
 	status = dom_element_set_attribute(element, class_atom, value);
+
+cleanup:
+	/* A completed attribute owns the value after these temporary roots end. */
+	while (registered > 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* An error leaves the old attribute untouched. */
 	if (status != 0)
 		return status;
 
@@ -785,10 +879,25 @@ token_list_append(
 	struct vm_object *tokens,
 	struct vm_string *token)
 {
+	struct vm_cell *roots[2];
 	int status;
 
 	/* At the end. */
+	roots[0] = &tokens->cell;
+	roots[1] = &token->cell;
+	status = vm_heap_add_root(realm->heap, &roots[0]);
+	if (status != 0)
+		return status;
+	status = vm_heap_add_root(realm->heap, &roots[1]);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &roots[0]);
+		return status;
+	}
+
+	/* The target array and word are both protected during property insertion. */
 	status = vm_object_define(realm->heap, tokens, vm_value_int32((int32_t)tokens->length), vm_value_cell(token), VM_PROPERTY_DEFAULT);
+	vm_heap_remove_root(realm->heap, &roots[1]);
+	vm_heap_remove_root(realm->heap, &roots[0]);
 	if (status != 0)
 		return status;
 
@@ -803,15 +912,21 @@ token_list_remove_at(
 	struct vm_object *tokens,
 	uint32_t index)
 {
+	struct vm_cell *root;
 	uint32_t at;
 	int status;
 
 	/* Each later word one place down. */
+	root = &tokens->cell;
+	status = vm_heap_add_root(realm->heap, &root);
+	if (status != 0)
+		return status;
 	for (at = index; at + 1U < tokens->length; at++)
 		tokens->elements[at] = tokens->elements[at + 1U];
 
 	/* The set is one shorter. */
 	status = vm_array_set_length(realm->heap, tokens, tokens->length - 1U);
+	vm_heap_remove_root(realm->heap, &root);
 	if (status != 0)
 		return status;
 
@@ -937,6 +1052,7 @@ token_list_value_set(
 	struct dom_element *element;
 	struct vm_string *class_atom;
 	struct vm_string *value;
+	struct vm_cell *value_root;
 	int status;
 
 	/* The element and the new value. */
@@ -947,12 +1063,21 @@ token_list_value_set(
 	status = bind_to_string(realm, js_argument(args, count, 0), &value);
 	if (status != 0)
 		return status;
+	value_root = &value->cell;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0)
+		return status;
 
 	/* The attribute takes it as it is. */
 	class_atom = vm_atom_from_ascii(realm->heap, "class");
-	if (class_atom == NULL)
+	if (class_atom == NULL) {
+		vm_heap_remove_root(realm->heap, &value_root);
 		return ENOMEM;
+	}
+
+	/* The value remains protected until the element accepts it. */
 	status = dom_element_set_attribute(element, class_atom, value);
+	vm_heap_remove_root(realm->heap, &value_root);
 	if (status != 0)
 		return status;
 
@@ -1008,6 +1133,7 @@ token_list_contains(
 	struct dom_element *element;
 	struct vm_object *tokens;
 	struct vm_string *token;
+	struct vm_cell *token_root;
 	uint32_t index;
 	int present;
 	int status;
@@ -1019,12 +1145,19 @@ token_list_contains(
 	status = bind_to_string(realm, js_argument(args, count, 0), &token);
 	if (status != 0)
 		return status;
-	status = token_list_read(realm, element, &tokens);
+	token_root = &token->cell;
+	status = vm_heap_add_root(realm->heap, &token_root);
 	if (status != 0)
 		return status;
+	status = token_list_read(realm, element, &tokens);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &token_root);
+		return status;
+	}
 
 	/* Succeeded: whether it is there. */
 	present = token_list_index(tokens, token, &index);
+	vm_heap_remove_root(realm->heap, &token_root);
 	*result = vm_value_boolean(present);
 	return 0;
 }
@@ -1041,6 +1174,7 @@ token_list_add(
 	struct dom_element *element;
 	struct vm_object *tokens;
 	struct vm_object *added;
+	struct vm_cell *added_root;
 	struct vm_string *token;
 	uint32_t index;
 	unsigned argument;
@@ -1055,19 +1189,23 @@ token_list_add(
 	status = bind_array_create(realm, &added);
 	if (status != 0)
 		return status;
+	added_root = &added->cell;
+	status = vm_heap_add_root(realm->heap, &added_root);
+	if (status != 0)
+		return status;
 	for (argument = 0; argument < count; argument++) {
 		status = token_list_token(realm, args[argument], &token);
 		if (status != 0)
-			return status;
+			goto cleanup_add;
 		status = token_list_append(realm, added, token);
 		if (status != 0)
-			return status;
+			goto cleanup_add;
 	}
 
 	/* The set, with each new word at its end. */
 	status = token_list_read(realm, element, &tokens);
 	if (status != 0)
-		return status;
+		goto cleanup_add;
 	for (index = 0; index < added->length; index++) {
 		token = (struct vm_string *)vm_value_as_cell(added->elements[index]);
 		present = token_list_index(tokens, token, &argument);
@@ -1077,11 +1215,15 @@ token_list_add(
 		/* A word the set lacks. */
 		status = token_list_append(realm, tokens, token);
 		if (status != 0)
-			return status;
+			goto cleanup_add;
 	}
 
 	/* Succeeded: the attribute holds the set. */
 	status = token_list_write(realm, element, tokens);
+
+cleanup_add:
+	/* Every argument remains reachable until validation and mutation finish. */
+	vm_heap_remove_root(realm->heap, &added_root);
 	if (status != 0)
 		return status;
 	return 0;
@@ -1100,6 +1242,8 @@ token_list_remove(
 	struct dom_attribute *attribute;
 	struct vm_object *tokens;
 	struct vm_object *removed;
+	struct vm_cell *removed_root;
+	struct vm_cell *tokens_root;
 	struct vm_string *class_atom;
 	struct vm_string *token;
 	uint32_t index;
@@ -1107,6 +1251,7 @@ token_list_remove(
 	unsigned argument;
 	int present;
 	int status;
+	int tokens_rooted;
 
 	/* The element, and every argument checked before anything changes. */
 	*result = VM_VALUE_UNDEFINED;
@@ -1116,19 +1261,29 @@ token_list_remove(
 	status = bind_array_create(realm, &removed);
 	if (status != 0)
 		return status;
+	removed_root = &removed->cell;
+	status = vm_heap_add_root(realm->heap, &removed_root);
+	if (status != 0)
+		return status;
+	tokens_rooted = 0;
 	for (argument = 0; argument < count; argument++) {
 		status = token_list_token(realm, args[argument], &token);
 		if (status != 0)
-			return status;
+			goto cleanup_remove;
 		status = token_list_append(realm, removed, token);
 		if (status != 0)
-			return status;
+			goto cleanup_remove;
 	}
 
 	/* The set, without each word. */
 	status = token_list_read(realm, element, &tokens);
 	if (status != 0)
-		return status;
+		goto cleanup_remove;
+	tokens_root = &tokens->cell;
+	status = vm_heap_add_root(realm->heap, &tokens_root);
+	if (status != 0)
+		goto cleanup_remove;
+	tokens_rooted = 1;
 	for (index = 0; index < removed->length; index++) {
 		token = (struct vm_string *)vm_value_as_cell(removed->elements[index]);
 		present = token_list_index(tokens, token, &found);
@@ -1138,19 +1293,31 @@ token_list_remove(
 		/* A word the set has. */
 		status = token_list_remove_at(realm, tokens, found);
 		if (status != 0)
-			return status;
+			goto cleanup_remove;
 	}
 
 	/* An element without the attribute and with nothing left is not given one. */
 	class_atom = vm_atom_from_ascii(realm->heap, "class");
-	if (class_atom == NULL)
-		return ENOMEM;
+	if (class_atom == NULL) {
+		status = ENOMEM;
+		goto cleanup_remove;
+	}
+
+	/* Empty absent classes stay absent after removal. */
 	attribute = dom_element_find_attribute(element, DOM_NS_NONE, class_atom);
-	if (attribute == NULL && tokens->length == 0)
-		return 0;
+	if (attribute == NULL && tokens->length == 0) {
+		status = 0;
+		goto cleanup_remove;
+	}
 
 	/* Succeeded: the attribute holds the set. */
 	status = token_list_write(realm, element, tokens);
+
+cleanup_remove:
+	/* Every argument remains reachable until validation and mutation finish. */
+	if (tokens_rooted)
+		vm_heap_remove_root(realm->heap, &tokens_root);
+	vm_heap_remove_root(realm->heap, &removed_root);
 	if (status != 0)
 		return status;
 	return 0;
@@ -1172,6 +1339,7 @@ token_list_toggle(
 	struct dom_element *element;
 	struct vm_object *tokens;
 	struct vm_string *token;
+	struct vm_cell *token_root;
 	uint32_t index;
 	int present;
 	int wanted;
@@ -1184,9 +1352,15 @@ token_list_toggle(
 	status = token_list_token(realm, js_argument(args, count, 0), &token);
 	if (status != 0)
 		return status;
-	status = token_list_read(realm, element, &tokens);
+	token_root = &token->cell;
+	status = vm_heap_add_root(realm->heap, &token_root);
 	if (status != 0)
 		return status;
+	status = token_list_read(realm, element, &tokens);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &token_root);
+		return status;
+	}
 
 	/* Whether the word is wanted: the force when given, otherwise the opposite of now. */
 	present = token_list_index(tokens, token, &index);
@@ -1199,6 +1373,7 @@ token_list_toggle(
 	/* Nothing to change. */
 	if (wanted == present) {
 		*result = vm_value_boolean(present);
+		vm_heap_remove_root(realm->heap, &token_root);
 		return 0;
 	}
 
@@ -1210,11 +1385,14 @@ token_list_toggle(
 	}
 
 	/* A change that failed. */
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &token_root);
 		return status;
+	}
 
 	/* The attribute holds the set. */
 	status = token_list_write(realm, element, tokens);
+	vm_heap_remove_root(realm->heap, &token_root);
 	if (status != 0)
 		return status;
 
@@ -1240,6 +1418,8 @@ token_list_replace(
 	struct vm_object *tokens;
 	struct vm_string *old_token;
 	struct vm_string *new_token;
+	struct vm_cell *old_root;
+	struct vm_cell *new_root;
 	uint32_t old_index;
 	uint32_t new_index;
 	int old_present;
@@ -1253,17 +1433,38 @@ token_list_replace(
 	status = token_list_token(realm, js_argument(args, count, 0), &old_token);
 	if (status != 0)
 		return status;
+	old_root = &old_token->cell;
+	status = vm_heap_add_root(realm->heap, &old_root);
+	if (status != 0)
+		return status;
 	status = token_list_token(realm, js_argument(args, count, 1), &new_token);
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &old_root);
 		return status;
+	}
+
+	/* Retain the converted replacement while the class set is read. */
+	new_root = &new_token->cell;
+	status = vm_heap_add_root(realm->heap, &new_root);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &old_root);
+		return status;
+	}
+
+	/* Read the current set after both conversions can run user code. */
 	status = token_list_read(realm, element, &tokens);
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &new_root);
+		vm_heap_remove_root(realm->heap, &old_root);
 		return status;
+	}
 
 	/* A word the set does not have is not replaced. */
 	old_present = token_list_index(tokens, old_token, &old_index);
 	if (!old_present) {
 		*result = VM_VALUE_FALSE;
+		vm_heap_remove_root(realm->heap, &new_root);
+		vm_heap_remove_root(realm->heap, &old_root);
 		return 0;
 	}
 
@@ -1281,11 +1482,16 @@ token_list_replace(
 	}
 
 	/* A change that failed. */
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &new_root);
+		vm_heap_remove_root(realm->heap, &old_root);
 		return status;
+	}
 
 	/* The attribute holds the set. */
 	status = token_list_write(realm, element, tokens);
+	vm_heap_remove_root(realm->heap, &new_root);
+	vm_heap_remove_root(realm->heap, &old_root);
 	if (status != 0)
 		return status;
 
@@ -1308,32 +1514,69 @@ string_map_accessor(
 	struct vm_function *setter;
 	struct vm_accessor *accessor;
 	struct vm_string *name;
+	struct vm_cell *roots[4];
 	vm_value key;
+	unsigned registered;
+	unsigned index;
 	int status;
 
 	/* The property's name. */
 	status = string_map_name(realm, attribute->name, &name);
 	if (status != 0)
 		return status;
-	status = vm_key_from_string(realm->heap, name, &key);
+	roots[0] = &name->cell;
+	status = vm_heap_add_root(realm->heap, &roots[0]);
 	if (status != 0)
 		return status;
+	status = vm_key_from_string(realm->heap, name, &key);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &roots[0]);
+		return status;
+	}
+
+	/* The temporary key name remains rooted during method construction. */
+	roots[1] = NULL;
+	roots[2] = NULL;
+	roots[3] = NULL;
+	registered = 1;
+	for (index = 1; index < 4U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* The getter and the setter, which keep the attribute's name. */
 	status = js_builtin_function(realm, "get", 0, string_map_get, NULL, &getter);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = &getter->object.cell;
 	getter->data = vm_value_cell(attribute->name);
 	status = js_builtin_function(realm, "set", 1, string_map_set, NULL, &setter);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[2] = &setter->object.cell;
 	setter->data = vm_value_cell(attribute->name);
 
 	/* The accessor, enumerable as other browsers' names are. */
 	accessor = vm_accessor_create(realm->heap, vm_value_cell(getter), vm_value_cell(setter));
-	if (accessor == NULL)
-		return ENOMEM;
+	if (accessor == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The descriptor remains live until it is attached to the rooted map. */
+	roots[3] = &accessor->cell;
 	status = vm_object_define(realm->heap, map, key, vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_ENUMERABLE | VM_PROPERTY_CONFIGURABLE);
+
+cleanup:
+	/* The map owns the completed accessor after publication. */
+	while (registered > 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* The caller sees only a fully published accessor or the original error. */
 	if (status != 0)
 		return status;
 
@@ -1459,6 +1702,7 @@ string_map_set(
 	struct vm_function *callee;
 	struct vm_string *name;
 	struct vm_string *value;
+	struct vm_cell *value_root;
 	int status;
 
 	/* The element, the attribute's name and the value. */
@@ -1471,9 +1715,14 @@ string_map_set(
 	status = bind_to_string(realm, js_argument(args, count, 0), &value);
 	if (status != 0)
 		return status;
+	value_root = &value->cell;
+	status = vm_heap_add_root(realm->heap, &value_root);
+	if (status != 0)
+		return status;
 
 	/* The attribute takes it. */
 	status = dom_element_set_attribute(element, name, value);
+	vm_heap_remove_root(realm->heap, &value_root);
 	if (status != 0)
 		return status;
 

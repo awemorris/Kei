@@ -10,6 +10,7 @@ Parent: [Master](../master.md)
 Queue: none（q592-i01 cleared（P3）/ q587-i01 uncleared / q581-i01 cleared / q580-i01 unclearedの履歴を保持。共有Queue投影はmain担当）
 Resume point（2026-10-02 q592）: **p007 cleared**（[q592 結果](phase007/q592-result.md)）。CSD の完成（B1/B2）は QEMU と Linux guest で達成。並行して p002 の行別採否をユーザーに提示する（[推奨案](phase002/phase.md)、WS117 p002 と同じ席で決めると速い）。p007 cleared が WS117 p001 の開始条件（2026-10-02 user の順序）。p003〜p006 は p002 の採否待ち。
 2026-10-02 user:「portalはなしにしましょう。D-BusがないとGTK4が動かないということはないはずです。WindowsでもMacでも動きますよね。D-Busも実装しません。」 → portal（ws114-p004 など）は取り消し、D-Bus は実装しない。
+2026-10-03 user:「org_kde_kwin_server_decorationに対応しましょう。どちらのプロトコルも使わず、自分で飾りを描くアプリは、無視します。」「…全画面が多いと思います。」→ 新 [p008](phase008/phase.md)（宣言の無い窓を既定で SSD、CSD の宣言で CSD、全画面は SSD 無し）。P2 の compositor の線で p023 の後に投入。
 <!-- awesome-plan-current:end -->
 
 ## ベータ1（fg019、2026-10-17）までの到達目標（2026-10-02 計画、ユーザー確認待ち）
@@ -76,3 +77,5 @@ Graph: WS105 context → p001 → p002 → {p003,p004} → p005 → p006 → WS1
 2026-10-02 / ws114-beta1-plan-20261002: 計画担当が fg019（ベータ1）向けに詳細化。最低線を p007 の CSD 完成（B1/B2）とし、p007 の新 attempt を残り 5 点に限定して Queue 投入可と記録。p002 に行別の推奨案（提案であり採否ではない）を追記し planned に、p003 は p007 cleared も依存に追加、p004 は portal をベータ1で取消/保留する推奨を記録。p007 cleared を WS117 p001 の開始条件として投影。実装・guest 実行なし。Queue/Master/WS117 投影は main。
 
 2026-10-02 / q592-p007-cleared: P3 が q592-i01 で p007 の残り 5 点を最終 source で確かめた。Linux guest への導入と SHA 照合、GTK4 の GL/Cairo/Vulkan、空 entry への別 client の paste の完全一致、Textedit の全 control、SSD の phantom release 0、Terminal/Files、OS/GPU 境界、zedBSD target build の warning 0、boot-test の PNG。製品 source の変更なし。p007 cleared。B1/B2 は達成。WS acceptance（p002 の採否、p003〜p006）は未達のまま。Queue・Master・WS117 への投影は Q1。
+
+2026-10-03 / p008: Q1 判定で cleared（P2 の提案を受け入れ。Linux GTK4 の CSD・二重無し、zedBSD の C 基準 15/15、boot-test）。

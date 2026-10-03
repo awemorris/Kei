@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-click.c",
+      "formatted_sha256": "da50b7679a93fdab73838c0e74dd400f688742f3902d465ff18cad8b0610f60f",
+      "final_sha256": "473509c62479e1b2b65e8c7970c053758cf8c3655fea1bba4337c20ff5be1f12",
+      "restorations": "definition argument tabs and compound precondition lines"
+    }
+  ]
+}

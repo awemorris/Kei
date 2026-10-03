@@ -1,0 +1,28 @@
+box 100px 40px 10px 4px 7px 2px solid rgb(255, 0, 0)
+box2 block static 0.5 auto rgb(0, 0, 0) rgba(0, 0, 0, 0) 20px 30px 8px
+names 20px 5px 2px true
+sized 100px 30px border-box rgba(0, 0, 255, 0.3)
+hidden none 50px
+inline auto inline
+fonts Arial, "Amazon Ember", sans-serif|700|italic|hidden|left|hidden auto
+rel relative 10px -10px 50% 3 rgb(51, 102, 153) auto
+text [] true string
+read-only true NoModificationAllowedError 7
+live 60px
+detached []
+not an element true
+offset parent holder holder cell BODY
+no parent    
+offsets 10 20 6 6 8 8 0
+box offset true 15
+scrollTo 500 500
+scrollBy 600
+clamp true
+negative 0
+by options 30
+into view 0
+into view end true
+into view center true
+scrollTop 50 50
+element 50
+root 70

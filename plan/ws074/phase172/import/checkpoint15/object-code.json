@@ -1,0 +1,18 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/bind/style-context.c",
+    "before_sha256": "37798912c58e9137600822422fcc25fecc030b9e4b89c3d2fe56514b8c441347",
+    "before_text_sha256": "c22cf13a3b636de258b0d28935615ca5c1a14573dd5d82ce2ce9a1336aa9b259",
+    "after_sha256": "5b10990a1c578962d30c0aef9eeaee2d2017c11c0b8d7eb226a67f3fd30a7a89",
+    "after_text_sha256": "a8343e021ff9f2e1017db5e1886d354a879be2dfb1ca9761dfc272921750ef10",
+    "text_equal": false
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/implementation.c",
+    "before_sha256": "12126b92256d208eb3fb3a83d47e52ca6f843acbb3c1e42ff1b4f84a256218f8",
+    "before_text_sha256": "1758e1c36497272e5005420d6b9e32a43cbb0b491fab7c2d189ba5b5525818fd",
+    "after_sha256": "1c9725ba5ba50c0cff9b8e38801c6488ff8c9e678ada0b8f2239aea6c2b70e1e",
+    "after_text_sha256": "1758e1c36497272e5005420d6b9e32a43cbb0b491fab7c2d189ba5b5525818fd",
+    "text_equal": true
+  }
+]

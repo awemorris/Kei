@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format-19",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/style-context.c",
+      "formatted_sha256": "9409b9d5538128d9f1698c4dc05a4ab7d73a8aeb81697548f3ab5640e7b71825",
+      "final_sha256": "5b10990a1c578962d30c0aef9eeaee2d2017c11c0b8d7eb226a67f3fd30a7a89",
+      "restorations": "definition argument tabs; required semantic paragraph separation"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/implementation.c",
+      "formatted_sha256": "4d933dd95decbb985ea6b3eee2def2f6477e83eb8458d5f81f2507a461468b9b",
+      "final_sha256": "1c9725ba5ba50c0cff9b8e38801c6488ff8c9e678ada0b8f2239aea6c2b70e1e",
+      "restorations": "definition argument tabs; required semantic paragraph separation"
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-viewport.c",
+      "formatted_sha256": "58377a1a872f3d37ee809bdd64146972d7d15bb42bf96ee9ddd3bfcbac68e8d5",
+      "final_sha256": "59120f886a8c8cfc0a85d906217085da2d42626c602ae6ea3bc29376e1190638",
+      "restorations": "definition argument tabs; required semantic paragraph separation"
+    }
+  ]
+}

@@ -91,6 +91,9 @@ struct selected_store {
 	const char *target;
 };
 
+int wifi_store_update_at(int directory, const char *target, uid_t uid, gid_t gid, const struct wifi_store_edit *edit, char *error, size_t error_capacity);
+static int apply_edit(struct wifi_conf_model *model, const struct wifi_store_edit *edit, char *error, size_t error_capacity);
+
 static int
 copy_diagnostic(char *error, size_t capacity, const char *message)
 {
@@ -878,6 +881,105 @@ wifi_store_set_key_at(int directory, const char *target, uid_t uid, gid_t gid,
 		      const void *passphrase, size_t passphrase_length,
 		      int automatic, char *error, size_t error_capacity)
 {
+	char ssid_text[WIFI_CONF_SSID_MAX + 1U];
+	char passphrase_text[WIFI_CONF_PASSPHRASE_MAX + 1U];
+	struct wifi_store_edit edit;
+	int updated;
+	int saved;
+
+	/* Checks the counted fields before they become text for the edit. */
+	if (wifi_conf_validate_profile(ssid, ssid_length, passphrase,
+	    passphrase_length, error, error_capacity) != 0)
+		return -1;
+
+	/* Refuses a mode that is neither manual nor automatic. */
+	if (automatic != 0 && automatic != 1) {
+		errno = EINVAL;
+		(void)store_error(error, error_capacity, errno, "invalid update mode", 0);
+		return -1;
+	}
+
+	/* The edit: add the SSID, or replace its key and mode. */
+	memcpy(ssid_text, ssid, ssid_length);
+	ssid_text[ssid_length] = '\0';
+	memcpy(passphrase_text, passphrase, passphrase_length);
+	passphrase_text[passphrase_length] = '\0';
+	edit.kind = WIFI_STORE_EDIT_SET;
+	edit.ssid = ssid_text;
+	edit.passphrase = passphrase_text;
+	edit.automatic = automatic;
+
+	/* The locked rewrite; the text copy of the key is wiped either way. */
+	updated = wifi_store_update_at(directory, target, uid, gid, &edit,
+	    error, error_capacity);
+	saved = errno;
+	wifi_conf_explicit_clear(passphrase_text, sizeof(passphrase_text));
+	errno = saved;
+	if (updated != 0)
+		return -1;
+
+	/* Succeeded: the store holds the profile. */
+	return 0;
+}
+
+/* Applies one edit to a parsed store model. */
+static int
+apply_edit(
+	struct wifi_conf_model *model,
+	const struct wifi_store_edit *edit,
+	char *error,
+	size_t error_capacity)
+{
+	size_t ssid_length;
+	size_t passphrase_length;
+	int applied;
+
+	/* The counted SSID and key (none for a delete, or for a modify that keeps the key). */
+	ssid_length = strnlen(edit->ssid, WIFI_CONF_SSID_MAX + 1U);
+	passphrase_length = 0U;
+	if (edit->passphrase != NULL)
+		passphrase_length = strnlen(edit->passphrase, WIFI_CONF_PASSPHRASE_MAX + 1U);
+
+	/* Each kind of edit is the configuration model's. */
+	applied = -1;
+	switch (edit->kind) {
+	case WIFI_STORE_EDIT_SET:
+		applied = wifi_conf_set_key(model, edit->ssid, ssid_length, edit->passphrase, passphrase_length, edit->automatic, error, error_capacity);
+		break;
+	case WIFI_STORE_EDIT_ADD:
+		applied = wifi_conf_add(model, edit->ssid, ssid_length, edit->passphrase, passphrase_length, edit->automatic, error, error_capacity);
+		break;
+	case WIFI_STORE_EDIT_MODIFY:
+		applied = wifi_conf_modify(model, edit->ssid, ssid_length, edit->passphrase, passphrase_length, edit->automatic, error, error_capacity);
+		break;
+	case WIFI_STORE_EDIT_DELETE:
+		applied = wifi_conf_delete(model, edit->ssid, ssid_length, error, error_capacity);
+		break;
+	default:
+		errno = EINVAL;
+		break;
+	}
+
+	/* Reports a refused edit with the model's reason. */
+	if (applied != 0)
+		return -1;
+
+	/* Succeeded: the model holds the change. */
+	return 0;
+}
+
+/*
+ * Applies one edit to the store at a directory as one locked rewrite.
+ *
+ * The store is read and parsed under its lock, changed, written to a
+ * temporary file that is read back and checked, and renamed over the old
+ * one.  A refused edit leaves the store as it was.
+ */
+int
+wifi_store_update_at(int directory, const char *target, uid_t uid, gid_t gid,
+		     const struct wifi_store_edit *edit, char *error,
+		     size_t error_capacity)
+{
 	int function_result;
 	struct stat unexpected;
 	struct stat lock_status;
@@ -912,22 +1014,11 @@ wifi_store_set_key_at(int directory, const char *target, uid_t uid, gid_t gid,
 		return function_result;
 	}
 
-	/* Handles an operation failure. */
-	if (wifi_conf_validate_profile(ssid, ssid_length, passphrase,
-	    passphrase_length, error, error_capacity) != 0)
-
-		/* Reports operation failure. */
-		return -1;
-
-	/* Handles the automatic condition. */
-	if (automatic != 0 && automatic != 1) {
+	/* Refuses an edit without its SSID. */
+	if (edit == NULL || edit->ssid == NULL) {
 		errno = EINVAL;
-
-		/* Obtains the store error result. */
 		function_result = store_error(error, error_capacity, errno,
-		    "invalid update mode", 0);
-
-		/* Returns the computed result. */
+		    "invalid update request", 0);
 		return function_result;
 	}
 	lock_descriptor = open_lock(directory, uid, gid, F_WRLCK);
@@ -975,8 +1066,7 @@ wifi_store_set_key_at(int directory, const char *target, uid_t uid, gid_t gid,
 	}
 
 	/* Handles an operation failure. */
-	if (wifi_conf_set_key(model, ssid, ssid_length, passphrase,
-	    passphrase_length, automatic, error, error_capacity) != 0 ||
+	if (apply_edit(model, edit, error, error_capacity) != 0 ||
 	    wifi_conf_serialize(model, output, WIFI_CONF_FILE_MAX + 1U,
 	    &output_length, error, error_capacity) != 0) {
 		failed = 1;
@@ -1660,6 +1750,57 @@ wifi_store_set_key_for_effective_user(const char *ssid,
 
 	/* Returns the computed result. */
 	return result;
+}
+
+/*
+ * Applies one edit to the invoking account's own credential store.
+ *
+ * The store is the effective UID's: /etc/wifi.conf for root, the passwd
+ * home's .wifi.conf for anyone else (HOME is not consulted), so an account
+ * only ever changes its own saved networks.
+ */
+int
+wifi_store_edit_for_effective_user(
+	const struct wifi_store_edit *edit,
+	char *error,
+	size_t error_capacity)
+{
+	struct selected_store selected;
+	int selected_error;
+	int updated;
+	int closed;
+	int saved;
+
+	/* Refuses an edit without its SSID. */
+	if (edit == NULL || edit->ssid == NULL) {
+		errno = EINVAL;
+		(void)store_error(error, error_capacity, errno, "invalid command fields", 0);
+		return -1;
+	}
+
+	/* Opens the invoking account's store directory. */
+	selected_error = select_store(&selected, geteuid());
+	if (selected_error != 0) {
+		(void)store_error(error, error_capacity, errno, "select credential store", 0);
+		return -1;
+	}
+
+	/* The locked rewrite, then the directory closed (whose failure counts only after a good rewrite). */
+	updated = wifi_store_update_at(selected.directory, selected.target, selected.uid, selected.gid, edit, error, error_capacity);
+	saved = errno;
+	closed = close(selected.directory);
+	if (closed != 0 && updated == 0) {
+		saved = errno;
+		updated = store_error(error, error_capacity, saved, "close credential directory", 0);
+	}
+	errno = saved;
+
+	/* Reports a refused or failed edit. */
+	if (updated != 0)
+		return -1;
+
+	/* Succeeded: the store holds the change. */
+	return 0;
 }
 
 int

@@ -137,9 +137,19 @@ layout_from_px(
 	float px)
 {
 	float units;
+	float limit;
 
-	/* Scales and rounds away from zero at the half. */
+	/* Scales finite pixels without casting NaN or infinity to an integer. */
 	units = px * (float)LAYOUT_UNIT;
+	if (units != units)
+		return 0;
+	limit = (float)INT32_MAX;
+	if (units >= limit)
+		return INT32_MAX;
+	if (units <= -limit)
+		return -INT32_MAX;
+
+	/* Rounds ordinary values away from zero at the half. */
 	if (units < 0)
 		return (layout_unit)(units - 0.5f);
 

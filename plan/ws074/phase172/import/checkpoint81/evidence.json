@@ -1,0 +1,33 @@
+{
+  "queue": "q597",
+  "checkpoint": 81,
+  "source": "userland/desktop/libbrowser/bind/style.c",
+  "source_sha256": "062578c27a8233a676e58fa64bd0c4e572e8844c77b086b6a6a2773b49f4cd31",
+  "baseline": "bfe7c8691300d43f37614ae5f5d0a3809a556bae",
+  "reviewed": 200,
+  "total": 209,
+  "remaining": 9,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 35,
+    "classification": "permitted forward cleanup jumps only"
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "cssom": "12/12 passed",
+    "cssom-mutation": "12/12 passed",
+    "css-rule-model": "44/44 passed",
+    "style-sheet": "21/21 passed",
+    "dom-tests": "dom-tests 23/23",
+    "collection": "37/37 passed"
+  },
+  "limits": [
+    "No collector forced exactly in all style-list/accessor allocation windows; static root ownership and cleanup reviewed.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

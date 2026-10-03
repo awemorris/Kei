@@ -1,16 +1,16 @@
 # Architecture
 
-Status: current navigation index
-
-Architecture documents explain component boundaries, ownership, lifecycle,
-and design rationale. They must label current implementation, compatibility
-intent, and future design separately. Detailed implementation schedules remain
-in the [plan](../../plan/master.md).
+Architecture documents give the external design of each subsystem: its
+purpose, its parts and their boundaries, and the reasons for them. They state
+the target design; the implementation follows ([rules](../style.md)).
 
 ## Current architecture
 
 - [Kernel, HAL and driver boundaries](kernel-and-hal.md): ownership, storage,
   public interfaces and implementation limits.
+- [Keiland desktop environment](keiland.md) (target design): purpose, layers,
+  the stable libkeiland API, internal Wayland extensions, the
+  operating-system backend, touch input and the titlebar.
 
 ## Planned architecture
 

@@ -1,0 +1,9 @@
+{
+  "path": "plan/ws074/tests/host-data-url.c",
+  "before_sha256": "34378a71ef5c7ef29dd0984539c3cc0afd1573984b7742db058a6339cee0103d",
+  "sha256": "0ed96cf67bf1188e8c595dde6ccfe18dec7b21cd973ba0038ca37bf8ddd0f7d6",
+  "full_standard_review": "complete original file and changed corpus against C/component rules",
+  "inventory_count": "Already reviewed in checkpoint11 inside209 import inventory; revalidated here, not counted a second time",
+  "scope": "four actual input/output regressions; existing fixture execution/allocation mechanism unchanged",
+  "previous_review": "checkpoint11/README.md"
+}

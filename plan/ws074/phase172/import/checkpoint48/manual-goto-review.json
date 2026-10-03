@@ -1,0 +1,35 @@
+{
+  "authority": "full C section14 single forward shared cleanup",
+  "findings": 25,
+  "functions": [
+    {
+      "path": "plan/ws074/tests/host-frame-load.c",
+      "function": "main",
+      "forward_cleanup_jumps": 10,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-load.c",
+      "function": "load_lifetime",
+      "forward_cleanup_jumps": 2,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-load.c",
+      "function": "load_pressure",
+      "forward_cleanup_jumps": 6,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-load.c",
+      "function": "load_files",
+      "forward_cleanup_jumps": 7,
+      "one_label": true,
+      "all_jumps_forward": true
+    }
+  ],
+  "other_findings": 0
+}

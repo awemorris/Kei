@@ -836,6 +836,12 @@ wlc_wire_display(
 		if (proxy != NULL)
 			display->protocol_interface = proxy->interface;
 
+		/* Keeps the error's log line, which is logged once the mutex is released. */
+		if (display->protocol_report == NULL) {
+			display->protocol_report = wlc_protocol_report(display->protocol_interface, id, code,
+								       (const char *)display->input + 20);
+		}
+
 		/* Reports the server's fatal protocol error with separately queryable detail. */
 		return EPROTO;
 	}

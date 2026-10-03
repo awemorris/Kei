@@ -58,8 +58,21 @@ run() {
 	code=$?
 	verdict=FAIL
 	[ $code -eq 0 ] && verdict=PASS
+	[ $code -ne 0 ] && keep_failure "$name"
 	detail=$(grep -E 'RESULT|: PASS|: FAIL|status=' "$out/$name.log" | tail -2 | tr '\n' ' ')
 	echo "$criterion $name $verdict seconds=$(($(date +%s) - began)) $detail" | tee -a "$results"
+}
+
+# Keeps what tells a failed test's cause from an infrastructure failure (ws099-p024, BUG-147), before the next test starts
+# the guest afresh: whether QEMU still runs and its own stderr (the emulator's log, not the guest's console), and the
+# session's and the test compositor's logs when SSH answers.
+keep_failure() {
+	alive=no
+	[ -f "$GUEST_RUNTIME/session.json" ] && kill -0 "$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["pid"])' "$GUEST_RUNTIME/session.json" 2>/dev/null)" 2>/dev/null && alive=yes
+	echo "qemu alive=$alive" > "$out/$1.failure.txt"
+	cp "$GUEST_RUNTIME/qemu.log" "$out/$1.qemu.log" 2>/dev/null
+	timeout 30 python3 plan/tools/guest/guest.py run 'cat /run/user/1000/session.log 2>/dev/null' > "$out/$1.session.log" 2>&1
+	timeout 30 python3 plan/tools/guest/guest.py run 'cat /tmp/zdesktop.log 2>/dev/null' > "$out/$1.zdesktop.log" 2>&1
 }
 
 : > "$results"

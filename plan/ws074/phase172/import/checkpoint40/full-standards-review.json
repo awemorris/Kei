@@ -1,0 +1,52 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "original_sha256": "152099ba7868578d4855a397200d1e0475376161274e60da10dcedabdac3e987",
+      "final_sha256": "6243ae1118603f6c06c74b0c911d23cf5ec16f4a48c0c0cc2d9daf4915bea718",
+      "status": "reviewed-full-file",
+      "original_lines": 404,
+      "final_lines": 760
+    },
+    {
+      "path": "plan/ws074/tests/host-form-collection.c",
+      "original_sha256": "a6be86a2670ee8baf288f3fc43533f901a4571ad266b76bd074fef11351b9b90",
+      "final_sha256": "cf12eae42e73070f5423745c67b382076598f24a011e9fcb982ab6e8a34eb12b",
+      "status": "reviewed-full-file",
+      "original_lines": 337,
+      "final_lines": 354
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "original_sha256": "75545aec575b71c6fe6fc72a468e4ee11af6dba24b083810b821bae34927c99f",
+      "final_sha256": "5a7dd66bc9ae52e858e962de9e5dac809b0a48f2276ca0800bba5ed8ae7b2bed",
+      "status": "reviewed-full-file",
+      "original_lines": 2029,
+      "final_lines": 2270
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "File order and user callback-forward exception; leading declarations/no call initializers; tabbed function arguments/public first sentence",
+    "Semantic paragraphs/purpose comments and allocate-check before initialize-publish; single forward cleanup per function",
+    "Immediate checked meaningful returns and actual VM_THROWN convention; no condition calls and preserved short-circuit decisions",
+    "Typed native receivers/private cells/DOM nodes; uint32 normalization and legacy own/prototype name visibility; native refusal versus ordinary fallback",
+    "Current children/document/forms/controls/radio/options/images/table membership; actual relevant Document/prototype/cache tracing and eventual reclamation",
+    "Callee roots across wrapper allocation and user argument conversion; only acquired slots removed on failure/complete output; no extra fixture retaining roots",
+    "Public ABI/SONAME/exports/public shell/private-engine ownership preserved; full whole-Phase boundary/runtime gates remain pending"
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 33,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "Allocation failure injection not performed; failure unwinds reviewed against exact acquisition count and one cleanup.",
+    "Whole source review150/209 is partial;59 C/header and final target/boot/API/ASan checks still required."
+  ]
+}

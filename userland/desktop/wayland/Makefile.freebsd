@@ -56,7 +56,7 @@ WAYLAND_FREEBSD_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/wayland/session/handoff-session.c \
 	userland/desktop/wayland/dmabuf/gpu-dmabuf.c \
 	userland/desktop/wayland/freebsd/sync-freebsd.c
-$(eval $(call KEILAND_FREEBSD_PROGRAM,wayland,bin,$(WAYLAND_FREEBSD_SOURCES),libkeiland.so libtruetype.so libpng-compat.so libz-compat.so libvulkan.so.1 libseat.so.1,-lm -pthread))
+$(eval $(call KEILAND_FREEBSD_PROGRAM,wayland,bin,$(WAYLAND_FREEBSD_SOURCES),libkeiland.so libkeiland-backend.a libtruetype.so libpng-compat.so libz-compat.so libvulkan.so.1 libseat.so.1,-lm -pthread))
 
 # Native seat compilation cannot race the external client's generated public header.
 $(KEILAND_FREEBSD_BUILD)/obj/userland/desktop/wayland/freebsd/seat-freebsd.o: $(KEILAND_FREEBSD_BUILD)/include/libseat.h

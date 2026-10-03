@@ -19,9 +19,9 @@ ZEDBSD_EXT_pango_ARCHIVE := pango-1.56.4.tar.xz
 ZEDBSD_EXT_pango_URL := https://download.gnome.org/sources/pango/1.56/pango-1.56.4.tar.xz
 ZEDBSD_EXT_pango_SIZE := 1883988
 ZEDBSD_EXT_pango_SHA256 := 17065e2fcc5f5a5bdbffc884c956bfc7c451a96e8c4fb2f8ad837c6413cb5a01
-ZEDBSD_EXT_pango_PATCH_LEVEL := zedbsd1
+ZEDBSD_EXT_pango_PATCH_LEVEL := zedbsd2
 ZEDBSD_EXT_pango_PATCHES := \
-	$(ZEDBSD_PANGO_DIR)/patches/0001-build-without-getc-unlocked-and-with-newer-clang.patch
+	$(ZEDBSD_PANGO_DIR)/patches/0001-keep-unused-but-set-global-a-warning.patch
 
 $(eval $(call ZEDBSD_EXTERNAL_SOURCE,pango))
 

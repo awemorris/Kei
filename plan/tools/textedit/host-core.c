@@ -47,6 +47,10 @@ static void test_files(void);
 static void test_layout(void);
 static void test_find(void);
 static void test_edit(void);
+static void test_replace(void);
+static void test_recent(void);
+static void set_text(struct te_app *app, const char *text, const char *find);
+static int text_is(struct te_app *app, const char *text);
 static void write_file(const char *name, const char *bytes, size_t length);
 static int read_back(const char *name, char *out, size_t size, size_t *length);
 
@@ -86,6 +90,8 @@ main(
 	test_layout();
 	test_find();
 	test_edit();
+	test_replace();
+	test_recent();
 	printf("host-core: %d/%d\n", test_passed, test_passed + test_failed);
 	return test_failed == 0 ? 0 : 1;
 }
@@ -405,6 +411,127 @@ test_edit(void)
 	te_app_event(&app, &event);
 	check(app.cursor == 12, "edit: Ctrl+Right goes to the end of the word");
 	te_app_release(&app);
+}
+
+/* ws128-p003: Replace and Replace All (the undo group, an empty replacement, Japanese text). */
+static void
+test_replace(void)
+{
+	struct te_app app;
+	size_t count;
+	int replaced;
+
+	/* Replace: the first selects, the next replaces and moves on, Undo puts one back. */
+	te_app_init(&app, &test_font, &test_font, 900, 680);
+	set_text(&app, "cat Cat cAT dog", "cat");
+	replaced = te_edit_replace(&app, "fox", 3);
+	check(!replaced && app.anchor == 0 && app.cursor == 3, "replace: the first Replace selects the place found");
+	replaced = te_edit_replace(&app, "fox", 3);
+	check(replaced && text_is(&app, "fox Cat cAT dog") && app.anchor == 4 && app.cursor == 7, "replace: the next replaces it and selects the next (either case)");
+	te_edit_undo(&app);
+	check(text_is(&app, "cat Cat cAT dog"), "replace: undo puts one replacement back");
+
+	/* Replace All with Japanese text, undone and redone in one step each. */
+	set_text(&app, "cat Cat cAT dog", "cat");
+	count = te_edit_replace_all(&app, "\xe3\x81\xad\xe3\x81\x93", 6);
+	check(count == 3 && text_is(&app, "\xe3\x81\xad\xe3\x81\x93 \xe3\x81\xad\xe3\x81\x93 \xe3\x81\xad\xe3\x81\x93 dog"), "replace all: every place, with Japanese text");
+	te_edit_undo(&app);
+	check(text_is(&app, "cat Cat cAT dog"), "replace all: one undo puts every place back");
+	te_edit_redo(&app);
+	check(text_is(&app, "\xe3\x81\xad\xe3\x81\x93 \xe3\x81\xad\xe3\x81\x93 \xe3\x81\xad\xe3\x81\x93 dog"), "replace all: one redo replaces them again");
+
+	/* An empty replacement. */
+	set_text(&app, "a-b--c", "-");
+	count = te_edit_replace_all(&app, "", 0);
+	check(count == 3 && text_is(&app, "abc"), "replace all: an empty replacement deletes");
+
+	/* A Japanese find text. */
+	set_text(&app, "\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe3\x81\xa8\xe6\x97\xa5\xe6\x9c\xac", "\xe6\x97\xa5\xe6\x9c\xac");
+	count = te_edit_replace_all(&app, "\xe8\x8b\xb1", 3);
+	check(count == 2 && text_is(&app, "\xe8\x8b\xb1\xe8\xaa\x9e\xe3\x81\xa8\xe8\x8b\xb1"), "replace all: a Japanese find text");
+
+	/* A replacement holding the find text. */
+	set_text(&app, "aaa", "a");
+	count = te_edit_replace_all(&app, "aa", 2);
+	check(count == 3 && text_is(&app, "aaaaaa"), "replace all: a replacement holding the find text is not searched again");
+
+	/* The panel's Replace All, an empty find text, and the panel holding the other actions back. */
+	set_text(&app, "one two one", "");
+	te_app_replace(&app, "one", "1", 1);
+	check(text_is(&app, "1 two 1") && strcmp(app.replace_with, "1") == 0 && strstr(app.message, "Replaced 2") != NULL, "replace: the panel's Replace All sets the find text and says how many");
+	te_app_replace(&app, "", "x", 1);
+	check(text_is(&app, "1 two 1") && strstr(app.message, "Type the text") != NULL, "replace: an empty find text changes nothing");
+	te_app_action(&app, TE_ACTION_REPLACE);
+	check(app.dialog == TE_DIALOG_REPLACE && app.replace_fresh, "replace: Edit > Replace opens the panel");
+	te_app_action(&app, TE_ACTION_UNDO);
+	check(text_is(&app, "1 two 1"), "replace: the panel holds the other actions back");
+	te_app_replace_close(&app);
+	check(app.dialog == TE_DIALOG_NONE, "replace: the panel closes");
+
+	/* A text that occurs nowhere. */
+	set_text(&app, "nothing here", "zebra");
+	count = te_edit_replace_all(&app, "x", 1);
+	check(count == 0 && text_is(&app, "nothing here") && !te_undo_can_undo(&app.undo), "replace all: no place, no change and no undo step");
+	te_app_release(&app);
+}
+
+/* ws128-p003: File > Open Recent opens a file that is there, says so of one that is gone, and asks about unsaved changes first. */
+static void
+test_recent(void)
+{
+	struct te_app app;
+	char path[512];
+
+	/* Two recent files, one of them gone. */
+	te_app_init(&app, &test_font, &test_font, 900, 680);
+	write_file("recent.txt", "recent text\n", 12);
+	snprintf(path, sizeof(path), "%s/recent.txt", test_dir);
+	snprintf(app.recent[0], sizeof(app.recent[0]), "%s", path);
+	app.recent_present[0] = 1;
+	snprintf(app.recent[1], sizeof(app.recent[1]), "%s/gone.txt", test_dir);
+	app.recent_present[1] = 0;
+	app.recent_count = 2;
+	/* The gone one, then the one that is there, then the one there over unsaved changes. */
+	te_app_action(&app, (enum te_action)(TE_ACTION_RECENT_FIRST + 1U));
+	check(strstr(app.message, "no longer there") != NULL && app.path[0] == '\0', "recent: a file that is gone is not opened");
+	te_app_action(&app, (enum te_action)TE_ACTION_RECENT_FIRST);
+	check(strcmp(app.path, path) == 0 && text_is(&app, "recent text\n"), "recent: the first item opens its file");
+	(void)te_edit_insert_text(&app, "x", 1, TE_MERGE_NONE);
+	te_app_new(&app);
+	(void)te_edit_insert_text(&app, "unsaved", 7, TE_MERGE_NONE);
+	te_app_action(&app, (enum te_action)TE_ACTION_RECENT_FIRST);
+	check(app.dialog == TE_DIALOG_UNSAVED && app.path[0] == '\0', "recent: unsaved changes are asked about first");
+	te_app_dialog_choose(&app, 1);
+	check(strcmp(app.path, path) == 0, "recent: Don't Save goes on to open the file");
+	te_app_release(&app);
+}
+
+/* Starts a document over with a text and a find text, the cursor at the start. */
+static void
+set_text(
+	struct te_app *app,
+	const char *text,
+	const char *find)
+{
+	/* The text, without an undo step and with the cursor at the start. */
+	te_app_new(app);
+	(void)te_edit_insert_text(app, text, strlen(text), TE_MERGE_NONE);
+	te_undo_free(&app->undo);
+	te_undo_init(&app->undo);
+	app->cursor = 0;
+	app->anchor = 0;
+	snprintf(app->find, sizeof(app->find), "%s", find);
+	app->find_length = strlen(find);
+}
+
+/* Tells whether the document is a text. */
+static int
+text_is(
+	struct te_app *app,
+	const char *text)
+{
+	/* The buffer's bytes and lines against the text. */
+	return buffer_matches(&app->buffer, text, strlen(text));
 }
 
 static void

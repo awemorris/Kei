@@ -1,0 +1,3 @@
+userland/desktop/libbrowser/page/link.c goto=10
+userland/desktop/libbrowser/bind/svg-text.c goto=2
+total 12

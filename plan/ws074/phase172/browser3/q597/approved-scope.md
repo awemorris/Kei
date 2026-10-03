@@ -1,0 +1,7 @@
+# q597-i01 / finite p172 continuation toward Acid3
+
+Authority: current user2026-10-03 JST「では、その目標に向かって自走をお願いします。」continues the exact previously agreed Acid3 score100/100 and fixed-reference zero-pixel objective through p172 whole prerequisite. Prior main-only/no-subagent/all `git commit -m WIP`/normal `origin browser3` push directions persist. q596 expired and was archived/read back before rotation.
+
+Selection is exactly the checkpoint50 remaining39 production C/header files and the original whole p172 final checks, at most3h from the selection time in selection.json. Fully review and repair `vm/spread.c` including its one style finding, then other38; maintain209 source hashes, apply Guardrail/full C/component standards and revalidate changed earlier-reviewed source. Finish original browser2 manifest/semantic provenance, source/API/ABI/include/link/independent client, actual native/page/JS/ASan, target warning0 and boot-test PNG gates. Clear only if every original criterion is actually proved. On bound expiry or unresolved decision, preserve results and an uncleared resume.
+
+No p100 implementation/runner execution until whole p172 clearance and actual output. Fixed Acid3 reference, viewport/font/color/comparison and fail/timeout requirements remain unchanged. q591–q593 remain reserved. Shared build inputs read-only; use own browser3 scratch. No Issue/Project publication in this locally tracked continuation.

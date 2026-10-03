@@ -1,0 +1,1 @@
+Click fixture full review, actual native10/scoped warning0/style0; unchanged no-stack-root activation/cancellation corpus.

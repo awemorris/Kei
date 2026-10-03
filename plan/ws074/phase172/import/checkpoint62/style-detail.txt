@@ -1,0 +1,2 @@
+userland/desktop/libbrowser/dom/node.c:188: goto: goto cleanup;
+userland/desktop/libbrowser/dom/node.c:196: goto: goto cleanup;

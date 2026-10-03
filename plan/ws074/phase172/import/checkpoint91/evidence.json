@@ -1,0 +1,42 @@
+{
+  "queue": "q598",
+  "checkpoint": 91,
+  "source": "userland/desktop/libbrowser/js/builtin_array.c",
+  "source_sha256": "10f74c7e8019705b43a96e8ff8651ce92cb77f95bdb5727ec359fd4f36424f25",
+  "manual_status": "reviewed-full-file",
+  "reviewed": 205,
+  "total": 209,
+  "remaining": 4,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "permitted_forward_cleanup_gotos": 47,
+    "other_findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "js": "14/14",
+    "dom": "23/23",
+    "focused_array": "5/5 observed outputs"
+  },
+  "review_areas": [
+    "full 2858-line source; API/ABI and libbrowser boundaries",
+    "constructor/array-like/coercion paths and receiver lifetime",
+    "indexed getter/setter/delete, sparse array and callback paths",
+    "sort/flatten/join scratch ownership and failure exits",
+    "full C standard checklist and machine style output"
+  ],
+  "fixes": [
+    "Array.from source and direct concat/toString primitive wrappers rooted through reentrant operations",
+    "array_this retains newly boxed receiver through length getter",
+    "map/filter/search transient values rooted across callbacks/definition",
+    "locale join retains fetched/converted value across getter and conversion"
+  ],
+  "limits": [
+    "forced GC in every callback and ENOMEM injection not run",
+    "four other full files and original whole p172 gates remain"
+  ]
+}

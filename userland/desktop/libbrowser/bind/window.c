@@ -23,25 +23,10 @@
 /* The longest console line kept for one call, in bytes (the rest is cut). */
 #define WINDOW_CONSOLE_MAX	(64U * 1024U)
 
-static int window_make_interface(struct bind_window *window, int index, struct vm_function **constructors);
-static int window_enumerate_dom_member(struct vm_realm *realm, struct vm_object *prototype, const char *name);
-static int window_define_globals(struct bind_window *window);
-static int window_make_console(struct bind_window *window);
-static int window_console_write(struct vm_realm *realm, int level, const vm_value *args, unsigned count, vm_value *result);
-static int window_console_log(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int window_console_info(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int window_console_warn(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int window_console_error(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int window_console_debug(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int window_queue_microtask(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int window_post_message(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int window_deliver_message(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int window_inner_width(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int window_inner_height(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static void window_report_job(struct vm_realm *realm, vm_value exception, void *context);
-static void window_report_exception(struct bind_window *window, vm_value exception, const char *name);
-static void window_trace(struct vm_heap *heap, void *context);
-static void window_release(void *context);
 
 /*
  * The attributes of Window's prototype.  The table is constant for the
@@ -175,6 +160,22 @@ static const struct bind_interface *const window_interfaces[BIND_INTERFACES] = {
 	&bind_svg_animated_length_interface,
 	&bind_svg_length_interface
 };
+
+static int window_make_interface(struct bind_window *window, int index, struct vm_function **constructors);
+static int window_enumerate_dom_member(struct vm_realm *realm, struct vm_object *prototype, const char *name);
+static int window_define_globals(struct bind_window *window);
+static int window_make_console(struct bind_window *window);
+static int window_console_write(struct vm_realm *realm, int level, const vm_value *args, unsigned count, vm_value *result);
+static int window_console_log(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int window_console_info(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int window_console_warn(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int window_console_error(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int window_console_debug(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static int window_deliver_message(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
+static void window_report_job(struct vm_realm *realm, vm_value exception, void *context);
+static void window_report_exception(struct bind_window *window, vm_value exception, const char *name);
+static void window_trace(struct vm_heap *heap, void *context);
+static void window_release(void *context);
 
 /*
  * Makes a realm's global object the window of a document: the interfaces,
@@ -1162,6 +1163,7 @@ window_post_message(
 	struct vm_string *type;
 	struct vm_string *target_origin;
 	struct vm_string *origin;
+	struct vm_cell *roots[4];
 	vm_value option;
 	vm_value origin_value;
 	vm_value event_value;
@@ -1169,8 +1171,11 @@ window_post_message(
 	vm_value ignored;
 	int present;
 	int is_object;
+	int option_cell;
 	int allowed;
 	int status;
+	unsigned registered;
+	unsigned index;
 
 	UNUSED_PARAMETER(this_value);
 
@@ -1188,46 +1193,85 @@ window_post_message(
 			option = VM_VALUE_UNDEFINED;
 	}
 
+	/* The options value, origin, event and delivery function survive allocations until the timer owns them. */
+	roots[0] = NULL;
+	option_cell = vm_value_is_cell(option);
+	if (option_cell)
+		roots[0] = vm_value_as_cell(option);
+	roots[1] = NULL;
+	roots[2] = NULL;
+	roots[3] = NULL;
+	registered = 0;
+	for (index = 0; index < 4U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
 	/* The string overload and the options field use the same origin syntax. */
 	if (option != VM_VALUE_UNDEFINED) {
 		status = bind_to_string(realm, option, &target_origin);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		roots[0] = &target_origin->cell;
 	}
 
 	/* '*' and '/' allow this window; an exact origin does too. */
 	status = bind_location_part(window, BIND_LOCATION_ORIGIN, &origin_value);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	origin = (struct vm_string *)vm_value_as_cell(origin_value);
+	roots[1] = &origin->cell;
 	allowed = target_origin == NULL || vm_string_equal_ascii(target_origin, "*") ||
 	    vm_string_equal_ascii(target_origin, "/") || vm_string_equal(target_origin, origin);
-	if (!allowed)
-		return 0;
+	if (!allowed) {
+		status = 0;
+		goto cleanup;
+	}
 
 	/* The message event carries the value in this realm and names this page as its source. */
 	type = vm_atom_from_ascii(realm->heap, "message");
-	if (type == NULL)
-		return ENOMEM;
+	if (type == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The new event carries this realm's message type. */
 	status = bind_event_create(window, BIND_MESSAGE_EVENT, type, &event_value, &event);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[2] = vm_value_as_cell(event_value);
 	event->detail = js_argument(args, count, 0);
 	event->origin = origin;
 	event->source = vm_value_cell(realm->global);
 	event->trusted = 1;
 	status = js_builtin_array(realm, NULL, 0, &event->ports);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* A zero-delay timer supplies the task boundary and keeps the event alive. */
 	deliver = vm_function_create_native(realm, "deliver message", 0, window_deliver_message);
-	if (deliver == NULL)
-		return ENOMEM;
+	if (deliver == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Hold the callback until the timer retains it. */
+	roots[3] = &deliver->object.cell;
 	deliver->data = event_value;
 	timer_args[0] = vm_value_cell(deliver);
 	timer_args[1] = vm_value_int32(0);
 	status = bind_set_timeout(realm, vm_value_cell(realm->global), timer_args, 2, &ignored);
+
+cleanup:
+	/* Release exactly the temporary roots registered by this call. */
+	while (registered > 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Return any error after releasing every temporary root. */
 	if (status != 0)
 		return status;
 

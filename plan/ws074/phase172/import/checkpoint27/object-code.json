@@ -1,0 +1,24 @@
+[
+  {
+    "path": "plan/ws074/tests/host-traversal.c",
+    "sha256": "3c11d2219a2b0882f65cb227b6aa63980ae65be0b83dcc2daedc6e1951ab28b6",
+    "object": "host-traversal.o",
+    "object_path": "build/browser3-p172/review27/host-traversal.o",
+    "text_sha256": "28e7967ee6df952fc948cacf8fa4c491e49662f7b10e1fee21ff954a5817d328",
+    "final_sha256": "0c8dd5cd3db49bb3ae0a81717354ecacd42d46111166b2d860d9437b4a397160",
+    "final_text_sha256": "abae5291aad69aaf4694537c8519fef8699b124e1c850391965afd33bb931aa7",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-removal.c",
+    "sha256": "f6dec199c493cb45fe09971e6740556cc3e8dca20fb0bc08926554da028725e5",
+    "object": "host-removal.o",
+    "object_path": "build/browser3-p172/review27/host-removal.o",
+    "text_sha256": "8239d4f68692c6211ee61abb1c97861a78e1d88d3fb0332569306ba4bad01e77",
+    "final_sha256": "143da884add7bb8ad8203b077eb3aa9000501a8c1c89473df11b57ceae77f755",
+    "final_text_sha256": "5c449e9bc42c2b6c201cc9577c601abad193f6ca638fc90896aa3e7d3e54ab3c",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

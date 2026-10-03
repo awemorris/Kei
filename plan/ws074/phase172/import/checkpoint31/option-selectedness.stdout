@@ -1,0 +1,74 @@
+PASS initial native states
+PASS clean detached default reflection
+PASS first enabled fallback does not alter default
+PASS new selected option wins and later unselected preserves
+PASS dirty script selection clears peers without defaults
+PASS dirty state ignores default presence changes
+PASS clean peer remains clean after script deselection
+PASS unselect current uses first enabled fallback
+PASS dirty option no longer follows defaults
+PASS boolean object truthiness without conversion callback
+PASS default boolean has no user conversion
+PASS negative index preserves explicit empty selection
+PASS reading empty selection never normalizes
+PASS high index clears all without fallback
+PASS explicit index selects native current member
+PASS index matching member dirtied
+PASS undefined long converts zero
+PASS selected index long modulo
+PASS selected index fraction truncates
+PASS selected index nonfinite zero
+PASS selected index string conversion
+PASS selected index modulo negative
+PASS list box no automatic fallback
+PASS list box permits unselecting last selection
+PASS display size change normalizes fallback
+PASS invalid display size uses default single
+PASS nonnegative prefix parser single display
+PASS large size parsing cannot overflow into single display
+PASS size removal normalizes default single
+PASS multiple no fallback
+PASS multiple preserves all selections and reports first
+PASS explicit index clears other multiple selections
+PASS removing multiple retains first selected
+PASS adding multiple does not force selection
+PASS disabled only option not auto selected
+PASS disabled group excluded from fallback
+PASS disabled option can be selected programmatically
+PASS option enabling recomputes fallback
+PASS option disabling triggers enabled fallback
+PASS group enabling triggers first eligible fallback
+PASS disabled select does not disable its option fallback
+PASS selected presence selects clean option
+PASS attribute value replacement preserves owned state
+PASS present selected replacement does not reselect clean peer
+PASS actual presence addition reselects clean peer
+PASS moving selected before existing peer repairs both owners
+PASS removed selected option retains state and old owner normalizes
+PASS reinsert selected option wins
+PASS last selected incoming group member wins
+PASS group removal repairs old owner and preserves detached state
+PASS blocking-container move removes old membership
+PASS blocked selected descendant cannot disturb outer selection
+PASS nested owner selectedness independent
+PASS deep clone initializes default fallback
+PASS shallow clone initializes selectedness from cloned default
+PASS clone selectedness starts clean independently of dirty source
+PASS deep clone fallback independent of explicit empty source selection
+PASS parser attributes and group insertion share owned state
+PASS one conversion before current membership
+PASS conversion exception preserves current state
+PASS index setter brand before conversion
+PASS forged index receiver
+PASS option getter setter brands 0
+PASS option getter setter brands 1
+PASS owned index ignores script visible collection
+PASS XML native selected state
+PASS exact namespace and local-case brands
+PASS saved child native state after frame removal
+PASS reentrant index adoption uses current native state
+PASS dirty default transition still requests ordinary fallback
+PASS bounded clone truncation preserves sibling alignment
+PASS negative zero is valid zero display size
+PASS negative nonzero invalid display uses default one
+option selectedness probe done

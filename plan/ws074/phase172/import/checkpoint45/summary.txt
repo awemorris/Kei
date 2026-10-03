@@ -1,0 +1,1 @@
+Native SVG length409/text347 full reviews; actual60+42=102 native checks/scoped warning0; 34 permitted forward cleanup jumps; original scalar/text/child XML corpora, precise GC/sole native roots and C strings retained.

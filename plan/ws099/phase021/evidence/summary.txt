@@ -1,0 +1,4 @@
+run 1 fails=2 lines=15
+run 2 fails=0 lines=15
+run 3 fails=0 lines=15
+done

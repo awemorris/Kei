@@ -806,6 +806,7 @@ context_create(
 	struct zwl_object *created;
 	struct zwl_object *menu;
 	struct zwl_object *surface;
+	struct zwl_object *desktop;
 	struct zwl_server *server;
 	uint32_t serial;
 	int32_t x;
@@ -840,8 +841,9 @@ context_create(
 	created->shown_menu = menu;
 
 	/* Only a window (a toplevel's surface) or the desktop surface (desktop.c) shows one. */
+	desktop = zwl_desktop_surface(server);
 	if ((surface->role == NULL || surface->role->top == NULL) &&
-	    surface != zwl_desktop_surface(server)) {
+	    surface != desktop) {
 		printf("ZWL MENU context-refused client=%llu context=%u surface=%u reason=window\n", (unsigned long long)manager->client->number, created->id, surface->id);
 		zwl_menu_send_context_done(created);
 		return 0;

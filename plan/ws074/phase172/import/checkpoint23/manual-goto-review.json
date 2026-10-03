@@ -1,0 +1,8 @@
+{
+  "standard": "plan/coding-style.md section14",
+  "scope": "userland/desktop/libbrowser/page/geometry.c",
+  "function": "geometry_child_box",
+  "label": "release_roots",
+  "findings": 5,
+  "classification": "Each is a single forward jump to the one shared root cleanup label. No loop/retry or cross-function jump; permitted by the full standard, not a waiver."
+}

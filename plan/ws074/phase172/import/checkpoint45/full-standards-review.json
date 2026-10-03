@@ -1,0 +1,43 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-svg-length.c",
+      "original_sha256": "e09e5b03a0d7ecf79af8b0ef78461032bd64e0c454e75e72732e674a205bc57c",
+      "final_sha256": "a3ddc059a5b06971400aeb0a93a494d9d01a445e330de731b2e55dac1e88bc58",
+      "status": "reviewed-full-file",
+      "original_lines": 409,
+      "final_lines": 538
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-text.c",
+      "original_sha256": "8ab0263a73bfc98e954de755821c82aeabe2a0601f9f2aa0046e99939563caf2",
+      "final_sha256": "ff4d84072e088e8b94bae26c5efd2e28b3c1470d19cfbc9d8a2d89e40223f280",
+      "status": "reviewed-full-file",
+      "original_lines": 347,
+      "final_lines": 476
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "All original409+347 lines including fixed native script corpora/inert tables/public main/static callbacks and console failure accounting.",
+    "Actual local SVG files/MIME/XML child frames, real canonical node brands/namespace/case/forged prototypes/UTF16 units/relative scalar refusal/readonly scalar attributes/reentrant coercion/default precise GC retained.",
+    "Each actual Page/file/font/source/frame/key/native-function/property/script/get/call result checked immediately before next significant operation; no allocation/call disguised in a conditional or comparison.",
+    "Full retained node/scalar/actual child Document/window realm ownership: original sole roots only after constructor returns, public aliases cleared before precise collection, refusing a missing collected native owner before native access, final root release proves actual graph collection.",
+    "File/page setup uses one forward cleanup with optional published file owner; all acquired paths/streams/native roots released on real refusal. Restore original live main embedding frame instead of an expired retention frame.",
+    "ANSI argument/declaration layout, per-operation purpose paragraphs, final Succeeded/error refusal separation, ownership flag purpose, ordering and physical clauses/calls reviewed against full rules. Original strings/scripts/native assertions retained."
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 34,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production edit, new fault switch, reference change or additional caller root.",
+    "No new allocation/fwrite failure injection; real existing60+42 native cases all pass. Whole p17245 remaining files and original final gates remain."
+  ]
+}

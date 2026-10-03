@@ -1,0 +1,11 @@
+{
+  "before_lines": 2489,
+  "after_lines": 2541,
+  "before_sha256": "8950ab64e598a285f706b82a93829fa8dee3227f16b99b6150eb13614affe86a",
+  "after_sha256": "c58e72065cc9dec640510422a7e82030a619274c0cab0738c5818fa2f2cd529f",
+  "existing_C_string_literal_contents_changed": false,
+  "added_C_string_literals": [
+    "s"
+  ],
+  "public_ABI_changed": false
+}

@@ -1,0 +1,1 @@
+Collection native/form full reviews plus actual verified unpublished-state and argument-conversion GC repairs; native37+13 and affected12+25+10+65+56=218, own private build/scoped warning0;33 permitted forward cleanup jumps; original caller-root exclusions/corpora and all production strings/23 constant tables preserved.

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "iframe-context-probe",
+    "argv": [
+      "timeout",
+      "120",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/iframe-context-probe.html"
+    ],
+    "exit": 0,
+    "passes": 17,
+    "failures": [],
+    "stdout": "PASS parser child\nPASS detached child null\nPASS distinct identity\nPASS repeated identity\nPASS initial URL\nPASS initial tree\nPASS initial state\nPASS defaultView\nPASS parent top frameElement\nPASS realm constructor\nPASS nested relationships\nPASS removed child null\nPASS saved window closed\nPASS removed defaultView\nPASS nested destroyed\nPASS reinsert fresh identity\nPASS inactive document child null\n",
+    "stderr": ""
+  },
+  {
+    "name": "iframe-safety-probe",
+    "argv": [
+      "timeout",
+      "120",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/iframe-safety-probe.html"
+    ],
+    "exit": 0,
+    "passes": 14,
+    "failures": [],
+    "stdout": "PASS borrowed iframe getter\nPASS borrowed Window getter\nPASS borrowed URL getter\nPASS borrowed state getter\nPASS borrowed createElement owner\nPASS shared well-known symbol\nPASS iframe getter rejects unrelated element\nPASS Window getter rejects copied Document\nPASS Window branding avoids user getter\nPASS unsupported sandbox does not expose child\nPASS ancestor removal retires child\nPASS ancestor reinsertion makes fresh context\nPASS nesting resource bound\nPASS bounded nested teardown\n",
+    "stderr": ""
+  },
+  {
+    "name": "frame-viewport-probe",
+    "argv": [
+      "timeout",
+      "120",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/frame-viewport-probe.html"
+    ],
+    "exit": 0,
+    "passes": 12,
+    "failures": [],
+    "stdout": "PASS zero iframe content viewport excludes border and padding\nPASS own and borrowed child media uses zero viewport\nPASS same saved child engine follows parent stylesheet resize\nPASS restored parent class restores zero media\nPASS dynamic inline resize updates unchanged child document\nPASS inline removal restores author zero size\nPASS border-box viewport subtracts native padding and borders\nPASS unrendered iframe has zero viewport\nPASS re-rendered iframe updates same child identity\nPASS child viewport does not overwrite primary embedder dimensions\nPASS retired child retains last supplied dimensions without parent layout access\nPASS retired saved computed declaration has no active cascade\nframe viewport probe done\n",
+    "stderr": ""
+  }
+]

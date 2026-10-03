@@ -1,0 +1,358 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=208
+ZWL STARTUP step=vulkan-objects-arrow ms=264
+ZWL STARTUP step=wallpaper-picture ms=1747
+ZWL STARTUP step=wallpaper ms=1980
+ZWL STARTUP step=glyphs-text ms=29
+ZWL STARTUP step=glyphs-icons ms=14
+ZWL STARTUP step=glyphs-mark ms=21
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=167
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=2699 at_ms=129942
+ZWL INPUT device=/dev/input/event0 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event1 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL STARTUP step=input ms=2 at_ms=129944
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=129944
+ZWL STARTUP step=socket ms=0 at_ms=129944
+ZWL IME none program=/usr/libexec/keiland-ime errno=6
+ZWL READY socket=/tmp/wayland-0 width=1280 height=800 timeout_ms=300000 pid=220
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL STARTUP step=output-display ms=49
+ZWL STARTUP step=output-pipelines ms=216
+ZWL STARTUP step=output-swapchain ms=383
+ZWL STARTUP step=output-targets ms=90
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=739 at_ms=134817
+ZWL LAT draw frame=1 at_us=134817000
+ZWL LAT acquired frame=1 at_us=134818000
+ZWL GLASS desktops x=823 step=46 width=40
+ZWL NETWORK icon x=1067 y=3 width=30 height=28
+ZWL VOLUME icon x=1034 y=3 width=30 height=28
+ZWL LAT recorded frame=1 at_us=134839000
+ZWL COMPOSE frame=1 image=0 windows=0 at_ms=134909
+ZWL LAT submit frame=1 at_us=134909000
+ZWL LAT shown frame=1 at_us=134919000
+ZWL HOME skip name=Image Viewer missing=/bin/imageview
+ZWL HOME skip name=Text Editor missing=/bin/textedit
+ZWL HOME skip name=Browser missing=/bin/browser
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=ue0 wifi=absent ssid=
+ZWL LAT draw frame=2 at_us=134921000
+ZWL LAT acquired frame=2 at_us=134961000
+ZWL LAT recorded frame=2 at_us=134981000
+ZWL COMPOSE frame=2 image=1 windows=0 at_ms=135051
+ZWL LAT submit frame=2 at_us=135051000
+ZWL LAT shown frame=2 at_us=135061000
+ZWL CLIENT client=1 fd=17
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=1 pointer=1 keyboard=1 touch=0
+ZWL LAT draw frame=3 at_us=136684000
+ZWL LAT acquired frame=3 at_us=136685000
+ZWL LAT recorded frame=3 at_us=136704000
+ZWL COMPOSE frame=3 image=2 windows=0 at_ms=136775
+ZWL LAT submit frame=3 at_us=136775000
+ZWL LAT shown frame=3 at_us=136785000
+ZWL TITLEBAR create client=1 titlebar=20 toplevel=16
+ZWL BOUNDS client=1 surface=14 width=1256 height=690
+ZWL CONFIGURE client=1 surface=14 serial=1 width=0 height=0 fullscreen=0
+ZWL VULKAN_IMPORT client=1 buffer=25 width=600 height=480
+ZWL IMPORT client=1 buffer=25 width=600 height=480 bytes=1167360
+ZWL VULKAN_IMPORT client=1 buffer=26 width=600 height=480
+ZWL IMPORT client=1 buffer=26 width=600 height=480 bytes=1167360
+ZWL VULKAN_IMPORT client=1 buffer=27 width=600 height=480
+ZWL IMPORT client=1 buffer=27 width=600 height=480 bytes=1167360
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL DECORATION applied client=1 surface=14 mode=2
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL LAT adopt surface=14 at_us=137730000
+ZWL MAP client=1 surface=14 x=340 y=203
+ZWL LAT draw frame=4 at_us=137730000
+ZWL LAT acquired frame=4 at_us=137730000
+ZWL LAT recorded frame=4 at_us=137751000
+ZWL COMPOSE frame=4 image=0 windows=1 at_ms=137822
+ZWL LAT submit frame=4 at_us=137822000
+ZWL LAT shown frame=4 at_us=137833000
+ZWL LAT draw frame=5 at_us=137885000
+ZWL LAT acquired frame=5 at_us=137886000
+ZWL LAT recorded frame=5 at_us=137907000
+ZWL COMPOSE frame=5 image=1 windows=1 at_ms=137978
+ZWL LAT submit frame=5 at_us=137978000
+ZWL LAT shown frame=5 at_us=137988000
+ZWL PERF 5006ms: passes=367 timeouts=341 | poll 81.7% work 39.1%
+ZWL PERF compose frames=5 draw_ms=119.25 (acquire 9.78 submit+present 84.54) frame_ms=131.41
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL ACQUIRED surface=14 waited_ms=5
+ZWL LAT adopt surface=14 at_us=139489000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=6 at_us=139489000
+ZWL LAT acquired frame=6 at_us=139489000
+ZWL LAT recorded frame=6 at_us=139501000
+ZWL COMPOSE frame=6 image=2 windows=1 at_ms=139553
+ZWL LAT submit frame=6 at_us=139554000
+ZWL LAT shown frame=6 at_us=139560000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL LAT adopt surface=14 at_us=139561000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=7 at_us=139561000
+ZWL LAT acquired frame=7 at_us=139592000
+ZWL LAT recorded frame=7 at_us=139613000
+ZWL COMPOSE frame=7 image=0 windows=1 at_ms=139657
+ZWL LAT submit frame=7 at_us=139657000
+ZWL LAT shown frame=7 at_us=139658000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL LAT adopt surface=14 at_us=139659000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=8 at_us=139659000
+ZWL LAT acquired frame=8 at_us=139682000
+ZWL DAMAGE frame=8 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=8 at_us=139714000
+ZWL COMPOSE frame=8 image=1 windows=1 at_ms=139757
+ZWL LAT submit frame=8 at_us=139757000
+ZWL LAT shown frame=8 at_us=139758000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL LAT adopt surface=14 at_us=139759000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=9 at_us=139759000
+ZWL LAT acquired frame=9 at_us=139792000
+ZWL DAMAGE frame=9 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=9 at_us=139805000
+ZWL COMPOSE frame=9 image=2 windows=1 at_ms=139853
+ZWL LAT submit frame=9 at_us=139853000
+ZWL LAT shown frame=9 at_us=139854000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL ACQUIRED surface=14 waited_ms=3
+ZWL LAT adopt surface=14 at_us=140052000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=10 at_us=140052000
+ZWL LAT acquired frame=10 at_us=140052000
+ZWL DAMAGE frame=10 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=10 at_us=140064000
+ZWL COMPOSE frame=10 image=0 windows=1 at_ms=140136
+ZWL LAT submit frame=10 at_us=140136000
+ZWL LAT shown frame=10 at_us=140141000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL LAT adopt surface=14 at_us=140142000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=11 at_us=140142000
+ZWL LAT acquired frame=11 at_us=140165000
+ZWL DAMAGE frame=11 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=11 at_us=140187000
+ZWL COMPOSE frame=11 image=1 windows=1 at_ms=140232
+ZWL LAT submit frame=11 at_us=140232000
+ZWL LAT shown frame=11 at_us=140242000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL LAT adopt surface=14 at_us=140243000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=12 at_us=140243000
+ZWL LAT acquired frame=12 at_us=140272000
+ZWL DAMAGE frame=12 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=12 at_us=140284000
+ZWL COMPOSE frame=12 image=2 windows=1 at_ms=140299
+ZWL LAT submit frame=12 at_us=140299000
+ZWL LAT shown frame=12 at_us=140300000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL LAT adopt surface=14 at_us=140301000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=13 at_us=140301000
+ZWL LAT acquired frame=13 at_us=140307000
+ZWL DAMAGE frame=13 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=13 at_us=140322000
+ZWL COMPOSE frame=13 image=0 windows=1 at_ms=140390
+ZWL LAT submit frame=13 at_us=140390000
+ZWL LAT shown frame=13 at_us=140391000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL ACQUIRED surface=14 waited_ms=3
+ZWL LAT adopt surface=14 at_us=140500000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=14 at_us=140500000
+ZWL LAT acquired frame=14 at_us=140501000
+ZWL DAMAGE frame=14 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=14 at_us=140513000
+ZWL COMPOSE frame=14 image=1 windows=1 at_ms=140583
+ZWL LAT submit frame=14 at_us=140583000
+ZWL LAT shown frame=14 at_us=140593000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL ACQUIRED surface=14 waited_ms=6
+ZWL LAT adopt surface=14 at_us=140599000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=15 at_us=140599000
+ZWL LAT acquired frame=15 at_us=140618000
+ZWL DAMAGE frame=15 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=15 at_us=140639000
+ZWL COMPOSE frame=15 image=2 windows=1 at_ms=140702
+ZWL LAT submit frame=15 at_us=140702000
+ZWL LAT shown frame=15 at_us=140712000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL LAT adopt surface=14 at_us=140712000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=16 at_us=140712000
+ZWL LAT acquired frame=16 at_us=140737000
+ZWL DAMAGE frame=16 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=16 at_us=140759000
+ZWL COMPOSE frame=16 image=0 windows=1 at_ms=140803
+ZWL LAT submit frame=16 at_us=140803000
+ZWL LAT shown frame=16 at_us=140804000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL LAT adopt surface=14 at_us=140804000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=17 at_us=140804000
+ZWL LAT acquired frame=17 at_us=140805000
+ZWL DAMAGE frame=17 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=17 at_us=140814000
+ZWL COMPOSE frame=17 image=1 windows=1 at_ms=140852
+ZWL LAT submit frame=17 at_us=140853000
+ZWL LAT shown frame=17 at_us=140856000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL ACQUIRED surface=14 waited_ms=5
+ZWL LAT adopt surface=14 at_us=140952000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=18 at_us=140952000
+ZWL LAT acquired frame=18 at_us=140953000
+ZWL DAMAGE frame=18 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=18 at_us=140965000
+ZWL COMPOSE frame=18 image=2 windows=1 at_ms=141027
+ZWL LAT submit frame=18 at_us=141027000
+ZWL LAT shown frame=18 at_us=141031000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL LAT adopt surface=14 at_us=141032000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=19 at_us=141032000
+ZWL LAT acquired frame=19 at_us=141058000
+ZWL DAMAGE frame=19 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=19 at_us=141080000
+ZWL COMPOSE frame=19 image=0 windows=1 at_ms=141144
+ZWL LAT submit frame=19 at_us=141144000
+ZWL LAT shown frame=19 at_us=141147000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL LAT adopt surface=14 at_us=141147000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=20 at_us=141147000
+ZWL LAT acquired frame=20 at_us=141148000
+ZWL DAMAGE frame=20 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=20 at_us=141170000
+ZWL COMPOSE frame=20 image=1 windows=1 at_ms=141201
+ZWL LAT submit frame=20 at_us=141201000
+ZWL LAT shown frame=20 at_us=141205000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL LAT adopt surface=14 at_us=141205000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=21 at_us=141205000
+ZWL LAT acquired frame=21 at_us=141214000
+ZWL DAMAGE frame=21 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=21 at_us=141235000
+ZWL COMPOSE frame=21 image=2 windows=1 at_ms=141292
+ZWL LAT submit frame=21 at_us=141292000
+ZWL LAT shown frame=21 at_us=141302000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL ACQUIRED surface=14 waited_ms=4
+ZWL LAT adopt surface=14 at_us=141398000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=22 at_us=141398000
+ZWL LAT acquired frame=22 at_us=141399000
+ZWL DAMAGE frame=22 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=22 at_us=141411000
+ZWL COMPOSE frame=22 image=0 windows=1 at_ms=141463
+ZWL LAT submit frame=22 at_us=141463000
+ZWL LAT shown frame=22 at_us=141464000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL ACQUIRED surface=14 waited_ms=5
+ZWL LAT adopt surface=14 at_us=141470000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=23 at_us=141470000
+ZWL LAT acquired frame=23 at_us=141481000
+ZWL DAMAGE frame=23 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=23 at_us=141502000
+ZWL COMPOSE frame=23 image=1 windows=1 at_ms=141565
+ZWL LAT submit frame=23 at_us=141565000
+ZWL LAT shown frame=23 at_us=141566000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL LAT adopt surface=14 at_us=141567000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=24 at_us=141567000
+ZWL LAT acquired frame=24 at_us=141574000
+ZWL DAMAGE frame=24 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=24 at_us=141595000
+ZWL COMPOSE frame=24 image=2 windows=1 at_ms=141640
+ZWL LAT submit frame=24 at_us=141640000
+ZWL LAT shown frame=24 at_us=141641000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL LAT adopt surface=14 at_us=141641000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=25 at_us=141641000
+ZWL LAT acquired frame=25 at_us=141642000
+ZWL DAMAGE frame=25 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=25 at_us=141647000
+ZWL COMPOSE frame=25 image=0 windows=1 at_ms=141695
+ZWL LAT submit frame=25 at_us=141695000
+ZWL LAT shown frame=25 at_us=141702000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL ACQUIRED surface=14 waited_ms=2
+ZWL LAT adopt surface=14 at_us=141832000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=26 at_us=141832000
+ZWL LAT acquired frame=26 at_us=141833000
+ZWL DAMAGE frame=26 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=26 at_us=141845000
+ZWL COMPOSE frame=26 image=1 windows=1 at_ms=141908
+ZWL LAT submit frame=26 at_us=141908000
+ZWL LAT shown frame=26 at_us=141918000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=26 queued=0
+ZWL ACQUIRED surface=14 waited_ms=3
+ZWL LAT adopt surface=14 at_us=141921000
+ZWL RELEASE client=1 buffer=25 dead=0
+ZWL LAT draw frame=27 at_us=141921000
+ZWL LAT acquired frame=27 at_us=141938000
+ZWL DAMAGE frame=27 image=2 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=27 at_us=141950000
+ZWL COMPOSE frame=27 image=2 windows=1 at_ms=142020
+ZWL LAT submit frame=27 at_us=142020000
+ZWL LAT shown frame=27 at_us=142031000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=27 queued=0
+ZWL ACQUIRED surface=14 waited_ms=1
+ZWL LAT adopt surface=14 at_us=142033000
+ZWL RELEASE client=1 buffer=26 dead=0
+ZWL LAT draw frame=28 at_us=142033000
+ZWL LAT acquired frame=28 at_us=142042000
+ZWL DAMAGE frame=28 image=0 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=28 at_us=142055000
+ZWL COMPOSE frame=28 image=0 windows=1 at_ms=142125
+ZWL LAT submit frame=28 at_us=142125000
+ZWL LAT shown frame=28 at_us=142135000
+ZWL ACQUIRE_FENCE client=1 surface=14 generation=1
+ZWL COMMIT client=1 surface=14 buffer=25 queued=0
+ZWL ACQUIRED surface=14 waited_ms=1
+ZWL LAT adopt surface=14 at_us=142137000
+ZWL RELEASE client=1 buffer=27 dead=0
+ZWL LAT draw frame=29 at_us=142137000
+ZWL LAT acquired frame=29 at_us=142147000
+ZWL DAMAGE frame=29 image=1 x=340 y=203 width=600 height=480
+ZWL LAT recorded frame=29 at_us=142158000

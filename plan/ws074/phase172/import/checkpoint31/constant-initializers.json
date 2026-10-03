@@ -1,0 +1,10 @@
+{
+  "paths": [
+    "userland/desktop/libbrowser/bind/select.c",
+    "userland/desktop/libbrowser/bind/table.c"
+  ],
+  "whitespace_normalized_constant_initializers_equal": true,
+  "required_select_callbacks_before_tables": 7,
+  "ordinary_select_forwards_after_tables": 4,
+  "ordinary_table_forwards_after_table": 6
+}

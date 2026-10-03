@@ -234,6 +234,72 @@ test_create_replace_append(void)
 	wifi_conf_explicit_clear(third, sizeof(third));
 }
 
+/* ws005-p020 q631: net wifi add, modify and delete through the locked rewrite. */
+static void
+test_add_modify_delete_edits(void)
+{
+	struct wifi_conf_model model;
+	struct wifi_store_edit edit;
+	char error[WIFI_CONF_DIAGNOSTIC_MAX];
+	char first[17], second[17];
+
+	secret_fill(first, 4);
+	secret_fill(second, 5);
+	clear_store();
+
+	/* delete and modify of a store that does not exist yet are ENOENT and make no file. */
+	memset(&edit, 0, sizeof(edit));
+	edit.kind = WIFI_STORE_EDIT_DELETE;
+	edit.ssid = "alpha";
+	errno = 0;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) != 0);
+	CHECK(errno == ENOENT);
+	edit.kind = WIFI_STORE_EDIT_MODIFY;
+	edit.automatic = 1;
+	errno = 0;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) != 0);
+	CHECK(errno == ENOENT);
+	CHECK(faccessat(directory_fd, "wifi.conf", F_OK, AT_SYMLINK_NOFOLLOW) != 0);
+
+	/* add twice: the second is EEXIST and keeps the first key. */
+	edit.kind = WIFI_STORE_EDIT_ADD;
+	edit.passphrase = first;
+	edit.automatic = 1;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) == 0);
+	assert_metadata("wifi.conf");
+	edit.passphrase = second;
+	errno = 0;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) != 0);
+	CHECK(errno == EEXIST);
+	CHECK(strstr(error, second) == NULL);
+	assert_passphrase("alpha", first, 1);
+
+	/* modify the mode only, then the key only. */
+	edit.kind = WIFI_STORE_EDIT_MODIFY;
+	edit.passphrase = NULL;
+	edit.automatic = 0;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) == 0);
+	assert_passphrase("alpha", first, 0);
+	edit.passphrase = second;
+	edit.automatic = -1;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) == 0);
+	assert_passphrase("alpha", second, 0);
+
+	/* delete: the profile goes, the store stays valid and empty. */
+	set_key("beta", first, 1);
+	edit.kind = WIFI_STORE_EDIT_DELETE;
+	edit.passphrase = NULL;
+	CHECK(wifi_store_update_at(directory_fd, "wifi.conf", owner_uid, owner_gid, &edit, error, sizeof(error)) == 0);
+	load_model(&model);
+	CHECK(model.profile_count == 1U);
+	CHECK(find_profile(&model, "alpha") < 0);
+	CHECK(find_profile(&model, "beta") == 0);
+	wifi_conf_model_clear(&model);
+	assert_no_temporary();
+	wifi_conf_explicit_clear(first, sizeof(first));
+	wifi_conf_explicit_clear(second, sizeof(second));
+}
+
 static void
 test_invalid_existing_preserved(void)
 {
@@ -656,6 +722,7 @@ main(int argc, char **argv)
 	owner_gid = getegid();
 	directory_path = argv[1];
 	test_create_replace_append();
+	test_add_modify_delete_edits();
 	test_invalid_existing_preserved();
 	test_unsafe_objects();
 	test_reader_replaced_target();

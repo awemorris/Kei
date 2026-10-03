@@ -1,0 +1,25 @@
+{
+  "queue": "q597",
+  "checkpoint": 54,
+  "source": "userland/desktop/libbrowser/bind/table-row.c",
+  "source_sha256": "8f53c3ae6d0f26ca9d4bc613f71156652ebf5e987f8b9ce1b6181099a2c20d6f",
+  "source_edited": false,
+  "baseline": "8575d12dd780b6cd6ede986d01effed59cc21b0e",
+  "reviewed": 174,
+  "total": 209,
+  "remaining": 35,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "native": {
+    "host-table-row": "table row lifetime checks: 75/75 passed",
+    "host-table-mutation": "table mutation lifetime checks: 42/42 passed",
+    "host-table-collection": "table collection GC checks: 25/25 passed"
+  },
+  "limits": [
+    "Only table-row.c is newly full-reviewed; original whole p172 gates and35 production files remain.",
+    "No new code edit, target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

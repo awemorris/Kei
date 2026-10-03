@@ -1,0 +1,61 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-form-owner.c",
+      "original_sha256": "e093850dd4277efc60126a7d4df3840c04591fee3e92f8653c1e590332790c4d",
+      "final_sha256": "87eabb706c3795bfda1aad77f65e01bf76d2c3815bddb64a0a11def55ce7b8fc",
+      "status": "reviewed-full-file",
+      "original_lines": 308,
+      "final_lines": 339
+    },
+    {
+      "path": "plan/ws074/tests/host-node-cloning.c",
+      "original_sha256": "5b3edf749fd75c700ffa7fb25465b8ad780234c5ac1a7ee252acd76f61fe562f",
+      "final_sha256": "c4e6fb6cd1e7b7ae637696885954a196c5166a829fc50b354c4cbf604b285acf",
+      "status": "reviewed-full-file",
+      "original_lines": 354,
+      "final_lines": 414
+    },
+    {
+      "path": "plan/ws074/tests/host-table-mutation.c",
+      "original_sha256": "ede909e203dbc57b178518d83164dd3d6b01ce049d468dabf366afd69fe78dad",
+      "final_sha256": "006bcc935c8bc347c15c520211d92d94d4c28d079fdfd2b055905a1358e0d5d0",
+      "status": "reviewed-full-file",
+      "original_lines": 354,
+      "final_lines": 402
+    },
+    {
+      "path": "plan/ws074/tests/host-table-row.c",
+      "original_sha256": "e8f98897fbb4e91e3feb9ae4e5022685bb422118c3230f554e7642535a5ba754",
+      "final_sha256": "4d6fa328317ab53107cc2df49a62ac532747626c70b6f0877f194bb5bb6c32f4",
+      "status": "reviewed-full-file",
+      "original_lines": 436,
+      "final_lines": 497
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "Actual form owner/listed/control-member DOM helper branding through unchanged script-created trees and original56 observations",
+    "Native cloning original6000/512 descendants, exact UTF16/surrogate/native namespaces/prefix/attribute fields and real default allocation pressure/bounded ENOMEM",
+    "Clone source survival before post-GC input dereference; complete distinct non-null copy, typed Text/Element/buffers/attribute storage before reads; real source/output/creator reclamation",
+    "Acquired construction/result flags end at the original callee/result boundaries; one forward cleanup releases only still-registered slots",
+    "Actual table/caption/header/body/row mutation target/old/new/insertion-anchor lifetimes; integer-only callback severs original tree edges and excludes conservative stacks during real GC",
+    "Borrowed child Document/window host ownership, signed numeric valueOf once, expected real host EIO and later reclamation; genuine source/argument/host/anchor guards before native field reads",
+    "Immediate checked operations before source release/successful owner teardown; actual VM_THROWN convention, ANSI declarations/explicit void success returns/public headers/semantic purpose paragraphs",
+    "Original scripts/C strings/wide corpus/heap limits/default pressure/native root exclusions preserved; split physical pointer loop/compound/call layout and component boundaries unchanged"
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 37,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production source edit, new engine behavior, fault switch or whole target/ASan/API/boot campaign.",
+    "Four full native fixture reviews with existing199 passing observations do not clear whole p172;51 files and final gates remain."
+  ]
+}

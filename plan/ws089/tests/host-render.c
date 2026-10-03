@@ -23,6 +23,7 @@
  * Actions, run in order:
  *   move=X,Y  click=X,Y  scroll=PIXELS  key=CODE[:MODS]  action=N
  *   drag=X,Y,X2        (presses at X,Y, moves to X2 and lets go there)
+ *   touch=X,Y,X2,Y2    (a finger touches at X,Y, moves to X2,Y2 in four steps and lifts there, ws089-p012)
  *   text=STRING        (types lower-case letters and digits as keys)
  *   control=N          (clicks the page's control N of the last frame)
  *   tb=CONTROL:DETAIL  (a titlebar control chosen)
@@ -45,6 +46,7 @@
 void host_network_fake(struct se_app *app, const char *scenario);
 static int host_write_ppm(const char *path, const uint32_t *pixels, int width, int height);
 static void host_event(struct se_app *app, unsigned type, int x, int y, uint32_t button, int pressed, uint32_t key, uint32_t modifiers);
+static void host_finger(struct se_app *app, unsigned type, int x, int y, int pressed);
 
 int
 main(
@@ -76,6 +78,9 @@ main(
 	int height;
 	int x;
 	int y;
+	int to_x;
+	int to_y;
+	int step;
 	int index;
 	int error;
 
@@ -144,6 +149,12 @@ main(
 			host_event(&app, SE_EVENT_MOTION, (x + (int)code) / 2, y, 0, 0, 0, 0);
 			host_event(&app, SE_EVENT_MOTION, (int)code, y, 0, 0, 0, 0);
 			host_event(&app, SE_EVENT_BUTTON, (int)code, y, SE_BUTTON_LEFT, 0, 0, 0);
+		} else if (sscanf(argv[index], "touch=%d,%d,%d,%d", &x, &y, &to_x, &to_y) == 4) {
+			host_finger(&app, SE_EVENT_MOTION, x, y, 0);
+			host_finger(&app, SE_EVENT_BUTTON, x, y, 1);
+			for (step = 1; step <= 4; step++)
+				host_finger(&app, SE_EVENT_MOTION, x + (to_x - x) * step / 4, y + (to_y - y) * step / 4, 0);
+			host_finger(&app, SE_EVENT_BUTTON, to_x, to_y, 0);
 		} else if (sscanf(argv[index], "scroll=%d", &y) == 1) {
 			memset(&wheel, 0, sizeof(wheel));
 			wheel.type = SE_EVENT_AXIS;
@@ -301,4 +312,27 @@ host_write_ppm(
 	/* Done. */
 	fclose(file);
 	return 0;
+}
+
+/* Gives the interface a finger's move or press on the touch screen (the pointer's events, marked as a finger's). */
+static void
+host_finger(
+	struct se_app *app,
+	unsigned type,
+	int x,
+	int y,
+	int pressed)
+{
+	struct se_event event;
+
+	/* The input, as the window makes it of a finger. */
+	memset(&event, 0, sizeof(event));
+	event.type = type;
+	event.x = x;
+	event.y = y;
+	event.button = SE_BUTTON_LEFT;
+	event.pressed = pressed;
+	event.time = app->now;
+	event.touch = 1;
+	se_ui_event(app, &event);
 }

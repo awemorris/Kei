@@ -1,0 +1,22 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review46/host-xml"
+    ],
+    "exit": 0,
+    "stdout_file": "host-xml.stdout",
+    "stderr_file": "host-xml.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review46/host-xml-dom"
+    ],
+    "exit": 0,
+    "stdout_file": "host-xml-dom.stdout",
+    "stderr_file": "host-xml-dom.stderr"
+  }
+]

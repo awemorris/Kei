@@ -61,7 +61,13 @@
 #define NETWORKD_WLAN_DHCP_SECONDS	10U
 #define NETWORKD_WLAN_RESCAN_SECONDS	5U
 #define NETWORKD_WLAN_ATTEMPTS	4U
-#define NETWORKD_WIFI_STATUS_RESERVE	128U
+#define NETWORKD_WIFI_STATUS_RESERVE	256U
+
+/* The most login sessions whose Wi-Fi stores are candidates at one time. */
+#define NETWORKD_WIFI_SESSION_MAX	8U
+
+/* The most refused keys remembered at one time; a newer refusal pushes out the oldest. */
+#define NETWORKD_WIFI_REJECTION_MAX	8U
 #define NETWORKD_CONTROL_INPUT_MAX	4U
 
 enum networkd_client_role {
@@ -96,6 +102,8 @@ struct networkd_request {
 	unsigned dns_count;
 	unsigned timeout;
 	uint32_t token;
+	/* The account a session request is about (NETWORKD_FIELD_ACCOUNT). */
+	uint32_t account;
 };
 
 struct networkd_wlan_radio {
@@ -153,6 +161,13 @@ struct networkd_wifi_candidate {
 	size_t radio;
 };
 
+/* A saved key a network refused: the account whose store holds it and the network's SSID. */
+struct networkd_wifi_rejection {
+	uid_t account;
+	size_t ssid_length;
+	unsigned char ssid[WLAN_SSID_MAX];
+};
+
 /* Partial request bytes belong to transport, never to an RF transaction. */
 struct networkd_control_input {
 	int active;
@@ -174,6 +189,7 @@ struct networkd_control_input {
  */
 struct networkd_lan_l3 {
 	char interface[IFNAMSIZ];
+	uint32_t ifindex;
 	int route_present;
 	struct networkd_managed_route route;
 	size_t resolver_length;
@@ -218,6 +234,16 @@ static int lan_work_due;
 
 /* An interface an event asked to be taken down, done at the next turn. */
 static char lan_down_pending[IFNAMSIZ];
+
+/*
+ * A wired interface whose device has gone, kept until the next turn.
+ *
+ * Its lease no longer carries anything, so the network preference is
+ * decided again without it (B3: Wi-Fi takes the default route and the
+ * resolver back).  An empty name means nothing is pending.
+ */
+static char lan_removed_pending[IFNAMSIZ];
+
 static struct networkd_wlan_radio known_wlan_radios[NETWORKD_WLAN_RADIO_MAX];
 static size_t known_wlan_radio_count;
 static int wifi_disable_pending;
@@ -227,6 +253,49 @@ static uint64_t route_event_sequence;
 static uint64_t automatic_retry_at;
 static unsigned retirement_retry_seconds = NETWORKD_WLAN_RESCAN_SECONDS;
 static size_t automatic_candidate_skip;
+
+/*
+ * The accounts whose login sessions are open, the oldest first.
+ *
+ * sessiond announces a session when it opens and when it closes (ws005-p024,
+ * the user's decision of 2026-10-02).  While an account is listed here, its
+ * own store of saved networks is a candidate for automatic joining besides
+ * the system's store.  Only the session requests change the list.  It is
+ * empty when networkd starts, so a session that was open across a restart of
+ * networkd counts again from its next login.
+ */
+static uid_t wifi_session_uids[NETWORKD_WIFI_SESSION_MAX];
+static size_t wifi_session_count;
+
+/*
+ * The account whose store gave the profile of the current connection.
+ *
+ * A successful join records it, and it is read while that connection lasts:
+ * a reconnect takes the key from the same store, and the close of that
+ * account's session ends the connection.  Known is cleared when a new join
+ * begins, so it never names the store of an earlier connection.
+ */
+static uid_t wifi_connection_store_uid;
+static int wifi_connection_store_known;
+
+/*
+ * The saved keys a network refused during its handshake, the oldest first.
+ *
+ * Automatic joining passes over such a key instead of offering it to the
+ * network again and again (ws005-p020, q631).  An entry goes when its store
+ * changes (the key may have been corrected), when an explicit join of that
+ * network with that store succeeds, and when Wi-Fi is turned off.  Only the
+ * event loop touches the list.
+ */
+static struct networkd_wifi_rejection wifi_rejections[NETWORKD_WIFI_REJECTION_MAX];
+static size_t wifi_rejection_count;
+
+/*
+ * Set when the store that gave the current connection's key changed: the
+ * event loop then checks, outside any running Wi-Fi work, that the network
+ * is still saved there, and leaves it when it was deleted (net wifi delete).
+ */
+static int wifi_connection_recheck_due;
 static struct networkd_wifi_work wifi_work;
 static struct networkd_wifi_observation wifi_observations[NETWORKD_WLAN_RADIO_MAX];
 static size_t wifi_observation_bytes;
@@ -265,9 +334,11 @@ static int lan_policy_decode(const struct networkd_request *,
 			     struct networkd_lan_policy *, size_t, size_t *);
 static int lan_interface_name(uint32_t, char *, size_t);
 static void lan_snapshot(void);
+static int lan_interface_is_radio(int, const char *, uint32_t);
 static int lan_address_usable(const char *);
 static void lan_l3_record(const char *);
 static void lan_l3_forget(const char *, int);
+static void lan_l3_removed(uint32_t);
 static struct networkd_lan_l3 *lan_l3_find(const char *);
 static int lan_l3_eligible(const struct networkd_lan_l3 *);
 static void apply_network_preference(void);
@@ -360,13 +431,31 @@ static int wifi_disable_defer(void);
 static int collect_profile_radios(const struct networkd_wlan_radio *, size_t, const struct wifi_conf_model *, size_t, struct networkd_wifi_candidate *, size_t *, size_t *, uint64_t);
 static unsigned wifi_selection_timeout(uint64_t);
 static int select_manual_radio(const struct networkd_wlan_radio *, size_t, const struct wifi_conf_profile *, size_t *, uint64_t);
-static int connect_automatic(const struct networkd_wlan_radio *, size_t, const struct wifi_conf_model *, uint64_t, char *, size_t, size_t *, int *);
+static int connect_automatic(const struct networkd_wlan_radio *, size_t, const struct wifi_conf_model *, const uid_t *, uint64_t, char *, size_t, size_t *, int *);
 static void stop_losing_scans(const struct networkd_wlan_radio *, size_t, size_t);
 static int run_managed_connect(const char *, const struct wifi_conf_profile *, enum networkd_managed_wlan_state, uint64_t, char *, size_t, size_t *, int *);
 static int acquire_managed_l3(const char *, uint64_t);
 static int reconcile_pending_l3(void);
 static const struct wifi_conf_profile *find_profile(const struct wifi_conf_model *, const void *, size_t);
 static int load_policy(uid_t, struct wifi_conf_model *, char *, size_t);
+static void load_candidates(struct wifi_conf_model *, uid_t *);
+static void candidate_store_add(struct wifi_conf_model *, uid_t *, uid_t);
+static void connection_store_note(const struct wifi_conf_model *, const uid_t *);
+static int connection_from_store(uid_t);
+static int wifi_session_account(const struct networkd_request *, const struct kern_peercred *, uid_t *);
+static int wifi_session_find(uid_t);
+static void wifi_session_forget(uid_t);
+static int wifi_session_open(const struct networkd_request *, const struct kern_peercred *);
+static int wifi_session_close(struct networkd_wifi_request *, const struct networkd_request *, const struct kern_peercred *);
+static void wifi_candidates_changed(void);
+static void wifi_rejection_note(uid_t, const struct wifi_conf_profile *);
+static int wifi_rejection_find(uid_t, const unsigned char *, size_t);
+static void wifi_rejection_forget(uid_t, const unsigned char *, size_t);
+static void wifi_rejection_forget_store(uid_t);
+static void wifi_join_failed(void);
+static void recheck_connection_profile(void);
+static void wifi_off_remember(int);
+static int append_hex(char *, size_t, size_t *, const unsigned char *, size_t);
 static int owner_allowed(const struct kern_peercred *);
 static int peer_in_network_group(const struct kern_peercred *);
 static const char *managed_state_name(enum networkd_managed_wlan_state);
@@ -1276,6 +1365,7 @@ lan_snapshot(
 	uint32_t ifindex;
 	int descriptor;
 	int flags;
+	int radio;
 
 	descriptor = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -1305,6 +1395,16 @@ lan_snapshot(
 		/* The loopback is nobody's cable and is never managed. */
 		if ((flags & IFF_LOOPBACK) != 0)
 			continue;
+
+		/*
+		 * A Wi-Fi radio is the Wi-Fi policy's: its carrier follows the
+		 * association, and the wired policy would run DHCP on it when
+		 * it joins and take it down when it moves to another network.
+		 */
+		radio = lan_interface_is_radio(descriptor, list[index].ifr_name,
+		    ifindex);
+		if (radio)
+			continue;
 		(void)networkd_lan_observe(&managed_lan, list[index].ifr_name,
 					   ifindex, 0U,
 					   (flags & IFF_RUNNING) != 0);
@@ -1312,6 +1412,52 @@ lan_snapshot(
 	networkd_lan_snapshot_end(&managed_lan);
 	free(list);
 	(void)close(descriptor);
+}
+
+/*
+ * Tells whether an interface is a Wi-Fi radio.
+ *
+ * An interface that answers the WLAN status request is one, and so is one
+ * already known as a radio.  Only an interface that says it does not know
+ * the request is taken for a cable: any other failure cannot prove that an
+ * interface is not a radio, and a radio taken for a cable would be taken
+ * down by the wired policy.
+ */
+static int
+lan_interface_is_radio(
+	int descriptor,
+	const char *name,
+	uint32_t ifindex)
+{
+	struct wlan_status_request status;
+	size_t known;
+	int error;
+	int differs;
+
+	/* Asks the interface for its WLAN status. */
+	memset(&status, 0, sizeof(status));
+	(void)snprintf(status.ifr_name, sizeof(status.ifr_name), "%s", name);
+	status.version = WLAN_ABI_VERSION;
+	status.size = sizeof(status);
+	error = ioctl(descriptor, SIOCGWLANSTATUS, &status);
+	if (error == 0)
+		return 1;
+
+	/* Counts a radio seen before, whatever it answers now. */
+	for (known = 0U; known < known_wlan_radio_count; known++) {
+		if (known_wlan_radios[known].ifindex != ifindex)
+			continue;
+		differs = strcmp(known_wlan_radios[known].interface, name);
+		if (differs == 0)
+			return 1;
+	}
+
+	/* An interface that does not know the request is a cable. */
+	if (errno == EOPNOTSUPP || errno == ENOTTY)
+		return 0;
+
+	/* Any other failure leaves the interface to the Wi-Fi policy. */
+	return 1;
 }
 
 /*
@@ -1541,6 +1687,7 @@ lan_l3_record(
 	memset(record, 0, sizeof(*record));
 	(void)snprintf(record->interface, sizeof(record->interface), "%s",
 	    interface);
+	record->ifindex = ifindex;
 	record->route_present = snapshot.default_route_present;
 	record->route = snapshot.default_route;
 
@@ -1595,6 +1742,32 @@ lan_l3_forget(
 
 	/* Frees the slot. */
 	networkd_protocol_clear(record, sizeof(*record));
+}
+
+/*
+ * Notes that the device of a wired lease has gone.
+ *
+ * The name is all that is left to find the lease by, and the device can no
+ * longer be asked for it, so it is taken from the record kept by index.
+ * The work is done at the next turn of the loop, not while events are read.
+ */
+static void
+lan_l3_removed(
+	uint32_t ifindex)
+{
+	size_t index;
+
+	/* Looks for the lease of the device that has gone. */
+	for (index = 0U; index < NETWORKD_LAN_MAX; index++) {
+		if (lan_l3[index].interface[0] == '\0')
+			continue;
+		if (lan_l3[index].ifindex != ifindex)
+			continue;
+		(void)snprintf(lan_removed_pending, sizeof(lan_removed_pending),
+		    "%s", lan_l3[index].interface);
+		lan_work_due = 1;
+		return;
+	}
 }
 
 /* Finds the lease record of one wired interface. */
@@ -1913,6 +2086,16 @@ run_lan_work(
 	}
 
 	/*
+	 * Forgets the lease of a wired device that has gone; the caller then
+	 * decides the preference again without it.
+	 */
+	if (lan_removed_pending[0] != '\0') {
+		lan_l3_forget(lan_removed_pending, 0);
+		lan_removed_pending[0] = '\0';
+		notify_state_changed();
+	}
+
+	/*
 	 * The count bounds one turn of the loop rather than the work: an
 	 * interface that is configured is not offered again, so the only way
 	 * round twice is for something to have changed meanwhile, and the
@@ -1948,8 +2131,13 @@ process_route_event(
 	/*
 	 * The wired policy sees every event too.  A carrier change means one
 	 * thing to a radio and another to a cable, so each reads the event
-	 * for itself rather than one deciding for both.
+	 * for itself rather than one deciding for both.  A wired device that
+	 * has gone also gives up its lease's place in the network preference.
 	 */
+	if (event->rtm_transition == RTM_IFINFO_REMOVAL)
+		lan_l3_removed(event->rtm_ifindex);
+
+	/* Lets the wired policy decide what the event asks of a cable. */
 	switch (networkd_lan_event(&managed_lan, event)) {
 	case NETWORKD_LAN_ACTION_CONFIGURE:
 	case NETWORKD_LAN_ACTION_RESNAPSHOT:
@@ -2102,7 +2290,11 @@ recover_managed_connection(
 	memcpy(ssid, managed_wlan.connection.ssid, ssid_length);
 	owner_uid = managed_wlan.owner_uid;
 
-	/* Reloads the active owner's exact current profile for this SSID. */
+	/* The key is read again from the store the connection was made from. */
+	if (wifi_connection_store_known)
+		owner_uid = wifi_connection_store_uid;
+
+	/* Reloads that store's exact current profile for this SSID. */
 	succeeded = load_policy(owner_uid, &model, diagnostic,
 	    sizeof(diagnostic)) == 0;
 	profile = succeeded ? find_profile(&model, ssid, ssid_length) : NULL;
@@ -2198,10 +2390,12 @@ run_automatic_work(
 {
 	struct networkd_wlan_radio radios[NETWORKD_WLAN_RADIO_MAX];
 	struct wifi_conf_model model;
+	uid_t stores[WIFI_CONF_PROFILE_MAX];
 	char diagnostic[WIFI_CONF_DIAGNOSTIC_MAX];
 	size_t radio_count;
 	uint64_t deadline;
 	int no_candidate;
+	int joined;
 	int saved;
 	int ready;
 	int changed;
@@ -2225,16 +2419,24 @@ run_automatic_work(
 	if (ready)
 		ready = prepare_wlan_radios(radios, radio_count, NULL, 0U,
 		    NULL) == 0;
-	if (ready)
-		ready = load_policy(managed_wlan.owner_uid, &model, diagnostic,
-		    sizeof(diagnostic)) == 0;
 	if (ready) {
+		/*
+		 * The candidates are the open sessions' stores, the policy
+		 * owner's and the system's (ws005-p024), each profile with the
+		 * store it came from.
+		 */
+		memset(stores, 0, sizeof(stores));
+		load_candidates(&model, stores);
+
+		/* One bounded wave of joins; a joined profile names its store. */
 		deadline = wifi_work.deadline -
 		    NETWORKD_WIFI_CLEANUP_SECONDS * 1000000ULL;
-		if (connect_automatic(radios, radio_count, &model, deadline,
-		    NULL, 0U, NULL,
-		    &no_candidate) != 0 && !no_candidate &&
-		    !wifi_work.cancelled && !wifi_work.profiles_changed) {
+		joined = connect_automatic(radios, radio_count, &model, stores,
+		    deadline, NULL, 0U, NULL, &no_candidate);
+		if (joined == 0) {
+			connection_store_note(&model, stores);
+		} else if (!no_candidate && !wifi_work.cancelled &&
+		    !wifi_work.profiles_changed) {
 			saved = errno != 0 ? errno : EIO;
 			fprintf(stderr, "networkd: automatic Wi-Fi attempt: %s\n",
 			    strerror(saved));
@@ -2307,6 +2509,12 @@ run_due_work(
 
 		/* A wired interface that went away hands the default back (B3). */
 		apply_network_preference();
+	}
+
+	/* A connection whose network was deleted from its store ends. */
+	if (wifi_connection_recheck_due) {
+		wifi_connection_recheck_due = 0;
+		recheck_connection_profile();
 	}
 	run_confirmed_due();
 	if (!networkd_confirmed_active(&confirmed) &&
@@ -2953,7 +3161,9 @@ operation_allowed(
 	    strcmp(operation, "WIFI_LIST") == 0 ||
 	    strcmp(operation, "WIFI_CONNECT") == 0 ||
 	    strcmp(operation, "WIFI_DISCONNECT") == 0 ||
-	    strcmp(operation, "WIFI_PROFILES_CHANGED") == 0);
+	    strcmp(operation, "WIFI_PROFILES_CHANGED") == 0 ||
+	    strcmp(operation, "WIFI_SESSION_OPEN") == 0 ||
+	    strcmp(operation, "WIFI_SESSION_CLOSE") == 0);
 
 	/* Returns the computed result. */
 	return function_result;
@@ -3132,7 +3342,7 @@ dispatch_request(
 	/* WLAN mutations cannot occupy the loop past a wired rollback deadline. */
 	if (networkd_confirmed_active(&confirmed) &&
 	    request->header.opcode >= NETWORKD_OP_WIFI_ENABLE &&
-	    request->header.opcode <= NETWORKD_OP_WIFI_PROFILES_CHANGED &&
+	    request->header.opcode <= NETWORKD_OP_WIFI_SESSION_CLOSE &&
 	    request->header.opcode != NETWORKD_OP_WIFI_LIST) {
 		send_response(client, request->header.request_id,
 		    request->header.opcode, NETWORKD_RESULT_ERROR, EBUSY,
@@ -3142,7 +3352,7 @@ dispatch_request(
 
 	/* Delegates the complete typed WLAN family to its bounded orchestrator. */
 	if (request->header.opcode >= NETWORKD_OP_WIFI_ENABLE &&
-	    request->header.opcode <= NETWORKD_OP_WIFI_PROFILES_CHANGED) {
+	    request->header.opcode <= NETWORKD_OP_WIFI_SESSION_CLOSE) {
 		handle_wifi_request(client, request, peer);
 		networkd_protocol_clear(response, sizeof(response));
 		networkd_protocol_clear(diagnostic, sizeof(diagnostic));
@@ -3672,6 +3882,10 @@ wifi_request_stop(
 	if (networkd_managed_wlan_disable(&managed_wlan) != 0)
 		return wifi_disable_defer();
 	wifi_disable_pending = 0;
+
+	/* Turning Wi-Fi off and on again offers every saved key once more. */
+	wifi_rejection_count = 0U;
+	memset(wifi_rejections, 0, sizeof(wifi_rejections));
 	return 0;
 }
 
@@ -3702,8 +3916,11 @@ wifi_request_connect(
 	size_t winner;
 	uid_t store_uid;
 	int l2_succeeded;
+	int selected;
+	int joined;
 	int transfer;
 	int taken;
+	int saved;
 
 	if (wifi_disable_pending) {
 		errno = EBUSY;
@@ -3768,20 +3985,47 @@ wifi_request_connect(
 	    NETWORKD_WLAN_SCAN_SECONDS * 1000000ULL;
 	if (selection_deadline > deadline)
 		selection_deadline = deadline;
+	/* A network no radio sees is out of reach, which a client tells apart from a missing key. */
 	work->stage = "Wi-Fi SSID not visible";
-	if (select_manual_radio(work->radios, work->radio_count, profile,
-	    &winner, selection_deadline) != 0)
+	selected = select_manual_radio(work->radios, work->radio_count, profile,
+	    &winner, selection_deadline);
+	if (selected != 0) {
+		saved = errno;
+		if (saved == ENOENT || saved == ETIMEDOUT)
+			saved = ENETUNREACH;
+		wifi_join_failed();
+		errno = saved;
 		return -1;
+	}
+
+	/* The join; a key the network refused is remembered, and any failure goes back to searching. */
 	l2_succeeded = 0;
 	work->stage = "wifi connect";
-	if (run_managed_connect(work->radios[winner].interface, profile,
+	joined = run_managed_connect(work->radios[winner].interface, profile,
 	    NETWORKD_WLAN_MANUAL_DISCONNECTED, deadline, work->output,
-	    (sizeof(work->output) - NETWORKD_WIFI_STATUS_RESERVE), &work->output_length, &l2_succeeded) != 0) {
-		if (l2_succeeded)
+	    (sizeof(work->output) - NETWORKD_WIFI_STATUS_RESERVE), &work->output_length, &l2_succeeded);
+	if (joined != 0) {
+		saved = errno;
+		if (l2_succeeded) {
 			work->stage = "DHCP transaction";
+		} else if (saved == EACCES) {
+			work->stage = "Wi-Fi key refused";
+			wifi_rejection_note(store_uid, profile);
+		}
+		wifi_join_failed();
+		errno = saved;
 		return -1;
 	}
 	stop_losing_scans(work->radios, work->radio_count, winner);
+
+	/* A reconnect, and the close of a session, look up the store this key came from. */
+	wifi_connection_store_uid = store_uid;
+	wifi_connection_store_known = 1;
+
+	/* The key worked: it is no longer remembered as refused. */
+	wifi_rejection_forget(store_uid, profile->ssid, profile->ssid_length);
+
+	/* Succeeded: the requested network is joined. */
 	return 0;
 }
 
@@ -3836,6 +4080,13 @@ process_wifi_request(
 			wifi_profiles_changed(peer);
 			result = 0;
 			break;
+		case NETWORKD_OP_WIFI_SESSION_OPEN:
+			work.stage = "Wi-Fi session";
+			result = wifi_session_open(request, peer);
+			break;
+		case NETWORKD_OP_WIFI_SESSION_CLOSE:
+			result = wifi_session_close(&work, request, peer);
+			break;
 		default:
 			errno = EINVAL;
 			break;
@@ -3846,6 +4097,20 @@ process_wifi_request(
 	if (result != 0 && (managed_wlan.state == NETWORKD_WLAN_RETIRING ||
 	    opcode == NETWORKD_OP_WIFI_LIST))
 		status = NETWORKD_RESULT_DEGRADED;
+
+	/* An explicit off is remembered across a restart, and an explicit on forgets it. */
+	if (result == 0 && opcode == NETWORKD_OP_WIFI_DISABLE) {
+		wifi_off_remember(1);
+	} else if (result == 0 && opcode == NETWORKD_OP_WIFI_ENABLE) {
+		wifi_off_remember(0);
+	}
+
+	/* A failed control operation is told with its stage (never a key or an SSID). */
+	if (error != 0 && opcode != NETWORKD_OP_WIFI_LIST) {
+		fprintf(stderr, "networkd: Wi-Fi %s failed at %s: %s\n",
+		    operation_name(opcode) != NULL ? operation_name(opcode) : "operation",
+		    work.stage, strerror(error));
+	}
 
 	/* Makes output exhaustion visible even when complete earlier lines survive. */
 	if (opcode == NETWORKD_OP_WIFI_LIST && error == EOVERFLOW) {
@@ -4081,23 +4346,296 @@ send_wired_observation(
 	free(output);
 }
 
-/* Preserves local profile publication while waking the applicable policy only. */
+/*
+ * Wakes the automatic search when a store it reads has changed.
+ *
+ * The stores automatic joining reads are the system's, the policy owner's
+ * and those of the accounts with an open session (ws005-p024); a change to
+ * any other account's store changes nothing networkd would join.
+ */
 static void
 wifi_profiles_changed(
 	const struct kern_peercred *peer)
 {
+	int connected_store;
+	int owner;
+	int session;
+
+	/* A notice from nobody known changes nothing. */
+	if (peer == NULL)
+		return;
+
+	/* The changed store may hold a corrected key: its refusals are forgotten. */
+	wifi_rejection_forget_store(peer->euid);
+
+	/* The connection made from the changed store is checked against it later. */
+	connected_store = connection_from_store(peer->euid);
+	if (connected_store)
+		wifi_connection_recheck_due = 1;
+
+	/* Root's store is the system's, which is always a candidate. */
+	if (peer->euid == 0) {
+		wifi_candidates_changed();
+		return;
+	}
+
+	/* The policy owner's store and an open session's store are candidates. */
+	owner = networkd_managed_wlan_owner_matches(&managed_wlan, peer->euid);
+	session = wifi_session_find(peer->euid);
+	if (!owner && session < 0)
+		return;
+
+	/* Succeeded: the changed store is one automatic joining reads. */
+	wifi_candidates_changed();
+}
+
+/* Starts the automatic search over with every candidate, at once. */
+static void
+wifi_candidates_changed(
+	void)
+{
 	size_t index;
 
-	if (peer == NULL || !networkd_managed_wlan_owner_matches(&managed_wlan,
-	    peer->euid))
-		return;
+	/* Every candidate is tried again, against every radio's current scan. */
 	automatic_candidate_skip = 0U;
 	for (index = 0U; index < known_wlan_radio_count; index++)
 		known_wlan_radios[index].consumed_snapshot_generation = 0U;
+
+	/* A wave already running starts over with the new candidates. */
 	if (wifi_work.background)
 		wifi_work.profiles_changed = 1;
+
+	/* A search waiting for its next wave runs it now. */
 	if (managed_wlan.state == NETWORKD_WLAN_AUTO_SEARCHING)
 		schedule_automatic_work(0U);
+}
+
+/* Remembers that a network refused the key one account's store holds for it. */
+static void
+wifi_rejection_note(
+	uid_t account,
+	const struct wifi_conf_profile *profile)
+{
+	struct networkd_wifi_rejection *rejection;
+	int known;
+
+	/* A refusal already remembered stays as it is. */
+	known = wifi_rejection_find(account, profile->ssid, profile->ssid_length);
+	if (known >= 0)
+		return;
+
+	/* A full list gives up its oldest refusal. */
+	if (wifi_rejection_count == NETWORKD_WIFI_REJECTION_MAX) {
+		memmove(&wifi_rejections[0], &wifi_rejections[1],
+		    (NETWORKD_WIFI_REJECTION_MAX - 1U) * sizeof(wifi_rejections[0]));
+		wifi_rejection_count--;
+	}
+
+	/* The refusal: the store and the SSID, never the key. */
+	rejection = &wifi_rejections[wifi_rejection_count];
+	memset(rejection, 0, sizeof(*rejection));
+	rejection->account = account;
+	rejection->ssid_length = profile->ssid_length;
+	memcpy(rejection->ssid, profile->ssid, profile->ssid_length);
+	wifi_rejection_count++;
+	fprintf(stderr, "networkd: Wi-Fi key of account %u refused by the network; not tried again until it changes\n",
+	    (unsigned)account);
+}
+
+/* Finds the refusal of one store's key for one SSID; returns its slot, or -1 when there is none. */
+static int
+wifi_rejection_find(
+	uid_t account,
+	const unsigned char *ssid,
+	size_t ssid_length)
+{
+	const struct networkd_wifi_rejection *rejection;
+	size_t index;
+	int differs;
+
+	/* Each remembered refusal, compared by store and SSID. */
+	for (index = 0U; index < wifi_rejection_count; index++) {
+		rejection = &wifi_rejections[index];
+		if (rejection->account != account || rejection->ssid_length != ssid_length)
+			continue;
+		differs = memcmp(rejection->ssid, ssid, ssid_length);
+		if (differs != 0)
+			continue;
+
+		/* Succeeded: this store's key for this SSID was refused. */
+		return (int)index;
+	}
+
+	/* No refusal is remembered for them. */
+	return -1;
+}
+
+/* Forgets the refusal of one store's key for one SSID. */
+static void
+wifi_rejection_forget(
+	uid_t account,
+	const unsigned char *ssid,
+	size_t ssid_length)
+{
+	size_t slot;
+	int found;
+
+	/* Nothing to forget when no refusal is remembered. */
+	found = wifi_rejection_find(account, ssid, ssid_length);
+	if (found < 0)
+		return;
+
+	/* The later refusals move down over it. */
+	slot = (size_t)found;
+	memmove(&wifi_rejections[slot], &wifi_rejections[slot + 1U],
+	    (wifi_rejection_count - slot - 1U) * sizeof(wifi_rejections[0]));
+	wifi_rejection_count--;
+	memset(&wifi_rejections[wifi_rejection_count], 0, sizeof(wifi_rejections[0]));
+}
+
+/* Forgets every refusal of one store's keys, whose contents may have changed. */
+static void
+wifi_rejection_forget_store(
+	uid_t account)
+{
+	size_t index;
+
+	/* Removes this store's refusals, keeping the others in their order. */
+	index = 0U;
+	while (index < wifi_rejection_count) {
+		if (wifi_rejections[index].account != account) {
+			index++;
+			continue;
+		}
+
+		/* The later refusals move down over this one. */
+		memmove(&wifi_rejections[index], &wifi_rejections[index + 1U],
+		    (wifi_rejection_count - index - 1U) * sizeof(wifi_rejections[0]));
+		wifi_rejection_count--;
+		memset(&wifi_rejections[wifi_rejection_count], 0, sizeof(wifi_rejections[0]));
+	}
+}
+
+/*
+ * Records whether Wi-Fi was turned off by request, for the next boot.
+ *
+ * The record is an empty file that only root can change; net startup
+ * leaves Wi-Fi off while it exists.  A failure to record is told and
+ * otherwise ignored: the switch itself has already happened.
+ */
+static void
+wifi_off_remember(
+	int off)
+{
+	int descriptor;
+	int made;
+	int removed;
+
+	/* On: the record goes (it may never have been made). */
+	if (!off) {
+		removed = unlink(NETWORKD_WIFI_OFF_PATH);
+		if (removed != 0 && errno != ENOENT)
+			fprintf(stderr, "networkd: cannot forget that Wi-Fi was off: %s\n", strerror(errno));
+		return;
+	}
+
+	/* Off: the directory, which a fresh system may lack. */
+	made = mkdir(NETWORKD_WIFI_OFF_DIRECTORY, 0755);
+	if (made != 0 && errno != EEXIST) {
+		fprintf(stderr, "networkd: cannot remember that Wi-Fi is off: %s\n", strerror(errno));
+		return;
+	}
+
+	/* Then the record itself. */
+	descriptor = open(NETWORKD_WIFI_OFF_PATH, O_WRONLY | O_CREAT | O_CLOEXEC | O_NOFOLLOW, 0644);
+	if (descriptor < 0) {
+		fprintf(stderr, "networkd: cannot remember that Wi-Fi is off: %s\n", strerror(errno));
+		return;
+	}
+	(void)close(descriptor);
+}
+
+/*
+ * Ends the connection when its network is no longer saved in the store
+ * that gave its key.
+ *
+ * Deleting a network one is on means leaving it (net wifi delete); the
+ * search then goes on with the networks still saved.  A store that cannot
+ * be read is left alone: the connection keeps going on what it has.
+ */
+static void
+recheck_connection_profile(
+	void)
+{
+	struct wifi_conf_model model;
+	char diagnostic[WIFI_CONF_DIAGNOSTIC_MAX];
+	const struct wifi_conf_profile *profile;
+	int loaded;
+	int saved;
+	int retired;
+
+	/* Only a connection that stands, with a known store, is checked. */
+	if (managed_wlan.state != NETWORKD_WLAN_CONNECTED)
+		return;
+	if (!wifi_connection_store_known)
+		return;
+
+	/* The store as it is now; a missing store has no networks. */
+	wifi_conf_model_init(&model);
+	memset(diagnostic, 0, sizeof(diagnostic));
+	loaded = load_policy(wifi_connection_store_uid, &model, diagnostic, sizeof(diagnostic));
+	saved = errno;
+	profile = NULL;
+	if (loaded == 0)
+		profile = find_profile(&model, managed_wlan.connection.ssid, managed_wlan.connection.ssid_length);
+	wifi_conf_model_clear(&model);
+	wifi_conf_explicit_clear(diagnostic, sizeof(diagnostic));
+
+	/* A store that could not be read for another reason changes nothing. */
+	if (loaded != 0 && saved != ENOENT)
+		return;
+
+	/* The network is still saved: the connection stays. */
+	if (profile != NULL)
+		return;
+
+	/* The network was deleted: the connection ends and the search goes on. */
+	fprintf(stderr, "networkd: the connected network was deleted from account %u's store; leaving it\n",
+	    (unsigned)wifi_connection_store_uid);
+	retired = retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1);
+	if (retired != 0)
+		return;
+	automatic_candidate_skip = 0U;
+	schedule_automatic_work(0U);
+}
+
+/*
+ * Goes back to searching for the saved networks after an explicit join
+ * failed once it had left the earlier connection.
+ *
+ * The join left that connection on purpose, but a failed join is not a
+ * request to stay unconnected: the radio searches again, so the network
+ * the machine was on comes back while the one that failed is not in reach
+ * or refused its key (ws005-p020, q631).
+ */
+static void
+wifi_join_failed(
+	void)
+{
+	int retired;
+
+	/* Only a policy the join left idle and unconnected moves; any other state is kept. */
+	if (managed_wlan.state != NETWORKD_WLAN_MANUAL_DISCONNECTED)
+		return;
+	if (managed_wlan.connection.interface[0] != '\0')
+		return;
+
+	/* The idle policy starts searching, at once. */
+	retired = retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1);
+	if (retired != 0)
+		return;
+	automatic_candidate_skip = 0U;
+	schedule_automatic_work(0U);
 }
 
 /* Resumes deferred control only after the interrupted actor has unwound. */
@@ -4305,6 +4843,14 @@ service_wifi_wait(
 		wifi_profiles_changed(&peer);
 		send_response(client, request.header.request_id, request.header.opcode,
 		    NETWORKD_RESULT_OK, 0, NULL, NULL, 0U);
+	} else if (request.header.opcode == NETWORKD_OP_WIFI_SESSION_OPEN) {
+		/* An opened session only adds candidates, so the running work is not stopped. */
+		error = 0;
+		if (wifi_session_open(&request, &peer) != 0)
+			error = errno != 0 ? errno : EIO;
+		send_response(client, request.header.request_id, request.header.opcode,
+		    error == 0 ? NETWORKD_RESULT_OK : NETWORKD_RESULT_ERROR, error,
+		    error == 0 ? NULL : "Wi-Fi session", NULL, 0U);
 	} else {
 		error = EBUSY;
 		interrupts = 0;
@@ -4326,7 +4872,7 @@ service_wifi_wait(
 		} else {
 			if (request.header.opcode != NETWORKD_OP_WIFI_ENABLE &&
 			    request.header.opcode >= NETWORKD_OP_WIFI_ENABLE &&
-			    request.header.opcode <= NETWORKD_OP_WIFI_PROFILES_CHANGED &&
+			    request.header.opcode <= NETWORKD_OP_WIFI_SESSION_CLOSE &&
 			    !owner_allowed(&peer))
 				error = EPERM;
 			send_response(client, request.header.request_id, request.header.opcode,
@@ -4365,13 +4911,18 @@ interrupts_background_work(
 	if (opcode == NETWORKD_OP_WIFI_ENABLE)
 		return 1;
 
-	/* Listing and profile notices are served without stopping the work. */
+	/*
+	 * Listing and profile notices are served without stopping the work.
+	 * The close of a session stops it, because a connection made from the
+	 * closing account's store may have to end (ws005-p024).
+	 */
 	if (opcode != NETWORKD_OP_WIFI_DISABLE &&
 	    opcode != NETWORKD_OP_WIFI_CONNECT &&
-	    opcode != NETWORKD_OP_WIFI_DISCONNECT)
+	    opcode != NETWORKD_OP_WIFI_DISCONNECT &&
+	    opcode != NETWORKD_OP_WIFI_SESSION_CLOSE)
 		return 0;
 
-	/* Off, join and disconnect stop the work only for a peer allowed them. */
+	/* Off, join, disconnect and a session's close stop the work only for a peer allowed them. */
 	allowed = owner_allowed(peer);
 	if (!allowed)
 		return 0;
@@ -4552,6 +5103,10 @@ decode_request(
 		    networkd_field_read_u32(&field, &request->token) == 0 &&
 		    request->token != 0U) {
 			seen |= 128U;
+		} else if (field.type == NETWORKD_FIELD_ACCOUNT &&
+		    (seen & 256U) == 0U &&
+		    networkd_field_read_u32(&field, &request->account) == 0) {
+			seen |= 256U;
 		} else if (field.type == NETWORKD_FIELD_SSID &&
 		    (seen & 32U) == 0U && field.length != 0U &&
 		    field.length <= sizeof(request->ssid) &&
@@ -4607,7 +5162,10 @@ decode_request(
 	    request->header.opcode == NETWORKD_OP_WIFI_PROFILES_CHANGED) &&
 	    seen == 0U && request->dns_count == 0U) ||
 	    (request->header.opcode == NETWORKD_OP_WIFI_CONNECT &&
-	    seen == 32U && request->dns_count == 0U))
+	    seen == 32U && request->dns_count == 0U) ||
+	    ((request->header.opcode == NETWORKD_OP_WIFI_SESSION_OPEN ||
+	    request->header.opcode == NETWORKD_OP_WIFI_SESSION_CLOSE) &&
+	    seen == 256U && request->dns_count == 0U))
 		return 0;
 	errno = EINVAL;
 	return -1;
@@ -4675,6 +5233,10 @@ operation_name(
 		return "WIFI_DISCONNECT";
 	if (opcode == NETWORKD_OP_WIFI_PROFILES_CHANGED)
 		return "WIFI_PROFILES_CHANGED";
+	if (opcode == NETWORKD_OP_WIFI_SESSION_OPEN)
+		return "WIFI_SESSION_OPEN";
+	if (opcode == NETWORKD_OP_WIFI_SESSION_CLOSE)
+		return "WIFI_SESSION_CLOSE";
 	return NULL;
 }
 
@@ -5619,6 +6181,352 @@ peer_in_network_group(
 	return 0;
 }
 
+/*
+ * Loads the profiles automatic joining may use, each with its store.
+ *
+ * The user decided on 2026-10-02 (ws005-p024) that the system's store
+ * (/etc/wifi.conf) is what a boot joins from, and that an account's own
+ * store is used only while that account is logged in: sessiond announces
+ * the login and the logout.  The stores are read in this order, and an SSID
+ * an earlier store gave is not taken again:
+ *
+ *   the open sessions' stores, the newest session first (a logged-in
+ *   person's own key is preferred to the system's);
+ *   the store of the account that owns the policy (one that took it with
+ *   an explicit join);
+ *   the system's store.
+ *
+ * A store that is missing or cannot be read adds nothing; the others are
+ * still used.  The keys are only held for this attempt: the caller clears
+ * the model afterwards.
+ */
+static void
+load_candidates(
+	struct wifi_conf_model *model,
+	uid_t *stores)
+{
+	size_t index;
+
+	/* Starts from no candidate. */
+	wifi_conf_model_init(model);
+
+	/* The open sessions' stores, the newest first. */
+	for (index = wifi_session_count; index > 0U; index--)
+		candidate_store_add(model, stores, wifi_session_uids[index - 1U]);
+
+	/* The store of the account that owns the policy. */
+	candidate_store_add(model, stores, managed_wlan.owner_uid);
+
+	/* The system's store. */
+	candidate_store_add(model, stores, 0);
+}
+
+/* Adds the profiles of one account's store whose SSIDs are not candidates yet. */
+static void
+candidate_store_add(
+	struct wifi_conf_model *model,
+	uid_t *stores,
+	uid_t account)
+{
+	struct wifi_conf_model store;
+	char diagnostic[WIFI_CONF_DIAGNOSTIC_MAX];
+	const struct wifi_conf_profile *profile;
+	const struct wifi_conf_profile *present;
+	size_t index;
+	int rejected;
+	int error;
+	int saved;
+
+	/* Reads the account's store; the store layer checks its owner and mode. */
+	wifi_conf_model_init(&store);
+	memset(diagnostic, 0, sizeof(diagnostic));
+	error = load_policy(account, &store, diagnostic, sizeof(diagnostic));
+	if (error != 0) {
+		/* A missing store is an empty one; any other failure is told, and the store skipped. */
+		saved = errno;
+		if (saved != ENOENT) {
+			fprintf(stderr, "networkd: Wi-Fi store of account %u skipped: %s\n",
+			    (unsigned)account,
+			    diagnostic[0] != '\0' ? diagnostic : strerror(saved));
+		}
+		wifi_conf_model_clear(&store);
+		wifi_conf_explicit_clear(diagnostic, sizeof(diagnostic));
+		return;
+	}
+
+	/* Takes each profile whose SSID no earlier store gave, while the model has room. */
+	for (index = 0U; index < store.profile_count; index++) {
+		profile = &store.profiles[index];
+
+		/* An SSID an earlier store gave keeps that store's key. */
+		present = find_profile(model, profile->ssid, profile->ssid_length);
+		if (present != NULL)
+			continue;
+
+		/* A key the network refused waits for its store to change. */
+		rejected = wifi_rejection_find(account, profile->ssid, profile->ssid_length);
+		if (rejected >= 0)
+			continue;
+
+		/* The model is full: later profiles are not candidates this time. */
+		if (model->profile_count == WIFI_CONF_PROFILE_MAX)
+			break;
+		if (profile->passphrase_length >
+		    WIFI_CONF_PASSPHRASE_TOTAL_MAX - model->passphrase_bytes)
+			break;
+
+		/* The profile, and the account whose store it came from. */
+		model->profiles[model->profile_count] = *profile;
+		stores[model->profile_count] = account;
+		model->profile_count++;
+		model->passphrase_bytes += profile->passphrase_length;
+	}
+
+	/* The store's own copy of the keys goes. */
+	wifi_conf_model_clear(&store);
+	wifi_conf_explicit_clear(diagnostic, sizeof(diagnostic));
+}
+
+/* Records the store of the profile the automatic join just used. */
+static void
+connection_store_note(
+	const struct wifi_conf_model *model,
+	const uid_t *stores)
+{
+	const struct wifi_conf_profile *profile;
+	size_t index;
+
+	/* The joined network is the connection's SSID. */
+	for (index = 0U; index < model->profile_count; index++) {
+		profile = &model->profiles[index];
+		if (profile->ssid_length != managed_wlan.connection.ssid_length)
+			continue;
+		if (memcmp(profile->ssid, managed_wlan.connection.ssid,
+		    profile->ssid_length) != 0)
+			continue;
+
+		/* Its store is the connection's from now on. */
+		wifi_connection_store_uid = stores[index];
+		wifi_connection_store_known = 1;
+		return;
+	}
+}
+
+/* Tells whether the current connection was made with a key from one account's store. */
+static int
+connection_from_store(
+	uid_t account)
+{
+	/* No join since the last connection began has named a store. */
+	if (!wifi_connection_store_known)
+		return 0;
+
+	/* Only a connection being made, kept or remade has a store. */
+	if (managed_wlan.state != NETWORKD_WLAN_CONNECTING &&
+	    managed_wlan.state != NETWORKD_WLAN_CONNECTED &&
+	    managed_wlan.state != NETWORKD_WLAN_RECONNECTING)
+		return 0;
+
+	/* Another account's store gave the key. */
+	if (wifi_connection_store_uid != account)
+		return 0;
+
+	/* Succeeded: the connection's key is from this account's store. */
+	return 1;
+}
+
+/*
+ * Decides which account a session request is about, or refuses it.
+ *
+ * Root -- sessiond, which opens and closes the sessions -- names the account
+ * of the session.  A member of the network group may name only itself, so no
+ * account can make another one's store a candidate or take it away.  The
+ * account must be in the account database, where its store is found.
+ * Returns zero or an errno value.
+ */
+static int
+wifi_session_account(
+	const struct networkd_request *request,
+	const struct kern_peercred *peer,
+	uid_t *account)
+{
+	char buffer[NETWORKD_GROUP_BUFFER_MAX];
+	struct passwd storage;
+	struct passwd *entry;
+	uid_t named;
+	int allowed;
+	int error;
+
+	/* A request whose sender is unknown is refused. */
+	if (peer == NULL)
+		return EACCES;
+
+	/* The account the request names. */
+	named = (uid_t)request->account;
+
+	/* Anyone but root must be a network operator naming itself. */
+	if (peer->euid != 0) {
+		allowed = owner_allowed(peer);
+		if (!allowed)
+			return EPERM;
+		if (named != (uid_t)peer->euid)
+			return EPERM;
+	}
+
+	/* The account's entry, where its home and so its store are found. */
+	entry = NULL;
+	error = getpwuid_r(named, &storage, buffer, sizeof(buffer), &entry);
+	if (error != 0)
+		return error;
+	if (entry == NULL)
+		return ENOENT;
+
+	/* Succeeded: the request is about this account. */
+	*account = named;
+	return 0;
+}
+
+/* Finds an account among the open sessions; returns its place, or -1. */
+static int
+wifi_session_find(
+	uid_t account)
+{
+	size_t index;
+
+	/* The list is short and kept in the order the sessions opened. */
+	for (index = 0U; index < wifi_session_count; index++) {
+		if (wifi_session_uids[index] == account)
+			return (int)index;
+	}
+
+	/* The account has no open session. */
+	return -1;
+}
+
+/* Takes an account off the open sessions, keeping the others in their order. */
+static void
+wifi_session_forget(
+	uid_t account)
+{
+	size_t index;
+	int slot;
+
+	/* An account that is not listed has nothing to take off. */
+	slot = wifi_session_find(account);
+	if (slot < 0)
+		return;
+
+	/* The later sessions move up by one. */
+	for (index = (size_t)slot; index + 1U < wifi_session_count; index++)
+		wifi_session_uids[index] = wifi_session_uids[index + 1U];
+	wifi_session_count--;
+}
+
+/*
+ * Makes an account's store a candidate because its session opened.
+ *
+ * The account becomes the newest session even when it was listed already
+ * (a second login), so its store is read first.  The automatic search then
+ * starts over with the new candidates.
+ */
+static int
+wifi_session_open(
+	const struct networkd_request *request,
+	const struct kern_peercred *peer)
+{
+	uid_t account;
+	int error;
+
+	/* The account the request is about, if the sender may name it. */
+	error = wifi_session_account(request, peer, &account);
+	if (error != 0) {
+		errno = error;
+		return -1;
+	}
+
+	/* The account goes to the newest place; a full list takes no new one. */
+	wifi_session_forget(account);
+	if (wifi_session_count == NETWORKD_WIFI_SESSION_MAX) {
+		errno = ENOSPC;
+		return -1;
+	}
+	wifi_session_uids[wifi_session_count] = account;
+	wifi_session_count++;
+	fprintf(stderr, "networkd: Wi-Fi store of account %u is a candidate (session open)\n",
+	    (unsigned)account);
+
+	/* The search starts over with the account's saved networks. */
+	wifi_candidates_changed();
+
+	/* Succeeded: the account's store is a candidate. */
+	return 0;
+}
+
+/*
+ * Drops an account's store from the candidates because its session closed.
+ *
+ * What was joined with the account's key does not outlive the session: when
+ * the account owns the policy (it joined a network itself), the policy goes
+ * back to root, which ends the connection and searches again with the
+ * system's store and the other sessions' stores; when the policy is root's
+ * but the current connection's key came from the account's store, that
+ * connection ends and the search resumes.  Root's store is the system's and
+ * stays a candidate.
+ */
+static int
+wifi_session_close(
+	struct networkd_wifi_request *work,
+	const struct networkd_request *request,
+	const struct kern_peercred *peer)
+{
+	uid_t account;
+	int owner;
+	int error;
+
+	/* The account the request is about, if the sender may name it. */
+	work->stage = "Wi-Fi session";
+	error = wifi_session_account(request, peer, &account);
+	if (error != 0) {
+		errno = error;
+		return -1;
+	}
+
+	/* The account's store is no longer a candidate. */
+	wifi_session_forget(account);
+	fprintf(stderr, "networkd: Wi-Fi store of account %u is no candidate (session closed)\n",
+	    (unsigned)account);
+
+	/* The system's store stays; closing root's session ends nothing. */
+	if (account == 0) {
+		wifi_candidates_changed();
+		return 0;
+	}
+
+	/* A policy the account took with a join goes back to root. */
+	owner = networkd_managed_wlan_owner_matches(&managed_wlan, account);
+	if (owner && managed_wlan.state != NETWORKD_WLAN_DISABLED) {
+		error = wifi_policy_take(work, 0);
+		if (error != 0)
+			return -1;
+		schedule_automatic_work(0U);
+		return 0;
+	}
+
+	/* A connection made with the account's key ends; the search resumes. */
+	if (connection_from_store(account)) {
+		work->stage = "retire the closed session's Wi-Fi connection";
+		error = retire_managed_connection(NETWORKD_WLAN_AUTO_SEARCHING, 1);
+		if (error != 0)
+			return -1;
+	}
+
+	/* The search starts over without the account's store. */
+	wifi_candidates_changed();
+
+	/* Succeeded: the account's store is no longer used. */
+	return 0;
+}
+
 /* Returns the public spelling for one managed policy state. */
 static const char *
 managed_state_name(
@@ -5644,29 +6552,119 @@ managed_state_name(
 	return "invalid";
 }
 
-/* Appends one nonsecret global managed-policy status record. */
+/*
+ * Appends one nonsecret global managed-policy status record.
+ *
+ * Besides the state and the radio, it names the policy owner, the store the
+ * current connection's key came from ("-" when there is no connection or it
+ * is not known) and the accounts whose sessions are open, so that which
+ * stores automatic joining reads can be seen (ws005-p024).  Account numbers
+ * are not secret; keys never appear here.
+ */
 static int
 append_managed_status(
 	char *output,
 	size_t capacity,
 	size_t *output_length)
 {
+	char sessions[NETWORKD_WIFI_SESSION_MAX * 11U + 2U];
+	char rejected[NETWORKD_WIFI_REJECTION_MAX * (11U + 1U + WLAN_SSID_MAX * 2U + 1U) + 2U];
+	char ssid[WLAN_SSID_MAX * 2U + 2U];
+	char store[16];
 	const char *interface;
+	size_t used;
+	size_t index;
 	int count;
+	int appended;
 
-	/* Describes public policy state and the sole selected radio, if any. */
-	interface = managed_wlan.connection.interface[0] != '\0' ?
-	    managed_wlan.connection.interface : "-";
+	/* The radio of the managed connection, if any. */
+	interface = "-";
+	if (managed_wlan.connection.interface[0] != '\0')
+		interface = managed_wlan.connection.interface;
+
+	/* The store of the connection's key, named only while that connection lasts. */
+	store[0] = '-';
+	store[1] = '\0';
+	if (connection_from_store(wifi_connection_store_uid))
+		(void)snprintf(store, sizeof(store), "%u", (unsigned)wifi_connection_store_uid);
+
+	/* The accounts with an open session, oldest first, separated by commas. */
+	sessions[0] = '-';
+	sessions[1] = '\0';
+	used = 0U;
+	for (index = 0U; index < wifi_session_count; index++) {
+		count = snprintf(sessions + used, sizeof(sessions) - used, "%s%u",
+		    index == 0U ? "" : ",", (unsigned)wifi_session_uids[index]);
+		if (count < 0 || (size_t)count >= sizeof(sessions) - used)
+			break;
+		used += (size_t)count;
+	}
+
+	/* The network of the connection, in hex, while one is being made or kept. */
+	ssid[0] = '-';
+	ssid[1] = '\0';
+	used = 0U;
+	if (managed_wlan.connection.interface[0] != '\0' && managed_wlan.connection.ssid_length != 0U)
+		(void)append_hex(ssid, sizeof(ssid), &used, managed_wlan.connection.ssid, managed_wlan.connection.ssid_length);
+
+	/* The refused keys, each as ACCOUNT:SSID-IN-HEX, separated by commas. */
+	rejected[0] = '-';
+	rejected[1] = '\0';
+	used = 0U;
+	for (index = 0U; index < wifi_rejection_count; index++) {
+		count = snprintf(rejected + used, sizeof(rejected) - used, "%s%u:",
+		    index == 0U ? "" : ",", (unsigned)wifi_rejections[index].account);
+		if (count < 0 || (size_t)count >= sizeof(rejected) - used)
+			break;
+		used += (size_t)count;
+		appended = append_hex(rejected, sizeof(rejected), &used, wifi_rejections[index].ssid, wifi_rejections[index].ssid_length);
+		if (appended != 0)
+			break;
+	}
+
+	/* The record. */
 	count = snprintf(output + *output_length,
-	    capacity - *output_length, "wifi state=%s interface=%s\n",
-	    managed_state_name(managed_wlan.state), interface);
+	    capacity - *output_length,
+	    "wifi state=%s interface=%s owner=%u store=%s sessions=%s ssid=%s rejected=%s\n",
+	    managed_state_name(managed_wlan.state), interface,
+	    (unsigned)managed_wlan.owner_uid, store, sessions, ssid, rejected);
 	if (count < 0 || (size_t)count >= capacity - *output_length) {
 		errno = EOVERFLOW;
 		return -1;
 	}
 	*output_length += (size_t)count;
 
-	/* Reports successful bounded status composition. */
+	/* Succeeded: the record is appended. */
+	return 0;
+}
+
+/* Appends bytes as lower-case hex to a text at *used, which stays terminated; fails when it does not fit. */
+static int
+append_hex(
+	char *text,
+	size_t capacity,
+	size_t *used,
+	const unsigned char *bytes,
+	size_t length)
+{
+	static const char digits[] = "0123456789abcdef";
+	size_t index;
+
+	/* Two digits a byte and the terminator must fit. */
+	if (*used + length * 2U + 1U > capacity) {
+		errno = EOVERFLOW;
+		return -1;
+	}
+
+	/* Each byte, high digit first. */
+	for (index = 0U; index < length; index++) {
+		text[*used] = digits[bytes[index] >> 4];
+		text[*used + 1U] = digits[bytes[index] & 0x0fU];
+		*used += 2U;
+	}
+	text[*used] = '\0';
+
+	/* Succeeded: the text holds the bytes. */
 	return 0;
 }
 
@@ -5977,6 +6975,7 @@ connect_automatic(
 	const struct networkd_wlan_radio *radios,
 	size_t radio_count,
 	const struct wifi_conf_model *model,
+	const uid_t *stores,
 	uint64_t deadline,
 	char *output,
 	size_t output_capacity,
@@ -5989,6 +6988,7 @@ connect_automatic(
 	size_t attempt;
 	size_t attempted;
 	size_t radio;
+	size_t profile_index;
 	uint64_t selection_deadline;
 	int l2_succeeded;
 	int saved;
@@ -6029,6 +7029,14 @@ connect_automatic(
 			return 0;
 		}
 		saved = errno != 0 ? errno : EIO;
+
+		/* A refused key is not offered again until its store changes. */
+		if (saved == EACCES && stores != NULL) {
+			profile_index = (size_t)(candidates[attempt].profile - model->profiles);
+			wifi_rejection_note(stores[profile_index], candidates[attempt].profile);
+		}
+
+		/* The wave ends when it was cancelled, its candidates changed, a connection exists or time ran out. */
 		if (wifi_work.cancelled || wifi_work.profiles_changed ||
 		    managed_wlan.connection.interface[0] != '\0' ||
 		    netutil_monotonic_us() >= deadline)
@@ -6080,6 +7088,9 @@ run_managed_connect(
 	if (networkd_managed_wlan_begin_connect(&managed_wlan, interface,
 	    ifindex, route_event_sequence, profile->ssid, profile->ssid_length) != 0)
 		return -1;
+
+	/* A new connection's store is not known until its join succeeds. */
+	wifi_connection_store_known = 0;
 
 	memset(&child, 0, sizeof(child));
 	timeout = (unsigned)((deadline - now) / 1000000ULL);

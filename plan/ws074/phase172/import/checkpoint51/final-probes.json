@@ -1,0 +1,42 @@
+[
+  {
+    "name": "probe-rest",
+    "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "rest output live=1 actual_collections=1\n",
+    "stderr": ""
+  },
+  {
+    "name": "probe-protocol",
+    "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "protocol rest output live=1 actual_collections=3\n",
+    "stderr": ""
+  },
+  {
+    "name": "probe-copy",
+    "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "copy output live=1 value=42 actual_collections=1\n",
+    "stderr": ""
+  },
+  {
+    "name": "probe-call-array",
+    "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "call result=42 is_number=1 actual_collections=1\n",
+    "stderr": ""
+  },
+  {
+    "name": "probe-array-spread",
+    "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "array spread output live=1 value=42 actual_collections=1\n",
+    "stderr": ""
+  }
+]

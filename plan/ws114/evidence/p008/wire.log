@@ -1,0 +1,804 @@
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "7d6d0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [4, 0], "payload": [8]}
+{"request": [5, 2], "payload": [9, 8]}
+{"request": [9, 1], "payload": [10]}
+{"request": [1, 0], "payload": [11]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [11, 0], "payload_hex": "7e6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [12]}
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "03000000"}
+{"event": [12, 0], "payload_hex": "7e6d0300"}
+{"request": [9, 4], "payload": [3]}
+{"request": [1, 0], "payload": [13]}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [13, 0], "payload_hex": "7e6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [14, 0], "payload_hex": "7e6d0300"}
+{"checkpoint": "initial", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "initial"}
+PASS no declaration: SSD by default
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "a36d0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [2, 0], "payload": [24, 39, 1600615023, 1600480363, 1852405611, 1919251295, 1601332598, 1868784996, 1769234802, 1834970735, 1734438497, 29285, 1, 8]}
+{"request": [4, 0], "payload": [9]}
+{"request": [5, 2], "payload": [10, 9]}
+{"request": [10, 1], "payload": [11]}
+{"request": [1, 0], "payload": [12]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [8, 0], "payload_hex": "02000000"}
+{"event": [12, 0], "payload_hex": "a36d0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [13]}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "04000000"}
+{"event": [13, 0], "payload_hex": "a36d0300"}
+{"request": [10, 4], "payload": [4]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [14, 0], "payload_hex": "a36d0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [15, 0], "payload_hex": "a36d0300"}
+{"checkpoint": "initial", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "initial"}
+PASS KDE manager bound, no decoration object (GTK4): CSD; default_mode SSD
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "bf6d0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [4, 0], "payload": [8]}
+{"request": [5, 2], "payload": [9, 8]}
+{"request": [9, 1], "payload": [10]}
+{"request": [1, 0], "payload": [11]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [11, 0], "payload_hex": "bf6d0300"}
+{"request": [6, 1], "payload": [12, 10]}
+{"request": [1, 0], "payload": [13]}
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [13, 0], "payload_hex": "bf6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "05000000"}
+{"event": [14, 0], "payload_hex": "bf6d0300"}
+{"request": [9, 4], "payload": [5]}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [15, 0], "payload_hex": "bf6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [16]}
+{"event": [1, 1], "payload_hex": "0f000000"}
+{"event": [16, 0], "payload_hex": "cd6d0300"}
+{"checkpoint": "initial", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "initial"}
+{"request": [12, 1], "payload": [1]}
+{"request": [1, 0], "payload": [17]}
+{"event": [1, 1], "payload_hex": "10000000"}
+{"event": [12, 0], "payload_hex": "01000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "06000000"}
+{"event": [17, 0], "payload_hex": "ce6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [18]}
+{"event": [1, 1], "payload_hex": "11000000"}
+{"event": [18, 0], "payload_hex": "da6d0300"}
+{"checkpoint": "CSD requested, not acknowledged: SSD remains", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "CSD requested, not acknowledged: SSD remains"}
+{"request": [9, 4], "payload": [6]}
+{"request": [1, 0], "payload": [19]}
+{"event": [1, 1], "payload_hex": "12000000"}
+{"event": [19, 0], "payload_hex": "da6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [20]}
+{"event": [1, 1], "payload_hex": "13000000"}
+{"event": [20, 0], "payload_hex": "e66d0300"}
+{"checkpoint": "CSD acknowledged: CSD applies", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "CSD acknowledged: CSD applies"}
+{"request": [12, 1], "payload": [2]}
+{"request": [1, 0], "payload": [21]}
+{"event": [1, 1], "payload_hex": "14000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "07000000"}
+{"event": [21, 0], "payload_hex": "e76d0300"}
+{"request": [9, 4], "payload": [7]}
+{"request": [1, 0], "payload": [22]}
+{"event": [1, 1], "payload_hex": "15000000"}
+{"event": [22, 0], "payload_hex": "e76d0300"}
+{"request": [12, 1], "payload": [1]}
+{"request": [1, 0], "payload": [23]}
+{"event": [1, 1], "payload_hex": "16000000"}
+{"event": [12, 0], "payload_hex": "01000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "08000000"}
+{"event": [23, 0], "payload_hex": "e76d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [24]}
+{"event": [1, 1], "payload_hex": "17000000"}
+{"event": [24, 0], "payload_hex": "f46d0300"}
+{"checkpoint": "ackSSD-requestCSD-commit: SSD applies", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "ackSSD-requestCSD-commit: SSD applies"}
+{"request": [9, 4], "payload": [8]}
+{"request": [1, 0], "payload": [25]}
+{"event": [1, 1], "payload_hex": "18000000"}
+{"event": [25, 0], "payload_hex": "f46d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [26]}
+{"event": [1, 1], "payload_hex": "19000000"}
+{"event": [26, 0], "payload_hex": "ff6d0300"}
+{"checkpoint": "next CSD acknowledgment applies", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "next CSD acknowledgment applies"}
+{"request": [12, 1], "payload": [1]}
+{"request": [1, 0], "payload": [27]}
+{"event": [1, 1], "payload_hex": "1a000000"}
+{"event": [12, 0], "payload_hex": "01000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "09000000"}
+{"event": [27, 0], "payload_hex": "ff6d0300"}
+{"request": [9, 4], "payload": [9]}
+{"request": [1, 0], "payload": [28]}
+{"event": [1, 1], "payload_hex": "1b000000"}
+{"event": [28, 0], "payload_hex": "ff6d0300"}
+{"request": [12, 1], "payload": [2]}
+{"request": [1, 0], "payload": [29]}
+{"event": [1, 1], "payload_hex": "1c000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "0a000000"}
+{"event": [29, 0], "payload_hex": "ff6d0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [30]}
+{"event": [1, 1], "payload_hex": "1d000000"}
+{"event": [30, 0], "payload_hex": "096e0300"}
+{"checkpoint": "ackCSD-requestSSD-commit: CSD remains", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "ackCSD-requestSSD-commit: CSD remains"}
+{"request": [9, 4], "payload": [10]}
+{"request": [1, 0], "payload": [31]}
+{"event": [1, 1], "payload_hex": "1e000000"}
+{"event": [31, 0], "payload_hex": "0a6e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [32]}
+{"event": [1, 1], "payload_hex": "1f000000"}
+{"event": [32, 0], "payload_hex": "146e0300"}
+{"checkpoint": "SSD acknowledgment applies", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "SSD acknowledgment applies"}
+{"request": [12, 1], "payload": [1]}
+{"request": [1, 0], "payload": [33]}
+{"event": [1, 1], "payload_hex": "20000000"}
+{"event": [12, 0], "payload_hex": "01000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "0b000000"}
+{"event": [33, 0], "payload_hex": "146e0300"}
+{"request": [12, 1], "payload": [2]}
+{"request": [1, 0], "payload": [34]}
+{"event": [1, 1], "payload_hex": "21000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "0c000000"}
+{"event": [34, 0], "payload_hex": "146e0300"}
+{"request": [9, 4], "payload": [11]}
+{"request": [1, 0], "payload": [35]}
+{"event": [1, 1], "payload_hex": "22000000"}
+{"event": [35, 0], "payload_hex": "146e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [36]}
+{"event": [1, 1], "payload_hex": "23000000"}
+{"event": [36, 0], "payload_hex": "206e0300"}
+{"checkpoint": "older outstanding CSD serial applies", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "older outstanding CSD serial applies"}
+{"request": [9, 4], "payload": [12]}
+{"request": [1, 0], "payload": [37]}
+{"event": [1, 1], "payload_hex": "24000000"}
+{"event": [37, 0], "payload_hex": "216e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [38]}
+{"event": [1, 1], "payload_hex": "25000000"}
+{"event": [38, 0], "payload_hex": "2b6e0300"}
+{"checkpoint": "newer SSD serial applies", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "newer SSD serial applies"}
+{"request": [12, 1], "payload": [1]}
+{"request": [1, 0], "payload": [39]}
+{"event": [1, 1], "payload_hex": "26000000"}
+{"event": [12, 0], "payload_hex": "01000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "0d000000"}
+{"event": [39, 0], "payload_hex": "2c6e0300"}
+{"request": [9, 4], "payload": [13]}
+{"request": [1, 0], "payload": [40]}
+{"event": [1, 1], "payload_hex": "27000000"}
+{"event": [40, 0], "payload_hex": "2c6e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [41]}
+{"event": [1, 1], "payload_hex": "28000000"}
+{"event": [41, 0], "payload_hex": "366e0300"}
+{"checkpoint": "CSD before unset", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "CSD before unset"}
+{"request": [12, 2], "payload": []}
+{"request": [1, 0], "payload": [42]}
+{"event": [1, 1], "payload_hex": "29000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "0e000000"}
+{"event": [42, 0], "payload_hex": "366e0300"}
+{"request": [9, 4], "payload": [14]}
+{"request": [1, 0], "payload": [43]}
+{"event": [1, 1], "payload_hex": "2a000000"}
+{"event": [43, 0], "payload_hex": "366e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [44]}
+{"event": [1, 1], "payload_hex": "2b000000"}
+{"event": [44, 0], "payload_hex": "416e0300"}
+{"checkpoint": "unset defaults to SSD", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "unset defaults to SSD"}
+{"request": [12, 0], "payload": []}
+{"request": [1, 0], "payload": [45]}
+{"event": [1, 1], "payload_hex": "2c000000"}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [45, 0], "payload_hex": "416e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [46]}
+{"event": [1, 1], "payload_hex": "2d000000"}
+{"event": [46, 0], "payload_hex": "4c6e0300"}
+{"checkpoint": "destroy withdraws SSD at the next commit", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "destroy withdraws SSD at the next commit"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [47]}
+{"event": [1, 1], "payload_hex": "2e000000"}
+{"event": [47, 0], "payload_hex": "566e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [48]}
+{"event": [1, 1], "payload_hex": "2f000000"}
+{"event": [48, 0], "payload_hex": "656e0300"}
+{"checkpoint": "the withdrawn window keeps CSD", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "the withdrawn window keeps CSD"}
+PASS mode events/configure serials/commit boundaries
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "6f6e0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [4, 0], "payload": [8]}
+{"request": [5, 2], "payload": [9, 8]}
+{"request": [9, 1], "payload": [10]}
+{"request": [1, 0], "payload": [11]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [11, 0], "payload_hex": "706e0300"}
+{"request": [7, 1], "payload": [12, 10]}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [13]}
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "0f000000"}
+{"event": [13, 0], "payload_hex": "706e0300"}
+{"request": [9, 4], "payload": [15]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [14, 0], "payload_hex": "706e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [15, 0], "payload_hex": "7b6e0300"}
+{"checkpoint": "initial", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "initial"}
+{"request": [12, 0], "payload": []}
+{"request": [1, 0], "payload": [16]}
+{"event": [1, 1], "payload_hex": "0f000000"}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [16, 0], "payload_hex": "856e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [17]}
+{"event": [1, 1], "payload_hex": "10000000"}
+{"event": [17, 0], "payload_hex": "8f6e0300"}
+{"checkpoint": "native titlebar destroyed: the default SSD remains", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "native titlebar destroyed: the default SSD remains"}
+PASS native opt-in and withdrawal
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "986e0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [4, 0], "payload": [8]}
+{"request": [5, 2], "payload": [9, 8]}
+{"request": [9, 1], "payload": [10]}
+{"request": [1, 0], "payload": [11]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [11, 0], "payload_hex": "996e0300"}
+{"request": [7, 1], "payload": [12, 10]}
+{"request": [6, 1], "payload": [13, 10]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [13, 0], "payload_hex": "02000000"}
+{"event": [14, 0], "payload_hex": "996e0300"}
+{"request": [13, 1], "payload": [1]}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [13, 0], "payload_hex": "01000000"}
+{"event": [15, 0], "payload_hex": "996e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [16]}
+{"event": [1, 1], "payload_hex": "0f000000"}
+{"event": [10, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [9, 0], "payload_hex": "10000000"}
+{"event": [16, 0], "payload_hex": "996e0300"}
+{"request": [9, 4], "payload": [16]}
+{"request": [1, 0], "payload": [17]}
+{"event": [1, 1], "payload_hex": "10000000"}
+{"event": [17, 0], "payload_hex": "996e0300"}
+{"request": [8, 6], "payload": []}
+{"request": [1, 0], "payload": [18]}
+{"event": [1, 1], "payload_hex": "11000000"}
+{"event": [18, 0], "payload_hex": "a26e0300"}
+{"checkpoint": "initial", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "initial"}
+PASS explicit xdg CSD takes precedence over native opt-in
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "ab6e0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [2, 0], "payload": [24, 39, 1600615023, 1600480363, 1852405611, 1919251295, 1601332598, 1868784996, 1769234802, 1834970735, 1734438497, 29285, 1, 8]}
+{"request": [4, 0], "payload": [9]}
+{"request": [5, 2], "payload": [10, 9]}
+{"request": [10, 1], "payload": [11]}
+{"request": [1, 0], "payload": [12]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [8, 0], "payload_hex": "02000000"}
+{"event": [12, 0], "payload_hex": "ac6e0300"}
+{"request": [8, 0], "payload": [13, 9]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [13, 0], "payload_hex": "02000000"}
+{"event": [14, 0], "payload_hex": "ac6e0300"}
+{"request": [13, 1], "payload": [1]}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [13, 0], "payload_hex": "01000000"}
+{"event": [15, 0], "payload_hex": "ac6e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [16]}
+{"event": [1, 1], "payload_hex": "0f000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "11000000"}
+{"event": [16, 0], "payload_hex": "ac6e0300"}
+{"request": [10, 4], "payload": [17]}
+{"request": [1, 0], "payload": [17]}
+{"event": [1, 1], "payload_hex": "10000000"}
+{"event": [17, 0], "payload_hex": "ac6e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [18]}
+{"event": [1, 1], "payload_hex": "11000000"}
+{"event": [18, 0], "payload_hex": "b66e0300"}
+{"checkpoint": "initial", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "initial"}
+{"request": [13, 1], "payload": [2]}
+{"request": [1, 0], "payload": [19]}
+{"event": [1, 1], "payload_hex": "12000000"}
+{"event": [13, 0], "payload_hex": "02000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "12000000"}
+{"event": [19, 0], "payload_hex": "b66e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [20]}
+{"event": [1, 1], "payload_hex": "13000000"}
+{"event": [20, 0], "payload_hex": "bf6e0300"}
+{"checkpoint": "KDE SERVER requested, not acknowledged: CSD remains", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "KDE SERVER requested, not acknowledged: CSD remains"}
+{"request": [10, 4], "payload": [18]}
+{"request": [1, 0], "payload": [21]}
+{"event": [1, 1], "payload_hex": "14000000"}
+{"event": [21, 0], "payload_hex": "bf6e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [22]}
+{"event": [1, 1], "payload_hex": "15000000"}
+{"event": [22, 0], "payload_hex": "c86e0300"}
+{"checkpoint": "KDE SERVER acknowledged: SSD applies", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "KDE SERVER acknowledged: SSD applies"}
+{"request": [13, 1], "payload": [0]}
+{"request": [1, 0], "payload": [23]}
+{"event": [1, 1], "payload_hex": "16000000"}
+{"event": [13, 0], "payload_hex": "00000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "13000000"}
+{"event": [23, 0], "payload_hex": "c86e0300"}
+{"request": [10, 4], "payload": [19]}
+{"request": [1, 0], "payload": [24]}
+{"event": [1, 1], "payload_hex": "17000000"}
+{"event": [24, 0], "payload_hex": "c86e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [25]}
+{"event": [1, 1], "payload_hex": "18000000"}
+{"event": [25, 0], "payload_hex": "d26e0300"}
+{"checkpoint": "KDE NONE: the client decorates (CSD)", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "KDE NONE: the client decorates (CSD)"}
+{"request": [13, 1], "payload": [2]}
+{"request": [1, 0], "payload": [26]}
+{"event": [1, 1], "payload_hex": "19000000"}
+{"event": [13, 0], "payload_hex": "02000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "14000000"}
+{"event": [26, 0], "payload_hex": "d26e0300"}
+{"request": [10, 4], "payload": [20]}
+{"request": [1, 0], "payload": [27]}
+{"event": [1, 1], "payload_hex": "1a000000"}
+{"event": [27, 0], "payload_hex": "d26e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [28]}
+{"event": [1, 1], "payload_hex": "1b000000"}
+{"event": [28, 0], "payload_hex": "db6e0300"}
+{"checkpoint": "KDE SERVER again: SSD", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "KDE SERVER again: SSD"}
+{"request": [13, 0], "payload": []}
+{"request": [1, 0], "payload": [29]}
+{"event": [1, 1], "payload_hex": "1c000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "15000000"}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [29, 0], "payload_hex": "db6e0300"}
+{"request": [10, 4], "payload": [21]}
+{"request": [1, 0], "payload": [30]}
+{"event": [1, 1], "payload_hex": "1d000000"}
+{"event": [30, 0], "payload_hex": "db6e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [31]}
+{"event": [1, 1], "payload_hex": "1e000000"}
+{"event": [31, 0], "payload_hex": "e46e0300"}
+{"checkpoint": "KDE decoration released: the window has no object again (CSD for a KDE client)", "expected_mode": 1}
+{"applied_mode": 1, "checkpoint": "KDE decoration released: the window has no object again (CSD for a KDE client)"}
+PASS KDE server decoration: CLIENT before the first commit, SERVER, NONE, release
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "ed6e0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [2, 0], "payload": [24, 39, 1600615023, 1600480363, 1852405611, 1919251295, 1601332598, 1868784996, 1769234802, 1834970735, 1734438497, 29285, 1, 8]}
+{"request": [4, 0], "payload": [9]}
+{"request": [5, 2], "payload": [10, 9]}
+{"request": [10, 1], "payload": [11]}
+{"request": [1, 0], "payload": [12]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [8, 0], "payload_hex": "02000000"}
+{"event": [12, 0], "payload_hex": "ee6e0300"}
+{"request": [8, 0], "payload": [13, 9]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [13, 0], "payload_hex": "02000000"}
+{"event": [14, 0], "payload_hex": "ee6e0300"}
+{"request": [13, 1], "payload": [1]}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [13, 0], "payload_hex": "01000000"}
+{"event": [15, 0], "payload_hex": "ee6e0300"}
+{"request": [6, 1], "payload": [16, 11]}
+{"request": [1, 0], "payload": [17]}
+{"event": [1, 1], "payload_hex": "0f000000"}
+{"event": [16, 0], "payload_hex": "02000000"}
+{"event": [17, 0], "payload_hex": "ee6e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [18]}
+{"event": [1, 1], "payload_hex": "11000000"}
+{"event": [11, 0], "payload_hex": "00000000000000000400000004000000"}
+{"event": [10, 0], "payload_hex": "16000000"}
+{"event": [18, 0], "payload_hex": "ee6e0300"}
+{"request": [10, 4], "payload": [22]}
+{"request": [1, 0], "payload": [19]}
+{"event": [1, 1], "payload_hex": "12000000"}
+{"event": [19, 0], "payload_hex": "ee6e0300"}
+{"request": [9, 6], "payload": []}
+{"request": [1, 0], "payload": [20]}
+{"event": [1, 1], "payload_hex": "13000000"}
+{"event": [20, 0], "payload_hex": "f76e0300"}
+{"checkpoint": "initial", "expected_mode": 2}
+{"applied_mode": 2, "checkpoint": "initial"}
+PASS xdg-decoration takes precedence over KDE
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "006f0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [4, 0], "payload": [8]}
+{"request": [5, 2], "payload": [9, 8]}
+{"request": [9, 1], "payload": [10]}
+{"request": [1, 0], "payload": [11]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [11, 0], "payload_hex": "016f0300"}
+{"request": [6, 1], "payload": [12, 10]}
+{"request": [1, 0], "payload": [13]}
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [13, 0], "payload_hex": "016f0300"}
+{"request": [6, 1], "payload": [14, 10]}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [1, 0], "payload_hex": "06000000010000001e00000074686520746f706c6576656c206861732061206465636f726174696f6e000000"}
+PASS expected duplicate protocol error
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "0a6f0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [4, 0], "payload": [8]}
+{"request": [5, 2], "payload": [9, 8]}
+{"request": [9, 1], "payload": [10]}
+{"request": [1, 0], "payload": [11]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [11, 0], "payload_hex": "0a6f0300"}
+{"request": [6, 1], "payload": [12, 10]}
+{"request": [1, 0], "payload": [13]}
+{"event": [1, 1], "payload_hex": "0b000000"}
+{"event": [12, 0], "payload_hex": "02000000"}
+{"event": [13, 0], "payload_hex": "0a6f0300"}
+{"request": [12, 1], "payload": [9]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0d000000"}
+{"event": [1, 0], "payload_hex": "0c00000003000000160000006e6f742061206465636f726174696f6e206d6f6465000000"}
+PASS expected invalid protocol error
+{"request": [1, 1], "payload": [2]}
+{"request": [1, 0], "payload": [3]}
+{"event": [2, 0], "payload_hex": "010000000e000000776c5f636f6d706f7369746f7200000004000000"}
+{"event": [2, 0], "payload_hex": "020000000c0000007864675f776d5f626173650004000000"}
+{"event": [2, 0], "payload_hex": "03000000140000007a77705f6c696e75785f646d616275665f76310003000000"}
+{"event": [2, 0], "payload_hex": "040000000a000000776c5f6f757470757400000004000000"}
+{"event": [2, 0], "payload_hex": "0500000008000000776c5f736561740005000000"}
+{"event": [2, 0], "payload_hex": "0600000007000000776c5f73686d000001000000"}
+{"event": [2, 0], "payload_hex": "07000000140000007864675f6d656e755f6d616e616765725f76310002000000"}
+{"event": [2, 0], "payload_hex": "0800000011000000776c5f737562636f6d706f7369746f720000000001000000"}
+{"event": [2, 0], "payload_hex": "0900000017000000776c5f646174615f6465766963655f6d616e61676572000003000000"}
+{"event": [2, 0], "payload_hex": "0a0000001b0000007a7864675f6465636f726174696f6e5f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0b0000001b00000077705f637572736f725f73686170655f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "0c0000000e00000077705f76696577706f7274657200000001000000"}
+{"event": [2, 0], "payload_hex": "0d0000001a0000007a77705f746578745f696e7075745f6d616e616765725f763300000001000000"}
+{"event": [2, 0], "payload_hex": "100000001c0000006b65696c616e645f7469746c656261725f6d616e616765725f76310003000000"}
+{"event": [2, 0], "payload_hex": "11000000190000006b65696c616e645f676c6173735f6d616e616765725f76310000000002000000"}
+{"event": [2, 0], "payload_hex": "12000000280000007a77705f7072696d6172795f73656c656374696f6e5f6465766963655f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "13000000160000007a77705f7461626c65745f6d616e616765725f763200000001000000"}
+{"event": [2, 0], "payload_hex": "150000001b0000006b65696c616e645f6465736b746f705f6d616e616765725f7631000001000000"}
+{"event": [2, 0], "payload_hex": "16000000220000006b65696c616e645f6b6579626f6172645f696e7365745f6d616e616765725f763100000001000000"}
+{"event": [2, 0], "payload_hex": "17000000180000006b65696c616e645f656469745f6d616e616765725f76310001000000"}
+{"event": [2, 0], "payload_hex": "18000000270000006f72675f6b64655f6b77696e5f7365727665725f6465636f726174696f6e5f6d616e61676572000001000000"}
+{"event": [3, 0], "payload_hex": "136f0300"}
+{"request": [2, 0], "payload": [1, 14, 1667198071, 1869639023, 1869900147, 114, 4, 4]}
+{"request": [2, 0], "payload": [2, 12, 1600611448, 1650421111, 6648673, 1, 5]}
+{"request": [2, 0], "payload": [10, 27, 1734637690, 1667589215, 1952543343, 1601073001, 1634623853, 1601332583, 12662, 1, 6]}
+{"request": [2, 0], "payload": [16, 28, 1818846571, 1600417377, 1819568500, 1918984805, 1851878751, 1919248225, 3241567, 1, 7]}
+{"request": [2, 0], "payload": [24, 39, 1600615023, 1600480363, 1852405611, 1919251295, 1601332598, 1868784996, 1769234802, 1834970735, 1734438497, 29285, 1, 8]}
+{"request": [4, 0], "payload": [9]}
+{"request": [5, 2], "payload": [10, 9]}
+{"request": [10, 1], "payload": [11]}
+{"request": [1, 0], "payload": [12]}
+{"event": [1, 1], "payload_hex": "03000000"}
+{"event": [8, 0], "payload_hex": "02000000"}
+{"event": [12, 0], "payload_hex": "146f0300"}
+{"request": [8, 0], "payload": [13, 9]}
+{"request": [1, 0], "payload": [14]}
+{"event": [1, 1], "payload_hex": "0c000000"}
+{"event": [13, 0], "payload_hex": "02000000"}
+{"event": [14, 0], "payload_hex": "146f0300"}
+{"request": [13, 1], "payload": [9]}
+{"request": [1, 0], "payload": [15]}
+{"event": [1, 1], "payload_hex": "0e000000"}
+{"event": [1, 0], "payload_hex": "01000000010000001f000000696e76616c6964206f7220756e737570706f7274656420726571756573740000"}
+PASS expected kde-invalid protocol error

@@ -1,0 +1,5 @@
+plan/ws074/tests/host-form-owner.c goto=2
+plan/ws074/tests/host-node-cloning.c goto=15
+plan/ws074/tests/host-table-mutation.c goto=8
+plan/ws074/tests/host-table-row.c goto=12
+total 37

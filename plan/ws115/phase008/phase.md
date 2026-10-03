@@ -3,7 +3,7 @@
 # ws115-p008: gdk-pixbuf・libjpeg-turbo・libtiff・graphene・libepoxy・libxkbcommon・xkeyboard-config
 
 Parent: [WS115](../ws.md)
-Status: in-progress（q610-i01、P3。作業と受け入れの証拠は揃った。clearance の確定は Q1）
+Status: cleared（2026-10-02 Q1。q610-i01、581021c3e まで main に統合）
 Disposition: normal
 Primary Milestone: MG002（WSから継承）
 Queue / attempts: q610-i01（P3、継続 dispatch、時限 4h、base main 9f408ea0c）

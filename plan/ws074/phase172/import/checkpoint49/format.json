@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-frame-lifetime.c",
+      "formatted_sha256": "7bdca8ef4e07df10dd5412435b287d2a851c9b7ff33096a1de86fbe19792e19d",
+      "final_sha256": "2a6885d8732c587487afab57926190526ab9e08dff67c9278657d835bf19c172",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    }
+  ]
+}

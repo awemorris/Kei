@@ -1,0 +1,22 @@
+userland/desktop/libbrowser/vm/function.c: In function ‘vm_function_create_native’:
+userland/desktop/libbrowser/vm/function.c:147:16: error: ‘function’ may be used uninitialized [-Werror=maybe-uninitialized]
+  147 |         return function;
+      |                ^~~~~~~~
+userland/desktop/libbrowser/vm/function.c:59:29: note: ‘function’ was declared here
+   59 |         struct vm_function *function;
+      |                             ^~~~~~~~
+userland/desktop/libbrowser/vm/function.c: In function ‘vm_function_create’:
+userland/desktop/libbrowser/vm/function.c:260:16: error: ‘function’ may be used uninitialized [-Werror=maybe-uninitialized]
+  260 |         return function;
+      |                ^~~~~~~~
+userland/desktop/libbrowser/vm/function.c:161:29: note: ‘function’ was declared here
+  161 |         struct vm_function *function;
+      |                             ^~~~~~~~
+userland/desktop/libbrowser/vm/function.c: In function ‘vm_closure_create’:
+userland/desktop/libbrowser/vm/function.c:337:16: error: ‘function’ may be used uninitialized [-Werror=maybe-uninitialized]
+  337 |         return function;
+      |                ^~~~~~~~
+userland/desktop/libbrowser/vm/function.c:276:29: note: ‘function’ was declared here
+  276 |         struct vm_function *function;
+      |                             ^~~~~~~~
+cc1: all warnings being treated as errors

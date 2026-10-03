@@ -1,0 +1,33 @@
+{
+  "path": "plan/ws074/tests/host-vm-factory.c",
+  "final_source_sha256": "6941424400a9998da7714e9232f1c48fe0b3259a4ad23452a39a67908be24bef",
+  "original_ordered_literals_preserved": true,
+  "added_literals": [
+    "\"vm/bytecode.h\"",
+    "\"(function(n){return n+17;})\"",
+    "\"(function(){var secret=17;return function(n){return secret+n;};})()\"",
+    "\"owned-native\"",
+    "\"owned-native\"",
+    "\"direct function/environment factory performs actual default GC\"",
+    "\"callee factory retains its unowned parent or bytecode input\"",
+    "\"factory publishes a surviving complete output cell\"",
+    "\"new environment retains exact parent and slot count\"",
+    "\"new environment initializes first and final slot\"",
+    "\"published native/bytecode/closure executes actual expected result\"",
+    "\"length\"",
+    "\"published native retains configurable length property\"",
+    "\"name\"",
+    "\"published native retains exact private name property\"",
+    "\"released function/environment output is collectible\"",
+    "\"released factory does not permanently retain input code or parent\"",
+    "\"released closure does not retain captured private environment\"",
+    "\"outer\"",
+    "\"nested native callback performs actual caller-free GC\"",
+    "\"nested native retains direct inputs and suspended callee/new.target\"",
+    "\"outer dispatch restores exact previous realm state\"",
+    "\"nested native returns its actual completion\"",
+    "\"released nested invocation does not retain isolated participant\"",
+    "\"inner\"",
+    "\"inner dispatch restores actual outer callee and call target\""
+  ]
+}

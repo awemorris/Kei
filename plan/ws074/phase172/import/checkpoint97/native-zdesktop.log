@@ -1,0 +1,117 @@
+ZWL PREFERENCES open
+ZWL DISPLAY device=llvmpipe (LLVM 19.1.7, 256 bits) width=1280 height=800 refresh_mhz=74994
+ZWL STARTUP step=vulkan-device ms=214
+ZWL STARTUP step=vulkan-objects-arrow ms=266
+ZWL STARTUP step=wallpaper-picture ms=1820
+ZWL STARTUP step=wallpaper ms=2079
+ZWL STARTUP step=glyphs-text ms=26
+ZWL STARTUP step=glyphs-icons ms=17
+ZWL STARTUP step=glyphs-mark ms=30
+ZWL GLASS atlas cache-top=380 cells=273 faces=1
+ZWL STARTUP step=glyphs ms=211
+ZWL GLASS ready text=1
+ZWL STARTUP step=compose ms=2850 at_ms=39961
+ZWL INPUT device=/dev/input/event0 kind=pointer abs=1
+ZWL INPUT device=/dev/input/event1 kind=keyboard abs=0
+ZWL INPUT device=/dev/input/event2 kind=pointer abs=0
+ZWL INPUT device=/dev/input/event3 kind=keyboard abs=0
+ZWL STARTUP step=input ms=2 at_ms=39963
+ZWL KEYMAP format=xkb_v1 errno=0
+ZWL STARTUP step=keymap ms=0 at_ms=39963
+ZWL STARTUP step=socket ms=0 at_ms=39963
+ZWL IME none program=/usr/libexec/keiland-ime errno=6
+ZWL READY socket=/tmp/wayland-0 width=1280 height=800 timeout_ms=900000 pid=49
+ZWL CORNER zone x=1252 y=0 width=28 height=28
+ZWL OSK zone kind=flick x=1252 y=772 size=28
+ZWL OSK zone kind=qwerty x=0 y=772 size=28
+ZWL STARTUP step=output-display ms=4
+ZWL STARTUP step=output-pipelines ms=160
+ZWL STARTUP step=output-swapchain ms=387
+ZWL STARTUP step=output-targets ms=89
+ZWL OUTPUT open width=1280 height=800 images=3 format=37
+ZWL MODE window switch_ms=641 at_ms=40615
+ZWL GLASS desktops x=817 step=46 width=40
+ZWL NETWORK icon x=1061 y=3 width=30 height=28
+ZWL VOLUME icon x=1028 y=3 width=30 height=28
+ZWL HOME skip name=Notes missing=/bin/notes
+ZWL HOME skip name=Image Viewer missing=/bin/imageview
+ZWL HOME skip name=Text Editor missing=/bin/textedit
+ZWL NETWORK state reachable=1 connected=1 kind=wired interface=ue0 wifi=absent ssid=
+ZWL CLIENT client=1 fd=17
+ZWL BOUNDS client=1 surface=7 width=1256 height=690
+ZWL CONFIGURE client=1 surface=7 serial=1 width=0 height=0 fullscreen=0
+ZWL SEAT client=1 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=1 pointer=1 keyboard=1 touch=0
+ZWL TITLEBAR create client=1 titlebar=16 toplevel=9
+ZWL BOUNDS client=1 surface=7 width=1256 height=690
+ZWL CONFIGURE client=1 surface=7 serial=2 width=0 height=0 fullscreen=0
+ZWL TITLEBAR commit client=1 titlebar=16 serial=1 mode=1 controls=4 tabs=0 generation=1
+ZWL IMPORT client=1 buffer=20 width=900 height=640 bytes=2334720
+ZWL IMPORT client=1 buffer=21 width=900 height=640 bytes=2334720
+ZWL IMPORT client=1 buffer=22 width=900 height=640 bytes=2334720
+ZWL TITLEBAR commit client=1 titlebar=16 serial=2 mode=1 controls=4 tabs=0 generation=2
+ZWL DECORATION applied client=1 surface=7 mode=1
+ZWL MAP client=1 surface=7 x=190 y=123
+ZWL PERF 5000ms: passes=348 timeouts=331 | poll 78.0% work 39.2%
+ZWL PERF compose frames=7 draw_ms=110.67 (acquire 7.35 submit+present 79.60) frame_ms=122.46
+ZWL CLIENT gone client=1 reason=read
+ZWL CLEANUP client=1 objects=15 unread_fds=0
+ZWL PERF 5003ms: passes=433 timeouts=422 | poll 85.2% work 14.7%
+ZWL PERF compose frames=3 draw_ms=91.21 (acquire 0.30 submit+present 70.26) frame_ms=101.12
+ZWL PERF 5003ms: passes=499 timeouts=499 | poll 99.2% work 0.7%
+ZWL CLIENT client=2 fd=17
+ZWL BOUNDS client=2 surface=7 width=1256 height=690
+ZWL CONFIGURE client=2 surface=7 serial=14 width=0 height=0 fullscreen=0
+ZWL SEAT client=2 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=2 pointer=1 keyboard=1 touch=0
+ZWL TITLEBAR create client=2 titlebar=16 toplevel=9
+ZWL BOUNDS client=2 surface=7 width=1256 height=690
+ZWL CONFIGURE client=2 surface=7 serial=15 width=0 height=0 fullscreen=0
+ZWL TITLEBAR commit client=2 titlebar=16 serial=1 mode=1 controls=4 tabs=0 generation=1
+ZWL IMPORT client=2 buffer=20 width=900 height=640 bytes=2334720
+ZWL IMPORT client=2 buffer=21 width=900 height=640 bytes=2334720
+ZWL IMPORT client=2 buffer=22 width=900 height=640 bytes=2334720
+ZWL TITLEBAR commit client=2 titlebar=16 serial=2 mode=1 controls=4 tabs=0 generation=2
+ZWL DECORATION applied client=2 surface=7 mode=1
+ZWL MAP client=2 surface=7 x=190 y=123
+ZWL PERF 5001ms: passes=429 timeouts=413 | poll 82.6% work 17.3%
+ZWL PERF compose frames=6 draw_ms=91.43 (acquire 5.05 submit+present 65.80) frame_ms=101.46
+ZWL DECORATION applied client=2 surface=7 mode=2
+ZWL GLASS glyph codepoint=U+2026 size=0 face=0 cell=0
+ZWL TITLEBAR control client=2 surface=7 where=floating id=1 x=400 y=78 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=7 where=floating id=2 x=434 y=78 width=30 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=7 where=floating id=3 x=903 y=78 width=73 height=30 shown=1
+ZWL TITLEBAR control client=2 surface=7 where=floating id=4 x=474 y=78 width=346 height=30 shown=1
+ZWL PERF 5002ms: passes=483 timeouts=475 | poll 94.6% work 5.3%
+ZWL PERF compose frames=2 draw_ms=103.18 (acquire 12.17 submit+present 70.20) frame_ms=113.59
+ZWL PERF 5001ms: passes=472 timeouts=452 | poll 90.9% work 9.0%
+ZWL PERF compose frames=4 draw_ms=91.47 (acquire 0.29 submit+present 70.28) frame_ms=101.38
+ZWL CLIENT gone client=2 reason=read
+ZWL CLEANUP client=2 objects=15 unread_fds=0
+ZWL CLIENT client=3 fd=17
+ZWL BOUNDS client=3 surface=7 width=1256 height=690
+ZWL CONFIGURE client=3 surface=7 serial=31 width=0 height=0 fullscreen=0
+ZWL SEAT client=3 pointer=1 keyboard=0 touch=0
+ZWL SEAT client=3 pointer=1 keyboard=1 touch=0
+ZWL TITLEBAR create client=3 titlebar=16 toplevel=9
+ZWL BOUNDS client=3 surface=7 width=1256 height=690
+ZWL CONFIGURE client=3 surface=7 serial=32 width=0 height=0 fullscreen=0
+ZWL TITLEBAR commit client=3 titlebar=16 serial=1 mode=1 controls=4 tabs=0 generation=1
+ZWL IMPORT client=3 buffer=20 width=900 height=640 bytes=2334720
+ZWL IMPORT client=3 buffer=21 width=900 height=640 bytes=2334720
+ZWL IMPORT client=3 buffer=22 width=900 height=640 bytes=2334720
+ZWL TITLEBAR commit client=3 titlebar=16 serial=2 mode=1 controls=4 tabs=0 generation=2
+ZWL DECORATION applied client=3 surface=7 mode=1
+ZWL MAP client=3 surface=7 x=190 y=123
+ZWL PERF 5005ms: passes=388 timeouts=370 | poll 74.3% work 25.6%
+ZWL PERF compose frames=6 draw_ms=91.87 (acquire 4.09 submit+present 67.37) frame_ms=102.19
+ZWL PERF 5002ms: passes=468 timeouts=457 | poll 91.2% work 8.7%
+ZWL PERF compose frames=4 draw_ms=90.60 (acquire 0.28 submit+present 70.26) frame_ms=100.52
+ZWL PERF 5003ms: passes=477 timeouts=471 | poll 95.2% work 4.7%
+ZWL PERF compose frames=2 draw_ms=90.44 (acquire 0.29 submit+present 70.06) frame_ms=100.34
+ZWL PERF 5001ms: passes=499 timeouts=499 | poll 99.2% work 0.7%
+ZWL PERF 5003ms: passes=500 timeouts=500 | poll 99.2% work 0.8%
+ZWL CLIENT gone client=3 reason=read
+ZWL CLEANUP client=3 objects=17 unread_fds=0
+ZWL OUTPUT closed
+ZWL EXIT frames=35 error=0 cleanup_failed=0 pid=49 input_events=53 seat_events=64 at_ms=98427

@@ -32,8 +32,9 @@
  * the strokes (libpdf draws them into the background picture) and each
  * save adds the strokes to the file as a new revision, leaving its own
  * bytes as they were.  An encrypted or signed PDF is left as it is and a
- * new notebook starts.  Ctrl+O has no file chooser to open another file
- * with yet, and says so.
+ * new notebook starts.  Ctrl+O opens another PDF with libkeiui's file
+ * chooser (the notebook shown is saved first), and Ctrl+Shift+S saves the
+ * notebook as another file, which Notes goes on writing (ws128-p002).
  *
  * ws081-p013: the fingers do not write.  One finger scrolls a page zoomed
  * past the window (with inertia), two fingers zoom, a double tap zooms in
@@ -69,6 +70,9 @@
 
 /* The longest path Notes keeps. */
 #define MAIN_PATH_MAX		4096U
+
+/* The app_id the file chooser's window gets, so that zdesktop shows it as Notes'. */
+#define MAIN_APPLICATION	"notes"
 
 /* The eraser's radius, in points. */
 #define MAIN_ERASER_RADIUS	10.0f
@@ -235,6 +239,18 @@ struct notes_app {
 	int quit;
 
 	/*
+	 * File > Open and Save As (ws128-p002): libkeiui's file chooser while it
+	 * is shown (NULL otherwise) and its mode, and the path it answered with,
+	 * kept until the main loop carries it out (ready says it waits; an empty
+	 * path is a cancel).
+	 */
+	struct kui_file_chooser *chooser;
+	unsigned chooser_mode;
+	char chosen[MAIN_PATH_MAX];
+	unsigned chosen_mode;
+	int chosen_ready;
+
+	/*
 	 * The frames drawn since the last NOTES FRAMES line: how many, and the
 	 * sum and the longest of the time spent building their geometry and
 	 * drawing them (microseconds).  The line goes out when a contact ends,
@@ -275,6 +291,12 @@ static void app_frame_report(struct notes_app *app);
 static int app_timeout(const struct notes_app *app, uint64_t now);
 static uint64_t app_unix_ms(void);
 static uint64_t app_microseconds(void);
+static void app_choose(struct notes_app *app, unsigned mode);
+static void app_chooser_done(void *data, struct kui_file_chooser *chooser, unsigned result, const char *path, size_t filter);
+static void app_chosen(struct notes_app *app);
+static void app_open_file(struct notes_app *app, const char *path);
+static void app_save_as(struct notes_app *app, const char *path);
+static void app_place_page(struct notes_app *app);
 
 /*
  * Runs Notes.
@@ -381,10 +403,7 @@ main(
 		printf("NOTES TOUCH none error=%d\n", error);
 
 	/* The page's first place, before any input needs it. */
-	notes_view_layout(&app.view, app.renderer.extent.width, app.renderer.extent.height,
-			  app.document.pages[0]->width, app.document.pages[0]->height);
-	notes_touch_layout(&app.touch, app.renderer.extent.width, app.renderer.extent.height, (float)NOTES_TOOLBAR_HEIGHT, NOTES_PAGE_MARGIN,
-			   app.document.pages[0]->width, app.document.pages[0]->height, app.view.scale);
+	app_place_page(&app);
 
 	/* The tests' first line. */
 	printf("NOTES START width=%u height=%u fullscreen=%d pages=%lu strokes=%lu path=%s\n",
@@ -434,6 +453,10 @@ main(
 			app_input(&app, &app.window.inputs[index]);
 		app.window.input_count = 0;
 
+		/* What the file chooser answered (ws128-p002). */
+		if (app.chosen_ready)
+			app_chosen(&app);
+
 		/* The fingers' events, and where they put the page. */
 		for (index = 0; index < app.window.touch_count; index++)
 			notes_touch_event(&app.touch, &app.window.touches[index]);
@@ -478,6 +501,8 @@ main(
 	fflush(stdout);
 
 	/* Everything goes; the journal stays only when the last save failed. */
+	kui_file_chooser_destroy(app.chooser);
+	app.chooser = NULL;
 	notes_touch_close(&app.touch);
 	notes_ui_close(&app.ui);
 	notes_frame_free(&app.frame);
@@ -987,9 +1012,12 @@ app_action(
 		(void)app_save(app, "request");
 		break;
 	case NOTES_ACTION_OPEN:
-		/* Opening another notebook needs a file chooser, which Notes does not have yet. */
-		printf("NOTES OPEN chooser unsupported\n");
-		app_status(app, "Opening from Notes is not available yet");
+		/* Another PDF, chosen in libkeiui's file chooser (ws128-p002). */
+		app_choose(app, KUI_FILE_CHOOSER_OPEN);
+		break;
+	case NOTES_ACTION_SAVE_AS:
+		/* The notebook as another file, chosen in the file chooser (ws128-p002). */
+		app_choose(app, KUI_FILE_CHOOSER_SAVE);
 		break;
 	case NOTES_ACTION_CLOSE:
 		/* The main loop saves and ends. */
@@ -1049,7 +1077,10 @@ app_key(
 	if (control) {
 		switch (key->key) {
 		case MAIN_KEY_S:
-			app_action(app, NOTES_ACTION_SAVE);
+			if (shift)
+				app_action(app, NOTES_ACTION_SAVE_AS);
+			else
+				app_action(app, NOTES_ACTION_SAVE);
 			break;
 		case MAIN_KEY_Z:
 			if (shift)
@@ -2115,4 +2146,244 @@ app_microseconds(void)
 
 	/* Reports it in microseconds. */
 	return (uint64_t)now.tv_sec * 1000000U + (uint64_t)now.tv_nsec / 1000U;
+}
+
+/*
+ * Shows libkeiui's file chooser for File > Open (KUI_FILE_CHOOSER_OPEN) or
+ * Save As (KUI_FILE_CHOOSER_SAVE), at the notebook's folder, the PDFs
+ * shown first (ws128-p002).  One already shown answers in its time.
+ */
+static void
+app_choose(
+	struct notes_app *app,
+	unsigned mode)
+{
+	static const struct kui_file_filter filters[] = {
+		{ "PDF documents", "pdf" },
+		{ "All files", NULL }
+	};
+	static const struct kui_file_chooser_listener listener = {
+		app_chooser_done
+	};
+	struct kui_file_chooser_options options;
+	char folder[MAIN_PATH_MAX];
+	const char *word;
+	char *slash;
+
+	/* One chooser at a time. */
+	if (app->chooser != NULL)
+		return;
+
+	/* The notebook's folder (the home folder when the path has none). */
+	(void)snprintf(folder, sizeof(folder), "%s", app->path);
+	slash = strrchr(folder, '/');
+	if (slash != NULL && slash != folder)
+		*slash = '\0';
+
+	/* Open shows the PDFs; Save As starts with the notebook's name. */
+	memset(&options, 0, sizeof(options));
+	options.mode = mode;
+	options.application = MAIN_APPLICATION;
+	options.folder = folder;
+	options.filters = filters;
+	options.filter_count = sizeof(filters) / sizeof(filters[0]);
+	options.filter = 0;
+	options.font = MAIN_FONT;
+	if (mode == KUI_FILE_CHOOSER_SAVE) {
+		options.title = "Save As";
+		options.name = app->name;
+	}
+
+	/* The chooser's window over Notes'; without it the status says why. */
+	app->chooser = kui_file_chooser_open(app->window.display, app->window.toplevel, &options, &listener, app);
+	if (app->chooser == NULL) {
+		printf("NOTES CHOOSER failed errno=%d\n", errno);
+		app_status(app, "The file chooser could not be shown");
+		return;
+	}
+
+	/* The tests' line. */
+	app->chooser_mode = mode;
+	word = "open";
+	if (mode == KUI_FILE_CHOOSER_SAVE)
+		word = "save";
+	printf("NOTES CHOOSER open mode=%s folder=%s\n", word, folder);
+}
+
+/* The chooser answered: the path (empty when cancelled) waits for the main loop, and the chooser goes. */
+static void
+app_chooser_done(
+	void *data,
+	struct kui_file_chooser *chooser,
+	unsigned result,
+	const char *path,
+	size_t filter)
+{
+	struct notes_app *app;
+
+	/* The answer, kept for the main loop (which carries it out after the dispatch). */
+	(void)filter;
+	app = data;
+	app->chosen[0] = '\0';
+	if (result == KUI_FILE_CHOOSER_CHOSEN && path != NULL)
+		(void)snprintf(app->chosen, sizeof(app->chosen), "%s", path);
+	app->chosen_mode = app->chooser_mode;
+	app->chosen_ready = 1;
+
+	/* The chooser is spent. */
+	kui_file_chooser_destroy(chooser);
+	if (chooser == app->chooser)
+		app->chooser = NULL;
+}
+
+/* Carries out what the chooser answered: nothing for a cancel, else the file opened or saved as. */
+static void
+app_chosen(
+	struct notes_app *app)
+{
+	char path[MAIN_PATH_MAX];
+
+	/* Once. */
+	app->chosen_ready = 0;
+	(void)snprintf(path, sizeof(path), "%s", app->chosen);
+
+	/* Cancelled: the notebook stays as it is. */
+	if (path[0] == '\0') {
+		printf("NOTES CHOOSER cancelled\n");
+		fflush(stdout);
+		return;
+	}
+
+	/* Save As, or Open. */
+	if (app->chosen_mode == KUI_FILE_CHOOSER_SAVE) {
+		app_save_as(app, path);
+	} else {
+		app_open_file(app, path);
+	}
+}
+
+/*
+ * Opens another PDF in place of the notebook shown (File > Open,
+ * ws128-p002): the notebook is saved first (a stroke being drawn is kept),
+ * then the new one starts as at Notes' start -- its journal recovered,
+ * its edit data read, or another program's PDF written on.
+ */
+static void
+app_open_file(
+	struct notes_app *app,
+	const char *path)
+{
+	int same;
+	int error;
+
+	/* The notebook shown is opened already. */
+	same = strcmp(path, app->path);
+	if (same == 0) {
+		app_status(app, "That notebook is open");
+		return;
+	}
+
+	/* The notebook shown is kept: a stroke being drawn ends, and changes are saved. */
+	if (app->live != NULL)
+		app_end_contact(app, NULL);
+	if (app->document.dirty) {
+		error = app_save(app, "open");
+		if (error != 0)
+			return;
+	}
+
+	/* The notebook shown goes, with the pictures drawn of it. */
+	notes_journal_destroy(app->document.journal);
+	app->document.journal = NULL;
+	notes_document_free(&app->document);
+	memset(&app->document, 0, sizeof(app->document));
+	pdf_display_list_destroy(app->background_list);
+	app->background_list = NULL;
+	app->background_failed = 0;
+	app->background_page = NULL;
+	app->picture_page = NULL;
+	app->touch_page = NULL;
+	app->page = 0;
+	app->status[0] = '\0';
+	app->status_until = 0;
+
+	/* The new one; a notebook that cannot start at all leaves a new one at a new path. */
+	error = app_start_document(app, path);
+	if (error != 0) {
+		printf("NOTES OPEN failed error=%d path=%s\n", error, path);
+		error = app_start_document(app, NULL);
+		if (error != 0) {
+			fprintf(stderr, "notes: cannot start a notebook: %s\n", strerror(error));
+			app->quit = 1;
+			return;
+		}
+	}
+
+	/* The new notebook shown from its first page, named in the title, and among the recent files. */
+	app_place_page(app);
+	app_set_title(app);
+	(void)keiland_recent_add(app->path, MAIN_APPLICATION);
+	if (app->status[0] == '\0')
+		app_status(app, "Opened");
+	printf("NOTES OPENED pages=%lu strokes=%lu path=%s\n", (unsigned long)app->document.page_count,
+	       (unsigned long)notes_document_stroke_total(&app->document), app->path);
+	fflush(stdout);
+	app->toolbar_dirty = 1;
+	app->redraw = 1;
+}
+
+/*
+ * Saves the notebook as another file and goes on writing that one (File >
+ * Save As, ws128-p002): the journal follows the new path, and the file the
+ * notebook was saved as before stays as it was saved.
+ */
+static void
+app_save_as(
+	struct notes_app *app,
+	const char *path)
+{
+	const char *slash;
+	int same;
+
+	/* The same file is a plain save. */
+	same = strcmp(path, app->path);
+	if (same == 0) {
+		(void)app_save(app, "request");
+		return;
+	}
+
+	/* The old path's journal goes (a save follows at once, so nothing is lost). */
+	if (app->document.journal != NULL) {
+		(void)notes_journal_discard(app->document.journal);
+		notes_journal_destroy(app->document.journal);
+		app->document.journal = NULL;
+	}
+
+	/* The new path, its name and its journal. */
+	(void)snprintf(app->path, sizeof(app->path), "%s", path);
+	slash = strrchr(app->path, '/');
+	app->name = app->path;
+	if (slash != NULL)
+		app->name = slash + 1;
+	app->document.journal = notes_journal_create(app->path);
+	if (app->document.journal == NULL)
+		printf("NOTES JOURNAL none error=%d\n", errno);
+
+	/* The title, and the notebook saved there now. */
+	app_set_title(app);
+	(void)app_save(app, "save-as");
+	app->toolbar_dirty = 1;
+	app->redraw = 1;
+}
+
+/* Places the notebook's first page in the window, for the pointer and the fingers (at the start, and after Open). */
+static void
+app_place_page(
+	struct notes_app *app)
+{
+	/* The page's place, and the fingers' with it. */
+	notes_view_layout(&app->view, app->renderer.extent.width, app->renderer.extent.height,
+			  app->document.pages[0]->width, app->document.pages[0]->height);
+	notes_touch_layout(&app->touch, app->renderer.extent.width, app->renderer.extent.height, (float)NOTES_TOOLBAR_HEIGHT, NOTES_PAGE_MARGIN,
+			   app->document.pages[0]->width, app->document.pages[0]->height, app->view.scale);
 }

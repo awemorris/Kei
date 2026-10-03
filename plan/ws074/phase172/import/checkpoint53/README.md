@@ -1,0 +1,9 @@
+# q597 checkpoint53 / DOM mixin full source review
+
+Fully reviewed `userland/desktop/libbrowser/bind/mixin.c` (old631 → current767 lines) against full C/component standards and Guardrail, including ParentNode/ChildNode sibling/count/append/prepend/remove, tag/class queries, class splitting and qualified-name matching. Current source SHA256 `f51ce61227afde791ab4893bb0287a6d0a7f92486dd7e9bebe112d3f412db838`; all209 inventory hashes checked, reviewed173/209,36 production C/header remain. Original three C string literals and original query/input corpora were preserved. No public ABI, JS surface, runner or reference asset changed.
+
+The DOM query paths now retain their converted strings, token/result arrays and freshly created Text nodes across wrapper and insertion allocations. The class splitter keeps its destination/token alive and releases only acquired roots and initialized native units. This repairs ownership paths found by full review; unlike checkpoint51/52, no isolated before/after collector crash was claimed for this file.
+
+GCC14.2 scoped compile `-std=gnu11 -Wall -Wextra -Werror` exit0/warning0. Full private host build on this source exit0/warning0. Fixed DOM corpus23/23, native insertion29/29, mutation-record16/16 and tree exit0. Style checker exit1 lists exactly19 permitted single forward `goto cleanup` findings under full C §14, other findings0. `clang-format-19` v19.1.7 ran on a copy; generic layout conflicts with canonical ANSI/one-argument-per-line style, so manually reviewed source retains full-standard layout.
+
+Resume with [remaining36](remaining.json) and original whole p172 manifest/semantic/API/ABI/client/native/ASan/target/boot gates. p100 remains blocked/unselected until whole p172 clearance and actual output. GitHub Issue/Project publication remains deferred.

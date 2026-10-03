@@ -401,6 +401,23 @@ struct ufs_mount_state {
 	struct ufs_io_owner snapshot_io;
 	struct ufs_super super;
 	struct mutex namespace_lock;
+
+	/*
+	 * The namespace's shared side (ws073-p045, BUG-135).  A name's lookup
+	 * and the journal's periodic commit share the namespace: each counts
+	 * itself in namespace_readers (under namespace_guard) after a brief
+	 * pass through namespace_lock, so a lookup no longer waits for a
+	 * commit's disk writes and cache flushes.  A namespace change holds
+	 * namespace_lock and waits on namespace_drained until the count is
+	 * zero, so it still runs alone against both.  load_lock admits one
+	 * shared loader at a time to the in-core inode table, which the
+	 * exclusive namespace_lock used to do for every loader.
+	 */
+	struct spinlock namespace_guard;
+	unsigned namespace_readers;
+	struct wait_queue namespace_drained;
+	struct mutex load_lock;
+
 	struct mutex lock;
 	struct mutex journal_lock;
 	uint8_t *cg;
@@ -732,6 +749,11 @@ static enum inode_type mode_type(uint16_t mode);
 static int decode_inode_raw(struct inode *inode, const uint8_t *raw, uint32_t number, int orphan);
 static int load_inode_locked(struct mount *mountp, uint32_t number, struct inode **result);
 static int load_inode(struct mount *mountp, uint32_t number, struct inode **result);
+static int load_inode_admitted(struct mount *mountp, uint32_t number, struct inode **result);
+static void namespace_enter(struct ufs_mount_state *ms);
+static void namespace_leave(struct ufs_mount_state *ms);
+static void namespace_share(struct ufs_mount_state *ms);
+static void namespace_unshare(struct ufs_mount_state *ms);
 static int next_dirent(struct inode *directory, off_t *cursor, uint32_t *number, uint8_t *type, char name[NAME_MAX + 1U]);
 static uint16_t dir_minimum(uint8_t length);
 static uint8_t dir_type(enum inode_type type);
@@ -761,6 +783,7 @@ static int reserve_inode_locked(struct inode *inode, const struct inode_creation
 static int reserve_inode_group(struct inode *inode, const struct inode_creation_request *request);
 static int new_inode(struct inode *directory, const struct inode_creation_request *request, nlink_t links, struct inode **result);
 static int ufs_lookup_locked(struct inode *directory, const struct componentname *component, struct inode **result);
+static int ufs_lookup_scan(struct inode *directory, const struct componentname *component, struct inode **result, int shared);
 static int remove_group_locked(struct inode *directory, const struct componentname *name, struct inode *target, struct ufs_remove_group *group);
 static int remove_group(struct inode *directory, const struct componentname *name, struct inode *target, int *handled);
 static int directory_image_insert(struct inode *directory, const struct componentname *name, struct inode *target, uint8_t *block, uint32_t index);
@@ -9620,25 +9643,21 @@ load_inode(
 	uint32_t number,
 	struct inode **result)
 {
-	struct mutex *gate;
-	int entered;
+	struct ufs_mount_state *ms;
+	int owned;
 	int error;
 
-	/*
-	 * The caller may already hold the gate, in which case this call waits.
-	 */
-	gate = &state(mountp)->namespace_lock;
-	entered = !mutex_owned(gate);
-
-	/* Releases the lock this call took. */
-	if (entered)
-		mutex_lock(gate);
-
-	error = load_inode_locked(mountp, number, result);
-
-	/* Releases the lock this call took. */
-	if (entered)
-		mutex_unlock(gate);
+	/* A caller that holds the namespace alone loads with no other loader about. */
+	ms = state(mountp);
+	owned = mutex_owned(&ms->namespace_lock);
+	if (owned) {
+		error = load_inode_locked(mountp, number, result);
+	} else {
+		/* Any other caller shares the namespace and is admitted as the one loader. */
+		namespace_share(ms);
+		error = load_inode_admitted(mountp, number, result);
+		namespace_unshare(ms);
+	}
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -11215,12 +11234,128 @@ new_inode(
 	return 0;
 }
 
-/* Resolves one name under a directory, with the mount lock held. */
+/* Loads an inode as the one admitted loader, with the namespace shared (ws073-p045). */
+static int
+load_inode_admitted(
+	struct mount *mountp,
+	uint32_t number,
+	struct inode **result)
+{
+	struct ufs_mount_state *ms;
+	int error;
+
+	/* One shared loader at a time publishes into the in-core inode table. */
+	ms = state(mountp);
+	mutex_lock(&ms->load_lock);
+	error = load_inode_locked(mountp, number, result);
+	mutex_unlock(&ms->load_lock);
+
+	/* Reports why the inode could not be read. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the inode is in core. */
+	return 0;
+}
+
+/*
+ * Holds the namespace alone for a change: takes the namespace lock, then
+ * waits until no lookup or commit shares the namespace (ws073-p045).
+ */
+static void
+namespace_enter(
+	struct ufs_mount_state *ms)
+{
+	unsigned long irq;
+	uint64_t sequence;
+
+	/* The lock keeps new sharers out from here on. */
+	mutex_lock(&ms->namespace_lock);
+
+	/* Waits for the sharers already in to leave. */
+	irq = spin_lock_irqsave(&ms->namespace_guard);
+	while (ms->namespace_readers != 0U) {
+		sequence = waitq_sequence(&ms->namespace_drained);
+		(void)waitq_sleep(&ms->namespace_drained, &ms->namespace_guard, sequence, 0, 0);
+	}
+	spin_unlock_irqrestore(&ms->namespace_guard, irq);
+}
+
+/* Lets the namespace go after a change. */
+static void
+namespace_leave(
+	struct ufs_mount_state *ms)
+{
+	/* Sharers and the next change may come in. */
+	mutex_unlock(&ms->namespace_lock);
+}
+
+/*
+ * Shares the namespace with other lookups and the journal's commit: waits
+ * out a change that holds it alone, then counts this caller in.
+ */
+static void
+namespace_share(
+	struct ufs_mount_state *ms)
+{
+	unsigned long irq;
+
+	/* A brief pass through the lock waits for a change under way. */
+	mutex_lock(&ms->namespace_lock);
+
+	/* The count a change waits on, which this sharer joins. */
+	irq = spin_lock_irqsave(&ms->namespace_guard);
+	ms->namespace_readers++;
+	spin_unlock_irqrestore(&ms->namespace_guard, irq);
+	mutex_unlock(&ms->namespace_lock);
+}
+
+/* Stops sharing the namespace; the last sharer out wakes a change that waits. */
+static void
+namespace_unshare(
+	struct ufs_mount_state *ms)
+{
+	unsigned long irq;
+
+	/* The count goes down, and a change waiting for zero is woken. */
+	irq = spin_lock_irqsave(&ms->namespace_guard);
+	ms->namespace_readers--;
+	if (ms->namespace_readers == 0U)
+		waitq_wake_all(&ms->namespace_drained);
+	spin_unlock_irqrestore(&ms->namespace_guard, irq);
+}
+
+/* Resolves one name under a directory, with the namespace held alone. */
 static int
 ufs_lookup_locked(
 	struct inode *directory,
 	const struct componentname *component,
 	struct inode **result)
+{
+	int error;
+
+	/* The scan loads the inode it finds as the namespace's only user. */
+	error = ufs_lookup_scan(directory, component, result, 0);
+
+	/* Reports the inode, or why it could not be found or read. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded. */
+	return 0;
+}
+
+/*
+ * Resolves one name under a directory: the namespace is held alone, or
+ * shared (shared) by a lookup, which then loads the inode it finds as the
+ * admitted loader (ws073-p045).
+ */
+static int
+ufs_lookup_scan(
+	struct inode *directory,
+	const struct componentname *component,
+	struct inode **result,
+	int shared)
 {
 	int looked_up;
 	off_t cursor = 0;
@@ -11249,9 +11384,12 @@ ufs_lookup_locked(
 		 * The entry matches on its name length and its bytes together.
 		 */
 		if (length == component->cn_namelen && difference == 0) {
-			/* Reads the inode the entry names. */
-			looked_up =
-				load_inode(directory->i_mount, number, result);
+			/* Reads the inode the entry names (a shared lookup as the admitted loader). */
+			if (shared) {
+				looked_up = load_inode_admitted(directory->i_mount, number, result);
+			} else {
+				looked_up = load_inode(directory->i_mount, number, result);
+			}
 
 			/* Reports the inode, or why it could not be read. */
 			return looked_up;
@@ -11273,9 +11411,9 @@ ufs_lookup(
 	const struct componentname *component,
 	struct inode **result)
 {
-	struct mutex *gate;
+	struct ufs_mount_state *ms;
 	int hidden;
-	int entered;
+	int owned;
 	int error;
 
 	/* The journal file is the volume's own and no one else's to name. */
@@ -11283,18 +11421,21 @@ ufs_lookup(
 	if (hidden)
 		return EPERM;
 
-	/* The caller may already hold the gate; this call then does not take it. */
-	gate = &state(directory->i_mount)->namespace_lock;
-	entered = !mutex_owned(gate);
-
-	/* Takes the gate this call holds for the lookup. */
-	if (entered)
-		mutex_lock(gate);
-	error = ufs_lookup_locked(directory, component, result);
-
-	/* Releases the lock this call took. */
-	if (entered)
-		mutex_unlock(gate);
+	/*
+	 * A caller that holds the namespace alone looks up inside its change;
+	 * any other shares the namespace with other lookups and the journal's
+	 * commit (ws073-p045, BUG-135: a commit's cache flush no longer holds
+	 * up stat() and open()).
+	 */
+	ms = state(directory->i_mount);
+	owned = mutex_owned(&ms->namespace_lock);
+	if (owned) {
+		error = ufs_lookup_locked(directory, component, result);
+	} else {
+		namespace_share(ms);
+		error = ufs_lookup_scan(directory, component, result, 1);
+		namespace_unshare(ms);
+	}
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -12902,7 +13043,7 @@ ufs_create(
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable)
 		return EROFS;
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -12941,7 +13082,7 @@ ufs_create(
 	*result = inode;
 out:
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -12979,7 +13120,7 @@ ufs_mkdir(
 	if (!ms->writable)
 		return EROFS;
 
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13081,7 +13222,7 @@ ufs_mkdir(
 
 out:
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -13121,7 +13262,7 @@ ufs_mknod(
 	if (!ms->writable)
 		return EROFS;
 
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13161,7 +13302,7 @@ ufs_mknod(
 	*result = inode;
 out:
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -13195,7 +13336,7 @@ ufs_unlink(
 	old_links = 0;
 	old_flags = 0;
 
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13262,7 +13403,7 @@ ufs_unlink(
 out:
 	inode_release(target);
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -13345,7 +13486,7 @@ ufs_rmdir(
 	/* Refuses to remove the directory itself or its parent link. */
 	if (dot)
 		return EINVAL;
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13431,7 +13572,7 @@ ufs_rmdir(
 out:
 	inode_release(target);
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -13522,7 +13663,7 @@ ufs_rename(
 		return 0;
 	}
 
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13818,7 +13959,7 @@ out:
 	inode_release(target);
 	inode_release(source);
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -13852,7 +13993,7 @@ ufs_link(
 	/* Refuses a link to a directory. */
 	if (target->i_type == INODE_DIR)
 		return EPERM;
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13914,7 +14055,7 @@ ufs_link(
 
 out:
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -13950,7 +14091,7 @@ ufs_symlink(
 
 	*result = NULL;
 
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Refuses to write to a volume that is no longer writable. */
 	if (!ms->writable) {
@@ -13993,7 +14134,7 @@ ufs_symlink(
 
 out:
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -16625,14 +16766,14 @@ orphan_recover(
 	 * Excludes namespace users while each checked owner takes its metadata
 	 * locks.
 	 */
-	mutex_lock(&ms->namespace_lock);
+	namespace_enter(ms);
 
 	/* Walks the volume for inodes nothing names. */
 	error = orphan_scan_locked(mountp, scan);
 	if (error != 0)
 		ms->writable = 0;
 
-	mutex_unlock(&ms->namespace_lock);
+	namespace_leave(ms);
 
 	kern_free(scan);
 
@@ -16719,6 +16860,10 @@ ufs_mount_impl(
 	}
 
 	(void)mutex_init(&ms->namespace_lock, LOCK_RANK_NAMESPACE, "ufs namespace");
+	spin_init(&ms->namespace_guard, LOCK_RANK_NAMESPACE, "ufs namespace readers");
+	ms->namespace_readers = 0;
+	waitq_init(&ms->namespace_drained, "ufs namespace drained");
+	(void)mutex_init(&ms->load_lock, LOCK_RANK_INODE_IO, "ufs inode load");
 	(void)mutex_init(&ms->lock, LOCK_RANK_INODE, "ufs mount");
 	quota_state_init(&ms->quota);
 	ms->cg = kern_malloc(ms->super.bsize);
@@ -17000,11 +17145,15 @@ ufs_sync(
 	if (error == 0 && ms->j3.active)
 		error = j3_commit(ms, mountp);
 
-	/* The mount is only durable once the device has it. */
+	mutex_unlock(&ms->lock);
+
+	/*
+	 * The mount is only durable once the device has it.  The writes and the
+	 * device's cache flush need no mount lock (ws073-p045, BUG-135: under a
+	 * slow flush the lock held every change of the volume for seconds).
+	 */
 	if (error == 0)
 		error = disk_sync(mountp->m_disk);
-
-	mutex_unlock(&ms->lock);
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -19254,7 +19403,19 @@ j3_hook(
 	 * operation is half done when the commit runs.
 	 */
 	ms = argument;
-	mutex_lock(&ms->namespace_lock);
+
+	/*
+	 * Writes the content the commit would first write, before the locks,
+	 * so that the commit holds them for less (ws073-p045).
+	 */
+	if (ms->j3.mountp != NULL)
+		(void)buf_sync(ms->j3.mountp->m_disk);
+
+	/*
+	 * Shares the namespace (no change is half done while it is shared, and
+	 * lookups go on meanwhile, ws073-p045), then takes the mount lock.
+	 */
+	namespace_share(ms);
 	mutex_lock(&ms->lock);
 
 	/* Commits for the mount the hook was registered for. */
@@ -19262,7 +19423,7 @@ j3_hook(
 		(void)j3_commit(ms, ms->j3.mountp);
 
 	mutex_unlock(&ms->lock);
-	mutex_unlock(&ms->namespace_lock);
+	namespace_unshare(ms);
 }
 
 /* Reads the superblock sector that holds the locator and the request. */

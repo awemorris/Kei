@@ -62,6 +62,14 @@
 
 /* How long a launch waits for its window, and how far towards the top left a drag closes Home. */
 #define HOME_LAUNCH_WAIT_MS	5000U
+
+/*
+ * How long a launch is remembered at all: a window that comes later than
+ * HOME_LAUNCH_WAIT_MS does not grow out of the icon, but is still named as
+ * the launch's (ZWL GLASS launch-late), so that a slow start can be told
+ * from a launch that never came (ws099-p024, BUG-147).
+ */
+#define HOME_LAUNCH_FORGET_MS	30000U
 #define HOME_CLOSE_DRAG		120
 
 /* The keys that turn pages and move to the next icon. */
@@ -684,7 +692,7 @@ zwl_home_tick(
 	}
 
 	/* A launch whose window never came is forgotten. */
-	if (server->home_launching && now - server->home_launch_ms > HOME_LAUNCH_WAIT_MS)
+	if (server->home_launching && now - server->home_launch_ms > HOME_LAUNCH_FORGET_MS)
 		server->home_launching = 0;
 
 	/* No animation: nothing to draw. */
@@ -741,8 +749,10 @@ zwl_home_axis(
 
 /*
  * Tells a newly mapped window whether it is the one a launch from Home
- * waits for: once, within HOME_LAUNCH_WAIT_MS, with the icon's rectangle
- * (x, y, width, height) it grows from.  Returns 1 when it is.
+ * waits for: once, with the icon's rectangle (x, y, width, height) it grows
+ * from.  Returns 1 when it is and came within HOME_LAUNCH_WAIT_MS (it grows
+ * out of the icon), 2 when it came later (it is the launch's but does not
+ * grow), and 0 when no launch waits.
  */
 int
 zwl_home_launched(
@@ -751,13 +761,18 @@ zwl_home_launched(
 {
 	uint64_t waited;
 
-	/* No launch waits, or its time is over. */
+	/* No launch waits (or it was forgotten, HOME_LAUNCH_FORGET_MS). */
 	if (!server->home_launching)
 		return 0;
 	server->home_launching = 0;
 	waited = zwl_milliseconds() - server->home_launch_ms;
-	if (waited > HOME_LAUNCH_WAIT_MS)
-		return 0;
+
+	/* A window that came too late to grow out of the icon is still the launch's. */
+	if (waited > HOME_LAUNCH_WAIT_MS) {
+		printf("ZWL HOME launched-late waited_ms=%llu at_ms=%llu\n", (unsigned long long)waited, (unsigned long long)zwl_milliseconds());
+		memcpy(rect, server->home_launch_rect, sizeof(server->home_launch_rect));
+		return 2;
+	}
 
 	/* The time from the icon's click to the window's first image (ws099-p016 measures it). */
 	printf("ZWL HOME launched waited_ms=%llu at_ms=%llu\n", (unsigned long long)waited, (unsigned long long)zwl_milliseconds());

@@ -1,0 +1,29 @@
+{
+  "queue": "q597",
+  "checkpoint": 65,
+  "source": "userland/desktop/libbrowser/bind/traversal.c",
+  "source_sha256": "d828182d23db7e71ae5917874520089c2c622331601e98c7a8e81b2348aca121",
+  "baseline": "bab5b3a6b2d490a5c568736219434e46dac81877",
+  "reviewed": 184,
+  "total": 209,
+  "remaining": 25,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 7,
+    "other_findings": 0
+  },
+  "tests": {
+    "host-traversal": "9/9 actual GC checks",
+    "tree-walker-probe": "70 PASS, 0 FAIL",
+    "dom-tests": "23/23"
+  },
+  "limits": [
+    "No isolated before/after crash reproduction for these local ownership intervals.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

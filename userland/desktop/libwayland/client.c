@@ -17,8 +17,35 @@
 #include <sys/un.h>
 #include <unistd.h>
 
+/*
+ * The client's log handler, which wl_log_set_handler_client() sets.
+ *
+ * NULL, its starting value, keeps the library silent, as it was before the
+ * handler existed.  It is stored and loaded atomically, so a handler set on
+ * one thread is seen by the thread that reads the socket.
+ */
+static wl_log_func_t wlc_log_handler;
+
 static void wlc_roundtrip_done(void *data, struct wl_callback *callback, uint32_t serial);
 static int wlc_display_wait(struct wl_display *display);
+static void wlc_log(const char *format, ...) __attribute__((__format__(__printf__, 1, 2)));
+
+/*
+ * Sets the handler the library gives the messages it logs.
+ *
+ * The library logs the server's fatal protocol error, in the words the
+ * standard library uses; a null handler logs nothing.
+ */
+void
+wl_log_set_handler_client(
+	wl_log_func_t handler)
+{
+	/* Publishes the handler to the threads that read the socket. */
+	__atomic_store_n(&wlc_log_handler, handler, __ATOMIC_RELEASE);
+
+	/* Succeeded: the handler receives the next message. */
+	return;
+}
 
 /*
  * Connects to a standard Wayland endpoint selected by name or environment.
@@ -278,6 +305,7 @@ wl_display_disconnect(
 		close(display->input_descriptors[index]);
 
 	/* Releases connection-owned storage and the adopted socket. */
+	free(display->protocol_report);
 	free(display->input_descriptors);
 	free(display->input);
 	close(display->fd);
@@ -729,6 +757,7 @@ wl_display_read_events(
 	struct wl_display *display)
 {
 	uint64_t generation;
+	char *report;
 	int error;
 
 	/* Joins the generation established by the caller's successful preparation. */
@@ -770,7 +799,17 @@ wl_display_read_events(
 	if (error == 0)
 		error = display->read_error;
 
+	/* Takes a protocol error's log line, which is logged outside the mutex. */
+	report = display->protocol_report;
+	display->protocol_report = NULL;
+
 	pthread_mutex_unlock(&display->mutex);
+
+	/* Gives the protocol error's line to the client's log handler. */
+	if (report != NULL) {
+		wlc_log("%s", report);
+		free(report);
+	}
 
 	/* Reports this generation's socket or protocol failure consistently. */
 	if (error != 0) {
@@ -934,6 +973,54 @@ wl_display_roundtrip(
 }
 
 /*
+ * Formats the line the client's log handler is given for a fatal protocol
+ * error, or reports NULL when no handler is set or memory is short.
+ *
+ * The line is the standard library's: "interface@id: error code: message",
+ * or "[destroyed object]" for an object the client has already destroyed.
+ */
+char *
+wlc_protocol_report(
+	const struct wl_interface *interface,
+	uint32_t id,
+	uint32_t code,
+	const char *message)
+{
+	char object[128];
+	char *report;
+	wl_log_func_t handler;
+	int length;
+
+	/* Formats nothing while no handler would receive it. */
+	handler = __atomic_load_n(&wlc_log_handler, __ATOMIC_ACQUIRE);
+	if (handler == NULL)
+		return NULL;
+
+	/* Names the object the error is about. */
+	if (interface != NULL) {
+		snprintf(object, sizeof(object), "%s@%u", interface->name, id);
+	} else {
+		snprintf(object, sizeof(object), "[destroyed object]");
+	}
+
+	/* Measures the line. */
+	length = snprintf(NULL, 0, "%s: error %u: %s\n", object, code, message);
+	if (length < 0)
+		return NULL;
+
+	/* Allocates room for the line and its terminator. */
+	report = malloc((size_t)length + 1U);
+	if (report == NULL)
+		return NULL;
+
+	/* Fills the line. */
+	snprintf(report, (size_t)length + 1U, "%s: error %u: %s\n", object, code, message);
+
+	/* Succeeded: the caller owns the line. */
+	return report;
+}
+
+/*
  * Records a sticky connection error while the display mutex is held.
  */
 void
@@ -1023,4 +1110,27 @@ wlc_display_wait(
 			return -1;
 		}
 	}
+}
+
+/* Gives one message to the client's log handler, if one is set. */
+static void
+wlc_log(
+	const char *format,
+	...)
+{
+	wl_log_func_t handler;
+	va_list arguments;
+
+	/* Logs nothing without a handler. */
+	handler = __atomic_load_n(&wlc_log_handler, __ATOMIC_ACQUIRE);
+	if (handler == NULL)
+		return;
+
+	/* Hands the format and its arguments to the handler. */
+	va_start(arguments, format);
+	handler(format, arguments);
+	va_end(arguments);
+
+	/* Succeeded: the handler has the message. */
+	return;
 }

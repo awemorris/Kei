@@ -1,0 +1,63 @@
+[
+  {
+    "name": "native-cssom",
+    "argv": [
+      "build/browser3-p172/plain/host-cssom"
+    ],
+    "exit": 0,
+    "stdout": "native CSSOM: 12/12 passed\n"
+  },
+  {
+    "name": "native-cssom-mutation",
+    "argv": [
+      "build/browser3-p172/plain/host-cssom-mutation"
+    ],
+    "exit": 0,
+    "stdout": "native CSSOM mutation: 12/12 passed\n"
+  },
+  {
+    "name": "native-css-rule-model",
+    "argv": [
+      "build/browser3-p172/plain/host-css-rule-model"
+    ],
+    "exit": 0,
+    "stdout": "native CSS rule model: 44/44 passed\n"
+  },
+  {
+    "name": "style-sheet-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/style-sheet-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS native SameObject empty sheet query\nPASS missing native sheet indices\nPASS actual HTML style interface has no disconnected sheet\nPASS native inline sheet query actual tree order\nPASS actual native sheet identity owner and inline href\nPASS native saved rule counts preserve top-level false media group\nPASS native connection change retires moved style sheet identity\nPASS same Text replacement retires sheet but preserves saved old rule model\nPASS actual source child change separates current and saved old rule counts\nPASS foreign namespace and template sheet owners excluded\nPASS native indexed descriptors and inherited length\nPASS native keys precede ordinary expandos\nPASS native canonical indices refuse assignment and definition\nPASS native supported deletion and extension policy\nPASS item conversion observes reentrant actual tree change\nPASS private native brands reject lookalikes and wrong CSSOM kinds\nPASS actual sheet brands survive prototype changes and borrowed getters\nPASS public CSSOM direct constructors remain illegal in current core\nPASS native child wrappers use actual relevant realm and isolated membership\nPASS saved child sheet query follows parser replacement while old model remains\nPASS saved child query remains usable after actual owner retirement\nPASS native XML prototype snapshot and exact HTML local style name\nstyle sheet probe done\n"
+  },
+  {
+    "name": "style-sheet-mutation-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/style-sheet-mutation-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS native initial model and actual rendered height10\nPASS native end insertion updates saved list and rendered height20\nPASS native end insertion updates saved list and rendered height40\nPASS native delete restores rendered prior-rule precedence\nPASS native JS model edits preserve DOM Text and create no observer records\nPASS default zero insertion preserves later actual cascade precedence\nPASS native zero deletion restores current count\nPASS native syntax error precedes bounds and rejects multiple or empty input\nPASS native live insertion and deletion bounds\nPASS unsupported at-rule and failed operations preserve model rendering and Text\nPASS native methods enforce required arguments\nPASS native mutation private brands reject lookalikes and rule lists\nPASS rule string conversion precedes index conversion\nPASS WebIDL index wraps to uint32\nPASS native UTF16 CSSOMString supports actual Unicode selector\nPASS reentrant Text reset mutates saved receiver model only\nPASS retired sheet deletion affects saved model only\nPASS borrowed native insert uses actual child cascade and isolates parent\nPASS borrowed native deletion restores actual child height\nPASS implicit EOF block closure does not consume actual inserted rule\nPASS actual saved retired child sheet remains mutable\nPASS ordinary rule cannot precede actual retained import\nPASS ordinary insertion after retained import keeps valid native order\nstyle sheet mutation probe done\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  }
+]

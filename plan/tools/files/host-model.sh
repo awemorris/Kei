@@ -7,7 +7,8 @@ set -u
 cd "$(dirname -- "$0")/../../.."
 sh plan/tools/files/host-build.sh || exit 1
 temporary=$(mktemp -d)
-timeout 300 build/ws071-host/files-model "$temporary"
+# The thumbnails kept on disk go to the temporary folder, not the user's cache (ws127-p002).
+XDG_CACHE_HOME=$temporary/cache timeout 300 build/ws071-host/files-model "$temporary"
 status=$?
 rm -rf "$temporary"
 exit $status

@@ -76,14 +76,10 @@ main(
 
 	/* Executes the bounded inventory before dismantling either realm. */
 	error = probe_run(&probe, parent, child);
-
-	/* Keeps both realms alive until every test call has ended. */
-	vm_realm_destroy(child);
-	vm_realm_destroy(parent);
-	vm_heap_destroy(heap);
-
-	/* Separates setup failures from reproducible semantic failures. */
 	if (error != 0) {
+		vm_realm_destroy(child);
+		vm_realm_destroy(parent);
+		vm_heap_destroy(heap);
 		printed = fprintf(
 		    stderr,
 		    "realm probe infrastructure error: %d\n",
@@ -93,6 +89,11 @@ main(
 		return 2;
 	}
 
+	/* Successful execution is checked before releasing the two explicit realm tracers. */
+	vm_realm_destroy(child);
+	vm_realm_destroy(parent);
+	vm_heap_destroy(heap);
+
 	/* Preserves failing outcomes instead of treating reproduction as a pass. */
 	printed = printf(
 	    "realm checks: %u/%u passed\n",
@@ -100,6 +101,8 @@ main(
 	    probe.checks);
 	if (printed < 0)
 		return 2;
+
+	/* Every semantic assertion must pass after successful infrastructure teardown. */
 	if (probe.failures != 0)
 		return 1;
 
@@ -192,6 +195,8 @@ probe_run(
 	    VM_PROPERTY_DEFAULT);
 	if (error != 0)
 		return error;
+
+	/* Publishes the checked native value into its owning global for subsequent assertions. */
 	error = js_builtin_value(
 	    child,
 	    child->global,
@@ -423,6 +428,8 @@ probe_run(
 	error = vm_run_jobs(child, NULL, NULL);
 	if (error != 0)
 		return error;
+
+	/* Completes pending jobs in this realm before later asynchronous assertions. */
 	error = vm_run_jobs(parent, NULL, NULL);
 	if (error != 0)
 		return error;
@@ -440,9 +447,13 @@ probe_run(
 	error = probe_script(parent, "Target.prototype=7;", &answer);
 	if (error != 0)
 		return error;
+
+	/* Constructs the next foreign receiver with the parent realm's explicit target. */
 	error = probe_construct_target(parent, child, "Box");
 	if (error != 0)
 		return error;
+
+	/* Records this independent named realm behavior before proceeding to later checks. */
 	error = probe_check(
 	    probe,
 	    parent,
@@ -455,6 +466,8 @@ probe_run(
 	error = probe_construct_target(parent, child, "Array");
 	if (error != 0)
 		return error;
+
+	/* Records this independent named realm behavior before proceeding to later checks. */
 	error = probe_check(
 	    probe,
 	    parent,
@@ -462,9 +475,13 @@ probe_run(
 	    "Object.getPrototypeOf(mixed)===Array.prototype && mixed.length===2;");
 	if (error != 0)
 		return error;
+
+	/* Constructs the next foreign receiver with the parent realm's explicit target. */
 	error = probe_construct_target(parent, child, "Error");
 	if (error != 0)
 		return error;
+
+	/* Records this independent named realm behavior before proceeding to later checks. */
 	error = probe_check(
 	    probe,
 	    parent,
@@ -504,7 +521,7 @@ probe_script(
 		return error;
 	}
 
-	/* Runs and releases the source before reporting its outcome. */
+	/* Executes the source while its UTF-16 storage remains available. */
 	error = js_run_script(
 	    realm,
 	    units.data,
@@ -512,9 +529,13 @@ probe_script(
 	    0,
 	    answer,
 	    &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* The checked completion no longer needs its temporary source storage. */
+	wb_units_release(&units);
 
 	/* Succeeded: the last expression's value is available to the assertion. */
 	return 0;
@@ -622,6 +643,8 @@ probe_construct_target(
 	    &object);
 	if (error != 0)
 		return error;
+
+	/* Publishes the checked native value into its owning global for subsequent assertions. */
 	error = js_builtin_value(
 	    parent,
 	    parent->global,
@@ -661,9 +684,13 @@ probe_api(
 	error = vm_get(parent, vm_value_cell(child->global), key, &callback);
 	if (error != 0)
 		return error;
+
+	/* Runs the foreign callable through the public embedding boundary. */
 	error = vm_call(parent, callback, VM_VALUE_UNDEFINED, NULL, 0, &answer);
 	if (error != 0)
 		return error;
+
+	/* Publishes the checked native value into its owning global for subsequent assertions. */
 	error = js_builtin_value(
 	    parent,
 	    parent->global,
@@ -672,6 +699,8 @@ probe_api(
 	    VM_PROPERTY_DEFAULT);
 	if (error != 0)
 		return error;
+
+	/* Records this independent named realm behavior before proceeding to later checks. */
 	error = probe_check(probe, parent, "VM call global", "apiResult===22;");
 	if (error != 0)
 		return error;
@@ -683,6 +712,8 @@ probe_api(
 	error = vm_get(parent, vm_value_cell(child->global), key, &callback);
 	if (error != 0)
 		return error;
+
+	/* Runs the foreign callable through the public embedding boundary. */
 	status = vm_call(
 	    parent,
 	    callback,
@@ -716,6 +747,8 @@ probe_api(
 	native = vm_function_create_native(child, "throwing", 0, probe_throw);
 	if (native == NULL)
 		return ENOMEM;
+
+	/* The checked function exposes the same native contract through construction. */
 	native->construct = probe_throw;
 	error = js_builtin_value(
 	    child,
@@ -725,6 +758,8 @@ probe_api(
 	    VM_PROPERTY_DEFAULT);
 	if (error != 0)
 		return error;
+
+	/* Runs the foreign callable through the public embedding boundary. */
 	status = vm_call(
 	    parent,
 	    vm_value_cell(native),
@@ -734,6 +769,8 @@ probe_api(
 	    &answer);
 	if (status != VM_THROWN)
 		return EINVAL;
+
+	/* Publishes the checked native value into its owning global for subsequent assertions. */
 	error = js_builtin_value(
 	    parent,
 	    parent->global,
@@ -750,6 +787,8 @@ probe_api(
 	    "apiError instanceof child.TypeError;");
 	if (error != 0)
 		return error;
+
+	/* Constructs through the public boundary while retaining the supplied new.target. */
 	status = vm_construct(
 	    parent,
 	    vm_value_cell(native),
@@ -759,6 +798,8 @@ probe_api(
 	    &answer);
 	if (status != VM_THROWN)
 		return EINVAL;
+
+	/* Publishes the checked native value into its owning global for subsequent assertions. */
 	error = js_builtin_value(
 	    parent,
 	    parent->global,
@@ -780,6 +821,8 @@ probe_api(
 	native = vm_function_create_native(child, "nomem", 0, probe_nomem);
 	if (native == NULL)
 		return ENOMEM;
+
+	/* The checked function exposes the same native contract through construction. */
 	native->construct = probe_nomem;
 	saved_callee = child->callee;
 	saved_target = child->new_target;
@@ -792,6 +835,8 @@ probe_api(
 	    &answer);
 	if (status != ENOMEM)
 		return EINVAL;
+
+	/* Errno refusal must restore the suspended native state without a script throw. */
 	if (child->callee != saved_callee || child->new_target != saved_target)
 		return EINVAL;
 	status = vm_construct(
@@ -803,6 +848,8 @@ probe_api(
 	    &answer);
 	if (status != ENOMEM)
 		return EINVAL;
+
+	/* Errno refusal must restore the suspended native state without a script throw. */
 	if (child->callee != saved_callee || child->new_target != saved_target)
 		return EINVAL;
 
@@ -814,6 +861,8 @@ probe_api(
 	/* Confirms all foreign runs left both explicit VM stacks idle. */
 	if (parent->stack_top != 0 || child->stack_top != 0)
 		return EINVAL;
+
+	/* Both realms must also release their active recursion count after unwinding. */
 	if (parent->depth != 0 || child->depth != 0)
 		return EINVAL;
 
@@ -840,6 +889,8 @@ probe_native_reentry(
 	/* Keeps state the nested native/script calls may temporarily replace. */
 	if (count < 1)
 		return EINVAL;
+
+	/* Remember the exact outer state before any foreign callback can temporarily replace it. */
 	saved_callee = realm->callee;
 	saved_target = realm->new_target;
 	error = vm_call(realm, args[0], VM_VALUE_UNDEFINED, NULL, 0, &ignored);
@@ -874,6 +925,6 @@ probe_nomem(
 	UNUSED_PARAMETER(count);
 	UNUSED_PARAMETER(result);
 
-	/* Refuses the native operation with its ordinary allocation error. */
+	/* Succeeded: supplies the fixture's native allocation-refusal contract. */
 	return ENOMEM;
 }

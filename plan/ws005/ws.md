@@ -41,10 +41,11 @@ networkd の SUBSCRIBE と `net watch`（ws035-p018）、system bar の network 
 | --- | --- | --- | --- | --- |
 | [p018](phase018/phase.md) | WiFi の利用者の流れの調査と契約（boot の root の方針と session の利用者の鍵の所有者の関係、再起動後の再接続、有線との route/DNS）。決定の要る点をユーザーへ出す | planned | なし | 2〜3h |
 | [p019](phase019/phase.md) | p018 で決めた流れの実装（networkd・net・libkeiland の network の最小の修正）と host/QEMU の試験 | planning | p018 とユーザーの判断 | 3〜4h |
-| [p020](phase020/phase.md) | RTL8822BU（Archer T3U）の USB passthrough で、現在の main の WLAN の経路と desktop の B1〜B4 を通す | planning | p019、Archer の置き場所と試験用 AP の SSID/鍵の渡し方（ユーザー） | 2〜3h |
+| [p020](phase020/phase.md) | RTL8822BU（Archer T3U）の USB passthrough で、現在の main の WLAN の経路と desktop の B1〜B4 を通す | cleared（2026-10-03 user の判断、鍵の要る項目は WS133 へ） | p019、Archer の置き場所と試験用 AP の SSID/鍵の渡し方（ユーザー） | 2〜3h |
 | [p021](phase021/phase.md) | AX211 の PCI passthrough で B1〜B4 を通す | planning | BUG-134 の解決（ws004-p051）、p019 | 2〜3h |
 | [p022](phase022/phase.md) | 変更した source の全文規約の確認と回帰（near-final conformance） | planning | p019（p020・p021 の修正を含む） | 2h |
 | [p023](phase023/phase.md) | 実機の受け入れ B5（5330 の AX211・USB の LAN、5320 の USB の LAN・無線）。ユーザーと一緒に行う | planning | p020/p021/p022、ユーザーの時期、WS118 p001 の image の方式 | 2h（ユーザーの立会い） |
+| [p025](phase025/phase.md) | [BUG-149](../bugs/BUG-149.md): AF_UNIX の自分側の SHUT_WR で poll が POLLERR を返す kernel の不具合を直し、libkeiland・zsv1-client・greeter・net の影響を確かめる | in-progress（q635、P1。A1〜A5 を満たし cleared を提案） | なし | 4h |
 
 p016 は ws035-p018 へ移管済み（cleared）。p017（旧 fg005 の統合）は p022・p023 に置き換える提案（main の確認待ち、それまで planning のまま残す）。
 
@@ -478,3 +479,5 @@ Return to planning rather than broadening an implementation Phase if:
   `network` group; or
 - physical acceptance requires DFS, WPA3, enterprise authentication, or a
   different radio before the initial milestone can be honestly claimed.
+
+2026-10-03 / p020・p024 の clearance: user「あまりセキュリティ回避を行うとアカウントが削除される可能性があるので、いったんclearedにして先に進めましょう。あとで手作業で確認する作業としてWSを立てておいてください。」→ 鍵の要る試験（権限の判定で着手できず）と ws131-p003 の後の libkeiland の join の確認は未実施のまま [WS133](../ws133/ws.md) へ。次は q635（BUG-149、P1）。

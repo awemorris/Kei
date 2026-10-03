@@ -1,0 +1,4 @@
+userland/desktop/libbrowser/page/page.c:469: goto: goto cleanup;
+userland/desktop/libbrowser/page/page.c:482: goto: goto cleanup;
+userland/desktop/libbrowser/page/page.c:490: goto: goto cleanup;
+userland/desktop/libbrowser/page/page.c:513: goto: goto cleanup;

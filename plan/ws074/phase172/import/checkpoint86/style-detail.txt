@@ -1,0 +1,5 @@
+userland/desktop/libbrowser/js/builtin_array.c:1372: goto: goto cleanup;
+userland/desktop/libbrowser/js/builtin_array.c:1379: goto: goto cleanup;
+userland/desktop/libbrowser/js/builtin_array.c:2388: goto: goto release_items;
+userland/desktop/libbrowser/js/builtin_array.c:2394: goto: goto release_items;
+userland/desktop/libbrowser/js/builtin_array.c:2399: goto: goto release_items;

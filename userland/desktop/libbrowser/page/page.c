@@ -34,9 +34,10 @@ static int page_text_of(const struct dom_node *node, struct wb_units *units);
 static const struct dom_node *page_find_title(const struct dom_node *node, int depth);
 static int page_dump_node(const struct dom_node *node, int depth, struct wb_buffer *out);
 static int page_dump_style_node(struct page *page, struct dom_element *element, const struct css_style *parent, int depth, struct wb_buffer *out);
-static void page_indent(struct wb_buffer *out, int depth);
-static void page_append_string(struct wb_buffer *out, const struct vm_string *string);
-static void page_append_length(struct wb_buffer *out, const struct css_length *length);
+static int page_dump_style_line(const struct dom_element *element, const struct css_style *style, int depth, struct wb_buffer *out);
+static int page_indent(struct wb_buffer *out, int depth);
+static int page_append_string(struct wb_buffer *out, const struct vm_string *string);
+static int page_append_length(struct wb_buffer *out, const struct css_length *length);
 
 /*
  * Makes an empty page: a heap whose C stack ends at stack_base, and an
@@ -439,6 +440,10 @@ page_layout(
 	int missed;
 	int pass;
 	int error;
+	uint32_t old_laid_out_images;
+
+	/* A failed rebuild must leave the prior complete layout's image generation intact. */
+	old_laid_out_images = page->laid_out_images;
 
 	/* Throws the old display list and layout away. */
 	if (page->painted) {
@@ -461,7 +466,7 @@ page_layout(
 	/* The style sheets again when the document or its sheets changed since they were gathered. */
 	error = page_update_styles(page);
 	if (error != 0)
-		return error;
+		goto cleanup;
 
 	/* The web fonts that arrived join the text system. */
 	page_fonts_install(page);
@@ -474,22 +479,22 @@ page_layout(
 	/* The images the document names, fetched and decoded when they are new. */
 	error = page_load_images(page);
 	if (error != 0)
-		return error;
+		goto cleanup;
 
 	/* Builds and lays out the box tree, the images found by their elements (the ones there are now). */
 	page->laid_out_images = page->images_generation;
 	css_engine_set_container_lookup(page->css, page_container_size, page);
 	error = layout_build(&page->layout, page->css, &page->text, page->document, page_image_of, page_image_by_url, page, width, height);
 	page->laid_out = 1;
-	page->laid_out_generation = page->document->generation;
-	page->layout_serial++;
+	if (error != 0)
+		goto cleanup;
 
 	/*
 	 * A query container the old layout did not have (the first layout), or
 	 * one this layout gave another size than the styles used: the page is
 	 * laid out again with the sizes it has now (twice more at most).
 	 */
-	for (pass = 0; pass < PAGE_CONTAINER_PASSES && error == 0; pass++) {
+	for (pass = 0; pass < PAGE_CONTAINER_PASSES; pass++) {
 		missed = css_engine_container_missed(page->css);
 		if (!missed)
 			missed = page_containers_moved(page);
@@ -504,6 +509,8 @@ page_layout(
 		memset(&page->layout, 0, sizeof(page->layout));
 		css_engine_forget_styles(page->css);
 		error = layout_build(&page->layout, page->css, &page->text, page->document, page_image_of, page_image_by_url, page, width, height);
+		if (error != 0)
+			goto cleanup;
 	}
 
 	/* The old layout is no longer needed. */
@@ -512,12 +519,31 @@ page_layout(
 		page->previous_laid_out = 0;
 	}
 
-	/* A layout that could not be made. */
-	if (error != 0)
-		return error;
+	/* Only a complete layout advances observable generation and geometry caches. */
+	page->laid_out_generation = page->document->generation;
+	page->layout_serial++;
 
 	/* Succeeded: the page is laid out. */
 	return 0;
+
+cleanup:
+	/* Discard a partly built layout and restore the last complete one, if any. */
+	if (page->laid_out) {
+		layout_release(&page->layout);
+		page->laid_out = 0;
+	}
+
+	/* The last complete layout remains available after a failed rebuild. */
+	if (page->previous_laid_out) {
+		page->layout = page->previous_layout;
+		page->laid_out = 1;
+		page->previous_laid_out = 0;
+		memset(&page->previous_layout, 0, sizeof(page->previous_layout));
+	}
+
+	/* Failed layout attempts do not consume a new image generation. */
+	page->laid_out_images = old_laid_out_images;
+	return error;
 }
 
 /*
@@ -834,23 +860,51 @@ page_dump_node(
 
 	/* One line per child, elements followed by their attributes and children. */
 	for (child = node->first_child; child != NULL; child = child->next) {
-		page_indent(out, depth);
+		error = page_indent(out, depth);
+		if (error != 0)
+			return error;
 		switch (child->type) {
 		case DOM_ELEMENT:
 			element = (const struct dom_element *)child;
-			wb_buffer_append_string(out, "<");
-			if (element->ns == DOM_NS_SVG)
-				wb_buffer_append_string(out, "svg ");
-			if (element->ns == DOM_NS_MATHML)
-				wb_buffer_append_string(out, "math ");
-			page_append_string(out, element->local_name);
-			wb_buffer_append_string(out, ">\n");
+			error = wb_buffer_append_string(out, "<");
+			if (error != 0)
+				return error;
+			if (element->ns == DOM_NS_SVG) {
+				error = wb_buffer_append_string(out, "svg ");
+				if (error != 0)
+					return error;
+			}
+
+			/* Foreign MathML elements keep their namespace marker. */
+			if (element->ns == DOM_NS_MATHML) {
+				error = wb_buffer_append_string(out, "math ");
+				if (error != 0)
+					return error;
+			}
+
+			/* The local name and closing delimiter finish the element line. */
+			error = page_append_string(out, element->local_name);
+			if (error != 0)
+				return error;
+			error = wb_buffer_append_string(out, ">\n");
+			if (error != 0)
+				return error;
 			for (index = 0; index < element->attribute_count; index++) {
-				page_indent(out, depth + 1);
-				page_append_string(out, element->attributes[index].name);
-				wb_buffer_append_string(out, "=\"");
-				page_append_string(out, element->attributes[index].value);
-				wb_buffer_append_string(out, "\"\n");
+				error = page_indent(out, depth + 1);
+				if (error != 0)
+					return error;
+				error = page_append_string(out, element->attributes[index].name);
+				if (error != 0)
+					return error;
+				error = wb_buffer_append_string(out, "=\"");
+				if (error != 0)
+					return error;
+				error = page_append_string(out, element->attributes[index].value);
+				if (error != 0)
+					return error;
+				error = wb_buffer_append_string(out, "\"\n");
+				if (error != 0)
+					return error;
 			}
 
 			/* Then its children. */
@@ -860,23 +914,43 @@ page_dump_node(
 			break;
 		case DOM_TEXT:
 			text = (const struct dom_character_data *)child;
-			wb_buffer_append_string(out, "\"");
-			wb_units_to_utf8(text->data.data, text->data.length, out);
-			wb_buffer_append_string(out, "\"\n");
+			error = wb_buffer_append_string(out, "\"");
+			if (error != 0)
+				return error;
+			error = wb_units_to_utf8(text->data.data, text->data.length, out);
+			if (error != 0)
+				return error;
+			error = wb_buffer_append_string(out, "\"\n");
+			if (error != 0)
+				return error;
 			break;
 		case DOM_COMMENT:
 			text = (const struct dom_character_data *)child;
-			wb_buffer_append_string(out, "<!-- ");
-			wb_units_to_utf8(text->data.data, text->data.length, out);
-			wb_buffer_append_string(out, " -->\n");
+			error = wb_buffer_append_string(out, "<!-- ");
+			if (error != 0)
+				return error;
+			error = wb_units_to_utf8(text->data.data, text->data.length, out);
+			if (error != 0)
+				return error;
+			error = wb_buffer_append_string(out, " -->\n");
+			if (error != 0)
+				return error;
 			break;
 		case DOM_DOCUMENT_TYPE:
-			wb_buffer_append_string(out, "<!DOCTYPE ");
-			page_append_string(out, ((const struct dom_doctype *)child)->name);
-			wb_buffer_append_string(out, ">\n");
+			error = wb_buffer_append_string(out, "<!DOCTYPE ");
+			if (error != 0)
+				return error;
+			error = page_append_string(out, ((const struct dom_doctype *)child)->name);
+			if (error != 0)
+				return error;
+			error = wb_buffer_append_string(out, ">\n");
+			if (error != 0)
+				return error;
 			break;
 		default:
-			wb_buffer_append_string(out, "?\n");
+			error = wb_buffer_append_string(out, "?\n");
+			if (error != 0)
+				return error;
 			break;
 		}
 	}
@@ -894,13 +968,8 @@ page_dump_style_node(
 	int depth,
 	struct wb_buffer *out)
 {
-	static const char *const displays[] = {
-		"inline", "block", "inline-block", "list-item", "none", "table", "table-row", "table-cell", "flex", "contents", "grid",
-		"table-row-group", "table-caption", "inline-table", "table-column"
-	};
 	struct css_style *style;
 	struct dom_node *child;
-	int side;
 	int error;
 
 	/* Computes the style (on the heap: the recursion would otherwise use much stack). */
@@ -913,32 +982,12 @@ page_dump_style_node(
 		return error;
 	}
 
-	/* One line: the element and the main properties. */
-	page_indent(out, depth);
-	page_append_string(out, element->local_name);
-	wb_buffer_printf(out, " display=%s font-size=%.2f weight=%d italic=%d color=#%08x background=#%08x",
-	    displays[style->display], (double)style->font_size, style->font_weight, style->font_italic,
-	    (unsigned)style->color, (unsigned)style->background_color);
-	wb_buffer_append_string(out, " margin=");
-	for (side = 0; side < 4; side++) {
-		if (side > 0)
-			wb_buffer_append_string(out, ",");
-		page_append_length(out, &style->margin[side]);
+	/* Emits one complete style line before recursively visiting children. */
+	error = page_dump_style_line(element, style, depth, out);
+	if (error != 0) {
+		free(style);
+		return error;
 	}
-
-	/* The paddings, the borders and the width. */
-	wb_buffer_append_string(out, " padding=");
-	for (side = 0; side < 4; side++) {
-		if (side > 0)
-			wb_buffer_append_string(out, ",");
-		page_append_length(out, &style->padding[side]);
-	}
-
-	/* The borders and the width. */
-	wb_buffer_printf(out, " border=%.1f,%.1f,%.1f,%.1f width=", (double)style->border_width[0], (double)style->border_width[1],
-	    (double)style->border_width[2], (double)style->border_width[3]);
-	page_append_length(out, &style->width);
-	wb_buffer_append_string(out, "\n");
 
 	/* The element children, below the depth limit. */
 	error = 0;
@@ -958,53 +1007,162 @@ page_dump_style_node(
 	return 0;
 }
 
+/* Appends one computed-style line, checking every buffer expansion. */
+static int
+page_dump_style_line(
+	const struct dom_element *element,
+	const struct css_style *style,
+	int depth,
+	struct wb_buffer *out)
+{
+	static const char *const displays[] = {
+		"inline", "block", "inline-block", "list-item", "none", "table", "table-row", "table-cell", "flex", "contents", "grid",
+		"table-row-group", "table-caption", "inline-table", "table-column"
+	};
+	int side;
+	int error;
+
+	/* Appends the element name and main computed properties. */
+	error = page_indent(out, depth);
+	if (error != 0)
+		return error;
+	error = page_append_string(out, element->local_name);
+	if (error != 0)
+		return error;
+	error = wb_buffer_printf(out, " display=%s font-size=%.2f weight=%d italic=%d color=#%08x background=#%08x",
+	    displays[style->display], (double)style->font_size, style->font_weight, style->font_italic,
+	    (unsigned)style->color, (unsigned)style->background_color);
+	if (error != 0)
+		return error;
+
+	/* Appends all four margins in established order. */
+	error = wb_buffer_append_string(out, " margin=");
+	if (error != 0)
+		return error;
+	for (side = 0; side < 4; side++) {
+		if (side > 0) {
+			error = wb_buffer_append_string(out, ",");
+			if (error != 0)
+				return error;
+		}
+
+		/* The current margin follows its separator. */
+		error = page_append_length(out, &style->margin[side]);
+		if (error != 0)
+			return error;
+	}
+
+	/* Appends all four paddings in established order. */
+	error = wb_buffer_append_string(out, " padding=");
+	if (error != 0)
+		return error;
+	for (side = 0; side < 4; side++) {
+		if (side > 0) {
+			error = wb_buffer_append_string(out, ",");
+			if (error != 0)
+				return error;
+		}
+
+		/* The current padding follows its separator. */
+		error = page_append_length(out, &style->padding[side]);
+		if (error != 0)
+			return error;
+	}
+
+	/* Appends the border widths and final computed width. */
+	error = wb_buffer_printf(out, " border=%.1f,%.1f,%.1f,%.1f width=", (double)style->border_width[0], (double)style->border_width[1],
+	    (double)style->border_width[2], (double)style->border_width[3]);
+	if (error != 0)
+		return error;
+	error = page_append_length(out, &style->width);
+	if (error != 0)
+		return error;
+	error = wb_buffer_append_string(out, "\n");
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the line is complete and its caller may visit children. */
+	return 0;
+}
+
 /* Appends two spaces per level. */
-static void
+static int
 page_indent(
 	struct wb_buffer *out,
 	int depth)
 {
 	int level;
+	int error;
 
 	/* The html5lib format's prefix and the indentation. */
-	wb_buffer_append_string(out, "| ");
-	for (level = 0; level < depth; level++)
-		wb_buffer_append_string(out, "  ");
+	error = wb_buffer_append_string(out, "| ");
+	if (error != 0)
+		return error;
+	for (level = 0; level < depth; level++) {
+		error = wb_buffer_append_string(out, "  ");
+		if (error != 0)
+			return error;
+	}
+
+	/* Succeeded: the next field starts at the requested tree depth. */
+	return 0;
 }
 
 /* Appends a VM string as UTF-8. */
-static void
+static int
 page_append_string(
 	struct wb_buffer *out,
 	const struct vm_string *string)
 {
+	int error;
+
 	/* Converts the string. */
-	vm_string_to_utf8(string, out);
+	error = vm_string_to_utf8(string, out);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: all string bytes are in the dump. */
+	return 0;
 }
 
 /* Appends a computed length as text. */
-static void
+static int
 page_append_length(
 	struct wb_buffer *out,
 	const struct css_length *length)
 {
+	int error;
+
 	/* The unit decides the form. */
 	switch (length->unit) {
 	case CSS_UNIT_PX:
-		wb_buffer_printf(out, "%.2f", (double)length->value);
+		error = wb_buffer_printf(out, "%.2f", (double)length->value);
 		break;
 	case CSS_UNIT_PERCENT:
-		wb_buffer_printf(out, "%.2f%%", (double)length->value);
-		if (length->offset != 0)
-			wb_buffer_printf(out, "%+.2f", (double)length->offset);
+		error = wb_buffer_printf(out, "%.2f%%", (double)length->value);
+		if (error != 0)
+			return error;
+		if (length->offset != 0) {
+			error = wb_buffer_printf(out, "%+.2f", (double)length->offset);
+			if (error != 0)
+				return error;
+		}
+
 		break;
 	case CSS_UNIT_AUTO:
-		wb_buffer_append_string(out, "auto");
+		error = wb_buffer_append_string(out, "auto");
 		break;
 	default:
-		wb_buffer_append_string(out, "?");
+		error = wb_buffer_append_string(out, "?");
 		break;
 	}
+
+	/* A failed append cannot be reported as a complete length. */
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the complete length representation was appended. */
+	return 0;
 }
 
 /* Finds the first HTML <title> element under a node, in document order. */

@@ -124,6 +124,7 @@ bind_traversal_install(
 {
 	struct vm_realm *realm;
 	struct vm_object *namespace;
+	struct vm_cell *root;
 	const struct traversal_constant *entry;
 	vm_value number;
 	int status;
@@ -133,17 +134,25 @@ bind_traversal_install(
 	namespace = vm_object_create(realm->heap, realm->object_prototype);
 	if (namespace == NULL)
 		return ENOMEM;
+	root = &namespace->cell;
+	status = vm_heap_add_root(realm->heap, &root);
+	if (status != 0)
+		return status;
 
 	/* Numbers retain all unsigned bits instead of becoming negative int32 constants. */
 	for (entry = traversal_constants; entry->name != NULL; entry++) {
 		number = vm_value_number((double)entry->number);
 		status = js_builtin_value(realm, namespace, entry->name, number, VM_PROPERTY_ENUMERABLE);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Publishes the complete namespace as an ordinary replaceable global binding. */
 	status = js_builtin_value(realm, realm->global, "NodeFilter", vm_value_cell(namespace), VM_PROPERTY_DEFAULT);
+
+cleanup:
+	/* The published global retains the namespace after temporary ownership ends. */
+	vm_heap_remove_root(realm->heap, &root);
 	if (status != 0)
 		return status;
 
@@ -169,6 +178,7 @@ bind_create_tree_walker(
 	struct vm_object *prototype;
 	struct vm_object *wrapper;
 	struct walker_state *state;
+	struct vm_cell *state_root;
 	vm_value filter;
 	vm_value snapshot;
 	uint32_t mask;
@@ -234,14 +244,23 @@ bind_create_tree_walker(
 	state->current = root;
 	state->filter = filter;
 	state->mask = mask;
+	state_root = &state->cell;
+	status = vm_heap_add_root(document->heap, &state_root);
+	if (status != 0)
+		return status;
 
 	/* The wrapper retains both the native state and the relevant realm prototype. */
 	wrapper = vm_object_create(document->heap, prototype);
-	if (wrapper == NULL)
+	if (wrapper == NULL) {
+		vm_heap_remove_root(document->heap, &state_root);
 		return ENOMEM;
+	}
+
+	/* The finished wrapper now owns the protected native graph. */
 	wrapper->kind = VM_KIND_PLATFORM;
 	wrapper->internal = vm_value_cell(state);
 	*result = vm_value_cell(wrapper);
+	vm_heap_remove_root(document->heap, &state_root);
 
 	/* Succeeded: the walker starts at its root without invoking any filter. */
 	return 0;
@@ -262,13 +281,30 @@ bind_filter_callback(
 	vm_value wrapped;
 	vm_value answer;
 	vm_value key;
+	struct vm_cell *roots[3];
+	unsigned index;
+	unsigned registered;
 	int callable;
+	int value_cell;
 	int status;
+
+	/* The wrapped candidate, returned operation and conversion result may all allocate. */
+	roots[0] = NULL;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	for (index = 0; index < 3U; index++) {
+		status = vm_heap_add_root(realm->heap, &roots[index]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* The callback receives the candidate's owner-realm Node wrapper. */
 	status = bind_wrap(bind_window_of(realm), node, &wrapped);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[0] = vm_value_as_cell(wrapped);
 
 	/* Callable callback interfaces invoke the supplied function directly. */
 	callback = filter;
@@ -277,33 +313,55 @@ bind_filter_callback(
 	if (!callable) {
 		/* Object filters resolve acceptNode for every invocation, including its getter. */
 		key = vm_key_from_ascii(realm->heap, "acceptNode");
-		if (key == VM_VALUE_EMPTY)
-			return ENOMEM;
+		if (key == VM_VALUE_EMPTY) {
+			status = ENOMEM;
+			goto cleanup;
+		}
+
+		/* Reading a user-defined getter may allocate or collect. */
 		status = vm_get(realm, filter, key, &callback);
 		if (status != 0)
-			return status;
+			goto cleanup;
 
 		/* Callback-interface operations must be callable before entering the VM call primitive. */
 		callable = vm_value_is_callable(callback);
 		if (!callable) {
 			status = vm_throw_type_error(realm, "The acceptNode operation is not callable.");
-			return status;
+			goto cleanup;
 		}
 
 		/* Object callbacks receive their original callback object as this. */
 		receiver = filter;
 	}
 
+	/* A newly returned callback stays live until the invocation completes. */
+	value_cell = vm_value_is_cell(callback);
+	if (value_cell)
+		roots[1] = vm_value_as_cell(callback);
+
 	/* Callback exceptions retain their original value and cross-realm transport. */
 	status = vm_call(realm, callback, receiver, &wrapped, 1, &answer);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	value_cell = vm_value_is_cell(answer);
+	if (value_cell)
+		roots[2] = vm_value_as_cell(answer);
 
 	/* Unsigned short conversion remains within the active callback operation. */
 	status = vm_to_uint32(realm, answer, accepted);
+	if (status == 0)
+		*accepted &= 0xffffU;
+
+cleanup:
+	/* Caller-owned filter state remains while transient callback values are released. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Any callback or conversion error propagates after releasing local roots. */
 	if (status != 0)
 		return status;
-	*accepted &= 0xffffU;
 
 	/* Succeeded: the callback's converted filter decision is available. */
 	return 0;
@@ -719,6 +777,7 @@ walker_move(
 {
 	struct walker_state *state;
 	struct dom_node *answer;
+	struct vm_cell *answer_root;
 	int status;
 
 	/* Every navigation method requires a genuine native walker state. */
@@ -757,7 +816,18 @@ walker_move(
 		return status;
 
 	/* Fallible wrapper publication completes before committing the selected node. */
+	answer_root = NULL;
+	if (answer != NULL) {
+		answer_root = &answer->cell;
+		status = vm_heap_add_root(realm->heap, &answer_root);
+		if (status != 0)
+			return status;
+	}
+
+	/* The candidate remains protected while its script wrapper is published. */
 	status = bind_wrap_or_null(bind_window_of(realm), answer, result);
+	if (answer != NULL)
+		vm_heap_remove_root(realm->heap, &answer_root);
 	if (status != 0)
 		return status;
 

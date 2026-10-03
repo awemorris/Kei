@@ -1,0 +1,41 @@
+ZTERM SETTINGS run=t1 ambiguous_wide=0
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0 ambiguous_wide=0
+ZTERM MENU ready items=31
+ZTERM TAB active id=1
+ZTERM TAB new run=t1 id=1 count=1
+ZTERM START run=t1 columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZTERM MENU item=36 action=21 serial=41
+ZTERM AMBIGUOUS run=t1 wide=1 saved=0
+ZTERM ACTION run=t1 action=21
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0 ambiguous_wide=1
+ZTERM MENU item=13 action=19 serial=82
+ZTERM TAB active id=2
+ZTERM TAB new run=t1 id=2 count=2
+ZTERM ACTION run=t1 action=19
+ZTERM TABS count=2 active=2 mode=2
+ZTERM MENU item=12 action=2 serial=127
+ZTERM DONE run=t1 reason=menu-close
+ZTERM TAB closed run=t1 id=2 count=1
+ZTERM TAB active id=1
+ZTERM TAB closed run=t1 id=1 count=0
+ZTERM SETTINGS run=t2 ambiguous_wide=1
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0 ambiguous_wide=1
+ZTERM MENU ready items=31
+ZTERM TAB active id=1
+ZTERM TAB new run=t2 id=1 count=1
+ZTERM START run=t2 columns=90 rows=28 cell=10x22 window=916x632
+ZTERM TABS count=1 active=1 mode=0
+ZTERM TITLE tab=1 title=Terminal
+ZTERM CLIPBOARD selection text=0
+ZTERM PRIMARY offer text=0
+ZTERM MENU item=36 action=21 serial=174
+ZTERM AMBIGUOUS run=t2 wide=0 saved=0
+ZTERM ACTION run=t2 action=21
+ZTERM MENU state selection=0 clipboard=0 pixels=16 fullscreen=0 ambiguous_wide=0
+ZTERM MENU item=12 action=2 serial=215
+ZTERM DONE run=t2 reason=menu-close
+ZTERM TAB closed run=t2 id=1 count=0

@@ -10,6 +10,8 @@
  * Wayland window.
  *
  * screen.c keeps the character grid and interprets what the shell writes;
+ * width.c says how many cells a character takes; settings.c keeps the
+ * terminal's settings between runs;
  * keys.c turns the compositor's key codes into the bytes a shell reads;
  * font.c draws the glyphs of a monospaced TrueType font into an atlas;
  * render.c draws the grid from that atlas; window.c holds the Wayland
@@ -33,6 +35,7 @@
 #include <stdint.h>
 
 #include "touch.h"
+#include "width.h"
 
 /* The primary selection's objects (primary.c includes their protocol's header). */
 struct zwp_primary_selection_device_manager_v1;
@@ -123,7 +126,8 @@ enum terminal_action {
 	TERMINAL_ACTION_RESET,
 	TERMINAL_ACTION_ABOUT,
 	TERMINAL_ACTION_NEW_TAB,
-	TERMINAL_ACTION_CLOSE_TAB
+	TERMINAL_ACTION_CLOSE_TAB,
+	TERMINAL_ACTION_AMBIGUOUS_WIDE
 };
 
 /*
@@ -143,13 +147,24 @@ struct terminal_tab_request {
 /*
  * What the menus show of the terminal's state: whether something is
  * selected (Copy), whether the clipboard holds text (Paste), the font's
- * size (Zoom, Text Size) and whether the window is fullscreen.
+ * size (Zoom, Text Size), whether the window is fullscreen and whether
+ * Ambiguous-width characters are wide (ws128-p009).
  */
 struct terminal_menu_state {
 	int selection;
 	int clipboard;
 	unsigned pixels;
 	int fullscreen;
+	int ambiguous_wide;
+};
+
+/*
+ * The terminal's own settings kept between runs (settings.c,
+ * ~/.config/keiland/terminal.conf): whether Ambiguous-width characters are
+ * wide (ws128-p009).  All zero is the default.
+ */
+struct terminal_settings {
+	int ambiguous_wide;
 };
 
 /* The modifier bits of wl_keyboard.modifiers, as zdesktop reports them. */
@@ -193,6 +208,15 @@ struct terminal_screen {
 	unsigned saved_column;
 	unsigned saved_row;
 
+	/*
+	 * Nonzero while a character written in the last column has left the
+	 * cursor there with its wrap still to come (the right margin of xterm
+	 * and the VT100, terminfo's am and xenl; ws128-p010, BUG-150).  The
+	 * next printed character wraps first; a carriage return, a line feed,
+	 * a move or an edit cancels the wrap, and SGR and the modes keep it.
+	 */
+	int wrap_pending;
+
 	/* Whether the cursor is shown (DECTCEM, CSI ? 25 h / l). */
 	int cursor_visible;
 
@@ -205,6 +229,13 @@ struct terminal_screen {
 	uint32_t background;
 	int inverse;
 	int bold;
+
+	/*
+	 * Whether Ambiguous-width characters written from now on take two cells
+	 * (View > Treat Ambiguous-Width Characters as Wide, ws128-p009).  Cells
+	 * already written keep their width.
+	 */
+	int ambiguous_wide;
 
 	/* The parser: 0 text, 1 after ESC, 2 in a CSI sequence, 3 in an OSC string, 4 after ESC of a string's end. */
 	int parser_state;
@@ -278,7 +309,8 @@ struct terminal_pointer_event {
 };
 
 /*
- * The glyph atlas: every character drawn so far, one cell-sized slot each.
+ * The glyph atlas: every character drawn so far, one cell-sized slot each,
+ * or two slots side by side for a character drawn two cells wide.
  *
  * The pixels live in an image the renderer owns; the atlas only decides
  * which slot holds which character and draws into the slot.  Slot 0 is a
@@ -289,6 +321,15 @@ struct terminal_font {
 	void *data;
 	size_t size;
 	struct truetype_face *face;
+
+	/*
+	 * The fallback font (ws128-p009), which draws the characters the face
+	 * has no glyph for (CJK): its file, kept in memory, and its face (NULL
+	 * without one).  It is drawn at the face's size.
+	 */
+	void *fallback_data;
+	size_t fallback_size;
+	struct truetype_face *fallback_face;
 
 	/* The size glyphs are drawn at, in pixels. */
 	unsigned pixels_size;
@@ -308,7 +349,19 @@ struct terminal_font {
 	unsigned slots;
 	unsigned used;
 
-	/* The characters in the slots: an open-addressing table from code point to slot. */
+	/*
+	 * The first of the two slots side by side that hold the replacement
+	 * character two cells wide, which a wide character shows when the
+	 * atlas is full (ws128-p009).
+	 */
+	unsigned wide_replacement;
+
+	/*
+	 * The characters in the slots: an open-addressing table from code point
+	 * to slot.  A character drawn two cells wide is a key of its own (the
+	 * code point with FONT_WIDE_KEY), in the first of two slots side by
+	 * side, so that the same character can be in narrow and wide cells.
+	 */
 	uint32_t *keys;
 	uint32_t *values;
 	unsigned table_size;
@@ -533,6 +586,7 @@ void terminal_primary_close(struct terminal_window *window);
 
 /* The character grid (screen.c). */
 void terminal_screen_init(struct terminal_screen *screen, unsigned columns, unsigned rows);
+void terminal_screen_set_ambiguous_wide(struct terminal_screen *screen, int ambiguous_wide);
 void terminal_screen_resize(struct terminal_screen *screen, unsigned columns, unsigned rows);
 void terminal_screen_write(struct terminal_screen *screen, const unsigned char *bytes, size_t length);
 struct terminal_cell *terminal_screen_cell(struct terminal_screen *screen, unsigned column, unsigned row);
@@ -542,6 +596,10 @@ int terminal_screen_scroll_view(struct terminal_screen *screen, int lines);
 size_t terminal_screen_text(struct terminal_screen *screen, char *text, size_t size);
 int terminal_screen_in_range(const struct terminal_screen *screen, unsigned column, unsigned long line);
 
+/* The settings kept between runs (settings.c). */
+void terminal_settings_load(struct terminal_settings *settings);
+int terminal_settings_save(const struct terminal_settings *settings);
+
 /* The key codes (keys.c). */
 size_t terminal_key_bytes(uint32_t key, uint32_t modifiers, unsigned char *bytes, size_t size);
 
@@ -549,7 +607,9 @@ size_t terminal_key_bytes(uint32_t key, uint32_t modifiers, unsigned char *bytes
 int terminal_font_open(struct terminal_font *font, const char *path, unsigned pixels);
 int terminal_font_attach(struct terminal_font *font, unsigned char *pixels, size_t row_pitch, unsigned width, unsigned height);
 int terminal_font_resize(struct terminal_font *font, unsigned pixels);
+int terminal_font_fallback(struct terminal_font *font, const char *path);
 unsigned terminal_font_slot(struct terminal_font *font, uint32_t codepoint);
+unsigned terminal_font_wide_slot(struct terminal_font *font, uint32_t codepoint);
 void terminal_font_close(struct terminal_font *font);
 
 /* The drawing (render.c). */

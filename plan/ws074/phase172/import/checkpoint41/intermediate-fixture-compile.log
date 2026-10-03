@@ -1,0 +1,91 @@
+plan/ws074/tests/host-vm-factory.c: In function ‘factory_function_case’:
+plan/ws074/tests/host-vm-factory.c:682:33: error: label ‘cleanup’ used but not defined
+  682 |                                 goto cleanup;
+      |                                 ^~~~
+plan/ws074/tests/host-vm-factory.c:468:19: error: variable ‘parent_address’ set but not used [-Werror=unused-but-set-variable]
+  468 |         uintptr_t parent_address;
+      |                   ^~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c: At top level:
+plan/ws074/tests/host-vm-factory.c:694:1: error: data definition has no type or storage class [-Werror]
+  694 | roots[1] = NULL;
+      | ^~~~~
+plan/ws074/tests/host-vm-factory.c:694:1: error: type defaults to ‘int’ in declaration of ‘roots’ [-Wimplicit-int]
+In file included from /usr/include/stdio.h:34,
+                 from plan/ws074/tests/host-vm-factory.c:14:
+plan/ws074/tests/host-vm-factory.c:694:12: error: invalid initializer
+  694 | roots[1] = NULL;
+      |            ^~~~
+plan/ws074/tests/host-vm-factory.c:695:1: error: data definition has no type or storage class [-Werror]
+  695 | vm_heap_collect(heap);
+      | ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:695:1: error: type defaults to ‘int’ in declaration of ‘vm_heap_collect’ [-Wimplicit-int]
+plan/ws074/tests/host-vm-factory.c:695:1: error: parameter names (without types) in function declaration [-Wdeclaration-missing-parameter-type]
+plan/ws074/tests/host-vm-factory.c:695:1: error: conflicting types for ‘vm_heap_collect’; have ‘int()’
+In file included from userland/desktop/libbrowser/js/js.h:23,
+                 from userland/desktop/libbrowser/js/builtin.h:22,
+                 from plan/ws074/tests/host-vm-factory.c:10:
+userland/desktop/libbrowser/vm/vm.h:531:6: note: previous declaration of ‘vm_heap_collect’ with type ‘void(struct vm_heap *)’
+  531 | void vm_heap_collect(struct vm_heap *heap);
+      |      ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:696:1: error: data definition has no type or storage class [-Werror]
+  696 | found = vm_heap_find_cell(heap, output_address);
+      | ^~~~~
+plan/ws074/tests/host-vm-factory.c:696:1: error: type defaults to ‘int’ in declaration of ‘found’ [-Wimplicit-int]
+plan/ws074/tests/host-vm-factory.c:696:27: error: ‘heap’ undeclared here (not in a function)
+  696 | found = vm_heap_find_cell(heap, output_address);
+      |                           ^~~~
+plan/ws074/tests/host-vm-factory.c:696:33: error: ‘output_address’ undeclared here (not in a function)
+  696 | found = vm_heap_find_cell(heap, output_address);
+      |                                 ^~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:697:20: error: expected ‘)’ before ‘==’ token
+  697 | factory_check(found == NULL, "released function/environment output is collectible");
+      |                    ^~~
+      |                    )
+plan/ws074/tests/host-vm-factory.c:698:1: error: expected identifier or ‘(’ before ‘if’
+  698 | if (found != NULL) {
+      | ^~
+plan/ws074/tests/host-vm-factory.c:704:1: error: expected identifier or ‘(’ before ‘if’
+  704 | if (input_address != 0) {
+      | ^~
+plan/ws074/tests/host-vm-factory.c:708:1: error: expected identifier or ‘(’ before ‘if’
+  708 | if (mode == 3U) {
+      | ^~
+plan/ws074/tests/host-vm-factory.c:713:9: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘:’ token
+  713 | cleanup :
+      |         ^
+plan/ws074/tests/host-vm-factory.c:720:53: error: expected ‘)’ before ‘(’ token
+  720 | vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+      |                                                     ^
+      |                                                     )
+plan/ws074/tests/host-vm-factory.c:721:1: error: data definition has no type or storage class [-Werror]
+  721 | vm_realm_destroy(realm);
+      | ^~~~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:721:1: error: type defaults to ‘int’ in declaration of ‘vm_realm_destroy’ [-Wimplicit-int]
+plan/ws074/tests/host-vm-factory.c:721:1: error: parameter names (without types) in function declaration [-Wdeclaration-missing-parameter-type]
+plan/ws074/tests/host-vm-factory.c:721:1: error: conflicting types for ‘vm_realm_destroy’; have ‘int()’
+userland/desktop/libbrowser/vm/vm.h:615:6: note: previous declaration of ‘vm_realm_destroy’ with type ‘void(struct vm_realm *)’
+  615 | void vm_realm_destroy(struct vm_realm *realm);
+      |      ^~~~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:722:1: error: data definition has no type or storage class [-Werror]
+  722 | vm_heap_destroy(heap);
+      | ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:722:1: error: type defaults to ‘int’ in declaration of ‘vm_heap_destroy’ [-Wimplicit-int]
+plan/ws074/tests/host-vm-factory.c:722:1: error: parameter names (without types) in function declaration [-Wdeclaration-missing-parameter-type]
+plan/ws074/tests/host-vm-factory.c:722:1: error: conflicting types for ‘vm_heap_destroy’; have ‘int()’
+userland/desktop/libbrowser/vm/vm.h:528:6: note: previous declaration of ‘vm_heap_destroy’ with type ‘void(struct vm_heap *)’
+  528 | void vm_heap_destroy(struct vm_heap *heap);
+      |      ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-vm-factory.c:723:1: error: expected identifier or ‘(’ before ‘if’
+  723 | if (status != 0)
+      | ^~
+plan/ws074/tests/host-vm-factory.c:727:1: error: expected identifier or ‘(’ before ‘return’
+  727 | return 0;
+      | ^~~~~~
+plan/ws074/tests/host-vm-factory.c:728:1: error: expected identifier or ‘(’ before ‘}’ token
+  728 | }
+      | ^
+plan/ws074/tests/host-vm-factory.c: In function ‘factory_function_case’:
+plan/ws074/tests/host-vm-factory.c:691:1: error: control reaches end of non-void function [-Werror=return-type]
+  691 | }
+      | ^
+cc1: all warnings being treated as errors

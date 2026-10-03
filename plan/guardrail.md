@@ -188,3 +188,15 @@ Event ws114-gtk-qt-port-projections-20261002: user指定の順序は[全文](sta
 ## 移植で見つかった API の取り込み（2026-10-02）
 
 ユーザー「getc_unlocked()は追加します。このように、GNUソフトウェアの移植で判明した、POSIX標準でないが重要なAPIは、積極的に取り込みます。」→ 外部 package の移植で libc に無いと分かった API（POSIX でない GNU・BSD の広く使われるものを含む）は、package ごとの patch で済ませず、libc に積極的に取り込む。取り込みは ABI 互換と名前空間（WS001 の POSIX の観点）を確かめ、全文規約・build・試験を通す。最初のまとめは [ws034-p058](ws034/phase058/phase.md)。
+
+## 5330 の passthrough で iGPU と AX211 を同時に渡さない（2026-10-03）
+
+ユーザー「iGPUとAX211は、同時にvfioを有効にした実績がゼロです。おそらく同時には有効にできないのです。」→ 今後は iGPU（00:02.0）と AX211（00:14.3）を同じ QEMU に同時に passthrough しない。WiFi の試験は AX211 だけ（std VGA）、GPU の試験は iGPU だけ。記録上は 2026-10-02 の q590（run 2・3）と q599-i03 で同時の passthrough が起動しているが、2026-10-03 00:41 の同時の passthrough の直後に host が hard hang した（BUG-145 の記録）。間欠的に host を止める危険として扱う。
+
+## iGPU の passthrough を使う場面（2026-10-03）
+
+ユーザー「iGPUを使うのはグラフィックドライバ改善とデスクトップ描画パフォーマンス改善のPhaseのみにしてください。恒常的にiGPUをパススルーする必要性を私は感じません。Venusで十分ですし、LLVMpipeで十分です。」→ 5330 の iGPU（00:02.0）の passthrough は i915 の driver の改善の Phase だけで使う。追記（同日 user）:「パフォーマンス改善でも、5330でVenusを使えば実質i915が使えますので、そうしてください。」→ desktop の描画の性能の改善は 5330 の host の i915 を使う QEMU の Venus で行い、iGPU の passthrough は使わない。それ以外（WiFi・desktop の UI・app・GTK/Qt など）の試験は QEMU の Venus か llvmpipe で行う。
+
+## Keiland の OS の境界の改訂予定（2026-10-03）
+
+ユーザーの決定で、desktop の OS の抽象化を libkeiland-backend（compositor が使う、OS ごとに libkeiland-backend-zedbsd・-linux・-freebsd の別の source tree）に集め、compositor の OS の module（seat・logind・evdev・KMS/GPU）も移す。libkeiland は標準 app の UI toolkit と compositor の非標準の機能の wrapper になり、app は OS の抽象化を直接持たない（WiFi・network・音量・電源・PnP・設定は compositor の拡張の protocol を通す）。上の「Keiland の OS の境界」の配置の規則と checker は [WS131](ws131/ws.md) の設計で改訂する（それまでは今の規則のまま）。

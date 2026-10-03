@@ -514,9 +514,7 @@ desktop_painted_record(
 	painted->cut = entry->cut;
 
 	/* A picture's thumbnail, once made (fm_grid_entry_icon draws it). */
-	if (entry->folder == 0 &&
-	    entry->path != NULL &&
-	    entry->mime->category == FM_CATEGORY_IMAGE)
+	if (fm_thumb_kind(entry) != 0)
 		painted->thumb = fm_thumb_get(app, entry->path, entry->modified);
 
 	/* Succeeded: the record describes this cell. */

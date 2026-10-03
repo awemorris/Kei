@@ -1,0 +1,72 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-realms"
+    ],
+    "exit": 0,
+    "stdout_file": "realms.stdout",
+    "stderr_file": "realms.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-realm-retirement"
+    ],
+    "exit": 0,
+    "stdout_file": "realm-retirement.stdout",
+    "stderr_file": "realm-retirement.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "stdout_file": "vm-factory.stdout",
+    "stderr_file": "vm-factory.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-heap"
+    ],
+    "exit": 0,
+    "stdout_file": "heap.stdout",
+    "stderr_file": "heap.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/async.js"
+    ],
+    "exit": 0,
+    "expected": "plan/ws074/tests/js/async.expected",
+    "exact_output_equal": true,
+    "lines": 49,
+    "stdout_file": "async.stdout",
+    "stderr_file": "async.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/builtins.js"
+    ],
+    "exit": 0,
+    "expected": "plan/ws074/tests/js/builtins.expected",
+    "exact_output_equal": true,
+    "lines": 30,
+    "stdout_file": "builtins.stdout",
+    "stderr_file": "builtins.stderr"
+  }
+]

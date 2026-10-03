@@ -1,0 +1,1 @@
+speed: bytes=53000000 off=2.139s on=2.198s ratio=1.028

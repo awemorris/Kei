@@ -71,6 +71,7 @@ static void app_save(struct te_app *app);
 static int app_save_to(struct te_app *app, const char *path);
 static void app_size(struct te_app *app, int step);
 static void app_dialog(struct te_app *app, enum te_dialog dialog);
+static void app_recent(struct te_app *app, unsigned index);
 static int app_dialog_buttons(const struct te_app *app);
 static void app_choose(struct te_app *app, int saving);
 static void app_chosen(struct te_app *app, const struct te_event *event);
@@ -337,6 +338,13 @@ te_app_action(
 		return;
 	te_log("ACTION %d", (int)action);
 
+	/* An item of File > Open Recent opens its file (ws128-p003). */
+	if ((unsigned)action >= TE_ACTION_RECENT_FIRST && (unsigned)action < TE_ACTION_RECENT_FIRST + TE_RECENT_MAX) {
+		app_recent(app, (unsigned)action - TE_ACTION_RECENT_FIRST);
+		app->dirty = 1;
+		return;
+	}
+
 	/* The action. */
 	switch (action) {
 	case TE_ACTION_NEW:
@@ -386,6 +394,11 @@ te_app_action(
 		break;
 	case TE_ACTION_FIND_PREVIOUS:
 		te_edit_find(app, 0, 0);
+		break;
+	case TE_ACTION_REPLACE:
+		/* The Replace panel (main.c fills its fields the first frame). */
+		app->replace_fresh = 1;
+		app_dialog(app, TE_DIALOG_REPLACE);
 		break;
 	case TE_ACTION_LINE_NUMBERS:
 		app->line_numbers = !app->line_numbers;
@@ -1227,6 +1240,10 @@ app_after(
 	case TE_AFTER_OPEN:
 		app_choose(app, 0);
 		break;
+	case TE_AFTER_OPEN_PATH:
+		/* A file of Open Recent. */
+		(void)te_app_open(app, app->open_path);
+		break;
 	case TE_AFTER_NOTHING:
 		break;
 	}
@@ -1339,6 +1356,31 @@ app_dialog(
 	te_log("DIALOG %d", (int)dialog);
 }
 
+/* Opens a file of File > Open Recent, after unsaved changes are dealt with; one no longer there says so. */
+static void
+app_recent(
+	struct te_app *app,
+	unsigned index)
+{
+	char message[TE_PATH_MAX + 48];
+
+	/* An item past the list does nothing. */
+	if (index >= app->recent_count)
+		return;
+
+	/* A file that is gone is not opened. */
+	if (!app->recent_present[index]) {
+		snprintf(message, sizeof(message), "\"%s\" is no longer there.", app->recent[index]);
+		te_app_message(app, message);
+		return;
+	}
+
+	/* The file waits for the unsaved changes, as File > Open does. */
+	snprintf(app->open_path, sizeof(app->open_path), "%s", app->recent[index]);
+	te_log("RECENT open index=%u path=%s", index, app->open_path);
+	app_request(app, TE_AFTER_OPEN_PATH);
+}
+
 /*
  * Carries out a dialog's button (the first is the default, the last
  * cancels).
@@ -1381,6 +1423,7 @@ te_app_dialog_choose(
 			app->after = TE_AFTER_NOTHING;
 		break;
 	case TE_DIALOG_ABOUT:
+	case TE_DIALOG_REPLACE:
 	case TE_DIALOG_NONE:
 		break;
 	}
@@ -1401,6 +1444,71 @@ app_dialog_buttons(
 
 	/* The others: the action and Cancel. */
 	return 2;
+}
+
+/*
+ * Carries out the Replace panel's Replace (all 0) or Replace All (1)
+ * (ws128-p003): the find text becomes the editor's (as the titlebar's
+ * field would set it), the replacement is kept for the next time, and a
+ * message says what was done.
+ */
+void
+te_app_replace(
+	struct te_app *app,
+	const char *find,
+	const char *with,
+	int all)
+{
+	char message[TE_FIND_MAX + 64];
+	size_t with_length;
+	size_t count;
+	int replaced;
+
+	/* The find text, as long as the editor keeps, and the replacement. */
+	snprintf(app->find, sizeof(app->find), "%s", find);
+	app->find_length = strlen(app->find);
+	snprintf(app->replace_with, sizeof(app->replace_with), "%s", with);
+	with_length = strlen(app->replace_with);
+
+	/* Nothing to find: the panel says so. */
+	if (app->find_length == 0U) {
+		te_app_message(app, "Type the text to find.");
+		return;
+	}
+
+	/* Replace All: every place, as one undo group. */
+	if (all) {
+		count = te_edit_replace_all(app, app->replace_with, with_length);
+		te_log("REPLACE all count=%lu", (unsigned long)count);
+		if (count == 0U) {
+			snprintf(message, sizeof(message), "No matches for \"%s\"", app->find);
+		} else if (count == 1U) {
+			snprintf(message, sizeof(message), "Replaced 1 place");
+		} else {
+			snprintf(message, sizeof(message), "Replaced %lu places", (unsigned long)count);
+		}
+
+		/* The message, at the bottom of the card. */
+		te_app_message(app, message);
+		return;
+	}
+
+	/* Replace: the place found, then the next is selected. */
+	replaced = te_edit_replace(app, app->replace_with, with_length);
+	te_log("REPLACE one replaced=%d", replaced);
+}
+
+/*
+ * Closes the Replace panel; the place found stays selected.
+ */
+void
+te_app_replace_close(
+	struct te_app *app)
+{
+	/* The panel goes, and the text has the keyboard again. */
+	app->dialog = TE_DIALOG_NONE;
+	app->dirty = 1;
+	te_log("REPLACE closed");
 }
 
 /*

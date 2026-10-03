@@ -83,6 +83,7 @@ fm_app_init(
 
 	/* The defaults: icons by name, sidebar shown, preview hidden, hidden files hidden. */
 	memset(app, 0, sizeof(*app));
+	app->drag_wait_ms = -1;
 	app->text = text;
 	app->width = FM_WIDTH;
 	app->height = FM_HEIGHT;
@@ -218,6 +219,7 @@ fm_ui_event(
 		app->hover_kind = FM_HIT_NONE;
 		app->hover_index = -1;
 		app->dirty = 1;
+		fm_scrollbar_leave(app);
 		break;
 	case FM_EVENT_KEY:
 		fm_input_key(app, event);
@@ -274,6 +276,9 @@ fm_ui_tick(
 
 	/* The information's checksum moves on. */
 	fm_info_tick(app);
+
+	/* A drag springs a folder open or scrolls at an edge (ws127-p002). */
+	(void)fm_drag_tick(app, now);
 
 	/* A message that has run its time goes. */
 	if (app->message[0] != '\0' && now >= app->message_until) {
@@ -335,6 +340,7 @@ fm_ui_draw(
 
 	/* The content's card, drawn by the view of the place, the row of tabs at its top, and the preview beside it when shown. */
 	fm_grid_draw(app, canvas, &app->layout.content);
+	fm_scrollbar_draw(app, canvas);
 	fm_tabs_draw(app, canvas);
 	if (app->show_preview != 0)
 		fm_preview_draw(app, canvas, &app->layout.preview);
@@ -501,6 +507,8 @@ int
 fm_ui_wait(
 	struct fm_app *app)
 {
+	int busy;
+
 	/* A thumbnail asked for, an operation, a search walking or a checksum: no sleep. */
 	if (app->thumb_wanted[0] != '\0')
 		return 0;
@@ -514,6 +522,17 @@ fm_ui_wait(
 	/* A search typed a moment ago starts soon. */
 	if (app->search_typed_at != 0U)
 		return 20;
+
+	/* A drag waits for a folder to spring open, or scrolls at an edge (ws127-p002). */
+	if (app->drag_wait_ms >= 0 && (app->drag != 0 || app->drop_active != 0))
+		return app->drag_wait_ms;
+
+	/* The overlay scroll bar waits to fade, or fades: a frame soon. */
+	busy = fm_scrollbar_busy(app);
+	if (busy != 0) {
+		app->dirty = 1;
+		return 16;
+	}
 
 	/* Nothing waits. */
 	return -1;

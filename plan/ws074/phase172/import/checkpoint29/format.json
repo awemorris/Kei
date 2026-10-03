@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_json.c",
+      "formatted_sha256": "c250db52b4f067884b01c4189837f2147fc90a6eb71aa38455e666c1681ac04a",
+      "final_sha256": "edf6a3af60e785ae2d65e0e4a6287bbe4cbc1746b6d3d57d4a4bc51d04ba3bd8",
+      "restorations": "definition argument tabs and compound layout; symmetric escape branches and semantic paragraphs"
+    }
+  ]
+}

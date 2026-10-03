@@ -1,0 +1,34 @@
+{
+  "queue": "q597",
+  "checkpoint": 62,
+  "source": "userland/desktop/libbrowser/dom/node.c",
+  "source_sha256": "0959155814f7d5c168d441778ab2fc528b9378b197aadfdc582a2877f5bb9549",
+  "baseline": "710f1314fdecfa10aeae105d33c559b3b4910908",
+  "reviewed": 181,
+  "total": 209,
+  "remaining": 28,
+  "partial_review": true,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 2,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "tests": {
+    "host-node-cloning": "native node cloning: 26 checks, 0 failures",
+    "host-attribute-namespace": "native attribute namespaces: 25/25 passed",
+    "host-xml-dom": "native XML DOM: 54/54 passed",
+    "host-xml-binding": "native XML bindings: 34/34 passed",
+    "host-native-properties": "native property checks: 65/65 passed",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "resume": "Trace and, where needed, retain doctype identifier strings through earlier conversions in bind/implementation.c and html/modes.c; then complete full dom/node.c review and revalidate any changed previously reviewed source.",
+  "limits": [
+    "dom/node.c is not marked full-reviewed; all28 pending files remain.",
+    "No isolated forced GC/overflow reproduction, target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

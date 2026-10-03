@@ -1,0 +1,50 @@
+[
+  {
+    "name": "frame-lifetime",
+    "argv": [
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout": "frame lifetime checks: 148/148 passed\n"
+  },
+  {
+    "name": "realms",
+    "argv": [
+      "build/browser3-p172/plain/host-realms"
+    ],
+    "exit": 0,
+    "stdout": "PASS child arguments and this\nPASS child closure environment\nPASS child constructor\nPASS child derived constructor\nPASS derived realm\nPASS derived target\nPASS derived prototype\nPASS foreign new.target\nPASS foreign target identity\nPASS foreign target prototype\nPASS returning reentry\nPASS native state on reentry\nPASS child getter throw\nPASS child setter throw\nPASS foreign generator\nPASS foreign generator throw\nPASS foreign async promise\nPASS bidirectional global\nPASS bidirectional exception\nPASS stack limit across realms\nPASS recovered after stack limit\nPASS async callback realm\nPASS target object fallback\nPASS target array fallback\nPASS target error fallback\nPASS VM call global\nPASS VM script exception\nPASS VM native exception\nPASS VM constructor exception\nPASS native failure unwind\nrealm checks: 30/30 passed\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  },
+  {
+    "name": "settle",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-settle-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "settle: 14 runtime checks and 8 diagnostic checks passed\n"
+  },
+  {
+    "name": "postMessage overload/origin",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "build/browser3-p172/review69/post-message.html"
+    ],
+    "exit": 0,
+    "stdout": "received star null\nreceived slash null\nreceived exact null\nreceived options null\ncount 4 star,slash,exact,options\n"
+  }
+]

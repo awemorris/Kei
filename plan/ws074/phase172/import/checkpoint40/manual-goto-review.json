@@ -1,0 +1,214 @@
+{
+  "authority": "full C section14",
+  "findings": 33,
+  "functions": {
+    "plan/ws074/tests/host-collection.c:collection_pressure_case": 7,
+    "plan/ws074/tests/host-collection.c:collection_conversion_case": 11,
+    "userland/desktop/libbrowser/bind/collection.c:collection_create": 6,
+    "userland/desktop/libbrowser/bind/collection.c:collection_read_item": 2,
+    "userland/desktop/libbrowser/bind/collection.c:collection_named_item": 2,
+    "userland/desktop/libbrowser/bind/collection.c:controls_named_item": 2,
+    "userland/desktop/libbrowser/bind/collection.c:radio_value_set": 3
+  },
+  "classification": "All33 forward jumps target a sole shared per-function cleanup. Production construction removes only acquired roots; conversion releases state root; fixture restores stack/observer and real embedding ownership. No other final supporting findings; no waiver.",
+  "details": [
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 502,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 510,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 517,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 523,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 527,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 539,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_pressure_case",
+      "line": 545,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 653,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 667,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 678,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 684,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 687,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 696,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 704,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 711,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 715,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 719,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "function": "collection_conversion_case",
+      "line": 723,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_create",
+      "line": 543,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_create",
+      "line": 561,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_create",
+      "line": 564,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_create",
+      "line": 578,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_create",
+      "line": 589,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_create",
+      "line": 602,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_read_item",
+      "line": 1442,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_read_item",
+      "line": 1452,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_named_item",
+      "line": 1502,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "collection_named_item",
+      "line": 1512,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "controls_named_item",
+      "line": 1681,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "controls_named_item",
+      "line": 1684,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "radio_value_set",
+      "line": 1936,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "radio_value_set",
+      "line": 1957,
+      "destination": "sole later cleanup"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "function": "radio_value_set",
+      "line": 1958,
+      "destination": "sole later cleanup"
+    }
+  ]
+}

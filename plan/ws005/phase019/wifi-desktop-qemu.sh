@@ -1,8 +1,13 @@
 #!/bin/bash
-# ws005-p019: the desktop image on the 5330 with its iGPU and its AX211 passed through, on the 5330.
+# ws005-p019: the desktop image on the 5330 with its AX211 passed through, on the 5330.
+#
+# 2026-10-03 (user, Guardrail): the iGPU and the AX211 are never given to one QEMU (they had never been passed
+# through together before ws005-p019, and the third such run hung the host), and a Wi-Fi test does not use the
+# iGPU at all.  The guest has the standard VGA only: the greeter finds no GPU and the console login comes up on
+# it; the desktop's Wi-Fi UI is checked on the Venus QEMU instead.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 #
-# The conditions of plan/ws075/tests/hdmi/h4-qemu.sh (q35, KVM, 4 GiB, 4 vCPUs, the iGPU with vfio-pci, OVMF,
+# The conditions of plan/ws075/tests/hdmi/h4-qemu.sh (q35, KVM, 4 GiB, 4 vCPUs, OVMF,
 # NVMe, two QMP sockets, a USB tablet and keyboard, so h4-ctl.py takes shots and drives the pointer), plus the
 # AX211 (0000:00:14.3, moved from iwlwifi to vfio-pci for the run and back to iwlwifi when QEMU ends, as
 # plan/ws004/tests/run-intel-ax211-vfio-qemu.sh does) and a USB CDC ECM interface on QEMU's user network as the
@@ -57,7 +62,6 @@ args=(
 	-m 4096
 	-smp 4
 	-object memory-backend-memfd,id=mem,size=4G,share=on
-	-device vfio-pci,host=0000:00:02.0,x-igd-opregion=on,rombar=0
 	-device vfio-pci,host=$bdf,id=ax211
 	-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd
 	-drive if=pflash,format=raw,file=$dir/vars.fd

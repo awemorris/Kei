@@ -62,9 +62,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* The checked native campaign no longer needs its construction heap. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("table row lifetime checks: %u/%u passed\n", checks - failures, checks);
@@ -121,9 +125,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Checked execution precedes releasing the converted script source. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -146,8 +154,16 @@ table_collect(
 
 	/* The actual host context stays intact for unrelated environment collaborators. */
 	observer = active_observer;
-	observer->calls++;
+	if (observer == NULL || node == NULL)
+		return EINVAL;
+
+	/* Only actual inserted children can supply the current native mutation parent. */
 	owner = node->parent;
+	if (owner == NULL)
+		return EINVAL;
+
+	/* Exactly one synchronous insertion notification belongs to this observed native operation. */
+	observer->calls++;
 	anchor = NULL;
 	if (observer->anchor != 0)
 		anchor = (struct dom_node *)observer->anchor;
@@ -259,11 +275,14 @@ collection_case(
 	int status;
 	int expected;
 	int matches;
+	int is_object;
 
 	/* Installs the real primary binding without a synthetic engine behavior switch. */
 	status = vm_realm_create(heap, &realm);
 	if (status != 0)
 		return status;
+
+	/* Complete ordinary language intrinsics before constructing the native host. */
 	status = js_install_builtins(realm);
 	if (status != 0) {
 		vm_realm_destroy(realm);
@@ -299,8 +318,16 @@ collection_case(
 		window->host.node_inserted = NULL;
 		status = collection_script(realm, "document.createElement('table')", &receiver);
 		if (status != 0)
-			break;
+			goto cleanup;
+
+		/* Inspect only an actual native receiver after successful script construction. */
 		table = bind_node_of(receiver);
+		if (table == NULL) {
+			status = EINVAL;
+			goto cleanup;
+		}
+
+		/* Integer observer state supplies no retaining collector edge. */
 		actual = window;
 		argument = vm_value_int32(0);
 		memset(&observer, 0, sizeof(observer));
@@ -310,35 +337,53 @@ collection_case(
 		if (kind == 1) {
 			status = bind_table_head_create(realm, receiver, NULL, 0, &answer);
 			if (status != 0)
-				break;
+				goto cleanup;
 			status = bind_section_row_insert(realm, answer, NULL, 0, &answer);
 			if (status != 0)
-				break;
+				goto cleanup;
 		}
 
 		/* The actual child host must be selected through a borrowed primary row operation. */
 		if (kind == 2) {
-			status = collection_script(realm,
-						   "document.appendChild(document.createElement('html'));"
-						   "document.documentElement.appendChild(document.createElement('body'));"
-						   "(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
-						   "var t=f.contentDocument.createElement('table');f.remove();return t;})()",
-						   &receiver);
+			status = collection_script(
+			    realm,
+			    "document.appendChild(document.createElement('html'));"
+			    "document.documentElement.appendChild(document.createElement('body'));"
+			    "(function(){var f=document.createElement('iframe');document.body.appendChild(f);"
+			    "var t=f.contentDocument.createElement('table');f.remove();return t;})()",
+			    &receiver);
 			if (status != 0)
-				break;
+				goto cleanup;
 			table = bind_node_of(receiver);
+			if (table == NULL) {
+				status = EINVAL;
+				goto cleanup;
+			}
+
+			/* Borrowed operations require the genuine current Document's retained child host. */
 			actual = table->document->view;
+			if (actual == NULL) {
+				status = EINVAL;
+				goto cleanup;
+			}
 		}
 
 		/* Body creation anchors after the last current tbody and before the existing footer. */
 		if (kind == 4) {
-			status = collection_script(realm,
-						   "(function(){var t=document.createElement('table');"
-						   "t.innerHTML='<tbody></tbody><tfoot></tfoot>';return t;})()",
-						   &receiver);
+			status = collection_script(
+			    realm,
+			    "(function(){var t=document.createElement('table');"
+			    "t.innerHTML='<tbody></tbody><tfoot></tfoot>';return t;})()",
+			    &receiver);
 			if (status != 0)
-				break;
+				goto cleanup;
 			table = bind_node_of(receiver);
+			if (table == NULL) {
+				status = EINVAL;
+				goto cleanup;
+			}
+
+			/* The actual footer remains the independently removed insertion anchor. */
 			observer.anchor = (uintptr_t)table->last_child;
 		}
 
@@ -346,7 +391,15 @@ collection_case(
 		if (kind == 5) {
 			status = collection_script(realm, "({valueOf:collectIndex})", &argument);
 			if (status != 0)
-				break;
+				goto cleanup;
+			/* The scripted conversion argument must be an actual object before exposing its cell. */
+			is_object = vm_value_is_object(argument);
+			if (!is_object) {
+				status = EINVAL;
+				goto cleanup;
+			}
+
+			/* Integer argument identity adds no retaining root during conversion GC. */
 			observer.argument = (uintptr_t)vm_value_as_cell(argument);
 		}
 
@@ -354,6 +407,12 @@ collection_case(
 		observer.target = (uintptr_t)table;
 		observer.owner = observer.target;
 		if (kind == 1) {
+			if (table->first_child == NULL || table->first_child->first_child == NULL) {
+				status = EINVAL;
+				goto cleanup;
+			}
+
+			/* A real header and row provide the separately retained parent and anchor. */
 			observer.owner = (uintptr_t)table->first_child;
 			observer.anchor = (uintptr_t)table->first_child->first_child;
 		}
@@ -424,6 +483,10 @@ collection_case(
 		vm_heap_set_stack_base(heap, construction_stack);
 		status = 0;
 	}
+
+cleanup:
+	/* The embedding must regain its normal stack boundary on every infrastructure outcome. */
+	vm_heap_set_stack_base(heap, construction_stack);
 
 	/* Primary teardown observes no root slot pointing into an expired native invocation. */
 	bind_window_destroy(window);

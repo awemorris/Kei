@@ -24,7 +24,7 @@
 #include <string.h>
 
 /* The no-break space, which is written as &nbsp;. */
-#define SERIALIZE_NBSP		0x00a0U
+#define SERIALIZE_NBSP 0x00a0U
 
 static int serialize_node(const struct dom_node *node, int scripting, struct wb_units *out);
 static int serialize_children(const struct dom_node *node, int scripting, struct wb_units *out);
@@ -40,8 +40,8 @@ static int serialize_is_void(const struct dom_element *element);
 static int serialize_is_raw_text(const struct dom_node *parent, int scripting);
 
 /*
- * Writes the HTML serialization of a node's children (innerHTML):
- * scripting says whether noscript's content is raw text.
+ * Writes a node's children as HTML for innerHTML.
+ * Scripting says whether noscript's content is raw text.
  */
 int
 dom_serialize_children(
@@ -54,7 +54,11 @@ dom_serialize_children(
 	/* A template's children are its contents'. */
 	if (node->type == DOM_ELEMENT && ((const struct dom_element *)node)->content != NULL) {
 		error = serialize_children(((const struct dom_element *)node)->content, scripting, out);
-		return error;
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the template contents are written. */
+		return 0;
 	}
 
 	/* Each child. */
@@ -67,8 +71,8 @@ dom_serialize_children(
 }
 
 /*
- * Writes the HTML serialization of a node itself with its descendants
- * (outerHTML), as if it were the only child of a fragment.
+ * Writes a node and its descendants as HTML for outerHTML.
+ * Treats the node as the only child of a fragment.
  */
 int
 dom_serialize_node(
@@ -124,7 +128,11 @@ serialize_node(
 	switch (node->type) {
 	case DOM_ELEMENT:
 		error = serialize_element((const struct dom_element *)node, scripting, out);
-		return error;
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the element and its descendants are written. */
+		return 0;
 	case DOM_TEXT:
 	case DOM_CDATA_SECTION:
 		/* Text, raw inside the raw text elements and escaped anywhere else. */
@@ -140,45 +148,85 @@ serialize_node(
 			error = serialize_units(data->data.data, data->data.length, 0, out);
 		}
 
-		/* Reports the writing. */
-		return error;
-	case DOM_PROCESSING_INSTRUCTION:
-		/* HTML fragment serialization preserves the actual PI target and uninterpreted data. */
-		data = (const struct dom_character_data *)node;
-		error = serialize_ascii("<?", out);
-		if (error == 0)
-			error = serialize_string(data->target, out);
-		if (error == 0)
-			error = serialize_ascii(" ", out);
-		if (error == 0)
-			error = wb_units_append(out, data->data.data, data->data.length);
-		if (error == 0)
-			error = serialize_ascii("?>", out);
-
-		/* Succeeded or failed: PI serialization never descends into nonexistent children. */
-		return error;
-	case DOM_COMMENT:
-		/* A comment, its data as it is. */
-		data = (const struct dom_character_data *)node;
-		error = serialize_ascii("<!--", out);
+		/* Rejects a failed raw or escaped append. */
 		if (error != 0)
 			return error;
+
+		/* Succeeded: the text is written in its parent context. */
+		return 0;
+	case DOM_PROCESSING_INSTRUCTION:
+		/* Retains the actual PI target and uninterpreted data. */
+		data = (const struct dom_character_data *)node;
+
+		/* Opens the instruction. */
+		error = serialize_ascii("<?", out);
+		if (error != 0)
+			return error;
+
+		/* Writes the target without escaping it. */
+		error = serialize_string(data->target, out);
+		if (error != 0)
+			return error;
+
+		/* Separates the target from its data. */
+		error = serialize_ascii(" ", out);
+		if (error != 0)
+			return error;
+
+		/* Copies the uninterpreted data. */
 		error = wb_units_append(out, data->data.data, data->data.length);
 		if (error != 0)
 			return error;
+
+		/* Closes the instruction. */
+		error = serialize_ascii("?>", out);
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the instruction is written without descendants. */
+		return 0;
+	case DOM_COMMENT:
+		/* Selects the comment's unescaped data. */
+		data = (const struct dom_character_data *)node;
+
+		/* Opens the comment. */
+		error = serialize_ascii("<!--", out);
+		if (error != 0)
+			return error;
+
+		/* Copies the data verbatim. */
+		error = wb_units_append(out, data->data.data, data->data.length);
+		if (error != 0)
+			return error;
+
+		/* Closes the comment. */
 		error = serialize_ascii("-->", out);
-		return error;
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the comment is written. */
+		return 0;
 	case DOM_DOCUMENT_TYPE:
-		/* A DOCTYPE, by its name. */
+		/* Selects the DOCTYPE's name. */
 		doctype = (const struct dom_doctype *)node;
+
+		/* Opens the declaration. */
 		error = serialize_ascii("<!DOCTYPE ", out);
 		if (error != 0)
 			return error;
+
+		/* Copies the name without a namespace prefix. */
 		error = serialize_string(doctype->name, out);
 		if (error != 0)
 			return error;
+
+		/* Closes the declaration. */
 		error = serialize_ascii(">", out);
-		return error;
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the DOCTYPE is written. */
+		return 0;
 	default:
 		break;
 	}
@@ -203,10 +251,12 @@ serialize_element(
 	int is_void;
 	int error;
 
-	/* The start tag's name. */
+	/* Opens the start tag. */
 	error = serialize_ascii("<", out);
 	if (error != 0)
 		return error;
+
+	/* Writes the element name in the current namespace. */
 	error = serialize_tag_name(element, out);
 	if (error != 0)
 		return error;
@@ -237,9 +287,13 @@ serialize_element(
 	error = serialize_ascii("</", out);
 	if (error != 0)
 		return error;
+
+	/* Writes the element name in the current namespace. */
 	error = serialize_tag_name(element, out);
 	if (error != 0)
 		return error;
+
+	/* Closes the end tag. */
 	error = serialize_ascii(">", out);
 	if (error != 0)
 		return error;
@@ -273,15 +327,19 @@ serialize_tag_name(
 		error = serialize_string(element->prefix, out);
 		if (error != 0)
 			return error;
+
+		/* Separates the prefix from the local name. */
 		error = serialize_ascii(":", out);
 		if (error != 0)
 			return error;
 	}
 
-	/* Succeeded: the local name. */
+	/* Writes the local name after any namespace prefix. */
 	error = serialize_string(element->local_name, out);
 	if (error != 0)
 		return error;
+
+	/* Succeeded: the requested units are written. */
 	return 0;
 }
 
@@ -293,10 +351,12 @@ serialize_attribute(
 {
 	int error;
 
-	/* The space and the name. */
+	/* Separates this attribute from the preceding tag content. */
 	error = serialize_ascii(" ", out);
 	if (error != 0)
 		return error;
+
+	/* Writes the namespace-qualified attribute name. */
 	error = serialize_attribute_name(attribute, out);
 	if (error != 0)
 		return error;
@@ -305,9 +365,13 @@ serialize_attribute(
 	error = serialize_ascii("=\"", out);
 	if (error != 0)
 		return error;
+
+	/* Escapes the value in attribute context. */
 	error = serialize_escaped(attribute->value, 1, out);
 	if (error != 0)
 		return error;
+
+	/* Closes the quoted value. */
 	error = serialize_ascii("\"", out);
 	if (error != 0)
 		return error;
@@ -336,27 +400,36 @@ serialize_attribute_name(
 	error = 0;
 	if (attribute->ns == DOM_NS_XML) {
 		error = serialize_ascii("xml:", out);
+		if (error != 0)
+			return error;
 	} else if (attribute->ns == DOM_NS_XLINK) {
 		error = serialize_ascii("xlink:", out);
+		if (error != 0)
+			return error;
 	} else if (attribute->ns == DOM_NS_XMLNS && !xmlns) {
 		error = serialize_ascii("xmlns:", out);
+		if (error != 0)
+			return error;
 	} else if (attribute->ns != DOM_NS_NONE &&
 		   attribute->ns != DOM_NS_XMLNS &&
 		   attribute->prefix != NULL) {
 		/* Another namespace's own prefix and its colon. */
 		error = serialize_string(attribute->prefix, out);
-		if (error == 0)
-			error = serialize_ascii(":", out);
+		if (error != 0)
+			return error;
+
+		/* Separates the explicit prefix from the local name. */
+		error = serialize_ascii(":", out);
+		if (error != 0)
+			return error;
 	}
 
-	/* A failed prefix. */
-	if (error != 0)
-		return error;
-
-	/* Succeeded: the local name. */
+	/* Writes the local name after any namespace prefix. */
 	error = serialize_string(attribute->name, out);
 	if (error != 0)
 		return error;
+
+	/* Succeeded: the requested units are written. */
 	return 0;
 }
 
@@ -378,11 +451,15 @@ serialize_escaped(
 		return error;
 	}
 
-	/* Escaped, and the units are freed. */
+	/* Escapes the temporary units while preserving any partial output. */
 	error = serialize_units(units.data, units.length, attribute, out);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Releases the temporary representation after a successful copy. */
+	wb_units_release(&units);
 
 	/* Succeeded: the string is written. */
 	return 0;
@@ -428,16 +505,22 @@ serialize_units(
 		error = wb_units_append(out, units + start, index - start);
 		if (error != 0)
 			return error;
+
+		/* Substitutes the entity for the character ending the run. */
 		error = serialize_ascii(entity, out);
 		if (error != 0)
 			return error;
+
+		/* Starts the next unchanged run after the escaped character. */
 		start = index + 1U;
 	}
 
-	/* Succeeded: the last run. */
+	/* Appends the final unchanged run. */
 	error = wb_units_append(out, units + start, length - start);
 	if (error != 0)
 		return error;
+
+	/* Succeeded: the requested units are written. */
 	return 0;
 }
 
@@ -529,6 +612,8 @@ serialize_is_raw_text(
 	/* Only HTML elements have raw text. */
 	if (parent->type != DOM_ELEMENT)
 		return 0;
+
+	/* Checks the element namespace before choosing raw-text rules. */
 	element = (const struct dom_element *)parent;
 	if (element->ns != DOM_NS_HTML)
 		return 0;

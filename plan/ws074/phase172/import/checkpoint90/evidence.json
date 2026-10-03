@@ -1,0 +1,34 @@
+{
+  "queue": "q598",
+  "checkpoint": 90,
+  "source": "userland/desktop/libbrowser/js/builtin_array.c",
+  "source_sha256": "1636395b0fdcdf4d62181035612acfc42c353f3a39fb2bb6a71e6ce3f53753e9",
+  "manual_status": "partial-review-unresolved",
+  "reviewed": 204,
+  "total": 209,
+  "remaining": 5,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "permitted_forward_cleanup_gotos": 33,
+    "other_findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "js": "14/14",
+    "dom": "23/23"
+  },
+  "fixes": [
+    "array_has/get/set/remove/set_length/append retain receiver and transient values during VM operations",
+    "array_flatten retains mapped value across length/getter/recursion",
+    "array_reverse retains both fetched values across reentrant swap"
+  ],
+  "limits": [
+    "Full Array review remains pending for generic primitive receiver lifetime and other transient paths",
+    "No forced GC in all reentrant paths or ENOMEM injection",
+    "Four other full files and original whole p172 gates remain"
+  ]
+}

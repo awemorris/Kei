@@ -470,7 +470,7 @@ preview_picture(
 
 	/* A picture's thumbnail, once it is made. */
 	thumb = NULL;
-	if (entry->folder == 0 && entry->mime->category == FM_CATEGORY_IMAGE)
+	if (fm_thumb_kind(entry) != 0)
 		thumb = fm_thumb_get(app, entry->path, entry->modified);
 
 	/* No thumbnail: the item's icon, large, in the middle of the box. */

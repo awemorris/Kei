@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "sh",
+    "plan/ws074/tests/host-build.sh",
+    "plain"
+  ],
+  "environment": {
+    "BROWSER_HOST_BUILD": "build/browser3-p172"
+  },
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "stable_sources": {
+    "userland/desktop/libbrowser/vm/function.c": "9e0004090aa1e2f39b0e65589936ea6cc4e9a3aa0a5dd51e0abaee19ba27f5f3",
+    "plan/ws074/tests/host-vm-factory.c": "6941424400a9998da7714e9232f1c48fe0b3259a4ad23452a39a67908be24bef"
+  }
+}

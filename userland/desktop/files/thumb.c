@@ -50,6 +50,16 @@
 /* The largest number a PPM header is read up to (larger ones are refused). */
 #define THUMB_NUMBER_MAX	100000
 
+/*
+ * The GIF being read from memory: its bytes and how far they were read
+ * (thumb_gif_read).  One lives on thumb_gif's stack for one decoding.
+ */
+struct thumb_gif_source {
+	const unsigned char *data;
+	size_t size;
+	size_t at;
+};
+
 static int thumb_read_file(const char *path, unsigned char **data, size_t *size);
 static int thumb_ppm(const unsigned char *data, size_t size, struct fm_image *image);
 static int thumb_png(const unsigned char *data, size_t size, struct fm_image *image);
@@ -66,8 +76,8 @@ static struct fm_thumb *thumb_slot(struct fm_app *app);
 /*
  * Reads a picture file into an image of opaque pixels.
  *
- * Returns 0, ENOTSUP for a format that is not read (PPM, PGM, PNG, JPEG
- * and GIF are), EINVAL for a damaged picture, EFBIG for one too large, or
+ * Returns 0, ENOTSUP for a format that is not read (PPM, PGM, PNG, JPEG,
+ * GIF and the first page of a PDF are), EINVAL for a damaged picture, EFBIG for one too large, or
  * another errno value.
  */
 int
@@ -101,6 +111,11 @@ fm_image_load(
 	signed_as = thumb_signed(data, size, THUMB_JPEG_SIGNATURE, sizeof(THUMB_JPEG_SIGNATURE) - 1U);
 	if (signed_as)
 		error = thumb_jpeg(data, size, image);
+
+	/* A PDF, its first page (thumb-cache.c, ws127-p002). */
+	signed_as = fm_thumb_is_pdf(data, size);
+	if (signed_as)
+		error = fm_thumb_pdf(data, size, image);
 
 	/* A GIF by its signature, GIF87a or GIF89a. */
 	signed_as = thumb_signed(data, size, THUMB_GIF87_SIGNATURE, sizeof(THUMB_GIF87_SIGNATURE) - 1U);
@@ -214,6 +229,7 @@ fm_thumb_tick(
 	struct fm_app *app)
 {
 	struct fm_thumb *thumb;
+	int cached;
 	int error;
 
 	/* Nothing is asked for. */
@@ -235,13 +251,23 @@ fm_thumb_tick(
 	thumb->used = app->thumb_clock;
 	thumb->failed = 0;
 
-	/* The thumbnail itself. */
-	error = fm_image_thumbnail(app->thumb_wanted, FM_THUMB_SIDE, &thumb->image);
+	/* The thumbnail kept on disk for the file as it is now, else made and then kept (ws127-p002). */
+	cached = 0;
+	error = fm_thumb_cache_read(app->thumb_wanted, &thumb->image);
+	if (error == 0) {
+		cached = 1;
+	} else {
+		error = fm_image_thumbnail(app->thumb_wanted, FM_THUMB_SIDE, &thumb->image);
+		if (error == 0)
+			(void)fm_thumb_cache_write(app->thumb_wanted, &thumb->image);
+	}
+
+	/* A file that gave no thumbnail is not tried again until it changes. */
 	if (error != 0)
 		thumb->failed = 1;
 
 	/* The log line the tests wait for, and nothing asked for any more. */
-	fm_log("THUMB path=%s error=%d width=%d height=%d", app->thumb_wanted, error, thumb->image.width, thumb->image.height);
+	fm_log("THUMB path=%s error=%d width=%d height=%d cached=%d", app->thumb_wanted, error, thumb->image.width, thumb->image.height, cached);
 	app->thumb_wanted[0] = '\0';
 
 	/* Succeeded: a new frame shows it. */
@@ -640,9 +666,13 @@ thumb_signed(
 	if (size <= length)
 		return 0;
 
-	/* The first bytes. */
+	/* The first bytes must be the signature. */
 	differs = memcmp(data, signature, length);
-	return differs == 0;
+	if (differs != 0)
+		return 0;
+
+	/* Succeeded: the file starts with the signature. */
+	return 1;
 }
 
 /*
@@ -678,16 +708,6 @@ thumb_jpeg(
 	return 0;
 }
 
-/*
- * The GIF being read from memory: its bytes and how far they were read
- * (thumb_gif_read).
- */
-struct thumb_gif_source {
-	const unsigned char *data;
-	size_t size;
-	size_t at;
-};
-
 /* Decodes a GIF's first frame; returns 0, EINVAL (damaged), EFBIG or ENOMEM. */
 static int
 thumb_gif(
@@ -719,11 +739,15 @@ thumb_gif(
 
 	/* The first frame on its clear screen, within the sizes the thumbnails take. */
 	error = keiland_picture_gif_first(gif, THUMB_SIDE_MAX, THUMB_PIXELS_MAX, &picture);
-	(void)DGifCloseFile(gif, &status);
-	if (error == E2BIG)
-		return EFBIG;
-	if (error != 0)
+	if (error != 0) {
+		(void)DGifCloseFile(gif, &status);
+		if (error == E2BIG)
+			return EFBIG;
 		return error;
+	}
+
+	/* The records are not needed any more. */
+	(void)DGifCloseFile(gif, &status);
 
 	/* Succeeded: the picture is the image's. */
 	thumb_adopt(&picture, image);
@@ -760,9 +784,13 @@ thumb_adopt(
 	struct keiland_picture *picture,
 	struct fm_image *image)
 {
+	/* The image takes the pixels; the picture no longer owns them. */
 	image->pixels = picture->pixels;
 	image->width = picture->width;
 	image->height = picture->height;
 	image->stride = (size_t)picture->width;
 	picture->pixels = NULL;
+
+	/* Succeeded: the image holds the picture. */
+	return;
 }

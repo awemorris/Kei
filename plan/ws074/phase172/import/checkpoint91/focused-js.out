@@ -1,0 +1,5 @@
+from-string a:b
+map-string a!,b!
+find-string b
+filter-reentrant 1 kept
+from-mapper a,

@@ -97,13 +97,26 @@ main(
 
 	/* Actual ToUint32 invokes this production native function through valueOf. */
 	status = js_builtin_method(realm, realm->global, "collectSplit", 0, split_collect);
-	if (status == 0)
-		status = split_cases(realm, window, __builtin_frame_address(0));
+	if (status != 0) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Invoke real native methods only after callback installation succeeded. */
+	status = split_cases(realm, window, __builtin_frame_address(0));
+	if (status != 0) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Destroy the completed embedding after every native invocation was checked. */
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Independent lifetime observations determine this fixture's acceptance. */
 	printed = printf("range insertion lifetime checks: %u/%u passed\n", checks - failures, checks);
@@ -182,9 +195,13 @@ split_script(
 
 	/* The real engine supplies native platform objects and relevant prototypes. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Release source storage after checking interpreter completion. */
+	wb_units_release(&units);
 
 	/* Succeeded: the genuine completion is available. */
 	return 0;
@@ -229,7 +246,11 @@ split_collect(
 	/* A real VM exception is preserved by the public unsigned conversion. */
 	if (active_observer->failure == 2U) {
 		status = vm_throw_type_error(realm, "split conversion failure");
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested genuine VM exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* Succeeded: the native helper must use this post-conversion offset and updated data. */
@@ -280,7 +301,11 @@ split_host(
 	/* VM host exceptions retain their exact status and already committed native mutation. */
 	if (active_observer->failure == 2U) {
 		status = vm_throw_type_error(realm, "split host failure");
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested genuine VM exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* Succeeded: ordinary insertion continues with all current participants still alive. */
@@ -308,6 +333,8 @@ split_cases(
 	int status;
 	int invocation;
 	int expected;
+	int is_object;
+	int is_cell;
 
 	/* Empty post-call slots retain no input during direct native execution. */
 	post_roots[0] = NULL;
@@ -337,6 +364,12 @@ split_cases(
 				if (status != 0)
 					break;
 				node = bind_node_of(receiver);
+				if (node == NULL || node->type != DOM_TEXT) {
+					status = EIO;
+					break;
+				}
+
+				/* Save nonretaining observations of the checked native input. */
 				observer.original = (uintptr_t)node;
 				observer.creator = (uintptr_t)node->document;
 				status = split_script(realm, "({valueOf:collectSplit})", &argument);
@@ -352,12 +385,32 @@ split_cases(
 						      &receiver);
 				if (status != 0)
 					break;
+				is_object = vm_value_is_object(receiver);
+				if (!is_object) {
+					status = EIO;
+					break;
+				}
+
+				/* Inspect only the generated platform wrapper's actual private state. */
 				wrapper = (struct vm_object *)vm_value_as_cell(receiver);
+				is_cell = vm_value_is_cell(wrapper->internal);
+				if (wrapper->kind != VM_KIND_PLATFORM || !is_cell) {
+					status = EIO;
+					break;
+				}
+
+				/* Record the checked state before reading its genuine native endpoint. */
 				observer.state = (uintptr_t)vm_value_as_cell(wrapper->internal);
 				status = bind_abstract_range_interface.attributes[0].getter(realm, receiver, NULL, 0, &answer);
 				if (status != 0)
 					break;
 				node = bind_node_of(answer);
+				if (node == NULL || node->type != DOM_TEXT) {
+					status = EIO;
+					break;
+				}
+
+				/* Save nonretaining observations of the checked native input. */
 				observer.original = (uintptr_t)node;
 				observer.creator = (uintptr_t)node->document;
 				observer.parent = (uintptr_t)node->parent;
@@ -368,25 +421,43 @@ split_cases(
 				if (status != 0)
 					break;
 				node = bind_node_of(argument);
+				if (node == NULL || node->type != DOM_DOCUMENT_FRAGMENT) {
+					status = EIO;
+					break;
+				}
+
+				/* Save nonretaining observations of the checked native input. */
 				observer.incoming = (uintptr_t)node;
 				observer.foreign_creator = (uintptr_t)node->document;
 			}
 
-			/* Direct registration-table invocation supplies no outer VM receiver or Node argument frame. */
-			active_observer = &observer;
-			if (mode == 0) {
-				invocation = bind_text_interface.operations[0].method(realm, receiver, &argument, 1, &answer);
-			} else {
-				invocation = bind_range_interface.operations[13].method(realm, receiver, &argument, 1, &answer);
-			}
-
-			/* Callee completion ends synchronous callback observation before independent inspection. */
-			active_observer = NULL;
+			/* Compute each expected ordinary or throwing outcome before the native call. */
 			expected = 0;
 			if (kind == 1U)
 				expected = EIO;
 			if (kind == 2U)
 				expected = VM_THROWN;
+
+			/* Direct registration-table invocation supplies no outer VM receiver or Node argument frame. */
+			active_observer = &observer;
+			if (mode == 0) {
+				invocation = bind_text_interface.operations[0].method(realm, receiver, &argument, 1, &answer);
+				if (invocation != expected) {
+					active_observer = NULL;
+					status = EIO;
+					break;
+				}
+			} else {
+				invocation = bind_range_interface.operations[13].method(realm, receiver, &argument, 1, &answer);
+				if (invocation != expected) {
+					active_observer = NULL;
+					status = EIO;
+					break;
+				}
+			}
+
+			/* Callee completion ends synchronous callback observation before independent inspection. */
+			active_observer = NULL;
 			split_check(invocation == expected, "exact direct native success or callback error status");
 			expected_calls = 1;
 			if (mode == 1U && kind == 0U)
@@ -396,16 +467,41 @@ split_cases(
 			/* Post-call inspection acquires its own roots only after callee root cleanup has finished. */
 			if (mode == 0) {
 				if (kind == 0U) {
+					is_object = vm_value_is_object(answer);
+					if (!is_object) {
+						status = EIO;
+						break;
+					}
+
+					/* Root the verified suffix result only after direct native return. */
 					post_roots[0] = vm_value_as_cell(answer);
 					node = bind_node_of(answer);
+					if (node == NULL || node->type != DOM_TEXT) {
+						status = EIO;
+						break;
+					}
+
+					/* Read only checked native CharacterData from the suffix result. */
 					data = (struct dom_character_data *)node;
 					split_check(data->data.length == 5U && data->data.data[4] == 'G', "suffix copies actual post-conversion data");
 					observer.reference = (uintptr_t)node;
 				}
 			} else {
 				/* Even a rejected host callback leaves a completely committed and inspectable native split. */
-				post_roots[0] = (struct vm_cell *)observer.state;
-				post_roots[1] = (struct vm_cell *)observer.incoming;
+				post_roots[0] = vm_heap_find_cell(realm->heap, observer.state);
+				if (post_roots[0] == NULL) {
+					status = EIO;
+					break;
+				}
+
+				/* The incoming Fragment must remain real before its inspection root is published. */
+				post_roots[1] = vm_heap_find_cell(realm->heap, observer.incoming);
+				if (post_roots[1] == NULL) {
+					status = EIO;
+					break;
+				}
+
+				/* Allocate inspection storage only after both actual participants are rooted. */
 				wrapper = vm_object_create(realm->heap, window->prototypes[BIND_RANGE]);
 				if (wrapper == NULL) {
 					status = ENOMEM;

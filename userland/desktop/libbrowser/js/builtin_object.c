@@ -84,6 +84,9 @@ static int object_set_prototype(struct vm_object *object, struct vm_object *prot
 static int object_accessor_half(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, int setter, vm_value *result);
 static int object_lookup_half(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, int setter, vm_value *result);
 static const char *object_tag(vm_value value, const struct vm_object *object);
+static void object_trace_values(struct vm_heap *heap, void *context);
+static void object_trace_descriptor(struct vm_heap *heap, void *context);
+static void object_trace_descriptors(struct vm_heap *heap, void *context);
 
 /*
  * The functions of the Object constructor.
@@ -174,6 +177,67 @@ js_builtin_install_object(
 	return 0;
 }
 
+/* Keeps cells copied into a native value vector alive during reentrant getters. */
+static void
+object_trace_values(
+	struct vm_heap *heap,
+	void *context)
+{
+	struct wb_vector *values;
+	vm_value value;
+	size_t index;
+	int is_cell;
+
+	/* Native vector storage is outside the VM stack and collector heap. */
+	values = context;
+	for (index = 0; index < values->count; index++) {
+		value = *(vm_value *)wb_vector_at(values, index);
+		is_cell = vm_value_is_cell(value);
+		if (is_cell)
+			vm_heap_mark(heap, vm_value_as_cell(value));
+	}
+}
+
+/* Keeps all cell-valued fields of one temporary descriptor alive. */
+static void
+object_trace_descriptor(
+	struct vm_heap *heap,
+	void *context)
+{
+	struct vm_descriptor *descriptor;
+	int is_cell;
+
+	/* A getter can collect after an earlier descriptor field was read. */
+	descriptor = context;
+	is_cell = vm_value_is_cell(descriptor->value);
+	if (is_cell)
+		vm_heap_mark(heap, vm_value_as_cell(descriptor->value));
+	is_cell = vm_value_is_cell(descriptor->getter);
+	if (is_cell)
+		vm_heap_mark(heap, vm_value_as_cell(descriptor->getter));
+	is_cell = vm_value_is_cell(descriptor->setter);
+	if (is_cell)
+		vm_heap_mark(heap, vm_value_as_cell(descriptor->setter));
+}
+
+/* Keeps descriptors saved before defineProperties commits them alive. */
+static void
+object_trace_descriptors(
+	struct vm_heap *heap,
+	void *context)
+{
+	struct wb_vector *descriptors;
+	struct vm_descriptor *descriptor;
+	size_t index;
+
+	/* Each vector entry has the same cell-valued fields as a local descriptor. */
+	descriptors = context;
+	for (index = 0; index < descriptors->count; index++) {
+		descriptor = wb_vector_at(descriptors, index);
+		object_trace_descriptor(heap, descriptor);
+	}
+}
+
 /* Object(value) called: a new object for undefined and null, the value as an object otherwise. */
 static int
 object_call(
@@ -257,13 +321,17 @@ object_assign(
 {
 	struct wb_vector keys;
 	struct vm_descriptor descriptor;
+	struct vm_cell *roots[3];
 	vm_value target;
 	vm_value source;
 	vm_value key;
 	vm_value value;
 	unsigned index;
+	unsigned registered;
 	size_t item;
 	int found;
+	int traced;
+	int is_cell;
 	int status;
 
 	UNUSED_PARAMETER(this_value);
@@ -272,14 +340,30 @@ object_assign(
 	status = vm_to_object(realm, js_argument(args, count, 0), &target);
 	if (status != 0)
 		return status;
+	roots[0] = vm_value_as_cell(target);
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	while (registered < 3U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto roots_cleanup;
+		registered++;
+	}
 
 	/* Each source that is not undefined or null. */
 	wb_vector_init(&keys, sizeof(vm_value));
+	traced = 0;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &keys);
+	if (status != 0)
+		goto cleanup;
+	traced = 1;
 	for (index = 1; index < count; index++) {
 		if (args[index] == VM_VALUE_UNDEFINED || args[index] == VM_VALUE_NULL)
 			continue;
 		status = vm_to_object(realm, args[index], &source);
 		if (status == 0) {
+			roots[1] = vm_value_as_cell(source);
 			wb_vector_clear(&keys);
 			status = object_own_keys(realm, (struct vm_object *)vm_value_as_cell(source), 1, &keys);
 		}
@@ -297,19 +381,37 @@ object_assign(
 			if (!found || (descriptor.attributes & VM_PROPERTY_ENUMERABLE) == 0U)
 				continue;
 			status = vm_get(realm, source, key, &value);
-			if (status == 0)
+			if (status == 0) {
+				roots[2] = NULL;
+				is_cell = vm_value_is_cell(value);
+				if (is_cell)
+					roots[2] = vm_value_as_cell(value);
 				status = vm_set(realm, target, key, value, 1);
+			}
 		}
 
 		/* A failure leaves the rest. */
 		if (status != 0) {
-			wb_vector_release(&keys);
-			return status;
+			goto cleanup;
 		}
 	}
 
-	/* The list is no longer needed. */
+cleanup:
+	/* Releases copied keys before converted sources and target leave scope. */
+	if (traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &keys);
 	wb_vector_release(&keys);
+
+roots_cleanup:
+	/* Every registered input root is removed after the final property write. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed read or write does not publish a target result. */
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the target. */
 	*result = target;
@@ -327,6 +429,7 @@ object_create(
 {
 	struct vm_object *made;
 	struct vm_object *prototype;
+	struct vm_cell *made_root;
 	vm_value proto;
 	vm_value properties;
 	vm_value define_args[2];
@@ -361,7 +464,12 @@ object_create(
 		return 0;
 	define_args[0] = *result;
 	define_args[1] = args[1];
+	made_root = &made->cell;
+	status = vm_heap_add_root(realm->heap, &made_root);
+	if (status != 0)
+		return status;
 	status = object_define_properties(realm, VM_VALUE_UNDEFINED, define_args, 2, &ignored);
+	vm_heap_remove_root(realm->heap, &made_root);
 	if (status != 0)
 		return status;
 
@@ -383,11 +491,14 @@ object_define_properties(
 	struct vm_descriptor descriptor;
 	struct vm_descriptor own;
 	struct vm_object *object;
+	struct vm_cell *properties_root;
 	vm_value properties;
 	vm_value key;
 	vm_value value;
 	size_t item;
 	int found;
+	int keys_traced;
+	int descriptors_traced;
 	int status;
 
 	UNUSED_PARAMETER(this_value);
@@ -399,10 +510,24 @@ object_define_properties(
 	status = vm_to_object(realm, js_argument(args, count, 1), &properties);
 	if (status != 0)
 		return status;
+	properties_root = vm_value_as_cell(properties);
+	status = vm_heap_add_root(realm->heap, &properties_root);
+	if (status != 0)
+		return status;
 
 	/* All the descriptors first (a bad one defines nothing), then each definition. */
 	wb_vector_init(&keys, sizeof(vm_value));
 	wb_vector_init(&descriptors, sizeof(struct vm_descriptor));
+	keys_traced = 0;
+	descriptors_traced = 0;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &keys);
+	if (status != 0)
+		goto cleanup;
+	keys_traced = 1;
+	status = vm_heap_add_tracer(realm->heap, object_trace_descriptors, &descriptors);
+	if (status != 0)
+		goto cleanup;
+	descriptors_traced = 1;
 	status = object_own_keys(realm, (struct vm_object *)vm_value_as_cell(properties), 1, &keys);
 	for (item = 0; status == 0 && item < keys.count; item++) {
 		key = *(vm_value *)wb_vector_at(&keys, item);
@@ -437,7 +562,13 @@ object_define_properties(
 		status = object_define_or_throw(realm, object, key, &descriptor);
 	}
 
-	/* The lists are no longer needed. */
+cleanup:
+	/* All native copies and converted property input leave the root set. */
+	if (descriptors_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_descriptors, &descriptors);
+	if (keys_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &keys);
+	vm_heap_remove_root(realm->heap, &properties_root);
 	wb_vector_release(&keys);
 	wb_vector_release(&descriptors);
 	if (status != 0)
@@ -459,7 +590,10 @@ object_define_property(
 {
 	struct vm_descriptor descriptor;
 	struct vm_object *object;
+	struct vm_cell *key_root;
 	vm_value key;
+	int is_cell;
+	int key_rooted;
 	int status;
 
 	UNUSED_PARAMETER(this_value);
@@ -471,12 +605,29 @@ object_define_property(
 	status = vm_to_key(realm, js_argument(args, count, 1), &key);
 	if (status != 0)
 		return status;
-	status = object_to_descriptor(realm, js_argument(args, count, 2), &descriptor);
+	key_root = NULL;
+	is_cell = vm_value_is_cell(key);
+	if (is_cell)
+		key_root = vm_value_as_cell(key);
+	status = vm_heap_add_root(realm->heap, &key_root);
 	if (status != 0)
 		return status;
+	key_rooted = 1;
+	status = object_to_descriptor(realm, js_argument(args, count, 2), &descriptor);
+	if (status != 0)
+		goto cleanup;
 
 	/* The definition, which must be allowed. */
+	status = vm_heap_add_tracer(realm->heap, object_trace_descriptor, &descriptor);
+	if (status != 0)
+		goto cleanup;
 	status = object_define_or_throw(realm, object, key, &descriptor);
+	vm_heap_remove_tracer(realm->heap, object_trace_descriptor, &descriptor);
+
+cleanup:
+	/* The converted key and descriptor no longer cross a user callback. */
+	if (key_rooted)
+		vm_heap_remove_root(realm->heap, &key_root);
 	if (status != 0)
 		return status;
 
@@ -548,6 +699,7 @@ object_get_own_property_descriptor(
 	vm_value *result)
 {
 	struct vm_descriptor descriptor;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value key;
 	int found;
@@ -559,7 +711,12 @@ object_get_own_property_descriptor(
 	status = vm_to_object(realm, js_argument(args, count, 0), &object);
 	if (status != 0)
 		return status;
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	status = vm_to_key(realm, js_argument(args, count, 1), &key);
+	vm_heap_remove_root(realm->heap, &object_root);
 	if (status != 0)
 		return status;
 
@@ -592,11 +749,14 @@ object_get_own_property_descriptors(
 	struct wb_vector keys;
 	struct vm_descriptor descriptor;
 	struct vm_object *made;
+	struct vm_cell *roots[3];
 	vm_value object;
 	vm_value key;
 	vm_value value;
 	size_t item;
+	unsigned registered;
 	int found;
+	int traced;
 	int status;
 
 	UNUSED_PARAMETER(this_value);
@@ -605,12 +765,34 @@ object_get_own_property_descriptors(
 	status = vm_to_object(realm, js_argument(args, count, 0), &object);
 	if (status != 0)
 		return status;
+	roots[0] = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &roots[0]);
+	if (status != 0)
+		return status;
 	made = vm_object_create(realm->heap, realm->object_prototype);
-	if (made == NULL)
+	if (made == NULL) {
+		vm_heap_remove_root(realm->heap, &roots[0]);
 		return ENOMEM;
+	}
+
+	/* The new descriptor map stays live until every property is published. */
+	roots[1] = &made->cell;
+	roots[2] = NULL;
+	registered = 1;
+	while (registered < 3U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto roots_cleanup;
+		registered++;
+	}
 
 	/* Each own property's descriptor. */
 	wb_vector_init(&keys, sizeof(vm_value));
+	traced = 0;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &keys);
+	if (status != 0)
+		goto cleanup;
+	traced = 1;
 	status = object_own_keys(realm, (struct vm_object *)vm_value_as_cell(object), 1, &keys);
 	for (item = 0; status == 0 && item < keys.count; item++) {
 		key = *(vm_value *)wb_vector_at(&keys, item);
@@ -624,12 +806,26 @@ object_get_own_property_descriptors(
 		if (!found)
 			continue;
 		status = object_from_descriptor(realm, &descriptor, &value);
-		if (status == 0)
+		if (status == 0) {
+			roots[2] = vm_value_as_cell(value);
 			status = vm_object_define(realm->heap, made, key, value, VM_PROPERTY_DEFAULT);
+		}
 	}
 
-	/* The list is no longer needed. */
+cleanup:
+	/* The native key list stops tracing after the definitions finish. */
+	if (traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &keys);
 	wb_vector_release(&keys);
+
+roots_cleanup:
+	/* The converted source and unpublished result no longer need roots. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed descriptor conversion leaves no published map. */
 	if (status != 0)
 		return status;
 
@@ -649,9 +845,12 @@ object_get_own_property_names(
 {
 	struct wb_vector keys;
 	struct wb_vector names;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value name;
 	size_t item;
+	int keys_traced;
+	int names_traced;
 	int status;
 
 	UNUSED_PARAMETER(this_value);
@@ -660,8 +859,22 @@ object_get_own_property_names(
 	status = vm_to_object(realm, js_argument(args, count, 0), &object);
 	if (status != 0)
 		return status;
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	wb_vector_init(&keys, sizeof(vm_value));
 	wb_vector_init(&names, sizeof(vm_value));
+	keys_traced = 0;
+	names_traced = 0;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &keys);
+	if (status != 0)
+		goto cleanup;
+	keys_traced = 1;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &names);
+	if (status != 0)
+		goto cleanup;
+	names_traced = 1;
 	status = object_own_keys(realm, (struct vm_object *)vm_value_as_cell(object), 0, &keys);
 
 	/* Each as a string, in an array. */
@@ -674,6 +887,14 @@ object_get_own_property_names(
 	/* The array. */
 	if (status == 0)
 		status = js_builtin_array(realm, names.items, (uint32_t)names.count, result);
+
+cleanup:
+	/* Converted source and native key/name vectors are no longer needed. */
+	if (names_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &names);
+	if (keys_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &keys);
+	vm_heap_remove_root(realm->heap, &object_root);
 	wb_vector_release(&keys);
 	wb_vector_release(&names);
 	if (status != 0)
@@ -694,9 +915,12 @@ object_get_own_property_symbols(
 {
 	struct wb_vector keys;
 	struct wb_vector symbols;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value key;
 	size_t item;
+	int keys_traced;
+	int symbols_traced;
 	int is_string;
 	int is_int32;
 	int status;
@@ -707,8 +931,22 @@ object_get_own_property_symbols(
 	status = vm_to_object(realm, js_argument(args, count, 0), &object);
 	if (status != 0)
 		return status;
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	wb_vector_init(&keys, sizeof(vm_value));
 	wb_vector_init(&symbols, sizeof(vm_value));
+	keys_traced = 0;
+	symbols_traced = 0;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &keys);
+	if (status != 0)
+		goto cleanup;
+	keys_traced = 1;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &symbols);
+	if (status != 0)
+		goto cleanup;
+	symbols_traced = 1;
 	status = object_own_keys(realm, (struct vm_object *)vm_value_as_cell(object), 1, &keys);
 
 	/* Only the symbols. */
@@ -724,6 +962,14 @@ object_get_own_property_symbols(
 	/* The array. */
 	if (status == 0)
 		status = js_builtin_array(realm, symbols.items, (uint32_t)symbols.count, result);
+
+cleanup:
+	/* The symbol and key copies leave the root set with the source. */
+	if (symbols_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &symbols);
+	if (keys_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &keys);
+	vm_heap_remove_root(realm->heap, &object_root);
 	wb_vector_release(&keys);
 	wb_vector_release(&symbols);
 	if (status != 0)
@@ -771,6 +1017,7 @@ object_has_own(
 	vm_value *result)
 {
 	struct vm_descriptor descriptor;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value key;
 	int found;
@@ -782,7 +1029,12 @@ object_has_own(
 	status = vm_to_object(realm, js_argument(args, count, 0), &object);
 	if (status != 0)
 		return status;
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	status = vm_to_key(realm, js_argument(args, count, 1), &key);
+	vm_heap_remove_root(realm->heap, &object_root);
 	if (status != 0)
 		return status;
 
@@ -1230,11 +1482,13 @@ object_to_string(
 {
 	struct vm_object *object;
 	struct vm_string *text_string;
+	struct vm_cell *roots[4];
 	vm_value value;
 	vm_value named;
 	vm_value prefix;
 	char text[64];
 	const char *tag;
+	unsigned registered;
 	int is_string;
 	int status;
 
@@ -1243,6 +1497,7 @@ object_to_string(
 
 	/* undefined and null have their own tags. */
 	object = NULL;
+	registered = 0;
 	if (this_value == VM_VALUE_UNDEFINED) {
 		tag = "Undefined";
 	} else if (this_value == VM_VALUE_NULL) {
@@ -1253,35 +1508,69 @@ object_to_string(
 			return status;
 		object = (struct vm_object *)vm_value_as_cell(value);
 		tag = object_tag(value, object);
+		roots[0] = &object->cell;
+		roots[1] = NULL;
+		roots[2] = NULL;
+		roots[3] = NULL;
+		registered = 0;
+		while (registered < 4U) {
+			status = vm_heap_add_root(realm->heap, &roots[registered]);
+			if (status != 0)
+				goto cleanup;
+			registered++;
+		}
 
 		/* A string Symbol.toStringTag names it instead (ws074-p087). */
 		status = vm_get(realm, value, vm_symbol_key(realm, VM_SYMBOL_TO_STRING_TAG), &named);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		is_string = vm_value_is_string(named);
 		if (is_string) {
+			roots[1] = vm_value_as_cell(named);
 			status = js_builtin_string(realm, "[object ", &prefix);
 			if (status != 0)
-				return status;
+				goto cleanup;
+			roots[2] = vm_value_as_cell(prefix);
 			text_string = vm_string_concat(realm->heap, (struct vm_string *)vm_value_as_cell(prefix), (struct vm_string *)vm_value_as_cell(named));
-			if (text_string == NULL)
-				return ENOMEM;
+			if (text_string == NULL) {
+				status = ENOMEM;
+				goto cleanup;
+			}
+
+			/* The first concatenation must survive suffix allocation. */
+			roots[3] = &text_string->cell;
 			status = js_builtin_string(realm, "]", &prefix);
 			if (status != 0)
-				return status;
+				goto cleanup;
+			roots[2] = vm_value_as_cell(prefix);
 			text_string = vm_string_concat(realm->heap, text_string, (struct vm_string *)vm_value_as_cell(prefix));
-			if (text_string == NULL)
-				return ENOMEM;
+			if (text_string == NULL) {
+				status = ENOMEM;
+				goto cleanup;
+			}
+
+			/* The custom tag is the result after roots are released. */
 			*result = vm_value_cell(text_string);
-			return 0;
+			goto cleanup;
 		}
 	}
 
 	/* Succeeded: the text. */
 	snprintf(text, sizeof(text), "[object %s]", tag);
 	status = js_builtin_string(realm, text, result);
+
+cleanup:
+	/* Any wrapper and transient tag strings leave the root set. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Conversion or string allocation failure has no usable result. */
 	if (status != 0)
 		return status;
+
+	/* Succeeded: the object tag string is published. */
 	return 0;
 }
 
@@ -1494,8 +1783,10 @@ object_to_descriptor(
 	struct vm_descriptor *descriptor)
 {
 	struct vm_object *object;
+	struct vm_cell *value_root;
 	vm_value field;
 	int callable;
+	int is_cell;
 	int truth;
 	int status;
 
@@ -1504,9 +1795,23 @@ object_to_descriptor(
 	descriptor->value = VM_VALUE_UNDEFINED;
 	descriptor->getter = VM_VALUE_UNDEFINED;
 	descriptor->setter = VM_VALUE_UNDEFINED;
-	status = object_require(realm, value, "Property description must be an object", &object);
+	value_root = NULL;
+	is_cell = vm_value_is_cell(value);
+	if (is_cell)
+		value_root = vm_value_as_cell(value);
+	status = vm_heap_add_root(realm->heap, &value_root);
 	if (status != 0)
 		return status;
+	status = vm_heap_add_tracer(realm->heap, object_trace_descriptor, descriptor);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &value_root);
+		return status;
+	}
+
+	/* The descriptor source must remain valid across its getter sequence. */
+	status = object_require(realm, value, "Property description must be an object", &object);
+	if (status != 0)
+		goto cleanup;
 
 	/* enumerable, configurable, value, writable, get and set, in that order. */
 	field = VM_VALUE_FALSE;
@@ -1533,27 +1838,34 @@ object_to_descriptor(
 	if (status == 0)
 		status = object_descriptor_field(realm, value, "set", VM_HAS_SET, descriptor, &descriptor->setter);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* A getter and a setter must be functions or undefined. */
 	callable = vm_value_is_callable(descriptor->getter);
 	if ((descriptor->has & VM_HAS_GET) != 0U && !callable && descriptor->getter != VM_VALUE_UNDEFINED) {
 		status = vm_throw_type_error(realm, "Getter must be a function");
-		return status;
+		goto cleanup;
 	}
 
 	/* The same for the setter. */
 	callable = vm_value_is_callable(descriptor->setter);
 	if ((descriptor->has & VM_HAS_SET) != 0U && !callable && descriptor->setter != VM_VALUE_UNDEFINED) {
 		status = vm_throw_type_error(realm, "Setter must be a function");
-		return status;
+		goto cleanup;
 	}
 
 	/* A descriptor is an accessor or a data property, not both. */
 	if ((descriptor->has & (VM_HAS_GET | VM_HAS_SET)) != 0U && (descriptor->has & (VM_HAS_VALUE | VM_HAS_WRITABLE)) != 0U) {
 		status = vm_throw_type_error(realm, "Invalid property descriptor. Cannot both specify accessors and a value or writable attribute");
-		return status;
+		goto cleanup;
 	}
+
+cleanup:
+	/* The caller takes the completed descriptor after its getter sequence. */
+	vm_heap_remove_tracer(realm->heap, object_trace_descriptor, descriptor);
+	vm_heap_remove_root(realm->heap, &value_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: the descriptor. */
 	return 0;
@@ -1601,12 +1913,26 @@ object_from_descriptor(
 	vm_value *result)
 {
 	struct vm_object *made;
+	struct vm_cell *made_root;
 	int error;
 
 	/* The object. */
+	error = vm_heap_add_tracer(realm->heap, object_trace_descriptor, (void *)descriptor);
+	if (error != 0)
+		return error;
 	made = vm_object_create(realm->heap, realm->object_prototype);
-	if (made == NULL)
+	if (made == NULL) {
+		vm_heap_remove_tracer(realm->heap, object_trace_descriptor, (void *)descriptor);
 		return ENOMEM;
+	}
+
+	/* The result object stays live while its fields are installed. */
+	made_root = &made->cell;
+	error = vm_heap_add_root(realm->heap, &made_root);
+	if (error != 0) {
+		vm_heap_remove_tracer(realm->heap, object_trace_descriptor, (void *)descriptor);
+		return error;
+	}
 
 	/* value and writable, or get and set; then enumerable and configurable. */
 	error = 0;
@@ -1622,6 +1948,8 @@ object_from_descriptor(
 		error = js_builtin_value(realm, made, "enumerable", vm_value_boolean((descriptor->attributes & VM_PROPERTY_ENUMERABLE) != 0U), VM_PROPERTY_DEFAULT);
 	if (error == 0)
 		error = js_builtin_value(realm, made, "configurable", vm_value_boolean((descriptor->attributes & VM_PROPERTY_CONFIGURABLE) != 0U), VM_PROPERTY_DEFAULT);
+	vm_heap_remove_root(realm->heap, &made_root);
+	vm_heap_remove_tracer(realm->heap, object_trace_descriptor, (void *)descriptor);
 	if (error != 0)
 		return error;
 
@@ -1731,6 +2059,7 @@ object_list(
 	struct wb_vector keys;
 	struct wb_vector items;
 	struct vm_descriptor descriptor;
+	struct vm_cell *roots[3];
 	vm_value object;
 	vm_value key;
 	vm_value name;
@@ -1738,15 +2067,41 @@ object_list(
 	vm_value pair[2];
 	vm_value item;
 	size_t index;
+	unsigned registered;
 	int found;
+	int keys_traced;
+	int items_traced;
+	int is_cell;
 	int status;
 
 	/* The object and its own string keys. */
 	status = vm_to_object(realm, value, &object);
 	if (status != 0)
 		return status;
+	roots[0] = vm_value_as_cell(object);
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	while (registered < 3U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto roots_cleanup;
+		registered++;
+	}
+
+	/* Native vectors retain keys and entries across property getters. */
 	wb_vector_init(&keys, sizeof(vm_value));
 	wb_vector_init(&items, sizeof(vm_value));
+	keys_traced = 0;
+	items_traced = 0;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &keys);
+	if (status != 0)
+		goto cleanup;
+	keys_traced = 1;
+	status = vm_heap_add_tracer(realm->heap, object_trace_values, &items);
+	if (status != 0)
+		goto cleanup;
+	items_traced = 1;
 	status = object_own_keys(realm, (struct vm_object *)vm_value_as_cell(object), 0, &keys);
 
 	/* Each one still there and enumerable. */
@@ -1764,6 +2119,10 @@ object_list(
 		status = object_key_value(realm, key, &name);
 		if (status != 0)
 			break;
+		roots[1] = NULL;
+		is_cell = vm_value_is_cell(name);
+		if (is_cell)
+			roots[1] = vm_value_as_cell(name);
 
 		/* The key, the value, or both. */
 		item = name;
@@ -1771,6 +2130,10 @@ object_list(
 			status = vm_get(realm, object, key, &property);
 			if (status != 0)
 				break;
+			roots[2] = NULL;
+			is_cell = vm_value_is_cell(property);
+			if (is_cell)
+				roots[2] = vm_value_as_cell(property);
 			item = property;
 		}
 
@@ -1790,8 +2153,24 @@ object_list(
 	/* The array. */
 	if (status == 0)
 		status = js_builtin_array(realm, items.items, (uint32_t)items.count, result);
+
+cleanup:
+	/* Native key and item vectors stop tracing after result publication. */
+	if (items_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &items);
+	if (keys_traced)
+		vm_heap_remove_tracer(realm->heap, object_trace_values, &keys);
 	wb_vector_release(&keys);
 	wb_vector_release(&items);
+
+roots_cleanup:
+	/* Converted object and temporary values leave the root set. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Failed enumeration does not publish a partial array. */
 	if (status != 0)
 		return status;
 
@@ -1951,6 +2330,7 @@ object_accessor_half(
 	vm_value *result)
 {
 	struct vm_descriptor descriptor;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value function;
 	vm_value key;
@@ -1962,17 +2342,26 @@ object_accessor_half(
 	status = vm_to_object(realm, this_value, &object);
 	if (status != 0)
 		return status;
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	function = js_argument(args, count, 1);
 	callable = vm_value_is_callable(function);
 	if (!callable) {
 		status = vm_throw_type_error(realm, "Object.prototype.__defineGetter__: Expecting function");
+		vm_heap_remove_root(realm->heap, &object_root);
 		return status;
 	}
 
 	/* The half, enumerable and configurable. */
 	status = vm_to_key(realm, js_argument(args, count, 0), &key);
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &object_root);
 		return status;
+	}
+
+	/* The chosen accessor half leaves the other half unspecified. */
 	memset(&descriptor, 0, sizeof(descriptor));
 	descriptor.has = VM_HAS_ENUMERABLE | VM_HAS_CONFIGURABLE;
 	descriptor.attributes = VM_PROPERTY_ENUMERABLE | VM_PROPERTY_CONFIGURABLE;
@@ -1986,6 +2375,7 @@ object_accessor_half(
 
 	/* The definition. */
 	status = object_define_or_throw(realm, (struct vm_object *)vm_value_as_cell(object), key, &descriptor);
+	vm_heap_remove_root(realm->heap, &object_root);
 	if (status != 0)
 		return status;
 
@@ -2005,6 +2395,7 @@ object_lookup_half(
 {
 	struct vm_descriptor descriptor;
 	struct vm_object *walk;
+	struct vm_cell *object_root;
 	vm_value object;
 	vm_value key;
 	int found;
@@ -2015,7 +2406,12 @@ object_lookup_half(
 	status = vm_to_object(realm, this_value, &object);
 	if (status != 0)
 		return status;
+	object_root = vm_value_as_cell(object);
+	status = vm_heap_add_root(realm->heap, &object_root);
+	if (status != 0)
+		return status;
 	status = vm_to_key(realm, js_argument(args, count, 0), &key);
+	vm_heap_remove_root(realm->heap, &object_root);
 	if (status != 0)
 		return status;
 

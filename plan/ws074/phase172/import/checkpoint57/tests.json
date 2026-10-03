@@ -1,0 +1,89 @@
+[
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-form",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-form",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "host-form: 29 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-form-owner",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-form-owner",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "form owner checks: 56/56 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-form-collection",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-form-collection",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "form collection GC checks: 13/13 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-radio-state",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-radio-state",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "radio state checks: 12/12 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-option-state",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-option-state",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "option selectedness lifetime checks: 20/20 passed\n",
+    "stderr": ""
+  }
+]

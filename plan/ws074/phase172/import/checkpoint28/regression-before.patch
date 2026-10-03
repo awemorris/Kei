@@ -1,0 +1,23 @@
+diff --git a/plan/ws074/tests/host-color-media.c b/plan/ws074/tests/host-color-media.c
+index ae21a75be..c1389bff4 100644
+--- a/plan/ws074/tests/host-color-media.c
++++ b/plan/ws074/tests/host-color-media.c
+@@ -50,7 +50,17 @@ static const struct media_case media_cases[] = {
+ 	{ "only screen and (color)", 1 },
+ 	{ "(max-color: 0), (min-monochrome: 0)", 1 },
+ 	{ "(max-width: 0px) and (min-color: 8)", 1 },
+-	{ "(min-width: 1em) and (color)", 0 }
++	{ "(min-width: 1em) and (color)", 0 },
++	{ "(max-width: 0px extra)", 0 },
++	{ "(max-height: 0 extra)", 0 },
++	{ "(aspect-ratio: 0/1 extra)", 0 },
++	{ "(orientation: portrait extra)", 0 },
++	{ "(resolution: 1px)", 0 },
++	{ "(hover: hover extra)", 0 },
++	{ "(min-resolution: 1dppx)", 1 },
++	{ "(resolution: 96dpi)", 1 },
++	{ "(min-resolution: 37dpcm)", 1 },
++	{ "(resolution: 1x)", 1 }
+ };
+ 
+ static int media_run(const struct media_case *test, int *matches);

@@ -62,6 +62,7 @@ struct truetype_face;
 #define TE_KEY_D		32U
 #define TE_KEY_F		33U
 #define TE_KEY_G		34U
+#define TE_KEY_H		35U
 #define TE_KEY_Z		44U
 #define TE_KEY_X		45U
 #define TE_KEY_C		46U
@@ -155,6 +156,7 @@ enum te_action {
 	TE_ACTION_FIND,
 	TE_ACTION_FIND_NEXT,
 	TE_ACTION_FIND_PREVIOUS,
+	TE_ACTION_REPLACE,
 	TE_ACTION_LINE_NUMBERS,
 	TE_ACTION_WORD_WRAP,
 	TE_ACTION_BIGGER,
@@ -162,6 +164,13 @@ enum te_action {
 	TE_ACTION_ACTUAL_SIZE,
 	TE_ACTION_ABOUT
 };
+
+/*
+ * File > Open Recent (ws128-p003): the actions of its items, the first
+ * file's and the ones after it, and how many files it shows.
+ */
+#define TE_ACTION_RECENT_FIRST	100U
+#define TE_RECENT_MAX		10U
 
 /*
  * A frame being drawn: premultiplied 0xAARRGGBB words, stride words a row,
@@ -345,7 +354,8 @@ enum te_dialog {
 	TE_DIALOG_NONE = 0,
 	TE_DIALOG_UNSAVED,
 	TE_DIALOG_CHANGED,
-	TE_DIALOG_ABOUT
+	TE_DIALOG_ABOUT,
+	TE_DIALOG_REPLACE
 };
 
 /* What waits for the unsaved changes to be saved or dropped. */
@@ -353,7 +363,8 @@ enum te_after {
 	TE_AFTER_NOTHING = 0,
 	TE_AFTER_CLOSE,
 	TE_AFTER_NEW,
-	TE_AFTER_OPEN
+	TE_AFTER_OPEN,
+	TE_AFTER_OPEN_PATH
 };
 
 /*
@@ -454,6 +465,25 @@ struct te_app {
 	/* The find text, and whether the last search wrapped. */
 	char find[TE_FIND_MAX];
 	size_t find_length;
+
+	/*
+	 * Edit > Replace (ws128-p003, the dialog TE_DIALOG_REPLACE drawn by
+	 * main.c): the replacement last used, and whether the panel was just
+	 * opened (main.c then fills its fields and gives one the keyboard).
+	 */
+	char replace_with[TE_FIND_MAX];
+	int replace_fresh;
+
+	/*
+	 * File > Open Recent (ws128-p003): the files the editor used, newest
+	 * first (main.c reads them from libkeiland's recent list), whether each
+	 * is still there (one that is not is shown greyed), and the file chosen
+	 * that waits for unsaved changes to be dealt with (TE_AFTER_OPEN_PATH).
+	 */
+	char recent[TE_RECENT_MAX][TE_PATH_MAX];
+	int recent_present[TE_RECENT_MAX];
+	size_t recent_count;
+	char open_path[TE_PATH_MAX];
 
 	/* The message shown at the bottom, until when. */
 	char message[160];
@@ -587,6 +617,8 @@ void te_edit_line(const struct te_app *app, size_t position, size_t *start, size
 size_t te_edit_position_at(struct te_app *app, int x, int y);
 void te_edit_reveal(struct te_app *app);
 void te_edit_find(struct te_app *app, int forward, int from_selection);
+int te_edit_replace(struct te_app *app, const char *with, size_t with_length);
+size_t te_edit_replace_all(struct te_app *app, const char *with, size_t with_length);
 
 /* The editor (app.c). */
 void te_app_init(struct te_app *app, struct te_text *body, struct te_text *ui, int width, int height);
@@ -615,6 +647,8 @@ void te_app_publish_primary(struct te_app *app);
 void te_app_tap(struct te_app *app, int x, int y, int count);
 void te_app_dialog_choose(struct te_app *app, int button);
 void te_app_dialog_words(const struct te_app *app, char *title, size_t size, const char **words, const char *const **labels, int *count);
+void te_app_replace(struct te_app *app, const char *find, const char *with, int all);
+void te_app_replace_close(struct te_app *app);
 
 /* The frame (draw.c). */
 void te_draw(struct te_app *app, struct te_canvas *canvas);

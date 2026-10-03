@@ -132,6 +132,13 @@ memfd_create（任意、§3.2）・shm_open・mkostemp・posix_fallocate・memme
 | `wl_data_device_manager_get_version` | 関数 | DnD の版の判定 | 足す |
 | pkg-config の `wayland-client.pc`（Version 1.23.1）・`wayland-egl.pc` | metadata | `dependency('wayland-client', version: '>= 1.23.0')`、`dependency('wayland-egl')` | 足す。版は ABI の基準の 1.23.1 とする |
 
+- **p009 の結果（2026-10-03、q613）**: 上の表の不足は全部足した（`userland/desktop/libwayland` と `userland/desktop/keiland/wayland`。追加だけで、既存の member・値・signature は変えていない）。
+  - `wl_shm_format`・`wl_output_mode`・`wl_output_subpixel`・`wl_output_transform` は upstream 1.23.1 の `wayland.xml` から生成した enum で、前の macro と同じ値。
+  - `wl_surface` の表は v6 まで（offset・preferred_buffer_*）を記述する。ただし interface の version は 4 のまま（compositor が広告する wl_compositor v4 に合わせる）。
+  - `wayland-client.pc`（1.23.1）・`wayland-egl.pc`（18.1.0）は `make wayland-client` の stage にある。
+  - wayland-protocols 1.49 は `userland/packages/desktop/wayland-protocols`。
+  - 補足: compositor は `xdg_wm_base` v4 を広告する。v4 までの xdg の event（configure_bounds・repositioned）は libwayland の型付きの表が渡す。v5 以降の event（wm_capabilities）は compositor が v5 を広告したら、型付きの表か generic の経路に足す必要がある。
+
 - 足りている物: `wl_display_*`（connect・dispatch 系・prepare_read(_queue)・read_events・cancel_read・roundtrip・flush・get_fd・create_queue）、`wl_event_queue_destroy`、`wl_proxy_*`（marshal_flags・add_listener・destroy・get/set_user_data・get_version・get_class・set_queue・create_wrapper）、`wl_egl_window_*`、core の `wl_*_interface`。
 - GTK が使う protocol のうち zedBSD の表に無いもの（gtk-shell・viewporter・xdg-foreign・pointer-gestures・fractional-scale・presentation-time・xdg-activation・xdg-dialog・cursor-shape・single-pixel-buffer・color-management・linux-dmabuf など）の event は、`event.c` の `wlc_event_generic` が渡す。これは各引数を 1 word として最大 20 個を渡し、generated の listener を呼ぶもので、x86-64 SysV では整数と pointer の引数だけなので成り立つ。**p009 で、これらの listener への実際の配送（`new_id` の event で server が作る object を含む）を試験する。** compositor が advertise しない protocol は GTK が bind しないので、届く event の範囲は compositor が決める。
 
@@ -212,8 +219,8 @@ Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h
 | glib の fuzz の `fuzz_resolver` が record の parser（0003 で外した）を呼ぶ | 上の nameser の結果 | glib（fuzzing/meson.build） | glib の patch 0005（`arpa/nameser.h` が無ければその target だけ外す） |
 | harfbuzz（C++）が libc++ の header を要る | toolchain の package（devel/libcxx） | harfbuzz | upstream の既定（`with_libstdcxx=false`）で C の linker で link するので、実行時に libc++ は要らない（NEEDED と未定義の C++ の symbol が無いことを確かめた）。header は `ZEDBSD_EXT_harfbuzz_DEPENDS` の `libcxx` の stage から `-nostdinc++ -isystem <view>/usr/include/c++/v1`（lang/clang と同じ形）。subagent の worktree では main の stage の複写を使い、make に `-o <libcxx の stage>/.zedbsd-staged` を渡す（p006） |
 | fontconfig の `additional-fonts-dirs=yes` が build の機械の X11 の font の directory を調べる | cross の build の道具 | fontconfig | `no` にし、`default-fonts-dirs=/usr/share/fonts`（p006） |
-| `<alloca.h>` が無く、alloca の宣言がどこにも無い | libc の header | cairo（cairo-colr-glyph-render.c） | cairo の patch 0001（header が無ければ `__builtin_alloca`）。libc に `alloca.h` を足すかは別の判断（記録だけ。p007） |
-| `getc_unlocked()` が無い（POSIX。flockfile・funlockfile はある） | libc | pango（pango-utils.c） | pango の patch 0001（meson の検査と getc への fallback）。libc に足すかは別の判断（記録だけ。p007） |
+| `<alloca.h>` が無く、alloca の宣言がどこにも無い | libc の header | cairo（cairo-colr-glyph-render.c） | cairo の patch 0001（header が無ければ `__builtin_alloca`、p007）。**main の libc に `alloca.h` が入ったので p002 で patch を外した**（cairo の meson が alloca.h を見つけて build が通る） |
+| `getc_unlocked()` が無い（POSIX。flockfile・funlockfile はある） | libc | pango（pango-utils.c） | pango の patch 0001 の前半（p007）。**main の libc に入ったので p002 で外し**、patch は clang の警告の部分だけになった（`0001-keep-unused-but-set-global-a-warning.patch`） |
 | LLVM 23 の clang が `-Wunused-but-set-variable` の群に `-Wunused-but-set-global` を含め、G_DEFINE_TYPE の parent_class を報告する | toolchain の版 | pango（`-Werror=unused-but-set-variable`）。glib・cairo などでは warning だけ | pango の patch 0001（その診断だけ `-Wno-error`）（p007） |
 | pixman が TLS を使い `__tls_get_addr` を呼ぶ | link の契約（glib と同じ） | pixman | `-Db_lundef=false` を package ごとに指定（glib と pixman の 2 つ。external.mk の共通化はしていない。p007） |
 | `<inttypes.h>` の `PRId64`・`PRIu64` が `"lld"`・`"llu"` で、`int64_t` は `long`（LP64） | libc の header | libtiff・libxkbcommon・glib（gtestutils）・expat の `-Wformat` の warning（実行時は同じ幅で害は無い） | 記録だけ。libc の inttypes.h を `"ld"`・`"lu"` に直す差分の候補（main の判断。p008） |
@@ -221,4 +228,12 @@ Q1 の判断（2026-10-02）: POSIX の名前空間にかかる変更（string.h
 | `<dlfcn.h>` に `RTLD_NOLOAD` が無い（拡張で、POSIX ではない） | libc・rtld | libepoxy | libepoxy の patch 0002（無ければ「読み込まれていない」と扱う）（p008） |
 | `CLOCK_PROCESS_CPUTIME_ID` が無い | libc（POSIX の CPU 時間の clock） | libxkbcommon の bench | patch 0003（cross build では試験・bench を作らない）。記録だけ（p008） |
 | EGL・GLES・GL の SONAME が版の無い `libEGL.so`・`libGLESv2.so`・`libGL.so`（/lib） | zedBSD の library の名前 | libepoxy（dlopen） | libepoxy の patch 0001（`__ZEDBSD__` で名前を足す）。guest で epoxy 経由の `eglQueryString` が通った（p008） |
+| `<fenv.h>` に `FE_UPWARD`・`FE_DOWNWARD`・`FE_TOWARDZERO` が無い（zedBSD の soft-float は最近接の丸めだけ） | libc（C99 の fenv.h） | GTK（gtkcssnumbervalue.c の CSS の round()） | `userland/packages/desktop/gtk4/patches/0001-round-without-fenv-rounding-modes.patch`（無ければ ceil・floor・trunc・nearbyint で同じ結果）。libc の取り込みの候補（ws034-p058、Q1）。libc に入ったらこの patch を外す（p002） |
+| `uint` の型が無い（BSD・glibc の `sys/types.h` にある） | libc の header | GTK（gdkwaylandcolor.c） | `gtk4/patches/0002-use-guint-for-the-bsd-uint-type.patch`（guint に）。libc の取り込みの候補（ws034-p058）。入ったら外す（p002） |
+| `sigjmp_buf` が `jmp_buf` と別の型 | libc の header（setjmp.h） | GTK（gdkpng.c が libpng の `jmp_buf` に `sigsetjmp` を使う。glibc では同じ型なので通る） | `gtk4/patches/0003-use-setjmp-with-libpng-jmpbuf-on-zedbsd.patch`（zedBSD では setjmp。libpng は longjmp で戻るので対になる）。libc の型を同じにするかは main の判断（p002） |
+| `<malloc.h>` が無い（標準外） | libc の header | GTK（roaring.h。自身の注釈で「要らないはず」） | `gtk4/patches/0004-leave-out-malloc-h-on-zedbsd.patch`（FreeBSD・OpenBSD と同じく読まない）。libc に足したら外せる（p002） |
+| D-Bus の session bus が無い | OS の方針（ユーザーの決定: portal・D-Bus は使わない） | GTK の a11y（起動のたびに `Unable to acquire session bus` の警告） | `gtk4/patches/0005-report-missing-session-bus-as-a11y-debug.patch`（`GTK_DEBUG=a11y` のときだけ出す。動作は同じ）（p002） |
+| `wayland-util.h` に upstream の iteration の macro（`wl_container_of`・`wl_list_for_each` 系・`wl_array_for_each`）と `<math.h>`・`<inttypes.h>` の include が無かった | zedBSD の libwayland の header | GTK（gdk/wayland の 3 file と wayland-cursor.c の ceil） | **header に追加済み**（q614、Q1 の許可。upstream と同じ意味で独自に書いた。全 client を作り直して回帰なし）（p002） |
+| wayland-protocols 1.49 の XML の `frozen` 属性を host の wayland-scanner 1.23.1 が知らない | build の道具の版 | GTK（color-management-v1 の生成） | GTK は `--strict` を使わないので警告（`XML failed validation`）だけで生成は通る。wayland-protocols の package の enum header だけは patch で 1.24 以上に限った（p009） |
+| ld.so の上限: object ごとの `DT_NEEDED` は `RTLD_NEEDED_MAX` 16、全 object は `RTLD_OBJECT_MAX` 32（`src/rtld/rtld.h`） | rtld | GTK（`libgtk-4.so.1` の NEEDED が 24、依存の木が 35 file ＋ libc・ld.so）。zedBSD 上で `gtk4-widget-factory` が `ld.so: too many dependencies` で止まる | **未対応**（p010、q615 のラップアップで中断）。Q1 は 16→64・32→128 を許可した（error は残す）。上げるときは `lookup_handle_graph`（rtld.c:5033、dlsym on handle）の `uint32_t visited` の bitmask を `RTLD_OBJECT_MAX` の bit 数の配列に広げる必要がある（index が 32 以上で shift が未定義になる）。動的に伸ばす設計は Future Work（WS066 の ld.so の最適化に関係づける。Python・Emacs の package でも依存が増える） |
 | `config.sub` と libtool が zedbsd を知らない | 外部の build 道具 | libffi（autotools だけ） | libffi の patch 0001（OpenSSH の先例と同じ形） |

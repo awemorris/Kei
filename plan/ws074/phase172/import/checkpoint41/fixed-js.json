@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "python3",
+    "plan/ws074/tests/run-js-tests.py",
+    "--program",
+    "build/browser3-p172/plain/browser"
+  ],
+  "exit": 0,
+  "stdout_file": "fixed-js.stdout",
+  "stderr_file": "fixed-js.stderr",
+  "expected": "unchanged checked-in *.expected; no reference generation"
+}

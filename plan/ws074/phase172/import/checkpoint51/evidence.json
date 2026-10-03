@@ -1,0 +1,39 @@
+{
+  "queue": "q597",
+  "checkpoint": 51,
+  "source": "userland/desktop/libbrowser/vm/spread.c",
+  "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a",
+  "baseline": "0c3fe9a65c537ca4816be576858a71c2d6a902b3",
+  "reviewed": 171,
+  "total": 209,
+  "remaining": 38,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 54,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0,
+    "source_sha256": "6590f625cd4106fba94962a7b2e310ce9e7b5eb819ad40ceb714130639ab3f5a"
+  },
+  "js_tests": "14/14",
+  "affected_host_tests": {
+    "host-vm-factory": "native VM factory GC: 56/56 passed",
+    "host-object": "host-object: 100 checks, 0 failed",
+    "host-heap": "host-heap: 31 checks, 0 failed",
+    "host-collection": "collection GC checks: 37/37 passed"
+  },
+  "actual_gc_probes": {
+    "probe-rest": "rest output live=1 actual_collections=1",
+    "probe-protocol": "protocol rest output live=1 actual_collections=3",
+    "probe-copy": "copy output live=1 value=42 actual_collections=1",
+    "probe-call-array": "call result=42 is_number=1 actual_collections=1",
+    "probe-array-spread": "array spread output live=1 value=42 actual_collections=1"
+  },
+  "limits": [
+    "Only spread.c is newly full-reviewed. Original whole p172 final gates and38 production files remain.",
+    "No target/boot or current Acid3 pixel comparison was run."
+  ]
+}

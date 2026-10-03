@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "plan/ws074/tests/run-js-tests.py",
+    "--program",
+    "build/browser3-p172/plain/browser"
+  ],
+  "exit": 0,
+  "stdout": "pass async\npass builtins\npass class\npass closures\npass collections\npass control\npass date\npass destructuring\npass iteration\npass lexical\npass objects\npass operators\npass regexp\npass strict\njs-tests 14/14\n"
+}

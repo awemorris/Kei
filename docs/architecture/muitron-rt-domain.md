@@ -5,8 +5,6 @@ claim is made
 
 Last reviewed: 2026-08-27
 
-Owner: [WS015](../../plan/ws015/ws.md)
-
 ## Purpose
 
 This note records the current design direction for combining a
@@ -144,7 +142,5 @@ note.
 
 ## References
 
-- [WS015 plan](../../plan/ws015/ws.md)
-- [WS015 architecture discussion Phase](../../plan/ws015/phase001/phase.md)
 - [TRON Forum specifications](https://www.tron.org/specifications/)
 - [μITRON 4.0 multicore processor extension guideline](https://www.tron.org/ja/wp-content/themes/dp-magjam/pdf/specifications/ja/WG024-W030-01.00.00.pdf)

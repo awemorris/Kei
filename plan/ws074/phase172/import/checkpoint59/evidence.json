@@ -1,0 +1,36 @@
+{
+  "queue": "q597",
+  "checkpoint": 59,
+  "source": "userland/desktop/libbrowser/bind/frame.c",
+  "source_sha256": "17c03f9d79409e8c0470db6c289a660f7a6d83b5616aa40ca004ba612ffea5bd",
+  "baseline": "9dc05d21216bbc246c76948df692f79406fef737",
+  "reviewed": 179,
+  "total": 209,
+  "remaining": 30,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "page_probes": {
+    "iframe-context-probe": 17,
+    "iframe-safety-probe": 14,
+    "frame-viewport-probe": 12
+  },
+  "tests": {
+    "host-frame-lifetime": "frame lifetime checks: 148/148 passed",
+    "host-frame-viewport": "native iframe viewport: 12/12 passed",
+    "host-realms": "realm checks: 30/30 passed",
+    "host-realm-retirement": "retired primary realm tracing: PASS",
+    "frame-load": "native child loading: 52/52 passed; error=0",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "limits": [
+    "Only frame.c is newly full-reviewed; original whole p172 gates and30 production files remain.",
+    "No target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

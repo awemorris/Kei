@@ -1,0 +1,36 @@
+{
+  "queue": "q598",
+  "checkpoint": 93,
+  "source": "userland/desktop/libbrowser/bind/range.c",
+  "source_sha256": "dfe248b3d93974206e2be3d97b5b0505fa7e716d52f48b83424e3cf507fc7e24",
+  "manual_status": "reviewed-full-file",
+  "reviewed": 207,
+  "total": 209,
+  "remaining": 2,
+  "source_changed": false,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "js": "14/14",
+    "dom": "23/23",
+    "range_native": "8 binaries, all exit0; 373 checks"
+  },
+  "review_areas": [
+    "full 3219-line source, declaration/function order and component boundary",
+    "native Range creator and current Document ownership, weak subscriptions, GC roots",
+    "boundary conversion/order, native point repair after insertion, removal, data edits and Text split",
+    "clone/delete/extract/surround/insertion preflight, frame storage and cleanup",
+    "full C standard checklist and style checker"
+  ],
+  "limits": [
+    "Allocation failures in every native mutation hook not injected",
+    "Two CSS source reviews and original whole p172 gates remain"
+  ]
+}

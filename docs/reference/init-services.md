@@ -290,5 +290,3 @@ and the shared
 [`client`](../../userland/base/service/zsv1-client.c), and
 [`server transport`](../../userland/base/service/zsv1-server.c).
 
-The executable evidence and current acceptance matrix are indexed by the
-[WS012 shared tests](../../plan/ws012/tests/README.md).

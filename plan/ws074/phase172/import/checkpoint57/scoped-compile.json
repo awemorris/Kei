@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "cc",
+    "-std=gnu11",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/browser3-p172/include",
+    "-I.",
+    "-c",
+    "userland/desktop/libbrowser/bind/html-input.c",
+    "-o",
+    "build/browser3-p172/plain/obj/libbrowser_bind_html_input.o"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

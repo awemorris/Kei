@@ -1,0 +1,48 @@
+[
+  {
+    "name": "object",
+    "argv": [
+      "build/browser3-p172/plain/host-object"
+    ],
+    "exit": 0,
+    "stdout": "host-object: collection freed 1305 cells, 541 live\nhost-object: 100 checks, 0 failed\n"
+  },
+  {
+    "name": "array-length",
+    "argv": [
+      "build/browser3-p172/plain/host-array-length"
+    ],
+    "exit": 0,
+    "stdout": "array length capacity checks: 4/4 passed\n"
+  },
+  {
+    "name": "vm-factory",
+    "argv": [
+      "build/browser3-p172/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "stdout": "native VM factory GC: 56/56 passed\n"
+  },
+  {
+    "name": "js-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-js-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass async\npass builtins\npass class\npass closures\npass collections\npass control\npass date\npass destructuring\npass iteration\npass lexical\npass objects\npass operators\npass regexp\npass strict\njs-tests 14/14\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  }
+]

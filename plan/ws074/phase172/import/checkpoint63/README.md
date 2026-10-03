@@ -1,0 +1,7 @@
+# q597 checkpoint63 / DOM DocumentType ownership closure
+
+Fully reviewed the current `dom/node.c` (1104 lines) after checking the previously uncovered DocumentType callers. `bind/implementation.c`, previously reviewed in checkpoint15, was revalidated after protecting the unpublished prototype snapshot and implementation brand, converted namespace and doctype strings, and detached Document/Element during allocation. In `html/modes.c`, the parser now retains name, public ID and system ID until insertion. That file remains pending its own full review. All209 current inventory hashes match source; reviewed182/209,27 production C/header pending. Original C string literals are unchanged in all three files (see source-preservation.json).
+
+The heap of each page is shared by its managed child realms; borrowed iframe factory coverage in the XML document probe passed. GCC14.2 scoped compiles and whole host build exit0/warning0. Style checker reports only26 permitted forward jumps to cleanup labels; `clang-format-19` v19.1.7 ran on copies. XML document probe62/62, native XML binding34/34, XML DOM54/54, cloning26/26, namespace25/25, properties65/65 and DOM23/23 pass. The wider html5lib tree corpus is absent locally; its runner returned0/0 and is not counted as evidence. No isolated forced-GC or overflow proof is claimed.
+
+Resume from [remaining27](remaining.json) and the original whole p172 gates. p100 remains blocked/unselected until whole p172 clearance and actual output. GitHub Issue/Project publication remains deferred.

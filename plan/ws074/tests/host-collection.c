@@ -13,16 +13,28 @@
 #include <stdio.h>
 #include <string.h>
 
+/* Ordinary inert allocation crosses the default collector threshold without tracing participants. */
+static const struct vm_cell_type collection_pressure_type = { "collection-wrapper-pressure", NULL, NULL };
+
 /* Assertions accumulate across callback-driven and embedding-driven collection. */
 static unsigned checks;
 /* Failed behavioral checks determine the final exit status. */
 static unsigned failures;
+/* Integer-only state observations live only during one direct native argument conversion. */
+static uintptr_t conversion_state;
+/* One bounded case selects numeric item, named lookup, controls lookup or radio assignment. */
+static unsigned conversion_mode;
+/* The default user conversion must run exactly once in each native invocation. */
+static unsigned conversion_calls;
 /* The embedding restores this construction stack boundary after explicit collection. */
 static const void *construction_stack;
 
 static void collection_check(int condition, const char *name);
 static int collection_script(struct vm_realm *realm, const char *source, vm_value *answer);
 static int collection_case(struct vm_heap *heap);
+static int collection_pressure_case(struct vm_heap *heap);
+static int collection_collect_index(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+static int collection_conversion_case(struct vm_heap *heap);
 
 /*
  * Verifies collection caches and collectible DOM cycles through ordinary bindings.
@@ -42,9 +54,27 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Exercise callee-only ownership during genuine argument conversion and collection. */
+	error = collection_conversion_case(heap);
+	if (error != 0) {
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Exercise allocation-triggered native construction without conservative C-stack retention. */
+	error = collection_pressure_case(heap);
+	if (error != 0) {
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Release the completed fixture's embedding before reporting its observations. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("collection GC checks: %u/%u passed\n", checks - failures, checks);
@@ -101,9 +131,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release borrowed source storage after checking interpreter completion. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -175,6 +209,20 @@ collection_case(
 	/* The C DOM boundary tests foreign attribute namespaces without requiring absent setAttributeNS. */
 	foreign_wrapper = answer;
 	node = bind_node_of(answer);
+	if (node == NULL || node->first_child == NULL) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Attribute namespace checks require an actual native Element member. */
+	if (node->first_child->type != DOM_ELEMENT) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Use only the checked foreign member for direct attribute operations. */
 	foreign = (struct dom_element *)node->first_child;
 	href_name = vm_atom_from_ascii(heap, "href");
 	if (href_name == NULL) {
@@ -400,5 +448,313 @@ collection_case(
 	vm_realm_destroy(realm);
 
 	/* Succeeded: cache identity and root lifetime used ordinary production GC. */
+	return 0;
+}
+
+/* Checks an unpublished native collection state when its wrapper allocation triggers real GC. */
+static int
+collection_pressure_case(
+	struct vm_heap *heap)
+{
+	struct vm_realm *realm;
+	struct dom_document *document;
+	struct bind_window *window;
+	struct bind_host host;
+	struct vm_object *wrapper;
+	struct vm_cell *pressure;
+	struct vm_cell *found;
+	struct vm_heap_stats before;
+	struct vm_heap_stats after;
+	vm_value receiver;
+	vm_value answer;
+	uintptr_t state_address;
+	int is_object;
+	int error;
+
+	/* Install an independent actual primary Document without any cached children wrapper. */
+	error = vm_realm_create(heap, &realm);
+	if (error != 0)
+		return error;
+	error = js_install_builtins(realm);
+	if (error != 0) {
+		vm_realm_destroy(realm);
+		return error;
+	}
+
+	/* The ordinary Window owns the native root throughout collection construction. */
+	document = dom_document_create(heap);
+	if (document == NULL) {
+		vm_realm_destroy(realm);
+		return ENOMEM;
+	}
+
+	/* No custom host callback retains the unpublished collection state. */
+	memset(&host, 0, sizeof(host));
+	error = bind_window_create(realm, document, &host, &window);
+	if (error != 0) {
+		vm_realm_destroy(realm);
+		return error;
+	}
+
+	/* The genuine Document wrapper supplies the direct registered native receiver. */
+	error = bind_wrap(window, &document->node, &receiver);
+	if (error != 0)
+		goto cleanup;
+
+	/* A fresh collection resets ordinary allocation accounting and excludes C temporaries. */
+	vm_heap_set_stack_base(heap, NULL);
+	vm_heap_collect(heap);
+	vm_heap_stats(heap, &before);
+	if (before.live_bytes >= 8U * 1024U * 1024U) {
+		error = EOVERFLOW;
+		goto cleanup;
+	}
+
+	/* The real32-byte native state crosses8MiB; the following wrapper allocation collects. */
+	pressure = vm_heap_alloc(heap, &collection_pressure_type, 8U * 1024U * 1024U - 16U);
+	if (pressure == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Actual default collection creation, without a caller VM frame or test-only GC switch. */
+	error = bind_children(realm, receiver, NULL, 0, &answer);
+	if (error != 0)
+		goto cleanup;
+	is_object = vm_value_is_object(answer);
+	if (!is_object) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* Integer-only observation cannot keep an unpublished state alive during its earlier allocation. */
+	wrapper = (struct vm_object *)vm_value_as_cell(answer);
+	state_address = (uintptr_t)vm_value_as_cell(wrapper->internal);
+	vm_heap_stats(heap, &after);
+	collection_check(after.collections > before.collections, "collection wrapper allocation triggers actual GC without stack roots");
+	found = vm_heap_find_cell(heap, state_address);
+	collection_check(found != NULL, "unpublished collection state survives wrapper allocation GC");
+	if (found == NULL) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* A normal inherited getter must consume this actual surviving private state. */
+	error = bind_html_collection_interface.attributes[0].getter(realm, answer, NULL, 0, &receiver);
+	if (error != 0)
+		goto cleanup;
+	collection_check(receiver == vm_value_number(0), "allocation GC collection length uses genuine complete state");
+	collection_check(document->node.children_collection == wrapper, "allocation GC preserves published SameObject wrapper identity");
+
+	/* All construction observations completed before independent embedding teardown. */
+	error = 0;
+
+cleanup:
+	/* Restore the construction convention before retiring the independent primary ownership. */
+	vm_heap_set_stack_base(heap, construction_stack);
+	bind_window_destroy(window);
+	vm_realm_destroy(realm);
+	if (error != 0)
+		return error;
+
+	/* Retiring the actual Window and realm leaves no constructor root into its former C stack. */
+	vm_heap_set_stack_base(heap, NULL);
+	vm_heap_collect(heap);
+	found = vm_heap_find_cell(heap, state_address);
+	collection_check(found == NULL, "native collection constructor roots are released after embedding retirement");
+	vm_heap_set_stack_base(heap, construction_stack);
+
+	/* Succeeded: actual allocation GC preserved the complete unpublished native state. */
+	return 0;
+}
+
+/* Collects inside actual user conversion without retaining the observed receiver or native state. */
+static int
+collection_collect_index(
+	struct vm_realm *realm,
+	vm_value receiver,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct vm_cell *found;
+	int error;
+
+	UNUSED_PARAMETER(receiver);
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+
+	/* Only the native collection callee can retain its state during this actual callback. */
+	conversion_calls++;
+	vm_heap_collect(realm->heap);
+	found = vm_heap_find_cell(realm->heap, conversion_state);
+	collection_check(found != NULL, "native collection state survives argument conversion GC without caller roots");
+	if (found == NULL)
+		return EIO;
+
+	/* Numeric item conversion observes zero while string operations receive an existing member name. */
+	if (conversion_mode == 0) {
+		*result = vm_value_number(0);
+	} else {
+		error = bind_string(realm, "held", result);
+		if (error != 0)
+			return error;
+	}
+
+	/* Succeeded: the ordinary conversion returns its completed primitive value. */
+	return 0;
+}
+
+/* Verifies direct native item, named, duplicate and radio conversions with actual collector pressure. */
+static int
+collection_conversion_case(
+	struct vm_heap *heap)
+{
+	struct vm_realm *realm;
+	struct dom_document *document;
+	struct bind_window *window;
+	struct bind_host host;
+	struct vm_object *wrapper;
+	struct vm_cell *found;
+	vm_value receiver;
+	vm_value argument;
+	vm_value answer;
+	int is_object;
+	int error;
+
+	/* An independent primary embedding cannot retain the otherwise detached XML collection graph. */
+	error = vm_realm_create(heap, &realm);
+	if (error != 0)
+		return error;
+	error = js_install_builtins(realm);
+	if (error != 0) {
+		vm_realm_destroy(realm);
+		return error;
+	}
+
+	/* The real default Window installs only the ordinary public native bindings. */
+	document = dom_document_create(heap);
+	if (document == NULL) {
+		vm_realm_destroy(realm);
+		return ENOMEM;
+	}
+
+	/* No host callback or extra native root owns any tested XML collection. */
+	memset(&host, 0, sizeof(host));
+	error = bind_window_create(realm, document, &host, &window);
+	if (error != 0) {
+		vm_realm_destroy(realm);
+		return error;
+	}
+
+	/* The actual interpreter invokes this ordinary native function through valueOf or toString. */
+	error = js_builtin_method(realm, realm->global, "collectCollection", 0, collection_collect_index);
+	if (error != 0)
+		goto cleanup;
+
+	/* Each invocation has fresh unglobally-owned participants and one real callback. */
+	for (conversion_mode = 0; conversion_mode < 4U; conversion_mode++) {
+		vm_heap_set_stack_base(heap, construction_stack);
+		conversion_calls = 0;
+		if (conversion_mode < 2U) {
+			/* A direct children wrapper is the only caller-visible edge to this XML owner. */
+			error = collection_script(realm,
+						  "(function(){var d=document.implementation.createDocument(null,'root',null);"
+						  "var x=d.createElement('x');x.setAttribute('id','held');d.documentElement.appendChild(x);"
+						  "return d.documentElement.children;})()",
+						  &receiver);
+			if (error != 0)
+				goto cleanup;
+		} else {
+			/* Controls and duplicate lists use actual HTML form/input ownership in an unbound XML graph. */
+			error = collection_script(realm,
+						  "(function(){var d=document.implementation.createDocument(null,'root',null),ns='http://www.w3.org/1999/xhtml';"
+						  "var f=d.createElementNS(ns,'form');d.documentElement.appendChild(f);"
+						  "for(var i=0;i<2;i++){var x=d.createElementNS(ns,'input');x.setAttribute('type','radio');"
+						  "x.setAttribute('name','held');x.setAttribute('value','held');f.appendChild(x);}"
+						  "return f.elements;})()",
+						  &receiver);
+			if (error != 0)
+				goto cleanup;
+
+			/* A genuine duplicate list comes from the actual native namedItem algorithm. */
+			if (conversion_mode == 3U) {
+				error = bind_string(realm, "held", &argument);
+				if (error != 0)
+					goto cleanup;
+				error = bind_html_form_controls_collection_interface.operations[0].method(realm, receiver, &argument, 1, &answer);
+				if (error != 0)
+					goto cleanup;
+				receiver = answer;
+			}
+		}
+
+		/* A primitive substitute or fabricated prototype never supplies an observed native state. */
+		is_object = vm_value_is_object(receiver);
+		if (!is_object) {
+			error = EIO;
+			goto cleanup;
+		}
+
+		/* The actual generated native state is observed only by integer address. */
+		wrapper = (struct vm_object *)vm_value_as_cell(receiver);
+		conversion_state = (uintptr_t)vm_value_as_cell(wrapper->internal);
+		error = collection_script(realm, "({valueOf:collectCollection,toString:collectCollection})", &argument);
+		if (error != 0)
+			goto cleanup;
+
+		/* Exclude conservative C temporaries before direct invocation, with no outer VM receiver frame. */
+		vm_heap_set_stack_base(heap, NULL);
+		if (conversion_mode == 0U) {
+			error = bind_html_collection_interface.operations[0].method(realm, receiver, &argument, 1, &answer);
+			if (error != 0)
+				goto cleanup;
+		} else if (conversion_mode == 1U) {
+			error = bind_html_collection_interface.operations[1].method(realm, receiver, &argument, 1, &answer);
+			if (error != 0)
+				goto cleanup;
+		} else if (conversion_mode == 2U) {
+			error = bind_html_form_controls_collection_interface.operations[0].method(realm, receiver, &argument, 1, &answer);
+			if (error != 0)
+				goto cleanup;
+		} else {
+			error = bind_radio_node_list_interface.attributes[0].setter(realm, receiver, &argument, 1, &answer);
+			if (error != 0)
+				goto cleanup;
+		}
+
+		/* Restore ordinary embedding construction only after the entire native call returns. */
+		vm_heap_set_stack_base(heap, construction_stack);
+		collection_check(conversion_calls == 1U, "native collection argument conversion executes exactly once");
+		if (conversion_mode == 3U) {
+			collection_check(answer == VM_VALUE_UNDEFINED, "native radio assignment completes after conversion collection");
+		} else {
+			is_object = vm_value_is_object(answer);
+			collection_check(is_object, "native collection lookup returns genuine member or duplicate after conversion GC");
+		}
+
+		/* Dropping all caller observations verifies the callee released its temporary native root. */
+		receiver = VM_VALUE_EMPTY;
+		argument = VM_VALUE_EMPTY;
+		answer = VM_VALUE_EMPTY;
+		vm_heap_set_stack_base(heap, NULL);
+		vm_heap_collect(heap);
+		found = vm_heap_find_cell(heap, conversion_state);
+		collection_check(found == NULL, "native collection temporary root is released after argument conversion");
+	}
+
+	/* All four native conversion families completed without a caller retention edge. */
+	error = 0;
+
+cleanup:
+	/* Synchronous observer addresses never outlive their invocation or own a VM cell. */
+	conversion_state = 0;
+	vm_heap_set_stack_base(heap, construction_stack);
+	bind_window_destroy(window);
+	vm_realm_destroy(realm);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: all current native lookup and assignment conversions preserve callee-owned state. */
 	return 0;
 }

@@ -293,6 +293,76 @@ test_update_order_and_redaction(void)
 		CHECK(((unsigned char *)&model)[length] == 0);
 }
 
+/* ws005-p020 q631: net wifi add, modify and delete on the model. */
+static void
+test_add_modify_delete(void)
+{
+	struct wifi_conf_model model;
+	char error[WIFI_CONF_DIAGNOSTIC_MAX];
+
+	wifi_conf_model_init(&model);
+
+	/* add: a new SSID is appended; the same SSID again is EEXIST and changes nothing. */
+	CHECK(wifi_conf_add(&model, "alpha", 5U, "alpha-pass", 10U, 1, error, sizeof(error)) == 0);
+	CHECK(wifi_conf_add(&model, "beta", 4U, "beta-pass-1", 11U, 0, error, sizeof(error)) == 0);
+	errno = 0;
+	CHECK(wifi_conf_add(&model, "alpha", 5U, "other-pass", 10U, 0, error, sizeof(error)) != 0);
+	CHECK(errno == EEXIST);
+	CHECK(strstr(error, "other-pass") == NULL);
+	CHECK(model.profile_count == 2U);
+	CHECK(model.profiles[0].passphrase_length == 10U);
+	CHECK(memcmp(model.profiles[0].passphrase, "alpha-pass", 10U) == 0);
+	CHECK(model.profiles[0].automatic == 1);
+	CHECK(model.passphrase_bytes == 21U);
+
+	/* add: a short key is refused as before. */
+	errno = 0;
+	CHECK(wifi_conf_add(&model, "gamma", 5U, "short", 5U, 1, error, sizeof(error)) != 0);
+	CHECK(errno == EINVAL);
+	CHECK(model.profile_count == 2U);
+
+	/* modify: only the mode; the key and the order stay. */
+	CHECK(wifi_conf_modify(&model, "alpha", 5U, NULL, 0U, 0, error, sizeof(error)) == 0);
+	CHECK(model.profiles[0].automatic == 0);
+	CHECK(memcmp(model.profiles[0].passphrase, "alpha-pass", 10U) == 0);
+	CHECK(model.passphrase_bytes == 21U);
+
+	/* modify: only the key; the mode stays. */
+	CHECK(wifi_conf_modify(&model, "beta", 4U, "beta-pass-two", 13U, -1, error, sizeof(error)) == 0);
+	CHECK(model.profiles[1].automatic == 0);
+	CHECK(model.profiles[1].passphrase_length == 13U);
+	CHECK(memcmp(model.profiles[1].passphrase, "beta-pass-two", 13U) == 0);
+	CHECK(model.passphrase_bytes == 23U);
+
+	/* modify: nothing to change, an unknown mode, and an SSID that is not saved. */
+	errno = 0;
+	CHECK(wifi_conf_modify(&model, "alpha", 5U, NULL, 0U, -1, error, sizeof(error)) != 0);
+	CHECK(errno == EINVAL);
+	errno = 0;
+	CHECK(wifi_conf_modify(&model, "alpha", 5U, NULL, 0U, 2, error, sizeof(error)) != 0);
+	CHECK(errno == EINVAL);
+	errno = 0;
+	CHECK(wifi_conf_modify(&model, "delta", 5U, "delta-pass", 10U, 1, error, sizeof(error)) != 0);
+	CHECK(errno == ENOENT);
+
+	/* delete: the later profile moves down, the key leaves the total; a second delete is ENOENT. */
+	CHECK(wifi_conf_delete(&model, "alpha", 5U, error, sizeof(error)) == 0);
+	CHECK(model.profile_count == 1U);
+	CHECK(model.profiles[0].ssid_length == 4U);
+	CHECK(memcmp(model.profiles[0].ssid, "beta", 4U) == 0);
+	CHECK(model.passphrase_bytes == 13U);
+	CHECK(!contains_bytes(&model.profiles[1], sizeof(model.profiles[1]), "alpha-pass", 10U));
+	errno = 0;
+	CHECK(wifi_conf_delete(&model, "alpha", 5U, error, sizeof(error)) != 0);
+	CHECK(errno == ENOENT);
+	errno = 0;
+	CHECK(wifi_conf_delete(&model, "", 0U, error, sizeof(error)) != 0);
+	CHECK(errno == EINVAL);
+	CHECK(wifi_conf_validate(&model, error, sizeof(error)) == 0);
+
+	wifi_conf_model_clear(&model);
+}
+
 int
 main(void)
 {
@@ -300,6 +370,7 @@ main(void)
 	test_strict_rejections();
 	test_bounds();
 	test_update_order_and_redaction();
+	test_add_modify_delete();
 	puts("wifi-conf model test: PASS");
 	return 0;
 }

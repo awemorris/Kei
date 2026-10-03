@@ -7,7 +7,7 @@ Parent: [WS005](../ws.md)
 | NET-T00 | Regression | WS002 `networkd` fd 3 readiness, synchronous `net`, `dhcpc`, and direct-ifconfig recovery remain passing |
 | NET-T10 | Physical wired/USB | Static and DHCP configuration, route/DNS output, transfer, restart, and degraded failure pass |
 | NET-T20 | Host ZNV2 protocol | Exact-length/split/limit/error framing passes at the 32-byte header and 4096/32768-byte request/response bounds for all wired and Wi-Fi operations; callers migrate together, the V1 parser/executor is deleted, and legacy magic can only receive a bounded unsupported-version error |
-| NET-T21 | wifi.conf profile | `set-key` selects `/etc/wifi.conf` or its euid account's passwd-home `.wifi.conf` without trusting `HOME`; omission means manual and an explicit `manual` operand is rejected; permission, parsing, escaping, atomic rewrite, corruption recovery, maxima, wiping, and secret-redaction cases pass; the q071 daemon reader independently derives the active owner's same fixed path from `SO_PEERCRED` rather than accepting a caller path |
+| NET-T21 | wifi.conf profile | `add`・`modify`・`delete`（旧 `set-key`、2026-10-03 置換） select `/etc/wifi.conf` or its euid account's passwd-home `.wifi.conf` without trusting `HOME`; omission means manual and an explicit `manual` operand is rejected; permission, parsing, escaping, atomic rewrite, corruption recovery, maxima, wiping, and secret-redaction cases pass; the q071 daemon reader independently derives the active owner's same fixed path from `SO_PEERCRED` rather than accepting a caller path |
 | NET-T22 | AF_UNIX admission/authentication | The p003 peer snapshot and lifecycle regressions pass; `root:network` GID 69 mode `0660`, readiness ordering, unauthorized/admitted peers, root/all versus nonroot/read-only-plus-WLAN authorization, fd passing, and peer close are covered |
 | NET-T23 | Primitive wifi child contract | `WIFI1` scan/status/list/connect/disconnect records, secret fd 4, 32768-byte/64-record stdout, 512-byte stderr, blocked output, 15/30-second stage deadline, cancel, crash, one-second termination grace, kill/reap, USB removal, malformed records, and no-secret-echo cases pass |
 | NET-T24 | Direct wifi command and bounded connect UX | Production-ioctl fixtures pass the original direct-root sequence plus prompt asynchronous scan/connect generations, one userspace-owned command-wide 30-second scan/select/connect retry deadline, ordered nonsecret progress, retryable/fatal classification, idempotent administrative up/down, global quiet output suppression, bounds, and secret erasure without DHCP, persistence, or hidden kernel reconnect |
@@ -37,7 +37,7 @@ It exercises the strict v1 model, canonical serialization, checked
 same-directory store operations, injected publication failures, lock timing,
 concurrency, and redaction in ordinary, ASan+UBSan, and compiler-analyzer
 builds.  Native root/non-root ownership and directory-durability acceptance
-uses the actual `/sbin/net wifi set-key` command through:
+uses the actual `/sbin/net wifi add` command (the former `set-key`) through:
 
 ```sh
 make -j16 toolchain

@@ -1,0 +1,14 @@
+In file included from userland/desktop/libbrowser/js/js.h:23,
+                 from userland/desktop/libbrowser/js/builtin.h:22,
+                 from /tmp/browser3-q596-function-probe.c:10:
+In function ‘vm_value_cell’,
+    inlined from ‘probe_case’ at /tmp/browser3-q596-function-probe.c:275:12,
+    inlined from ‘main’ at /tmp/browser3-q596-function-probe.c:41:11:
+userland/desktop/libbrowser/vm/vm.h:784:16: error: ‘function’ may be used uninitialized [-Werror=maybe-uninitialized]
+  784 |         return (vm_value)(uintptr_t)cell;
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/browser3-q596-function-probe.c: In function ‘main’:
+/tmp/browser3-q596-function-probe.c:109:29: note: ‘function’ was declared here
+  109 |         struct vm_function *function;
+      |                             ^~~~~~~~
+cc1: all warnings being treated as errors

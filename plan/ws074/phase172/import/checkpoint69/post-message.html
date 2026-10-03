@@ -1,0 +1,16 @@
+<!doctype html><script>
+var received = [];
+window.addEventListener('message', function (event) {
+  received.push(event.data.value);
+  console.log('received', event.data.value, event.origin);
+});
+var expected = location.origin;
+window.postMessage({value: 'star'}, '*');
+window.postMessage({value: 'slash'}, '/');
+window.postMessage({value: 'exact'}, expected);
+window.postMessage({value: 'options'}, {targetOrigin: '*'});
+window.postMessage({value: 'blocked'}, 'https://not-this-origin.example');
+setTimeout(function () {
+  console.log('count', received.length, received.join(','));
+}, 2);
+</script>

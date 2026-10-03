@@ -10,6 +10,7 @@ true true false true
 outer note true null
 EM 2 null
 SyntaxError 12,SyntaxError 12,SyntaxError 12,SyntaxError 12
+SyntaxError,SyntaxError,SyntaxError,SyntaxError,SyntaxError
 matches threw SyntaxError
 null 0
 4 5

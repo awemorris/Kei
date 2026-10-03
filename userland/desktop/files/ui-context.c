@@ -29,6 +29,7 @@
 #define CONTEXT_VIEW		102U
 #define CONTEXT_SORT		103U
 #define CONTEXT_ALWAYS_WITH	104U
+#define CONTEXT_MOVE_TO		105U
 
 /* The number of a row that carries out an action: the action's, moved past the others. */
 #define CONTEXT_ACTION_ID	1000U
@@ -43,6 +44,9 @@ static void context_add(struct fm_context *context, unsigned parent, unsigned ki
 static void context_submenu(struct fm_context *context, unsigned id, const char *label, int enabled);
 static void context_check(struct fm_context *context, unsigned parent, const char *label, unsigned action, int checked);
 static int context_folder(struct fm_app *app);
+static void context_move_to(struct fm_app *app, struct fm_context *context);
+static int context_destination(struct fm_app *app, int place);
+static void context_move(struct fm_app *app, int place);
 
 /*
  * Works out the context menu of the last right press (app->context_*),
@@ -111,6 +115,24 @@ fm_ui_context_action(
 	const struct fm_tab *tab;
 	struct fm_location location;
 	int item;
+
+	/* The selection moved to a place of the sidebar (Move To). */
+	if (action >= FM_ACTION_MOVE_TO_FIRST && action < FM_ACTION_MOVE_TO_FIRST + FM_PLACES) {
+		context_move(app, (int)(action - FM_ACTION_MOVE_TO_FIRST));
+		return 1;
+	}
+
+	/* A folder of the selection in a window of its own (another process, as New Window starts). */
+	if (action == FM_ACTION_OPEN_IN_NEW_WINDOW) {
+		item = fm_preview_item(app);
+		tab = fm_ui_tab(app);
+		if (item < 0 || tab->listing.entries[item].folder == 0)
+			return 1;
+		snprintf(app->new_window_folder, sizeof(app->new_window_folder), "%s", tab->listing.entries[item].path);
+		fm_log("CONTEXT new-window path=%s", app->new_window_folder);
+		app->request = FM_REQUEST_NEW_WINDOW;
+		return 1;
+	}
 
 	/* A folder of the selection in a new tab. */
 	if (action == FM_ACTION_OPEN_IN_NEW_TAB) {
@@ -205,6 +227,7 @@ context_items(
 	    folder != 0 &&
 	    app->desktop == 0) {
 		context_add(context, 0U, FM_ROW_ITEM, "Open in New Tab", FM_ACTION_OPEN_IN_NEW_TAB, state->tabs < FM_TABS);
+		context_add(context, 0U, FM_ROW_ITEM, "Open in New Window", FM_ACTION_OPEN_IN_NEW_WINDOW, 1);
 	}
 
 	/* The other ways to open, in a submenu. */
@@ -234,6 +257,7 @@ context_items(
 	context_add(context, 0U, FM_ROW_LINE, "", 0U, 1);
 	context_add(context, 0U, FM_ROW_ITEM, "Rename", FM_ACTION_RENAME, single);
 	context_add(context, 0U, FM_ROW_ITEM, "Duplicate", FM_ACTION_DUPLICATE, 1);
+	context_move_to(app, context);
 
 	/* The tags, each checked when every selected item has it. */
 	context_add(context, 0U, FM_ROW_LINE, "", 0U, 1);
@@ -332,6 +356,9 @@ context_desktop(
 		context_add(context, 0U, FM_ROW_LINE, "", 0U, 1);
 		context_add(context, 0U, FM_ROW_ITEM, "Change Wallpaper\xe2\x80\xa6", FM_ACTION_CHANGE_WALLPAPER, 1);
 	}
+
+	/* Succeeded: the desktop's rows are listed. */
+	return;
 }
 
 /* Works out the rows for a place of the sidebar. */
@@ -437,6 +464,113 @@ context_folder(
 
 	/* Not a folder. */
 	return 0;
+}
+
+/*
+ * Adds the Move To submenu (spec §15): the sidebar's favorite folders and
+ * mounted volumes, each a row that moves the selection there.  The folder
+ * shown is left out, and so is a place the selection is in already.
+ */
+static void
+context_move_to(
+	struct fm_app *app,
+	struct fm_context *context)
+{
+	int destinations;
+	int place;
+	int usable;
+
+	/* How many places can take the selection. */
+	destinations = 0;
+	for (place = 0; place < app->places.count; place++) {
+		usable = context_destination(app, place);
+		if (usable != 0)
+			destinations++;
+	}
+
+	/* The submenu, enabled when it has a row. */
+	context_submenu(context, CONTEXT_MOVE_TO, "Move To", destinations > 0);
+	for (place = 0; place < app->places.count; place++) {
+		usable = context_destination(app, place);
+		if (usable == 0)
+			continue;
+		context_add(context, CONTEXT_MOVE_TO, FM_ROW_ITEM, app->places.items[place].label, FM_ACTION_MOVE_TO_FIRST + (unsigned)place, 1);
+	}
+}
+
+/* Tells whether a place of the sidebar can take the selection by Move To. */
+static int
+context_destination(
+	struct fm_app *app,
+	int place)
+{
+	const struct fm_place *item;
+	const char *shown;
+	int differs;
+
+	/* A place that is not there takes nothing. */
+	item = &app->places.items[place];
+	if (item->missing != 0)
+		return 0;
+
+	/* A favorite folder (Home among them), or a mounted volume of the locations. */
+	if (item->section == FM_SECTION_FAVORITES) {
+		if (item->location.kind != FM_LOCATION_FOLDER && item->location.kind != FM_LOCATION_HOME)
+			return 0;
+	} else if (item->section == FM_SECTION_LOCATIONS) {
+		if (item->location.kind != FM_LOCATION_FOLDER || item->icon != FM_ICON_VOLUME)
+			return 0;
+	} else {
+		return 0;
+	}
+
+	/* A place without a folder cannot hold items. */
+	if (item->location.path[0] == '\0')
+		return 0;
+
+	/* The folder shown is where the items are already. */
+	shown = fm_current_folder(app);
+	if (shown != NULL) {
+		differs = strcmp(shown, item->location.path);
+		if (differs == 0)
+			return 0;
+	}
+
+	/* Succeeded: the place can take the selection. */
+	return 1;
+}
+
+/* Moves the selection to a place of the sidebar, as a drop there would (undone with Ctrl+Z). */
+static void
+context_move(
+	struct fm_app *app,
+	int place)
+{
+	char **paths;
+	size_t count;
+	int usable;
+	int error;
+
+	/* Only a place the menu offered. */
+	if (place < 0 || place >= app->places.count)
+		return;
+	usable = context_destination(app, place);
+	if (usable == 0)
+		return;
+
+	/* The selection's paths. */
+	error = fm_selected_paths(app, &paths, &count);
+	if (error != 0 || count == 0) {
+		fm_paths_free(paths, count);
+		return;
+	}
+
+	/* A move task like a drop's, which asks about taken names. */
+	fm_log("CONTEXT move-to place=%d path=%s count=%zu", place, app->places.items[place].location.path, count);
+	error = fm_action_transfer(app, FM_TASK_MOVE, paths, count, app->places.items[place].location.path);
+	if (error != 0)
+		fm_ui_message(app, "The items could not be moved");
+	fm_paths_free(paths, count);
 }
 
 /* Adds a row that can be checked (a view, an order, a tag), checked or not. */

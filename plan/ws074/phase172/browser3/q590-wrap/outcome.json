@@ -1,0 +1,33 @@
+{
+  "queue": "q590",
+  "attempt": "q590-i01",
+  "status": "finished",
+  "outcome": "uncleared",
+  "phase": "ws074-p172",
+  "phase_status": "uncleared",
+  "ws": "ws074",
+  "ws_status": "incomplete",
+  "started_utc": "2026-10-02T09:41:27Z",
+  "ended_utc": "2026-10-02T12:33:42+00:00",
+  "deadline_utc": "2026-10-02T12:41:27Z",
+  "final_source_checkpoint": "e658661e4e645150f643365ea1f7fcf2306dbc7c",
+  "reviewed": 135,
+  "total": 209,
+  "new_full_reviews": 38,
+  "remaining_C_header": 74,
+  "remaining_other": 0,
+  "approved_scope_sha256": "2a9c2fc311492357ba11cca01df1ec0472a5e17e1d16e1b8e2c343b9baa227dd",
+  "approved_paths_sha256": "06a3d626b5b6a71135652d7505e86845f0c3626778f5d7dddbaaf6702d244d53",
+  "source_hashes_match": true,
+  "reason": "Stop at coherent verified checkpoint near finite bound; remaining whole scope cannot fit. No criteria waived.",
+  "verification": "Per-checkpoint actual host/native/page/JS/targeted LSan results; latest production build checkpoint33 exit0/warnings0, realm object text unchanged; final click fixture checkpoint34 native10/style0/warnings0.",
+  "skipped": [
+    "new target build/boot",
+    "final whole-scope boundary/API/public-client revalidation",
+    "full final ASan campaign",
+    "remaining74 full reviews",
+    "downstream browser Phases"
+  ],
+  "process_state": "All owned compiler/builder/fixture processes ended; ps snapshot shows no remaining browser3-p172 command except inspection itself.",
+  "sync": "WIP normal pushes to origin/browser3; Issues/Project publication remains deferred, absent .sync state; Git is not planning synchronization."
+}

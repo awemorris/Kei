@@ -1,0 +1,36 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-frame-load.c",
+      "original_sha256": "0f969a8e4e3f910a290efb5696b69467cd345ae4538a2ac9143cc8904c994f3e",
+      "final_sha256": "a3978e45a4e35d4f7a751f1e2e02c204b6e9d4938a759d2055ef0de98f784d3e",
+      "status": "reviewed-full-file",
+      "original_lines": 584,
+      "final_lines": 849
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "All original584 child-loading fixture lines: genuine loader descriptors/loopback responses/raw resource MIME and final URL/namespace gating/XML PI/CDATA/native constructor/events/timer ordering/cancellation/epoch/adoption/origin cases.",
+    "Complete native lifetime/pressure/local-file/settle code reviewed. Every significant source/Page/frame/load/URL/native allocation/install operation checked immediately before output/statistics use or next operation; missing metadata/native shape guards precede private field casts.",
+    "Actual52 observations, nine initial pending sources, poll rounds80/45/25,2-second settle bound,32768-byte production8MiB pressure distance, original source strings and delayed Python HTTP/local-file driver unchanged.",
+    "Main/source/saved-Document/pressure/local-Page failure cleanup: optional loader/Page/source owners released exactly once; original two caller construction/output slots tracked only after successful registration and removed in reverse on every failure.",
+    "Saved original Document sole root remains only after native graph publication; public aliases removed before precise GC. Missing native retained Document stops before metadata access. No extra root preserves tested native participants; final graph release unchanged.",
+    "All non-experimental collection restores a live original main embedding frame; actual precisely excluded stack intervals inside saved graph/child install experiments retained. Borrowed response callback ordering and post-Page loader polling unchanged.",
+    "Full C/component ANSI declarations/order/physical calls/clauses/pointer controls/semantic purpose/refusal-vs-Succeeded/flags-counter protocols checked. Single forward cleanup labels per function allowed by full section14."
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 25,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production edit, new fault switch, reference change or additional caller root.",
+    "Original actual Python loopback/local driver52 observations all pass; no new fault injection. Whole p17240 remaining files and original final gates remain."
+  ]
+}

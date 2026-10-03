@@ -1,0 +1,31 @@
+{
+  "queue": "q597",
+  "checkpoint": 73,
+  "source": "userland/desktop/libbrowser/vm/object.c",
+  "source_sha256": "16e99aa8fed2a01b748c0e8dd4cabce99cfc2feee299dbf5b2cd6232fc88a30f",
+  "baseline": "69a0ce5422920e6d7c6947f0ed22ddae2a902b7f",
+  "reviewed": 192,
+  "total": 209,
+  "remaining": 17,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 3,
+    "all": "permitted forward cleanup jumps"
+  },
+  "tests": {
+    "object": "100 checks, 0 failed",
+    "array-length": "4/4",
+    "vm-factory-GC": "56/56",
+    "js-tests": "14/14",
+    "dom-tests": "23/23"
+  },
+  "limits": [
+    "No allocation-failure injection for array contraction or new roots; behavior under those failures is reviewed statically but not proven.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

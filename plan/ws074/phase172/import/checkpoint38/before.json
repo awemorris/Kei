@@ -1,0 +1,16 @@
+[
+  {
+    "path": "plan/ws074/tests/host-range-clone-contents.c",
+    "sha256": "fcc18b4ab269ae710f8142629f5f455bfb15af2bd83dd06707be0687f4c224c5",
+    "object": "host-range-clone-contents.o",
+    "object_path": "build/browser3-p172/review38/host-range-clone-contents.o",
+    "text_sha256": "7369865071ad8b351c40f12c4e4ce6a143d896bf0e395dcf55c8aaf8552914dd"
+  },
+  {
+    "path": "plan/ws074/tests/host-range-extract-contents.c",
+    "sha256": "4b99ee11318953642ed92ac6e2895152b7245f4d9eaf06c72e0872f461e24a46",
+    "object": "host-range-extract-contents.o",
+    "object_path": "build/browser3-p172/review38/host-range-extract-contents.o",
+    "text_sha256": "3c2bd6c9f1da810be88da231605585b488ed2ba1c0fdd2aec93db30f3e3c1649"
+  }
+]

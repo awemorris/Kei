@@ -1,0 +1,18 @@
+[
+  {
+    "name": "probe-function-apply",
+    "source_sha256": "63621c17e014184f43842353217967c394d0f7e97cc31cd03f3286938f3433e8",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "apply result=42 is_number=1 actual_collections=1\n",
+    "stderr": ""
+  },
+  {
+    "name": "probe-function-bind",
+    "source_sha256": "63621c17e014184f43842353217967c394d0f7e97cc31cd03f3286938f3433e8",
+    "compile_exit": 0,
+    "exit": 0,
+    "stdout": "bound output live=1 actual_collections=1\n",
+    "stderr": ""
+  }
+]

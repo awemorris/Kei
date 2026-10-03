@@ -48,6 +48,9 @@
 #define MAIN_FONT		KEILAND_DATADIR "/fonts/keiland-mono.ttf"
 #define MAIN_FONT_PIXELS	16U
 
+/* The font that draws what the monospaced font has no glyph for (CJK), unless told otherwise. */
+#define MAIN_FALLBACK_FONT	KEILAND_DATADIR "/fonts/keiland-fallback.ttf"
+
 /* The grid the window opens with. */
 #define MAIN_COLUMNS		90U
 #define MAIN_ROWS		28U
@@ -75,6 +78,7 @@ struct main_options {
 	const char *program;
 	const char *display;
 	const char *font;
+	const char *fallback;
 	const char *command;
 	const char *token;
 	unsigned pixels;
@@ -96,6 +100,13 @@ struct main_run {
 	unsigned columns;
 	unsigned rows;
 	unsigned pixels;
+
+	/*
+	 * Whether Ambiguous-width characters are wide (View > Treat
+	 * Ambiguous-Width Characters as Wide, ws128-p009): every tab's grid
+	 * follows it, and the settings file keeps it for the next run.
+	 */
+	int ambiguous_wide;
 
 	/* What failed last, the Vulkan result of it, and why the run ended normally. */
 	const char *operation;
@@ -234,6 +245,7 @@ static int main_menu_actions(const struct main_options *options, struct main_run
 static void main_menu_state(const struct main_run *run, struct terminal_menu_state *state);
 static void main_new_window(const struct main_options *options, const struct main_run *run);
 static int main_zoom(const struct main_options *options, struct main_run *run, unsigned pixels);
+static void main_ambiguous_wide(const struct main_options *options, struct main_run *run);
 static void main_copy(void);
 static void main_start_paste(void);
 static void main_drop_paste(void);
@@ -278,7 +290,7 @@ main(
 	/* The command line. */
 	status = main_parse(argc, argv, &options);
 	if (status != 0) {
-		fprintf(stderr, "usage: terminal [--display=NAME] [--font=PATH] [--font-size=PIXELS] [--columns=N] [--rows=N] [--command=COMMAND] [--token=NAME] [--timeout-s=N]\n");
+		fprintf(stderr, "usage: terminal [--display=NAME] [--font=PATH] [--fallback-font=PATH] [--font-size=PIXELS] [--columns=N] [--rows=N] [--command=COMMAND] [--token=NAME] [--timeout-s=N]\n");
 		return 2;
 	}
 
@@ -340,6 +352,7 @@ main_parse(
 	options->program = MAIN_PROGRAM;
 	options->display = NULL;
 	options->font = MAIN_FONT;
+	options->fallback = MAIN_FALLBACK_FONT;
 	options->command = NULL;
 	options->token = "term";
 	options->pixels = MAIN_FONT_PIXELS;
@@ -369,6 +382,13 @@ main_parse(
 		value = main_value(argv[index], "--font=");
 		if (value != NULL) {
 			options->font = value;
+			continue;
+		}
+
+		/* The fallback font file. */
+		value = main_value(argv[index], "--fallback-font=");
+		if (value != NULL) {
+			options->fallback = value;
 			continue;
 		}
 
@@ -460,7 +480,13 @@ main_start(
 	struct main_run *run)
 {
 	struct terminal_menu_state state;
+	struct terminal_settings settings;
 	int status;
+
+	/* The settings kept from the last run (the defaults when there are none). */
+	terminal_settings_load(&settings);
+	run->ambiguous_wide = settings.ambiguous_wide;
+	printf("ZTERM SETTINGS run=%s ambiguous_wide=%d\n", options->token, run->ambiguous_wide);
 
 	/* The font, which sets the cell's size. */
 	run->operation = "terminal_font_open";
@@ -469,6 +495,11 @@ main_start(
 		errno = status;
 		return -1;
 	}
+
+	/* The fallback font for the characters the font has not got; without it they show the font's missing glyph. */
+	status = terminal_font_fallback(&main_font, options->fallback);
+	if (status != 0)
+		printf("ZTERM FONT fallback=none error=%d\n", status);
 
 	/* The window, sized for the grid asked for. */
 	run->operation = "terminal_window_open";
@@ -499,9 +530,6 @@ main_start(
 	status = terminal_menu_open(&main_window, &state);
 	if (status != 0)
 		return -1;
-
-	/* The tabs in the titlebar (none from a compositor without it). */
-	terminal_tabs_open(&main_window);
 
 	/* The first tab: a shell on a pseudo-terminal of that size. */
 	run->operation = "forkpty";
@@ -993,8 +1021,13 @@ main_menu_actions(
 			terminal_screen_write(main_screen, (const unsigned char *)"\033[H\033[2J", 7U);
 			break;
 		case TERMINAL_ACTION_RESET:
-			/* The screen as it started, at its size. */
+			/* The screen as it started, at its size, with the width setting kept. */
 			terminal_screen_init(main_screen, run->columns, run->rows);
+			terminal_screen_set_ambiguous_wide(main_screen, run->ambiguous_wide);
+			break;
+		case TERMINAL_ACTION_AMBIGUOUS_WIDE:
+			/* Ambiguous-width characters written from now on take the other width. */
+			main_ambiguous_wide(options, run);
 			break;
 		case TERMINAL_ACTION_ABOUT:
 			/* A line about the terminal on the screen (there are no dialogs). */
@@ -1034,10 +1067,11 @@ main_menu_state(
 			state->selection = 1;
 	}
 
-	/* Clipboard, type size and fullscreen do not depend on a tab. */
+	/* Clipboard, type size, fullscreen and the width setting do not depend on a tab. */
 	state->clipboard = terminal_clipboard_has_text(&main_window);
 	state->pixels = run->pixels;
 	state->fullscreen = main_window.fullscreen;
+	state->ambiguous_wide = run->ambiguous_wide;
 }
 
 /*
@@ -1150,6 +1184,42 @@ main_zoom(
 	return 0;
 }
 
+/*
+ * Turns View > Treat Ambiguous-Width Characters as Wide over: every tab's
+ * grid gives the next Ambiguous characters the other width (what is on
+ * the screens stays as it is), and the settings file keeps the choice for
+ * the next run.
+ */
+static void
+main_ambiguous_wide(
+	const struct main_options *options,
+	struct main_run *run)
+{
+	struct terminal_settings settings;
+	unsigned index;
+	int error;
+
+	/* The other setting; the menu shows it checked or not on the next refresh. */
+	if (run->ambiguous_wide) {
+		run->ambiguous_wide = 0;
+	} else {
+		run->ambiguous_wide = 1;
+	}
+
+	/* Every tab's grid follows at once. */
+	for (index = 0U; index < main_tab_count; index++)
+		terminal_screen_set_ambiguous_wide(main_tabs[index].screen, run->ambiguous_wide);
+
+	/* The settings file keeps it; a failed write leaves this run changed and is reported. */
+	memset(&settings, 0, sizeof(settings));
+	settings.ambiguous_wide = run->ambiguous_wide;
+	error = terminal_settings_save(&settings);
+
+	/* The log line the tests read. */
+	printf("ZTERM AMBIGUOUS run=%s wide=%d saved=%d\n", options->token, run->ambiguous_wide, error);
+	fflush(stdout);
+}
+
 /* Copies the selected text to the clipboard (Edit > Copy: the pointer's range, or the whole screen selected). */
 static void
 main_copy(void)
@@ -1254,8 +1324,9 @@ main_tab_new(
 		return -1;
 	}
 
-	/* Empty, at the grid's size. */
+	/* Empty, at the grid's size, with the window's width setting. */
 	terminal_screen_init(screen, run->columns, run->rows);
+	terminal_screen_set_ambiguous_wide(screen, run->ambiguous_wide);
 
 	/* Its shell, told the grid's size. */
 	child = main_spawn(options, &master);

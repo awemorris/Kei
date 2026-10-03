@@ -1,0 +1,42 @@
+[
+  {
+    "name": "xml-model",
+    "argv": [
+      "build/browser3-p172/plain/host-xml"
+    ],
+    "exit": 0,
+    "stdout": "native XML model: 236/236 passed\n"
+  },
+  {
+    "name": "xml-dom",
+    "argv": [
+      "build/browser3-p172/plain/host-xml-dom"
+    ],
+    "exit": 0,
+    "stdout": "native XML DOM: 54/54 passed\n"
+  },
+  {
+    "name": "xml-binding",
+    "argv": [
+      "build/browser3-p172/plain/host-xml-binding"
+    ],
+    "exit": 0,
+    "stdout": "native XML bindings: 34/34 passed\n"
+  },
+  {
+    "name": "xml-node",
+    "argv": [
+      "build/browser3-p172/plain/host-xml-node"
+    ],
+    "exit": 0,
+    "stdout": "native XML nodes: 32/32 passed\n"
+  },
+  {
+    "name": "xml-document-gc",
+    "argv": [
+      "build/browser3-p172/plain/host-xml-document"
+    ],
+    "exit": 0,
+    "stdout": "XML document GC checks: 16/16 passed\n"
+  }
+]

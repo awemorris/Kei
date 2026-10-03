@@ -697,8 +697,12 @@ sheets_parse(
 	resolving.page = page;
 	resolving.location = entry->location;
 	error = css_sheet_resolve_urls(entry->sheet, sheets_resolve_url, &resolving);
-	if (error != 0)
+	if (error != 0) {
+		/* A partly resolved sheet must not be published after an asynchronous failure. */
+		css_sheet_destroy(entry->sheet);
+		entry->sheet = NULL;
 		return error;
+	}
 
 	/* Succeeded: the sheet is parsed. */
 	return 0;

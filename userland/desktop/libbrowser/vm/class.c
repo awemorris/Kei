@@ -25,11 +25,12 @@
 static int class_private_find(struct vm_realm *realm, vm_value object, vm_value key, struct vm_property *property, int *found);
 
 /*
- * Sets up a class: its prototype object (whose prototype is the parent's
- * prototype, Object.prototype without a heritage, or null for extends
- * null), the constructor's prototype property and the prototype's
- * constructor, and the constructor's own prototype (the parent for
- * extends).  parent is the empty value without a heritage.
+ * Initializes a class constructor and its instance prototype chain.
+ *
+ * The prototype inherits the parent's prototype, Object.prototype without
+ * heritage, or null for extends null. Reciprocal constructor properties
+ * link both objects; a derived constructor inherits the parent constructor.
+ * The empty parent value denotes absent heritage.
  */
 int
 vm_class_setup(
@@ -61,20 +62,32 @@ vm_class_setup(
 		is_constructor = vm_value_is_constructor(parent);
 		if (!is_constructor) {
 			status = vm_throw_type_error(realm, "Class extends value is not a constructor or null");
-			return status;
+			if (status != 0)
+				return status;
+
+			/* Succeeded: the native class refusal follows its existing throw contract. */
+			return 0;
 		}
 
 		/* Its prototype property, an object or null. */
 		key = vm_key_from_ascii(realm->heap, "prototype");
 		if (key == VM_VALUE_EMPTY)
 			return ENOMEM;
+
+		/* Reads the actual parent's prototype before classifying its returned value. */
 		status = vm_get(realm, parent, key, &parent_prototype);
 		if (status != 0)
 			return status;
+
+		/* Only an object or null can enter the instance prototype chain. */
 		is_object = vm_value_is_object(parent_prototype);
 		if (!is_object && parent_prototype != VM_VALUE_NULL) {
 			status = vm_throw_type_error(realm, "Class extends value does not have valid prototype property");
-			return status;
+			if (status != 0)
+				return status;
+
+			/* Succeeded: the native class refusal follows its existing throw contract. */
+			return 0;
 		}
 
 		/* The chains. */
@@ -88,6 +101,8 @@ vm_class_setup(
 	made = vm_object_create(realm->heap, proto_parent);
 	if (made == NULL)
 		return ENOMEM;
+
+	/* Retains the new home object through the constructor's native data edge. */
 	function = (struct vm_function *)vm_value_as_cell(constructor);
 	function->object.prototype = constructor_parent;
 	function->data = vm_value_cell(made);
@@ -96,6 +111,8 @@ vm_class_setup(
 	key = vm_key_from_ascii(realm->heap, "prototype");
 	if (key == VM_VALUE_EMPTY)
 		return ENOMEM;
+
+	/* Defines the constructor's fixed prototype after its native key is available. */
 	status = vm_object_define(realm->heap, &function->object, key, vm_value_cell(made), 0);
 	if (status != 0)
 		return status;
@@ -104,19 +121,24 @@ vm_class_setup(
 	key = vm_key_from_ascii(realm->heap, "constructor");
 	if (key == VM_VALUE_EMPTY)
 		return ENOMEM;
+
+	/* Gives the completed prototype its reciprocal non-enumerable constructor. */
 	status = vm_object_define(realm->heap, made, key, constructor, VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
 	if (status != 0)
 		return status;
 
-	/* Succeeded: the prototype object. */
+	/* Publishes the completed instance prototype after both reciprocal properties exist. */
 	*prototype = vm_value_cell(made);
+
+	/* Succeeded: the class's native constructor and prototype chains are installed. */
 	return 0;
 }
 
 /*
- * Defines a class's method (kind 0), getter (1) or setter (2) on its home
- * object, not enumerable, and makes that object the function's home
- * object.
+ * Defines a class method or accessor on its native home object.
+ *
+ * Kinds zero, one and two select a method, getter and setter respectively.
+ * The non-enumerable function retains that object as its native home.
  */
 int
 vm_define_method(
@@ -146,6 +168,8 @@ vm_define_method(
 		status = vm_object_define(realm->heap, object, key, function, VM_PROPERTY_WRITABLE | VM_PROPERTY_CONFIGURABLE);
 		if (status != 0)
 			return status;
+
+		/* Succeeded: the native method has its class home and ordinary descriptor. */
 		return 0;
 	}
 
@@ -174,6 +198,8 @@ vm_define_method(
 	accessor = vm_accessor_create(realm->heap, getter, setter);
 	if (accessor == NULL)
 		return ENOMEM;
+
+	/* Publishes the completed accessor pair under the class's ordinary method key. */
 	status = vm_object_define(realm->heap, object, key, vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_CONFIGURABLE);
 	if (status != 0)
 		return status;
@@ -183,8 +209,9 @@ vm_define_method(
 }
 
 /*
- * Reads super.key in a method whose home object is home: the property of
- * the home object's prototype, a getter called with the method's this.
+ * Reads a property through a class method's native home prototype.
+ *
+ * An inherited getter receives the current method's actual this value.
  */
 int
 vm_get_super(
@@ -206,14 +233,22 @@ vm_get_super(
 	is_object = vm_value_is_object(home);
 	if (!is_object) {
 		status = vm_throw_error(realm, VM_ERROR_SYNTAX, "'super' keyword unexpected here");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* The home object's prototype, where super looks. */
 	object = ((struct vm_object *)vm_value_as_cell(home))->prototype;
 	if (object == NULL) {
 		status = vm_throw_type_error(realm, "Cannot read properties of null");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* The property on the prototype's chain. */
@@ -235,6 +270,8 @@ vm_get_super(
 	accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 	if (accessor->getter == VM_VALUE_UNDEFINED)
 		return 0;
+
+	/* Calls the inherited getter with the current method's actual this receiver. */
 	status = vm_call(realm, accessor->getter, this_value, NULL, 0, result);
 	if (status != 0)
 		return status;
@@ -243,7 +280,9 @@ vm_get_super(
 	return 0;
 }
 
-/* Throws the TypeError of a class's constructor called without new, naming the class. */
+/*
+ * Throws a TypeError naming the class constructor invoked without new.
+ */
 int
 vm_throw_class_call(
 	struct vm_realm *realm,
@@ -251,6 +290,7 @@ vm_throw_class_call(
 {
 	struct wb_buffer name;
 	char text[200];
+	int printed;
 	int status;
 
 	/* The class's name as UTF-8 (a constructor's code is named after its class). */
@@ -264,18 +304,27 @@ vm_throw_class_call(
 	}
 
 	/* The message, as Chromium words it. */
-	snprintf(text, sizeof(text), "Class constructor %.120s cannot be invoked without 'new'", wb_buffer_string(&name));
+	printed = snprintf(text, sizeof(text), "Class constructor %.120s cannot be invoked without 'new'", wb_buffer_string(&name));
+	if (printed < 0) {
+		wb_buffer_release(&name);
+		return EIO;
+	}
+
+	/* Releases the converted name before constructing the already formatted native exception. */
 	wb_buffer_release(&name);
 	status = vm_throw_type_error(realm, text);
+	if (status != 0)
+		return status;
 
-	/* Reports the throw. */
-	return status;
+	/* Succeeded: the class-call refusal follows the existing native throw contract. */
+	return 0;
 }
 
 /*
- * Reads a private member (obj.#x): only the object's own, a getter called
- * with the object; a TypeError when the object does not have it (its class
- * did not make it).
+ * Reads an object's own private field or accessor.
+ *
+ * A private getter receives the actual object; an absent own brand throws
+ * a TypeError because that object's class did not declare the member.
  */
 int
 vm_private_get(
@@ -294,9 +343,15 @@ vm_private_get(
 	status = class_private_find(realm, object, key, &property, &found);
 	if (status != 0)
 		return status;
+
+	/* An absent private brand cannot supply a field or accessor result. */
 	if (!found) {
 		status = vm_throw_type_error(realm, "Cannot read private member from an object whose class did not declare it");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* A field's or a method's value. */
@@ -309,7 +364,11 @@ vm_private_get(
 	accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 	if (accessor->getter == VM_VALUE_UNDEFINED) {
 		status = vm_throw_type_error(realm, "'#' accessor was defined without a getter");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* The getter's value. */
@@ -322,9 +381,9 @@ vm_private_get(
 }
 
 /*
- * Writes a private member (obj.#x = value): a field takes it, a setter is
- * called; a method, an accessor without a setter or a member the object
- * does not have is a TypeError.
+ * Writes an object's own private field or invokes its private setter.
+ *
+ * A method, missing setter or absent own brand remains a TypeError.
  */
 int
 vm_private_set(
@@ -343,20 +402,32 @@ vm_private_set(
 	status = class_private_find(realm, object, key, &property, &found);
 	if (status != 0)
 		return status;
+
+	/* An absent private brand cannot receive a field write or setter call. */
 	if (!found) {
 		status = vm_throw_type_error(realm, "Cannot write private member to an object whose class did not declare it");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* A field takes the value; a method cannot be assigned. */
 	if ((property.attributes & VM_PROPERTY_ACCESSOR) == 0U) {
 		if ((property.attributes & VM_PROPERTY_WRITABLE) == 0U) {
 			status = vm_throw_type_error(realm, "Private method is not writable");
-			return status;
+			if (status != 0)
+				return status;
+
+			/* Succeeded: the native class refusal follows its existing throw contract. */
+			return 0;
 		}
 
 		/* A field takes the value. */
 		*property.value = value;
+
+		/* Succeeded: the ordinary writable private field holds the new value. */
 		return 0;
 	}
 
@@ -364,7 +435,11 @@ vm_private_set(
 	accessor = (struct vm_accessor *)vm_value_as_cell(*property.value);
 	if (accessor->setter == VM_VALUE_UNDEFINED) {
 		status = vm_throw_type_error(realm, "'#' accessor was defined without a setter");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* The setter. */
@@ -376,7 +451,9 @@ vm_private_set(
 	return 0;
 }
 
-/* Adds a private field to an object (its class's field initializer); one it has already is a TypeError. */
+/*
+ * Adds a private field from its class initializer to an unbranded object.
+ */
 int
 vm_private_define(
 	struct vm_realm *realm,
@@ -392,9 +469,15 @@ vm_private_define(
 	status = class_private_find(realm, object, key, &property, &found);
 	if (status != 0)
 		return status;
+
+	/* Repeated private field initialization on the same object remains illegal. */
 	if (found) {
 		status = vm_throw_type_error(realm, "Cannot initialize private field twice on the same object");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* A writable member, never enumerable. */
@@ -407,9 +490,10 @@ vm_private_define(
 }
 
 /*
- * Gives an instance a private method or accessor its class keeps on the
- * prototype (the source), with the same attributes; an instance that has
- * it already is a TypeError.
+ * Copies a class's private method or accessor brand onto an instance.
+ *
+ * The source prototype's attributes are retained; an existing own brand
+ * rejects repeated construction with a TypeError.
  */
 int
 vm_private_copy(
@@ -427,9 +511,15 @@ vm_private_copy(
 	status = class_private_find(realm, target, key, &property, &found);
 	if (status != 0)
 		return status;
+
+	/* A constructed instance cannot acquire the same private method brand twice. */
 	if (found) {
 		status = vm_throw_type_error(realm, "Cannot initialize private methods twice on the same object");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* The prototype's member. */
@@ -447,7 +537,9 @@ vm_private_copy(
 	return 0;
 }
 
-/* Tells whether an object has a private member (#x in object); anything but an object is a TypeError. */
+/*
+ * Tests an actual object's own private member brand for the in operator.
+ */
 int
 vm_private_in(
 	struct vm_realm *realm,
@@ -464,11 +556,17 @@ vm_private_in(
 	is_object = vm_value_is_object(object);
 	if (!is_object) {
 		status = vm_throw_type_error(realm, "Cannot use 'in' operator to search for a private field in a value that is not an object");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the native class refusal follows its existing throw contract. */
+		return 0;
 	}
 
 	/* Its own member. */
 	found = vm_object_get_own_ordinary((struct vm_object *)vm_value_as_cell(object), key, &property);
+
+	/* Publishes ordinary brand presence without searching any prototype. */
 	*result = VM_VALUE_FALSE;
 	if (found)
 		*result = VM_VALUE_TRUE;

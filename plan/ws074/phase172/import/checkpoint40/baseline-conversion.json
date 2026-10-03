@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "timeout",
+    "30",
+    "build/browser3-p172/review40/host-collection"
+  ],
+  "exit": 2,
+  "production_source": "1f3b3c90d",
+  "fixture_sha256": "ed88ece978a0e81b0a9c14f39cbe36144d12b4245d51baa0c33f5e52a013ec22",
+  "reason": "Actual numeric valueOf collection callback runs GC with no outer caller VM frame or conservative stack; native collection state disappears. Callback returns EIO before caller could dereference freed state."
+}

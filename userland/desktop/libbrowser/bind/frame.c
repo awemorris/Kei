@@ -23,15 +23,8 @@
 static int frame_src_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int frame_src_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int frame_svg_document(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-static int frame_loaded_document(struct vm_realm *realm, vm_value receiver, int tag, int svg, vm_value *result);
 static int frame_document(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int frame_global(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static int frame_context(struct vm_realm *realm, vm_value this_value, struct bind_window **window);
-static int frame_create(struct vm_realm *caller, struct bind_window *parent, struct dom_element *element, struct bind_window **window);
-static int frame_tree(struct dom_document *document);
-static int frame_window_this(struct vm_realm *realm, vm_value this_value, struct bind_window **window);
-static void frame_removed(struct dom_document *document, struct dom_node *node);
-static void frame_remove_subtree(struct dom_node *root);
 
 /* Synchronous child accessors create only an initial, verified blank context. */
 static const struct bind_attribute frame_attributes[] = {
@@ -51,6 +44,14 @@ static const struct bind_operation frame_operations[] = {
 const struct bind_interface bind_html_iframe_element_interface = {
 	"HTMLIFrameElement", BIND_HTML_ELEMENT, 0, NULL, frame_attributes, frame_operations, NULL
 };
+
+static int frame_loaded_document(struct vm_realm *realm, vm_value receiver, int tag, int svg, vm_value *result);
+static int frame_context(struct vm_realm *realm, vm_value this_value, struct bind_window **window);
+static int frame_create(struct vm_realm *caller, struct bind_window *parent, struct dom_element *element, struct bind_window **window);
+static int frame_tree(struct dom_document *document);
+static int frame_window_this(struct vm_realm *realm, vm_value this_value, struct bind_window **window);
+static void frame_removed(struct dom_document *document, struct dom_node *node);
+static void frame_remove_subtree(struct dom_node *root);
 
 /*
  * Reports an object's actual loaded Document without creating a blank context.

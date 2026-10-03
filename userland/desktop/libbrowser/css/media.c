@@ -23,10 +23,10 @@
 #include <string.h>
 
 /* The most tests one query keeps (the rest of a longer query are dropped). */
-#define MEDIA_TESTS_MAX		8
+#define MEDIA_TESTS_MAX 8
 
 /* The pixels an em is worth in a media query (the initial font size). */
-#define MEDIA_EM_PIXELS		16.0f
+#define MEDIA_EM_PIXELS 16.0f
 
 /* The features a test measures. */
 enum media_feature {
@@ -59,35 +59,6 @@ struct media_name {
 	int comparison;
 };
 
-/* The range features by their names (the -webkit- pixel ratios are resolutions in dppx). */
-static const struct media_name media_names[] = {
-	{ "color", MEDIA_FEATURE_COLOR, MEDIA_EQUAL },
-	{ "min-color", MEDIA_FEATURE_COLOR, MEDIA_AT_LEAST },
-	{ "max-color", MEDIA_FEATURE_COLOR, MEDIA_AT_MOST },
-	{ "monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_EQUAL },
-	{ "min-monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_AT_LEAST },
-	{ "max-monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_AT_MOST },
-	{ "width", MEDIA_FEATURE_WIDTH, MEDIA_EQUAL },
-	{ "min-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_LEAST },
-	{ "max-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_MOST },
-	{ "height", MEDIA_FEATURE_HEIGHT, MEDIA_EQUAL },
-	{ "min-height", MEDIA_FEATURE_HEIGHT, MEDIA_AT_LEAST },
-	{ "max-height", MEDIA_FEATURE_HEIGHT, MEDIA_AT_MOST },
-	{ "device-width", MEDIA_FEATURE_WIDTH, MEDIA_EQUAL },
-	{ "min-device-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_LEAST },
-	{ "max-device-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_MOST },
-	{ "aspect-ratio", MEDIA_FEATURE_ASPECT_RATIO, MEDIA_EQUAL },
-	{ "min-aspect-ratio", MEDIA_FEATURE_ASPECT_RATIO, MEDIA_AT_LEAST },
-	{ "max-aspect-ratio", MEDIA_FEATURE_ASPECT_RATIO, MEDIA_AT_MOST },
-	{ "resolution", MEDIA_FEATURE_RESOLUTION, MEDIA_EQUAL },
-	{ "min-resolution", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_LEAST },
-	{ "max-resolution", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_MOST },
-	{ "-webkit-device-pixel-ratio", MEDIA_FEATURE_RESOLUTION, MEDIA_EQUAL },
-	{ "-webkit-min-device-pixel-ratio", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_LEAST },
-	{ "-webkit-max-device-pixel-ratio", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_MOST },
-	{ NULL, 0, 0 }
-};
-
 /*
  * A discrete feature's value this browser has: the feature, and the
  * values that are true of it (a list ended by NULL; the feature alone,
@@ -98,26 +69,53 @@ struct media_discrete {
 	const char *values[3];
 };
 
+/* The range features by their names (the -webkit- pixel ratios are resolutions in dppx). */
+static const struct media_name media_names[] = {
+    {"color", MEDIA_FEATURE_COLOR, MEDIA_EQUAL},
+    {"min-color", MEDIA_FEATURE_COLOR, MEDIA_AT_LEAST},
+    {"max-color", MEDIA_FEATURE_COLOR, MEDIA_AT_MOST},
+    {"monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_EQUAL},
+    {"min-monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_AT_LEAST},
+    {"max-monochrome", MEDIA_FEATURE_MONOCHROME, MEDIA_AT_MOST},
+    {"width", MEDIA_FEATURE_WIDTH, MEDIA_EQUAL},
+    {"min-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_LEAST},
+    {"max-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_MOST},
+    {"height", MEDIA_FEATURE_HEIGHT, MEDIA_EQUAL},
+    {"min-height", MEDIA_FEATURE_HEIGHT, MEDIA_AT_LEAST},
+    {"max-height", MEDIA_FEATURE_HEIGHT, MEDIA_AT_MOST},
+    {"device-width", MEDIA_FEATURE_WIDTH, MEDIA_EQUAL},
+    {"min-device-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_LEAST},
+    {"max-device-width", MEDIA_FEATURE_WIDTH, MEDIA_AT_MOST},
+    {"aspect-ratio", MEDIA_FEATURE_ASPECT_RATIO, MEDIA_EQUAL},
+    {"min-aspect-ratio", MEDIA_FEATURE_ASPECT_RATIO, MEDIA_AT_LEAST},
+    {"max-aspect-ratio", MEDIA_FEATURE_ASPECT_RATIO, MEDIA_AT_MOST},
+    {"resolution", MEDIA_FEATURE_RESOLUTION, MEDIA_EQUAL},
+    {"min-resolution", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_LEAST},
+    {"max-resolution", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_MOST},
+    {"-webkit-device-pixel-ratio", MEDIA_FEATURE_RESOLUTION, MEDIA_EQUAL},
+    {"-webkit-min-device-pixel-ratio", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_LEAST},
+    {"-webkit-max-device-pixel-ratio", MEDIA_FEATURE_RESOLUTION, MEDIA_AT_MOST},
+    {NULL, 0, 0}};
+
 /* The discrete features and the values the browser has. */
 static const struct media_discrete media_discretes[] = {
-	{ "prefers-reduced-motion", { "no-preference", NULL, NULL } },
-	{ "prefers-color-scheme", { "light", NULL, NULL } },
-	{ "prefers-contrast", { "no-preference", NULL, NULL } },
-	{ "prefers-reduced-transparency", { "no-preference", NULL, NULL } },
-	{ "forced-colors", { "none", NULL, NULL } },
-	{ "inverted-colors", { "none", NULL, NULL } },
-	{ "hover", { "hover", NULL, NULL } },
-	{ "any-hover", { "hover", NULL, NULL } },
-	{ "pointer", { "fine", NULL, NULL } },
-	{ "any-pointer", { "fine", NULL, NULL } },
-	{ "display-mode", { "browser", NULL, NULL } },
-	{ "scan", { "progressive", NULL, NULL } },
-	{ "update", { "fast", NULL, NULL } },
-	{ "color-gamut", { "srgb", NULL, NULL } },
-	{ "dynamic-range", { "standard", NULL, NULL } },
-	{ "grid", { "none", NULL, NULL } },
-	{ NULL, { NULL, NULL, NULL } }
-};
+    {"prefers-reduced-motion", {"no-preference", NULL, NULL}},
+    {"prefers-color-scheme", {"light", NULL, NULL}},
+    {"prefers-contrast", {"no-preference", NULL, NULL}},
+    {"prefers-reduced-transparency", {"no-preference", NULL, NULL}},
+    {"forced-colors", {"none", NULL, NULL}},
+    {"inverted-colors", {"none", NULL, NULL}},
+    {"hover", {"hover", NULL, NULL}},
+    {"any-hover", {"hover", NULL, NULL}},
+    {"pointer", {"fine", NULL, NULL}},
+    {"any-pointer", {"fine", NULL, NULL}},
+    {"display-mode", {"browser", NULL, NULL}},
+    {"scan", {"progressive", NULL, NULL}},
+    {"update", {"fast", NULL, NULL}},
+    {"color-gamut", {"srgb", NULL, NULL}},
+    {"dynamic-range", {"standard", NULL, NULL}},
+    {"grid", {"none", NULL, NULL}},
+    {NULL, {NULL, NULL, NULL}}};
 
 static int media_query(struct wb_arena *arena, const struct css_token *tokens, size_t count, struct css_media_query *query);
 static int media_condition(const struct css_token *tokens, size_t count, struct css_media_test *test);
@@ -132,10 +130,10 @@ static int media_query_holds(const struct css_media_query *query, float width, f
 static size_t media_skip_space(const struct css_token *tokens, size_t count, size_t index);
 
 /*
- * Reads a media query list (the tokens of an @media prelude, an @import's
- * media or a media attribute) into the arena; parent is the list of the
- * @media rule this one is nested in (NULL at the top), which must hold
- * too.  An empty list is true.
+ * Reads a media query list into the arena.
+ * The tokens come from an @media prelude, @import media or a media attribute.
+ * The parent is the enclosing @media list, or NULL at the top; it must hold too.
+ * An empty list is true.
  */
 int
 css_media_parse(
@@ -168,6 +166,8 @@ css_media_parse(
 	made = wb_arena_zalloc(arena, sizeof(*made));
 	if (made == NULL)
 		return ENOMEM;
+
+	/* The arena owns the list and its separately checked query storage. */
 	made->parent = parent;
 	made->queries = wb_arena_zalloc(arena, (commas + 1U) * sizeof(struct css_media_query));
 	if (made->queries == NULL)
@@ -201,8 +201,8 @@ css_media_parse(
 }
 
 /*
- * Tells whether a media query list holds for a viewport of width by
- * height CSS pixels, with the lists it is nested in (NULL holds).
+ * Tests a media query list and its parents against the CSS viewport.
+ * A NULL list holds at every viewport size.
  */
 int
 css_media_matches(
@@ -320,11 +320,13 @@ media_query(
 			if (error != 0) {
 				/* A range form did not read: a name and a value, or a name alone. */
 				error = media_condition(tokens + index + 1U, end - index - 1U, &tests[made]);
-				range_made = 1;
 				if (error != 0) {
 					tests[made].feature = MEDIA_FEATURE_CONSTANT;
 					tests[made].value = 0;
 				}
+
+				/* Either recognized syntax or a false constant occupies one test. */
+				range_made = 1;
 			}
 		}
 
@@ -354,6 +356,8 @@ media_query(
 		query->tests = wb_arena_alloc(arena, made * sizeof(struct css_media_test));
 		if (query->tests == NULL)
 			return ENOMEM;
+
+		/* Copies complete parsed tests after storage allocation succeeds. */
 		memcpy(query->tests, tests, made * sizeof(struct css_media_test));
 		query->test_count = made;
 	}
@@ -374,6 +378,7 @@ media_condition(
 {
 	const struct css_token *name;
 	size_t index;
+	size_t end;
 	int feature;
 	int comparison;
 	int known;
@@ -425,6 +430,12 @@ media_condition(
 	/* A range feature compares its value; a discrete one is decided now. */
 	known = media_feature_name(name, &feature, &comparison);
 	if (!known) {
+		/* Discrete values occupy one token, followed only by whitespace. */
+		end = media_skip_space(tokens, count, index + 1U);
+		if (end != count)
+			return EINVAL;
+
+		/* The validated discrete token contributes one constant test. */
 		test->feature = MEDIA_FEATURE_CONSTANT;
 		holds = 0;
 		if (tokens[index].type == CSS_TOKEN_IDENT)
@@ -641,6 +652,7 @@ media_value(
 {
 	const struct css_token *token;
 	size_t index;
+	size_t end;
 	float denominator;
 	int is_word;
 
@@ -649,6 +661,11 @@ media_value(
 	if (index >= count)
 		return EINVAL;
 	token = &tokens[index];
+
+	/* Ordinary values must consume the complete condition token sequence. */
+	end = media_skip_space(tokens, count, index + 1U);
+	if (feature != MEDIA_FEATURE_ASPECT_RATIO && end != count)
+		return EINVAL;
 
 	/* The kind of feature picks the kind of value. */
 	switch (feature) {
@@ -699,7 +716,9 @@ media_value(
 			return EINVAL;
 		*value = (float)token->number;
 		index = media_skip_space(tokens, count, index + 1U);
-		if (index < count && tokens[index].type == CSS_TOKEN_DELIM && tokens[index].delim == '/') {
+		if (index < count &&
+		    tokens[index].type == CSS_TOKEN_DELIM &&
+		    tokens[index].delim == '/') {
 			index = media_skip_space(tokens, count, index + 1U);
 			if (index >= count || tokens[index].type != CSS_TOKEN_NUMBER)
 				return EINVAL;
@@ -707,7 +726,12 @@ media_value(
 			if (denominator <= 0)
 				return EINVAL;
 			*value = *value / denominator;
+			index = media_skip_space(tokens, count, index + 1U);
 		}
+
+		/* A ratio cannot silently ignore an unrelated trailing token. */
+		if (index != count)
+			return EINVAL;
 
 		/* The ratio is read. */
 		return 0;
@@ -721,13 +745,26 @@ media_value(
 		/* A dimension in dppx or x, or converted from dpi or dpcm. */
 		if (token->type != CSS_TOKEN_DIMENSION)
 			return EINVAL;
-		*value = (float)token->number;
+		is_word = css_ident_equal(token, "dppx");
+		if (!is_word)
+			is_word = css_ident_equal(token, "x");
+		if (is_word) {
+			*value = (float)token->number;
+			return 0;
+		}
+
+		/* Converts the two physical density units to CSS pixel density. */
 		is_word = css_ident_equal(token, "dpi");
-		if (is_word)
+		if (is_word) {
 			*value = (float)token->number / 96.0f;
+			return 0;
+		}
+
+		/* Unknown dimension units cannot act as dppx. */
 		is_word = css_ident_equal(token, "dpcm");
-		if (is_word)
-			*value = (float)token->number * 2.54f / 96.0f;
+		if (!is_word)
+			return EINVAL;
+		*value = (float)token->number * 2.54f / 96.0f;
 		return 0;
 	case MEDIA_FEATURE_ORIENTATION:
 		/* portrait is 0 and landscape 1. */
@@ -770,7 +807,9 @@ media_operator(
 
 	/* An = straight after < or > makes it inclusive. */
 	equals = 0;
-	if (*index < count && tokens[*index].type == CSS_TOKEN_DELIM && tokens[*index].delim == '=') {
+	if (*index < count &&
+	    tokens[*index].type == CSS_TOKEN_DELIM &&
+	    tokens[*index].delim == '=') {
 		equals = 1;
 		(*index)++;
 	}
@@ -886,8 +925,9 @@ media_query_holds(
 
 	/* The type, then each test. */
 	holds = query->type_matches;
-	for (index = 0; index < query->test_count && holds; index++)
+	for (index = 0; index < query->test_count && holds; index++) {
 		holds = media_test_holds(&query->tests[index], width, height);
+	}
 
 	/* not turns the answer round. */
 	if (query->negate)

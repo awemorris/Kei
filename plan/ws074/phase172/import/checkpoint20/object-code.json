@@ -1,0 +1,20 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/dom/removal.c",
+    "before_sha256": "19dc02259cc840d3b6e9e213713f90b79c25be4a478c96874ebf971bc8ddfb5d",
+    "before_text_sha256": "91abec2acd4124c47b7f64ec6de63b53fd943ef9c123777247d374cb2f179647",
+    "after_sha256": "a7daa28908d0e4c4ca00e09503f77593e8b60db02b9f5d0f0cda92a386531edb",
+    "after_text_sha256": "154630a009366b35049eb49f3e14b4853a45b32d35dffc5a9c9e76f71450358a",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  },
+  {
+    "path": "userland/desktop/libbrowser/dom/control.c",
+    "before_sha256": "ca832a8893497c6af51431dc3feb068c7771d39618aa2e190f1de543b4d70f0b",
+    "before_text_sha256": "d36c8f46d1df0e73867c48ddab0660a10e591804250723c9b4ffd5d50294d36d",
+    "after_sha256": "0fde4b2727229660dbbbf0e3f60a1e980f62c605a80f06357420a554ce9afade",
+    "after_text_sha256": "810984e6b005c6f35069a9d83906fcab1a40332821f081f1d8cb554e6ad187a8",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  }
+]

@@ -1,0 +1,73 @@
+PASS exact native select family
+PASS native SameObject empty options
+PASS native method lengths
+PASS native null addition creates same actual option
+PASS omitted undefined negative append
+PASS groups contribute tree ordered options
+PASS numeric group insertion uses reference actual parent
+PASS element group insertion uses reference actual parent
+PASS ordinary wrapper membership
+PASS any descendant HTMLElement can be reference
+PASS nested select membership excluded from outer list
+PASS blocking ancestor excluded 0
+PASS blocked option absent 0
+PASS blocking ancestor excluded 1
+PASS blocked option absent 1
+PASS blocking ancestor excluded 2
+PASS blocked option absent 2
+PASS second optgroup blocks outer owner
+PASS template content not entered
+PASS long conversion insertion parent 0
+PASS out of range append 0
+PASS long conversion insertion parent 1
+PASS out of range append 1
+PASS long conversion insertion parent 2
+PASS nonfinite converts zero 2
+PASS long conversion insertion parent 3
+PASS nonfinite converts zero 3
+PASS long conversion insertion parent 4
+PASS nonfinite converts zero 4
+PASS long conversion insertion parent 5
+PASS out of range append 5
+PASS long modulo zero
+PASS long fractional truncation
+PASS long string conversion
+PASS long boolean conversion
+PASS one conversion precedes current membership
+PASS conversion failure no native insertion
+PASS non-descendant reference rejection
+PASS select itself not descendant reference
+PASS same reference no-op
+PASS incoming ancestor rejected before bad reference
+PASS incoming typed brand before conversion 0
+PASS incoming typed brand before conversion 1
+PASS incoming typed brand before conversion 2
+PASS incoming typed brand before conversion 3
+PASS incoming typed brand before conversion 4
+PASS receiver brand before conversion
+PASS required first argument
+PASS forged getter receiver
+PASS illegal interface construction 0
+PASS illegal interface construction 1
+PASS illegal interface construction 2
+PASS illegal interface construction 3
+PASS native add ignores script visible collection and methods
+PASS current id or name first match
+PASS method and property missing results
+PASS native index descriptor
+PASS native named descriptor
+PASS named membership immediately follows attribute mutation
+PASS collection live after removal
+PASS collection live after readdition
+PASS XML native prototypes and membership
+PASS foreign and uppercase options excluded
+PASS exact incoming namespace and local case
+PASS uppercase getter receiver
+PASS clone independent native cache
+PASS clone mutation independence
+PASS borrowed add uses actual child interfaces
+PASS saved child add after frame removal
+PASS addition adopts incoming node into actual child Document
+PASS conversion adoption chooses current native owner
+PASS cached collection identity retains original creator prototype
+select options probe done

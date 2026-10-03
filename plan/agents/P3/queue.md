@@ -27,4 +27,16 @@ Next（予約）: ws115-p006（libpng・freetype・harfbuzz・fontconfig）〜
 | P3-011 | q608 | 53b5dbe6b..03f00921d（前回 cbbc1607f） | packages/libs/{pixman,fribidi,cairo,pango}・plan/ws115 | integrated db8f21553 |
 | q610 / q610-i01 | ws115-p008 | gdk-pixbuf・jpeg・tiff・graphene・libepoxy・libxkbcommon | 継続 dispatch | 4h | finished / cleared |
 | P3-012 | q610 | 8fe02c02b..581021c3e（前回 03f00921d） | packages/libs/{gdk-pixbuf,libjpeg-turbo,libtiff,graphene,libepoxy,libxkbcommon,xkeyboard-config}・plan/ws115 | integrated 8f4dcb417 |
-| q613 / q613-i01 | ws115-p009 | libwayland-client ABI 互換・wayland-protocols | 継続 dispatch | 4h | in-progress |
+| q613 / q613-i01 | ws115-p009 | libwayland-client ABI 互換・wayland-protocols | 継続 dispatch | 4h | finished / cleared |
+| P3-013 | q613 | 7f6d5f4dd・d1fb4b2b1・ad993eb6a（前回 581021c3e） | libwayland・keiland/wayland の header・packages/desktop/wayland-protocols・plan/ws115 | integrated de9b0a4e2 |
+| q614 / q614-i01 | ws115-p002 | GTK 4.18.6 本体 | 継続 dispatch | 4h | finished / cleared |
+| P3-014 | q614 | b5abef788..34843813c（前回 ad993eb6a） | packages/desktop/gtk4・cairo・pango・wayland-util.h・plan/ws115 | integrated 41e878d09 |
+| q615 / q615-i01 | ws115-p010 | gtk4-demo を zedBSD の QEMU で | 継続 dispatch | 4h | finished / uncleared（rtld の上限） |
+| P3-015 | q615 wrap | 122aeb402（前回 34843813c） | plan/ws115 | integrated 03e9c9088 |
+
+2026-10-03: ユーザーの判断で GTK は後回し、P3 generation2 は終了。再開は ws115-p010 の再開点（rtld の定数と `lookup_handle_graph` の bitmask の配列化、Q1 の許可済み）から。
+| P3-016 | q628 | f6d7e391b..d502b1276 | plan/ws131（design.md・rename-map.md・phase003〜016） | integrated 769b46ac3（design-reviewer の review とユーザーのレビュー待ち） |
+
+2026-10-03 / q632-i01（generation3）: host の memory の圧迫でラップアップ、uncleared。agent/p3 381b403b8..184600fd3 未統合。q632-i02（generation4）: user「N=1でP3のみを再開しましょう。」、ws131-p003 の「再開の手順」1〜6、4h、in-progress。
+
+2026-10-03 / 5320 を FreeBSD に: user「Latitude 5320はP4で利用する実機ですが、P4は停止しており、P3を優先している状況ですので、FreeBSDのビルドやテストにSSH経由で利用してOKです。awe@10.0.30.3 です。」「5320にはFreeBSD 15.1がインストールされており、起動しています。」「ホストキーは更新してOKです。」→ Q1 が known_hosts の 10.0.30.3 を更新（ED25519 SHA256:SU3SAIyuzmOC97UBmW2veciwXDfHLA+C8AAKcZTiysE）、疎通を確認（FreeBSD 15.1-RELEASE、8 CPU、8 GB、cc・gmake・git・python3 あり）。P3 の WS131 p003 で FreeBSD の build と試験を再開（「書くだけ」を解除）。P4 の再開の時は P3 から 5320 を返す。

@@ -1,0 +1,27 @@
+{
+  "queue": "q597",
+  "checkpoint": 72,
+  "source": "userland/desktop/libbrowser/xml/parser.c",
+  "source_sha256": "22ed80598f14c6772f1138fd47f390143f3c0e0cc1d371a84a5e983473964d30",
+  "baseline": "0999a6388b3fae817bbf0791166d71530da25410",
+  "reviewed": 191,
+  "total": 209,
+  "remaining": 18,
+  "source_changed": false,
+  "whole_host_build": "checkpoint71 whole-host-build exit0 warning0; unchanged production source since that build",
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "tests": {
+    "xml-model": "236/236",
+    "xml-dom": "54/54",
+    "xml-binding": "34/34",
+    "xml-node": "32/32",
+    "xml-document-gc": "16/16"
+  },
+  "limits": [
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

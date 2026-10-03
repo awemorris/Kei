@@ -43,6 +43,7 @@ static int mask_prefix(uint32_t mask, unsigned *result);
 static int sockaddr_address(const struct sockaddr *address, uint32_t *result);
 static void set_sockaddr(struct sockaddr *address, uint32_t value);
 static int route_delete_request(uint32_t network, uint32_t netmask, struct net_device *device);
+static int route_lookup_matching(uint32_t destination, const struct net_device *device, struct net_route *result);
 
 /*
  * Empties the routing table.
@@ -285,48 +286,40 @@ route_lookup_ref(
 	uint32_t destination,
 	struct net_route *result)
 {
-	const struct net_route *best;
-	bool enabled;
-	unsigned best_prefix;
-	unsigned index;
-	unsigned prefix;
+	int error;
 
-	best = NULL;
-	best_prefix = 0;
+	/* Considers the routes of every device. */
+	error = route_lookup_matching(destination, NULL, result);
+	if (error != 0)
+		return error;
 
-	/* Rejects a missing result. */
-	if (result == NULL)
+	/* Reports the found route. */
+	return 0;
+}
+
+/*
+ * Finds the longest-prefix route to a destination through one device.
+ *
+ * A packet that must leave by a given device, such as one from a socket
+ * bound to it, may use only that device's routes: the gateway of another
+ * device's route is not a neighbour on this one.
+ */
+int
+route_lookup_device_ref(
+	uint32_t destination,
+	const struct net_device *device,
+	struct net_route *result)
+{
+	int error;
+
+	/* Rejects a missing device, which would widen the search. */
+	if (device == NULL)
 		return EINVAL;
 
-	/* Keeps the matching live route with the longest prefix. */
-	enabled = route_lock();
-	for (index = 0; index < ROUTE_MAX; index++) {
-		prefix = 0;
-		if (!route_used[index] ||
-		    (destination & routes[index].netmask) != routes[index].network)
-			continue;
-		if (!net_device_ref_live(routes[index].device))
-			continue;
-		(void)mask_prefix(routes[index].netmask, &prefix);
-		if (best == NULL || prefix > best_prefix) {
-			if (best != NULL)
-				net_device_release(best->device);
-			best = &routes[index];
-			best_prefix = prefix;
-		} else {
-			net_device_release(routes[index].device);
-		}
-	}
-
-	/* Reports an unreachable destination. */
-	if (best == NULL) {
-		route_unlock(enabled);
-		return ENETUNREACH;
-	}
-
-	/* Copies the route; the caller owns the device reference. */
-	*result = *best;
-	route_unlock(enabled);
+	/* Considers only the routes of the device. */
+	error = route_lookup_matching(destination, device, result);
+	if (error != 0)
+		return error;
 
 	/* Reports the found route. */
 	return 0;
@@ -595,5 +588,61 @@ route_delete_request(
 	route_unlock(enabled);
 
 	/* Reports the deleted route. */
+	return 0;
+}
+
+/* Finds the longest-prefix live route, through one device when one is named. */
+static int
+route_lookup_matching(
+	uint32_t destination,
+	const struct net_device *device,
+	struct net_route *result)
+{
+	const struct net_route *best;
+	bool enabled;
+	unsigned best_prefix;
+	unsigned index;
+	unsigned prefix;
+
+	best = NULL;
+	best_prefix = 0;
+
+	/* Rejects a missing result. */
+	if (result == NULL)
+		return EINVAL;
+
+	/* Keeps the matching live route with the longest prefix. */
+	enabled = route_lock();
+	for (index = 0; index < ROUTE_MAX; index++) {
+		prefix = 0;
+		if (!route_used[index] ||
+		    (destination & routes[index].netmask) != routes[index].network)
+			continue;
+		if (device != NULL && routes[index].device != device)
+			continue;
+		if (!net_device_ref_live(routes[index].device))
+			continue;
+		(void)mask_prefix(routes[index].netmask, &prefix);
+		if (best == NULL || prefix > best_prefix) {
+			if (best != NULL)
+				net_device_release(best->device);
+			best = &routes[index];
+			best_prefix = prefix;
+		} else {
+			net_device_release(routes[index].device);
+		}
+	}
+
+	/* Reports an unreachable destination. */
+	if (best == NULL) {
+		route_unlock(enabled);
+		return ENETUNREACH;
+	}
+
+	/* Copies the route; the caller owns the device reference. */
+	*result = *best;
+	route_unlock(enabled);
+
+	/* Reports the found route. */
 	return 0;
 }

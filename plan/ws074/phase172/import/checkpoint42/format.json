@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-realms.c",
+      "formatted_sha256": "8354d9c68ac1cc4df94d12d251862f08e8cfcbfa5663537d1f3b19612ca66d07",
+      "final_sha256": "803ccbfd76941be4ef585ed4b65d6b558a76dc0167063f8bd6ae8e1283e77f14",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "plan/ws074/tests/host-context-ownership.c",
+      "formatted_sha256": "2f856f7a1cdbe454e0beabba52805ab21f6e457422b2ef8a18d69cf6590727d4",
+      "final_sha256": "689f2d8a5e637bf0233e516d20db79963452a1f55c4c96fe32aae13f7856bba9",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    }
+  ]
+}

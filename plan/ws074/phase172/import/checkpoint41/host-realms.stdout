@@ -1,0 +1,31 @@
+PASS child arguments and this
+PASS child closure environment
+PASS child constructor
+PASS child derived constructor
+PASS derived realm
+PASS derived target
+PASS derived prototype
+PASS foreign new.target
+PASS foreign target identity
+PASS foreign target prototype
+PASS returning reentry
+PASS native state on reentry
+PASS child getter throw
+PASS child setter throw
+PASS foreign generator
+PASS foreign generator throw
+PASS foreign async promise
+PASS bidirectional global
+PASS bidirectional exception
+PASS stack limit across realms
+PASS recovered after stack limit
+PASS async callback realm
+PASS target object fallback
+PASS target array fallback
+PASS target error fallback
+PASS VM call global
+PASS VM script exception
+PASS VM native exception
+PASS VM constructor exception
+PASS native failure unwind
+realm checks: 30/30 passed

@@ -1,0 +1,23 @@
+{
+  "standard": "plan/coding-style.md section14",
+  "scope": "userland/desktop/libbrowser/page/frame-load.c",
+  "findings": 28,
+  "groups": {
+    "frame_load_start": {
+      "release_urls": 5
+    },
+    "frame_load_allowed": {
+      "release_origins": 5
+    },
+    "frame_load_activate": {
+      "release_roots": 6
+    },
+    "frame_load_error_document": {
+      "release_graph": 8
+    },
+    "frame_load_html": {
+      "release_parser": 4
+    }
+  },
+  "classification": "Each is a single forward jump to its function's one shared ownership cleanup label. No loop/retry/cross-function jump. Permitted by full rules; not a waiver."
+}

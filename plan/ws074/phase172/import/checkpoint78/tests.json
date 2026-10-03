@@ -1,0 +1,33 @@
+[
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  },
+  {
+    "name": "host-form",
+    "argv": [
+      "build/browser3-p172/plain/host-form",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "host-form: 29 checks, 0 failed\n"
+  },
+  {
+    "name": "image-geometry",
+    "argv": [
+      "build/browser3-p172/plain/host-image-geometry"
+    ],
+    "exit": 0,
+    "stdout": "native image geometry: 10/10 passed\n"
+  }
+]

@@ -1,0 +1,1832 @@
+{
+  "phase": "ws074-p172",
+  "attempt": "q590-i01",
+  "base": "70fd4d2f4",
+  "reviewed": [
+    "userland/desktop/libbrowser/dom/adopt.c",
+    "userland/desktop/libbrowser/dom/attribute.c",
+    "userland/desktop/libbrowser/dom/form.c",
+    "userland/desktop/libbrowser/dom/xml.c",
+    "userland/desktop/libbrowser/dom/radio.c",
+    "userland/desktop/libbrowser/dom/select.c",
+    "userland/desktop/libbrowser/xml/dom.h",
+    "userland/desktop/libbrowser/xml/xml.h",
+    "userland/desktop/libbrowser/bind/insertion.c",
+    "userland/desktop/libbrowser/bind/frame-resource.c",
+    "userland/desktop/libbrowser/bind/style-sheet.c",
+    "userland/desktop/libbrowser/page/resource.c",
+    "userland/desktop/libbrowser/bind/svg-length.c",
+    "userland/desktop/libbrowser/bind/xml.c",
+    "userland/desktop/libbrowser/xml/dom.c",
+    "userland/desktop/libbrowser/html/input.c",
+    "plan/ws074/tests/dom/document-write.expected",
+    "plan/ws074/tests/dom/document-write.html",
+    "plan/ws074/tests/form-owner.js",
+    "plan/ws074/tests/pages/array-length-probe.js",
+    "plan/ws074/tests/pages/child-style-probe.html",
+    "plan/ws074/tests/pages/click-activation-probe.html",
+    "plan/ws074/tests/pages/cursor-probe.html",
+    "plan/ws074/tests/pages/document-adoption-probe.html",
+    "plan/ws074/tests/pages/document-forms-probe.html",
+    "plan/ws074/tests/pages/document-images-probe.html",
+    "plan/ws074/tests/pages/document-stream-probe.html",
+    "plan/ws074/tests/pages/element-name-probe.html",
+    "plan/ws074/tests/pages/form-controls-probe.html",
+    "plan/ws074/tests/pages/frame-viewport-probe.html",
+    "plan/ws074/tests/pages/html-collection-probe.html",
+    "plan/ws074/tests/pages/html-reflection-probe.html",
+    "plan/ws074/tests/pages/iframe-context-probe.expected",
+    "plan/ws074/tests/pages/iframe-context-probe.html",
+    "plan/ws074/tests/pages/iframe-safety-probe.html",
+    "plan/ws074/tests/pages/image-geometry-probe.html",
+    "plan/ws074/tests/pages/image-zero-probe.html",
+    "plan/ws074/tests/pages/input-reflection-probe.html",
+    "plan/ws074/tests/pages/language-empty-probe.html",
+    "plan/ws074/tests/pages/legacy-event-probe.html",
+    "plan/ws074/tests/pages/mutation-record-probe.html",
+    "plan/ws074/tests/pages/namespace-probe.html",
+    "plan/ws074/tests/pages/node-cloning-probe.html",
+    "plan/ws074/tests/pages/node-iterator-probe.html",
+    "plan/ws074/tests/pages/object-url-probe.html",
+    "plan/ws074/tests/pages/option-selectedness-probe.html",
+    "plan/ws074/tests/pages/pre-insertion-probe.html",
+    "plan/ws074/tests/pages/radio-state-probe.html",
+    "plan/ws074/tests/pages/range-boundary-probe.html",
+    "plan/ws074/tests/pages/range-clone-contents-probe.html",
+    "plan/ws074/tests/pages/range-core-probe.html",
+    "plan/ws074/tests/pages/range-delete-contents-probe.html",
+    "plan/ws074/tests/pages/range-extract-contents-probe.html",
+    "plan/ws074/tests/pages/range-insert-probe.html",
+    "plan/ws074/tests/pages/range-mutation-probe.html",
+    "plan/ws074/tests/pages/range-removal-probe.html",
+    "plan/ws074/tests/pages/range-surround-contents-probe.html",
+    "plan/ws074/tests/pages/select-options-probe.html",
+    "plan/ws074/tests/pages/selector-grammar-probe.html",
+    "plan/ws074/tests/pages/style-sheet-mutation-probe.html",
+    "plan/ws074/tests/pages/style-sheet-probe.html",
+    "plan/ws074/tests/pages/submit-event-probe.html",
+    "plan/ws074/tests/pages/table-collection-probe.html",
+    "plan/ws074/tests/pages/table-row-probe.html",
+    "plan/ws074/tests/pages/table-structure-probe.html",
+    "plan/ws074/tests/pages/text-transform-media-probe.html",
+    "plan/ws074/tests/pages/tree-walker-probe.html",
+    "plan/ws074/tests/pages/xml-document-probe.html",
+    "plan/ws074/tests/run-acid-tests.py",
+    "plan/ws074/tests/run-dom-tests.py",
+    "plan/ws074/tests/run-frame-load-tests.py",
+    "plan/ws074/tests/run-realm-context-probe.py",
+    "plan/ws074/tests/run-resource-tests.py",
+    "plan/ws074/tests/run-settle-tests.py",
+    "plan/ws074/tests/run-write-tests.py",
+    "userland/desktop/libbrowser/Makefile",
+    "userland/desktop/libbrowser/bind/bind.h",
+    "userland/desktop/libbrowser/html/html.h",
+    "userland/desktop/libbrowser/html/parser.h",
+    "userland/desktop/libbrowser/page/page.h",
+    "plan/ws074/tests/host-array-length.c",
+    "plan/ws074/tests/host-color-media.c",
+    "plan/ws074/tests/host-realm-retirement.c",
+    "plan/ws074/tests/host-write.c",
+    "plan/ws074/tests/host-data-url.c",
+    "plan/ws074/tests/host-image-zero.c",
+    "plan/ws074/tests/host-namespace.c",
+    "plan/ws074/tests/host-radio-state.c",
+    "userland/desktop/libbrowser/bind/cloning.c",
+    "userland/desktop/libbrowser/layout/bounds.c",
+    "userland/desktop/libbrowser/layout/replaced.c",
+    "userland/desktop/libbrowser/bind/submit.c",
+    "userland/desktop/libbrowser/dom/dom.h",
+    "userland/desktop/libbrowser/css/css.h",
+    "userland/desktop/libbrowser/css/internal.h",
+    "userland/desktop/libbrowser/bind/internal.h",
+    "userland/desktop/libbrowser/vm/vm.h",
+    "plan/ws074/tests/host-frame-viewport.c",
+    "userland/desktop/libbrowser/bind/implementation.c",
+    "userland/desktop/libbrowser/bind/style-context.c",
+    "plan/ws074/tests/host-cssom.c",
+    "plan/ws074/tests/host-document-images.c",
+    "plan/ws074/tests/host-image-geometry.c",
+    "plan/ws074/tests/host-select-collection.c",
+    "userland/desktop/libbrowser/bind/click.c",
+    "userland/desktop/libbrowser/bind/timer.c",
+    "plan/ws074/tests/host-resource.c",
+    "userland/desktop/libbrowser/bind/svg-text.c",
+    "userland/desktop/libbrowser/page/link.c",
+    "userland/desktop/libbrowser/js/builtin.c",
+    "userland/desktop/libbrowser/vm/class.c",
+    "userland/desktop/libbrowser/dom/control.c",
+    "userland/desktop/libbrowser/dom/removal.c",
+    "userland/desktop/libbrowser/dom/serialize.c",
+    "userland/desktop/libbrowser/js/builtin_symbol.c",
+    "plan/ws074/tests/host-attribute-namespace.c",
+    "plan/ws074/tests/host-xml-document.c",
+    "plan/ws074/tests/host-xml-node.c",
+    "userland/desktop/libbrowser/page/geometry.c",
+    "userland/desktop/libbrowser/page/frame-load.c"
+  ],
+  "scope": [
+    {
+      "path": "plan/ws074/tests/dom/document-write.expected",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "a9ef747d6a100edf2f182c7ab521e44850b8ca7200272aafb86eff255ce462df",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/dom/document-write.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "5ad9798bc7d328f47ec4d16cb4ec7f00f8219d6cbfaf311f87d15aac85db1f63",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/form-owner.js",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "b457b86209963a8e940bab68d9b0c7696d69368e4f6c589bfab1ae33bc3d5193",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-array-length.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "7d4c31827c14e445f80f672313c639fa5e21a5338217d8606f1ee7dbff5737b9",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint10/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-attribute-namespace.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "7636f97515385ff26e593c2b61385b88a7450ec489e9deb82a28047604350118",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint22/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-click.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "87c8150009a2c136bf5920c9972cffb492f82fc1b5c6cb59fe9bedeaa396ac56",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-collection.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "152099ba7868578d4855a397200d1e0475376161274e60da10dcedabdac3e987",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-color-media.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "a84c247e7750687d731ff2461861b498385e18bdc752cd2330374f2adf29884a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint10/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-context-ownership.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "6104d95c560085949b032724e29385d314bab7de5bf79a10e73102fc3821bc1f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-css-rule-model.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "2d713eeb9d6ee089ba620d9e6770b4383c59d30e5b89ae901829297d2d836d3e",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-cssom-mutation.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "78e34cb32706f0ea5ac078cbc77c309d6b4768cbfd67f66a8d3fa7070fcd895a",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-cssom.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "cbbd64b201ff3ff09276d854ff40b637246cd14fa509fcb17bc420cf3a492e0c",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint16/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-data-url.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "34378a71ef5c7ef29dd0984539c3cc0afd1573984b7742db058a6339cee0103d",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint11/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-document-images.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "03fbe6e1b865bf52fc330fbfd0dd776a10599f05091eb2e367c074d6b0b62dde",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint16/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-document-parser.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "8b070b77eafd9571543056ae6768366ccd46098731c85b2f2cb49f01ecd65e86",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-document-stream.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "bbeb69a8d0b751ee96dcdebae1a716e81817cb51a42bd7cf2240c87f6617a89f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-form-collection.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "a6be86a2670ee8baf288f3fc43533f901a4571ad266b76bd074fef11351b9b90",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-form-owner.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e093850dd4277efc60126a7d4df3840c04591fee3e92f8653c1e590332790c4d",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-lifetime.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "1e9806612bf6f11801067a7e3b9bb16d13146f3fc074fd123576abe5349a9ed9",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-load.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "0f969a8e4e3f910a290efb5696b69467cd345ae4538a2ac9143cc8904c994f3e",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-frame-viewport.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "59120f886a8c8cfc0a85d906217085da2d42626c602ae6ea3bc29376e1190638",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint15/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-image-geometry.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "3d2539e4a776c81793d076a3f7b222a27731e90097107345631f13b9eae0c537",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint16/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-image-zero.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "699f19add5fe60de1ac328ecac3b5121bac453aeb9e65af80c765dca1494a954",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint11/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-insertion.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "ae4d6d1574b343439ffa7c6c37b552e9512fa7421f119119a487d6e92cadd483",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-mutation-record.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "43d5ea7b51f5b452ca306e100f407922a149018c9e9e07356b32e9932c7e8743",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-namespace.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e9ae652c8e01aab449e22108a668072b7fc8be1d52f6facd0c72cd6a531cca31",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint11/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-native-properties.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "4877599e6e6b4358cf40bfbd412ef425e6776df2eeaf5c3d9df48c4b19d0fd93",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-node-cloning.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "5b3edf749fd75c700ffa7fb25465b8ad780234c5ac1a7ee252acd76f61fe562f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-option-state.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "7a6e3d0409f8f19c8ab8808d8bacfbfa0b2fa803d826c6a8450eee34ab7edeb5",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-radio-state.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e2a44c648ab8c6441462ab995aab33a3537b09084c64d61300f0d1ff96db6efd",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint11/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-range-boundary.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "7aa9e05e33b33d6666625e55bd2e92d1003db829725c0e3ecc42ace8bb837562",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-clone-contents.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "fcc18b4ab269ae710f8142629f5f455bfb15af2bd83dd06707be0687f4c224c5",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-data.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "2e5b579d62a095ac681705f7ddc020cb791e1fc626f19a966cb3d886c3f2958f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-delete-contents.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "7b8ac20e14bfcec468b196de80375b02ac00d82537414ca02a1783801314beb6",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-extract-contents.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "4b99ee11318953642ed92ac6e2895152b7245f4d9eaf06c72e0872f461e24a46",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-insert.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "21e9f1f9a6136f4421a0dab2daae993b718fddc6d8f0e98a3ff03ed0f5fe0ccd",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-mutation.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e3fe836215a202a1b1f6eb3123be9061de7800945103629b53e0f997da07f6bd",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-range-surround-contents.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "0d7d0b5ad9ba056e3baa42b6fa03de64fc8061f1d4d9e7f6ecf8b62a053c5ab6",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-realm-retirement.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "81727dc13b90b3cf53dc71fcd48dbb5c166942fbc508d1f4fda9a358d1605944",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint10/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-realms.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "bc736df0fae86a6fc0a58a178216678987f501105fa844e09cb819d6e13d369b",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-removal.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "f6dec199c493cb45fe09971e6740556cc3e8dca20fb0bc08926554da028725e5",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-resource.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "c2d0dcd5f43b01b174a46ba53bd9f8df032017e01fad92d5ec3e2bfe9d27991f",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint18/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-select-collection.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "cd377f4a8a54bce0b7e5e9a8b96dbb8f36a591de5b4073211f3567cdddd9d136",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint16/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-select.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "0142030d77f66b6d7795f0a574f5f2491aa1c7014fc446201aacace7c956ffa6",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-style-sheet.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "62ce8fc85edaecc153175945e186d0d38f597fc9e2dd459458115ea0bc9c5205",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-submit.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "1ae74bec843c29a27adf242612c158ae45133bcbf5515213625190799aeb4574",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-length.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e09e5b03a0d7ecf79af8b0ef78461032bd64e0c454e75e72732e674a205bc57c",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-text.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "8ab0263a73bfc98e954de755821c82aeabe2a0601f9f2aa0046e99939563caf2",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-table-collection.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "ae868fdc9f5f82316885397a300de6713c980384179d707c4dc66e7230fe1146",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-table-mutation.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "ede909e203dbc57b178518d83164dd3d6b01ce049d468dabf366afd69fe78dad",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-table-row.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e8f98897fbb4e91e3feb9ae4e5022685bb422118c3230f554e7642535a5ba754",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-traversal.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "3c11d2219a2b0882f65cb227b6aa63980ae65be0b83dcc2daedc6e1951ab28b6",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-vm-factory.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "bb651ff82a03463d0ebdbdeedf46c8b702baeb4ad2c032f5349a9e2f2bdfc9e1",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-write.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "41333c9e1e46c646fc72c0f713aa32a4eaa2e0e583e6021bf8f07b9af21480f3",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint10/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-binding.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e5c759e3b8cc67540712cf2d67e37de38112d02f400373c9fc570271de5b61d0",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-document.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "a0a48686f41eb44e514d11e483f1769f21a0ecff88a8ddaa708d91314f7d1185",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint22/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-dom.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "f5db6bc45d16a3f5904c54d2c961385d0df03aed70f83ce713ec48f528bfa106",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-node.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "af8a73dd84ab93347e253d39c1fe1d2df4ba3a2fc3686a588a36c6851882b0c6",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint22/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/host-xml.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "182b853b5475d8d62fb367f11e7c44d175bb765c8e8f2037756b3f17e96278aa",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/pages/array-length-probe.js",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "f92b5b1a5032b46b50d4a8838a09479a69a30adfd8a740b4e12c3ef6369f113a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/child-style-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "bee8c0a690384913d7fc741dfadebb1a3fc03085bd36af29412e191e0f3d085b",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/click-activation-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "f80de464607d0c05fadb140a34793b148708096ad2df59f44935283587d2ca7e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/cursor-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "6a2abeba1075ac065e6c1c548db12874e0bc9d8e3cb7853453def54ef04e819e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-adoption-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "c3bec8532f398a5b92e5f2f5c018c80c5d695cd079db836fac36f65c17cc8a42",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-forms-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "e076050770861d3264514dba1eb22b7e3efb0954235ea5610688c13a5520e65e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-images-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "4882d511359a63395dcef33086d80ef4fc8e8eea40b18dbafc2616de9cfc18d4",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/document-stream-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "edf70d0b62cd6aab4c59cf93ba8c41c268c42805f345af3079079447aaa0d067",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/element-name-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "721d129d37f3cd643178d3ef4d96700507f56714748d0356b6252b886e3a2d5e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/form-controls-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "03e67a40ba9355dc18125ef34dbba628e857de248c5061f056e43de792999e8f",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/frame-viewport-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "3d87c56d7259990c0719121b0612e31faf047836a27716a396cf541e43ec335e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/html-collection-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "4fa261905859569ece4486f98ef10729362d63362ff977225dd4a3ad1ba5e5dc",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/html-reflection-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "accfa6ef1642b5788391d3fba6626c74e1dab21fce45fe23eb1660790d4b5b72",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/iframe-context-probe.expected",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "2f7c5d31d1b66675cd84e233fa6c4d2ac86540594d44028b5fe19d88c74a4466",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/iframe-context-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "983d8bed7561f6d481ae59a92128153df52b0e1253953de99a968d643d95f878",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/iframe-safety-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "3b0e7f941327f73b83eb67d31cf0918f5a5ee7d109678074549dbc196e7d204f",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/image-geometry-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "dedab366c960a68cb040ec485e9f234329649ca6d4c1ad5eb59bc981a465ed9e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/image-zero-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "18e5cc6b8cd40b78d363dbadd47a738db9652838157a6a2d7bd2614685ee2359",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/input-reflection-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "c14c745d161a0dfebf474fee4544fa0d9f2c483e4b65c9691833846a68496301",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/language-empty-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "cdb7dd7d6f7ec4aead8762030223ca9e544b8945cef34e3760f0b15903cca537",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/legacy-event-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "fec1930d2d1077a31c730d5c4c289484f5d4548b68401b516ce85f2eb4e9a228",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/mutation-record-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "0e8cef5730cb237204885f8e45a4856b4c1b4434ad945569ce88b4a6399b23a0",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/namespace-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "24feecbf77c3b2aac55c4eb022764ccad4cab1b731d05e4c488bc9955c3f328c",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/node-cloning-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "a3531d8433e3dd0eb2b5d27496a7aba062288bdbce0584d04ecb4ea07966906e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/node-iterator-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "ddcb292d0ab837cab32ef1a8db628f80f306c001b3fa6caa934b7ec1ced49542",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/object-url-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "b82b76e616eefbf8feb1fe32c86743210288bb4eacffb784a66cdf099bc27163",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/option-selectedness-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "0b8aa644d583b04bfa858077ba66e6777398088ff49d5417feabef2cf400c320",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/pre-insertion-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "8c82647678fdb0b578c4e34c71fb5cc53f7dab8bdab37c3bbdbbfc298d559b9e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/radio-state-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "3302295fadbd17b6b5397e21dd38aff72d1ea381281588f33f9852d177cb2f96",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-boundary-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "527f27292317472e2fa92991ace11cf153852cada59a4e670af61ae630c6025a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-clone-contents-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "64fd345b256c7d1e609b9a02c74ad6d7b3739e5cd6e129e353cf99175d06e24f",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-core-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "fc74d55581c06ee60c460a1881af8078cbb975d6227dfd87d2ac015fd454cd3a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-delete-contents-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "3c12e392ef3416e082845a1e5a0c4471149b22526bfe48184b53a1bbb41af475",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-extract-contents-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "8673f051bb2d94c182310c98c8a5b985f05cfffd2018e88f57a64e594e1d2473",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-insert-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "7fff8abb7cd2616a0153dbac351fe30f1ff1a066535c31d33a8d37ee16dffe18",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-mutation-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "55751d6ee55bfdf93ae0f444c06da63fb96510b427437a3117ef679025d2d326",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-removal-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "bf3abac897967a8f36cffdc4b31aeb9ae8c92bb3601dffff06739100fc8936fc",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/range-surround-contents-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "1570f36aec2225c5dfc5c8187466ab779e4fe69082a50d94469841a46d5c6285",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/select-options-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "11b6f2624104e16e2a774223fec3d45e372e5cae2949f1ae0347bb136bd34cd3",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/selector-grammar-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "c8feb59e1bb9680c7f87c687d1abc0e6d9ce43be95ee7c6ffe54b8bbb40ed40a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/style-sheet-mutation-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "6c50f6e1ba9004898e5b16b124126bb587a0b5cc8da8504bcd57cb412d8114ec",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/style-sheet-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "301e633663a366221a4abd6d3dcc3717746b101258f3edd82430d3c988e50197",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/submit-event-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "87eeef995513efe53b1d69b1bf21d4d0a15b146e1b09703454048978ab5b3cd2",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/table-collection-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "d1ccfba14b0ab423dc1abf45a516fed114ba43ba24e204fb82708bf6494349ae",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/table-row-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "5b6517459e2bfc780f28a754b6c236de4c36a90e8e54f22c66b68d8153816ff6",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/table-structure-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "9e0fb9c68edb0da58bc1a2f8e1928a7171859c135f7b5ccea2d4ee93fae478e3",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/text-transform-media-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "968b6c36aa26d5582b064e15fbade86db0fd9073b61c9c33bdbdb551bc20a95d",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/tree-walker-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "eac52be6b32ff0c9ee39a0865d1aec42db6594e3c76995a84259849e1686e391",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/pages/xml-document-probe.html",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "a08e6da6b386678c15405e40fa455c02a188f9c61ca6124c2ff94f352311f6d3",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/realm-context-probe.c",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "471a1470f1e14523701438c67c131bf7abdce7c3d38101026ac07f0440908feb",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "plan/ws074/tests/run-acid-tests.py",
+      "kind": "test",
+      "branch_status": "M",
+      "sha256": "0cd6cda79b4958de0ad2413d255d99cfc0120d311565a38b622e5040df67b4d0",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/run-dom-tests.py",
+      "kind": "test",
+      "branch_status": "M",
+      "sha256": "a760ee9700f30bc455e46d54f2a98218e559cf9b8c4724cd861f6f1c5cbb4f75",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/run-frame-load-tests.py",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "1afeae4bf5e191d692113d15b5b80a31a777f64056edaf25f1268d20a454de64",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/run-realm-context-probe.py",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "8a871aff89208bb5ceda3dbe0d8dc85d7fbe3397758317bd85db4e647f3fa04a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/run-resource-tests.py",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "d03c65650139b6bada83c2a90205e2f9c3f944b48b63231ef8881fe269f3afd4",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/run-settle-tests.py",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "031828e5eabe21df9bfb2eebef8067300ac1336cb19f20f859ee188b02e2c229",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "plan/ws074/tests/run-write-tests.py",
+      "kind": "test",
+      "branch_status": "A",
+      "sha256": "00586f53006b1024752bac810ba730cd0a5db4faf4825f86b9f5ead9eb848624",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/bind.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "2cfb6d9950f496d35327d954e17d4e276d87de5cb8b88bbee44d3224d01a0404",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint09/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/click.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "15ea86f212dcd4ecf39e827598fbc1f28f222f7d4dc151b61c6c4d77da0cf1ac",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint17/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/cloning.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "102a2fa557759a0ccc04f8fc227f51c9afc3a5950050a990190114a35a5716f6",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint12/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/collection.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "75545aec575b71c6fe6fc72a468e4ee11af6dba24b083810b821bae34927c99f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/computed.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "38aa9c89bb9001366275e1dfa0224d7c00b3bd6a406f6cc6cff9901c369ad86d",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/cssom.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "bddeeb49e12c795218229b9beb932819909dd552f2750c91629c86c051f7eb41",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/document.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "c9c6da8eb2061c1abc3f85ab1fdcf930b4f0dbeaaf867a4b70fd292f5c70731e",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/element.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "663376ab0687fa785ecd39357fdcfce660a83c646695847392d8070d2eda87fa",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/environment.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "f9f4b3fac3a2aa500177ea3073ee5c86f9ef4d2e2257135a484114fd2611f7e0",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/event.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "b787a24d2c3f54640a24432e04945e47d1f25e113a537c5d501689a029e1f54b",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/frame-resource.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "5c0a59944df78aa4f58b1ab3bf8167ee6aec517ee62f01ac6cf5ccc87b715b48",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint06; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/frame.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "a7ea4741e6b55539e35a935b60fadb7f6d6c745fef597c075c8ddde18c4ab7c2",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/html-input.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "bafc7f0e104112f14567cd311e11dc48646cad23f29dbbbf57655e6f7352105a",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/html-reflection.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "609a069950a5a2f6a3113e18f4c831d085dafe19ce124745d6ddf1a0e96b578f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/implementation.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "1c9725ba5ba50c0cff9b8e38801c6488ff8c9e678ada0b8f2239aea6c2b70e1e",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint15/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/insertion.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "5485067931766c25aca5e13eb8412ff6b5adae56d6ba281c77f2e420477fda29",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint06; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/internal.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "638b2b3e07d88628bfdb00af47e810f574daa665043e4e85b90ce276bd2b5f3b",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint14/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/iterator.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "486931ec02689f1c755c74de3768354b882cf149e22a7489e0c212c9e6c2a2b4",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/mixin.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "bdd106e5f11da3abb686db628f08fcb103e350875ba4a7ea3e5bd4325f735756",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/node.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "5935a7be6c36e53b17ecc096704ead1bfdd66954a07cf95c7acc33b75b628d54",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/query.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "a31740de92a21528c7d9ccdac9557eb5a864462e49e67eb1cad17134a6230d50",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/range.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "dfe248b3d93974206e2be3d97b5b0505fa7e716d52f48b83424e3cf507fc7e24",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/select.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "4fcef80d702c33314b1cf2045939f225abe3a13919b61da3f825727fc1f599a4",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/style-context.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "5b10990a1c578962d30c0aef9eeaee2d2017c11c0b8d7eb226a67f3fd30a7a89",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint15/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/style-sheet.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "581087e06a335bc4125d6d98ea9af8e41cceff42f01e6820849e93c4b3e40553",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint06; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/style.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "fcc44ded0aea1dfb6cb83a0d5ba255003d0187c74e454e47919d3818da100536",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/submit.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "a959ab463b2b56685f3572fdf0e149fbbeac84c615a869c29da383c11b9d4d19",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint13/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/svg-length.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "884133cfbf7f92319f218ab4c3c8ee4ad81aa242e0fb6cf3a9a00577835e6261",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint07; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/svg-text.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "665c2dceda133439263a59de764933bfd3ed68c18e129ede867627b27ca4af82",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint18/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/table-row.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "8f53c3ae6d0f26ca9d4bc613f71156652ebf5e987f8b9ce1b6181099a2c20d6f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/table.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "1caeb76b5f59f99048fbb64e0439cf285193a8b1f5888e03cd4a288d4269543e",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/text.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "273a33eea978bae37baca0e5f4076ef1cc840d583f51d0e323fd0f144bacfe4d",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/timer.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "72404768016fe693a64157bdbcf5330fea9e0df1b0d1859731eb1383a9d32b1f",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint17/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/traversal.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "f16921663d02102c481981876e5bffe9e25c6f74ea2287f638c46b5ff17a710e",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/window.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "131c24782b6806b5fd5a19f7bb67298d89b7bdba7c7176480c67054264e1446d",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/xml.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "73465cbf27b3b4be941d7afd168cc9a64949be7a22b7f28ce5a89bfc8eb48edb",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint07; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/cascade.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "7f4c07befc605bc8e84ba82f76d43ed9643a47ee099815201eed945d936107e0",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/css.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "e2007315579154288b86041467e583928d8e5cdf13bb7f76284ec7d207367748",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint14/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/internal.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "9704408f74ec4c219c970eb8f6db05d92e1b4d4e2f13d8f6c1bca26ce4d1a2df",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint14/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/media.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "e1debeee9566a5459be1498bf84eac6172797636f19025521ec30716ff80b5cc",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/parser.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "8950ab64e598a285f706b82a93829fa8dee3227f16b99b6150eb13614affe86a",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/rule-model.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "79ba855773036c811547b9d5379491d50a65891e40d079161967d4c9dee0b61c",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/tokenizer.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "c532d79f34e75bb717333485f75625bcce48b6cbec58202ba8be43d808b1074f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/css/values.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "1e3462711f8cccc40381895f4464b88fe1650f748890337f7197f5e40f11dcbb",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/adopt.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "489a4fe605ac61302bbb4ea8dacf8a8f36298c834e9e3ce745b6eea25505170c",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/attribute.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "1b2b2de7965d0b326321255048dfb5da826cf0c7b54975d1491165912293f1d6",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/control.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "0fde4b2727229660dbbbf0e3f60a1e980f62c605a80f06357420a554ce9afade",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint20/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/dom.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "7827e3a70347708a6586f056789a6a1031957de0f9c76b2fd71eebec4c8079de",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint14/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/form.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "487599bbefee3151b763351f3696619360109689d38e91c238760ca08ac53d3f",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/node.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "1dc870a61ee41dfa3c4b8cf534608943fdb6c530bea9937a335e281f1ac18a68",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/radio.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "039588e67f37ce93680e1abddbe8bed5a12d99377514bdc98438cf728b1592d1",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/removal.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "a7daa28908d0e4c4ca00e09503f77593e8b60db02b9f5d0f0cda92a386531edb",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint20/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/select.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "7ae91d25ce984782915d9a6c771b89b030f942775751fb21c9bf48f2f29fcc2a",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/serialize.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "7a9baeb052861cab4e6fc35b3b15ff8351e5d15dbb99903d5b79de908c3c83a4",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint21/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/dom/xml.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "7ff0f9fed4c25029e267406e497deeefc2594c29b73c6611642ef765fbc3cd7c",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/html.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "83d5c84a1fb0820a3733ce64c9a61d202231a6be1aa78f65a287b7a0444fa38e",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint09/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/input.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "b932613c55cd8a3fdfc5518123401d2945a14f41cb071cd55b47456c3482cf1a",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint07; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/modes.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "7acfbbf61a8947fbfaed3415a0602c24756c713be6c1173beadc7d35202b93b1",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/parser.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "37dbd1aabfa84d53acd0bea32f2987f675f2d294a2c94cff715a40e2123bda67",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/parser.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "23652c927e85b42ec6f9ea87b01156b6b7e7ea34d1651011217dec4e8021eaae",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint09/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/html/tokenizer.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "b4e6c3466b66fa10cd7c429063761520d2dea45f47ed5ffb468fe20d0a5faca1",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "0d8811cf2538ab858fd594ad4700fda7acfe6e42fb805183dd05a319b67ecfa3",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint19/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_array.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "3ffe8cc4acaf773ee3ed9e46ba035987abb1c84c9af1a1b3d794bc3d34018126",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_function.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "a94b19d3561df2988bbc7e7ac5f3e2716a7f28f2d9126b48b208d71e47742e58",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_json.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "5c1a570121eae461b25f30e29f8182226b78261043db513c4f38f4f011c10788",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_object.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "37d807766b62ebbb0653624bb90467bcdcca3554d666861143ba096cb5abea9e",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/js/builtin_symbol.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "15a6ad149aa930a2c23d7aae5ede4cee3a21e2062dbde4e7ba96deb4121014dd",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint21/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/layout/bounds.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "eff79824a89fe9294998e667c136d3ae5b985f7940dba94af6d96b7e43388dea",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint12/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/layout/box.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "ddd89dcf4dd47b9879861f6931f6b96c20e9032b55976d4f360fad5d9b1354e0",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/layout/replaced.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "799e8c610e4061999359e777d22d8ec96c37af2c3c94a0a483560b0192c0d8b6",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint12/README.md"
+    },
+    {
+      "path": "userland/desktop/browser/main.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "8b20d2b754ce373260c8d79aee8d997c9472c428aca85d46cc6580a54e2dbce5",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/net/data.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "a601bb16ef8931ebcd2ae2520eaf02491ab0918c7835907ce3cb845aaaa4ad0d",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/frame-load.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "24643fc375d0ada1ea43b3305f062883d59342b82ac1429055c56f0828bd5a74",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint24/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/geometry.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "445dc346e410a02305f8ac928a0774e35525bbf136b3a6ecc75b9d1c2a1b5059",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint23/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/link.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "c6d05d44b74e504aa351dd598889b2a95138958c8f491bcc2523e43c7912ce1b",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint18/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/page.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "35079bcf50692082cf2093aa9ffb417a3825de34b84b0f911e5c1a7dd2e669da",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/page.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "037bcde8a08753a4a896aad4f9e3245e711ba83b31b98b179c76d3003c131c40",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint09/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/resource.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "23d34f12a7d390f8535725ad7c611d4bde9484c311d47a87e410a05b1c75e87a",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint06; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/script.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "1371b2bb59cda0434442c17a0969f7d264f74663b1682692612925efd10e5e61",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/page/sheets.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "5f92baf1a5692d011fcd2af1b9da327ee281f3442ca83ad16ab0a9add19f2059",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/access.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "467a2ebcdbb9091f1de2a1e99ec6f0ca3fd2cc9fb7a32999b1f34d0abf959765",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/class.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "93dbdf541f6bec51dc2539f6a66fd7309859fbb299dce78166f33af39ca38c13",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint19/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "f3260a7276114e7ca0f183fa043e5bd628d9cfe0186c1b1c496877e6867debf0",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/interpreter.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "e686e274550179e1ad33113373b6d1e720e44fafb79579fec5420b01fbb5d143",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/object.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "6254a594a5085af09acabb285e3cbd6993ae2d4c9f48fd37a6fd0bf22e902832",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/realm.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "f840fa0b68b82019508199f4bb7bb10fea4b83bfc59d991e3927bda1c9aeaad1",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/spread.c",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "707677d773dddd712acf9d481f6bc40bcd24519f1e4dc281cee7a76c0ae9c71f",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/vm.h",
+      "kind": "source",
+      "branch_status": "M",
+      "sha256": "89bd0323fd42b62b3e143965f5aba3d39890da9410a22b9dd32b173aa1340b35",
+      "manual_status": "reviewed-full-file",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance.",
+      "review": "checkpoint14/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/dom.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "c008618b7423d5207f2dbd475807aded9e065d9b04e7430197b51a89194adfb4",
+      "manual_status": "reviewed-full-file",
+      "required": "Full C/component review completed in checkpoint07; final hash fixed here."
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/dom.h",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "5284bcb14d9b6bc56edf1c05509460004c9e70a56c0a02388721d2b1469d44de",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/parser.c",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "22ed80598f14c6772f1138fd47f390143f3c0e0cc1d371a84a5e983473964d30",
+      "manual_status": "pending",
+      "required": "Full applicable C standard and browser ownership review; existing mechanical/regression evidence is not clearance."
+    },
+    {
+      "path": "userland/desktop/libbrowser/xml/xml.h",
+      "kind": "source",
+      "branch_status": "A",
+      "sha256": "646511b012cb5bfb84c367d6edf38099d072b02233d4ee359e5e94072c20ea06",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint04/README.md"
+    },
+    {
+      "path": "userland/desktop/libbrowser/Makefile",
+      "kind": "build",
+      "branch_status": "M",
+      "sha256": "7dacad3caf6fc044828868c07391e61670a9e5832b57bdde7df99429d234f797",
+      "manual_status": "reviewed-full-file",
+      "review": "checkpoint08/README.md"
+    }
+  ],
+  "whole_phase_cleared": false,
+  "attempt_outcome": "in-progress",
+  "reason": "q590 continuing full C/component conformance; checkpoint24 reviewed120/209, remaining89 C/header; whole criteria absent."
+}

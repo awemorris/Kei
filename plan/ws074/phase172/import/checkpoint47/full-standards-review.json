@@ -1,0 +1,43 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-native-properties.c",
+      "original_sha256": "4877599e6e6b4358cf40bfbd412ef425e6776df2eeaf5c3d9df48c4b19d0fd93",
+      "final_sha256": "54ea416fa98c301d9b2c44996ed2b85f582ce3568bceb85381c979b5ab9f9823",
+      "status": "reviewed-full-file",
+      "original_lines": 617,
+      "final_lines": 638
+    },
+    {
+      "path": "plan/ws074/tests/realm-context-probe.c",
+      "original_sha256": "471a1470f1e14523701438c67c131bf7abdce7c3d38101026ac07f0440908feb",
+      "final_sha256": "7f3362d6ea856e91e82ca9a26961b609552d66b560e37e7c42078bf9c80c3667",
+      "status": "reviewed-full-file",
+      "original_lines": 337,
+      "final_lines": 354
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "All original native property617/probe337 lines: actual virtual property policy, native error conventions, ordinary property bypass, immutable callback tables and original shared-heap realm source/corpora.",
+    "Full C/component rules for physical calls/conditions/declarations/type-order/table callback declaration exception/semantic paragraphs/refusal/final Succeeded/void returns checked. Only six initializer-required callback declarations precede constant tables; other declarations follow tables.",
+    "Native owner traceable payload/accessor initialized before next actual VM allocation; allocator-zero errno fields retain their existing policy. No additional retaining roots or changes to actual default GC/root exclusion.",
+    "Native presence tri-state, keys errno, definition/deletion handled flags, extension refusal and borrowed receiver accessor protocols preserve exact original operations/corpora. Ordinary source accessor lookup refuses negative errno or missing value slot before native state exposure.",
+    "Native script/probe execution checked before source release or manual realm/heap teardown; final successful teardown separate. Every original8 control/cross-realm global/getter/Function/TypeError/SyntaxError identity case unchanged and passing on current production VM.",
+    "Complete65 native script/C errno/property/GC assertions and8 explicit historical probe checks pass. Prior historical baseline failing-probe text describes baseline; current8/8 result recorded explicitly."
+  ],
+  "supporting_checker": {
+    "exit": 0,
+    "findings": 0,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production edit, new fault switch, reference change or additional caller root.",
+    "No new fault injection or production edit; original65+8 native observations all pass. Whole p17241 remaining files and original final gates remain."
+  ]
+}

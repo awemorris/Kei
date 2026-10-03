@@ -348,6 +348,7 @@ bind_get_computed_style(
 	struct bind_window *window;
 	struct computed_ref *ref;
 	struct vm_object *declaration;
+	struct vm_cell *ref_root;
 	struct dom_node *node;
 	vm_value given;
 	int status;
@@ -368,16 +369,25 @@ bind_get_computed_style(
 	if (ref == NULL)
 		return ENOMEM;
 	ref->element = given;
+	ref_root = &ref->cell;
+	status = vm_heap_add_root(realm->heap, &ref_root);
+	if (status != 0)
+		return status;
 
 	/* The declaration with CSSStyleDeclaration's prototype. */
 	declaration = vm_object_create(realm->heap, window->prototypes[BIND_CSS_STYLE_DECLARATION]);
-	if (declaration == NULL)
+	if (declaration == NULL) {
+		vm_heap_remove_root(realm->heap, &ref_root);
 		return ENOMEM;
+	}
+
+	/* The published declaration now traces its private computed-style state. */
 	declaration->kind = VM_KIND_PLATFORM;
 	declaration->internal = vm_value_cell(ref);
 
 	/* Succeeded: the declaration. */
 	*result = vm_value_cell(declaration);
+	vm_heap_remove_root(realm->heap, &ref_root);
 	return 0;
 }
 

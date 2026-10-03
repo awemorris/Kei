@@ -1,0 +1,7 @@
+{
+  "path": "plan/ws074/tests/host-color-media.c",
+  "previous_review": "checkpoint10/README.md",
+  "full_changed_file_review": "complete",
+  "scope": "ten actual native query cases and immediate tokenizer/source cleanup guards",
+  "newly_reviewed_count": 0
+}

@@ -1,0 +1,91 @@
+{
+  "distinct_fixtures": 14,
+  "checks": 580,
+  "failures": 0,
+  "fixtures": [
+    {
+      "fixture": "host-range-boundary",
+      "checks": 89,
+      "evidence": "plan/ws074/phase172/import/checkpoint37/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-range-data",
+      "checks": 100,
+      "evidence": "plan/ws074/phase172/import/checkpoint37/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-range-clone-contents",
+      "checks": 15,
+      "evidence": "plan/ws074/phase172/import/checkpoint38/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-range-extract-contents",
+      "checks": 14,
+      "evidence": "plan/ws074/phase172/import/checkpoint38/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-range-insert",
+      "checks": 92,
+      "evidence": "plan/ws074/phase172/import/checkpoint39/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-range-mutation",
+      "checks": 36,
+      "evidence": "plan/ws074/phase172/import/checkpoint39/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-range-surround-contents",
+      "checks": 16,
+      "evidence": "plan/ws074/phase172/import/checkpoint39/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-collection",
+      "checks": 37,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-form-collection",
+      "checks": 13,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-select-collection",
+      "checks": 12,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/affected-tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-table-collection",
+      "checks": 25,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/affected-tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-document-images",
+      "checks": 10,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/affected-tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-native-properties",
+      "checks": 65,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/affected-tests.json",
+      "exit": 0
+    },
+    {
+      "fixture": "host-form-owner",
+      "checks": 56,
+      "evidence": "plan/ws074/phase172/import/checkpoint40/affected-tests.json",
+      "exit": 0
+    }
+  ]
+}

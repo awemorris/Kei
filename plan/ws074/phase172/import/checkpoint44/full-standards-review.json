@@ -1,0 +1,59 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-insertion.c",
+      "original_sha256": "ae4d6d1574b343439ffa7c6c37b552e9512fa7421f119119a487d6e92cadd483",
+      "final_sha256": "92b1ed69604a81eb71eb5be9ad80c109be181657145b7cdc18574e336c1a3149",
+      "status": "reviewed-full-file",
+      "original_lines": 356,
+      "final_lines": 387
+    },
+    {
+      "path": "plan/ws074/tests/host-mutation-record.c",
+      "original_sha256": "43d5ea7b51f5b452ca306e100f407922a149018c9e9e07356b32e9932c7e8743",
+      "final_sha256": "a665a4cc87e772cc3cd1b10e0a446a0ce445342e0070ce5d06da89aabb5894d8",
+      "status": "reviewed-full-file",
+      "original_lines": 324,
+      "final_lines": 358
+    },
+    {
+      "path": "plan/ws074/tests/host-style-sheet.c",
+      "original_sha256": "62ce8fc85edaecc153175945e186d0d38f597fc9e2dd459458115ea0bc9c5205",
+      "final_sha256": "fe3fab4be2f1e907775ec4f782b4a8c322b7840a9207b6f25afa237fb38794ef",
+      "status": "reviewed-full-file",
+      "original_lines": 411,
+      "final_lines": 470
+    },
+    {
+      "path": "plan/ws074/tests/host-submit.c",
+      "original_sha256": "1ae74bec843c29a27adf242612c158ae45133bcbf5515213625190799aeb4574",
+      "final_sha256": "d2c763a713486d5d7f847a0bafa08108fb1067e65f30b308e376d97e6391def1",
+      "status": "reviewed-full-file",
+      "original_lines": 348,
+      "final_lines": 409
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "Full original insertion356/mutation324/sheet411/submit348 lines: actual native identity, field branding, parent/child/source lifetime and object refusal guards before reads.",
+    "Actual C callback collection uses integer-only observations, original excluded stacks and default pressure, and no new caller roots while callee ownership is exercised.",
+    "One forward cleanup releases only acquired root registrations, subscription, converted units and native manual owners; successful status checked before output reads or source/owner release.",
+    "Original insertion generation/host counts and29 observations, mutation combined/added-only/removed-only near-threshold modes and16 observations, actual model source retirement/retired child ownership/render height and21 observations, submit callback/dictionary conversion/Event sole root and13 observations retained.",
+    "Original C strings/scripts/heap limits/root exclusion intervals unchanged; ANSI declarations/public interfaces/type guards/error-vs-final-Succeeded/purpose paragraphs/function ordering and split physical calls/conditions reviewed.",
+    "Checkpoint43 table fixture multi-line calls corrected; complete final affected table files rechecked and native42+75 recompiled/revalidated, historical checkpoint43 format overstatement retained and corrected here."
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 85,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production source edit or new engine/fault switch. No new fault-injection campaign; existing79 native observations plus117 affected prior observations all pass.",
+    "Whole p172 remains in-progress:47 C/header and original whole gates remain."
+  ]
+}

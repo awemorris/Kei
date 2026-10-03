@@ -1,0 +1,24 @@
+[
+  {
+    "path": "plan/ws074/tests/host-xml.c",
+    "sha256": "182b853b5475d8d62fb367f11e7c44d175bb765c8e8f2037756b3f17e96278aa",
+    "object": "host-xml.o",
+    "object_path": "build/browser3-p172/review46/host-xml.o",
+    "text_sha256": "9f566aa3c6735013b6c6979b8873be4af6a45a0d404a5dc8a034abd4a6ae7003",
+    "final_sha256": "6bf20c3722cd60b2ac1c82d75fea43517cc6a8a3c329812855de169c0d491ea0",
+    "final_text_sha256": "866c115b813e54e96f2829a15d98bf3e90a8e3cf60a99ec2480735faee707c5c",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-xml-dom.c",
+    "sha256": "f5db6bc45d16a3f5904c54d2c961385d0df03aed70f83ce713ec48f528bfa106",
+    "object": "host-xml-dom.o",
+    "object_path": "build/browser3-p172/review46/host-xml-dom.o",
+    "text_sha256": "6eb5afc30640cdd87937f3b3da917b75c0d73d7112379e490358b7659e0508cf",
+    "final_sha256": "c4ee51dd77c551c10efaedee7948e9825dda7624283943d0d63db1bf24b4f0da",
+    "final_text_sha256": "a425e580bdd222d9ba4ef83547b5796e06603e9204f019bbb0b33ac5841b286f",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

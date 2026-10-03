@@ -55,9 +55,9 @@ Resume point（2026-10-02 ベータ1の計画）: 2026-10-02 user「Settingsも�
 | [ws089-p005](phase005/phase.md) | Mouse・Keyboard の頁と Sound（audiod の有無の表示だけ、main の依頼）。Touchpad は準備中のまま | cleared（2026-09-29、Venus の guest。実機は未実施） | p002, p007 |
 | [ws089-p009](phase009/phase.md) | 生成の壁紙（5 枚、1920x1080、`userland/desktop/wallpapers/generate.py`）を build の時に作り、デモの image に同梱（2026-09-29 ユーザーの D8 の判断、main の許可） | cleared（2026-09-29、Venus の guest。デモの image は `make -n`。実機は未実施） | p004 |
 | [ws089-p006](phase006/phase.md) | 規約の全文との照合、回帰、デモの通し（App Home の絵は p008、デモの image の壁紙は p009） | cleared（2026-09-29、Venus の guest。実機は未実施） | p003〜p005, p008 |
-| [ws089-p010](phase010/phase.md) | 現在の main（KEILAND_VERSION 20 以後）での回帰の取り直し・S7（QEMU）・頁ごとの通しと不具合の表・ブラッシュアップの候補の一覧（ユーザーが選ぶ） | planned（3h） | — |
+| [ws089-p010](phase010/phase.md) | 現在の main（KEILAND_VERSION 20 以後）での回帰の取り直し・S7（QEMU）・頁ごとの通しと不具合の表・ブラッシュアップの候補の一覧（ユーザーが選ぶ） | cleared（2026-10-03、q617-i01、QEMU の Venus。regress 8 本・volume-p005・host・boot test PASS、重い・中の不具合 0、候補は [beta1-candidates.md](beta1-candidates.md)） | — |
 | [ws089-p011](phase011/phase.md) | 5330 の passthrough で S7（壁紙・透明度・検索）、透明度 85% の frame の率 | planned（2h、`/tmp/i915-hw.lock` が空くこと） | p010 |
-| [ws089-p012](phase012/phase.md) | Settings の中だけで済む操作性: 検索の結果の上下の key と Enter、頁の pane の touch の drag の scroll、左の pane の key の移動の見直し | planned（2h） | —（p010 と並列可、source は p012 だけが変える） |
+| [ws089-p012](phase012/phase.md) | Settings の中だけで済む操作性: 検索の結果の上下の key と Enter、頁の pane の touch の drag の scroll、左の pane の key の移動の見直し（q619 で C1・C4 を追加） | uncleared（2026-10-03 q619-i01。実装と試験 PASS、欄からの Down だけ compositor 待ち。今は Tab → Down） | —（p010 と並列可、source は p012 だけが変える） |
 | [ws089-p013](phase013/phase.md) | About の memory と Storage の使用量（[proposed/libkeiland-system.md](proposed/libkeiland-system.md)、libkeiland の追加） | planning（libkeiland の API の追加の main の許可、p010 でユーザーの採否） | p010 |
 | [ws089-p014](phase014/phase.md) | Network の頁を実機の Wi-Fi（5330）で: 一覧・接続・鍵・切断 | planning（WiFi の driver の WS（BUG-134 ほか）の成果が要る） | ネットワークの WS、実機 |
 | [ws089-p015](phase015/phase.md) | 日本語の UI（WS127 p005 と共通の仕組み） | planning（ユーザーの判断: 日本語の UI をベータ1 に入れるか） | p010、WS127 p005 と仕組みを共有 |

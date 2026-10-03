@@ -10,6 +10,7 @@ Objectives: O1
 Parent: [Master](../master.md)
 Executor: WS073 のサブエージェント（2026-09-29 から worktree `.claude/worktrees/ws073-bugs`、branch `wt/ws073`。以前は `worktree-agent-a4f5b29b09938aa63`、p001・p002 は `worktree-agent-aefedcaf4a52a0507`）。main が merge する
 Resume point: 2026-09-30（p044、P1）: BUG-123 を ws073-p044 で修正（libwayland-client の dispatch を標準と同じ 1 回の読みに）。以下は前の記録: 2026-09-30（p042）: ws073-p042（BUG-116）で原因を特定して修正（command の poll の間 IE を落とさない）。少数回の再現の試験と boot test は phase.md、受け入れの試験（TCG・KVM 各 2×20、80 回で cancel・attach-failed・error・列挙の再試行 0、boot test PASS、serial の login 可）で cleared、BUG-116 を resolved。BUG-030 の p041 の未達（KVM の 1 回）もこの機構で、p042 の後の 80 回で usb-storage の error 0（BUG-030 の扱いは main の判断）。その前: ws073-p041（BUG-030）で原因を特定して修正（usb-storage の BOT の段の timeout を 30 秒・flush 60 秒に）。受け入れの試験（2026-09-30）で flush の待ちは 0 だが、KVM の 1 回で usb-storage が BUG-116 の機構で時間切れになり p041 は uncleared（扱いは main の判断）。その前、2026-09-29 夜: ws073-p040（BUG-030）は wrap up で uncleared（再現の道具 `tests/usb-stress.sh`）。2026-09-29: BUG-102（p029）・BUG-104（p031）・BUG-051（p030）・BUG-107（p034）・BUG-108（p035）を解決、BUG-031 を resolved・BUG-039 は確認のみ（p036）。次は main の指示を待つ（残り: BUG-036・041 の再現、BUG-039 は host 試験の土台の WS、BUG-093 は toolchain、BUG-027・033 は低い優先度）
+2026-10-03: 新 [p045](phase045/phase.md)（BUG-135）。
 <!-- awesome-plan-current:end -->
 
 ## 目標

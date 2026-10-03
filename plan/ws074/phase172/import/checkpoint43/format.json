@@ -1,0 +1,30 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-form-owner.c",
+      "formatted_sha256": "7e31218db9900549300d7d81a8d51f2b111bba507af669f050d5ba671271227c",
+      "final_sha256": "87eabb706c3795bfda1aad77f65e01bf76d2c3815bddb64a0a11def55ce7b8fc",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; split collection-script calls have one argument per physical line"
+    },
+    {
+      "path": "plan/ws074/tests/host-node-cloning.c",
+      "formatted_sha256": "b9fa1adb5f51dddb058c365a4d01c26395148e422b33ba3f7922be6d32c12fc2",
+      "final_sha256": "c4e6fb6cd1e7b7ae637696885954a196c5166a829fc50b354c4cbf604b285acf",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; split collection-script calls have one argument per physical line"
+    },
+    {
+      "path": "plan/ws074/tests/host-table-mutation.c",
+      "formatted_sha256": "ba16b4283fc6733ba4fb765c5e643e138afb0bc6b4c0d975f8f507351531f038",
+      "final_sha256": "006bcc935c8bc347c15c520211d92d94d4c28d079fdfd2b055905a1358e0d5d0",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; split collection-script calls have one argument per physical line"
+    },
+    {
+      "path": "plan/ws074/tests/host-table-row.c",
+      "formatted_sha256": "8b688079cd71f8f58fdb56e3b693e0112a962c8a35c93f9a0d623eec32f2aee1",
+      "final_sha256": "4d6fa328317ab53107cc2df49a62ac532747626c70b6f0877f194bb5bb6c32f4",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers; split collection-script calls have one argument per physical line"
+    }
+  ]
+}

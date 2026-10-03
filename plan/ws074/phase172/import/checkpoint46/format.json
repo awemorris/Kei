@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-xml.c",
+      "formatted_sha256": "53dc9bb4505dc4c27dbae8314e5435e0c1785fe7770181c8348b7cf38e554762",
+      "final_sha256": "6bf20c3722cd60b2ac1c82d75fea43517cc6a8a3c329812855de169c0d491ea0",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-dom.c",
+      "formatted_sha256": "b4f630c168a8b13134d1fd432c3dbdfb1b736c180a60e6d17ed7f51a9ed6d3c6",
+      "final_sha256": "c4ee51dd77c551c10efaedee7948e9825dda7624283943d0d63db1bf24b4f0da",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    }
+  ]
+}

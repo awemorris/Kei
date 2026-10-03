@@ -1,0 +1,61 @@
+[
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  },
+  {
+    "name": "namespace",
+    "argv": [
+      "build/browser3-p172/plain/host-namespace"
+    ],
+    "exit": 0,
+    "stdout": "namespace GC checks: 12/12 passed\n"
+  },
+  {
+    "name": "document-stream",
+    "argv": [
+      "build/browser3-p172/plain/host-document-stream"
+    ],
+    "exit": 0,
+    "stdout": "native document streams: 9/9 passed\n"
+  },
+  {
+    "name": "document-parser",
+    "argv": [
+      "build/browser3-p172/plain/host-document-parser"
+    ],
+    "exit": 0,
+    "stdout": "native document parser lifetime: 8/8 passed\n"
+  },
+  {
+    "name": "xml-document",
+    "argv": [
+      "build/browser3-p172/plain/host-xml-document"
+    ],
+    "exit": 0,
+    "stdout": "XML document GC checks: 16/16 passed\n"
+  },
+  {
+    "name": "xml-binding",
+    "argv": [
+      "build/browser3-p172/plain/host-xml-binding"
+    ],
+    "exit": 0,
+    "stdout": "native XML bindings: 34/34 passed\n"
+  },
+  {
+    "name": "collection",
+    "argv": [
+      "build/browser3-p172/plain/host-collection"
+    ],
+    "exit": 0,
+    "stdout": "collection GC checks: 37/37 passed\n"
+  }
+]

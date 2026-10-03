@@ -183,7 +183,7 @@ fm_grid_entry_icon(
 
 	/* A picture with a path shows its thumbnail, once it is made (it is asked for until then). */
 	thumb = NULL;
-	if (entry->path != NULL && entry->mime->category == FM_CATEGORY_IMAGE)
+	if (fm_thumb_kind(entry) != 0)
 		thumb = fm_thumb_get(app, entry->path, entry->modified);
 	if (thumb != NULL) {
 		grid_thumbnail(canvas, thumb, x, y, size);

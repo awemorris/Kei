@@ -45,6 +45,23 @@
 #define MAIN_TEXT_REGION	1U
 #define MAIN_DIALOG		2U
 
+/* The Replace panel's widgets (ws128-p003): its two fields and its three buttons. */
+#define MAIN_REPLACE_FIND	3U
+#define MAIN_REPLACE_WITH	4U
+#define MAIN_REPLACE_ONE	5U
+#define MAIN_REPLACE_ALL	6U
+#define MAIN_REPLACE_DONE	7U
+
+/* The Replace panel's size, its distance from the card's top, a field's and a button's height, and the space between rows. */
+#define MAIN_REPLACE_WIDTH	560
+#define MAIN_REPLACE_HEIGHT	232
+#define MAIN_REPLACE_TOP	28
+#define MAIN_REPLACE_ROW	36
+#define MAIN_REPLACE_GAP	12
+
+/* The evdev code of A: Edit > Select All (Ctrl+A, the menu's) selects the Replace panel's field instead of the text. */
+#define MAIN_KEY_A		30U
+
 /* How far above the card's bottom a message's chip stands. */
 #define MAIN_CHIP_BOTTOM	42
 
@@ -97,6 +114,14 @@ static struct kui_ui *main_input;
 
 /* Whether the fingers or the view's scroll still move (the loop draws the next frame soon). */
 static int main_moving;
+
+/*
+ * The Replace panel's fields (ws128-p003): the text to find and its
+ * replacement, filled from the editor each time the panel opens (the
+ * editor's replace_fresh) and kept while it is open.
+ */
+static struct kui_field main_find_field;
+static struct kui_field main_with_field;
 
 /* Whether the compositor asked to close the window or gave it a new size, since the loop last looked. */
 static int main_closed;
@@ -173,6 +198,8 @@ static void main_state(struct te_state *state);
 static void main_title_refresh(void);
 static void main_edit_state(const struct te_state *state);
 static void main_opened(void);
+static void main_recent_refresh(void);
+static void main_replace_panel(uint64_t now_us, const struct kui_style *style, const struct kui_rect *area);
 static void main_host(struct te_app *app);
 static void main_copy(void *data, const char *text, size_t length);
 static size_t main_paste(void *data, char *text, size_t size);
@@ -269,6 +296,9 @@ main(
 		te_log("MENU failed errno=%d", error);
 		te_menu_close(&main_menu);
 	}
+
+	/* File > Open Recent's files. */
+	main_recent_refresh();
 
 	/* The titlebar's controls. */
 	error = te_titlebar_open(&main_titlebar, &main_window, &state);
@@ -700,6 +730,14 @@ main_overlay(
 	/* The dialog, a frame of the fingers' and the pointer's input of its own. */
 	if (main_app.dialog == TE_DIALOG_NONE || main_input == NULL)
 		return;
+
+	/* Edit > Replace's panel is a dialog of fields (ws128-p003). */
+	if (main_app.dialog == TE_DIALOG_REPLACE) {
+		main_replace_panel(now_us, &style, &area);
+		return;
+	}
+
+	/* Any other dialog: its words and buttons (libkeiui's dialog). */
 	te_app_dialog_words(&main_app, title, sizeof(title), &words, &labels, &count);
 	kui_ui_begin(main_input, now_us);
 	answer = kui_dialog(main_input, &style, MAIN_DIALOG, &area, title, words, labels, count);
@@ -872,6 +910,179 @@ main_opened(void)
 	error = keiland_recent_add(resolved, MAIN_APPLICATION);
 	if (error != 0)
 		te_log("RECENT failed errno=%d", error);
+
+	/* File > Open Recent shows it. */
+	main_recent_refresh();
+}
+
+/*
+ * Reads the files Text Editor used from libkeiland's recent list, newest
+ * first and at most TE_RECENT_MAX (ws128-p003), notes which are still
+ * there, and shows them in File > Open Recent.
+ */
+static void
+main_recent_refresh(void)
+{
+	static struct keiland_recent_item items[64];
+	size_t count;
+	size_t index;
+	size_t kept;
+	int differs;
+	int error;
+	int status;
+
+	/* The list (an unreadable one shows no file). */
+	count = 0;
+	error = keiland_recent_list(items, sizeof(items) / sizeof(items[0]), &count);
+	if (error != 0) {
+		te_log("RECENT list failed errno=%d", error);
+		count = 0;
+	}
+
+	/* The editor's own files, newest first. */
+	kept = 0;
+	for (index = 0; index < count && kept < TE_RECENT_MAX; index++) {
+		differs = strcmp(items[index].application, MAIN_APPLICATION);
+		if (differs != 0)
+			continue;
+		snprintf(main_app.recent[kept], sizeof(main_app.recent[kept]), "%s", items[index].path);
+		status = access(items[index].path, R_OK);
+		main_app.recent_present[kept] = 0;
+		if (status == 0)
+			main_app.recent_present[kept] = 1;
+		kept++;
+	}
+
+	/* How many the editor keeps. */
+	main_app.recent_count = kept;
+
+	/* The menu shows them. */
+	te_menu_recent(&main_menu, &main_app);
+}
+
+/*
+ * Draws Edit > Replace's panel over the card and carries out what was done
+ * with it (ws128-p003): the text to find and its replacement, Replace (or
+ * Enter in the replacement) replaces the place found and selects the next,
+ * Replace All replaces every place as one undo step, Enter in the text to
+ * find finds the next place, and Done or Esc closes the panel.
+ */
+static void
+main_replace_panel(
+	uint64_t now_us,
+	const struct kui_style *style,
+	const struct kui_rect *area)
+{
+	struct kui_event event;
+	struct kui_rect panel;
+	struct kui_rect rect;
+	char selected[TE_FIND_MAX];
+	const char *newline;
+	size_t start;
+	size_t end;
+	unsigned find_flags;
+	unsigned with_flags;
+	int replace_one;
+	int replace_all;
+	int done;
+	int width;
+	int top;
+	int taken;
+
+	/* Opened just now: the text to find is the selection (a short one on one line) or the last, the replacement the last. */
+	if (main_app.replace_fresh) {
+		main_app.replace_fresh = 0;
+		snprintf(selected, sizeof(selected), "%s", main_app.find);
+		te_edit_selection(&main_app, &start, &end);
+		if (end > start && end - start < sizeof(selected)) {
+			te_buffer_copy(&main_app.buffer, start, end, selected);
+			selected[end - start] = '\0';
+			newline = strchr(selected, '\n');
+			if (newline != NULL)
+				snprintf(selected, sizeof(selected), "%s", main_app.find);
+		}
+
+		/* The fields, and the keyboard for the replacement (for the text to find when there is none yet). */
+		kui_field_set(&main_find_field, selected);
+		kui_field_set(&main_with_field, main_app.replace_with);
+		if (main_find_field.length == 0U) {
+			kui_ui_set_focus(main_input, MAIN_REPLACE_FIND, 0);
+		} else {
+			kui_ui_set_focus(main_input, MAIN_REPLACE_WITH, 0);
+		}
+
+		/* The log line the tests read. */
+		te_log("REPLACE open find=%s", main_find_field.text);
+	}
+
+	/* The panel near the card's top, in its middle, narrower in a narrow window. */
+	width = MAIN_REPLACE_WIDTH;
+	if (width > area->width - 32)
+		width = area->width - 32;
+	panel.x = area->x + (area->width - width) / 2;
+	panel.y = area->y + MAIN_REPLACE_TOP;
+	panel.width = width;
+	panel.height = MAIN_REPLACE_HEIGHT;
+
+	/* The frame of input of its own: the panel, the two fields and the buttons. */
+	kui_ui_begin(main_input, now_us);
+	kui_panel(style, &panel, 0);
+	top = kui_card(style, &panel, "Replace", "The next place found is selected; Replace All can be undone at once.");
+	rect.x = panel.x + 20;
+	rect.width = panel.width - 40;
+	rect.height = MAIN_REPLACE_ROW;
+	rect.y = top;
+	find_flags = kui_field(main_input, style, MAIN_REPLACE_FIND, &rect, &main_find_field, "Find");
+	rect.y = top + MAIN_REPLACE_ROW + MAIN_REPLACE_GAP;
+	with_flags = kui_field(main_input, style, MAIN_REPLACE_WITH, &rect, &main_with_field, "Replace with");
+
+	/* The buttons at the bottom right: Replace (the default), Replace All, Done. */
+	rect.y = top + 2 * (MAIN_REPLACE_ROW + MAIN_REPLACE_GAP) + 4;
+	rect.width = kui_button_width(style, "Replace");
+	rect.x = panel.x + panel.width - 20 - rect.width;
+	replace_one = kui_button(main_input, style, MAIN_REPLACE_ONE, &rect, "Replace", KUI_BUTTON_PRIMARY);
+	rect.width = kui_button_width(style, "Replace All");
+	rect.x -= rect.width + 10;
+	replace_all = kui_button(main_input, style, MAIN_REPLACE_ALL, &rect, "Replace All", 0U);
+	rect.width = kui_button_width(style, "Done");
+	rect.x -= rect.width + 10;
+	done = kui_button(main_input, style, MAIN_REPLACE_DONE, &rect, "Done", 0U);
+	main_moving = kui_ui_end(main_input, now_us);
+
+	/* A key no widget took: Esc closes the panel, anything else is nothing. */
+	for (;;) {
+		taken = kui_ui_take(main_input, &event);
+		if (taken == 0)
+			break;
+
+		/* Esc. */
+		if (event.kind == KUI_EVENT_KEY && event.code == KUI_KEY_ESC)
+			done = 1;
+	}
+
+	/* Esc in either field closes the panel too. */
+	if ((find_flags & KUI_FIELD_CANCELLED) != 0U || (with_flags & KUI_FIELD_CANCELLED) != 0U)
+		done = 1;
+
+	/* Enter in the text to find finds the next place, without replacing. */
+	if ((find_flags & KUI_FIELD_SUBMITTED) != 0U) {
+		snprintf(main_app.find, sizeof(main_app.find), "%s", main_find_field.text);
+		main_app.find_length = strlen(main_app.find);
+		te_edit_find(&main_app, 1, 0);
+	}
+
+	/* Enter in the replacement is Replace. */
+	if ((with_flags & KUI_FIELD_SUBMITTED) != 0U)
+		replace_one = 1;
+
+	/* What the buttons and Enter asked for, then the frame shows it. */
+	if (replace_one)
+		te_app_replace(&main_app, main_find_field.text, main_with_field.text, 0);
+	if (replace_all)
+		te_app_replace(&main_app, main_find_field.text, main_with_field.text, 1);
+	if (done)
+		te_app_replace_close(&main_app);
+	main_app.dirty = 1;
 }
 
 /* Gives the editor the window's services. */
@@ -1166,6 +1377,15 @@ main_window_event(
 		main_closed = 1;
 		break;
 	case KUI_WINDOW_POST:
+		/* Select All (zdesktop takes Ctrl+A for the menu) selects the focused field of the Replace panel. */
+		if (event->code == TE_ACTION_SELECT_ALL &&
+		    main_app.dialog == TE_DIALOG_REPLACE &&
+		    main_input != NULL) {
+			(void)kui_ui_key(main_input, MAIN_KEY_A, 1, KUI_MOD_CTRL);
+			main_app.dirty = 1;
+			break;
+		}
+
 		/* An action of the menus or the titlebar, in its place among the keys. */
 		te_window_act(&main_window, event->code);
 		break;

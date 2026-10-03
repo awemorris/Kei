@@ -31,6 +31,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* The fewest slots the index of boxes has. */
+#define GEOMETRY_INDEX_MIN 64U
+
+/* The deepest element whose style is computed without a box. */
+#define GEOMETRY_STYLE_DEPTH 512
+
 /*
  * One slot of the page's index of boxes: a node and its first box (an
  * empty slot has no node).
@@ -39,12 +45,6 @@ struct page_box_slot {
 	const struct dom_node *node;
 	const struct layout_box *box;
 };
-
-/* The fewest slots the index of boxes has. */
-#define GEOMETRY_INDEX_MIN	64U
-
-/* The deepest element whose style is computed without a box. */
-#define GEOMETRY_STYLE_DEPTH	512
 
 static int geometry_tree_box(const struct layout_tree *tree, const struct layout_box *first, struct dom_node *node, struct bind_box *box);
 static int geometry_child_box(struct page *page, struct dom_node *node, struct bind_box *box);
@@ -58,9 +58,8 @@ static size_t geometry_slot_of(const struct page *page, const struct dom_node *n
 static int geometry_cascade(struct page *page, struct dom_element *element, struct css_style *style);
 
 /*
- * Finds the style engine a script's selectors are matched with (the
- * bind_host's selector_engine), made when first asked for; NULL when it
- * cannot be made.
+ * Finds or creates the script selector engine for bind_host.selector_engine.
+ * Returns NULL when the engine cannot be made.
  */
 struct css_engine *
 page_selector_engine(
@@ -86,9 +85,8 @@ page_selector_engine(
 }
 
 /*
- * Finds where a node is on the page as it is laid out now (the
- * bind_host's node_box), laying it out first when it changed; reports
- * whether the node has a box.
+ * Finds a node's current geometry for bind_host.node_box.
+ * Refreshes changed layout and reports whether the node has a box.
  */
 int
 page_node_box(
@@ -108,13 +106,19 @@ page_node_box(
 	/* Foreign nodes use their own active child cascade and actual content viewport. */
 	if (node->document != page->document) {
 		found = geometry_child_box(page, node, box);
-		return found;
+		if (!found)
+			return 0;
+
+		/* Succeeded: the active child supplied copied geometry. */
+		return 1;
 	}
 
 	/* Primary layout keeps its existing indexed first-box lookup. */
 	laid_out = geometry_layout(page);
 	if (!laid_out)
 		return 0;
+
+	/* Resolves the first indexed box and its current native bounds. */
 	first = geometry_first_box(page, node);
 	found = geometry_tree_box(&page->layout, first, node, box);
 	if (!found)
@@ -125,9 +129,8 @@ page_node_box(
 }
 
 /*
- * Finds the laid out document's width and height (the bind_host's
- * document_size), laying the page out first when it changed; 0 when it
- * cannot be laid out.
+ * Finds the laid-out document dimensions for bind_host.document_size.
+ * Refreshes changed layout and reports zero when it cannot be laid out.
  */
 void
 page_document_size(
@@ -149,11 +152,13 @@ page_document_size(
 	/* The viewport's width, and the document's height. */
 	*width = layout_to_px(page->layout.viewport_width);
 	*height = layout_to_px(page->layout.document_height);
+
+	/* Succeeded: both dimensions reflect the current layout. */
+	return;
 }
 
 /*
- * Finds how far the page's view is scrolled, in CSS pixels (the
- * bind_host's scroll).
+ * Finds the view's scroll offset in CSS pixels for bind_host.scroll.
  */
 void
 page_scroll(
@@ -167,9 +172,14 @@ page_scroll(
 	page = context;
 	*x = page->scroll_x;
 	*y = page->scroll_y;
+
+	/* Succeeded: the caller receives the last reported view offsets. */
+	return;
 }
 
-/* Finds the top element at a point in viewport coordinates. */
+/*
+ * Finds the top element at a point in viewport coordinates.
+ */
 struct dom_node *
 page_element_at(
 	void *context,
@@ -182,8 +192,13 @@ page_element_at(
 
 	/* Points outside the viewport do not hit the document. */
 	page = context;
-	if (!(x >= 0.0) || !(y >= 0.0) || x >= page->viewport_width || y >= page->viewport_height)
+	if (!(x >= 0.0) ||
+	    !(y >= 0.0) ||
+	    x >= page->viewport_width ||
+	    y >= page->viewport_height)
 		return NULL;
+
+	/* Uses only a current successful layout for hit testing. */
 	laid_out = geometry_layout(page);
 	if (!laid_out)
 		return NULL;
@@ -194,13 +209,17 @@ page_element_at(
 	node = layout_hit_node(&page->layout, (layout_unit)(x * LAYOUT_UNIT), (layout_unit)(y * LAYOUT_UNIT));
 	while (node != NULL && node->type != DOM_ELEMENT)
 		node = node->parent;
+	if (node == NULL)
+		return NULL;
+
+	/* Succeeded: the hit resolves to an actual DOM element. */
 	return node;
 }
 
 /*
- * Computes an element's style (the bind_host's computed_style): its box's
- * when the page lays out and the element has one, otherwise the
- * cascade's.  Reports ENOENT for an element outside the document.
+ * Computes an element's style for bind_host.computed_style.
+ * Uses its box when available and otherwise the cascade; reports ENOENT
+ * for an element outside the document.
  */
 int
 page_computed_style(
@@ -241,9 +260,8 @@ page_computed_style(
 }
 
 /*
- * Moves the page's scroll where a script asks (the bind_host's
- * scroll_to), kept inside the laid out document: the page does not scroll
- * sideways, and not past the last view's worth of the document.
+ * Moves the page's scroll within document bounds for bind_host.scroll_to.
+ * Does not scroll sideways or past the last viewport of the document.
  */
 void
 page_scroll_to(
@@ -276,6 +294,9 @@ page_scroll_to(
 	page->scroll_x = 0.0;
 	page->scroll_y = y;
 	page->scroll_requested = 1;
+
+	/* Succeeded: the view will consume the bounded scroll request. */
+	return;
 }
 
 /*
@@ -289,6 +310,9 @@ page_box_index_release(
 	free(page->box_index);
 	page->box_index = NULL;
 	page->box_index_capacity = 0;
+
+	/* Succeeded: no native box pointer remains cached. */
+	return;
 }
 
 /* Serializes the same actual border/content geometry from primary or child box trees. */
@@ -379,6 +403,7 @@ geometry_child_box(
 	int connected;
 	int status;
 	int found;
+	int laid_out;
 
 	/* Only a connected node of an actual binding-owned child can have child geometry. */
 	document = node->document;
@@ -406,38 +431,43 @@ geometry_child_box(
 		}
 	}
 
-	/* Open borrowed fonts only after the actual child graph is rooted through primary allocations. */
+	/* Opens borrowed fonts only after the queried native graph is rooted. */
 	found = 0;
 	engine = NULL;
-	status = geometry_layout(page);
-	if (status) {
-		/* The binding bridge rejects retirement after its actual viewport refresh callback. */
-		status = bind_window_child_styles(window, &engine, &width, &height);
-	}
+	laid_out = geometry_layout(page);
+	if (!laid_out)
+		goto release_roots;
 
-	/* A callback cannot publish layout for an adopted node or a retired owner. */
+	/* Rejects retirement after the actual viewport refresh callback. */
+	status = bind_window_child_styles(window, &engine, &width, &height);
+	if (status != 0)
+		goto release_roots;
+
+	/* A callback cannot publish layout for an adopted node or retired owner. */
 	if (node->document != document || document->view != window)
-		engine = NULL;
+		goto release_roots;
+	if (engine == NULL)
+		goto release_roots;
 
-	/* Only a successfully refreshed active owner supplies a borrowed engine to layout. */
-	if (status == 0 && engine != NULL) {
-		/* Checked viewport bounds precede the layout engine's signed fixed-unit multiplication. */
-		if (width >= 0 &&
-		    height >= 0 &&
-		    width <= INT_MAX / LAYOUT_UNIT &&
-		    height <= INT_MAX / LAYOUT_UNIT) {
-			status = layout_build(&tree, engine, &page->text, document, page_image_of, page_image_by_url, page, width, height);
-			if (status == 0) {
-				first = layout_box_of(&tree, node);
-				found = geometry_tree_box(&tree, first, node, box);
-			}
-
-			/* Every transient arena is released before returning to script or another query. */
+	/* Checked bounds precede signed fixed-unit viewport multiplication. */
+	if (width >= 0 &&
+	    height >= 0 &&
+	    width <= INT_MAX / LAYOUT_UNIT &&
+	    height <= INT_MAX / LAYOUT_UNIT) {
+		status = layout_build(&tree, engine, &page->text, document, page_image_of, page_image_by_url, page, width, height);
+		if (status != 0) {
 			layout_release(&tree);
+			goto release_roots;
 		}
+
+		/* Copies actual child bounds before releasing the transient arena. */
+		first = layout_box_of(&tree, node);
+		found = geometry_tree_box(&tree, first, node, box);
+		layout_release(&tree);
 	}
 
-	/* No queried DOM or child context remains rooted by this completed observation. */
+release_roots:
+	/* No queried DOM or child context remains rooted by this observation. */
 	for (index = 0; index < 2U; index++)
 		vm_heap_remove_root(page->heap, &roots[index]);
 	if (!found)
@@ -490,17 +520,30 @@ geometry_first_box(
 	struct page *page,
 	const struct dom_node *node)
 {
+	const struct layout_box *box;
 	size_t slot;
 	int error;
 
 	/* The index of this layout. */
 	error = geometry_index(page);
-	if (error != 0)
-		return layout_box_of(&page->layout, node);
+	if (error != 0) {
+		/* Index allocation failure retains the ordinary tree-search fallback. */
+		box = layout_box_of(&page->layout, node);
+		if (box == NULL)
+			return NULL;
 
-	/* Succeeded: the node's slot's box, or none. */
+		/* Succeeded: the layout supplies the box without a cached index. */
+		return box;
+	}
+
+	/* Reads the node's indexed first box, or its empty slot. */
 	slot = geometry_slot_of(page, node);
-	return page->box_index[slot].box;
+	box = page->box_index[slot].box;
+	if (box == NULL)
+		return NULL;
+
+	/* Succeeded: the index supplies the node's first box. */
+	return box;
 }
 
 /*
@@ -557,12 +600,16 @@ geometry_index(
 	page->box_index = calloc(capacity, sizeof(*page->box_index));
 	if (page->box_index == NULL)
 		return ENOMEM;
+
+	/* Publishes the allocated empty table before inserting native boxes. */
 	page->box_index_capacity = capacity;
 
-	/* Succeeded: each node's first box is in its slot. */
+	/* Inserts each node's first box in tree order. */
 	if (page->layout.root != NULL)
 		geometry_index_boxes(page, page->layout.root, 0);
 	page->box_index_serial = page->layout_serial;
+
+	/* Succeeded: the index describes the current layout serial. */
 	return 0;
 }
 
@@ -583,6 +630,8 @@ geometry_count_boxes(
 	count = 1;
 	for (child = box->first_child; child != NULL; child = child->next)
 		count += geometry_count_boxes(child, depth + 1);
+
+	/* Succeeded: the count includes every box within the layout depth bound. */
 	return count;
 }
 
@@ -612,6 +661,9 @@ geometry_index_boxes(
 	/* Each child. */
 	for (child = box->first_child; child != NULL; child = child->next)
 		geometry_index_boxes(page, child, depth + 1);
+
+	/* Succeeded: every eligible descendant has its first-box index entry. */
+	return;
 }
 
 /* Finds a node's slot in the index: its own, or the empty one it would take. */
@@ -628,6 +680,8 @@ geometry_slot_of(
 	slot = (size_t)((((uintptr_t)node >> 4) * 2654435761U) & mask);
 	while (page->box_index[slot].node != NULL && page->box_index[slot].node != node)
 		slot = (slot + 1U) & mask;
+
+	/* Succeeded: the slot is owned by this node or remains empty. */
 	return slot;
 }
 
@@ -658,8 +712,14 @@ geometry_cascade(
 	chain = malloc(GEOMETRY_STYLE_DEPTH * sizeof(*chain));
 	if (chain == NULL)
 		return ENOMEM;
+
+	/* Records element ancestors within the existing finite depth bound. */
 	count = 0;
-	for (walk = &element->node; walk != NULL && walk->type == DOM_ELEMENT && count < GEOMETRY_STYLE_DEPTH; walk = walk->parent) {
+	for (walk = &element->node;
+	     walk != NULL &&
+	     walk->type == DOM_ELEMENT &&
+	     count < GEOMETRY_STYLE_DEPTH;
+	     walk = walk->parent) {
 		chain[count] = (struct dom_element *)walk;
 		count++;
 	}
@@ -675,8 +735,11 @@ geometry_cascade(
 	inherited = NULL;
 	for (index = count; index > 0; index--) {
 		error = css_engine_compute(page->css, chain[index - 1U], inherited, style);
-		if (error != 0)
-			break;
+		if (error != 0) {
+			free(parent);
+			free(chain);
+			return error;
+		}
 
 		/* The next one inherits from this one. */
 		*parent = *style;
@@ -686,8 +749,6 @@ geometry_cascade(
 	/* The chain and the copy are no longer needed. */
 	free(parent);
 	free(chain);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: the style. */
 	return 0;

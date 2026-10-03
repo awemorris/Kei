@@ -11,8 +11,10 @@
  *
  * While the query has a word in it, the page pane shows the results in
  * place of the page; the page stays the history's step and comes back when
- * the search ends.  Enter opens the first result, Esc ends the search, and
- * a result clicked opens its page.  A search is not a step of the history.
+ * the search ends.  One result is chosen (the first of a new list, drawn as
+ * the list of pages draws the page shown); Up and Down choose another
+ * (ws089-p012), Enter opens the chosen one, Esc ends the search, and a
+ * result clicked opens its page.  A search is not a step of the history.
  */
 
 #include "settings.h"
@@ -32,6 +34,9 @@
 
 /* The space between the header and the card, and the card's inner margin. */
 #define SEARCH_PAD		18
+
+/* How much of the page pane a chosen result keeps from the pane's edges when the keys scroll it into sight. */
+#define SEARCH_REVEAL_MARGIN	12
 
 /*
  * One setting a page shows, as the search knows it: the page, the
@@ -92,6 +97,7 @@ static int search_matches(const struct search_words *words, const char *name, co
 static int search_begins(const char *haystack, const char *needle);
 static void search_add(struct se_app *app, unsigned page, const char *setting);
 static void search_row(struct se_app *app, struct fm_canvas *canvas, unsigned index, int x, int y, int width, int last);
+static void search_reveal(struct se_app *app, const struct fm_rect *row);
 
 /*
  * Searches the pages and their settings for a query as typed; a query
@@ -129,6 +135,10 @@ se_search_set(
 	if (started != 0)
 		app->page_scroll = 0;
 
+	/* A new list of results has its first one chosen, wherever the keys had moved in the last. */
+	search->chosen = 0;
+	search->reveal = 0;
+
 	/* The pages whose name or words hold every word of the query (Home is not a result). */
 	for (index = SE_PAGE_HOME + 1; index < SE_PAGES; index++) {
 		page = &se_pages[index];
@@ -164,9 +174,11 @@ se_search_end(
 	if (search->active == 0 && search->query[0] == '\0')
 		return;
 
-	/* The query and the results are dropped; the page is shown from its top. */
+	/* The query, the results and the choice among them are dropped; the page is shown from its top. */
 	search->query[0] = '\0';
 	search->count = 0;
+	search->chosen = 0;
+	search->reveal = 0;
 	if (search->active != 0)
 		app->page_scroll = 0;
 	search->active = 0;
@@ -189,22 +201,54 @@ se_search_focus(
 }
 
 /*
- * Opens the first result's page and ends the search (Enter).  Returns 1,
- * or 0 when the search found nothing and nothing changes.
+ * Opens the chosen result's page and ends the search (Enter, in the
+ * titlebar's field or in the window).  Returns 1, or 0 when the search
+ * found nothing and nothing changes.
  */
 int
-se_search_open_first(
+se_search_open_chosen(
 	struct se_app *app)
 {
 	/* Nothing found, nothing opened. */
 	if (app->search.active == 0 || app->search.count == 0U)
 		return 0;
 
-	/* The first result. */
-	se_search_press(app, 0);
+	/* The chosen result (the first unless the keys moved). */
+	se_search_press(app, (int)app->search.chosen);
 
 	/* Succeeded: its page is shown. */
 	return 1;
+}
+
+/*
+ * Chooses the result after (direction 1, Down) or before (-1, Up) the
+ * chosen one; the ends stay.  The next frame scrolls it into sight.
+ */
+void
+se_search_step(
+	struct se_app *app,
+	int direction)
+{
+	struct se_search *search;
+	unsigned chosen;
+
+	/* Without results there is nothing to choose. */
+	search = &app->search;
+	if (search->active == 0 || search->count == 0U)
+		return;
+
+	/* The neighbour in the list, short of either end. */
+	chosen = search->chosen;
+	if (direction < 0 && chosen > 0U)
+		chosen--;
+	if (direction > 0 && chosen + 1U < search->count)
+		chosen++;
+
+	/* The choice, drawn and brought into sight at the next frame. */
+	search->chosen = chosen;
+	search->reveal = 1;
+	app->dirty = 1;
+	se_log("SEARCH chosen index=%u page=%s", chosen, se_pages[search->results[chosen].page].word);
 }
 
 /*
@@ -417,7 +461,7 @@ search_add(
 	app->search.count++;
 }
 
-/* Draws one result's row: the page's picture, the name found, and where it is; lit under the pointer, and clickable. */
+/* Draws one result's row: the page's picture, the name found, and where it is; the chosen one selected, another lit under the pointer, and clickable. */
 static void
 search_row(
 	struct se_app *app,
@@ -437,19 +481,29 @@ search_row(
 	int left;
 	int right;
 	int lit;
+	int divided;
 
 	/* The result's page. */
 	result = &app->search.results[index];
 	page = &se_pages[result->page];
 
-	/* The row's rectangle inside the card's margins, a shade under the pointer. */
+	/* The row's rectangle inside the card's margins. */
 	row.x = x + 8;
 	row.y = y;
 	row.width = width - 16;
 	row.height = SEARCH_ROW;
+
+	/* The chosen row has the selection's ground (as the list's page shown), another a shade under the pointer. */
 	lit = se_ui_lit(app, SE_HIT_RESULT, (int)index);
-	if (lit != 0)
+	if (index == app->search.chosen) {
+		fm_canvas_round(canvas, (float)row.x, (float)row.y, (float)row.width, (float)row.height, 10.0f, SE_COLOR_SELECTION);
+	} else if (lit != 0) {
 		fm_canvas_round(canvas, (float)row.x, (float)row.y, (float)row.width, (float)row.height, 10.0f, SE_COLOR_HOVER);
+	}
+
+	/* The chosen row the keys just moved to is scrolled into sight. */
+	if (index == app->search.chosen && app->search.reveal != 0)
+		search_reveal(app, &row);
 
 	/* The page's picture: the accent for a page that works, quiet for one that is coming. */
 	glyph = SE_COLOR_ACCENT;
@@ -477,10 +531,44 @@ search_row(
 	/* The chevron at the right says the row opens a page. */
 	se_glyph_draw(canvas, SE_GLYPH_CHEVRON, (float)right - 18.0f, (float)y + 17.0f, 16.0f, SE_COLOR_TEXT_FAINT);
 
-	/* The line under the row, unless it is the last. */
-	if (last == 0)
+	/* The line under the row, unless it is the last or it would cross the chosen row's ground. */
+	divided = 1;
+	if (last != 0)
+		divided = 0;
+	if (index == app->search.chosen || index + 1U == app->search.chosen)
+		divided = 0;
+	if (divided != 0)
 		fm_canvas_line(canvas, (float)left + 38.0f, (float)(y + SEARCH_ROW) - 0.5f, (float)right, (float)(y + SEARCH_ROW) - 0.5f, 1.0f, SE_COLOR_SEPARATOR);
 
 	/* A click opens the result's page. */
 	se_ui_hit(app, &row, SE_HIT_RESULT, (int)index);
+}
+
+/* Scrolls the page pane (at the next frame) so that the chosen result's row is in sight, once after the keys moved it. */
+static void
+search_reveal(
+	struct se_app *app,
+	const struct fm_rect *row)
+{
+	const struct fm_rect *pane;
+	int scroll;
+
+	/* Only once for a move of the keys. */
+	app->search.reveal = 0;
+
+	/* A row above the pane's top comes down to it, one below its bottom comes up to it. */
+	pane = &app->layout.page;
+	scroll = app->page_scroll;
+	if (row->y < pane->y + SEARCH_REVEAL_MARGIN)
+		scroll -= pane->y + SEARCH_REVEAL_MARGIN - row->y;
+	if (row->y + row->height > pane->y + pane->height - SEARCH_REVEAL_MARGIN)
+		scroll += row->y + row->height - (pane->y + pane->height - SEARCH_REVEAL_MARGIN);
+	if (scroll < 0)
+		scroll = 0;
+
+	/* A change needs a frame (the page's extent keeps it within the page at the next one). */
+	if (scroll != app->page_scroll) {
+		app->page_scroll = scroll;
+		app->dirty = 1;
+	}
 }

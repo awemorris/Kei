@@ -1,0 +1,24 @@
+[
+  {
+    "path": "plan/ws074/tests/host-realms.c",
+    "sha256": "bc736df0fae86a6fc0a58a178216678987f501105fa844e09cb819d6e13d369b",
+    "object": "host-realms.o",
+    "object_path": "build/browser3-p172/review42/host-realms.o",
+    "text_sha256": "eeee89703c3396ba489238f2d0ef8a0d94380d319f9ed31c4d79ca5281cf2f65",
+    "final_sha256": "803ccbfd76941be4ef585ed4b65d6b558a76dc0167063f8bd6ae8e1283e77f14",
+    "final_text_sha256": "8cdf3ffb8e304e1b783850737ccc1082461fa5cd71103e581923aaa33956623e",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-context-ownership.c",
+    "sha256": "6104d95c560085949b032724e29385d314bab7de5bf79a10e73102fc3821bc1f",
+    "object": "host-context-ownership.o",
+    "object_path": "build/browser3-p172/review42/host-context-ownership.o",
+    "text_sha256": "6fc4a6e7a2ce814e867255ae64219c79dd6e3a10a4095e7fc6e76c5f930539ea",
+    "final_sha256": "689f2d8a5e637bf0233e516d20db79963452a1f55c4c96fe32aae13f7856bba9",
+    "final_text_sha256": "f33c10375b5620bdb316d8a3025e1f9f7d3859b6b7531a3637de846f12ef649b",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

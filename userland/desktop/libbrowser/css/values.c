@@ -18,6 +18,9 @@
 /* The most items a content value keeps. */
 #define VALUES_CONTENT_ITEMS	8
 
+/* The widest supported shorthand expands border's four sides into twelve longhands. */
+#define VALUES_EXPANSION_MAX	16
+
 /* The shorthands this pass expands (numbered after the longhands). */
 enum values_shorthand {
 	SHORT_MARGIN = CSS_PROP_COUNT,
@@ -964,10 +967,10 @@ css_parse_value(
 	size_t *out_count,
 	size_t out_capacity)
 {
+	struct css_declaration expanded[VALUES_EXPANSION_MAX];
+	size_t made;
 	int property;
 	int error;
-
-	UNUSED_PARAMETER(out_capacity);
 
 	/* Finds the property. */
 	*out_count = 0;
@@ -975,10 +978,16 @@ css_parse_value(
 	if (property < 0)
 		return EINVAL;
 
-	/* Parses the value as that property. */
-	error = css_parse_property(parse, property, tokens, count, out, out_count);
+	/* Parse into bounded scratch before publishing declarations to a caller's smaller buffer. */
+	made = 0;
+	error = css_parse_property(parse, property, tokens, count, expanded, &made);
 	if (error != 0)
 		return error;
+	if (made > out_capacity)
+		return EOVERFLOW;
+	if (made != 0)
+		memcpy(out, expanded, made * sizeof(*out));
+	*out_count = made;
 
 	/* Succeeded: the longhands are declared. */
 	return 0;
@@ -1272,6 +1281,7 @@ css_parse_color(
 	const struct css_token *token;
 	uint32_t value;
 	size_t index;
+	size_t used;
 	int keyword;
 	int digit;
 	int same;
@@ -1281,6 +1291,8 @@ css_parse_color(
 		tokens++;
 		count--;
 	}
+	while (count > 0 && tokens[count - 1U].type == CSS_TOKEN_WHITESPACE)
+		count--;
 
 	/* Nothing is not a color. */
 	if (count == 0)
@@ -1289,6 +1301,8 @@ css_parse_color(
 
 	/* Keywords and named colors. */
 	if (token->type == CSS_TOKEN_IDENT) {
+		if (count != 1U)
+			return EINVAL;
 		same = values_keyword(values_color_keywords, token, &keyword);
 		if (same) {
 			*color = (uint32_t)keyword;
@@ -1310,6 +1324,8 @@ css_parse_color(
 
 	/* Hex colors of 3, 4, 6 or 8 digits. */
 	if (token->type == CSS_TOKEN_HASH) {
+		if (count != 1U)
+			return EINVAL;
 		value = 0;
 		for (index = 0; index < token->length; index++) {
 			digit = values_hex_digit(token->text[index]);
@@ -1349,6 +1365,11 @@ css_parse_color(
 		if (!same)
 			same = css_ident_equal(token, "rgba");
 		if (!same)
+			return EINVAL;
+		if (count < 2U || tokens[count - 1U].type != CSS_TOKEN_CLOSE_PAREN)
+			return EINVAL;
+		used = values_function_length(tokens, count);
+		if (used != count)
 			return EINVAL;
 		return values_rgb_function(tokens + 1, count - 1U, color);
 	}

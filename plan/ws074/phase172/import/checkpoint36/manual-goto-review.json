@@ -1,0 +1,7 @@
+{
+  "authority": "plan/coding-style.md section14 shared cleanup",
+  "checker_exit": 1,
+  "findings": 18,
+  "classification": "All18 forward jumps in delete_case target its sole cleanup label; no other findings. Label restores stack policy and removes exactly the one acquired construction root. This is permitted by full standard, not an exception or waived failure.",
+  "full_review": true
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review38/host-range-clone-contents"
+    ],
+    "exit": 0,
+    "stdout_file": "host-range-clone-contents.stdout",
+    "stderr_file": "host-range-clone-contents.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review38/host-range-extract-contents"
+    ],
+    "exit": 0,
+    "stdout_file": "host-range-extract-contents.stdout",
+    "stderr_file": "host-range-extract-contents.stderr"
+  }
+]

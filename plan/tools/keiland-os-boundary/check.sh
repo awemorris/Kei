@@ -74,19 +74,23 @@ find include/libc \( -name 'keiland.h' -o -name 'keiui.h' -o -name 'truetype.h' 
 
 # Linux selection belongs to the OS modules; the evdev header bridges constants.
 find userland/desktop \
-    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/freebsd' -o -path '*/wpa' \) -prune \
+    \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/freebsd' -o -path '*/wpa' \
+    -o -path 'userland/desktop/libkeiland-backend-*' \) -prune \
     -o -name '*.[ch]' -print |
 while IFS= read -r file; do
     [ "$file" != userland/desktop/wayland/zwl-evdev.h ] || continue
     awk '/^[[:space:]]*#[[:space:]]*(if|ifdef|elif).*(__linux__|__FreeBSD__)/ {print FILENAME ":" FNR ": " $0}' "$file"
 done > "$work/L1"
 
-# Each OS module consumes only its own kernel and service interfaces.
-find userland/desktop/libkeiland/linux userland/desktop/libkeiland/wpa userland/desktop/wayland/linux -name '*.[ch]' -print |
+# Each OS module consumes only its own kernel and service interfaces (libkeiland-backend's trees, WS131).
+find userland/desktop/libkeiland/linux userland/desktop/wayland/linux \
+    userland/desktop/libkeiland-backend-linux userland/desktop/libkeiland-backend-freebsd \
+    userland/desktop/libkeiland-backend/wpa -name '*.[ch]' -print 2>/dev/null |
 while IFS= read -r file; do
     awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"](uapi\/|userland\/base\/(net|audiod)\/)/ {print FILENAME ":" FNR ": " $0}' "$file"
 done > "$work/L2"
-find userland/desktop/libkeiland/zedbsd userland/desktop/wayland/zedbsd -name '*.[ch]' -print |
+find userland/desktop/libkeiland/zedbsd userland/desktop/wayland/zedbsd \
+    userland/desktop/libkeiland-backend-zedbsd -name '*.[ch]' -print 2>/dev/null |
 while IFS= read -r file; do
     awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"](linux\/|drm\/|sound\/)/ {print FILENAME ":" FNR ": " $0}' "$file"
 done > "$work/L3"
@@ -100,6 +104,24 @@ while IFS= read -r file; do
 done > "$work/L4"
 make -s -f userland/desktop/keiland-linux.mk print-sources > "$work/linux-sources"
 awk '/^userland\/desktop\/libvulkan\// {print "compiled Linux source: " $0}' "$work/linux-sources" >> "$work/L4"
+
+# libkeiland-backend never reaches into the compositor or the applications' library (WS131 B1).
+find userland/desktop/libkeiland-backend userland/desktop/libkeiland-backend-zedbsd \
+    userland/desktop/libkeiland-backend-linux userland/desktop/libkeiland-backend-freebsd \
+    -name '*.[ch]' -print 2>/dev/null |
+while IFS= read -r file; do
+    awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*([<"]userland\/desktop\/wayland\/|"[^"]*zwl[^"]*\.h"|<keiland\.h>|<keiui\.h>)/ {print FILENAME ":" FNR ": " $0}' "$file"
+done > "$work/B1"
+
+# Only the compositor uses libkeiland-backend; libkeiland forwards through it only in
+# system-compat.c until Settings reaches the network through the compositor (WS131 B3, ws131-p011).
+find userland/desktop -path 'userland/desktop/wayland' -prune \
+    -o -path 'userland/desktop/libkeiland-backend*' -prune \
+    -o -name '*.[ch]' -print |
+while IFS= read -r file; do
+    [ "$file" != userland/desktop/libkeiland/system-compat.c ] || continue
+    awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"].*keiland-backend\.h[>"]/ {print FILENAME ":" FNR ": " $0}' "$file"
+done > "$work/B3"
 
 # Inspect the actual target package membership and wildcard filename boundary.
 make -pn disk-image > "$work/make-database"
@@ -124,7 +146,7 @@ for line in Path(sys.argv[1]).read_text().splitlines():
 PY
 
 # Report every violated condition before returning the aggregate outcome.
-for check in C1 C2 C3 C4 C5 L1 L2 L3 L4 L5; do
+for check in C1 C2 C3 C4 C5 L1 L2 L3 L4 L5 B1 B3; do
     if [ -s "$work/$check" ]; then
         while IFS= read -r detail; do
             printf 'check: %s FAIL %s\n' "$check" "$detail"

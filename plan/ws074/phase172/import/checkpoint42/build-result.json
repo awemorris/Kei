@@ -1,0 +1,12 @@
+{
+  "kind": "scoped actual fixture GCC compile/link against current own engine objects; production unchanged",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-realms.c": "803ccbfd76941be4ef585ed4b65d6b558a76dc0167063f8bd6ae8e1283e77f14",
+    "plan/ws074/tests/host-context-ownership.c": "689f2d8a5e637bf0233e516d20db79963452a1f55c4c96fe32aae13f7856bba9"
+  },
+  "production_baseline": "4c31de681"
+}

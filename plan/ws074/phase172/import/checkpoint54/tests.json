@@ -1,0 +1,35 @@
+[
+  {
+    "name": "host-table-row",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-table-row"
+    ],
+    "exit": 0,
+    "stdout": "table row lifetime checks: 75/75 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-table-mutation",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-table-mutation"
+    ],
+    "exit": 0,
+    "stdout": "table mutation lifetime checks: 42/42 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-table-collection",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-table-collection"
+    ],
+    "exit": 0,
+    "stdout": "table collection GC checks: 25/25 passed\n",
+    "stderr": ""
+  }
+]

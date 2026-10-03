@@ -3,13 +3,13 @@
 # WS118: Dell Latitude 5320 で Kei を動かす
 
 <!-- awesome-plan-current:start -->
-Status: planning
+Status: incomplete
 Primary Milestone: MG003
 Related Milestones: MG006
 Objectives: O2
 Parent: [Master](../master.md)
 Focused goal: fg019（ベータ1、2026-10-02 user: ネットワークの次）
-Queue: none
+Queue: q634（P4、p001 の残りと p005）
 Resume point: [p001](phase001/phase.md)（sshd を起動する遠隔の実機 log 用 image と手順、planned、実機は使わない）。p002 以降の実機の作業は Q1 がユーザーに時期を聞いてから。
 2026-10-02 user:「使うネットワークの手段はUSB の LAN の RTL8156。これは明日の朝以降にやります。」→ 5320 は RTL8156 の USB の LAN で遠隔の log を取る。実機の作業は 2026-10-03 の朝以降、時期はユーザーに確かめる。
 <!-- awesome-plan-current:end -->
@@ -56,3 +56,4 @@ T3 がベータ1 に間に合わないとき（LCD の修正が大きいとき�
 | [p002](phase002/phase.md) | ユーザーと実機で: 3 種の image を順に起動、inventory（PCI・USB・無線・panel・VBT/OpRegion）と i915 の log を取り、LCD の制御の失敗を分類する | planning | p001、ユーザーの時期、5320 の network の手段の確認 | 2h（立会い）＋解析 1h |
 | [p003](phase003/phase.md) | p002 の分類に基づく i915 の修正（分類の後に分割する。範囲・依存は p002 の結果で書き直す） | planning | p002 | 未定（2〜4h ×n） |
 | [p004](phase004/phase.md) | 5320 のベータ1 の受け入れ T3・T4（ユーザーと一緒に、WS129 の実機の確認と同じ日にまとめられる） | planning | p003、ユーザーの時期 | 1〜2h（立会い） |
+| [p005](phase005/phase.md) | i915 を起動の後に SSH から手で初期化し、debug の log で 5320 の LCD の初期化を直す（変種 D の image、2026-10-03 user） | in-progress（q634） | p001 の道具、ユーザーの立会い | 4〜6h＋立会い |

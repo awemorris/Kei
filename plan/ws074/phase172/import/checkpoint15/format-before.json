@@ -1,0 +1,14 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/bind/style-context.c",
+    "replacements": 18
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/implementation.c",
+    "replacements": 37
+  },
+  {
+    "path": "plan/ws074/tests/host-frame-viewport.c",
+    "replacements": 16
+  }
+]

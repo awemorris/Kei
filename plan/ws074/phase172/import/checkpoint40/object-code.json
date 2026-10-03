@@ -1,0 +1,61 @@
+[
+  {
+    "path": "plan/ws074/tests/host-collection.c",
+    "sha256": "152099ba7868578d4855a397200d1e0475376161274e60da10dcedabdac3e987",
+    "object": "host-collection.o",
+    "object_path": "build/browser3-p172/review40/host-collection.o",
+    "text_sha256": "41a4dcf29265c413fc6255222e812f70f9996b35519cae5fa0f5ab5918ea5541",
+    "final_sha256": "6243ae1118603f6c06c74b0c911d23cf5ec16f4a48c0c0cc2d9daf4915bea718",
+    "final_text_sha256": "fbeb09c4471921e7944d8d8ebe0b8dc7f944ee3b1b72a927cacf99621563ab42",
+    "C_string_literals_equal": false,
+    "text_equal": false,
+    "original_ordered_C_literals_preserved": true,
+    "added_C_string_literals": [
+      "\"collection-wrapper-pressure\"",
+      "\"collection wrapper allocation triggers actual GC without stack roots\"",
+      "\"unpublished collection state survives wrapper allocation GC\"",
+      "\"allocation GC collection length uses genuine complete state\"",
+      "\"allocation GC preserves published SameObject wrapper identity\"",
+      "\"native collection constructor roots are released after embedding retirement\"",
+      "\"native collection state survives argument conversion GC without caller roots\"",
+      "\"held\"",
+      "\"held\"",
+      "\"collectCollection\"",
+      "\"(function(){var d=document.implementation.createDocument(null,'root',null);\"",
+      "\"var x=d.createElement('x');x.setAttribute('id','held');d.documentElement.appendChild(x);\"",
+      "\"return d.documentElement.children;})()\"",
+      "\"(function(){var d=document.implementation.createDocument(null,'root',null),ns='http://www.w3.org/1999/xhtml';\"",
+      "\"var f=d.createElementNS(ns,'form');d.documentElement.appendChild(f);\"",
+      "\"for(var i=0;i<2;i++){var x=d.createElementNS(ns,'input');x.setAttribute('type','radio');\"",
+      "\"x.setAttribute('name','held');x.setAttribute('value','held');f.appendChild(x);}\"",
+      "\"return f.elements;})()\"",
+      "\"({valueOf:collectCollection,toString:collectCollection})\"",
+      "\"native collection argument conversion executes exactly once\"",
+      "\"native radio assignment completes after conversion collection\"",
+      "\"native collection lookup returns genuine member or duplicate after conversion GC\"",
+      "\"native collection temporary root is released after argument conversion\""
+    ]
+  },
+  {
+    "path": "plan/ws074/tests/host-form-collection.c",
+    "sha256": "a6be86a2670ee8baf288f3fc43533f901a4571ad266b76bd074fef11351b9b90",
+    "object": "host-form-collection.o",
+    "object_path": "build/browser3-p172/review40/host-form-collection.o",
+    "text_sha256": "e2d1a28a23ec8e44148e3e9f113c9007a1757fa266cdfe37b98dbb24fc263def",
+    "final_sha256": "cf12eae42e73070f5423745c67b382076598f24a011e9fcb982ab6e8a34eb12b",
+    "final_text_sha256": "273aff6b0941335d7b8947323ee7521f8888a669ddfacd0e880950c1511a13c3",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/collection.c",
+    "sha256": "75545aec575b71c6fe6fc72a468e4ee11af6dba24b083810b821bae34927c99f",
+    "object": "libbrowser_bind_collection.o",
+    "text_sha256": "a26f30c2ad790da846bafd7af0099f7deaf4d8cc0db2e1425e308e7de07f10b8",
+    "final_sha256": "5a7dd66bc9ae52e858e962de9e5dac809b0a48f2276ca0800bba5ed8ae7b2bed",
+    "final_text_sha256": "229609830ed71289dd1f7915e976f7eebf911c0b4551fed562a95d040cc119bd",
+    "C_string_literals_equal": true,
+    "text_equal": false,
+    "constant_initializers_equal": true
+  }
+]

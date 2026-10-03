@@ -9,7 +9,8 @@
  * The interface of Settings (plan/ws089/design.md section 3): the list of
  * pages on the left and the page on the right, each a card floating on
  * zdesktop's frosted glass; the history of pages that the titlebar's Back,
- * Forward, Home and breadcrumb walk; the pointer, the wheel and the keys.
+ * Forward, Home and breadcrumb walk; the pointer, the wheel, the keys, and a
+ * finger's drag on the touch screen, which scrolls the pane it holds.
  *
  * A frame is drawn whole whenever something changed.  Drawing records the
  * clickable regions, and the next input is matched against them.
@@ -19,6 +20,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /*
@@ -58,6 +60,9 @@
 /* How far the arrows scroll the page, in pixels. */
 #define UI_KEY_STEP		48
 
+/* How far a finger moves up or down before its press is a scroll rather than a tap, in pixels. */
+#define UI_TOUCH_SLOP		10
+
 static void ui_layout(struct se_app *app);
 static void ui_draw_sidebar(struct se_app *app, struct fm_canvas *canvas);
 static void ui_reveal(struct se_app *app, const struct fm_rect *current);
@@ -67,6 +72,10 @@ static int ui_hit_at(struct se_app *app, int x, int y, unsigned *kind, int *inde
 static void ui_motion(struct se_app *app, const struct se_event *event);
 static void ui_button(struct se_app *app, const struct se_event *event);
 static void ui_click(struct se_app *app, unsigned kind, int index);
+static void ui_touch_press(struct se_app *app, const struct se_event *event, unsigned kind);
+static void ui_touch_move(struct se_app *app, const struct se_event *event);
+static int ui_touch_release(struct se_app *app);
+static const char *ui_touch_pane_word(unsigned pane);
 static void ui_scroll(struct se_app *app, const struct se_event *event);
 static void ui_key(struct se_app *app, const struct se_event *event);
 static void ui_step_page(struct se_app *app, int direction);
@@ -450,10 +459,10 @@ se_ui_titlebar(
 		return;
 	}
 
-	/* The search's editing ended: Enter opens the first result, Esc ends the search, leaving keeps it. */
+	/* The search's editing ended: Enter opens the chosen result, Esc ends the search, leaving (Tab) keeps it for the keys. */
 	if (event->kind == SE_TITLEBAR_DONE && event->id == SE_CONTROL_SEARCH) {
 		if (event->detail == KEILAND_TEXT_SUBMITTED) {
-			(void)se_search_open_first(app);
+			(void)se_search_open_chosen(app);
 		} else if (event->detail == KEILAND_TEXT_CANCELLED) {
 			se_search_end(app);
 		}
@@ -831,6 +840,12 @@ ui_motion(
 	unsigned kind;
 	int index;
 
+	/* A finger held on a pane scrolls it once it has moved far enough. */
+	if (app->touch.held != 0 && event->touch != 0) {
+		ui_touch_move(app, event);
+		return;
+	}
+
 	/* A press held on a page's control that drags (a slider) follows the pointer. */
 	page = &se_pages[app->page];
 	if (app->press_kind == SE_HIT_CONTROL &&
@@ -864,6 +879,7 @@ ui_button(
 	const struct se_page *page;
 	unsigned kind;
 	int index;
+	int scrolled;
 
 	/* Only the left button does anything. */
 	if (event->button != SE_BUTTON_LEFT)
@@ -872,7 +888,7 @@ ui_button(
 	/* The region under the pointer. */
 	(void)ui_hit_at(app, event->x, event->y, &kind, &index);
 
-	/* A press holds the region down; a page's control that drags starts its drag. */
+	/* A press holds the region down; a page's control that drags starts its drag (a finger on it drags the slider, not the page). */
 	page = &se_pages[app->page];
 	if (event->pressed != 0) {
 		app->press_kind = kind;
@@ -880,10 +896,19 @@ ui_button(
 		app->dirty = 1;
 		if (kind == SE_HIT_CONTROL &&
 		    page->drag != NULL &&
-		    app->search.active == 0)
+		    app->search.active == 0) {
 			page->drag(app, index, event->x, SE_DRAG_START);
+			return;
+		}
+
+		/* A finger held anywhere else may scroll its pane. */
+		if (event->touch != 0)
+			ui_touch_press(app, event, kind);
 		return;
 	}
+
+	/* A finger lifted after it scrolled its pane: the scroll ends. */
+	scrolled = ui_touch_release(app);
 
 	/* The release ends a drag wherever it lands. */
 	if (app->press_kind == SE_HIT_CONTROL &&
@@ -891,8 +916,8 @@ ui_button(
 	    app->search.active == 0)
 		page->drag(app, app->press_index, event->x, SE_DRAG_END);
 
-	/* A release over the same region clicks it. */
-	if (kind == app->press_kind && index == app->press_index)
+	/* A release over the same region clicks it, unless the finger scrolled. */
+	if (scrolled == 0 && kind == app->press_kind && index == app->press_index)
 		ui_click(app, kind, index);
 
 	/* Nothing is held down any more. */
@@ -929,6 +954,141 @@ ui_click(
 			page->press(app, index);
 		app->dirty = 1;
 	}
+}
+
+/* Holds a pane under a finger just pressed: a drag of the finger will scroll it (the list's rows scroll the list). */
+static void
+ui_touch_press(
+	struct se_app *app,
+	const struct se_event *event,
+	unsigned kind)
+{
+	const struct fm_rect *page;
+	struct se_touch_scroll *touch;
+
+	/* The pane under the finger: the list for its rows and its ground, else the page when the finger is on it. */
+	touch = &app->touch;
+	page = &app->layout.page;
+	if (kind == SE_HIT_PAGE_ROW || kind == SE_HIT_SIDEBAR) {
+		touch->pane = SE_HIT_SIDEBAR;
+		touch->start_scroll = app->sidebar_scroll;
+	} else if (event->x >= page->x &&
+		   event->x < page->x + page->width &&
+		   event->y >= page->y &&
+		   event->y < page->y + page->height) {
+		touch->pane = SE_HIT_PAGE;
+		touch->start_scroll = app->page_scroll;
+	} else {
+		/* Outside both panes a finger only clicks. */
+		touch->held = 0;
+		return;
+	}
+
+	/* The finger is held where it touched, not yet a scroll. */
+	touch->held = 1;
+	touch->scrolling = 0;
+	touch->start_x = event->x;
+	touch->start_y = event->y;
+}
+
+/* Follows a held finger: once it has moved far enough up or down, its pane scrolls with it and its press clicks nothing. */
+static void
+ui_touch_move(
+	struct se_app *app,
+	const struct se_event *event)
+{
+	struct se_touch_scroll *touch;
+	const struct fm_rect *pane;
+	int moved_x;
+	int moved_y;
+	int distance_x;
+	int distance_y;
+	int limit;
+	int scroll;
+
+	/* How far the finger has moved since it touched. */
+	touch = &app->touch;
+	moved_x = event->x - touch->start_x;
+	moved_y = event->y - touch->start_y;
+	distance_x = abs(moved_x);
+	distance_y = abs(moved_y);
+
+	/* A small move, or one more sideways than up or down, is still a tap. */
+	if (touch->scrolling == 0) {
+		if (distance_y < UI_TOUCH_SLOP)
+			return;
+		if (distance_x > distance_y)
+			return;
+
+		/* From here the finger scrolls: the region it pressed is let go without a click. */
+		touch->scrolling = 1;
+		app->press_kind = SE_HIT_NONE;
+		app->press_index = -1;
+		app->hover_kind = SE_HIT_NONE;
+		app->hover_index = -1;
+		se_log("TOUCH scroll start pane=%s", ui_touch_pane_word(touch->pane));
+	}
+
+	/* The content follows the finger: a finger moving up shows what is below, within the pane's extent. */
+	if (touch->pane == SE_HIT_SIDEBAR) {
+		pane = &app->layout.sidebar;
+		limit = app->sidebar_extent - pane->height;
+		scroll = ui_clamp(touch->start_scroll - moved_y, 0, limit);
+		if (scroll != app->sidebar_scroll) {
+			app->sidebar_scroll = scroll;
+			app->dirty = 1;
+		}
+	} else {
+		pane = &app->layout.page;
+		limit = app->page_extent - pane->height;
+		scroll = ui_clamp(touch->start_scroll - moved_y, 0, limit);
+		if (scroll != app->page_scroll) {
+			app->page_scroll = scroll;
+			app->dirty = 1;
+		}
+	}
+}
+
+/* Lets a held finger go.  Returns 1 when it had scrolled its pane (its release then clicks nothing), else 0. */
+static int
+ui_touch_release(
+	struct se_app *app)
+{
+	struct se_touch_scroll *touch;
+	int scrolled;
+
+	/* No finger held, nothing scrolled. */
+	touch = &app->touch;
+	if (touch->held == 0)
+		return 0;
+
+	/* The finger is gone. */
+	scrolled = touch->scrolling;
+	touch->held = 0;
+	touch->scrolling = 0;
+
+	/* A scroll it made says where its pane stopped (the tests read it). */
+	if (scrolled != 0 && touch->pane == SE_HIT_SIDEBAR) {
+		se_log("TOUCH scroll end pane=list scroll=%d", app->sidebar_scroll);
+	} else if (scrolled != 0) {
+		se_log("TOUCH scroll end pane=page scroll=%d", app->page_scroll);
+	}
+
+	/* Reports whether the finger scrolled. */
+	return scrolled;
+}
+
+/* Names a pane a finger scrolls, for the log. */
+static const char *
+ui_touch_pane_word(
+	unsigned pane)
+{
+	/* The list of pages. */
+	if (pane == SE_HIT_SIDEBAR)
+		return "list";
+
+	/* The page. */
+	return "page";
 }
 
 /* Scrolls the pane under the pointer by the wheel. */
@@ -976,11 +1136,23 @@ ui_key(
 		return;
 	}
 
-	/* While the search's results are shown, Enter and Esc are the search's. */
+	/* While the search's results are shown, Up, Down, Enter and Esc are the search's. */
 	if (app->search.active != 0) {
-		/* Enter opens the first result. */
+		/* Up chooses the result before (ws089-p012). */
+		if (event->key == SE_KEY_UP) {
+			se_search_step(app, -1);
+			return;
+		}
+
+		/* Down chooses the result after. */
+		if (event->key == SE_KEY_DOWN) {
+			se_search_step(app, 1);
+			return;
+		}
+
+		/* Enter opens the chosen result. */
 		if (event->key == SE_KEY_ENTER) {
-			(void)se_search_open_first(app);
+			(void)se_search_open_chosen(app);
 			return;
 		}
 

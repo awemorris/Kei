@@ -1,0 +1,8 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/bind/iterator.c",
+    "sha256": "486931ec02689f1c755c74de3768354b882cf149e22a7489e0c212c9e6c2a2b4",
+    "object": "libbrowser_bind_iterator.o",
+    "text_sha256": "3fbe3e0e40b7f58446fbce87b96574b2f5a7a65569af5b24d89b70c4c068ef19"
+  }
+]

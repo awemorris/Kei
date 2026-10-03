@@ -1,0 +1,162 @@
+/*
+ * zedBSD
+ * Copyright (C) 2026 Awe Morris
+ *
+ * SPDX-License-Identifier: Zlib
+ */
+
+/* Exercises ordinary function/environment factories without conservative caller retention. */
+
+#include "js/builtin.h"
+#include "vm/bytecode.h"
+
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+
+/* Inert allocation advances the ordinary default collector accounting. */
+
+
+/* Integer-only observations do not retain any VM participant. */
+static uintptr_t observed[6];
+static unsigned lost;
+static int inner(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+static int outer(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
+
+/*
+ * Checks saved native state and direct receiver/argument ownership under real reentrant collection.
+ */
+int
+main(
+	void)
+{
+	struct vm_heap *heap;
+	struct vm_realm *realm;
+	struct vm_function *function;
+	struct vm_object *object;
+	struct vm_cell *roots[6];
+	vm_value argument;
+	vm_value receiver;
+	vm_value answer;
+	unsigned index;
+	int status;
+	int printed;
+
+	status = vm_heap_create(&heap, 0);
+	if (status != 0)
+		return 2;
+	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+	status = vm_realm_create(heap, &realm);
+	if (status != 0)
+		return 2;
+	status = js_install_builtins(realm);
+	if (status != 0)
+		return 2;
+	memset(roots, 0, sizeof(roots));
+	for (index = 0; index < 6U; index++) {
+		status = vm_heap_add_root(heap, &roots[index]);
+		if (status != 0)
+			return 2;
+	}
+	function = vm_function_create_native(realm, "outer", 1, outer);
+	if (function == NULL)
+		return 2;
+	roots[0] = &function->object.cell;
+	observed[0] = (uintptr_t)function;
+	object = vm_object_create(heap, NULL);
+	if (object == NULL)
+		return 2;
+	roots[1] = &object->cell;
+	observed[1] = (uintptr_t)object;
+	receiver = vm_value_cell(object);
+	object = vm_object_create(heap, NULL);
+	if (object == NULL)
+		return 2;
+	roots[2] = &object->cell;
+	observed[2] = (uintptr_t)object;
+	argument = vm_value_cell(object);
+	object = vm_object_create(heap, NULL);
+	if (object == NULL)
+		return 2;
+	roots[3] = &object->cell;
+	observed[3] = (uintptr_t)object;
+	realm->callee = vm_value_cell(object);
+	object = vm_object_create(heap, NULL);
+	if (object == NULL)
+		return 2;
+	roots[4] = &object->cell;
+	observed[4] = (uintptr_t)object;
+	realm->new_target = vm_value_cell(object);
+	vm_heap_set_stack_base(heap, NULL);
+	for (index = 0; index < 6U; index++)
+		roots[index] = NULL;
+	status = vm_call(realm, vm_value_cell(function), receiver, &argument, 1, &answer);
+	if (status != 0)
+		return 2;
+	printed = printf("nested native lost %u of 5 participants\n", lost);
+	if (printed < 0)
+		return 2;
+	realm->callee = VM_VALUE_UNDEFINED;
+	realm->new_target = VM_VALUE_UNDEFINED;
+	for (index = 0; index < 6U; index++)
+		vm_heap_remove_root(heap, &roots[index]);
+	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+	vm_realm_destroy(realm);
+	vm_heap_destroy(heap);
+	if (lost != 0)
+		return 1;
+
+	/* Succeeded: direct participants and suspended native state survived. */
+	return 0;
+}
+
+/* Collects while the inner call temporarily replaces its outer callee and target. */
+static int
+inner(
+	struct vm_realm *realm,
+	vm_value receiver,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct vm_cell *found;
+	unsigned index;
+
+	UNUSED_PARAMETER(receiver);
+	UNUSED_PARAMETER(args);
+	UNUSED_PARAMETER(count);
+	vm_heap_collect(realm->heap);
+	for (index = 0; index < 5U; index++) {
+		found = vm_heap_find_cell(realm->heap, observed[index]);
+		if (found == NULL)
+			lost++;
+	}
+
+	/* Succeeded: no reclaimed participant is dereferenced by the regression. */
+	*result = VM_VALUE_UNDEFINED;
+	return 0;
+}
+
+/* Reenters the actual native dispatcher with direct, otherwise unowned inputs. */
+static int
+outer(
+	struct vm_realm *realm,
+	vm_value receiver,
+	const vm_value *args,
+	unsigned count,
+	vm_value *result)
+{
+	struct vm_function *function;
+	int status;
+
+	function = vm_function_create_native(realm, "inner", 1, inner);
+	if (function == NULL)
+		return ENOMEM;
+	status = vm_call(realm, vm_value_cell(function), receiver, args, count, result);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: the nested dispatcher restored its outer invocation. */
+	return 0;
+}
+

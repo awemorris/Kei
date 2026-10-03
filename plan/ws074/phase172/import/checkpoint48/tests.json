@@ -1,0 +1,15 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "80",
+      "python3",
+      "plan/ws074/tests/run-frame-load-tests.py",
+      "--program",
+      "build/browser3-p172/review48/host-frame-load"
+    ],
+    "exit": 0,
+    "stdout_file": "host-frame-load.stdout",
+    "stderr_file": "host-frame-load.stderr"
+  }
+]

@@ -1,0 +1,55 @@
+[
+  {
+    "name": "document-parser",
+    "argv": [
+      "build/browser3-p172/plain/host-document-parser"
+    ],
+    "exit": 0,
+    "stdout": "native document parser lifetime: 8/8 passed\n"
+  },
+  {
+    "name": "document-stream",
+    "argv": [
+      "build/browser3-p172/plain/host-document-stream"
+    ],
+    "exit": 0,
+    "stdout": "native document streams: 9/9 passed\n"
+  },
+  {
+    "name": "table-row",
+    "argv": [
+      "build/browser3-p172/plain/host-table-row"
+    ],
+    "exit": 0,
+    "stdout": "table row lifetime checks: 75/75 passed\n"
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n"
+  },
+  {
+    "name": "tree-creation",
+    "argv": [
+      "build/browser3-p172/plain/host-tree"
+    ],
+    "exit": 0,
+    "cases": 3,
+    "inputs": [
+      "<a x=\"1\" y=\"2\">z</a>",
+      "<template a=\"v\"><p>T</p></template>",
+      "<table><tr><td>A<td>B</table>"
+    ],
+    "outputs": [
+      "| <html>\n|   <head>\n|   <body>\n|     <a>\n|       x=\"1\"\n|       y=\"2\"\n|       \"z\"\n",
+      "| <html>\n|   <head>\n|     <template>\n|       a=\"v\"\n|       content\n|         <p>\n|           \"T\"\n|   <body>\n",
+      "| <html>\n|   <head>\n|   <body>\n|     <table>\n|       <tbody>\n|         <tr>\n|           <td>\n|             \"A\"\n|           <td>\n|             \"B\"\n"
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "exit": 1,
+  "cause": "New radio root acquisition was placed before collection_this initialized state; GCC -Werror rejected the intermediate source before execution.",
+  "remedy": "Validate the genuine receiver first, acquire the callee state root next, then invoke user conversion. Final source/build/tests revalidated."
+}

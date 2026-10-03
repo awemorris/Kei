@@ -1,0 +1,46 @@
+[
+  {
+    "name": "host-vm-factory",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "stdout": "native VM factory GC: 56/56 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-object",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-object"
+    ],
+    "exit": 0,
+    "stdout": "host-object: collection freed 1306 cells, 541 live\nhost-object: 100 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-heap",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-heap"
+    ],
+    "exit": 0,
+    "stdout": "host-heap: random workload: 185 collections, 8783 live cells, 10405580 live bytes, 2424832 heap bytes\nhost-heap: 31 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-collection",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-collection"
+    ],
+    "exit": 0,
+    "stdout": "collection GC checks: 37/37 passed\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,7 @@
+run 1 (C2 C3 C4 C8 C9) fails=0 lines=15
+run 2 (C2 C3 C4 C8 C9) fails=1 lines=15
+run 3 (C2 C3 C4 C8 C9) fails=0 lines=15
+run 4 (C3 C4 C8 C9) fails=0 lines=14
+run 5 (C3 C4 C8 C9) fails=0 lines=14
+files files-desktop-guest: PASS
+done

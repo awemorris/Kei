@@ -1,0 +1,14 @@
+{
+  "kind": "scoped current fixture GCC compile/link against current own engine objects; production unchanged",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-form-owner.c": "87eabb706c3795bfda1aad77f65e01bf76d2c3815bddb64a0a11def55ce7b8fc",
+    "plan/ws074/tests/host-node-cloning.c": "c4e6fb6cd1e7b7ae637696885954a196c5166a829fc50b354c4cbf604b285acf",
+    "plan/ws074/tests/host-table-mutation.c": "006bcc935c8bc347c15c520211d92d94d4c28d079fdfd2b055905a1358e0d5d0",
+    "plan/ws074/tests/host-table-row.c": "4d6fa328317ab53107cc2df49a62ac532747626c70b6f0877f194bb5bb6c32f4"
+  },
+  "production_baseline": "552bf9fac"
+}

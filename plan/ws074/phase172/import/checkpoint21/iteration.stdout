@@ -1,0 +1,47 @@
+symbol Symbol(x) Symbol(x) x undefined
+Symbol(Symbol.iterator) true k undefined
+plain 1 1
+symbol to string: TypeError
+new Symbol: TypeError
+of 1
+of 2
+of 3
+char 1
+char 2
+char 1
+entry a 1
+entry b 2
+1-2-3
+1,2  3
+v 0
+v 1
+closed at 3
+closed at 1
+first 0
+closed at 1
+caught inside
+closed at 1
+closed at 1
+closed at 2
+pattern 0 1
+w 0
+w 1
+6 1,2,3,NaN,0,1 true true true true
+3 nan undefined true
+forEach y 2
+forEach NaN nan
+forEach z 3
+y,NaN,z 2,nan,3 [["y",2],[null,"nan"],["z",3]]
+live 1,3
+value false true false
+true
+weak key: TypeError
+[object Map] [object Set] [object Map Iterator]
+[object Array Iterator] [object Math] [object Promise]
+string default 5
+true false true
+[object Custom]
+function 0
+a%20b%26c%3Dd%2F%C3%A9%3F http://x/a%20b?q=1&r=%C3%A9#h
+a b&é %3Fa b a%20b+%E9 あA
+malformed: URIError

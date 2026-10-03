@@ -1,0 +1,3 @@
+userland/desktop/libbrowser/html/parser.c:1101: goto: goto cleanup;
+userland/desktop/libbrowser/html/parser.c:1108: goto: goto cleanup;
+userland/desktop/libbrowser/html/parser.c:1120: goto: goto cleanup;

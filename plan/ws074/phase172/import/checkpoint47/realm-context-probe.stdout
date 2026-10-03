@@ -1,0 +1,9 @@
+PASS parent control
+PASS child control
+PASS child bytecode global
+PASS child Function global
+PASS child getter global
+PASS child native exception
+PASS child constructor exception
+PASS child bytecode exception identity
+realm checks: 8/8 passed

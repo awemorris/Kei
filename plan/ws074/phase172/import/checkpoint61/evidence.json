@@ -1,0 +1,57 @@
+{
+  "queue": "q597",
+  "checkpoint": 61,
+  "source": "userland/desktop/browser/main.c",
+  "source_sha256": "75ad356ede3d8a5d29ccd2fa3e224aea44ab49e805936f8096123d3aee2b9470",
+  "baseline": "09e14bdfbdca26887b4585d6782ce6374cb31302",
+  "reviewed": 181,
+  "total": 209,
+  "remaining": 28,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "output_probes": [
+    [
+      "dump-dom",
+      0
+    ],
+    [
+      "dump-style",
+      0
+    ],
+    [
+      "run-page",
+      0
+    ],
+    [
+      "render",
+      0
+    ],
+    [
+      "dump-full",
+      1
+    ],
+    [
+      "run-full",
+      1
+    ],
+    [
+      "render-full",
+      1
+    ]
+  ],
+  "tests": {
+    "dom-tests": "dom-tests 23/23",
+    "js-tests": "js-tests 14/14"
+  },
+  "limits": [
+    "Only main.c is newly full-reviewed; original whole p172 gates and28 production files remain.",
+    "No target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

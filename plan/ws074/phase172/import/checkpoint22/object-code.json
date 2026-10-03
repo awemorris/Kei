@@ -1,0 +1,32 @@
+[
+  {
+    "path": "plan/ws074/tests/host-xml-node.c",
+    "sha256": "85d28a70361af463100c5a42acd798931dbdc88ece2e741010a869f504a76c67",
+    "object": "host-xml-node",
+    "text_sha256": "097e8cf17127a2bbf4bef95bf905cd110ac6238f61eab8947f04238be82a2434",
+    "final_sha256": "af8a73dd84ab93347e253d39c1fe1d2df4ba3a2fc3686a588a36c6851882b0c6",
+    "final_text_sha256": "7588fa96e5ea848d690ac5c9205e105ea70a454bd412a54aa3f3074acd6e7ad9",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  },
+  {
+    "path": "plan/ws074/tests/host-xml-document.c",
+    "sha256": "e8f7a292dc0cb219eac34b959c61f81e543fdf63673a966b8ef315286fd13fea",
+    "object": "host-xml-document",
+    "text_sha256": "3a3ee4113f033112fe9b49dd3bd5e6eb40f54f9249f1843709f8589e7f7e25c3",
+    "final_sha256": "a0a48686f41eb44e514d11e483f1769f21a0ecff88a8ddaa708d91314f7d1185",
+    "final_text_sha256": "e3ae1bb7341a031be873adb30dd7974733fbc2dbc7aa0848cfca0ea9c6aad410",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  },
+  {
+    "path": "plan/ws074/tests/host-attribute-namespace.c",
+    "sha256": "b7eae34107a2e732d9f9eee683506a243b0ab949cf034dd9e3dec556847027cb",
+    "object": "host-attribute-namespace",
+    "text_sha256": "9523e76737ac214bc5121f34206bf3f04af844f0bab984127ca1f83cd52135cc",
+    "final_sha256": "7636f97515385ff26e593c2b61385b88a7450ec489e9deb82a28047604350118",
+    "final_text_sha256": "59ec78b30baf2a3f96ab238a3e8e63122ffff79b74032ce90d914771c7f81a8d",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  }
+]

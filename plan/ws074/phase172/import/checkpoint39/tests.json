@@ -1,0 +1,32 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review39/host-range-insert"
+    ],
+    "exit": 0,
+    "stdout_file": "host-range-insert.stdout",
+    "stderr_file": "host-range-insert.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review39/host-range-mutation"
+    ],
+    "exit": 0,
+    "stdout_file": "host-range-mutation.stdout",
+    "stderr_file": "host-range-mutation.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review39/host-range-surround-contents"
+    ],
+    "exit": 0,
+    "stdout_file": "host-range-surround-contents.stdout",
+    "stderr_file": "host-range-surround-contents.stderr"
+  }
+]

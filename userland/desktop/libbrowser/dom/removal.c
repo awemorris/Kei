@@ -406,11 +406,14 @@ dom_removal_move_root(
 	original = root->document->removals;
 	if (original == NULL || root->document == document)
 		return 0;
+
+	/* Token migration cannot overlap its source registry's pure notification. */
 	assert(!original->notifying);
 
 	/* Counts this root's migration before changing either list or any ownership counter. */
 	count = 0;
 	for (entry = original->first; entry != NULL; entry = entry->next) {
+		/* Only subscriptions strongly owned by this actual traversal root migrate. */
 		if (entry->root == root)
 			count++;
 	}
@@ -423,12 +426,17 @@ dom_removal_move_root(
 	destination = document->removals;
 	if (destination == NULL)
 		return EINVAL;
+
+	/* Prepared destination ownership must be stable throughout this checked migration. */
 	assert(!destination->notifying);
+
+	/* The complete migration count must fit before any token or list link changes. */
 	if (count > SIZE_MAX - destination->references)
 		return EOVERFLOW;
 
 	/* Each moved token exchanges one registry reference without allocation or context destruction. */
 	for (entry = original->first; entry != NULL; entry = following) {
+		/* Captures the old successor before any matching token changes lists. */
 		following = entry->next;
 		if (entry->root != root)
 			continue;
@@ -451,6 +459,8 @@ dom_removal_move_root(
 		entry->registry = destination;
 		entry->previous = destination->last;
 		entry->next = NULL;
+
+		/* Registration order appends this token after all existing destination observers. */
 		if (destination->last != NULL) {
 			destination->last->next = entry;
 		} else {
@@ -475,12 +485,16 @@ dom_removal_matches_document(
 	const struct dom_removal_subscription *subscription,
 	const struct dom_document *document)
 {
-	/* A complete active token belongs to this live Document only through its separately owned registry. */
-	if (subscription != NULL && subscription->registry == document->removals)
-		return 1;
+	/* An absent token cannot carry an association with this live Document. */
+	if (subscription == NULL)
+		return 0;
 
 	/* A different or absent registry requires checked subscription replacement. */
-	return 0;
+	if (subscription->registry != document->removals)
+		return 0;
+
+	/* Succeeded: the active token belongs to this Document's independently owned registry. */
+	return 1;
 }
 
 /*
@@ -509,6 +523,8 @@ removal_drop(
 {
 	/* Every caller drops exactly one previously acquired ownership reference. */
 	assert(registry->references != 0);
+
+	/* Remaining Document or token ownership keeps the independent C registry alive. */
 	registry->references--;
 	if (registry->references != 0)
 		return;

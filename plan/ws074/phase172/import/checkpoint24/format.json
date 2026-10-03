@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/page/frame-load.c",
+      "formatted_sha256": "b3f81523b1a68e842587a69db86499276011d16dc088672e0070e980da89839c",
+      "final_sha256": "24643fc375d0ada1ea43b3305f062883d59342b82ac1429055c56f0828bd5a74",
+      "restorations": "definition argument tabs and compound clause layout"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "queue": "q597",
+  "checkpoint": 56,
+  "source": "userland/desktop/libbrowser/bind/html-reflection.c",
+  "source_sha256": "5b9414997ab4abefe996a40b54671fd3669ee8817f84dbd3ee19618aea126b79",
+  "baseline": "26de86acf0fe7f1c122c9b747929705f2db23d3e",
+  "reviewed": 176,
+  "total": 209,
+  "remaining": 33,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "permitted_forward_cleanup_jumps": 5,
+    "other_findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "page_probes": {
+    "html-reflection-probe": 40,
+    "object-url-probe": 44
+  },
+  "tests": {
+    "dom-tests": "dom-tests 23/23",
+    "host-form": "host-form: 29 checks, 0 failed",
+    "host-url": "exit0"
+  },
+  "limits": [
+    "Only html-reflection.c is newly full-reviewed; original whole p172 gates and33 production files remain.",
+    "No isolated before/after GC crash is claimed for this setter repair.",
+    "No target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

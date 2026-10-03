@@ -23,6 +23,7 @@
 #define WLAN_IE_SSID 0U
 #define WLAN_IE_DS_PARAMETER 3U
 #define WLAN_IE_RSN 48U
+#define WLAN_IE_HT_OPERATION 61U
 #define WLAN_IE_VENDOR 221U
 
 #define WLAN_CAPABILITY_PRIVACY 0x0010U
@@ -39,13 +40,18 @@ static enum cipher_kind parse_cipher(const uint8_t *suite, int rsn);
 static void parse_akm(const uint8_t *suite, int rsn, uint32_t *security);
 static int parse_security_body(const uint8_t *body, size_t length, int rsn, uint32_t *security);
 static uint32_t channel_frequency(uint8_t channel);
+static int ssid_is_hidden(const uint8_t *ssid, size_t length);
 
 /*
  * Parses a beacon or probe response into a BSS record.
  *
  * The frame must carry an SSID; the channel comes from the DS parameter
- * element or, failing that, from the channel the frame was received on.
- * Duplicate elements and a channel without a known frequency are errors.
+ * element, else from the primary channel of the HT operation element, and
+ * failing both from the channel the frame was received on.  A 5 GHz beacon
+ * usually has no DS parameter element, and a radio scanning one channel
+ * also hears the beacons of a neighbouring one, so the receive channel is
+ * the last resort.  Duplicate elements and a channel without a known
+ * frequency are errors.
  */
 int
 wlan_frame_parse_bss(
@@ -64,12 +70,17 @@ wlan_frame_parse_bss(
 	uint8_t ie_length;
 	int have_ssid;
 	int have_channel;
+	int have_ht_channel;
+	uint8_t ht_channel;
 	int have_rsn;
 	int have_wpa;
+	int hidden;
 	int error;
 
 	have_ssid = 0;
 	have_channel = 0;
+	have_ht_channel = 0;
+	ht_channel = 0U;
 	have_rsn = 0;
 	have_wpa = 0;
 	bssid_nonzero = 0U;
@@ -125,6 +136,11 @@ wlan_frame_parse_bss(
 				return EINVAL;
 			have_channel = 1;
 			parsed.channel = body[0];
+		} else if (identifier == WLAN_IE_HT_OPERATION) {
+			if (have_ht_channel || ie_length < 1U)
+				return EINVAL;
+			have_ht_channel = 1;
+			ht_channel = body[0];
 		} else if (identifier == WLAN_IE_RSN) {
 			if (have_rsn)
 				return EINVAL;
@@ -153,10 +169,22 @@ wlan_frame_parse_bss(
 		offset += ie_length;
 	}
 
-	/* Requires an SSID and a channel with a known frequency. */
+	/* Requires an SSID element, even an empty one. */
 	if (!have_ssid)
 		return EINVAL;
-	if (!have_channel)
+
+	/*
+	 * A hidden network may fill its SSID with zero octets instead of
+	 * leaving it empty; either way the frame names no network to show.
+	 */
+	hidden = ssid_is_hidden(parsed.ssid, parsed.ssid_length);
+	if (hidden)
+		parsed.ssid_length = 0U;
+
+	/* Takes the DS parameter's, the HT operation's or the receive channel, which must have a known frequency. */
+	if (!have_channel && have_ht_channel)
+		parsed.channel = ht_channel;
+	else if (!have_channel)
 		parsed.channel = channel_hint;
 	parsed.center_frequency_mhz = channel_frequency(parsed.channel);
 	if (parsed.center_frequency_mhz == 0U)
@@ -166,6 +194,28 @@ wlan_frame_parse_bss(
 
 	/* Reports the parsed record. */
 	return 0;
+}
+
+/* Tells whether an SSID is made only of zero octets (a hidden network's); an empty one is not. */
+static int
+ssid_is_hidden(
+	const uint8_t *ssid,
+	size_t length)
+{
+	size_t index;
+
+	/* An empty SSID already names nothing. */
+	if (length == 0U)
+		return 0;
+
+	/* Any nonzero octet makes it a name. */
+	for (index = 0U; index < length; index++) {
+		if (ssid[index] != 0U)
+			return 0;
+	}
+
+	/* Succeeded: every octet is zero. */
+	return 1;
 }
 
 /* Reads a little-endian 16-bit field. */

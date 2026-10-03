@@ -1,0 +1,11 @@
+{
+  "kind": "GCC14.2 scoped compile/link against current unchanged own engine objects",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-xml.c": "6bf20c3722cd60b2ac1c82d75fea43517cc6a8a3c329812855de169c0d491ea0",
+    "plan/ws074/tests/host-xml-dom.c": "c4ee51dd77c551c10efaedee7948e9825dda7624283943d0d63db1bf24b4f0da"
+  }
+}

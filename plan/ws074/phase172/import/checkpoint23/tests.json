@@ -1,0 +1,75 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/dom/geometry.html"
+    ],
+    "exit": 0,
+    "stdout_file": "geometry.stdout",
+    "stderr_file": "geometry.stderr",
+    "expected": "plan/ws074/tests/dom/geometry.expected",
+    "exact_output_equal": true,
+    "lines": 15
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/dom/computed.html"
+    ],
+    "exit": 0,
+    "stdout_file": "computed.stdout",
+    "stderr_file": "computed.stderr",
+    "expected": "plan/ws074/tests/dom/computed.expected",
+    "exact_output_equal": true,
+    "lines": 28
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/child-style-probe.html"
+    ],
+    "exit": 0,
+    "stdout_file": "child-style.stdout",
+    "stderr_file": "child-style.stderr",
+    "pass_lines": 30,
+    "fail_lines": 0
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-viewport"
+    ],
+    "exit": 0,
+    "stdout_file": "host-frame-viewport.stdout",
+    "stderr_file": "host-frame-viewport.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout_file": "host-frame-lifetime.stdout",
+    "stderr_file": "host-frame-lifetime.stderr"
+  }
+]

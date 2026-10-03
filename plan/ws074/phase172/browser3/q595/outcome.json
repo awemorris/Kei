@@ -1,0 +1,43 @@
+{
+  "queue": "q595",
+  "attempt": "q595-i01",
+  "queue_status": "finished",
+  "item_status": "cleared",
+  "partial_scope": true,
+  "phase_status": "uncleared",
+  "ws_status": "incomplete",
+  "started_utc": "2026-10-02T13:10:49+00:00",
+  "finished_utc": "2026-10-02T14:07:37+00:00",
+  "deadline_utc": "2026-10-02T16:10:49+00:00",
+  "source_commit": "140d0838df174c2fa29498b40aa02fdd6de3e481",
+  "verified_remote_source_commit": "140d0838df174c2fa29498b40aa02fdd6de3e481",
+  "selected": [
+    "plan/ws074/tests/host-range-boundary.c",
+    "plan/ws074/tests/host-range-clone-contents.c",
+    "plan/ws074/tests/host-range-data.c",
+    "plan/ws074/tests/host-range-extract-contents.c",
+    "plan/ws074/tests/host-range-insert.c",
+    "plan/ws074/tests/host-range-mutation.c",
+    "plan/ws074/tests/host-range-surround-contents.c",
+    "plan/ws074/tests/host-collection.c",
+    "plan/ws074/tests/host-form-collection.c",
+    "userland/desktop/libbrowser/bind/collection.c"
+  ],
+  "reviewed_before": 140,
+  "reviewed_after": 150,
+  "remaining_C_header": 59,
+  "remaining_other": 0,
+  "source_hashes_matched": 209,
+  "native_checks": 580,
+  "native_fixture_count": 14,
+  "scoped_build_warning_count": 0,
+  "verified_repairs": "Unpublished collection state across wrapper allocation and callee state across native user conversion; host GC failures reproduced/fixed, post-call roots released.",
+  "next_queue": "unselected; q591-q593 reservations retained, next unreserved q596",
+  "pending_sync": "Issues/Project deferred; configured github mode and absent .sync state preserved. Git source push verified separately.",
+  "limitations": [
+    "Whole final boundary/API/public-client/target/boot/ASan gates remain unexecuted in this partial Queue; earlier evidence stays historical.",
+    "Allocation failure injection not performed; exact acquired-root and cleanup paths reviewed.",
+    "No subagents used or downstream Phase started; p099 retained cleared.",
+    "Requested unused build cleanup was completed in q594; no new deletion needed."
+  ]
+}

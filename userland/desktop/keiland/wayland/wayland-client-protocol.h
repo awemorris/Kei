@@ -99,6 +99,9 @@ extern const struct wl_interface wl_surface_interface;
 struct wl_surface_listener {
 	void (*enter)(void *data, struct wl_surface *object, struct wl_output *output);
 	void (*leave)(void *data, struct wl_surface *object, struct wl_output *output);
+	/* Version 6; called only on a surface of version 6 or later. */
+	void (*preferred_buffer_scale)(void *data, struct wl_surface *object, int32_t factor);
+	void (*preferred_buffer_transform)(void *data, struct wl_surface *object, uint32_t transform);
 };
 
 int wl_surface_add_listener(struct wl_surface *object, const struct wl_surface_listener *listener, void *data);
@@ -122,6 +125,23 @@ void wl_surface_set_buffer_transform(struct wl_surface *object, int32_t transfor
 void wl_surface_set_buffer_scale(struct wl_surface *object, int32_t scale);
 #define WL_SURFACE_DAMAGE_BUFFER 9U
 void wl_surface_damage_buffer(struct wl_surface *object, int32_t x, int32_t y, int32_t width, int32_t height);
+#define WL_SURFACE_OFFSET 10U
+void wl_surface_offset(struct wl_surface *object, int32_t x, int32_t y);
+#define WL_SURFACE_ENTER_SINCE_VERSION 1
+#define WL_SURFACE_LEAVE_SINCE_VERSION 1
+#define WL_SURFACE_PREFERRED_BUFFER_SCALE_SINCE_VERSION 6
+#define WL_SURFACE_PREFERRED_BUFFER_TRANSFORM_SINCE_VERSION 6
+#define WL_SURFACE_DESTROY_SINCE_VERSION 1
+#define WL_SURFACE_ATTACH_SINCE_VERSION 1
+#define WL_SURFACE_DAMAGE_SINCE_VERSION 1
+#define WL_SURFACE_FRAME_SINCE_VERSION 1
+#define WL_SURFACE_SET_OPAQUE_REGION_SINCE_VERSION 1
+#define WL_SURFACE_SET_INPUT_REGION_SINCE_VERSION 1
+#define WL_SURFACE_COMMIT_SINCE_VERSION 1
+#define WL_SURFACE_SET_BUFFER_TRANSFORM_SINCE_VERSION 2
+#define WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION 3
+#define WL_SURFACE_DAMAGE_BUFFER_SINCE_VERSION 4
+#define WL_SURFACE_OFFSET_SINCE_VERSION 5
 void wl_surface_set_user_data(struct wl_surface *object, void *data);
 void *wl_surface_get_user_data(struct wl_surface *object);
 uint32_t wl_surface_get_version(struct wl_surface *object);
@@ -257,6 +277,7 @@ struct wl_data_source *wl_data_device_manager_create_data_source(struct wl_data_
 #define WL_DATA_DEVICE_MANAGER_GET_DATA_DEVICE 1U
 struct wl_data_device *wl_data_device_manager_get_data_device(struct wl_data_device_manager *wl_data_device_manager, struct wl_seat *seat);
 void wl_data_device_manager_destroy(struct wl_data_device_manager *wl_data_device_manager);
+uint32_t wl_data_device_manager_get_version(struct wl_data_device_manager *wl_data_device_manager);
 
 struct wl_buffer;
 extern const struct wl_interface wl_buffer_interface;
@@ -279,8 +300,136 @@ extern const struct wl_interface wl_shm_interface;
 extern const struct wl_interface wl_shm_pool_interface;
 
 /* The pixel formats of wl_shm: 32-bit little-endian words with alpha, or with an unused byte. */
-#define WL_SHM_FORMAT_ARGB8888 0U
-#define WL_SHM_FORMAT_XRGB8888 1U
+/*
+ * The pixel formats of wl_shm buffers: ARGB8888 and XRGB8888 are 0 and 1,
+ * and the rest are DRM fourcc codes.  The two first were macros here and keep
+ * their values.
+ */
+enum wl_shm_format {
+	WL_SHM_FORMAT_ARGB8888 = 0,
+	WL_SHM_FORMAT_XRGB8888 = 1,
+	WL_SHM_FORMAT_C8 = 0x20203843,
+	WL_SHM_FORMAT_RGB332 = 0x38424752,
+	WL_SHM_FORMAT_BGR233 = 0x38524742,
+	WL_SHM_FORMAT_XRGB4444 = 0x32315258,
+	WL_SHM_FORMAT_XBGR4444 = 0x32314258,
+	WL_SHM_FORMAT_RGBX4444 = 0x32315852,
+	WL_SHM_FORMAT_BGRX4444 = 0x32315842,
+	WL_SHM_FORMAT_ARGB4444 = 0x32315241,
+	WL_SHM_FORMAT_ABGR4444 = 0x32314241,
+	WL_SHM_FORMAT_RGBA4444 = 0x32314152,
+	WL_SHM_FORMAT_BGRA4444 = 0x32314142,
+	WL_SHM_FORMAT_XRGB1555 = 0x35315258,
+	WL_SHM_FORMAT_XBGR1555 = 0x35314258,
+	WL_SHM_FORMAT_RGBX5551 = 0x35315852,
+	WL_SHM_FORMAT_BGRX5551 = 0x35315842,
+	WL_SHM_FORMAT_ARGB1555 = 0x35315241,
+	WL_SHM_FORMAT_ABGR1555 = 0x35314241,
+	WL_SHM_FORMAT_RGBA5551 = 0x35314152,
+	WL_SHM_FORMAT_BGRA5551 = 0x35314142,
+	WL_SHM_FORMAT_RGB565 = 0x36314752,
+	WL_SHM_FORMAT_BGR565 = 0x36314742,
+	WL_SHM_FORMAT_RGB888 = 0x34324752,
+	WL_SHM_FORMAT_BGR888 = 0x34324742,
+	WL_SHM_FORMAT_XBGR8888 = 0x34324258,
+	WL_SHM_FORMAT_RGBX8888 = 0x34325852,
+	WL_SHM_FORMAT_BGRX8888 = 0x34325842,
+	WL_SHM_FORMAT_ABGR8888 = 0x34324241,
+	WL_SHM_FORMAT_RGBA8888 = 0x34324152,
+	WL_SHM_FORMAT_BGRA8888 = 0x34324142,
+	WL_SHM_FORMAT_XRGB2101010 = 0x30335258,
+	WL_SHM_FORMAT_XBGR2101010 = 0x30334258,
+	WL_SHM_FORMAT_RGBX1010102 = 0x30335852,
+	WL_SHM_FORMAT_BGRX1010102 = 0x30335842,
+	WL_SHM_FORMAT_ARGB2101010 = 0x30335241,
+	WL_SHM_FORMAT_ABGR2101010 = 0x30334241,
+	WL_SHM_FORMAT_RGBA1010102 = 0x30334152,
+	WL_SHM_FORMAT_BGRA1010102 = 0x30334142,
+	WL_SHM_FORMAT_YUYV = 0x56595559,
+	WL_SHM_FORMAT_YVYU = 0x55595659,
+	WL_SHM_FORMAT_UYVY = 0x59565955,
+	WL_SHM_FORMAT_VYUY = 0x59555956,
+	WL_SHM_FORMAT_AYUV = 0x56555941,
+	WL_SHM_FORMAT_NV12 = 0x3231564e,
+	WL_SHM_FORMAT_NV21 = 0x3132564e,
+	WL_SHM_FORMAT_NV16 = 0x3631564e,
+	WL_SHM_FORMAT_NV61 = 0x3136564e,
+	WL_SHM_FORMAT_YUV410 = 0x39565559,
+	WL_SHM_FORMAT_YVU410 = 0x39555659,
+	WL_SHM_FORMAT_YUV411 = 0x31315559,
+	WL_SHM_FORMAT_YVU411 = 0x31315659,
+	WL_SHM_FORMAT_YUV420 = 0x32315559,
+	WL_SHM_FORMAT_YVU420 = 0x32315659,
+	WL_SHM_FORMAT_YUV422 = 0x36315559,
+	WL_SHM_FORMAT_YVU422 = 0x36315659,
+	WL_SHM_FORMAT_YUV444 = 0x34325559,
+	WL_SHM_FORMAT_YVU444 = 0x34325659,
+	WL_SHM_FORMAT_R8 = 0x20203852,
+	WL_SHM_FORMAT_R16 = 0x20363152,
+	WL_SHM_FORMAT_RG88 = 0x38384752,
+	WL_SHM_FORMAT_GR88 = 0x38385247,
+	WL_SHM_FORMAT_RG1616 = 0x32334752,
+	WL_SHM_FORMAT_GR1616 = 0x32335247,
+	WL_SHM_FORMAT_XRGB16161616F = 0x48345258,
+	WL_SHM_FORMAT_XBGR16161616F = 0x48344258,
+	WL_SHM_FORMAT_ARGB16161616F = 0x48345241,
+	WL_SHM_FORMAT_ABGR16161616F = 0x48344241,
+	WL_SHM_FORMAT_XYUV8888 = 0x56555958,
+	WL_SHM_FORMAT_VUY888 = 0x34325556,
+	WL_SHM_FORMAT_VUY101010 = 0x30335556,
+	WL_SHM_FORMAT_Y210 = 0x30313259,
+	WL_SHM_FORMAT_Y212 = 0x32313259,
+	WL_SHM_FORMAT_Y216 = 0x36313259,
+	WL_SHM_FORMAT_Y410 = 0x30313459,
+	WL_SHM_FORMAT_Y412 = 0x32313459,
+	WL_SHM_FORMAT_Y416 = 0x36313459,
+	WL_SHM_FORMAT_XVYU2101010 = 0x30335658,
+	WL_SHM_FORMAT_XVYU12_16161616 = 0x36335658,
+	WL_SHM_FORMAT_XVYU16161616 = 0x38345658,
+	WL_SHM_FORMAT_Y0L0 = 0x304c3059,
+	WL_SHM_FORMAT_X0L0 = 0x304c3058,
+	WL_SHM_FORMAT_Y0L2 = 0x324c3059,
+	WL_SHM_FORMAT_X0L2 = 0x324c3058,
+	WL_SHM_FORMAT_YUV420_8BIT = 0x38305559,
+	WL_SHM_FORMAT_YUV420_10BIT = 0x30315559,
+	WL_SHM_FORMAT_XRGB8888_A8 = 0x38415258,
+	WL_SHM_FORMAT_XBGR8888_A8 = 0x38414258,
+	WL_SHM_FORMAT_RGBX8888_A8 = 0x38415852,
+	WL_SHM_FORMAT_BGRX8888_A8 = 0x38415842,
+	WL_SHM_FORMAT_RGB888_A8 = 0x38413852,
+	WL_SHM_FORMAT_BGR888_A8 = 0x38413842,
+	WL_SHM_FORMAT_RGB565_A8 = 0x38413552,
+	WL_SHM_FORMAT_BGR565_A8 = 0x38413542,
+	WL_SHM_FORMAT_NV24 = 0x3432564e,
+	WL_SHM_FORMAT_NV42 = 0x3234564e,
+	WL_SHM_FORMAT_P210 = 0x30313250,
+	WL_SHM_FORMAT_P010 = 0x30313050,
+	WL_SHM_FORMAT_P012 = 0x32313050,
+	WL_SHM_FORMAT_P016 = 0x36313050,
+	WL_SHM_FORMAT_AXBXGXRX106106106106 = 0x30314241,
+	WL_SHM_FORMAT_NV15 = 0x3531564e,
+	WL_SHM_FORMAT_Q410 = 0x30313451,
+	WL_SHM_FORMAT_Q401 = 0x31303451,
+	WL_SHM_FORMAT_XRGB16161616 = 0x38345258,
+	WL_SHM_FORMAT_XBGR16161616 = 0x38344258,
+	WL_SHM_FORMAT_ARGB16161616 = 0x38345241,
+	WL_SHM_FORMAT_ABGR16161616 = 0x38344241,
+	WL_SHM_FORMAT_C1 = 0x20203143,
+	WL_SHM_FORMAT_C2 = 0x20203243,
+	WL_SHM_FORMAT_C4 = 0x20203443,
+	WL_SHM_FORMAT_D1 = 0x20203144,
+	WL_SHM_FORMAT_D2 = 0x20203244,
+	WL_SHM_FORMAT_D4 = 0x20203444,
+	WL_SHM_FORMAT_D8 = 0x20203844,
+	WL_SHM_FORMAT_R1 = 0x20203152,
+	WL_SHM_FORMAT_R2 = 0x20203252,
+	WL_SHM_FORMAT_R4 = 0x20203452,
+	WL_SHM_FORMAT_R10 = 0x20303152,
+	WL_SHM_FORMAT_R12 = 0x20323152,
+	WL_SHM_FORMAT_AVUY8888 = 0x59555641,
+	WL_SHM_FORMAT_XVUY8888 = 0x59555658,
+	WL_SHM_FORMAT_P030 = 0x30333050
+};
 
 /* Receives the formats the compositor accepts for shared-memory buffers. */
 struct wl_shm_listener {
@@ -314,6 +463,14 @@ struct wl_output_listener {
 int wl_output_add_listener(struct wl_output *object, const struct wl_output_listener *listener, void *data);
 #define WL_OUTPUT_RELEASE 0U
 void wl_output_release(struct wl_output *object);
+void wl_output_destroy(struct wl_output *object);
+#define WL_OUTPUT_GEOMETRY_SINCE_VERSION 1
+#define WL_OUTPUT_MODE_SINCE_VERSION 1
+#define WL_OUTPUT_DONE_SINCE_VERSION 2
+#define WL_OUTPUT_SCALE_SINCE_VERSION 2
+#define WL_OUTPUT_NAME_SINCE_VERSION 4
+#define WL_OUTPUT_DESCRIPTION_SINCE_VERSION 4
+#define WL_OUTPUT_RELEASE_SINCE_VERSION 3
 void wl_output_set_user_data(struct wl_output *object, void *data);
 void *wl_output_get_user_data(struct wl_output *object);
 uint32_t wl_output_get_version(struct wl_output *object);
@@ -420,6 +577,8 @@ int wl_pointer_add_listener(struct wl_pointer *wl_pointer, const struct wl_point
 #define WL_POINTER_AXIS_SOURCE_SINCE_VERSION 5
 #define WL_POINTER_AXIS_STOP_SINCE_VERSION 5
 #define WL_POINTER_AXIS_DISCRETE_SINCE_VERSION 5
+#define WL_POINTER_AXIS_VALUE120_SINCE_VERSION 8
+#define WL_POINTER_AXIS_RELATIVE_DIRECTION_SINCE_VERSION 9
 #define WL_POINTER_SET_CURSOR_SINCE_VERSION 1
 #define WL_POINTER_RELEASE_SINCE_VERSION 3
 void wl_pointer_set_cursor(struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface, int32_t hotspot_x, int32_t hotspot_y);
@@ -505,10 +664,33 @@ uint32_t wl_touch_get_version(struct wl_touch *wl_touch);
 #define WL_REGISTRY_BIND 0U
 void *wl_registry_bind(struct wl_registry *registry, uint32_t name, const struct wl_interface *interface, uint32_t version);
 
-#define WL_OUTPUT_MODE_CURRENT 1U
-#define WL_OUTPUT_MODE_PREFERRED 2U
-#define WL_OUTPUT_TRANSFORM_NORMAL 0
-#define WL_OUTPUT_SUBPIXEL_UNKNOWN 0
+/* Flags of wl_output.mode; the values the macros here had. */
+enum wl_output_mode {
+	WL_OUTPUT_MODE_CURRENT = 0x1,
+	WL_OUTPUT_MODE_PREFERRED = 0x2
+};
+
+/* The subpixel layouts wl_output.geometry reports. */
+enum wl_output_subpixel {
+	WL_OUTPUT_SUBPIXEL_UNKNOWN = 0,
+	WL_OUTPUT_SUBPIXEL_NONE = 1,
+	WL_OUTPUT_SUBPIXEL_HORIZONTAL_RGB = 2,
+	WL_OUTPUT_SUBPIXEL_HORIZONTAL_BGR = 3,
+	WL_OUTPUT_SUBPIXEL_VERTICAL_RGB = 4,
+	WL_OUTPUT_SUBPIXEL_VERTICAL_BGR = 5
+};
+
+/* The rotations and flips of an output or a buffer, counter-clockwise. */
+enum wl_output_transform {
+	WL_OUTPUT_TRANSFORM_NORMAL = 0,
+	WL_OUTPUT_TRANSFORM_90 = 1,
+	WL_OUTPUT_TRANSFORM_180 = 2,
+	WL_OUTPUT_TRANSFORM_270 = 3,
+	WL_OUTPUT_TRANSFORM_FLIPPED = 4,
+	WL_OUTPUT_TRANSFORM_FLIPPED_90 = 5,
+	WL_OUTPUT_TRANSFORM_FLIPPED_180 = 6,
+	WL_OUTPUT_TRANSFORM_FLIPPED_270 = 7
+};
 
 #ifdef __cplusplus
 }

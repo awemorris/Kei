@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-range-boundary.c",
+      "formatted_sha256": "3a50a125ba2f58011063832c929b6a72fd653da63e276831e17d216d6ce0dbae",
+      "final_sha256": "dd02bc5366a3c32585fe65f6ccfe3bd1d8661c18cbb126272dde01928efcffbe",
+      "restorations": "definition tabs, compound observation clauses/one split argument per line, constant initializer layout and meaningful completion paragraph"
+    },
+    {
+      "path": "plan/ws074/tests/host-range-data.c",
+      "formatted_sha256": "d89ec609b1553f421fb77b1a51318457a9b5a3785e124210aa1b4c711c77ba3f",
+      "final_sha256": "468eab91bb697e0165a1990168035ebb1ed01be9199fca9cbdb0eb76bd444ea0",
+      "restorations": "definition tabs, compound observation clauses/one split argument per line, constant initializer layout and meaningful completion paragraph"
+    }
+  ]
+}

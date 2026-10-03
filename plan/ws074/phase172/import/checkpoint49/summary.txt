@@ -1,0 +1,1 @@
+Frame lifetime1190 full review; original148 native checks/scoped warning0; 79 permitted forward cleanup jumps; all29 native saved graph families/capped failure/owner counters/precise GC root intervals and C strings retained.

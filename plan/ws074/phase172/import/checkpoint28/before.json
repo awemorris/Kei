@@ -1,0 +1,8 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/css/media.c",
+    "sha256": "e1debeee9566a5459be1498bf84eac6172797636f19025521ec30716ff80b5cc",
+    "object": "libbrowser_css_media.o",
+    "text_sha256": "2c90cb6d24f200366945a10d421e88fb822adfc4faac04a5a3b963ed4d75bf21"
+  }
+]

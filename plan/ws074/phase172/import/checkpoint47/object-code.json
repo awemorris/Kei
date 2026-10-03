@@ -1,0 +1,24 @@
+[
+  {
+    "path": "plan/ws074/tests/host-native-properties.c",
+    "sha256": "4877599e6e6b4358cf40bfbd412ef425e6776df2eeaf5c3d9df48c4b19d0fd93",
+    "object": "host-native-properties.o",
+    "object_path": "build/browser3-p172/review47/host-native-properties.o",
+    "text_sha256": "530615668cbc19a82e4af9cd751d31c64ff730e08ec6e0ba223bf9dcdd16881d",
+    "final_sha256": "54ea416fa98c301d9b2c44996ed2b85f582ce3568bceb85381c979b5ab9f9823",
+    "final_text_sha256": "58678ffb7f441bc4023e182b98b3376631afc2c62454e55d4061030658a041d9",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/realm-context-probe.c",
+    "sha256": "471a1470f1e14523701438c67c131bf7abdce7c3d38101026ac07f0440908feb",
+    "object": "realm-context-probe.o",
+    "object_path": "build/browser3-p172/review47/realm-context-probe.o",
+    "text_sha256": "87e4ddd0e6d12639033c97d5a4a6e6f277340dbc4c469b8df8225178f8145a2d",
+    "final_sha256": "7f3362d6ea856e91e82ca9a26961b609552d66b560e37e7c42078bf9c80c3667",
+    "final_text_sha256": "c32da0c36c080b59e2402f514985dc7f212f2f20c5b61151758af62e960e2b46",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

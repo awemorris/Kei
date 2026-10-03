@@ -1,0 +1,31 @@
+{
+  "queue": "q598",
+  "attempt": "q598-i01",
+  "phase": "ws074-p172",
+  "partial_scope": false,
+  "selected": [
+    "userland/desktop/libbrowser/bind/environment.c",
+    "userland/desktop/libbrowser/bind/range.c",
+    "userland/desktop/libbrowser/css/cascade.c",
+    "userland/desktop/libbrowser/css/values.c",
+    "userland/desktop/libbrowser/js/builtin_array.c",
+    "userland/desktop/libbrowser/bind/input.c"
+  ],
+  "inventory_review_targets": [
+    "userland/desktop/libbrowser/bind/environment.c",
+    "userland/desktop/libbrowser/bind/range.c",
+    "userland/desktop/libbrowser/css/cascade.c",
+    "userland/desktop/libbrowser/css/values.c",
+    "userland/desktop/libbrowser/js/builtin_array.c"
+  ],
+  "adjacent_revalidation_target": "userland/desktop/libbrowser/bind/input.c",
+  "whole_final_checks": true,
+  "baseline": "1737a7235f117a4dc001f92b94f8f5c913b8fc13",
+  "started_utc": "2026-10-03T03:17:13.319790+00:00",
+  "deadline_utc": "2026-10-03T06:17:13.319790+00:00",
+  "source_hashes_verified": 209,
+  "adjacent_source_sha256": "c0405f03becb556963049e495e1b736a9d561d7c550e2f7456063de360871047",
+  "user_source": "2026-10-03 JST: 再会できますか？ resumes prior autonomous Acid3 goal; no subagents/all WIP/normal browser3 push persist.",
+  "criteria": "Five complete full C/component reviews and necessary repairs; bind/input.c identified constructor root gap only; revalidate changed earlier-reviewed source; original whole p172 final manifest/semantic, ownership/public API/include/ELF/independent client, actual native-page-JS/ASan, target warning0 and boot-test PNG. Whole clearance only after all original criteria and actual output. Finite3h; preserve uncleared/resume at bound.",
+  "selection_reason": "q597 user-stop ended uncleared at204/209 with five pending; current user resumed same goal. Input caller gap is p172 adjacent source now expressly selected. p100 remains unselected until whole prerequisite verified."
+}

@@ -1,0 +1,22 @@
+{
+  "base": "08342554b",
+  "fixture_patch": "regression-before.patch",
+  "fixture_sha256": "8441dc78e7313ad43f61b0b9870114ca57711c242966d157606066aaeba906eb",
+  "production_objects": "checkpoint17 private plain objects before link/SVG edits",
+  "link_flags_addition": [
+    "-fsanitize=leak"
+  ],
+  "driver": [
+    "timeout",
+    "30",
+    "python3",
+    "plan/ws074/tests/run-resource-tests.py",
+    "--program",
+    "build/browser3-p172/review18/resource-before"
+  ],
+  "exit": 23,
+  "leaked_bytes": 512,
+  "allocations": 8,
+  "stdout_file": "resource-before.stdout",
+  "stderr_file": "resource-before.stderr"
+}

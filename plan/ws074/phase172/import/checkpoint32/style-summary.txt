@@ -1,0 +1,4 @@
+plan/ws074/tests/host-option-state.c goto=5
+plan/ws074/tests/host-table-collection.c goto=5
+plan/ws074/tests/host-select.c goto=9
+total 19

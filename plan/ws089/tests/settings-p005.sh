@@ -51,8 +51,7 @@ expect_log() {
 # Starts settings on a page (its log in /tmp/s.log) and finds its window.
 start_settings() {
 	guest "export XDG_RUNTIME_DIR=/tmp HOME=/root; /bin/settings --timeout-s=800 $1 > /tmp/s.log 2>&1 </dev/null & sleep 5; echo started" >/dev/null
-	set -- $(guest "grep 'ZWL MAP client=1 ' /tmp/zdesktop.log | tail -1" | sed -n 's/.* surface=\([0-9]*\) x=\([-0-9]*\) y=\([-0-9]*\).*/\1 \2 \3/p')
-	wx=${2:-0}; wy=${3:-0}
+	find_window
 	echo "settings: window at $wx,$wy"
 }
 
@@ -146,7 +145,7 @@ shot home.png
 
 # 4. zdesktop saw no error.
 errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
-[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
+[ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; guest "grep ERROR /tmp/zdesktop.log | head -5"; status=1; }
 guest 'cat /tmp/s.log' > "$out/settings.log"
 guest 'grep -E "PREFERENCES" /tmp/zdesktop.log' > "$out/zdesktop-preferences.log"
 guest "$stop_all" >/dev/null

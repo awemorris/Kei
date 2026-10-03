@@ -72,3 +72,5 @@ Q1 の判断（2026-10-02）: 既定の apps.conf を wayland の package の da
 
 - 「Model viewer（mview）と vkdemo を CI の image から外します。これらはGPUドライバやVulkan実装のテストでのみ使用していきましょう。」→ Q1 が `config/ci/config-amd64.mk` から mview・vkdemo を外し、既定の apps.conf とデモの apps.conf から Model viewer の tile を消した（試験の config には残す）。BUG-144 は CI の image では起きなくなるが、GPU の試験の image での扱いとして tracking に残す。
 - 「i386はしばらくテストもビルドもしなくていいです。」→ pcat・pc98 の CI の config の追加は build で確かめない（i386 の確認は免除）。amd64 の範囲で受け入れを満たすので、この Phase は cleared（Q1、2026-10-02）。
+
+2026-10-03 user:「vkdemo, mviewに加えて、Gearsもテスト専用にして、CIイメージからはずしてください。」→ Q1 が `config/ci/config-amd64.mk` から zgears を外し、既定とデモの apps.conf から Gears の tile を消した（試験の config には残す。home.c の内蔵の予備の一覧の Gears は binary が無ければ出ない）。

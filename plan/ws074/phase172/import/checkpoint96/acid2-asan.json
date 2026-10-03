@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "max_difference": 0,
+  "different_pixels": 0,
+  "total_pixels": 120000,
+  "agreement": 100.0,
+  "test_image": "acid2-test.png",
+  "reference_image": "acid2-reference.png",
+  "side_image": "acid2-side.png",
+  "variant": "asan",
+  "test_errors": [],
+  "reference_errors": [],
+  "suite_commit": "2d66b9b7998bb58c336138c178323ddee857b586"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review34/host-click"
+    ],
+    "exit": 0,
+    "stdout_file": "click.stdout",
+    "stderr_file": "click.stderr"
+  }
+]

@@ -13,7 +13,7 @@
 #include <stdio.h>
 
 /* Disposable allocation reaches the unchanged production collector threshold. */
-static const struct vm_cell_type pressure_type = { "xml-node-pressure", NULL, NULL };
+static const struct vm_cell_type pressure_type = {"xml-node-pressure", NULL, NULL};
 /* Count independent native identity, data and collector observations. */
 static unsigned checks;
 /* Preserve all failures while ordinary owned native resources are released. */
@@ -37,9 +37,13 @@ main(
 	status = xml_node_case();
 	if (status != 0)
 		return 2;
+
+	/* Reports the independently counted observations. */
 	printed = printf("native XML nodes: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Rejects any recorded semantic failure. */
 	if (failures != 0)
 		return 1;
 
@@ -63,6 +67,9 @@ xml_node_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: the observation contributes to the final result. */
+	return;
 }
 
 /* Owns all nullable root slots and heap resources across every early native return. */
@@ -81,6 +88,8 @@ xml_node_case(
 	status = vm_heap_create(&heap, 0);
 	if (status != 0)
 		return status;
+
+	/* Protects initial construction through the actual caller stack. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	status = vm_realm_create(heap, &realm);
 	if (status != 0) {
@@ -93,21 +102,40 @@ xml_node_case(
 	for (index = 0; index < 4U; index++) {
 		roots[index] = NULL;
 		status = vm_heap_add_root(heap, &roots[index]);
-		if (status != 0)
-			break;
+		if (status != 0) {
+			while (registered != 0) {
+				registered--;
+				vm_heap_remove_root(heap, &roots[registered]);
+			}
+
+			/* Releases the enclosing owners after unregistering stack slots. */
+			vm_realm_destroy(realm);
+			vm_heap_destroy(heap);
+			return status;
+		}
+
+		/* Keeps every successful stack registration recoverable. */
 		registered++;
 	}
 
 	/* Independent native data and collector checks always return through complete owner cleanup. */
-	if (status == 0)
-		status = xml_node_run(heap, realm, roots);
+	status = xml_node_run(heap, realm, roots);
+	if (status != 0) {
+		for (index = 0; index < registered; index++)
+			vm_heap_remove_root(heap, &roots[index]);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return status;
+	}
+
+	/* Unregisters live stack slots before releasing their heap. */
 	for (index = 0; index < registered; index++)
 		vm_heap_remove_root(heap, &roots[index]);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
 
-	/* Succeeded or failed: no registered stack slot or native heap escapes. */
-	return status;
+	/* Succeeded: no registered stack slot or native heap escapes. */
+	return 0;
 }
 
 /* Observes native allocation collection and exact character graphs without conservative caller roots. */
@@ -142,9 +170,15 @@ xml_node_run(
 
 	/* The PI target is a non-atom VM string, so only genuine node tracing can retain it later. */
 	document = dom_document_create(heap);
-	target = vm_string_from_utf8(heap, "processing-target", 17);
-	if (document == NULL || target == NULL)
+	if (document == NULL)
 		return ENOMEM;
+
+	/* Allocates the non-atom target before precise-root collection. */
+	target = vm_string_from_utf8(heap, "processing-target", 17);
+	if (target == NULL)
+		return ENOMEM;
+
+	/* Uses exact UTF-16 input, including a lone surrogate. */
 	units[0] = 'A';
 	units[1] = 0xd800U;
 	units[2] = 'Z';
@@ -158,10 +192,12 @@ xml_node_run(
 		return ENOMEM;
 	vm_heap_stats(heap, &before);
 	status = dom_pi_create(document, target, units, 3, &pi);
-	vm_heap_stats(heap, &after);
 	if (status != 0)
 		return status;
+
+	/* Roots the result before observing the allocation collection count. */
 	roots[0] = &pi->cell;
+	vm_heap_stats(heap, &after);
 	pi_address = (uintptr_t)pi;
 	xml_node_check(after.collections > before.collections, "PI callee allocation caused actual threshold collection");
 	xml_node_check(pi->type == DOM_PROCESSING_INSTRUCTION && pi->document == document, "PI has native type seven and actual owner");
@@ -176,6 +212,8 @@ xml_node_run(
 	status = dom_cdata_create(document, units, 3, &cdata);
 	if (status != 0)
 		return status;
+
+	/* Publishes the successful native node to its pre-registered root slot. */
 	roots[1] = &cdata->cell;
 	cdata_address = (uintptr_t)cdata;
 	units[0] = 'B';
@@ -192,6 +230,8 @@ xml_node_run(
 	fragment = dom_fragment_create(document);
 	if (fragment == NULL)
 		return ENOMEM;
+
+	/* Publishes and then removes a real native tree edge. */
 	dom_append_child(fragment, cdata);
 	xml_node_check(cdata->parent == fragment && fragment->first_child == cdata, "CDATA joins a real native tree");
 	dom_remove(cdata);
@@ -202,19 +242,27 @@ xml_node_run(
 	status = dom_text_append(pi, &replacement, 1);
 	if (status != 0)
 		return status;
+
+	/* Observes the exact owned character buffer after mutation. */
 	data = (struct dom_character_data *)pi;
 	xml_node_check(data->data.length == 4 && data->data.data[3] == 'Q', "PI append updates its own character buffer");
 	status = dom_text_set(pi, units, 3);
 	if (status != 0)
 		return status;
+
+	/* Records the successful native mutation. */
 	xml_node_check(data->data.length == 3 && data->data.data[0] == 'B', "PI set copies replacement data");
 	status = dom_text_replace(pi, 1, 1, &replacement, 1);
 	if (status != 0)
 		return status;
+
+	/* Records the successful native mutation. */
 	xml_node_check(data->data.data[1] == 'Q' && data->target == target, "PI interval replacement preserves immutable target");
 	status = dom_text_truncate(pi, 2);
 	if (status != 0)
 		return status;
+
+	/* Records the successful native mutation. */
 	xml_node_check(data->data.length == 2, "PI truncate retains its actual prefix");
 	generation = document->generation;
 	status = dom_text_replace(pi, 3, 0, NULL, 0);
@@ -224,11 +272,15 @@ xml_node_run(
 	status = dom_text_replace(cdata, 0, 1, &replacement, 1);
 	if (status != 0)
 		return status;
+
+	/* Observes the exact owned character buffer after mutation. */
 	data = (struct dom_character_data *)cdata;
 	xml_node_check(data->data.data[0] == 'Q' && cdata->type == DOM_CDATA_SECTION, "CDATA interval replacement preserves native type");
 	status = dom_text_truncate(cdata, 0);
 	if (status != 0)
 		return status;
+
+	/* Records the successful native mutation. */
 	xml_node_check(data->data.length == 0, "CDATA empty truncation remains a genuine node");
 
 	/* Rejected native inputs leave no published node and cannot mutate the existing owner graph. */
@@ -250,10 +302,14 @@ xml_node_run(
 	status = bind_clone_node(realm, pi, 0, &copy_pi);
 	if (status != 0)
 		return status;
+
+	/* Publishes the successful native node to its pre-registered root slot. */
 	roots[2] = &copy_pi->cell;
 	status = bind_clone_node(realm, cdata, 0, &copy_cdata);
 	if (status != 0)
 		return status;
+
+	/* Publishes the successful native node to its pre-registered root slot. */
 	roots[3] = &copy_cdata->cell;
 	data = (struct dom_character_data *)copy_pi;
 	xml_node_check(copy_pi->type == DOM_PROCESSING_INSTRUCTION && data->target == target, "native clone preserves PI type and target");

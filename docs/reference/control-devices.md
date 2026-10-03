@@ -37,7 +37,6 @@ use `ttyname_r`. Current libc uses termios for the former and device identity
 for the latter; a PTY is a terminal but is not `/dev/console`. Normal example:
 `tty` inside zterm reports `/dev/pts/N`. A regular file descriptor is not a
 terminal, and an invalid descriptor must remain distinguishable from it.
-[q147](../../plan/history/queue-q147.md) tests these cases and actual graphical input.
 
 ## Graphical ownership and drawing
 
@@ -73,14 +72,12 @@ unsupported operations rather than assuming an accelerated fallback.
 
 The header defines INDEX8, RGB24 and MONO1 formats and MSB-first glyph bits.
 Pixel, palette and mode-array addresses use `uapi_ptr_t`; reserved fields must
-be initialized as required. PC/AT currently bounds mode capacity to 16,
-flush rectangles to 32 and its row buffer to 4096 bytes. These implementation
-bounds do not mean arbitrary user strides, multiplication overflows or
-out-of-range rectangles are accepted. Returned mode may differ from the
-requested preference. The actual Xzed/zterm path passed
-[WS006 q147](../../plan/history/queue-q147.md).
+be initialized as required. PC/AT currently bounds mode capacity to 16, flush
+rectangles to 32 and its row buffer to 4096 bytes. These implementation bounds
+do not mean arbitrary user strides, multiplication overflows or out-of-range
+rectangles are accepted. Returned mode may differ from the requested
+preference.
 
-`/dev/gpu` remains a [WS014 proposal on manual hold](../../plan/ws014/ws.md).
 There is no published current GPU object ABI to enumerate here.
 
 ## System administration and observation
@@ -129,8 +126,5 @@ Console/graphics/system nodes normally use the devfs non-event-device mode
 ownership. See [devfs](../../src/kern/devfs.c) for node policy and
 [service shutdown](init-services.md) for orchestration.
 
-Relevant evidence includes [runtime swap](../../plan/ws016/tests/README.md),
-[USB-root checked halt q141](../../plan/history/queue-q141.md), and
-[resource-baseline q142](../../plan/history/queue-q142.md). Resource counts are live:
-an independently retiring boot worker can change the baseline, so immediate
-before/after subtraction alone does not prove a leak.
+Resource counts are live: an independently retiring boot worker can change the
+baseline, so immediate before/after subtraction alone does not prove a leak. 

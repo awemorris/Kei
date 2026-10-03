@@ -35,9 +35,13 @@ main(
 	status = attribute_case();
 	if (status != 0)
 		return 2;
+
+	/* Reports the independently counted observations. */
 	printed = printf("native attribute namespaces: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Rejects any recorded semantic failure. */
 	if (failures != 0)
 		return 1;
 
@@ -61,6 +65,9 @@ attribute_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: the observation contributes to the final result. */
+	return;
 }
 
 /* Owns the actual heap and nullable root slots across every success or early failure. */
@@ -78,6 +85,8 @@ attribute_case(
 	status = vm_heap_create(&heap, 0);
 	if (status != 0)
 		return status;
+
+	/* Protects initial construction through the actual caller stack. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	status = vm_realm_create(heap, &realm);
 	if (status != 0) {
@@ -106,13 +115,22 @@ attribute_case(
 
 	/* Every early test return still passes through complete owner cleanup here. */
 	status = attribute_run(heap, realm, &source_root, &copy_root);
+	if (status != 0) {
+		vm_heap_remove_root(heap, &copy_root);
+		vm_heap_remove_root(heap, &source_root);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return status;
+	}
+
+	/* Unregisters live stack slots before releasing their heap. */
 	vm_heap_remove_root(heap, &copy_root);
 	vm_heap_remove_root(heap, &source_root);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
 
-	/* Succeeded or failed: no stack slot or native heap ownership outlives this invocation. */
-	return status;
+	/* Succeeded: no stack slot or native heap ownership outlives this invocation. */
+	return 0;
 }
 
 /* Exercises exact native URI identity, ordered array moves and cloned ownership in one real heap. */
@@ -154,44 +172,76 @@ attribute_run(
 
 	/* Native test graph construction precedes precise-root collection. */
 	document = dom_document_create(heap);
+	if (document == NULL)
+		return ENOMEM;
+
+	/* Interns the local name shared by distinct expanded names. */
 	name = vm_atom_from_ascii(heap, "a");
+	if (name == NULL)
+		return ENOMEM;
+
+	/* Interns the first namespace prefix. */
 	prefix = vm_atom_from_ascii(heap, "p");
+	if (prefix == NULL)
+		return ENOMEM;
+
+	/* Interns an alternate prefix for the same expanded name. */
 	alias = vm_atom_from_ascii(heap, "q");
+	if (alias == NULL)
+		return ENOMEM;
+
+	/* Allocates the first independently traced custom URI. */
 	uri_a = vm_string_from_utf8(heap, "urn:custom:a", 12);
+	if (uri_a == NULL)
+		return ENOMEM;
+
+	/* Allocates a distinct custom URI with the same local name. */
 	uri_b = vm_string_from_utf8(heap, "urn:custom:b", 12);
+	if (uri_b == NULL)
+		return ENOMEM;
+
+	/* Allocates equal URI text without relying on pointer identity. */
 	uri_equal = vm_string_from_utf8(heap, "urn:custom:a", 12);
+	if (uri_equal == NULL)
+		return ENOMEM;
+
+	/* Allocates equal local-name text outside the atom registry. */
 	name_equal = vm_string_from_utf8(heap, "a", 1);
+	if (name_equal == NULL)
+		return ENOMEM;
+
+	/* Represents an empty namespace URI explicitly. */
 	empty = vm_string_from_utf8(heap, "", 0);
+	if (empty == NULL)
+		return ENOMEM;
+
+	/* Represents the canonical XML namespace by its full URI. */
 	xml = vm_string_from_utf8(heap, "http://www.w3.org/XML/1998/namespace", 36);
+	if (xml == NULL)
+		return ENOMEM;
+
+	/* Allocates the value used to verify first-record identity. */
 	value_a = vm_string_from_utf8(heap, "one", 3);
+	if (value_a == NULL)
+		return ENOMEM;
+
+	/* Allocates the independent second-record value. */
 	value_b = vm_string_from_utf8(heap, "two", 3);
-	if (document == NULL ||
-	    name == NULL ||
-	    prefix == NULL ||
-	    alias == NULL ||
-	    uri_a == NULL ||
-	    uri_b == NULL ||
-	    uri_equal == NULL ||
-	    name_equal == NULL ||
-	    empty == NULL ||
-	    xml == NULL ||
-	    value_a == NULL ||
-	    value_b == NULL) {
-		status = ENOMEM;
-		return status;
-	}
+	if (value_b == NULL)
+		return ENOMEM;
 
 	/* The detached source has no Document child edge that could substitute for its own root. */
 	element = dom_element_create(document, DOM_NS_NONE, name, NULL);
-	if (element == NULL) {
-		status = ENOMEM;
-		return status;
-	}
+	if (element == NULL)
+		return ENOMEM;
 
 	/* All URI helpers work directly on already validated strings without a VM allocation. */
 	status = dom_element_add_attribute_uri(element, uri_a, prefix, name, value_a);
-	if (status == 0)
-		status = dom_element_add_attribute_uri(element, uri_b, prefix, name, value_b);
+	if (status != 0)
+		return status;
+
+	/* Adds the independently named attribute through its native namespace path. */
+	status = dom_element_add_attribute_uri(element, uri_b, prefix, name, value_b);
 	if (status != 0)
 		return status;
 	attribute_check(element->attribute_count == 2, "distinct custom namespaces coexist with the same local name");
@@ -217,8 +267,11 @@ attribute_run(
 
 	/* Absent and canonical XML namespaces remain distinct from custom namespaces with the same local name. */
 	status = dom_element_add_attribute_uri(element, NULL, NULL, name, value_a);
-	if (status == 0)
-		status = dom_element_add_attribute(element, DOM_NS_XML, prefix, name, value_b);
+	if (status != 0)
+		return status;
+
+	/* Adds the independently named attribute through its native namespace path. */
+	status = dom_element_add_attribute(element, DOM_NS_XML, prefix, name, value_b);
 	if (status != 0)
 		return status;
 	attribute = dom_element_find_attribute_uri(element, empty, name);
@@ -233,9 +286,13 @@ attribute_run(
 		printed = snprintf(buffer, sizeof(buffer), "extra%u", index);
 		if (printed < 0)
 			return EIO;
+
+		/* Interns the next bounded attribute name. */
 		extra = vm_atom_from_ascii(heap, buffer);
 		if (extra == NULL)
 			return ENOMEM;
+
+		/* Grows the actual native attribute array. */
 		status = dom_element_add_attribute(element, DOM_NS_NONE, NULL, extra, value_b);
 		if (status != 0)
 			return status;
@@ -268,6 +325,8 @@ attribute_run(
 	status = bind_clone_node(realm, &element->node, 0, &copy);
 	if (status != 0)
 		return status;
+
+	/* Retains the independently cloned native graph. */
 	*copy_root = &copy->cell;
 	copy_element = (struct dom_element *)copy;
 	attribute = dom_element_find_attribute_uri(copy_element, uri_a, name);
@@ -282,6 +341,10 @@ attribute_run(
 	attribute_check(found == NULL, "clone-only collection releases the original detached source");
 	found = vm_heap_find_cell(heap, uri_address);
 	attribute_check(found != NULL, "clone-only collection retains the copied non-atom URI");
+	if (found == NULL)
+		return EINVAL;
+
+	/* Queries the copied record only through a verified surviving URI cell. */
 	attribute = dom_element_find_attribute_uri(copy_element, (struct vm_string *)found, name);
 	same = attribute != NULL;
 	if (same)

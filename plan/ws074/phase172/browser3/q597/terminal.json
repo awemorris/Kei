@@ -1,0 +1,28 @@
+{
+  "queue": "q597",
+  "attempt": "q597-i01",
+  "status": "finished",
+  "item_status": "uncleared",
+  "phase_status": "uncleared",
+  "ws_status": "incomplete",
+  "start_utc": "2026-10-03T00:14:25.107380+00:00",
+  "end_utc": "2026-10-03T03:01:32.842056+00:00",
+  "end_reason": "User requested host reboot and wrap-up at next commit before the original 03:14:25Z deadline",
+  "approved_scope_sha256": "87c656541edc7fa86a88a1203a34dbfad52612c38b07622f3197363aac39ed17",
+  "selection_sha256": "c76ce875a14424f93cbe5572fcf0c3d74e89fb675677622bb84cfc1f4a403e4a",
+  "baseline_reviewed": 170,
+  "final_reviewed": 204,
+  "total": 209,
+  "pending_C_header": [
+    "userland/desktop/libbrowser/bind/environment.c",
+    "userland/desktop/libbrowser/bind/range.c",
+    "userland/desktop/libbrowser/css/cascade.c",
+    "userland/desktop/libbrowser/css/values.c",
+    "userland/desktop/libbrowser/js/builtin_array.c"
+  ],
+  "latest_evidence": "../../import/checkpoint87/README.md",
+  "whole_gates": "unverified",
+  "p100": "unselected and blocked",
+  "github_issues_project": "publication deferred",
+  "next_unreserved_queue_candidate": "q598; q591-q593 remain reserved"
+}

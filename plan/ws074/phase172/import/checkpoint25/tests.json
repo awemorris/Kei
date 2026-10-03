@@ -1,0 +1,47 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-data-url"
+    ],
+    "exit": 0,
+    "stdout_file": "data.stdout",
+    "stderr_file": "data.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-resource"
+    ],
+    "exit": 2,
+    "stdout_file": "resource.stdout",
+    "stderr_file": "resource.stderr",
+    "reason": "initial missing required directory/server arguments; no resource assertions executed"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "python3",
+      "plan/ws074/tests/run-resource-tests.py",
+      "--program",
+      "/home/awe/zedBSD-claude2/build/browser3-p172/plain/host-resource"
+    ],
+    "exit": 0,
+    "stdout_file": "resource-corrected.stdout",
+    "stderr_file": "resource-corrected.stderr",
+    "corrects": "initial missing fixture arguments, exit2 retained"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review25/data-lsan"
+    ],
+    "exit": 0,
+    "stdout_file": "data-lsan.stdout",
+    "stderr_file": "data-lsan.stderr"
+  }
+]

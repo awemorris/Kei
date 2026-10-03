@@ -1,0 +1,10 @@
+{
+  "kind": "GCC14.2 scoped compile/link against current unchanged own engine objects",
+  "exit": 0,
+  "warnings": 0,
+  "errors": 0,
+  "argv_file": "after-commands.json",
+  "source_hashes": {
+    "plan/ws074/tests/host-frame-load.c": "a3978e45a4e35d4f7a751f1e2e02c204b6e9d4938a759d2055ef0de98f784d3e"
+  }
+}

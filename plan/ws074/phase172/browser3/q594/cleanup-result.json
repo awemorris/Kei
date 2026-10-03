@@ -1,0 +1,44 @@
+{
+  "status": "completed",
+  "trigger_commit": "d9a19f28f674234477bc883d5ed1133de80719a1",
+  "performed_utc": "2026-10-02T12:54:03+00:00",
+  "deleted_directories": [
+    "build/browser3-p172/review15",
+    "build/browser3-p172/review16",
+    "build/browser3-p172/review17",
+    "build/browser3-p172/review18",
+    "build/browser3-p172/review19",
+    "build/browser3-p172/review20",
+    "build/browser3-p172/review21",
+    "build/browser3-p172/review22",
+    "build/browser3-p172/review23",
+    "build/browser3-p172/review24",
+    "build/browser3-p172/review25",
+    "build/browser3-p172/review26",
+    "build/browser3-p172/review27",
+    "build/browser3-p172/review28",
+    "build/browser3-p172/review29",
+    "build/browser3-p172/review30",
+    "build/browser3-p172/review31",
+    "build/browser3-p172/review32",
+    "build/browser3-p172/review33",
+    "build/browser3-p172/review34"
+  ],
+  "deleted_files": 441,
+  "logical_bytes": 111842236,
+  "allocated_file_bytes": 112865280,
+  "retained": [
+    "build/browser3-p172/plain (current reusable p172 production cache)",
+    "build/browser3-p172/review35 (current attempt scratch)",
+    "shared toolchain/sysroot/packages and other WS build trees (ownership/continued need)",
+    "other agents live p1/p2 build/guest assets"
+  ],
+  "checks": [
+    "git checkpoint README blobs exist",
+    "all evidence files have matching committed checkpoint copies or generated-only classification",
+    "no symlinks/special files/tracked files",
+    "audited file hashes unchanged",
+    "no candidate process cwd/open fd/mapping",
+    "20 exact directories gone"
+  ]
+}

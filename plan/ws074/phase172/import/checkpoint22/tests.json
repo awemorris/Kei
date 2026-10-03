@@ -1,0 +1,32 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review22/host-xml-node"
+    ],
+    "exit": 0,
+    "stdout_file": "host-xml-node.stdout",
+    "stderr_file": "host-xml-node.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review22/host-xml-document"
+    ],
+    "exit": 0,
+    "stdout_file": "host-xml-document.stdout",
+    "stderr_file": "host-xml-document.stderr"
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review22/host-attribute-namespace"
+    ],
+    "exit": 0,
+    "stdout_file": "host-attribute-namespace.stdout",
+    "stderr_file": "host-attribute-namespace.stderr"
+  }
+]

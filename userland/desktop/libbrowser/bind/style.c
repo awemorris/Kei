@@ -43,6 +43,8 @@ struct style_list {
 	struct vm_object *names;
 	struct vm_object *values;
 	struct vm_object *priorities;
+	struct vm_cell *roots[3];
+	unsigned rooted;
 };
 
 static int style_element(struct vm_realm *realm, vm_value this_value, struct dom_element **element);
@@ -57,6 +59,7 @@ static int style_find(const struct style_list *list, const struct vm_string *nam
 static int style_set(struct vm_realm *realm, struct dom_element *element, struct vm_string *name, struct vm_string *value, int important);
 static int style_remove(struct vm_realm *realm, struct dom_element *element, struct vm_string *name, vm_value *old_value);
 static int style_list_create(struct vm_realm *realm, struct style_list *list);
+static void style_list_release(struct vm_realm *realm, struct style_list *list);
 static int style_list_append(struct vm_realm *realm, struct style_list *list, struct vm_string *name, struct vm_string *value, int important);
 static int style_list_remove_at(struct vm_realm *realm, struct style_list *list, uint32_t index);
 static int style_remove_from_list(struct vm_realm *realm, struct style_list *list, const struct vm_string *name);
@@ -302,8 +305,12 @@ style_read(
 
 	/* The attribute. */
 	style_atom = vm_atom_from_ascii(realm->heap, "style");
-	if (style_atom == NULL)
+	if (style_atom == NULL) {
+		style_list_release(realm, list);
 		return ENOMEM;
+	}
+
+	/* Finds the current style attribute after its name is available. */
 	attribute = dom_element_find_attribute(element, DOM_NS_NONE, style_atom);
 	if (attribute == NULL)
 		return 0;
@@ -314,8 +321,10 @@ style_read(
 	if (status == 0)
 		status = style_parse(realm, units.data, units.length, list);
 	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		style_list_release(realm, list);
 		return status;
+	}
 
 	/* Succeeded: the declarations. */
 	return 0;
@@ -394,6 +403,7 @@ style_parse_one(
 {
 	struct vm_string *name;
 	struct vm_string *value;
+	struct vm_cell *name_root;
 	struct wb_units lower;
 	size_t colon;
 	size_t name_start;
@@ -445,14 +455,21 @@ style_parse_one(
 	wb_units_release(&lower);
 	if (name == NULL)
 		return ENOMEM;
+	name_root = &name->cell;
+	status = vm_heap_add_root(realm->heap, &name_root);
+	if (status != 0)
+		return status;
 
 	/* The value as it is written. */
 	value = vm_string_from_units(realm->heap, units + value_start, end - value_start);
-	if (value == NULL)
+	if (value == NULL) {
+		vm_heap_remove_root(realm->heap, &name_root);
 		return ENOMEM;
+	}
 
 	/* Succeeded: the declaration is in the list. */
 	status = style_list_append(realm, list, name, value, important);
+	vm_heap_remove_root(realm->heap, &name_root);
 	if (status != 0)
 		return status;
 	return 0;
@@ -537,7 +554,9 @@ style_write(
 {
 	struct vm_string *style_atom;
 	struct vm_string *text;
+	struct vm_cell *roots[2];
 	struct wb_units units;
+	unsigned registered;
 	int status;
 
 	/* The text. */
@@ -553,12 +572,35 @@ style_write(
 	wb_units_release(&units);
 	if (text == NULL)
 		return ENOMEM;
+	roots[0] = &text->cell;
+	roots[1] = NULL;
+	registered = 0;
+	while (registered < 2U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* The attribute takes it. */
 	style_atom = vm_atom_from_ascii(realm->heap, "style");
-	if (style_atom == NULL)
-		return ENOMEM;
+	if (style_atom == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The name and value stay live until the attribute stores both. */
+	roots[1] = &style_atom->cell;
 	status = dom_element_set_attribute(element, style_atom, text);
+
+cleanup:
+	/* The attribute owns the strings only after successful publication. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Reports failed serialization or publication to the caller. */
 	if (status != 0)
 		return status;
 
@@ -653,30 +695,43 @@ style_set(
 	int important)
 {
 	struct style_list list;
+	struct vm_cell *roots[2];
 	uint32_t index;
 	uint32_t later;
+	unsigned registered;
 	int present;
 	int valid;
 	int status;
 
+	/* Caller strings survive validation, list creation and attribute publication. */
+	roots[0] = &name->cell;
+	roots[1] = &value->cell;
+	registered = 0;
+	while (registered < 2U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto roots_cleanup;
+		registered++;
+	}
+
 	/* A value the engine does not read changes nothing. */
 	status = style_valid(realm, name, value, &valid);
 	if (status != 0)
-		return status;
+		goto roots_cleanup;
 	if (!valid)
-		return 0;
+		goto roots_cleanup;
 
 	/* The declarations as they are. */
 	status = style_read(realm, element, &list);
 	if (status != 0)
-		return status;
+		goto roots_cleanup;
 
 	/* A property not there is appended. */
 	present = style_find(&list, name, &index);
 	if (!present) {
 		status = style_list_append(realm, &list, name, value, important);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	} else {
 		/* Otherwise its first declaration takes the value and the later ones go. */
 		list.values->elements[index] = vm_value_cell(value);
@@ -692,12 +747,25 @@ style_set(
 			/* A later declaration of it. */
 			status = style_list_remove_at(realm, &list, later);
 			if (status != 0)
-				return status;
+				goto cleanup;
 		}
 	}
 
 	/* Succeeded: the attribute holds the declarations. */
 	status = style_write(realm, element, &list);
+
+cleanup:
+	/* The serialized attribute now owns the values; no caller root remains. */
+	style_list_release(realm, &list);
+
+roots_cleanup:
+	/* Inputs leave the root set after every validation or mutation outcome. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Reports a failed validation or attribute update. */
 	if (status != 0)
 		return status;
 	return 0;
@@ -715,18 +783,38 @@ style_remove(
 	vm_value *old_value)
 {
 	struct style_list list;
+	struct vm_cell *old_root;
+	struct vm_cell *name_root;
 	uint32_t index;
 	int present;
 	int removed;
+	int old_registered;
 	int status;
+
+	/* The requested property remains live while its declaration list is built. */
+	name_root = &name->cell;
+	status = vm_heap_add_root(realm->heap, &name_root);
+	if (status != 0)
+		return status;
 
 	/* The declarations as they are. */
 	status = style_read(realm, element, &list);
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &name_root);
 		return status;
+	}
+
+	/* The last removed value remains live until the mutation returns. */
+	old_root = NULL;
+	old_registered = 0;
+	status = vm_heap_add_root(realm->heap, &old_root);
+	if (status != 0)
+		goto cleanup;
+	old_registered = 1;
 	status = bind_string(realm, "", old_value);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	old_root = vm_value_as_cell(*old_value);
 
 	/* Each declaration of the property, the last one's value reported. */
 	removed = 0;
@@ -735,18 +823,26 @@ style_remove(
 		if (!present)
 			break;
 		*old_value = list.values->elements[index];
+		old_root = vm_value_as_cell(*old_value);
 		status = style_list_remove_at(realm, &list, index);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		removed = 1;
 	}
 
 	/* Nothing removed leaves the attribute as it is. */
 	if (!removed)
-		return 0;
+		goto cleanup;
 
 	/* Succeeded: the attribute holds the rest. */
 	status = style_write(realm, element, &list);
+
+cleanup:
+	/* The caller receives a value after the transient list is no longer used. */
+	style_list_release(realm, &list);
+	if (old_registered)
+		vm_heap_remove_root(realm->heap, &old_root);
+	vm_heap_remove_root(realm->heap, &name_root);
 	if (status != 0)
 		return status;
 	return 0;
@@ -758,23 +854,58 @@ style_list_create(
 	struct vm_realm *realm,
 	struct style_list *list)
 {
+	unsigned index;
 	int status;
+
+	/* Stable caller slots protect each unpublished array during every allocation. */
+	list->names = NULL;
+	list->values = NULL;
+	list->priorities = NULL;
+	list->rooted = 0;
+	for (index = 0; index < 3U; index++) {
+		list->roots[index] = NULL;
+		status = vm_heap_add_root(realm->heap, &list->roots[index]);
+		if (status != 0)
+			goto failed;
+		list->rooted++;
+	}
 
 	/* The names. */
 	status = bind_array_create(realm, &list->names);
 	if (status != 0)
-		return status;
+		goto failed;
+	list->roots[0] = &list->names->cell;
 
 	/* The values. */
 	status = bind_array_create(realm, &list->values);
 	if (status != 0)
-		return status;
+		goto failed;
+	list->roots[1] = &list->values->cell;
 
 	/* Succeeded: and the priorities. */
 	status = bind_array_create(realm, &list->priorities);
 	if (status != 0)
-		return status;
+		goto failed;
+	list->roots[2] = &list->priorities->cell;
 	return 0;
+
+failed:
+	/* A failed list factory leaves no registered caller stack slots. */
+	style_list_release(realm, list);
+	return status;
+}
+
+/* Releases all collector roots held by one temporary declaration list. */
+static void
+style_list_release(
+	struct vm_realm *realm,
+	struct style_list *list)
+{
+	/* Only registered slots can be removed after partial construction. */
+	while (list->rooted != 0U) {
+		list->rooted--;
+		vm_heap_remove_root(realm->heap, &list->roots[list->rooted]);
+	}
 }
 
 /* Appends one declaration. */
@@ -786,8 +917,21 @@ style_list_append(
 	struct vm_string *value,
 	int important)
 {
+	struct vm_cell *roots[2];
 	vm_value at;
+	unsigned registered;
 	int status;
+
+	/* Keep both new strings live until their arrays own them. */
+	roots[0] = &name->cell;
+	roots[1] = &value->cell;
+	registered = 0;
+	while (registered < 2U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* The place after the last. */
 	at = vm_value_int32((int32_t)list->names->length);
@@ -795,15 +939,24 @@ style_list_append(
 	/* The name. */
 	status = vm_object_define(realm->heap, list->names, at, vm_value_cell(name), VM_PROPERTY_DEFAULT);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* The value. */
 	status = vm_object_define(realm->heap, list->values, at, vm_value_cell(value), VM_PROPERTY_DEFAULT);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* Succeeded: and the priority. */
 	status = vm_object_define(realm->heap, list->priorities, at, vm_value_boolean(important), VM_PROPERTY_DEFAULT);
+
+cleanup:
+	/* The list now owns any installed string on both success and partial failure. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Reports a failed array insertion. */
 	if (status != 0)
 		return status;
 	return 0;
@@ -958,24 +1111,55 @@ style_accessor(
 	struct vm_function *getter;
 	struct vm_function *setter;
 	struct vm_accessor *accessor;
+	struct vm_cell *roots[4];
+	unsigned registered;
 	int status;
 
 	/* The getter and the setter, which keep the property's name. */
 	realm = window->realm;
+	roots[0] = &property->cell;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	roots[3] = NULL;
+	registered = 0;
+	while (registered < 4U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* Both functions retain the same property name for later callbacks. */
 	status = js_builtin_function(realm, name, 0, style_member_get, NULL, &getter);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = &getter->object.cell;
 	getter->data = vm_value_cell(property);
 	status = js_builtin_function(realm, name, 1, style_member_set, NULL, &setter);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[2] = &setter->object.cell;
 	setter->data = vm_value_cell(property);
 
 	/* The accessor on the prototype. */
 	accessor = vm_accessor_create(realm->heap, vm_value_cell(getter), vm_value_cell(setter));
-	if (accessor == NULL)
-		return ENOMEM;
+	if (accessor == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The unpublished accessor survives the prototype definition. */
+	roots[3] = &accessor->cell;
 	status = js_builtin_value(realm, window->prototypes[BIND_CSS_STYLE_DECLARATION], name, vm_value_cell(accessor), VM_PROPERTY_ACCESSOR | VM_PROPERTY_ENUMERABLE | VM_PROPERTY_CONFIGURABLE);
+
+cleanup:
+	/* The prototype owns a successfully published accessor and its functions. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Reports a failed callback or accessor publication. */
 	if (status != 0)
 		return status;
 
@@ -1088,6 +1272,7 @@ style_css_text_get(
 	/* Their text. */
 	wb_units_init(&units);
 	status = style_serialize(&list, &units);
+	style_list_release(realm, &list);
 	if (status != 0) {
 		wb_units_release(&units);
 		return status;
@@ -1119,8 +1304,12 @@ style_css_text_set(
 	struct vm_string *text;
 	struct vm_string *name;
 	struct vm_string *value;
+	struct vm_cell *text_root;
 	struct wb_units units;
 	uint32_t index;
+	int given_live;
+	int kept_live;
+	int text_live;
 	int important;
 	int valid;
 	int status;
@@ -1133,42 +1322,62 @@ style_css_text_set(
 	status = bind_to_string(realm, js_argument(args, count, 0), &text);
 	if (status != 0)
 		return status;
-	status = style_list_create(realm, &given);
+	text_root = &text->cell;
+	status = vm_heap_add_root(realm->heap, &text_root);
 	if (status != 0)
 		return status;
+	text_live = 1;
+	given_live = 0;
+	kept_live = 0;
+	status = style_list_create(realm, &given);
+	if (status != 0)
+		goto cleanup;
+	given_live = 1;
 	wb_units_init(&units);
 	status = vm_string_append_units(text, &units);
+	vm_heap_remove_root(realm->heap, &text_root);
+	text_live = 0;
 	if (status == 0)
 		status = style_parse(realm, units.data, units.length, &given);
 	wb_units_release(&units);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* The ones the engine reads, each property once (the last one given). */
 	status = style_list_create(realm, &kept);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	kept_live = 1;
 	for (index = 0; index < given.names->length; index++) {
 		name = (struct vm_string *)vm_value_as_cell(given.names->elements[index]);
 		value = (struct vm_string *)vm_value_as_cell(given.values->elements[index]);
 		important = vm_to_boolean(given.priorities->elements[index]);
 		status = style_valid(realm, name, value, &valid);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		if (!valid)
 			continue;
 
 		/* A property given again replaces the earlier declaration. */
 		status = style_remove_from_list(realm, &kept, name);
 		if (status != 0)
-			return status;
+			goto cleanup;
 		status = style_list_append(realm, &kept, name, value, important);
 		if (status != 0)
-			return status;
+			goto cleanup;
 	}
 
 	/* Succeeded: the attribute holds them. */
 	status = style_write(realm, element, &kept);
+
+cleanup:
+	/* Each temporary list and converted input leaves the root set. */
+	if (kept_live)
+		style_list_release(realm, &kept);
+	if (given_live)
+		style_list_release(realm, &given);
+	if (text_live)
+		vm_heap_remove_root(realm->heap, &text_root);
 	if (status != 0)
 		return status;
 	return 0;
@@ -1208,6 +1417,7 @@ style_length(
 
 	/* Succeeded: how many. */
 	*result = vm_value_int32((int32_t)list.names->length);
+	style_list_release(realm, &list);
 	return 0;
 }
 
@@ -1254,11 +1464,13 @@ style_item(
 	/* A place past the end has no name. */
 	if (index >= list.names->length) {
 		status = bind_string(realm, "", result);
+		style_list_release(realm, &list);
 		return status;
 	}
 
 	/* Succeeded: the name. */
 	*result = list.names->elements[index];
+	style_list_release(realm, &list);
 	return 0;
 }
 
@@ -1274,6 +1486,7 @@ style_get_property_value(
 	struct dom_element *element;
 	struct style_list list;
 	struct vm_string *name;
+	struct vm_cell *name_root;
 	uint32_t index;
 	int present;
 	int computed;
@@ -1285,7 +1498,12 @@ style_get_property_value(
 		status = style_property_name(realm, js_argument(args, count, 0), &name);
 		if (status != 0)
 			return status;
+		name_root = &name->cell;
+		status = vm_heap_add_root(realm->heap, &name_root);
+		if (status != 0)
+			return status;
 		status = bind_computed_value(realm, element, name, result);
+		vm_heap_remove_root(realm->heap, &name_root);
 		return status;
 	}
 
@@ -1296,19 +1514,28 @@ style_get_property_value(
 	status = style_property_name(realm, js_argument(args, count, 0), &name);
 	if (status != 0)
 		return status;
-	status = style_read(realm, element, &list);
+	name_root = &name->cell;
+	status = vm_heap_add_root(realm->heap, &name_root);
 	if (status != 0)
 		return status;
+	status = style_read(realm, element, &list);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &name_root);
+		return status;
+	}
 
 	/* A property not there is the empty string. */
 	present = style_find(&list, name, &index);
+	vm_heap_remove_root(realm->heap, &name_root);
 	if (!present) {
 		status = bind_string(realm, "", result);
+		style_list_release(realm, &list);
 		return status;
 	}
 
 	/* Succeeded: its value. */
 	*result = list.values->elements[index];
+	style_list_release(realm, &list);
 	return 0;
 }
 
@@ -1324,6 +1551,7 @@ style_get_property_priority(
 	struct dom_element *element;
 	struct style_list list;
 	struct vm_string *name;
+	struct vm_cell *name_root;
 	uint32_t index;
 	int present;
 	int important;
@@ -1344,13 +1572,20 @@ style_get_property_priority(
 	status = style_property_name(realm, js_argument(args, count, 0), &name);
 	if (status != 0)
 		return status;
-	status = style_read(realm, element, &list);
+	name_root = &name->cell;
+	status = vm_heap_add_root(realm->heap, &name_root);
 	if (status != 0)
 		return status;
+	status = style_read(realm, element, &list);
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &name_root);
+		return status;
+	}
 
 	/* Whether the property is there and important. */
 	important = 0;
 	present = style_find(&list, name, &index);
+	vm_heap_remove_root(realm->heap, &name_root);
 	if (present)
 		important = vm_to_boolean(list.priorities->elements[index]);
 
@@ -1360,6 +1595,9 @@ style_get_property_priority(
 	} else {
 		status = bind_string(realm, "", result);
 	}
+
+	/* Temporary declarations are no longer needed after the word is allocated. */
+	style_list_release(realm, &list);
 
 	/* A string that could not be made. */
 	if (status != 0)
@@ -1385,7 +1623,9 @@ style_set_property(
 	struct vm_string *name;
 	struct vm_string *value;
 	struct vm_string *priority;
+	struct vm_cell *roots[3];
 	vm_value old_value;
+	unsigned registered;
 	int important;
 	int status;
 
@@ -1394,23 +1634,38 @@ style_set_property(
 	status = style_element(realm, this_value, &element);
 	if (status != 0)
 		return status;
+	roots[0] = NULL;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	while (registered < 3U) {
+		status = vm_heap_add_root(realm->heap, &roots[registered]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* Converts each argument while retaining earlier converted strings. */
 	status = style_property_name(realm, js_argument(args, count, 0), &name);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[0] = &name->cell;
 	status = bind_to_string(realm, js_argument(args, count, 1), &value);
 	if (status != 0)
-		return status;
+		goto cleanup;
+	roots[1] = &value->cell;
 	priority = NULL;
 	if (count > 2U && args[2] != VM_VALUE_UNDEFINED) {
 		status = bind_to_string(realm, args[2], &priority);
 		if (status != 0)
-			return status;
+			goto cleanup;
+		roots[2] = &priority->cell;
 	}
 
 	/* An empty value removes the property. */
 	if (value->length == 0) {
 		status = style_remove(realm, element, name, &old_value);
-		return status;
+		goto cleanup;
 	}
 
 	/* The priority must be "important" or nothing. */
@@ -1418,11 +1673,20 @@ style_set_property(
 	if (priority != NULL && priority->length != 0) {
 		important = vm_string_equal_ascii(priority, "important");
 		if (!important)
-			return 0;
+			goto cleanup;
 	}
 
 	/* Succeeded: the property is set. */
 	status = style_set(realm, element, name, value, important);
+
+cleanup:
+	/* Converted arguments leave the root set after the mutation returns. */
+	while (registered != 0U) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* Reports a failed conversion or mutation. */
 	if (status != 0)
 		return status;
 	return 0;
@@ -1498,11 +1762,13 @@ style_member_get(
 	present = style_find(&list, name, &index);
 	if (!present) {
 		status = bind_string(realm, "", result);
+		style_list_release(realm, &list);
 		return status;
 	}
 
 	/* Succeeded: its value. */
 	*result = list.values->elements[index];
+	style_list_release(realm, &list);
 	return 0;
 }
 

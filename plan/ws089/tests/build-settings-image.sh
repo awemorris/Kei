@@ -4,6 +4,8 @@
 # (plan/ws035/demo/apps.conf), like plan/tools/files/build-files-image.sh.  The fonts come with the compositor's package.
 #
 #   plan/ws089/tests/build-settings-image.sh [BUILD]     (default build/amd64)
+#   SETTINGS_CONFIG=plan/ws089/tests/config-amd64-settings-ime.mk plan/ws089/tests/build-settings-image.sh BUILD
+#                                                       (another config, such as the one with the input method)
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
@@ -17,5 +19,5 @@ python3 userland/desktop/wallpapers/generate.py "$build/wallpapers" >/dev/null
 for picture in "$build"/wallpapers/*.ppm; do
 	extra="$extra --file /usr/share/keiland/wallpapers/$(basename "$picture")=$picture"
 done
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws089/tests/config-amd64-settings.mk BUILD="$build" \
+exec make -j"$(nproc)" ZEDBSD_CONFIG="${SETTINGS_CONFIG:-plan/ws089/tests/config-amd64-settings.mk}" BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

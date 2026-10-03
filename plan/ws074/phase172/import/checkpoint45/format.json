@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-svg-length.c",
+      "formatted_sha256": "c79cb7adba8f04162232ab56cfe6b36038d0706d498225b1b50b15b45ef39b7e",
+      "final_sha256": "a3ddc059a5b06971400aeb0a93a494d9d01a445e330de731b2e55dac1e88bc58",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    },
+    {
+      "path": "plan/ws074/tests/host-svg-text.c",
+      "formatted_sha256": "cc66e1a82d5faffae2e1d80ae10aac55206940d5f88dbdc42f66f855e4d3589d",
+      "final_sha256": "ff4d84072e088e8b94bae26c5efd2e28b3c1470d19cfbc9d8a2d89e40223f280",
+      "restorations": "definition tabs, compound clauses, pointer loop controls, split call arguments and inert constant initializers"
+    }
+  ]
+}

@@ -172,6 +172,12 @@ static const struct wl_interface *wl_surface_requests_9_types[] = {
 	NULL,
 };
 
+/* Identifies object arguments in wl_surface.offset for validation. */
+static const struct wl_interface *wl_surface_requests_10_types[] = {
+	NULL,
+	NULL,
+};
+
 /* Preserves the wire opcode order for wl_surface requests. */
 static const struct wl_message wl_surface_requests[] = {
 	{ "destroy", "", NULL },
@@ -184,6 +190,7 @@ static const struct wl_message wl_surface_requests[] = {
 	{ "set_buffer_transform", "2i", wl_surface_requests_7_types },
 	{ "set_buffer_scale", "3i", wl_surface_requests_8_types },
 	{ "damage_buffer", "4iiii", wl_surface_requests_9_types },
+	{ "offset", "5ii", wl_surface_requests_10_types },
 };
 
 /* Identifies object arguments in wl_surface.enter for validation. */
@@ -196,16 +203,36 @@ static const struct wl_interface *wl_surface_events_1_types[] = {
 	&wl_output_interface,
 };
 
+/* Identifies object arguments in wl_surface.preferred_buffer_scale for validation. */
+static const struct wl_interface *wl_surface_events_2_types[] = {
+	NULL,
+};
+
+/* Identifies object arguments in wl_surface.preferred_buffer_transform for validation. */
+static const struct wl_interface *wl_surface_events_3_types[] = {
+	NULL,
+};
+
 /* Preserves the wire opcode order for wl_surface events. */
 static const struct wl_message wl_surface_events[] = {
 	{ "enter", "o", wl_surface_events_0_types },
 	{ "leave", "o", wl_surface_events_1_types },
+	{ "preferred_buffer_scale", "6i", wl_surface_events_2_types },
+	{ "preferred_buffer_transform", "6u", wl_surface_events_3_types },
 };
 
-/* Exposes the immutable selected wl_surface protocol description. */
+/*
+ * Exposes the immutable selected wl_surface protocol description.
+ *
+ * The tables describe the messages up to version 6 (offset, the preferred
+ * buffer events), and each is checked against the proxy's own version.  The
+ * interface version stays 4, the wl_compositor version the compositor
+ * advertises, so a client that binds with the description's version asks for
+ * no more than is offered; it rises with the compositor's.
+ */
 const struct wl_interface wl_surface_interface = {
-	"wl_surface", 4, 10, wl_surface_requests,
-	2, wl_surface_events
+	"wl_surface", 4, 11, wl_surface_requests,
+	4, wl_surface_events
 };
 
 /* Identifies object arguments in wl_region.add for validation. */
@@ -1494,6 +1521,28 @@ wl_surface_damage_buffer(
 }
 
 /*
+ * Sends the wl_surface.offset request (version 5).
+ */
+void
+wl_surface_offset(
+	struct wl_surface *object,
+	int32_t x,
+	int32_t y)
+{
+	union wl_argument arguments[2];
+
+	/* Preserves argument order: the new buffer's position relative to the old. */
+	arguments[0].i = x;
+	arguments[1].i = y;
+
+	/* Queues the wire request; a surface older than version 5 refuses it. */
+	wl_proxy_marshal_array_flags((struct wl_proxy *)object, 10U, NULL, 0, 0, arguments);
+
+	/* Succeeded: the display owns the queued request or its fatal error. */
+	return;
+}
+
+/*
  * Associates client state with the wl_surface proxy.
  */
 void
@@ -1883,6 +1932,20 @@ wl_output_release(
 	wl_proxy_marshal_array_flags((struct wl_proxy *)object, 0U, NULL, 0, WL_MARSHAL_FLAG_DESTROY, NULL);
 
 	/* Succeeded: the display owns the queued request or its fatal error. */
+	return;
+}
+
+/*
+ * Drops the local wl_output proxy without telling the compositor.
+ */
+void
+wl_output_destroy(
+	struct wl_output *object)
+{
+	/* Suppresses future callbacks; release is the request that ends the object. */
+	wl_proxy_destroy((struct wl_proxy *)object);
+
+	/* Succeeded: caller ownership has ended. */
 	return;
 }
 

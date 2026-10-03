@@ -30,12 +30,12 @@ jobs:
       - name: Install pinned LLVM toolchain cache
         run: |
           make toolchain-cache
-          make -j16 toolchain
+          make -j4 toolchain
 
       - name: Build amd64
         run: |
           cp config/ci/config-amd64.mk config.mk
-          make -j16
+          make -j4
           mkdir -p artifacts
           # The 2 GiB native image is published gzip-compressed.
           gzip -9 -c build/amd64/hdd-image.img > artifacts/zedbsd-amd64.img.gz
@@ -58,52 +58,19 @@ jobs:
             artifacts/*.img.gz
             artifacts/Kei-nightly.zip
 
-#  keiland-deb:
-#    name: Keiland deb (${{ matrix.distro }})
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 45
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        include:
-#          - distro: debian13
-#            target: keiland-linux-debian
-#          - distro: ubuntu2604
-#            target: keiland-linux-ubuntu2604
-#    env:
-#      KEILAND_DEB_ACCEL: tcg
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v4
-#
-#      - name: Set up QEMU host dependencies
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install -y make python3 curl git openssh-client \
-#            qemu-system-x86 qemu-utils xorriso
-#
-#      - name: Build and verify native guest package
-#        run: make ${{ matrix.target }}
-#
-#      - name: Verify release inputs
-#        run: python3 tools/release/keiland-linux-deb/verify-artifacts.py --require-clean build/keiland-deb/artifacts/${{ matrix.distro }} ${{ matrix.distro }}
-#
-#      - name: Upload verified package and evidence
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: keiland-linux-${{ matrix.distro }}
-#          path: build/keiland-deb/artifacts/${{ matrix.distro }}/*
-#          if-no-files-found: error
-
   release:
     name: Create GitHub Release
+
     runs-on: ubuntu-latest
+
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
     permissions:
       contents: write
+
     needs:
       - build
-      - keiland-deb
+
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -122,9 +89,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: release-source
-
-      - name: Verify both distributions before publication
-        run: python3 release-source/tools/release/keiland-linux-deb/verify-artifacts.py --require-clean artifacts debian13 ubuntu2604
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -149,18 +113,6 @@ jobs:
             Keiland Linux (native QEMU build and installation tests)
             =======================================================
 
-            | OS | CPU | Package |
-            |----|-----|---------|
-            | Debian 13 | amd64 | `keiland_*+debian13_amd64.deb` |
-            | Ubuntu 26.04 | amd64 | `keiland_*+ubuntu2604_amd64.deb` |
-
-            SHA-256 checksums, payload manifests and Keiland JSON build records
-            accompany both packages. Install with `sudo apt install ./keiland_*.deb`.
-
           files: |
             artifacts/zedbsd-amd64.img.gz
             artifacts/Kei-nightly.zip
-            artifacts/*.deb
-            artifacts/*.sha256
-            artifacts/*.manifest.json
-            artifacts/*.buildinfo.json

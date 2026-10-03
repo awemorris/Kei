@@ -1,0 +1,103 @@
+[
+  {
+    "name": "host-node-cloning",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-node-cloning",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "PASS unsupported native Document kind preserves output\nPASS missing embedding output slot rejected\nPASS clone allocation caused actual collection without stack roots\nPASS callee retained source identity and current owner\nPASS source graph and every UTF16 buffer preserved\nPASS complete copy published after successful allocation\nPASS copied element retains native prefix and arbitrary namespace URI\nPASS copied native attribute retains namespaced identity\nPASS copied native attribute retains prefix local name and value\nPASS every copied child survived allocation collection\nPASS source graph collectible after callee roots released\nPASS complete copy retains creator Document\nPASS post-call root retains copied graph\nPASS creator collectible after all output roots released\nPASS complete copy collectible after output release\nPASS invalid embedding arguments rejected without publication\nPASS unsupported native Document kind preserves output\nPASS missing embedding output slot rejected\nPASS clone allocation caused actual collection without stack roots\nPASS callee retained source identity and current owner\nPASS source graph and every UTF16 buffer preserved\nPASS real ENOMEM preserves unpublished output sentinel\nPASS source graph collectible after callee roots released\nPASS failed partial graph and Document collectible\nPASS creator collectible after all output roots released\nPASS invalid embedding arguments rejected without publication\nnative node cloning: 26 checks, 0 failures\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-attribute-namespace",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-attribute-namespace",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "native attribute namespaces: 25/25 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-xml-dom",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-xml-dom",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "native XML DOM: 54/54 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-xml-binding",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-xml-binding",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "native XML bindings: 34/34 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-native-properties",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-native-properties",
+      "plan/ws074/tests/pages",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "native property checks: 65/65 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "dom-tests",
+    "argv": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "stdout": "pass classlist\npass computed\npass document-write\npass dynamic-script\npass elements\npass encoding\npass environment\npass events\npass exception\npass flexmin\npass gc\npass geometry\npass lexical\npass loop\npass markup\npass mutation-observer\npass promise\npass query\npass storage\npass style\npass tree\npass urls\npass web-api\ndom-tests 23/23\n",
+    "stderr": ""
+  },
+  {
+    "name": "xml-document-probe",
+    "argv": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/xml-document-probe.html"
+    ],
+    "exit": 0,
+    "stdout": "PASS SameObject implementation\nPASS implementation is not a Node\nPASS primary HTML content\nPASS illegal implementation constructor\nPASS illegal XMLDocument constructor\nPASS Document getter brand\nPASS implementation method brand\nPASS implementation fake prototype\nPASS required factory arguments\nPASS required doctype arguments\nPASS XML document interface\nPASS empty XML document\nPASS detached document defaults\nPASS XML MIME\nPASS undefined qualified name is DOMString\nPASS empty namespace normalized in factory\nPASS omitted nullable doctype\nPASS factory returns new objects\nPASS per document implementation\nPASS XML case and null namespace\nPASS XML owner and parent\nPASS XML text ownership\nPASS ordinary XML query exact case\nPASS XHTML content kind\nPASS XHTML createElement namespace and case\nPASS XHTML query exact case\nPASS HTML naming unchanged\nPASS SVG XML content kind\nPASS SVG createElement remains no namespace\nPASS custom root qualified identity\nPASS qualified XML tag query\nPASS empty name does not validate namespace binding\nPASS missing prefix namespace\nPASS bad name\nPASS reserved xml binding\nPASS invalid supplied doctype\nPASS doctype native interface and fields\nPASS doctype associated owner\nPASS doctype adoption preserves identity\nPASS invalid name preserves supplied doctype\nPASS doctype unchanged after failed factory\nPASS attached doctype moves and old doc loses it\nPASS empty doctype name valid\nPASS current DOM allows non XML QName\nPASS invalid doctype 0\nPASS invalid doctype 1\nPASS invalid doctype 2\nPASS invalid doctype 3\nPASS invalid doctype 4\nPASS invalid doctype 5\nPASS invalid doctype 6\nPASS createDocument conversion order once\nPASS doctype conversion order once\nPASS conversion exception identity\nPASS brand before conversion\nPASS invalid receiver skips conversions\nPASS borrowed getter uses receiver realm\nPASS borrowed factory uses implementation realm\nPASS borrowed createElement wraps in XML owner realm\nPASS child XML implementation prototype\nPASS removed frame XML remains usable\nPASS XML readonly content type\n",
+    "stderr": ""
+  }
+]

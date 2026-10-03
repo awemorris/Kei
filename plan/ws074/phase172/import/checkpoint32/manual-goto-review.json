@@ -1,0 +1,45 @@
+[
+  {
+    "path": "plan/ws074/tests/host-option-state.c",
+    "function": "collection_case",
+    "target": "cleanup",
+    "lines": [
+      242,
+      249,
+      259,
+      275,
+      283
+    ],
+    "classification": "Forward jumps to the sole shared teardown label; permitted by full C section14."
+  },
+  {
+    "path": "plan/ws074/tests/host-table-collection.c",
+    "function": "collection_case",
+    "target": "cleanup",
+    "lines": [
+      184,
+      192,
+      200,
+      211,
+      240
+    ],
+    "classification": "Forward jumps to the sole shared teardown label; permitted by full C section14."
+  },
+  {
+    "path": "plan/ws074/tests/host-select.c",
+    "function": "collection_case",
+    "target": "cleanup",
+    "lines": [
+      315,
+      319,
+      335,
+      341,
+      357,
+      363,
+      382,
+      389,
+      414
+    ],
+    "classification": "Forward jumps to the sole shared teardown label; permitted by full C section14."
+  }
+]

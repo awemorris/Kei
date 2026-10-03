@@ -1,35 +1,47 @@
 # Documentation rules
 
-Status: current
+These rules follow the project owner's policy (2026-10-03).
+
+## Documents come first
+
+`docs/` holds the design of zedBSD and Keiland: what each part is for, how it
+is divided, and which interfaces programs and people can rely on. A document
+states the target design. Implementation follows the document, the way code
+follows its tests in test-driven development. A document may therefore
+describe something that is not built yet. That is not an error, and the
+document does not need to mark it.
+
+When the design changes, change the document first and then the code. A
+document that disagrees with the intended design is wrong. A document that is
+ahead of the code is not.
 
 ## Document classes
 
-- `docs/architecture/` explains why components are shaped as they are.
-- `docs/reference/` specifies exact observable interfaces and compatibility.
-- `docs/howto/` gives reproducible procedures for a user goal.
-- `plan/` owns proposals, Phases, status, acceptance, and future work.
+- `docs/architecture/`: the external design of a subsystem. It covers its
+  purpose, its parts and their boundaries, and the reasons for them. Internal
+  implementation is left to the source.
+- `docs/reference/`: exact interfaces that programs and people use: commands,
+  configuration, file formats, user APIs and compatibility.
+- `docs/howto/`: procedures for a user's goal, each with the observation that
+  shows it worked.
 
-Do not use a plan as the only product reference for behavior that users can
-rely on. Conversely, do not present a proposed interface in product
-documentation as implemented.
+## No links into plan/
 
-## Required status and evidence
+`plan/` is a separate world. It holds work in progress (Queues, Phases,
+status and acceptance), and its records are deleted when the work is done. A
+document in `docs/` never links into `plan/` and does not depend on anything
+there. Schedules, open decisions and the state of the work belong in `plan/`,
+not in `docs/`.
 
-Every product document starts with one status: `current`, `experimental`,
-`deprecated`, or `planned`. Interface references name supported architectures,
-source/header locations, applicable tests, known limitations, and stability.
-Architecture documents visibly separate current behavior from intended design.
-Commands and procedures include an expected observation and meaningful failure
-diagnostics.
+Links to the source tree (headers, programs, configuration) are fine.
 
-Compatibility terms such as POSIX, SUS, Linux-compatible, and FreeBSD-compatible
-must identify the covered version/profile and known deviations. A behavioral
-similarity is not called binary compatibility unless ABI layout is also tested.
+## Writing
 
-## Links and navigation
-
-Use relative Markdown links for repository documents. Every document is
-reachable from [the documentation index](README.md), a section index, or the
-authoritative [plan index](../plan/README.md). Renames update inbound links in
-the same change. Run the repeatable link validator documented by
-[WS009 tests](../plan/ws009/tests/README.md).
+- Begin each document with a status line that says what kind of document it
+  is (for example `design`).
+- Use relative Markdown links within the repository. Every document is
+  reachable from [the documentation index](README.md) or a section index.
+  When a document is renamed, update the links to it in the same change.
+- Compatibility terms such as POSIX, Linux-compatible and FreeBSD-compatible
+  name the version or profile they mean. Do not call a similarity "binary
+  compatibility" unless the ABI is the same.

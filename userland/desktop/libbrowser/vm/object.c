@@ -39,13 +39,6 @@
 
 static void object_symbol_trace(struct vm_heap *heap, struct vm_cell *cell);
 static void object_accessor_trace(struct vm_heap *heap, struct vm_cell *cell);
-static int object_grow_slots(struct vm_object *object, uint32_t count);
-static int object_grow_elements(struct vm_object *object, uint32_t index);
-static int object_store_named(struct vm_heap *heap, struct vm_object *object, vm_value key, vm_value value, uint32_t attributes);
-static int object_reshape(struct vm_heap *heap, struct vm_object *object, vm_value skip, vm_value change, uint32_t attributes);
-static int object_is_length(struct vm_heap *heap, struct vm_object *object, vm_value key);
-static void object_sync_length(struct vm_heap *heap, struct vm_object *object);
-static int object_key_compare(const void *left, const void *right);
 
 /* The cell type of plain objects: they hold their shape, prototype, slots and elements. */
 const struct vm_cell_type vm_object_type = {
@@ -66,6 +59,14 @@ const struct vm_cell_type vm_symbol_type = {
 const struct vm_cell_type vm_accessor_type = {
 	"accessor", object_accessor_trace, NULL
 };
+
+static int object_grow_slots(struct vm_object *object, uint32_t count);
+static int object_grow_elements(struct vm_object *object, uint32_t index);
+static int object_store_named(struct vm_heap *heap, struct vm_object *object, vm_value key, vm_value value, uint32_t attributes);
+static int object_reshape(struct vm_heap *heap, struct vm_object *object, vm_value skip, vm_value change, uint32_t attributes);
+static int object_is_length(struct vm_object *object, vm_value key);
+static void object_sync_length(struct vm_heap *heap, struct vm_object *object);
+static int object_key_compare(const void *left, const void *right);
 
 /*
  * Marks the cell a value refers to, if it refers to one.
@@ -405,13 +406,28 @@ vm_symbol_create(
 	vm_value description)
 {
 	struct vm_symbol *symbol;
+	struct vm_cell *root;
+	int is_cell;
+	int error;
 
 	/* The cell and its description. */
-	symbol = vm_heap_alloc(heap, &vm_symbol_type, sizeof(*symbol));
-	if (symbol == NULL)
+	root = NULL;
+	is_cell = vm_value_is_cell(description);
+	if (is_cell)
+		root = vm_value_as_cell(description);
+	error = vm_heap_add_root(heap, &root);
+	if (error != 0)
 		return NULL;
+	symbol = vm_heap_alloc(heap, &vm_symbol_type, sizeof(*symbol));
+	if (symbol == NULL) {
+		vm_heap_remove_root(heap, &root);
+		return NULL;
+	}
+
+	/* The new symbol owns its description before temporary ownership ends. */
 	symbol->description = description;
 	symbol->private_name = 0;
+	vm_heap_remove_root(heap, &root);
 
 	/* Succeeded: the symbol. */
 	return symbol;
@@ -428,9 +444,39 @@ vm_accessor_create(
 	vm_value setter)
 {
 	struct vm_accessor *accessor;
+	struct vm_cell *roots[2];
+	unsigned registered;
+	unsigned index;
+	int is_cell;
+	int error;
 
 	/* The cell and its functions. */
-	accessor = vm_heap_alloc(heap, &vm_accessor_type, sizeof(*accessor));
+	roots[0] = NULL;
+	is_cell = vm_value_is_cell(getter);
+	if (is_cell)
+		roots[0] = vm_value_as_cell(getter);
+	roots[1] = NULL;
+	is_cell = vm_value_is_cell(setter);
+	if (is_cell)
+		roots[1] = vm_value_as_cell(setter);
+	registered = 0;
+	for (index = 0; index < 2U; index++) {
+		error = vm_heap_add_root(heap, &roots[index]);
+		if (error != 0)
+			break;
+		registered++;
+	}
+
+	/* A partially registered pair cannot enter the collecting allocator. */
+	accessor = NULL;
+	if (registered == 2U)
+		accessor = vm_heap_alloc(heap, &vm_accessor_type, sizeof(*accessor));
+	while (registered > 0U) {
+		registered--;
+		vm_heap_remove_root(heap, &roots[registered]);
+	}
+
+	/* A failed root or cell allocation publishes no partial pair. */
 	if (accessor == NULL)
 		return NULL;
 	accessor->getter = getter;
@@ -559,7 +605,7 @@ vm_object_define(
 	int error;
 
 	/* Script access has already normalized length; the C boundary accepts any valid uint32 number. */
-	is_length = object_is_length(heap, object, key);
+	is_length = object_is_length(object, key);
 	if (is_length) {
 		/* Requires a numeric value rather than silently applying user coercion in the VM heap layer. */
 		is_number = vm_value_is_number(value);
@@ -833,6 +879,7 @@ vm_array_set_length(
 	uint32_t length)
 {
 	struct wb_vector keys;
+	struct vm_cell *root;
 	uint32_t index;
 	size_t item;
 	vm_value *key;
@@ -841,6 +888,10 @@ vm_array_set_length(
 	int error;
 
 	/* The elements past the new length become holes. */
+	root = &array->cell;
+	error = vm_heap_add_root(heap, &root);
+	if (error != 0)
+		return error;
 	for (index = length; index < array->element_capacity; index++)
 		array->elements[index] = VM_VALUE_EMPTY;
 
@@ -861,13 +912,16 @@ vm_array_set_length(
 
 		/* The list of keys is no longer needed. */
 		wb_vector_release(&keys);
-		if (error != 0)
+		if (error != 0) {
+			vm_heap_remove_root(heap, &root);
 			return error;
+		}
 	}
 
 	/* The length and its property. */
 	array->length = length;
 	object_sync_length(heap, array);
+	vm_heap_remove_root(heap, &root);
 
 	/* Succeeded: the array has its new length. */
 	return 0;
@@ -1204,26 +1258,57 @@ object_store_named(
 	uint32_t attributes)
 {
 	struct vm_shape *shape;
+	struct vm_cell *roots[3];
 	uint32_t slot;
+	unsigned registered;
+	unsigned index;
+	int is_cell;
 	int error;
 
-	/* The shape with the property (the object is on this frame, so a collection keeps its old shape). */
+	/* Retain the owner, new key and value while a shape allocation can collect. */
+	roots[0] = &object->cell;
+	roots[1] = NULL;
+	is_cell = vm_value_is_cell(key);
+	if (is_cell)
+		roots[1] = vm_value_as_cell(key);
+	roots[2] = NULL;
+	is_cell = vm_value_is_cell(value);
+	if (is_cell)
+		roots[2] = vm_value_as_cell(value);
+	registered = 0;
+	for (index = 0; index < 3U; index++) {
+		error = vm_heap_add_root(heap, &roots[index]);
+		if (error != 0)
+			goto cleanup;
+		registered++;
+	}
+
+	/* The shape with the property is traced through the owner's root shape. */
 	shape = vm_shape_add(heap, object->shape, key, attributes);
-	if (shape == NULL)
-		return ENOMEM;
+	if (shape == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
 
 	/* The slot, whose number is the count of properties before it. */
 	slot = vm_shape_count(shape) - 1U;
 	error = object_grow_slots(object, slot + 1U);
 	if (error != 0)
-		return error;
+		goto cleanup;
 
 	/* The value, then the shape that names it. */
 	object->slots[slot] = value;
 	object->shape = shape;
 
-	/* Succeeded: the property is added. */
-	return 0;
+cleanup:
+	/* Published storage owns the property after temporary roots end. */
+	while (registered > 0U) {
+		registered--;
+		vm_heap_remove_root(heap, &roots[registered]);
+	}
+
+	/* Report either complete publication or the allocation failure. */
+	return error;
 }
 
 /*
@@ -1240,6 +1325,7 @@ object_reshape(
 	uint32_t attributes)
 {
 	struct vm_shape *shape;
+	struct vm_cell *root;
 	vm_value *keys;
 	vm_value *slots;
 	uint32_t *old_slots;
@@ -1269,9 +1355,17 @@ object_reshape(
 
 	/* Fills them from the shape. */
 	vm_shape_keys(object->shape, keys, old_slots, old_attributes);
+	root = &object->cell;
+	error = vm_heap_add_root(heap, &root);
+	if (error != 0) {
+		free(keys);
+		free(old_slots);
+		free(old_attributes);
+		free(slots);
+		return error;
+	}
 
 	/* The new path from the root, each value moving to its new slot. */
-	error = 0;
 	shape = vm_shape_root(heap);
 	if (shape == NULL)
 		error = ENOMEM;
@@ -1302,6 +1396,7 @@ object_reshape(
 	free(old_attributes);
 	if (error != 0) {
 		free(slots);
+		vm_heap_remove_root(heap, &root);
 		return error;
 	}
 
@@ -1312,6 +1407,7 @@ object_reshape(
 	for (index = kept; index < object->slot_capacity; index++)
 		object->slots[index] = VM_VALUE_EMPTY;
 	object->shape = shape;
+	vm_heap_remove_root(heap, &root);
 
 	/* Succeeded: the object has its new layout. */
 	return 0;
@@ -1320,13 +1416,12 @@ object_reshape(
 /* Tells whether a key is an array's length. */
 static int
 object_is_length(
-	struct vm_heap *heap,
 	struct vm_object *object,
 	vm_value key)
 {
-	struct vm_string *name;
 	struct vm_cell *cell;
 	int is_cell;
+	int matches;
 
 	/* Only arrays have the special length. */
 	if ((object->flags & VM_OBJECT_ARRAY) == 0U)
@@ -1340,11 +1435,9 @@ object_is_length(
 	if (cell->type != &vm_string_type)
 		return 0;
 
-	/* The atom "length" (atoms compare by pointer). */
-	name = vm_atom_from_ascii(heap, "length");
-	if (name == NULL)
-		return 0;
-	if (cell != &name->cell)
+	/* Compare the existing key without allocating a new atom or hiding allocation failure. */
+	matches = vm_string_equal_ascii((struct vm_string *)cell, "length");
+	if (!matches)
 		return 0;
 
 	/* The key is the array's length. */

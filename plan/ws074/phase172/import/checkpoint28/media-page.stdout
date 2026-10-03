@@ -1,0 +1,39 @@
+PASS default text-transform none
+PASS inline camel/CSS name and inherited computed keyword
+PASS native declaration and computed CSS spelling
+PASS invalid transform leaves previous valid declaration
+PASS capitalize computed keyword
+PASS initial resets computed keyword
+PASS explicit inherit uses native parent state
+PASS unset follows inherited property
+PASS custom variable resolves native transform
+PASS inline important wins against stylesheet important
+PASS stylesheet actual cascade after inline removal
+PASS dynamic style Text changes computed transform
+PASS computed transform observation preserves native DOM text
+PASS original46 media a
+PASS original46 media b
+PASS original46 media c
+PASS original46 media d
+PASS original46 media e
+PASS original46 media g
+PASS original46 media h
+PASS original46 media i
+PASS original46 media j
+PASS original46 media k
+PASS original46 media l
+PASS original46 media m
+PASS original46 media n
+PASS original46 media o
+PASS original46 media p
+PASS original46 media q
+PASS original46 media u
+PASS original46 media v
+PASS original46 media ww
+PASS original46 media x
+PASS original46 media y1
+PASS original46 media y2
+PASS original46 media y3
+PASS original46 media y4
+PASS borrowed computed style uses child CSS and viewport
+text transform media probe done

@@ -1,0 +1,24 @@
+unit: ok
+png rgb: ok worst 0 levels 3 
+png rgba over checker: ok worst 1 levels 3 
+png gray 16: ok worst 0 levels 2 
+png palette tRNS: ok worst 0 levels 3 
+png levels: ok worst 0 levels 5 
+png level count: ok levels 5 (3000 -> 1500 -> 750 -> 375 -> 188)
+jpeg baseline: ok worst 0 levels 3 
+jpeg progressive: ok worst 0 levels 3 
+jpeg gray: ok worst 0 levels 3 
+jpeg exif 6: ok worst 0 levels 3 
+jpeg exif 6 size: ok file size ['480', '640']
+jpeg cmyk: ok worst 0 levels 3 
+gif still: ok worst 0 levels 3 
+gif frames: ok 120 90 3 0
+delay 0 120
+delay 1 250
+delay 2 80
+gif delays: ok 120 250 80
+gif frame 0: ok worst 0
+gif frame 1: ok worst 0
+gif frame 2: ok worst 0
+view: ok
+host-imageview: PASS

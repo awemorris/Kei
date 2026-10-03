@@ -1,0 +1,10 @@
+PASS no declaration: SSD by default
+PASS KDE manager bound, no decoration object (GTK4): CSD; default_mode SSD
+PASS mode events/configure serials/commit boundaries
+PASS native opt-in and withdrawal
+PASS explicit xdg CSD takes precedence over native opt-in
+PASS KDE server decoration: CLIENT before the first commit, SERVER, NONE, release
+PASS xdg-decoration takes precedence over KDE
+PASS expected duplicate protocol error
+PASS expected invalid protocol error
+PASS expected kde-invalid protocol error

@@ -135,7 +135,7 @@ lex_peek(
 	uint16_t unit;
 
 	/* Past the end is end of file. */
-	if (lexer->position + ahead >= lexer->length)
+	if (ahead >= lexer->length - lexer->position)
 		return LEX_EOF;
 
 	/* The preprocessing: carriage returns and form feeds are line feeds, NULs are replaced. */
@@ -700,11 +700,13 @@ lex_string(
 	struct css_lexer *lexer,
 	int32_t quote)
 {
+	size_t before;
 	int32_t c;
 
 	/* Gathers the characters. */
 	wb_units_clear(&lexer->scratch);
 	for (;;) {
+		before = lexer->position;
 		c = lex_next(lexer);
 
 		/* The closing quote or the end ends the string. */
@@ -713,7 +715,7 @@ lex_string(
 
 		/* A newline makes it a bad string (the newline is not consumed). */
 		if (c == 0x0a) {
-			lexer->position--;
+			lexer->position = before;
 			lex_emit(lexer, CSS_TOKEN_BAD_STRING, NULL, 0, 0, 0);
 			return;
 		}

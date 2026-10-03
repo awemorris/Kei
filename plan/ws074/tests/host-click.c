@@ -26,7 +26,7 @@ static int collection_case(struct vm_heap *heap);
 static int click_collect(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 
 /*
- * Verifies collection caches and collectible DOM cycles through ordinary bindings.
+ * Verifies pending activation and event-path lifetimes during listener collection.
  */
 int
 main(
@@ -43,9 +43,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Release the completed fixture before reporting its observations. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("click lifetime checks: %u/%u passed\n", checks - failures, checks);
@@ -102,9 +106,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release input only after checking the interpreter outcome. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -119,6 +127,7 @@ click_collect(
 	unsigned count,
 	vm_value *result)
 {
+	vm_value argument;
 	struct bind_event *event;
 	struct dom_node *target;
 	struct dom_node *previous;
@@ -133,10 +142,21 @@ click_collect(
 	UNUSED_PARAMETER(receiver);
 
 	/* Actual Event.target supplies the input; there are no external registered fixture roots. */
-	event = bind_event_of(js_argument(args, count, 0));
+	argument = js_argument(args, count, 0);
+	event = bind_event_of(argument);
+	if (event == NULL)
+		return EIO;
 	target = bind_node_of(event->target);
+	if (target == NULL || target->parent == NULL)
+		return EIO;
+
+	/* The generated parent must own the previous selection before links are severed. */
 	parent = target->parent;
 	previous = parent->first_child;
+	if (previous == NULL)
+		return EIO;
+
+	/* Integer-only observations do not retain any pending activation cell. */
 	target_address = (uintptr_t)target;
 	previous_address = (uintptr_t)previous;
 	parent_address = (uintptr_t)parent;
@@ -170,9 +190,13 @@ click_collect(
 	collection_check(same, "current native event survives callback collection");
 	vm_heap_set_stack_base(realm->heap, construction_stack);
 
-	/* Cancellation runs after this callback, when the old radio is no longer a current peer. */
+	/* Cancellation requires the event to remain live after real collector pressure. */
+	if (found == NULL)
+		return EIO;
 	event->canceled = 1;
 	*result = VM_VALUE_UNDEFINED;
+
+	/* Succeeded: the live event cancels the pending radio activation. */
 	return 0;
 }
 
@@ -242,6 +266,16 @@ collection_case(
 
 	/* Invoke click directly so the saved previous radio exists only in native activation state. */
 	form = bind_node_of(answer);
+	if (form == NULL ||
+	    form->first_child == NULL ||
+	    form->last_child == NULL ||
+	    form->last_child->type != DOM_ELEMENT) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
+	}
+
+	/* Publish target observations after validating the actual generated element. */
 	target = (struct dom_element *)form->last_child;
 	previous_address = (uintptr_t)form->first_child;
 	parent_address = (uintptr_t)form;
@@ -252,6 +286,14 @@ collection_case(
 		bind_window_destroy(window);
 		vm_realm_destroy(realm);
 		return status;
+	}
+
+	/* Refuse a missing target before inspecting post-callback activation state. */
+	found = vm_heap_find_cell(heap, target_address);
+	if (found == NULL || target->control == NULL) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		return EIO;
 	}
 
 	/* A removed prior selection is not restored; cancellation leaves the target unchecked. */
@@ -276,5 +318,7 @@ collection_case(
 	/* The primary binding then tears down without a retained root slot into this stack. */
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
+
+	/* Succeeded: activation, cancellation and final reclamation were observed. */
 	return 0;
 }

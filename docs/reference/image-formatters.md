@@ -54,9 +54,8 @@ Exit status is 0 after successful verification/initialization and close, 1 on
 an object, I/O or content error, and 2 for unsupported arguments. Successful
 read-only output says `pristine`; normal formatting says `initialized`.
 
-Implementation: `userland/base/common/format-file.c`,
-`userland/base/mkfs/`, `userland/base/mkswap/`.
-Acceptance: [WS019-p019](../../plan/ws019/phase019/phase.md).
+Implementation: `userland/base/common/format-file.c`, `userland/base/mkfs/`,
+`userland/base/mkswap/`.
 
 ## Block-device modes
 
@@ -87,7 +86,4 @@ mkfs -t ufs --profile=native --check-size BYTES
 ```
 
 The regular-file `--verify-pristine` command is not a general checker for an
-installed native filesystem. FAT32 block formatting and native UFS are owned
-by `userland/base/mkfs/block-command.c`, `fat32-format.c` and `ufs-format.c`;
-acceptance is recorded in
-[WS019 native integration](../../plan/ws019/phase049/phase.md).
+installed native filesystem. 

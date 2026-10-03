@@ -20,29 +20,29 @@ ZEDBSD_EXT_cairo_ARCHIVE := cairo-1.18.6.tar.xz
 ZEDBSD_EXT_cairo_URL := https://cairographics.org/releases/cairo-1.18.6.tar.xz
 ZEDBSD_EXT_cairo_SIZE := 32725456
 ZEDBSD_EXT_cairo_SHA256 := 1c767308174337a74694da0f3ec069c271452163a1ef4540964c50c301f157d4
-ZEDBSD_EXT_cairo_PATCH_LEVEL := zedbsd1
-ZEDBSD_EXT_cairo_PATCHES := \
-	$(ZEDBSD_CAIRO_DIR)/patches/0001-use-builtin-alloca-without-alloca-h.patch
+ZEDBSD_EXT_cairo_PATCH_LEVEL := zedbsd2
+ZEDBSD_EXT_cairo_PATCHES :=
 
 $(eval $(call ZEDBSD_EXTERNAL_SOURCE,cairo))
 
 # ---------------------------------------------------------------- build
 
 # Meson, through the common rule.  The image surface with PNG, fonts through
-# FreeType and fontconfig, and cairo-gobject (GTK requires it).  Off, and why:
+# FreeType and fontconfig, cairo-gobject (GTK requires it), and with zlib the
+# PDF and PostScript surfaces, which GTK's print-to-file and gtk4-demo use
+# (WS115 p002).  Off, and why:
 #   xlib, xcb, quartz, dwrite  no such window systems here; GL is gone from
 #                         cairo 1.18 altogether
-#   zlib                  only the PDF and PostScript surfaces use it, and
-#                         GTK's drawing does not
 #   lzo, spectre, symbol-lookup, tee  optional extras of the test tools
 #   tests, gtk2-utils, gtk_doc
-# The SVG surface needs nothing more and stays, as cairo builds it.
+# The SVG surface needs nothing more and stays, as cairo builds it.  The
+# alloca patch of WS115 p007 went when the C library gained <alloca.h>.
 ZEDBSD_EXT_cairo_MAKEFILE := $(ZEDBSD_CAIRO_MAKEFILE)
-ZEDBSD_EXT_cairo_DEPENDS := pixman freetype fontconfig libpng glib
+ZEDBSD_EXT_cairo_DEPENDS := pixman freetype fontconfig libpng zlib glib
 ZEDBSD_EXT_cairo_HOST_TOOLS :=
 ZEDBSD_EXT_cairo_MESON_OPTIONS := \
 	-Dfontconfig=enabled -Dfreetype=enabled -Dpng=enabled -Dglib=enabled \
-	-Dzlib=disabled -Ddwrite=disabled -Dquartz=disabled -Dtee=disabled \
+	-Dzlib=enabled -Ddwrite=disabled -Dquartz=disabled -Dtee=disabled \
 	-Dxcb=disabled -Dxlib=disabled -Dxlib-xcb=disabled -Dlzo=disabled \
 	-Dspectre=disabled -Dsymbol-lookup=disabled -Dtests=disabled \
 	-Dgtk2-utils=disabled -Dgtk_doc=false
@@ -57,13 +57,17 @@ ZEDBSD_CAIRO_LICENSES := COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
 # The libraries, each under its SONAME, with the libraries it needs.  The
 # list is the dependency contract.  The file name carries upstream's
 # version (2.11806.6 for 1.18.6).
-ZEDBSD_CAIRO_LIBRARIES := cairo cairo-gobject
+ZEDBSD_CAIRO_LIBRARIES := cairo cairo-gobject cairo-script-interpreter
 ZEDBSD_CAIRO_SONAME_cairo := libcairo.so.2
-ZEDBSD_CAIRO_NEEDED_cairo := libpng16.so.16 libfontconfig.so.1 libfreetype.so.6 libpixman-1.so.0 libc.so
+ZEDBSD_CAIRO_NEEDED_cairo := libz.so.1 libpng16.so.16 libfontconfig.so.1 libfreetype.so.6 libpixman-1.so.0 libc.so
 # cairo-gobject calls nothing in the C library itself, so --as-needed leaves
 # libc.so out of it.
 ZEDBSD_CAIRO_SONAME_cairo-gobject := libcairo-gobject.so.2
 ZEDBSD_CAIRO_NEEDED_cairo-gobject := libcairo.so.2 libglib-2.0.so.0 libgobject-2.0.so.0
+# The script interpreter comes with zlib; GTK links it to replay recorded
+# drawing in its debugging tools.
+ZEDBSD_CAIRO_SONAME_cairo-script-interpreter := libcairo-script-interpreter.so.2
+ZEDBSD_CAIRO_NEEDED_cairo-script-interpreter := libcairo.so.2 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libc.so
 ZEDBSD_CAIRO_REALNAME = $(ZEDBSD_CAIRO_LIBDIR)/$(ZEDBSD_CAIRO_SONAME_$(1)).11806.6
 
 # Checks every library against its contract once the stage exists.
@@ -90,7 +94,7 @@ cairo: $(ZEDBSD_CAIRO_CHECKED)
 # licences it may be taken under.  The headers and the .pc files go with the
 # development packages of the GTK port (WS115 p002).
 $(eval $(call ZEDBSD_USERLAND_PACKAGE,cairo,2D graphics library,*,n,package,,y,\
-	packages/libs,libs/cairo,libs/pixman libs/freetype libs/fontconfig libs/libpng libs/glib))
+	packages/libs,libs/cairo,libs/pixman libs/freetype libs/fontconfig libs/libpng libs/zlib libs/glib))
 
 ZEDBSD_PACKAGE_INPUTS += $(if $(filter cairo,$(ZEDBSD_USER_PROGRAMS)),\
 	$(ZEDBSD_CAIRO_CHECKED) \

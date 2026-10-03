@@ -11,6 +11,7 @@ LIBKEIUI_SOURCES := userland/desktop/libkeiui/version.c userland/desktop/libkeiu
 	userland/desktop/libkeiui/text.c userland/desktop/libkeiui/icons.c \
 	userland/desktop/libkeiui/icons-line.c userland/desktop/libkeiui/theme.c \
 	userland/desktop/libkeiui/input.c userland/desktop/libkeiui/scroll.c \
+	userland/desktop/libkeiui/scroll-bar.c \
 	userland/desktop/libkeiui/text-touch.c userland/desktop/libkeiui/ui.c \
 	userland/desktop/libkeiui/window.c userland/desktop/libkeiui/present.c \
 	userland/desktop/libkeiui/present-shm.c userland/desktop/libkeiui/clipboard.c \

@@ -27,6 +27,7 @@ struct wl_event_queue;
 struct wl_display *wl_display_connect(const char *name);
 struct wl_display *wl_display_connect_to_fd(int fd);
 void wl_display_disconnect(struct wl_display *display);
+void wl_log_set_handler_client(wl_log_func_t handler);
 int wl_display_get_fd(struct wl_display *display);
 int wl_display_get_error(struct wl_display *display);
 uint32_t wl_display_get_protocol_error(struct wl_display *display, const struct wl_interface **interface, uint32_t *id);

@@ -19,6 +19,7 @@
 #include "css/internal.h"
 
 #include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -103,8 +104,8 @@ static size_t parser_skip_at_rule(const struct css_token *tokens, size_t count, 
 static int parser_rules(struct parser_state *state, const struct css_token *tokens, size_t count, const struct css_media *media);
 static int parser_at_rule(struct parser_state *state, const struct css_token *tokens, size_t count, const struct css_media *media);
 static int parser_keep_imports(struct parser_state *state);
-static int parser_supports(struct parser_state *state, const struct css_token *tokens, size_t count);
-static int parser_supports_group(struct parser_state *state, const struct css_token *tokens, size_t count);
+static int parser_supports(struct parser_state *state, const struct css_token *tokens, size_t count, int *status);
+static int parser_supports_group(struct parser_state *state, const struct css_token *tokens, size_t count, int *status);
 static int parser_import(struct parser_state *state, const struct css_token *tokens, size_t count);
 static int parser_font_face(struct parser_state *state, const struct css_token *tokens, size_t count);
 static int parser_font_descriptor(struct parser_state *state, const struct css_token *name, const struct css_token *tokens, size_t count, struct css_font_face *face);
@@ -779,7 +780,10 @@ parser_at_rule(
 
 	/* An @supports block counts when its condition holds (decided now: it does not depend on the page). */
 	if (is_supports) {
-		holds = parser_supports(state, tokens + 1, open - 1U);
+		error = 0;
+		holds = parser_supports(state, tokens + 1, open - 1U, &error);
+		if (error != 0)
+			return error;
 		if (!holds)
 			return 0;
 		error = parser_rules(state, tokens + open + 1U, body_count, media);
@@ -835,7 +839,8 @@ static int
 parser_supports(
 	struct parser_state *state,
 	const struct css_token *tokens,
-	size_t count)
+	size_t count,
+	int *status)
 {
 	size_t index;
 	size_t end;
@@ -856,7 +861,9 @@ parser_supports(
 		is_not = css_ident_equal(&tokens[index], "not");
 		if (!is_not)
 			return 0;
-		holds = parser_supports(state, tokens + index + 1U, count - index - 1U);
+		holds = parser_supports(state, tokens + index + 1U, count - index - 1U, status);
+		if (*status != 0)
+			return 0;
 		return !holds;
 	}
 
@@ -870,7 +877,9 @@ parser_supports(
 		if (tokens[index].type != CSS_TOKEN_OPEN_PAREN && tokens[index].type != CSS_TOKEN_FUNCTION)
 			return 0;
 		end = parser_skip_block(tokens, count, index);
-		group = parser_supports_group(state, tokens + index, end - index);
+		group = parser_supports_group(state, tokens + index, end - index, status);
+		if (*status != 0)
+			return 0;
 		if (joined_by_or) {
 			if (group)
 				holds = 1;
@@ -913,7 +922,8 @@ static int
 parser_supports_group(
 	struct parser_state *state,
 	const struct css_token *tokens,
-	size_t count)
+	size_t count,
+	int *status)
 {
 	struct css_declaration expanded[PARSER_EXPANSION_MAX];
 	struct css_parse parse;
@@ -947,7 +957,7 @@ parser_supports_group(
 
 	/* A nested condition. */
 	if (inner[index].type != CSS_TOKEN_IDENT) {
-		holds = parser_supports(state, inner, inner_count);
+		holds = parser_supports(state, inner, inner_count, status);
 		return holds;
 	}
 
@@ -977,6 +987,12 @@ parser_supports_group(
 	parse.arena = &state->sheet->arena;
 	made = 0;
 	error = css_parse_property(&parse, property, value.tokens, value.count, expanded, &made);
+	if (error == ENOMEM) {
+		*status = error;
+		return 0;
+	}
+
+	/* An unsupported value simply makes the condition false. */
 	if (error != 0 || made == 0)
 		return 0;
 
@@ -1310,6 +1326,8 @@ parser_compound(
 		} else if (token->type == CSS_TOKEN_OPEN_SQUARE) {
 			/* An attribute selector up to its closing bracket. */
 			end = parser_skip_block(tokens, count, *index);
+			if (end <= *index + 1U || tokens[end - 1U].type != CSS_TOKEN_CLOSE_SQUARE)
+				return EINVAL;
 			error = parser_attribute(heap, tokens + *index + 1U, end - *index - 2U, simple);
 			if (error != 0)
 				return error;
@@ -1374,6 +1392,8 @@ parser_attribute(
 	struct token_range range;
 	const struct css_token *operator_token;
 	size_t index;
+	int insensitive;
+	int sensitive;
 
 	/* The name comes first. */
 	range.tokens = tokens;
@@ -1440,8 +1460,20 @@ parser_attribute(
 	index++;
 	while (index < range.count && range.tokens[index].type == CSS_TOKEN_WHITESPACE)
 		index++;
-	if (index < range.count && range.tokens[index].type == CSS_TOKEN_IDENT)
-		simple->case_insensitive = css_ident_equal(&range.tokens[index], "i");
+	if (index < range.count) {
+		if (range.tokens[index].type != CSS_TOKEN_IDENT)
+			return EINVAL;
+		insensitive = css_ident_equal(&range.tokens[index], "i");
+		sensitive = css_ident_equal(&range.tokens[index], "s");
+		if (!insensitive && !sensitive)
+			return EINVAL;
+		simple->case_insensitive = insensitive;
+		index++;
+	}
+
+	/* A flag must be the selector's final token. */
+	if (index != range.count)
+		return EINVAL;
 
 	/* Succeeded: the attribute selector is complete. */
 	return 0;
@@ -1508,6 +1540,8 @@ parser_pseudo(
 
 	/* A function: its arguments run to its closing parenthesis, where the index is left. */
 	end = parser_skip_block(tokens, count, *index);
+	if (end <= *index + 1U || tokens[end - 1U].type != CSS_TOKEN_CLOSE_PAREN)
+		return EINVAL;
 	arguments.tokens = tokens + *index + 1U;
 	arguments.count = end - *index - 1U;
 	if (arguments.count > 0 && tokens[end - 1U].type == CSS_TOKEN_CLOSE_PAREN)
@@ -1744,9 +1778,12 @@ parser_nth(
 	size_t length;
 	size_t index;
 	size_t part;
+	uint64_t value;
+	uint64_t limit;
+	uint64_t digit;
 	int written;
 	int sign;
-	int value;
+	int number;
 	int has_digits;
 	int is_word;
 	int differs;
@@ -1772,10 +1809,13 @@ parser_nth(
 		/* Numbers with their sign, then the text of identifiers and units. */
 		written = 0;
 		if (token->type == CSS_TOKEN_NUMBER || token->type == CSS_TOKEN_DIMENSION) {
+			if (!token->integer || !(token->number >= INT_MIN && token->number <= INT_MAX))
+				return EINVAL;
+			number = (int)token->number;
 			if (token->type == CSS_TOKEN_NUMBER && length > 0 && !after_sign) {
-				written = snprintf(text + length, sizeof(text) - length, "%+d", (int)token->number);
+				written = snprintf(text + length, sizeof(text) - length, "%+d", number);
 			} else {
-				written = snprintf(text + length, sizeof(text) - length, "%d", (int)token->number);
+				written = snprintf(text + length, sizeof(text) - length, "%d", number);
 			}
 
 			/* The number must fit. */
@@ -1838,8 +1878,14 @@ parser_nth(
 	/* The digits of a. */
 	value = 0;
 	has_digits = 0;
+	limit = INT_MAX;
+	if (sign < 0)
+		limit = (uint64_t)INT_MAX + 1U;
 	while (text[index] >= '0' && text[index] <= '9') {
-		value = value * 10 + (text[index] - '0');
+		digit = (uint64_t)(text[index] - '0');
+		if (value > (limit - digit) / 10U)
+			return EINVAL;
+		value = value * 10U + digit;
 		has_digits = 1;
 		index++;
 	}
@@ -1848,14 +1894,14 @@ parser_nth(
 	if (text[index] != 'n') {
 		if (!has_digits || text[index] != '\0')
 			return EINVAL;
-		*b = sign * value;
+		*b = (int)((int64_t)sign * (int64_t)value);
 		return 0;
 	}
 
 	/* A bare n is 1n. */
 	if (!has_digits)
 		value = 1;
-	*a = sign * value;
+	*a = (int)((int64_t)sign * (int64_t)value);
 	index++;
 
 	/* b: an optional signed number after the n. */
@@ -1869,8 +1915,14 @@ parser_nth(
 	index++;
 	value = 0;
 	has_digits = 0;
+	limit = INT_MAX;
+	if (sign < 0)
+		limit = (uint64_t)INT_MAX + 1U;
 	while (text[index] >= '0' && text[index] <= '9') {
-		value = value * 10 + (text[index] - '0');
+		digit = (uint64_t)(text[index] - '0');
+		if (value > (limit - digit) / 10U)
+			return EINVAL;
+		value = value * 10U + digit;
 		has_digits = 1;
 		index++;
 	}
@@ -1878,7 +1930,7 @@ parser_nth(
 	/* b must be digits to the end. */
 	if (!has_digits || text[index] != '\0')
 		return EINVAL;
-	*b = sign * value;
+	*b = (int)((int64_t)sign * (int64_t)value);
 
 	/* Succeeded: a and b are read. */
 	return 0;

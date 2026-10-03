@@ -1,0 +1,1 @@
+Range boundary/data full reviews; native89+100/scoped warning0;36 permitted cleanup jumps; original native GC/root exclusion and mutation scripts preserved.

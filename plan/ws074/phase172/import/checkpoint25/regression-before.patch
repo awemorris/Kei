@@ -1,0 +1,17 @@
+diff --git a/plan/ws074/tests/host-data-url.c b/plan/ws074/tests/host-data-url.c
+index 11c6396e7..285c019cc 100644
+--- a/plan/ws074/tests/host-data-url.c
++++ b/plan/ws074/tests/host-data-url.c
+@@ -114,7 +114,11 @@ data_cases(
+ 		{ "data:bad%20type;base64,YQ==", 0, "a", "text/plain;charset=US-ASCII" },
+ 		{ "data:,markup", 0, "markup", "text/plain;charset=US-ASCII" },
+ 		{ "data:;charset=UTF-8,a", 0, "a", "text/plain;charset=UTF-8" },
+-		{ "data:TEXT/HTML,%3Cp%3E#fragment", 0, "<p>", "text/html" }
++		{ "data:TEXT/HTML,%3Cp%3E#fragment", 0, "<p>", "text/html" },
++		{ "data:text/ html,x", 0, "x", "text/plain;charset=US-ASCII" },
++		{ "data:text/plain;a=\";b=x\";b=y,z", 0, "z", "text/plain;a=\";b=x\";b=y" },
++		{ "data:text/plain;a=\";b=x\";B=y;b=z,k", 0, "k", "text/plain;a=\";b=x\";b=y" },
++		{ "data:text/plain;a=\"escaped\\\";b=x\";b=y,t", 0, "t", "text/plain;a=\"escaped\\\";b=x\";b=y" }
+ 	};
+ 	size_t index;
+ 	int error;

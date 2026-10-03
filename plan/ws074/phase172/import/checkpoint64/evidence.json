@@ -1,0 +1,31 @@
+{
+  "queue": "q597",
+  "checkpoint": 64,
+  "source": "userland/desktop/libbrowser/css/tokenizer.c",
+  "source_sha256": "e38b7c8ed0838e5cd53e95c093afbd547cce1867497ac33cb427ab91da415660",
+  "baseline": "15456affba22d3e5f3f7b71bd3b11c37462a4e87",
+  "reviewed": 183,
+  "total": 209,
+  "remaining": 26,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "tests": {
+    "host-color-media": "native color media: 39/39 passed",
+    "host-css-rule-model": "native CSS rule model: 44/44 passed",
+    "host-cssom": "native CSSOM: 12/12 passed",
+    "host-style-sheet": "native style source: 21/21 passed",
+    "dom-tests": "dom-tests 23/23",
+    "values.style golden": "exact byte equality"
+  },
+  "limits": [
+    "No huge-buffer overflow injection for defensive lex_peek bound.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

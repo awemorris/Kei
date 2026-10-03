@@ -1,0 +1,15 @@
+[
+  {
+    "path": "plan/ws074/tests/host-vm-factory.c",
+    "sha256": "bb651ff82a03463d0ebdbdeedf46c8b702baeb4ad2c032f5349a9e2f2bdfc9e1",
+    "object": "host-vm-factory.o",
+    "object_path": "build/browser3-p172/review41/host-vm-factory.o",
+    "text_sha256": "c60ed9c4e375b1e205deb12db5a7f1dbca8975490dcd3334f28624a866b897eb"
+  },
+  {
+    "path": "userland/desktop/libbrowser/vm/function.c",
+    "sha256": "f3260a7276114e7ca0f183fa043e5bd628d9cfe0186c1b1c496877e6867debf0",
+    "object": "libbrowser_vm_function.o",
+    "text_sha256": "c57cf25f9da867c6a3f903f9b683b2b4c5378caeb6b79cd046a135dec8cf4256"
+  }
+]

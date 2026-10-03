@@ -1,11 +1,8 @@
 # Reference
 
-Status: current navigation index
-
-Reference documents define stable or explicitly experimental commands,
-configuration formats, headers, structures, constants, errors, and
-permissions. Every compatibility claim must point to implementation and test
-evidence; POSIX claims must agree with [WS001](../../plan/ws001/ws.md).
+Reference documents define the commands, configuration formats, headers,
+structures, constants, errors and permissions that programs and people use
+([rules](../style.md)).
 
 - [C interfaces and compatibility profile](compatibility-profile.md): feature
   selectors, ABI boundaries and conformance limits.

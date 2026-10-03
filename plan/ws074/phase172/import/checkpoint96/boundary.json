@@ -1,0 +1,12 @@
+{
+  "soname": "libbrowser.so",
+  "needed": [
+    "libvulkan.so.1",
+    "libm.so.6",
+    "libc.so.6"
+  ],
+  "exports_count": 39,
+  "exports_equal_checkpoint03": true,
+  "engine_sources": 167,
+  "forbidden_token_hits": []
+}

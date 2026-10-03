@@ -16,6 +16,7 @@
 
 /* Independent image collection lifetime observations survive fixture teardown. */
 static unsigned checks;
+
 /* All failed observations remain visible in the final native result. */
 static unsigned failures;
 
@@ -42,7 +43,11 @@ main(
 	status = vm_heap_create(&heap, 0);
 	if (status != 0)
 		return 2;
+
+	/* Protects ordinary native installation with its construction stack. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+
+	/* Creates the realm whose prototypes supply the actual Document bindings. */
 	status = vm_realm_create(heap, &realm);
 	if (status != 0) {
 		vm_heap_destroy(heap);
@@ -67,6 +72,8 @@ main(
 
 	/* The fixture uses ordinary child binding ownership without host callbacks. */
 	memset(&host, 0, sizeof(host));
+
+	/* Installs the primary Window after preparing its empty host. */
 	status = bind_window_create(realm, document, &host, &window);
 	if (status != 0) {
 		vm_realm_destroy(realm);
@@ -76,12 +83,19 @@ main(
 
 	/* Only the direct lifetime case disables conservative stack scanning. */
 	status = images_case(realm);
+	if (status != 0) {
+		vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Restores ordinary stack scanning before releasing the primary graph. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Publish complete observations after the embedding has released its roots. */
 	printed = printf("native Document.images lifetime: %u/%u passed\n", checks - failures, checks);
@@ -112,6 +126,9 @@ images_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: this observation remains in the final result. */
+	return;
 }
 
 /* Constructs genuine DOM and managed contexts through the ordinary interpreter. */
@@ -135,9 +152,13 @@ images_script(
 
 	/* Ordinary script execution provides genuine managed iframe state. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Releases source storage after the interpreter has stopped borrowing it. */
+	wb_units_release(&units);
 
 	/* Succeeded: a normal interpreter value is available to the embedding. */
 	return 0;
@@ -150,6 +171,7 @@ images_case(
 {
 	struct dom_node *frame;
 	struct dom_node *member;
+	struct dom_node *container;
 	struct vm_realm *child_realm;
 	struct bind_window *child;
 	struct vm_object *collection;
@@ -172,15 +194,49 @@ images_case(
 			       &answer);
 	if (status != 0)
 		return status;
+
+	/* Rejects absent or non-element native frame bindings before a cast. */
 	frame = bind_node_of(answer);
+	if (frame == NULL || frame->type != DOM_ELEMENT)
+		return EINVAL;
+
+	/* Requires the iframe's genuine managed realm. */
 	child_realm = (struct vm_realm *)((struct dom_element *)frame)->child_context;
+	if (child_realm == NULL)
+		return EINVAL;
+
+	/* Resolves the Window that owns the installed child Document. */
 	child = child_realm->host;
+	if (child == NULL)
+		return EINVAL;
+
+	/* Requires the actual SameObject image collection created by the script. */
 	collection = child->document->images_collection;
-	member = child->document->node.last_child->last_child->first_child;
+	if (collection == NULL)
+		return EINVAL;
+
+	/* Checks the parsed HTML tree before resolving its body. */
+	container = child->document->node.last_child;
+	if (container == NULL)
+		return EINVAL;
+
+	/* Checks the parsed body before reading its first image. */
+	container = container->last_child;
+	if (container == NULL)
+		return EINVAL;
+
+	/* Requires the actual image whose lifetime the collection should retain. */
+	member = container->first_child;
+	if (member == NULL)
+		return EINVAL;
+
+	/* Integer addresses observe collection without adding conservative roots. */
 	child_address = (uintptr_t)&child_realm->cell;
 	document_address = (uintptr_t)&child->document->node.cell;
 	collection_address = (uintptr_t)&collection->cell;
 	member_address = (uintptr_t)&member->cell;
+
+	/* Removes script aliases before testing the connected Document's native trace. */
 	status = images_script(realm, "d=null;f=null", &answer);
 	if (status != 0)
 		return status;
@@ -190,6 +246,8 @@ images_case(
 	vm_heap_collect(realm->heap);
 	found = vm_heap_find_cell(realm->heap, collection_address);
 	images_check(found != NULL, "actual native Document trace retains image cache without stack roots");
+
+	/* Reads the SameObject cache through the actual native Document getter. */
 	receiver = vm_value_cell(child->document->node.wrapper);
 	status = bind_document_images(realm, receiver, NULL, 0, &answer);
 	if (status != 0)
@@ -210,10 +268,16 @@ images_case(
 	images_check(found != NULL, "collection-only root retains actual child Document");
 	found = vm_heap_find_cell(realm->heap, member_address);
 	images_check(found != NULL, "collection-only root retains actual image member");
+
+	/* Queries the retired collection through its actual branded native getter. */
 	receiver = vm_value_cell(collection);
 	status = bind_html_collection_interface.attributes[0].getter(realm, receiver, NULL, 0, &answer);
-	if (status != 0)
+	if (status != 0) {
+		vm_heap_remove_root(realm->heap, &root);
 		return status;
+	}
+
+	/* Compares the surviving native collection count with its genuine member. */
 	expected = vm_value_int32(1);
 	images_check(answer == expected, "retired native image list remains live and branded after GC");
 

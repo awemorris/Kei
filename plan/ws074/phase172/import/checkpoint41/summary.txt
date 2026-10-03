@@ -1,0 +1,1 @@
+VM function/factory full reviews; actual parent/code/closure and reentrant-native GC repairs, default factory56/interp45/realms30/ownership27/heap31 plus retired-realm PASS, fixed JS14/14, own warning0;83 permitted forward cleanup findings and original production strings/tables preserved.

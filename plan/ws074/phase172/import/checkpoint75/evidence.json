@@ -1,0 +1,26 @@
+{
+  "queue": "q597",
+  "checkpoint": 75,
+  "source": "userland/desktop/libbrowser/html/modes.c",
+  "source_sha256": "e8408e3a076e01033815444e7c88ee84fede2a86d7fc93d2b0b38b6ccdf49cc6",
+  "baseline": "36acc57d50e59b38ecfc0526a6f088939481c580",
+  "reviewed": 194,
+  "total": 209,
+  "remaining": 15,
+  "source_changed": false,
+  "whole_host_build": "checkpoint73 whole-host-build exit0 warning0; unchanged production source since that build",
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 5,
+    "all": "permitted forward cleanup jumps"
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "tree-focused": "5/5 doctype, head/body, implied table rows/cells, foster parenting, template"
+  },
+  "limits": [
+    "html5lib tree corpus is not present locally; no suite coverage claim.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

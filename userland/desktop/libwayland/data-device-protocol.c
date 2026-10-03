@@ -213,6 +213,22 @@ wl_data_device_manager_destroy(
 }
 
 /*
+ * Reports the version of the wl_data_device_manager proxy.
+ */
+uint32_t
+wl_data_device_manager_get_version(
+	struct wl_data_device_manager *object)
+{
+	uint32_t version;
+
+	/* The version the manager was bound with. */
+	version = wl_proxy_get_version((struct wl_proxy *)object);
+
+	/* Succeeded: reports the bound version. */
+	return version;
+}
+
+/*
  * Sends wl_data_source.offer: one more MIME type the source has.
  */
 void

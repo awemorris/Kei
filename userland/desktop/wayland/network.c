@@ -26,19 +26,19 @@
  * turns the Wi-Fi on or off.  A click elsewhere, or Esc, closes the menu.
  * Opening the menu asks for a scan.
  *
- * libkeiland carries one request at a time.  A switch or a network clicked
+ * libkeiland-backend carries one request at a time.  A switch or a network clicked
  * while another request (the menu's own scan, usually) is still out waits
  * in one slot and is sent when that one is answered, rather than being
  * refused with "busy".
  *
- * All of it comes through libkeiland (keiland_network_*): zdesktop never
+ * All of it comes through libkeiland-backend (kl_backend_network_*): zdesktop never
  * speaks networkd's protocol.  Nothing here waits for the daemon; each tick
  * reads what has arrived.
  */
 
 #include "glass.h"
 
-#include <keiland.h>
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -70,7 +70,7 @@
 #define NETWORK_MENU_RADIUS	12.0f
 
 /* The most rows the menu has: the switch, the state, the networks, the wired line, disconnect, a message. */
-#define NETWORK_ROWS_MAX	(KEILAND_NETWORK_SCAN_MAX + 8)
+#define NETWORK_ROWS_MAX	(KL_BACKEND_NETWORK_SCAN_MAX + 8)
 
 /* The kinds of row. */
 enum network_row_kind {
@@ -96,7 +96,7 @@ struct network_row {
 };
 
 /*
- * The network's side of the system bar: the watch libkeiland keeps (NULL
+ * The network's side of the system bar: the watch libkeiland-backend keeps (NULL
  * until the first tick of the desktop, and while it cannot be made), the
  * state and scan last read from it, whether the menu is open and where,
  * its rows, where the icon was last drawn, the network last asked to be
@@ -108,17 +108,17 @@ struct network_row {
  * join_after_profiles is set while the daemon is being told the saved
  * networks changed, so that its answer sends the join of key_ssid.
  *
- * The waiting slot: pending_request (KEILAND_NETWORK_REQUEST_NONE when
+ * The waiting slot: pending_request (KL_BACKEND_NETWORK_REQUEST_NONE when
  * empty) and pending_ssid, sent when the outstanding request is answered.
  *
  * It lives as long as zdesktop; the menu's rows are laid out again each
  * time the menu is drawn, so they always show the state last read.
  */
 struct network_view {
-	struct keiland_network *watch;
+	struct kl_backend_network *watch;
 	unsigned opened;
-	struct keiland_network_state state;
-	struct keiland_network_ap scan[KEILAND_NETWORK_SCAN_MAX];
+	struct kl_backend_network_state state;
+	struct kl_backend_network_ap scan[KL_BACKEND_NETWORK_SCAN_MAX];
 	size_t scan_count;
 	unsigned open;
 	int32_t menu_x;
@@ -133,14 +133,14 @@ struct network_view {
 	int32_t icon_height;
 	unsigned icon_logged;
 	char failure[96];
-	char joining[KEILAND_NETWORK_SSID_MAX];
+	char joining[KL_BACKEND_NETWORK_SSID_MAX];
 	unsigned key_open;
-	char key_ssid[KEILAND_NETWORK_SSID_MAX];
+	char key_ssid[KL_BACKEND_NETWORK_SSID_MAX];
 	char key[NETWORK_KEY_MAX + 1U];
 	size_t key_length;
 	unsigned join_after_profiles;
 	unsigned pending_request;
-	char pending_ssid[KEILAND_NETWORK_SSID_MAX];
+	char pending_ssid[KL_BACKEND_NETWORK_SSID_MAX];
 };
 
 /*
@@ -170,7 +170,7 @@ static void network_open_menu(struct zwl_server *server);
 static void network_close_menu(struct zwl_server *server, const char *via);
 static void network_layout(struct zwl_server *server);
 static void network_add_row(enum network_row_kind kind, const char *text, int32_t height, unsigned ap);
-static void network_state_text(const struct keiland_network_state *state, char *text, size_t size);
+static void network_state_text(const struct kl_backend_network_state *state, char *text, size_t size);
 static void network_act(struct zwl_server *server, const struct network_row *row);
 static void network_request(struct zwl_server *server, unsigned request, const char *ssid);
 static const struct network_row *network_row_at(int32_t x, int32_t y, int32_t *top);
@@ -206,10 +206,10 @@ zwl_network_tick(
 	unsigned request;
 	int error;
 
-	/* The watch, once (libkeiland connects to the daemon when it can). */
+	/* The watch, once (libkeiland-backend connects to the daemon when it can). */
 	if (!network_view.opened) {
 		network_view.opened = 1;
-		network_view.watch = keiland_network_open();
+		network_view.watch = kl_backend_network_open();
 		network_view.icon_x = -1;
 	}
 
@@ -218,27 +218,27 @@ zwl_network_tick(
 		return;
 
 	/* What arrived. */
-	(void)keiland_network_update(network_view.watch, &changed);
+	(void)kl_backend_network_update(network_view.watch, &changed);
 	if (changed == 0)
 		return;
 
 	/* A new state redraws the icon (and the menu). */
-	if ((changed & KEILAND_NETWORK_CHANGED_STATE) != 0) {
-		keiland_network_get_state(network_view.watch, &network_view.state);
+	if ((changed & KL_BACKEND_NETWORK_CHANGED_STATE) != 0) {
+		kl_backend_network_get_state(network_view.watch, &network_view.state);
 		network_log_state();
 	}
 
 	/* A new scan redraws the menu's networks. */
-	if ((changed & KEILAND_NETWORK_CHANGED_SCAN) != 0) {
-		network_view.scan_count = keiland_network_get_scan(network_view.watch, network_view.scan, KEILAND_NETWORK_SCAN_MAX);
-		if (network_view.scan_count > KEILAND_NETWORK_SCAN_MAX)
-			network_view.scan_count = KEILAND_NETWORK_SCAN_MAX;
+	if ((changed & KL_BACKEND_NETWORK_CHANGED_SCAN) != 0) {
+		network_view.scan_count = kl_backend_network_get_scan(network_view.watch, network_view.scan, KL_BACKEND_NETWORK_SCAN_MAX);
+		if (network_view.scan_count > KL_BACKEND_NETWORK_SCAN_MAX)
+			network_view.scan_count = KL_BACKEND_NETWORK_SCAN_MAX;
 		printf("ZWL NETWORK scan count=%u\n", (unsigned)network_view.scan_count);
 	}
 
 	/* A request that finished: its failure said, and what waited for it sent. */
-	if ((changed & KEILAND_NETWORK_CHANGED_DONE) != 0) {
-		request = keiland_network_get_request(network_view.watch, &error);
+	if ((changed & KL_BACKEND_NETWORK_CHANGED_DONE) != 0) {
+		request = kl_backend_network_get_request(network_view.watch, &error);
 		printf("ZWL NETWORK done request=%s error=%d\n", network_request_name(request), error);
 		network_finished(server, request, error);
 	}
@@ -259,7 +259,7 @@ zwl_network_draw_icon(
 	const float *ink)
 {
 	static const float blue[4] = { 0.25f, 0.52f, 0.98f, 0.28f };
-	const struct keiland_network_state *state;
+	const struct kl_backend_network_state *state;
 	unsigned lit;
 	unsigned index;
 	int differs;
@@ -280,13 +280,13 @@ zwl_network_draw_icon(
 
 	/* A wired connection is the tree. */
 	state = &network_view.state;
-	if (state->connected && state->kind == KEILAND_NETWORK_WIRED) {
+	if (state->connected && state->kind == KL_BACKEND_NETWORK_WIRED) {
 		network_draw_wired(server, command, x, ink);
 		return;
 	}
 
 	/* A connected Wi-Fi is as many dark bars as its signal is strong (all without a scan of it). */
-	if (state->connected && state->kind == KEILAND_NETWORK_WIFI) {
+	if (state->connected && state->kind == KL_BACKEND_NETWORK_WIFI) {
 		lit = 4;
 		for (index = 0; index < network_view.scan_count; index++) {
 			differs = strcmp(network_view.scan[index].ssid, state->ssid);
@@ -301,7 +301,7 @@ zwl_network_draw_icon(
 
 	/* Anything else is pale bars; Wi-Fi that is off is struck through. */
 	network_draw_bars(server, command, x, 23, 0, ink, 0.30f);
-	if (state->reachable && state->wifi == KEILAND_WIFI_OFF)
+	if (state->reachable && state->wifi == KL_BACKEND_WIFI_OFF)
 		glass_draw_solid(server, command, (float)(x - 2), 15.0f, 22.0f, 2.0f, 1.0f, ink);
 }
 
@@ -496,11 +496,11 @@ network_open_menu(
 	printf("ZWL NETWORK open\n");
 
 	/* A radio that is on is asked what it sees. */
-	if (network_view.state.wifi == KEILAND_WIFI_ABSENT)
+	if (network_view.state.wifi == KL_BACKEND_WIFI_ABSENT)
 		return;
-	if (network_view.state.wifi == KEILAND_WIFI_OFF)
+	if (network_view.state.wifi == KL_BACKEND_WIFI_OFF)
 		return;
-	network_request(server, KEILAND_NETWORK_REQUEST_SCAN, NULL);
+	network_request(server, KL_BACKEND_NETWORK_REQUEST_SCAN, NULL);
 }
 
 /* Closes the menu. */
@@ -526,7 +526,7 @@ static void
 network_layout(
 	struct zwl_server *server)
 {
-	const struct keiland_network_state *state;
+	const struct kl_backend_network_state *state;
 	char text[96];
 	unsigned request;
 	unsigned index;
@@ -538,7 +538,7 @@ network_layout(
 	network_view.row_count = 0;
 
 	/* The Wi-Fi's switch, with its state under it. */
-	if (state->wifi != KEILAND_WIFI_ABSENT && state->reachable) {
+	if (state->wifi != KL_BACKEND_WIFI_ABSENT && state->reachable) {
 		network_add_row(NETWORK_ROW_SWITCH, "Wi-Fi", NETWORK_ROW_HEIGHT, 0);
 		network_state_text(state, text, sizeof(text));
 		network_add_row(NETWORK_ROW_NOTE, text, NETWORK_NOTE_HEIGHT, 0);
@@ -548,12 +548,12 @@ network_layout(
 	}
 
 	/* The networks, while the Wi-Fi is on. */
-	if (state->reachable && state->wifi != KEILAND_WIFI_ABSENT && state->wifi != KEILAND_WIFI_OFF) {
+	if (state->reachable && state->wifi != KL_BACKEND_WIFI_ABSENT && state->wifi != KL_BACKEND_WIFI_OFF) {
 		network_add_row(NETWORK_ROW_SEPARATOR, "", NETWORK_SEPARATOR, 0);
 
 		/* A scan on its way, or one that found nothing, says so. */
-		request = keiland_network_get_request(network_view.watch, &error);
-		if (request == KEILAND_NETWORK_REQUEST_SCAN && network_view.scan_count == 0) {
+		request = kl_backend_network_get_request(network_view.watch, &error);
+		if (request == KL_BACKEND_NETWORK_REQUEST_SCAN && network_view.scan_count == 0) {
 			network_add_row(NETWORK_ROW_NOTE, "Looking for networks...", NETWORK_NOTE_HEIGHT, 0);
 		} else if (network_view.scan_count == 0) {
 			network_add_row(NETWORK_ROW_NOTE, "No networks found", NETWORK_NOTE_HEIGHT, 0);
@@ -585,7 +585,7 @@ network_layout(
 	network_add_row(NETWORK_ROW_WIRED, text, NETWORK_ROW_HEIGHT, 0);
 
 	/* Leaving the Wi-Fi network it is on. */
-	if (state->wifi == KEILAND_WIFI_CONNECTED || state->wifi == KEILAND_WIFI_CONNECTING) {
+	if (state->wifi == KL_BACKEND_WIFI_CONNECTED || state->wifi == KL_BACKEND_WIFI_CONNECTING) {
 		(void)snprintf(text, sizeof(text), "Disconnect from %s", state->ssid);
 		network_add_row(NETWORK_ROW_DISCONNECT, text, NETWORK_ROW_HEIGHT, 0);
 	}
@@ -643,7 +643,7 @@ network_add_row(
 /* Writes the line under the switch: what the Wi-Fi is doing, or why there is none. */
 static void
 network_state_text(
-	const struct keiland_network_state *state,
+	const struct kl_backend_network_state *state,
 	char *text,
 	size_t size)
 {
@@ -655,19 +655,19 @@ network_state_text(
 
 	/* The Wi-Fi's own state. */
 	switch (state->wifi) {
-	case KEILAND_WIFI_ABSENT:
+	case KL_BACKEND_WIFI_ABSENT:
 		(void)snprintf(text, size, "No Wi-Fi hardware");
 		break;
-	case KEILAND_WIFI_OFF:
+	case KL_BACKEND_WIFI_OFF:
 		(void)snprintf(text, size, "Wi-Fi is off");
 		break;
-	case KEILAND_WIFI_SEARCHING:
+	case KL_BACKEND_WIFI_SEARCHING:
 		(void)snprintf(text, size, "Searching for a known network");
 		break;
-	case KEILAND_WIFI_CONNECTING:
+	case KL_BACKEND_WIFI_CONNECTING:
 		(void)snprintf(text, size, "Joining %s...", state->ssid);
 		break;
-	case KEILAND_WIFI_CONNECTED:
+	case KL_BACKEND_WIFI_CONNECTED:
 		(void)snprintf(text, size, "Connected to %s", state->ssid);
 		break;
 	default:
@@ -688,16 +688,16 @@ network_act(
 	switch (row->kind) {
 	case NETWORK_ROW_SWITCH:
 		/* Off turns on, anything else turns off. */
-		wanted = KEILAND_NETWORK_REQUEST_WIFI_OFF;
-		if (network_view.state.wifi == KEILAND_WIFI_OFF)
-			wanted = KEILAND_NETWORK_REQUEST_WIFI_ON;
+		wanted = KL_BACKEND_NETWORK_REQUEST_WIFI_OFF;
+		if (network_view.state.wifi == KL_BACKEND_WIFI_OFF)
+			wanted = KL_BACKEND_NETWORK_REQUEST_WIFI_ON;
 		network_request(server, wanted, NULL);
 		break;
 	case NETWORK_ROW_AP:
 		network_choose_ap(server, row->ap);
 		break;
 	case NETWORK_ROW_DISCONNECT:
-		network_request(server, KEILAND_NETWORK_REQUEST_DISCONNECT, NULL);
+		network_request(server, KL_BACKEND_NETWORK_REQUEST_DISCONNECT, NULL);
 		break;
 	default:
 		/* The notes, the separators and the wired line only show. */
@@ -705,7 +705,7 @@ network_act(
 	}
 }
 
-/* Sends a request through libkeiland, and says in the menu when it cannot be sent. */
+/* Sends a request through libkeiland-backend, and says in the menu when it cannot be sent. */
 static void
 network_request(
 	struct zwl_server *server,
@@ -724,19 +724,19 @@ network_request(
 		(void)snprintf(network_view.joining, sizeof(network_view.joining), "%s", ssid);
 
 	/* The request; the answer comes through the ticks. */
-	error = keiland_network_request(network_view.watch, request, ssid);
+	error = kl_backend_network_request(network_view.watch, request, ssid);
 	printf("ZWL NETWORK request %s ssid=%s error=%d\n", network_request_name(request), network_view.joining, error);
 	server->dirty = 1;
 
 	/* A request behind another one waits for its answer (a scan is not kept). */
-	if (error == EBUSY && request != KEILAND_NETWORK_REQUEST_SCAN) {
+	if (error == EBUSY && request != KL_BACKEND_NETWORK_REQUEST_SCAN) {
 		network_view.pending_request = request;
 		(void)snprintf(network_view.pending_ssid, sizeof(network_view.pending_ssid), "%s", network_view.joining);
 		return;
 	}
 
 	/* A request that could not even be sent is said in the menu. */
-	if (error != 0 && request != KEILAND_NETWORK_REQUEST_SCAN)
+	if (error != 0 && request != KL_BACKEND_NETWORK_REQUEST_SCAN)
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not %s (%s)", network_request_name(request), strerror(error));
 }
 
@@ -798,15 +798,15 @@ static void
 network_log_state(
 	void)
 {
-	const struct keiland_network_state *state;
+	const struct kl_backend_network_state *state;
 	const char *kind;
 
 	/* What carries the connection. */
 	state = &network_view.state;
 	kind = "none";
-	if (state->kind == KEILAND_NETWORK_WIRED)
+	if (state->kind == KL_BACKEND_NETWORK_WIRED)
 		kind = "wired";
-	if (state->kind == KEILAND_NETWORK_WIFI)
+	if (state->kind == KL_BACKEND_NETWORK_WIFI)
 		kind = "wifi";
 
 	/* One line. */
@@ -914,7 +914,7 @@ network_draw_row(
 	static const float line[4] = { 0.12f, 0.16f, 0.24f, 0.16f };
 	static const float field[4] = { 1.0f, 1.0f, 1.0f, 0.95f };
 	static const float frame[4] = { 0.25f, 0.52f, 0.98f, 0.70f };
-	const struct keiland_network_ap *ap;
+	const struct kl_backend_network_ap *ap;
 	char stars[NETWORK_KEY_MAX + 2U];
 	size_t count;
 	float ink[4];
@@ -953,7 +953,7 @@ network_draw_row(
 	/* The switch's row: its label and the switch at the right. */
 	if (row->kind == NETWORK_ROW_SWITCH) {
 		glass_draw_text(server, command, SIZE_TITLE, left + 14, baseline + 1, row->text, 160, ink);
-		network_draw_switch(server, command, right, middle, network_view.state.wifi != KEILAND_WIFI_OFF);
+		network_draw_switch(server, command, right, middle, network_view.state.wifi != KL_BACKEND_WIFI_OFF);
 		return;
 	}
 
@@ -961,7 +961,7 @@ network_draw_row(
 	if (row->kind == NETWORK_ROW_AP) {
 		ap = &network_view.scan[row->ap];
 		differs = strcmp(ap->ssid, network_view.state.ssid);
-		if (network_view.state.wifi == KEILAND_WIFI_CONNECTED && differs == 0) {
+		if (network_view.state.wifi == KL_BACKEND_WIFI_CONNECTED && differs == 0) {
 			/* The check mark, or a small square without the glyph. */
 			present = glass_glyph_advance(server, SIZE_BAR, GLASS_CHECK_GLYPH);
 			if (present > 0) {
@@ -1078,17 +1078,17 @@ network_request_name(
 {
 	/* Each request's verb. */
 	switch (request) {
-	case KEILAND_NETWORK_REQUEST_SCAN:
+	case KL_BACKEND_NETWORK_REQUEST_SCAN:
 		return "scan";
-	case KEILAND_NETWORK_REQUEST_JOIN:
+	case KL_BACKEND_NETWORK_REQUEST_JOIN:
 		return "join";
-	case KEILAND_NETWORK_REQUEST_DISCONNECT:
+	case KL_BACKEND_NETWORK_REQUEST_DISCONNECT:
 		return "disconnect";
-	case KEILAND_NETWORK_REQUEST_WIFI_ON:
+	case KL_BACKEND_NETWORK_REQUEST_WIFI_ON:
 		return "turn Wi-Fi on";
-	case KEILAND_NETWORK_REQUEST_WIFI_OFF:
+	case KL_BACKEND_NETWORK_REQUEST_WIFI_OFF:
 		return "turn Wi-Fi off";
-	case KEILAND_NETWORK_REQUEST_PROFILES:
+	case KL_BACKEND_NETWORK_REQUEST_PROFILES:
 		return "save the key";
 	default:
 		break;
@@ -1105,15 +1105,15 @@ network_wifi_name(
 {
 	/* Each state's name. */
 	switch (wifi) {
-	case KEILAND_WIFI_OFF:
+	case KL_BACKEND_WIFI_OFF:
 		return "off";
-	case KEILAND_WIFI_SEARCHING:
+	case KL_BACKEND_WIFI_SEARCHING:
 		return "searching";
-	case KEILAND_WIFI_CONNECTING:
+	case KL_BACKEND_WIFI_CONNECTING:
 		return "connecting";
-	case KEILAND_WIFI_CONNECTED:
+	case KL_BACKEND_WIFI_CONNECTED:
 		return "connected";
-	case KEILAND_WIFI_DISCONNECTED:
+	case KL_BACKEND_WIFI_DISCONNECTED:
 		return "disconnected";
 	default:
 		break;
@@ -1133,7 +1133,7 @@ network_choose_ap(
 	struct zwl_server *server,
 	unsigned ap)
 {
-	const struct keiland_network_ap *chosen;
+	const struct kl_backend_network_ap *chosen;
 	int saved;
 
 	/* The network as the scan last reported it. */
@@ -1142,7 +1142,7 @@ network_choose_ap(
 	/* A network with a saved key, or one that asks for none, is joined. */
 	saved = network_key_saved(chosen->ssid);
 	if (saved || !chosen->secured) {
-		network_request(server, KEILAND_NETWORK_REQUEST_JOIN, chosen->ssid);
+		network_request(server, KL_BACKEND_NETWORK_REQUEST_JOIN, chosen->ssid);
 		return;
 	}
 
@@ -1155,15 +1155,15 @@ static int
 network_key_saved(
 	const char *ssid)
 {
-	char saved[KEILAND_NETWORK_SCAN_MAX][KEILAND_NETWORK_SSID_MAX];
+	char saved[KL_BACKEND_NETWORK_SCAN_MAX][KL_BACKEND_NETWORK_SSID_MAX];
 	size_t count;
 	size_t index;
 	int differs;
 
 	/* The networks the user has saved (read from the store, not the daemon). */
-	count = keiland_network_get_saved(saved, KEILAND_NETWORK_SCAN_MAX);
-	if (count > KEILAND_NETWORK_SCAN_MAX)
-		count = KEILAND_NETWORK_SCAN_MAX;
+	count = kl_backend_network_get_saved(saved, KL_BACKEND_NETWORK_SCAN_MAX);
+	if (count > KL_BACKEND_NETWORK_SCAN_MAX)
+		count = KL_BACKEND_NETWORK_SCAN_MAX;
 
 	/* Looks for this one among them. */
 	for (index = 0; index < count; index++) {
@@ -1280,7 +1280,7 @@ network_key_submit(
 	}
 
 	/* The key, saved in the user's own store. */
-	error = keiland_network_save_key(network_view.key_ssid, network_view.key);
+	error = kl_backend_network_save_key(network_view.key_ssid, network_view.key);
 	network_key_wipe();
 	if (error != 0) {
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not save the key (%s)", strerror(error));
@@ -1294,7 +1294,7 @@ network_key_submit(
 	network_view.key_open = 0;
 	network_view.join_after_profiles = 1;
 	(void)snprintf(network_view.joining, sizeof(network_view.joining), "%s", network_view.key_ssid);
-	network_request(server, KEILAND_NETWORK_REQUEST_PROFILES, NULL);
+	network_request(server, KL_BACKEND_NETWORK_REQUEST_PROFILES, NULL);
 }
 
 /* Wipes the key field's characters, every byte of it. */
@@ -1332,14 +1332,14 @@ network_finished(
 	network_view.failure[0] = '\0';
 
 	/* The daemon has the new key: the join follows (the slot waits for it). */
-	if (request == KEILAND_NETWORK_REQUEST_PROFILES && network_view.join_after_profiles) {
+	if (request == KL_BACKEND_NETWORK_REQUEST_PROFILES && network_view.join_after_profiles) {
 		network_view.join_after_profiles = 0;
-		network_request(server, KEILAND_NETWORK_REQUEST_JOIN, network_view.key_ssid);
+		network_request(server, KL_BACKEND_NETWORK_REQUEST_JOIN, network_view.key_ssid);
 		return;
 	}
 
 	/* A join of a network that asks for a key, without one, asks for it. */
-	if (error == ENOENT && request == KEILAND_NETWORK_REQUEST_JOIN) {
+	if (error == ENOENT && request == KL_BACKEND_NETWORK_REQUEST_JOIN) {
 		for (index = 0; index < network_view.scan_count; index++) {
 			/* The scan's entry of the network, when it asks for a key. */
 			differs = strcmp(network_view.scan[index].ssid, network_view.joining);
@@ -1351,22 +1351,22 @@ network_finished(
 		if (!network_view.key_open)
 			(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not join %s: no saved key", network_view.joining);
 	} else if (error == EPERM &&
-	    request == KEILAND_NETWORK_REQUEST_JOIN &&
-	    network_view.state.wifi == KEILAND_WIFI_OFF) {
+	    request == KL_BACKEND_NETWORK_REQUEST_JOIN &&
+	    network_view.state.wifi == KL_BACKEND_WIFI_OFF) {
 		/* networkd refuses a join while Wi-Fi is off. */
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Wi-Fi is off; turn it on to join");
 	} else if (error == EPERM) {
 		/* Only root and the network group may control Wi-Fi (2026-10-02, ws005-p019). */
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "This account may not control Wi-Fi");
-	} else if (error != 0 && request != KEILAND_NETWORK_REQUEST_SCAN) {
+	} else if (error != 0 && request != KL_BACKEND_NETWORK_REQUEST_SCAN) {
 		/* Anything else that failed says the errno's text. */
 		(void)snprintf(network_view.failure, sizeof(network_view.failure), "Could not %s (%s)", network_request_name(request), strerror(error));
 	}
 
 	/* What waited in the slot is sent now. */
 	waiting = network_view.pending_request;
-	if (waiting != KEILAND_NETWORK_REQUEST_NONE) {
-		network_view.pending_request = KEILAND_NETWORK_REQUEST_NONE;
+	if (waiting != KL_BACKEND_NETWORK_REQUEST_NONE) {
+		network_view.pending_request = KL_BACKEND_NETWORK_REQUEST_NONE;
 
 		/* A join names its network; the other requests take none. */
 		if (network_view.pending_ssid[0] != '\0') {

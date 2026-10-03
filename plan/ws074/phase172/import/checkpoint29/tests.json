@@ -1,0 +1,79 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/collections.js"
+    ],
+    "exit": 0,
+    "stdout_file": "collections.stdout",
+    "stderr_file": "collections.stderr",
+    "expected_file": "plan/ws074/tests/js/collections.expected",
+    "expected_equal": true,
+    "expected_lines": 46
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/regexp.js"
+    ],
+    "exit": 0,
+    "stdout_file": "regexp.stdout",
+    "stderr_file": "regexp.stderr",
+    "expected_file": "plan/ws074/tests/js/regexp.expected",
+    "expected_equal": true,
+    "expected_lines": 30
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "plan/ws074/tests/js/date.js"
+    ],
+    "exit": 0,
+    "stdout_file": "date.stdout",
+    "stderr_file": "date.stderr",
+    "expected_file": "plan/ws074/tests/js/date.expected",
+    "expected_equal": true,
+    "expected_lines": 31
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/browser",
+      "--js",
+      "build/browser3-p172/review29/json-error-paths.js"
+    ],
+    "exit": 0,
+    "stdout_file": "json-error-paths.stdout",
+    "stderr_file": "json-error-paths.stderr",
+    "expected_file": "build/browser3-p172/review29/json-error-paths.expected",
+    "expected_equal": true,
+    "expected_lines": 9
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review29/browser-lsan",
+      "--js",
+      "build/browser3-p172/review29/json-error-paths.js"
+    ],
+    "exit": 0,
+    "stdout_file": "json-error-lsan.stdout",
+    "stderr_file": "json-error-lsan.stderr",
+    "expected_equal": true,
+    "expected_lines": 9,
+    "environment": {
+      "LSAN_OPTIONS": "exitcode=23"
+    }
+  }
+]

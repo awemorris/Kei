@@ -41,8 +41,12 @@ bind_window_child_styles(
 	*engine = NULL;
 	*width = 0;
 	*height = 0;
+
+	/* A retired Window supplies no child cascade or viewport. */
 	if (window == NULL || window->detached)
 		return 0;
+
+	/* Refreshes the cascade before lending it to the page's layout observer. */
 	status = bind_style_context_engine(window, engine);
 	if (status != 0)
 		return status;
@@ -77,6 +81,8 @@ bind_style_context_engine(
 
 	/* Primary hosts and retired child Documents have no fallback cascade. */
 	*engine = NULL;
+
+	/* Only an active managed child owns this fallback cache. */
 	if (!window->owned ||
 	    window->context_depth == 0 ||
 	    window->detached)
@@ -86,6 +92,10 @@ bind_style_context_engine(
 	error = bind_frame_viewport(window);
 	if (error != 0)
 		return error;
+
+	/* The parent's geometry callback may have retired this managed child. */
+	if (window->detached)
+		return 0;
 
 	/* Reuses only a cache built from the current Document generation. */
 	context = window->style_context;
@@ -207,9 +217,11 @@ bind_style_context_compute(
 		parent = inherited;
 	}
 
-	/* Temporary traversal storage owns no strings or VM cells. */
+	/* Releases scratch storage without releasing the engine-backed style pointers. */
 	free(inherited);
 	wb_vector_release(&ancestors);
+
+	/* Propagates a failed ancestor computation after releasing its scratch storage. */
 	if (error != 0)
 		return error;
 
@@ -316,8 +328,8 @@ style_context_add(
 	/* A non-memory parse failure contributes an empty sheet, as on primary pages. */
 	sheet = NULL;
 	error = css_sheet_create(&sheet, element->node.document->heap, units.data, units.length);
-	wb_units_release(&units);
 	if (error != 0) {
+		wb_units_release(&units);
 		css_sheet_destroy(sheet);
 
 		/* Allocation failure must prevent publication of an incomplete cascade. */
@@ -327,6 +339,9 @@ style_context_add(
 		/* A syntactically unusable sheet contributes no author rules. */
 		return 0;
 	}
+
+	/* The parsed sheet owns its source data independently of this temporary buffer. */
+	wb_units_release(&units);
 
 	/* Transfers ownership before the engine starts borrowing the parsed sheet. */
 	error = wb_vector_push(&context->sheets, &sheet);
@@ -364,6 +379,8 @@ style_context_media(
 
 	/* A missing media attribute imposes no condition on the sheet. */
 	*media = NULL;
+
+	/* An absent attribute selects the unconditional author-sheet media list. */
 	attribute = dom_attribute_ascii(element, "media");
 	if (attribute == NULL)
 		return 0;
@@ -381,9 +398,13 @@ style_context_media(
 
 	/* The engine keeps the parsed list in its own arena. */
 	error = css_engine_parse_media(context->engine, units.data, units.length, media);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* The arena-backed media list no longer needs the temporary attribute buffer. */
+	wb_units_release(&units);
 
 	/* Succeeded: the list is available until the context is released. */
 	return 0;

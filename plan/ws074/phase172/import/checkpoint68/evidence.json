@@ -1,0 +1,32 @@
+{
+  "queue": "q597",
+  "checkpoint": 68,
+  "source": "userland/desktop/libbrowser/page/script.c",
+  "source_sha256": "52b2dc257d2e492c566633d6c6ca0b4c014d01c2312991862c032589a0db4581",
+  "baseline": "de6d5dec9fe86b64653d1a1578c62b237aeea0ae",
+  "reviewed": 187,
+  "total": 209,
+  "remaining": 22,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "tests": {
+    "resource": "105/105",
+    "settle": "14 runtime + 8 diagnostic",
+    "write": "late/bound/gc PASS",
+    "frame-load": "52/52",
+    "dom-tests": "23/23",
+    "missing external script": "diagnostic + later inline PASS"
+  },
+  "limits": [
+    "The first resource runner invocation used browser rather than host-resource, exited2 and was corrected; only the corrected105/105 result counts.",
+    "No allocator fault injection for diagnostic construction.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

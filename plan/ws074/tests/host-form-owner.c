@@ -77,12 +77,18 @@ main(
 		return 2;
 	}
 
-	/* Only this embedding exposes the actual C helpers to its bounded script. */
+	/* Only this embedding exposes actual C helpers to the ordinary-tree script. */
 	status = owner_install(realm);
-	if (status == 0)
-		status = owner_script(realm);
+	if (status != 0)
+		goto cleanup;
 
-	/* Manual embedding ownership is released independently of script success. */
+	/* Run the bounded ownership script only after every native entry point is installed. */
+	status = owner_script(realm);
+	if (status != 0)
+		goto cleanup;
+
+cleanup:
+	/* The checked execution outcome precedes releasing the complete manual embedding. */
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
@@ -97,6 +103,8 @@ main(
 	printed = printf("form owner checks: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Ordinary ownership assertions remain failures after successful execution teardown. */
 	if (failures != 0)
 		return 1;
 
@@ -168,6 +176,7 @@ owner_get(
 {
 	struct dom_element *element;
 	struct dom_element *owner;
+	struct bind_window *window;
 	int status;
 
 	UNUSED_PARAMETER(receiver);
@@ -176,6 +185,8 @@ owner_get(
 	status = owner_element(realm, args, count, &element);
 	if (status != 0)
 		return status;
+
+	/* Query the current native association after actual Element branding. */
 	owner = dom_form_owner(element);
 	if (owner == NULL) {
 		*result = VM_VALUE_NULL;
@@ -183,7 +194,8 @@ owner_get(
 	}
 
 	/* The normal wrapper selects the actual owner Document's relevant realm. */
-	status = bind_wrap(bind_window_of(realm), &owner->node, result);
+	window = bind_window_of(realm);
+	status = bind_wrap(window, &owner->node, result);
 	if (status != 0)
 		return status;
 
@@ -210,6 +222,8 @@ owner_listed(
 	status = owner_element(realm, args, count, &element);
 	if (status != 0)
 		return status;
+
+	/* The production category query uses the checked native Element. */
 	listed = dom_form_listed(element);
 	*result = vm_value_boolean(listed);
 
@@ -236,6 +250,8 @@ owner_member(
 	status = owner_element(realm, args, count, &element);
 	if (status != 0)
 		return status;
+
+	/* Controls membership includes the actual current input type and content state. */
 	member = dom_form_control_member(element);
 	*result = vm_value_boolean(member);
 
@@ -252,15 +268,23 @@ owner_element(
 	struct dom_element **out)
 {
 	struct dom_node *node;
+	vm_value argument;
 	int status;
 
 	/* The fixture uses the same argument brand helper as production DOM methods. */
-	status = bind_argument_node(realm, js_argument(args, count, 0), &node);
+	argument = js_argument(args, count, 0);
+	status = bind_argument_node(realm, argument, &node);
 	if (status != 0)
 		return status;
+
+	/* Other genuine Node kinds cannot enter an Element-specific ownership query. */
 	if (node->type != DOM_ELEMENT) {
 		status = vm_throw_type_error(realm, "Expected an actual Element.");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the fixture's brand refusal follows the existing native throw contract. */
+		return 0;
 	}
 
 	/* Succeeded: the private C query receives the actual DOM element. */
@@ -291,17 +315,24 @@ owner_script(
 
 	/* Convert complete fixture bytes before releasing their input storage. */
 	status = wb_utf8_to_units(bytes.data, bytes.length, &units);
+	if (status != 0) {
+		wb_buffer_release(&bytes);
+		wb_units_release(&units);
+		return status;
+	}
+
+	/* Complete conversion releases input bytes before the interpreter consumes UTF-16. */
 	wb_buffer_release(&bytes);
+
+	/* The script creates and mutates every test node through existing production bindings. */
+	status = js_run_script(realm, units.data, units.length, 0, &answer, &syntax);
 	if (status != 0) {
 		wb_units_release(&units);
 		return status;
 	}
 
-	/* The script creates and mutates every test node through existing production bindings. */
-	status = js_run_script(realm, units.data, units.length, 0, &answer, &syntax);
+	/* The checked interpreter result no longer borrows converted fixture storage. */
 	wb_units_release(&units);
-	if (status != 0)
-		return status;
 
 	/* Succeeded: the actual engine executed every bounded ownership scenario. */
 	return 0;

@@ -12,6 +12,7 @@
 
 #include "html/parser.h"
 
+#include <errno.h>
 #include <string.h>
 
 static void modes_doctype(struct html_parser *p, const struct tb_token *token);
@@ -1659,10 +1660,14 @@ modes_doctype(
 	struct vm_string *public_id;
 	struct vm_string *system_id;
 	struct dom_node *doctype;
+	struct vm_cell *roots[3];
+	unsigned index;
+	unsigned registered;
 	int html_name;
 	int legacy;
 	int quirks;
 	int limited;
+	int error;
 
 	/* A DOCTYPE other than <!DOCTYPE html> (and a few legacy ones) is an error. */
 	raw = token->raw;
@@ -1674,24 +1679,71 @@ modes_doctype(
 	    (raw->has_system_id && !legacy))
 		tb_error(p);
 
+	/* Each uninterned identifier survives allocation of its successors. */
+	roots[0] = NULL;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	error = 0;
+	for (index = 0; index < 3U; index++) {
+		error = vm_heap_add_root(p->heap, &roots[index]);
+		if (error != 0)
+			goto cleanup;
+		registered++;
+	}
+
 	/* Makes the node with the name and identifiers (empty when missing). */
 	name = vm_string_from_units(p->heap, raw->name.data, raw->name.length);
-	public_id = vm_string_from_units(p->heap, raw->public_id.data, raw->public_id.length);
-	system_id = vm_string_from_units(p->heap, raw->system_id.data, raw->system_id.length);
-	if (name == NULL || public_id == NULL || system_id == NULL) {
-		p->failed = 1;
-		return;
+	if (name == NULL) {
+		error = ENOMEM;
+		goto cleanup;
 	}
+
+	/* The name remains live during later identifier construction. */
+	roots[0] = &name->cell;
+
+	/* The public identifier stays live while creating the system identifier. */
+	public_id = vm_string_from_units(p->heap, raw->public_id.data, raw->public_id.length);
+	if (public_id == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The second identifier joins the registered temporary ownership. */
+	roots[1] = &public_id->cell;
+
+	/* All three identifiers remain live until the Document owns their node. */
+	system_id = vm_string_from_units(p->heap, raw->system_id.data, raw->system_id.length);
+	if (system_id == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The final identifier remains live through native node creation. */
+	roots[2] = &system_id->cell;
 
 	/* Makes the node. */
 	doctype = dom_doctype_create(p->document, name, public_id, system_id);
 	if (doctype == NULL) {
-		p->failed = 1;
-		return;
+		error = ENOMEM;
+		goto cleanup;
 	}
 
 	/* Appends it to the document. */
 	dom_append_child(&p->document->node, doctype);
+
+cleanup:
+	/* A connected node now traces the identifiers; failures leave no node. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(p->heap, &roots[registered]);
+	}
+
+	/* A failed allocation stops this parse without exposing an incomplete node. */
+	if (error != 0) {
+		p->failed = 1;
+		return;
+	}
 
 	/* Picks the document's mode. */
 	quirks = modes_quirks(raw);

@@ -1,0 +1,7 @@
+{
+  "source": "userland/desktop/libbrowser/bind/input.c",
+  "before_sha256": "c0405f03becb556963049e495e1b736a9d561d7c550e2f7456063de360871047",
+  "after_sha256": "1d8a8856d94d5c0858f21eb27a6a7262382f7a316dcd3e6692e4d95f5fd9e1bc",
+  "C_string_literals_changed": false,
+  "public_ABI_changed": false
+}

@@ -1,0 +1,1 @@
+CSS rule model and Range deletion full reviews, final own warning0 build/native67;18 permitted shared-cleanup jumps; original CSS sources/native scripts and GC root exclusion preserved.

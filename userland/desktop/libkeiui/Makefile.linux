@@ -8,6 +8,7 @@ KEILAND_LINUX_LIBKEIUI_SOURCES := userland/desktop/libkeiui/version.c \
 	userland/desktop/libkeiui/theme.c \
 	userland/desktop/libkeiui/input.c \
 	userland/desktop/libkeiui/scroll.c \
+	userland/desktop/libkeiui/scroll-bar.c \
 	userland/desktop/libkeiui/text-touch.c \
 	userland/desktop/libkeiui/ui.c \
 	userland/desktop/libkeiui/window.c \

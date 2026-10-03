@@ -1,0 +1,91 @@
+{
+  "authority": "plan/coding-style.md section14 single forward shared cleanup",
+  "findings": 83,
+  "functions": [
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "vm_function_create_native",
+      "forward_cleanup_jumps": 8,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "vm_function_create",
+      "forward_cleanup_jumps": 8,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "vm_closure_create",
+      "forward_cleanup_jumps": 4,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "vm_construct_prototype",
+      "forward_cleanup_jumps": 2,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "vm_call",
+      "forward_cleanup_jumps": 5,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "vm_construct",
+      "forward_cleanup_jumps": 7,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "function_run_native",
+      "forward_cleanup_jumps": 1,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "function_add_prototype",
+      "forward_cleanup_jumps": 5,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/function.c",
+      "function": "function_add_generator_prototype",
+      "forward_cleanup_jumps": 3,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-vm-factory.c",
+      "function": "factory_case",
+      "forward_cleanup_jumps": 14,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-vm-factory.c",
+      "function": "factory_function_case",
+      "forward_cleanup_jumps": 22,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-vm-factory.c",
+      "function": "factory_native_case",
+      "forward_cleanup_jumps": 4,
+      "one_label": true,
+      "all_jumps_forward": true
+    }
+  ],
+  "other_findings": 0
+}

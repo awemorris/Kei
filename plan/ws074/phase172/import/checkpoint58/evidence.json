@@ -1,0 +1,35 @@
+{
+  "queue": "q597",
+  "checkpoint": 58,
+  "source": "userland/desktop/libbrowser/page/sheets.c",
+  "source_sha256": "7546761547f3f715fa6f658eda800156a6b079231ccadac6b09e1418601c38d9",
+  "baseline": "9e11c9f98a05b0a16b2a9f1581249577f56d298c",
+  "reviewed": 178,
+  "total": 209,
+  "remaining": 31,
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror, exit0 warning0",
+  "style_checker": {
+    "exit": 0,
+    "findings": 0
+  },
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "page_probes": {
+    "style-sheet-probe": 22,
+    "style-sheet-mutation-probe": 23,
+    "child-style-probe": 30
+  },
+  "tests": {
+    "host-style-sheet": "native style source: 21/21 passed",
+    "host-cssom": "native CSSOM: 12/12 passed",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "http_async": "19/19 including async-sheets",
+  "limits": [
+    "Only sheets.c is newly full-reviewed; original whole p172 gates and31 production files remain.",
+    "OOM injection was not run; async URL-resolution failure cleanup was reviewed manually.",
+    "No target/boot/ASan or current Acid3 pixel comparison."
+  ]
+}

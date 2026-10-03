@@ -1,0 +1,12 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/review49/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout_file": "host-frame-lifetime.stdout",
+    "stderr_file": "host-frame-lifetime.stderr"
+  }
+]

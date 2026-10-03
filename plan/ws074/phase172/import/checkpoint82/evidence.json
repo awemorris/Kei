@@ -1,0 +1,32 @@
+{
+  "queue": "q597",
+  "checkpoint": 82,
+  "source": "userland/desktop/libbrowser/vm/interpreter.c",
+  "source_sha256": "d4ba844dca1e226e8ec4fce22808fd10347f55a829b2a4723cf8d799b7129fc5",
+  "baseline": "316752f334411d9bd5264c0b6dc045c764731186",
+  "reviewed": 201,
+  "total": 209,
+  "remaining": 8,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 13,
+    "classification": "permitted forward cleanup jumps only"
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "object": "100 checks, 0 failed",
+    "vm-factory": "56/56 passed",
+    "array-length": "4/4 passed",
+    "js-tests": "js-tests 14/14",
+    "dom-tests": "dom-tests 23/23"
+  },
+  "limits": [
+    "No forced collector in all new arguments/super/rest ownership windows; static lifetime and cleanup reviewed.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

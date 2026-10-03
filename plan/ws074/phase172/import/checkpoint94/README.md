@@ -1,0 +1,5 @@
+# q598 checkpoint94 / CSS values full source review
+
+Fully reviewed `css/values.c` against full C/component rules and Guardrail: property and keyword tables, shorthand expansion, color/background/calc/grid parsing, bounds and publication. Invalid trailing tokens after a named, hex or rgb/rgba color now reject the entire color. `css_parse_value` parses into a bounded 16-slot scratch array and copies only when the caller's stated capacity fits. The current maximum supported shorthand expansion is twelve declarations. Existing C string literals/public ABI are unchanged. All209 hashes match; reviewed208/209, cascade.c remains.
+
+GCC14.2 whole/scoped build exit0/warning0, five CSS host binaries128/128, JS14/14 and DOM23/23 pass. Focused invalid-color page confirms three invalid forms are discarded and a valid rgb form retained. Style checker reports zero findings; clang-format19.1.7 ran on a copy. No independent capacity-failure injection was run. Whole p172 remains in-progress pending cascade.c and original final gates; p100 remains blocked/unselected. GitHub Issue/Project publication is deferred.

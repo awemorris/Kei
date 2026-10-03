@@ -1051,7 +1051,12 @@ socket_poll_common(
 		result |= POLLHUP;
 	if (!socket->write_shutdown && socket->lifecycle == SOCKET_OPEN)
 		result |= events & (POLLOUT | POLLWRNORM);
-	else if (socket->write_shutdown)
+
+	/*
+	 * A socket being closed reports an error.  This end's own write
+	 * shutdown only withholds POLLOUT; it is not an error (BUG-149).
+	 */
+	if (socket->lifecycle != SOCKET_OPEN)
 		result |= POLLERR;
 
 	spin_unlock_irqrestore(&socket->lock, irq);

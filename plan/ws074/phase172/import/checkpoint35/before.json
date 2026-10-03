@@ -1,0 +1,23 @@
+[
+  {
+    "path": "plan/ws074/tests/host-xml-binding.c",
+    "sha256": "e5c759e3b8cc67540712cf2d67e37de38112d02f400373c9fc570271de5b61d0",
+    "object": "host-xml-binding.o",
+    "object_path": "build/browser3-p172/review35/host-xml-binding.o",
+    "text_sha256": "cbb585a32324e264a956589e55a33e1f61f8cb70788de23458258574852adbf0"
+  },
+  {
+    "path": "plan/ws074/tests/host-document-parser.c",
+    "sha256": "8b070b77eafd9571543056ae6768366ccd46098731c85b2f2cb49f01ecd65e86",
+    "object": "host-document-parser.o",
+    "object_path": "build/browser3-p172/review35/host-document-parser.o",
+    "text_sha256": "bd7bf171d91534f4cc59ec13ad88200a436d6367eb2f62f1308b5f1859fd0309"
+  },
+  {
+    "path": "plan/ws074/tests/host-document-stream.c",
+    "sha256": "bbeb69a8d0b751ee96dcdebae1a716e81817cb51a42bd7cf2240c87f6617a89f",
+    "object": "host-document-stream.o",
+    "object_path": "build/browser3-p172/review35/host-document-stream.o",
+    "text_sha256": "7f91fed80231fbc3ce5c277cca5de0ffcd960e19c1344535153038f61fd75c7b"
+  }
+]

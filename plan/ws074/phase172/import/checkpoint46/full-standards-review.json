@@ -1,0 +1,43 @@
+{
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-xml.c",
+      "original_sha256": "182b853b5475d8d62fb367f11e7c44d175bb765c8e8f2037756b3f17e96278aa",
+      "final_sha256": "6bf20c3722cd60b2ac1c82d75fea43517cc6a8a3c329812855de169c0d491ea0",
+      "status": "reviewed-full-file",
+      "original_lines": 518,
+      "final_lines": 727
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-dom.c",
+      "original_sha256": "f5db6bc45d16a3f5904c54d2c961385d0df03aed70f83ce713ec48f528bfa106",
+      "final_sha256": "c4ee51dd77c551c10efaedee7948e9825dda7624283943d0d63db1bf24b4f0da",
+      "status": "reviewed-full-file",
+      "original_lines": 541,
+      "final_lines": 709
+    }
+  ],
+  "authoritative_rules": {
+    "plan/guardrail.md": "dd925ec1aac78a8ec6cea902fa62624b2b30e9d4a97a551b4445045f87c5617a",
+    "plan/coding-style.md": "b14162f8f7ec3a1536be41de7de80f48e5d95225070d0d27b48296a6f6db4058",
+    "plan/standards/browser-component.md": "3628f0b425244074cc3fa6114790a5f82360247acd24ce607da859113ed24d97"
+  },
+  "review_coverage": [
+    "All original XML model518/projector fixture541 lines including fixed valid/invalid/unsupported corpus, pinned resources, native namespace/attribute/PI/CDATA/Unicode and actual bounded ownership observations.",
+    "Every ordinary parse/project/build/file-read call individually checked before input/model release or later fallible calls. Expected malformed/limit outcomes remain explicitly asserted; a missing resource read cannot impersonate expected XML rejection.",
+    "ANSI declarations/function ordering/explicit final Succeeded/real refusal paths/purpose paragraphs and split physical pointer loops/compound clauses reviewed.",
+    "Parser expected-result booleans and immutable unit comparisons use explicit primitive-result decisions, preserving short-circuit order; complete node/attribute/buffer shape guards precede private field reads.",
+    "Original30000 projection tree,65534/65535 records,256/257 depth,100 mutable-source lifetimes,16MiB bound and2048 heap limit retained. No test corpus shrinking, added participant root or synthetic engine hook.",
+    "Native conversion/model/heap ownership: single forward cleanup only for current parsed model, owner wrappers check results before teardown, result root acquired at original publication boundary, precise stack exclusion and final graph collection unchanged. Resource script remains native unexecuted data."
+  ],
+  "supporting_checker": {
+    "exit": 1,
+    "findings": 20,
+    "all_classified_against_full_section14": true,
+    "other_final_findings": 0
+  },
+  "limits": [
+    "No production edit, new fault switch, reference change or additional caller root.",
+    "No new allocation failure injection; original236+54 native observations all pass. Whole p17243 remaining files and original final gates remain."
+  ]
+}

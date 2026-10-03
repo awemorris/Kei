@@ -1,0 +1,9 @@
+{
+  "authority": "full C section14",
+  "findings": 53,
+  "functions": {
+    "contents_case": 30,
+    "extract_case": 23
+  },
+  "classification": "All jumps forward to each function sole cleanup, release only successfully registered construction slots; no other final findings."
+}

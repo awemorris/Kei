@@ -1,0 +1,12 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/geometry.c",
+    "sha256": "59152bffd582f729d8e9c044acca2c9dc7621f5ae69a10a423e89c8048ec34a2",
+    "object": "libbrowser_page_geometry.o",
+    "text_sha256": "e8a78dc1012d9fe352babf145c2a5993402ab858362af71da60f74fcf59a3579",
+    "final_sha256": "445dc346e410a02305f8ac928a0774e35525bbf136b3a6ecc75b9d1c2a1b5059",
+    "final_text_sha256": "9341f4e13be3a63e0a2ffcf8fe1688905c7c7413f933d6afa16ca7e5a9840149",
+    "text_equal": false,
+    "C_string_literals_equal": true
+  }
+]

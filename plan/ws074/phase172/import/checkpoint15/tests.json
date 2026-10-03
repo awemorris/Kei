@@ -1,0 +1,42 @@
+[
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-viewport"
+    ],
+    "exit": 0,
+    "stdout": "native iframe viewport: 12/12 passed\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "stdout": "frame lifetime checks: 148/148 passed\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-xml-document"
+    ],
+    "exit": 0,
+    "stdout": "XML document GC checks: 16/16 passed\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "timeout",
+      "30",
+      "build/browser3-p172/plain/host-cssom-mutation"
+    ],
+    "exit": 0,
+    "stdout": "native CSSOM mutation: 12/12 passed\n",
+    "stderr": ""
+  }
+]

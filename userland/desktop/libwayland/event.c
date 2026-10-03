@@ -283,6 +283,24 @@ wlc_event_dispatch(
 			event->delivered = 1;
 			wl_surface_callbacks->leave(data, (struct wl_surface *)proxy, (struct wl_output *)arguments[0].o);
 			return 0;
+		case 2:
+			/* An optional listener slot deliberately ignores this event. */
+			if (wl_surface_callbacks->preferred_buffer_scale == NULL)
+				return 0;
+
+			/* Delivers the scale the compositor prefers (version 6). */
+			event->delivered = 1;
+			wl_surface_callbacks->preferred_buffer_scale(data, (struct wl_surface *)proxy, arguments[0].i);
+			return 0;
+		case 3:
+			/* An optional listener slot deliberately ignores this event. */
+			if (wl_surface_callbacks->preferred_buffer_transform == NULL)
+				return 0;
+
+			/* Delivers the transform the compositor prefers (version 6). */
+			event->delivered = 1;
+			wl_surface_callbacks->preferred_buffer_transform(data, (struct wl_surface *)proxy, arguments[0].u);
+			return 0;
 		default:
 			return EPROTO;
 		}

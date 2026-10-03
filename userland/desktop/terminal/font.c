@@ -13,12 +13,21 @@
  * and stays there; the renderer samples the slot as the coverage between a
  * cell's background and foreground.  When the atlas is full, a new
  * character shows the replacement glyph's slot instead.
+ *
+ * A character the grid gives two cells (East Asian wide, or Ambiguous with
+ * View > Treat Ambiguous-Width Characters as Wide, ws128-p009) is drawn
+ * into two slots side by side, in a frame two cells wide: a glyph made for
+ * two cells fills it, a narrower one is centred in it, and box drawing and
+ * block elements are drawn twice as wide so their lines still meet the
+ * next cell's.  A character the font has no glyph for (CJK) is drawn from
+ * the fallback font when there is one.
  */
 
 #include "terminal.h"
 
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -32,9 +41,20 @@
 /* The mark of an empty place in the code point table. */
 #define FONT_EMPTY		0xffffffffU
 
-static int font_read(struct terminal_font *font, const char *path);
+/* The bit that makes a code point the key of its glyph drawn two cells wide (no code point has it). */
+#define FONT_WIDE_KEY		0x80000000U
+
+/* Box drawing and block elements, which a wide cell draws stretched so their lines join the next cell's. */
+#define FONT_STRETCH_FIRST	0x2500U
+#define FONT_STRETCH_LAST	0x259fU
+
+/* The replacement character, shown for what cannot be drawn. */
+#define FONT_REPLACEMENT	0xfffdU
+
+static int font_read(const char *path, void **data, size_t *size);
 static int font_measure(struct terminal_font *font, unsigned pixels);
-static void font_draw(struct terminal_font *font, unsigned slot, uint32_t codepoint);
+static unsigned font_lookup(struct terminal_font *font, uint32_t key, unsigned *slot);
+static void font_draw(struct terminal_font *font, unsigned slot, uint32_t codepoint, unsigned cells);
 static void font_slot_origin(const struct terminal_font *font, unsigned slot, unsigned *x, unsigned *y);
 
 /*
@@ -55,7 +75,7 @@ terminal_font_open(
 	memset(font, 0, sizeof(*font));
 
 	/* The whole file, which the face reads from for as long as it is open. */
-	error = font_read(font, path);
+	error = font_read(path, &font->data, &font->size);
 	if (error != 0)
 		return error;
 
@@ -114,8 +134,52 @@ terminal_font_resize(
 }
 
 /*
+ * Opens the fallback font, which draws the characters the font has no
+ * glyph for, at the font's size.  It is opened before the atlas is
+ * attached, so that every glyph drawn can use it.
+ *
+ * Returns 0, or an errno value with no fallback when the file cannot be
+ * read or is not a TrueType font.
+ */
+int
+terminal_font_fallback(
+	struct terminal_font *font,
+	const char *path)
+{
+	int error;
+
+	/* The whole file, which the fallback face reads from for as long as it is open. */
+	error = font_read(path, &font->fallback_data, &font->fallback_size);
+	if (error != 0)
+		return error;
+
+	/* The face over it. */
+	error = truetype_open(font->fallback_data, font->fallback_size, 0U, &font->fallback_face);
+	if (error != 0) {
+		free(font->fallback_data);
+		font->fallback_data = NULL;
+		font->fallback_face = NULL;
+		return error;
+	}
+
+	/* Drawn at the font's size. */
+	error = truetype_set_pixel_size(font->fallback_face, font->pixels_size);
+	if (error != 0) {
+		truetype_close(font->fallback_face);
+		free(font->fallback_data);
+		font->fallback_data = NULL;
+		font->fallback_face = NULL;
+		return error;
+	}
+
+	/* Succeeded: characters missing from the font come from the fallback. */
+	return 0;
+}
+
+/*
  * Gives the atlas its pixels, draws the cursor's solid block into slot 0
- * and prepares the table of drawn characters.
+ * and the replacement character two cells wide into slots 1 and 2, and
+ * prepares the table of drawn characters.
  *
  * Returns 0, or ENOMEM.
  */
@@ -138,7 +202,8 @@ terminal_font_attach(
 	font->atlas_width = width;
 	font->atlas_height = height;
 	font->slots = (width / font->cell_width) * (height / font->cell_height);
-	font->used = 1U;
+	font->used = 3U;
+	font->wide_replacement = 1U;
 
 	/* The table of drawn characters, twice as large as the slots so that it never fills. */
 	font->table_size = font->slots * 2U;
@@ -166,13 +231,16 @@ terminal_font_attach(
 			row[x] = 0xffffffffU;
 	}
 
+	/* Slots 1 and 2 are the replacement character two cells wide, for a wide character a full atlas cannot draw. */
+	font_draw(font, font->wide_replacement, FONT_REPLACEMENT, 2U);
+
 	/* Succeeded: characters can be drawn into the atlas. */
 	return 0;
 }
 
 /*
- * Returns the slot a character is drawn in, drawing it first if the atlas
- * has not got it.
+ * Returns the slot a character is drawn in, one cell wide, drawing it
+ * first if the atlas has not got it.
  */
 unsigned
 terminal_font_slot(
@@ -181,32 +249,72 @@ terminal_font_slot(
 {
 	unsigned place;
 	unsigned slot;
+	unsigned found;
 
-	/* Looks the character up, probing from its hash until it or an empty place is found. */
-	place = (codepoint * 2654435761U) % font->table_size;
-	while (font->keys[place] != FONT_EMPTY) {
-		/* A character drawn before keeps its slot. */
-		if (font->keys[place] == codepoint)
-			return font->values[place];
-		place = (place + 1U) % font->table_size;
-	}
+	/* A character drawn before keeps its slot. */
+	place = font_lookup(font, codepoint, &slot);
+	found = font->keys[place];
+	if (found == codepoint)
+		return slot;
 
 	/* A full atlas draws nothing more: the replacement character's slot, or the block, stands in. */
 	if (font->used >= font->slots) {
-		if (codepoint == 0xfffdU)
+		if (codepoint == FONT_REPLACEMENT)
 			return 0U;
-		slot = terminal_font_slot(font, 0xfffdU);
+		slot = terminal_font_slot(font, FONT_REPLACEMENT);
 		return slot;
 	}
 
 	/* A new slot for the character, drawn now and remembered. */
 	slot = font->used;
 	font->used++;
-	font_draw(font, slot, codepoint);
+	font_draw(font, slot, codepoint, 1U);
 	font->keys[place] = codepoint;
 	font->values[place] = slot;
 
 	/* Succeeded: the character's new slot. */
+	return slot;
+}
+
+/*
+ * Returns the first of the two slots side by side a character is drawn in,
+ * two cells wide, drawing it first if the atlas has not got it.
+ */
+unsigned
+terminal_font_wide_slot(
+	struct terminal_font *font,
+	uint32_t codepoint)
+{
+	unsigned per_row;
+	unsigned place;
+	unsigned slot;
+	unsigned found;
+	unsigned key;
+
+	/* A character drawn wide before keeps its slots. */
+	key = codepoint | FONT_WIDE_KEY;
+	place = font_lookup(font, key, &slot);
+	found = font->keys[place];
+	if (found == key)
+		return slot;
+
+	/* Two slots side by side must be on one row of the atlas: a row's last slot is passed over. */
+	per_row = font->atlas_width / font->cell_width;
+	if (font->used % per_row == per_row - 1U)
+		font->used++;
+
+	/* A full atlas draws nothing more: the wide replacement character stands in. */
+	if (font->used + 2U > font->slots)
+		return font->wide_replacement;
+
+	/* Two new slots for the character, drawn now and remembered. */
+	slot = font->used;
+	font->used += 2U;
+	font_draw(font, slot, codepoint, 2U);
+	font->keys[place] = key;
+	font->values[place] = slot;
+
+	/* Succeeded: the first of the character's new slots. */
 	return slot;
 }
 
@@ -218,22 +326,28 @@ void
 terminal_font_close(
 	struct terminal_font *font)
 {
-	/* The face reads from the file, so it goes first. */
+	/* The faces read from the files, so they go first. */
 	if (font->face != NULL)
 		truetype_close(font->face);
 
-	/* The file and the table. */
+	/* The fallback face, when one was opened. */
+	if (font->fallback_face != NULL)
+		truetype_close(font->fallback_face);
+
+	/* The files and the table. */
 	free(font->data);
+	free(font->fallback_data);
 	free(font->keys);
 	free(font->values);
 	memset(font, 0, sizeof(*font));
 }
 
-/* Reads the whole font file into memory the face keeps using. */
+/* Reads a whole font file into memory a face keeps using. */
 static int
 font_read(
-	struct terminal_font *font,
-	const char *path)
+	const char *path,
+	void **data,
+	size_t *size)
 {
 	struct stat status;
 	ssize_t count;
@@ -261,22 +375,24 @@ font_read(
 	}
 
 	/* The memory for all of it. */
-	font->size = (size_t)status.st_size;
-	font->data = malloc(font->size);
-	if (font->data == NULL) {
+	*size = (size_t)status.st_size;
+	*data = malloc(*size);
+	if (*data == NULL) {
 		close(descriptor);
 		return ENOMEM;
 	}
 
 	/* Reads it to the end. */
 	done = 0U;
-	while (done < font->size) {
-		count = read(descriptor, (char *)font->data + done, font->size - done);
+	while (done < *size) {
+		count = read(descriptor, (char *)*data + done, *size - done);
 		if (count <= 0) {
 			error = EIO;
 			if (count < 0)
 				error = errno;
 			close(descriptor);
+			free(*data);
+			*data = NULL;
 			return error;
 		}
 
@@ -320,6 +436,13 @@ font_measure(
 	if (glyph.advance <= 0 || metrics.line_height <= 0)
 		return EINVAL;
 
+	/* The fallback is drawn at the same size; one that cannot be leaves its glyphs at the old size. */
+	if (font->fallback_face != NULL) {
+		error = truetype_set_pixel_size(font->fallback_face, pixels);
+		if (error != 0)
+			printf("ZTERM FONT fallback-size=%u error=%d\n", pixels, error);
+	}
+
 	/* Succeeded: the cell's size and baseline. */
 	font->pixels_size = pixels;
 	font->cell_width = (unsigned)glyph.advance;
@@ -328,33 +451,112 @@ font_measure(
 	return 0;
 }
 
-/* Draws a character's glyph into a slot, on the baseline, as white coverage. */
+/*
+ * Looks a key up in the table of drawn characters, probing from its hash
+ * until it or an empty place is found.  Returns the place, and the key's
+ * slot in *slot when the place holds the key.
+ */
+static unsigned
+font_lookup(
+	struct terminal_font *font,
+	uint32_t key,
+	unsigned *slot)
+{
+	unsigned place;
+
+	/* Nothing found yet. */
+	*slot = 0U;
+
+	/* The probe starts at the key's hash and stops at the key or at an empty place. */
+	place = (key * 2654435761U) % font->table_size;
+	while (font->keys[place] != FONT_EMPTY) {
+		/* The key's own place. */
+		if (font->keys[place] == key) {
+			*slot = font->values[place];
+			return place;
+		}
+
+		/* Another key's place: the probe goes on to the next one. */
+		place = (place + 1U) % font->table_size;
+	}
+
+	/* The empty place where the key would go. */
+	return place;
+}
+
+/*
+ * Draws a character's glyph into a frame of one cell or of two (two slots
+ * side by side), on the baseline, as white coverage.
+ */
 static void
 font_draw(
 	struct terminal_font *font,
 	unsigned slot,
-	uint32_t codepoint)
+	uint32_t codepoint,
+	unsigned cells)
 {
 	static uint8_t bitmap[FONT_GLYPH_MAX * FONT_GLYPH_MAX];
+	struct truetype_face *face;
 	struct truetype_glyph glyph;
 	uint32_t *row;
 	uint32_t value;
 	unsigned origin_x;
 	unsigned origin_y;
 	unsigned index;
+	unsigned fallback_index;
+	unsigned frame_width;
+	unsigned copies;
+	unsigned copy;
 	unsigned x;
 	unsigned y;
+	int shift;
+	int stretch;
 	int target_x;
 	int target_y;
 	int error;
 
-	/* The glyph and how big it is; a glyph too large for the buffer is left blank. */
+	/* The font's glyph, or the fallback's when the font has none and the fallback has one. */
+	face = font->face;
 	index = truetype_glyph_index(font->face, codepoint);
-	error = truetype_render_glyph(font->face, index, &glyph, bitmap, FONT_GLYPH_MAX, sizeof(bitmap));
+	if (index == 0U && font->fallback_face != NULL) {
+		/* The fallback's glyph for the character, used when it has one. */
+		fallback_index = truetype_glyph_index(font->fallback_face, codepoint);
+		if (fallback_index != 0U) {
+			face = font->fallback_face;
+			index = fallback_index;
+		}
+	}
+
+	/* The glyph and how big it is; a glyph too large for the buffer is left blank. */
+	error = truetype_render_glyph(face, index, &glyph, bitmap, FONT_GLYPH_MAX, sizeof(bitmap));
 	if (error != 0)
 		return;
 
-	/* Copies the coverage into the slot, clipped to the cell. */
+	/*
+	 * Where the glyph goes across the frame.  One cell draws it as the font
+	 * places it.  Two cells draw box drawing and block elements twice as
+	 * wide, each pixel twice, so a line runs from edge to edge; any other
+	 * glyph narrower than the frame is centred in it.
+	 */
+	frame_width = cells * font->cell_width;
+	shift = 0;
+	stretch = 0;
+	if (cells == 2U &&
+	    codepoint >= FONT_STRETCH_FIRST &&
+	    codepoint <= FONT_STRETCH_LAST) {
+		/* A line or a block that must meet the next cell's. */
+		stretch = 1;
+	} else if (cells == 2U && glyph.advance < (int)frame_width) {
+		/* A glyph made for one cell, in the middle of two. */
+		shift = ((int)frame_width - glyph.advance) / 2;
+	}
+
+	/* A stretched pixel is written twice. */
+	copies = 1U;
+	if (stretch)
+		copies = 2U;
+
+	/* Copies the coverage into the slot, clipped to the frame. */
 	font_slot_origin(font, slot, &origin_x, &origin_y);
 	for (y = 0U; y < glyph.height; y++) {
 		/* The row of the cell this glyph row lands on, if any (top counts up from the baseline). */
@@ -363,13 +565,18 @@ font_draw(
 			continue;
 		row = (uint32_t *)(font->pixels + (size_t)(origin_y + (unsigned)target_y) * font->row_pitch);
 
-		/* Each pixel of the glyph row that lands in the cell. */
+		/* Each pixel of the glyph row, once or twice, where it lands in the frame. */
 		for (x = 0U; x < glyph.width; x++) {
-			target_x = glyph.left + (int)x;
-			if (target_x < 0 || target_x >= (int)font->cell_width)
-				continue;
+			/* The glyph pixel's coverage. */
 			value = bitmap[y * FONT_GLYPH_MAX + x];
-			row[origin_x + (unsigned)target_x] = (value << 24) | (value << 16) | (value << 8) | value;
+
+			/* Writes it once, or twice side by side for a stretched glyph, where it lands in the frame. */
+			for (copy = 0U; copy < copies; copy++) {
+				target_x = shift + (glyph.left + (int)x) * (int)copies + (int)copy;
+				if (target_x < 0 || target_x >= (int)frame_width)
+					continue;
+				row[origin_x + (unsigned)target_x] = (value << 24) | (value << 16) | (value << 8) | value;
+			}
 		}
 	}
 }

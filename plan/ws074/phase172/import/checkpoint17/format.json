@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/click.c",
+      "formatted_sha256": "66db8db7ed3587f33f706f1ce3856c01066a1c17a16b7012651747c784b6be6f",
+      "final_sha256": "15ea86f212dcd4ecf39e827598fbc1f28f222f7d4dc151b61c6c4d77da0cf1ac",
+      "restorations": "definition argument tabs and three-clause condition layout"
+    },
+    {
+      "path": "userland/desktop/libbrowser/bind/timer.c",
+      "formatted_sha256": "010ff5b47714473fbf9273f80e2e54fabeddb3a756acddc93962e2dc80a77910",
+      "final_sha256": "72404768016fe693a64157bdbcf5330fea9e0df1b0d1859731eb1383a9d32b1f",
+      "restorations": "definition argument tabs and three-clause condition layout"
+    }
+  ]
+}

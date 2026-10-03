@@ -1,0 +1,9 @@
+{
+  "authority": "full C section14",
+  "findings": 43,
+  "functions": {
+    "mutation_case": 16,
+    "surround_case": 27
+  },
+  "classification": "All43 jumps forward to sole per-function cleanup; weak token teardown/stack restoration and acquired root removal unchanged. Insert fixture zero findings; no other final findings."
+}

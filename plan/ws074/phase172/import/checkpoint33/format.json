@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/vm/realm.c",
+      "formatted_sha256": "9b90640e6a8d09eaf6bcf43397e1913a2df93222e64351a871741f0f879d1967",
+      "final_sha256": "99bcc07e545d0726e9093c75f64d7a4bce8f54438d5b06e771f8173d8ba38cb4",
+      "restorations": "definition argument tabs and one blank between declaration blocks"
+    }
+  ]
+}

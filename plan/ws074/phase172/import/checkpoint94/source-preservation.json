@@ -1,0 +1,7 @@
+{
+  "source": "userland/desktop/libbrowser/css/values.c",
+  "before_sha256": "1e3462711f8cccc40381895f4464b88fe1650f748890337f7197f5e40f11dcbb",
+  "after_sha256": "e5259cf84634b2820b2dcd91c31e38162b6ff41de8cf6d6c99e0c765708451da",
+  "C_string_literals_changed": false,
+  "public_ABI_changed": false
+}

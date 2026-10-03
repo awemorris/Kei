@@ -18,12 +18,19 @@
  * a right press asks for the window menu.  The window is drawn at the size
  * each configure gives, within its limits (200x150 to 800x600).
  *
+ * The window asks for zdesktop's titlebar (keiland_titlebar, an explicit
+ * server-side decoration) before its first commit, as the native
+ * applications do; without it zdesktop leaves the decoration to the client
+ * (ws114-p007) and the tests that use the titlebar's buttons and corners
+ * have none.  --csd leaves it out (ws099-p023).
+ *
  * Keys: m maximizes, u unmaximizes, n minimizes the window; r places the
  * open menu again (xdg_popup.reposition); p stops answering pings, and
  * answers the last one when pressed again.  Every event is one line:
  * POPUPPROBE <what> ..., with the surface named window, menu or submenu.
  *
- *   popup-probe [--wide] [--wm-probe] [--request-delay-ms=N] [--timeout-s=N] [--token=NAME]
+ *   popup-probe [--wide] [--wm-probe] [--csd] [--request-delay-ms=N] [--timeout-s=N] [--token=NAME]
+ *     --csd       asks for no titlebar: the client keeps its own decoration
  *     --wide      menus 360 pixels wide, so that a submenu near the output's
  *                 right edge must flip to the left
  *     --request-delay-ms=N
@@ -41,6 +48,7 @@
 
 #include <wayland-client.h>
 #include <xdg-shell-client-protocol.h>
+#include <keiland.h>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -161,6 +169,8 @@ struct probe {
 	const char *token;
 	int wm_probe;
 	unsigned request_delay_ms;
+	int csd;
+	struct keiland_titlebar *titlebar;
 };
 
 static int probe_options(int count, char **arguments, struct probe *probe, unsigned *timeout);
@@ -201,6 +211,11 @@ static void keyboard_enter(void *data, struct wl_keyboard *keyboard, uint32_t se
 static void keyboard_leave(void *data, struct wl_keyboard *keyboard, uint32_t serial, struct wl_surface *surface);
 static void keyboard_key(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state);
 static void keyboard_modifiers(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t depressed, uint32_t latched, uint32_t locked, uint32_t group);
+
+/* The titlebar's events: the probe's titlebar has no controls or tabs, so it hears none. */
+static const struct keiland_titlebar_listener titlebar_listener = {
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+};
 
 /* The registry's callbacks. */
 static const struct wl_registry_listener registry_listener = {
@@ -283,7 +298,7 @@ main(
 	memset(&probe, 0, sizeof(probe));
 	error = probe_options(count, arguments, &probe, &timeout);
 	if (error != 0) {
-		fprintf(stderr, "usage: popup-probe [--wide] [--wm-probe] [--request-delay-ms=N] [--timeout-s=N] [--token=NAME]\n");
+		fprintf(stderr, "usage: popup-probe [--wide] [--wm-probe] [--csd] [--request-delay-ms=N] [--timeout-s=N] [--token=NAME]\n");
 		return 2;
 	}
 
@@ -338,7 +353,7 @@ main(
 	return 0;
 }
 
-/* Reads the options: --wide, --wm-probe, --request-delay-ms=N, --timeout-s=N (default 120) and --token=NAME. */
+/* Reads the options: --wide, --wm-probe, --csd, --request-delay-ms=N, --timeout-s=N (default 120) and --token=NAME. */
 static int
 probe_options(
 	int count,
@@ -369,6 +384,13 @@ probe_options(
 		same = strcmp(arguments[index], "--wm-probe");
 		if (same == 0) {
 			probe->wm_probe = 1;
+			continue;
+		}
+
+		/* No titlebar: the window keeps the client's own decoration. */
+		same = strcmp(arguments[index], "--csd");
+		if (same == 0) {
+			probe->csd = 1;
 			continue;
 		}
 
@@ -443,6 +465,15 @@ probe_connect(
 	xdg_toplevel_set_parent(probe->window.toplevel, NULL);
 	xdg_toplevel_set_min_size(probe->window.toplevel, PROBE_MIN_WIDTH, PROBE_MIN_HEIGHT);
 	xdg_toplevel_set_max_size(probe->window.toplevel, PROBE_MAX_WIDTH, PROBE_MAX_HEIGHT);
+
+	/* zdesktop's titlebar, asked for before the first commit so that the first configure carries it. */
+	if (!probe->csd && !probe->wm_probe) {
+		probe->titlebar = keiland_titlebar_create(probe->display, probe->window.toplevel, &titlebar_listener, probe);
+		if (probe->titlebar == NULL)
+			printf("POPUPPROBE titlebar none errno=%d\n", errno);
+	}
+
+	/* The first commit, without an image, asks for the first configure. */
 	wl_surface_commit(probe->window.surface);
 
 	/* The first configure. */

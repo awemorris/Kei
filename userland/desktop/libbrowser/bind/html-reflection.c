@@ -24,12 +24,6 @@ static int meta_http_equiv_get(struct vm_realm *realm, vm_value this_value, cons
 static int meta_http_equiv_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int object_data_get(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
 static int object_data_set(struct vm_realm *realm, vm_value this_value, const vm_value *args, unsigned count, vm_value *result);
-static void reflection_url_release(struct net_url *base, struct net_url *parsed, struct wb_buffer *raw, struct wb_buffer *serialized);
-static int reflection_scalar(struct vm_realm *realm, struct vm_string *text, struct vm_string **scalar);
-static int reflection_this(struct vm_realm *realm, vm_value receiver, int tag, struct dom_element **element);
-static int reflection_get(struct vm_realm *realm, vm_value receiver, int tag, const char *name, vm_value *result);
-static int reflection_set(struct vm_realm *realm, vm_value receiver, int tag, const char *name, const vm_value *args, unsigned count);
-static int reflection_equal_folded(const struct vm_string *text, const char *keyword);
 
 /* Button type and value are content-attribute views, not activation state. */
 static const struct bind_attribute button_attributes[] = {
@@ -82,6 +76,13 @@ const struct bind_interface bind_html_label_element_interface = {
 const struct bind_interface bind_html_meta_element_interface = {
 	"HTMLMetaElement", BIND_HTML_ELEMENT, 0, NULL, meta_attributes, NULL, NULL
 };
+
+static void reflection_url_release(struct net_url *base, struct net_url *parsed, struct wb_buffer *raw, struct wb_buffer *serialized);
+static int reflection_scalar(struct vm_realm *realm, struct vm_string *text, struct vm_string **scalar);
+static int reflection_this(struct vm_realm *realm, vm_value receiver, int tag, struct dom_element **element);
+static int reflection_get(struct vm_realm *realm, vm_value receiver, int tag, const char *name, vm_value *result);
+static int reflection_set(struct vm_realm *realm, vm_value receiver, int tag, const char *name, const vm_value *args, unsigned count);
+static int reflection_equal_folded(const struct vm_string *text, const char *keyword);
 
 /*
  * Resolves a branded URL attribute against its actual owning Document.
@@ -202,6 +203,9 @@ bind_reflect_url_set(
 	struct vm_string *text;
 	struct vm_string *scalar;
 	struct vm_string *name;
+	struct vm_cell *roots[3];
+	unsigned index;
+	unsigned registered;
 	int error;
 
 	/* Brands the actual node before a potentially reentrant argument conversion. */
@@ -215,18 +219,47 @@ bind_reflect_url_set(
 	if (error != 0)
 		return error;
 
+	/* Retain the converted text, scalar result and attribute atom until publication. */
+	roots[0] = &text->cell;
+	roots[1] = NULL;
+	roots[2] = NULL;
+	registered = 0;
+	for (index = 0; index < 3U; index++) {
+		error = vm_heap_add_root(realm->heap, &roots[index]);
+		if (error != 0)
+			goto cleanup;
+
+		/* Cleanup owns only successfully registered slots. */
+		registered++;
+	}
+
 	/* WebIDL USVString repairs lone surrogates before publishing attribute text. */
 	error = reflection_scalar(realm, text, &scalar);
 	if (error != 0)
-		return error;
+		goto cleanup;
+	roots[1] = &scalar->cell;
 
 	/* Allocates the known attribute name before changing the real DOM. */
 	name = vm_atom_from_ascii(realm->heap, attribute);
-	if (name == NULL)
-		return ENOMEM;
+	if (name == NULL) {
+		error = ENOMEM;
+		goto cleanup;
+	}
+
+	/* The known name stays live until the actual element owns the attribute. */
+	roots[2] = &name->cell;
 
 	/* The ordinary DOM mutation path retains parser, clone and wrapper identity. */
 	error = dom_element_set_attribute(element, name, scalar);
+
+cleanup:
+	/* No temporary root slot survives either DOM publication or failure. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed conversion or mutation cannot report a completed attribute. */
 	if (error != 0)
 		return error;
 
@@ -742,6 +775,9 @@ reflection_set(
 	struct dom_element *element;
 	struct vm_string *attribute;
 	struct vm_string *text;
+	struct vm_cell *roots[2];
+	unsigned index;
+	unsigned registered;
 	int error;
 
 	/* Rejects a foreign receiver before evaluating the setter argument. */
@@ -754,13 +790,36 @@ reflection_set(
 	if (attribute == NULL)
 		return ENOMEM;
 
+	/* A user conversion may collect before either string enters the DOM. */
+	roots[0] = &attribute->cell;
+	roots[1] = NULL;
+	registered = 0;
+	for (index = 0; index < 2U; index++) {
+		error = vm_heap_add_root(realm->heap, &roots[index]);
+		if (error != 0)
+			goto cleanup;
+
+		/* Cleanup removes only the slots acquired by this setter. */
+		registered++;
+	}
+
 	/* Converts once; Symbol or user conversion exceptions leave the attribute untouched. */
 	error = bind_to_string(realm, js_argument(args, count, 0), &text);
 	if (error != 0)
-		return error;
+		goto cleanup;
+	roots[1] = &text->cell;
 
 	/* Mutates the real DOM and its ordinary generation, preserving exact UTF-16 text. */
 	error = dom_element_set_attribute(element, attribute, text);
+
+cleanup:
+	/* Published attributes are now owned by the actual DOM element. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(realm->heap, &roots[registered]);
+	}
+
+	/* A failed string conversion or native mutation reports its exact error. */
 	if (error != 0)
 		return error;
 

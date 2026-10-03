@@ -1,0 +1,25 @@
+{
+  "queue": "q595",
+  "attempt": "q595-i01",
+  "phase": "ws074-p172",
+  "partial_scope": true,
+  "selected": [
+    "plan/ws074/tests/host-range-boundary.c",
+    "plan/ws074/tests/host-range-clone-contents.c",
+    "plan/ws074/tests/host-range-data.c",
+    "plan/ws074/tests/host-range-extract-contents.c",
+    "plan/ws074/tests/host-range-insert.c",
+    "plan/ws074/tests/host-range-mutation.c",
+    "plan/ws074/tests/host-range-surround-contents.c",
+    "plan/ws074/tests/host-collection.c",
+    "plan/ws074/tests/host-form-collection.c",
+    "userland/desktop/libbrowser/bind/collection.c"
+  ],
+  "baseline": "e2d305ac2bd11e77264e345b9c86de1921e241c4",
+  "started_utc": "2026-10-02T13:10:49+00:00",
+  "deadline_utc": "2026-10-02T16:10:49+00:00",
+  "source_hashes_verified": 209,
+  "user_source": "current user2026-10-02 しばらく自走をお願いします; prior direct/no-subagents/WIP/browser3 normal push persists",
+  "criteria": "All ten complete full C/component reviews with necessary in-scope repairs and bounded affected actual native tests, warning0 own build/compile, committed exact receipts. Partial may clear; whole p172 remains uncleared.",
+  "selection_reason": "Complete actual Range ownership/mutation fixtures then collection native/form fixtures and their independent production binding. Coherent native GC/root exclusion and collection ownership slice; no new product behavior or downstream work."
+}

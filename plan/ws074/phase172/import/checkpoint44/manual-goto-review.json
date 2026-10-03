@@ -1,0 +1,49 @@
+{
+  "authority": "full C section14 single forward shared cleanup",
+  "findings": 85,
+  "functions": [
+    {
+      "path": "plan/ws074/tests/host-insertion.c",
+      "function": "insertion_case",
+      "forward_cleanup_jumps": 9,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-mutation-record.c",
+      "function": "mutation_case",
+      "forward_cleanup_jumps": 15,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-style-sheet.c",
+      "function": "sheet_case",
+      "forward_cleanup_jumps": 31,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-submit.c",
+      "function": "collection_case",
+      "forward_cleanup_jumps": 10,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-table-mutation.c",
+      "function": "collection_case",
+      "forward_cleanup_jumps": 8,
+      "one_label": true,
+      "all_jumps_forward": true
+    },
+    {
+      "path": "plan/ws074/tests/host-table-row.c",
+      "function": "collection_case",
+      "forward_cleanup_jumps": 12,
+      "one_label": true,
+      "all_jumps_forward": true
+    }
+  ],
+  "other_findings": 0
+}

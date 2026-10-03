@@ -16,11 +16,17 @@
  *
  *   wlshm [--size=WxH] [--color=AARRGGBB] [--xrgb] [--band=AARRGGBB]
  *         [--frames=N] [--cursor=AARRGGBB] [--hide-cursor] [--hold]
- *         [--delay-ms=N] [--token=NAME]
+ *         [--delay-ms=N] [--token=NAME] [--display=NAME] [--csd]
+ *
+ * The window asks for zdesktop's titlebar (keiland_titlebar, an explicit
+ * server-side decoration) before its first commit, as the native
+ * applications do; without it zdesktop leaves the decoration to the client
+ * (ws114-p007).  --csd leaves it out (ws099-p023).
  */
 
 #include <wayland-client.h>
 #include <xdg-shell-client-protocol.h>
+#include <keiland.h>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -72,6 +78,8 @@ struct window {
 	int closed;
 	const char *token;
 	const char *name;
+	int csd;
+	struct keiland_titlebar *titlebar;
 };
 
 static int options(int count, char **arguments, struct window *window, uint32_t *frames);
@@ -101,6 +109,8 @@ static void pointer_motion(void *data, struct wl_pointer *pointer, uint32_t time
 static void pointer_button(void *data, struct wl_pointer *pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
 static void pointer_axis(void *data, struct wl_pointer *pointer, uint32_t time, uint32_t axis, wl_fixed_t value);
 
+/* The titlebar's events: the window's titlebar has no controls or tabs, so it hears none. */
+static const struct keiland_titlebar_listener titlebar_listener = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 static const struct wl_registry_listener registry_listener = { registry_global, registry_remove };
 static const struct xdg_wm_base_listener shell_listener = { shell_ping };
 static const struct xdg_surface_listener role_listener = { role_configure };
@@ -131,7 +141,7 @@ main(
 	memset(&window, 0, sizeof(window));
 	error = options(count, arguments, &window, &frames);
 	if (error != 0) {
-		fprintf(stderr, "usage: wlshm [--size=WxH] [--color=AARRGGBB] [--xrgb] [--band=AARRGGBB] [--frames=N] [--cursor=AARRGGBB] [--hide-cursor] [--hold] [--delay-ms=N] [--token=NAME] [--display=NAME]\n");
+		fprintf(stderr, "usage: wlshm [--size=WxH] [--color=AARRGGBB] [--xrgb] [--band=AARRGGBB] [--frames=N] [--cursor=AARRGGBB] [--hide-cursor] [--hold] [--delay-ms=N] [--token=NAME] [--display=NAME] [--csd]\n");
 		return 2;
 	}
 
@@ -193,7 +203,7 @@ options(
 {
 	static const char *const names[] = {
 		"--size=", "--color=", "--xrgb", "--band=", "--frames=", "--cursor=",
-		"--delay-ms=", "--hold", "--hide-cursor", "--token=", "--display="
+		"--delay-ms=", "--hold", "--hide-cursor", "--token=", "--display=", "--csd"
 	};
 	const char *argument;
 	const char *value;
@@ -269,6 +279,10 @@ options(
 			error = 0;
 			if (*value == '\0')
 				error = -1;
+			break;
+		case 11:
+			window->csd = 1;
+			error = 0;
 			break;
 		default:
 			break;
@@ -365,6 +379,15 @@ connect_window(
 	window->toplevel = xdg_surface_get_toplevel(window->role);
 	xdg_toplevel_add_listener(window->toplevel, &toplevel_listener, window);
 	xdg_toplevel_set_title(window->toplevel, "wl_shm test");
+
+	/* zdesktop's titlebar, asked for before the first commit so that the first configure carries it. */
+	if (!window->csd) {
+		window->titlebar = keiland_titlebar_create(window->display, window->toplevel, &titlebar_listener, window);
+		if (window->titlebar == NULL)
+			printf("WLSHM titlebar none errno=%d\n", errno);
+	}
+
+	/* The first commit, without an image, asks for the first configure. */
 	wl_surface_commit(window->surface);
 	status = wl_display_roundtrip(window->display);
 	if (status < 0 || !window->configured)

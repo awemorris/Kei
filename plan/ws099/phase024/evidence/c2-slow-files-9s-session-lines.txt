@@ -1,0 +1,4 @@
+# guest /bin/files wrapped to sleep 7 s before exec (desktop instance unchanged); VENUS_SIZE=1920x1280; image build/p2-p024-img
+ZWL HOME launched-late waited_ms=9056 at_ms=53846
+ZWL GLASS launch-late surface=8 from=564,430 to=400,323 size=1120x720
+c2-geometry: C2 RESULT pass=14 fail=0 / C2: PASS

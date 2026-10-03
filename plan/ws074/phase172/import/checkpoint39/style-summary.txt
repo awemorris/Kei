@@ -1,0 +1,3 @@
+plan/ws074/tests/host-range-mutation.c goto=16
+plan/ws074/tests/host-range-surround-contents.c goto=27
+total 43

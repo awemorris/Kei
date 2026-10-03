@@ -12,6 +12,7 @@ Queue: none
 Resume point（2026-10-02 計画詳細化）: [p001](phase001/phase.md)（Debian13 の標準 Qt6 6.8 の実測と機能表 Q01〜）が planned。開始条件は WS114 p007 cleared（user の順序）。p001 の後に p002 で行別採否をユーザーと決め、p003/p004 で compositor を改良する。
 順序（2026-10-02 user（作業開始の指示））: WS115（GTK4 移植）と WS097（独自 GTK4）の後に着手する。
 2026-10-02 user:「portalはなしにしましょう。D-BusがないとGTK4が動かないということはないはずです。WindowsでもMacでも動きますよね。D-Busも実装しません。」 → portal（ws114-p004 など）は取り消し、D-Bus は実装しない。
+2026-10-03 user（SSD の方針について）:「SSDの明示的な依頼ですが、それだとKDE系のアプリケーションで問題になる場合があるかもしれないですね、検証しないとわかりませんが。KDEではSSDは自動なので。でも、コンポジタの互換X11実装ではタイトルバーがつくのであれば、ほとんどのアプリで問題ないかも。」→ WS117 の Qt6 の調査で、xdg-decoration を要求しない／SSD を前提にする Qt・KDE の app で Keiland の「明示の要求の窓だけ SSD」（WS114 p007 G05）が問題にならないかを必ず確かめる。
 <!-- awesome-plan-current:end -->
 
 ## 目標（2026-10-02 ユーザー）

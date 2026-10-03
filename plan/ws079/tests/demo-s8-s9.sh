@@ -85,7 +85,9 @@ fi
 sh plan/ws079/tests/make-a4-document.sh "$out/a4.pdf" || exit 1
 sh plan/ws035/tests/zdesktop-guest.sh stop >/dev/null 2>&1
 timeout 180 sh plan/ws035/tests/zdesktop-guest.sh start "$image" >/dev/null 2>&1
-sleep 20
+# ws128-p001 (F-062): waits for the guest's SSH (at most three minutes) rather than a fixed 20 seconds, which a slower
+# boot outran (every step then failed with MISSING).
+timeout 200 python3 plan/tools/guest/guest.py wait --timeout 180 >/dev/null 2>&1 || { echo "guest: no answer"; status=1; }
 put "$out/a4.pdf" /root/a4.pdf
 guest 'service stop greeter >/dev/null 2>&1; rm -rf /root/Documents/Notes /root/.local/share/keiland/notes; export XDG_RUNTIME_DIR=/tmp; rm -f /tmp/wayland-0; picture=; [ -f /usr/share/keiland/wallpaper.ppm ] && picture=--wallpaper=/usr/share/keiland/wallpaper.ppm
 /bin/wayland --timeout=1200 --width=1280 --height=800 --glass $picture > /tmp/zdesktop.log 2>&1 </dev/null & sleep 4; echo started' >/dev/null

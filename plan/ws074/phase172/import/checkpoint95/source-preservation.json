@@ -1,0 +1,7 @@
+{
+  "source": "userland/desktop/libbrowser/css/cascade.c",
+  "before_sha256": "7f4c07befc605bc8e84ba82f76d43ed9643a47ee099815201eed945d936107e0",
+  "after_sha256": "53e72e1006b7d73d9a3990184bcbcede5a17982e73b3b81296c86452114442aa",
+  "C_string_literals_changed": false,
+  "public_ABI_changed": false
+}

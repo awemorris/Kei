@@ -91,11 +91,17 @@ main(
 
 	/* Observe default native mutations independently of their script binding wrappers. */
 	status = mutation_case(realm, __builtin_frame_address(0));
+	if (status != 0) {
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Tear down the embedding after complete native observations. */
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Behavior failures are distinct from embedding allocation failures. */
 	printed = printf("range-mutation native checks: %u/%u passed\n", checks - failures, checks);
@@ -146,7 +152,10 @@ mutation_inserted(
 	mutation_check(*observer->sequence == observer->order, "optional insertion callbacks retain FIFO order");
 	mutation_check(node->parent != NULL, "insertion callback sees final native parent");
 	mutation_check(node->previous == NULL, "first-child insertion callback sees final preceding link");
-	mutation_check(node->parent->first_child == node, "insertion callback sees complete parent first-child link");
+
+	/* A failed parent observation cannot justify dereferencing an absent parent. */
+	if (node->parent != NULL)
+		mutation_check(node->parent->first_child == node, "insertion callback sees complete parent first-child link");
 
 	/* Succeeded: this callback performed only native observations. */
 	return;
@@ -217,9 +226,13 @@ mutation_script(
 
 	/* The actual script engine supplies native wrappers and original owner graphs. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Release source storage after checking interpreter completion. */
+	wb_units_release(&units);
 
 	/* Succeeded: the genuine completion is available to the embedding. */
 	return 0;
@@ -265,129 +278,142 @@ mutation_case(
 	generic_token = NULL;
 
 	/* Globals supply genuine script ownership while direct C calls have no receiver frame. */
-	do {
-		status = mutation_script(realm,
-					 "var mutationDoc=document.implementation.createDocument(null,'root',null);"
-					 "var mutationText=mutationDoc.createTextNode('ABCDE');"
-					 "mutationDoc.documentElement.appendChild(mutationText);"
-					 "var mutationRange=mutationDoc.createRange();"
-					 "mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,4);"
-					 "var mutationIncoming=mutationDoc.createComment('incoming');mutationText;",
-					 &answer);
-		if (status != 0)
-			break;
-		text = bind_node_of(answer);
-		characters = (struct dom_character_data *)text;
-		owner = text->document;
-		text_address = (uintptr_t)text;
-		creator_address = (uintptr_t)owner;
-		status = mutation_script(realm, "mutationRange", &range);
-		if (status != 0)
-			break;
-		status = mutation_script(realm, "mutationIncoming", &answer);
-		if (status != 0)
-			break;
-		incoming = bind_node_of(answer);
+	status = mutation_script(realm,
+				 "var mutationDoc=document.implementation.createDocument(null,'root',null);"
+				 "var mutationText=mutationDoc.createTextNode('ABCDE');"
+				 "mutationDoc.documentElement.appendChild(mutationText);"
+				 "var mutationRange=mutationDoc.createRange();"
+				 "mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,4);"
+				 "var mutationIncoming=mutationDoc.createComment('incoming');mutationText;",
+				 &answer);
+	if (status != 0)
+		goto cleanup;
+	text = bind_node_of(answer);
+	if (text == NULL ||
+	    text->type != DOM_TEXT ||
+	    text->parent == NULL) {
+		status = EIO;
+		goto cleanup;
+	}
 
-		/* Three real weak subscriptions distinguish optional delivery from removal-only behavior. */
-		status = dom_removal_subscribe(owner, &first, mutation_removed, &first_token);
-		if (status != 0)
-			break;
-		dom_removal_set_updates(first_token, mutation_inserted, mutation_data);
-		status = dom_removal_subscribe(owner, &second, mutation_removed, &second_token);
-		if (status != 0)
-			break;
-		dom_removal_set_updates(second_token, mutation_inserted, mutation_data);
-		status = dom_removal_subscribe(owner, &generic, mutation_removed, &generic_token);
-		if (status != 0)
-			break;
+	/* Read verified native Text storage and its actual creator. */
+	characters = (struct dom_character_data *)text;
+	owner = text->document;
+	text_address = (uintptr_t)text;
+	creator_address = (uintptr_t)owner;
+	status = mutation_script(realm, "mutationRange", &range);
+	if (status != 0)
+		goto cleanup;
+	status = mutation_script(realm, "mutationIncoming", &answer);
+	if (status != 0)
+		goto cleanup;
+	incoming = bind_node_of(answer);
+	if (incoming == NULL || incoming->type != DOM_COMMENT) {
+		status = EIO;
+		goto cleanup;
+	}
 
-		/* Real GC sees script globals and native traces, never these C graph pointers. */
-		vm_heap_set_stack_base(realm->heap, NULL);
-		vm_heap_collect(realm->heap);
-		found = vm_heap_find_cell(realm->heap, text_address);
-		mutation_check(found != NULL, "genuine script roots retain native data graph during collection");
+	/* Three real weak subscriptions distinguish optional delivery from removal-only behavior. */
+	status = dom_removal_subscribe(owner, &first, mutation_removed, &first_token);
+	if (status != 0)
+		goto cleanup;
+	dom_removal_set_updates(first_token, mutation_inserted, mutation_data);
+	status = dom_removal_subscribe(owner, &second, mutation_removed, &second_token);
+	if (status != 0)
+		goto cleanup;
+	dom_removal_set_updates(second_token, mutation_inserted, mutation_data);
+	status = dom_removal_subscribe(owner, &generic, mutation_removed, &generic_token);
+	if (status != 0)
+		goto cleanup;
 
-		/* Default DOM insertion delivers optional callbacks after complete first-child links. */
-		dom_insert_before(text->parent, incoming, text);
-		mutation_check(first.inserted == 1U, "first optional observer receives native insertion");
-		mutation_check(second.inserted == 1U, "second optional observer receives native insertion");
-		mutation_check(generic.inserted == 0U && generic.removed == 0U, "generic removal observer receives no insertion delivery");
+	/* Real GC sees script globals and native traces, never these C graph pointers. */
+	vm_heap_set_stack_base(realm->heap, NULL);
+	vm_heap_collect(realm->heap);
+	found = vm_heap_find_cell(realm->heap, text_address);
+	mutation_check(found != NULL, "genuine script roots retain native data graph during collection");
 
-		/* Full native replacement accepts aliased old input and resets live Range points. */
-		sequence = 0;
-		status = dom_text_set(text, characters->data.data + 1U, 3U);
-		if (status != 0)
-			break;
-		mutation_check(characters->data.length == 3U, "aliased replacement commits independent native buffer length");
-		mutation_check(characters->data.data[0] == 'B' && characters->data.data[2] == 'D', "aliased replacement preserves exact UTF16 units");
-		mutation_check(
-			first.offset == 0U &&
-			first.count == 5U &&
-			first.added == 3U &&
-			first.committed_length == 3U,
-			"full replacement notifies actual previous interval");
-		status = bind_abstract_range_interface.attributes[2].getter(realm, range, NULL, 0, &answer);
-		if (status != 0)
-			break;
-		mutation_check(answer == vm_value_number(0), "direct native full replacement resets actual start");
-		status = bind_abstract_range_interface.attributes[3].getter(realm, range, NULL, 0, &answer);
-		if (status != 0)
-			break;
-		mutation_check(answer == vm_value_number(0), "direct native full replacement resets actual end");
+	/* Default DOM insertion delivers optional callbacks after complete first-child links. */
+	dom_insert_before(text->parent, incoming, text);
+	mutation_check(first.inserted == 1U, "first optional observer receives native insertion");
+	mutation_check(second.inserted == 1U, "second optional observer receives native insertion");
+	mutation_check(generic.inserted == 0U && generic.removed == 0U, "generic removal observer receives no insertion delivery");
 
-		/* Nonzero current endpoints make failed preparation's preservation independently observable. */
-		status = mutation_script(realm,
-					 "mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,2);",
-					 &answer);
-		if (status != 0)
-			break;
+	/* Full native replacement accepts aliased old input and resets live Range points. */
+	sequence = 0;
+	status = dom_text_set(text, characters->data.data + 1U, 3U);
+	if (status != 0)
+		goto cleanup;
+	mutation_check(characters->data.length == 3U, "aliased replacement commits independent native buffer length");
+	mutation_check(characters->data.data[0] == 'B' && characters->data.data[2] == 'D', "aliased replacement preserves exact UTF16 units");
+	mutation_check(
+		first.offset == 0U &&
+		first.count == 5U &&
+		first.added == 3U &&
+		first.committed_length == 3U,
+		"full replacement notifies actual previous interval");
+	status = bind_abstract_range_interface.attributes[2].getter(realm, range, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+	mutation_check(answer == vm_value_number(0), "direct native full replacement resets actual start");
+	status = bind_abstract_range_interface.attributes[3].getter(realm, range, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+	mutation_check(answer == vm_value_number(0), "direct native full replacement resets actual end");
 
-		/* Oversized preparation fails before copying input, changing generation or notifying observers. */
-		generation = owner->generation;
-		status = dom_text_set(text, characters->data.data, SIZE_MAX);
-		mutation_check(status == ENOMEM, "oversized full replacement propagates checked allocation failure");
-		mutation_check(owner->generation == generation, "failed replacement preserves native generation");
-		mutation_check(characters->data.length == 3U && characters->data.data[0] == 'B', "failed replacement preserves complete old data");
-		mutation_check(first.data == 1U && second.data == 1U, "failed replacement delivers no optional notification");
-		status = bind_abstract_range_interface.attributes[3].getter(realm, range, NULL, 0, &answer);
-		if (status != 0)
-			break;
-		mutation_check(answer == vm_value_number(2), "failed replacement preserves actual native endpoint");
+	/* Nonzero current endpoints make failed preparation's preservation independently observable. */
+	status = mutation_script(realm,
+				 "mutationRange.setStart(mutationText,1);mutationRange.setEnd(mutationText,2);",
+				 &answer);
+	if (status != 0)
+		goto cleanup;
 
-		/* Efficient native append reports a zero-removal interval and preserves old equal endpoints. */
-		sequence = 0;
-		suffix[0] = 0xD83DU;
-		suffix[1] = 0xDE00U;
-		status = dom_text_append(text, suffix, 2U);
-		if (status != 0)
-			break;
-		mutation_check(
-			first.offset == 3U &&
-			first.count == 0U &&
-			first.added == 2U &&
-			first.committed_length == 5U,
-			"native append notifies exact UTF16 insertion interval");
-		mutation_check(characters->data.length == 5U && characters->data.data[4] == 0xDE00U, "native append commits exact surrogate units");
-		status = bind_abstract_range_interface.attributes[3].getter(realm, range, NULL, 0, &answer);
-		if (status != 0)
-			break;
-		mutation_check(answer == vm_value_number(2), "native append preserves earlier live endpoint");
-		mutation_check(generic.data == 0U && generic.removed == 0U, "generic removal observer receives no data delivery");
+	/* Oversized preparation fails before copying input, changing generation or notifying observers. */
+	generation = owner->generation;
+	status = dom_text_set(text, characters->data.data, SIZE_MAX);
+	mutation_check(status == ENOMEM, "oversized full replacement propagates checked allocation failure");
+	mutation_check(owner->generation == generation, "failed replacement preserves native generation");
+	mutation_check(characters->data.length == 3U && characters->data.data[0] == 'B', "failed replacement preserves complete old data");
+	mutation_check(first.data == 1U && second.data == 1U, "failed replacement delivers no optional notification");
+	status = bind_abstract_range_interface.attributes[3].getter(realm, range, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+	mutation_check(answer == vm_value_number(2), "failed replacement preserves actual native endpoint");
 
-		/* With no script graph roots, configured weak callbacks cannot retain their creator Document. */
-		status = mutation_script(realm,
-					 "mutationRange=null;mutationIncoming=null;mutationText=null;mutationDoc=null;", &answer);
-		if (status != 0)
-			break;
-		vm_heap_collect(realm->heap);
-		found = vm_heap_find_cell(realm->heap, creator_address);
-		mutation_check(found == NULL, "configured optional weak token does not retain creator Document");
-		found = vm_heap_find_cell(realm->heap, text_address);
-		mutation_check(found == NULL, "configured optional weak token does not retain endpoint graph");
-		status = 0;
-	} while (0);
+	/* Efficient native append reports a zero-removal interval and preserves old equal endpoints. */
+	sequence = 0;
+	suffix[0] = 0xD83DU;
+	suffix[1] = 0xDE00U;
+	status = dom_text_append(text, suffix, 2U);
+	if (status != 0)
+		goto cleanup;
+	mutation_check(
+		first.offset == 3U &&
+		first.count == 0U &&
+		first.added == 2U &&
+		first.committed_length == 5U,
+		"native append notifies exact UTF16 insertion interval");
+	mutation_check(characters->data.length == 5U && characters->data.data[4] == 0xDE00U, "native append commits exact surrogate units");
+	status = bind_abstract_range_interface.attributes[3].getter(realm, range, NULL, 0, &answer);
+	if (status != 0)
+		goto cleanup;
+	mutation_check(answer == vm_value_number(2), "native append preserves earlier live endpoint");
+	mutation_check(generic.data == 0U && generic.removed == 0U, "generic removal observer receives no data delivery");
 
+	/* With no script graph roots, configured weak callbacks cannot retain their creator Document. */
+	status = mutation_script(realm,
+				 "mutationRange=null;mutationIncoming=null;mutationText=null;mutationDoc=null;", &answer);
+	if (status != 0)
+		goto cleanup;
+	vm_heap_collect(realm->heap);
+	found = vm_heap_find_cell(realm->heap, creator_address);
+	mutation_check(found == NULL, "configured optional weak token does not retain creator Document");
+	found = vm_heap_find_cell(realm->heap, text_address);
+	mutation_check(found == NULL, "configured optional weak token does not retain endpoint graph");
+
+	/* All native mutation observations completed before weak token teardown. */
+	status = 0;
+
+cleanup:
 	/* Token cleanup remains valid after its Document and native Range have already finalized. */
 	vm_heap_set_stack_base(realm->heap, stack_base);
 	dom_removal_unsubscribe(generic_token);

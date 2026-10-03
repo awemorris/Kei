@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p017 -->
 # ws099-p017: BUG-125 move/resizeの再現・試験同期の切り分け
 
-Status: uncleared
+Status: cleared（2026-10-03 Q1 判定（user「Q1の判断で閉じられるものは閉じてください。」）: 受け入れの「p076 単独 20・C9 5 で FAIL 0」は後継の ws099-p020（compositor の直し）と ws099-p024 の証拠で満たした）。元の記載: uncleared
 Disposition: normal
 Parent: [WS099](../ws.md)
 Queue: q577 / q577-i01 / P8（uncleared履歴）、q583 / q583-i01 / B3（部分診断cleared）、q589 / q589-i01 / B3（uncleared、準備のみ）

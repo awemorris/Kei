@@ -1,0 +1,34 @@
+{
+  "queue": "q597",
+  "checkpoint": 80,
+  "source": "userland/desktop/libbrowser/bind/document.c",
+  "source_sha256": "e3f531f3c472927c0c824d46e8e85e4e653e6d2d72eec746aeb84a1befa9a1c3",
+  "baseline": "430d26b121b5fd551509ee69cbbeb25ec235dc52",
+  "reviewed": 199,
+  "total": 209,
+  "remaining": 10,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 11,
+    "classification": "permitted forward cleanup jumps only"
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "dom-tests": "dom-tests 23/23",
+    "namespace": "12/12 passed",
+    "document-stream": "9/9 passed",
+    "document-parser": "8/8 passed",
+    "xml-document": "16/16 passed",
+    "xml-binding": "34/34 passed",
+    "collection": "37/37 passed"
+  },
+  "limits": [
+    "No collector forced exactly between all newly rooted Document allocation/publication steps; root ownership reviewed statically.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

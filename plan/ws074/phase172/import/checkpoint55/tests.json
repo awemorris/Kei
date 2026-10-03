@@ -1,0 +1,60 @@
+[
+  {
+    "name": "host-text",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-text",
+      "userland/desktop/fonts/Inter.ttf",
+      "userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "userland/desktop/fonts/DroidSansFallbackFull.ttf"
+    ],
+    "exit": 0,
+    "stdout": "host-text: 16px sans: ascent 16 descent 4 line height 20\nhost-text: width of \"Hello\": regular 40 bold 45 mono 50 large 79\nhost-text: 20 checks, 0 failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-tree",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-tree"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "host-mutation-record",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-mutation-record"
+    ],
+    "exit": 0,
+    "stdout": "native mutation record GC: 16/16 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-range-data",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-range-data"
+    ],
+    "exit": 0,
+    "stdout": "range-data native checks: 100/100 passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "host-range-insert",
+    "argv": [
+      "timeout",
+      "60",
+      "build/browser3-p172/plain/host-range-insert"
+    ],
+    "exit": 0,
+    "stdout": "range insertion lifetime checks: 92/92 passed\n",
+    "stderr": ""
+  }
+]

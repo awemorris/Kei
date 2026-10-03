@@ -415,3 +415,7 @@ ls build/wsNNN/pNNN-hw/shots/*-live.png
 | Notes の起動の後に kernel が止まった | BUG-091（i915 の timer thread の spin lock、ws075-p014 で修正） | 再発したら gdbstub（1.9 節） | `plan/known-bugs.md` の BUG-091 |
 | lock を見たら使用中だった | 他の WS（WS075・WS099・WS101）と共有で、長く使われることがある | 1.7 節。未実施と書いて進むか、background で待つ | `plan/ws101/phase016/phase.md:5`、`plan/ws099/phase016/phase.md:67` |
 | HDMI 用の座標・道具を使った | `h4-cycle.sh`・`h4-ctl.py watch`（pipe B）・`hdmi-h1/h2-hw.sh` は HDMI の LCD の頃（2026-09-28）のもの。今は eDP（pipe A） | eDP では pipe `A`（`ctl rate A`・`latency A`・`c6 A`、`measure-apps.sh:23-30`） | `h4-ctl.py:68-69`、`plan/master.md:54` |
+
+**注意（2026-10-03）**: iGPU と AX211 を同じ QEMU に同時に passthrough しない（host の hard hang の危険、[Guardrail](../../guardrail.md)）。
+
+**注意（2026-10-03）**: iGPU の passthrough は i915 の driver の改善の Phase だけ（描画の性能の改善は 5330 の Venus）（[Guardrail](../../guardrail.md)）。

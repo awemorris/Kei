@@ -1,0 +1,7 @@
+# q598 checkpoint97 / final target and native shell blocker
+
+The unchanged-source target warm rebuild passed with zero warnings and a valid native image. The first boot attempt timed out while QMP produced a screendump; a bounded retry booted the same image to a visually checked login prompt. Both logs are preserved. The final image SHA256 and exact results are in [evidence.json](evidence.json).
+
+The Venus guest ran the actual browser and passed page rendering, GPU/CPU comparison, keyboard/wheel scrolling, Ctrl+Q close and compositor error check. Native p014 ended exit1 because the third window stayed in decoration mode1, so the expected titlebar drag/close events were absent. The second window reached mode2 after scrolling caused another frame. Browser shell source acknowledges a new configure without dirtying a same-size window; this is the likely cause and needs a bounded fix/retest. [Native log](native-p014-failure.log), [compositor log](native-zdesktop.log), and [browser log](native-browser-last.log) preserve the observation. The first, scrolled and final-window PNGs are attached here. The guest has been stopped.
+
+All 209 reviewed source hashes still match checkpoint95. p172 and q598 remain in progress; p100 stays unselected and has not run. The proposed shell repair is outside q598’s explicitly selected source files and awaits a scope decision. GitHub Issue/Project publication remains deferred.

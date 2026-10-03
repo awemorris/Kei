@@ -1,0 +1,15 @@
+pass async
+pass builtins
+pass class
+pass closures
+pass collections
+pass control
+pass date
+pass destructuring
+pass iteration
+pass lexical
+pass objects
+pass operators
+pass regexp
+pass strict
+js-tests 14/14

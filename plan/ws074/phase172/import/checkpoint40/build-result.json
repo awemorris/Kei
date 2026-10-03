@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "sh",
+    "plan/ws074/tests/host-build.sh",
+    "plain"
+  ],
+  "environment": {
+    "BROWSER_HOST_BUILD": "build/browser3-p172"
+  },
+  "exit": 0,
+  "warning_count": 0,
+  "source_stable_before_build": true,
+  "production_engine": "167 engine source-list entries plus browser main,18 support-library objects and host shell stand-in; updated production collection compiled, all current native fixtures linked",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0"
+}

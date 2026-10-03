@@ -1,0 +1,20 @@
+{
+  "verified_utc": "2026-10-02T14:07:37+00:00",
+  "files": {
+    "plan/history/queue-q595.md": "8f78af5c8be089554e137f7be3ee7e9b740eb31daa947ce52a8e7986917819b5",
+    "plan/ws074/phase172/browser3/q595/README.md": "ed3cb8d9555164ebe416a98298b2be12a71ea52ad929e8333c8acdb3a13548fc",
+    "plan/ws074/phase172/browser3/q595/amendment01.md": "5b7ca6fe29874a1fead846f3e3a0dad1c00325995cef066a7803d5499c2f6711",
+    "plan/ws074/phase172/browser3/q595/approved-scope.md": "a11d0411d288fbb3250334d79df8bf541d484e12379405543006c8335f6ba644",
+    "plan/ws074/phase172/browser3/q595/commits.json": "87410560936d5f28305fd7268b9a72ff63c16bc1822f8f93dcac24ab1069d163",
+    "plan/ws074/phase172/browser3/q595/native-results.json": "80ca160973d7136d4e68b0f1da3b7500239bb4a23c6f54c6b82c6ea7223ac208",
+    "plan/ws074/phase172/browser3/q595/outcome.json": "f2c7448e0157c09ce3e66a518094955031c74ab30f7bedcd14ba52ca0ac48678",
+    "plan/ws074/phase172/browser3/q595/remaining.json": "d569793e4fcfa4c1858dc68b86beb6b58c7ee41b5bc4f9c0e71d94d3a815feb6",
+    "plan/ws074/phase172/browser3/q595/review-inventory.json": "21b517bde7982f570a523df1d11bf444f3fd3cb61064db5e10ec5f478e704a27",
+    "plan/ws074/phase172/browser3/q595/selection.json": "fd9fba8f3cf236380b19e2de547a8dfbbbbc87db50d1f815ca2727a1167aaef4",
+    "plan/ws074/phase172/browser3/q595/source-hash-readback.json": "4b60b470225fb9d9b27642ff69f02e713f506f55dc60a071135e8de8d8fe66cf"
+  },
+  "source_hashes_matched": 209,
+  "selected_reviews_verified": 10,
+  "reviewed": 150,
+  "remaining": 59
+}

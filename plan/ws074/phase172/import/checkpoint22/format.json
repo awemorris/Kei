@@ -1,0 +1,24 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "plan/ws074/tests/host-xml-node.c",
+      "formatted_sha256": "023e2e18fd0dd7b36407598dc6f3b90774fff5b402f6a97d1ff61bc9353c5676",
+      "final_sha256": "af8a73dd84ab93347e253d39c1fe1d2df4ba3a2fc3686a588a36c6851882b0c6",
+      "restorations": "definition tabs and compound clauses"
+    },
+    {
+      "path": "plan/ws074/tests/host-xml-document.c",
+      "formatted_sha256": "02fd5ce140d8754f1347cc3763d41a94049ec339d0c893e97387cd6c8be7c25b",
+      "final_sha256": "a0a48686f41eb44e514d11e483f1769f21a0ecff88a8ddaa708d91314f7d1185",
+      "restorations": "definition tabs and compound clauses"
+    },
+    {
+      "path": "plan/ws074/tests/host-attribute-namespace.c",
+      "formatted_sha256": "57f488d8d8dbf1bc26d95b4961e6df14412024464948bff477021721f7f1e6e2",
+      "final_sha256": "7636f97515385ff26e593c2b61385b88a7450ec489e9deb82a28047604350118",
+      "restorations": "definition tabs and compound clauses"
+    }
+  ]
+}

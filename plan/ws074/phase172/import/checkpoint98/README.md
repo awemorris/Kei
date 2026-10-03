@@ -1,0 +1,9 @@
+# q598 checkpoint98 / final p172 gate evidence
+
+The user-directed `origin/main` merge brought in WS114 p008's SSD default. The [collision record](../../../../agents/browser3/main-merge-483531ebe/README.md) preserves both versions of four shared plan projections; Agent A must reconcile the reused q594–q598 IDs before shared publication. Browser3's own exact Queue scope and Phase records remain authoritative locally.
+
+The 209 imported files still match their fully reviewed checkpoint95 hashes, and the additional `bind/input.c` hash is unchanged. Browser source itself had no merge diff. The prior [checkpoint96](../checkpoint96/README.md) records the pinned browser2 manifest, host plain/ASan regressions, goldens, Acid2 exact pixels, public ABI and independent client. After main's compositor change, the full target image build exited0 with 220 external/toolchain warning lines and no browser/compositor warning; a warm rebuild of browser CSS and compositor decoration exited0 with warning0 and valid image. The exact final image hash is in [evidence.json](evidence.json). UEFI NVMe boot reached the visually verified [login PNG](final-boot-login.png).
+
+Venus native p014 passed on the postmerge image. On the final warm image, its first cold run missed READY/FRAME within the script's fixed five seconds; its first PNG showed the wallpaper before browser startup, while its later page, GPU/CPU, scrolling and titlebar checks passed. A bounded retry on that same final image exited0, including the [first page](final-native-first.png), [scroll](final-native-scrolled.png), [moved titlebar](final-native-moved.png), close and compositor ERROR0. Both logs are retained. The own guest was stopped.
+
+All p172 import acceptance checks have evidence. The initial cold-start timeout remains a runner timing limitation, and shared plan/Issue publication is pending; it is not claimed as an Acid3 result. p100 has not run.

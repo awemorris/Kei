@@ -1,0 +1,12 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/bind/iterator.c",
+      "formatted_sha256": "a67193cf55e21e03ed4d612214a1f5252a0a522e7bbc26cc68cd79b9aa1345a8",
+      "final_sha256": "93862546418bda1598ea2f8922f02372d29d7add3508bcc7a8322bb85797f736",
+      "restorations": "definition argument tabs"
+    }
+  ]
+}

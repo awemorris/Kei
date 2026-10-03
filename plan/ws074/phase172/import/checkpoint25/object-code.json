@@ -1,0 +1,13 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/net/data.c",
+    "sha256": "a601bb16ef8931ebcd2ae2520eaf02491ab0918c7835907ce3cb845aaaa4ad0d",
+    "object": "libbrowser_net_data.o",
+    "text_sha256": "f6c8d631adf2c3341c90fd71c83f5c42ee795a219cb5070c5dd21f6da8aed61a",
+    "final_sha256": "5a82798865ee59c0572bf988943a7e2d4085c90a29938395e7244cfbfd9bc848",
+    "final_text_sha256": "1d18e3906b7e3d024c0928c56d70ccab9ce0ee48bdfb8c0fe7918610eac97114",
+    "text_equal": false,
+    "C_string_literals_equal": true,
+    "literal_scanner": "C comments, character literals and string literals recognized separately"
+  }
+]

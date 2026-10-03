@@ -1,0 +1,36 @@
+{
+  "queue": "q598",
+  "checkpoint": 95,
+  "source": "userland/desktop/libbrowser/css/cascade.c",
+  "source_sha256": "53e72e1006b7d73d9a3990184bcbcede5a17982e73b3b81296c86452114442aa",
+  "manual_status": "reviewed-full-file",
+  "reviewed": 209,
+  "total": 209,
+  "remaining": 0,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "findings": 0
+  },
+  "tests": {
+    "js": "14/14",
+    "dom": "23/23",
+    "css_host": "five binaries/128 checks"
+  },
+  "review_areas": [
+    "full 4227-line current source, full C style and browser component ownership",
+    "sheet/media ownership, selector/index/cascade ordering and CSS-wide keywords",
+    "custom property substitution and scratch/arena lifetime",
+    "style/class caches, pseudo matching, computed length/font/container behavior"
+  ],
+  "fixes": [
+    "css_engine_add_parsed returns E2BIG instead of silently dropping an applicable media list beyond CSS_MEDIA_CHAIN_MAX"
+  ],
+  "limits": [
+    "Direct oversized media-chain caller not separately injected; existing production callers stay within the import-depth bound",
+    "Original whole p172 final gates remain"
+  ]
+}

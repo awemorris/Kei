@@ -1,0 +1,14 @@
+{
+  "inputs": [
+    "1.5f",
+    "-1.5f",
+    "1.0e30f",
+    "-1.0e30f",
+    "NAN"
+  ],
+  "output": "96\n-96\n2147483647\n-2147483647\n0\n",
+  "sanitizer": "undefined,float-cast-overflow",
+  "exit": 0,
+  "stderr": "",
+  "source": "userland/desktop/libbrowser/layout/box.c"
+}

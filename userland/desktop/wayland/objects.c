@@ -308,8 +308,11 @@ zwl_object_destroy(
 	    object->kind == ZWL_POPUP)
 		zwl_popup_object_gone(object);
 
-	/* A toplevel and its decoration, a pointer and its cursor-shape devices, a surface and its viewport part (ws035-p080). */
-	if (object->kind == ZWL_TOPLEVEL || object->kind == ZWL_DECORATION)
+	/* A toplevel, a surface and their decorations, a pointer and its cursor-shape devices, a surface and its viewport part (ws035-p080). */
+	if (object->kind == ZWL_TOPLEVEL ||
+	    object->kind == ZWL_DECORATION ||
+	    object->kind == ZWL_KDE_DECORATION ||
+	    object->kind == ZWL_SURFACE)
 		zwl_decoration_object_gone(object);
 	if (object->kind == ZWL_POINTER)
 		zwl_cursor_shape_object_gone(object);

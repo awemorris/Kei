@@ -1,0 +1,1 @@
+XML model518/projector541 full reviews; actual236+54=290 native checks/scoped warning0; 20 permitted forward cleanup jumps; original XML syntax/bounds/pinned resources/native graphs, actual30000 wide corpus/precise GC roots and C strings retained.

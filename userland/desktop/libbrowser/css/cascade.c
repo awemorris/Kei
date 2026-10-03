@@ -403,13 +403,15 @@ css_engine_add_parsed(
 	size_t index;
 	int error;
 
-	/* The lent sheet and its lists (the deepest ones beyond the room are left out). */
+	/* The lent sheet and every applicable media list. */
 	memset(&entry, 0, sizeof(entry));
 	entry.sheet = sheet;
 	entry.owned = NULL;
-	for (index = 0; index < media_count && entry.media_count < CSS_MEDIA_CHAIN_MAX; index++) {
+	for (index = 0; index < media_count; index++) {
 		if (media[index] == NULL)
 			continue;
+		if (entry.media_count == CSS_MEDIA_CHAIN_MAX)
+			return E2BIG;
 		entry.media[entry.media_count] = media[index];
 		entry.media_count++;
 	}

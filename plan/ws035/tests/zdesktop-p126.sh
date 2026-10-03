@@ -20,7 +20,9 @@ out=${1:-build/ws035-p126}
 cycles=${2:-3}
 strict=${3:-}
 mkdir -p "$out"
-guest() { timeout 120 python3 plan/tools/guest/guest.py run "$1" 2>&1 </dev/null; }
+# The SSH to the guest, tried again when ssh itself fails (plan/ws099/tests/guest-retry.sh, ws099-p023).
+. plan/ws099/tests/guest-retry.sh
+guest() { guest_retry 120 "$1" </dev/null; }
 keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py --width 1280 --height 800 "$GUEST_RUNTIME/qmp.sock" "$@"; }
 frames() { python3 plan/ws035/tests/frames.py "$out/$1" --runtime "$GUEST_RUNTIME" --seconds "$2" > "$out/$1.txt" 2>&1; }

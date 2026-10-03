@@ -250,6 +250,9 @@ zwl_desktop_object_gone(
 	desk.object = NULL;
 	desk.focus_top = NULL;
 	server->dirty = 1;
+
+	/* Succeeded: the role has ended. */
+	return;
 }
 
 /*
@@ -291,6 +294,9 @@ zwl_desktop_tick(
 	    server->locked ||
 	    server->greeter)
 		zwl_callbacks_done(&desk.surface->committed_callbacks);
+
+	/* Succeeded: the desktop is in step with the pass. */
+	return;
 }
 
 /*
@@ -347,6 +353,9 @@ zwl_desktop_draw(
 	if (image->draw == ZWL_DRAW_OPAQUE)
 		shape.opaque = 1.0f;
 	glass_shape_draw(server, command, &shape);
+
+	/* Succeeded: the desktop is drawn. */
+	return;
 }
 
 /*
@@ -469,6 +478,9 @@ zwl_desktop_unfocus(
 	server->front_surface = zwl_top_window(server);
 	zwl_seat_focus(server);
 	printf("ZWL DESKTOP unfocus via=press\n");
+
+	/* Succeeded: the top window has the keyboard. */
+	return;
 }
 
 /*
@@ -526,6 +538,7 @@ desktop_get(
 	struct zwl_server *server;
 	const char *token;
 	uint32_t id;
+	uint32_t surface_id;
 	int differs;
 	int error;
 
@@ -534,7 +547,8 @@ desktop_get(
 	if (size < 12U)
 		return EPROTO;
 	id = desktop_word(bytes, 0U);
-	surface = zwl_find(manager->client, desktop_word(bytes, 4U));
+	surface_id = desktop_word(bytes, 4U);
+	surface = zwl_find(manager->client, surface_id);
 	if (surface == NULL || surface->kind != ZWL_SURFACE)
 		return EPROTO;
 	error = desktop_string(bytes, size, 8U, &token);
@@ -639,6 +653,9 @@ desktop_place(
 
 	/* The rest of the height, less the keyboard's row. */
 	*height = (int32_t)server->height - *y - bottom;
+
+	/* Succeeded: the place is given. */
+	return;
 }
 
 /* Tells the desktop surface its place (configure) and moves it there. */
@@ -727,17 +744,23 @@ desktop_start(
 	/* The program, its token in its environment only. */
 	snprintf(line, sizeof(line), "KEILAND_DESKTOP_TOKEN=%s exec %s", desk.token, desk.command);
 	desk.pid = zwl_spawn(server, line);
-	desk.starts++;
 	if (desk.pid < 0) {
 		printf("ZWL DESKTOP start-failed errno=%d\n", errno);
+		desk.starts++;
 		desk.pid = 0;
 		desk.gone_ms = now;
 		return;
 	}
 
+	/* Every start counts toward the minute's limit, a failed one too (above). */
+	desk.starts++;
+
 	/* The log the tests read; its first image is logged when drawn. */
 	desk.drawn = 0;
 	printf("ZWL DESKTOP start pid=%d command=%s at_ms=%llu\n", (int)desk.pid, desk.command, (unsigned long long)zwl_milliseconds());
+
+	/* Succeeded: the program is running. */
+	return;
 }
 
 /* Notices that the desktop program ended (its own wait, or App Home's collecting every child). */
@@ -767,11 +790,15 @@ desktop_watch(
 	printf("ZWL DESKTOP exited pid=%d\n", (int)desk.pid);
 	desk.pid = 0;
 	desk.gone_ms = zwl_milliseconds();
+
+	/* Succeeded: the end is noted. */
+	return;
 }
 
 /* Tells whether /etc/keiland/desktop turns the desktop off (its first word is "off"). */
 static int
-desktop_switched_off(void)
+desktop_switched_off(
+	void)
 {
 	char text[8];
 	ssize_t count;
@@ -786,15 +813,21 @@ desktop_switched_off(void)
 	/* Its first bytes. */
 	memset(text, 0, sizeof(text));
 	count = read(descriptor, text, sizeof(text) - 1U);
-	close(descriptor);
-	if (count < 3)
+	if (count < 3) {
+		close(descriptor);
 		return 0;
+	}
+
+	/* The file is not needed any more. */
+	close(descriptor);
 
 	/* "off", alone on its line or followed by a space, turns it off. */
 	match = strncmp(text, "off", 3U);
 	if (match != 0)
 		return 0;
-	if (text[3] != '\0' && text[3] != '\n' && text[3] != ' ')
+	if (text[3] != '\0' &&
+	    text[3] != '\n' &&
+	    text[3] != ' ')
 		return 0;
 
 	/* The desktop is switched off. */
@@ -803,7 +836,8 @@ desktop_switched_off(void)
 
 /* Makes a new random token, written in hex. */
 static void
-desktop_new_token(void)
+desktop_new_token(
+	void)
 {
 	static const char digits[] = "0123456789abcdef";
 	unsigned char bytes[DESKTOP_TOKEN_BYTES];
@@ -820,6 +854,9 @@ desktop_new_token(void)
 
 	/* The token ends after them. */
 	desk.token[DESKTOP_TOKEN_BYTES * 2U] = '\0';
+
+	/* Succeeded: a new token. */
+	return;
 }
 
 /* Reads one possibly unaligned native-endian protocol word. */
@@ -833,6 +870,6 @@ desktop_word(
 	/* The word, copied out byte by byte. */
 	memcpy(&word, bytes + offset, sizeof(word));
 
-	/* Reports the word. */
+	/* Succeeded: the word in the host's order. */
 	return word;
 }

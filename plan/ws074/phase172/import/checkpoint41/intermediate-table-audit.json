@@ -1,0 +1,5 @@
+{
+  "initial_check": "failed because clang-format flattened both original multiline cell initializers",
+  "resolution": "both original blocks restored byte-for-byte before final source verification/build",
+  "source_sha256": "9e0004090aa1e2f39b0e65589936ea6cc4e9a3aa0a5dd51e0abaee19ba27f5f3"
+}

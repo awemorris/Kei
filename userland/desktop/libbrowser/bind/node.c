@@ -416,21 +416,43 @@ bind_array_push_node(
 	struct vm_object *array,
 	struct dom_node *node)
 {
+	struct vm_cell *array_root;
+	struct vm_cell *wrapper_root;
+	struct vm_heap *node_heap;
 	vm_value wrapper;
 	int error;
 
-	/* The node's object. */
-	error = bind_wrap(window, node, &wrapper);
+	/* The result array survives wrapper construction in its caller's heap. */
+	array_root = &array->cell;
+	error = vm_heap_add_root(window->realm->heap, &array_root);
 	if (error != 0)
 		return error;
+
+	/* The node's object. */
+	error = bind_wrap(window, node, &wrapper);
+	if (error != 0) {
+		vm_heap_remove_root(window->realm->heap, &array_root);
+		return error;
+	}
+
+	/* The wrapper's owning heap may differ from the array's heap. */
+	node_heap = node->document->heap;
+	wrapper_root = vm_value_as_cell(wrapper);
+	error = vm_heap_add_root(node_heap, &wrapper_root);
+	if (error != 0) {
+		vm_heap_remove_root(window->realm->heap, &array_root);
+		return error;
+	}
 
 	/* At the array's end. */
 	error = vm_object_define(window->realm->heap, array, vm_value_int32((int32_t)array->length), wrapper, VM_PROPERTY_DEFAULT);
-	if (error != 0)
-		return error;
 
-	/* Succeeded: the node is in the array. */
-	return 0;
+	/* Each temporary root leaves the heap that owns its cell. */
+	vm_heap_remove_root(node_heap, &wrapper_root);
+	vm_heap_remove_root(window->realm->heap, &array_root);
+
+	/* Reports the append or allocation outcome. */
+	return error;
 }
 
 /*

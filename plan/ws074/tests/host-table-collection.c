@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Checks form cache cycles and sole duplicate-list retention using actual production GC. */
+/* Checks table cache cycles and sole cells-collection retention using actual production GC. */
 
 #include "bind/internal.h"
 
@@ -42,9 +42,13 @@ main(
 	construction_stack = __builtin_frame_address(0);
 	vm_heap_set_stack_base(heap, construction_stack);
 	error = collection_case(heap);
-	vm_heap_destroy(heap);
-	if (error != 0)
+	if (error != 0) {
+		vm_heap_destroy(heap);
 		return 2;
+	}
+
+	/* Release the completed fixture heap before reporting its observations. */
+	vm_heap_destroy(heap);
 
 	/* Reports behavioral failures independently of fixture allocation failures. */
 	printed = printf("table collection GC checks: %u/%u passed\n", checks - failures, checks);
@@ -101,9 +105,13 @@ collection_script(
 
 	/* The actual script engine creates every node and collection wrapper. */
 	error = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (error != 0)
+	if (error != 0) {
+		wb_units_release(&units);
 		return error;
+	}
+
+	/* Release the borrowed script input after checking execution. */
+	wb_units_release(&units);
 
 	/* Succeeded: the fixture completion is available. */
 	return 0;
@@ -118,6 +126,7 @@ collection_case(
 	struct dom_document *document;
 	struct bind_window *window;
 	struct bind_host host;
+	struct dom_node *node;
 	struct dom_element *table;
 	struct dom_element *body;
 	struct dom_element *row;
@@ -168,10 +177,41 @@ collection_case(
 		return error;
 	}
 
-	/* Integer addresses observe ownership without supplying any collector root. */
-	table = (struct dom_element *)bind_node_of(answer);
-	body = (struct dom_element *)table->node.first_child;
-	row = (struct dom_element *)body->node.first_child;
+	/* Validate generated nodes before observing their unrooted integer addresses. */
+	node = bind_node_of(answer);
+	if (node == NULL || node->type != DOM_ELEMENT) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* Follow the checked table into its generated section. */
+	table = (struct dom_element *)node;
+	node = table->node.first_child;
+	if (node == NULL || node->type != DOM_ELEMENT) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* Follow the checked section into its generated row. */
+	body = (struct dom_element *)node;
+	node = body->node.first_child;
+	if (node == NULL || node->type != DOM_ELEMENT) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* Inspect the checked row and every materialized cache. */
+	row = (struct dom_element *)node;
+	if (table->bodies_collection == NULL ||
+	    table->rows_collection == NULL ||
+	    body->rows_collection == NULL ||
+	    row->cells_collection == NULL ||
+	    row->node.first_child == NULL) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* Integer addresses supply no collector root. */
 	addresses[0] = (uintptr_t)table;
 	addresses[1] = (uintptr_t)table->bodies_collection;
 	addresses[2] = (uintptr_t)table->rows_collection;
@@ -179,6 +219,7 @@ collection_case(
 	addresses[4] = (uintptr_t)row->cells_collection;
 	addresses[5] = (uintptr_t)row;
 	addresses[6] = (uintptr_t)row->node.first_child;
+	node = NULL;
 	table = NULL;
 	body = NULL;
 	row = NULL;
@@ -194,6 +235,12 @@ collection_case(
 
 	/* The native cache field identities must remain stable after a real collection. */
 	found = vm_heap_find_cell(heap, addresses[0]);
+	if (found == NULL) {
+		error = EIO;
+		goto cleanup;
+	}
+
+	/* A missing table has already failed the checked observation above. */
 	table = (struct dom_element *)found;
 	collection_check((uintptr_t)table->bodies_collection == addresses[1], "table bodies cache SameObject after GC");
 	collection_check((uintptr_t)table->rows_collection == addresses[2], "table rows cache SameObject after GC");
@@ -261,8 +308,17 @@ collection_case(
 	/* Ordinary native construction resumes with the original stack boundary. */
 	vm_heap_set_stack_base(heap, construction_stack);
 
-	/* The manual primary tears down after all native ownership contracts have been observed. */
+	/* All native ownership observations completed before shared teardown. */
+	error = 0;
+
+cleanup:
+	/* Restore the construction contract even after a missing collector observation. */
+	vm_heap_set_stack_base(heap, construction_stack);
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: all native caches and sole collection ownership were observed. */
 	return 0;
 }

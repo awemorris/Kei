@@ -1,6 +1,6 @@
 # zedBSD known bugs
 
-Last updated: 2026-10-02
+Last updated: 2026-10-03
 
 This ledger records observed defects and their explicit active or deferred
 owner. A listed item is not silently treated as a failure of an unrelated
@@ -9,13 +9,34 @@ remain as traceable history and are not new implementation work.
 
 2026-10-02 ユーザー指示: [P8バグ修正専任](agents/registry.md)がgeneration1で稼働。各ticketの既存owner、優先度、保留/再調査条件は保持し、mainが個別のhandling WS/Phaseと有限Queueを選んだ時だけP8へ渡す。P9のKeilandデスクトップ高度化で新たに見つかったバグはmainが重複を照合して本Boardとticketへ記録し、P8の次候補へ回す。担当枠の予約だけで全行のdispositionや修正済み状態を変更しない。
 
+## 優先度と依存（2026-10-03 user、最新）
+
+| Bug | 優先度 | 依存・時期 | 担当・メモ |
+| --- | --- | --- | --- |
+| [BUG-135](bugs/BUG-135.md) | **優先** | [WS131](ws131/ws.md) の libkeiland の整理の後、desktop の設定が libkeiland → compositor の拡張の経路に再実装されてから（WS131 p005・p006 の後）再び取り組む | stat と関連。q624 で UFS の namespace_lock の待ちを修正済み（停止 10→2 回）、残りは commit の二段化 |
+| [BUG-143](bugs/BUG-143.md) | **優先** | — | ユーザーの観察: Text Editor では IME を通さなくても全ての文字入力に 500 ms の遅延があるように見える |
+| [BUG-052](bugs/BUG-052.md) | 優先 | **Q2 に移管（2026-10-03 user、Q1 の管轄外）** | Q1 の担当は触らない |
+| [BUG-120](bugs/BUG-120.md) | 標準 | BUG-052 の後（P1） | GPU の object の枠 128 |
+| [BUG-105](bugs/BUG-105.md) | 標準 | 実機（5330）の日にユーザーと | USB マウス（Logi Bolt） |
+| [BUG-095](bugs/BUG-095.md) | 標準 | — | 電源を切る処理が終わらない |
+| [BUG-041](bugs/BUG-041.md) | 標準 | インストーラ（WS119）の完成の後 | NVMe |
+| [BUG-144](bugs/BUG-144.md)・[BUG-124](bugs/BUG-124.md) | 標準 | WS131 の libkeiland の再構成の後 | QEMU の Venus |
+| [BUG-036](bugs/BUG-036.md)・[BUG-033](bugs/BUG-033.md)・[BUG-027](bugs/BUG-027.md)・[BUG-103](bugs/BUG-103.md) | 低（直っていると思われる） | 確認だけして閉じる。新しい報告があれば優先度を上げる | — |
+
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
+| [BUG-151](bugs/BUG-151.md) | kernel の TCP: 自分側の SHUT_WR で poll が POLLHUP | reproduced（QEMU） / tracking | ws005-p025 / q635 | S1 の後に時期を決める |
+| [BUG-150](bugs/BUG-150.md) | Terminal で Emacs の描画が 2 行目から始まる（右端の wrap の保留が無かった） | reproduced / resolved（ws128-p010、統合 02c0d6f41） | 2026-10-03 ユーザー報告 | — |
+| [BUG-149](bugs/BUG-149.md) | kernel の AF_UNIX stream: 自分側の SHUT_WR で poll が POLLERR | reproduced（QEMU、libkeiland の join の EIO） / resolved（ws005-p025、統合 cb3da62d1。実機は S1） | ws005-p020 / q631 | —。libkeiland 側の回避は ws131-p003 |
+| [BUG-148](bugs/BUG-148.md) | system bar の WiFi の menu の下端が画面の外に切れる | reproduced（QEMU） / tracking | ws005-p020 | 標準 |
+| [BUG-147](bugs/BUG-147.md) | C9 の p128・cursor-owner が間欠的に落ちる | reproduced（1/5） / tracking | ws099-p023 の C9 ×5 | 起動の検出の半分は ws099-p024 で修正（launch-late）。cursor-owner の喪失は未再現、次の発生で criteria.sh の診断を読む |
+| [BUG-146](bugs/BUG-146.md) | Venus の guest 試験が client=1 前提、IME が先だと外れる | reproduced / tracking | ws127-p002 | 共有の helper で app を名前で特定 |
+| [BUG-145](bugs/BUG-145.md) | AX211: handshake の後に DHCP の lease が取れず disassoc（reason 8） | reproduced（passthrough） / tracking | ws005-p019 q611、5GHz | WS004 の新しい Phase |
 | [BUG-144](bugs/BUG-144.md) | 8 番目の Model viewer が vkAllocateMemory -4 | reproduced（QEMU） / tracking | ws129-p010、Venus の hostmem の見当 | 実機で確かめる |
 | [BUG-143](bugs/BUG-143.md) | IME の確定のたびに 500 ms 超で止まり IME を迂回 | reproduced（QEMU） / tracking | ws095-p005、辞書の保存の fsync の見当 | WS095 の次の Phase |
-| [BUG-142](bugs/BUG-142.md) | Files: 起動直後の停止中の Ctrl+C が遅れて処理 | reproduced once（QEMU） / tracking | ws127-p001 | 実機で再現したら ws127-p002 |
-| [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | reproduced / tracking | ws127-p001 | ws127-p002 |
-| [BUG-140](bugs/BUG-140.md) | Files: Trash の同名の 2 つ目の名前と種類 | reproduced / tracking | ws127-p001 | ws127-p002 |
+| [BUG-142](bugs/BUG-142.md) | Files: 起動直後の停止中の Ctrl+C が遅れて処理 | unreproduced / tracking | ws127-p001 | q616 で調べ（source 上は順序を保つ）。実機で再試行 ws127-p007 |
+| [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | unreproduced / tracking | ws127-p001 | q616 で scroll の後の残りを修正。実機で再確認 ws127-p007 |
+| [BUG-140](bugs/BUG-140.md) | Files: Trash の同名の 2 つ目の名前と種類 | reproduced / resolved | ws127-p001 | q616（ws127-p002）で修正、host 試験 |
 | [BUG-139](bugs/BUG-139.md) | Text Editor の IME の変換中の文字が小さい | reproduced / scheduled（ws095-p013 で直した、QEMU で確認、実機の確認待ち） | ユーザー実機、UI/UX の要 | 実機の確認 → resolved |
 | [BUG-138](bugs/BUG-138.md) | system bar の WiFi の on/off・AP 接続が未実装 | reproduced / scheduled（ws005-p019、高） | ユーザー実機 | p019 |
 | [BUG-137](bugs/BUG-137.md) | Terminal の初回起動でタイトルバーが数秒遅れる | reproduced / scheduled（ws099-p023） | ユーザー実機 | p023 |
@@ -26,7 +47,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-130](bugs/BUG-130.md) | FreeBSD drm-kmod DMA-BUF のaccess flags | reproduced / tracking | WS109 q568、live fdのsync ioctlがEBADF、Vulkan window acquire失敗 | Keiland workaround/実GPU window・所有権はq569/q570で検証済み。driver未修理、drm-kmod upgrade時に再確認 |
 | [BUG-129](bugs/BUG-129.md) | package menu に Fonts 分類が無い | reproduced / tracking | WS106 q540、移動前rowsでもMAC-T001 noto-color-emojiでFAIL | package/menu整備時。今回未修正、BUG-080は関連する別条件 |
 | [BUG-128](bugs/BUG-128.md) | Terminal menu初期化でNULL screenを読む | reproduced / resolved（WS105 p008） | source 7dd3ad9e、Linux / zedBSDで起動・文字・終了PASS | startup再発時にreopen、実機未実施 |
-| [BUG-127](bugs/BUG-127.md) | zedBSD window最小化直後の画像 | reproduced / tracking | q532 C9 p072、minimize log後に青い窓が残る。復元・desktop移動はPASS。ユーザーがtrackingでclearを許可 | window操作のQueueでframe待ちを含むbounded調査。修正未実施 |
+| [BUG-127](bugs/BUG-127.md) | zedBSD window最小化直後の画像 | reproduced / resolved（closed 2026-10-03、再現せず。再び見えたら reopen） | q532 C9 p072、minimize log後に青い窓が残る。復元・desktop移動はPASS。ユーザーがtrackingでclearを許可 | window操作のQueueでframe待ちを含むbounded調査。修正未実施 |
 | [BUG-023](bugs/BUG-023.md) | PC98 QEMUで /sbin が空 | reproduced（ユーザー報告） / tracking | 2026-09-27: 最近の PC-98 の staging の /sbin は 26 個（静的）。起動した guest での確認は amd64 だけの方針で未実施 | ws003-p026（削除済み。git の履歴にある）で生成・配置・mountを切り分け。 |
 | [BUG-024](bugs/BUG-024.md) | PC98 menuconfigでPCI/USBを選択できない（PC-98 の kernel に PCI の backend・USB の host が無い） | reproduced（静的） / scheduled（WS077） | ユーザー報告、WS073 の調査 | 2026-09-28 ユーザー: PCI を有効に（WS077） |
 | [BUG-025](bugs/BUG-025.md) | LX6 USB起動でbootパーティションを判別できない | reproduced（ユーザー報告） / scheduled | init未到達。起動モード/識別子/log未取得。 | ws003-p028（削除済み。git の履歴にある）。BUG-017との同一原因は未証明。 |
@@ -128,7 +149,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-122](bugs/BUG-122.md) | compositor が落ちた後、greeter が 3 回失敗して文字の console に落ちる | reproduced（passthrough・QEMU） / resolved（ws099-p010、QEMU） | ws075-p025 | 5330 で再び起きたら sessiond の log の `SESSIOND GREETER failed reason=` を読む（WS099 の L2） |
 | [BUG-123](bugs/BUG-123.md) | desktop-probe が `--timeout-s=3` の後に終わらないことがある（5 回中 2 回） | reproduced（QEMU） / resolved（ws073-p044: libwayland-client の wl_display_dispatch_queue が event を待ち続けた。標準と同じ 1 回の読みに） | ws094-p006 | 5330 の実機での確認 |
 | [BUG-124](bugs/BUG-124.md) | QEMU の Venus で Model viewer を大きくすると vkCreateSwapchainKHR が DEVICE_LOST で失敗し app が終わる（40 回中 5〜6 回） | reproduced（QEMU） / tracking | ws099-p011 | 未定（libvulkan・Venus）。Windows の QEMU のデモで起きたら優先を上げる |
-| [BUG-125](bugs/BUG-125.md) | C9 の p076（窓の move と resize）が全体の実行の中で時々 FAIL（画面が resize の途中） | reproduced（QEMU） / tracking | ws102-p016 ほか | 試験で resize の後の frame を待つ。20 回の単独と 5 回の C9 で確かめる WS105 q532でもleft resize416（期待200）、q538のC2 / p076 resize FAILも追加（原因未確定）、ユーザーが未修正trackingでclearを許可（2026-10-01）。。2026-10-02: WS099 の blocking、[ws099-p020](ws099/phase020/phase.md) で WS099 の担当が直す |
+| [BUG-125](bugs/BUG-125.md) | C9 の p076（窓の move と resize）が全体の実行の中で時々 FAIL（画面が resize の途中） | reproduced（QEMU） / resolved（ws099-p020、2026-10-03） | ws102-p016 ほか | 試験で resize の後の frame を待つ。20 回の単独と 5 回の C9 で確かめる WS105 q532でもleft resize416（期待200）、q538のC2 / p076 resize FAILも追加（原因未確定）、ユーザーが未修正trackingでclearを許可（2026-10-01）。。2026-10-02: WS099 の blocking、[ws099-p020](ws099/phase020/phase.md) で WS099 の担当が直す |
 | [BUG-126](bugs/BUG-126.md) | toolchain の lock の中で libcxx の source の複写に patch が当たらない | reproduced / resolved | 2026-09-30: `cp -al` が読み取り専用の LLVM の source の directory の権限を写し、patch が一時 file を作れない | 2026-10-01 修正: `ZEDBSD_EXTERNAL_LLVM_COPY` が複写の directory を書けるようにする。lock のままで再現と修正を確かめた |
 | [BUG-064](bugs/BUG-064.md) | libwayland の client が flush の EPIPE を致命的にし、直前の protocol error を失う | reproduced / resolved | ws070-p005 | 修正済み（EPIPE を無視して残りの event を読む） |
 | `BUG-022` | High-Speed UAS formatter completion stall | Fixed for observed path; WS025-p029 q229 | q228-mounted-high1 times out during mkfs before media exchange. CPU0 is in drv_usb_urb_wait; UAS trace ends after WRITE(16) tag 0xfa data-out completion, without the next status request. | Pending URB wait now yields to HCD retirement workers. Focused normal/sanitized wait tests, three builds and two full High-Speed mounted-medium scenarios pass. Preserve original image/trace/registers; re-open on recurrence. Evidence（削除済み。git の履歴にある）. |

@@ -1,0 +1,13 @@
+log: ZWL CORNER commit (1) ok
+harness: ssh failed, attempt 1: Connection timed out during banner exchange
+log: ZWL WINDOW unfullscreen surface=[0-9]+ x=-?[0-9]+ y=-?[0-9]+ placed=0 (1) MISSING (found 0)
+harness: ssh failed, attempt 1: Connection timed out during banner exchange
+log: ZWL WINDOW centred surface=[0-9]+ x=[0-9]+ y=[0-9]+ width=[0-9]+ height=[0-9]+ (1) MISSING (found 0)
+harness: ssh failed, attempt 1: Connection timed out during banner exchange
+notes centred at 0,0 size 0x0
+title bar under the system bar (y=0 >= 98) FAIL
+centred across (middle 0) FAIL
+log: ZWL GLASS moved surface=[0-9]+ x=100 y=60 (1) MISSING (found 0)
+log: ZWL CORNER commit (2) ok
+log: ZWL WINDOW unfullscreen surface=[0-9]+ x=100 y=98 placed=1 (1) MISSING (found 0)
+p138: FAIL

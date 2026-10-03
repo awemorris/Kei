@@ -1,0 +1,9 @@
+[
+  {
+    "path": "plan/ws074/tests/host-click.c",
+    "sha256": "87c8150009a2c136bf5920c9972cffb492f82fc1b5c6cb59fe9bedeaa396ac56",
+    "object": "host-click.o",
+    "object_path": "build/browser3-p172/review34/host-click.o",
+    "text_sha256": "11554d2241035e6a6f612832f8ed2aa8d504418b4db6f81300a34d0743722be5"
+  }
+]

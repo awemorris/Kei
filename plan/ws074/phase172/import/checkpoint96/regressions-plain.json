@@ -1,0 +1,1573 @@
+[
+  {
+    "group": 0,
+    "command": [
+      "python3",
+      "plan/ws074/tests/run-frame-load-tests.py",
+      "--program",
+      "build/browser3-p172/plain/host-frame-load"
+    ],
+    "exit": 0,
+    "seconds": 2.646,
+    "log_sha256": "b6c893bf7115edef6832ee26565ce1a797e8634c449a1e694283577219db4c6e",
+    "last": [
+      "native child loading: 52/52 passed; error=0"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 1,
+    "command": [
+      "build/browser3-p172/plain/host-svg-text"
+    ],
+    "exit": 0,
+    "seconds": 0.04,
+    "log_sha256": "8a3fcbd77470b677eca8b3f80c6ae0d1c237fa33fef890d4c8180458368764f0",
+    "last": [
+      "native SVG text: 42/42 passed; error=0"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 2,
+    "command": [
+      "build/browser3-p172/plain/host-document-parser"
+    ],
+    "exit": 0,
+    "seconds": 0.031,
+    "log_sha256": "29064fa4ecb262d43927404832154073a01ff9b44b772ecd44f7d0ce51257b71",
+    "last": [
+      "native document parser lifetime: 8/8 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 3,
+    "command": [
+      "build/browser3-p172/plain/host-image-geometry"
+    ],
+    "exit": 0,
+    "seconds": 0.028,
+    "log_sha256": "42d97ff1ddfcc9fe239189ea774188e7e1c993d586a5cdf7b74d63399d057a75",
+    "last": [
+      "native image geometry: 10/10 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 4,
+    "command": [
+      "build/browser3-p172/plain/host-image-zero"
+    ],
+    "exit": 0,
+    "seconds": 0.003,
+    "log_sha256": "78969ec89bfe1cc3b3e197b32c7ff0b99d6a48a4405ce57a94152d0d4000d8fa",
+    "last": [
+      "native image zero layout: 10/10 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 5,
+    "command": [
+      "build/browser3-p172/plain/host-css-rule-model"
+    ],
+    "exit": 0,
+    "seconds": 0.009,
+    "log_sha256": "8f92bab1f61e5a667cf5255a6f7e1a11a750927bb740757159ccc7f2bf39ab62",
+    "last": [
+      "native CSS rule model: 44/44 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 6,
+    "command": [
+      "build/browser3-p172/plain/host-style-sheet"
+    ],
+    "exit": 0,
+    "seconds": 0.023,
+    "log_sha256": "145a244581384ac3acdf11ee7720624896213a69ed3009bd5564e566afb23e69",
+    "last": [
+      "native style source: 21/21 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 7,
+    "command": [
+      "build/browser3-p172/plain/host-cssom"
+    ],
+    "exit": 0,
+    "seconds": 0.039,
+    "log_sha256": "c305d5cb21f371d8d586cc841ea9eba1e54c2bf0a8f0dd7d1086bcf366d3c125",
+    "last": [
+      "native CSSOM: 12/12 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 8,
+    "command": [
+      "build/browser3-p172/plain/host-cssom-mutation"
+    ],
+    "exit": 0,
+    "seconds": 0.039,
+    "log_sha256": "7139f768e70640f1d19ddc52050b340cf31f3257e24fed4621b30c240e8136e3",
+    "last": [
+      "native CSSOM mutation: 12/12 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 9,
+    "command": [
+      "python3",
+      "plan/ws074/tests/run-resource-tests.py",
+      "--program",
+      "build/browser3-p172/plain/host-resource"
+    ],
+    "exit": 0,
+    "seconds": 0.611,
+    "log_sha256": "a4e566354b33ea8b2f2214c4a526bd4847fa13954ff62eab51d9975d5a35bcab",
+    "last": [
+      "native resource metadata: 105/105 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 10,
+    "command": [
+      "build/browser3-p172/plain/host-data-url"
+    ],
+    "exit": 0,
+    "seconds": 0.004,
+    "log_sha256": "6ca7f4300680e31ff61cec08e17418602a134c117652fbb41bb411a6ac770910",
+    "last": [
+      "native data URL error routing: 80/80 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 11,
+    "command": [
+      "build/browser3-p172/plain/host-xml-dom"
+    ],
+    "exit": 0,
+    "seconds": 0.08,
+    "log_sha256": "576225688d7dc3f868aa73afb48b0bf65d71b00ecad5a8edccffa51a9f6775a2",
+    "last": [
+      "native XML DOM: 54/54 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 12,
+    "command": [
+      "build/browser3-p172/plain/host-xml-binding"
+    ],
+    "exit": 0,
+    "seconds": 0.032,
+    "log_sha256": "77c6af3ff22ac88b8a3c6956e7ac1425b58f15fc42afac31374a1f1f0aad8968",
+    "last": [
+      "native XML bindings: 34/34 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 13,
+    "command": [
+      "build/browser3-p172/plain/host-xml-node"
+    ],
+    "exit": 0,
+    "seconds": 0.012,
+    "log_sha256": "1467f0b272fc2c0bdd424f2e435edc3c06afb3304584ec6cb5bf0eee380bcb1c",
+    "last": [
+      "native XML nodes: 32/32 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 14,
+    "command": [
+      "build/browser3-p172/plain/host-attribute-namespace"
+    ],
+    "exit": 0,
+    "seconds": 0.003,
+    "log_sha256": "06d9825cef428a2de2534defc5a26693114c7b69675a306d2e3e806206235e2d",
+    "last": [
+      "native attribute namespaces: 25/25 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 15,
+    "command": [
+      "build/browser3-p172/plain/host-xml"
+    ],
+    "exit": 0,
+    "seconds": 0.047,
+    "log_sha256": "c36ef6d6c26839449e19ca578f421c490ad6b070923094354707d4c562729edd",
+    "last": [
+      "native XML model: 236/236 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 16,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/style-sheet-mutation-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.035,
+    "log_sha256": "005081bb70a23d92ed8a17b37709acf5cb714e08315a38ef6742581c4bc8bbbb",
+    "last": [
+      "PASS ordinary rule cannot precede actual retained import",
+      "PASS ordinary insertion after retained import keeps valid native order",
+      "style sheet mutation probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 17,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/style-sheet-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "4c8e6aaf340bbebd6bf3811232a7866f61d3c6fa526bbb0de06a6fd82e8d635d",
+    "last": [
+      "PASS saved child query remains usable after actual owner retirement",
+      "PASS native XML prototype snapshot and exact HTML local style name",
+      "style sheet probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 18,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/image-zero-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.028,
+    "log_sha256": "334b9aabd3813b6811a2fe92136102b52e7e006ed92963ea92240c1190f7a56f",
+    "last": [
+      "PASS zero width native child rectangle retains height",
+      "PASS retired zero image remains nonrendered fallback",
+      "image zero probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 19,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/image-geometry-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.037,
+    "log_sha256": "8e5e6134e87c765d187d0f46de130735a0006eeaad96b0c7f30afb3ac1757f79",
+    "last": [
+      "PASS retired image uses fallback without accessing destroyed parent layout",
+      "PASS retired child has no active geometry",
+      "image geometry probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 20,
+    "command": [
+      "build/browser3-p172/plain/host-document-images"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "ac57e07ae8c28343bf6d130c10ba5c8d466d87a248d7460df5e6c62a20b949c8",
+    "last": [
+      "native Document.images lifetime: 10/10 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 21,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/document-images-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.015,
+    "log_sha256": "697fce77eeed9266988bceca602cd4dfa713cfb77627e6922ebd7ec2f4fb7499",
+    "last": [
+      "PASS same cache observes new replacement image identity",
+      "PASS saved image collection remains usable after child retirement",
+      "document images probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 22,
+    "command": [
+      "build/browser3-p172/plain/host-document-stream"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "6677347421b4a1ab2cc40724f9278a3fc8f5c20e1ac6f75281c1cece68993bff",
+    "last": [
+      "native document streams: 9/9 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 23,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/document-stream-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.027,
+    "log_sha256": "b0a9ce81b50672b66dbd28c57f22ec065ca6b3e9f6b6fbbabd072f85afdc5518",
+    "last": [
+      "PASS existing primary active parser write retained",
+      "PASS retired child cannot start active replacement",
+      "document stream probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 24,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "--font=userland/desktop/fonts/Inter.ttf",
+      "--mono-font=userland/desktop/fonts/JetBrainsMono-Regular.ttf",
+      "--fallback-font=userland/desktop/fonts/DroidSansFallbackFull.ttf",
+      "plan/ws074/tests/pages/frame-viewport-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.031,
+    "log_sha256": "94bdbb74457d1e183f3b00c6e3c5942ba82bdb4d5395ad204ae9a2ed2dfb8862",
+    "last": [
+      "PASS retired child retains last supplied dimensions without parent layout access",
+      "PASS retired saved computed declaration has no active cascade",
+      "frame viewport probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 25,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/text-transform-media-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.031,
+    "log_sha256": "f0bfc6ebbc098c0deda5c98a304d5a838cb7dc2a41fef7812fd7de6114f17bac",
+    "last": [
+      "PASS original46 media y4",
+      "PASS borrowed computed style uses child CSS and viewport",
+      "text transform media probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 26,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-surround-contents-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.014,
+    "log_sha256": "8588e15539e384ff008cdc895a4f6742294165f47932dcbe544ac7a4a06d7d2c",
+    "last": [
+      "PASS adopted source surround uses current owner independently of creator",
+      "PASS saved child XML surround after iframe removal",
+      "range surround contents probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 27,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-extract-contents-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.095,
+    "log_sha256": "2c2620b102bb1b66905682de1f49d25be649ce1086842bcd13a827013ac58f15",
+    "last": [
+      "PASS adopted endpoint extract uses current owner independently of creator",
+      "PASS saved child XML extraction after iframe removal",
+      "range extract contents probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 28,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-delete-contents-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.043,
+    "log_sha256": "5d874a54ec0170ff7df35f12818f3ef68ab9e553599f0280cc45058039dea964",
+    "last": [
+      "PASS saved child XML Range survives iframe removal",
+      "PASS actual Range removal retires an iframe through native frame teardown",
+      "range delete contents probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 29,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/mutation-record-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.018,
+    "log_sha256": "a067a271b832f263f6200e3e9e6c42f77628aabb3ae752762d63089af82e6795",
+    "last": [
+      "PASS checkpoint batches complete FIFO records",
+      "PASS callback preserves added and removed identity",
+      "mutation record probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 30,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-clone-contents-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.082,
+    "log_sha256": "312ee5292caa9c4c63071ebc10573cc0b4aa197e326bdf641df12c02c5b0c63d",
+    "last": [
+      "PASS adopted endpoint clone uses current owner independently of Range creator",
+      "PASS saved child XML content clone retains actual prototype snapshot after iframe removal",
+      "range clone contents probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 31,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/node-cloning-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.015,
+    "log_sha256": "8223860d90559f9965c4d237eebdec6b6ef1b651ee9faa28ec9e7f13e785126f",
+    "last": [
+      "PASS adopted clone uses current primary owner",
+      "PASS saved child XML clone retains snapshot after iframe removal",
+      "node cloning probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 32,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-insert-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.025,
+    "log_sha256": "d3ec66c6fdc6a4842fe9c9aead26c3239b37a75bb8fcdef877df773b45dd1550",
+    "last": [
+      "PASS borrowed primary Text split uses current XML snapshot prototype",
+      "PASS saved child Text split creates suffix in actual current primary Document",
+      "range insert probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 33,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-mutation-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.022,
+    "log_sha256": "f3324230c13dba86cf4bf9e68c4e6db953404002739cf81259f4c085c8311ad9",
+    "last": [
+      "PASS saved borrowed child insertion uses current primary registry",
+      "PASS saved child creator range uses current Text owner for data",
+      "range mutation probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 34,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/pre-insertion-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.014,
+    "log_sha256": "c5c976341cd34445a45e96faf11c43a904ff01d8b408ffbf358f1ffeae0a46c4",
+    "last": [
+      "PASS borrowed child method rejects actual existing XML root",
+      "PASS saved XML graph valid after child frame removal",
+      "pre-insertion probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 35,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-core-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.031,
+    "log_sha256": "27a262339d1404ee70f0d8f25a919a8c714efc1725648d1f856e1ccbfb5243a3",
+    "last": [
+      "PASS adopted endpoint clone preserves source relevant prototype",
+      "PASS saved child clones usable after frame removal and adoption",
+      "range core probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 36,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-removal-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.019,
+    "log_sha256": "0c6b7092140f720b1a48d24c6e07f07aa49958d6adc5aa0eb20ef475f9644020",
+    "last": [
+      "PASS native removal ignores visible endpoint expandos",
+      "PASS saved child removal remains native after iframe removal",
+      "range removal probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 37,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/range-boundary-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.025,
+    "log_sha256": "10b3a3a78ff67866aad0f2caca2e9741fadc3a8ba3d0faf938dc43ee3924cbf2",
+    "last": [
+      "PASS saved range retains detached child boundaries",
+      "PASS adoption during conversion uses actual node identity",
+      "range boundary probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 38,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/option-selectedness-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.029,
+    "log_sha256": "9cce9bd71b67b66b174bf0decaec24fa0929a6acedfbc0562de40693c22a242f",
+    "last": [
+      "PASS negative zero is valid zero display size",
+      "PASS negative nonzero invalid display uses default one",
+      "option selectedness probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 39,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/select-options-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "863600ac268c3467ea75b170e21f7805bf9c7e6bbdc74451a83d5f7f7de7c599",
+    "last": [
+      "PASS conversion adoption chooses current native owner",
+      "PASS cached collection identity retains original creator prototype",
+      "select options probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 40,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/table-row-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.023,
+    "log_sha256": "91386ab6cb33e2b54a99a617238060d6bd861d3df7f678eff117ad4251be5e4b",
+    "last": [
+      "PASS conversion adoption chooses current Document for new row",
+      "PASS adopted table deletion uses current native state",
+      "table row probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 41,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/document-adoption-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.026,
+    "log_sha256": "9cb93bebd6278734834d46b5b77744e6d5d6a7fc7daf7d576464df0cf4c11812",
+    "last": [
+      "PASS sole adopted child iterator repairs current native state",
+      "PASS active candidate repaired during filter adoption and removal",
+      "Document adoption probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 42,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/table-structure-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.033,
+    "log_sha256": "f7f27378d64dd2e2b3cee8c1493b3e64a727677042c39925b220629d47a7ec3c",
+    "last": [
+      "PASS saved child creates after frame removal",
+      "PASS cross-Document setter adopts complete subtree",
+      "table structure probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 43,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/table-collection-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.028,
+    "log_sha256": "f97588cbdb860c4c07e4db6970f0adba20eb25b53170f7b691d7b8cdacc50a35",
+    "last": [
+      "PASS saved table collection after frame removal",
+      "PASS saved child table list remains live",
+      "table collection probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 44,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/submit-event-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.026,
+    "log_sha256": "a08dd08c3a037d2b186ac18e497b5ebd09b3b7f65a156174151640b07654a306",
+    "last": [
+      "PASS retained child submission after frame removal",
+      "PASS constructed submit event dispatch/cancellation",
+      "submit event probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 45,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/click-activation-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.028,
+    "log_sha256": "a9a975dacf2500ca14058fb8926b9e32ddabffc9e6fcf891461609e3eefb20fb",
+    "last": [
+      "PASS borrowed click uses actual child event realm",
+      "PASS saved child input click after iframe removal",
+      "click activation probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 46,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/radio-state-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.029,
+    "log_sha256": "e5cd0b91d9414c7e2da5b3616e5ae43f1217d0ae5e00a9f497b3a13c28b4ceb7",
+    "last": [
+      "PASS managed child radio list native group",
+      "PASS retired child radio value remains native callable",
+      "radio state probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 47,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/input-reflection-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.027,
+    "log_sha256": "15796f22eb14b068731d0f30d3e679b4f58c59bf2375c947da476b3d72a19803",
+    "last": [
+      "PASS input relevant child prototype and borrowed owner getter",
+      "PASS retired managed input native getter remains callable",
+      "input reflection probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 48,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/form-controls-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.029,
+    "log_sha256": "c261d19b193a1ec12cd31c1fcd18fcb56f9c5d32eb7e847e687c5121ab6313b5",
+    "last": [
+      "PASS cross realm borrowed collection methods",
+      "PASS retired managed controls and list remain callable",
+      "form controls probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 49,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/document-forms-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.011,
+    "log_sha256": "b9c403c53b1b1dab00755a51272a354de105b4384c85d7370978468988881de9",
+    "last": [
+      "PASS whole form subtree removal empties saved Document.forms",
+      "PASS different Document collections remain independent",
+      "Document.forms probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 50,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/html-collection-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.029,
+    "log_sha256": "45e059e53d00c48b3bfe8feca2f9a7681f5e6f92ac6699109d7787087dec56d4",
+    "last": [
+      "PASS borrowed method accepts actual foreign collection",
+      "PASS retired managed child collection remains usable",
+      "HTMLCollection probe done"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 51,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/node-iterator-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.026,
+    "log_sha256": "86d36daa12ccab85caa126cc06b79a1787d5088b6b7b5ff4f3d99f906edfb1d4",
+    "last": [
+      "PASS borrowed factory prototype follows receiver Document",
+      "PASS child XML prototype snapshot used",
+      "PASS removed child factories remain usable"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 52,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/tree-walker-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.026,
+    "log_sha256": "48187a3826853a43757017c560381278a3d44086b9fb71783949d7599e6a649f",
+    "last": [
+      "PASS accepted removed candidate is returned",
+      "PASS removed candidate has no implicit ancestor",
+      "PASS readonly walker state and constants"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 53,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/xml-document-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.023,
+    "log_sha256": "8de4472ffc2fce6a2720f9da11df4240e48faf660b85b76cc3c2d0f854d2fed8",
+    "last": [
+      "PASS child XML implementation prototype",
+      "PASS removed frame XML remains usable",
+      "PASS XML readonly content type"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 54,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/namespace-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.022,
+    "log_sha256": "f9a78abd6fb45205833c8181d76313a7a53e4fc1730a71e807ac6dfbe72aedb3",
+    "last": [
+      "PASS required arguments",
+      "PASS borrowed child wrapper owner",
+      "PASS child namespace exception realm"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 55,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/element-name-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.012,
+    "log_sha256": "7084e3faa20600ff576160ad41955a9e22e789c71db5f8153149740144075059",
+    "last": [
+      "PASS borrowed child wrapper realm",
+      "PASS borrowed method exception realm",
+      "PASS child method exception realm"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 56,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/iframe-context-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.032,
+    "log_sha256": "2f7c5d31d1b66675cd84e233fa6c4d2ac86540594d44028b5fe19d88c74a4466",
+    "last": [
+      "PASS nested destroyed",
+      "PASS reinsert fresh identity",
+      "PASS inactive document child null"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 57,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/legacy-event-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "21a7d0121aacd38b2e36c243a795b6c4fe73f536521a1ef6c869c4e0b3c181d7",
+    "last": [
+      "PASS initialization clears stop flags",
+      "PASS empty initialized type dispatch allowed",
+      "PASS active method still converts arguments"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 58,
+    "command": [
+      "build/browser3-p172/plain/host-frame-lifetime"
+    ],
+    "exit": 0,
+    "seconds": 0.219,
+    "log_sha256": "59488199b4118eca452b94185f06384d62a7e05ac13637d99b6b9dcc27a061ce",
+    "last": [
+      "frame lifetime checks: 148/148 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 59,
+    "command": [
+      "build/browser3-p172/plain/host-namespace"
+    ],
+    "exit": 0,
+    "seconds": 0.031,
+    "log_sha256": "42188dd144abb5fa678344b5bee0728e414da338b2bf2b2c134cec9c7ba83727",
+    "last": [
+      "namespace GC checks: 12/12 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 60,
+    "command": [
+      "build/browser3-p172/plain/host-context-ownership"
+    ],
+    "exit": 0,
+    "seconds": 0.034,
+    "log_sha256": "10819a10c049ee2693c6435c5e47ed11afb34b5a01bbb0cb434e4860f9f3c963",
+    "last": [
+      "ownership checks: 27/27 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 61,
+    "command": [
+      "build/browser3-p172/plain/host-realms"
+    ],
+    "exit": 0,
+    "seconds": 0.012,
+    "log_sha256": "edadbf2feb586f130a1136b8eadf4891dae4e4550ee0eba8c5efd7790954c45f",
+    "last": [
+      "PASS VM constructor exception",
+      "PASS native failure unwind",
+      "realm checks: 30/30 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 62,
+    "command": [
+      "build/browser3-p172/plain/host-object"
+    ],
+    "exit": 0,
+    "seconds": 0.003,
+    "log_sha256": "6f2d0db85e235258e7afdf6877ee05cc176b8031089d24f786d587836f736e88",
+    "last": [
+      "host-object: collection freed 1305 cells, 541 live",
+      "host-object: 100 checks, 0 failed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 63,
+    "command": [
+      "build/browser3-p172/plain/host-interp"
+    ],
+    "exit": 0,
+    "seconds": 0.109,
+    "log_sha256": "4ae6342e8b4089d5fb2f1c04347699a9d5c9839d80f5740001086d50e23e90e0",
+    "last": [
+      "host-interp: fib(20) ran; 0 collections so far",
+      "host-interp: the run collected 2 times, 103852 live cells",
+      "host-interp: 45 checks, 0 failed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 64,
+    "command": [
+      "python3",
+      "plan/ws074/tests/run-dom-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "seconds": 2.41,
+    "log_sha256": "b6160a5f4a2b2e88dd01df38d8f86f9d3d5963ff347b42ef7393c039b1dddcb0",
+    "last": [
+      "pass urls",
+      "pass web-api",
+      "dom-tests 23/23"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 65,
+    "command": [
+      "python3",
+      "plan/ws074/tests/run-js-tests.py",
+      "--program",
+      "build/browser3-p172/plain/browser"
+    ],
+    "exit": 0,
+    "seconds": 0.247,
+    "log_sha256": "8257be6bc6927e5457c4ad79e208f648b26529b693de56c39cf3dc0658fa91d2",
+    "last": [
+      "pass regexp",
+      "pass strict",
+      "js-tests 14/14"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 66,
+    "command": [
+      "build/browser3-p172/plain/host-xml-document"
+    ],
+    "exit": 0,
+    "seconds": 0.031,
+    "log_sha256": "ef2d09e7bd4ee77d6c774f341af83e512a49e1464747896ec49d0a42d1e24e6d",
+    "last": [
+      "XML document GC checks: 16/16 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 67,
+    "command": [
+      "build/browser3-p172/plain/browser",
+      "--run",
+      "plan/ws074/tests/pages/child-style-probe.html"
+    ],
+    "exit": 0,
+    "seconds": 0.036,
+    "log_sha256": "c72395c342552ddd8091fad902ada52fd49b26a1b6911f0d65481f7a0b7f2944",
+    "last": [
+      "PASS reinserted declaration remains live",
+      "PASS retired child computed empty",
+      "PASS retired child selector empty"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 68,
+    "command": [
+      "build/browser3-p172/plain/host-frame-viewport"
+    ],
+    "exit": 0,
+    "seconds": 0.028,
+    "log_sha256": "dd9e41ad3590f0e3d1d40c3052f4392914e3ec9cf6eae7e53ba8347097d1edd9",
+    "last": [
+      "native iframe viewport: 12/12 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 69,
+    "command": [
+      "build/browser3-p172/plain/host-color-media"
+    ],
+    "exit": 0,
+    "seconds": 0.002,
+    "log_sha256": "e08b21c3c01a01278a7c700782a6358ba4d714c021f18ce3579fa5be555e64a4",
+    "last": [
+      "native color media: 39/39 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 70,
+    "command": [
+      "build/browser3-p172/plain/host-range-surround-contents"
+    ],
+    "exit": 0,
+    "seconds": 0.553,
+    "log_sha256": "db2314016d63424e4e95b6658a2e4a3a32e8faa75a704166d585de7fe3f18276",
+    "last": [
+      "native Range surround contents: 16/16 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 71,
+    "command": [
+      "build/browser3-p172/plain/host-range-extract-contents"
+    ],
+    "exit": 0,
+    "seconds": 0.382,
+    "log_sha256": "0000bc07600c9636dbc74b6d250747494f5ae87f6b90e227a721678e6f476eb5",
+    "last": [
+      "native Range extract contents: 14/14 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 72,
+    "command": [
+      "build/browser3-p172/plain/host-range-delete-contents"
+    ],
+    "exit": 0,
+    "seconds": 0.06,
+    "log_sha256": "90a10920835e62ad6e176c58bb1aa95c1d694fd6fac4a9829919c39801f725fe",
+    "last": [
+      "native Range delete contents: 11/11 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 73,
+    "command": [
+      "build/browser3-p172/plain/host-vm-factory"
+    ],
+    "exit": 0,
+    "seconds": 0.029,
+    "log_sha256": "85d1462cab49abc28e72dd322e13c96c738e09991ec9a39236dbfca1cae48cea",
+    "last": [
+      "native VM factory GC: 56/56 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 74,
+    "command": [
+      "build/browser3-p172/plain/host-mutation-record"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "8d888edc1356115476fe8ae90db9989a86cda0854f25093caccb354c11bdfa4c",
+    "last": [
+      "native mutation record GC: 16/16 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 75,
+    "command": [
+      "build/browser3-p172/plain/host-range-clone-contents"
+    ],
+    "exit": 0,
+    "seconds": 0.367,
+    "log_sha256": "83789d415140d9ecd6275dc4884e7b53a66c8efe4c0ed9ec8b9787b38aea9882",
+    "last": [
+      "native Range clone contents: 15/15 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 76,
+    "command": [
+      "build/browser3-p172/plain/host-range-data"
+    ],
+    "exit": 0,
+    "seconds": 0.018,
+    "log_sha256": "8de29452af60d0f8b56443e8347a60ebdb2038615c37dd4ba56523275a4e3fb2",
+    "last": [
+      "range-data native checks: 100/100 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 77,
+    "command": [
+      "build/browser3-p172/plain/host-node-cloning"
+    ],
+    "exit": 0,
+    "seconds": 0.032,
+    "log_sha256": "ae86c7431f890e5921ad0c95ab460ef4e8ed853a2aabd5772bcd83cd3b6ae262",
+    "last": [
+      "PASS creator collectible after all output roots released",
+      "PASS invalid embedding arguments rejected without publication",
+      "native node cloning: 26 checks, 0 failures"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 78,
+    "command": [
+      "build/browser3-p172/plain/host-range-insert"
+    ],
+    "exit": 0,
+    "seconds": 0.033,
+    "log_sha256": "b6357d21ebe8696f4dc0befd4710ab9e130bf68c6e9f58d31a854bdffbdd50d1",
+    "last": [
+      "range insertion lifetime checks: 92/92 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 79,
+    "command": [
+      "build/browser3-p172/plain/host-range-mutation"
+    ],
+    "exit": 0,
+    "seconds": 0.016,
+    "log_sha256": "92448ca00b71e9bfaa8b88b718702913295e9dac4b6c4938bb3ccd2757e265bf",
+    "last": [
+      "range-mutation native checks: 36/36 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 80,
+    "command": [
+      "build/browser3-p172/plain/host-insertion"
+    ],
+    "exit": 0,
+    "seconds": 0.015,
+    "log_sha256": "aa4152a870f23d7423be24720a0b2de0922a2ca516a0e2971c7bc201d46fd541",
+    "last": [
+      "pre-insertion native checks: 29/29 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 81,
+    "command": [
+      "build/browser3-p172/plain/host-range-boundary"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "f47421e86732929ef77a1141fedf7827982c9bfd7013fe6cf0bc60d6bc4c2727",
+    "last": [
+      "range boundary lifetime checks: 89/89 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 82,
+    "command": [
+      "build/browser3-p172/plain/host-option-state"
+    ],
+    "exit": 0,
+    "seconds": 0.019,
+    "log_sha256": "5039c0f60367b8b60295fd608563a01e699a3a8b47e97356cc7d75a8a3107484",
+    "last": [
+      "option selectedness lifetime checks: 20/20 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 83,
+    "command": [
+      "build/browser3-p172/plain/host-select"
+    ],
+    "exit": 0,
+    "seconds": 0.024,
+    "log_sha256": "29d50effcf363127530d82d2a96838b14a053362ad02a401a4bd5cece791b2be",
+    "last": [
+      "select addition lifetime checks: 78/78 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 84,
+    "command": [
+      "build/browser3-p172/plain/host-select-collection"
+    ],
+    "exit": 0,
+    "seconds": 0.017,
+    "log_sha256": "d18cc454bb2f25136940e45394ea0df346c1c6b6921f060003ab9ce6b267fece",
+    "last": [
+      "select collection GC checks: 12/12 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 85,
+    "command": [
+      "build/browser3-p172/plain/host-table-row"
+    ],
+    "exit": 0,
+    "seconds": 0.025,
+    "log_sha256": "dd0332e5610b52d633e5af544a4e9903a6d254f2087d8d3d5197325bd82fafb3",
+    "last": [
+      "table row lifetime checks: 75/75 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 86,
+    "command": [
+      "build/browser3-p172/plain/host-table-mutation"
+    ],
+    "exit": 0,
+    "seconds": 0.012,
+    "log_sha256": "21540766952b2f5af869fe3f766072492a6f2f995deaa9240577ee1d10341b66",
+    "last": [
+      "table mutation lifetime checks: 42/42 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 87,
+    "command": [
+      "build/browser3-p172/plain/host-table-collection"
+    ],
+    "exit": 0,
+    "seconds": 0.019,
+    "log_sha256": "a9bc1bd999b56a0f3af687d5b129e1473d2f3053746c67b82ab794b6739a2dea",
+    "last": [
+      "table collection GC checks: 25/25 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 88,
+    "command": [
+      "build/browser3-p172/plain/host-submit"
+    ],
+    "exit": 0,
+    "seconds": 0.022,
+    "log_sha256": "b5c99f51e998fcfd5096798a3a756b8cfa31ca0e8597facaab05446a809910c8",
+    "last": [
+      "submit lifetime checks: 13/13 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 89,
+    "command": [
+      "build/browser3-p172/plain/host-click"
+    ],
+    "exit": 0,
+    "seconds": 0.017,
+    "log_sha256": "dfaeb5adbdaf213d7ee65f4f3da89ddf52bdf9c5080467e2dffe3d5e873e9b79",
+    "last": [
+      "click lifetime checks: 10/10 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 90,
+    "command": [
+      "build/browser3-p172/plain/host-radio-state"
+    ],
+    "exit": 0,
+    "seconds": 0.013,
+    "log_sha256": "704427406c4d8eda8c29b158b2baf699ea1015aa8de41aacb318f577ecc93a22",
+    "last": [
+      "radio state checks: 12/12 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 91,
+    "command": [
+      "build/browser3-p172/plain/host-form-collection"
+    ],
+    "exit": 0,
+    "seconds": 0.017,
+    "log_sha256": "b23e0ffb0e4dc0e7c38853ecb65c0660a8cef0c05cea0d9c0af469c122e992e0",
+    "last": [
+      "form collection GC checks: 13/13 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 92,
+    "command": [
+      "build/browser3-p172/plain/host-form-owner"
+    ],
+    "exit": 0,
+    "seconds": 0.026,
+    "log_sha256": "6d49cc0dedc318a4f1123975a63e26e7cc9844d44d42ecf2885b22d58566f381",
+    "last": [
+      "form owner checks: 56/56 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 93,
+    "command": [
+      "build/browser3-p172/plain/host-collection"
+    ],
+    "exit": 0,
+    "seconds": 0.038,
+    "log_sha256": "15071eec9091dee297948c421960aba7ed0940e3a66195ba6c2995d322b5be49",
+    "last": [
+      "collection GC checks: 37/37 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 94,
+    "command": [
+      "build/browser3-p172/plain/host-traversal"
+    ],
+    "exit": 0,
+    "seconds": 0.025,
+    "log_sha256": "6864061c52575e7033f5ec7defa757d3716c533bf54381b3c590c503030a754e",
+    "last": [
+      "traversal GC checks: 9/9 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 95,
+    "command": [
+      "build/browser3-p172/plain/host-removal"
+    ],
+    "exit": 0,
+    "seconds": 0.006,
+    "log_sha256": "655e21f79ea744be49432abc4c54506cef0d01d17e38953b6f9d13b79b71b158",
+    "last": [
+      "removal subscription checks: 37/37 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 96,
+    "command": [
+      "build/browser3-p172/plain/host-native-properties"
+    ],
+    "exit": 0,
+    "seconds": 0.005,
+    "log_sha256": "b26dc255d716de9b1005970cbf4bde46c4bcf7cee191af3efb77af6e0f970663",
+    "last": [
+      "native property checks: 65/65 passed"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  },
+  {
+    "group": 98,
+    "command": [
+      "build/browser3-p172/plain/host-svg-length"
+    ],
+    "exit": 0,
+    "seconds": 0.032,
+    "log_sha256": "9e3609f813ed54846ac8ba3ae08050e96f332ee9361653e370d5739e10a26171",
+    "last": [
+      "native SVG length: 60/60 passed; error=0"
+    ],
+    "fail_lines": 0,
+    "sanitizer_error": false
+  }
+]

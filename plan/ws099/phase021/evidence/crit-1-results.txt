@@ -1,0 +1,15 @@
+C2 c2-geometry FAIL seconds=54 C2 RESULT pass=0 fail=1 C2: FAIL 
+C3 p138 PASS seconds=37 p138: PASS 
+C3 c3-swipe-back PASS seconds=49 c3-swipe-back: PASS 
+C4 p137 PASS seconds=51 p137: PASS 
+C8 p134 PASS seconds=101 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p052 PASS seconds=39 p052: PASS 
+C9 p053 PASS seconds=104 p053: PASS 
+C9 p072 PASS seconds=42 zdesktop-p072: PASS (and judge the screens) 
+C9 p076 PASS seconds=111 p076: PASS 
+C9 p126 PASS seconds=120 zdesktop-p126: status=0 
+C9 p128 PASS seconds=62 zdesktop-p128: status=0 
+C9 p134 PASS seconds=66 probe-title corners: 0 of 4 square, want round: PASS p134/p136: PASS 
+C9 p137 PASS seconds=50 p137: PASS 
+C9 p138 FAIL seconds=133 p138: FAIL 
+C9 cursor-owner PASS seconds=23 cursor-owner: PASS 

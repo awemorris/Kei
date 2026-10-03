@@ -824,8 +824,10 @@ wlan_station_report_frame(
 	uint8_t ethernet[WLAN_L2_ETHERNET_MAX];
 	uint16_t frame_control;
 	size_t ethernet_length;
+	enum wlan_wpa2_state handshake;
 	unsigned long enabled;
 	uint64_t now;
+	int loss;
 	int result;
 
 	packet = NULL;
@@ -944,8 +946,27 @@ wlan_station_report_frame(
 				goto out;
 			}
 
+			/*
+			 * After message 2 went out the access point has the
+			 * key's proof; ending the association before message 3
+			 * is its refusal of the key, which the join reports
+			 * apart from a plain disconnection.
+			 */
+			enabled = spin_lock_irqsave(&station->lock);
+
+			handshake = wlan_wpa2_engine_state(&station->wpa2);
+
+			spin_unlock_irqrestore(&station->lock, enabled);
+
+			/* A refused key, or any other end of the association. */
+			loss = ECONNRESET;
+			if (handshake == WLAN_WPA2_STATE_MESSAGE_2_TX ||
+			    handshake == WLAN_WPA2_STATE_MESSAGE_3)
+				loss = EACCES;
+
+			/* Ends the connection with the reason. */
 			result = station_link_lost_controlled(station,
-			    report->generation, ECONNRESET);
+			    report->generation, loss);
 			goto out;
 		}
 

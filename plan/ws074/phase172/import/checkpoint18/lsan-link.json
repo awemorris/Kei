@@ -1,0 +1,29 @@
+{
+  "prefix": [
+    "cc",
+    "-std=gnu11",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-D_GNU_SOURCE",
+    "-fPIC",
+    "-Iuserland/desktop/libbrowser",
+    "-Iuserland/desktop/browser",
+    "-Iplan/ws074/tests",
+    "-Ibuild/browser3-p172/include",
+    "-I.",
+    "-fsanitize=leak",
+    "-o",
+    "build/browser3-p172/review18/resource-after",
+    "plan/ws074/tests/host-resource.c"
+  ],
+  "objects": "link-objects.json",
+  "suffix": [
+    "-lvulkan",
+    "-lm"
+  ],
+  "exit": 0,
+  "stderr": ""
+}

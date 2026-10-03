@@ -1,0 +1,18 @@
+{
+  "tool": "clang-format19.1.7",
+  "configuration": "-style={BasedOnStyle: InheritParentConfig, ColumnLimit: 0}",
+  "scope": [
+    {
+      "path": "userland/desktop/libbrowser/js/builtin.c",
+      "formatted_sha256": "e384b3d30f949fedc6ff565da926f2c11f19b49db2b386e5bb0d6e2247979ebc",
+      "final_sha256": "0d8811cf2538ab858fd594ad4700fda7acfe6e42fb805183dd05a319b67ecfa3",
+      "restorations": "mandatory definition argument tabs"
+    },
+    {
+      "path": "userland/desktop/libbrowser/vm/class.c",
+      "formatted_sha256": "ef7ba3f5a7242700ab65bd9e2c55f989ddfba37878a6349bcd3e00f2d8b442cf",
+      "final_sha256": "93dbdf541f6bec51dc2539f6a66fd7309859fbb299dce78166f33af39ca38c13",
+      "restorations": "mandatory definition argument tabs"
+    }
+  ]
+}

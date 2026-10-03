@@ -38,19 +38,32 @@ main(
 	int status;
 	int printed;
 
-	/* Ordinary trees, real resources and bounded heap behavior use the same production projector. */
+	/* Verify ordinary copied trees before independent pinned resources. */
 	status = projection_owned(0, 0);
-	if (status == 0)
-		status = projection_resources();
-	if (status == 0)
-		status = projection_owned(0, 1);
-	if (status == 0)
-		status = projection_owned(2048, 1);
 	if (status != 0)
 		return 2;
+
+	/* Project the original actual XML resources into separately owned native heaps. */
+	status = projection_resources();
+	if (status != 0)
+		return 2;
+
+	/* Cross the unchanged native allocation threshold with the full original wide tree. */
+	status = projection_owned(0, 1);
+	if (status != 0)
+		return 2;
+
+	/* Observe real partial-publication refusal under the original bounded heap. */
+	status = projection_owned(2048, 1);
+	if (status != 0)
+		return 2;
+
+	/* Reports all native projection observations after independent owner teardown. */
 	printed = printf("native XML DOM: %u/%u passed\n", checks - failures, checks);
 	if (printed < 0)
 		return 2;
+
+	/* Refuse a fixture with any failed real native projection observation. */
 	if (failures != 0)
 		return 1;
 
@@ -74,6 +87,9 @@ projection_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: every observation remains in the final native fixture count. */
+	return;
 }
 
 /* Owns the nullable result root and heap across every return from a semantic test. */
@@ -90,22 +106,39 @@ projection_owned(
 	status = vm_heap_create(&heap, limit);
 	if (status != 0)
 		return status;
+
+	/* Register the nullable result slot with conservative caller scanning disabled. */
 	vm_heap_set_stack_base(heap, NULL);
 	held = NULL;
 	status = vm_heap_add_root(heap, &held);
-	if (status == 0) {
-		if (pressure)
-			status = projection_pressure(heap, &held, limit);
-		else
-			status = projection_normal(heap, &held);
-		vm_heap_remove_root(heap, &held);
+	if (status != 0) {
+		vm_heap_destroy(heap);
+		return status;
 	}
 
-	/* The private native heap owns every remaining allocation, including permanent name atoms. */
+	/* Run only the selected original native conversion with its registered nullable result slot. */
+	if (pressure) {
+		status = projection_pressure(heap, &held, limit);
+		if (status != 0) {
+			vm_heap_remove_root(heap, &held);
+			vm_heap_destroy(heap);
+			return status;
+		}
+	} else {
+		status = projection_normal(heap, &held);
+		if (status != 0) {
+			vm_heap_remove_root(heap, &held);
+			vm_heap_destroy(heap);
+			return status;
+		}
+	}
+
+	/* Successful conversion no longer needs the caller-owned nullable slot. */
+	vm_heap_remove_root(heap, &held);
 	vm_heap_destroy(heap);
 
-	/* Succeeded or failed: no stack root registration or native allocation escapes. */
-	return status;
+	/* Succeeded: no stack registration or private native allocation escapes. */
+	return 0;
 }
 
 /* Observes namespace identity, copied character buffers and genuine owner tracing after model destruction. */
@@ -147,17 +180,28 @@ projection_normal(
 	status = xml_document_project(heap, model, DOM_CONTENT_XML, NULL);
 	projection_check(status == EINVAL, "missing output rejected");
 	status = xml_document_project(heap, model, DOM_CONTENT_XML, &document);
-	if (status == 0)
-		*held = &document->node.cell;
+	if (status != 0) {
+		xml_document_destroy(model);
+		return status;
+	}
+
+	/* The complete native graph has its original caller slot before model/input destruction. */
+	if (document == NULL) {
+		xml_document_destroy(model);
+		return EINVAL;
+	}
+
+	/* Publish only the complete result into its original caller-owned root slot. */
+	*held = &document->node.cell;
 	xml_document_destroy(model);
 	memset(input, '!', sizeof(input));
-	if (status != 0)
-		return status;
 
 	/* Every following observation occurs after both source input and model storage are destroyed. */
 	projection_check(document->content == DOM_CONTENT_XML && document->view == NULL, "actual XML Document has explicit content and no activation owner");
 	node = document->node.first_child;
-	if (node == NULL || node->next == NULL)
+	if (node == NULL ||
+	    node->next == NULL ||
+	    node->type != DOM_PROCESSING_INSTRUCTION)
 		return EINVAL;
 	data = (struct dom_character_data *)node;
 	same = projection_ascii(data->target, "keep");
@@ -166,7 +210,10 @@ projection_normal(
 	projection_check(same, "Document PI copied character data");
 	target_address = (uintptr_t)data->target;
 	root = projection_root(document);
-	if (root == NULL || root->node.first_child == NULL)
+	if (root == NULL ||
+	    root->node.first_child == NULL ||
+	    root->attribute_count < 7 ||
+	    root->attributes == NULL)
 		return EINVAL;
 	same = projection_ascii(root->local_name, "R");
 	projection_check(same && root->ns == DOM_NS_OTHER, "XML root case and arbitrary namespace class preserved");
@@ -194,6 +241,10 @@ projection_normal(
 	projection_check(same && root->attributes[6].ns == DOM_NS_XML, "canonical XML attribute namespace classified exactly");
 	same = projection_ascii(root->attributes[0].namespace_uri, "http://www.w3.org/2000/xmlns/");
 	projection_check(same && root->attributes[0].ns == DOM_NS_XMLNS, "namespace declaration is an actual XMLNS attribute");
+
+	/* Read element fields only from the genuine native first element child. */
+	if (root->node.first_child->type != DOM_ELEMENT)
+		return EINVAL;
 	mixed = (struct dom_element *)root->node.first_child;
 	same = projection_ascii(mixed->local_name, "Mixed");
 	projection_check(same, "prefixed element local case preserved");
@@ -202,7 +253,9 @@ projection_normal(
 	same = projection_ascii(mixed->namespace_uri, "urn:p");
 	projection_check(same && mixed->node.document == document, "prefixed element exact URI and owner retained");
 	node = mixed->node.first_child;
-	if (node == NULL || node->next == NULL || node->next->next == NULL)
+	if (node == NULL ||
+	    node->next == NULL ||
+	    node->next->next == NULL)
 		return EINVAL;
 	same = projection_data(node, "<&");
 	projection_check(same && node->type == DOM_CDATA_SECTION, "CDATA retains subtype and literal characters");
@@ -210,26 +263,42 @@ projection_normal(
 	same = projection_data(node, "comment");
 	projection_check(same && node->type == DOM_COMMENT, "Comment copied with exact native kind");
 	node = node->next;
+
+	/* Native text alone supplies the decoded character buffer representation. */
+	if (node->type != DOM_TEXT)
+		return EINVAL;
 	data = (struct dom_character_data *)node;
 	projection_check(node->type == DOM_TEXT && data->data.length == 4, "decoded supplementary text keeps exact UTF16 length");
+
+	/* Inspect the original exact supplementary text only after its four-unit buffer exists. */
 	if (data->data.length == 4) {
+		if (data->data.data == NULL)
+			return EINVAL;
 		projection_check(data->data.data[0] == 'A' && data->data.data[1] == '&', "text entity decoding copied");
 		projection_check(data->data.data[2] == 0xd83dU && data->data.data[3] == 0xde00U, "supplementary scalar surrogate pair copied");
 	}
 
 	/* The final real mixed child is its own processing instruction. */
 	node = node->next;
-	if (node == NULL)
+	if (node == NULL || node->type != DOM_PROCESSING_INSTRUCTION)
 		return EINVAL;
+
+	/* The existing processing instruction supplies its actual target and character fields. */
 	data = (struct dom_character_data *)node;
 	same = projection_ascii(data->target, "inside");
 	projection_check(same && node->type == DOM_PROCESSING_INSTRUCTION, "nested PI retains actual target and kind");
 	same = projection_data(node, "data");
 	projection_check(same && mixed->node.last_child == node, "nested PI data and last-child order retained");
+
+	/* Follow only the two genuine native element siblings in the original parsed tree. */
+	if (mixed->node.next == NULL || mixed->node.next->type != DOM_ELEMENT)
+		return EINVAL;
 	empty = (struct dom_element *)mixed->node.next;
-	if (empty == NULL || empty->node.next == NULL)
+	if (empty->node.next == NULL || empty->node.next->type != DOM_ELEMENT)
 		return EINVAL;
 	greek = (struct dom_element *)empty->node.next;
+	if (greek->local_name == NULL)
+		return EINVAL;
 	projection_check(empty->ns == DOM_NS_NONE && empty->namespace_uri == NULL, "default empty namespace resets native element identity");
 	unit = vm_string_at(greek->local_name, 0);
 	projection_check(greek->local_name->length == 1 && unit == 0x03b1U, "Unicode element name retained as exact native atom");
@@ -288,18 +357,45 @@ projection_pressure(
 	/* Source contains real elements and attributes, not artificial VM pressure or collector hooks. */
 	wb_buffer_init(&bytes);
 	status = wb_buffer_append_string(&bytes, "<r xmlns='urn:pressure'>");
-	for (index = 0; index < 30000U && status == 0; index++)
-		status = wb_buffer_append_string(&bytes, "<q a='v'/>");
-	if (status == 0)
-		status = wb_buffer_append_string(&bytes, "</r>");
-	if (status == 0)
-		status = xml_document_parse(&model, bytes.data, bytes.length, &error);
-	wb_buffer_release(&bytes);
-	if (status != 0)
+	if (status != 0) {
+		wb_buffer_release(&bytes);
 		return status;
+	}
+
+	/* Append all original thirty thousand native element/attribute sources. */
+	for (index = 0; index < 30000U; index++) {
+		status = wb_buffer_append_string(&bytes, "<q a='v'/>");
+		if (status != 0) {
+			wb_buffer_release(&bytes);
+			return status;
+		}
+	}
+
+	/* Close only the completely constructed original wide source. */
+	status = wb_buffer_append_string(&bytes, "</r>");
+	if (status != 0) {
+		wb_buffer_release(&bytes);
+		return status;
+	}
+
+	/* Parse the actual immutable source before releasing its input storage. */
+	status = xml_document_parse(&model, bytes.data, bytes.length, &error);
+	if (status != 0) {
+		wb_buffer_release(&bytes);
+		return status;
+	}
+
+	/* The complete model no longer borrows the temporary source buffer. */
+	wb_buffer_release(&bytes);
 	records = model->records;
 	vm_heap_stats(heap, &before);
 	status = xml_document_project(heap, model, DOM_CONTENT_XML, &document);
+	if (limit == 0 && status != 0) {
+		xml_document_destroy(model);
+		return status;
+	}
+
+	/* Capture collection evidence only after success or the selected bounded refusal. */
 	vm_heap_stats(heap, &after);
 
 	/* A real bounded native heap fails midway, publishes nothing and leaves its caller-owned model unchanged. */
@@ -311,15 +407,20 @@ projection_pressure(
 		vm_heap_stats(heap, &released);
 		projection_check(released.freed_cells > after.freed_cells, "unpublished partial native graph collected after failure");
 		projection_check(released.live_bytes < after.live_bytes, "failure cleanup releases native graph bytes while normal name atoms remain");
+
+		/* Succeeded: the original bounded failure published no retained native graph. */
 		return 0;
 	}
 
 	/* The completed result is rooted before source destruction or any further heap allocation. */
-	if (status == 0)
-		*held = &document->node.cell;
+	if (document == NULL) {
+		xml_document_destroy(model);
+		return EINVAL;
+	}
+
+	/* Publish only the complete result into its original caller-owned root slot. */
+	*held = &document->node.cell;
 	xml_document_destroy(model);
-	if (status != 0)
-		return status;
 	projection_check(after.collections > before.collections, "actual wide-tree conversion triggers production threshold collection");
 	root = projection_root(document);
 	if (root == NULL)
@@ -328,12 +429,21 @@ projection_pressure(
 	correct = 1;
 
 	/* Observe every copied node and attribute after the source model no longer exists. */
-	for (node = root->node.first_child; node != NULL; node = node->next) {
+	for (node = root->node.first_child;
+	     node != NULL;
+	     node = node->next) {
+		/* Only actual native elements supply namespace and attribute fields. */
+		if (node->type != DOM_ELEMENT)
+			return EINVAL;
 		element = (struct dom_element *)node;
 		same = projection_ascii(element->namespace_uri, "urn:pressure");
-		if (!same || node->document != document || node->parent != &root->node)
+		if (!same ||
+		    node->document != document ||
+		    node->parent != &root->node)
 			correct = 0;
-		if (element->attribute_count != 1) {
+
+		/* Each copied wide element must retain its one real expanded attribute. */
+		if (element->attribute_count != 1 || element->attributes == NULL) {
 			correct = 0;
 		} else {
 			same = projection_ascii(element->attributes[0].value, "v");
@@ -367,17 +477,31 @@ projection_resources(
 
 	/* Each resource owns an independent model and heap, so no previous test can supply accidental roots. */
 	status = projection_resource("build/ws074-suites/wpt/acid/acid3/svg.xml", "http://www.w3.org/2000/svg", DOM_CONTENT_SVG, 0);
-	if (status == 0)
-		status = projection_resource("build/ws074-suites/wpt/acid/acid3/xhtml.1", "http://www.w3.org/1999/xhtml", DOM_CONTENT_XHTML, 0);
-	if (status == 0)
-		status = projection_resource("build/ws074-suites/wpt/acid/acid3/xhtml.3", "http://www.w3.org/1999/xhtml#", DOM_CONTENT_XHTML, 0);
-	if (status == 0)
-		status = projection_resource("build/ws074-suites/wpt/acid/acid3/xhtml.2", NULL, DOM_CONTENT_XHTML, 1);
-	if (status == 0)
-		status = projection_resource("build/ws074-suites/wpt/acid/acid3/empty.xml", NULL, DOM_CONTENT_XML, 1);
+	if (status != 0)
+		return status;
 
-	/* Succeeded or failed: the first actual resource error remains available to the caller. */
-	return status;
+	/* Project the next independently owned pinned input after checked completion. */
+	status = projection_resource("build/ws074-suites/wpt/acid/acid3/xhtml.1", "http://www.w3.org/1999/xhtml", DOM_CONTENT_XHTML, 0);
+	if (status != 0)
+		return status;
+
+	/* Project the next independently owned pinned input after checked completion. */
+	status = projection_resource("build/ws074-suites/wpt/acid/acid3/xhtml.3", "http://www.w3.org/1999/xhtml#", DOM_CONTENT_XHTML, 0);
+	if (status != 0)
+		return status;
+
+	/* Project the next independently owned pinned input after checked completion. */
+	status = projection_resource("build/ws074-suites/wpt/acid/acid3/xhtml.2", NULL, DOM_CONTENT_XHTML, 1);
+	if (status != 0)
+		return status;
+
+	/* Project the next independently owned pinned input after checked completion. */
+	status = projection_resource("build/ws074-suites/wpt/acid/acid3/empty.xml", NULL, DOM_CONTENT_XML, 1);
+	if (status != 0)
+		return status;
+
+	/* Succeeded: all actual pinned resource projections finished with independent ownership. */
+	return 0;
 }
 
 /* Copies one real validated resource into an independent heap or observes its genuine parse failure. */
@@ -404,18 +528,33 @@ projection_resource(
 	model = NULL;
 	wb_buffer_init(&bytes);
 	status = wb_file_read(path, &bytes);
-	if (status == 0)
-		status = xml_document_parse(&model, bytes.data, bytes.length, &error);
+	if (status != 0) {
+		wb_buffer_release(&bytes);
+		return status;
+	}
+
+	/* Genuine parser acceptance or expected refusal owns the complete raw input. */
+	status = xml_document_parse(&model, bytes.data, bytes.length, &error);
+	if (status != 0 && !rejected) {
+		wb_buffer_release(&bytes);
+		return status;
+	}
+
+	/* The checked parse result no longer borrows resource bytes. */
 	wb_buffer_release(&bytes);
 	if (rejected) {
 		projection_check(status != 0 && model == NULL, path);
 		xml_document_destroy(model);
+
+		/* Succeeded: the original malformed resource has no projected native model. */
 		return 0;
 	}
 
 	/* A rejected ordinary input cannot create a recovered native resource document. */
 	if (status != 0)
 		return status;
+
+	/* Allocate an independent native heap only for an accepted complete model. */
 	status = vm_heap_create(&heap, 0);
 	if (status != 0) {
 		xml_document_destroy(model);
@@ -425,57 +564,76 @@ projection_resource(
 	/* Only the projector supplies temporary ownership during resource conversion. */
 	vm_heap_set_stack_base(heap, NULL);
 	status = xml_document_project(heap, model, content, &document);
+	if (status != 0) {
+		xml_document_destroy(model);
+		vm_heap_destroy(heap);
+		return status;
+	}
+
+	/* Observe only a complete successfully published native resource after model release. */
 	xml_document_destroy(model);
-	if (status == 0) {
-		root = projection_root(document);
-		projection_check(root != NULL && document->content == content, path);
-		if (root != NULL) {
-			same = projection_ascii(root->namespace_uri, uri);
-			projection_check(same, "actual pinned root URI copied exactly after model release");
+	if (document == NULL) {
+		vm_heap_destroy(heap);
+		return EINVAL;
+	}
+
+	/* Inspect the actual complete native resource root and unchanged content policy. */
+	root = projection_root(document);
+	projection_check(root != NULL && document->content == content, path);
+	if (root != NULL) {
+		same = projection_ascii(root->namespace_uri, uri);
+		projection_check(same, "actual pinned root URI copied exactly after model release");
+	}
+
+	/* Actual SVG PI and XHTML script nodes remain native data without browsing activation. */
+	if (content == DOM_CONTENT_SVG) {
+		node = document->node.first_child;
+		if (node == NULL || node->type != DOM_PROCESSING_INSTRUCTION) {
+			vm_heap_destroy(heap);
+			return EINVAL;
 		}
 
-		/* Actual SVG PI and XHTML script nodes remain native data without browsing activation. */
-		if (content == DOM_CONTENT_SVG) {
-			node = document->node.first_child;
-			data = (struct dom_character_data *)node;
-			same = projection_ascii(data->target, "xml-stylesheet");
-			projection_check(same && node->type == DOM_PROCESSING_INSTRUCTION, "actual SVG stylesheet PI preserved without resource effects");
-		} else if (root != NULL) {
-			script = 0;
-			node = root->node.first_child;
+		/* The actual stylesheet processing instruction has native character fields. */
+		data = (struct dom_character_data *)node;
+		same = projection_ascii(data->target, "xml-stylesheet");
+		projection_check(same && node->type == DOM_PROCESSING_INSTRUCTION, "actual SVG stylesheet PI preserved without resource effects");
+	} else if (root != NULL) {
+		script = 0;
+		node = root->node.first_child;
 
-			/* Traverse actual preorder to find the real unexecuted XHTML script text. */
-			while (node != NULL) {
-				if (node->type == DOM_ELEMENT) {
-					same = projection_ascii(((struct dom_element *)node)->local_name, "script");
-					if (same && node->first_child != NULL) {
-						script = node->first_child->type == DOM_TEXT;
-						break;
-					}
+		/* Traverse actual preorder to find the real unexecuted XHTML script text. */
+		while (node != NULL) {
+			if (node->type == DOM_ELEMENT) {
+				same = projection_ascii(((struct dom_element *)node)->local_name, "script");
+				if (same && node->first_child != NULL) {
+					script = 0;
+					if (node->first_child->type == DOM_TEXT)
+						script = 1;
+					break;
 				}
-
-				/* Descend along the actual copied resource tree. */
-				if (node->first_child != NULL) {
-					node = node->first_child;
-					continue;
-				}
-
-				/* Ascend completed branches to their next real sibling. */
-				while (node->next == NULL && node->parent != &root->node)
-					node = node->parent;
-				node = node->next;
 			}
 
-			/* The real copied script is observed without an execution host. */
-			projection_check(script, "actual XHTML script source copied as data without Window activation");
+			/* Descend along the actual copied resource tree. */
+			if (node->first_child != NULL) {
+				node = node->first_child;
+				continue;
+			}
+
+			/* Ascend completed branches to their next real sibling. */
+			while (node->next == NULL && node->parent != &root->node)
+				node = node->parent;
+			node = node->next;
 		}
+
+		/* The real copied script is observed without an execution host. */
+		projection_check(script, "actual XHTML script source copied as data without Window activation");
 	}
 
 	/* The private native heap owns every remaining allocation, including permanent name atoms. */
 	vm_heap_destroy(heap);
 
-	/* Succeeded or failed: no resource model or private native heap escapes. */
-	return status;
+	/* Succeeded: no resource model or private native heap escapes. */
+	return 0;
 }
 
 /* Compares actual VM string characters without relying on interning or pointer equality. */
@@ -510,10 +668,18 @@ projection_data(
 	character = dom_is_character_data(node);
 	if (!character)
 		return 0;
+
+	/* Inspect only the checked genuine CharacterData buffer. */
 	data = (const struct dom_character_data *)node;
 	length = strlen(expected);
 	if (data->data.length != length)
 		return 0;
+
+	/* Compare every original independent expected native character. */
+	if (length != 0 && data->data.data == NULL)
+		return 0;
+
+	/* Compare all actual buffer units after validating native storage. */
 	for (index = 0; index < length; index++) {
 		if (data->data.data[index] != (unsigned char)expected[index])
 			return 0;
@@ -531,7 +697,9 @@ projection_root(
 	struct dom_node *node;
 
 	/* Direct native sibling order retains prolog processing instructions and comments. */
-	for (node = document->node.first_child; node != NULL; node = node->next) {
+	for (node = document->node.first_child;
+	     node != NULL;
+	     node = node->next) {
 		if (node->type == DOM_ELEMENT)
 			return (struct dom_element *)node;
 	}

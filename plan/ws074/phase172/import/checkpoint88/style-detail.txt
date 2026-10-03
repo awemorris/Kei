@@ -1,0 +1,7 @@
+userland/desktop/libbrowser/bind/input.c:758: goto: goto cleanup;
+userland/desktop/libbrowser/bind/input.c:763: goto: goto cleanup;
+userland/desktop/libbrowser/bind/input.c:768: goto: goto cleanup;
+userland/desktop/libbrowser/bind/input.c:774: goto: goto cleanup;
+userland/desktop/libbrowser/bind/input.c:815: goto: goto cleanup;
+userland/desktop/libbrowser/bind/input.c:820: goto: goto cleanup;
+userland/desktop/libbrowser/bind/input.c:825: goto: goto cleanup;

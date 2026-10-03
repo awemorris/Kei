@@ -1,0 +1,5 @@
+{
+  "authority": "full C section14",
+  "findings": 36,
+  "classification": "All36 jumps are forward to partial_case sole cleanup; restores exact caller stack policy and unsubscribes only acquired optional tokens. No other final findings; no exception or waiver."
+}

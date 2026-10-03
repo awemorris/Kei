@@ -6,10 +6,20 @@
  */
 
 /*
- * Negotiates each toplevel's decoration ownership. Clients without an SSD
- * request keep their own decorations. A native titlebar is an explicit
- * Keiland SSD request, subordinate to an xdg-decoration object's choice.
- * Configure snapshots carry mode ownership through ack and surface commit.
+ * Negotiates each toplevel's decoration ownership. Configure snapshots carry
+ * mode ownership through ack and surface commit.
+ *
+ * The compositor decorates every toplevel (SSD) unless its client declares
+ * its own decoration (2026-10-03 user, ws114-p008): with xdg-decoration's
+ * client_side, with KDE's org_kde_kwin_server_decoration request_mode
+ * CLIENT or NONE, by destroying its xdg-decoration object, or by binding
+ * KDE's manager and making no decoration object for the window (KDE's
+ * protocol decorates only through objects; GTK4 declares its own
+ * decoration so, gdktoplevel-wayland.c set_decorated).  An xdg-decoration
+ * object's choice comes first, then KDE's object; a native keiland_titlebar
+ * is the compositor's decoration as well.  A client that uses neither protocol and draws its own frame is
+ * not told apart (the user's decision); a fullscreen window is drawn
+ * without the decoration (shell.c).
  */
 
 #include "extras.h"
@@ -26,6 +36,18 @@
 #define DECORATION_SET_MODE 1U
 #define DECORATION_UNSET_MODE 2U
 #define DECORATION_CONFIGURE 0U
+
+/* KDE's server decoration: the manager's create and default_mode, the decoration's release, request_mode and mode. */
+#define KDE_MANAGER_CREATE 0U
+#define KDE_MANAGER_DEFAULT_MODE 0U
+#define KDE_DECORATION_RELEASE 0U
+#define KDE_DECORATION_REQUEST_MODE 1U
+#define KDE_DECORATION_MODE 0U
+
+/* KDE's modes: no decoration at all, the client's, the compositor's. */
+#define KDE_MODE_NONE 0U
+#define KDE_MODE_CLIENT 1U
+#define KDE_MODE_SERVER 2U
 
 /* The ownership modes specified by xdg-decoration v1. */
 #define MODE_CLIENT_SIDE 1U
@@ -50,6 +72,10 @@ struct zwl_decoration_configure {
 };
 
 static int decoration_create(struct zwl_object *manager, const unsigned char *bytes, size_t size);
+static int kde_request(struct zwl_object *object, uint32_t opcode, const unsigned char *bytes, size_t size);
+static int kde_create(struct zwl_object *manager, const unsigned char *bytes, size_t size);
+static uint32_t decoration_wanted(const struct zwl_object *toplevel);
+static int decoration_propose(struct zwl_object *toplevel);
 static int decoration_answer(struct zwl_object *decoration);
 static struct zwl_object *decoration_top(const struct zwl_object *surface);
 static void decoration_reset(struct zwl_object *toplevel);
@@ -71,6 +97,16 @@ zwl_decoration_request(
 	uint32_t mode;
 	int error;
 
+	/* KDE's server decoration has requests of its own. */
+	if (object->kind == ZWL_KDE_DECORATION_MANAGER || object->kind == ZWL_KDE_DECORATION) {
+		error = kde_request(object, opcode, bytes, size);
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the KDE request was carried out. */
+		return 0;
+	}
+
 	/* The manager either retires or associates one decoration with a toplevel. */
 	if (object->kind == ZWL_DECORATION_MANAGER) {
 		if (opcode == MANAGER_DESTROY && size == 0U) {
@@ -89,7 +125,7 @@ zwl_decoration_request(
 		if (error != 0)
 			return error;
 
-		/* Succeeded: the new decoration has an initial CSD proposal. */
+		/* Succeeded: the new decoration has an initial SSD proposal. */
 		return 0;
 	}
 
@@ -133,7 +169,7 @@ zwl_decoration_request(
 			return EPROTO;
 		}
 	} else if (opcode == DECORATION_UNSET_MODE) {
-		/* An unset preference carries no payload and defaults to CSD. */
+		/* An unset preference carries no payload and leaves the compositor's default, SSD. */
 		if (size != 0U)
 			return EPROTO;
 	} else {
@@ -162,6 +198,7 @@ zwl_decoration_object_gone(
     struct zwl_object *object)
 {
 	struct zwl_object *toplevel;
+	struct zwl_object *surface;
 
 	/* A destroyed decoration withdraws SSD at the next commit of its surviving window. */
 	if (object->kind == ZWL_DECORATION) {
@@ -169,14 +206,42 @@ zwl_decoration_object_gone(
 		if (toplevel != NULL) {
 			toplevel->decoration = NULL;
 
-			/* Invalidates outstanding proposals from the destroyed object. */
+			/* Invalidates outstanding proposals; the window keeps the client's decoration from now. */
 			decoration_reset(toplevel);
+			toplevel->decoration_withdrawn = 1;
 		}
 
 		/* Removes the retired object's link to its surviving toplevel. */
 		object->decoration_toplevel = NULL;
 
 		/* The surviving toplevel owns its pending mode and snapshots. */
+		return;
+	}
+
+	/* A released KDE decoration leaves its surviving window to the compositor's default. */
+	if (object->kind == ZWL_KDE_DECORATION) {
+		surface = object->kde_surface;
+		object->kde_surface = NULL;
+		if (surface != NULL && surface->kde_decoration == object) {
+			surface->kde_decoration = NULL;
+
+			/* The window's mode follows the default again (a failure is the next configure's). */
+			toplevel = decoration_top(surface);
+			if (toplevel != NULL)
+				(void)decoration_propose(toplevel);
+		}
+
+		/* The surface no longer names it. */
+		return;
+	}
+
+	/* A surface that goes leaves its KDE decoration orphaned. */
+	if (object->kind == ZWL_SURFACE) {
+		if (object->kde_decoration != NULL)
+			object->kde_decoration->kde_surface = NULL;
+		object->kde_decoration = NULL;
+
+		/* The surface's toplevel is retired on its own. */
 		return;
 	}
 
@@ -216,11 +281,12 @@ zwl_decoration_configure(
 	if (snapshot == NULL)
 		return ENOMEM;
 
+	/* The mode this configure offers: the one the declarations (or the default) give now. */
+	toplevel->decoration_configured = decoration_wanted(toplevel);
+
 	/* Initializes this toplevel-owned record before exposing it through the list. */
 	snapshot->serial = serial;
-	snapshot->mode = MODE_CLIENT_SIDE;
-	if (toplevel->decoration_configured == MODE_SERVER_SIDE)
-		snapshot->mode = MODE_SERVER_SIDE;
+	snapshot->mode = toplevel->decoration_configured;
 
 	/* Records which decoration identity proposed this ownership. */
 	snapshot->generation = toplevel->decoration_generation;
@@ -345,67 +411,59 @@ zwl_decoration_server(
 	if (toplevel == NULL)
 		return 0;
 
-	/* Client decoration is the default, including zero-initialized ownership. */
+	/* Only a committed SSD is the compositor's (nothing is committed before the first image). */
 	if (toplevel->decoration_committed != MODE_SERVER_SIDE)
 		return 0;
 
-	/* Succeeded: this surface committed an explicit SSD proposal. */
+	/* Succeeded: this surface committed an SSD proposal. */
 	return 1;
 }
 
 /*
- * Proposes native SSD ownership when a titlebar is explicitly created or removed.
+ * Proposes the decoration again when a native titlebar is created or removed.
+ *
+ * A titlebar is the compositor's decoration, as the default is, so the mode
+ * changes only when another declaration says otherwise.
  */
 int
 zwl_decoration_native_changed(
     struct zwl_object *toplevel)
 {
-	struct zwl_object *surface;
-	uint32_t mode;
 	int error;
 
-	/* An xdg-decoration object's CSD or unset request takes precedence. */
-	if (toplevel->decoration != NULL)
-		return 0;
-
-	/* The native extension explicitly requests the compositor's titlebar. */
-	mode = MODE_CLIENT_SIDE;
-	if (toplevel->titlebar != NULL)
-		mode = MODE_SERVER_SIDE;
-
-	/* An unchanged request needs no additional configure generation. */
-	if (mode == toplevel->decoration_configured)
-		return 0;
-
-	/* Offers the new native ownership while preserving acknowledged content. */
-	toplevel->decoration_configured = mode;
-	surface = toplevel->surface;
-
-	/* Removing the extension withdraws its decoration at the next commit. */
-	if (mode == MODE_CLIENT_SIDE) {
-		decoration_reset(toplevel);
-
-		/* The surviving client already owns its content and next commit. */
-		return 0;
-	}
-
-	/* A new native request supersedes a pending withdrawal of its old titlebar. */
-	toplevel->decoration_reset = 0;
-
-	/* The first empty commit will carry native SSD in its initial configure. */
-	if (surface == NULL)
-		return 0;
-
-	/* Leaves initial configuration to the first empty commit. */
-	if (!surface->configured)
-		return 0;
-
-	/* A mapped client must acknowledge the new ownership before it is drawn. */
-	error = zwl_window_send_configure(surface);
+	/* The declarations decide the mode; an unchanged one sends nothing. */
+	error = decoration_propose(toplevel);
 	if (error != 0)
 		return error;
 
-	/* Succeeded: native decoration waits for the client's configure acknowledgment. */
+	/* Succeeded: a changed mode waits for the client's configure acknowledgment. */
+	return 0;
+}
+
+/*
+ * Tells a new binding of KDE's server decoration manager the default mode,
+ * the compositor's decoration.
+ */
+int
+zwl_decoration_kde_bind(
+	struct zwl_object *manager)
+{
+	uint32_t mode;
+	int error;
+
+	/*
+	 * From now on the client's windows are decorated only through a
+	 * decoration object, as KDE's protocol has it (decoration_wanted).
+	 */
+	manager->client->kde_bound = 1;
+
+	/* The default a new decoration object has until the client asks for another. */
+	mode = KDE_MODE_SERVER;
+	error = zwl_emit(manager->client, manager->id, KDE_MANAGER_DEFAULT_MODE, &mode, sizeof(mode));
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the client knows the default. */
 	return 0;
 }
 
@@ -494,11 +552,12 @@ decoration_create(
 	created->decoration_toplevel = toplevel;
 	toplevel->decoration = created;
 	toplevel->decoration_preferred = 0U;
+	toplevel->decoration_withdrawn = 0;
 	decoration_invalidate(toplevel);
 	toplevel->decoration_acked = 0;
 	toplevel->decoration_reset = 0;
 
-	/* Publishes the initial client-side ownership proposal. */
+	/* Publishes the initial ownership proposal (the compositor's until the client asks otherwise). */
 	error = decoration_answer(created);
 	if (error != 0)
 		return error;
@@ -522,10 +581,8 @@ decoration_answer(
 	if (toplevel == NULL)
 		return EPROTO;
 
-	/* Unspecified ownership defaults to client-side decoration. */
-	mode = MODE_CLIENT_SIDE;
-	if (toplevel->decoration_preferred == MODE_SERVER_SIDE)
-		mode = MODE_SERVER_SIDE;
+	/* The object's preference, or the compositor's default when it has none. */
+	mode = decoration_wanted(toplevel);
 
 	/* Retains the offered ownership for the next surface configure. */
 	toplevel->decoration_configured = mode;
@@ -553,6 +610,204 @@ decoration_answer(
 		return error;
 
 	/* Succeeded: the client knows the offered ownership and its configure boundary. */
+	return 0;
+}
+
+/* Carries out a request of KDE's server decoration manager or of one of its decorations. */
+static int
+kde_request(
+	struct zwl_object *object,
+	uint32_t opcode,
+	const unsigned char *bytes,
+	size_t size)
+{
+	struct zwl_object *toplevel;
+	uint32_t mode;
+	int error;
+
+	/* The manager only creates decorations. */
+	if (object->kind == ZWL_KDE_DECORATION_MANAGER) {
+		if (opcode != KDE_MANAGER_CREATE)
+			return EPROTO;
+
+		/* A decoration for a surface. */
+		error = kde_create(object, bytes, size);
+		if (error != 0)
+			return error;
+
+		/* Succeeded: the surface's decoration is the client's to choose. */
+		return 0;
+	}
+
+	/* The release ends the decoration; its window returns to the default. */
+	if (opcode == KDE_DECORATION_RELEASE) {
+		if (size != 0U)
+			return EPROTO;
+
+		/* Detaches it from its surface (zwl_decoration_object_gone). */
+		zwl_object_destroy(object);
+
+		/* Succeeded: the surface survives. */
+		return 0;
+	}
+
+	/* Only request_mode is left, with one known mode. */
+	if (opcode != KDE_DECORATION_REQUEST_MODE || size != 4U)
+		return EPROTO;
+	mode = decoration_word(bytes, 0U);
+	if (mode > KDE_MODE_SERVER)
+		return EPROTO;
+
+	/* The client's choice, answered with the mode event as KDE's protocol does. */
+	object->kde_mode = mode;
+	error = zwl_emit(object->client, object->id, KDE_DECORATION_MODE, &mode, sizeof(mode));
+	if (error != 0)
+		return error;
+	printf("ZWL DECORATION kde client=%llu mode=%u\n", (unsigned long long)object->client->number, mode);
+
+	/* A window of an orphaned decoration, or one without a toplevel yet, takes the mode at its first configure. */
+	if (object->kde_surface == NULL)
+		return 0;
+	toplevel = decoration_top(object->kde_surface);
+	if (toplevel == NULL)
+		return 0;
+
+	/* The window's decoration follows the declaration with its next configure. */
+	error = decoration_propose(toplevel);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the new mode waits for the client's acknowledgment and commit. */
+	return 0;
+}
+
+/* Creates KDE's server decoration of a surface; it starts in the compositor's mode. */
+static int
+kde_create(
+	struct zwl_object *manager,
+	const unsigned char *bytes,
+	size_t size)
+{
+	struct zwl_object *created;
+	struct zwl_object *surface;
+	struct zwl_object *toplevel;
+	uint32_t id;
+	uint32_t surface_id;
+	uint32_t mode;
+	int error;
+
+	/* The new ID and the surface. */
+	if (size != 8U)
+		return EPROTO;
+	id = decoration_word(bytes, 0U);
+	surface_id = decoration_word(bytes, 4U);
+	surface = zwl_find(manager->client, surface_id);
+	if (surface == NULL || surface->kind != ZWL_SURFACE)
+		return EPROTO;
+
+	/* One decoration per surface. */
+	if (surface->kde_decoration != NULL)
+		return EPROTO;
+
+	/* The object, tied to its surface from both ends. */
+	created = zwl_create(manager->client, id, ZWL_KDE_DECORATION, manager->version);
+	if (created == NULL)
+		return EPROTO;
+	created->kde_surface = surface;
+	created->kde_mode = KDE_MODE_SERVER;
+	surface->kde_decoration = created;
+
+	/* The mode it starts in. */
+	mode = KDE_MODE_SERVER;
+	error = zwl_emit(created->client, created->id, KDE_DECORATION_MODE, &mode, sizeof(mode));
+	if (error != 0)
+		return error;
+
+	/* A window already shown keeps its mode: the compositor's is the default anyway. */
+	toplevel = decoration_top(surface);
+	if (toplevel == NULL)
+		return 0;
+	error = decoration_propose(toplevel);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the surface's decoration is declared from now. */
+	return 0;
+}
+
+/* Tells the mode the declarations give a toplevel: the client's when it declared so, the compositor's otherwise. */
+static uint32_t
+decoration_wanted(
+	const struct zwl_object *toplevel)
+{
+	const struct zwl_object *kde;
+
+	/* An xdg-decoration object's choice comes first: client_side, else (server_side or unset) SSD. */
+	if (toplevel->decoration != NULL) {
+		if (toplevel->decoration_preferred == MODE_CLIENT_SIDE)
+			return MODE_CLIENT_SIDE;
+		return MODE_SERVER_SIDE;
+	}
+
+	/* A destroyed xdg-decoration object leaves the client's decoration. */
+	if (toplevel->decoration_withdrawn)
+		return MODE_CLIENT_SIDE;
+
+	/* KDE's: the compositor's only when the client keeps or asks for it (CLIENT and NONE are the client's). */
+	kde = NULL;
+	if (toplevel->surface != NULL)
+		kde = toplevel->surface->kde_decoration;
+	if (kde != NULL) {
+		if (kde->kde_mode == KDE_MODE_SERVER)
+			return MODE_SERVER_SIDE;
+		return MODE_CLIENT_SIDE;
+	}
+
+	/* A native titlebar is the compositor's decoration. */
+	if (toplevel->titlebar != NULL)
+		return MODE_SERVER_SIDE;
+
+	/* A client that speaks KDE's protocol and made no object for this window decorates it itself (GTK4). */
+	if (toplevel->client->kde_bound)
+		return MODE_CLIENT_SIDE;
+
+	/* Succeeded: no declaration at all: the compositor's decoration. */
+	return MODE_SERVER_SIDE;
+}
+
+/* Offers a toplevel the mode its declarations give now, when it differs from the one offered last. */
+static int
+decoration_propose(
+	struct zwl_object *toplevel)
+{
+	struct zwl_object *surface;
+	uint32_t mode;
+	int error;
+
+	/* An xdg-decoration object proposes through its own configure event (decoration_answer). */
+	if (toplevel->decoration != NULL)
+		return 0;
+
+	/* An unchanged mode needs no new configure. */
+	mode = decoration_wanted(toplevel);
+	if (mode == toplevel->decoration_configured)
+		return 0;
+
+	/* A new mode supersedes a pending withdrawal; it is offered with the next configure. */
+	toplevel->decoration_configured = mode;
+	toplevel->decoration_reset = 0;
+
+	/* A window not configured yet takes it with its first configure. */
+	surface = toplevel->surface;
+	if (surface == NULL || !surface->configured)
+		return 0;
+
+	/* A shown window must acknowledge the new ownership before it is drawn so. */
+	error = zwl_window_send_configure(surface);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the mode waits for the client's acknowledgment and commit. */
 	return 0;
 }
 

@@ -1,0 +1,20 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/bind/click.c",
+    "before_sha256": "a704b6f98ccaceda6f5bd5254a04b98d4ca02e7fccd019654cf1c22c6e24aa89",
+    "before_text_sha256": "1b0b534e3780c426cd892237f52c8acaccd028f61192cd806a17b6b0e18ce0ef",
+    "after_sha256": "15ea86f212dcd4ecf39e827598fbc1f28f222f7d4dc151b61c6c4d77da0cf1ac",
+    "after_text_sha256": "5c22c5608ac007118ffaa0e26b38f650fe66bb9338cc39526550ae74e8500295",
+    "text_equal": false,
+    "string_literals_equal": true
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/timer.c",
+    "before_sha256": "ae045eb841960a865515c182557a7d960acfd0a2207644c762aeb4be6a05b95c",
+    "before_text_sha256": "be349b8e3ce67524a11b35421dd6a9e5bfa5d5c6a8241778e9e993c72149c5b7",
+    "after_sha256": "72404768016fe693a64157bdbcf5330fea9e0df1b0d1859731eb1383a9d32b1f",
+    "after_text_sha256": "40bfd130bec1579d2b366eea1010ca2f9dc9ceb1232f95bc0f34864b57b8f4dc",
+    "text_equal": false,
+    "string_literals_equal": true
+  }
+]

@@ -596,7 +596,7 @@ primary docs for operational syntax:
 # zedBSD のプロジェクトの規則
 
 上の Awesome Plan の原則に加えて、このリポジトリでは次の規則に従う。ユーザーの指示はこの文書と skill の既定より優先する。
-**この文書には進捗を書かない。** 進捗・現在の目標・状態は `plan/master.md`、各 `plan/wsNNN/ws.md`、`plan/wsNNN/phaseNNN/phase.md` に書く。
+**この文書には進捗を書かない。** 進捗・現在の目標・状態は `plan/master.md`（先頭の「現在の状況」は `<!-- master:<名前>:start -->`〜`<!-- master:<名前>:end -->` の block で、sed/awk で block ごと置き換えてよい）、各 `plan/wsNNN/ws.md`、`plan/wsNNN/phaseNNN/phase.md` に書く。
 
 ## セッションの始め
 
@@ -638,7 +638,12 @@ primary docs for operational syntax:
 ## git
 
 - commit はエージェントが行う。メッセージは必ず `git commit -m WIP` とし、WIP 以外の文字を含めない。
-- **push はしない。**
+- **push はしない。** ユーザーが push を指示したときだけ、次の手順で行う。
+  1. push する範囲の commit のメッセージに `Co-Authored-By` などの付記が無いことを確かめる（2026-10-03 ユーザー「push手順に、git logをgrepしてco-authored-byが入っていないことをチェックする手順を追加しておいてください。」）:
+     `git fetch origin && git log --format=%B origin/<branch>..<branch> | grep -ci 'co-authored-by'` が `0` であること。1 以上なら push せず、ユーザーに報告する。
+  2. 全部の commit のメッセージが `WIP` ちょうどであることも確かめる: `git log --format=%B origin/<branch>..<branch> | grep -v '^$' | grep -vx WIP | wc -l` が `0`。
+  3. 確かめてから push する（force push はユーザーが明示したときだけ、`--force-with-lease` で）。
+- 再発防止（2026-10-03）: `.claude/settings.json` の `attribution` で Claude Code の commit・PR の付記を無効にし、`.git/hooks/commit-msg` でメッセージが `WIP` ちょうどでない commit を拒否する。
 - 関係の無い作業中の変更を保つ。
 
 ## 禁止と承認
@@ -667,8 +672,13 @@ primary docs for operational syntax:
 - WS109 の専用 FreeBSD 15 QEMU guest も上記の SSH/QMP PNG 例外の対象（2026-10-02 ユーザー「FreeBSDにも例外を適用します」）。接続は `127.0.0.1` の転送ポートのみ、serial/console log は判定に使わない。
 - QEMU の console log・serial log を読んで判定しない（解析・回帰・受け入れのどれでも）。guest の操作はシリアル
   （`plan/tools/guest/serial.py`）か SSH（`plan/tools/guest/guest.sh`）で対話し、不具合は gdbstub・monitor・QMP で解析する。
-- 回帰の範囲は Phase の性質で決める。コードの意味を変えない refactor は build（warning 0）と最後の boot test だけ。
-  コードの意味を変える Phase は、変えた領域の host 試験を選んで流す。
+- **試験の方針（2026-10-03 ユーザー）**: 「全体的に言って、1つの細かい修正に対して、テストが厚すぎます。回帰テストを全部回すのは、理想的にはいいかもしれませんが、このプロジェクトでは不要にします。」
+  - 細かい修正ごとに回帰試験を回さない。実装を自分で丁寧にレビューし、確信が持てたら、build（warning 0）と変えた所の host 試験（短いもの）にとどめる。
+  - QEMU・実機の試験は、WS の最後（または意味のまとまった単位）で**試験の担当 T1** に依頼する。実装の担当は QEMU を自分で起動しない。
+  - T1 は届いた複数の依頼を可能な限りまとめ、**1 つの QEMU のインスタンス**でまとめて流す（依頼が 1 つなら単体で流してよい）。QEMU は host 全体で同時に 1 つ。試験が他を塞ぐので、1 回の試験が長くなりすぎないようにする。
+  - T1 に依頼した担当は結果を待たず、Q1 が投入した別の WS の作業へ移ってよい（2026-10-03 ユーザー「待つのではなくて、別な作業をしてスループットを上げます。」）。依頼した Phase は T1 の結果を Q1 が判定するまで cleared にしない。
+  - 負荷試験・耐久試験は別枠。ユーザーに確かめてから夜間に流す。
+  - T1 の運用は [protocol](plan/agents/protocol.md) の「試験の担当 T1」。
 - 回帰試験では GPU を使わず、framebuffer で login prompt だけを確かめる。GPU の確認は GPU を扱う WS の Phase で行う。
 - QEMU の証拠と実機の証拠を分けて書く。やっていない確認は「未実施」と書く。
 

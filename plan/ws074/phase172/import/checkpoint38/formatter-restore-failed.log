@@ -1,0 +1,108 @@
+plan/ws074/tests/host-range-clone-contents.c: In function ‘contents_case’:
+plan/ws074/tests/host-range-clone-contents.c:192:13: error: invalid storage class for function ‘contents_check’
+  192 | static void contents_check(int condition, const char *name);
+      |             ^~~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:193:12: error: invalid storage class for function ‘contents_script’
+  193 | static int contents_script(struct vm_realm *realm, const char *source, vm_value *answer);
+      |            ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:194:12: error: invalid storage class for function ‘contents_case’
+  194 | static int contents_case(struct vm_realm *realm, struct bind_window *window);
+      |            ^~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:200:1: error: ‘main’ is normally a non-static function [-Werror=main]
+  200 | main(
+      | ^~~~
+plan/ws074/tests/host-range-clone-contents.c:278:1: error: invalid storage class for function ‘contents_check’
+  278 | contents_check(
+      | ^~~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:299:1: error: invalid storage class for function ‘contents_script’
+  299 | contents_script(
+      | ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:332:1: error: invalid storage class for function ‘contents_case’
+  332 | contents_case(
+      | ^~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:716:1: error: expected declaration or statement at end of input
+  716 | }
+      | ^
+plan/ws074/tests/host-range-clone-contents.c:186:24: error: unused variable ‘units’ [-Werror=unused-variable]
+  186 |         const uint16_t units[2] = { 'X', 0xd800 };
+      |                        ^~~~~
+plan/ws074/tests/host-range-clone-contents.c:185:18: error: unused variable ‘arguments’ [-Werror=unused-variable]
+  185 |         vm_value arguments[2];
+      |                  ^~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:184:18: error: unused variable ‘answer’ [-Werror=unused-variable]
+  184 |         vm_value answer;
+      |                  ^~~~~~
+plan/ws074/tests/host-range-clone-contents.c:183:18: error: unused variable ‘receiver’ [-Werror=unused-variable]
+  183 |         vm_value receiver;
+      |                  ^~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:182:18: error: unused variable ‘source_value’ [-Werror=unused-variable]
+  182 |         vm_value source_value;
+      |                  ^~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:181:18: error: unused variable ‘creator’ [-Werror=unused-variable]
+  181 |         vm_value creator;
+      |                  ^~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:180:30: error: unused variable ‘after’ [-Werror=unused-variable]
+  180 |         struct vm_heap_stats after;
+      |                              ^~~~~
+plan/ws074/tests/host-range-clone-contents.c:179:30: error: unused variable ‘before’ [-Werror=unused-variable]
+  179 |         struct vm_heap_stats before;
+      |                              ^~~~~~
+plan/ws074/tests/host-range-clone-contents.c:178:27: error: unused variable ‘wrapper’ [-Werror=unused-variable]
+  178 |         struct vm_object *wrapper;
+      |                           ^~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:177:25: error: unused variable ‘pressure’ [-Werror=unused-variable]
+  177 |         struct vm_cell *pressure;
+      |                         ^~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:176:25: error: unused variable ‘found’ [-Werror=unused-variable]
+  176 |         struct vm_cell *found;
+      |                         ^~~~~
+plan/ws074/tests/host-range-clone-contents.c:175:25: error: unused variable ‘state’ [-Werror=unused-variable]
+  175 |         struct vm_cell *state;
+      |                         ^~~~~
+plan/ws074/tests/host-range-clone-contents.c:174:25: error: unused variable ‘roots’ [-Werror=unused-variable]
+  174 |         struct vm_cell *roots[3];
+      |                         ^~~~~
+plan/ws074/tests/host-range-clone-contents.c:173:27: error: unused variable ‘name’ [-Werror=unused-variable]
+  173 |         struct vm_string *name;
+      |                           ^~~~
+plan/ws074/tests/host-range-clone-contents.c:172:29: error: unused variable ‘element’ [-Werror=unused-variable]
+  172 |         struct dom_element *element;
+      |                             ^~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:171:26: error: unused variable ‘text’ [-Werror=unused-variable]
+  171 |         struct dom_node *text;
+      |                          ^~~~
+plan/ws074/tests/host-range-clone-contents.c:170:26: error: unused variable ‘child’ [-Werror=unused-variable]
+  170 |         struct dom_node *child;
+      |                          ^~~~~
+plan/ws074/tests/host-range-clone-contents.c:169:26: error: unused variable ‘copy’ [-Werror=unused-variable]
+  169 |         struct dom_node *copy;
+      |                          ^~~~
+plan/ws074/tests/host-range-clone-contents.c:168:26: error: unused variable ‘source’ [-Werror=unused-variable]
+  168 |         struct dom_node *source;
+      |                          ^~~~~~
+plan/ws074/tests/host-range-clone-contents.c:167:30: error: unused variable ‘document’ [-Werror=unused-variable]
+  167 |         struct dom_document *document;
+      |                              ^~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:716:1: error: no return statement in function returning non-void [-Werror=return-type]
+  716 | }
+      | ^
+plan/ws074/tests/host-range-clone-contents.c:164:26: error: unused parameter ‘realm’ [-Werror=unused-parameter]
+  164 |         struct vm_realm *realm,
+      |         ~~~~~~~~~~~~~~~~~^~~~~
+plan/ws074/tests/host-range-clone-contents.c:165:29: error: unused parameter ‘window’ [-Werror=unused-parameter]
+  165 |         struct bind_window *window)
+      |         ~~~~~~~~~~~~~~~~~~~~^~~~~~
+plan/ws074/tests/host-range-clone-contents.c: At top level:
+plan/ws074/tests/host-range-clone-contents.c:332:1: error: ‘contents_case’ defined but not used [-Werror=unused-function]
+  332 | contents_case(
+      | ^~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:200:1: error: ‘main’ defined but not used [-Werror=unused-function]
+  200 | main(
+      | ^~~~
+plan/ws074/tests/host-range-clone-contents.c:130:1: error: ‘contents_script’ defined but not used [-Werror=unused-function]
+  130 | contents_script(
+      | ^~~~~~~~~~~~~~~
+plan/ws074/tests/host-range-clone-contents.c:109:1: error: ‘contents_check’ defined but not used [-Werror=unused-function]
+  109 | contents_check(
+      | ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors

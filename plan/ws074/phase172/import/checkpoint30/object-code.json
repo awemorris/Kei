@@ -1,0 +1,24 @@
+[
+  {
+    "path": "plan/ws074/tests/host-css-rule-model.c",
+    "sha256": "2d713eeb9d6ee089ba620d9e6770b4383c59d30e5b89ae901829297d2d836d3e",
+    "object": "host-css-rule-model.o",
+    "object_path": "build/browser3-p172/review30/host-css-rule-model.o",
+    "text_sha256": "f289063abe5eddf6d9a6963383170bbd9e04cf2ba237ac59da27ce56858bdc59",
+    "final_sha256": "b9e9ce9c81d928f2db88ce5d1311da7eb2b8efb3625d571c2ee0691ed6526e98",
+    "final_text_sha256": "fd46d620aa8f807549b7afd6bcf9b59516f967296404fb00e66db3069d8f6ab5",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  },
+  {
+    "path": "plan/ws074/tests/host-cssom-mutation.c",
+    "sha256": "78e34cb32706f0ea5ac078cbc77c309d6b4768cbfd67f66a8d3fa7070fcd895a",
+    "object": "host-cssom-mutation.o",
+    "object_path": "build/browser3-p172/review30/host-cssom-mutation.o",
+    "text_sha256": "057dcf0958781e0741c02c03078f3b9be1e2b7dc3a4bf32a744333cf89e78e08",
+    "final_sha256": "24356283422b956385c4fd722e497d3a142dfe3345e8f6d0b159d58b5d62762a",
+    "final_text_sha256": "e4bff1070745b0163f6a73bdc961ff928c787102e1fe38e64f9253e1fce2267a",
+    "C_string_literals_equal": true,
+    "text_equal": false
+  }
+]

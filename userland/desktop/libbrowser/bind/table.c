@@ -19,17 +19,16 @@ enum table_action {
 	TABLE_DELETE
 };
 
+/* Actual HTML caption nodes inherit HTMLElement and reject direct script construction. */
+const struct bind_interface bind_html_table_caption_element_interface = {
+    "HTMLTableCaptionElement", BIND_HTML_ELEMENT, 0, NULL, NULL, NULL, NULL};
+
 static int table_html(const struct dom_node *node, int tag);
 static struct dom_node *table_first(struct dom_node *table, int tag);
 static struct dom_node *table_reference(struct dom_node *table, int tag);
 static int table_access(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, int tag, enum table_action action, vm_value *result);
 static int table_change(struct vm_realm *realm, struct dom_node *table, struct dom_node *existing, struct dom_node *incoming, int tag, enum table_action action, struct vm_cell **roots, vm_value *result);
 static void table_unroot(struct vm_heap *heap, struct vm_cell **roots, unsigned count);
-
-/* Actual HTML caption nodes inherit HTMLElement and reject direct script construction. */
-const struct bind_interface bind_html_table_caption_element_interface = {
-	"HTMLTableCaptionElement", BIND_HTML_ELEMENT, 0, NULL, NULL, NULL, NULL
-};
 
 /*
  * Reads the table's actual caption child through the native structural algorithm.
@@ -412,7 +411,11 @@ table_access(
 	matches = table_html(table, DOM_TAG_TABLE);
 	if (!matches) {
 		status = vm_throw_type_error(realm, "Table operation requires an actual HTML table.");
-		return status;
+		if (status != 0)
+			return status;
+
+		/* Succeeded: the VM accepted this native operation exception. */
+		return 0;
 	}
 
 	/* Nullable interface conversion never invokes user coercion or trusts prototype inheritance. */
@@ -435,21 +438,30 @@ table_access(
 			/* An unrelated node fails interface conversion before any old child is removed. */
 			if (!matches) {
 				status = vm_throw_type_error(realm, "The new child has the wrong table interface.");
-				return status;
+				if (status != 0)
+					return status;
+
+				/* Succeeded: the VM accepted this native operation exception. */
+				return 0;
 			}
 
 			/* A genuine section with the wrong section name fails the table setter algorithm. */
 			matches = table_html(incoming, tag);
 			if (!matches) {
 				status = bind_throw_dom(realm, "HierarchyRequestError", "The new section has the wrong table section name.");
-				return status;
+				if (status != 0)
+					return status;
+
+				/* Succeeded: the VM accepted this native operation exception. */
+				return 0;
 			}
 		}
 	}
 
 	/* Reads and repeated creates publish the first current eligible child without mutation. */
 	existing = table_first(table, tag);
-	if (action == TABLE_GET || (action == TABLE_CREATE && existing != NULL)) {
+	if (action == TABLE_GET ||
+	    (action == TABLE_CREATE && existing != NULL)) {
 		window = bind_window_of(realm);
 		status = bind_wrap_or_null(window, existing, result);
 		if (status != 0)
@@ -480,9 +492,13 @@ table_access(
 
 	/* The same cleanup applies after successful mutation, host failure or DOM exception. */
 	status = table_change(realm, table, existing, incoming, tag, action, roots, result);
-	table_unroot(realm->heap, roots, 4U);
-	if (status != 0)
+	if (status != 0) {
+		table_unroot(realm->heap, roots, 4U);
 		return status;
+	}
+
+	/* Releases graph roots only after the complete mutation result is checked. */
+	table_unroot(realm->heap, roots, 4U);
 
 	/* Succeeded: every temporary root has been removed after result publication. */
 	return 0;
@@ -518,10 +534,14 @@ table_change(
 		name = vm_atom_from_ascii(realm->heap, local);
 		if (name == NULL)
 			return ENOMEM;
+
+		/* Retains the allocated name while creating the actual child element. */
 		roots[2] = &name->cell;
 		created = dom_element_create(table->document, DOM_NS_HTML, name, NULL);
 		if (created == NULL)
 			return ENOMEM;
+
+		/* Retains the new child before any removal or host notification. */
 		incoming = &created->node;
 		roots[2] = &incoming->cell;
 	}
@@ -567,8 +587,9 @@ table_unroot(
 	unsigned index;
 
 	/* No host failure leaves a heap root pointing into an expired native invocation. */
-	for (index = 0; index < count; index++)
+	for (index = 0; index < count; index++) {
 		vm_heap_remove_root(heap, &roots[index]);
+	}
 
 	/* Succeeded: the invocation has no remaining temporary roots. */
 	return;

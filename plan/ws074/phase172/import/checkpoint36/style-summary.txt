@@ -1,0 +1,2 @@
+plan/ws074/tests/host-range-delete-contents.c goto=18
+total 18

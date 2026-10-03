@@ -38,17 +38,18 @@ static unsigned checks;
 /* A failing check determines the final process status after later checks run. */
 static unsigned failures;
 
+static void removal_observer_finalize(struct vm_heap *heap, struct vm_cell *cell);
+
+/* No trace edge turns a weak subscription into permanent Document or observer ownership. */
+static const struct vm_cell_type removal_observer_type = {"removal-observer-test", NULL, removal_observer_finalize};
+
 static void removal_check(int condition, const char *name);
 static void removal_observe(void *context, struct dom_node *node);
 static void removal_count(void *context, struct dom_node *node);
 static void removal_weak_notify(void *context, struct dom_node *node);
-static void removal_observer_finalize(struct vm_heap *heap, struct vm_cell *cell);
 static int removal_links(void);
 static int removal_adoption(void);
 static int removal_order(unsigned kind);
-
-/* No trace edge turns a weak subscription into permanent Document or observer ownership. */
-static const struct vm_cell_type removal_observer_type = { "removal-observer-test", NULL, removal_observer_finalize };
 
 /*
  * Verifies notification links and independent Document/subscriber finalization.
@@ -443,8 +444,15 @@ removal_adoption(
 	/* Current registry movement preserves token handles across several back-and-forth transfers. */
 	for (iteration = 0; iteration < 4U; iteration++) {
 		error = dom_adopt(destination, &root->node);
-		if (error != 0)
-			break;
+		if (error != 0) {
+			dom_removal_unsubscribe(rooted);
+			dom_removal_unsubscribe(generic);
+			vm_heap_destroy(foreign);
+			vm_heap_destroy(heap);
+			return error;
+		}
+
+		/* Successful adoption updates both observed current owner Documents. */
 		removal_check(root->node.document == destination, "root current Document changed");
 		removal_check(child->node.document == destination, "descendant current Document changed");
 		original_calls = 0;
@@ -459,8 +467,13 @@ removal_adoption(
 		dom_removal_notify(original, &child->node);
 		removal_check(rooted_calls == 0U, "original registry no longer retains migrated token");
 		error = dom_adopt(original, &root->node);
-		if (error != 0)
-			break;
+		if (error != 0) {
+			dom_removal_unsubscribe(rooted);
+			dom_removal_unsubscribe(generic);
+			vm_heap_destroy(foreign);
+			vm_heap_destroy(heap);
+			return error;
+		}
 	}
 
 	/* Both original handles unlink their current lists without accessing a former Document. */
@@ -468,8 +481,6 @@ removal_adoption(
 	dom_removal_unsubscribe(generic);
 	vm_heap_destroy(foreign);
 	vm_heap_destroy(heap);
-	if (error != 0)
-		return error;
 
 	/* Succeeded: default checked adoption preserved exact weak registration ownership. */
 	return 0;
@@ -528,6 +539,8 @@ removal_order(
 	size = offsetof(struct removal_observer, padding);
 	if (kind == 3)
 		size = sizeof(*observer);
+
+	/* The selected cell size affects only the real finalization order. */
 	observer = vm_heap_alloc(heap, &removal_observer_type, size);
 	if (observer == NULL) {
 		vm_heap_destroy(heap);

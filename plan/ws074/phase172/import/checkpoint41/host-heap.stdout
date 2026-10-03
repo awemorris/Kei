@@ -1,0 +1,2 @@
+host-heap: random workload: 185 collections, 8783 live cells, 10405580 live bytes, 2424832 heap bytes
+host-heap: 31 checks, 0 failed

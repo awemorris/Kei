@@ -14,3 +14,5 @@ plan/ws*/temp/
 # Temp
 plan/ws031/mesa-refs/
 /userland/desktop/browser/distfiles/
+
+.wifi

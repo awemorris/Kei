@@ -37,42 +37,21 @@ struct collection_state {
 };
 
 static void collection_trace(struct vm_heap *heap, struct vm_cell *cell);
-static int collection_create(struct vm_realm *realm, struct dom_node *root, enum collection_kind kind, struct vm_string *name, struct vm_object **out);
-static int collection_this(struct vm_realm *realm, vm_value receiver, int list, struct collection_state **out);
-static struct dom_node *collection_next(struct collection_state *state, struct dom_node *node);
-static int collection_key_index(vm_value key, uint32_t *index);
-static int collection_matches(struct collection_state *state, struct dom_node *node);
-static struct dom_node *collection_index(struct collection_state *state, uint32_t index);
-static struct dom_node *collection_named(struct collection_state *state, struct vm_string *name);
-static int collection_visible(struct vm_object *object, vm_value key);
 static int collection_get_own(struct vm_object *object, vm_value key, struct vm_property *property);
 static int collection_own_keys(struct vm_heap *heap, struct vm_object *object, struct wb_vector *keys);
-static int collection_name_key(struct vm_heap *heap, struct vm_object *object, struct vm_string *name, struct wb_vector *keys);
 static int collection_define(struct vm_realm *realm, struct vm_object *object, vm_value key, const struct vm_descriptor *descriptor, int *handled, int *done);
 static int collection_delete(struct vm_heap *heap, struct vm_object *object, vm_value key, int *handled, int *deleted);
 static int collection_prevent_extensions(struct vm_object *object, int *allowed);
 static int collection_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int collection_item(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int collection_named_item(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-static struct dom_node *collection_root(struct collection_state *state);
-static int collection_name_matches(struct dom_node *node, struct vm_string *name);
-static int collection_named_value(struct collection_state *state, struct vm_string *name, vm_value *result);
 static int controls_named_item(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int node_list_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int node_list_item(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-static int collection_read_length(struct collection_state *state, vm_value *result);
-static int collection_read_item(struct vm_realm *realm, struct collection_state *state, const vm_value *args, unsigned count, vm_value *result);
 static int form_elements(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int form_length(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
 static int radio_value_get(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int radio_value_set(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
-
-static int collection_table_html(const struct dom_node *node, int tag);
-static int collection_section_rank(const struct dom_node *node);
-static struct dom_node *collection_table_next(struct collection_state *state, struct dom_node *node);
-static int collection_table_get(struct vm_realm *realm, vm_value receiver, enum collection_kind kind, vm_value *result);
 static int table_bodies(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int table_rows(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
 static int section_rows(struct vm_realm *realm, vm_value receiver, const vm_value *args, unsigned count, vm_value *result);
@@ -224,6 +203,25 @@ const struct bind_interface bind_html_table_row_element_interface = {
 	"HTMLTableRowElement", BIND_HTML_ELEMENT, 0, NULL, row_attributes, NULL, NULL
 };
 
+static int collection_create(struct vm_realm *realm, struct dom_node *root, enum collection_kind kind, struct vm_string *name, struct vm_object **out);
+static int collection_this(struct vm_realm *realm, vm_value receiver, int list, struct collection_state **out);
+static struct dom_node *collection_next(struct collection_state *state, struct dom_node *node);
+static int collection_key_index(vm_value key, uint32_t *index);
+static int collection_matches(struct collection_state *state, struct dom_node *node);
+static struct dom_node *collection_index(struct collection_state *state, uint32_t index);
+static struct dom_node *collection_named(struct collection_state *state, struct vm_string *name);
+static int collection_visible(struct vm_object *object, vm_value key);
+static int collection_name_key(struct vm_heap *heap, struct vm_object *object, struct vm_string *name, struct wb_vector *keys);
+static struct dom_node *collection_root(struct collection_state *state);
+static int collection_name_matches(struct dom_node *node, struct vm_string *name);
+static int collection_named_value(struct collection_state *state, struct vm_string *name, vm_value *result);
+static int collection_read_length(struct collection_state *state, vm_value *result);
+static int collection_read_item(struct vm_realm *realm, struct collection_state *state, const vm_value *args, unsigned count, vm_value *result);
+static int collection_table_html(const struct dom_node *node, int tag);
+static int collection_section_rank(const struct dom_node *node);
+static struct dom_node *collection_table_next(struct collection_state *state, struct dom_node *node);
+static int collection_table_get(struct vm_realm *realm, vm_value receiver, enum collection_kind kind, vm_value *result);
+
 /*
  * Reports the next actual row using the live table collection's native logical order.
  * Native mutation/index algorithms use this bridge without observing script properties.
@@ -233,7 +231,7 @@ bind_table_row_next(
 	struct dom_node *table,
 	struct dom_node *previous)
 {
-	struct collection_state state = { 0 };
+	struct collection_state state = {0};
 	struct dom_node *node;
 
 	/* The ordered walker reads only its current root, without storing or allocating traversal state. */
@@ -270,7 +268,11 @@ bind_children(
 	    node->type != DOM_ELEMENT &&
 	    node->type != DOM_DOCUMENT_FRAGMENT) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* Publish the cache only after its complete native wrapper has been allocated. */
@@ -278,6 +280,8 @@ bind_children(
 		status = collection_create(realm, node, COLLECTION_CHILDREN, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		node->children_collection = wrapper;
 	}
 
@@ -311,7 +315,11 @@ bind_document_links(
 		return status;
 	if (node->type != DOM_DOCUMENT) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* A Document owns its SameObject cache without retaining unrelated query lists. */
@@ -320,6 +328,8 @@ bind_document_links(
 		status = collection_create(realm, node, COLLECTION_LINKS, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		document->links_collection = wrapper;
 	}
 
@@ -353,7 +363,11 @@ bind_document_forms(
 		return status;
 	if (node->type != DOM_DOCUMENT) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* A Document owns its SameObject cache without retaining unrelated query lists. */
@@ -362,6 +376,8 @@ bind_document_forms(
 		status = collection_create(realm, node, COLLECTION_FORMS, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		document->forms_collection = wrapper;
 	}
 
@@ -395,7 +411,11 @@ bind_document_images(
 		return status;
 	if (node->type != DOM_DOCUMENT) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* A Document owns its SameObject cache without retaining unrelated query lists. */
@@ -404,6 +424,8 @@ bind_document_images(
 		status = collection_create(realm, node, COLLECTION_IMAGES, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		document->images_collection = wrapper;
 	}
 
@@ -439,7 +461,11 @@ bind_select_options(
 	actual = collection_table_html(node, DOM_TAG_SELECT);
 	if (!actual) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* The validated select owns the cache, independently of its current wrapper prototype. */
@@ -450,6 +476,8 @@ bind_select_options(
 		status = collection_create(realm, node, COLLECTION_OPTIONS, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		element->options_collection = wrapper;
 	}
 
@@ -488,13 +516,33 @@ collection_create(
 	struct vm_object **out)
 {
 	struct dom_document *document;
+	struct vm_heap *heap;
 	struct bind_window *window;
 	struct collection_state *state;
 	struct vm_object *prototype;
 	struct vm_object *wrapper;
+	struct vm_cell *roots[3];
+	unsigned registered;
+	unsigned slot;
 	vm_value snapshot;
 	int index;
 	int status;
+
+	/* Native construction owns its root, captured name and unpublished state until wrapper publication. */
+	heap = root->document->heap;
+	roots[0] = &root->cell;
+	roots[1] = NULL;
+	if (name != NULL)
+		roots[1] = &name->cell;
+	roots[2] = NULL;
+	registered = 0;
+	status = 0;
+	for (slot = 0; slot < 3U; slot++) {
+		status = vm_heap_add_root(heap, &roots[slot]);
+		if (status != 0)
+			goto cleanup;
+		registered++;
+	}
 
 	/* The root's owner supplies the specific interface for each native collection kind. */
 	index = BIND_HTML_COLLECTION;
@@ -510,9 +558,13 @@ collection_create(
 	if (document->binding_prototypes != NULL) {
 		status = vm_object_get(document->binding_prototypes, vm_value_int32(index), &snapshot);
 		if (status != 0)
-			return status;
-		if (snapshot == VM_VALUE_UNDEFINED)
-			return EINVAL;
+			goto cleanup;
+		if (snapshot == VM_VALUE_UNDEFINED) {
+			status = EINVAL;
+			goto cleanup;
+		}
+
+		/* The checked owner snapshot supplies the exact relevant interface prototype. */
 		prototype = (struct vm_object *)vm_value_as_cell(snapshot);
 	} else {
 		/* Parser Documents retain an actual binding owner while their graph is usable. */
@@ -521,29 +573,55 @@ collection_create(
 			window = bind_window_of(realm);
 
 		/* An embedding with neither view nor supplied realm cannot create a wrapper. */
-		if (window == NULL)
-			return EINVAL;
+		if (window == NULL) {
+			status = EINVAL;
+			goto cleanup;
+		}
+
+		/* A real binding owner supplies this interface without observing script properties. */
 		prototype = window->prototypes[index];
 	}
 
-	/* Initialize the complete state before the wrapper publishes an internal edge. */
+	/* Allocate the independent state while its owner and captured name remain rooted. */
 	state = vm_heap_alloc(document->heap, &collection_type, sizeof(*state));
-	if (state == NULL)
-		return ENOMEM;
+	if (state == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Initialize the complete state before rooting it across wrapper allocation. */
 	state->root = root;
 	state->kind = kind;
 	state->name = name;
+	roots[2] = &state->cell;
 
 	/* A normal object trace preserves its internal cell and relevant prototype. */
 	wrapper = vm_object_create(document->heap, prototype);
-	if (wrapper == NULL)
-		return ENOMEM;
+	if (wrapper == NULL) {
+		status = ENOMEM;
+		goto cleanup;
+	}
+
+	/* Publish the complete internal edge before releasing native construction ownership. */
 	wrapper->kind = VM_KIND_PLATFORM;
 	wrapper->internal = vm_value_cell(state);
 	wrapper->native_operations = &collection_native;
 
-	/* Succeeded: only this wrapper can pass the native collection brand check. */
+	/* Return storage receives only a completely constructed genuine wrapper. */
 	*out = wrapper;
+
+cleanup:
+	/* No completed or failed constructor leaves a root pointing into its returned C stack. */
+	while (registered != 0) {
+		registered--;
+		vm_heap_remove_root(heap, &roots[registered]);
+	}
+
+	/* Unpublished construction failures never supply a usable output wrapper. */
+	if (status != 0)
+		return status;
+
+	/* Succeeded: only the complete wrapper can pass the native collection brand check. */
 	return 0;
 }
 
@@ -564,33 +642,64 @@ collection_this(
 	valid = vm_value_is_object(receiver);
 	if (!valid) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* Only a genuine native operation table permits internal-cell inspection. */
 	object = (struct vm_object *)vm_value_as_cell(receiver);
 	if (object->native_operations != &collection_native) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* The private cell type independently confirms the collection brand. */
+	valid = vm_value_is_cell(object->internal);
+	if (!valid) {
+		status = bind_throw_illegal(realm);
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: an absent native private cell is rejected by a real exception. */
+		return VM_THROWN;
+	}
+
+	/* Inspect only a verified native cell before comparing its private type. */
 	cell = vm_value_as_cell(object->internal);
 	if (cell->type != &collection_type) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* NodeList and HTMLCollection are independent brands despite shared storage helpers. */
 	if (list) {
 		if (((struct collection_state *)cell)->kind != COLLECTION_RADIO) {
 			status = bind_throw_illegal(realm);
-			return status;
+			if (status != VM_THROWN)
+				return status;
+
+			/* Succeeded: the requested native exception is installed. */
+			return VM_THROWN;
 		}
 	} else {
 		if (((struct collection_state *)cell)->kind == COLLECTION_RADIO) {
 			status = bind_throw_illegal(realm);
-			return status;
+			if (status != VM_THROWN)
+				return status;
+
+			/* Succeeded: the requested native exception is installed. */
+			return VM_THROWN;
 		}
 	}
 
@@ -616,8 +725,12 @@ collection_next(
 	}
 
 	/* Table rows follow logical group order rather than an unrestricted descendant traversal. */
-	if (state->kind == COLLECTION_TABLE_ROWS)
-		return collection_table_next(state, node);
+	if (state->kind == COLLECTION_TABLE_ROWS) {
+		node = collection_table_next(state, node);
+
+		/* Succeeded: the pure native walker reports the next current row or exhaustion. */
+		return node;
+	}
 
 	/* Owner-based lists include outside controls in the form's current tree root. */
 	root = collection_root(state);
@@ -643,7 +756,7 @@ collection_next(
 		node = node->parent;
 	}
 
-	/* Exhausted: no descendant follows within this rooted collection. */
+	/* Succeeded: traversal is exhausted within this rooted collection. */
 	return NULL;
 }
 
@@ -765,13 +878,21 @@ collection_matches(
 	/* Table-family lists reuse native legacy properties with tightly scoped actual membership. */
 	if (state->kind == COLLECTION_TABLE_BODIES) {
 		same = collection_table_html(node, DOM_TAG_TBODY);
-		return same;
+		if (!same)
+			return 0;
+
+		/* Succeeded: this actual native candidate satisfies the requested membership. */
+		return 1;
 	}
 
 	/* The ordered iterator supplies only direct actual table rows from eligible sections. */
 	if (state->kind == COLLECTION_TABLE_ROWS || state->kind == COLLECTION_SECTION_ROWS) {
 		same = collection_table_html(node, DOM_TAG_TR);
-		return same;
+		if (!same)
+			return 0;
+
+		/* Succeeded: this actual native candidate satisfies the requested membership. */
+		return 1;
 	}
 
 	/* A row's direct cells can be td or th, but no other direct child or descendant. */
@@ -780,7 +901,11 @@ collection_matches(
 		if (same)
 			return 1;
 		same = collection_table_html(node, DOM_TAG_TH);
-		return same;
+		if (!same)
+			return 0;
+
+		/* Succeeded: this actual native candidate satisfies the requested membership. */
+		return 1;
 	}
 
 	/* Links independently require exact anchor or area local names. */
@@ -823,7 +948,7 @@ collection_index(
 		node = collection_next(state, node);
 	}
 
-	/* Exhausted: property access may fall back to ordinary storage. */
+	/* Succeeded: no indexed member exists, permitting ordinary property fallback. */
 	return NULL;
 }
 
@@ -871,7 +996,7 @@ collection_named(
 		node = collection_next(state, node);
 	}
 
-	/* Exhausted: no current member carries this exact nonempty key. */
+	/* Succeeded: no current member carries this exact nonempty key. */
 	return NULL;
 }
 
@@ -891,7 +1016,9 @@ collection_visible(
 		return 0;
 
 	/* An own property anywhere on the prototype chain wins over a legacy member name. */
-	for (prototype = object->prototype; prototype != NULL; prototype = prototype->prototype) {
+	for (prototype = object->prototype;
+	     prototype != NULL;
+	     prototype = prototype->prototype) {
 		found = vm_object_get_own(prototype, key, &property);
 		if (found < 0)
 			return found;
@@ -1290,28 +1417,44 @@ collection_read_item(
 {
 	struct dom_node *node;
 	uint32_t index;
+	struct vm_cell *state_root;
 	int status;
 
 	/* A required argument is checked before invoking its conversion. */
 	if (count == 0) {
 		status = vm_throw_type_error(realm, "HTMLCollection.item requires an index.");
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
+
+	/* The native callee retains genuine state through user conversion and result publication. */
+	state_root = &state->cell;
+	status = vm_heap_add_root(realm->heap, &state_root);
+	if (status != 0)
+		return status;
 
 	/* Conversion may mutate membership and therefore precedes the live search. */
 	status = vm_to_uint32(realm, args[0], &index);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* Missing members are null through this method, unlike missing own properties. */
 	node = collection_index(state, index);
 	if (node == NULL) {
 		*result = VM_VALUE_NULL;
-		return 0;
+	} else {
+		/* Resolve the member in its actual owning Document prototype graph. */
+		status = bind_wrap(NULL, node, result);
+		if (status != 0)
+			goto cleanup;
 	}
 
-	/* Resolve the member in its actual owning Document prototype graph. */
-	status = bind_wrap(NULL, node, result);
+cleanup:
+	/* Conversion errors, missing members and complete publication release the same native ownership. */
+	vm_heap_remove_root(realm->heap, &state_root);
 	if (status != 0)
 		return status;
 
@@ -1331,6 +1474,7 @@ collection_named_item(
 	struct collection_state *state;
 	struct dom_node *node;
 	struct vm_string *name;
+	struct vm_cell *state_root;
 	int status;
 
 	/* Actual native branding precedes a potentially side-effecting DOMString conversion. */
@@ -1339,23 +1483,38 @@ collection_named_item(
 		return status;
 	if (count == 0) {
 		status = vm_throw_type_error(realm, "HTMLCollection.namedItem requires a name.");
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
+
+	/* The native callee retains genuine state through user conversion and result publication. */
+	state_root = &state->cell;
+	status = vm_heap_add_root(realm->heap, &state_root);
+	if (status != 0)
+		return status;
 
 	/* Conversion may mutate names and therefore precedes the live search. */
 	status = vm_to_string(realm, args[0], &name);
 	if (status != 0)
-		return status;
+		goto cleanup;
 
 	/* No global id priority overrides an earlier matching HTML name attribute. */
 	node = collection_named(state, name);
 	if (node == NULL) {
 		*result = VM_VALUE_NULL;
-		return 0;
+	} else {
+		/* Resolve the member in its actual owning Document prototype graph. */
+		status = bind_wrap(NULL, node, result);
+		if (status != 0)
+			goto cleanup;
 	}
 
-	/* Resolve the member in its actual owning Document prototype graph. */
-	status = bind_wrap(NULL, node, result);
+cleanup:
+	/* Conversion errors, missing members and complete publication release the same native ownership. */
+	vm_heap_remove_root(realm->heap, &state_root);
 	if (status != 0)
 		return status;
 
@@ -1484,6 +1643,7 @@ controls_named_item(
 {
 	struct collection_state *state;
 	struct vm_string *name;
+	struct vm_cell *state_root;
 	int status;
 
 	/* The more specific brand precedes argument count and every user conversion. */
@@ -1492,20 +1652,40 @@ controls_named_item(
 		return status;
 	if (state->kind != COLLECTION_CONTROLS) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* A required DOMString must be supplied before conversion can run. */
 	if (count == 0) {
 		status = vm_throw_type_error(realm, "HTMLFormControlsCollection.namedItem requires a name.");
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
+
+	/* The native callee retains genuine state through user conversion and result publication. */
+	state_root = &state->cell;
+	status = vm_heap_add_root(realm->heap, &state_root);
+	if (status != 0)
+		return status;
 
 	/* Conversion-time DOM changes are observed by the subsequent current-member search. */
 	status = vm_to_string(realm, args[0], &name);
 	if (status != 0)
-		return status;
+		goto cleanup;
 	status = collection_named_value(state, name, result);
+	if (status != 0)
+		goto cleanup;
+
+cleanup:
+	/* Conversion errors, missing members and complete publication release the same native ownership. */
+	vm_heap_remove_root(realm->heap, &state_root);
 	if (status != 0)
 		return status;
 
@@ -1588,7 +1768,11 @@ form_elements(
 		return status;
 	if (node->type != DOM_ELEMENT) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* A foreign or uppercase XML form cannot borrow this branded getter. */
@@ -1596,7 +1780,11 @@ form_elements(
 	form = vm_string_equal_ascii(element->local_name, "form");
 	if (element->ns != DOM_NS_HTML || !form) {
 		status = bind_throw_illegal(realm);
-		return status;
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the requested native exception is installed. */
+		return VM_THROWN;
 	}
 
 	/* Allocate a complete native wrapper before publishing the form's traced cache. */
@@ -1604,6 +1792,8 @@ form_elements(
 		status = collection_create(realm, node, COLLECTION_CONTROLS, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		element->controls_collection = wrapper;
 	}
 
@@ -1719,10 +1909,12 @@ radio_value_set(
 	struct dom_node *node;
 	struct dom_element *element;
 	struct vm_string *text;
+	vm_value argument;
 	struct vm_string *value;
 	int matches;
 	int radio;
 	int same;
+	struct vm_cell *state_root;
 	int status;
 
 	/* Native identity precedes DOMString conversion, which may mutate the entire live list. */
@@ -1730,9 +1922,18 @@ radio_value_set(
 	status = collection_this(realm, receiver, 1, &state);
 	if (status != 0)
 		return status;
-	status = bind_to_string(realm, js_argument(args, count, 0), &text);
+
+	/* The native callee retains genuine state through user conversion and result publication. */
+	state_root = &state->cell;
+	status = vm_heap_add_root(realm->heap, &state_root);
 	if (status != 0)
 		return status;
+
+	/* Convert once while preserving the callee-owned live collection state. */
+	argument = js_argument(args, count, 0);
+	status = bind_to_string(realm, argument, &text);
+	if (status != 0)
+		goto cleanup;
 
 	/* The first matching actual radio wins even if another member has the same value. */
 	node = collection_next(state, NULL);
@@ -1753,8 +1954,8 @@ radio_value_set(
 				if (same) {
 					status = dom_input_set_checked(element, 1, 0);
 					if (status != 0)
-						return status;
-					return 0;
+						goto cleanup;
+					goto cleanup;
 				}
 			}
 		}
@@ -1762,6 +1963,12 @@ radio_value_set(
 		/* A conversion-time rename, removal or owner change is observed during this search. */
 		node = collection_next(state, node);
 	}
+
+cleanup:
+	/* Conversion errors, missing members and complete publication release the same native ownership. */
+	vm_heap_remove_root(realm->heap, &state_root);
+	if (status != 0)
+		return status;
 
 	/* Succeeded: an unmatched string leaves every current checkedness state unchanged. */
 	return 0;
@@ -1785,7 +1992,11 @@ collection_table_html(
 		return 0;
 	name = dom_tag_name(tag);
 	same = vm_string_equal_ascii(element->local_name, name);
-	return same;
+	if (!same)
+		return 0;
+
+	/* Succeeded: this actual native candidate satisfies the requested membership. */
+	return 1;
 }
 
 /* Classifies actual sections by the order in which their direct rows occur in table.rows. */
@@ -1806,7 +2017,7 @@ collection_section_rank(
 	if (section)
 		return 3;
 
-	/* An unrelated, foreign or uppercase XML section contributes no table rows. */
+	/* Succeeded: an unrelated, foreign or uppercase XML section contributes no table rows. */
 	return 0;
 }
 
@@ -1838,7 +2049,9 @@ collection_table_next(
 			child = node->next;
 		} else {
 			/* Remaining direct rows in this section precede the next eligible section. */
-			for (row = node->next; row != NULL; row = row->next) {
+			for (row = node->next;
+			     row != NULL;
+			     row = row->next) {
 				actual = collection_table_html(row, DOM_TAG_TR);
 				if (actual)
 					return row;
@@ -1865,7 +2078,9 @@ collection_table_next(
 			/* A matching actual section contributes only its direct actual tr children. */
 			section = collection_section_rank(child);
 			if (section == rank) {
-				for (row = child->first_child; row != NULL; row = row->next) {
+				for (row = child->first_child;
+				     row != NULL;
+				     row = row->next) {
 					actual = collection_table_html(row, DOM_TAG_TR);
 					if (actual)
 						return row;
@@ -1880,7 +2095,7 @@ collection_table_next(
 		child = root->first_child;
 	}
 
-	/* All header, body/direct and footer rows in this current table are exhausted. */
+	/* Succeeded: all header, body/direct and footer rows in this current table are exhausted. */
 	return NULL;
 }
 
@@ -1903,8 +2118,16 @@ collection_table_get(
 	status = bind_this_node(realm, receiver, &node);
 	if (status != 0)
 		return status;
-	if (node->type != DOM_ELEMENT)
-		return bind_throw_illegal(realm);
+	if (node->type != DOM_ELEMENT) {
+		status = bind_throw_illegal(realm);
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the required illegal-receiver exception is installed. */
+		return VM_THROWN;
+	}
+
+	/* Only the checked Element can own a specific table-family cache. */
 	element = (struct dom_element *)node;
 
 	/* Each selected collection kind has one exact root brand and one independently traced cache. */
@@ -1930,16 +2153,26 @@ collection_table_get(
 	}
 
 	/* Foreign elements and prototype forgeries cannot allocate a native table collection. */
-	if (!actual)
-		return bind_throw_illegal(realm);
+	if (!actual) {
+		status = bind_throw_illegal(realm);
+		if (status != VM_THROWN)
+			return status;
+
+		/* Succeeded: the required illegal-receiver exception is installed. */
+		return VM_THROWN;
+	}
+
+	/* Construct a wrapper only after the exact root brand and cache were selected. */
 	if (*cache == NULL) {
 		status = collection_create(realm, node, kind, NULL, &wrapper);
 		if (status != 0)
 			return status;
+
+		/* Publish only the successfully constructed complete wrapper into its traced cache. */
 		*cache = wrapper;
 	}
 
-	/* The cached wrapper observes current links and uses its actual root's relevant realm. */
+	/* Succeeded: the cached wrapper observes current links in its root's relevant realm. */
 	*result = vm_value_cell(*cache);
 	return 0;
 }
@@ -1962,6 +2195,8 @@ table_bodies(
 	status = collection_table_get(realm, receiver, COLLECTION_TABLE_BODIES, result);
 	if (status != 0)
 		return status;
+
+	/* Succeeded: the correctly branded root supplies its complete SameObject live collection. */
 	return 0;
 }
 
@@ -1983,6 +2218,8 @@ table_rows(
 	status = collection_table_get(realm, receiver, COLLECTION_TABLE_ROWS, result);
 	if (status != 0)
 		return status;
+
+	/* Succeeded: the correctly branded root supplies its complete SameObject live collection. */
 	return 0;
 }
 
@@ -2004,6 +2241,8 @@ section_rows(
 	status = collection_table_get(realm, receiver, COLLECTION_SECTION_ROWS, result);
 	if (status != 0)
 		return status;
+
+	/* Succeeded: the correctly branded root supplies its complete SameObject live collection. */
 	return 0;
 }
 
@@ -2025,5 +2264,7 @@ row_cells(
 	status = collection_table_get(realm, receiver, COLLECTION_ROW_CELLS, result);
 	if (status != 0)
 		return status;
+
+	/* Succeeded: the correctly branded root supplies its complete SameObject live collection. */
 	return 0;
 }

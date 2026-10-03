@@ -1,0 +1,32 @@
+--- a/plan/ws074/tests/host-resource.c
++++ b/plan/ws074/tests/host-resource.c
+@@ -154,7 +154,9 @@
+ 	void)
+ {
+ 	struct net_response response;
++	struct wb_buffer bytes;
+ 	enum dom_document_content content;
++	unsigned attempt;
+ 	int status;
+ 	int same;
+ 
+@@ -207,6 +209,19 @@
+ 	net_response_release(&response);
+ 	status = page_fetch_response("https://example.invalid/base", "data:,x", NULL);
+ 	resource_check(status == EINVAL, "missing response output rejected");
++
++	/* A representational overflow rejects copying after genuine data decoding has allocated its fields. */
++	for (attempt = 0; attempt < 4U; attempt++) {
++		/* The real append guard must refuse this extra byte without touching nonexistent storage. */
++		wb_buffer_init(&bytes);
++		bytes.length = (size_t)-2;
++		status = page_fetch("https://example.invalid/base", "data:text/plain,cleanup-probe", &bytes, NULL);
++		resource_check(status == ENOMEM && bytes.data == NULL, "legacy data copy overflow returns its native allocation error");
++
++		/* Restores the synthetic length before ordinary caller-buffer teardown. */
++		bytes.length = 0;
++		wb_buffer_release(&bytes);
++	}
+ 
+ 	/* Succeeded: every data result or error has followed ordinary response cleanup. */
+ 	return;

@@ -1,0 +1,17 @@
+[
+  {
+    "path": "userland/desktop/libbrowser/page/link.c",
+    "before_sha256": "4da7ba93b718b55c1c59bf7dd1bbf36af4e658e39de297aec191c9c94e4400b5",
+    "before_text_sha256": "b24f3eae8e5293e8814a8699b5c50a27c930d4a247d93a3161a2e9c725dc196f"
+  },
+  {
+    "path": "userland/desktop/libbrowser/bind/svg-text.c",
+    "before_sha256": "b1b92fe4befaa0be4a74cea70741fceea2318554732864a2a8bf2d4584eca1a4",
+    "before_text_sha256": "b08d67882ec1cf1a25a37b17ba6d8fabb4f5b77c2cec8c62b52f06e27e3dd1ce"
+  },
+  {
+    "path": "plan/ws074/tests/host-resource.c",
+    "before_sha256": "ac4419c5b331a3930c59296335967628dd87e88d8443f1cda880d4c6965f57f9",
+    "before_text_sha256": "34bc1e9585642c24f323a3ef2e08909c9f9a14ee8b5b63c9b8b14c9572147e8b"
+  }
+]

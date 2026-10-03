@@ -91,12 +91,19 @@ main(
 
 	/* Only the direct lifetime case disables conservative stack scanning. */
 	status = stream_case(realm, window, &fixture);
+	if (status != 0) {
+		vm_heap_set_stack_base(heap, __builtin_frame_address(0));
+		bind_window_destroy(window);
+		vm_realm_destroy(realm);
+		vm_heap_destroy(heap);
+		return 2;
+	}
+
+	/* Restore conservative construction before completed native teardown. */
 	vm_heap_set_stack_base(heap, __builtin_frame_address(0));
 	bind_window_destroy(window);
 	vm_realm_destroy(realm);
 	vm_heap_destroy(heap);
-	if (status != 0)
-		return 2;
 
 	/* Publish complete observations after the embedding has released its roots. */
 	printed = printf("native document streams: %u/%u passed\n", checks - failures, checks);
@@ -127,6 +134,9 @@ stream_check(
 		if (printed < 0)
 			failures++;
 	}
+
+	/* Succeeded: this independent observation contributes to the final outcome. */
+	return;
 }
 
 /* Constructs genuine DOM and managed contexts through the ordinary interpreter. */
@@ -150,9 +160,13 @@ stream_script(
 
 	/* Ordinary script execution provides genuine managed iframe state. */
 	status = js_run_script(realm, units.data, units.length, 0, answer, &syntax);
-	wb_units_release(&units);
-	if (status != 0)
+	if (status != 0) {
+		wb_units_release(&units);
 		return status;
+	}
+
+	/* Release the borrowed source after interpreter execution was checked. */
+	wb_units_release(&units);
 
 	/* Succeeded: a normal interpreter value is available to the embedding. */
 	return 0;
@@ -224,6 +238,10 @@ stream_case(
 	if (status != 0)
 		return status;
 	status = bind_document_interface.operations[20].method(realm, receiver, NULL, 0, &answer);
+	if (status != VM_THROWN)
+		return EIO;
+
+	/* The expected native exception must leave the real factory Document unchanged. */
 	stream_check(status == VM_THROWN && factory->node.first_child == NULL, "factory HTML Document without owner refuses replacement stream");
 	realm->exception = VM_VALUE_UNDEFINED;
 
@@ -235,11 +253,23 @@ stream_case(
 	if (status != 0)
 		return status;
 	frame = bind_node_of(answer);
+	if (frame == NULL || frame->type != DOM_ELEMENT)
+		return EIO;
+
+	/* Publish callback state only for the genuine generated iframe. */
 	fixture->frame = frame;
 	child_realm = (struct vm_realm *)((struct dom_element *)frame)->child_context;
+	if (child_realm == NULL || child_realm->host == NULL)
+		return EIO;
+
+	/* The actual managed child owns its stream and returned Document wrapper. */
 	child = child_realm->host;
 	child_address = (uintptr_t)&child_realm->cell;
 	wrapper = child->document->node.wrapper;
+	if (wrapper == NULL)
+		return EIO;
+
+	/* Invoke the borrowed native operation through the existing real wrapper. */
 	receiver = vm_value_cell(wrapper);
 	status = stream_script(realm, "f=null", &answer);
 	if (status != 0)
@@ -256,11 +286,11 @@ stream_case(
 
 	/* Parser hook performs actual GC and nested writes through the native child global. */
 	length = strlen("<!doctype html><script>var nativeMark=5;console.log('gc');"
-	    "document.write('<b id=nested>N</b>');document.close();</script><i id=tail>T</i>");
+			"document.write('<b id=nested>N</b>');document.close();</script><i id=tail>T</i>");
 	source = vm_string_from_utf8(realm->heap,
-	    "<!doctype html><script>var nativeMark=5;console.log('gc');"
-	    "document.write('<b id=nested>N</b>');document.close();</script><i id=tail>T</i>",
-	    length);
+				     "<!doctype html><script>var nativeMark=5;console.log('gc');"
+				     "document.write('<b id=nested>N</b>');document.close();</script><i id=tail>T</i>",
+				     length);
 	if (source == NULL)
 		return ENOMEM;
 	argument = vm_value_cell(source);
@@ -294,6 +324,7 @@ stream_case(
 	stream_check(child->detached && child->document_parser != NULL && child->document_parser_depth == 0, "temporary actual owner survives retirement until native write unwinds");
 
 	/* No script reference or parser standalone tracer may keep the retired context alive. */
+	fixture->frame = NULL;
 	vm_heap_collect(realm->heap);
 	found = vm_heap_find_cell(realm->heap, child_address);
 	stream_check(found == NULL, "forgotten retired child and unfinished written stream collectible");

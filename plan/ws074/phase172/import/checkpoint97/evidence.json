@@ -1,0 +1,37 @@
+{
+  "queue": "q598-i01",
+  "phase": "ws074-p172",
+  "checkpoint": 97,
+  "status": "in-progress",
+  "reviewed_source_hashes": {
+    "match": 209,
+    "total": 209,
+    "mismatch": []
+  },
+  "target": {
+    "warm_rebuild": "exit0, warning0, check-amd64-native-image OK",
+    "final_image_sha256": "d73a6685d1ab9ad3f65b753983b142f1e1a40b265c043dccbc7997cb98f3ccd8",
+    "first_final_boot": "QMP screendump TimeoutError; no claim of successful boot from that attempt",
+    "bounded_retry": "exit0, login PNG visually verified",
+    "guest_renderer": "read-only /home/awe/zedBSD-worktrees/p3/build/ws035-sq-venus/install"
+  },
+  "native_p014": {
+    "result": "exit1",
+    "passed": [
+      "browser READY/FRAME",
+      "first and blocks GPU/CPU comparison 0/480000 pixels over tolerance2",
+      "End, wheel, Home scroll",
+      "Ctrl+Q close",
+      "zdesktop no ERROR"
+    ],
+    "failed": [
+      "titlebar drag",
+      "titlebar close"
+    ],
+    "observation": "third browser window remained decoration mode1 (CSD), no ZWL GLASS moved/close; second window reached mode2 (SSD) after scroll redraw",
+    "diagnosis": "browser shell acknowledges post-titlebar configure but does not request a fresh frame on unchanged size, so SSD proposal need not reach a content commit; source analysis and runtime correlation, repair pending scope decision"
+  },
+  "guest_stopped": true,
+  "whole_phase_cleared": false,
+  "p100_executed": false
+}

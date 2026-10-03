@@ -1,0 +1,30 @@
+{
+  "queue": "q597",
+  "checkpoint": 78,
+  "source": "userland/desktop/libbrowser/bind/element.c",
+  "source_sha256": "bf9cfeea25590c30ca26512bab9a9b45ca2b6206842761a65519fd1d3b97014d",
+  "baseline": "e4ec499dd9bf472bc35070a8bff07d9bea91e882",
+  "reviewed": 197,
+  "total": 209,
+  "remaining": 12,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 -std=gnu11 -O1 -Wall -Wextra -Werror exit0 warning0",
+  "style_checker": {
+    "exit": 1,
+    "findings": 4,
+    "all": "permitted forward cleanup jumps"
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "dom-tests": "23/23",
+    "host-form": "29 checks, 0 failed",
+    "image-geometry": "10/10"
+  },
+  "limits": [
+    "No forced collector allocation exactly between hidden/async temporary string creation and attribute dispatch; root ownership reviewed statically.",
+    "Whole p172 manifest/ABI/client/native/ASan/target/boot gates and current Acid3 pixel comparison remain."
+  ]
+}

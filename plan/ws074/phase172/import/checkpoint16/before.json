@@ -1,0 +1,22 @@
+[
+  {
+    "path": "plan/ws074/tests/host-image-geometry.c",
+    "before_sha256": "ff15820285b1a7022650f51694dab759a3a7e8d480177b85f9321e683e9664b4",
+    "before_text_sha256": "b4fad924157c7cebc868b3715401f310218ff551e24a93384456adf7150dc4e1"
+  },
+  {
+    "path": "plan/ws074/tests/host-document-images.c",
+    "before_sha256": "6e9ee9a188d68accd9117a8a0dbab8f8433ceb425f25493689389fbee3e07fe0",
+    "before_text_sha256": "63ebfcaf227a582dc961a57a93693e8217385226868cd93125190b563d0b362c"
+  },
+  {
+    "path": "plan/ws074/tests/host-cssom.c",
+    "before_sha256": "1ecd5b0e94ec2b96c3f8f7bd74c68d73e589cc83d81932679991e2c2c3366c0f",
+    "before_text_sha256": "94e8d1f40388349ae54bc9023fdfbd97fc3be0b15d7a3fbf0dbc5a4001929eee"
+  },
+  {
+    "path": "plan/ws074/tests/host-select-collection.c",
+    "before_sha256": "cf2d9fa225494e764488b98f9514270dac028276923c91df974be041fdc0553c",
+    "before_text_sha256": "3b45db9bad8707f76c24fd37953b8d64670f969c770b70971c8a219d4276e229"
+  }
+]

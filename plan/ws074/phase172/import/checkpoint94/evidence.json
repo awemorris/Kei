@@ -1,0 +1,39 @@
+{
+  "queue": "q598",
+  "checkpoint": 94,
+  "source": "userland/desktop/libbrowser/css/values.c",
+  "source_sha256": "e5259cf84634b2820b2dcd91c31e38162b6ff41de8cf6d6c99e0c765708451da",
+  "manual_status": "reviewed-full-file",
+  "reviewed": 208,
+  "total": 209,
+  "remaining": 1,
+  "whole_host_build": {
+    "exit": 0,
+    "warnings": 0
+  },
+  "scoped_compile": "GCC14.2 exit0 warning0",
+  "style_checker": {
+    "findings": 0
+  },
+  "clang_format": "19.1.7 on copy",
+  "tests": {
+    "js": "14/14",
+    "dom": "23/23",
+    "css_host": "five binaries/128 checks",
+    "focused_invalid_color": "four expected output lines"
+  },
+  "review_areas": [
+    "full 4533-line current source, full C style and browser component ownership",
+    "property/keyword tables, shorthand expansion and declared value lifetime",
+    "color, background, lengths, calc and grid parsing/bounds",
+    "caller output capacity, validation, error returns and parser buffer contracts"
+  ],
+  "fixes": [
+    "css_parse_color rejects trailing tokens after named, hex or rgb/rgba colors",
+    "css_parse_value expands in bounded scratch and checks caller capacity before publication"
+  ],
+  "limits": [
+    "No independent capacity-allocation injection; direct parser callers retain fixed 16-slot contract",
+    "One cascade source review and original whole p172 gates remain"
+  ]
+}

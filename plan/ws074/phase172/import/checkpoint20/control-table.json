@@ -1,0 +1,6 @@
+{
+  "table": "control_types",
+  "initializer_equal_modulo_whitespace": true,
+  "before": "{{\"text\",DOM_CONTROL_TEXT},{\"search\",DOM_CONTROL_TEXT},{\"email\",DOM_CONTROL_TEXT},{\"url\",DOM_CONTROL_TEXT},{\"tel\",DOM_CONTROL_TEXT},{\"number\",DOM_CONTROL_TEXT},{\"password\",DOM_CONTROL_PASSWORD},{\"button\",DOM_CONTROL_BUTTON},{\"submit\",DOM_CONTROL_SUBMIT},{\"image\",DOM_CONTROL_SUBMIT},{\"reset\",DOM_CONTROL_RESET},{\"checkbox\",DOM_CONTROL_CHECKBOX},{\"radio\",DOM_CONTROL_RADIO},{\"hidden\",DOM_CONTROL_HIDDEN},{NULL,DOM_CONTROL_NONE}}",
+  "after": "{{\"text\",DOM_CONTROL_TEXT},{\"search\",DOM_CONTROL_TEXT},{\"email\",DOM_CONTROL_TEXT},{\"url\",DOM_CONTROL_TEXT},{\"tel\",DOM_CONTROL_TEXT},{\"number\",DOM_CONTROL_TEXT},{\"password\",DOM_CONTROL_PASSWORD},{\"button\",DOM_CONTROL_BUTTON},{\"submit\",DOM_CONTROL_SUBMIT},{\"image\",DOM_CONTROL_SUBMIT},{\"reset\",DOM_CONTROL_RESET},{\"checkbox\",DOM_CONTROL_CHECKBOX},{\"radio\",DOM_CONTROL_RADIO},{\"hidden\",DOM_CONTROL_HIDDEN},{NULL,DOM_CONTROL_NONE}}"
+}

@@ -1,0 +1,38 @@
+{
+  "queue_local": "browser3/q598-i01",
+  "phase": "ws074-p172",
+  "checkpoint": 98,
+  "status": "final-evidence",
+  "merge": {
+    "origin_main": "483531ebed6f134e09514f28f954fcc5c898190a",
+    "merge_commit": "e4f8e057f0e15c6ab3c8c88cbd9c55af77fe0fdf",
+    "incoming_shared_plan_id_collision": "q594-q598; preserved both four shared projection versions under plan/agents/browser3/main-merge-483531ebe and shared files restored to origin/main; Agent A mapping pending"
+  },
+  "browser_source": {
+    "reviewed": 209,
+    "hashes_matching": 209,
+    "adjacent_input_sha256": "1d8a8856d94d5c0858f21eb27a6a7262382f7a316dcd3e6692e4d95f5fd9e1bc",
+    "browser_source_diff_from_premerge": 0
+  },
+  "target": {
+    "full_build": "exit0; check-amd64-native-image OK",
+    "full_warning_lines": 220,
+    "browser_compositor_warning_lines": 0,
+    "warm_rebuild": "exit0; check-amd64-native-image OK; warning0/error0",
+    "final_image_sha256": "f213812caa75ce43c7d0a3d6366273faddc3f78deddadcca35f619217ece2dc0",
+    "libbrowser_sha256": "245d4250aecd8c2f64b5bfd23eca38b0ca215b6b6e1063a754a7859ce46f1d88",
+    "browser_sha256": "9b66e7d09c4f0318033418dbf6d72f9ba08e721030ecb1fad7ddbd2cac4937b0",
+    "boot_final": "exit0; login PNG visually verified",
+    "native_p014_pre_warm": "exit0",
+    "native_p014_final_cold": "exit1: first READY/FRAME missed fixed 5-second startup wait; screenshot before browser appeared; remaining checks pass",
+    "native_p014_final_retry": "exit0: all stages pass, GPU/CPU 0/480000 pixels over 2-channel tolerance, scroll and titlebar drag/close; zdesktop ERROR0",
+    "guest_stopped": true
+  },
+  "prior_final_host_and_manifest": "checkpoint96: manifest569 applied209 archived356 excluded4 unresolved0, 71 historical Phase records; plain/ASan98 regressions+81goldens each, Acid2 exact120000 pixels, independent CPU/GPU client, SONAME39 exports and forbidden deps0",
+  "limitations": [
+    "A-side shared planning Queue ID/projection collision pending semantic sync; browser3 lane outcome stored locally",
+    "First cold p014 fixed 5-second READY wait missed; bounded rerun passed without source changes",
+    "Target full build includes 220 external/toolchain warning lines; relevant browser/compositor warning0, final warm rebuild warning0",
+    "Acid3/p100 not run or selected; GitHub Issue/Project publication deferred"
+  ]
+}

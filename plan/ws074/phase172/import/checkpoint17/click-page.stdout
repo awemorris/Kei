@@ -1,0 +1,58 @@
+PASS click listener observes preactivation
+PASS preactivation clears indeterminate
+PASS click actual target
+PASS script click event flags
+PASS script click mouse view
+PASS input trusted noncancelable bubbling
+PASS change trusted noncancelable bubbling
+PASS uncanceled checkbox toggles
+PASS recursion suppressed across all callbacks
+PASS synchronous event order
+PASS saved click reset after dispatch
+PASS click leaves default checked absent
+PASS script click makes target dirty
+PASS second independent click eligible
+PASS canceled callback sees preactivation
+PASS cancellation restores both checkbox fields
+PASS handler false restores checkbox
+PASS cancellation overrides callback changes with snapshot
+PASS stopPropagation alone does not cancel
+PASS disabled input skip activation
+PASS disabled reflects empty presence
+PASS disabled false removes attr
+PASS boolean setters avoid user coercion
+PASS boolean symbol/zero conversions
+PASS clone copies independent indeterminate
+PASS clone storage independent
+PASS indeterminate initially false for every input
+PASS indeterminate-only input clone
+PASS disabled getter brand
+PASS disabled setter brand
+PASS indeterminate getter brand
+PASS indeterminate setter brand
+PASS detached toggle and click without notifications
+PASS removal in click suppresses notifications
+PASS radio listeners observe exclusivity
+PASS radio select order
+PASS radio listeners observe exclusivity
+PASS selected radio only click
+PASS radio cancellation restores previous and suppresses notifications
+PASS cancellation cannot restore previous changed group
+PASS removed prior radio not restored
+PASS target changed name cancellation unchecks target
+PASS no previous selection remains unchecked on cancel
+PASS click uses native state despite shadowed accessors
+PASS different target nested click allowed
+PASS first legend exception
+PASS second legend and outside disabled
+PASS inherited disabled not reflected own attr
+PASS live fieldset disabling removal
+PASS nested disabled fieldset independently applies
+PASS ordinary script click untrusted
+PASS ordinary disabled expando does not suppress click and recursion
+PASS click native receiver brand
+PASS foreign input no activation/disabled behavior
+PASS current changed type suppresses notifications
+PASS borrowed click uses actual child event realm
+PASS saved child input click after iframe removal
+click activation probe done
