@@ -72,6 +72,7 @@ legacy の HDA が 5330 の firmware の設定で無効にされていないか�
 | [ws100-p007](phase007/phase.md) | 規約（coding-style の全文）への合わせと全体の確かめ（audiod は WS100 で変えた関数とその周りだけ） | cleared（2026-09-30: 変えた関数と新しい code は style-check 0（sigsetjmp の例外 1）、audiod の残り 89 件は一覧、audiod-qemu・volume-p004・host-audio PASS） | p002〜p004 |
 | [ws100-p008](phase008/phase.md) | L3: 確かめの音の遅れの計測と短縮（操作から音の始まりまで 50 ms 以内） | cleared（2026-09-30 Q1 の判断で。P4 は判定の扱いを待って uncleared で報告。QEMU の guest の中の経路（音量の変更から HDA の DMA がその byte を取るまで）の中央値 31〜37 ms・最大 42 ms で 50 ms 以内。host の WAV（QEMU の codec の buffer 42.7 ms と USB の経路を含む）は 106〜111 ms で参考。直しは入れていない。5330 は未実施） | p004 |
 | [ws100-p010](phase010/phase.md) | BUG-153: system bar の slider の click が zdesktop 自身の保存の読み戻しで戻される（50 → 100）のを直す | cleared（2026-10-03 Q1、T1-018） | p004 |
+| [ws100-p012](phase012/phase.md) | BUG-161: 音量の変更のたびに desktop.conf へ書かない。session の間は audiod だけが持ち、session の終わり（Log Out・終了）に zdesktop が一度だけ書く。BUG-153 の読み戻しの仕組みを外す | in-progress（P1。実装と host の確認済み、T2 の QEMU 待ち） | p004・p005・p010 |
 
 ## 段の計画（2026-09-30 main 経由のユーザーの方針「広く浅く」: まず動く段をそろえ、磨き込みは段ごとの数値目標の小さな Phase）
 

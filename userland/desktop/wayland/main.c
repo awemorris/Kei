@@ -997,7 +997,8 @@ service_cleanup(
 	/* No client remains to hear from the seat, so its devices close quietly. */
 	zwl_input_cleanup(server);
 
-	/* The user's preferences are not read any more. */
+	/* The session's volume is kept for the next login (volume.c, BUG-161), then the preferences are not read any more. */
+	zwl_volume_keep(server, "end");
 	zwl_preferences_close(server);
 
 	/* Returns the OS resources after input and display cleanup. */

@@ -3,8 +3,10 @@
 # (build-volume-image.sh) with QEMU's HD Audio (volume-guest.sh), kei's session at boot.  Settings runs in kei's
 # session with kei's preferences (HOME=/home/kei).
 #  1. The page: audiod reached with a device (SOUND report reachable=1 device=1); sound.png.
-#  2. Settings -> audiod and the system bar: the slider dragged to 30% sets audiod to 30 and sound.volume=30 in
-#     desktop.conf, with one feedback sound at the release; the system bar's popup shows it (bar-30.png).
+#  2. Settings -> audiod and the system bar: the slider dragged to 30% sets audiod to 30, with one feedback sound at
+#     the release, and leaves desktop.conf as it was (BUG-161, ws100-p012: audiod holds the volume during the
+#     session; zdesktop writes it once at the session's end, volume-p004's A5); the system bar's popup shows it
+#     (bar-30.png).
 #  3. Mute in Settings: audiod muted, no feedback sound; the bar's icon muted (bar-muted.png); mute off: a sound.
 #  4. The system bar -> Settings: the wheel over the bar's icon (two notches down) and the bar's mute are shown by the
 #     page within a few seconds (SOUND report value=20, muted=1) (page-20.png, page-muted.png).
@@ -111,6 +113,7 @@ expect_more $log 'ZWL HANDOFF go=1' 0 60
 expect_more $log 'ZWL VOLUME reachable=1 device=1' 0 20
 guest 'audiod-feedback volume 60' >/dev/null
 sleep 2
+conf_start=$(guest "grep -E '^sound\\.(volume|muted)=' $conf" | tr '\n' ' ')
 maps=$(count $log 'ZWL MAP client=')
 guest "export XDG_RUNTIME_DIR=/run/user/1000 HOME=/home/kei; /bin/settings --timeout-s=600 sound > $slog 2>&1 </dev/null & sleep 6; echo started" >/dev/null
 expect_more $log 'ZWL MAP client=' "$maps" 20
@@ -123,7 +126,7 @@ expect_more $slog 'SOUND report reachable=1 device=1 value=60' 0 10
 expect_more $slog 'ZSETTINGS CONTROL index=6 ' 0 10
 shot sound.png
 
-# 2. Settings -> audiod, desktop.conf and the bar.
+# 2. Settings -> audiod and the bar, not desktop.conf.
 feedbacks=$(count $slog 'SOUND feedback error=0')
 slide_to 30
 expect_more $slog 'SOUND set value=(29|30|31) muted=0 final=1' 0 5
@@ -132,8 +135,8 @@ set -- $(audiod_volume)
 value=${1:-30}
 sleep 1
 kept=$(guest "grep -E '^sound\\.(volume|muted)=' $conf" | tr '\n' ' ')
-echo "kept: $kept"
-echo "$kept" | grep -q "sound.volume=$value" && verdict ok "settings slider: kept in desktop.conf" || verdict no "settings slider: kept in desktop.conf"
+echo "desktop.conf: $kept (at the start: $conf_start)"
+[ "$kept" = "$conf_start" ] && verdict ok "settings slider: desktop.conf not written" || verdict no "settings slider: desktop.conf not written"
 after=$(count $slog 'SOUND feedback error=0')
 [ "${after:-0}" -gt "${feedbacks:-0}" ] && verdict ok "settings slider: feedback sound at the release" || verdict no "settings slider: feedback sound at the release"
 bar_shot bar-30.png
