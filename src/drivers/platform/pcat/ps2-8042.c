@@ -7,11 +7,20 @@
 
 /*
  * IBM PC/AT i8042 PS/2 mouse driver
+ *
+ * The mouse is asked for the IntelliMouse protocols when it is started
+ * (BUG-156): the sample-rate knock 200, 100, 80 turns a wheel mouse (and
+ * the PS/2 emulation of a laptop's touchpad, whose two-finger or edge
+ * scroll comes as the wheel) into ID 3 with a fourth byte for the wheel,
+ * and 200, 200, 80 then turns an IntelliMouse Explorer into ID 4 with the
+ * wheel, the horizontal wheel and the side and extra buttons.  A mouse
+ * that answers neither stays ID 0 with three-byte packets.
  */
 
 #include "drivers/platform/pcat/ps2-8042.h"
 #include "kern/input-device.h"
 #include "kern/input-keymap.h"
+#include "kern/klog.h"
 #include "kern/lock.h"
 
 #include <uapi/errno.h>
@@ -35,6 +44,8 @@
 #define I8042_CONFIG_AUX_OFF 0x20U
 
 #define PS2_SET_DEFAULTS 0xf6U
+#define PS2_SET_SAMPLE_RATE 0xf3U
+#define PS2_GET_DEVICE_ID 0xf2U
 #define PS2_DISABLE_STREAM 0xf5U
 #define PS2_ENABLE_STREAM 0xf4U
 #define PS2_ACK 0xfaU
@@ -49,6 +60,16 @@
 #define MOUSE_BUTTON_LEFT 0x01U
 #define MOUSE_BUTTON_MIDDLE 0x02U
 #define MOUSE_BUTTON_RIGHT 0x04U
+#define MOUSE_BUTTON_SIDE 0x08U
+#define MOUSE_BUTTON_EXTRA 0x10U
+
+/* The device IDs: a plain mouse, the IntelliMouse (wheel) and the IntelliMouse Explorer (wheels and five buttons). */
+#define PS2_ID_STANDARD 0x00U
+#define PS2_ID_WHEEL 0x03U
+#define PS2_ID_EXPLORER 0x04U
+
+/* The sample rate a mouse runs at once it is identified (the rate SET_DEFAULTS gives). */
+#define PS2_SAMPLE_RATE_DEFAULT 100U
 
 static struct spinlock controller_lock;
 static struct mutex lifecycle_lock;
@@ -57,8 +78,17 @@ static struct input_device *keyboard_input;
 static struct input_capability keyboard_capabilities[256];
 static size_t keyboard_capability_count;
 static int keyboard_extended;
-static uint8_t packet[3];
+static uint8_t packet[4];
 static unsigned packet_index;
+
+/*
+ * The protocol the mouse speaks since it was last started (PS2_ID_*), and
+ * the bytes of its packets: three for a plain mouse, four with a wheel.
+ * Both are set while the interrupt is held off and read by it under
+ * controller_lock.
+ */
+static uint8_t mouse_protocol;
+static unsigned packet_size;
 static uint32_t last_buttons;
 static unsigned reader_count;
 static int mouse_active;
@@ -134,14 +164,28 @@ static const char *const scan_symbols[128] = {
 	[0x44] = "f10",
 };
 
+/*
+ * What the mouse can report.  The wheels and the side and extra buttons
+ * are declared before the mouse is identified (the device is registered
+ * at boot and started only when it is opened); a plain mouse simply never
+ * sends them.
+ */
 static const struct input_capability mouse_capabilities[] = {
 	{EV_SYN, SYN_REPORT}, {EV_REL, REL_X},	   {EV_REL, REL_Y},
+	{EV_REL, REL_WHEEL},  {EV_REL, REL_HWHEEL},
 	{EV_KEY, BTN_LEFT},   {EV_KEY, BTN_RIGHT}, {EV_KEY, BTN_MIDDLE},
+	{EV_KEY, BTN_SIDE},   {EV_KEY, BTN_EXTRA},
 };
 
+/*
+ * The host test's 8042 (WS018, BUG-156): with WS018_INPUT_HID_HOST_TEST the
+ * ports are a model of the controller and the mouse instead of the I/O
+ * instructions.
+ */
 #ifdef WS018_INPUT_HID_HOST_TEST
 uint8_t ws018_input_hid_test_inb(uint16_t);
 void ws018_input_hid_test_outb(uint16_t, uint8_t);
+#endif
 
 static uint8_t inb(uint16_t port);
 
@@ -154,8 +198,13 @@ static void flush_output(void);
 static int read_config(uint8_t *configuration);
 static int write_config(uint8_t configuration);
 static int mouse_command(uint8_t command);
-static int consume_byte(uint8_t value, int32_t *dx, int32_t *dy, uint32_t *buttons);
-static void publish_sample(int32_t dx, int32_t dy, uint32_t buttons, uint32_t changed_buttons);
+static int mouse_command_value(uint8_t command, uint8_t value);
+static int mouse_read_id(uint8_t *id);
+static int mouse_knock(uint8_t first, uint8_t second, uint8_t third, uint8_t *id);
+static int mouse_identify(void);
+static int mouse_identify_current(void);
+static int consume_byte(uint8_t value, int32_t *dx, int32_t *dy, int32_t *wheel, int32_t *hwheel, uint32_t *buttons);
+static void publish_sample(int32_t dx, int32_t dy, int32_t wheel, int32_t hwheel, uint32_t buttons, uint32_t changed_buttons);
 static void mouse_interrupt(int interrupt, kern_irq_ack_t acknowledge, void *argument);
 static int mouse_start(void);
 static void mouse_stop(void);
@@ -166,6 +215,7 @@ static void keyboard_interrupt(int interrupt, kern_irq_ack_t acknowledge,
 static void keyboard_build_capabilities(void);
 static void mouse_input_close(void *context);
 
+#ifdef WS018_INPUT_HID_HOST_TEST
 /* Supports the inb operation. */
 static uint8_t
 inb(
@@ -388,83 +438,303 @@ mouse_command(
 	return EIO;
 }
 
-/* Supports the consume byte operation. */
+/*
+ * Sends a command with its one-byte argument (such as a sample rate); both
+ * bytes must be acknowledged.  Returns 0 or an errno value.
+ */
+static int
+mouse_command_value(
+	uint8_t command,
+	uint8_t value)
+{
+	int error;
+
+	/* The command. */
+	error = mouse_command(command);
+	if (error != 0)
+		return error;
+
+	/* Its argument, acknowledged like a command. */
+	error = mouse_command(value);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the mouse took both bytes. */
+	return 0;
+}
+
+/* Asks the mouse for its device ID (PS2_ID_*); returns 0 or an errno value. */
+static int
+mouse_read_id(
+	uint8_t *id)
+{
+	int error;
+
+	/* The request, acknowledged. */
+	error = mouse_command(PS2_GET_DEVICE_ID);
+	if (error != 0)
+		return error;
+
+	/* The ID follows the acknowledgement. */
+	error = read_output(id, 1);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: *id is the protocol the mouse speaks now. */
+	return 0;
+}
+
+/*
+ * Sets three sample rates in a row, the knock a mouse answers by changing
+ * its protocol, and reads the ID it has after them.  Returns 0 or an errno
+ * value.
+ */
+static int
+mouse_knock(
+	uint8_t first,
+	uint8_t second,
+	uint8_t third,
+	uint8_t *id)
+{
+	int error;
+
+	/* The three rates, in order. */
+	error = mouse_command_value(PS2_SET_SAMPLE_RATE, first);
+	if (error != 0)
+		return error;
+	error = mouse_command_value(PS2_SET_SAMPLE_RATE, second);
+	if (error != 0)
+		return error;
+	error = mouse_command_value(PS2_SET_SAMPLE_RATE, third);
+	if (error != 0)
+		return error;
+
+	/* The ID the knock left. */
+	error = mouse_read_id(id);
+	if (error != 0)
+		return error;
+
+	/* Succeeded: *id says whether the knock was taken. */
+	return 0;
+}
+
+/*
+ * Finds the richest protocol the mouse speaks (BUG-156): the IntelliMouse
+ * knock, then the Explorer's, each kept only when the ID says the mouse
+ * took it, and the default sample rate back at the end.  Sets
+ * mouse_protocol and packet_size.  A mouse that refuses a knock is taken
+ * in the protocol its ID says it speaks.  Returns 0 or an errno value; a
+ * mouse that cannot even say its ID is not used.
+ */
+static int
+mouse_identify(
+	void)
+{
+	uint8_t id;
+	int error;
+
+	/* A plain mouse until a knock says otherwise. */
+	mouse_protocol = PS2_ID_STANDARD;
+	packet_size = 3U;
+
+	/* The IntelliMouse knock: a wheel mouse answers ID 3 and sends a fourth byte. */
+	error = mouse_knock(200U, 100U, 80U, &id);
+	if (error != 0)
+		return mouse_identify_current();
+	if (id == PS2_ID_WHEEL) {
+		mouse_protocol = PS2_ID_WHEEL;
+		packet_size = 4U;
+
+		/* The Explorer's knock, which only a wheel mouse is asked: ID 4 adds the second wheel and two buttons. */
+		error = mouse_knock(200U, 200U, 80U, &id);
+		if (error != 0)
+			return mouse_identify_current();
+		if (id == PS2_ID_EXPLORER)
+			mouse_protocol = PS2_ID_EXPLORER;
+	}
+
+	/*
+	 * The rate the knocks changed, back to the default.  A refusal is not
+	 * a failure: a mouse left at 80 reports a second still works, and
+	 * nothing is logged here under the controller's lock.
+	 */
+	(void)mouse_command_value(PS2_SET_SAMPLE_RATE, PS2_SAMPLE_RATE_DEFAULT);
+
+	/* Succeeded: the protocol and the packet size are known. */
+	return 0;
+}
+
+/*
+ * Takes the protocol the mouse's ID says it speaks now, after a knock it
+ * refused part of (a knock taken before the refusal may already have
+ * changed it).  Returns 0 or an errno value.
+ */
+static int
+mouse_identify_current(
+	void)
+{
+	uint8_t id;
+	int error;
+
+	/* The ID as it is now. */
+	error = mouse_read_id(&id);
+	if (error != 0)
+		return error;
+
+	/* Four bytes for either wheel protocol, three otherwise. */
+	mouse_protocol = PS2_ID_STANDARD;
+	packet_size = 3U;
+	if (id == PS2_ID_WHEEL || id == PS2_ID_EXPLORER) {
+		mouse_protocol = id;
+		packet_size = 4U;
+	}
+
+	/* Succeeded: the protocol the mouse speaks is known. */
+	return 0;
+}
+
+/*
+ * Collects one byte of a packet; returns 1 when a whole packet is decoded
+ * into the motion (dx, dy, evdev's directions), the wheels' notches
+ * (wheel, positive up; hwheel, positive right) and the buttons held
+ * (MOUSE_BUTTON_*), 0 otherwise.
+ */
 static int
 consume_byte(
 	uint8_t value,
 	int32_t *dx,
 	int32_t *dy,
+	int32_t *wheel,
+	int32_t *hwheel,
 	uint32_t *buttons)
 {
 	uint8_t first;
+	uint8_t extra;
 
-	/* Handles the packet index condition. */
+	/* A packet starts with a byte whose bit 3 is always set; anything else is skipped to resynchronise. */
 	if (packet_index == 0 && (value & 0x08U) == 0)
 		return 0;
-	packet[packet_index++] = value;
+	packet[packet_index] = value;
+	packet_index++;
 
-	/* Handles the packet index condition. */
-	if (packet_index != 3U)
+	/* A packet not whole yet. */
+	if (packet_index != packet_size)
 		return 0;
 	packet_index = 0;
 
-	/* Handles the first condition. */
+	/* A packet whose motion overflowed is dropped. */
 	first = packet[0];
 	if ((first & 0xc0U) != 0)
 		return 0;
-	*dx = (int8_t)packet[1];
+
 	/*
-	 * PS/2 positive Y is upwards; evdev REL_Y remains positive downwards.
+	 * The motion is nine bits: the byte and its sign in the first byte
+	 * (bit 4 for X, bit 5 for Y), so a fast stroke past 127 counts is not
+	 * read as a move back.  PS/2 positive Y is upwards; evdev REL_Y is
+	 * positive downwards.
 	 */
-	*dy = -(int32_t)(int8_t)packet[2];
+	*dx = (int32_t)packet[1];
+	if ((first & 0x10U) != 0)
+		*dx -= 256;
+	*dy = (int32_t)packet[2];
+	if ((first & 0x20U) != 0)
+		*dy -= 256;
+	*dy = -*dy;
+
+	/* The three buttons of every mouse. */
 	*buttons = 0;
-	/* Handles the first condition. */
 	if ((first & 0x01U) != 0)
 		*buttons |= MOUSE_BUTTON_LEFT;
-	/* Handles the first condition. */
 	if ((first & 0x04U) != 0)
 		*buttons |= MOUSE_BUTTON_MIDDLE;
-	/* Handles the first condition. */
 	if ((first & 0x02U) != 0)
 		*buttons |= MOUSE_BUTTON_RIGHT;
-	/* Reports operation failure. */
+
+	/* The wheels, from the fourth byte of a wheel mouse's packet. */
+	*wheel = 0;
+	*hwheel = 0;
+	extra = packet[3];
+
+	/* The IntelliMouse: a signed byte, positive toward the user (evdev's wheel is positive up). */
+	if (mouse_protocol == PS2_ID_WHEEL)
+		*wheel = -(int32_t)(int8_t)extra;
+
+	/*
+	 * The Explorer: bits 7 and 6 say what the byte carries (as Linux's
+	 * psmouse reads it): 10 a vertical and 01 a horizontal scroll of six
+	 * bits; 00 or 11 a four-bit vertical scroll with the side (bit 4) and
+	 * extra (bit 5) buttons.
+	 */
+	if (mouse_protocol == PS2_ID_EXPLORER) {
+		switch (extra & 0xc0U) {
+		case 0x80U:
+			/* A scroll packet carries no side buttons: they stay as they were. */
+			*wheel = (int32_t)(extra & 0x20U) - (int32_t)(extra & 0x1fU);
+			*buttons |= last_buttons & (MOUSE_BUTTON_SIDE | MOUSE_BUTTON_EXTRA);
+			break;
+		case 0x40U:
+			*hwheel = (int32_t)(extra & 0x20U) - (int32_t)(extra & 0x1fU);
+			*buttons |= last_buttons & (MOUSE_BUTTON_SIDE | MOUSE_BUTTON_EXTRA);
+			break;
+		default:
+			*wheel = (int32_t)(extra & 0x08U) - (int32_t)(extra & 0x07U);
+			if ((extra & 0x10U) != 0)
+				*buttons |= MOUSE_BUTTON_SIDE;
+			if ((extra & 0x20U) != 0)
+				*buttons |= MOUSE_BUTTON_EXTRA;
+			break;
+		}
+	}
+
+	/* Succeeded: a whole packet is decoded. */
 	return 1;
 }
 
-/* Supports the publish sample operation. */
+/* Publishes one decoded packet: the motion, the wheels and the buttons that changed, then the report's end. */
 static void
 publish_sample(
 	int32_t dx,
 	int32_t dy,
+	int32_t wheel,
+	int32_t hwheel,
 	uint32_t buttons,
 	uint32_t changed_buttons)
 {
-	/* Handles the dx condition. */
+	/* The motion. */
 	if (dx != 0)
 		drv_input_device_emit(mouse_input, EV_REL, REL_X, dx);
-
-	/* Handles the dy condition. */
 	if (dy != 0)
 		drv_input_device_emit(mouse_input, EV_REL, REL_Y, dy);
 
-	/* Handles the changed buttons condition. */
+	/* The wheels' notches. */
+	if (wheel != 0)
+		drv_input_device_emit(mouse_input, EV_REL, REL_WHEEL, wheel);
+	if (hwheel != 0)
+		drv_input_device_emit(mouse_input, EV_REL, REL_HWHEEL, hwheel);
+
+	/* Each button that changed. */
 	if ((changed_buttons & MOUSE_BUTTON_LEFT) != 0) {
 		drv_input_device_emit(mouse_input, EV_KEY, BTN_LEFT,
 				      (buttons & MOUSE_BUTTON_LEFT) != 0);
 	}
-
-	/* Handles the changed buttons condition. */
 	if ((changed_buttons & MOUSE_BUTTON_RIGHT) != 0) {
 		drv_input_device_emit(mouse_input, EV_KEY, BTN_RIGHT,
 				      (buttons & MOUSE_BUTTON_RIGHT) != 0);
 	}
-
-	/* Handles the changed buttons condition. */
 	if ((changed_buttons & MOUSE_BUTTON_MIDDLE) != 0) {
 		drv_input_device_emit(mouse_input, EV_KEY, BTN_MIDDLE,
 				      (buttons & MOUSE_BUTTON_MIDDLE) != 0);
 	}
+	if ((changed_buttons & MOUSE_BUTTON_SIDE) != 0) {
+		drv_input_device_emit(mouse_input, EV_KEY, BTN_SIDE,
+				      (buttons & MOUSE_BUTTON_SIDE) != 0);
+	}
+	if ((changed_buttons & MOUSE_BUTTON_EXTRA) != 0) {
+		drv_input_device_emit(mouse_input, EV_KEY, BTN_EXTRA,
+				      (buttons & MOUSE_BUTTON_EXTRA) != 0);
+	}
 
+	/* The end of the report. */
 	drv_input_device_emit(mouse_input, EV_SYN, SYN_REPORT, 0);
 }
 
@@ -479,7 +749,7 @@ mouse_interrupt(
 	int complete;
 	unsigned long irq;
 	uint8_t status;
-	int32_t dx = 0, dy = 0;
+	int32_t dx = 0, dy = 0, wheel = 0, hwheel = 0;
 	uint32_t buttons = 0, changed_buttons = 0;
 	int report = 0;
 
@@ -495,12 +765,16 @@ mouse_interrupt(
 
 		/* Handles the complete condition. */
 		complete = mouse_active
-				   ? consume_byte(value, &dx, &dy, &buttons)
+				   ? consume_byte(value, &dx, &dy, &wheel, &hwheel, &buttons)
 				   : 0;
 		if (complete) {
-			/* Handles the dx condition. */
+			/* A packet with motion, a wheel's notch or a button that changed is reported. */
 			changed_buttons = buttons ^ last_buttons;
-			if (dx != 0 || dy != 0 || changed_buttons != 0) {
+			if (dx != 0 ||
+			    dy != 0 ||
+			    wheel != 0 ||
+			    hwheel != 0 ||
+			    changed_buttons != 0) {
 				last_buttons = buttons;
 				report = 1;
 			}
@@ -516,7 +790,7 @@ mouse_interrupt(
 
 	/* Handles the report condition. */
 	if (report)
-		publish_sample(dx, dy, buttons, changed_buttons);
+		publish_sample(dx, dy, wheel, hwheel, buttons, changed_buttons);
 
 	spin_unlock_irqrestore(&controller_lock, irq);
 }
@@ -548,9 +822,11 @@ mouse_start(
 		error = write_config(configuration);
 	}
 
-	/* Checks the operation status. */
+	/* Defaults, the richest protocol the mouse speaks (BUG-156), then the stream. */
 	if (error == 0)
 		error = mouse_command(PS2_SET_DEFAULTS);
+	if (error == 0)
+		error = mouse_identify();
 	if (error == 0)
 		error = mouse_command(PS2_ENABLE_STREAM);
 	if (error == 0) {
@@ -571,9 +847,11 @@ mouse_start(
 
 	spin_unlock_irqrestore(&controller_lock, irq);
 
-	/* Checks the operation status. */
-	if (error == 0)
+	/* The protocol found, for a machine's log (BUG-156). */
+	if (error == 0) {
+		kern_logf("i8042: mouse id=%u packet=%u\n", (unsigned)mouse_protocol, packet_size);
 		kern_irq_unmask(PS2_MOUSE_IRQ);
+	}
 
 	/* Reports the failure. */
 	if (error != 0)
@@ -609,7 +887,7 @@ mouse_stop(
 
 	/* Handles the last buttons condition. */
 	if (last_buttons != 0) {
-		publish_sample(0, 0, 0, last_buttons);
+		publish_sample(0, 0, 0, 0, 0, last_buttons);
 		last_buttons = 0;
 	}
 
@@ -892,6 +1170,8 @@ drv_pcat_ps2_8042_init(
 			 "i8042 mouse lifecycle");
 	mouse_input = NULL;
 	packet_index = 0;
+	mouse_protocol = PS2_ID_STANDARD;
+	packet_size = 3U;
 	last_buttons = 0;
 	reader_count = 0;
 	mouse_active = 0;

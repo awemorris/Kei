@@ -60,6 +60,7 @@ p005 を scroller・gesture の library と app ごとの適用に分ける、p0
 | [ws081-p018](phase018/phase.md) | Windows の QEMU 用の demo の image（`config-amd64-demo-win.mk`・`build-demo-win.sh`: 5330 の demo の app の一式を Venus で、touchlog、Text Editor）と `windows-touch.md` の用意 | cleared（2026-09-30: `build/ws081-demo-win/hdd-image.img`、boot-test PASS、Venus で session と ssh の password の 1 行の touchlog の SUMMARY。Windows は未実施） | p016 |
 | [ws081-p006](phase006/phase.md) | ブラウザの慣性の scroll と touch の入力（browser の shell） | cleared | p005、WS074（`browser.h` の scroll の範囲・overscroll。main の判断でこの Phase が足した） |
 | ws081-p007 | touch の実物での調整（報告の率の実測、係数の調整）。**2026-09-30 ユーザー: デモの touch は Windows 上の QEMU（WS085）で行う。外付けの touch LCD は間に合えば別の計画**。まず Windows の QEMU の touch の経路（host の touch → QEMU の入力 device → Kei）で報告の率と遅れを測る | planning | p005、p006、touch の USB |
+| [ws081-p019](phase019/phase.md) | BUG-156: PS/2 の mouse・touchpad の wheel（IntelliMouse・Explorer の切替、REL_WHEEL・REL_HWHEEL、動きの 9 bit の符号） | in-progress（q640、P1。実装済み・T1 の試験待ち） | — |
 | ws081-p009 | 全文規約確認と回帰（必須の最終確認） | planning | 全 Phase |
 
 touchpad の二本指の scroll（目標 1）の Phase は、design §10 の 4 のユーザーの判断の後に置く。
