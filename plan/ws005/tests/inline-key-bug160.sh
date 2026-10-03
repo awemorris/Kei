@@ -33,7 +33,7 @@ expect_log() {
 	tries=0
 	found=0
 	while [ $tries -lt 8 ]; do
-		found=$(guest "grep -cE '$2' $1" | tail -1)
+		found=$(guest "grep -acE '$2' $1" | tail -1)
 		[ "${found:-0}" -gt 0 ] 2>/dev/null && break
 		tries=$((tries + 1))
 		sleep 1
@@ -53,14 +53,14 @@ shot() {
 	echo "shot: $out/$1"
 }
 icon() {
-	guest "grep 'ZWL NETWORK icon' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep -a 'ZWL NETWORK icon' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 row() {
-	guest "grep 'ZWL NETWORK row .*text=$1\$' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep -a 'ZWL NETWORK row .*text=$1\$' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 # The index of the last laid-out row whose text is $1 (from the last layout logged).
 row_index() {
-	guest "grep 'ZWL NETWORK row ' /tmp/zdesktop.log | tail -40" | grep "text=$1\$" | tail -1 | sed -n 's/.* index=\([0-9]*\) .*/\1/p'
+	guest "grep -a 'ZWL NETWORK row ' /tmp/zdesktop.log | tail -40" | grep "text=$1\$" | tail -1 | sed -n 's/.* index=\([0-9]*\) .*/\1/p'
 }
 
 # 0. The stand-in and zdesktop (no key saved for Neighbor 5G).
@@ -80,7 +80,7 @@ click $(($1 + 150)) $(($2 + $4 / 2)) 1500
 expect_log /tmp/zdesktop.log 'ZWL NETWORK key open ssid=Neighbor 5G'
 expect_log /tmp/zdesktop.log 'ZWL NETWORK row .*text=Key for Neighbor 5G'
 ap=$(row_index 'Neighbor 5G'); note=$(row_index 'Key for Neighbor 5G'); finish=$(row_index 'Enter: join   Esc: cancel')
-wired=$(guest "grep 'ZWL NETWORK row ' /tmp/zdesktop.log | tail -40" | grep 'text=Wired' | tail -1 | sed -n 's/.* index=\([0-9]*\) .*/\1/p')
+wired=$(guest "grep -a 'ZWL NETWORK row ' /tmp/zdesktop.log | tail -40" | grep 'text=Wired' | tail -1 | sed -n 's/.* index=\([0-9]*\) .*/\1/p')
 echo "rows: Neighbor 5G=$ap note=$note finish=$finish wired=$wired"
 [ -n "$ap" ] && [ "${note:-0}" = $((ap + 1)) ] && [ "${finish:-0}" = $((ap + 3)) ] && [ "${wired:-0}" -gt "${finish:-99}" ] &&
     echo "inline: ok" || { echo "inline: FAIL"; status=1; }
@@ -97,9 +97,9 @@ keys '<esc>'
 expect_log /tmp/zdesktop.log 'ZWL NETWORK key cancel'
 
 # zdesktop saw no error; networkd's socket and root's store back.
-errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
+errors=$(guest "grep -ac ERROR /tmp/zdesktop.log" | tail -1)
 [ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
-guest 'grep "ZWL NETWORK" /tmp/zdesktop.log' > "$out/zdesktop-network.log"
+guest 'grep -a "ZWL NETWORK" /tmp/zdesktop.log' > "$out/zdesktop-network.log"
 guest "$stop_all" >/dev/null
 guest 'rm -f /run/networkd.sock; mv /run/networkd.sock.real /run/networkd.sock; rm -f /etc/wifi.conf; [ -f /tmp/wifi.conf.bug160 ] && mv /tmp/wifi.conf.bug160 /etc/wifi.conf; net show' > "$out/net-show.txt"
 grep -q 'online' "$out/net-show.txt" && echo "networkd: back" || { echo "networkd: not back"; status=1; }

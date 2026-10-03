@@ -26,3 +26,10 @@ AP が多いと menu の下端の「Disconnect from X」が画面の外に切れ
 - host 試験: 無し（compositor の描画）。読みで確かめた。
 - QEMU（T1 に依頼）: `menu-bug148.sh`（1280x800 で Kei Lab に join して最初の行・button の log・「Disconnect from」の行が無い、1280x230 で
   「2 more in Settings > Wi-Fi」と高さ 182 以内、button の click で op=36）、回帰の `zdesktop-p013.sh`・`connecting-bug154.sh`・`inline-key-bug160.sh`。未実施（結果待ち）。
+
+## T1-030（2026-10-03）: FAIL は試験の道具の側
+
+後半（1280x230）で network の icon の座標が取れず、(0,0) を click して App Home を開いていた。原因: zdesktop の log（`/tmp/zdesktop.log`）に NUL の byte が
+入り、zedBSD の grep が「binary file matches」とだけ出して行を出さなかった（`grep -c` の expect_log は数えられたので先へ進んだ）。画面（short.png）では
+1280x230 の system bar の配置は正しい（製品の不具合ではない）。試験の guest の grep を `grep -a` にした（menu-bug148・connecting-bug154・inline-key-bug160）。
+log に NUL が入る原因は未調査（別に記録する価値あり）。

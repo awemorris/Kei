@@ -36,7 +36,7 @@ expect_log() {
 	tries=0
 	found=0
 	while [ $tries -lt ${3:-10} ]; do
-		found=$(guest "grep -cE '$2' $1" | tail -1)
+		found=$(guest "grep -acE '$2' $1" | tail -1)
 		[ "${found:-0}" -gt 0 ] 2>/dev/null && break
 		tries=$((tries + 1))
 		sleep 1
@@ -59,15 +59,15 @@ shot() {
 }
 # The middle of the network icon, from zdesktop's log.
 icon() {
-	guest "grep 'ZWL NETWORK icon' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep -a 'ZWL NETWORK icon' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 # The place of the last laid-out menu row whose text is $1.
 row() {
-	guest "grep 'ZWL NETWORK row .*text=$1\$' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
+	guest "grep -a 'ZWL NETWORK row .*text=$1\$' /tmp/zdesktop.log | tail -1" | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p'
 }
 # Clicks a control of Settings' page by its index, where Settings last logged it.
 control() {
-	set -- $(guest "grep 'ZSETTINGS CONTROL index=$1 ' /tmp/s.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
+	set -- $(guest "grep -a 'ZSETTINGS CONTROL index=$1 ' /tmp/s.log | tail -1" | sed -n 's/.* x=\([-0-9]*\) y=\([-0-9]*\) width=\([0-9]*\) height=\([0-9]*\).*/\1 \2 \3 \4/p')
 	if [ -z "${1:-}" ]; then
 		echo "control: not found"
 		status=1
@@ -126,9 +126,9 @@ sleep 1
 shot settings-joined.png
 
 # zdesktop saw no error; networkd's socket back and the test key gone.
-errors=$(guest "grep -c ERROR /tmp/zdesktop.log" | tail -1)
+errors=$(guest "grep -ac ERROR /tmp/zdesktop.log" | tail -1)
 [ "${errors:-1}" = 0 ] && echo "zdesktop: no ERROR" || { echo "zdesktop: ERROR lines"; status=1; }
-guest 'grep "ZWL NETWORK" /tmp/zdesktop.log' > "$out/zdesktop-network.log"
+guest 'grep -a "ZWL NETWORK" /tmp/zdesktop.log' > "$out/zdesktop-network.log"
 guest 'cat /tmp/s.log' > "$out/settings.log"
 guest 'cat /tmp/probe.log' > "$out/probe.log"
 guest "$stop_all" >/dev/null
