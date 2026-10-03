@@ -1,41 +1,45 @@
 <!-- awesome-plan project=zedbsd record=ws099-p028 -->
-# ws099-p028: zdesktop の log に NUL の byte が入る（試験の grep が log を binary と読む）
+# ws099-p028: BUG-142・BUG-141 — compositor の入力の順と、zdesktop が pointer を取った時の leave
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: in-progress（q645、P2、2026-10-03。実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS099](../ws.md)
-Queue: q643 の続き（P1 generation11、2026-10-03。Q1 の指示: 見つけた担当がその場で直す。user「実機なしで解決できるバグをどんどん処理してください。」）
-発見: T1-030（menu-bug148）。`/tmp/zdesktop.log` に NUL が入り、zedBSD の grep が行を出さず「binary file matches」とだけ返した。
+Bugs: [BUG-142](../../bugs/BUG-142.md)、[BUG-141](../../bugs/BUG-141.md)
 
-## 原因（読みと host の再現）
+## 範囲（Q1、2026-10-03 user「対応可能なバグ修正はないんですか」）
 
-試験は zdesktop を `> /tmp/zdesktop.log 2>&1` で起動する（O_APPEND なし）。前の zdesktop（や、それが起動した program。stdout を共有する）が終わる途中、
-または生きている間に、次の run の `>` が file を 0 に切り詰めると、前の writer の次の write は自分の古い offset に書かれ、その手前が NUL の穴（sparse）
-になる。host の `plan/ws099/tests/host-log-append.sh` で再現した（O_APPEND なし 66 byte の NUL、あり 0）。
+どちらも unreproduced の Files の bug（ws127-p001 の観察）。ticket と ws127 の記録を読み、原因の候補があれば直す。無ければ再現の試みを T1 に。
+読みの結果、どちらも compositor（`userland/desktop/wayland/`）の側に候補があったので、WS099 で直す。
 
-## 修正（`userland/desktop/wayland/main.c`）
+## BUG-142: 起動直後の Ctrl+C が次の click の後に処理される
 
-起動の直後に stdout・stderr の open file に `O_APPEND` を立てる（`log_append`、fcntl F_GETFL/F_SETFL）。zdesktop が起動する program は同じ open file を
-共有するので、それらの write も末尾に付く。pipe・端末では効果がなく、立てられない時はそのまま。zedBSD の kernel は F_SETFL の O_APPEND を扱う
-（`src/kern/syscall.c`）。試験の側の `grep -a`（56f02e9f6）はそのまま残す。
+- 読み: Files の側は順を保つ（menu の action も pointer・key も同じ queue、`fm_window_action`）。compositor の event loop（`main.c`）は
+  ready な入力 device を **1 つずつ順に** 全部読んでいた（`zwl_input_read` を device ごとに、`INPUT_READS_PER_PASS` まで）。zdesktop が
+  忙しい間（起動直後の import、guest の停止など）に keyboard の Ctrl+C と tablet の click が両方たまると、次の pass では device の並び
+  （slot の順）で適用され、pointer の device が先なら click が Ctrl+C より先に Files に届く。観察（起動直後の 2.6 秒の停止の間の QMP の入力）と合う。
+- 直し: `input.c` に `zwl_input_read_devices`（ready な device をまとめて読み、evdev の event の時刻の順に k 本の merge で適用。同じ時刻は
+  device の順、各 device の中の順は保つ、各 device の読みの上限 `INPUT_READS_PER_PASS` も保つ）。report は device ごとに SYN_REPORT まで
+  device の中に貯めてから適用するので、event の単位の merge で device の間の順は SYN_REPORT の時刻の順になる。`main.c` は ready な device を
+  集めて 1 回呼ぶ。`zwl_input_read` は使う所が無くなったので外した。kernel の input の時刻は ms の分解能（`report_timestamp`）。
+- 試験: `plan/ws099/tests/bug142-order.sh`（Report.pdf を選び、zdesktop を SIGSTOP（忙しい compositor の代わり）、Ctrl+C → Downloads の
+  click → SIGCONT。Files の log で CLIPBOARD が LOCATION Downloads より先、Ctrl+V で Report.pdf が Downloads に）。直す前の compositor で
+  再現するかは device の slot の順による（keyboard が先なら直す前でも通る）。
 
-## 検証
+## BUG-141: Files の hover の強調が pointer が窓を出ても残る
 
-- host: `sh plan/ws099/tests/host-log-append.sh` → `plain: NUL bytes=66`、`append: NUL bytes=0`、PASS。
-- build: wayland の build は warning 0。
-- QEMU（T1 に依頼）: `plan/ws099/tests/log-nul-guest.sh`（新規。zdesktop を `>` で起動し、READY の後に file を切り詰めてから止める。size と
-  `tr -d '\000'` の後の size が等しく、ZWL EXIT の行が残る）。未実施（結果待ち）。修正前の image では FAIL の見込み。
+- 読み: `seat.c` の `zwl_seat_motion` は、zdesktop の画面・menu・gesture が motion を取ると（`zwl_seat_motion_shell` が 1）、client への
+  配達（`zwl_seat_pointer_update` → enter/leave）をしない。pointer が Files の item の上から zdesktop の menu（system bar の menu・F10・
+  context menu）や App Home・Wiseview・lock screen の上へ行くと、Files は leave も motion も聞かず、最後の item を明るいまま描く。
+  P1 の ws127-p002 の手順（item → desktop の隅）は motion を取られない経路なので通った。元の観察（w09）の手順の細部は残っていないので、
+  これが原因と断定はできない（候補の 1 つ、見て分かる形の不具合）。
+- 直し: `seat.c` に `motion_taken_leave`。zdesktop が motion を取ったら、pointer のある surface に leave を送り `pointer_surface` を NULL に
+  する。次に client の motion になれば `zwl_seat_pointer_update` が enter を送り直す（button の配達も先に update する）。窓の move・resize・
+  pull・client の move/resize の要求（interactive）・desktop の swipe・drag and drop（data.c が自分で leave する）の間は今までどおり。
+- 試験: `plan/ws099/tests/bug141-hover.sh`（item を click → 窓の空き → 別の item に hover（明るい）→ F10 の menu の行へ pointer → その item の
+  箱が base.png と同じに戻る）。
 
-## 続き: 他の daemon の log（2026-10-03、P1、Q1 の指示）
+## 確かめ
 
-`>`（O_TRUNC で O_APPEND なし）で log を開いて子に渡す所を探した: `open(…O_TRUNC…)` と stdout・stderr への `dup2` を userland/base と userland/desktop で照合。
-
-- **sessiond の session の log（`userland/desktop/sessiond/session.c`、`/run/user/UID/session.log`）が同じ形**: session ごとに O_TRUNC で開き、zdesktop と
-  その子に渡す。Log Out の後の新しい session が切り詰めた時に前の session の program がまだ書くと穴になる。zdesktop の log_append はこの file にも
-  O_APPEND を立てるが、zdesktop の main が走る前の窓を閉じるため、sessiond の open に O_APPEND を足した（O_TRUNC は残し、session ごとに空から）。
-- 既に O_APPEND: sessiond の自分の log（`/var/log/sessiond.log`）、greeter の log、cron の出力、nohup。
-- 切り詰めても一人だけが一度書く物（問題なし）: syslogd の boot の log、networkd の子の出力の一時 file。
-- 共通の関数にはしなかった: 直す所が sessiond の open の 1 行と zdesktop の main だけで、libkeiland（API の追加は版の管理が要る）に置くほどではない。
-
-build: sessiond の build は warning 0。試験: `log-nul-guest.sh` に 3 段目（guest の `/run/user/*/session.log` 全部に NUL が無いこと。session の無い
-image では飛ばす）を足した。T1 に volume の image（kei の session、volume-p004 の Log Out と login の後）でも流すよう依頼。
+- build: `make … build/p2-p024-img/bin/wayland`（zedBSD の clang、-Werror）exit 0、warning 0。Linux の build の flag で `input.c`・`main.c`・
+  `seat.c` を gcc の `-fsyntax-only -Werror` で通した（FreeBSD は未実施）。`style-check.py` は変えた行に違反 0。
+- QEMU（T1 に依頼）: bug142-order・bug141-hover と、入力・pointer の回帰（cursor-owner、zdesktop-p077、menu-p003、files-p002、zdesktop-p084）。結果は未着。

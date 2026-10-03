@@ -29,6 +29,22 @@
 /* Bound the reads one device gets per event-loop pass, so others still run. */
 #define INPUT_READS_PER_PASS	16U
 
+/* The events one read of a device takes at most. */
+#define INPUT_READ_EVENTS	32U
+
+/*
+ * One ready device's events while the devices are read together: those read
+ * and not yet applied, and how many reads it has had this pass.
+ */
+struct input_source {
+	struct zwl_input_device *device;
+	struct input_event events[INPUT_READ_EVENTS];
+	size_t count;
+	size_t next;
+	unsigned reads;
+	unsigned done;
+};
+
 /* The mouse buttons, BTN_LEFT through BTN_TASK, delivered as wl_pointer buttons. */
 #define INPUT_BUTTON_FIRST	0x110U
 #define INPUT_BUTTON_LAST	0x117U
@@ -69,6 +85,8 @@
 static int read_ranges(int descriptor, struct input_absinfo *x, struct input_absinfo *y);
 static int bit_is_set(const unsigned long *bits, unsigned code);
 static void consume_event(struct zwl_server *server, struct zwl_input_device *device, const struct input_event *event);
+static int source_fill(struct zwl_server *server, struct input_source *source);
+static int event_earlier(const struct input_event *event, const struct input_event *other);
 static void apply_frame(struct zwl_server *server, struct zwl_input_device *device, uint32_t time);
 static void apply_key(struct zwl_server *server, uint32_t time, uint32_t key, int32_t value);
 static int32_t scale_absolute(int32_t value, int32_t minimum, int32_t maximum, uint32_t size);
@@ -246,61 +264,152 @@ zwl_input_attach(
 }
 
 /*
- * Drains the events a device has ready and applies each completed report.
+ * Drains the events the ready devices have and applies them in the order
+ * they were made (BUG-142).
  *
- * A read error other than "nothing ready" means the device went away, and it
- * is closed.
+ * Each device's reports are gathered in the device until its SYN_REPORT, so
+ * the order between devices is the order of their events' times: a key
+ * pressed before a click is applied before it even when both waited while
+ * the compositor was busy.  Events of one time keep the devices' order, and
+ * one device's events keep their own.  A read error other than "nothing
+ * ready" means the device went away, and it is closed.
  */
 void
-zwl_input_read(
+zwl_input_read_devices(
 	struct zwl_server *server,
-	struct zwl_input_device *device)
+	struct zwl_input_device **devices,
+	size_t count)
 {
-	struct input_event events[32];
-	ssize_t count;
+	static struct input_source sources[ZWL_INPUT_MAX];
+	struct input_source *earliest;
+	size_t used;
 	size_t index;
-	unsigned reads;
-	int error;
+	int ready;
+	int before;
 
-	/* A bounded number of reads keeps one busy device from starving the loop. */
-	for (reads = 0; reads < INPUT_READS_PER_PASS; reads++) {
-		/* A closed slot has nothing more to read. */
-		if (!device->live)
-			return;
+	/* One source for each device given, up to the seat's devices. */
+	used = count;
+	if (used > ZWL_INPUT_MAX)
+		used = ZWL_INPUT_MAX;
+	for (index = 0; index < used; index++) {
+		sources[index].device = devices[index];
+		sources[index].count = 0;
+		sources[index].next = 0;
+		sources[index].reads = 0;
+		sources[index].done = 0;
+	}
 
-		/* Read as many whole events as the buffer holds. */
-		count = zwl_input_device_read(device->fd, events, sizeof(events) / sizeof(events[0]));
-		if (count < 0) {
-			error = errno;
-
-			/* Nothing more is ready; the next poll will say when there is. */
-			if (error == EAGAIN || error == EWOULDBLOCK)
-				return;
-
-			/* An interrupted read is simply retried. */
-			if (error == EINTR)
+	/* Applies the earliest waiting event until no device has one this pass. */
+	for (;;) {
+		earliest = NULL;
+		for (index = 0; index < used; index++) {
+			/* A source that ran out reads again, within its reads for the pass. */
+			ready = source_fill(server, &sources[index]);
+			if (!ready)
 				continue;
 
-			/* Any other failure means the device is gone. */
-			printf("ZWL INPUT_CLOSED device=%s errno=%d\n", device->path, error);
-			zwl_input_close(server, device);
+			/* The first source with the earliest event wins a tie. */
+			if (earliest == NULL) {
+				earliest = &sources[index];
+				continue;
+			}
+
+			/* A later source wins only with an earlier event. */
+			before = event_earlier(&sources[index].events[sources[index].next],
+					       &earliest->events[earliest->next]);
+			if (before)
+				earliest = &sources[index];
+		}
+
+		/* Nothing is left to apply. */
+		if (earliest == NULL)
 			return;
+
+		/* Applies the event and moves its source on. */
+		consume_event(server, earliest->device, &earliest->events[earliest->next]);
+		earliest->next++;
+	}
+}
+
+/*
+ * Makes sure a source has an event to apply, reading its device when the
+ * events read before are used up.  Reports 1 when it has one, 0 when the
+ * device has nothing more this pass (nothing ready, its reads used, or gone).
+ */
+static int
+source_fill(
+	struct zwl_server *server,
+	struct input_source *source)
+{
+	ssize_t count;
+	int error;
+
+	/* Events read before are still waiting. */
+	if (source->next < source->count)
+		return 1;
+
+	/* Reads until the device gives events, has none, or the pass's reads are used. */
+	while (!source->done) {
+		/* A closed slot, or one that had its reads, has nothing more this pass. */
+		if (!source->device->live || source->reads >= INPUT_READS_PER_PASS) {
+			source->done = 1;
+			break;
+		}
+
+		/* Reads as many whole events as the buffer holds. */
+		source->reads++;
+		count = zwl_input_device_read(source->device->fd, source->events, INPUT_READ_EVENTS);
+		if (count > 0) {
+			source->count = (size_t)count;
+			source->next = 0;
+			return 1;
 		}
 
 		/* End of file means the node is gone. */
 		if (count == 0) {
-			printf("ZWL INPUT_CLOSED device=%s errno=%d\n", device->path, EIO);
-			zwl_input_close(server, device);
-			return;
+			printf("ZWL INPUT_CLOSED device=%s errno=%d\n", source->device->path, EIO);
+			zwl_input_close(server, source->device);
+			source->done = 1;
+			break;
 		}
 
-		/* Apply the events in the order the device produced them. */
-		for (index = 0; index < (size_t)count; index++)
-			consume_event(server, device, &events[index]);
+		/* Nothing more is ready; the next poll will say when there is. */
+		error = errno;
+		if (error == EAGAIN || error == EWOULDBLOCK) {
+			source->done = 1;
+			break;
+		}
+
+		/* Any other failure but an interruption means the device is gone. */
+		if (error != EINTR) {
+			printf("ZWL INPUT_CLOSED device=%s errno=%d\n", source->device->path, error);
+			zwl_input_close(server, source->device);
+			source->done = 1;
+		}
 	}
 
-	/* Succeeded: this pass's share of the device's events has been applied. */
-	return;
+	/* Nothing to apply from this device this pass. */
+	return 0;
+}
+
+/* Reports whether an event was made before another (by its evdev time). */
+static int
+event_earlier(
+	const struct input_event *event,
+	const struct input_event *other)
+{
+	/* The seconds decide first. */
+	if (event->time.tv_sec < other->time.tv_sec)
+		return 1;
+	if (event->time.tv_sec > other->time.tv_sec)
+		return 0;
+
+	/* Then the microseconds. */
+	if (event->time.tv_usec < other->time.tv_usec)
+		return 1;
+
+	/* Made at the same time or later. */
+	return 0;
 }
 
 /*
