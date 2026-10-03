@@ -1695,6 +1695,7 @@ drv_i915_lcd_kernel_resident_run(
 	int preflight_error;
 	int fill_error;
 	int takeover_error;
+	int debug;
 	unsigned domain;
 
 	k = &display->lk;
@@ -1824,10 +1825,12 @@ drv_i915_lcd_kernel_resident_run(
 	/*
 	 * Judges the run on the counters: the run log holds a bounded number of
 	 * entries and a display that flips for as long as an application
-	 * presents always outgrows it.
+	 * presents always outgrows it.  i915.debug=display prints the run log
+	 * and the observer whatever the counters say.
 	 */
 	passed = i915_resident_passed(rep);
-	if (!passed || !released || held != 0) {
+	debug = drv_i915_lcd_debug_enabled();
+	if (!passed || !released || held != 0 || debug) {
 		drv_i915_lcd_log_trace(rep->trace);
 		drv_i915_lcd_log_observer(&rep->obs);
 	} else {
@@ -2224,6 +2227,7 @@ drv_i915_lcd_kernel_at_stage(
 {
 	struct i915_lcd_kernel *k;
 	struct i915_display *display;
+	int debug;
 
 	k = ctx;
 	display = i915_kernel_display(ctx);
@@ -2233,6 +2237,14 @@ drv_i915_lcd_kernel_at_stage(
 	case I915_LCD_SHOW_ENABLE_RETURNED:
 		/* Whatever the reference reports from here on belongs to the way down: counted apart. */
 		k->phase_cleanup = 1;
+
+		/* i915.debug=display prints the enable commit's run log now, failed or not. */
+		debug = drv_i915_lcd_debug_enabled();
+		if (debug) {
+			kern_logf("i915: LCD-B debug: the run log up to the enable commit's return follows\n");
+			drv_i915_lcd_log_trace(&display->show_trace);
+		}
+
 		break;
 	case I915_LCD_SHOW_PICTURE_UP:
 		/* The registers next to Linux's dump, and the start of the window. */

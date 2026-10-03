@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -26,10 +27,14 @@
 #define LOG_PATH "/var/log/messages"
 #define BOOT_LOG_PATH "/run/dmesg.boot"
 
+/* The most kernel log text the boot log keeps (the dmesg command's limit). */
+#define BOOT_LOG_LIMIT (1024U * 1024U)
+
 static volatile sig_atomic_t stopping;
 static volatile sig_atomic_t reopening;
 
 static void save_boot_log(void);
+static char *read_kernel_log(size_t *length);
 static int write_all(int descriptor, const void *buffer, size_t length);
 static int open_output(void);
 static void handle_signal(int number);
@@ -134,28 +139,85 @@ main(
 	return 0;
 }
 
-/* Supports the save boot log operation. */
+/* Copies the kernel's messages so far to the boot log file. */
 static void
 save_boot_log(
 	void)
 {
-	char buffer[65536];
+	char *buffer;
 	size_t length;
 	int descriptor;
 
-	length = sizeof(buffer);
-
-	/* Handles a failed sysctlbyname operation. */
-	if (sysctlbyname("kern.msgbuf", buffer, &length, NULL, 0) != 0)
+	/* Reads the whole kernel log; without it there is no boot log. */
+	buffer = read_kernel_log(&length);
+	if (buffer == NULL)
 		return;
-	descriptor = open(BOOT_LOG_PATH, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
-	/* Checks the file descriptor. */
+	/* Writes the boot log file and flushes it. */
+	descriptor = open(BOOT_LOG_PATH, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (descriptor >= 0) {
 		(void)write_all(descriptor, buffer, length);
 		(void)fsync(descriptor);
 		(void)close(descriptor);
 	}
+
+	free(buffer);
+}
+
+/*
+ * Reads the kernel log into a buffer of its own size.
+ *
+ * The log may grow between sizing and reading it, so a read the log has
+ * outgrown is sized and tried once more.  Returns the buffer, which the
+ * caller frees, or NULL when the log cannot be read.
+ */
+static char *
+read_kernel_log(
+	size_t *length)
+{
+	char *buffer;
+	size_t size;
+	int attempt;
+	int error;
+
+	/* Tries the sized read at most twice. */
+	buffer = NULL;
+	for (attempt = 0; attempt < 2; attempt++) {
+		/* Asks how long the log is now. */
+		size = 0;
+		error = sysctlbyname("kern.msgbuf", NULL, &size, NULL, 0);
+		if (error != 0)
+			return NULL;
+
+		/* Refuses a log beyond what the boot log keeps. */
+		if (size > BOOT_LOG_LIMIT)
+			return NULL;
+
+		/* Allocates room for that length; an empty log still gets a byte. */
+		buffer = malloc(size != 0 ? size : 1U);
+		if (buffer == NULL)
+			return NULL;
+
+		/* Reads the log; a log that grew past the room is sized again. */
+		error = sysctlbyname("kern.msgbuf", buffer, &size, NULL, 0);
+		if (error == 0)
+			break;
+
+		free(buffer);
+		buffer = NULL;
+
+		/* Anything but a log that outgrew the room ends the attempt. */
+		if (errno != ENOMEM)
+			return NULL;
+	}
+
+	/* The log kept outgrowing the room. */
+	if (buffer == NULL)
+		return NULL;
+
+	/* Succeeded: the buffer holds the whole log. */
+	*length = size;
+	return buffer;
 }
 
 /* Supports the write all operation. */

@@ -117,8 +117,14 @@ void drv_i915_lcd_kernel_step(void *ctx, const char *name);
 /* The error hook: counts and prints an error of the Linux text (ctx is the struct i915_lcd_kernel). */
 void drv_i915_lcd_kernel_error(void *ctx, const char *what);
 
-/* The debug hook: ignores a debug message (ctx is the struct i915_lcd_kernel). */
+/* The debug hook: prints a debug message under i915.debug=display, ignores it otherwise (ctx is the struct i915_lcd_kernel). */
 void drv_i915_lcd_kernel_debug(void *ctx, const char *what);
+
+/* Turns the detailed display log of i915.debug=display on (nonzero) or off. */
+void drv_i915_lcd_debug_set(int enabled);
+
+/* Reports whether i915.debug=display asked for the detailed display log. */
+int drv_i915_lcd_debug_enabled(void);
 
 /* Logs the named registers, optionally next to Linux's dump. */
 void drv_i915_lcd_log_regs(struct i915_lcd_world *world, struct i915_lcd_kernel *k, const char *when, int compare);

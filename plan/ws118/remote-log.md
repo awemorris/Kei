@@ -4,7 +4,7 @@
 2026-10-02、P1。画面（内蔵 LCD）に頼らずに、5320 を USB から起動して host（centris）から SSH で log を取る手順。
 ここに書いた確認はすべて **QEMU の証拠**（[phase001](phase001/phase.md) の結果）で、5320 の実機では未実施（実機は p002 でユーザーと一緒に）。
 
-## 1. image（3 種）
+## 1. image（4 種）
 
 `plan/ws118/tests/build-remote-log-image.sh VARIANT BUILD [ADDRESS/PREFIX GATEWAY [DNS]]` で作る（`plan/ws075/demo/build-demo-image.sh` を呼ぶだけ）。
 利用者に渡す image は `REMOTE_LOG_LEAN` を付けずに build する（付けると clang・libcxx・remacs が抜ける。エージェントの worktree の確認用）。
@@ -14,6 +14,7 @@
 | A | デモの image そのもの（i915、graphical boot、`display=edp`、kei の自動の login） | splash → greeter/desktop | 失敗を本番の形で再現する |
 | B | i915 あり、graphical boot 無し（kernel の message を画面に）、boot の行 `display=edp login=graphical`（`login=graphical` は一つだけ）、自動の login 無し | kernel の message | 画面が少しでも映るなら、どこまで進んだかを見る |
 | C | i915 無し（firmware の framebuffer だけ）、kernel の message を画面に、自動の login 無し | kernel の message | i915 が起動を止めるときの退路（SSH に届く） |
+| D | i915 あり・起動の時は保留（ws118-p005）。boot の行 `display=edp login=graphical i915.start=manual i915.debug=display`、graphical boot 無し、自動の login 無し | firmware の framebuffer の kernel の message と console の login。SSH から root が i915 を始めた後は i915 の表示 | LCD の初期化を SSH から始めて、詳しい log を取る（5 節） |
 
 どれも起動時に sshd が立ち、root に `plan/tmp/guest/id_ed25519` の鍵で入れる（公開鍵は image の `/root/.ssh/authorized_keys`）。
 鍵の組が無ければ `plan/tools/guest/guest.sh keys` で作る（build の script が無いときに呼ぶ）。passthrough の VBT は入れない。
@@ -27,7 +28,7 @@ root の crontab（`plan/ws118/tests/root-crontab`）が 1 分ごとに kernel �
 - 固定 IP の変種: `build-remote-log-image.sh C build/rl-c-fixed 10.0.10.50/24 10.0.10.1` のように address・gateway（・DNS）を付けると、
   `ue0` を固定 IP にした `/etc/net.conf` が image に入る。後から変えるときは、USB の root の UFS の `/etc/net.conf` を書き換える
   （書き換えは zedBSD か UFS を書ける環境で。ESP の `zedbsd.cfg` では変えられない）。
-- 無線（Archer T3U、RTL8822BU）を使うとき: 有線が無いときだけ。5320 で root として `net wifi add 'SSID'` を打ち、聞かれた鍵を入れる（2026-10-03 から set-key は add・modify・delete に置き換わった）
+- 無線（Archer T3U、RTL8822BU）を使うとき: 有線が無いときだけ。5320 で root として `net wifi set-key 'SSID' 'PASSPHRASE' auto` を打つ
   （鍵は root の store `/etc/wifi.conf` に入り、起動時の `net startup` が自動で接続する）。画面に頼れないので、一度有線か C の画面の console で
   入れておく。鍵は plan・git・log に書かない。
 
@@ -54,3 +55,34 @@ root の crontab（`plan/ws118/tests/root-crontab`）が 1 分ごとに kernel �
      kernel の message は cron の写し `/var/log/dmesg.cron`（最大 1 分前まで）にだけ残る。cron が起動する前（kernel の i915 の attach の途中など）の
      hang では disk に kernel の message は残らない。そのときは B の画面の写真が頼り。
    - 電源を急に切ると UFS の journal に残った最後の書込みは読めないことがある（`ufs-cat.py` の注意）。
+
+## 5. 変種 D: SSH から i915 を始めて LCD の初期化を debug する（ws118-p005）
+
+D は i915 を kernel に持つが、起動の時は attach だけして start を保留する（`i915.start=manual`）。保留中の device は
+`hw.gpu.attaching` に数えないので、`login=graphical` の sessiond はすぐ console に戻り、機械は firmware の framebuffer の
+console と SSH で立ち上がる。`i915.debug=display` は表示の経路の Linux の本文の debug の message と、panel の enable commit の
+run log（失敗しなくても）を dmesg に出す。amd64 の kernel の log は 512 KiB を保つ。
+
+address を知る（2026-10-03 user: DHCP のまま。router は同じ address を当分使い回す）:
+
+1. 5320 の画面（firmware の framebuffer）に console の login prompt が出たら、user が `root`（password `root`、デモの account、
+   `plan/ws035/demo/demo-accounts.sh`）で login する。
+2. `ifconfig ue0` を打ち、`inet` の address を Q1 に伝える。
+3. 以後のエージェントの操作はその address に SSH で行う。
+   （console の login prompt が出ることは QEMU でも 5320 でも未確認。出ない場合の代わり（/etc/issue に ue0 の address を出す等）は P4 が Q1 に返す。）
+
+エージェントの操作（root、SSH）:
+
+1. `plan/ws118/tests/manual-start.sh ADDRESS OUTDIR [GREETER_SECONDS]` を走らせる。中身は次の順:
+   - `sysctl hw.gpu.start`（保留中の device の数、5320 なら 1）と `hw.gpu.attaching`（0）、開始前の `dmesg`。
+   - `sysctl hw.gpu.start=1` で保留中の device の start worker を起こす（保留が無ければ ENODEV で失敗し、何も変わらない）。
+   - `i915: registered native GPU node`（node の公開）か `start stopped at`（失敗の段）まで最大 120 秒、2 秒ごとに `dmesg` を保存。
+   - `service start greeter` で graphical login を起こす（greeter が display を claim し、panel の modeset が走る）。
+     GREETER_SECONDS（既定 60）の間 2 秒ごとに `dmesg` を保存。
+   - `collect-5320.sh` で残りを集める。
+2. 手でやるときは同じ順に `sysctl hw.gpu.start=1`、`dmesg`、`service start greeter`、`dmesg`。
+3. 機械が hang したら（SSH が切れる）、OUTDIR の最後の `dmesg-*.txt` が hang の直前の 2 秒以内の log。
+   電源を切って USB を読み戻す退路は 4 の 3 と同じ（cron の写しは 1 分ごと）。
+
+起動の行は ESP の `/zedbsd.cfg` に 1 行 1 語で入る。`i915.start=manual` を消せば A と同じ自動の start、`i915.debug=display` を
+消せば通常の量の log になる。同じ名前の行を 2 回書くと起動が止まる（`plan/tools/hw5330/README.md` 3.4 節）。

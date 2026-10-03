@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws118-p001 -->
 # ws118-p001: 5320 の遠隔の実機 log 用 image（sshd）と手順
 
-Status: uncleared（q601-i02、P1、2026-10-02 Q1 の割り込み（q599-i04）で中断。後で再開）
+Status: uncleared（q634-i01、P4、2026-10-03 host 再起動のためのラップアップで中断。後で再開）
 Disposition: normal
 Parent: [WS118](../ws.md)
 Focused goal: fg019（ベータ1）
@@ -73,3 +73,13 @@ Queue: q601 / q601-i01（P1、中断）
   固定 IP の変種の build と QEMU の確認（例: `C build/p1-rl-cf 10.0.2.50/24 10.0.2.2`）、remote-log.md の見直し。
 - 追記（ラップアップ、2026-10-02）: `qemu-ssh-check.sh` に、collect の後に root の crontab の `/var/log/dmesg.cron` を最大 90 秒待つ段を足した（未実行）。
   crontab 入りの A・C の SSH の確認はラップアップの指示で途中で止めた（結果無し）。再開点は上の「未実施」のとおり。
+
+## q634-i01 の途中の結果（P4 generation1、2026-10-03、base main `5a3aca28c`、ラップアップで中断）
+
+- この Queue で p001 に要るのは C と D（p005）だけ。A・B は build の確認だけ（未実施）。
+- C: `REMOTE_LOG_LEAN=y build-remote-log-image.sh C build/p4-rl-c` は **失敗**（rc=2）。原因は P4 の運用の誤り: D の build を
+  同じ worktree で並行に走らせ、BUILD の外で共有の `build/packages/openssh` の configure を取り合った。source の不具合ではない。
+  再開時は D と並行させずに C だけを build し直す（packages は D の build で出来ているので速いはず）。
+- 未実施（再開点）: C の build、C の `qemu-ssh-check.sh`（`/var/log/dmesg.cron` が stick に残ることを含む）、A と C の `boot-test.sh`
+  （A は既定の起動の挙動が変わらないことの確認も兼ねる、Q1 の指示）、A・B の build の確認、remote-log.md の見直し。
+- 固定 IP の変種は作らない（2026-10-03 user: DHCP のまま、address は user が console で `ifconfig ue0` を見て伝える）。

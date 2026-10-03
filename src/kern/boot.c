@@ -52,6 +52,8 @@ static const struct parameter_name parameter_names[KERN_BOOT_PARAMETER_COUNT] = 
 	PARAMETER_NAME("login"),
 	PARAMETER_NAME("display"),
 	PARAMETER_NAME("display.mode"),
+	PARAMETER_NAME("i915.start"),
+	PARAMETER_NAME("i915.debug"),
 };
 
 static char firmware_source[KERN_BOOT_SOURCE_SELECTOR_SIZE];
@@ -287,10 +289,15 @@ kern_boot_parameters_parse(
 			}
 		}
 
-		/* kmsg=, login= and display= take one of their two words (ws035-p097, ws075-p012). */
+		/*
+		 * kmsg=, login=, display=, i915.start= and i915.debug= take one
+		 * of their words (ws035-p097, ws075-p012, ws118-p005).
+		 */
 		if (key == KERN_BOOT_PARAMETER_KMSG ||
 		    key == KERN_BOOT_PARAMETER_LOGIN ||
-		    key == KERN_BOOT_PARAMETER_DISPLAY) {
+		    key == KERN_BOOT_PARAMETER_DISPLAY ||
+		    key == KERN_BOOT_PARAMETER_I915_START ||
+		    key == KERN_BOOT_PARAMETER_I915_DEBUG) {
 			error = parameter_word(key, parameters->storage + value_start, value_length);
 			if (error != 0) {
 				error = parse_error(parameters, error);
@@ -322,7 +329,11 @@ kern_boot_parameters_parse(
 	return 0;
 }
 
-/* Checks the word of kmsg= (quiet or console), login= (graphical or console) or display= (auto, hdmi, edp or panel). */
+/*
+ * Checks the word of kmsg= (quiet or console), login= (graphical or console),
+ * display= (auto, hdmi, edp or panel), i915.start= (auto or manual) or
+ * i915.debug= (off or display).
+ */
 static int
 parameter_word(
 	enum kern_boot_parameter_key key,
@@ -345,6 +356,34 @@ parameter_word(
 			return EINVAL;
 
 		/* Succeeded: one of display='s words. */
+		return 0;
+	}
+
+	/*
+	 * i915.start= starts the i915's devices by themselves once the kernel
+	 * is ready (auto), or holds them until root asks with hw.gpu.start
+	 * (manual).
+	 */
+	if (key == KERN_BOOT_PARAMETER_I915_START) {
+		other = parameter_text_is(value, length, "auto");
+		if (!other)
+			other = parameter_text_is(value, length, "manual");
+		if (!other)
+			return EINVAL;
+
+		/* Succeeded: one of i915.start='s words. */
+		return 0;
+	}
+
+	/* i915.debug= keeps the i915's display path quiet (off) or logs it in detail (display). */
+	if (key == KERN_BOOT_PARAMETER_I915_DEBUG) {
+		other = parameter_text_is(value, length, "off");
+		if (!other)
+			other = parameter_text_is(value, length, "display");
+		if (!other)
+			return EINVAL;
+
+		/* Succeeded: one of i915.debug='s words. */
 		return 0;
 	}
 

@@ -13,6 +13,12 @@
 #   C  no i915 driver (the firmware's framebuffer only), the kernel's messages
 #      on the screen, no automatic login: SSH stays reachable when the i915
 #      stops the boot.
+#   D  i915 in the kernel but held at boot (ws118-p005): the boot lines
+#      "display=edp login=graphical i915.start=manual i915.debug=display" with
+#      ZEDBSD_GRAPHICAL_BOOT=n, no automatic login.  The machine comes up on
+#      the firmware's framebuffer with the console login and SSH; root then
+#      starts the i915 with `sysctl hw.gpu.start=1` and the greeter with
+#      `service start greeter`, and reads the detailed display log in dmesg.
 #
 # Every variant starts sshd and lets root in with plan/tmp/guest/id_ed25519
 # (plan/ws075/demo/build-demo-image.sh puts its public half in the image; the
@@ -31,7 +37,7 @@ cd "$(dirname -- "$0")/../../.."
 
 usage()
 {
-	echo "usage: $0 A|B|C BUILD [ADDRESS/PREFIX GATEWAY [DNS]]" >&2
+	echo "usage: $0 A|B|C|D BUILD [ADDRESS/PREFIX GATEWAY [DNS]]" >&2
 	exit 2
 }
 
@@ -57,6 +63,9 @@ B)
 C)
 	config=plan/ws118/tests/config-remote-log-c.mk
 	extra_make=C
+	;;
+D)
+	extra_make=D
 	;;
 *)
 	usage
@@ -124,6 +133,14 @@ C)
 		REMOTE_LOG_NO_AUTOLOGIN=y REMOTE_LOG_NETCONF=$netconf \
 		REMOTE_LOG_LEAN=${REMOTE_LOG_LEAN:-n} \
 		ZEDBSD_GRAPHICAL_BOOT=n
+	;;
+D)
+	exec plan/ws075/demo/build-demo-image.sh "$build" \
+		ZEDBSD_CONFIG=$config \
+		REMOTE_LOG_NO_AUTOLOGIN=y REMOTE_LOG_NETCONF=$netconf \
+		REMOTE_LOG_LEAN=${REMOTE_LOG_LEAN:-n} \
+		ZEDBSD_GRAPHICAL_BOOT=n \
+		"ZEDBSD_BOOT_EXTRA_LINES=display=edp login=graphical i915.start=manual i915.debug=display"
 	;;
 *)
 	exec plan/ws075/demo/build-demo-image.sh "$build" \

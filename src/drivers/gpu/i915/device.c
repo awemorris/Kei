@@ -25,6 +25,7 @@
 #include "sync.h"
 #include "worker.h"
 #include "display/display.h"
+#include "display/diagnostics.h"
 #include <kern/kcrt.h>
 #include <kern/sysctl.h>
 
@@ -32,6 +33,7 @@
 #include <drivers/pci/pci-i915.h>
 #include <drivers/pci/pci.h>
 #include <hal/hal.h>
+#include <kern/boot.h>
 #include <kern/clock.h>
 #include <kern/klog.h>
 #include <kern/lock.h>
@@ -70,7 +72,9 @@
  *
  * Attach adds a device to the pending list; the readiness report sets ready.
  * Whichever comes second launches the start worker, and a launched device
- * leaves the list, so each device is started exactly once.
+ * leaves the list, so each device is started exactly once.  With the boot
+ * parameter i915.start=manual the pending devices are held after readiness
+ * as well, until root asks for their start (hw.gpu.start).
  */
 struct i915_start_registry {
 	/*
@@ -85,6 +89,16 @@ struct i915_start_registry {
 
 	/* Nonzero once the kernel has reported that timed waits work. */
 	unsigned ready;
+
+	/*
+	 * Nonzero when the boot parameter i915.start=manual holds the devices
+	 * for root's start.  Set with ready, because the boot parameters are
+	 * read only after the devices have attached.
+	 */
+	unsigned manual;
+
+	/* Nonzero once root has asked for the start; a later device then starts by itself. */
+	unsigned released;
 
 	/* The registered devices whose worker has not been launched yet. */
 	struct i915_device *pending;
@@ -121,6 +135,18 @@ static const int i915_start_domains[I915_START_DOMAINS] = {
  */
 extern void drv_i915_test_after_start(struct i915_device *device) __attribute__((weak));
 
+static uint64_t i915_start_held(void);
+static int i915_start_release(void);
+
+/*
+ * The operations behind hw.gpu.start: how many devices are held for root's
+ * start, and the start itself.  The table never changes.
+ */
+static const struct kern_gpu_start_ops i915_start_ops = {
+	i915_start_held,
+	i915_start_release
+};
+
 static void i915_interim_display_irq_enable(void *context, int enabled);
 static void i915_interim_display_irq_nothing(void *context);
 static void i915_interim_display_irq_reset(void *context);
@@ -143,6 +169,8 @@ static const struct i915_irq_display_ops i915_interim_display_irq_ops = {
 };
 
 static void i915_start_registry_init(void);
+static int i915_start_held_locked(void);
+static int i915_boot_word(enum kern_boot_parameter_key key, const char *word);
 static void i915_start_launch(void);
 static void i915_start_worker(void *argument);
 static void i915_attach_settled_locked(struct i915_device *device);
@@ -180,20 +208,73 @@ static unsigned i915_cpu_physical_bits(void);
 void
 drv_i915_runtime_ready(void)
 {
+	struct i915_device *device;
+	unsigned held;
+	int manual;
+	int debug;
 	unsigned long enabled;
 
 	/* Makes sure the registry lock exists before it is taken. */
 	i915_start_registry_init();
+
+	/* Reads whether root starts the devices (i915.start=manual) and whether the display path is logged in detail. */
+	manual = i915_boot_word(KERN_BOOT_PARAMETER_I915_START, "manual");
+	debug = i915_boot_word(KERN_BOOT_PARAMETER_I915_DEBUG, "display");
+	drv_i915_lcd_debug_set(debug);
 
 	/* Marks the kernel ready for every current and later device. */
 	enabled = spin_lock_irqsave(&i915_start_registry.lock);
 
 	i915_start_registry.ready = 1U;
 
+	/* Holds the attached devices for root under i915.start=manual. */
+	held = 0U;
+	if (manual) {
+		i915_start_registry.manual = 1U;
+
+		/*
+		 * A held device is no GPU node on its way until root starts it,
+		 * so the graphical login does not wait for it.
+		 */
+		for (device = i915_start_registry.pending;
+		     device != NULL;
+		     device = device->start_next) {
+			i915_attach_settled_locked(device);
+			held++;
+		}
+	}
+
 	spin_unlock_irqrestore(&i915_start_registry.lock, enabled);
 
-	/* Starts the devices that attached before readiness. */
+	/* Tells root how to start the held devices. */
+	if (manual) {
+		kern_logf("i915: i915.start=manual: %u device(s) held; root starts them with: sysctl hw.gpu.start=1\n",
+		    held);
+	}
+
+	/* Notes the detailed display log. */
+	if (debug)
+		kern_logf("i915: i915.debug=display: the display path is logged in detail\n");
+
+	/* Starts the devices that attached before readiness, unless they are held. */
 	i915_start_launch();
+}
+
+/*
+ * Offers root the start of the devices i915.start=manual holds.
+ *
+ * Called once from the driver registration on the boot thread, before user
+ * space runs.  Without i915.start=manual nothing is ever held, and asking
+ * for the start fails with ENODEV.
+ */
+void
+drv_i915_device_start_ops_install(void)
+{
+	/* Makes sure the registry lock exists before the operations can take it. */
+	i915_start_registry_init();
+
+	/* Publishes the operations behind hw.gpu.start. */
+	kern_gpu_start_ops_set(&i915_start_ops);
 }
 
 /*
@@ -206,6 +287,7 @@ void
 drv_i915_device_schedule_start(
 	struct i915_device *device)
 {
+	int held;
 	unsigned long enabled;
 
 	/* Makes sure the registry lock exists before it is taken. */
@@ -220,15 +302,25 @@ drv_i915_device_schedule_start(
 	/*
 	 * The device counts as a GPU node on its way until the node is
 	 * published or the start has failed, so the graphical login waits for
-	 * it rather than falling back to the console.
+	 * it rather than falling back to the console.  A device held for
+	 * root's start is counted when root starts it.
 	 */
-	device->attach_counted = 1U;
-	kern_gpu_attach_begin();
+	held = i915_start_held_locked();
+	if (!held) {
+		device->attach_counted = 1U;
+		kern_gpu_attach_begin();
+	}
 
 	spin_unlock_irqrestore(&i915_start_registry.lock, enabled);
 
-	kern_logf("i915: device 8086:%04x registered; the start waits for kernel readiness\n",
-	    (unsigned)device->product);
+	/* Says what the start of the device waits for. */
+	if (held) {
+		kern_logf("i915: device 8086:%04x registered; held for root's start (sysctl hw.gpu.start=1)\n",
+		    (unsigned)device->product);
+	} else {
+		kern_logf("i915: device 8086:%04x registered; the start waits for kernel readiness\n",
+		    (unsigned)device->product);
+	}
 
 	/* Starts the device now when readiness came first. */
 	i915_start_launch();
@@ -418,22 +510,158 @@ i915_start_registry_init(void)
 	i915_start_registry.lock_ready = 1U;
 }
 
+/* Reports whether root holds the pending devices; the caller holds the start registry lock. */
+static int
+i915_start_held_locked(void)
+{
+	/* Only i915.start=manual holds, and only until root has asked. */
+	if (i915_start_registry.manual == 0U)
+		return 0;
+	if (i915_start_registry.released != 0U)
+		return 0;
+
+	/* Succeeded: the devices wait for root. */
+	return 1;
+}
+
+/* Counts the devices held for root's start (hw.gpu.start read). */
+static uint64_t
+i915_start_held(void)
+{
+	struct i915_device *device;
+	uint64_t count;
+	int held;
+	unsigned long enabled;
+
+	/* Counts the pending devices while root holds them. */
+	enabled = spin_lock_irqsave(&i915_start_registry.lock);
+
+	count = 0U;
+	held = i915_start_held_locked();
+	if (held) {
+		/* Counts each pending device. */
+		for (device = i915_start_registry.pending;
+		     device != NULL;
+		     device = device->start_next)
+			count++;
+	}
+
+	spin_unlock_irqrestore(&i915_start_registry.lock, enabled);
+
+	/* Reports the count. */
+	return count;
+}
+
+/*
+ * Starts the devices held for root's start (hw.gpu.start=1).
+ *
+ * Returns 0 once their start workers are launched, or ENODEV when no device
+ * is held: i915.start=manual was not given, no Intel display device
+ * attached, or root has already started them.
+ */
+static int
+i915_start_release(void)
+{
+	struct i915_device *device;
+	unsigned count;
+	int held;
+	unsigned long enabled;
+
+	/* Releases the held devices and counts them as GPU nodes on their way. */
+	enabled = spin_lock_irqsave(&i915_start_registry.lock);
+
+	count = 0U;
+	held = i915_start_held_locked();
+	if (held) {
+		/* Counts each pending device. */
+		for (device = i915_start_registry.pending;
+		     device != NULL;
+		     device = device->start_next)
+			count++;
+	}
+
+	/*
+	 * Released, the registry starts these and every later device by
+	 * itself.  Each device now counts on hw.gpu.attaching, so a graphical
+	 * login started afterwards waits for its node.
+	 */
+	if (count != 0U) {
+		i915_start_registry.released = 1U;
+		for (device = i915_start_registry.pending;
+		     device != NULL;
+		     device = device->start_next) {
+			device->attach_counted = 1U;
+			kern_gpu_attach_begin();
+		}
+	}
+
+	spin_unlock_irqrestore(&i915_start_registry.lock, enabled);
+
+	/* Refuses a start with nothing held. */
+	if (count == 0U) {
+		kern_logf("i915: hw.gpu.start: no device is held for root's start\n");
+		return ENODEV;
+	}
+
+	/* Notes root's start in the log. */
+	kern_logf("i915: hw.gpu.start: root starts %u held device(s)\n", count);
+
+	/* Launches the start workers of the released devices. */
+	i915_start_launch();
+
+	/* Succeeded: the held devices are starting. */
+	return 0;
+}
+
+/* Reports whether a word-valued boot parameter was given as the word. */
+static int
+i915_boot_word(
+	enum kern_boot_parameter_key key,
+	const char *word)
+{
+	const struct kern_boot_parameters *parameters;
+	const char *value;
+	int different;
+
+	/* Without valid boot parameters nothing was given. */
+	parameters = kern_boot_parameters_current();
+	if (parameters == NULL)
+		return 0;
+
+	/* A parameter that was not given is not the word. */
+	value = kern_boot_parameters_value(parameters, key);
+	if (value == NULL)
+		return 0;
+
+	/* Compares the given word. */
+	different = kern_strcmp(value, word);
+	if (different != 0)
+		return 0;
+
+	/* Succeeded: the parameter is the word. */
+	return 1;
+}
+
 /* Launches a start worker for every pending device once the kernel is ready. */
 static void
 i915_start_launch(void)
 {
 	struct i915_device *device;
 	struct thread *thread;
+	int held;
 	int error;
 	unsigned long enabled;
 
 	/* Hands the pending devices to workers one at a time. */
 	for (;;) {
-		/* Takes the next device off the list, only once the kernel is ready. */
+		/* Takes the next device off the list, only once the kernel is ready and root does not hold it. */
 		enabled = spin_lock_irqsave(&i915_start_registry.lock);
 
+		held = i915_start_held_locked();
 		device = NULL;
-		if (i915_start_registry.ready != 0U && i915_start_registry.pending != NULL) {
+		if (i915_start_registry.ready != 0U &&
+		    i915_start_registry.pending != NULL &&
+		    !held) {
 			device = i915_start_registry.pending;
 			i915_start_registry.pending = device->start_next;
 			device->start_next = NULL;
@@ -442,7 +670,7 @@ i915_start_launch(void)
 
 		spin_unlock_irqrestore(&i915_start_registry.lock, enabled);
 
-		/* Nothing is left to launch, or the kernel is not ready yet. */
+		/* Nothing is left to launch, the kernel is not ready yet, or root holds the devices. */
 		if (device == NULL)
 			return;
 

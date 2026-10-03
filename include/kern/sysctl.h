@@ -9,6 +9,23 @@
 #define KERN_KERN_SYSCTL_H
 
 #include <stddef.h>
+#include <stdint.h>
+
+/*
+ * What a GPU driver lets root do with the devices it holds back at boot
+ * (hw.gpu.start).
+ *
+ * A driver that can hold its devices until root asks for the start (the
+ * i915 with the boot parameter i915.start=manual) hands these to the kernel
+ * once, while it registers.  The operations live as long as the kernel.
+ */
+struct kern_gpu_start_ops {
+	/* Reports how many devices are held for the start. */
+	uint64_t (*held)(void);
+
+	/* Starts every held device; ENODEV when none is held. */
+	int (*start)(void);
+};
 
 void
 sysctl_init(void);
@@ -25,6 +42,14 @@ kern_gpu_attach_begin(void);
  */
 void
 kern_gpu_attach_end(void);
+
+/*
+ * Installs the operations behind hw.gpu.start; called once, on the boot
+ * thread, before user space runs.
+ */
+void
+kern_gpu_start_ops_set(
+	const struct kern_gpu_start_ops *ops);
 
 int
 kern_sysctl(

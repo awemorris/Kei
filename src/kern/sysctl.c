@@ -44,6 +44,7 @@ static const struct sysctl_leaf leaves[] = {
 	{{ CTL_HW, HW_NCPUONLINE, 0 }, 2, "hw.ncpuonline"},
 	{{ CTL_HW, HW_MEMORY_STATS, 0 }, 2, "hw.memory.stats"},
 	{{ CTL_HW, HW_GPU_ATTACHING, 0 }, 2, "hw.gpu.attaching"},
+	{{ CTL_HW, HW_GPU_START, 0 }, 2, "hw.gpu.start"},
 	{{ CTL_KERN, KERN_MSGBUF, 0 }, 2, "kern.msgbuf"},
 	{{ CTL_KERN, KERN_MSGBUF_SIZE, 0 }, 2, "kern.msgbuf_size"},
 	{{ CTL_KERN, KERN_MSGBUF_DROPPED, 0 }, 2, "kern.msgbuf_dropped"},
@@ -83,8 +84,19 @@ static struct spinlock hostname_lock;
  * atomic operations and never goes below zero.
  */
 static atomic_uint_t gpu_attaching;
+
+/*
+ * The operations behind hw.gpu.start, or NULL while no driver offers a
+ * start root can ask for.
+ *
+ * A driver installs them once on the boot thread while it registers, before
+ * user space runs, so a sysctl call never sees the pointer change.  They
+ * stay for the whole kernel lifetime.
+ */
+static const struct kern_gpu_start_ops *gpu_start_ops;
 static char hostname[KERN_HOST_NAME_MAX + 1U] = "zedbsd";
 
+static int sysctl_gpu_start(void *oldp, size_t *oldlenp, const void *newp, size_t newlen, int superuser);
 static int sysctl_writeback(const int *name, void *oldp, size_t *oldlenp, const void *newp, size_t newlen, int superuser);
 static int oid_compare(const int *a, unsigned alen, const int *b, unsigned blen);
 static const struct sysctl_leaf *find_oid(const int *oid, unsigned oidlen);
@@ -133,6 +145,17 @@ kern_gpu_attach_end(
 		if (exchanged)
 			break;
 	}
+}
+
+/*
+ * Installs the operations behind hw.gpu.start.
+ */
+void
+kern_gpu_start_ops_set(
+	const struct kern_gpu_start_ops *ops)
+{
+	/* Publishes the driver's operations for every later sysctl call. */
+	gpu_start_ops = ops;
 }
 
 /*
@@ -198,6 +221,12 @@ kern_sysctl(
 			return EPERM;
 		attaching = atomic_load_acquire(&gpu_attaching);
 		error = sysctl_output(oldp, oldlenp, &attaching, sizeof(attaching));
+		return error;
+	}
+
+	/* Reports or starts the GPU devices a driver holds for root's start. */
+	if (namelen == 2 && name[0] == CTL_HW && name[1] == HW_GPU_START) {
+		error = sysctl_gpu_start(oldp, oldlenp, newp, newlen, superuser);
 		return error;
 	}
 
@@ -528,6 +557,67 @@ sysctl_output(
 	kern_memcpy(oldp, value, size);
 
 	/* Reports the copied value. */
+	return 0;
+}
+
+/*
+ * Reads or writes hw.gpu.start.
+ *
+ * A write of 1 by the superuser starts the held devices first; the read
+ * then reports how many are still held.
+ */
+static int
+sysctl_gpu_start(
+	void *oldp,
+	size_t *oldlenp,
+	const void *newp,
+	size_t newlen,
+	int superuser)
+{
+	uint64_t request;
+	uint64_t held;
+	int error;
+
+	/* A length without a value asks for nothing that can be written. */
+	if (newp == NULL && newlen != 0)
+		return EINVAL;
+
+	/* Starts the held devices when root asks for it. */
+	if (newp != NULL) {
+		/* Only the superuser may start a device. */
+		if (!superuser)
+			return EPERM;
+
+		/* The request is one 64-bit word. */
+		if (newlen != sizeof(request))
+			return EINVAL;
+
+		/* The only request is 1, "start them". */
+		kern_memcpy(&request, newp, sizeof(request));
+		if (request != 1U)
+			return EINVAL;
+
+		/* Without a driver that holds devices there is nothing to start. */
+		if (gpu_start_ops == NULL)
+			return ENODEV;
+
+		/* Hands the held devices to the driver's start. */
+		error = gpu_start_ops->start();
+		if (error != 0)
+			return error;
+	}
+
+	/* Counts the devices still held; without a driver none is. */
+	held = 0U;
+	if (gpu_start_ops != NULL)
+		held = gpu_start_ops->held();
+
+	/* Reports the count to a caller that asked for it. */
+	error = sysctl_output(oldp, oldlenp, &held, sizeof(held));
+	if (error != 0)
+		return error;
+
+	/* Succeeded: the count is reported and any requested start has begun. */
 	return 0;
 }
 

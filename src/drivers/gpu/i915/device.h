@@ -18,6 +18,7 @@
 
 struct i915_device;
 
+void drv_i915_device_start_ops_install(void);
 void drv_i915_device_schedule_start(struct i915_device *device);
 int drv_i915_device_start(struct i915_device *device);
 int drv_i915_device_stop(struct i915_device *device);

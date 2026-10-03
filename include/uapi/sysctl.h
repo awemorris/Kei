@@ -46,6 +46,13 @@
  * login waits for /dev/gpu0 only while it is nonzero (BUG-092).
  */
 #define HW_GPU_ATTACHING	4
+/*
+ * hw.gpu.start (uint64_t): how many GPU devices a driver holds for a start
+ * root asks for (the i915 with the boot parameter i915.start=manual).
+ * Writing 1 as the superuser starts them; with none held the write fails
+ * with ENODEV.
+ */
+#define HW_GPU_START	5
 
 /* Firmware RAM and actually managed RAM are distinct. */
 #define MEMORY_STATS_VERSION 2U

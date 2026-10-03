@@ -25,7 +25,16 @@
 #include <kern/kcrt.h>
 #include <hal/hal.h>
 
+/*
+ * The size of the ring.  amd64 keeps 512 KiB, so a driver's long start log
+ * (the i915's, read over SSH after a start root asked for, ws118-p005) is
+ * still whole when dmesg reads it; the smaller machines keep 32 KiB.
+ */
+#if defined(__x86_64__)
+#define KLOG_CAPACITY (512U * 1024U)
+#else
 #define KLOG_CAPACITY (32U * 1024U)
+#endif
 
 /*
  * How long a record waits for another CPU's record to reach the consoles

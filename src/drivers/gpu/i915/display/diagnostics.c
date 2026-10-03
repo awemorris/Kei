@@ -179,6 +179,17 @@ static const char *const i915_survey_pll_names[I915_SURVEY_PLLS] = {
 	"DPLL0", "DPLL1", "TBT", "TC1", "TC2", "TC3", "TC4"
 };
 
+/*
+ * Nonzero when the boot parameter i915.debug=display asks for the display
+ * path in detail: the Linux text's debug messages are printed, and the run
+ * log of an enable commit is printed whether or not it failed.
+ *
+ * The device start's readiness report sets it once, before any device
+ * starts, and nothing changes it afterwards.  Its zero value (quiet) is what
+ * every other build, the host tests included, keeps.
+ */
+static int i915_lcd_debug_enabled;
+
 static struct i915_lcd_trace_entry *i915_trace_add(struct i915_lcd_trace *trace, int kind);
 static void i915_trace_write32(void *ctx, uint32_t reg, uint32_t value);
 static uint32_t i915_trace_rmw32(void *ctx, uint32_t reg, uint32_t clear, uint32_t set);
@@ -221,6 +232,29 @@ static const char *i915_trace_kind_name(int kind);
 /*
  * ==== The modeset run log ====
  */
+
+/*
+ * Turns the detailed display log of i915.debug=display on or off.
+ */
+void
+drv_i915_lcd_debug_set(
+	int enabled)
+{
+	/* Records the choice; only nonzero and zero are told apart. */
+	i915_lcd_debug_enabled = 0;
+	if (enabled != 0)
+		i915_lcd_debug_enabled = 1;
+}
+
+/*
+ * Reports whether i915.debug=display asked for the detailed display log.
+ */
+int
+drv_i915_lcd_debug_enabled(void)
+{
+	/* Reports the recorded choice. */
+	return i915_lcd_debug_enabled;
+}
 
 /*
  * Stacks the recorder on a backend.
@@ -1229,17 +1263,29 @@ drv_i915_lcd_kernel_error(
 }
 
 /*
- * Ignores a debug message of the Linux text.
+ * Prints a debug message of the Linux text when i915.debug=display asks for
+ * it, and ignores it otherwise.
  *
  * This is the debug hook of a panel run; ctx is the struct i915_lcd_kernel.
+ * The message is the Linux text's format text; its arguments are not
+ * rendered.
  */
 void
 drv_i915_lcd_kernel_debug(
 	void *ctx,
 	const char *what)
 {
+	const char *line_end;
+
 	UNUSED_PARAMETER(ctx);
-	UNUSED_PARAMETER(what);
+
+	/* Without the detailed display log the message is dropped. */
+	if (i915_lcd_debug_enabled == 0)
+		return;
+
+	/* Prints the message as one line. */
+	line_end = i915_log_line_end(what);
+	kern_logf("i915: LCD-B debug: %s%s", what, line_end);
 }
 
 /*

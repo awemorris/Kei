@@ -77,6 +77,9 @@ drv_pci_i915_driver_register(void)
 	};
 	int error;
 
+	/* Offers root the start of devices the boot parameter i915.start=manual holds. */
+	drv_i915_device_start_ops_install();
+
 	/* Hands probing, binding and the device lifecycle to PCI. */
 	error = drv_pci_driver_register(&driver);
 	if (error != 0)
