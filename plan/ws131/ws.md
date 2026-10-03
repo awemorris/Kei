@@ -75,7 +75,7 @@ app は OS の抽象化を直接持たない。例: Settings → libkeiland → 
 | [p021](phase021/phase.md) | compositor の内部の名前を `kwl_`・`KWL_` に | planning | p009・p011 | 3〜4h |
 | [p022](phase022/phase.md) | compositor の log の接頭辞を `KWL ` に（試験 201 本と同時） | planning | p021 | 3〜4h |
 | [p025](phase025/phase.md) | browser の shell の窓（D7、p020 の後・p023 の前、WS074 との衝突は開始の前に Q1 がユーザーに確認） | planning | p020 | 4〜5h |
-| [p023](phase023/phase.md) | 互換の除去・`keiland.h` 一本化・PnP の接続 | planning | p016〜p020・p025・p022（PnP は WS132） | 3〜4h |
+| [p023](phase023/phase.md) | 互換の除去・`keiland.h` 一本化・PnP の接続（WS134 の system monitor も移行の対象に含める） | planning | p016〜p020・p025・p022（PnP は WS132）・ws134-p010 | 3〜4h |
 | [p024](phase024/phase.md) | 全文規約と 3 OS の回帰、WS の完了 | planning | 全て | 4〜6h |
 
 ### 他の WS との関係（p002 の計画で更新、詳細は [design.md](design.md) §7.2・§8）
@@ -109,3 +109,5 @@ D8 の決定（2026-10-03 user）: 単独走行（N=1）で p003〜p024 を番�
 2026-10-03 user「FreeBSDでのテストはあとまわしにします。ホストがメモリを使い尽くしているためです。…一度適切なタイミングでホストの再起動が必要な見込みです。」→ WS131 の FreeBSD の build は未実施で進め、user の再開の指示まで FreeBSD の guest を起動しない（遅くとも p024 でまとめて）。試験の guest は担当ごとに同時に一つ。
 
 2026-10-03 user「FreeBSDでのビルド確認は後回しで、書くだけにします。Linuxでのビルドはネイティブで行いましょう。再起動は、P4がLCDの問題を解決し、P2がTerminal改善を終了し、P1も作業を終了したあとにします。再起動後にP3を実行しましょう。」→ WS131 の FreeBSD は source を書くだけ（build・audit・guest は user の再開の指示まで行わない）。Linux は host の native の build。P3 は次の安全な区切りでラップアップし、host の再起動の後に再開する。
+
+2026-10-03 Q1: WS134（system monitor、P2）の app を p023 の互換の除去の対象と前提に加えた（P2 の design.md §6 の依頼。足さないと B5 で FAIL）。monitor の system manager は `kl_system_manager_v1` の v3（WS113 が v2）。
