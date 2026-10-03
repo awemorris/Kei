@@ -31,3 +31,5 @@ join が送られてから（`join_step`）で、slot で待つ間は出なか�
 - host: `sh plan/ws089/tests/host-slot.sh` → `host-slot: PASS`（文言の期待を直した）。`sh plan/ws089/tests/host-build.sh` → built。
 - QEMU（T1 に依頼）: `connecting-bug154.sh`、回帰に `plan/ws035/tests/zdesktop-p013.sh` 相当（system bar の menu）と `settings-p003.sh`。未実施（結果待ち）。
 - 実機（5330 の AX211）は未実施。
+
+2026-10-03 T1-016（QEMU）: 465cfd612 の強調行の「Connecting...」の白文字を connecting-bug154 PASS（49 s）と PNG で確認。

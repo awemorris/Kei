@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws081-p019 -->
 # ws081-p019: PS/2 の mouse・touchpad の wheel（IntelliMouse の切替）（BUG-156）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-015（QEMU）ps2-wheel-qemu PASS、id=4・wheel 上 3 下 2・動き・left・side。5330 のタッチパッドの 2 本指の scroll と `i8042: mouse id=` は S2 で確認）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS081](../ws.md)
 Queue: q640（P1 generation11、2026-10-03。Q1 の dispatch。承認: user「実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」「実行してください。」）
