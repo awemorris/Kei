@@ -537,6 +537,8 @@ bug149_tcp_shutwr(void)
 	char detail[96];
 	char answer[8];
 	ssize_t count;
+	ssize_t sent;
+	ssize_t again;
 	short revents;
 	long elapsed;
 	int listener;
@@ -587,24 +589,30 @@ bug149_tcp_shutwr(void)
 	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x", ready, (unsigned)revents);
 	bug149_result("tcp-shutwr-nothing-yet", ready == 0 && revents == 0, detail);
 
-	/* The server answers and shuts its side: the answer is readable. */
-	(void)write(server, "ans", 3);
+	/*
+	 * The server answers after the client's FIN (its side in CLOSE_WAIT may
+	 * still send) and shuts its side: the answer is readable.  The reads do
+	 * not wait (MSG_DONTWAIT), so a kernel that has nothing to give fails
+	 * the case instead of hanging the probe.
+	 */
+	sent = write(server, "ans", 3);
 	(void)shutdown(server, SHUT_WR);
 	ready = bug149_poll(client, POLLIN, 2000, &revents, &elapsed);
 	memset(answer, 0, sizeof(answer));
 	count = -1;
 	if (ready == 1 && (revents & POLLIN) != 0)
-		count = read(client, answer, sizeof(answer) - 1U);
-	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x read=%ld text=%s", ready, (unsigned)revents, (long)count, answer);
-	bug149_result("tcp-shutwr-answer", count == 3 && strcmp(answer, "ans") == 0, detail);
+		count = recv(client, answer, sizeof(answer) - 1U, MSG_DONTWAIT);
+	(void)snprintf(detail, sizeof(detail), "sent=%ld ready=%d revents=0x%x read=%ld text=%s", (long)sent, ready, (unsigned)revents, (long)count, answer);
+	bug149_result("tcp-shutwr-answer", sent == 3 && count == 3 && strcmp(answer, "ans") == 0, detail);
 
-	/* The server's FIN after the answer: the end of the stream and a hangup. */
+	/* The server's FIN after the answer: the end of the stream and a hangup, and the end again on the next read. */
 	ready = bug149_poll(client, POLLIN, 2000, &revents, &elapsed);
 	count = -1;
 	if (ready == 1 && (revents & POLLIN) != 0)
-		count = read(client, answer, sizeof(answer) - 1U);
-	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x read=%ld", ready, (unsigned)revents, (long)count);
-	bug149_result("tcp-peer-fin-hangs-up", count == 0 && (revents & POLLHUP) != 0, detail);
+		count = recv(client, answer, sizeof(answer) - 1U, MSG_DONTWAIT);
+	again = recv(client, answer, sizeof(answer) - 1U, MSG_DONTWAIT);
+	(void)snprintf(detail, sizeof(detail), "ready=%d revents=0x%x read=%ld again=%ld", ready, (unsigned)revents, (long)count, (long)again);
+	bug149_result("tcp-peer-fin-hangs-up", count == 0 && again == 0 && (revents & POLLHUP) != 0, detail);
 
 	/* The sockets go. */
 	(void)close(client);
