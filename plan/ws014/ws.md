@@ -40,6 +40,7 @@ i915実機対応、GLES2実装、デスクトップ全体の移植はこの単�
 | ws014-p009 | [GPUレビュー対応とフレームワーク共通化](https://github.com/awemorris/zedBSD/issues/396) | cleared | q312-i01、R1–R6とGPU共通の待機/期限/所有権、backend停止契約・WSI改善と受入 |
 | ws014-p010 | [GPU監督の共通化仕上げと局所隔離](https://github.com/awemorris/zedBSD/issues/397) | cleared | q313-i01、self-review D1–D4/B3–B6とVenus→framework移管、session隔離、実QEMU受入 |
 | ws014-p004 | [ws014-p004](https://github.com/awemorris/zedBSD/issues/385) | planning | p010後の最終API整理・規約全文確認 |
+| [ws014-p011](phase011/phase.md) | BUG-144: Model viewer の 8 個目の vkAllocateMemory -4 の memory の量と上限の測定（BUG-120 との関係） | in-progress（q643、P1。測定の準備済み・T1 の測定待ち、修正は user の助言の後） | — |
 
 ## 制約・再開点
 
