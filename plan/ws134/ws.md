@@ -23,3 +23,5 @@ CPU（全体と各 core）、GPU（Util・VRAM・温度・電力、複数）、R
 | Phase | 内容 | 状態 | 依存 |
 | --- | --- | --- | --- |
 | [p001](phase001/phase.md) | 設計: zedBSD（と Linux・FreeBSD）で取れる情報の出どころの調査（不足は kernel・libkeiland の追加の案）、画面の構成・3D の表現・動き・操作・描画の方式（libkeiui と Vulkan）、Phase の分け方 | planning（P2、q649） | — |
+
+2026-10-03 user「P2はコードを書いてOKだと思います。衝突しないです。」 → P2 は設計（p001）を書いたら、user のレビューを待たずに実装の Phase へ進んでよい（Phase の ID は Q1 が割り当て）。
