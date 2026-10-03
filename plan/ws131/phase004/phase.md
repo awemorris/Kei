@@ -2,7 +2,7 @@
 
 # ws131-p004: backend の音声の領域
 
-Status: uncleared（q650、2026-10-03、P1。T2-006 で volume-p004 の mute off が FAIL）
+Status: cleared（q650、2026-10-03、P1。T2-009 の再試験 PASS、Q1 判定）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03 user「backend への移行はP1が今やりましょう。…」、Q1 の割り当て）
@@ -75,3 +75,7 @@ boot-test、`volume-p004.sh`・`volume-p005.sh`（volume の image、`build-volu
 ## 結果（Q1、2026-10-03、T2-006、QEMU）
 
 uncleared。boot-test PASS、settings-regress PASS 8/8。volume-p004 FAIL ×2: 1 回目は session の画面が出ず（HANDOFF go=1 MISSING 以下全て、fstrim で host の I/O が止まっていた時間）、再試行は `mute off: audiod unmuted (1) FAIL` の 1 項目だけ。volume-p005 は 1 回目 FAIL（desktop.conf の保存・release の音）、再試行 PASS。証拠 worktrees/t2/build/t2-006/。mute off は backend の移行（audio-compat の mute の引き渡し）の退行の疑い。再開: P1 が mute off を調べて直し、BUG-161（ws100-p012）の試験と合わせて T2 で volume-p004・p005 を再試験。desktop.conf の項目は BUG-161 の新しい項目に置き換わる。
+
+## 再試験（Q1、2026-10-03）
+
+cleared。T2-009（QEMU、efc5ea7fc、build warning 0）: volume-p004 PASS（136 s）、volume-p005 PASS（83 s）、volume-bug153 PASS（70 s）。証拠 worktrees/t2/build/t2-009/。実機は未実施（mute の確認を最長約 4 s 待つように直した試験で、mute off も ok）。

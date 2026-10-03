@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws100-p012 -->
 # ws100-p012: 音量を操作のたびに desktop.conf へ書かない（session の終わりに一度だけ、BUG-161）
 
-Status: in-progress（実装と host の確認は済み、QEMU は T2 の試験待ち）
+Status: cleared（2026-10-03、P1。Q1 判定）
 Disposition: normal
 Parent: [WS100](../ws.md)
 Queue: Q1 の割り当て（2026-10-03、P1。Phase の ID は Q1。p011 は WS100 の guide で最終の規約と回帰に予約済みなので飛ばす）
@@ -49,3 +49,7 @@ Bug: [BUG-161](../../bugs/BUG-161.md)
 ## QEMU の試験（T2 に依頼、結果待ち）
 
 volume の image で volume-p004・volume-p005（ws131-p004 の T2-006 の再試験を兼ねる）、volume-bug153。
+
+## 結果（Q1、2026-10-03）
+
+cleared。T2-009（QEMU、efc5ea7fc、build warning 0）: volume-p004 PASS（136 s）、volume-p005 PASS（83 s）、volume-bug153 PASS（70 s）。証拠 worktrees/t2/build/t2-009/。実機は未実施。

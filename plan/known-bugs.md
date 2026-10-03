@@ -26,7 +26,7 @@ remain as traceable history and are not new implementation work.
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
 | [BUG-160](bugs/BUG-160.md) | WiFi の鍵の入力欄が画面の下に出る（AP の行の中で入力できない） | reproduced（実機 S1、ユーザー） / resolved（ws005-p029、QEMU。実機は S2） | S1 の後のフィードバック | P1（q642） |
-| [BUG-161](bugs/BUG-161.md) | 音量の変更のたびに desktop.conf へ書く（session の終わりに一度だけ書くべき） | reproduced（code） / scheduled（直しは実装済み、T2 の QEMU 待ち） | T2-006 の volume-p005 とユーザーの判断 | P1（ws100-p012） |
+| [BUG-161](bugs/BUG-161.md) | 音量の変更のたびに desktop.conf へ書く（session の終わりに一度だけ書くべき） | reproduced（code） / resolved | T2-006 の volume-p005 とユーザーの判断 | ws100-p012、T2-009 の QEMU で PASS |
 | [BUG-162](bugs/BUG-162.md) | desktop.conf を Settings と zdesktop の通信路に使っている（1 秒ごとの poll） | reproduced（code） / tracking | ユーザーの問い（BUG-161 の後） | Q1（設計の直しの WS を立てる） |
 | [BUG-159](bugs/BUG-159.md) | バッテリー駆動で描画が 5 fps ほどに落ち、電池切れで警告なく落ちる | reproduced（実機 S1） / tracking | S1（WS133） | WS075（i915）、電源の管理（WS050〜052・WS132） |
 | [BUG-158](bugs/BUG-158.md) | 操作中・放置中にフリーズし、電源ボタンの長押しが要る | reproduced（実機 S1） / tracking | S1（WS133） | WS005／WS004（AX211）、原因次第 |
