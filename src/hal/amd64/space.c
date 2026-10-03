@@ -47,11 +47,22 @@ _Static_assert(AMD64_RAM_LIMIT == AMD64_DIRECT_LIMIT, "RAM window size agreement
 #define AMD64_ECAM_PD_COUNT 128U
 #define AMD64_ECAM_VIRTUAL_BASE 0xffffffffd0000000ULL
 
-/* Reserves the upper half of the shared MMIO directory for owned mappings. */
-#define AMD64_DEVICE_PD_FIRST 256U
-#define AMD64_DEVICE_PD_COUNT 256U
+/*
+ * Reserves two kernel PDPT slots below the ACPI window for owned mappings.
+ * The 2-GiB window holds a whole 1-GiB Venus aperture beside other views
+ * (BUG-144); it has its own directories, not the shared MMIO directory.
+ */
+#define AMD64_DEVICE_PDPT_FIRST 507U
+#define AMD64_DEVICE_PDPT_COUNT 2U
+#define AMD64_DEVICE_PD_COUNT (AMD64_DEVICE_PDPT_COUNT * 512U)
 #define AMD64_DEVICE_PAGE_COUNT (AMD64_DEVICE_PD_COUNT * 512U)
-#define AMD64_DEVICE_WINDOW_BASE 0xffffffffe0000000ULL
+#define AMD64_DEVICE_WINDOW_BASE 0xfffffffec0000000ULL
+
+_Static_assert(AMD64_DEVICE_PDPT_FIRST + AMD64_DEVICE_PDPT_COUNT ==
+    AMD64_ACPI_PDPT_INDEX, "device window ends at the ACPI window");
+_Static_assert(AMD64_DEVICE_WINDOW_BASE == 0xffffff8000000000ULL +
+    (unsigned long long)AMD64_DEVICE_PDPT_FIRST * 0x40000000ULL,
+    "device window base agreement");
 
 #define AMD64_FRAMEBUFFER_PD_FIRST 16U
 #define AMD64_FRAMEBUFFER_PD_COUNT \
@@ -118,9 +129,11 @@ static uint64_t system_framebuffer_edges[2][512] __attribute__((aligned(PAGE_SIZ
 static struct amd64_ram_builder ram_builder;
 static int ram_active;
 static uint64_t system_mmio_pd[512] __attribute__((aligned(PAGE_SIZE)));
+static uint64_t system_device_pd[AMD64_DEVICE_PDPT_COUNT][512]
+	__attribute__((aligned(PAGE_SIZE)));
 /*
  * Device leaf tables remain attached for the kernel lifetime. Individual views
- * release their PTEs and slots; at most the reserved 512-MiB window needs tables.
+ * release their PTEs and slots; at most the reserved 2-GiB window needs tables.
  */
 static hal_physaddr_t device_leaf_tables[AMD64_DEVICE_PD_COUNT];
 
@@ -507,6 +520,7 @@ prekern_amd64_space_init(
 	hal_memset(system_pd, 0, sizeof(system_pd));
 	hal_memset(system_kernel_pt, 0, sizeof(system_kernel_pt));
 	hal_memset(system_mmio_pd, 0, sizeof(system_mmio_pd));
+	hal_memset(system_device_pd, 0, sizeof(system_device_pd));
 	hal_memset(system_acpi_pd, 0, sizeof(system_acpi_pd));
 	hal_memset(system_acpi_pt, 0, sizeof(system_acpi_pt));
 
@@ -603,7 +617,12 @@ prekern_amd64_space_init(
 		    AMD64_PTE_PRESENT | AMD64_PTE_WRITE;
 	}
 
-	/* Connects the ACPI, direct-map, and fixed-MMIO directories. */
+	/* Connects the device, ACPI, direct-map, and fixed-MMIO directories. */
+	for (index = 0; index < AMD64_DEVICE_PDPT_COUNT; index++) {
+		system_pdpt[AMD64_DEVICE_PDPT_FIRST + index] =
+		    amd64_image_to_phys(system_device_pd[index]) |
+		    AMD64_PTE_PRESENT | AMD64_PTE_WRITE;
+	}
 	system_pdpt[AMD64_ACPI_PDPT_INDEX] =
 	    amd64_image_to_phys(system_acpi_pd) |
 	    AMD64_PTE_PRESENT | AMD64_PTE_WRITE;
@@ -2915,7 +2934,7 @@ device_window_populate(
 			hal_memset(table, 0, PAGE_SIZE);
 			device_leaf_tables[directory] = table_physical;
 			(void)__atomic_fetch_add(&page_table_count, 1U, __ATOMIC_RELAXED);
-			system_mmio_pd[AMD64_DEVICE_PD_FIRST + directory] =
+			system_device_pd[directory / 512U][directory % 512U] =
 			    table_physical | AMD64_PTE_PRESENT | AMD64_PTE_WRITE;
 		} else {
 			/* Reuses the leaf table retained from earlier views in this slot. */

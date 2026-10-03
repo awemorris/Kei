@@ -86,3 +86,20 @@ user「Venusの窓は私には判断できないです。もっと大きくし�
   GPU の使用は終わっている）。mview 1 個あたり aperture を 4〜5 MiB 返す。build（config/ci、`bin/mview`）warning 0。
 - 他の app（libkeiui の present）: 窓の大きさの host-visible の canvas（毎 frame の CPU の描画の upload に要る）と 6 頂点の buffer（page 1 枚）だけで、
   減らせる明らかな物は無い。aperture の割り当て（first-fit、compaction 無し）を best-fit にするかは、T1-027 の数字（断片化の大きさ、largest_hole）を見て決める。
+
+## 案 1 の実装（2026-10-03、P1、user「HALの変更と言っても、インタフェースでなく実装ですよね。それなら修正してOKです。」、Q1 経由）
+
+`include/hal/hal.h` は変えていない（`hal_space_map_device` の意味・引数は同じ、仮想 address の配置だけ）。
+
+- `src/hal/amd64/space.c`: kernel の device の窓を、共有の MMIO の directory（`system_mmio_pd` の 256〜511、0xffffffffe0000000、512 MiB）から、
+  専用の 2 枚の PD（`system_device_pd[2]`）を持つ kernel の PDPT の 507・508 番（0xfffffffec0000000〜0xffffffff40000000、**2 GiB**、ACPI の窓 509 番の直前）
+  へ移した。`AMD64_DEVICE_PD_COUNT` は 1024、`device_leaf_tables` も 1024 個（leaf table は今まで通り使う所だけ確保）。窓の位置と ACPI の窓との境は
+  `_Static_assert` で固定。PML4 511 の PDPT は全 process で共有なので、新しい PDPT の entry は fork 済みの space にも見える（`build_ram_map` の
+  256〜510 の空 PDPT と同じ理由）。`system_mmio_pd` の 256〜511 は空く。
+- 他の platform: device の窓の定数は amd64 の `space.c` だけ（arm64 の `space.c` に同じ物は無い）、Venus の driver は amd64 だけ（`platform/amd64/vmunix.mk`）。
+  影響は無い。
+- `src/drivers/gpu/venus/internal.h`: `VENUS_MAX_APERTURE_BYTES` を 1 GiB に（aperture の allocator は全て uint64）。
+- `plan/tools/guest/venus-hostmem.sh`: 既定を 1G に（注釈も直した）。9 か所の試験はこの値を使う。
+
+確認: kernel の build（`ZEDBSD_CONFIG=plan/ws089/tests/config-amd64-settings.mk`、vmunix）は warning 0。HAL の space の host 試験は無い。
+QEMU の boot-test（HAL の変更なので必須）と aperture-bug144.sh（hostmem 1G と 256M で mview を何個開けるか）は試験の担当に予約した（結果待ち）。実機は未実施。
