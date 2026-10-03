@@ -5,9 +5,9 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Owns the bounded system-bus connection used only by the Linux seat. */
-#ifndef ZWL_DBUS_LINUX_H
-#define ZWL_DBUS_LINUX_H
+/* Owns the bounded system-bus connection of the Linux seat and power (libkeiland-backend, ws131-p006). */
+#ifndef KL_BACKEND_DBUS_LINUX_H
+#define KL_BACKEND_DBUS_LINUX_H
 #include <stddef.h>
 #include <stdint.h>
 

@@ -7,13 +7,15 @@
 
 /*
  * Forwards the shared evdev reader's device leases to libkeiland-backend's
- * FreeBSD seat (seatd, ws131-p006).
+ * seat (Linux: logind or direct; FreeBSD: seatd; ws131-p006).
  */
 
-#include "../evdev/seat.h"
+#include "seat.h"
 #include "../zwl.h"
 
 #include "userland/desktop/libkeiland-backend/keiland-backend.h"
+
+#include <stdio.h>
 
 /*
  * Opens one input device through the seat.
@@ -61,7 +63,8 @@ zwl_seat_paused(
 }
 
 /*
- * Lets an input whose reading failed be closed as usual (seatd wants fresh opens).
+ * Tells the seat an input's reading failed as revoked: a device the seat
+ * keeps is set aside until it resumes, another is closed as usual.
  */
 int
 zwl_seat_device_revoked(
@@ -70,7 +73,22 @@ zwl_seat_device_revoked(
 {
 	int retained;
 
-	/* The seat keeps nothing. */
+	struct zwl_input_device *input;
+	unsigned index;
+
+	/* logind keeps the device for its later resume; seatd keeps nothing. */
 	retained = kl_backend_seat_device_revoked(server->backend, descriptor);
-	return retained;
+	if (retained == 0)
+		return 0;
+
+	/* A kept device is not read until the seat resumes it (input_resumed) or says it is gone. */
+	for (index = 0; index < ZWL_INPUT_MAX; index++) {
+		input = &server->inputs[index];
+		if (input->live != 0 && input->fd == descriptor) {
+			input->fd = -1;
+			printf("ZWL SEAT input_revoked path=%s lease=retained\n", input->path);
+			break;
+		}
+	}
+	return 1;
 }

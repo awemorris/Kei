@@ -6,9 +6,7 @@
  */
 
 /*
- * The power where the backend does not offer it yet (ws131-p005): FreeBSD,
- * and Linux until logind's D-Bus calls move here with the session
- * (ws131-p006).  The state says the source is unknown and no action may be
+ * The power where the backend does not offer it yet (ws131-p005): FreeBSD.  The state says the source is unknown and no action may be
  * taken; an action answers ENOTSUP.
  */
 

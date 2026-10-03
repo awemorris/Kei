@@ -8,7 +8,7 @@
 /*
  * The seat where the backend has none (ws131-p006): zedBSD, whose
  * compositor takes the display and the input devices through its own
- * kernel interfaces, and Linux until its seat moves here (ws131-p006b).
+ * kernel interfaces.
  * Opening answers ENOTSUP, nothing is paused, and the poll has nothing.
  */
 

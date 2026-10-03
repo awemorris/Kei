@@ -83,7 +83,7 @@ while IFS= read -r file; do
 done > "$work/L1"
 
 # Each OS module consumes only its own kernel and service interfaces (libkeiland-backend's trees, WS131).
-find userland/desktop/libkeiland/linux userland/desktop/wayland/linux \
+find userland/desktop/wayland/linux \
     userland/desktop/libkeiland-backend-linux userland/desktop/libkeiland-backend-freebsd \
     userland/desktop/libkeiland-backend/wpa -name '*.[ch]' -print 2>/dev/null |
 while IFS= read -r file; do

@@ -5,8 +5,11 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Opens the development seat without calling any DRM ioctl in the compositor. */
-#include "seat-linux.h"
+/*
+ * The direct root seat on Linux (libkeiland-backend since ws131-p006): the
+ * development seat, without logind and without calling any DRM ioctl.
+ */
+#include "userland/desktop/libkeiland-backend-linux/seat-linux.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -24,14 +27,13 @@ static char seat_path[4096];
  * Opens the root seat's selected primary node.
  */
 int
-zwl_linux_direct_seat_open(
-	struct zwl_server *server)
+linux_direct_seat_open(
+	void)
 {
 	const char *requested;
 	size_t length;
 
-	/* One compositor owns the process seat; server storage holds common state. */
-	(void)server;
+	/* One compositor owns the process seat. */
 	requested = getenv("KEILAND_DRM_DEVICE");
 	if (requested == NULL)
 		requested = "/dev/dri/card0";
@@ -55,11 +57,10 @@ zwl_linux_direct_seat_open(
  * Returns the root seat's primary descriptor.
  */
 void
-zwl_linux_direct_seat_close(
-	struct zwl_server *server)
+linux_direct_seat_close(
+	void)
 {
 	/* A failed startup may never have opened a primary node. */
-	(void)server;
 	if (seat_drm >= 0) {
 		(void)close(seat_drm);
 		seat_drm = -1;
@@ -73,14 +74,12 @@ zwl_linux_direct_seat_close(
  * Opens one nonblocking evdev descriptor.
  */
 int
-zwl_linux_direct_device_open(
-	struct zwl_server *server,
+linux_direct_device_open(
 	const char *path)
 {
 	int descriptor;
 
 	/* Direct input access has no separate service ownership. */
-	(void)server;
 	descriptor = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
 	if (descriptor < 0)
 		return -1;
@@ -93,12 +92,10 @@ zwl_linux_direct_device_open(
  * Releases one input descriptor.
  */
 void
-zwl_linux_direct_device_close(
-	struct zwl_server *server,
+linux_direct_device_close(
 	int descriptor)
 {
 	/* Device access returns after the common seat has removed its live input record. */
-	(void)server;
 	(void)close(descriptor);
 
 	/* Succeeded: this input file is no longer owned. */
@@ -109,7 +106,7 @@ zwl_linux_direct_device_close(
  * Supplies the live primary-node descriptor.
  */
 int
-zwl_linux_direct_drm_fd(
+linux_direct_drm_fd(
 	void)
 {
 	/* Succeeded: an invalid descriptor explicitly denotes absent seat ownership. */
@@ -120,20 +117,9 @@ zwl_linux_direct_drm_fd(
  * Supplies the selected primary-node pathname.
  */
 const char *
-zwl_linux_direct_drm_path(
+linux_direct_drm_path(
 	void)
 {
 	/* Succeeded: the process owns this stable pathname until shutdown. */
 	return seat_path;
-}
-
-/*
- * Reports direct-seat device availability.
- */
-int
-zwl_linux_direct_seat_paused(
-	void)
-{
-	/* Succeeded: a direct seat has no service-driven pause state. */
-	return 0;
 }

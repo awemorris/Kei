@@ -6,7 +6,7 @@
  */
 
 /* Exercises the public bus reader with independently marshaled fragmented frames. */
-#include "userland/desktop/wayland/linux/dbus-linux.h"
+#include "userland/desktop/libkeiland-backend-linux/dbus-linux.h"
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>

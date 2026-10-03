@@ -401,10 +401,10 @@ int kl_backend_audio_available(void);
  * The machine's power source and the actions a user may take on the
  * machine: power it off, restart it, suspend it.  An action is asked of
  * the system's session manager (zedBSD's sessiond from the login screen;
- * logind on Linux from ws131-p006) and the machine then ends or sleeps;
- * the session manager's answer comes as
- * session_answer(KL_BACKEND_SESSION_POWER).  One action is asked at a
- * time.  The power source is not read on any system yet: the state
+ * logind on Linux) and the machine then ends or sleeps.  On zedBSD
+ * sessiond's answer comes as session_answer(KL_BACKEND_SESSION_POWER); on
+ * Linux logind answers the call itself and the action's return value is
+ * the answer.  One action is asked at a time.  The power source is not read on any system yet: the state
  * says unknown.
  */
 
@@ -525,7 +525,8 @@ int kl_backend_session_managed(const struct kl_backend *backend);
  * Linux takes them through logind (the session's TakeDevice) or directly as
  * root, FreeBSD through seatd (libseat); zedBSD's compositor uses its own
  * kernel interfaces and no seat (every call answers ENOTSUP, and the
- * compositor does not open it).  kl_backend_seat_open takes the seat and
+ * compositor does not open it).  On Linux the seat also puts a virtual
+ * terminal on standard input in graphics mode while it is held.  kl_backend_seat_open takes the seat and
  * the primary display node before Vulkan opens; the input devices are
  * opened through the seat, one descriptor each, and the seat may take them
  * all away while another session has the display (a virtual terminal

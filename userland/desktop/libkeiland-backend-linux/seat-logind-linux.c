@@ -5,12 +5,18 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Keeps logind device leases distinct from each compositor input descriptor. */
-#include "seat-linux.h"
-#include "dbus-linux.h"
-#include "../zwl.h"
+/*
+ * logind's seat on Linux (libkeiland-backend since ws131-p006): session
+ * control, one TakeDevice lease a device, and the PauseDevice and
+ * ResumeDevice signals.  The compositor hears them through the backend's
+ * callbacks and knows its inputs by their device path; it is told to stop
+ * before a cooperative pause is acknowledged.
+ */
+#include "userland/desktop/libkeiland-backend-linux/seat-linux.h"
+#include "userland/desktop/libkeiland-backend-linux/dbus-linux.h"
 #include <errno.h>
 #include <fcntl.h>
+#include <linux/input.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,7 +26,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define LOGIND_DEVICES (ZWL_INPUT_MAX + 1U)
+#define LOGIND_DEVICES LINUX_SEAT_DEVICES
 
 /* One device holds exactly one TakeDevice lease until release or seat cleanup. */
 struct logind_device {
@@ -55,17 +61,16 @@ static int seat_call(const char *member, const char *signature, const struct dbu
 static int seat_device_call(const char *member, struct logind_device *device);
 static int seat_take(struct logind_device *device, const char *path, unsigned display);
 static void seat_release(struct logind_device *device);
-static struct zwl_input_device *seat_input(struct zwl_server *server, struct logind_device *device);
 static int seat_signal(struct dbus_reply *message, void *data);
-static int seat_pause(struct zwl_server *server, struct logind_device *device, const char *kind);
-static int seat_resume(struct zwl_server *server, struct logind_device *device, struct dbus_reply *message, uint32_t index);
+static int seat_pause(struct kl_backend *backend, struct logind_device *device, const char *kind);
+static int seat_resume(struct kl_backend *backend, struct logind_device *device, struct dbus_reply *message, uint32_t index);
 
 /*
  * Takes session control and the primary device before Vulkan inquiry begins.
  */
 int
-zwl_linux_logind_seat_open(
-	struct zwl_server *server)
+linux_logind_seat_open(
+	struct kl_backend *backend)
 {
 	struct dbus_arg argument;
 	struct dbus_reply *reply;
@@ -159,7 +164,7 @@ zwl_linux_logind_seat_open(
 	if (error != 0)
 		return error;
 	seat_paused = seat_devices[0].paused;
-	server->os_paused = seat_paused;
+	(void)backend;
 	printf("ZWL SEAT logind session=%s\n", seat_session);
 
 	/* Succeeded: logind, rather than direct open, owns device authority. */
@@ -170,8 +175,8 @@ zwl_linux_logind_seat_open(
  * Returns all device leases and session control, including paused descriptors.
  */
 void
-zwl_linux_logind_seat_close(
-	struct zwl_server *server)
+linux_logind_seat_close(
+	void)
 {
 	struct dbus_reply *reply;
 	unsigned index;
@@ -192,7 +197,6 @@ zwl_linux_logind_seat_close(
 	/* Losing the bus also returns server-side leases after any transport failure. */
 	dbus_close(&seat_bus);
 	seat_paused = 0;
-	server->os_paused = 0;
 
 	/* Succeeded: no session authority survives this compositor. */
 	return;
@@ -202,15 +206,13 @@ zwl_linux_logind_seat_close(
  * Acquires one active input lease for the common evdev classifier.
  */
 int
-zwl_linux_logind_device_open(
-	struct zwl_server *server,
+linux_logind_device_open(
 	const char *path)
 {
 	unsigned index;
 	int error;
 
 	/* Input discovery is postponed until the primary seat is active again. */
-	(void)server;
 	if (seat_paused != 0) {
 		errno = EAGAIN;
 		return -1;
@@ -250,14 +252,12 @@ zwl_linux_logind_device_open(
  * Releases the lease corresponding to one input descriptor.
  */
 void
-zwl_linux_logind_device_close(
-	struct zwl_server *server,
+linux_logind_device_close(
 	int descriptor)
 {
 	unsigned index;
 
 	/* A paused common record has no descriptor; final seat cleanup owns its lease. */
-	(void)server;
 	if (descriptor < 0)
 		return;
 
@@ -277,7 +277,7 @@ zwl_linux_logind_device_close(
  * Supplies the current logind primary descriptor for Vulkan acquisition.
  */
 int
-zwl_linux_logind_drm_fd(
+linux_logind_drm_fd(
 	void)
 {
 	/* An absent lease cannot authorize a display acquisition. */
@@ -292,7 +292,7 @@ zwl_linux_logind_drm_fd(
  * Supplies the selected primary-node path for the compatibility library.
  */
 const char *
-zwl_linux_logind_drm_path(
+linux_logind_drm_path(
 	void)
 {
 	/* Succeeded: the pathname remains stable across fd replacement on resume. */
@@ -303,7 +303,7 @@ zwl_linux_logind_drm_path(
  * Reports whether the primary seat is paused.
  */
 int
-zwl_linux_logind_seat_paused(
+linux_logind_seat_paused(
 	void)
 {
 	/* Succeeded: common input discovery observes the same pause as composition. */
@@ -314,7 +314,7 @@ zwl_linux_logind_seat_paused(
  * Supplies the authenticated system-bus socket to the OS poll range.
  */
 int
-zwl_linux_logind_poll_fd(
+linux_logind_poll_fd(
 	void)
 {
 	int descriptor;
@@ -330,13 +330,13 @@ zwl_linux_logind_poll_fd(
  * Applies queued and newly arrived device signals before common input reads.
  */
 int
-zwl_linux_logind_dispatch(
-	struct zwl_server *server)
+linux_logind_dispatch(
+	struct kl_backend *backend)
 {
 	int error;
 
 	/* Device callbacks may synchronously acknowledge pause while retaining later signals. */
-	error = dbus_dispatch(&seat_bus, seat_signal, server);
+	error = dbus_dispatch(&seat_bus, seat_signal, backend);
 	if (error != 0)
 		return error;
 
@@ -348,23 +348,18 @@ zwl_linux_logind_dispatch(
  * Excludes a revoked input file while preserving its lease for the pending signal.
  */
 int
-zwl_linux_logind_device_revoked(
-	struct zwl_server *server,
+linux_logind_device_revoked(
 	int descriptor)
 {
 	struct logind_device *device;
-	struct zwl_input_device *input;
 	unsigned index;
 
-	/* Only this seat's exact current input descriptor can retain service ownership. */
+	/* Only this seat's exact current input descriptor can retain service ownership; the compositor stops reading it. */
 	for (index = 1; index < LOGIND_DEVICES; index++) {
 		device = &seat_devices[index];
 		if (device->owned == 0 || device->fd != descriptor)
 			continue;
 		device->paused = 1;
-		input = seat_input(server, device);
-		if (input != NULL)
-			input->fd = -1;
 		printf("ZWL SEAT input_revoked device=%u:%u lease=retained\n", device->major, device->minor);
 		return 1;
 	}
@@ -542,35 +537,13 @@ seat_release(
 	return;
 }
 
-/* Finds the stable common input slot even while its fd is excluded from polling. */
-static struct zwl_input_device *
-seat_input(
-	struct zwl_server *server,
-	struct logind_device *device)
-{
-	unsigned index;
-	int same;
-
-	/* Path identity survives paused and resumed descriptor generations. */
-	for (index = 0; index < ZWL_INPUT_MAX; index++) {
-		if (server->inputs[index].live == 0)
-			continue;
-		same = strcmp(server->inputs[index].path, device->path);
-		if (same == 0)
-			return &server->inputs[index];
-	}
-
-	/* A node rejected by classification owns no common input slot. */
-	return NULL;
-}
-
 /* Validates signal authority and routes transitions only to known leases. */
 static int
 seat_signal(
 	struct dbus_reply *message,
 	void *data)
 {
-	struct zwl_server *server;
+	struct kl_backend *backend;
 	struct logind_device *device;
 	const char *kind;
 	uint32_t device_major;
@@ -582,7 +555,7 @@ seat_signal(
 	int error;
 
 	/* Other daemon signals are harmless and never affect device ownership. */
-	server = data;
+	backend = data;
 	if (message->sender == NULL)
 		return 0;
 	same = strcmp(message->sender, seat_owner);
@@ -636,7 +609,7 @@ seat_signal(
 			return error;
 		if (message->cursor != message->size)
 			return EPROTO;
-		error = seat_pause(server, device, kind);
+		error = seat_pause(backend, device, kind);
 		if (error != 0)
 			return error;
 	} else {
@@ -645,7 +618,7 @@ seat_signal(
 			return error;
 		if (message->cursor != message->size)
 			return EPROTO;
-		error = seat_resume(server, device, message, index);
+		error = seat_resume(backend, device, message, index);
 		if (error != 0)
 			return error;
 	}
@@ -657,11 +630,10 @@ seat_signal(
 /* Stops device use before acknowledging a cooperative pause. */
 static int
 seat_pause(
-	struct zwl_server *server,
+	struct kl_backend *backend,
 	struct logind_device *device,
 	const char *kind)
 {
-	struct zwl_input_device *input;
 	int cooperative;
 	int gone;
 	int same;
@@ -684,19 +656,14 @@ seat_pause(
 		}
 	}
 
-	/* Pause excludes descriptors but retains the TakeDevice lease for resume. */
+	/* Pause excludes descriptors but retains the TakeDevice lease for resume; the compositor stops first. */
 	device->paused = 1;
-	input = NULL;
 	if (device->display != 0) {
 		seat_paused = 1;
-		server->os_paused = 1;
-		zwl_compose_quiesce(server);
-		zwl_compose_output_close(server);
-		server->windowed = 0;
-	} else {
-		input = seat_input(server, device);
-		if (input != NULL)
-			input->fd = -1;
+		if (backend->host.session_paused != NULL)
+			backend->host.session_paused(backend->host.data);
+	} else if (backend->host.input_paused != NULL) {
+		backend->host.input_paused(backend->host.data, device->path);
 	}
 
 	/* The log records actual notification kind rather than assuming VT behavior. */
@@ -707,20 +674,15 @@ seat_pause(
 			return error;
 	}
 
-	/* Gone devices cannot receive a resume; common teardown returns their lease once. */
+	/* Gone devices cannot receive a resume: the compositor forgets the input, then the lease returns once. */
 	if (gone != 0) {
 		if (device->display != 0) {
 			seat_release(device);
 			return ENODEV;
 		}
-
-		/* Restoring the owned fd lets ordinary common teardown find its lease. */
-		if (input != NULL) {
-			input->fd = device->fd;
-			zwl_input_close(server, input);
-		} else {
-			seat_release(device);
-		}
+		if (backend->host.input_gone != NULL)
+			backend->host.input_gone(backend->host.data, device->path);
+		seat_release(device);
 	}
 
 	/* Succeeded: a cooperative acknowledgement follows complete withdrawal of use. */
@@ -730,12 +692,11 @@ seat_pause(
 /* Replaces a revoked file and restores the common input or display generation. */
 static int
 seat_resume(
-	struct zwl_server *server,
+	struct kl_backend *backend,
 	struct logind_device *device,
 	struct dbus_reply *message,
 	uint32_t index)
 {
-	struct zwl_input_device *input;
 	int descriptor;
 	int flags;
 	int error;
@@ -771,20 +732,13 @@ seat_resume(
 	device->fd = descriptor;
 	device->paused = 0;
 
-	/* Display reopening uses the scheduler's existing enter-window-mode path. */
+	/* The compositor opens its output again from its scheduler, or reads the input from the new file. */
 	if (device->display != 0) {
 		seat_paused = 0;
-		server->os_paused = 0;
-		server->windowed = 0;
-		server->dirty = 1;
-	} else {
-		/* A partial evdev report from the revoked file cannot enter the new generation. */
-		input = seat_input(server, device);
-		if (input != NULL) {
-			input->fd = descriptor;
-			input->frame_count = 0;
-			input->discarding = 0;
-		}
+		if (backend->host.session_resumed != NULL)
+			backend->host.session_resumed(backend->host.data);
+	} else if (backend->host.input_resumed != NULL) {
+		backend->host.input_resumed(backend->host.data, device->path, descriptor);
 	}
 
 	/* Succeeded: input and display use only the newly supplied file. */

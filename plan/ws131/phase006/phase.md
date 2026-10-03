@@ -2,7 +2,7 @@
 
 # ws131-p006: backend の seat・session の領域
 
-Status: in-progress（q650、2026-10-03、P1。範囲 1 の表、p006a（zedBSD の session）と p006c（FreeBSD の seat、書くだけ）の実装と host の確認は済み。p006b（Linux）は user の判断待ち。元の記載: planning）
+Status: in-progress（q650、2026-10-03、P1。範囲 1 の表、p006a（zedBSD の session）・p006b（Linux の seat と電源）・p006c（FreeBSD の seat、書くだけ）の実装と host の確認は済み。QEMU（zedBSD）と Linux の guest（QEMU+KVM）の確認は試験の担当待ち。元の記載: planning）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）
@@ -189,3 +189,49 @@ Q1（2026-10-03）: p006b の返事を待つ間、p006c の FreeBSD の書くだ
 ## 判断（2026-10-03 ユーザー）
 
 p006b の確認の方法: (A)。ユーザー「なるほど、LinuxでのテストはQEMU+KVMを使ってください。」→ p006b の logind と直の seat での起動、VT の切り替えの後の復帰、使い捨ての guest の Reboot は Debian の QEMU+KVM guest で T1・T2 が確かめる（AGENTS.md の検証の例外に記録）。
+
+## p006b: Linux の seat と logind の電源（2026-10-03、P1）
+
+Q1（2026-10-03）: 書く code は (A)/(B) で同じなので実装に入る。その後 user の判断は (A)（「なるほど、LinuxでのテストはQEMU+KVMを使ってください。」、Q1 が AGENTS.md の検証の例外に記録）。Linux の guest の確認は試験の担当に依頼する。
+
+### 変えたこと
+
+- `git mv` で `wayland/linux/` → `libkeiland-backend-linux/` へ移した:
+  - `dbus-linux.c`・`dbus-linux.h`（変更は header guard と冒頭の 1 行だけ）
+  - `seat-logind-linux.c`・`seat-direct-linux.c`・`seat-linux.h`（書き直し）
+- `seat-logind-linux.c`: compositor の内部（`os_paused`・`zwl_compose_*`・`windowed`・`dirty`・`inputs[]`・`zwl_input_close`）を触らず、callback を使う。
+  - primary の pause: `session_paused` → その後に `PauseDeviceComplete`（cooperative の時）。
+  - 入力の pause: `input_paused(path)`。gone: `input_gone(path)` → lease の返却。primary の gone: ENODEV → `session_stop(LOST)`。
+  - resume: 新しい fd に差し替え、`EVIOCSCLOCKID` → `session_resumed`、または `input_resumed(path, fd)`。
+  - `<linux/input.h>` を直に include する（前は compositor の zwl-evdev.h から）。
+- 新規 `seat-linux.c`: seat の選び方（`KEILAND_SEAT`、無ければ Wayland の session の ID で logind、他は direct、未知は EINVAL）、VT（`KDSETMODE`・`KDSKBMODE` と close での復元、もと `wayland/linux/os-linux.c`）、`kl_backend_seat_*` と poll（logind の bus、dispatch の失敗と HUP は `session_stop(LOST)`）。
+- 新規 `power-linux.c`: logind の `CanPowerOff`・`CanReboot`・`CanSuspend`（"yes"・"challenge" で offered）と、`PowerOff`・`Reboot`・`Suspend`（interactive=false）。
+  - 呼ぶたびに system bus を開いて閉じるので、direct の seat でも使える。
+  - Linux では logind が呼び出しに答えるので、action の戻り値が答えになる（`session_answer` は無い、header に書いた）。
+- compositor:
+  - `wayland/linux/os-linux.c` は socket の path、`KEILAND_DRM_DEVICE` の setenv、表示の acquire（p008 まで）、poll の委譲だけになった。
+  - `linux/input-seat-linux.c` と `freebsd/input-seat-freebsd.c` を共通の `evdev/seat-backend.c` 一つにした。
+  - logind が revoke の後に残す入力（`kl_backend_seat_device_revoked` が 1）は、この adapter が自分の record の fd を -1 にする（ws105-p009 の補正を compositor の側に保つ）。
+- build: backend の `Makefile.linux` から unsupported の seat と power を外し、dbus・seat-linux・seat-logind・seat-direct・power-linux を足した。compositor の `Makefile.linux` は os-linux.c と seat-backend.c。
+- 道具: `plan/tools/keiland-linux/dbus-wire.c` と README の dbus-linux の path（委任の範囲の path だけ）。checker の L2 の古い `libkeiland/linux` の path を外した。
+
+### 確認（host）
+
+| 確認 | 結果 |
+| --- | --- |
+| Linux の build（native の gcc・clang） | exit 0、warning 0。header-check PASS（350）、install、elf-check PASS（24 ELF）。`libkeiland-backend.a` の未定義の symbol に `zwl_`・`kwl_`・`keiland_` が無い（B1）。compositor は `kl_backend_seat_*`・`kl_backend_power_*` を 13 個持つ |
+| zedBSD の build（libkeiland.so・wayland） | exit 0、warning 0 |
+| `dbus-wire`（README の fixture、新しい path） | 普通と ASan・UBSan の両方で `dbus-wire: ALL PASS`（5 ケース） |
+| `seat-fd.c` | build できる（実行は guest、README の通り） |
+| `plan/ws131/tests/host-seat-linux.sh`（新規） | 12/12。未知の seat と相対の primary の EINVAL、direct の seat（/dev/null）の open、pause 無し、poll 0、入力の open、revoke で残さない、close で primary を返す、power の未知の action の ENOTSUP と backend 無しの EINVAL、Linux に session manager が無いこと |
+| `check.sh` | PASS |
+| `host-session`・`host-power`・`host-seat-freebsd` | 31/31、17/17・6/6、13/13 |
+| logind の pause・resume・gone の callback の順 | host では未実施（session が要る）。Linux の guest で確かめる |
+
+### Linux の guest の確認（user の判断 (A)、試験の担当に依頼、結果待ち）
+
+ws105-p009（q536）の手順で、gdm の guest（`build-guest.sh … gdm`、`guest.sh gdm-setup`）を使う。
+- logind の seat で Keiland の session が起動する。
+- `SwitchTo` と `chvt` の VT の切り替えの後に、画面と入力が戻る。
+- base の guest で root の direct の seat が起動する。
+- 使い捨ての guest で logind の Reboot（`busctl call … Reboot b false`）の後に再起動する（SSH が切れて再びつながる）。power-linux.c と同じ logind の呼び出しを外から確かめる形。

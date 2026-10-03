@@ -162,7 +162,7 @@ WiFiはnetdevのcontrolsocket権限を使う。radioのup/down ioctlはCAP_NET_A
 ```sh
 clang -D_GNU_SOURCE -std=gnu17 -Wall -Wextra -Werror -I. -Iuserland/desktop/keiland \
   -fsanitize=address,undefined -fno-omit-frame-pointer \
-  plan/tools/keiland-linux/dbus-wire.c userland/desktop/wayland/linux/dbus-linux.c \
+  plan/tools/keiland-linux/dbus-wire.c userland/desktop/libkeiland-backend-linux/dbus-linux.c \
   -o build/keiland-linux/test/dbus-wire
 timeout 60 python3 plan/tools/keiland-linux/dbus-wire.py build/keiland-linux/test/dbus-wire
 cc -D_GNU_SOURCE -std=gnu17 -Wall -Wextra -Werror plan/tools/keiland-linux/seat-fd.c \
