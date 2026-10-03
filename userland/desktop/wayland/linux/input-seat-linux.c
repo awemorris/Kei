@@ -48,11 +48,12 @@ zwl_seat_device_close(
  */
 int
 zwl_seat_paused(
-	void)
+	const struct zwl_server *server)
 {
 	int paused;
 
 	/* Service notifications remain ordered by the existing Linux seat state machine. */
+	(void)server;
 	paused = zwl_linux_seat_paused();
 	if (paused != 0)
 		return 1;

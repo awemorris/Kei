@@ -61,6 +61,11 @@ struct kl_backend_host {
 	void *data;
 	void (*session_stop)(void *data, unsigned reason);
 	void (*session_answer)(void *data, unsigned request, int error);
+	void (*session_paused)(void *data);
+	void (*session_resumed)(void *data);
+	void (*input_paused)(void *data, const char *path);
+	void (*input_resumed)(void *data, const char *path, int descriptor);
+	void (*input_gone)(void *data, const char *path);
 };
 
 /*
@@ -474,6 +479,7 @@ int kl_backend_power_action(struct kl_backend *backend, unsigned action);
 #define KL_BACKEND_SESSION_QUIT		1U	/* the session's Log Out was answered: end */
 #define KL_BACKEND_SESSION_ENDED	2U	/* the login screen's manager is done with it (a session is ready, or the manager went) */
 #define KL_BACKEND_SESSION_UNANSWERED	3U	/* a Log Out had no answer in time: end anyway */
+#define KL_BACKEND_SESSION_LOST		4U	/* the seat's authority failed or went away: end through the ordinary cleanup */
 
 /*
  * Says the compositor is about to take the display for the first time,
@@ -511,5 +517,74 @@ int kl_backend_session_unlock(struct kl_backend *backend, const char *password);
  * (1), so that it can be locked and logged out through it, or not (0).
  */
 int kl_backend_session_managed(const struct kl_backend *backend);
+
+
+/*
+ * The seat (ws131-p006): who may use the display and the input devices.
+ *
+ * Linux takes them through logind (the session's TakeDevice) or directly as
+ * root, FreeBSD through seatd (libseat); zedBSD's compositor uses its own
+ * kernel interfaces and no seat (every call answers ENOTSUP, and the
+ * compositor does not open it).  kl_backend_seat_open takes the seat and
+ * the primary display node before Vulkan opens; the input devices are
+ * opened through the seat, one descriptor each, and the seat may take them
+ * all away while another session has the display (a virtual terminal
+ * switch) and give them back later.
+ *
+ * The callbacks come from kl_backend_poll_done:
+ *   session_paused    stop drawing and close the output now; the seat is
+ *                     told the compositor has let go when it returns
+ *   session_resumed   the display may be opened again (the next frame)
+ *   input_paused      stop reading the input of path; its descriptor stays
+ *                     the seat's and is not closed
+ *   input_resumed     read the input of path from descriptor from now on
+ *                     (the old one is the seat's to close)
+ *   input_gone        the input of path is gone; forget it without closing
+ *                     its descriptor, which the seat has closed
+ * A failed authority calls session_stop(KL_BACKEND_SESSION_LOST).
+ */
+
+/*
+ * Takes the seat and the primary display node (KEILAND_DRM_DEVICE, or
+ * /dev/dri/card0).  Returns 0, ENOTSUP where there is no seat, or an errno
+ * value; kl_backend_seat_close is called after a failure too.
+ */
+int kl_backend_seat_open(struct kl_backend *backend);
+
+/*
+ * Returns every device and the seat (partial opens too).
+ */
+void kl_backend_seat_close(struct kl_backend *backend);
+
+/*
+ * The primary display node's descriptor (-1 while it is paused or not
+ * taken) and path, for the display's acquisition.
+ */
+int kl_backend_seat_primary_fd(const struct kl_backend *backend);
+const char *kl_backend_seat_primary_path(const struct kl_backend *backend);
+
+/*
+ * Tells whether the seat is paused (1: no drawing, no new input device).
+ */
+int kl_backend_seat_paused(const struct kl_backend *backend);
+
+/*
+ * Opens the input device at path through the seat: a nonblocking
+ * descriptor, or -1 with errno (EAGAIN while paused).
+ */
+int kl_backend_seat_device_open(struct kl_backend *backend, const char *path);
+
+/*
+ * Returns an input device's descriptor to the seat.
+ */
+void kl_backend_seat_device_close(struct kl_backend *backend, int descriptor);
+
+/*
+ * Tells the seat that reading descriptor failed as revoked (ENODEV).
+ * Returns 1 when the seat keeps the device for a later resume (the
+ * compositor stops reading it and waits for input_resumed or input_gone),
+ * 0 when the compositor closes it as usual.
+ */
+int kl_backend_seat_device_revoked(struct kl_backend *backend, int descriptor);
 
 #endif

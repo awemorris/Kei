@@ -7,5 +7,9 @@ KEILAND_FREEBSD_BACKEND_SOURCES := userland/desktop/libkeiland-backend/backend.c
 	userland/desktop/libkeiland-backend-freebsd/network-link-freebsd.c \
 	userland/desktop/libkeiland-backend-freebsd/audio-freebsd.c \
 	userland/desktop/libkeiland-backend/unsupported/power-unsupported.c \
-	userland/desktop/libkeiland-backend/session/session-none.c
+	userland/desktop/libkeiland-backend/session/session-none.c \
+	userland/desktop/libkeiland-backend-freebsd/seat-freebsd.c
 $(eval $(call KEILAND_FREEBSD_STATIC,keiland-backend,libkeiland-backend.a,$(KEILAND_FREEBSD_BACKEND_SOURCES)))
+
+# The seat's compilation cannot race the external client's generated public header (ws131-p006).
+$(KEILAND_FREEBSD_BUILD)/obj/userland/desktop/libkeiland-backend-freebsd/seat-freebsd.o: $(KEILAND_FREEBSD_BUILD)/include/libseat.h

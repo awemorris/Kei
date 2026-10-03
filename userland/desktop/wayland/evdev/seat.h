@@ -15,7 +15,7 @@ struct zwl_server;
 int zwl_seat_device_open(struct zwl_server *server, const char *path);
 void zwl_seat_device_close(struct zwl_server *server, int descriptor);
 /* A paused service retains its device leases until its own ordered notification. */
-int zwl_seat_paused(void);
+int zwl_seat_paused(const struct zwl_server *server);
 int zwl_seat_device_revoked(struct zwl_server *server, int descriptor);
 
 #endif

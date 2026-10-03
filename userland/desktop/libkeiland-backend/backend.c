@@ -10,11 +10,9 @@
  *
  * It keeps the compositor's callbacks and options for the areas that
  * report through them (struct kl_backend is in backend-private.h, which the
- * operating systems' areas share).  No area polls a descriptor yet: the
- * network and the sound are read by the compositor's own updates, and the
- * session's manager is read by the tick (ws131-p006), as the compositor
- * read it before.  The poll has nothing to do until the areas that need it
- * (the seat, the input devices) move here.
+ * operating systems' areas share).  The network and the sound are read by
+ * the compositor's own updates, and the session's manager by the tick, as
+ * the compositor read it before; the poll is the seat's (ws131-p006).
  */
 
 #include "userland/desktop/libkeiland-backend/backend-private.h"
@@ -23,9 +21,6 @@
 #include <poll.h>
 #include <stdlib.h>
 #include <string.h>
-
-/* Marks a parameter an interface requires but this implementation does not use yet. */
-#define UNUSED_PARAMETER(name) ((void)(name))
 
 /*
  * Opens the backend.
@@ -74,10 +69,15 @@ size_t
 kl_backend_poll_count(
 	const struct kl_backend *backend)
 {
-	UNUSED_PARAMETER(backend);
+	size_t count;
 
-	/* No area waits on a descriptor yet. */
-	return 0;
+	/* A compositor whose backend did not open polls nothing of it. */
+	if (backend == NULL)
+		return 0;
+
+	/* The seat's service (ws131-p006). */
+	count = kl_backend_seat_poll_count(backend);
+	return count;
 }
 
 /*
@@ -88,9 +88,12 @@ kl_backend_poll_fill(
 	struct kl_backend *backend,
 	struct pollfd *descriptors)
 {
-	/* No area waits on a descriptor yet, so there is nothing to fill. */
-	UNUSED_PARAMETER(backend);
-	UNUSED_PARAMETER(descriptors);
+	/* A compositor whose backend did not open has nothing to fill. */
+	if (backend == NULL)
+		return;
+
+	/* The seat's service (ws131-p006). */
+	kl_backend_seat_poll_fill(backend, descriptors);
 }
 
 /*
@@ -101,9 +104,12 @@ kl_backend_poll_done(
 	struct kl_backend *backend,
 	const struct pollfd *descriptors)
 {
-	/* No area waits on a descriptor yet, so nothing was reported. */
-	UNUSED_PARAMETER(backend);
-	UNUSED_PARAMETER(descriptors);
+	/* A compositor whose backend did not open was told nothing. */
+	if (backend == NULL)
+		return;
+
+	/* The seat's pauses and resumes (ws131-p006). */
+	kl_backend_seat_poll_done(backend, descriptors);
 }
 
 /*

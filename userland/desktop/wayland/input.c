@@ -445,6 +445,34 @@ zwl_input_close(
 }
 
 /*
+ * Forgets one device whose descriptor the seat has already closed
+ * (libkeiland-backend's input_gone, ws131-p006): the same as
+ * zwl_input_close without returning the descriptor.
+ */
+void
+zwl_input_forget(
+	struct zwl_server *server,
+	struct zwl_input_device *device)
+{
+	/* A slot that is not in use has nothing to forget. */
+	if (!device->live)
+		return;
+
+	/* A pen tablet's clients and a touch screen's fingers hear that it is gone. */
+	if (device->tablet)
+		zwl_tablet_remove(server, device, 1);
+	if (device->touch)
+		zwl_touch_remove(server, device, 1);
+
+	/* The slot is free; its descriptor was the seat's. */
+	device->fd = -1;
+	device->live = 0;
+
+	/* Bound seats learn that a class of device may be gone. */
+	update_capabilities(server);
+}
+
+/*
  * Closes every device during service shutdown without notifying clients.
  */
 void

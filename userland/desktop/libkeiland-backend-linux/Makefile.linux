@@ -9,5 +9,6 @@ KEILAND_LINUX_BACKEND_SOURCES := userland/desktop/libkeiland-backend/backend.c \
 	userland/desktop/libkeiland-backend-linux/network-link-linux.c \
 	userland/desktop/libkeiland-backend-linux/audio-linux.c \
 	userland/desktop/libkeiland-backend/unsupported/power-unsupported.c \
-	userland/desktop/libkeiland-backend/session/session-none.c
+	userland/desktop/libkeiland-backend/session/session-none.c \
+	userland/desktop/libkeiland-backend/unsupported/seat-unsupported.c
 $(eval $(call KEILAND_LINUX_STATIC,keiland-backend,libkeiland-backend.a,$(KEILAND_LINUX_BACKEND_SOURCES)))

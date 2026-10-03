@@ -1085,6 +1085,11 @@ int zwl_handoff_logout(struct zwl_server *server);
 void zwl_handoff_tick(struct zwl_server *server);
 void zwl_handoff_stop(void *data, unsigned reason);
 void zwl_handoff_answer(void *data, unsigned request, int error);
+void zwl_backend_session_paused(void *data);
+void zwl_backend_session_resumed(void *data);
+void zwl_backend_input_paused(void *data, const char *path);
+void zwl_backend_input_resumed(void *data, const char *path, int descriptor);
+void zwl_backend_input_gone(void *data, const char *path);
 int zwl_lock(struct zwl_server *server, const char *reason);
 void zwl_greeter_answer(struct zwl_server *server, unsigned request, int error);
 int zwl_emit(struct zwl_client *client, uint32_t object, uint32_t opcode, const void *payload, size_t size);
@@ -1269,6 +1274,7 @@ void zwl_seat_modifiers(struct zwl_server *server);
 int zwl_input_attach(struct zwl_server *server, int descriptor, const char *path, unsigned pointer, unsigned keyboard, const struct input_absinfo *x, const struct input_absinfo *y);
 void zwl_input_read_devices(struct zwl_server *server, struct zwl_input_device **devices, size_t count);
 void zwl_input_close(struct zwl_server *server, struct zwl_input_device *device);
+void zwl_input_forget(struct zwl_server *server, struct zwl_input_device *device);
 void zwl_input_cleanup(struct zwl_server *server);
 
 #endif

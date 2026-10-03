@@ -51,7 +51,7 @@ zwl_input_scan(
 	server->input_scan_time = zwl_milliseconds();
 
 	/* A service-paused seat cannot acquire newly discovered input devices. */
-	paused = zwl_seat_paused();
+	paused = zwl_seat_paused(server);
 	if (paused != 0)
 		return;
 
