@@ -73,3 +73,4 @@
 2026-10-03 夕 / 開始: user「実行してください。pushはこちらでやりますのでいいです。」→ agent/p1・agent/t1 を新しい main（230db74aa）に reset（旧の先は backup/agent-p1-before-squash・backup/agent-t1-before-squash）。P1 generation11（q638）・T1 generation3（q639）を起動。
 2026-10-03 user「BUG-151は、Fable 5.1のサブエージェントを利用してください。1つサブエージェントを増やしていいです。」 → P2 generation5（model Fable 5.1）を起動し BUG-151 を P1 から引き継ぐ（q644）。N=3（P1・P2・T1）。agent/p2 を main に reset（旧の先は backup/agent-p2-before-squash）。
 2026-10-03 / P2 generation5 取り消し: user「あ、BUG-151は解決したんですね。じゃあFableはいいです。」→ 起動直後に終了を依頼。N=2（P1・T1）。BUG-151 は P1 の修正の T1 の再試験で判定する。
+2026-10-03 user「利用量が余っているので、P2を立てて、併走で異なるバグを修正してください。」 → P2 generation6 を q645（BUG-146・147・095）で起動。N=3（P1・P2・T1）。P1 の q643 から BUG-146・147 を外す。
