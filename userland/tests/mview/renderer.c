@@ -13,7 +13,8 @@
  * image with its own descriptor set.  Six pipelines cover the three alpha
  * modes with and without back-face culling.  All uploads pass through one
  * reused host-visible staging buffer, because the host-visible window of the
- * Venus transport is small.  The per-pixel shading (--shading=pixel) adds a
+ * Venus transport is small, and the buffer is released once the model is
+ * uploaded (BUG-144).  The per-pixel shading (--shading=pixel) adds a
  * host-visible uniform buffer with the scene block, binding 1 of every
  * texture's set, rewritten before each frame is recorded.
  */
@@ -269,6 +270,14 @@ mview_renderer_load(
 	error = renderer_descriptors(renderer);
 	if (error != VK_SUCCESS)
 		return error;
+
+	/*
+	 * Every upload has finished (each waits for its submission), so the
+	 * staging buffer goes now: it is host-visible, the scarce kind of
+	 * memory on Venus (BUG-144, the 4 to 5 MiB it held for the viewer's
+	 * whole life counted against the guest's 256 MiB window).
+	 */
+	renderer_buffer_free(renderer, &renderer->staging);
 
 	/* Succeeded: the model is resident on the device. */
 	return VK_SUCCESS;
