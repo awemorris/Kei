@@ -270,6 +270,7 @@ void ja_user_free(struct ja_user *user);
 const struct ja_user_entry *ja_user_find(const struct ja_user *user, const char *reading, size_t length);
 int ja_user_learn(struct ja_user *user, const char *reading, size_t length, const char *candidate);
 int ja_user_save(const struct ja_user *user);
+int ja_user_save_later(const struct ja_user *user);
 
 /* ja-inflect.c */
 void ja_inflect_ends(const struct ja_text *text, size_t stem_end, char consonant, bool adjective, bool *ends);

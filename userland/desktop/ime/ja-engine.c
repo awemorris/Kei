@@ -694,9 +694,13 @@ engine_commit_conversion(
 
 	free(text);
 
-	/* The choices outlive the input method. */
+	/*
+	 * The choices outlive the input method; the file is written by a
+	 * thread of its own, so that a slow disk does not hold the commit
+	 * (BUG-143).
+	 */
 	if (learned)
-		(void)ja_user_save(&core->user);
+		(void)ja_user_save_later(&core->user);
 }
 
 /*
