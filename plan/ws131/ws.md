@@ -111,3 +111,5 @@ D8 の決定（2026-10-03 user）: 単独走行（N=1）で p003〜p024 を番�
 2026-10-03 user「FreeBSDでのビルド確認は後回しで、書くだけにします。Linuxでのビルドはネイティブで行いましょう。再起動は、P4がLCDの問題を解決し、P2がTerminal改善を終了し、P1も作業を終了したあとにします。再起動後にP3を実行しましょう。」→ WS131 の FreeBSD は source を書くだけ（build・audit・guest は user の再開の指示まで行わない）。Linux は host の native の build。P3 は次の安全な区切りでラップアップし、host の再起動の後に再開する。
 
 2026-10-03 Q1: WS134（system monitor、P2）の app を p023 の互換の除去の対象と前提に加えた（P2 の design.md §6 の依頼。足さないと B5 で FAIL）。monitor の system manager は `kl_system_manager_v1` の v3（WS113 が v2）。
+
+2026-10-03 Q1: 設定（preferences）の部分は [WS135](../ws135/ws.md)（BUG-162、ユーザーの方針: 読み書きは libkeiland を通す、監視と通知の API、desktop.conf は compositor の内部で session の開始・終了だけ）が引き取る。p010・p011 の設定の行は WS135 の p001 の結果で書き換える（manager の枠と network・audio・power は WS131 に残る）。
