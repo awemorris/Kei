@@ -74,8 +74,8 @@
 #define NETWORK_SEPARATOR	9
 #define NETWORK_MENU_RADIUS	12.0f
 
-/* The most rows the menu has: the switch, the state, the networks, the wired line, disconnect, a message. */
-#define NETWORK_ROWS_MAX	(KL_BACKEND_NETWORK_SCAN_MAX + 8)
+/* The most rows the menu has: the switch, the state, the networks, the key field's four, the wired line, disconnect, a message. */
+#define NETWORK_ROWS_MAX	(KL_BACKEND_NETWORK_SCAN_MAX + 12)
 
 /* The kinds of row. */
 enum network_row_kind {
@@ -181,6 +181,7 @@ static void network_open_menu(struct zwl_server *server);
 static void network_close_menu(struct zwl_server *server, const char *via);
 static void network_layout(struct zwl_server *server);
 static void network_add_row(enum network_row_kind kind, const char *text, int32_t height, unsigned ap);
+static void network_add_key_rows(void);
 static void network_state_text(const struct kl_backend_network_state *state, char *text, size_t size);
 static void network_act(struct zwl_server *server, const struct network_row *row);
 static void network_request(struct zwl_server *server, unsigned request, const char *ssid);
@@ -542,12 +543,15 @@ network_layout(
 	char text[96];
 	unsigned request;
 	unsigned index;
+	unsigned key_shown;
 	int32_t y;
 	int error;
+	int differs;
 
-	/* No rows yet. */
+	/* No rows yet, and no key field placed. */
 	state = &network_view.state;
 	network_view.row_count = 0;
+	key_shown = 0;
 
 	/* The Wi-Fi's switch, with its state under it (the network being joined while the user waits for it). */
 	if (state->wifi != KL_BACKEND_WIFI_ABSENT && state->reachable) {
@@ -573,18 +577,29 @@ network_layout(
 			network_add_row(NETWORK_ROW_NOTE, "No networks found", NETWORK_NOTE_HEIGHT, 0);
 		}
 
-		/* Each network the scan found. */
-		for (index = 0; index < network_view.scan_count; index++)
+		/*
+		 * Each network the scan found; the key field of the one chosen
+		 * stands right under its row (BUG-160: under the whole list it
+		 * was far from the network, at the bottom of the screen).
+		 */
+		for (index = 0; index < network_view.scan_count; index++) {
 			network_add_row(NETWORK_ROW_AP, network_view.scan[index].ssid, NETWORK_ROW_HEIGHT, index);
+
+			/* The network the key is asked for. */
+			if (!network_view.key_open)
+				continue;
+			differs = strcmp(network_view.scan[index].ssid, network_view.key_ssid);
+			if (differs != 0)
+				continue;
+			network_add_key_rows();
+			key_shown = 1;
+		}
 	}
 
-	/* The key field: what it is for, the field, and how to finish. */
-	if (network_view.key_open) {
+	/* A network the list does not show (no longer scanned, or the Wi-Fi off) keeps its field under the list. */
+	if (network_view.key_open && !key_shown) {
 		network_add_row(NETWORK_ROW_SEPARATOR, "", NETWORK_SEPARATOR, 0);
-		(void)snprintf(text, sizeof(text), "Key for %s", network_view.key_ssid);
-		network_add_row(NETWORK_ROW_NOTE, text, NETWORK_NOTE_HEIGHT, 0);
-		network_add_row(NETWORK_ROW_KEY, "", NETWORK_ROW_HEIGHT, 0);
-		network_add_row(NETWORK_ROW_NOTE, "Enter: join   Esc: cancel", NETWORK_NOTE_HEIGHT, 0);
+		network_add_key_rows();
 	}
 
 	/* The wired connection's line, after a separator. */
@@ -604,8 +619,8 @@ network_layout(
 		network_add_row(NETWORK_ROW_DISCONNECT, text, NETWORK_ROW_HEIGHT, 0);
 	}
 
-	/* The last failure. */
-	if (network_view.failure[0] != '\0')
+	/* The last failure (under the key field instead while it is open). */
+	if (network_view.failure[0] != '\0' && !network_view.key_open)
 		network_add_row(NETWORK_ROW_NOTE, network_view.failure, NETWORK_NOTE_HEIGHT, 0);
 
 	/* The rows' places from the top, and the menu's height. */
@@ -652,6 +667,26 @@ network_add_row(
 	row->height = height;
 	row->ap = ap;
 	network_view.row_count++;
+}
+
+/* Adds the key field's rows: the field and how to finish (the network is the row above it, or named when it is not). */
+static void
+network_add_key_rows(
+	void)
+{
+	char text[96];
+
+	/* What the field is for. */
+	(void)snprintf(text, sizeof(text), "Key for %s", network_view.key_ssid);
+	network_add_row(NETWORK_ROW_NOTE, text, NETWORK_NOTE_HEIGHT, 0);
+
+	/* The field, and the keys that finish it. */
+	network_add_row(NETWORK_ROW_KEY, "", NETWORK_ROW_HEIGHT, 0);
+	network_add_row(NETWORK_ROW_NOTE, "Enter: join   Esc: cancel", NETWORK_NOTE_HEIGHT, 0);
+
+	/* A key refused before it was sent (too short, not saved) is said under the field it is typed in. */
+	if (network_view.failure[0] != '\0')
+		network_add_row(NETWORK_ROW_NOTE, network_view.failure, NETWORK_NOTE_HEIGHT, 0);
 }
 
 /* Writes the line under the switch: what the Wi-Fi is doing, or why there is none. */
