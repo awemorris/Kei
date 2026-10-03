@@ -16,4 +16,4 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 4 | WiFi の AP の切替 | **FAIL（要修正）** | 別の AP を選んでも「Connecting...」のような表示が無く、何をしているか分からないまま約 10 秒後にチェックが付いた。user「これは問題なので修正が必要。Connecting...は必要。」 |
 | 4 | WiFi の off → on で保存済みの AP に自動で再接続 | PASS | |
 | 4 | 間違えた鍵の文言 | **FAIL** | 「did not accept the key」が出ず「Could not join (Network is down)」（ENETDOWN）。QEMU の RTL8822BU では EACCES だった（ws005-p020）。5330 の内蔵 AX211 の経路で鍵の拒否が ENETDOWN になっている見込み |
-| 4 | 再起動の後の off の保持 | 未実施 | |
+| 4 | off の保持（Log Out → login） | PASS | off のまま。再起動（Restart）を挟んだ保持は未実施 |
