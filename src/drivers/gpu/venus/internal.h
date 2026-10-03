@@ -35,7 +35,7 @@
 #define VENUS_HEADER_BYTES		24U
 #define VENUS_FEATURE_EDID		2U
 #define VENUS_MAX_RESOURCE_BYTES	(256U * 1024U * 1024U)
-#define VENUS_MAX_APERTURE_BYTES	(256U * 1024U * 1024U)
+#define VENUS_MAX_APERTURE_BYTES	(1024U * 1024U * 1024U)
 
 /*
  * One PCI capability window, retained until the device reset completes.
