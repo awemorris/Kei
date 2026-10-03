@@ -103,3 +103,14 @@ user「Venusの窓は私には判断できないです。もっと大きくし�
 
 確認: kernel の build（`ZEDBSD_CONFIG=plan/ws089/tests/config-amd64-settings.mk`、vmunix）は warning 0。HAL の space の host 試験は無い。
 QEMU の boot-test（HAL の変更なので必須）と aperture-bug144.sh（hostmem 1G と 256M で mview を何個開けるか）は試験の担当に予約した（結果待ち）。実機は未実施。
+
+## aperture-bug144.sh の直し（2026-10-03、P1、T1-027 で数字が取れなかったため）
+
+T1-027（CI の image）で数字が取れなかった理由は 2 つ:
+- CI の image には 10-02 から mview が入っていない。
+- zedBSD の ps は rss を持たない（`-o pid,rss,vsz,args` は usage で断られる）。
+
+直したこと:
+- image は mview のある `plan/ws035/tests/build-zdesktop-image.sh`（config-amd64-zdesktop.mk）を使う。guest に `/bin/mview` が無ければ `MISSING` と出して止まる。
+- CPU の memory は、各段の process の VSZ（`ps -o pid,vsz,args`、KiB）と、system 全体の確保済みの物理 memory（`/sbin/sysctl hw.memory.stats` の `allocated=`）で記録する。段の差がその段の重さになる。zedBSD には process ごとの RSS が無い。
+- App Home の全 app の段（1）は `APPHOME=1` の時だけ流す（T1-027 で CI の image で済んでいる）。
