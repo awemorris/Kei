@@ -20,6 +20,8 @@
 #include <kern/device-io.h>
 #include <kern/kmem.h>
 #include <kern/klog.h>
+#include <kern/process.h>
+#include <kern/thread.h>
 
 #include <uapi/errno.h>
 #include <limits.h>
@@ -62,6 +64,7 @@ static int venus_resource_release(struct venus_controller *controller, struct ve
 static int venus_resource_retire(struct venus_controller *controller, struct venus_resource *resource);
 static int venus_resource_validate(struct venus_controller *controller, struct venus_session *session, struct venus_resource *resource, uint64_t offset, uint32_t bytes);
 static int venus_aperture_reserve(struct venus_controller *controller, struct venus_resource *resource);
+static void venus_aperture_report(struct venus_controller *controller, uint32_t context, uint64_t extent);
 static int venus_blob_initialize(struct venus_controller *controller, struct venus_resource *resource, const struct gpu_blob_create *request);
 static int venus_scanout_disable(struct venus_controller *controller);
 static int venus_storage_initialize(struct venus_controller *controller, struct venus_resource *resource, const struct gpu_present *request);
@@ -437,8 +440,10 @@ venus_open(
 	unsigned failed;
 	struct venus_controller *controller;
 	struct venus_session *session;
+	struct thread *thread;
 	uint8_t command[96];
 	int error;
+	int pid;
 
 	/* Failure never transfers a partial session to the GPU core. */
 	controller = device;
@@ -485,6 +490,13 @@ venus_open(
 	}
 
 	mutex_unlock(&controller->mutex);
+
+	/* Names which process the context is (the aperture's report counts by context, BUG-144). */
+	thread = thread_current();
+	pid = -1;
+	if (thread != NULL && thread->proc != NULL)
+		pid = (int)thread->proc->pid;
+	kern_logf("venus: context=%u opened pid=%d\n", session->context, pid);
 
 	/* Only a successfully created renderer context is exposed to its open. */
 	*result = session;
@@ -1689,6 +1701,7 @@ venus_aperture_reserve(
 		/* Rejects exhaustion before computing the proposed extent end. */
 		if (offset > controller->transport.host_visible.length ||
 		    extent > controller->transport.host_visible.length - offset) {
+			venus_aperture_report(controller, resource->context, extent);
 			return ENOSPC;
 		}
 
@@ -1717,6 +1730,95 @@ venus_aperture_reserve(
 
 	/* Succeeded: a nonoverlapping aperture extent is reserved for this blob. */
 	return 0;
+}
+
+/*
+ * Logs why a CPU-mappable allocation found no room in the host-visible
+ * aperture (BUG-144): the request, the aperture's size, the bytes and blobs
+ * reserved, the largest free hole, and the bytes each context holds, so
+ * that a failed vkAllocateMemory can be told apart from other limits.  The
+ * caller holds the controller's mutex.
+ */
+static void
+venus_aperture_report(
+	struct venus_controller *controller,
+	uint32_t context,
+	uint64_t extent)
+{
+	struct venus_resource *other;
+	struct venus_resource *next;
+	uint64_t contexts[8][3];
+	uint64_t used;
+	uint64_t largest;
+	uint64_t start;
+	uint64_t end;
+	unsigned blobs;
+	unsigned count;
+	unsigned index;
+
+	/* The bytes and the blobs reserved, by context (the first eight contexts; the rest counted in the totals). */
+	used = 0U;
+	blobs = 0U;
+	count = 0U;
+	for (other = controller->resources; other != NULL; other = other->next) {
+		if (other->aperture_bytes == 0U)
+			continue;
+		used += other->aperture_bytes;
+		blobs++;
+
+		/* The context's line, made the first time it is seen. */
+		for (index = 0U; index < count; index++) {
+			if (contexts[index][0] == other->context)
+				break;
+		}
+		if (index == count && count < 8U) {
+			contexts[count][0] = other->context;
+			contexts[count][1] = 0U;
+			contexts[count][2] = 0U;
+			count++;
+		}
+		if (index < count) {
+			contexts[index][1] += other->aperture_bytes;
+			contexts[index][2]++;
+		}
+	}
+
+	/* The largest hole: from the aperture's start and from each blob's end to the next blob or the end. */
+	largest = 0U;
+	start = 0U;
+	other = NULL;
+	do {
+		/* The nearest blob at or after start. */
+		end = controller->transport.host_visible.length;
+		for (next = controller->resources; next != NULL; next = next->next) {
+			if (next->aperture_bytes != 0U && next->aperture_offset >= start && next->aperture_offset < end)
+				end = next->aperture_offset;
+		}
+		if (end - start > largest)
+			largest = end - start;
+
+		/* The next start: the end of a blob that begins where this hole ends. */
+		other = NULL;
+		for (next = controller->resources; next != NULL; next = next->next) {
+			if (next->aperture_bytes != 0U && next->aperture_offset == end) {
+				other = next;
+				break;
+			}
+		}
+		if (other != NULL)
+			start = other->aperture_offset + other->aperture_bytes;
+	} while (other != NULL);
+
+	/* The summary, then each context's share. */
+	kern_logf("venus: aperture full context=%u request=%llu aperture=%llu used=%llu blobs=%u largest_hole=%llu\n",
+		   context, (unsigned long long)extent,
+		   (unsigned long long)controller->transport.host_visible.length,
+		   (unsigned long long)used, blobs, (unsigned long long)largest);
+	for (index = 0U; index < count; index++) {
+		kern_logf("venus: aperture context=%u bytes=%llu blobs=%u\n",
+			   (unsigned)contexts[index][0], (unsigned long long)contexts[index][1],
+			   (unsigned)contexts[index][2]);
+	}
 }
 
 /* Creates and maps one host allocation through the owning Venus context. */
