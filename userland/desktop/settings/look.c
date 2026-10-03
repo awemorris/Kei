@@ -15,6 +15,10 @@
  * Settings writes a key when the user has chosen: a picture clicked, a
  * slider let go.  The file is read again once a second, so that a change
  * made elsewhere shows too.
+ *
+ * The pictures' small copies are read by a thread of their own (BUG-152):
+ * the Wallpaper page is shown at once with a stand-in in each tile, and
+ * each tile fills as its copy is ready.
  */
 
 #include "settings.h"
@@ -34,6 +38,9 @@
 
 /* How often the preferences are read again, in milliseconds. */
 #define LOOK_CHECK_MS		1000U
+
+/* How often the window's thread looks for finished small copies while they are being read, in milliseconds. */
+#define LOOK_LOAD_POLL_MS	40
 
 /* The windows' opacity: its range and its default, in percent. */
 #define LOOK_OPACITY_MIN	85
@@ -68,6 +75,10 @@ static const char *const look_places[] = { "/", "/home", "/usr", "/var", "/tmp",
 static void look_read(struct se_app *app);
 static int look_write(struct se_app *app, const char *key, const char *value);
 static void look_add_picture(struct se_app *app, const char *path, const char *name);
+static void look_load_start(struct se_app *app);
+static void *look_load_run(void *argument);
+static void look_load_take(struct se_app *app);
+static void look_load_stop(struct se_app *app);
 static int look_thumbnail(const char *path, struct fm_image *image);
 static int look_ppm_number(const unsigned char *data, size_t size, size_t *at, unsigned *number);
 static int look_compare_names(const void *left, const void *right);
@@ -118,6 +129,9 @@ se_look_poll(
 	int changed;
 	int error;
 
+	/* The pictures' small copies finished since the last round go to their tiles. */
+	look_load_take(app);
+
 	/* Nothing to read, or not yet. */
 	look = &app->look;
 	if (look->preferences == NULL)
@@ -140,6 +154,23 @@ se_look_poll(
 }
 
 /*
+ * Reports how long the main loop may sleep for the look: a short while
+ * when the pictures' small copies are being read, so that each tile fills
+ * soon after its copy is ready, and -1 (no limit) otherwise.
+ */
+int
+se_look_wait(
+	const struct se_app *app)
+{
+	/* No thread is reading pictures: the look has nothing due. */
+	if (app->look.loader.running == 0)
+		return -1;
+
+	/* Succeeded: the next look for finished copies. */
+	return LOOK_LOAD_POLL_MS;
+}
+
+/*
  * Closes the preferences and frees the pictures' small copies.
  */
 void
@@ -148,6 +179,9 @@ se_look_close(
 {
 	struct se_look *look;
 	unsigned index;
+
+	/* A thread still reading pictures is stopped and joined first. */
+	look_load_stop(app);
 
 	/* The small copies. */
 	look = &app->look;
@@ -252,9 +286,10 @@ se_look_set_wallpaper(
 }
 
 /*
- * Finds the pictures the Wallpaper page offers and reads their small
- * copies (once, when the page is first shown): the default first, then
- * the folder's, by name.
+ * Finds the pictures the Wallpaper page offers (once, when the page is
+ * first shown): the default first, then the folder's, by name.  Their
+ * small copies are read by a thread of their own and fill the tiles as
+ * they are ready (BUG-152).
  */
 void
 se_look_scan(
@@ -315,6 +350,9 @@ se_look_scan(
 
 	/* The log line the tests read. */
 	se_log("LOOK pictures count=%u", look->wallpaper_count);
+
+	/* The small copies, read while the page is already shown. */
+	look_load_start(app);
 }
 
 /*
@@ -463,7 +501,7 @@ look_write(
 	return 0;
 }
 
-/* Adds a picture to the page's list with its small copy (a picture that cannot be read is listed without one). */
+/* Adds a picture to the page's list, its small copy still to be read (the tile shows a stand-in until then). */
 static void
 look_add_picture(
 	struct se_app *app,
@@ -471,10 +509,6 @@ look_add_picture(
 	const char *name)
 {
 	struct se_wallpaper *wallpaper;
-	struct timespec started;
-	struct timespec finished;
-	long milliseconds;
-	int error;
 
 	/* A full list keeps the pictures it has. */
 	if (app->look.wallpaper_count == SE_WALLPAPERS)
@@ -486,15 +520,213 @@ look_add_picture(
 	(void)snprintf(wallpaper->path, sizeof(wallpaper->path), "%s", path);
 	(void)snprintf(wallpaper->name, sizeof(wallpaper->name), "%s", name);
 
-	/* Its small copy, timed for the log (a slow disk shows as a long first frame of the page). */
-	(void)clock_gettime(CLOCK_MONOTONIC, &started);
-	error = look_thumbnail(path, &wallpaper->thumbnail);
-	if (error == 0)
-		wallpaper->read = 1;
-	(void)clock_gettime(CLOCK_MONOTONIC, &finished);
-	milliseconds = (long)(finished.tv_sec - started.tv_sec) * 1000L + (finished.tv_nsec - started.tv_nsec) / 1000000L;
-	se_log("LOOK picture path=%s error=%d ms=%ld", path, error, milliseconds);
+	/* The loader fills its small copy later; until then the tile waits for it. */
+	wallpaper->pending = 1;
 	app->look.wallpaper_count++;
+}
+
+/*
+ * Starts the thread that reads the listed pictures' small copies.  When
+ * no thread can be started, the pictures are listed without small copies
+ * (their tiles show the drawn stand-in) rather than holding the page.
+ */
+static void
+look_load_start(
+	struct se_app *app)
+{
+	struct se_look_loader *loader;
+	unsigned index;
+	int error;
+
+	/* The paths the thread reads, its own copies, so that it shares nothing else with the page. */
+	loader = &app->look.loader;
+	memset(loader, 0, sizeof(*loader));
+	loader->count = app->look.wallpaper_count;
+	for (index = 0; index < loader->count; index++)
+		(void)snprintf(loader->paths[index], sizeof(loader->paths[index]), "%s", app->look.wallpapers[index].path);
+
+	/* The lock the thread hands each finished copy over under. */
+	error = pthread_mutex_init(&loader->lock, NULL);
+	if (error == 0) {
+		/* The thread; running says it must be joined. */
+		loader->running = 1;
+		error = pthread_create(&loader->thread, NULL, look_load_run, loader);
+		if (error != 0) {
+			loader->running = 0;
+			(void)pthread_mutex_destroy(&loader->lock);
+		}
+	}
+
+	/* Without a thread, no picture waits for a small copy any more. */
+	if (error != 0) {
+		for (index = 0; index < app->look.wallpaper_count; index++)
+			app->look.wallpapers[index].pending = 0;
+		app->dirty = 1;
+		se_log("LOOK loader error=%d", error);
+		return;
+	}
+
+	/* The log line the tests read. */
+	se_log("LOOK loader started count=%u", loader->count);
+}
+
+/*
+ * The loader's thread: reads each picture's small copy in the page's
+ * order (so the tiles fill from the first) and hands it over under the
+ * lock.  It ends early when the window closes.
+ */
+static void *
+look_load_run(
+	void *argument)
+{
+	struct se_look_loader *loader;
+	struct fm_image image;
+	struct timespec started;
+	struct timespec finished;
+	unsigned index;
+	long milliseconds;
+	int stopping;
+	int error;
+
+	/* The loader the window's thread started this thread with. */
+	loader = argument;
+
+	/* Each picture in turn, until every one is read or the window closes. */
+	for (index = 0; index < loader->count; index++) {
+		/* A closing window asks the thread to end between pictures. */
+		(void)pthread_mutex_lock(&loader->lock);
+
+		stopping = loader->stopping;
+
+		(void)pthread_mutex_unlock(&loader->lock);
+
+		/* The window is closing: the rest are not read. */
+		if (stopping != 0)
+			break;
+
+		/* The small copy, timed for the log (a slow disk shows as a late tile). */
+		memset(&image, 0, sizeof(image));
+		(void)clock_gettime(CLOCK_MONOTONIC, &started);
+		error = look_thumbnail(loader->paths[index], &image);
+		(void)clock_gettime(CLOCK_MONOTONIC, &finished);
+		milliseconds = (long)(finished.tv_sec - started.tv_sec) * 1000L + (finished.tv_nsec - started.tv_nsec) / 1000000L;
+
+		/*
+		 * The copy (empty when the picture could not be read) is handed
+		 * over; done tells the window's thread it may take it.
+		 */
+		(void)pthread_mutex_lock(&loader->lock);
+
+		loader->images[index] = image;
+		loader->errors[index] = error;
+		loader->milliseconds[index] = milliseconds;
+		loader->done[index] = 1;
+
+		(void)pthread_mutex_unlock(&loader->lock);
+	}
+
+	/* Succeeded: the thread ends and waits to be joined. */
+	return NULL;
+}
+
+/*
+ * Moves the small copies the loader has finished to their tiles and asks
+ * for a frame; once every copy is taken, the thread is joined.
+ */
+static void
+look_load_take(
+	struct se_app *app)
+{
+	struct se_look_loader *loader;
+	struct se_wallpaper *wallpaper;
+	unsigned index;
+	unsigned taken;
+
+	/* No thread is reading pictures. */
+	loader = &app->look.loader;
+	if (loader->running == 0)
+		return;
+
+	/* Each copy finished and not yet taken goes to its tile. */
+	taken = 0;
+	(void)pthread_mutex_lock(&loader->lock);
+
+	for (index = 0; index < loader->count; index++) {
+		/* A copy the thread has not finished, or one already taken, stays. */
+		if (loader->done[index] == 0)
+			continue;
+		if (loader->taken[index] != 0)
+			continue;
+
+		/* The tile owns the copy now; the loader's slot is emptied. */
+		wallpaper = &app->look.wallpapers[index];
+		wallpaper->thumbnail = loader->images[index];
+		memset(&loader->images[index], 0, sizeof(loader->images[index]));
+		wallpaper->read = 0;
+		if (loader->errors[index] == 0)
+			wallpaper->read = 1;
+
+		/* The tile stops waiting, and the count says when the thread may be joined. */
+		wallpaper->pending = 0;
+		loader->taken[index] = 1;
+		loader->taken_count++;
+		taken++;
+		se_log("LOOK picture path=%s error=%d ms=%ld", wallpaper->path, loader->errors[index], loader->milliseconds[index]);
+	}
+
+	(void)pthread_mutex_unlock(&loader->lock);
+
+	/* A tile that filled is drawn. */
+	if (taken != 0)
+		app->dirty = 1;
+
+	/* Some copies are still being read. */
+	if (loader->taken_count < loader->count)
+		return;
+
+	/* Every copy is taken: the thread has ended, or is about to, and is joined. */
+	(void)pthread_join(loader->thread, NULL);
+	(void)pthread_mutex_destroy(&loader->lock);
+	loader->running = 0;
+
+	/* The log line the tests read. */
+	se_log("LOOK pictures ready count=%u", loader->count);
+}
+
+/*
+ * Stops a thread still reading pictures (the window is closing): asks it
+ * to end between pictures, joins it, and frees the copies it finished
+ * that no tile took.
+ */
+static void
+look_load_stop(
+	struct se_app *app)
+{
+	struct se_look_loader *loader;
+	unsigned index;
+
+	/* No thread is reading pictures. */
+	loader = &app->look.loader;
+	if (loader->running == 0)
+		return;
+
+	/* stopping tells the thread to read no further picture. */
+	(void)pthread_mutex_lock(&loader->lock);
+
+	loader->stopping = 1;
+
+	(void)pthread_mutex_unlock(&loader->lock);
+
+	/* The thread ends after the picture it is reading. */
+	(void)pthread_join(loader->thread, NULL);
+	(void)pthread_mutex_destroy(&loader->lock);
+	loader->running = 0;
+
+	/* The copies no tile took are freed. */
+	for (index = 0; index < loader->count; index++) {
+		if (loader->done[index] != 0 && loader->taken[index] == 0)
+			fm_image_release(&loader->images[index]);
+	}
 }
 
 /*

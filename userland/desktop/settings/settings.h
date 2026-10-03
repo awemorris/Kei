@@ -25,6 +25,7 @@
 
 #include <keiland.h>
 
+#include <pthread.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -548,12 +549,45 @@ struct se_search {
  * One picture the Wallpaper page offers: its file, the name shown (the
  * file's name without .ppm), and a small copy for its tile (empty until
  * the page is first shown, or when the file cannot be read).
+ *
+ * pending is 1 from the moment the page lists the picture until the
+ * loader's small copy is taken (BUG-152): the tile shows a quiet
+ * stand-in meanwhile.  read is 1 once a small copy is in thumbnail.
  */
 struct se_wallpaper {
 	char path[SE_PATH];
 	char name[64];
 	struct fm_image thumbnail;
 	int read;
+	int pending;
+};
+
+/*
+ * The thread that reads the pictures' small copies away from the window's
+ * thread (BUG-152: seven pictures of 6 MB each held the first frame of the
+ * Wallpaper page for about ten seconds on a USB disk).
+ *
+ * The window's thread fills count and paths before the thread starts and
+ * does not change them while it runs; the thread reads only those.  Under
+ * lock, the thread fills images[i], errors[i] and milliseconds[i] and then
+ * sets done[i]; it looks at stopping between pictures and ends early when
+ * it is set.  taken[] and taken_count are the window's thread's alone: a
+ * picture whose small copy has moved to the page.  running is 1 while the
+ * thread has to be joined; the lock exists while running is 1.
+ */
+struct se_look_loader {
+	pthread_t thread;
+	pthread_mutex_t lock;
+	int running;
+	int stopping;
+	unsigned count;
+	char paths[SE_WALLPAPERS][SE_PATH];
+	struct fm_image images[SE_WALLPAPERS];
+	int errors[SE_WALLPAPERS];
+	long milliseconds[SE_WALLPAPERS];
+	int done[SE_WALLPAPERS];
+	int taken[SE_WALLPAPERS];
+	unsigned taken_count;
 };
 
 /*
@@ -581,7 +615,8 @@ struct se_volume {
  * default's (the session's --wallpaper) is wallpapers[0] when it exists.
  * The sliders' rectangles are the last frame's, for a drag (slider for
  * the opacity, sliders[] for the input pages' by their order).  The volumes are
- * read when the Storage page is shown.
+ * read when the Storage page is shown.  loader reads the pictures' small
+ * copies while the page is already shown.
  */
 struct se_look {
 	struct keiland_preferences *preferences;
@@ -600,6 +635,7 @@ struct se_look {
 	unsigned wallpaper_count;
 	int has_default;
 	int scanned;
+	struct se_look_loader loader;
 	struct se_volume volumes[SE_VOLUMES];
 	unsigned volume_count;
 	char message[SE_MESSAGE];
@@ -784,6 +820,7 @@ void se_field_clear(struct se_field *field);
 /* The look and the preferences (look.c). */
 void se_look_open(struct se_app *app);
 void se_look_poll(struct se_app *app, uint64_t now);
+int se_look_wait(const struct se_app *app);
 void se_look_close(struct se_app *app);
 void se_look_set_opacity(struct se_app *app, int percent);
 void se_look_set_number(struct se_app *app, const char *key, int value, int fallback);

@@ -362,9 +362,15 @@ look_tile(
 			chosen = 1;
 	}
 
-	/* The picture, or for one that could not be read a quiet gradient with the Kei mark. */
+	/*
+	 * The picture; while its small copy is still being read a plain grey
+	 * stand-in (BUG-152); for one that could not be read a quiet gradient
+	 * with the Kei mark.
+	 */
 	if (wallpaper->read != 0) {
 		fm_canvas_image(canvas, &wallpaper->thumbnail, (float)x, (float)y, (float)width, (float)height, 10.0f, 1.0f);
+	} else if (wallpaper->pending != 0) {
+		fm_canvas_round_gradient(canvas, (float)x, (float)y, (float)width, (float)height, 10.0f, FM_RGB(0xe9edf3), FM_RGB(0xdde3ec));
 	} else {
 		fm_canvas_round_gradient(canvas, (float)x, (float)y, (float)width, (float)height, 10.0f, FM_RGB(0xdfeaf7), FM_RGB(0xc8dcc4));
 		se_mark_draw(canvas, x + width / 2 - 24, y + height / 2 - 24, 48U, 0.9f);

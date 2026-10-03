@@ -225,6 +225,11 @@ main(
 			event.detail = mods;
 			se_ui_titlebar(&app, &event);
 		} else if (strncmp(argv[index], "draw=", 5) == 0) {
+			/* The Wallpaper page's small copies (BUG-152, read by a thread) are waited for, so the frame is the settled one. */
+			while (se_look_wait(&app) >= 0) {
+				(void)usleep(10000);
+				se_look_poll(&app, app.now);
+			}
 			se_ui_draw(&app, &canvas);
 			if (app.dirty != 0)
 				se_ui_draw(&app, &canvas);

@@ -46,5 +46,5 @@ for file in $src/*.c; do
 done
 "$cc" $flags -c plan/ws089/tests/host-render.c -o "$out/obj/host-render.o"
 "$cc" $flags -c plan/ws089/tests/host-network.c -o "$out/obj/host-network.o"
-"$cc" -o "$out/settings-render" "$out/obj/host-render.o" "$out/obj/host-network.o" $objects -lm
+"$cc" -o "$out/settings-render" "$out/obj/host-render.o" "$out/obj/host-network.o" $objects -lm -pthread
 echo "built $out/settings-render"
