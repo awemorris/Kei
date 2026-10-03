@@ -185,3 +185,7 @@ Q1（2026-10-03）: p006b の返事を待つ間、p006c の FreeBSD の書くだ
 | `check.sh` | PASS |
 | `host-session.sh`・`host-power.sh` | 31/31、17/17・6/6 |
 | FreeBSD の native build・`native-build-audit.py`・起動 | 未実施（user の再開の指示待ち） |
+
+## 判断（2026-10-03 ユーザー）
+
+p006b の確認の方法: (A)。ユーザー「なるほど、LinuxでのテストはQEMU+KVMを使ってください。」→ p006b の logind と直の seat での起動、VT の切り替えの後の復帰、使い捨ての guest の Reboot は Debian の QEMU+KVM guest で T1・T2 が確かめる（AGENTS.md の検証の例外に記録）。
