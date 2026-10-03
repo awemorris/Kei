@@ -90,7 +90,7 @@ app は OS の抽象化を直接持たない。例: Settings → libkeiland → 
 
 ### 時期（D8 の決定）
 
-D8 の決定（2026-10-03 user）: 単独走行（N=1）で p003〜p024 を番号の順に流す。p011 の後に Q1 がユーザーに進み具合を報告する区切り。開始はユーザーの承認と P2 の終了の後に Q1 が指示する。WS090 の残りは WS131 の完了の後（D9）。
+D8 の決定（2026-10-03 user）: 単独走行（N=1）で p003〜p024 を番号の順に流す。→ 改訂（2026-10-03 user「backend への移行はP1が今やりましょう。P2はシステムモニタを作っていますが、これは衝突しないように思えます。」）: P1 が他の担当（P2 の WS134 システムモニター、T1・T2）と並行で p004 から番号の順に流す。p011 の後に Q1 がユーザーに進み具合を報告する区切り。開始はユーザーの承認と P2 の終了の後に Q1 が指示する。WS090 の残りは WS131 の完了の後（D9）。
 
 2026-10-03 user（D2 と進め方）:「はい、GPUバッファ管理もbackendに移したいです。ただし、backend化は一気に実装せず、1つずつ移行することで、正確に、確実に作業した方がいいと思います。」→ D2 は G2 をやめ、GPU の buffer の protocol（Linux・FreeBSD の zwp_linux_dmabuf_v1、zedBSD の keiland_gpu_buffer_v1）を backend へ移す（compositor は wl_buffer の寿命と OS に依らない画像の型だけ、backend は compositor が渡す小さな protocol の host の interface を使う）。backend 化は一度に行わず、領域を 1 つずつ（例: network → 音声 → 電源 → seat → 入力 → 表示 → GPU の buffer）移し、各段で 3 OS の build と回帰を確かめてから次へ進む形に Phase を切り直す（design-reviewer の review の後に P3 が design.md を改訂）。
 
