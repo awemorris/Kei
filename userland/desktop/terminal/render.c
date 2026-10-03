@@ -45,7 +45,9 @@ static VkResult render_atlas(struct terminal_renderer *renderer, struct terminal
 static VkResult render_vertices(struct terminal_renderer *renderer);
 static VkResult render_pipeline(struct terminal_renderer *renderer);
 static VkResult render_module(struct terminal_renderer *renderer, const uint32_t *code, size_t size, VkShaderModule *module);
-static uint32_t render_build(struct terminal_renderer *renderer, struct terminal_screen *screen, struct terminal_font *font);
+static uint32_t render_build(struct terminal_renderer *renderer, struct terminal_screen *screen, struct terminal_font *font, const struct terminal_window *window);
+static float *render_preedit(struct terminal_renderer *renderer, const struct terminal_screen *screen, struct terminal_font *font, const struct terminal_window *window, float *vertex, int first_row, int last_row);
+static uint32_t render_utf8_next(const char *text, size_t *at);
 static float *render_quad(float *vertex, const struct terminal_font *font, float x, float y, float width, float height, unsigned slot, uint32_t foreground, uint32_t background);
 static void render_record(struct terminal_renderer *renderer, uint32_t image, uint32_t vertex_count);
 
@@ -183,7 +185,9 @@ terminal_renderer_resize(
 }
 
 /*
- * Draws the grid and presents it, and waits for the frame to finish.
+ * Draws the grid, and over it the input method's text being composed at
+ * the cursor (the window's, BUG-155), presents it, and waits for the frame
+ * to finish.
  *
  * Returns VK_ERROR_OUT_OF_DATE_KHR when the swapchain no longer matches
  * the window; the caller resizes and draws again.
@@ -192,7 +196,8 @@ VkResult
 terminal_renderer_draw(
 	struct terminal_renderer *renderer,
 	struct terminal_screen *screen,
-	struct terminal_font *font)
+	struct terminal_font *font,
+	const struct terminal_window *window)
 {
 	VkSubmitInfo submit;
 	VkPresentInfoKHR present;
@@ -201,8 +206,8 @@ terminal_renderer_draw(
 	uint32_t image;
 	VkResult error;
 
-	/* The vertices of the grid (drawing any new glyph into the atlas). */
-	vertex_count = render_build(renderer, screen, font);
+	/* The vertices of the grid and the composed text (drawing any new glyph into the atlas). */
+	vertex_count = render_build(renderer, screen, font, window);
 
 	/* The image to draw into, once the compositor has given one back. */
 	renderer->operation = "vkAcquireNextImageKHR";
@@ -1084,12 +1089,13 @@ render_module(
 	return VK_SUCCESS;
 }
 
-/* Writes the vertices of every cell and of the cursor, and returns how many there are. */
+/* Writes the vertices of every cell, of the cursor and of the composed text, and returns how many there are. */
 static uint32_t
 render_build(
 	struct terminal_renderer *renderer,
 	struct terminal_screen *screen,
-	struct terminal_font *font)
+	struct terminal_font *font,
+	const struct terminal_window *window)
 {
 	static const struct terminal_cell empty = { ' ', TERMINAL_FOREGROUND, TERMINAL_BACKGROUND, 0 };
 	const struct terminal_cell *cell;
@@ -1233,8 +1239,154 @@ render_build(
 		}
 	}
 
+	/* The input method's text being composed, over the cells from the cursor (BUG-155). */
+	vertex = render_preedit(renderer, screen, font, window, vertex, first_row, last_row);
+
 	/* Reports how many vertices the frame draws. */
 	return (uint32_t)((size_t)(vertex - start) / RENDER_VERTEX_FLOATS);
+}
+
+/*
+ * Writes the vertices of the input method's text being composed: from the
+ * cursor's cell rightward, a wide character over two cells, on the
+ * selection's background with the segment being converted in reverse, cut
+ * at the right edge of the grid.  The cursor's block is drawn over.
+ * Returns where the next quad goes.
+ */
+static float *
+render_preedit(
+	struct terminal_renderer *renderer,
+	const struct terminal_screen *screen,
+	struct terminal_font *font,
+	const struct terminal_window *window,
+	float *vertex,
+	int first_row,
+	int last_row)
+{
+	const float *start;
+	uint32_t codepoint;
+	uint32_t foreground;
+	uint32_t background;
+	size_t at;
+	size_t used;
+	long long row;
+	unsigned column;
+	unsigned cells;
+	unsigned slot;
+	int in_segment;
+	float x;
+	float y;
+
+	/* Nothing is being composed. */
+	if (window == NULL || window->preedit[0] == '\0')
+		return vertex;
+
+	/* The cursor's row in the view; a cursor the view does not show shows no composed text. */
+	row = (long long)screen->cursor_row + (long long)screen->view;
+	if (row < (long long)first_row || row > (long long)last_row)
+		return vertex;
+	y = (float)((int)TERMINAL_PADDING + (int)row * (int)font->cell_height + screen->view_offset);
+
+	/* Each character, from the cursor's cell, while it fits the grid and the vertex buffer. */
+	start = renderer->vertex_map;
+	column = screen->cursor_column;
+	at = 0U;
+	while (window->preedit[at] != '\0') {
+		/* The character, and where the next one starts. */
+		in_segment = 0;
+		if (window->preedit_begin >= 0 &&
+		    window->preedit_end > window->preedit_begin &&
+		    at >= (size_t)window->preedit_begin &&
+		    at < (size_t)window->preedit_end)
+			in_segment = 1;
+		codepoint = render_utf8_next(window->preedit, &at);
+
+		/* Its width in cells, as the grid would place it. */
+		cells = 1U;
+		if (terminal_width_wide(codepoint, screen->ambiguous_wide))
+			cells = 2U;
+
+		/* Past the grid's right edge the rest is not drawn. */
+		if (column + cells > screen->columns)
+			break;
+
+		/* A full vertex buffer draws no more. */
+		used = (size_t)(vertex - start) / RENDER_VERTEX_FLOATS;
+		if (used + RENDER_CELL_VERTICES > renderer->vertex_capacity)
+			break;
+
+		/* The glyph: two slots for a wide character. */
+		if (cells == 2U) {
+			slot = terminal_font_wide_slot(font, codepoint);
+		} else {
+			slot = terminal_font_slot(font, codepoint);
+		}
+
+		/* The segment being converted in reverse, the rest on the selection's background. */
+		if (in_segment) {
+			foreground = TERMINAL_BACKGROUND;
+			background = TERMINAL_FOREGROUND;
+		} else {
+			foreground = TERMINAL_FOREGROUND;
+			background = TERMINAL_SELECTION;
+		}
+
+		/* The character's quad, and the next cell. */
+		x = (float)(TERMINAL_PADDING + column * font->cell_width);
+		vertex = render_quad(vertex, font, x, y, (float)(cells * font->cell_width), (float)font->cell_height, slot, foreground, background);
+		column += cells;
+	}
+
+	/* Succeeded: the composed text is drawn. */
+	return vertex;
+}
+
+/*
+ * Reads one UTF-8 character of a text at *at and moves *at past it; a
+ * byte that does not start a whole character is read as U+FFFD alone.
+ */
+static uint32_t
+render_utf8_next(
+	const char *text,
+	size_t *at)
+{
+	const unsigned char *bytes;
+	uint32_t codepoint;
+	unsigned remaining;
+	unsigned index;
+
+	/* The lead byte says how many continuation bytes follow. */
+	bytes = (const unsigned char *)text + *at;
+	if (bytes[0] < 0x80U) {
+		*at += 1U;
+		return bytes[0];
+	}
+	if ((bytes[0] & 0xe0U) == 0xc0U) {
+		codepoint = bytes[0] & 0x1fU;
+		remaining = 1U;
+	} else if ((bytes[0] & 0xf0U) == 0xe0U) {
+		codepoint = bytes[0] & 0x0fU;
+		remaining = 2U;
+	} else if ((bytes[0] & 0xf8U) == 0xf0U) {
+		codepoint = bytes[0] & 0x07U;
+		remaining = 3U;
+	} else {
+		*at += 1U;
+		return 0xfffdU;
+	}
+
+	/* Each continuation byte; a missing one makes the lead byte a replacement alone. */
+	for (index = 1U; index <= remaining; index++) {
+		if ((bytes[index] & 0xc0U) != 0x80U) {
+			*at += 1U;
+			return 0xfffdU;
+		}
+		codepoint = (codepoint << 6) | (bytes[index] & 0x3fU);
+	}
+
+	/* Succeeded: the character, and the bytes it took. */
+	*at += 1U + remaining;
+	return codepoint;
 }
 
 /*

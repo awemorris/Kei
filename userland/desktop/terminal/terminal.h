@@ -474,6 +474,27 @@ struct terminal_window {
 	size_t input_length;
 
 	/*
+	 * The input method's text being composed (BUG-155, text-input-v3
+	 * through libkeiui's window): shown over the cells from the cursor
+	 * until it is committed (its bytes then go to the shell like typed
+	 * keys) or replaced; empty for none.  preedit_begin and preedit_end
+	 * are the byte range of the segment being converted (-1, or equal,
+	 * when there is none); preedit_changed says the main loop has to draw
+	 * it again.
+	 */
+	char preedit[KUI_WINDOW_TEXT_MAX];
+	int32_t preedit_begin;
+	int32_t preedit_end;
+	int preedit_changed;
+
+	/*
+	 * The input method's last committed text, kept so that a deletion
+	 * before the cursor (the on-screen keyboard's voice key replaces the
+	 * kana it sent last) can be typed as that many characters' Backspace.
+	 */
+	char last_commit[KUI_WINDOW_TEXT_MAX];
+
+	/*
 	 * The view's scrolling the main loop has not yet carried out
 	 * (ws035-p114): wheel notches and Shift+Page Up or Down pages, each
 	 * positive going back into the scrollback and negative toward the live
@@ -615,7 +636,7 @@ void terminal_font_close(struct terminal_font *font);
 /* The drawing (render.c). */
 VkResult terminal_renderer_open(struct terminal_renderer *renderer, struct terminal_window *window, struct terminal_font *font);
 VkResult terminal_renderer_resize(struct terminal_renderer *renderer, uint32_t width, uint32_t height);
-VkResult terminal_renderer_draw(struct terminal_renderer *renderer, struct terminal_screen *screen, struct terminal_font *font);
+VkResult terminal_renderer_draw(struct terminal_renderer *renderer, struct terminal_screen *screen, struct terminal_font *font, const struct terminal_window *window);
 void terminal_renderer_close(struct terminal_renderer *renderer);
 
 /* The window (window.c). */
