@@ -9,7 +9,7 @@ Bug: [BUG-095](../../bugs/BUG-095.md)
 ## 範囲（Q1 の q645「QEMU で再現できるかから」）
 
 BUG-095 の原因（ticket のコードの読み、ws075-p015 の 5330 の gdbstub）を init の側で直し、QEMU で再現と直しを確かめる。kernel の
-「受け付け前の unix stream の client で `poll` が準備ありを返す」（client の待ちが CPU を回す件）は範囲の外（別の調査）。
+「受け付け前の unix stream の client で `poll` が準備ありを返す」（client の待ちが CPU を回す件）は、Q1 の指示（同日）でこの Phase の続きとして調べた（下）。
 
 ## 原因（コードの読み）
 
@@ -41,3 +41,10 @@ main の loop の `accept4` に戻らず、control socket の要求に答えな�
 - build: `make ZEDBSD_CONFIG=plan/ws099/tests/config-amd64-criteria.mk BUILD=build/p2-p024-img build/p2-p024-img/bin/init`（-Werror）exit 0、
   warning 0。`plan/tools/style-check.py` は変えた行に違反 0（file の既存の違反は残る）。
 - host で init は動かせない（PID 1、zedBSD の UAPI）。QEMU の再現と直しは T1 に依頼（結果は未着）。
+
+## 続き: client の待ちが CPU を回す件（Q1、2026-10-03「範囲外として残した件を今調べて直す」）
+
+コードの読みの結論: BUG-149 の (b) と同じもので、BUG-149 の修正（ws005-p025、main に統合済み）で直っている。詳細は [BUG-095](../../bugs/BUG-095.md) の
+同日の追記。`unix_connect_resolved` は accept の前から peer を持つので「受け付け前」は関係せず、原因は SHUT_WR の後の `unix_poll` の POLLERR だった。
+今の `unix_poll`・`socket_poll_common` は自分側の write_shutdown で POLLERR を立てず、相手の close は `read_shutdown` を立てるので、zsv1-client の
+`wait_ready` → `recv` が EAGAIN を回る経路は残っていない。追加の source の変更は無い。BUG-151（TCP）は zsv1 に関係しない。
