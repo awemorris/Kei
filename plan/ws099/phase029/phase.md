@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p029 -->
 # ws099-p029: BUG-142・BUG-141 — compositor の入力の順と、zdesktop が pointer を取った時の leave
 
-Status: uncleared（q645、P2、2026-10-03。T2-004 で bug141-hover が FAIL）
+Status: cleared（q645、P2、2026-10-03。T2-008 で再試験 PASS、Q1 判定）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Bugs: [BUG-142](../../bugs/BUG-142.md)、[BUG-141](../../bugs/BUG-141.md)
@@ -57,3 +57,7 @@ uncleared。bug142-order・cursor-owner・zdesktop-p077・menu-p003・files-p004
 - 直し（`plan/ws099/tests/bug141-hover.sh`）: hover する item を menu の開く所から遠い 1 番目にし、差の閾値を 3 に、pointer の矢印の所を除き、
   lit は 1500 画素以上・menu は 200 画素以下。T2-004 の PNG で確かめた: 4 番目の tile の hover-on は 7422 画素、1 番目の tile の hover-on（hover していない）
   と menu は 0 画素。
+
+## 再試験（Q1、2026-10-03、T2-008、QEMU）
+
+cleared。f817299bb の直した bug141-hover を T2-004 の image（2217907f6）で: hover 7550 画素で lit、menu で 0 画素、`bug141: PASS`。注: f817299bb の guest の道具の hostmem の既定 1G は 2 GiB の device 窓の前の image では Venus が起動しないため、T2-004 と同じ `VENUS_HOSTMEM=256M` で流した（image の世代の差で、退行ではない）。
