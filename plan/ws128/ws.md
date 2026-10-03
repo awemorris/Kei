@@ -43,6 +43,7 @@ Resume point（2026-10-02 計画）: **p001（棚卸し・回帰の取り直し�
 | [ws128-p007](phase007/phase.md) | 5330 の実機で標準アプリの通し（ユーザーの目視、WS079 S8/S9・WS100 A7 と同じ回） | planning（p002〜p006 の選んだ物の後、実機とユーザーの時間） | 実装の Phase | agent 1h + ユーザー 30 分 |
 | [ws128-p009](phase009/phase.md) | Terminal: 「CJK Ambiguous Width を全角で扱う」を menu で即座に切り替える（2026-10-03 user の指示） | planned | —（p006・WS131 p018 と同時に流さない） | 2〜3h |
 | [ws128-p010](phase010/phase.md) | Terminal の右端の wrap を xterm と同じ保留にする（BUG-150、Emacs の画面が 1 行ずれる） | cleared（2026-10-03 q636-i01、FreeBSD 実機と host、Q1 の照合待ち） | — | 1〜3h |
+| [ws128-p011](phase011/phase.md) | BUG-155: Terminal で IME の日本語を入力する（text-input-v3、組み立て中の文字を cursor に描く） | in-progress（q638、P1。実装済み・T1 の試験待ち） | — | 2h |
 | [ws128-p008](phase008/phase.md) | 全文規約と回帰（WS の最後） | planning | 実装の Phase | 2h |
 
 ## 既存の WS の残りとの照合（2026-10-02、その WS で実行し WS128 では重ねない）

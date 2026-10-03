@@ -19,11 +19,16 @@
  * drops and drags (clipboard.c) and the primary selection (primary.c) bind
  * their managers from a registry of the terminal's own, on the window's
  * seat.
+ *
+ * The window asks for the input method's text (BUG-155): what it commits
+ * goes to the shell like typed keys, and what it composes is kept for the
+ * renderer to show at the cursor.
  */
 
 #include "terminal.h"
 
 #include <errno.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 
@@ -47,6 +52,9 @@ static void window_global_remove(void *data, struct wl_registry *registry, uint3
 static void window_take(struct terminal_window *window);
 static void window_event(struct terminal_window *window, const struct kui_window_event *event);
 static void window_press(struct terminal_window *window, uint32_t key);
+static void window_text_commit(struct terminal_window *window, const char *text);
+static void window_text_preedit(struct terminal_window *window, const struct kui_window_event *event);
+static void window_text_delete(struct terminal_window *window, uint32_t before);
 static void window_wheel(struct terminal_window *window, double dy);
 static void window_pointer_event(struct terminal_window *window, unsigned kind, const struct kui_window_event *event);
 static void window_touch_push(struct terminal_window *window, unsigned type, const struct kui_window_event *event);
@@ -94,6 +102,15 @@ terminal_window_open(
 	window->toplevel = kui_window_toplevel(window->kui);
 	kui_window_size(window->kui, &window->width, &window->height);
 	window->fullscreen = kui_window_fullscreen(window->kui);
+
+	/*
+	 * The input method's text, asked for for good: the whole window is
+	 * where the shell's text is typed (BUG-155).  Nothing is composed yet.
+	 */
+	window->preedit[0] = '\0';
+	window->preedit_begin = -1;
+	window->preedit_end = -1;
+	kui_window_text_input(window->kui, 1);
 
 	/*
 	 * zdesktop's titlebar with the tabs (tabs.c), asked for before anything
@@ -368,6 +385,16 @@ window_event(
 		if (event->pressed)
 			window_press(window, event->code);
 		break;
+	case KUI_WINDOW_TEXT_COMMIT:
+		window_text_commit(window, event->text);
+		break;
+	case KUI_WINDOW_TEXT_PREEDIT:
+		window_text_preedit(window, event);
+		break;
+	case KUI_WINDOW_TEXT_DELETE:
+		/* Only bytes before the cursor can be taken back, as Backspace; the terminal has no text after it. */
+		window_text_delete(window, event->before);
+		break;
 	case KUI_WINDOW_TOUCH_DOWN:
 		window_touch_push(window, TERMINAL_TOUCH_DOWN, event);
 		break;
@@ -421,6 +448,111 @@ window_press(
 	/* The bytes, if they fit in what is left of the buffer. */
 	length = terminal_key_bytes(key, window->modifiers, window->input + window->input_length, sizeof(window->input) - window->input_length);
 	window->input_length += length;
+
+	/* A key typed after a commit stands between it and the cursor: a later deletion cannot take it back. */
+	if (length != 0U)
+		window->last_commit[0] = '\0';
+}
+
+/*
+ * Adds the input method's committed text to what the shell reads next, as
+ * if typed; text that does not fit whole in what is left of the buffer is
+ * dropped whole, so no character is cut.
+ */
+static void
+window_text_commit(
+	struct terminal_window *window,
+	const char *text)
+{
+	size_t length;
+
+	/* The text's bytes, and whether they fit after those typed before. */
+	length = strlen(text);
+	if (length > sizeof(window->input) - window->input_length) {
+		printf("ZTERM IME commit dropped bytes=%u\n", (unsigned)length);
+		fflush(stdout);
+		return;
+	}
+
+	/* The bytes after those typed before; the main loop writes them to the shell. */
+	memcpy(window->input + window->input_length, text, length);
+	window->input_length += length;
+
+	/* Kept for a deletion that replaces it. */
+	(void)snprintf(window->last_commit, sizeof(window->last_commit), "%s", text);
+
+	/* The log line the tests read. */
+	printf("ZTERM IME commit bytes=%u text=%s\n", (unsigned)length, text);
+	fflush(stdout);
+}
+
+/*
+ * Takes back bytes before the cursor that the input method or the
+ * on-screen keyboard committed last, typing one Backspace for each
+ * character among them.  A deletion reaching further back than the last
+ * commit is not the terminal's to know (the shell owns the line) and is
+ * ignored.
+ */
+static void
+window_text_delete(
+	struct terminal_window *window,
+	uint32_t before)
+{
+	size_t length;
+	size_t at;
+	unsigned characters;
+	unsigned index;
+
+	/* Nothing to delete before the cursor. */
+	if (before == 0U)
+		return;
+
+	/* A deletion longer than the last commit is ignored. */
+	length = strlen(window->last_commit);
+	if ((size_t)before > length) {
+		printf("ZTERM IME delete ignored bytes=%u\n", (unsigned)before);
+		fflush(stdout);
+		return;
+	}
+
+	/* The characters in the last commit's tail: every byte that is not a UTF-8 continuation starts one. */
+	characters = 0U;
+	for (at = length - (size_t)before; at < length; at++) {
+		if (((unsigned char)window->last_commit[at] & 0xc0U) != 0x80U)
+			characters++;
+	}
+
+	/* One Backspace (DEL, as the key types it) for each, while the buffer has room. */
+	for (index = 0U; index < characters; index++) {
+		if (window->input_length >= sizeof(window->input))
+			break;
+		window->input[window->input_length] = 0x7fU;
+		window->input_length++;
+	}
+
+	/* The tail is gone from the last commit too. */
+	window->last_commit[length - (size_t)before] = '\0';
+
+	/* The log line the tests read. */
+	printf("ZTERM IME delete bytes=%u characters=%u\n", (unsigned)before, characters);
+	fflush(stdout);
+}
+
+/* Keeps the input method's text being composed (empty when it goes) for the renderer to show at the cursor. */
+static void
+window_text_preedit(
+	struct terminal_window *window,
+	const struct kui_window_event *event)
+{
+	/* The text and its segment; the main loop draws them. */
+	(void)snprintf(window->preedit, sizeof(window->preedit), "%s", event->text);
+	window->preedit_begin = event->begin;
+	window->preedit_end = event->end;
+	window->preedit_changed = 1;
+
+	/* The log line the tests read. */
+	printf("ZTERM IME preedit=%s begin=%d end=%d\n", window->preedit, (int)event->begin, (int)event->end);
+	fflush(stdout);
 }
 
 /*

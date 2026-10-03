@@ -272,6 +272,7 @@ static void main_edge_scroll(uint64_t now);
 static void main_scroll(void);
 static void main_view_log(const char *how);
 static void main_touch_round(void);
+static void main_text_cursor(void);
 static void main_touch_queue(unsigned kind, const struct terminal_touch_pointer *made);
 
 /*
@@ -694,12 +695,18 @@ main_loop(
 		terminal_menu_refresh(&main_window, &state);
 		main_tabs_show();
 
+		/* The input method's text being composed changed: drawn again at the cursor (BUG-155). */
+		if (main_window.preedit_changed) {
+			main_window.preedit_changed = 0;
+			main_screen->changed = 1;
+		}
+
 		/* Nothing changed: nothing to draw. */
 		if (!main_screen->changed)
 			continue;
 
 		/* Draws the grid; a swapchain out of date is remade and drawn again next round. */
-		run->result = terminal_renderer_draw(&main_renderer, main_screen, &main_font);
+		run->result = terminal_renderer_draw(&main_renderer, main_screen, &main_font, &main_window);
 		run->operation = main_renderer.operation;
 		if (run->result == VK_ERROR_OUT_OF_DATE_KHR) {
 			stale++;
@@ -716,6 +723,9 @@ main_loop(
 		/* The grid on the window is up to date. */
 		stale = 0U;
 		main_screen->changed = 0;
+
+		/* The input method's candidates stay next to the cursor as drawn (only a change is sent). */
+		main_text_cursor();
 	}
 }
 
@@ -2193,4 +2203,23 @@ main_touch_queue(
 	event->time = made->time;
 	event->serial = made->serial;
 	event->modifiers = main_window.modifiers;
+}
+
+/*
+ * Tells the input method where the cursor's cell is on the window (surface
+ * pixels), so that its candidate list opens beside the text being composed
+ * (BUG-155); libkeiui sends only a change.
+ */
+static void
+main_text_cursor(void)
+{
+	int x;
+	int y;
+
+	/* The cursor's cell, on the rows the view shows (a view scrolled back moves it down). */
+	x = (int)TERMINAL_PADDING + (int)(main_screen->cursor_column * main_font.cell_width);
+	y = (int)TERMINAL_PADDING + (int)((main_screen->cursor_row + main_screen->view) * main_font.cell_height) + main_screen->view_offset;
+
+	/* The cell's rectangle. */
+	kui_window_text_cursor(main_window.kui, x, y, (int)main_font.cell_width, (int)main_font.cell_height);
 }
