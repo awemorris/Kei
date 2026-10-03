@@ -196,10 +196,19 @@ test_rules(void)
 	level = SM_LEVEL_NORMAL;
 	for (time = 0; time <= 200000U; time += 1000U) {
 		frame.time_ms = time;
-		level = sm_rules_update(&rules, &info, &frame);
+		level = sm_rules_update(&rules, &info, &frame, 0);
 	}
 
 	check(level == SM_LEVEL_NORMAL, "rules: a simulated field grades nothing");
+
+	/* From the simulation itself it does. */
+	sm_rules_init(&rules);
+	for (time = 0; time <= 11000U; time += 1000U) {
+		frame.time_ms = time;
+		level = sm_rules_update(&rules, &info, &frame, 1);
+	}
+
+	check(level == SM_LEVEL_ELEVATED && rules.rule_levels[SM_RULE_CPU] == SM_LEVEL_ELEVATED, "rules: the simulation's own fields grade");
 
 	/* The same CPU really busy: Elevated at 10 s, Warning at 60 s, Critical at 120 s. */
 	frame.simulated = 0;
@@ -207,25 +216,25 @@ test_rules(void)
 	sm_rules_init(&rules);
 	for (time = 0; time <= 9000U; time += 1000U) {
 		frame.time_ms = time;
-		level = sm_rules_update(&rules, &info, &frame);
+		level = sm_rules_update(&rules, &info, &frame, 0);
 	}
 
 	check(level == SM_LEVEL_NORMAL, "rules: not before 10 s");
 	for (; time <= 10000U; time += 1000U) {
 		frame.time_ms = time;
-		level = sm_rules_update(&rules, &info, &frame);
+		level = sm_rules_update(&rules, &info, &frame, 0);
 	}
 
 	check(level == SM_LEVEL_ELEVATED, "rules: Elevated at 10 s");
 	for (; time <= 60000U; time += 1000U) {
 		frame.time_ms = time;
-		level = sm_rules_update(&rules, &info, &frame);
+		level = sm_rules_update(&rules, &info, &frame, 0);
 	}
 
 	check(level == SM_LEVEL_WARNING, "rules: Warning at 60 s");
 	for (; time <= 120000U; time += 1000U) {
 		frame.time_ms = time;
-		level = sm_rules_update(&rules, &info, &frame);
+		level = sm_rules_update(&rules, &info, &frame, 0);
 	}
 
 	check(level == SM_LEVEL_CRITICAL, "rules: Critical at 120 s");
@@ -234,15 +243,15 @@ test_rules(void)
 	/* Calm again: one level every 5 seconds. */
 	frame.cpu = 0.2;
 	frame.time_ms = time;
-	level = sm_rules_update(&rules, &info, &frame);
+	level = sm_rules_update(&rules, &info, &frame, 0);
 	check(level == SM_LEVEL_CRITICAL, "rules: no fall at once");
 	frame.time_ms = time + 5000U;
-	level = sm_rules_update(&rules, &info, &frame);
+	level = sm_rules_update(&rules, &info, &frame, 0);
 	check(level == SM_LEVEL_WARNING, "rules: one level after 5 s");
 	frame.time_ms = time + 15000U;
-	(void)sm_rules_update(&rules, &info, &frame);
+	(void)sm_rules_update(&rules, &info, &frame, 0);
 	frame.time_ms = time + 20000U;
-	level = sm_rules_update(&rules, &info, &frame);
+	level = sm_rules_update(&rules, &info, &frame, 0);
 	check(level == SM_LEVEL_NORMAL, "rules: Normal after three steps");
 	check(strcmp(rules.summary, "Stable") == 0, "rules: the summary is Stable");
 }

@@ -196,6 +196,45 @@ struct sm_event {
 	char text[80];
 };
 
+/*
+ * A value's slide (design.md section 3.1): the text shown, the one before
+ * it, when it changed, and whether it rose (1) or fell (-1).
+ */
+struct sm_slide {
+	char text[48];
+	char old[48];
+	uint64_t changed_ms;
+	int direction;
+};
+
+/*
+ * The motion's state (design.md sections 3.1 and 3.2): the pointer's
+ * place (from -1 to 1 across the window), the camera's tilt following it
+ * on a spring, the core's measures following the values, and the phases
+ * of what turns and flows, advanced by the time between frames.
+ */
+struct sm_motion {
+	uint64_t last_ms;
+	float pointer_x;
+	float pointer_y;
+	float tilt_x;
+	float tilt_y;
+	float tilt_speed_x;
+	float tilt_speed_y;
+	float cpu;
+	float gpu;
+	float memory;
+	float network;
+	float disk;
+	float level;
+	float ring_phase;
+	float orbit_phase;
+	float rx_phase;
+	float tx_phase;
+	float read_phase;
+	float write_phase;
+};
+
 /* The time ranges the graphs show (the titlebar's controls). */
 #define SM_RANGES		4U
 
@@ -214,6 +253,7 @@ struct sm_app {
 	int fixed_clock;
 	uint64_t fixed_ms;
 	uint64_t timeout_ms;
+	uint64_t clock_offset_ms;
 	const char *token;
 
 	/* The window, its titlebar, and the frame callback that allows the next frame. */
@@ -247,6 +287,9 @@ struct sm_app {
 	struct sm_scene scene;
 	struct sm_renderer renderer;
 	struct sm_layout layout;
+	struct sm_layout view;
+	struct sm_motion motion;
+	struct sm_slide slides[SM_PLATES];
 	char shown[SM_PLATES][48];
 
 	/* The clock and the reports. */
@@ -268,6 +311,11 @@ void sm_scene_clear(struct sm_scene *scene);
 void sm_scene_release(struct sm_scene *scene);
 int sm_scene_build(struct sm_app *app, uint64_t now_ms);
 void sm_layout_compute(struct sm_layout *layout, float width, float height);
+
+/* space.c */
+void sm_motion_update(struct sm_app *app, uint64_t now_ms);
+void sm_space_core(struct sm_app *app, const struct sm_box *box, uint64_t now_ms);
+void sm_space_relief(struct sm_app *app, const struct sm_box *box);
 
 /* render.c */
 VkResult sm_renderer_open(struct sm_renderer *renderer, struct wl_display *display, struct wl_surface *surface, uint32_t width, uint32_t height);

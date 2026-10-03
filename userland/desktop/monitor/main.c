@@ -54,9 +54,15 @@
 #define MAIN_FRAME_REPORT_MS	5000U
 #define MAIN_MEMORY_REPORT_MS	30000U
 
-/* The titlebar's controls: the time ranges, one segmented group. */
+/*
+ * The titlebar's controls: the time ranges, as text pills (a segmented
+ * group's faces are icons in zdesktop, and a text control in one shows as
+ * "...").
+ */
 #define MAIN_CONTROL_RANGE	1U
-#define MAIN_RANGE_GROUP	1U
+
+/* The history the simulation fills before the window shows, in milliseconds (the 5 minutes' range). */
+#define MAIN_PREFILL_MS		300000U
 
 static const char *const main_range_labels[SM_RANGES] = { "1 min", "5 min", "15 min", "1 h" };
 
@@ -352,6 +358,10 @@ main_open(
 		}
 	} else {
 		(void)sm_source_open_sim(&app->source, app->seed, app->period_ms, app->cpus, app->gpus, app->calm);
+
+		/* The simulated GPU is named after the device that draws the window. */
+		if (app->source.info.gpu_count != 0U)
+			(void)snprintf(app->source.info.gpu_name[0], SM_NAME_MAX, "%s", app->renderer.device_name);
 	}
 
 	/* The history and the rules start empty and calm. */
@@ -362,10 +372,14 @@ main_open(
 	app->visible = 1;
 	app->dirty = 1;
 
-	/* A stopped clock plays the source up to its time first. */
+	/* A stopped clock plays the source up to its time first; the simulation fills its graphs' history before it shows. */
 	if (app->fixed_clock) {
 		for (time = 0; time <= app->fixed_ms; time += app->period_ms)
 			main_take_frames(app, time);
+	} else if (app->replay_path == NULL) {
+		for (time = 0; time < MAIN_PREFILL_MS; time += app->period_ms)
+			main_take_frames(app, time);
+		app->clock_offset_ms = MAIN_PREFILL_MS;
 	}
 
 	/* The tests' first line. */
@@ -422,7 +436,7 @@ main_titlebar(
 	(void)keiland_titlebar_set_mode(app->titlebar, KEILAND_TITLEBAR_CONTROLS);
 	for (range = 0; range < SM_RANGES; range++) {
 		(void)keiland_titlebar_add_control(app->titlebar, MAIN_CONTROL_RANGE + range, KEILAND_CONTROL_GENERIC, KEILAND_PRIORITY_NORMAL,
-						   MAIN_RANGE_GROUP, main_range_labels[range]);
+						   0U, main_range_labels[range]);
 		(void)keiland_titlebar_set_control_state(app->titlebar, MAIN_CONTROL_RANGE + range, 1, range == app->range);
 	}
 
@@ -487,8 +501,8 @@ main_now(
 	if (app->fixed_clock)
 		return app->fixed_ms;
 
-	/* Succeeded: the time since the start. */
-	return (kui_clock_us() - app->start_us) / 1000U;
+	/* Succeeded: the time since the start (after the history the simulation filled). */
+	return (kui_clock_us() - app->start_us) / 1000U + app->clock_offset_ms;
 }
 
 /* Takes every frame the source has due, into the history, the rules and the events. */
@@ -516,7 +530,7 @@ main_take_frames(
 		app->dirty = 1;
 
 		/* The state, and an event when it changes. */
-		level = sm_rules_update(&app->rules, &app->source.info, &frame);
+		level = sm_rules_update(&app->rules, &app->source.info, &frame, app->source.kind == SM_SOURCE_SIM);
 		if (level != app->level) {
 			if (level > app->level)
 				(void)snprintf(text, sizeof(text), "%s: %s", sm_level_name(level), app->rules.summary);

@@ -14,7 +14,8 @@
  * for 60 seconds Warning; its critical threshold held for its time makes
  * it Critical.  The state rises at once and falls one level every 5
  * seconds.  Only the fields the source really gave count: a simulated
- * field never grades the state (design.md section 1.5).
+ * field never grades the state (design.md section 1.5), except from the
+ * simulation itself, whose excursions are there to be seen.
  */
 
 #include "monitor.h"
@@ -26,16 +27,6 @@
 #define RULE_ELEVATED_MS	10000U
 #define RULE_WARNING_MS		60000U
 #define RULE_FALL_MS		5000U
-
-/* The rules. */
-enum rule {
-	RULE_CPU,
-	RULE_MEMORY,
-	RULE_SWAP,
-	RULE_LATENCY,
-	RULE_GPU,
-	RULE_TEMPERATURE
-};
 
 /* A rule's name and unit in the summary, the field it needs, and how long its critical threshold must hold. */
 struct rule_shape {
@@ -73,13 +64,15 @@ sm_rules_init(
 }
 
 /*
- * Grades the state with a new frame and reports it.
+ * Grades the state with a new frame and reports it; count_simulated lets
+ * the simulation's fields grade it too.
  */
 enum sm_level
 sm_rules_update(
 	struct sm_rules *rules,
 	const struct sm_info *info,
-	const struct sm_frame *frame)
+	const struct sm_frame *frame,
+	int count_simulated)
 {
 	enum sm_level target;
 	enum sm_level level;
@@ -91,8 +84,10 @@ sm_rules_update(
 	double value;
 	double cause_value;
 
-	/* The fields the source really gave. */
+	/* The fields the source really gave (all of them from the simulation). */
 	real = frame->valid & ~frame->simulated;
+	if (count_simulated)
+		real = frame->valid;
 
 	/* Each rule's conditions, and the highest level any of them reaches. */
 	target = SM_LEVEL_NORMAL;
@@ -110,6 +105,7 @@ sm_rules_update(
 		rule_track(&rules->since_ms[rule][0], attention, frame->time_ms);
 		rule_track(&rules->since_ms[rule][1], critical, frame->time_ms);
 		level = rule_level(rules->since_ms[rule], rule_shapes[rule].critical_ms, frame->time_ms);
+		rules->rule_levels[rule] = level;
 
 		/* The first rule at the highest level is the cause. */
 		if (level > target) {
@@ -176,12 +172,12 @@ rule_judge(
 
 	/* Each rule its own measure. */
 	switch (rule) {
-	case RULE_CPU:
+	case SM_RULE_CPU:
 		*value = frame->cpu * 100.0;
 		*attention = frame->cpu > 0.80;
 		*critical = frame->cpu > 0.95;
 		break;
-	case RULE_MEMORY:
+	case SM_RULE_MEMORY:
 		/* The share still available. */
 		share = 1.0;
 		if (info->memory_total != 0U)
@@ -190,7 +186,7 @@ rule_judge(
 		*attention = share < 0.15;
 		*critical = share < 0.05;
 		break;
-	case RULE_SWAP:
+	case SM_RULE_SWAP:
 		/* The share of the swap in use. */
 		share = 0.0;
 		if (info->swap_total != 0U)
@@ -199,12 +195,12 @@ rule_judge(
 		*attention = share > 0.50;
 		*critical = share > 0.90;
 		break;
-	case RULE_LATENCY:
+	case SM_RULE_LATENCY:
 		*value = frame->disk_latency_ms;
 		*attention = frame->disk_latency_ms > 5.0;
 		*critical = frame->disk_latency_ms > 50.0;
 		break;
-	case RULE_GPU:
+	case SM_RULE_GPU:
 		*value = frame->gpu_busy[0] * 100.0;
 		*attention = frame->gpu_busy[0] > 0.90;
 		*critical = 0;

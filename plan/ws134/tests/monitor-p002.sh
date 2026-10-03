@@ -2,7 +2,7 @@
 # ws134-p002: the System Monitor's skeleton on the Venus guest (plan/ws134/tests/build-monitor-image.sh; start the guest
 # with plan/tools/files/files-guest.sh start IMAGE).  zdesktop --glass at 1280x800.
 #  1. A recording with the clock stopped (/usr/share/monitor-tests/normal.txt, --clock=fixed:2000): ZMON READY, and the
-#     values drawn (ZMON TEXT) are the recording's: CPU 37%, GPU 21%, Memory 2.1 / 8 GiB, Network 4.2 Mb/s, Disk 12 MB/s,
+#     values drawn (ZMON TEXT) are the recording's: CPU 37%, GPU 21%, Memory 2.1 GiB (of 8 GiB), Network 4.2 Mb/s, Disk 12 MB/s,
 #     latency 0.8 ms, state Normal.  replay.png.
 #  2. The simulation for 25 seconds: samples every second (ZMON SAMPLE), frames drawn (ZMON FRAME fps > 0), no failure.
 #     sim.png, taken after 20 seconds.
@@ -55,7 +55,7 @@ start '--source=replay:/usr/share/monitor-tests/normal.txt --clock=fixed:2000 --
 expect_log 'ZMON READY width=[0-9]+ height=[0-9]+ source=replay cpus=4 gpus=1'
 expect_log 'ZMON TEXT plate=cpu value="37%"'
 expect_log 'ZMON TEXT plate=gpu value="21%"'
-expect_log 'ZMON TEXT plate=memory value="2.1 / 8 GiB"'
+expect_log 'ZMON TEXT plate=memory value="2.1 GiB"'
 expect_log 'ZMON TEXT plate=network value="4.2 Mb/s"'
 expect_log 'ZMON TEXT plate=disk value="12 MB/s"'
 expect_log 'ZMON TEXT plate=latency value="0.8 ms"'

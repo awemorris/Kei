@@ -186,9 +186,19 @@ struct sm_history {
  * reached, so that a level rises after its condition held and falls one
  * step at a time (design.md section 3.7).
  */
+/* The rules (rules.c), in the order of their levels in struct sm_rules. */
+enum sm_rule {
+	SM_RULE_CPU,
+	SM_RULE_MEMORY,
+	SM_RULE_SWAP,
+	SM_RULE_LATENCY,
+	SM_RULE_GPU,
+	SM_RULE_TEMPERATURE
+};
 #define SM_RULE_COUNT		6U
 struct sm_rules {
 	enum sm_level level;
+	enum sm_level rule_levels[SM_RULE_COUNT];
 	uint64_t since_ms[SM_RULE_COUNT][2];
 	uint64_t changed_ms;
 	int cause;
@@ -211,7 +221,7 @@ float sm_history_peak(const struct sm_history *history, enum sm_series series, u
 
 /* rules.c */
 void sm_rules_init(struct sm_rules *rules);
-enum sm_level sm_rules_update(struct sm_rules *rules, const struct sm_info *info, const struct sm_frame *frame);
+enum sm_level sm_rules_update(struct sm_rules *rules, const struct sm_info *info, const struct sm_frame *frame, int count_simulated);
 const char *sm_level_name(enum sm_level level);
 
 /* format.c */

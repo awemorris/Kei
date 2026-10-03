@@ -116,7 +116,7 @@ sm_source_open_sim(
 	source->info.memory_total = SIM_MEMORY;
 	source->info.swap_total = SIM_SWAP;
 	for (index = 0; index < gpus; index++) {
-		(void)snprintf(source->info.gpu_name[index], SM_NAME_MAX, "GPU %u", index);
+		(void)snprintf(source->info.gpu_name[index], SM_NAME_MAX, "Simulated GPU");
 		source->info.gpu_memory_total[index] = SIM_GPU_MEMORY;
 	}
 

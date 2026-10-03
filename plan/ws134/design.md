@@ -429,6 +429,11 @@ CPU 全体と core ごとの %（u8）、memory の 4 つ（u16 の ‰）、lin
 | 5 | 文字の texture | plate ごとの texture を premultiplied alpha で重ねる | 小 |
 | 6 | 展開と警告 | L3 の plate（展開の card・詳細 chart） | 展開の間だけ |
 
+**実装の方針（p003、2026-10-03）**: 3D の部品（状態コア・CPU のレリーフ・リング・軌道・点）は数千の頂点しかないので、**CPU で投影して面ごとに陰影を
+付けた 2D の三角形**として scene に入れ、pass 2・4 と同じ shape の shader で描く（`space.c`）。i915 の native の compiler は `gl_VertexIndex` を
+取らない（`notes/shaders/draw.vert` の注）ので、instancing・storage buffer・depth buffer に頼らない形にした。半透明の殻は上の固定の順、レリーフの tile は
+画面の奥行きで並べて奥から描く。画面の確かめには host で scene を作って shader と同じ式で塗る `plan/ws134/tests/host/preview.sh` を使う（guest の絵が正）。
+
 MSAA は使わない（Notes と同じく sample 1）。縁は SDF の shader で anti-alias、3D の箱は角丸の mesh と fresnel で縁の段差を目立たせない。
 
 ### 4.3 frame の予算と速さの段
