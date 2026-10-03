@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws100-p010 -->
 # ws100-p010: system bar の音量の click が自分の保存の読み戻しで戻される（BUG-153）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-018（QEMU）volume-bug153・volume-p004・volume-p005 PASS。実機（5330 の HDA）の確認は S2）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS100](../ws.md)
 Queue: q638（P1 generation11、2026-10-03。承認: user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」「実行してください。」）
