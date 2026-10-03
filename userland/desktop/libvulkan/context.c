@@ -540,6 +540,16 @@ vulkan_kernel_error(
 	if (error == ENOMEM)
 		return VK_ERROR_OUT_OF_DEVICE_MEMORY;
 
+	/*
+	 * A full GPU window (the kernel's ENOSPC: Venus's host-visible aperture,
+	 * or a session's resource limit) is pressure too, not a lost session:
+	 * the allocation fails and the session goes on (BUG-124, BUG-144: an
+	 * application whose window or memory found no room was ended as if
+	 * the device had been lost).
+	 */
+	if (error == ENOSPC)
+		return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+
 	/* Marks uncertain transport ownership as lost for every device sharing this context. */
 	vulkan_context_error(context, VK_ERROR_DEVICE_LOST);
 

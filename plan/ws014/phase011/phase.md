@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws014-p011 -->
 # ws014-p011: Model viewer の 8 個目の vkAllocateMemory -4 — memory の量と上限の測定（BUG-144、BUG-120 との関係）
 
-Status: in-progress（測定の準備と読みの見積もり済み・T1 の測定待ち。修正は user の助言の後）
+Status: in-progress（測定の準備と読みの見積もり済み・T1 の測定待ち。ENOSPC の意味の修正を実装。容量の修正は user の助言の後）
 Disposition: normal
 Parent: [WS014](../ws.md)
 Bug: [BUG-144](../../bugs/BUG-144.md)（関係: [BUG-120](../../bugs/BUG-120.md)）
@@ -44,3 +44,14 @@ Queue: q643（P1 generation11、2026-10-03。user「Model viewerが作成する�
 数字（aperture を誰がどれだけ持つか、mview の RSS、何個目で失敗するか、穴の断片化）を Q1 経由で user に報告し、助言を待ってから直す。直し方の候補:
 mview の staging を load の後に解放する（4〜5 MiB の aperture を返す）、texture の upload を小さな staging の分割で行う、aperture の割り当てを
 大きさ順・断片化の少ない方式に、hostmem を大きくする（QEMU の起動の option、試験の環境）、i915 の object の枠を動的に（BUG-120）。
+
+## BUG-124 との関係と -4 の読み直し（2026-10-03、P1）
+
+- **-4 は `VK_ERROR_DEVICE_LOST`**（OUT_OF_DEVICE_MEMORY は -2）。ticket の「-4（OUT_OF_DEVICE_MEMORY）」は読み違いだった。
+- BUG-124 の `vkCreateSwapchainKHR result=-4 errno=8`: zedBSD の errno 8 は **ENOSPC**。Venus の driver で ENOSPC を返すのは `venus_aperture_reserve`
+  （host-visible の aperture の満杯）だけ（`gpu.c` の資源数の上限は Venus では UINT32_MAX）。よって **BUG-124 も BUG-144 と同じ aperture の満杯**で、
+  窓を大きくした時の swapchain の作り直し（新しい image の blob を古い物が残る間に取る）で起きる。
+- libvulkan の `vulkan_kernel_error`（`userland/desktop/libvulkan/context.c`）は ENOMEM だけを OUT_OF_DEVICE_MEMORY にし、**ENOSPC を DEVICE_LOST に変えて
+  context 全体を失ったことにしていた**。そのため、窓や memory が入らなかっただけの app が終わっていた。
+- 修正（容量の修正とは別の、意味の修正）: ENOSPC も OUT_OF_DEVICE_MEMORY にして context を失わせない。libvulkan の build は warning 0。
+  容量そのもの（aperture の使い方・hostmem・staging）は測定と user の助言の後。
