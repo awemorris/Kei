@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws134-p004 -->
 # ws134-p004: システムモニターの操作（M3a）
 
-Status: in-progress（q645 の後の Q1 の依頼、P2、2026-10-03。`interact.c` を書いたところでユーザーの指示でラップアップ。未配線・未試験）
+Status: uncleared（q645 の後の Q1 の依頼、P2、2026-10-03。`interact.c` を書いたところでユーザーの指示でラップアップ。未配線・未試験）
 Disposition: normal
 Parent: [WS134](../ws.md)
 設計: [design.md](../design.md) §3.9・§3.10・§5

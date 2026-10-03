@@ -26,7 +26,7 @@ CPU（全体と各 core）、GPU（Util・VRAM・温度・電力、複数）、R
 | [p001](phase001/phase.md) | 設計: zedBSD（と Linux・FreeBSD）で取れる情報の出どころの調査（不足は kernel・libkeiland の追加の案）、画面の構成・3D の表現・動き・操作・描画の方式（libkeiui と Vulkan）、Phase の分け方 | planning（P2、q649） | — |
 | [p002](phase002/phase.md) | M1 骨組み: package・3 OS の build・libkeiui の窓＋自前の Vulkan・title bar・data source の層（sim・replay）・履歴・plate と文字・ZMON の log・App Home | cleared（T1-041 PASS） | p001 |
 | [p003](phase003/phase.md) | M2 3D と動き: 状態コア・CPU のタイル面・GPU のカード・Network/Disk の流れ・Memory の層・視差・数値の slide・段階的な警告・Events | uncleared（q645、T1-043 で sim の fps 4.7 < 15。直しと再試験が残る） | p002 |
-| [p004](phase004/phase.md) | M3a 操作: tap の展開・長押しの固定・swipe の時間軸・pinch の俯瞰・key/pointer・--calm | in-progress（P2: `interact.c` まで、未配線。ラップアップで中断） | p003 |
+| [p004](phase004/phase.md) | M3a 操作: tap の展開・長押しの固定・swipe の時間軸・pinch の俯瞰・key/pointer・--calm | uncleared（P2: `interact.c` まで、未配線。ラップアップで中断） | p003 |
 | p005 | K1 kernel: CPU ごとの時間 `hw.cputimes`（sysctl の CLI・top の CPU 行、design.md §1.2 の review の反映） | planned | — |
 | p006 | K2 kernel: disk ごとの統計 `hw.diskstats`（物理の whole disk） | planned | — |
 | p007 | K3 kernel: GPU の telemetry の sysctl `hw.gputelemetry`（Guardrail により ioctl にしない。実機の確認は 5330） | planned | — |
