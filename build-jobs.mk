@@ -6,7 +6,9 @@
 # instead.  Keeping the answer in one place stops the number from being
 # written differently in each of them.
 #
-# It follows the machine unless the caller says otherwise:
+# It is 16, or the machine's count when that is smaller, unless the caller
+# says otherwise (2026-10-03: several builds run at once on the 64-thread
+# build machine, and 64 jobs each filled its disk's write-back):
 #
 #   make ZEDBSD_BUILD_JOBS=8 toolchain
 #
@@ -17,7 +19,7 @@
 ifndef ZEDBSD_BUILD_JOBS_MK
 ZEDBSD_BUILD_JOBS_MK := 1
 
-ZEDBSD_BUILD_JOBS ?= $(shell nproc 2>/dev/null || echo 4)
+ZEDBSD_BUILD_JOBS ?= $(shell n=$$(nproc 2>/dev/null || echo 4); if test "$$n" -gt 16; then n=16; fi; echo "$$n")
 ZEDBSD_BUILD_LINK_JOBS ?= $(shell \
 	jobs=$(ZEDBSD_BUILD_JOBS); \
 	links=$$((jobs / 8)); \
