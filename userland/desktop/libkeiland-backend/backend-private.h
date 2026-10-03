@@ -53,4 +53,13 @@ struct kl_backend {
  */
 void kl_backend_session_tick(struct kl_backend *backend, uint64_t now_ms);
 
+/*
+ * The seat's part of the event loop's poll (ws131-p006): each operating
+ * system's seat counts, fills and handles its descriptors (the service it
+ * hears the pauses and the resumes from).
+ */
+size_t kl_backend_seat_poll_count(const struct kl_backend *backend);
+void kl_backend_seat_poll_fill(struct kl_backend *backend, struct pollfd *descriptors);
+void kl_backend_seat_poll_done(struct kl_backend *backend, const struct pollfd *descriptors);
+
 #endif

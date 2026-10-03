@@ -5,14 +5,18 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Binds the compositor's OS interface to native seatd and standard Vulkan display ownership. */
-#include "seat-freebsd.h"
+/*
+ * Binds the compositor's OS interface to libkeiland-backend's FreeBSD seat
+ * (seatd, ws131-p006) and standard Vulkan display ownership.
+ */
 #include "../compose.h"
 #include "../zwl-os.h"
+
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /*
  * Takes real native seat and primary ownership before Vulkan performs any device inquiry.
@@ -21,33 +25,20 @@ int
 zwl_os_open(
 	struct zwl_server *server)
 {
-	const char *selection;
 	const char *runtime;
 	const char *path;
-	int same;
 	int error;
 	int length;
 
-	/* Native service authority is explicit; unknown providers cannot fall back to direct root access. */
-	selection = getenv("KEILAND_SEAT");
-	if (selection != NULL) {
-		same = strcmp(selection, "seatd");
-		if (same != 0)
-			return EINVAL;
-	}
-
-	/* Keeps the daemon connection alive across activation and device withdrawal. */
-	error = zwl_freebsd_seat_connect(server);
+	/* seatd's activation and the primary node, before the compatibility library opens its inquiry file. */
+	server->os_paused = 1;
+	error = kl_backend_seat_open(server->backend);
 	if (error != 0)
 		return error;
-
-	/* The real primary must be acquired before the compatibility library opens its inquiry file. */
-	error = zwl_freebsd_primary_open(server);
-	if (error != 0)
-		return error;
+	server->os_paused = (unsigned)kl_backend_seat_paused(server->backend);
 
 	/* Vulkan's native backend must inquire about the exact same primary node owned by the seat. */
-	path = zwl_freebsd_primary_path();
+	path = kl_backend_seat_primary_path(server->backend);
 	error = setenv("KEILAND_DRM_DEVICE", path, 1);
 	if (error != 0)
 		return errno;
@@ -77,7 +68,8 @@ zwl_os_close(
 	struct zwl_server *server)
 {
 	/* The daemon restores its native VT policy after the compositor releases every device owner. */
-	zwl_freebsd_seat_close(server);
+	kl_backend_seat_close(server->backend);
+	server->os_paused = 1;
 
 	/* Succeeded: no native seat file or service session remains owned by this compositor. */
 	return;
@@ -90,16 +82,11 @@ size_t
 zwl_os_poll_count(
 	const struct zwl_server *server)
 {
-	int descriptor;
+	size_t count;
 
-	/* Partial startup without a connection contributes no invalid event-loop entry. */
-	(void)server;
-	descriptor = zwl_freebsd_seat_poll_fd();
-	if (descriptor < 0)
-		return 0;
-
-	/* Succeeded: the real native authority contributes one readiness descriptor. */
-	return 1;
+	/* seatd's descriptor, polled while the output is withdrawn too (none before the seat is taken). */
+	count = kl_backend_poll_count(server->backend);
+	return count;
 }
 
 /*
@@ -110,13 +97,8 @@ zwl_os_poll_fill(
 	struct zwl_server *server,
 	struct pollfd *descriptors)
 {
-	/* Library-owned connection readiness also carries buffered activation and withdrawal events. */
-	(void)server;
-	descriptors[0].fd = zwl_freebsd_seat_poll_fd();
-	descriptors[0].events = POLLIN;
-
-	/* Succeeded: the service connection remains polled independently of display state. */
-	return;
+	/* The backend fills seatd's descriptor. */
+	kl_backend_poll_fill(server->backend, descriptors);
 }
 
 /*
@@ -127,22 +109,8 @@ zwl_os_poll_done(
 	struct zwl_server *server,
 	const struct pollfd *descriptors)
 {
-	int error;
-
-	/* Dispatches buffered library notifications even when this snapshot reports no new readability. */
-	error = zwl_freebsd_seat_dispatch(server);
-	if (error != 0) {
-		(void)fprintf(stderr, "wayland: native seat dispatch errno=%d\n", error);
-		server->failed = 1;
-		return;
-	}
-
-	/* Loss of the authority is fatal even if its last queued notification was successfully delivered. */
-	if ((descriptors[0].revents & (POLLERR | POLLHUP | POLLNVAL)) != 0)
-		server->failed = 1;
-
-	/* Succeeded: the common loop observes the daemon's latest native device generation. */
-	return;
+	/* The backend dispatches seatd's notifications; the callbacks (backend-host.c) pause, resume or end. */
+	kl_backend_poll_done(server->backend, descriptors);
 }
 
 /*
@@ -159,7 +127,7 @@ zwl_os_display_acquire(
 	int descriptor;
 
 	/* Missing real primary ownership cannot be reported as a successful display acquisition. */
-	descriptor = zwl_freebsd_primary_fd();
+	descriptor = kl_backend_seat_primary_fd(server->backend);
 	if (descriptor < 0)
 		return VK_ERROR_INITIALIZATION_FAILED;
 

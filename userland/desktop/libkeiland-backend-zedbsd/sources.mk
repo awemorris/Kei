@@ -9,4 +9,5 @@ KL_BACKEND_ZEDBSD_SOURCES := userland/desktop/libkeiland-backend/backend.c \
 	userland/desktop/libkeiland-backend-zedbsd/audio-zedbsd.c \
 	userland/desktop/libkeiland-backend-zedbsd/power-zedbsd.c \
 	userland/desktop/libkeiland-backend-zedbsd/session-zedbsd.c \
+	userland/desktop/libkeiland-backend/unsupported/seat-unsupported.c \
 	userland/base/net/protocol.c userland/base/net/wifi-conf.c userland/base/net/wifi-store.c

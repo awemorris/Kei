@@ -94,6 +94,11 @@ main(
 	backend_host.data = &server;
 	backend_host.session_stop = zwl_handoff_stop;
 	backend_host.session_answer = zwl_handoff_answer;
+	backend_host.session_paused = zwl_backend_session_paused;
+	backend_host.session_resumed = zwl_backend_session_resumed;
+	backend_host.input_paused = zwl_backend_input_paused;
+	backend_host.input_resumed = zwl_backend_input_resumed;
+	backend_host.input_gone = zwl_backend_input_gone;
 
 	/* Reads the command line; a mistake ends the run with the usage. */
 	error = parse_options(&server, count, arguments);

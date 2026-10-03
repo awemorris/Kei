@@ -2,7 +2,7 @@
 
 # ws131-p006: backend の seat・session の領域
 
-Status: in-progress（q650、2026-10-03、P1。範囲 1 の表、p006a（zedBSD の session）の実装と host の確認は済み。p006b は user の判断待ち、p006c は未着手。元の記載: planning）
+Status: in-progress（q650、2026-10-03、P1。範囲 1 の表、p006a（zedBSD の session）と p006c（FreeBSD の seat、書くだけ）の実装と host の確認は済み。p006b（Linux）は user の判断待ち。元の記載: planning）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）
@@ -141,3 +141,47 @@ Q1（2026-10-03）: 3 段の分け方は OK、p006a を進める。p006b は use
 - `graphical-network` の image で `zdesktop-p104.sh`。
 - `zdesktop-p103.sh`。
 - criteria の image で `c1-boot-shutdown.sh`（Log Out → QUIT → greeter → Shut Down）。
+
+## p006c: FreeBSD の seat（書くだけ、2026-10-03、P1）
+
+Q1（2026-10-03）: p006b の返事を待つ間、p006c の FreeBSD の書くだけを先にしてよい。FreeBSD の build・audit・guest は user の指示で行わない。
+
+### seat の interface（Linux の p006b も同じ物を使う）
+
+- `keiland-backend.h`:
+  - seat の関数: `kl_backend_seat_open`・`close`・`primary_fd`・`primary_path`・`paused`・`device_open`・`device_close`・`device_revoked`。
+  - host の callback: `session_paused`・`session_resumed`・`input_paused(path)`・`input_resumed(path, descriptor)`・`input_gone(path)`、停止の理由 `KL_BACKEND_SESSION_LOST`。
+  - 入力は device の path で識別する。descriptor は pause・resume で変わるが、path は変わらない。backend は compositor の `inputs[]` を見ない。
+- `backend.c` の `kl_backend_poll_*` は、各 OS の `kl_backend_seat_poll_*`（`backend-private.h`）へ渡す。
+- `libkeiland-backend/unsupported/seat-unsupported.c`（新規）: zedBSD（compositor は自分の kernel の interface を使う）と、p006b までの Linux。open は ENOTSUP、poll は 0。
+
+### FreeBSD
+
+- `git mv wayland/freebsd/seat-freebsd.c → libkeiland-backend-freebsd/seat-freebsd.c` で書き直した。
+  - `seat-freebsd.h` は削除した。
+  - seatd の選択（`KEILAND_SEAT`）と primary の path の検証は backend の open に入れた。最初の activation は open の中で待ち、compositor には callback で知らせない（compositor は open の後に `kl_backend_seat_paused` を読む）。
+  - lease は path を持つ。
+  - disable の順: `session_paused`（compositor が描画を止め出力を閉じる）→ 各入力の `input_gone(path)` と lease の close → primary の lease → `libseat_disable_seat`。
+  - enable の順: primary を開き直す → `session_resumed`。
+  - libseat の callback の中の失敗と、service の HUP は、dispatch の後に `session_stop(LOST)`。
+  - 閉じる時は callback を呼ばない（compositor は終わる所）。
+- compositor:
+  - `freebsd/os-freebsd.c` は backend の seat と poll を使う。表示の acquire は p008 まで compositor に残し、primary の fd は backend から取る。
+  - 新規 `freebsd/input-seat-freebsd.c`: evdev の `zwl_seat_device_*` を backend へ。
+  - 新規 `wayland/backend-host.c`（共通）: 5 つの callback。paused は quiesce・output close・`windowed = 0`。resumed は `os_paused = 0`・`input_scan_time = 0`・`windowed = 0`・`dirty = 1`。input は path で探す。
+  - `input.c` に `zwl_input_forget`（seat が閉じた descriptor を返さずに record を消す）。
+  - `handoff.c` は LOST で `failed = 1`。
+  - `evdev/seat.h` の `zwl_seat_paused` は server を取る（Linux の adapter は使わない）。
+- build: backend の `Makefile.freebsd` に seat-freebsd.c と、libseat.h の生成を待つ規則（compositor の Makefile.freebsd から移した）。compositor の一覧は `input-seat-freebsd.c`・`backend-host.c`。
+
+### 確認（host だけ、FreeBSD の build は未実施）
+
+| 確認 | 結果 |
+| --- | --- |
+| `plan/ws131/tests/host-seat-freebsd.sh`（新規。seat-freebsd.c を host で、作り物の libseat（`tests/fake-libseat/libseat.h` と test の中の関数）と） | 13/13。最初の activation は resume にならない。disable の順は `paused gone:/dev/zero close close disable`。disable 中の入力は EAGAIN。enable は `open:/dev/null resumed`。HUP は `stop:4`（LOST）。close で全て返る |
+| FreeBSD の compositor の file（os-freebsd.c・input-seat-freebsd.c）と backend-host.c・handoff.c・input.c | Linux の header と作り物の libseat.h で gcc の `-fsyntax-only` が通る（FreeBSD の build の代わりではない） |
+| zedBSD の build（libkeiland.so・wayland） | exit 0、warning 0 |
+| Linux の build（native の gcc・clang） | exit 0、warning 0。header-check PASS（350）、B1 は 0 |
+| `check.sh` | PASS |
+| `host-session.sh`・`host-power.sh` | 31/31、17/17・6/6 |
+| FreeBSD の native build・`native-build-audit.py`・起動 | 未実施（user の再開の指示待ち） |

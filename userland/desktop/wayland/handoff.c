@@ -118,6 +118,13 @@ zwl_handoff_stop(
 	/* The compositor the backend was opened for. */
 	server = data;
 
+	/* The seat's authority failed: the ordinary cleanup ends the compositor. */
+	if (reason == KL_BACKEND_SESSION_LOST) {
+		printf("ZWL SEAT lost\n");
+		server->failed = 1;
+		return;
+	}
+
 	/* A Log Out the manager did not answer in time: the compositor ends anyway. */
 	if (reason == KL_BACKEND_SESSION_UNANSWERED) {
 		printf("ZWL HANDOFF logout unanswered\n");

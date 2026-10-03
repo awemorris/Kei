@@ -9,5 +9,6 @@ out=build/ws131-host
 mkdir -p "$out"
 ${CC:-cc} -std=gnu89 -Wall -Wextra -Werror -D_GNU_SOURCE -I. -fsanitize=address,undefined -g \
     userland/desktop/libkeiland-backend/backend.c userland/desktop/libkeiland-backend-zedbsd/session-zedbsd.c \
+    userland/desktop/libkeiland-backend/unsupported/seat-unsupported.c \
     userland/desktop/libkeiland-backend-zedbsd/power-zedbsd.c plan/ws131/tests/host-session.c -o "$out/host-session"
 exec "$out/host-session"
