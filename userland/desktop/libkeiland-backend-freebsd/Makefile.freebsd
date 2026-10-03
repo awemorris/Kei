@@ -6,5 +6,6 @@ KEILAND_FREEBSD_BACKEND_SOURCES := userland/desktop/libkeiland-backend/backend.c
 	userland/desktop/libkeiland-backend/wpa/network-config-wpa.c \
 	userland/desktop/libkeiland-backend-freebsd/network-link-freebsd.c \
 	userland/desktop/libkeiland-backend-freebsd/audio-freebsd.c \
-	userland/desktop/libkeiland-backend/unsupported/power-unsupported.c
+	userland/desktop/libkeiland-backend/unsupported/power-unsupported.c \
+	userland/desktop/libkeiland-backend/session/session-none.c
 $(eval $(call KEILAND_FREEBSD_STATIC,keiland-backend,libkeiland-backend.a,$(KEILAND_FREEBSD_BACKEND_SOURCES)))

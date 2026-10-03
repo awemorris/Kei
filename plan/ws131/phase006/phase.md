@@ -2,7 +2,7 @@
 
 # ws131-p006: backend の seat・session の領域
 
-Status: in-progress（q650、2026-10-03、P1。範囲 1 の読みと表は済み。元の記載: planning）
+Status: in-progress（q650、2026-10-03、P1。範囲 1 の表、p006a（zedBSD の session）の実装と host の確認は済み。p006b は user の判断待ち、p006c は未着手。元の記載: planning）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）
@@ -92,3 +92,52 @@ p006 は 3 OS の seat と session で大きく、Linux の logind の pause・r
 1. p006a zedBSD の session（handoff・greeter の AUTH・UNLOCK・答えの読み、sessiond の無い session の `session/handoff-session.c`）。QEMU の p101〜p104・C1 で確かめられる。
 2. p006b Linux の seat（logind・直・D-Bus・VT）と logind の電源。build と host の試験（`dbus-wire`・`seat-fd.c` の fixture）だけでは pause・resume を確かめられない。
 3. p006c FreeBSD の seat（書くだけ）。
+
+## p006a: zedBSD の session（2026-10-03、P1）
+
+Q1（2026-10-03）: 3 段の分け方は OK、p006a を進める。p006b は user の判断（(A) Linux の guest を使う／(B) build だけ）待ちで入らない。
+
+### 変えたこと
+
+- `libkeiland-backend/keiland-backend.h`:
+  - session の領域: `KL_BACKEND_SESSION_NONE`・`AUTH`・`UNLOCK`・`POWER`（答えの request）、`KL_BACKEND_SESSION_QUIT`・`ENDED`・`UNANSWERED`（停止の理由）。
+  - 関数: `kl_backend_session_ready`・`logout`・`authenticate`・`unlock`・`managed`。
+  - host の `session_stop(reason)`・`session_answer(request, error)`、options の `session_descriptor`。
+  - 答えの error: OK → 0、FAIL → EACCES、ERROR → EIO、他の行 → EPROTO。
+  - design.md §3.3 の `kl_backend_session_released` は置かなかった。QUIT・ENDED の時は compositor が callback の中で出力を閉じ、callback から戻った後に backend が `RELEASED` を書く。こうすると「出力を閉じた後に RELEASED」の順と、callback の中で backend を呼ばない約束（§3.4）を両方守れる。
+- `git mv wayland/zedbsd/handoff-zedbsd.c → libkeiland-backend-zedbsd/session-zedbsd.c` で書き直した。
+  - READY・GO の同期の待ち（20 s、GO の後は読まない）。
+  - AUTH・UNLOCK（一度に一つ、他は EBUSY、password は送った後に消す）、LOGOUT（一度だけ、30 s の期限は tick）。
+  - 2 つの descriptor の行を tick で読む。login screen の descriptor の EOF は ENDED。session の descriptor の EOF は、閉じて session は続く（managed 0）。
+  - power の OK は `session_answer(POWER)`（power-zedbsd.c が request を記録する）。
+- `git mv wayland/session/handoff-session.c → libkeiland-backend/session/session-none.c`（Linux・FreeBSD）: 全て ENOTSUP、managed 0。
+- `backend.c`: `kl_backend_tick` が各 OS の `kl_backend_session_tick` を呼ぶ。`backend-private.h` に session の状態。
+- compositor:
+  - 新規 `wayland/handoff.c`（共通、3 OS）: `zwl_handoff_wait`・`logout`・`tick` を backend の上に、callback の `zwl_handoff_stop`・`zwl_handoff_answer`。
+  - log は今の行のまま: `ZWL HANDOFF go=`・`logout`・`quit`・`released`・`logout unanswered`、`ZWL GREETER closed`。
+  - `greeter.c`: auth の descriptor を読まない。AUTH・UNLOCK は backend、答えは `zwl_greeter_answer(request, error)`。`ZWL GREETER answer=OK|FAIL|ERROR` の log は同じ（認識しない行は `?`）。
+  - `zwl_lock`・App Home の Lock Screen の有無は `kl_backend_session_managed`。
+  - `shell.c` の login screen の tick で `zwl_handoff_tick` も呼ぶ。
+  - `main.c` は 2 つの descriptor と callback を backend に渡す。
+- build: `sources.mk` に session-zedbsd.c。Linux・FreeBSD の backend に session-none.c。compositor の 3 つの Makefile は handoff-zedbsd.c・handoff-session.c を handoff.c に替えた。
+
+### 確認（host）
+
+| 確認 | 結果 |
+| --- | --- |
+| `plan/ws131/tests/host-session.sh`（新規、ASan・UBSan、socketpair を sessiond の代わりに） | 31/31 |
+| `host-session.sh` の中身 | READY・GO、AUTH の行、EBUSY、名前の空白の EINVAL、FAIL → EACCES、2 回に分けて届く ERROR → EIO、POWER の OK → request POWER、頼んでいない行 → NONE・EPROTO、login screen の shutdown → ENDED と、stop の後の RELEASED、UNLOCK と OK、LOGOUT は一度、QUIT → QUIT と stop の後の RELEASED、sessiond が閉じた後は unmanaged と logout の ENOTSUP、30 s の期限（34999 では無し、35000 で UNANSWERED） |
+| `host-power.sh` | 17/17・6/6 |
+| zedBSD の build（libkeiland.so・wayland） | exit 0、warning 0 |
+| Linux の build（native の gcc・clang） | exit 0、warning 0。header-check PASS（348）、B1 の未定義の symbol 0 |
+| `check.sh` | PASS |
+| makefile-sync | 既存の誤検出（apps.c）だけ |
+| FreeBSD | 書くだけ |
+
+### QEMU の試験（試験の担当に予約、結果待ち）
+
+- boot-test。
+- login の image（`build-login-image.sh BUILD graphical`）で `zdesktop-p095.sh`（間違った password の FAIL と login）、`zdesktop-p101.sh`（READY・GO・RELEASED の受け渡し）、`zdesktop-p102.sh`（lock と unlock）。
+- `graphical-network` の image で `zdesktop-p104.sh`。
+- `zdesktop-p103.sh`。
+- criteria の image で `c1-boot-shutdown.sh`（Log Out → QUIT → greeter → Shut Down）。

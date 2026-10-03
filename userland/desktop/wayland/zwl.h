@@ -668,6 +668,8 @@ struct zwl_server {
 	 * and ends with App Home's Log Out.  size_given: --width or --height
 	 * was given, so the display's preferred size is not used.  control_fd:
 	 * the session's descriptor to sessiond (--control-fd, -1 for none);
+	 * auth_fd and control_fd are handed to libkeiland-backend, which speaks
+	 * on them (ws131-p006);
 	 * handed_over: the display's hand-over (handoff.c, ws035-p101) is done;
 	 * logout_ms: when Log Out asked sessiond for a greeter (0: it did not).
 	 */
@@ -1079,11 +1081,12 @@ int zwl_greeter_button(struct zwl_server *server, uint32_t button, uint32_t stat
 int zwl_greeter_key(struct zwl_server *server, uint32_t key, uint32_t state);
 void zwl_greeter_tick(struct zwl_server *server);
 void zwl_handoff_wait(struct zwl_server *server);
-void zwl_handoff_release(struct zwl_server *server);
 int zwl_handoff_logout(struct zwl_server *server);
 void zwl_handoff_tick(struct zwl_server *server);
+void zwl_handoff_stop(void *data, unsigned reason);
+void zwl_handoff_answer(void *data, unsigned request, int error);
 int zwl_lock(struct zwl_server *server, const char *reason);
-void zwl_lock_answer(struct zwl_server *server, const char *answer);
+void zwl_greeter_answer(struct zwl_server *server, unsigned request, int error);
 int zwl_emit(struct zwl_client *client, uint32_t object, uint32_t opcode, const void *payload, size_t size);
 int zwl_emit_fd(struct zwl_client *client, uint32_t object, uint32_t opcode, const void *payload, size_t size, int descriptor);
 void zwl_packet_free(struct zwl_packet *packet);
