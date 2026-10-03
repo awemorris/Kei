@@ -235,3 +235,9 @@ ws105-p009（q536）の手順で、gdm の guest（`build-guest.sh … gdm`、`g
 - `SwitchTo` と `chvt` の VT の切り替えの後に、画面と入力が戻る。
 - base の guest で root の direct の seat が起動する。
 - 使い捨ての guest で logind の Reboot（`busctl call … Reboot b false`）の後に再起動する（SSH が切れて再びつながる）。power-linux.c と同じ logind の呼び出しを外から確かめる形。
+
+## p006b の結果（Q1、2026-10-03、T1-042、Debian 13 の QEMU+KVM）
+
+試験 1 logind の起動 PASS、試験 2 VT の切り替え 2 通り PASS（pid 不変、paused/resumed、復帰後の click で App Home）、試験 4 logind の Reboot PASS（boot_id が変わる）。
+試験 3 direct の seat: `wayland --timeout=15`（--glass・--session 無し）で画面は背景色 (32,48,64) の 1 色、入力 4 個を direct で開き、15 s で終わり chvt 1 で tty1 に戻る。P1 の判定: この起動の仕方では期待どおり（glass の look を出さない）、依頼の command の不足で code の問題ではない。p006b は確認済みとする。
+p006 全体の判定は p006a の T2-007 の結果を待つ。
