@@ -724,6 +724,17 @@ network_row_draw(
 	differs = strcmp(row->ssid, network->join_ssid);
 	if (differs == 0 && network->join_step != SE_JOIN_NONE)
 		joining = 1;
+
+	/*
+	 * A join still waiting in the slot behind the outstanding request (the
+	 * page's own scan, usually) is being joined too: the row says so from
+	 * the click, not only once the join is sent (BUG-154).
+	 */
+	if (network->pending_request != KEILAND_NETWORK_REQUEST_NONE && network->pending_step != SE_JOIN_NONE) {
+		differs = strcmp(row->ssid, network->pending_ssid);
+		if (differs == 0)
+			joining = 1;
+	}
 	if (network->state.wifi == KEILAND_WIFI_CONNECTING) {
 		differs = strcmp(row->ssid, network->state.ssid);
 		if (differs == 0)
