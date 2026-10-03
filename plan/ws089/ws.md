@@ -64,6 +64,7 @@ Resume point（2026-10-02 ベータ1の計画）: 2026-10-02 user「Settingsも�
 | [ws089-p016](phase016/phase.md) | 単一の instance（二つ目の起動で既存の窓を前に） | planning（compositor の activation の仕組みが要る。今の zdesktop に xdg-activation は無い） | p010、compositor の Phase（WS099 と直列） |
 | [ws089-p017](phase017/phase.md) | accent の色・dark の外観（D2） | planning（ユーザーの判断: ベータ1 に入れるか。zdesktop と全 app の固定の色に及ぶ） | p010 |
 | [ws089-p018](phase018/phase.md) | 全文規約と回帰（WS の最後）、完了の処理の準備 | planning（最後） | 選んだ実装の Phase |
+| [ws089-p020](phase020/phase.md) | BUG-152: Wallpaper の頁の縮小表示を別の thread で読み、頁を先に出す | in-progress（q638、P1。実装済み・T1 の試験待ち） | — |
 
 
 ## ベータ1 の到達目標（2026-10-02 計画、fg019）

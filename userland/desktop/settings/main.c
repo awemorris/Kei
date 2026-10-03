@@ -548,6 +548,7 @@ main_timeout(
 	uint64_t wait;
 	int network;
 	int sound;
+	int look;
 	int limit;
 
 	/* A frame the last one asked for (a scroll it corrected) is drawn at once. */
@@ -564,6 +565,11 @@ main_timeout(
 	sound = se_sound_wait(&main_app);
 	if (sound >= 0 && sound < limit)
 		limit = sound;
+
+	/* And while the Wallpaper page's small copies are being read, so each tile fills soon after its copy. */
+	look = se_look_wait(&main_app);
+	if (look >= 0 && look < limit)
+		limit = look;
 
 	/* No key is held: the limit. */
 	if (main_window.repeat_key == 0U)

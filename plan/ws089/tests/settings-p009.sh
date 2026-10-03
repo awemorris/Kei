@@ -99,6 +99,8 @@ wait_desktop
 guest 'ls -l /usr/share/keiland/wallpapers/'
 start_settings wallpaper
 expect_log /tmp/s.log 'ZSETTINGS LOOK pictures count=6'
+# BUG-152: the small copies are read by a thread after the page is shown; the shot waits for every tile.
+expect_log /tmp/s.log 'ZSETTINGS LOOK pictures ready count=6'
 expect_log /tmp/s.log 'ZSETTINGS CONTROL index=105 '
 shot page.png
 

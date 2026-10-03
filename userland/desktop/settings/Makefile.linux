@@ -25,4 +25,4 @@ KEILAND_LINUX_SETTINGS_SOURCES := userland/desktop/settings/main.c \
 	userland/desktop/files/text.c \
 	userland/desktop/files/icons.c \
 	userland/desktop/artwork/mark.c
-$(eval $(call KEILAND_LINUX_PROGRAM,settings,bin,$(KEILAND_LINUX_SETTINGS_SOURCES),libkeiland.so libwayland-client.so libtruetype.so libvulkan.so.1,-lm))
+$(eval $(call KEILAND_LINUX_PROGRAM,settings,bin,$(KEILAND_LINUX_SETTINGS_SOURCES),libkeiland.so libwayland-client.so libtruetype.so libvulkan.so.1,-lm -pthread))
