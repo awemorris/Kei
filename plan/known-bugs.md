@@ -47,9 +47,9 @@ remain as traceable history and are not new implementation work.
 | [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | unreproduced / tracking | ws127-p001 | q616 で scroll の後の残りを修正。実機で再確認 ws127-p007 |
 | [BUG-140](bugs/BUG-140.md) | Files: Trash の同名の 2 つ目の名前と種類 | reproduced / resolved | ws127-p001 | q616（ws127-p002）で修正、host 試験 |
 | [BUG-139](bugs/BUG-139.md) | Text Editor の IME の変換中の文字が小さい | reproduced / scheduled（ws095-p013 で直した、QEMU で確認、実機の確認待ち） | ユーザー実機、UI/UX の要 | 実機の確認 → resolved |
-| [BUG-138](bugs/BUG-138.md) | system bar の WiFi の on/off・AP 接続が未実装 | reproduced / scheduled（ws005-p019、高） | ユーザー実機 | p019 |
-| [BUG-137](bugs/BUG-137.md) | Terminal の初回起動でタイトルバーが数秒遅れる | reproduced / scheduled（ws099-p023） | ユーザー実機 | p023 |
-| [BUG-136](bugs/BUG-136.md) | Gears（X11）にタイトルバーが出ない | reproduced / scheduled（ws099-p023） | ユーザー実機 | p023 |
+| [BUG-138](bugs/BUG-138.md) | system bar の WiFi の on/off・AP 接続が未実装 | reproduced / resolved（2026-10-03 整理） | ユーザー実機 | p019 |
+| [BUG-137](bugs/BUG-137.md) | Terminal の初回起動でタイトルバーが数秒遅れる | reproduced / resolved（2026-10-03 整理） | ユーザー実機 | p023 |
+| [BUG-136](bugs/BUG-136.md) | Gears（X11）にタイトルバーが出ない | reproduced / resolved（2026-10-03 整理） | ユーザー実機 | p023 |
 | [BUG-135](bugs/BUG-135.md) | stat() が数秒かかる（UFS、guest） | reproduced / tracking | ws099-p020 の診断で 0.7〜6.5 秒。compositor は watcher thread で回避 | kernel/UFS の Phase で gdbstub で待ちの場所を取る |
 | [BUG-134](bugs/BUG-134.md) | AX211 不動作、driver 有効で起動停止 | unreproduced / resolved（2026-10-02 ユーザーの実機確認） | デモ config の firmware 欠落。CI 土台の image で実機動作 | 起動停止が再び見えたら reopen |
 | [BUG-133](bugs/BUG-133.md) | Browser UTF16 reserve byte数overflow | unknown / tracking（静的証拠） | browser2:BUG129をp172/q579で検出、mainBUG129はFonts別条件。原本を保持してID衝突修復 | 有限buffer-bounds Phaseを選定。runtime再現/修理未実施、import回帰は上限の証明ではない |
