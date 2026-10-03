@@ -66,8 +66,8 @@ QEMU serial / console log を受け入れ判定に使わない。
 ## Linux build の確認
 
 ```sh
-timeout 180 make -j64 keiland-linux
-timeout 180 make -j64 keiland-linux CC=clang KEILAND_LINUX_BUILD=build/keiland-linux-clang
+timeout 180 make -j16 keiland-linux
+timeout 180 make -j16 keiland-linux CC=clang KEILAND_LINUX_BUILD=build/keiland-linux-clang
 timeout 60 make keiland-linux-install DESTDIR="$PWD/build/keiland-linux/stage"
 timeout 30 sh plan/tools/keiland-linux/elf-check.sh build/keiland-linux/stage
 timeout 30 sh plan/tools/keiland-linux/makefile-sync.sh

@@ -10,6 +10,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
 [ -n "$extra" ] || { echo "build-browser-image: no guest files (plan/tools/guest/guest.py keys?)"; exit 1; }
@@ -33,5 +34,5 @@ python3 plan/ws074/tests/make-test-images.py >/dev/null
 for picture in build/ws074-images/*; do
 	[ -f "$picture" ] && extra="$extra --file /usr/share/browser-images/$(basename "$picture")=$picture"
 done
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws074/tests/config-amd64-browser.mk BUILD="$build" \
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws074/tests/config-amd64-browser.mk BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

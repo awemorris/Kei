@@ -14,6 +14,8 @@
 # (QMP quit), and the stick is kept for the disk-log check when KEEP=1.
 # This is QEMU evidence, not the 5320's.
 set -u
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 cd "$(dirname -- "$0")/../../.."
 image=${1:?image}
 port=${2:?port}
@@ -25,7 +27,7 @@ mkdir -p "$out"
 rm -f "$out/qmp.sock"
 cp --sparse=always "$image" "$out/usbstick.img"
 cp "$vars" "$out/vars.fd"
-timeout 900 qemu-system-x86_64 -machine q35,accel=kvm -m 4G -smp 4 -cpu max \
+timeout 900 qemu-system-x86_64 -machine q35 -m 4G -smp 4 $(qemu_accel_args max) \
 	-drive "if=pflash,format=raw,readonly=on,file=$code" \
 	-drive "if=pflash,format=raw,file=$out/vars.fd" \
 	-device qemu-xhci,id=xhci \

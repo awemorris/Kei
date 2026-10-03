@@ -2,6 +2,8 @@
 # Focused WS013 p002/p003 OVMF acceptance for zedbsd.cfg discovery.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -euo pipefail
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 repo=$(cd -- "$script_dir/../../.." && pwd)
@@ -455,7 +457,7 @@ run_qemu()
 	: >"$qemu_log"
 	qemu_args=(
 		-machine q35
-		-accel tcg,thread=multi
+		$(if [[ $(qemu_accel_mode) == kvm ]]; then echo "-accel kvm -cpu host"; else echo "-accel tcg,thread=multi"; fi)
 		-m "$memory_mib"
 		-smp "$smp_cpus"
 		-drive "if=pflash,format=raw,readonly=on,file=$ovmf_code"

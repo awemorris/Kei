@@ -2,6 +2,8 @@
 # ws004-p031 legacy-HCD concurrent HID/storage and root-hotplug acceptance.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 if [ "$#" -ne 2 ]; then
 	echo "usage: $0 AUX-IMAGE OUTPUT-DIRECTORY" >&2
@@ -929,7 +931,7 @@ run_cell()
 		echo "qemu_command=$qemu -machine q35,usb=off -m 512 -smp 2 -drive if=pflash,format=raw,readonly=on,file='$ovmf_code' -drive if=pflash,format=raw,file='$vars_copy' -device piix3-ide,id=legacyide -drive if=none,id=bootdisk,file='$boot_copy',format=raw -device ide-hd,bus=legacyide.0,drive=bootdisk,bootindex=1 -device piix3-usb-uhci,id=uhci -object throttle-group,id=aux_throttle,x-bps-read=$storage_read_bps,x-bps-read-max=$storage_read_bps,x-bps-read-max-length=1 -blockdev driver=file,filename='$auxiliary_copy',node-name=aux_file,read-only=on -blockdev driver=raw,file=aux_file,node-name=aux_raw,read-only=on -blockdev driver=throttle,throttle-group=aux_throttle,file=aux_raw,node-name=auxdisk,read-only=on -device usb-storage,bus=uhci.0,port=2,drive=auxdisk,id=stick,serial=hw-t25-storage -display none -serial none -debugcon file:'$guest_log' -qmp stdio -no-reboot" >>"$cell_metadata"
 		controller_driver | timeout --foreground --kill-after=5 \
 		    "${cell_timeout}s" "$qemu" \
-		    -machine q35,usb=off -m 512 -smp 2 \
+		    -machine q35,usb=off -m 512 -smp 2 $(qemu_accel_args "") \
 		    -drive if=pflash,format=raw,readonly=on,file="$ovmf_code" \
 		    -drive if=pflash,format=raw,file="$vars_copy" \
 		    -device piix3-ide,id=legacyide \
@@ -948,7 +950,7 @@ run_cell()
 		echo "qemu_command=$qemu -machine q35,usb=off -m 512 -smp 2 -drive if=pflash,format=raw,readonly=on,file='$ovmf_code' -drive if=pflash,format=raw,file='$vars_copy' -device piix3-ide,id=legacyide -drive if=none,id=bootdisk,file='$boot_copy',format=raw -device ide-hd,bus=legacyide.0,drive=bootdisk,bootindex=1 -device ich9-usb-ehci1,id=ehci -device ich9-usb-uhci1,id=uhci1,masterbus=ehci.0,firstport=0 -device ich9-usb-uhci2,id=uhci2,masterbus=ehci.0,firstport=2 -device ich9-usb-uhci3,id=uhci3,masterbus=ehci.0,firstport=4 -object throttle-group,id=aux_throttle,x-bps-read=$storage_read_bps,x-bps-read-max=$storage_read_bps,x-bps-read-max-length=1 -blockdev driver=file,filename='$auxiliary_copy',node-name=aux_file,read-only=on -blockdev driver=raw,file=aux_file,node-name=aux_raw,read-only=on -blockdev driver=throttle,throttle-group=aux_throttle,file=aux_raw,node-name=auxdisk,read-only=on -device usb-storage,bus=ehci.0,port=6,drive=auxdisk,id=stick,serial=hw-t25-storage -display none -serial none -debugcon file:'$guest_log' -qmp stdio -no-reboot" >>"$cell_metadata"
 		controller_driver | timeout --foreground --kill-after=5 \
 		    "${cell_timeout}s" "$qemu" \
-		    -machine q35,usb=off -m 512 -smp 2 \
+		    -machine q35,usb=off -m 512 -smp 2 $(qemu_accel_args "") \
 		    -drive if=pflash,format=raw,readonly=on,file="$ovmf_code" \
 		    -drive if=pflash,format=raw,file="$vars_copy" \
 		    -device piix3-ide,id=legacyide \

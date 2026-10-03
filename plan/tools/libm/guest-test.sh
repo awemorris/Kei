@@ -16,6 +16,7 @@ set -eu
 
 root=$(cd "$(dirname "$0")/../../.." && pwd)
 cd "$root"
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${BUILD:-build/ws076-amd64}
 count=2000
 if [ "${1:-}" = "--count" ]; then
@@ -27,7 +28,7 @@ out=build/ws076-libm-guest
 mkdir -p "$out"
 
 # The C library of the image, which the runner links against.
-make -j48 ZEDBSD_CONFIG=$config BUILD="$build" "$build/dynamic/libc.so"
+make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=$config BUILD="$build" "$build/dynamic/libc.so"
 
 # The runner, compiled like a base program and linked with that libc.so.
 sysroot=$root/build/amd64/sysroot
@@ -48,7 +49,7 @@ if [ ! -f "$reference" ] || [ plan/tools/libm/gen-reference.py -nt "$reference" 
 fi
 
 # The image with both files in /root.
-make -j48 ZEDBSD_CONFIG=$config BUILD="$build" \
+make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=$config BUILD="$build" \
 	ZEDBSD_TEST_EXTRA_FILES="--file /root/libm-test=$root/$out/libm-test --file /root/libm-ref.bin=$root/$reference --mode /root/libm-test=0755" \
 	disk-image
 

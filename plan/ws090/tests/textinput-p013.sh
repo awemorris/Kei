@@ -12,6 +12,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -u
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 image=${1:-}
 out=${2:-build/ws090-shots/p013}
 mkdir -p "$out"
@@ -25,7 +26,7 @@ status=0
 # The image: built with the text input config when none is given.
 if [ -z "$image" ]; then
 	extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
-	timeout 3000 make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws090/tests/config-amd64-textinput.mk BUILD=build/amd64 \
+	timeout 3000 make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws090/tests/config-amd64-textinput.mk BUILD=build/amd64 \
 	    "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image > "$out/image.log" 2>&1 || { echo "image: FAIL"; exit 1; }
 	mkdir -p build/ws090
 	cp --reflink=auto build/amd64/hdd-image.img build/ws090/textinput.img

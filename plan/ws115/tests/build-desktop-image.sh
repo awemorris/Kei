@@ -9,6 +9,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=$1
 probe=$2
 shift 2
@@ -23,5 +24,5 @@ for picture in "$build"/wallpapers/*.ppm; do
 	extra="$extra --file /usr/share/keiland/wallpapers/$(basename "$picture")=$picture"
 done
 extra="$extra $probe"
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws099/tests/config-amd64-criteria.mk BUILD="$build" \
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws099/tests/config-amd64-criteria.mk BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" ZEDBSD_TEST_IMAGE_TAG=wsp009 "$@" disk-image

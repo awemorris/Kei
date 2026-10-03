@@ -11,6 +11,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -u
 cd "$(dirname -- "$0")/../../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 out=${1:-build/ws101-p010-gles-hw}
 BUILD=${BUILD:-build/ws101-p010-hw}
 host=${I915_HOST:-solaris10-man}
@@ -25,7 +26,7 @@ FILES="$FILES --file /etc/service.d/wlwait=$Z/wlwait --file /etc/service.d/gles1
 FILES="$FILES --file /etc/keiland/run-zdesktop.sh=$D/run-zdesktop.sh --file /etc/keiland/run-gles.sh=$D/run-gles.sh"
 FILES="$FILES --file /etc/keiland/run-poweroff.sh=$Z/run-poweroff.sh"
 [ -f "$fonts/Inter.ttf" ] && FILES="$FILES --file /usr/share/fonts/keiland.ttf=$fonts/Inter.ttf"
-timeout 3600 make -j"$(nproc)" BUILD="$BUILD" ZEDBSD_CONFIG=$D/config.mk I915_TESTS=n I915_TEST_ORACLE=n I915_TEST_VBT=y \
+timeout 3600 make -j"$ZEDBSD_JOBS" BUILD="$BUILD" ZEDBSD_CONFIG=$D/config.mk I915_TESTS=n I915_TEST_ORACLE=n I915_TEST_VBT=y \
 	I915_TEST_CAPTURE=n ZEDBSD_TEST_RC_CONF=$D/rc.conf "ZEDBSD_TEST_EXTRA_FILES=$FILES" ZEDBSD_TEST_IMAGE_TAG=ws101gles \
 	disk-image > "$out/build.log" 2>&1 || { echo "gles-hw: BUILD FAILED ($out/build.log)"; exit 1; }
 echo "gles-hw: built $BUILD/hdd-image.img"

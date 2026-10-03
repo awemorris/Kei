@@ -7,6 +7,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=$1
 
 extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
@@ -19,5 +20,5 @@ extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_E
 extra="$extra --file /usr/share/files-tests/make-home.sh=plan/tools/files/make-home.sh"
 extra="$extra --file /usr/share/pdfviewer-tests/notes.pdf=build/ws079-p006-host/notes.pdf"
 extra="$extra --file /usr/share/pdfviewer-tests/ops.pdf=build/ws079-p006-host/ops.pdf"
-make ${DRY:-} -j"$(nproc)" ZEDBSD_CONFIG=plan/tools/files/config-amd64-files.mk BUILD="$build" \
+make ${DRY:-} -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/tools/files/config-amd64-files.mk BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

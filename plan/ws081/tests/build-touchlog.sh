@@ -7,9 +7,10 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 sysroot=$(pwd)/$build/sysroot
-[ -f "$sysroot/usr/lib/crt1.o" ] || make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws081/tests/config-amd64-touchlog.mk BUILD="$build" disk-image
+[ -f "$sysroot/usr/lib/crt1.o" ] || make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws081/tests/config-amd64-touchlog.mk BUILD="$build" disk-image
 mkdir -p build/ws081-tests
 build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot="$sysroot" -nostdinc -I. -Iinclude -isystem "$sysroot/usr/include" \
     -DHAL_ARCH_AMD64 -DKERN_USER_ABI_LP64 -DKERN_DYNAMIC_LIBC -m64 -march=x86-64 -mno-red-zone -O2 -ffreestanding -fPIC \
@@ -21,4 +22,4 @@ build/llvm/bin/clang --target=x86_64-unknown-zedbsd --sysroot="$sysroot" -m64 -n
 echo "built build/ws081-tests/touchlog"
 [ "${2:-}" = image ] || exit 0
 extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws081/tests/config-amd64-touchlog.mk BUILD="$build" "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws081/tests/config-amd64-touchlog.mk BUILD="$build" "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

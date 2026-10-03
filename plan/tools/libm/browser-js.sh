@@ -13,6 +13,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${BUILD:-build/ws076-browser}
 out=build/ws076-browser-js
 mkdir -p "$out"
@@ -22,7 +23,7 @@ extra=""
 for test in plan/ws074/tests/js/*.js plan/tools/libm/js/*.js; do
 	extra="$extra --file /root/js/$(basename "$test")=$(pwd)/$test"
 done
-make -j48 ZEDBSD_CONFIG=plan/tools/libm/config-amd64-browser-libm.mk \
+make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/tools/libm/config-amd64-browser-libm.mk \
 	BUILD="$build" "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image
 
 # Runs every test, marking where each output and its standard error begin.

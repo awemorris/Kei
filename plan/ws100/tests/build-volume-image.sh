@@ -7,6 +7,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 extra=$(python3 plan/tools/guest/guest.py extra-files | sed -n "s/^ZEDBSD_TEST_EXTRA_FILES='\(.*\)'$/\1/p")
 [ -n "$extra" ] || { echo "build-criteria-image: no guest files (plan/tools/guest/guest.py keys?)"; exit 1; }
@@ -23,5 +24,5 @@ done
 # The test client audiod-feedback, which config-amd64-volume.mk puts into /usr/bin when it is built (T1-014: the
 # volume tests read audiod's volume with it and could not without it).
 sh plan/ws100/tests/build-audiod-feedback.sh "$build"
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws100/tests/config-amd64-volume.mk BUILD="$build" \
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws100/tests/config-amd64-volume.mk BUILD="$build" \
     "ZEDBSD_TEST_EXTRA_FILES=$extra" disk-image

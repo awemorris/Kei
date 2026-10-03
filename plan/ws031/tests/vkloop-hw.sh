@@ -42,6 +42,7 @@
 #        I915_HOST names the 5330 for ssh and scp (default: the alias solaris10-man; e.g. I915_HOST=awe@10.0.30.3)
 set -u
 cd "$(dirname "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 EXTRA=${1:-}
 TIME_MS=${2:-}
 ORACLE=0
@@ -208,7 +209,7 @@ cp "$RC_CONF" $RC_GEN.new
 cmp -s $RC_GEN.new $RC_GEN 2>/dev/null || mv $RC_GEN.new $RC_GEN
 rm -f $RC_GEN.new
 RC_CONF=$RC_GEN
-make -j"$(nproc)" BUILD=$BUILD "I915_TESTS=${I915_TESTS:-n}" "I915_TEST_ORACLE=${I915_TEST_ORACLE:-n}" \
+make -j"$ZEDBSD_JOBS" BUILD=$BUILD "I915_TESTS=${I915_TESTS:-n}" "I915_TEST_ORACLE=${I915_TEST_ORACLE:-n}" \
 	"I915_TEST_VBT=$I915_TEST_VBT" "I915_TEST_CAPTURE=$I915_TEST_CAPTURE" \
 	"ZEDBSD_TEST_CPPFLAGS=-DGPU_IOCTL_TRACE=1 $EXTRA" \
 	ZEDBSD_TEST_RC_CONF=$RC_CONF "ZEDBSD_TEST_EXTRA_FILES=$FILES" \

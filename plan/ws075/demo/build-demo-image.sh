@@ -20,6 +20,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/demo-hdmi}
 [ $# -gt 0 ] && shift
 vbt=n
@@ -43,6 +44,6 @@ plan/ws035/demo/demo-accounts.sh "$accounts"
 key=plan/tmp/guest/id_ed25519.pub
 [ -f "$key" ] && extra="$extra --file /root/.ssh/authorized_keys=$key --mode /root/.ssh/authorized_keys=0600 --mode /root/.ssh=0700"
 extra="$extra --file /etc/passwd=$accounts/passwd --file /etc/group=$accounts/group --file /etc/shadow=$accounts/shadow"
-make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws075/demo/config-demo-hdmi.mk BUILD="$build" I915_TEST_VBT=$vbt \
+make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws075/demo/config-demo-hdmi.mk BUILD="$build" I915_TEST_VBT=$vbt \
 	"ZEDBSD_TEST_EXTRA_FILES=$extra" ZEDBSD_TEST_IMAGE_TAG=demo-hdmi "$@" disk-image
 echo "demo image: $build/hdd-image.img"

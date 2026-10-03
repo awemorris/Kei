@@ -12,6 +12,8 @@
 # IMAGE is copied, never changed; OUT defaults to build/ws073-p015.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 image=${1:?image}
 out=${2:-build/ws073-p015}
 here=$(cd "$(dirname "$0")" && pwd)
@@ -30,7 +32,7 @@ run=$out/hybrid-run
 mkdir -p "$run"
 rm -f "$run/serial.sock"
 cp /usr/share/OVMF/OVMF_VARS_4M.fd "$run/vars.fd"
-qemu-system-x86_64 -machine q35 -m 8G -smp 4 -cpu max -enable-kvm \
+qemu-system-x86_64 -machine q35 -m 8G -smp 4 $(qemu_accel_args max) \
 	-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \
 	-drive "if=pflash,format=raw,file=$run/vars.fd" \
 	-drive "if=none,id=boot,file=$disk,format=raw" \

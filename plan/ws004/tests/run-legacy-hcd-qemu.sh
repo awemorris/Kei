@@ -2,6 +2,8 @@
 # ws004-p016 non-interactive UHCI/EHCI lifecycle acceptance.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 if [ "$#" -ne 3 ]; then
 	echo "usage: $0 AMD64-HDD-IMAGE AUXILIARY-IMAGE OUTPUT-DIRECTORY" >&2
@@ -211,7 +213,7 @@ run_cell()
 
 	if controller_driver | timeout --foreground --kill-after=5 \
 	    "${cell_timeout}s" "$qemu" \
-	    -machine q35 -m 512 -smp 2 \
+	    -machine q35 -m 512 -smp 2 $(qemu_accel_args "") \
 	    -drive if=pflash,format=raw,readonly=on,file="$ovmf_code" \
 	    -drive if=pflash,format=raw,file="$vars_copy" \
 	    -device piix3-ide,id=legacyide \

@@ -15,6 +15,8 @@
 #   RUN=build/ws100-run IMG=build/ws100-audiod.img plan/ws100/tests/audiod-qemu.sh [OUT] [CASE...]
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -u
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 cd "$(dirname -- "$0")/../../.."
 out=${1:-build/ws100-audiod}
 [ $# -ge 1 ] && shift
@@ -53,7 +55,7 @@ boot() {
 	rm -f "$D"/*.sock "$D"/out.wav
 	cp "$IMG" "$D/stick.img"
 	cp /usr/share/OVMF/OVMF_VARS_4M.fd "$D/vars.fd"
-	qemu-system-x86_64 -accel kvm -machine q35 -m 512 -smp 4 -cpu host \
+	qemu-system-x86_64 -machine q35 -m 512 -smp 4 $(qemu_accel_args max) \
 	    -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \
 	    -drive if=pflash,format=raw,file="$D/vars.fd" -device qemu-xhci,id=xhci \
 	    -drive if=none,id=boot,file="$D/stick.img",format=raw \

@@ -2,6 +2,8 @@
 # PC/AT BIOS/UEFI zedbsd.cfg production-loader acceptance.
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -euo pipefail
+# KVM when the host offers it, else TCG; QEMU_NO_KVM=1 forces TCG (ws129-p011).
+. "$(dirname -- "$0")/../../tools/guest/qemu-accel.sh"
 
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 repo=$(cd -- "$script_dir/../../.." && pwd)
@@ -65,7 +67,7 @@ run_usb_bios()
 	local log=$output/amd64-usb-bios-debugcon.log status
 	cp --reflink=auto --sparse=always "$amd64_image" "$image"
 	set +e
-	timeout 75 "$qemu_x86_64" -machine q35 -m 512 -smp 4 \
+	timeout 75 "$qemu_x86_64" -machine q35 -m 512 -smp 4 $(qemu_accel_args "") \
 	    -device qemu-xhci,id=xhci \
 	    -drive "if=none,id=boot,file=$image,format=raw" \
 	    -device usb-storage,bus=xhci.0,drive=boot,id=bootstick,bootindex=1 \
@@ -88,7 +90,7 @@ run_uefi()
 	cp --reflink=auto --sparse=always "$amd64_image" "$image"
 	cp "$ovmf_vars" "$vars"
 	set +e
-	timeout 100 "$qemu_x86_64" -machine q35 -m 512 -smp 4 \
+	timeout 100 "$qemu_x86_64" -machine q35 -m 512 -smp 4 $(qemu_accel_args "") \
 	    -drive "if=pflash,format=raw,readonly=on,file=$ovmf_code" \
 	    -drive "if=pflash,format=raw,file=$vars" \
 	    -device qemu-xhci,id=xhci \

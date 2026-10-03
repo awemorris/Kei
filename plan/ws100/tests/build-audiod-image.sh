@@ -5,6 +5,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/jobs.sh  # ZEDBSD_JOBS, the parallel jobs (default 16)
 build=${1:-build/amd64}
 AUDIOD_CONFIG=plan/ws100/tests/config-amd64-audiod.mk sh plan/ws100/tests/build-audiod-feedback.sh "$build"
-exec make -j"$(nproc)" ZEDBSD_CONFIG=plan/ws100/tests/config-amd64-audiod.mk BUILD="$build" disk-image
+exec make -j"$ZEDBSD_JOBS" ZEDBSD_CONFIG=plan/ws100/tests/config-amd64-audiod.mk BUILD="$build" disk-image
