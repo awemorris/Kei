@@ -4462,6 +4462,7 @@ station_retire_controlled(
 	int carrier_error;
 	int scan_error;
 	int connection_error;
+	int kept_error;
 	int error;
 
 	scan_error = 0;
@@ -4469,6 +4470,21 @@ station_retire_controlled(
 
 	/* Cancels everything under the lock and notes what to stop. */
 	enabled = spin_lock_irqsave(&station->lock);
+
+	/*
+	 * A connection that already failed with a reason (the key refused, a
+	 * timeout, the link lost) keeps that reason through a close or a
+	 * driver's quiesce that follows it (BUG-157): the status of its
+	 * generation still says why it failed, instead of a bare DOWN that
+	 * the wifi command can only report as ENETDOWN.  An explicit
+	 * disconnect (keep_administrative_up) starts a generation of its own
+	 * and reports its own outcome.
+	 */
+	kept_error = 0;
+	if (!keep_administrative_up &&
+	    station->state == WLAN_STATE_FAILED &&
+	    station->terminal_error > 0)
+		kept_error = station->terminal_error;
 
 	/* Lowers the carrier and samples what still has to be stopped. */
 	if (!keep_administrative_up)
@@ -4569,8 +4585,14 @@ station_retire_controlled(
 		    station_now_locked(station), 1U);
 	}
 
-	/* Reports the first failure of the three as the terminal error. */
-	if (scan_error != 0)
+	/*
+	 * Reports the first failure as the terminal error: the connection's
+	 * own reason from before the retirement, else the first of the
+	 * three stops.
+	 */
+	if (kept_error != 0)
+		station->terminal_error = kept_error;
+	else if (scan_error != 0)
 		station->terminal_error = scan_error;
 	else if (connection_error != 0)
 		station->terminal_error = connection_error;

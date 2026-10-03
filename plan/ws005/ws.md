@@ -48,6 +48,7 @@ networkd の SUBSCRIBE と `net watch`（ws035-p018）、system bar の network 
 | [p025](phase025/phase.md) | [BUG-149](../bugs/BUG-149.md): AF_UNIX の自分側の SHUT_WR で poll が POLLERR を返す kernel の不具合を直し、libkeiland・zsv1-client・greeter・net の影響を確かめる | in-progress（q635、P1。A1〜A5 を満たし cleared を提案） | なし | 4h |
 | [p026](phase026/phase.md) | [BUG-154](../bugs/BUG-154.md): WiFi の join の間、system bar の menu と Settings の Wi-Fi に「Connecting...」を出す | cleared（2026-10-03 Q1、T1-013） | なし | 2h |
 | [p027](phase027/phase.md) | [BUG-151](../bugs/BUG-151.md): TCP の自分側の SHUT_WR で poll が POLLHUP を返すのを直す（p025 の続き、tcp_poll） | in-progress（q641、P1。実装済み・T1 の試験待ち） | p025 | 1h |
+| [p028](phase028/phase.md) | [BUG-157](../bugs/BUG-157.md): 失敗した接続の理由（鍵の拒否）がその後の close・quiesce で消えて ENETDOWN になるのを、共通の WLAN core で保つ | in-progress（q641、P1。実装済み・S2 の実機で確認） | なし | 2h |
 
 p016 は ws035-p018 へ移管済み（cleared）。p017（旧 fg005 の統合）は p022・p023 に置き換える提案（main の確認待ち、それまで planning のまま残す）。
 
