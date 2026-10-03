@@ -1005,11 +1005,19 @@ network_draw_row(
 				joining = 1;
 		}
 
-		/* The row of the network being joined: its SSID and "Connecting..." at the right. */
+		/*
+		 * The row of the network being joined: its SSID and "Connecting..."
+		 * at the right, soft on the glass and white on the lit row's blue
+		 * (soft there could hardly be read).
+		 */
 		if (joining) {
 			width = glass_text_width(server, SIZE_BAR, "Connecting...");
 			glass_draw_text(server, command, SIZE_BAR, left + 32, baseline, row->text, NETWORK_MENU_WIDTH - 32 - 24 - width, ink);
-			glass_draw_text(server, command, SIZE_BAR, right - width, baseline, "Connecting...", width + 2, soft);
+			if (over) {
+				glass_draw_text(server, command, SIZE_BAR, right - width, baseline, "Connecting...", width + 2, ink);
+			} else {
+				glass_draw_text(server, command, SIZE_BAR, right - width, baseline, "Connecting...", width + 2, soft);
+			}
 			return;
 		}
 
