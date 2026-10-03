@@ -9,13 +9,14 @@
  * The backend object every operating system shares (WS131 p003).
  *
  * It keeps the compositor's callbacks and options for the areas that will
- * report through them.  No area polls a descriptor or waits for time yet:
+ * report through them (struct kl_backend is in backend-private.h, which the
+ * operating systems' areas share).  No area polls a descriptor or waits for time yet:
  * the network is read by the compositor's own updates
  * (kl_backend_network_update), so the poll and the tick have nothing to do
  * until the areas that need them (the seat, the input devices) move here.
  */
 
-#include "userland/desktop/libkeiland-backend/keiland-backend.h"
+#include "userland/desktop/libkeiland-backend/backend-private.h"
 
 #include <errno.h>
 #include <poll.h>
@@ -24,18 +25,6 @@
 
 /* Marks a parameter an interface requires but this implementation does not use yet. */
 #define UNUSED_PARAMETER(name) ((void)(name))
-
-/*
- * The compositor's backend.
- *
- * Allocated by kl_backend_open and freed by kl_backend_close.  host and
- * options are copies of what the compositor passed, kept unchanged for the
- * areas that call back.
- */
-struct kl_backend {
-	struct kl_backend_host host;
-	struct kl_backend_options options;
-};
 
 /*
  * Opens the backend.

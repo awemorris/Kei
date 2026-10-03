@@ -15,7 +15,7 @@
  *
  *   READY                   GO: the display may be taken (handoff.c)
  *   AUTH name password      OK: the user is in; FAIL
- *   POWER poweroff|reboot   OK
+ *   POWER poweroff|reboot   OK (sent by libkeiland-backend's power, ws131-p005)
  *
  * After OK the screen says "Starting session..." and takes no input until
  * sessiond closes the descriptor, once the session is ready to take the
@@ -40,6 +40,8 @@
  */
 
 #include "glass.h"
+
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 
 #include <errno.h>
 #include <math.h>
@@ -1083,13 +1085,19 @@ greeter_power(
 	printf("ZWL GREETER powering=%s frame=%llu\n", what, (unsigned long long)server->frame);
 }
 
-/* Sends the power request once the "Shutting down..." picture has been shown (two frames on, or GREETER_POWER_MS). */
+/*
+ * Asks for the power action once the "Shutting down..." picture has been
+ * shown (two frames on, or GREETER_POWER_MS).  The backend sends it to
+ * sessiond (ws131-p005); sessiond's answer is read with the others.
+ */
 static void
 greeter_power_send(
 	struct zwl_server *server)
 {
-	char line[32];
 	uint64_t elapsed;
+	unsigned action;
+	int reboot;
+	int error;
 
 	/* Sent already. */
 	if (greeter_power_sent)
@@ -1100,10 +1108,17 @@ greeter_power_send(
 	if (server->frame < greeter_power_frame + 2U && elapsed < GREETER_POWER_MS)
 		return;
 
-	/* The request. */
-	(void)snprintf(line, sizeof(line), "POWER %s\n", greeter_powering);
-	greeter_send(server, line);
+	/* The action the button asked for. */
+	action = KL_BACKEND_POWER_POWEROFF;
+	reboot = strcmp(greeter_powering, "reboot");
+	if (reboot == 0)
+		action = KL_BACKEND_POWER_REBOOT;
+
+	/* The request, through the backend. */
 	greeter_power_sent = 1U;
+	error = kl_backend_power_action(server->backend, action);
+	if (error != 0)
+		printf("ZWL GREETER send errno=%d\n", error);
 	printf("ZWL GREETER power=%s frames=%llu ms=%llu\n", greeter_powering, (unsigned long long)(server->frame - greeter_power_frame), (unsigned long long)elapsed);
 }
 
