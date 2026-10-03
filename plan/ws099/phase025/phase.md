@@ -34,3 +34,13 @@ client の番号は 1 本の連番なので、試験が最初に起こした app
   `2 3 4 5`・`2 3 4 5`・`2 4 5 6`・`1 2 3 4`）。`zwl_app_client` も同じ。書き換えた 81 本は `sh -n` を通る。
 - QEMU（T1 に依頼）: IME 入りの Files の image で files-p002・titlebar-p011・zdesktop-p084・zdesktop-p062 が PASS、IME 無しの image で
   files-p002 が PASS。結果は未着。
+
+## T1-026 の結果（2026-10-03）と直し
+
+- QEMU（T1-026、SHA 32bf5d810）: IME 入りの image で files-p002・zdesktop-p084・zdesktop-p062 PASS、`ime=1` の行 1 本（IME が client 1）、IME 無しの image で
+  files-p002 PASS。**titlebar-p011 だけ FAIL**（2 回とも `GLASS undock surface=8 MISSING`、他の項目は client の番号の置き換えで全て ok）。
+- 原因: client の番号でも surface の番号でもなく、undock の double click の固定の座標 `double 185 17`。docked の system bar では窓の tab が x=157 から
+  並び（README.md 157〜270）、185 は tab の上で、tab が press を取るので bar の title の double click（`shell.c` の `bar_press`）に届かない。IME とは関係なく、
+  docked の tab の strip が入った後の試験の古さ（試験の直し）。titlebar-p013 の `pointer move 185 17` と titlebar-p010 の `double 190 17` も同じ形。
+- 直し: 3 本に `docked_free_x CLIENT_INDEX`（log の `where=docked` の strip・control の右端の最大 + 40、無ければ 190）を足し、undock の double click をそこに。
+  T1-026 の log で 560（"+" の右端 520 + 40、最小化の button の手前）。host で helper を確かめた。再試験は T1 に依頼。
