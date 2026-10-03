@@ -8,8 +8,10 @@
 #  3. A3: the wheel over the icon: three notches down, two up -> five percent a notch, audiod follows.
 #  4. A4: the WAV (the guest stopped) has a feedback sound for the changes, the wheel's in falling then rising loudness,
 #     none while muted, and none louder than one sound.
-#  5. A5: the volume is kept (sound.volume in kei's desktop.conf); after Log Out, audiod set to 100 (as a new boot
-#     leaves it) and a login, the session sets audiod back to the kept volume (ZWL VOLUME preferences).
+#  5. A5 (BUG-161, ws100-p012): while the session changes the volume, kei's desktop.conf does not change (no write
+#     for a change, no ZWL VOLUME kept line); at Log Out the volume is written once (ZWL VOLUME kept ... why=logout
+#     write=1, sound.volume in desktop.conf); after audiod set to 100 (as a new boot leaves it) and a login, the
+#     session sets audiod back to the kept volume (ZWL VOLUME preferences).
 #  6. A6: a guest without HD Audio: the icon says no sound (device=0), the popup says "No sound output"; with audiod
 #     stopped, reachable=0 and the popup says so; zdesktop keeps running without ZWL ERROR.
 #   plan/ws100/tests/volume-p004.sh IMAGE [OUTDIR]
@@ -67,6 +69,20 @@ audiod_volume() {
 	guest 'audiod-feedback get' | sed -n 's/.*volume left=\([0-9]*\) right=[0-9]* muted=\([0-9]\).*/\1 \2/p' | tail -1
 }
 
+# audiod's mute, waited for (up to about 4 s) until it is $1: the set is sent at once, but the guest may be slow to
+# answer (T2-006: zdesktop's "set ... muted=0 via=mute final=1" was logged and the one reading after 0.8 s still said 1).
+audiod_muted_wait() {
+	tries=0
+	while :; do
+		set -- "$1" $(audiod_volume)
+		[ "${3:-x}" = "$1" ] && break
+		tries=$((tries + 1))
+		[ $tries -ge 4 ] && break
+		sleep 1
+	done
+	echo "${3:-?}"
+}
+
 # The last line of the session log matching a pattern.
 last() {
 	guest "grep -E '$1' $log | tail -1"
@@ -77,6 +93,9 @@ sh plan/ws100/tests/volume-guest.sh stop >/dev/null 2>&1
 VOLUME_AUDIO=duplex timeout 180 sh plan/ws100/tests/volume-guest.sh start "$image" >/dev/null 2>&1
 sleep 35
 expect_more $log 'ZWL HANDOFF go=1' 0 60
+
+# What kei's desktop.conf holds of the volume as the session begins (A5 compares it later).
+conf_start=$(guest 'grep -E "^sound\.(volume|muted)=" /home/kei/.config/keiland/desktop.conf' | tr '\n' ' ')
 
 # 1. A1: the icon, and audiod reached with its device.
 expect_more $log 'ZWL VOLUME icon x=' 0 10
@@ -105,12 +124,13 @@ sleep 1
 set -- $(audiod_volume)
 [ "${1:-0}" -ge 74 ] && [ "${1:-0}" -le 76 ] && [ "${2:-1}" = 0 ] && verdict ok "slider: audiod at ${1:-?}" || verdict no "slider: audiod at ${1:-?} muted ${2:-?}"
 pointer move $((px + pw - 40)) $my sleep 300 down sleep 60 up sleep 800
-set -- $(audiod_volume)
-[ "${2:-0}" = 1 ] && verdict ok "mute on: audiod muted" || verdict no "mute on: audiod muted (${2:-?})"
+muted=$(audiod_muted_wait 1)
+[ "$muted" = 1 ] && verdict ok "mute on: audiod muted" || verdict no "mute on: audiod muted ($muted)"
 shot muted.png
 pointer move $((px + pw - 40)) $my sleep 300 down sleep 60 up sleep 800
-set -- $(audiod_volume)
-[ "${2:-1}" = 0 ] && verdict ok "mute off: audiod unmuted" || verdict no "mute off: audiod unmuted (${2:-?})"
+muted=$(audiod_muted_wait 0)
+[ "$muted" = 0 ] && verdict ok "mute off: audiod unmuted" || verdict no "mute off: audiod unmuted ($muted)"
+guest "grep -E 'ZWL VOLUME (set .*via=mute|send errno)' $log" > "$out/mute.log"
 closes=$(count $log 'ZWL VOLUME popup close via=outside')
 pointer move 400 600 sleep 300 down sleep 60 up sleep 800
 expect_more $log 'ZWL VOLUME popup close via=outside' "$closes" 5
@@ -132,16 +152,20 @@ grep -q 'ZWL ERROR' "$out/session-first.log" && { echo "ZWL ERROR in the first s
 n=$(grep -c 'via=wheel final=1' "$out/session-first.log")
 [ "$n" -eq 5 ] && verdict ok "wheel: five changes logged" || verdict no "wheel: five changes logged ($n)"
 
-# 5. A5: kept, then a new session takes it back.
+# 5. A5: nothing written during the session; kept once at Log Out, then a new session takes it back.
 sleep 2
-kept=$(guest 'grep -E "^sound\.(volume|muted)=" /home/kei/.config/keiland/desktop.conf' | tr '\n' ' ')
-echo "kept: $kept"
-echo "$kept" | grep -q "sound.volume=${after:-x}" && verdict ok "kept in desktop.conf" || verdict no "kept in desktop.conf"
+during=$(guest 'grep -E "^sound\.(volume|muted)=" /home/kei/.config/keiland/desktop.conf' | tr '\n' ' ')
+echo "during the session: $during (the session began with: $conf_start)"
+[ "$during" = "$conf_start" ] && verdict ok "no write while the volume changes" || verdict no "no write while the volume changes"
+grep -q 'ZWL VOLUME kept' "$out/session-first.log" && verdict no "no kept line during the session" || verdict ok "no kept line during the session"
 pointer move 23 17 sleep 300 down sleep 60 up sleep 1500
 set -- $(last 'ZWL HOME icon name="Log Out"' | sed -n 's/.* x=\([0-9]*\) y=\([0-9]*\).*/\1 \2/p')
 pointer move "${1:-0}" "${2:-0}" sleep 400 down sleep 60 up
 expect_more /var/log/sessiond.log 'SESSIOND GREETER adopt pid=' 0 20
 sleep 2
+kept=$(guest 'grep -E "^sound\.(volume|muted)=" /home/kei/.config/keiland/desktop.conf' | tr '\n' ' ')
+echo "kept at Log Out: $kept"
+echo "$kept" | grep -q "sound.volume=${after:-x}" && verdict ok "kept in desktop.conf at Log Out" || verdict no "kept in desktop.conf at Log Out"
 guest 'audiod-feedback volume 100' >/dev/null
 greeter_volume=$(audiod_volume | cut -d' ' -f1)
 keys 'kei\n'

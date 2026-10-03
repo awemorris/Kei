@@ -17,9 +17,17 @@
  * Esc, closes it.  The wheel over the icon (or the open popup) moves the
  * volume by VOLUME_WHEEL_STEP a notch.  Each change plays audiod's short
  * feedback sound (a drag at most every VOLUME_FEEDBACK_MS, and once at its
- * end), and is kept in the user's preferences (sound.volume, sound.muted)
- * a moment after it settles.  The preferences are applied when audiod is
- * reached and whenever they change.
+ * end).
+ *
+ * During a session audiod alone holds the volume: the system bar and
+ * Settings' Sound page both set it there and follow what it reports, and
+ * nothing is written to a file while the user changes it (BUG-161,
+ * ws100-p012; 2026-10-03 user: no I/O for each change, keep it at the end
+ * of the session).  The user's preferences (sound.volume, sound.muted) are
+ * read once, when audiod is first reached, and applied; the volume is
+ * written back once, when the session ends (Log Out, or zdesktop told to
+ * stop), and only when it differs from what the file holds.  A volume
+ * changed after a power cut or a crash is lost, which the user accepted.
  *
  * All of it goes through libkeiland-backend (kl_backend_audio_*, ws131-p004):
  * zdesktop never speaks audiod's protocol, and nothing here waits for it.
@@ -60,18 +68,9 @@
 /* The wheel: percent a notch (zwl_seat_axis counts notches, as evdev's wheel does). */
 #define VOLUME_WHEEL_STEP	5
 
-/* How often a drag sends the volume, how often it plays the feedback sound, and when a change is kept, in milliseconds. */
+/* How often a drag sends the volume, and how often it plays the feedback sound, in milliseconds. */
 #define VOLUME_SEND_MS		50U
 #define VOLUME_FEEDBACK_MS	250U
-#define VOLUME_SAVE_MS		1000U
-
-/*
- * How long after zdesktop kept the volume a change of the file is taken as
- * that write read back, in milliseconds: the preferences' watcher looks
- * once a second and the event loop takes its reading at its next pass, and
- * the two keys are written one after the other (BUG-153).
- */
-#define VOLUME_ECHO_MS		3000U
 
 /* The preferences' keys. */
 #define VOLUME_KEY_VOLUME	"sound.volume"
@@ -82,16 +81,14 @@
  * on the desktop's first tick), what it last reported, the volume shown
  * (while a drag or a wheel leads, ahead of audiod's report), whether the
  * popup is open and where, where the icon was drawn, whether the slider
- * is dragged, the times of the last send and feedback, what is waiting to
- * be sent or played, when the change is kept, and whether the preferences
- * have been applied to this connection.
+ * is dragged, the times of the last send and feedback, and what is
+ * waiting to be sent or played.
  *
- * saved, saved_value and saved_muted are what zdesktop itself last kept
- * in the preferences (saved is 0 until it has kept anything), and
- * saved_ms when.  A change of the file that brings these back, or comes
- * within VOLUME_ECHO_MS of that write, is zdesktop's own write read again
- * and is not applied (BUG-153: it arrived up to two seconds after the
- * write and set audiod back to the kept volume over a newer click).
+ * restored is set once the preferences' volume has been applied (on the
+ * first connection to audiod); an audiod reached again later gets the
+ * session's volume instead.  kept, kept_value and kept_muted are what the
+ * file holds as far as zdesktop knows (read at the start, written at the
+ * end), so that the end writes only a volume that changed.
  */
 struct volume_view {
 	struct kl_backend_audio *audio;
@@ -113,12 +110,11 @@ struct volume_view {
 	uint64_t feedback_ms;
 	unsigned send_waiting;
 	unsigned feedback_waiting;
-	uint64_t save_ms;
 	unsigned applied;
-	unsigned saved;
-	unsigned saved_value;
-	unsigned saved_muted;
-	uint64_t saved_ms;
+	unsigned restored;
+	unsigned kept;
+	unsigned kept_value;
+	unsigned kept_muted;
 };
 
 /*
@@ -131,8 +127,7 @@ static void volume_open_popup(struct zwl_server *server);
 static void volume_close_popup(struct zwl_server *server, const char *via);
 static void volume_set(struct zwl_server *server, unsigned value, unsigned muted, const char *via, unsigned final);
 static void volume_send(struct zwl_server *server);
-static void volume_apply_preferences(struct zwl_server *server, unsigned from_file);
-static void volume_save(struct zwl_server *server);
+static void volume_restore(struct zwl_server *server);
 static int volume_sound(void);
 static int volume_in_icon(int32_t x, int32_t y);
 static int volume_in_popup(int32_t x, int32_t y);
@@ -143,8 +138,8 @@ static void volume_draw_switch(struct zwl_server *server, VkCommandBuffer comman
 
 /*
  * Reads what audiod has reported since the last tick, sends a volume a drag
- * held back, plays a feedback sound held back, and keeps a change whose
- * moment has come.  The link is made on the desktop's first tick.
+ * held back, and plays a feedback sound held back.  The link is made on
+ * the desktop's first tick.
  */
 void
 zwl_volume_tick(
@@ -171,7 +166,7 @@ zwl_volume_tick(
 		kl_backend_audio_get_state(volume_view.audio, &volume_view.state);
 		server->dirty = 1;
 
-		/* audiod reached or lost: the preferences are applied once per connection. */
+		/* audiod reached or lost: the volume is given once per connection. */
 		if ((changed & KL_BACKEND_AUDIO_CHANGED_REACHABLE) != 0U) {
 			printf("ZWL VOLUME reachable=%u device=%u\n", volume_view.state.reachable, volume_view.state.device);
 			if (!volume_view.state.reachable)
@@ -184,10 +179,10 @@ zwl_volume_tick(
 			volume_view.muted = volume_view.state.muted;
 		}
 
-		/* A connection with the volume known takes the preferences. */
+		/* A connection with the volume known takes the preferences' volume, or the session's when reached again. */
 		if (volume_view.state.reachable && !volume_view.applied && (changed & KL_BACKEND_AUDIO_CHANGED_VOLUME) != 0U) {
 			volume_view.applied = 1U;
-			volume_apply_preferences(server, 0U);
+			volume_restore(server);
 		}
 	}
 
@@ -201,36 +196,57 @@ zwl_volume_tick(
 		(void)kl_backend_audio_feedback(volume_view.audio);
 		printf("ZWL VOLUME feedback at_ms=%llu via=held\n", (unsigned long long)now);
 	}
-
-	/* A settled change is kept. */
-	if (volume_view.save_ms != 0U && now >= volume_view.save_ms) {
-		volume_view.save_ms = 0U;
-		volume_save(server);
-	}
 }
 
 /*
- * Applies the preferences' volume again after the file changed
- * (preferences.c): a volume kept elsewhere (Settings' Sound page).  A
- * change of the user's here that is not kept yet is newer than the file
- * and wins; the file follows it when it is kept (BUG-153).
+ * Writes the session's volume to the preferences, once, when the session
+ * ends (Log Out, or zdesktop told to stop; BUG-161).  Nothing is written
+ * when the file already holds it, or without preferences (the login
+ * screen) or before the volume was known.
  */
 void
-zwl_volume_preferences(
-	struct zwl_server *server)
+zwl_volume_keep(
+	struct zwl_server *server,
+	const char *why)
 {
-	/* Only once audiod has been reached (it is applied on reaching otherwise). */
-	if (volume_view.audio == NULL || !volume_view.applied)
+	unsigned value;
+	unsigned muted;
+	char text[16];
+	int error;
+
+	/* Without preferences, or before audiod ever reported, there is nothing to keep. */
+	if (server->preferences == NULL || !volume_view.restored)
 		return;
 
-	/* A drag, or a change waiting to be kept, is newer than what the file holds. */
-	if (volume_view.dragging || volume_view.save_ms != 0U) {
-		printf("ZWL VOLUME preferences skipped reason=newer value=%u muted=%u\n", volume_view.value, volume_view.muted);
+	/* audiod's volume when it is reached, else the last one shown. */
+	value = volume_view.value;
+	muted = volume_view.muted;
+	if (volume_view.state.reachable) {
+		value = volume_view.state.left;
+		muted = volume_view.state.muted;
+	}
+
+	/* What the file holds already is not written again. */
+	if (volume_view.kept && value == volume_view.kept_value && muted == volume_view.kept_muted) {
+		printf("ZWL VOLUME kept value=%u muted=%u why=%s write=0\n", value, muted, why);
 		return;
 	}
 
-	/* The preferences' volume, unless it is only zdesktop's own last write read back. */
-	volume_apply_preferences(server, 1U);
+	/* The two keys, once. */
+	(void)snprintf(text, sizeof(text), "%u", value);
+	error = keiland_preferences_set(server->preferences, VOLUME_KEY_VOLUME, text);
+	if (error == 0) {
+		(void)snprintf(text, sizeof(text), "%u", muted);
+		error = keiland_preferences_set(server->preferences, VOLUME_KEY_MUTED, text);
+	}
+	if (error == 0) {
+		volume_view.kept = 1U;
+		volume_view.kept_value = value;
+		volume_view.kept_muted = muted;
+	}
+
+	/* The log line the tests read. */
+	printf("ZWL VOLUME kept value=%u muted=%u why=%s write=1 error=%d\n", value, muted, why, error);
 }
 
 /*
@@ -647,7 +663,7 @@ volume_set(
 	server->dirty = 1;
 	printf("ZWL VOLUME set value=%u muted=%u via=%s final=%u at_ms=%llu\n", value, muted, via, final, (unsigned long long)zwl_milliseconds());
 
-	/* Sent now when final, or when a drag's wait is over. */
+	/* Sent now when final, or when a drag's wait is over (audiod holds it; nothing is written). */
 	now = zwl_milliseconds();
 	if (final || now - volume_view.sent_ms >= VOLUME_SEND_MS)
 		volume_send(server);
@@ -663,9 +679,6 @@ volume_set(
 			volume_view.feedback_waiting = 1U;
 		}
 	}
-
-	/* Kept a moment after it settles. */
-	volume_view.save_ms = now + VOLUME_SAVE_MS;
 }
 
 /* Sends the volume shown to audiod. */
@@ -686,90 +699,53 @@ volume_send(
 }
 
 /*
- * Sends the preferences' volume, when they have one, to audiod.  With
- * from_file (the file changed), the values zdesktop kept itself last are
- * its own write read back and are not sent again.
+ * Gives a newly reached audiod its volume: the preferences' on the first
+ * connection of the session (the volume kept at the end of the last one),
+ * the session's on a later one (an audiod that came back).
  */
 static void
-volume_apply_preferences(
-	struct zwl_server *server,
-	unsigned from_file)
+volume_restore(
+	struct zwl_server *server)
 {
 	int32_t value;
 	int32_t muted;
 	char text[16];
 	int error;
 
-	/* Without preferences (the login screen), audiod's volume stays. */
+	/* audiod came back: it gets the volume the session had. */
+	if (volume_view.restored) {
+		if (volume_view.value != volume_view.state.left || volume_view.muted != volume_view.state.muted) {
+			volume_send(server);
+			printf("ZWL VOLUME restored value=%u muted=%u from=session\n", volume_view.value, volume_view.muted);
+		}
+		return;
+	}
+	volume_view.restored = 1U;
+
+	/* Without preferences (the login screen), or without a kept volume, audiod's stays. */
 	if (server->preferences == NULL)
 		return;
-
-	/* A volume that is not set leaves audiod's as it is. */
 	error = keiland_preferences_get(server->preferences, VOLUME_KEY_VOLUME, text, sizeof(text));
 	if (error != 0)
 		return;
 	value = keiland_preferences_get_int(server->preferences, VOLUME_KEY_VOLUME, 100, 0, 100);
 	muted = keiland_preferences_get_int(server->preferences, VOLUME_KEY_MUTED, 0, 0, 1);
 
-	/*
-	 * zdesktop's own last write, read back (its values, or a reading taken
-	 * while it was being written): nothing new.  Sending it would undo
-	 * whatever audiod was set to since (BUG-153).
-	 */
-	if (from_file && volume_view.saved) {
-		/* The values zdesktop kept. */
-		if ((unsigned)value == volume_view.saved_value && (unsigned)muted == volume_view.saved_muted)
-			return;
-
-		/* A change of the file soon after zdesktop's write is that write. */
-		if (zwl_milliseconds() - volume_view.saved_ms < VOLUME_ECHO_MS) {
-			printf("ZWL VOLUME preferences skipped reason=echo value=%d muted=%d\n", value, muted);
-			return;
-		}
-	}
+	/* What the file holds, so that the end writes only a change. */
+	volume_view.kept = 1U;
+	volume_view.kept_value = (unsigned)value;
+	volume_view.kept_muted = (unsigned)muted;
 
 	/* The same as audiod's: nothing to send. */
 	if ((unsigned)value == volume_view.state.left && (unsigned)muted == volume_view.state.muted)
 		return;
 
-	/* Shown and sent, without a sound and without keeping it again. */
+	/* Shown and sent, without a sound. */
 	volume_view.value = (unsigned)value;
 	volume_view.muted = (unsigned)muted;
 	volume_send(server);
 	server->dirty = 1;
 	printf("ZWL VOLUME preferences value=%d muted=%d\n", value, muted);
-}
-
-/* Keeps the volume in the preferences (sound.volume and sound.muted). */
-static void
-volume_save(
-	struct zwl_server *server)
-{
-	char text[16];
-	int error;
-
-	/* Without preferences (the login screen) nothing is kept. */
-	if (server->preferences == NULL)
-		return;
-
-	/* The two keys. */
-	(void)snprintf(text, sizeof(text), "%u", volume_view.value);
-	error = keiland_preferences_set(server->preferences, VOLUME_KEY_VOLUME, text);
-	if (error == 0) {
-		(void)snprintf(text, sizeof(text), "%u", volume_view.muted);
-		error = keiland_preferences_set(server->preferences, VOLUME_KEY_MUTED, text);
-	}
-
-	/* What was kept, so that the file read back with it is known as zdesktop's own (BUG-153). */
-	if (error == 0) {
-		volume_view.saved = 1U;
-		volume_view.saved_value = volume_view.value;
-		volume_view.saved_muted = volume_view.muted;
-		volume_view.saved_ms = zwl_milliseconds();
-	}
-
-	/* The log line the tests read. */
-	printf("ZWL VOLUME saved value=%u muted=%u error=%d\n", volume_view.value, volume_view.muted, error);
 }
 
 /* Tells whether there is sound: audiod reached, with a device. */

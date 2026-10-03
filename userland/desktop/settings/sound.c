@@ -10,10 +10,12 @@
  * same volume the system bar's popup sets (userland/desktop/wayland/
  * volume.c), through the same ways.
  *
- *   - audiod holds the volume (libkeiland's keiland_audio_*); a change is
- *     sent to it, and a change made in the system bar comes back from it.
- *   - The user's preferences keep it (sound.volume, sound.muted in
- *     desktop.conf), which zdesktop applies to audiod when it starts.
+ *   - audiod holds the volume during the session (libkeiland's
+ *     keiland_audio_*); a change is sent to it, and a change made in the
+ *     system bar comes back from it.  Nothing is written to a file while
+ *     the user changes it (BUG-161, ws100-p012): zdesktop keeps the volume
+ *     in the preferences (sound.volume, sound.muted in desktop.conf) once,
+ *     at the session's end, and applies it to audiod at the next login.
  *   - The short feedback sound follows the system bar's rules: when a
  *     change is final (a drag let go, mute turned off), at most one every
  *     250 milliseconds while dragging, and never when mute is turned on.
@@ -37,7 +39,6 @@
 static void sound_set(struct se_app *app, int value, int muted, int final);
 static void sound_send(struct se_app *app);
 static void sound_feedback(struct se_app *app);
-static void sound_save(struct se_app *app);
 
 /*
  * Starts following audiod's volume; until it reports, the page shows the
@@ -249,10 +250,6 @@ sound_set(
 		else
 			sound->feedback_waiting = 1;
 	}
-
-	/* A final volume is kept. */
-	if (final)
-		sound_save(app);
 }
 
 /* Sends the volume shown to audiod. */
@@ -284,14 +281,4 @@ sound_feedback(
 	app->sound.feedback_at = app->now;
 	error = keiland_audio_feedback(app->sound.audio);
 	se_log("SOUND feedback error=%d", error);
-}
-
-/* Keeps the volume in the preferences (the system bar's keys), which zdesktop takes too. */
-static void
-sound_save(
-	struct se_app *app)
-{
-	/* Both keys, always written (the system bar reads a volume only when it is set). */
-	se_look_set_number(app, SOUND_KEY_VOLUME, app->sound.value, -1);
-	se_look_set_number(app, SOUND_KEY_MUTED, app->sound.muted, -1);
 }

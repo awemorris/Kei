@@ -9,8 +9,9 @@
 #  2. Five seconds later: audiod is at 49..51 (audiod-feedback get), zdesktop's last set is the middle click, and no
 #     "ZWL VOLUME preferences value=" line came after the first click (the read-back is skipped: "skipped
 #     reason=newer" or "reason=echo", or matches the kept values).  slider-50.png shows the knob in the middle.
-#  3. A change made elsewhere is still applied: desktop.conf written with sound.volume=30 by hand (as Settings would)
-#     -> audiod at 30 within a few seconds ("ZWL VOLUME preferences value=30").
+#  3. Since BUG-161 (ws100-p012) nothing is written during the session and the file is not followed: a hand edit of
+#     desktop.conf (sound.volume=30) leaves audiod as it is, and no "ZWL VOLUME kept" line comes before the session
+#     ends.  Step 2 still holds (no read-back can undo a click, since there is no write to read back).
 #   plan/ws100/tests/volume-bug153.sh IMAGE [OUTDIR]
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -u
@@ -101,17 +102,19 @@ set -- $(audiod_volume)
 lastset=$(last 'ZWL VOLUME set value=')
 echo "last set: $lastset"
 echo "$lastset" | grep -qE 'value=(49|50|51) .*final=1' && verdict ok "zdesktop's last set is the middle" || verdict no "zdesktop's last set is the middle"
-guest "tail -n +$((${first:-0} + 1)) $log | grep -E 'ZWL VOLUME (set|saved|preferences)'" > "$out/rounds.log"
+guest "tail -n +$((${first:-0} + 1)) $log | grep -E 'ZWL VOLUME (set|saved|kept|preferences)'" > "$out/rounds.log"
 cat "$out/rounds.log"
 undone=$(grep -c 'ZWL VOLUME preferences value=' "$out/rounds.log")
 [ "${undone:-1}" = 0 ] && verdict ok "no read-back applied over a click" || verdict no "read-back applied over a click ($undone)"
 
-# 3. A change made elsewhere (written into desktop.conf by hand, five seconds after the last save) is applied.
+# 3. The file is neither written nor followed during the session (BUG-161): a hand edit leaves audiod as it is.
+kept=$(grep -c 'ZWL VOLUME kept' "$out/rounds.log")
+[ "${kept:-1}" = 0 ] && verdict ok "no write during the session" || verdict no "no write during the session ($kept)"
 sleep 2
 guest "grep -v '^sound\\.volume=' $conf > /tmp/bug153.conf; echo sound.volume=30 >> /tmp/bug153.conf; cat /tmp/bug153.conf > $conf; grep '^sound\\.volume' $conf" | tail -1
-expect_more $log 'ZWL VOLUME preferences value=30' 0 8
+sleep 4
 set -- $(audiod_volume)
-[ "${1:-0}" = 30 ] && verdict ok "a change elsewhere applied (audiod at 30)" || verdict no "a change elsewhere applied (audiod at ${1:-?})"
+[ "${1:-0}" -ge 49 ] && [ "${1:-0}" -le 51 ] && verdict ok "a hand edit is not followed (audiod at ${1:-?})" || verdict no "a hand edit is not followed (audiod at ${1:-?})"
 errors=$(count $log 'ZWL ERROR')
 [ "${errors:-1}" = 0 ] && verdict ok "no ZWL ERROR" || verdict no "ZWL ERROR ($errors)"
 sh plan/ws100/tests/volume-guest.sh stop >/dev/null 2>&1

@@ -385,8 +385,11 @@ preferences_apply(
 	value = keiland_preferences_get_int(preferences, "keyboard.repeat.delay", PREFERENCES_DELAY_DEFAULT, PREFERENCES_DELAY_MIN, PREFERENCES_DELAY_MAX);
 	preferences_number("keyboard.repeat.delay", &server->repeat_delay_ms, value);
 
-	/* The sound's volume, once audiod has been reached (volume.c, ws100-p004). */
-	zwl_volume_preferences(server);
+	/*
+	 * The sound's volume is not taken from here: audiod holds it during the
+	 * session, and volume.c reads the file once when audiod is first reached
+	 * and writes it once at the session's end (BUG-161).
+	 */
 }
 
 /* Shows the wallpaper the preferences choose (an absolute path), or the command line's when they choose none. */
