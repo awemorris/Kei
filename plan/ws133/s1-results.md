@@ -12,3 +12,5 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 3 | タッチパッド | 一部 FAIL | pointer・click は OK、**スクロールが効かない** |
 | 3 | キーボード（App Home の絞り込み） | PASS | |
 | — | タッチパッドで窓を移動中のフリーズ | **FAIL** | M650 の受信機を抜いた後、タッチパッドで窓を移動している途中で止まり、戻らなかった。→ フリーズは M650 だけの問題ではない |
+| 4 | WiFi の Join | PASS | 接続できた |
+| 4 | WiFi の AP の切替 | **FAIL（要修正）** | 別の AP を選んでも「Connecting...」のような表示が無く、何をしているか分からないまま約 10 秒後にチェックが付いた。user「これは問題なので修正が必要。Connecting...は必要。」 |
