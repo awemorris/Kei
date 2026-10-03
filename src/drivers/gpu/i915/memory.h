@@ -68,9 +68,14 @@ struct i915_ppgtt;
  * How many GT objects the pool holds: a status page, a ring and a context
  * image per engine, the scratch page, the page-table pages, and the
  * objects of the draw paths.  64 ran out once three contexts and four user
- * objects were live together.
+ * objects were live together, and 128 once about thirty windows were open
+ * (BUG-120): the pool now grows a block of I915_GT_OBJECT_BLOCK slots at a
+ * time, up to I915_GT_OBJECT_BLOCKS blocks.  A block is never moved or
+ * freed while the device runs, so an object's address stays valid.
  */
-#define I915_GT_MAX_OBJECTS		128U
+#define I915_GT_OBJECT_BLOCK		128U
+#define I915_GT_OBJECT_BLOCKS		16U
+#define I915_GT_MAX_OBJECTS		(I915_GT_OBJECT_BLOCK * I915_GT_OBJECT_BLOCKS)
 
 /* The page every session object and session page-table page is made of. */
 #define I915_PAGE_BYTES			4096U
@@ -175,8 +180,13 @@ struct i915_gt_mem {
 	/* How many objects fini had to leave alone because they are kept. */
 	unsigned kept_objects;
 
-	/* The object pool and how many of its slots are in use. */
-	struct i915_gt_object objects[I915_GT_MAX_OBJECTS];
+	/*
+	 * The object pool: its blocks (the first object_block_count are
+	 * allocated, each I915_GT_OBJECT_BLOCK slots) and how many slots are in
+	 * use.  A block is added when every slot is taken and freed at fini.
+	 */
+	struct i915_gt_object *object_blocks[I915_GT_OBJECT_BLOCKS];
+	unsigned object_block_count;
 	unsigned objects_live;
 
 	/* Diagnostics; never a substitute for a return value. */
