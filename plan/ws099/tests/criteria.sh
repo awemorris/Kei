@@ -33,22 +33,42 @@ results=$out/results.txt
 GUEST_RUNTIME=$(pwd)/build/ws035-sq-run
 export GUEST_RUNTIME
 
-# Starts the guest afresh from the image at a size (1280x800 or 1920x1280), and waits for its boot.
+# Starts the guest afresh from the image at a size (1280x800 or 1920x1280), and waits for its boot: SIZE NAME.
+# BUG-147 (ws099-p026): a start that failed (the copy of the image or the emulator's start not done within the time,
+# so no session.json) was not noticed, and the next test ran with no guest ("no guest is running", the first time of
+# q609's cursor-owner).  The start's own output goes to OUTDIR/NAME.start.log, SSH must answer after the boot's wait,
+# and a failed start is tried once more; returns 1 when the second fails too.
 start_guest() {
-	sh plan/ws035/tests/zdesktop-guest.sh stop >/dev/null 2>&1
-	if [ "$1" = 1920x1280 ]; then
-		VENUS_SIZE=1920x1280 timeout 180 sh plan/ws035/tests/zdesktop-guest.sh start "$image" >/dev/null 2>&1
-	else
-		env -u VENUS_SIZE timeout 180 sh plan/ws035/tests/zdesktop-guest.sh start "$image" >/dev/null 2>&1
-	fi
-	sleep 40
+	attempt=1
+	: > "$out/$2.start.log"
+	while :; do
+		sh plan/ws035/tests/zdesktop-guest.sh stop >/dev/null 2>&1
+		if [ "$1" = 1920x1280 ]; then
+			VENUS_SIZE=1920x1280 timeout 300 sh plan/ws035/tests/zdesktop-guest.sh start "$image" >> "$out/$2.start.log" 2>&1
+		else
+			env -u VENUS_SIZE timeout 300 sh plan/ws035/tests/zdesktop-guest.sh start "$image" >> "$out/$2.start.log" 2>&1
+		fi
+		started=$?
+		if [ $started -eq 0 ]; then
+			sleep 40
+			timeout 200 python3 plan/tools/guest/guest.py wait --timeout 180 >> "$out/$2.start.log" 2>&1 && return 0
+		fi
+		echo "criteria: guest start $attempt failed (start status $started)" >> "$out/$2.start.log"
+		[ $attempt -ge 2 ] && return 1
+		attempt=$((attempt + 1))
+	done
 }
 
 # Runs one test on a fresh guest: CRITERION NAME SIZE COMMAND...; records its verdict, time and RESULT line.
+# A guest that does not start fails the test as INFRA without running it.
 run() {
 	criterion=$1 name=$2 size=$3
 	shift 3
-	start_guest "$size"
+	if ! start_guest "$size" "$name"; then
+		keep_failure "$name"
+		echo "$criterion $name FAIL seconds=0 INFRA: the guest did not start ($out/$name.start.log)" | tee -a "$results"
+		return
+	fi
 	began=$(date +%s)
 	if [ "$size" = 1920x1280 ]; then
 		VENUS_SIZE=1920x1280 timeout 5400 "$@" > "$out/$name.log" 2>&1

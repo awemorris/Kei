@@ -74,6 +74,7 @@ WS035 を閉じた後継。ユーザー:「WS099のゴールも、明確な達�
 | [ws099-p021](phase021/phase.md) | C2 の geometry（q538: top-right の増分 20、bottom-left/left の settle）と BUG-127（最小化の直後に窓が残る）。B2 | planned（3h） | p020 cleared（同じ shell.c の周り） |
 | [ws099-p022](phase022/phase.md) | WS099 の全文規約と回帰（WS の最後）。B5 | planning（最後。p019〜p021 の後） | p019・p020・p021、p012 |
 | [ws099-p025](phase025/phase.md) | BUG-146: Venus の guest 試験が app の client の番号を IME の有無に関わらず求める（共有の helper `plan/tools/guest/zwl-clients.sh`、81 本の試験の `client=N` を置き換え） | in-progress（q645、P2: 実装済み・T1 の試験待ち） | — |
+| [ws099-p026](phase026/phase.md) | BUG-147 の残り: cursor-owner の guest の消失は、criteria.sh の start_guest が guest の起動の失敗を確かめずに次の試験を流したもの（記録の読み）。start の出力を残し、SSH を確かめ、1 回起こし直す、失敗は INFRA と記録 | in-progress（q645、P2: 実装済み・T1 の試験待ち） | p024 |
 
 ## ベータ1 の到達目標（2026-10-02 計画、fg019）
 
