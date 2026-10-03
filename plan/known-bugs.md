@@ -25,7 +25,7 @@ remain as traceable history and are not new implementation work.
 
 | ID | Area | Status / priority | Observation | Resume and acceptance condition |
 | --- | --- | --- | --- | --- |
-| [BUG-160](bugs/BUG-160.md) | WiFi の鍵の入力欄が画面の下に出る（AP の行の中で入力できない） | reproduced（実機 S1、ユーザー） / scheduled | S1 の後のフィードバック | P1（q642） |
+| [BUG-160](bugs/BUG-160.md) | WiFi の鍵の入力欄が画面の下に出る（AP の行の中で入力できない） | reproduced（実機 S1、ユーザー） / resolved（ws005-p029、QEMU。実機は S2） | S1 の後のフィードバック | P1（q642） |
 | [BUG-159](bugs/BUG-159.md) | バッテリー駆動で描画が 5 fps ほどに落ち、電池切れで警告なく落ちる | reproduced（実機 S1） / tracking | S1（WS133） | WS075（i915）、電源の管理（WS050〜052・WS132） |
 | [BUG-158](bugs/BUG-158.md) | 操作中・放置中にフリーズし、電源ボタンの長押しが要る | reproduced（実機 S1） / tracking | S1（WS133） | WS005／WS004（AX211）、原因次第 |
 | [BUG-157](bugs/BUG-157.md) | 鍵を間違えたとき「Could not join (Network is down)」と出る（5330 の AX211） | reproduced（実機 S1） / scheduled | S1（WS133） | WS005／WS004（AX211） |

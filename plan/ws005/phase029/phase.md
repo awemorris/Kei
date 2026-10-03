@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p029 -->
 # ws005-p029: Wi-Fi の鍵の入力欄を選んだ AP の行の直下に出す（BUG-160）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-019（QEMU）inline-key-bug160 PASS、鍵の欄が Neighbor 5G の行の直下。回帰 settings-p003・connecting-bug154 PASS、zdesktop-p013 は新しい guest で PASS。実機は S2）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS005](../ws.md)
 Bug: [BUG-160](../../bugs/BUG-160.md)
