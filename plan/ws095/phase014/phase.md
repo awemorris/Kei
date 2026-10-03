@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws095-p014 -->
 # ws095-p014: IME の確定のたびの止まりと Text Editor の入力の遅れ（BUG-143）
 
-Status: in-progress（IME の止まりを修正・T1 の計測待ち。Text Editor の直接入力の遅れは原因未特定）
+Status: cleared（Q1 判定 2026-10-03: T1-024（QEMU）日本語の確定の後の IME の迂回 0→0、missed 0。辞書の保存の止まりの修正の範囲。BUG-143 の直接入力の遅れ（QEMU で textedit 337/416 ms、terminal 311/321 ms の median/max、host の IO が高い時の参考値）は未解決で BUG-143 に残す）。元の記載: in-progress（IME の止まりを修正・T1 の計測待ち。Text Editor の直接入力の遅れは原因未特定）
 Disposition: normal
 Parent: [WS095](../ws.md)
 Bug: [BUG-143](../../bugs/BUG-143.md)
