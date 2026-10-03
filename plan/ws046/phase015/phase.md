@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws046-p015 -->
 # ws046-p015: BUG-027 — file に裏付けられた page の fault の再計測（直っている見込みの確認と close）
 
-Status: in-progress（q645、P2、2026-10-03。計測の道具と image を用意、T1 の計測待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-034（QEMU、単独）cold 76.54 µs/page（基準 ≤180）、warm 1.71 µs/page（≤34）、warm の fault と read の比 1.0x。ticket の 1.8 ms/page から 20 倍以上改善）。元の記載: in-progress（q645、P2、2026-10-03。計測の道具と image を用意、T1 の計測待ち）
 Disposition: normal
 Parent: [WS046](../ws.md)
 Bug: [BUG-027](../../bugs/BUG-027.md)
