@@ -643,7 +643,7 @@ primary docs for operational syntax:
      `git fetch origin && git log --format=%B origin/<branch>..<branch> | grep -ci 'co-authored-by'` が `0` であること。1 以上なら push せず、ユーザーに報告する。
   2. 全部の commit のメッセージが `WIP` ちょうどであることも確かめる: `git log --format=%B origin/<branch>..<branch> | grep -v '^$' | grep -vx WIP | wc -l` が `0`。
   3. 確かめてから push する（force push はユーザーが明示したときだけ、`--force-with-lease` で）。
-- 再発防止（2026-10-03）: `.claude/settings.json` の `attribution` で Claude Code の commit・PR の付記を無効にし、`.git/hooks/commit-msg` でメッセージが `WIP` ちょうどでない commit を拒否する。
+- 再発防止（2026-10-03）: `.claude/settings.json` の `attribution` で Claude Code の commit・PR の付記を無効にし、`.git/hooks/commit-msg`（原本 `plan/tools/git-hooks/commit-msg`、clone・作り直しの後に `.git/hooks/` へ写す）でメッセージが `WIP` ちょうどでない commit を拒否する。
 - 関係の無い作業中の変更を保つ。
 
 ## 禁止と承認

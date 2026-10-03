@@ -12,31 +12,47 @@
 ## 現在の状況
 
 <!-- master:updated:start -->
-更新: 2026-10-03 夕 Q1（S1 の実機試験の終了、次のセッションの pipeline）
+更新: 2026-10-03 夜 Q1（全担当のソフトな停止と統合、リポジトリの作り直しの前の持ち越し）
+<!-- master:updated:end -->
 
 <!-- master:agents:start -->
-- 体制: 単一 session の Q1 ＋固定名サブエージェント P1〜P8。host は 2026-10-03 12:12 に再起動済み。user「N=1でP3のみを再開しましょう。」→ P3 generation4 が q632-i02（WS131 p003）。続けて user「N=2に上げて、P1も再開します。P4はまだ再開しません。」→ P1 generation7 が q631-i02（WiFi）、その後 q635（BUG-149）。q635 が cleared で関連の bug が無ければ P1 はラップアップし、N=1 で P3 だけのシリアル区間（user 2026-10-03）。BUG-052 は別 session の Q2（merge は Q1）。
-- 再開待ち（未統合）: P4（agent/p4 59a94c6aa）・P2（Terminal の menu-p003 の流し直し）。P3 の network の file の移動の後に再開する時は、Q1 が移った path を伝える。
+- 体制: 単一 session の Q1 ＋固定名サブエージェント（実装 P1〜P8、試験 T1・T2）。2026-10-03 夜 user「これによりすべての作業をソフトに停止します。」で P1・P2・T1・T2 はラップアップして終了、全ての成果は main に統合済み（P4 の WS118 の source と記録も Q1 が取り込んだ）。動いている担当は無い。
+- 再開の時の割り当ての候補（user が決める）: P1 = WS131 の p008 の試験と p009 以降、P2 = WS134 の p003 の直しと p004、T1・T2 = 台帳の未実行の予約（`plan/agents/T1/requests.md`・`T2/requests.md`）。WS135（設定の一本化、BUG-162）の担当と時期は未定。
+<!-- master:agents:end -->
+
+## リポジトリの作り直し（2026-10-03 夜、持ち越し）
+
+2026-10-03 user「リポジトリを作り直します。build/以下は削除されます。.git/も削除されます。持ち越したい情報があれば、plan/以下のドキュメントに記載が必要です。」
+
+- **git の履歴**: plan の中の commit の SHA（`6ecf801cc`・`f94b1b633` など、2026-10-03 以前の全て）は古いリポジトリの物で、作り直した後は引けない。記録の意味（どの変更か）は文で残っている。
+- **build/ の証拠**: plan が指す `build/…` と `/home/awe/zedBSD-worktrees/*/build/…` の PNG・log・image（S1 の image `build/s1-pre/hdd-image.img` を含む）は消える。結果と判定は各 phase.md・Bug の ticket・`plan/agents/T1|T2/requests.md` に文で残っている。消えた証拠を指す行を「証拠の file が残っている」と読まない。
+- **作り直した後の手順**（Q1）:
+  1. commit の hook: `cp plan/tools/git-hooks/commit-msg .git/hooks/ && chmod +x .git/hooks/commit-msg`（メッセージが `WIP` ちょうどでない commit を拒否。AGENTS.md「git」）。`.claude/settings.json` の `attribution`（Co-Authored-By などの付記を無効）は tree にあるので残る。
+  2. remote は `git@github.com:awemorris/zedBSD.git`、author は `Awe Morris`。push はユーザーが指示した時だけ（AGENTS.md の確かめの手順）。
+  3. サブエージェントの worktree: 古い `/home/awe/zedBSD-worktrees/*`（agent/p1〜p4・t1・t2、codex/a1〜a3・p8〜p10）と `/home/awe/zedBSD-rpi4/.claude/worktrees/*` は古い `.git` に結び付くので使えない。担当を起こす時に main が `git worktree add /home/awe/zedBSD-worktrees/<名前> -b agent/<名前>` で作り直す（[protocol](agents/protocol.md) の 1）。古い worktree の directory の削除はユーザーが行う。
+  4. toolchain: `make toolchain` などで `build/llvm`・`llvm-source`・`llvm-build`・`NoctLang` を作り直した後に `plan/tools/toolchain-lock.sh lock`。
+  5. Linux の試験の guest（WS105・WS131、QEMU+KVM）: `plan/tools/keiland-linux/build-guest.sh`（base と gdm）で `build/keiland-linux/guest`・`guest-gdm` を作り直す。guest の SSH の鍵 `plan/tmp/guest/` は tree にある。
+  6. 統合の前の残り: 無い（全ての agent の branch は main に入っている。`worktree-agent-aefedcaf…` の 2 commit は BUG-066 の決定で merge しない物）。P1 の `build/p1-q640/p007-wip.patch` は p007 が commit 済みなので不要。
+- **tree に残るが git に入らない物**（削除の対象外の前提）: `.wifi`（WiFi の認証情報、ユーザーが作成）、`.claude/settings.local.json`、`config.mk`、`plan/*/temp/`。
+- **host の状態**（repo の外）: sysctl の一時の設定（`vm.dirty_background_bytes=512M`・`vm.dirty_bytes=2G`・`vm.swappiness=10`、2026-10-03 user「sysctl の調整はやってみてください」）は再起動で戻る。残すかは user の判断待ち。fstrim は 2026-10-03 に実行済み（35 分、204.6 GiB）。
 
 <!-- master:focus:start -->
 - **fg019 ベータ1 のリリース（目標 2026-10-17、凍結なし、できた所までをベータ1 に。版 zedbsd-0.1.0-beta1）**。内容は下の「Current Focused Goals」。
 - fg018 Linux 標準 GTK4（WS114 は p007・p008 まで達成、GTK4 の zedBSD 移植 WS115 は後回し）。
 <!-- master:focus:end -->
 
-P26-10-03 user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」 → 順（[WS133](ws133/ws.md) の S1 の結果の表）: BUG-152（Settings の Wallpaper の 10 秒）→ BUG-155（Terminal の IME）→ BUG-154（WiFi の Connecting...）→ BUG-153（音量の slider）→ 実機の要る BUG-156・157・158・119・159 は読みと実装まで進め S2 の実機試験へ。試験は T1 が依頼をまとめて 1 つの QEMU で（AGENTS.md「検証」）。
-
 <!-- master:blocked:start -->
-- 5330 の AX211 の passthrough は停止（host の hang 2 回、AX211 の vfio の reset の異常の見当）。host の iwlwifi の blacklist と起動時の vfio-pci の bind の要否はユーザーの判断待ち。iGPU は i915 の driver の改善の Phase だけで使う、iGPU と AX211 の同時は禁止。
-- WS131 の移行計画のユーザーのレビュー待ち（それまで WS131 の code は書かない）。
-- GitHub への記録の公開は保留（このチェックアウトに .sync が無い）。push はしない。
+- 5330 の AX211 の passthrough は停止（host の hang 2 回）。iGPU は i915 の driver の改善の Phase だけで使い、iGPU と AX211 の同時は禁止。
+- 実機の要る bug（BUG-157・158・119・159・143・120・156 と QEMU で resolved にした bug の実機の確認）は安定版 S2 の実機試験で（[WS133](ws133/ws.md)）。
+- GitHub への記録の公開は保留（.sync が無い）。push はユーザーの指示の時だけ。
 <!-- master:blocked:end -->
 
 <!-- master:pending-decisions:start -->
-- WS131: 時期（backend 側を先に、app の移行は標準 app の区切りに）、WS090 の窓の移行の WS131 への移管。
+- WS135（設定の一本化、BUG-162）の担当と開始の時期。WS131 の p010・p011 の設定の部分は WS135 が引き取る。
+- host の sysctl の設定を `/etc/sysctl.d` に残すか。
+- docs/ の本文に残る Plan の ID の記述を消すか。
 - WS132（PnP の通知・自動 mount・eject）をベータ1 に入れるか。
-- BUG-147 の扱い（ws099-p024 で直してから p020・p021 を閉じる予定）。
 - 5330 の host の設定（AX211 を起動時から vfio-pci、iwlwifi・btusb の blacklist）。
-- 利用枠の配分（週の上限を 2026-10-04 17:00 までに使い切る。夜は N=1 の案）。
 <!-- master:pending-decisions:end -->
 <!-- awesome-plan-current:end -->
 
@@ -261,10 +277,10 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 | [WS128](ws128/ws.md) | MG006 | 標準アプリ全般のベータ1 のブラッシュアップ（fg019） | incomplete | p001（棚卸し、候補 C1〜C15）・p002（Notes の Open・Save As）・p003（Text Editor の Replace・Open Recent）cleared。標準 app の開発は WS131 の後 |
 | [WS129](ws129/ws.md) | MG007 | ベータ1 のリリース作業（版・release notes・既知の問題・CI の release・最終回帰）（fg019） | incomplete | p009（デモの image を CI 土台に）・p010（全 desktop app と base の program を config へ）cleared。版 zedbsd-0.1.0-beta1、Prerelease を user が手で昇格 |
 | [WS130](ws130/ws.md) | MG005 | IPv6 の network stack（ベータ1 は計画だけ、実装はベータ2 以降。DHCPv6 は `dhcpc -6`） | planning | p001 設計 |
-| [WS131](ws131/ws.md) | MG006 | libkeiland を GUI toolkit 兼 desktop 機能の抽象化層にする（app の窓の作成を含む GUI の構築を共通化） | planning | 構成は決定（libkeiland-backend と libkeiland、libkeiui の吸収）。p002（詳細な移行計画、P3 が作成中）をユーザーがレビューしてから実装 |
+| [WS131](ws131/ws.md) | MG006 | libkeiland を GUI toolkit 兼 desktop 機能の抽象化層にする（app の窓の作成を含む GUI の構築を共通化） | incomplete | p003〜p005 cleared、p006（Linux は T1-042 PASS、zedBSD の T2-007 は未実行）・p007（demo-s8-s9 未実行）・p008（試験未依頼）は uncleared。次は p008 の試験と p009。設定の部分は WS135 へ |
 | [WS132](ws132/ws.md) | MG006 | /dev/system の電源管理と PnP の通知（subscriber が事象を指定）、自動 mount、Files の eject | planning | p001 設計（/dev/system に電源管理と PnP の通知、subscriber が事象を指定） |
 | [WS133](ws133/ws.md) | MG003 | 安定版 S1 の実機試験（安定版の image を実機で起動し SSH で複数の試験を詰め込む。最初の項目は ws005-p020・p024 から移した WiFi） | planning | 安定版 S1 の内容と試験の一覧はユーザーと決める |
-| [WS134](ws134/ws.md) | MG006 | システムモニターのアプリ（Analytic Spatial UI、中央の状態コア、層構造、2026-10-03 ユーザー） | planning | p001 設計（P2） |
+| [WS134](ws134/ws.md) | MG006 | システムモニターのアプリ（Analytic Spatial UI、中央の状態コア、層構造、2026-10-03 ユーザー） | incomplete | p001・p002 cleared、p003 uncleared（sim の fps 4.7）、p004 uncleared（`interact.c` まで） |
 | [WS135](ws135/ws.md) | MG006 | 設定の読み書きを libkeiland に一本化（libkeiland が直接か compositor の拡張で解決、監視と通知の API、desktop.conf は compositor の内部で session の開始・終了だけ読み書き。BUG-162、2026-10-03 ユーザー） | planning | p001 設計 |
 | [WS116](ws116/ws.md) | MG002 | upstream Qt6の範囲をGTK4移植後に検討し `packages/desktop/qt6`へ移植 | planning | WS115の知見後。旧WS034 p030移管、Queue none |
 
@@ -291,6 +307,7 @@ Milestone の達成は所属 WS の完了数ではなく、到達点の証拠で
 
 | tool | 用途 | 使い方 |
 | --- | --- | --- |
+| `plan/tools/git-hooks/commit-msg` | git の commit-msg の hook（メッセージが `WIP` ちょうどでない commit を拒否、Co-Authored-By などの混入の防止、2026-10-03） | `cp plan/tools/git-hooks/commit-msg .git/hooks/ && chmod +x .git/hooks/commit-msg`（clone・作り直しの後に毎回） |
 | `plan/tools/toolchain-lock.sh` | 共有の toolchain の tree（`build/llvm`・`llvm-source`・`llvm-build`・`NoctLang`）の directory を読み取り専用にして、許可の無い変更を防ぐ（BUG-096） | `lock`・`unlock`（main が許可した toolchain の変更の間だけ）・`status` |
 | [boot-test.sh](tools/boot-test.sh)（`boot-test.py`） | 起動の確認。OVMF の USB（amd64）か BIOS の IDE（i386）で起動し、画面を QMP で撮って login prompt を読む | `plan/tools/boot-test.sh [IMAGE]`。`OUTPUT`（既定 `build/boot-test`）、`BOOT_TIMEOUT`、`BOOT_MODE=uefi-usb` か `bios-ide` |
 | [Keiland の OS 境界 checker](tools/keiland-os-boundary/check.sh)（WS104） | 共通 source の OS include / ioctl、GPU layout の所有、install literal、libc に残る desktop header を C1〜C5、Linux/zedBSD moduleと実build membershipをL1〜L5で確認。evdev の 1 行だけを例外とする | `sh plan/tools/keiland-os-boundary/check.sh`。PASS は exit 0、違反は各項目の file:line と exit 1 |

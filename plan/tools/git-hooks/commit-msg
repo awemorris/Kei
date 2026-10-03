@@ -1,0 +1,8 @@
+#!/bin/sh
+# zedBSD (AGENTS.md "git"): a commit message is exactly "WIP" -- no trailers such as Co-Authored-By.
+msg=$(git stripspace --strip-comments < "$1")
+if [ "$msg" != "WIP" ]; then
+	echo "commit-msg: the message must be exactly WIP (AGENTS.md); got:" >&2
+	printf '%s\n' "$msg" | sed 's/^/  /' >&2
+	exit 1
+fi
