@@ -22,7 +22,7 @@ LIBKEILAND_SOURCES := userland/desktop/libkeiland/version.c userland/desktop/lib
 # here too.
 LIBKEILAND_ZEDBSD_SOURCES := userland/desktop/libkeiland/system-compat.c \
 	userland/desktop/libkeiland/audio-compat.c \
-	$(KL_BACKEND_ZEDBSD_SOURCES)
+	$(KL_BACKEND_ZEDBSD_COMPAT_SOURCES)
 
 LIBZDESKTOP_IMAGE_DATA := $(if $(ZEDBSD_TOPLEVEL_BUILD),/lib/libkeiland.so=$(BUILD)/dynamic/libkeiland.so)
 $(eval $(call ZEDBSD_USERLAND_PACKAGE,libkeiland,Desktop system library,amd64,y,library,$(LIBKEILAND_SOURCES) $(LIBKEILAND_ZEDBSD_SOURCES),y,desktop,desktop/libkeiland,desktop/libwayland desktop/libtruetype,,shared-library,$(LIBZDESKTOP_IMAGE_DATA),,lib))

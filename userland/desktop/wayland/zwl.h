@@ -1272,6 +1272,13 @@ void zwl_seat_frame(struct zwl_server *server);
 void zwl_seat_key(struct zwl_server *server, uint32_t time, uint32_t key, uint32_t state);
 void zwl_seat_key_deliver(struct zwl_server *server, uint32_t time, uint32_t key, uint32_t state);
 void zwl_seat_modifiers(struct zwl_server *server);
+/* The operating system through libkeiland-backend (os.c, ws131-p008; the display's two in compose.h). */
+struct pollfd;
+int zwl_os_open(struct zwl_server *server);
+void zwl_os_close(struct zwl_server *server);
+size_t zwl_os_poll_count(const struct zwl_server *server);
+void zwl_os_poll_fill(struct zwl_server *server, struct pollfd *descriptors);
+void zwl_os_poll_done(struct zwl_server *server, const struct pollfd *descriptors);
 void zwl_input_scan(struct zwl_server *server);
 int zwl_input_probe(struct zwl_server *server, int descriptor, const char *path, const struct kl_backend_input_caps *capabilities);
 int zwl_input_attach(struct zwl_server *server, int descriptor, const char *path, unsigned pointer, unsigned keyboard, const struct input_absinfo *x, const struct input_absinfo *y);

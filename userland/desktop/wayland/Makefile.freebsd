@@ -50,9 +50,9 @@ WAYLAND_FREEBSD_SOURCES := userland/desktop/wayland/main.c \
 	userland/tests/vkdemo/display.c \
 	userland/desktop/artwork/mark.c \
 	userland/desktop/picture/color-glyph.c \
-	userland/desktop/wayland/freebsd/os-freebsd.c \
 	userland/desktop/wayland/handoff.c \
 	userland/desktop/wayland/backend-host.c \
+	userland/desktop/wayland/os.c \
 	userland/desktop/wayland/dmabuf/gpu-dmabuf.c \
 	userland/desktop/wayland/freebsd/sync-freebsd.c
 $(eval $(call KEILAND_FREEBSD_PROGRAM,wayland,bin,$(WAYLAND_FREEBSD_SOURCES),libkeiland.so libkeiland-backend.a libtruetype.so libpng-compat.so libz-compat.so libvulkan.so.1 libseat.so.1,-lm -pthread))
