@@ -110,7 +110,7 @@ shot list.png
 click "$lx" "$ly" 1500
 expect_log /tmp/probe.log 'NETPROBE request op=35 ssid=Kei Lab'
 expect_log /tmp/zdesktop.log 'ZWL NETWORK state reachable=1 connected=1 kind=wifi interface=wlan0 wifi=connected ssid=Kei Lab'
-expect_log /tmp/zdesktop.log 'ZWL NETWORK row .*text=Disconnect from Kei Lab'
+expect_log /tmp/zdesktop.log 'ZWL NETWORK disconnect .*ssid=Kei Lab'
 pointer move 1100 500 sleep 500
 shot joined.png
 
@@ -139,7 +139,7 @@ expect_log /tmp/zdesktop.log 'ZWL NETWORK key saved ssid=Neighbor 5G'
 expect_log /tmp/probe.log 'NETPROBE request op=37'
 expect_log /tmp/probe.log 'NETPROBE request op=35 ssid=Neighbor 5G'
 expect_log /tmp/zdesktop.log 'ZWL NETWORK state reachable=1 connected=1 kind=wifi interface=wlan0 wifi=connected ssid=Neighbor 5G'
-expect_log /tmp/zdesktop.log 'ZWL NETWORK row .*text=Disconnect from Neighbor 5G'
+expect_log /tmp/zdesktop.log 'ZWL NETWORK disconnect .*ssid=Neighbor 5G'
 pointer move 1100 500 sleep 500
 shot key-joined.png
 

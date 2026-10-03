@@ -16,9 +16,12 @@
  * connection at all it is pale bars.
  *
  * A click on the icon opens the menu: the Wi-Fi switch with the Wi-Fi's
- * state under it, the networks the radio sees (the one it is on checked,
- * a padlock on those that ask for a key, the signal as bars), the wired
- * connection, and "Disconnect" while the Wi-Fi is connected.  A click on a
+ * state under it, the networks the radio sees (the one it is on first,
+ * checked, with a Disconnect button on its row; a padlock on those that
+ * ask for a key, the signal as bars), and the wired connection.  The list
+ * is cut to what fits under the bar, the rest named in a note (BUG-148:
+ * the bottom row "Disconnect from X" fell off the screen when many
+ * networks were seen).  A click on a
  * network joins it with its saved profile; a network that asks for a key
  * and has none saved opens a key field in the menu instead, and Enter saves
  * the key in the user's store, tells the daemon and joins (ws005-p019,
@@ -66,6 +69,10 @@
 #define NETWORK_KEY_MIN		8U
 #define NETWORK_KEY_MAX		63U
 
+/* The Disconnect button on the row of the network it is on (BUG-148): its width, its inset from the row's top and bottom. */
+#define NETWORK_DISCONNECT_WIDTH	92
+#define NETWORK_DISCONNECT_INSET	4
+
 /* The menu's width, its padding, its rows' height, and its corner radius. */
 #define NETWORK_MENU_WIDTH	300
 #define NETWORK_MENU_PADDING	8
@@ -84,7 +91,7 @@ enum network_row_kind {
 	NETWORK_ROW_SEPARATOR,
 	NETWORK_ROW_AP,
 	NETWORK_ROW_WIRED,
-	NETWORK_ROW_DISCONNECT,
+	NETWORK_ROW_CURRENT,
 	NETWORK_ROW_KEY
 };
 
@@ -180,6 +187,9 @@ static const char network_shifted[NETWORK_KEYS] = {
 static void network_open_menu(struct zwl_server *server);
 static void network_close_menu(struct zwl_server *server, const char *via);
 static void network_layout(struct zwl_server *server);
+static unsigned network_layout_rows(struct zwl_server *server, unsigned limit);
+static int network_is_current(const struct network_row *row);
+static int network_in_disconnect(const struct network_row *row, int32_t x, int32_t y);
 static void network_add_row(enum network_row_kind kind, const char *text, int32_t height, unsigned ap);
 static void network_add_key_rows(void);
 static void network_state_text(const struct kl_backend_network_state *state, char *text, size_t size);
@@ -192,6 +202,8 @@ static void network_log_layout(void);
 static void network_draw_bars(struct zwl_server *server, VkCommandBuffer command, int32_t x, int32_t bottom, unsigned lit, const float *ink, float faint);
 static void network_draw_wired(struct zwl_server *server, VkCommandBuffer command, int32_t x, const float *ink);
 static void network_draw_row(struct zwl_server *server, VkCommandBuffer command, const struct network_row *row, int32_t top, unsigned over);
+static void network_draw_check(struct zwl_server *server, VkCommandBuffer command, int32_t left, int32_t middle, int32_t baseline, const float *ink);
+static void network_draw_disconnect(struct zwl_server *server, VkCommandBuffer command, const struct network_row *row, int32_t top, int on_button);
 static void network_draw_switch(struct zwl_server *server, VkCommandBuffer command, int32_t right, int32_t middle, unsigned on);
 static void network_draw_lock(struct zwl_server *server, VkCommandBuffer command, int32_t x, int32_t middle, const float *ink);
 static unsigned network_strength(int rssi);
@@ -533,25 +545,77 @@ network_close_menu(
 
 /*
  * Lays out the rows from the state and scan last read: the switch and the
- * state, the networks, the wired connection, disconnect and a failure.
+ * state, the networks (the one it is on first), the wired connection and
+ * a failure.  A list too long for the screen keeps the networks that fit.
  */
 static void
 network_layout(
 	struct zwl_server *server)
+{
+	unsigned limit;
+	unsigned listed;
+	int32_t room;
+
+	/* Every network first. */
+	limit = KL_BACKEND_NETWORK_SCAN_MAX;
+	listed = network_layout_rows(server, limit);
+
+	/* The menu's place: under the icon, its right edge a little in from the output's. */
+	network_view.menu_x = network_view.icon_x + network_view.icon_width - NETWORK_MENU_WIDTH + 60;
+	if (network_view.menu_x + NETWORK_MENU_WIDTH > (int32_t)server->width - 8)
+		network_view.menu_x = (int32_t)server->width - 8 - NETWORK_MENU_WIDTH;
+	if (network_view.menu_x < 8)
+		network_view.menu_x = 8;
+	network_view.menu_y = ZWL_GLASS_BAR + 6;
+
+	/*
+	 * A menu taller than the screen under it lists fewer networks: as many
+	 * rows fewer as it overflows, and one more for the note that names the
+	 * rest.
+	 */
+	room = (int32_t)server->height - network_view.menu_y - 8;
+	if (network_view.menu_height > room && listed > 0U) {
+		limit = listed;
+		while (limit > 0U && network_view.menu_height > room) {
+			limit--;
+			(void)network_layout_rows(server, limit);
+		}
+	}
+
+	/* A new layout is logged for the tests that click the rows. */
+	network_log_layout();
+}
+
+/*
+ * Makes the rows with at most limit networks besides the one it is on and
+ * the one whose key is typed (the strongest first, as the scan has them).
+ * Returns how many networks besides those two the scan had to list.
+ */
+static unsigned
+network_layout_rows(
+	struct zwl_server *server,
+	unsigned limit)
 {
 	const struct kl_backend_network_state *state;
 	char text[96];
 	unsigned request;
 	unsigned index;
 	unsigned key_shown;
+	unsigned others;
+	unsigned shown;
+	int current;
 	int32_t y;
 	int error;
 	int differs;
+
+	(void)server;
 
 	/* No rows yet, and no key field placed. */
 	state = &network_view.state;
 	network_view.row_count = 0;
 	key_shown = 0;
+	others = 0;
+	shown = 0;
 
 	/* The Wi-Fi's switch, with its state under it (the network being joined while the user waits for it). */
 	if (state->wifi != KL_BACKEND_WIFI_ABSENT && state->reachable) {
@@ -573,26 +637,61 @@ network_layout(
 		request = kl_backend_network_get_request(network_view.watch, &error);
 		if (request == KL_BACKEND_NETWORK_REQUEST_SCAN && network_view.scan_count == 0) {
 			network_add_row(NETWORK_ROW_NOTE, "Looking for networks...", NETWORK_NOTE_HEIGHT, 0);
-		} else if (network_view.scan_count == 0) {
+		} else if (network_view.scan_count == 0 && state->wifi != KL_BACKEND_WIFI_CONNECTED) {
 			network_add_row(NETWORK_ROW_NOTE, "No networks found", NETWORK_NOTE_HEIGHT, 0);
 		}
 
+		/* The network it is on comes first (its own row when the scan has not found it). */
+		if (state->wifi == KL_BACKEND_WIFI_CONNECTED && state->ssid[0] != '\0') {
+			current = 0;
+			for (index = 0; index < network_view.scan_count; index++) {
+				differs = strcmp(network_view.scan[index].ssid, state->ssid);
+				if (differs != 0)
+					continue;
+				network_add_row(NETWORK_ROW_AP, network_view.scan[index].ssid, NETWORK_ROW_HEIGHT, index);
+				current = 1;
+				break;
+			}
+			if (!current)
+				network_add_row(NETWORK_ROW_CURRENT, state->ssid, NETWORK_ROW_HEIGHT, 0);
+		}
+
 		/*
-		 * Each network the scan found; the key field of the one chosen
-		 * stands right under its row (BUG-160: under the whole list it
-		 * was far from the network, at the bottom of the screen).
+		 * Every other network the scan found, as many as the limit lets;
+		 * the key field of the one chosen stands right under its row
+		 * (BUG-160), and that one is always listed.
 		 */
 		for (index = 0; index < network_view.scan_count; index++) {
+			/* The network it is on is already first. */
+			if (state->wifi == KL_BACKEND_WIFI_CONNECTED) {
+				differs = strcmp(network_view.scan[index].ssid, state->ssid);
+				if (differs == 0)
+					continue;
+			}
+
+			/* The network the key is asked for is always listed; the others while the limit lets. */
+			differs = 1;
+			if (network_view.key_open)
+				differs = strcmp(network_view.scan[index].ssid, network_view.key_ssid);
+			if (differs != 0) {
+				others++;
+				if (shown >= limit)
+					continue;
+				shown++;
+			}
 			network_add_row(NETWORK_ROW_AP, network_view.scan[index].ssid, NETWORK_ROW_HEIGHT, index);
 
-			/* The network the key is asked for. */
-			if (!network_view.key_open)
-				continue;
-			differs = strcmp(network_view.scan[index].ssid, network_view.key_ssid);
+			/* The key field under the network it is asked for. */
 			if (differs != 0)
 				continue;
 			network_add_key_rows();
 			key_shown = 1;
+		}
+
+		/* The networks the screen had no room for are named, and found in Settings. */
+		if (shown < others) {
+			(void)snprintf(text, sizeof(text), "%u more in Settings > Wi-Fi", others - shown);
+			network_add_row(NETWORK_ROW_NOTE, text, NETWORK_NOTE_HEIGHT, 0);
 		}
 	}
 
@@ -613,12 +712,6 @@ network_layout(
 	/* The line. */
 	network_add_row(NETWORK_ROW_WIRED, text, NETWORK_ROW_HEIGHT, 0);
 
-	/* Leaving the Wi-Fi network it is on. */
-	if (state->wifi == KL_BACKEND_WIFI_CONNECTED || state->wifi == KL_BACKEND_WIFI_CONNECTING) {
-		(void)snprintf(text, sizeof(text), "Disconnect from %s", state->ssid);
-		network_add_row(NETWORK_ROW_DISCONNECT, text, NETWORK_ROW_HEIGHT, 0);
-	}
-
 	/* The last failure (under the key field instead while it is open). */
 	if (network_view.failure[0] != '\0' && !network_view.key_open)
 		network_add_row(NETWORK_ROW_NOTE, network_view.failure, NETWORK_NOTE_HEIGHT, 0);
@@ -633,16 +726,8 @@ network_layout(
 	/* The menu ends with its padding under the last row. */
 	network_view.menu_height = y + NETWORK_MENU_PADDING;
 
-	/* Under the icon, its right edge a little in from the output's. */
-	network_view.menu_x = network_view.icon_x + network_view.icon_width - NETWORK_MENU_WIDTH + 60;
-	if (network_view.menu_x + NETWORK_MENU_WIDTH > (int32_t)server->width - 8)
-		network_view.menu_x = (int32_t)server->width - 8 - NETWORK_MENU_WIDTH;
-	if (network_view.menu_x < 8)
-		network_view.menu_x = 8;
-	network_view.menu_y = ZWL_GLASS_BAR + 6;
-
-	/* A new layout is logged for the tests that click the rows. */
-	network_log_layout();
+	/* Succeeded: how many networks wanted a row of their own. */
+	return others;
 }
 
 /* Adds one row (while there is room). */
@@ -732,6 +817,8 @@ network_act(
 	const struct network_row *row)
 {
 	unsigned wanted;
+	int current;
+	int inside;
 
 	/* What the row does. */
 	switch (row->kind) {
@@ -743,10 +830,19 @@ network_act(
 		network_request(server, wanted, NULL);
 		break;
 	case NETWORK_ROW_AP:
-		network_choose_ap(server, row->ap);
-		break;
-	case NETWORK_ROW_DISCONNECT:
-		network_request(server, KL_BACKEND_NETWORK_REQUEST_DISCONNECT, NULL);
+	case NETWORK_ROW_CURRENT:
+		/* The network it is on: its Disconnect button leaves it, the rest of its row does nothing. */
+		current = network_is_current(row);
+		if (current) {
+			inside = network_in_disconnect(row, server->pointer_x, server->pointer_y);
+			if (inside)
+				network_request(server, KL_BACKEND_NETWORK_REQUEST_DISCONNECT, NULL);
+			break;
+		}
+
+		/* Any other network is joined. */
+		if (row->kind == NETWORK_ROW_AP)
+			network_choose_ap(server, row->ap);
 		break;
 	default:
 		/* The notes, the separators and the wired line only show. */
@@ -825,7 +921,7 @@ network_row_at(
 			continue;
 
 		/* Notes, separators and the wired line do nothing. */
-		if (row->kind == NETWORK_ROW_SWITCH || row->kind == NETWORK_ROW_AP || row->kind == NETWORK_ROW_DISCONNECT)
+		if (row->kind == NETWORK_ROW_SWITCH || row->kind == NETWORK_ROW_AP || row->kind == NETWORK_ROW_CURRENT)
 			return row;
 		return NULL;
 	}
@@ -884,8 +980,9 @@ network_log_layout(
 	uint64_t checksum;
 	unsigned index;
 	size_t at;
+	int current;
 
-	/* A checksum of the rows' kinds, places and texts. */
+	/* A checksum of the rows' kinds, places and texts, and of the Wi-Fi's state (the Disconnect button comes with it). */
 	checksum = 1469598103934665603ULL;
 	for (index = 0; index < network_view.row_count; index++) {
 		row = &network_view.rows[index];
@@ -895,8 +992,9 @@ network_log_layout(
 			checksum = (checksum ^ (unsigned char)row->text[at]) * 1099511628211ULL;
 	}
 
-	/* And the menu's place. */
+	/* And the menu's place and the Wi-Fi's state. */
 	checksum = (checksum ^ (uint64_t)(uint32_t)network_view.menu_x) * 1099511628211ULL;
+	checksum = (checksum ^ (uint64_t)network_view.state.wifi) * 1099511628211ULL;
 
 	/* Only a layout not logged yet. */
 	if (checksum == network_view.logged_layout)
@@ -909,6 +1007,15 @@ network_log_layout(
 		row = &network_view.rows[index];
 		printf("ZWL NETWORK row index=%u kind=%d x=%d y=%d width=%d height=%d text=%s\n", index, (int)row->kind,
 		    network_view.menu_x, network_view.menu_y + row->y, NETWORK_MENU_WIDTH, row->height, row->text);
+
+		/* The Disconnect button of the network it is on, for the tests that click it. */
+		current = network_is_current(row);
+		if (current) {
+			printf("ZWL NETWORK disconnect x=%d y=%d width=%d height=%d ssid=%s\n",
+			    network_view.menu_x + NETWORK_MENU_WIDTH - 10 - NETWORK_DISCONNECT_WIDTH,
+			    network_view.menu_y + row->y + NETWORK_DISCONNECT_INSET, NETWORK_DISCONNECT_WIDTH,
+			    row->height - 2 * NETWORK_DISCONNECT_INSET, row->text);
+		}
 	}
 }
 
@@ -984,9 +1091,10 @@ network_draw_row(
 	int32_t middle;
 	int32_t baseline;
 	int32_t width;
-	int present;
 	int differs;
 	int joining;
+	int current;
+	int on_button;
 
 	/* The row's edges, its middle and the text's baseline. */
 	left = network_view.menu_x;
@@ -1006,8 +1114,11 @@ network_draw_row(
 		return;
 	}
 
-	/* The lit row is a blue band with white text. */
+	/* The lit row is a blue band with white text (not the network it is on: only its button acts). */
 	memcpy(ink, dark, sizeof(ink));
+	current = network_is_current(row);
+	if (current && network_view.connecting[0] == '\0')
+		over = 0;
 	if (over) {
 		glass_draw_solid(server, command, (float)(left + 5), (float)(top + 1), (float)(NETWORK_MENU_WIDTH - 10), (float)(row->height - 2), 6.0f, blue);
 		memcpy(ink, white, sizeof(ink));
@@ -1021,9 +1132,20 @@ network_draw_row(
 	}
 
 	/*
-	 * A network: the check of the one it is on, its SSID, a padlock and its
-	 * signal; while one is being joined, it says so in place of the padlock
-	 * and the signal, and no check is shown until the join is answered.
+	 * The network it is on (BUG-148): the check, its SSID and a Disconnect
+	 * button at the right of its row, lit while the pointer is on it.
+	 */
+	if (current && network_view.connecting[0] == '\0') {
+		network_draw_check(server, command, left, middle, baseline, ink);
+		glass_draw_text(server, command, SIZE_BAR, left + 32, baseline, row->text, NETWORK_MENU_WIDTH - 32 - NETWORK_DISCONNECT_WIDTH - 20, ink);
+		on_button = network_in_disconnect(row, server->pointer_x, server->pointer_y);
+		network_draw_disconnect(server, command, row, top, on_button);
+		return;
+	}
+
+	/*
+	 * A network: its SSID, a padlock and its signal; while one is being
+	 * joined, it says so in place of the padlock and the signal.
 	 */
 	if (row->kind == NETWORK_ROW_AP) {
 		ap = &network_view.scan[row->ap];
@@ -1054,20 +1176,6 @@ network_draw_row(
 				glass_draw_text(server, command, SIZE_BAR, right - width, baseline, "Connecting...", width + 2, soft);
 			}
 			return;
-		}
-
-		/* The check of the network it is on, unless another is being joined. */
-		differs = strcmp(ap->ssid, network_view.state.ssid);
-		if (network_view.state.wifi == KL_BACKEND_WIFI_CONNECTED &&
-		    differs == 0 &&
-		    network_view.connecting[0] == '\0') {
-			/* The check mark, or a small square without the glyph. */
-			present = glass_glyph_advance(server, SIZE_BAR, GLASS_CHECK_GLYPH);
-			if (present > 0) {
-				glass_draw_glyph(server, command, SIZE_BAR, GLASS_CHECK_GLYPH, left + 12, baseline, ink);
-			} else {
-				glass_draw_solid(server, command, (float)(left + 13), (float)(middle - 4), 8.0f, 8.0f, 2.0f, ink);
-			}
 		}
 
 		/* The SSID, the padlock of a network that asks for a key, and the signal. */
@@ -1509,4 +1617,117 @@ network_connecting(
 
 	/* The log line the tests read. */
 	printf("ZWL NETWORK connecting ssid=%s\n", network_view.connecting);
+}
+
+/* Tells whether a row is the network the Wi-Fi is on (a network row of its SSID, or its own row). */
+static int
+network_is_current(
+	const struct network_row *row)
+{
+	const struct kl_backend_network_ap *ap;
+	int differs;
+
+	/* Only while connected. */
+	if (network_view.state.wifi != KL_BACKEND_WIFI_CONNECTED)
+		return 0;
+
+	/* The row made for it when the scan did not find it. */
+	if (row->kind == NETWORK_ROW_CURRENT)
+		return 1;
+
+	/* A network row of the same SSID. */
+	if (row->kind != NETWORK_ROW_AP)
+		return 0;
+	ap = &network_view.scan[row->ap];
+	differs = strcmp(ap->ssid, network_view.state.ssid);
+	if (differs != 0)
+		return 0;
+
+	/* Succeeded: the row is the network it is on. */
+	return 1;
+}
+
+/* Tells whether a point of the screen is on the Disconnect button of a row (its right end). */
+static int
+network_in_disconnect(
+	const struct network_row *row,
+	int32_t x,
+	int32_t y)
+{
+	int32_t right;
+	int32_t top;
+
+	/* The button's rectangle. */
+	right = network_view.menu_x + NETWORK_MENU_WIDTH - 10;
+	top = network_view.menu_y + row->y + NETWORK_DISCONNECT_INSET;
+
+	/* Outside it. */
+	if (x < right - NETWORK_DISCONNECT_WIDTH || x >= right)
+		return 0;
+	if (y < top || y >= top + row->height - 2 * NETWORK_DISCONNECT_INSET)
+		return 0;
+
+	/* Succeeded: on the button. */
+	return 1;
+}
+
+/* Draws the check of the network it is on, or a small square without the glyph. */
+static void
+network_draw_check(
+	struct zwl_server *server,
+	VkCommandBuffer command,
+	int32_t left,
+	int32_t middle,
+	int32_t baseline,
+	const float *ink)
+{
+	int present;
+
+	/* The font's check mark, when it has one. */
+	present = glass_glyph_advance(server, SIZE_BAR, GLASS_CHECK_GLYPH);
+	if (present > 0) {
+		glass_draw_glyph(server, command, SIZE_BAR, GLASS_CHECK_GLYPH, left + 12, baseline, ink);
+	} else {
+		glass_draw_solid(server, command, (float)(left + 13), (float)(middle - 4), 8.0f, 8.0f, 2.0f, ink);
+	}
+}
+
+/* Draws the Disconnect button at the right of the row of the network it is on: an outline, filled blue under the pointer. */
+static void
+network_draw_disconnect(
+	struct zwl_server *server,
+	VkCommandBuffer command,
+	const struct network_row *row,
+	int32_t top,
+	int on_button)
+{
+	static const float dark[4] = { 0.12f, 0.16f, 0.24f, 1.0f };
+	static const float white[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	static const float blue[4] = { 0.25f, 0.52f, 0.98f, 1.0f };
+	static const float edge[4] = { 0.12f, 0.16f, 0.24f, 0.28f };
+	static const float face[4] = { 1.0f, 1.0f, 1.0f, 0.92f };
+	const float *ink;
+	int32_t x;
+	int32_t y;
+	int32_t height;
+	int32_t width;
+
+	/* The button's rectangle. */
+	x = network_view.menu_x + NETWORK_MENU_WIDTH - 10 - NETWORK_DISCONNECT_WIDTH;
+	y = top + NETWORK_DISCONNECT_INSET;
+	height = row->height - 2 * NETWORK_DISCONNECT_INSET;
+
+	/* Its face: blue under the pointer, else white within a thin edge. */
+	ink = dark;
+	if (on_button) {
+		glass_draw_solid(server, command, (float)x, (float)y, (float)NETWORK_DISCONNECT_WIDTH, (float)height, 6.0f, blue);
+		ink = white;
+	} else {
+		glass_draw_solid(server, command, (float)x, (float)y, (float)NETWORK_DISCONNECT_WIDTH, (float)height, 6.0f, edge);
+		glass_draw_solid(server, command, (float)(x + 1), (float)(y + 1), (float)(NETWORK_DISCONNECT_WIDTH - 2), (float)(height - 2), 5.0f, face);
+	}
+
+	/* Its word, in the middle. */
+	width = glass_text_width(server, SIZE_BAR, "Disconnect");
+	glass_draw_text(server, command, SIZE_BAR, x + (NETWORK_DISCONNECT_WIDTH - width) / 2, y + height / 2 + 5, "Disconnect", NETWORK_DISCONNECT_WIDTH - 4, ink);
 }
