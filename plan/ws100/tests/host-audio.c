@@ -6,8 +6,9 @@
  */
 
 /*
- * The host test of libkeiland's audio (ws100-p003): the library against a
- * pretend audiod on a socket of its own (audio.c built with
+ * The host test of the desktop's audio (ws100-p003; libkeiland-backend's
+ * zedBSD side since ws131-p004): the backend against a
+ * pretend audiod on a socket of its own (audio-zedbsd.c built with
  * AUDIO_SOCKET_PATH), a child process that answers HELLO with WELCOME,
  * SUBSCRIBE with DONE and the volume, DEVICE_VOLUME with DONE and the new
  * volume, and FEEDBACK with ERROR EINVAL (an audiod without it), then goes
@@ -16,7 +17,7 @@
  *   plan/ws100/tests/host-audio.sh
  */
 
-#include <keiland.h>
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
 
 #include "userland/base/audiod/protocol.h"
 
@@ -40,7 +41,7 @@ static pid_t pretend_start(unsigned device, unsigned volume);
 static void pretend_serve(int listener, unsigned device, unsigned volume);
 static void pretend_reply(int fd, uint32_t type, uint32_t serial, uint32_t error);
 static void pretend_volume(int fd, unsigned left, unsigned right, unsigned muted);
-static void wait_update(struct keiland_audio *audio, unsigned want, unsigned *seen);
+static void wait_update(struct kl_backend_audio *audio, unsigned want, unsigned *seen);
 static void pause_ms(unsigned milliseconds);
 
 /* Runs the checks; returns 0 when all passed. */
@@ -48,8 +49,8 @@ int
 main(
 	void)
 {
-	struct keiland_audio *audio;
-	struct keiland_audio_state state;
+	struct kl_backend_audio *audio;
+	struct kl_backend_audio_state state;
 	unsigned seen;
 	pid_t child;
 	int error;
@@ -59,52 +60,52 @@ main(
 
 	/* 1. No audiod: the record exists, not connected, not reachable, and a set is refused. */
 	unlink(AUDIO_SOCKET_PATH);
-	audio = keiland_audio_open();
+	audio = kl_backend_audio_open();
 	check(audio != NULL, "open without audiod");
-	check(keiland_audio_fd(audio) < 0, "no descriptor without audiod");
-	keiland_audio_get_state(audio, &state);
+	check(kl_backend_audio_fd(audio) < 0, "no descriptor without audiod");
+	kl_backend_audio_get_state(audio, &state);
 	check(state.reachable == 0U, "not reachable without audiod");
-	error = keiland_audio_set_volume(audio, 50U, 50U, 0U);
+	error = kl_backend_audio_set_volume(audio, 50U, 50U, 0U);
 	check(error == ENOTCONN, "set refused without audiod");
-	error = keiland_audio_set_volume(audio, 101U, 50U, 0U);
+	error = kl_backend_audio_set_volume(audio, 101U, 50U, 0U);
 	check(error == EINVAL, "an out-of-range volume is refused");
 
 	/* 2. audiod comes: the next update (after the wait) connects, WELCOME and the volume arrive. */
 	child = pretend_start(1U, 70U);
 	pause_ms(1100U);
-	wait_update(audio, KEILAND_AUDIO_CHANGED_VOLUME, &seen);
-	keiland_audio_get_state(audio, &state);
+	wait_update(audio, KL_BACKEND_AUDIO_CHANGED_VOLUME, &seen);
+	kl_backend_audio_get_state(audio, &state);
 	check(state.reachable == 1U && state.device == 1U && state.rate == 48000U, "reachable with the device after connecting");
 	check(state.left == 70U && state.right == 70U && state.muted == 0U, "the volume as it stands");
-	check(keiland_audio_fd(audio) >= 0, "a descriptor while connected");
+	check(kl_backend_audio_fd(audio) >= 0, "a descriptor while connected");
 
 	/* 3. A set comes back as a report. */
-	error = keiland_audio_set_volume(audio, 35U, 35U, 1U);
+	error = kl_backend_audio_set_volume(audio, 35U, 35U, 1U);
 	check(error == 0, "set sent");
-	wait_update(audio, KEILAND_AUDIO_CHANGED_VOLUME, &seen);
-	keiland_audio_get_state(audio, &state);
+	wait_update(audio, KL_BACKEND_AUDIO_CHANGED_VOLUME, &seen);
+	kl_backend_audio_get_state(audio, &state);
 	check(state.left == 35U && state.muted == 1U, "the new volume reported");
 
 	/* 4. The feedback sound to an audiod without it: sent, the ERROR passed over, still connected. */
-	error = keiland_audio_feedback(audio);
+	error = kl_backend_audio_feedback(audio);
 	check(error == 0, "feedback sent");
 	wait_update(audio, 0U, &seen);
-	check(keiland_audio_fd(audio) >= 0, "still connected after an ERROR");
+	check(kl_backend_audio_fd(audio) >= 0, "still connected after an ERROR");
 
 	/* 5. audiod goes: not reachable; it comes back with no device: reachable, device 0. */
 	kill(child, SIGTERM);
 	waitpid(child, NULL, 0);
-	wait_update(audio, KEILAND_AUDIO_CHANGED_REACHABLE, &seen);
-	keiland_audio_get_state(audio, &state);
+	wait_update(audio, KL_BACKEND_AUDIO_CHANGED_REACHABLE, &seen);
+	kl_backend_audio_get_state(audio, &state);
 	check(state.reachable == 0U, "not reachable after audiod went");
 	child = pretend_start(0U, 100U);
 	pause_ms(1100U);
-	wait_update(audio, KEILAND_AUDIO_CHANGED_VOLUME, &seen);
-	keiland_audio_get_state(audio, &state);
+	wait_update(audio, KL_BACKEND_AUDIO_CHANGED_VOLUME, &seen);
+	kl_backend_audio_get_state(audio, &state);
 	check(state.reachable == 1U && state.device == 0U && state.left == 100U, "connected again, no device");
 
 	/* The end. */
-	keiland_audio_close(audio);
+	kl_backend_audio_close(audio);
 	kill(child, SIGTERM);
 	waitpid(child, NULL, 0);
 	unlink(AUDIO_SOCKET_PATH);
@@ -271,7 +272,7 @@ pretend_volume(
 /* Updates for up to 3 seconds until a change bit is seen (with 0, updates for 300 ms). */
 static void
 wait_update(
-	struct keiland_audio *audio,
+	struct kl_backend_audio *audio,
 	unsigned want,
 	unsigned *seen)
 {
@@ -281,7 +282,7 @@ wait_update(
 	/* Every 20 ms. */
 	*seen = 0U;
 	for (round = 0U; round < 150U; round++) {
-		(void)keiland_audio_update(audio, &changed);
+		(void)kl_backend_audio_update(audio, &changed);
 		*seen |= changed;
 		if (want != 0U && (*seen & want) != 0U)
 			return;

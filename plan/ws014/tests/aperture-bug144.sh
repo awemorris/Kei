@@ -29,6 +29,12 @@ stop_all='service stop greeter >/dev/null 2>&1; ps -A -o pid,comm | awk "{ n = \
 
 allocated='/sbin/sysctl hw.memory.stats | sed -n "s/.* allocated=\([0-9]*\).*/\1/p"'
 
+# A guest just started answers SSH only after it has booted; nothing is asked of it before.
+timeout 660 python3 plan/tools/guest/guest.py wait --timeout 600 </dev/null >/dev/null 2>&1 || {
+	echo "aperture-bug144: the guest's SSH did not come up"
+	exit 1
+}
+
 # The image must have the Model viewer (the CI image has not since 2026-10-02).
 if [ "$(guest 'test -x /bin/mview && echo yes' | tail -1)" != yes ]; then
 	echo "aperture-bug144: MISSING /bin/mview in the guest's image (use plan/ws035/tests/build-zdesktop-image.sh)"
@@ -54,9 +60,10 @@ before=$(guest "$allocated" | tail -1)
 echo "zdesktop alone: allocated=${before:-?}" | tee "$out/mview-steps.txt"
 n=1
 while [ $n -le 14 ]; do
-	guest "export XDG_RUNTIME_DIR=/tmp; /bin/mview --windowed --size=960x640 --token=m$n > /tmp/mview-$n.log 2>&1 </dev/null & sleep 8; echo started" >/dev/null
+	# zedBSD's ps does not show the arguments a viewer was started with, so it is found by its pid.
+	pid=$(guest "export XDG_RUNTIME_DIR=/tmp; /bin/mview --windowed --size=960x640 --token=m$n > /tmp/mview-$n.log 2>&1 </dev/null & echo \$!; sleep 8" | tail -1)
 	failed=$(guest "grep -c 'MVIEW FAILED' /tmp/mview-$n.log" | tail -1)
-	vsz=$(guest "ps -A -o vsz,args | grep '[m]view.*--token=m$n\$' | awk '{print \$1}'" | tail -1)
+	vsz=$(guest "ps -A -o pid,vsz | awk '\$1 == ${pid:-0} {print \$2}'" | tail -1)
 	now=$(guest "$allocated" | tail -1)
 	echo "mview $n: vsz_kib=${vsz:-gone} allocated=${now:-?} failed=${failed:-?}" | tee -a "$out/mview-steps.txt"
 	if [ "${failed:-0}" != 0 ]; then

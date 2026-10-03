@@ -1,10 +1,11 @@
 # The Linux side of libkeiland-backend (WS131, plan/ws131/design.md section 3.6): a static library the
-# compositor links (and libkeiland, while it forwards its old network calls here, until ws131-p011).
+# compositor links (and libkeiland, while it forwards its old network and sound calls here, until ws131-p011).
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 # keiland-linux-sync: only userland/desktop/libkeiland-backend/* the shared backend sources (no zedBSD Makefile pair)
 # keiland-linux-sync: only userland/desktop/libkeiland-backend-linux/* the Linux backend (no zedBSD Makefile pair)
 KEILAND_LINUX_BACKEND_SOURCES := userland/desktop/libkeiland-backend/backend.c \
 	userland/desktop/libkeiland-backend/wpa/network-wpa.c \
 	userland/desktop/libkeiland-backend/wpa/network-config-wpa.c \
-	userland/desktop/libkeiland-backend-linux/network-link-linux.c
+	userland/desktop/libkeiland-backend-linux/network-link-linux.c \
+	userland/desktop/libkeiland-backend-linux/audio-linux.c
 $(eval $(call KEILAND_LINUX_STATIC,keiland-backend,libkeiland-backend.a,$(KEILAND_LINUX_BACKEND_SOURCES)))

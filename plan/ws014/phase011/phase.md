@@ -114,3 +114,8 @@ T1-027（CI の image）で数字が取れなかった理由は 2 つ:
 - image は mview のある `plan/ws035/tests/build-zdesktop-image.sh`（config-amd64-zdesktop.mk）を使う。guest に `/bin/mview` が無ければ `MISSING` と出して止まる。
 - CPU の memory は、各段の process の VSZ（`ps -o pid,vsz,args`、KiB）と、system 全体の確保済みの物理 memory（`/sbin/sysctl hw.memory.stats` の `allocated=`）で記録する。段の差がその段の重さになる。zedBSD には process ごとの RSS が無い。
 - App Home の全 app の段（1）は `APPHOME=1` の時だけ流す（T1-027 で CI の image で済んでいる）。
+
+T2 の 1 回目（b4b4f5d66）で分かった 2 点を直した（2026-10-03）:
+- `files-guest.sh start` の直後に流すと、SSH の準備の前に `MISSING /bin/mview` と誤って止まった。今は先に `guest.py wait --timeout 600` で SSH を待つ。
+- `vsz_kib` が全行 `gone` だった。zedBSD の ps は起動の引数（`--token=mN`）を出さないので、grep で見つからなかった。今は mview を起動した shell の `$!` で pid を取り、`ps -A -o pid,vsz` からその pid の行を読む。
+T2 の数字（allocated、QEMU）は BUG-144 に Q1 が記録した。

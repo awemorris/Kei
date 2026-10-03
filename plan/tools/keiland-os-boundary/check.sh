@@ -114,14 +114,24 @@ while IFS= read -r file; do
 done > "$work/B1"
 
 # Only the compositor uses libkeiland-backend; libkeiland forwards through it only in
-# system-compat.c until Settings reaches the network through the compositor (WS131 B3, ws131-p011).
+# system-compat.c and audio-compat.c until Settings reaches the network and the sound through the compositor (WS131 B3,
+# ws131-p011).
 find userland/desktop -path 'userland/desktop/wayland' -prune \
     -o -path 'userland/desktop/libkeiland-backend*' -prune \
     -o -name '*.[ch]' -print |
 while IFS= read -r file; do
-    [ "$file" != userland/desktop/libkeiland/system-compat.c ] || continue
+    case $file in
+    userland/desktop/libkeiland/system-compat.c|userland/desktop/libkeiland/audio-compat.c) continue ;;
+    esac
     awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"].*keiland-backend\.h[>"]/ {print FILENAME ":" FNR ": " $0}' "$file"
 done > "$work/B3"
+
+# libkeiland keeps no operating-system directory: its OS code is libkeiland-backend's (WS131 L6, ws131-p004).
+for os_dir in zedbsd linux freebsd; do
+    if [ -e "userland/desktop/libkeiland/$os_dir" ]; then
+        echo "userland/desktop/libkeiland/$os_dir: an OS directory in libkeiland"
+    fi
+done > "$work/L6"
 
 # Inspect the actual target package membership and wildcard filename boundary.
 make -pn disk-image > "$work/make-database"
@@ -146,7 +156,7 @@ for line in Path(sys.argv[1]).read_text().splitlines():
 PY
 
 # Report every violated condition before returning the aggregate outcome.
-for check in C1 C2 C3 C4 C5 L1 L2 L3 L4 L5 B1 B3; do
+for check in C1 C2 C3 C4 C5 L1 L2 L3 L4 L5 L6 B1 B3; do
     if [ -s "$work/$check" ]; then
         while IFS= read -r detail; do
             printf 'check: %s FAIL %s\n' "$check" "$detail"
