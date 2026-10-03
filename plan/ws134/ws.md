@@ -1,0 +1,25 @@
+<!-- awesome-plan project=zedbsd record=ws134 -->
+
+# WS134: システムモニターのアプリ（Analytic Spatial UI）
+
+<!-- awesome-plan-current:start -->
+Status: planning
+Primary Milestone: MG006
+Related Milestones: —
+Objectives: O2
+Parent: [Master](../master.md)
+Queue: q649（P2、p001）
+Resume point: p001（設計: 情報の出どころの調査と画面・3D・動きの設計）
+<!-- awesome-plan-current:end -->
+
+## 目標（2026-10-03 ユーザー）
+
+「P2が空いているので、システムモニターのアプリを作ってほしいです。添付がイメージです。」デザインのコンセプトは [design/user-concept.md](design/user-concept.md)（原文の要約）と参考の画像 [design/reference-image.webp](design/reference-image.webp)。
+
+CPU（全体と各 core）、GPU（Util・VRAM・温度・電力、複数）、RAM（Used・Cache・Available・Swap）、Network（RX/TX）、Disk I/O（読み・書き・Latency）と最近の出来事を、中央の「システム状態の立体コア」を顔にした層構造の画面で見せる Keiland の app。3D は階層を見せるため、動きは「呼吸」。タブレットの操作（タップで浮く、スワイプで時間軸、長押しで固定、2 本指で俯瞰）。
+
+## Phase
+
+| Phase | 内容 | 状態 | 依存 |
+| --- | --- | --- | --- |
+| [p001](phase001/phase.md) | 設計: zedBSD（と Linux・FreeBSD）で取れる情報の出どころの調査（不足は kernel・libkeiland の追加の案）、画面の構成・3D の表現・動き・操作・描画の方式（libkeiui と Vulkan）、Phase の分け方 | planning（P2、q649） | — |
