@@ -26,3 +26,5 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 6 | Notes の起動 | PASS | 一瞬 |
 | 6 | PDF Viewer の起動 | PASS | 約 1 秒（F-072 の速さの候補） |
 | 6 | Settings の Wallpaper（Lakeside・Birch-Lake） | 一部 FAIL（要修正） | 2 枚とも一覧にあり、切り替えもできる。ただし Wallpaper の頁を click すると約 10 秒止まる。user「画像読み込みはマルチスレッドにしないとだめだね。要修正。」 |
+| 6 | Desktop の icon から file を開く | PASS | 保存した file を Desktop から開けた（名前は s1.txt ではない） |
+| 6 | IME の A／あ の表示（WS095） | PASS | |
