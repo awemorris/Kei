@@ -1730,7 +1730,14 @@ tcp_sendto(
 		return -EPIPE;
 	}
 
-	if (endpoint->tcp.state != TCP_ESTABLISHED) {
+	/*
+	 * A connection sends while it is established, and after the peer's FIN
+	 * too (CLOSE_WAIT): the peer shut only its own writing and still reads
+	 * the answer (RFC 793; BUG-151, a client's request, SHUT_WR, then the
+	 * answer).
+	 */
+	if (endpoint->tcp.state != TCP_ESTABLISHED &&
+	    endpoint->tcp.state != TCP_CLOSE_WAIT) {
 		spin_unlock_irqrestore(&socket->lock, irq);
 		return -ENOTCONN;
 	}
@@ -1851,6 +1858,22 @@ tcp_recvfrom(
 	if (socket->read_shutdown)
 		return 0;
 	if (endpoint->tcp.state == TCP_CLOSE_WAIT && socket->receive_head == NULL)
+		return 0;
+
+	/*
+	 * After the peer's FIN was read once (its end-of-file marker taken),
+	 * every later read reports the end again instead of waiting for data
+	 * that cannot come (BUG-151: a client that shut its own side first
+	 * reaches TIME_WAIT, and its second read slept for ever).
+	 */
+	if ((endpoint->tcp.state == TCP_LAST_ACK ||
+	     endpoint->tcp.state == TCP_TIME_WAIT) &&
+	    socket->receive_head == NULL)
+		return 0;
+	if (endpoint->tcp.state == TCP_CLOSED &&
+	    (endpoint->tcp.inet.inet_flags & INET_SOCKET_CONNECTED) != 0 &&
+	    socket->error == 0 &&
+	    socket->receive_head == NULL)
 		return 0;
 
 	/* Takes the next packet and copies what fits. */
@@ -2271,7 +2294,8 @@ tcp_poll(
 		 * be acknowledged, only for space to put one more segment.
 		 */
 		if (!socket->write_shutdown &&
-		    endpoint->tcp.state == TCP_ESTABLISHED &&
+		    (endpoint->tcp.state == TCP_ESTABLISHED ||
+		     endpoint->tcp.state == TCP_CLOSE_WAIT) &&
 		    endpoint->tcp.send_count < TCP_SEND_QUEUE_MAX)
 			result |= events & (POLLOUT | POLLWRNORM);
 		if (endpoint->tcp.state == TCP_SYN_SENT && socket->error != 0)

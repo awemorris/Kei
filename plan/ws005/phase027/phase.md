@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p027 -->
 # ws005-p027: BUG-151 — TCP の自分側の shutdown(SHUT_WR) で poll が POLLHUP を返す不具合を kernel で直す
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: uncleared（T1-017 FAIL）→ 修正 2 を実装・T1 の再試験待ち
 Disposition: normal
 Parent: [WS005](../ws.md)
 Bug: [BUG-151](../../bugs/BUG-151.md)
@@ -27,3 +27,19 @@ AF_UNIX・UDP の他の case は Linux では違いがあり、zedBSD の guest 
 - host: 上の Linux の基準。kernel の tcp_poll の host 試験は無い（読みで確かめた）。
 - QEMU（T1 に依頼）: lean image（`plan/ws001/tests/config-amd64-lean-guest.mk` + bug149 の probe）で `bug149-check.sh`。未実施（結果待ち）。
 - 実機は未実施（TCP の SHUT_WR を使う zedBSD の userland は無い）。
+
+## T1-017（2026-10-03、QEMU）: FAIL と修正 2
+
+`tcp-shutwr-nothing-yet` は PASS（修正 1 は効いた）。`tcp-shutwr-answer` が `ready=1 revents=0x11 read=0`（答えの前に EOF）で FAIL し、続く
+`tcp-peer-fin-hangs-up` の read が戻らず probe が止まった（2 回とも同じ）。読みで原因を特定した:
+
+1. **`tcp_sendto` が ESTABLISHED の時しか送らなかった。** client の FIN を受けた server は CLOSE_WAIT になり、答えの write が ENOTCONN で捨てられ、
+   server の FIN だけが届いて client は EOF を読んだ（半分閉じた接続で相手が答えられない。BUG-151 の場面そのもの）。RFC 793 のとおり CLOSE_WAIT でも
+   送れるようにした。poll の POLLOUT も CLOSE_WAIT を含める。
+2. **EOF の印を一度読んだ後の read が永久に待った。** 相手の FIN は空の packet（EOF の印）として queue に入るだけで、それを読んだ後、LAST_ACK・
+   TIME_WAIT（と FIN の後の CLOSED）の read は data を待って眠った。queue が空でこれらの状態なら 0 を返すようにした（RST の後の CLOSED は error を返す
+   従来どおり）。
+3. 試験: TCP の read を `recv(MSG_DONTWAIT)` にし（kernel の不具合で probe が止まらない）、server の write の戻り値（sent=3）と、EOF の後の 2 度目の
+   read も 0 であることを見る。Linux の host で 3 case とも PASS。
+
+build: vmunix warning 0、`amd64 vmunix check: PASS`、probe の build OK。QEMU の再試験は T1 に依頼（結果待ち）。
