@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p029 -->
 # ws099-p029: BUG-142・BUG-141 — compositor の入力の順と、zdesktop が pointer を取った時の leave
 
-Status: in-progress（q645、P2、2026-10-03。実装済み・T1 の試験待ち）
+Status: uncleared（q645、P2、2026-10-03。T2-004 で bug141-hover が FAIL）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Bugs: [BUG-142](../../bugs/BUG-142.md)、[BUG-141](../../bugs/BUG-141.md)
@@ -43,3 +43,7 @@ Bugs: [BUG-142](../../bugs/BUG-142.md)、[BUG-141](../../bugs/BUG-141.md)
 - build: `make … build/p2-p024-img/bin/wayland`（zedBSD の clang、-Werror）exit 0、warning 0。Linux の build の flag で `input.c`・`main.c`・
   `seat.c` を gcc の `-fsyntax-only -Werror` で通した（FreeBSD は未実施）。`style-check.py` は変えた行に違反 0。
 - QEMU（T1 に依頼）: bug142-order・bug141-hover と、入力・pointer の回帰（cursor-owner、zdesktop-p077、menu-p003、files-p002、zdesktop-p084）。結果は未着。
+
+## 結果（Q1、2026-10-03、T2-004、QEMU）
+
+uncleared。bug142-order・cursor-owner・zdesktop-p077・menu-p003・files-p004・zdesktop-p084 は PASS。bug141-hover は 2 回 FAIL（`hover: the item is not lit (118 pixels) MISSING`、`menu: the item stays lit (5655 pixels differ) FAIL`）。目視（判定外）では hover-on.png で tile が明るく menu.png で暗く、試験の判定（画素の数え方・領域）の誤りの疑い。PNG: worktrees/t2/build/t2-004/bug141/・bug141-retry/。修正前の対照は未実施。再開の条件: P2 が試験の判定を直し（必要なら修正前の対照も）、T1/T2 で再試験。
