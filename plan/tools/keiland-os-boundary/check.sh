@@ -13,33 +13,15 @@ find userland/desktop/libkeiland userland/desktop/wayland \
     \( -path '*/zedbsd' -o -path '*/linux' -o -path '*/freebsd' -o -path '*/wpa' \) -prune \
     -o -name '*.[ch]' -print | LC_ALL=C sort > "$work/common"
 
-# Keep exactly the agreed evdev header exception, and reject other OS includes.
+# The compositor and libkeiland include no OS header (the evdev header choice is
+# libkeiland-backend's keiland-backend-evdev.h since ws131-p007).
 while IFS= read -r file; do
-    awk '
-    /^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"](uapi\/|userland\/base\/)/ {
-        if (FILENAME == "userland/desktop/wayland/zwl-evdev.h" &&
-            $0 ~ /^[[:space:]]*#[[:space:]]*include[[:space:]]*<uapi\/input\.h>[[:space:]]*$/) {
-            exceptions++
-        } else {
-            print FILENAME ":" FNR ": " $0
-        }
-    }
-    END {
-        if (FILENAME == "userland/desktop/wayland/zwl-evdev.h" && exceptions != 1)
-            print FILENAME ": expected exactly one input UAPI include, got " exceptions + 0
-    }' "$file"
+    awk '/^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"](uapi\/|userland\/base\/)/ {print FILENAME ":" FNR ": " $0}' "$file"
 done < "$work/common" > "$work/C1"
 
-# OS-specific device ioctls stay in OS modules. The shared native evdev mechanism uses
-# only the metadata/clock operations selected by the one approved native header bridge.
+# No device ioctl in the compositor or libkeiland: the input devices are libkeiland-backend's (ws131-p007).
 while IFS= read -r file; do
-    awk '/ioctl[[:space:]]*\(/ {
-        if (FILENAME == "userland/desktop/wayland/evdev/input-evdev.c" &&
-            $0 ~ /^[[:space:]]*error = ioctl\(descriptor, EV(IOCGABS|IOCGNAME|IOCGID|IOCSCLOCKID|IOCGBIT)([(,])/) {
-            next
-        }
-        print FILENAME ":" FNR ": " $0
-    }' "$file"
+    awk '/ioctl[[:space:]]*\(/ {print FILENAME ":" FNR ": " $0}' "$file"
 done < "$work/common" > "$work/C2"
 
 # A zedBSD wire layout must stay inside the zedBSD GPU backend.
@@ -78,7 +60,7 @@ find userland/desktop \
     -o -path 'userland/desktop/libkeiland-backend-*' \) -prune \
     -o -name '*.[ch]' -print |
 while IFS= read -r file; do
-    [ "$file" != userland/desktop/wayland/zwl-evdev.h ] || continue
+    [ "$file" != userland/desktop/libkeiland-backend/keiland-backend-evdev.h ] || continue
     awk '/^[[:space:]]*#[[:space:]]*(if|ifdef|elif).*(__linux__|__FreeBSD__)/ {print FILENAME ":" FNR ": " $0}' "$file"
 done > "$work/L1"
 

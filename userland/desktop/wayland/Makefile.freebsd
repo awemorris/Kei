@@ -51,8 +51,6 @@ WAYLAND_FREEBSD_SOURCES := userland/desktop/wayland/main.c \
 	userland/desktop/artwork/mark.c \
 	userland/desktop/picture/color-glyph.c \
 	userland/desktop/wayland/freebsd/os-freebsd.c \
-	userland/desktop/wayland/evdev/seat-backend.c \
-	userland/desktop/wayland/evdev/input-evdev.c \
 	userland/desktop/wayland/handoff.c \
 	userland/desktop/wayland/backend-host.c \
 	userland/desktop/wayland/dmabuf/gpu-dmabuf.c \

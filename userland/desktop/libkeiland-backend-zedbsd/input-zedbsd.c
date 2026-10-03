@@ -5,10 +5,12 @@
  * SPDX-License-Identifier: Zlib
  */
 
-/* Accesses native evdev through seat-owned descriptors with monotonic event timestamps. */
-#include "../zwl.h"
-#include "seat.h"
-#include <time.h>
+/*
+ * The input devices on zedBSD (libkeiland-backend since ws131-p007): the
+ * evdev nodes opened directly (there is no seat service).
+ */
+#include "userland/desktop/libkeiland-backend/backend-private.h"
+#include "userland/desktop/libkeiland-backend/keiland-backend-evdev.h"
 #include <sys/ioctl.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -20,13 +22,9 @@
 /* The directory whose eventN nodes are the evdev devices. */
 #define INPUT_DIRECTORY "/dev/input"
 
-/* The one native input seat borrows this server until common service cleanup. */
-static struct zwl_server *input_server;
-
 static int event_node_name(const char *name);
-static int device_open(struct zwl_server *server, const char *path);
-static void probe_device(struct zwl_server *server, const char *path);
-static int read_capabilities(int descriptor, struct zwl_input_caps *capabilities);
+static void probe_device(struct kl_backend *backend, const char *path);
+static int read_capabilities(int descriptor, struct kl_backend_input_caps *capabilities);
 
 /*
  * Opens every evdev pointer and keyboard not already open.
@@ -35,25 +33,15 @@ static int read_capabilities(int descriptor, struct zwl_input_caps *capabilities
  * The event loop calls this periodically so late devices are picked up.
  */
 void
-zwl_input_scan(
-	struct zwl_server *server)
+kl_backend_input_scan(
+	struct kl_backend *backend)
 {
 	DIR *directory;
 	struct dirent *entry;
-	char path[ZWL_INPUT_PATH_MAX];
+	char path[KL_BACKEND_INPUT_PATH_MAX];
 	int length;
 	int valid;
 	int open_already;
-	int paused;
-
-	/* The next rescan is due one period from now. */
-	input_server = server;
-	server->input_scan_time = zwl_milliseconds();
-
-	/* A service-paused seat cannot acquire newly discovered input devices. */
-	paused = zwl_seat_paused(server);
-	if (paused != 0)
-		return;
 
 	/* Without the directory there is nothing to read. */
 	directory = opendir(INPUT_DIRECTORY);
@@ -77,13 +65,15 @@ zwl_input_scan(
 		if (length < 0 || (size_t)length >= sizeof(path))
 			continue;
 
-		/* A node already being read is left alone. */
-		open_already = device_open(server, path);
+		/* A node the compositor already reads is left alone. */
+		open_already = 0;
+		if (backend->host.input_known != NULL)
+			open_already = backend->host.input_known(backend->host.data, path);
 		if (open_already)
 			continue;
 
-		/* Classify the node and keep it if it is a pointer or a keyboard. */
-		probe_device(server, path);
+		/* The compositor classifies the node and keeps it if it is a pointer or a keyboard. */
+		probe_device(backend, path);
 	}
 
 	/* The directory stream is no longer needed. */
@@ -99,7 +89,7 @@ zwl_input_scan(
  * A nonnegative ioctl response is success; failures return an errno value.
  */
 int
-zwl_input_device_absinfo(
+kl_backend_input_absinfo(
 	int descriptor,
 	uint32_t axis,
 	struct input_absinfo *info)
@@ -121,7 +111,7 @@ zwl_input_device_absinfo(
  * A nonnegative ioctl response is success; failures return an errno value.
  */
 int
-zwl_input_device_name(
+kl_backend_input_name(
 	int descriptor,
 	char *name,
 	size_t size)
@@ -143,7 +133,7 @@ zwl_input_device_name(
  * A nonnegative ioctl response is success; failures return an errno value.
  */
 int
-zwl_input_device_id(
+kl_backend_input_id(
 	int descriptor,
 	struct input_id *id)
 {
@@ -164,30 +154,17 @@ zwl_input_device_id(
  * EOF returns zero; failures preserve read's errno, or use EIO for torn events.
  */
 ssize_t
-zwl_input_device_read(
+kl_backend_input_read(
 	int descriptor,
 	struct input_event *events,
 	size_t capacity)
 {
 	ssize_t bytes;
-	int error;
-	int retained;
 
 	/* Reads as many whole events as the buffer holds. */
 	bytes = read(descriptor, events, capacity * sizeof(events[0]));
-	if (bytes < 0) {
-		/* Logind can revoke the kernel file before its ordered bus notification arrives. */
-		error = errno;
-		if (error == ENODEV) {
-			retained = zwl_seat_device_revoked(input_server, descriptor);
-			if (retained != 0)
-				error = EAGAIN;
-		}
-
-		/* A retained lease waits for pause/resume; ordinary direct-device failures still close. */
-		errno = error;
+	if (bytes < 0)
 		return -1;
-	}
 
 	/* Reports the end of the device. */
 	if (bytes == 0)
@@ -206,15 +183,17 @@ zwl_input_device_read(
 /*
  * Closes an input device descriptor.
  *
- * The seat module returns both descriptor and service ownership.
+ * zedBSD does not need a separate seat service to relinquish the node.
  */
 void
-zwl_input_device_close(
-	struct zwl_server *server,
+kl_backend_input_close(
+	struct kl_backend *backend,
 	int descriptor)
 {
-	/* Releases the node through its seat owner. */
-	zwl_seat_device_close(server, descriptor);
+	(void)backend;
+
+	/* Releases the node's descriptor. */
+	close(descriptor);
 
 	/* Succeeded: the descriptor is no longer owned by the seat. */
 	return;
@@ -234,9 +213,7 @@ event_node_name(
 		return 0;
 
 	/* Everything after the prefix is a decimal digit. */
-	for (cursor = name + 5;
-	     *cursor != '\0';
-	     cursor++) {
+	for (cursor = name + 5; *cursor != '\0'; cursor++) {
 		/* Any other character makes it some other kind of node. */
 		if (*cursor < '0' || *cursor > '9')
 			return 0;
@@ -246,78 +223,42 @@ event_node_name(
 	return 1;
 }
 
-/* Reports whether a device node is already open in the table. */
-static int
-device_open(
-	struct zwl_server *server,
-	const char *path)
-{
-	unsigned index;
-	int same;
-
-	/* Compare the path with every slot in use. */
-	for (index = 0; index < ZWL_INPUT_MAX; index++) {
-		/* A free slot names no device. */
-		if (!server->inputs[index].live)
-			continue;
-
-		/* The same path means the same node. */
-		same = strcmp(server->inputs[index].path, path);
-		if (same == 0)
-			break;
-	}
-
-	/* Refuses an entry not represented by any live descriptor. */
-	if (index == ZWL_INPUT_MAX)
-		return 0;
-
-	/* Succeeded: a live descriptor already owns this device node. */
-	return 1;
-}
-
-/* Opens one node and hands its capability bitmaps to the seat. */
+/* Opens one node and offers it, with its capability bitmaps, to the compositor. */
 static void
 probe_device(
-	struct zwl_server *server,
+	struct kl_backend *backend,
 	const char *path)
 {
-	struct zwl_input_caps capabilities;
-	int clock_id;
+	struct kl_backend_input_caps capabilities;
 	int descriptor;
 	int error;
+	int kept;
 
 	/* Opens a nonblocking descriptor that children cannot inherit. */
-	descriptor = zwl_seat_device_open(server, path);
+	descriptor = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
 	if (descriptor < 0)
 		return;
-
-	/* Matches the common compositor's monotonic clock before interpreting event timestamps. */
-	clock_id = CLOCK_MONOTONIC;
-	error = ioctl(descriptor, EVIOCSCLOCKID, &clock_id);
-	if (error != 0) {
-		zwl_seat_device_close(server, descriptor);
-		return;
-	}
 
 	/* Reads the bits that determine the device's role. */
 	error = read_capabilities(descriptor, &capabilities);
 	if (error != 0) {
-		zwl_seat_device_close(server, descriptor);
+		close(descriptor);
 		return;
 	}
 
-	/* Transfers the descriptor to the seat's classification. */
-	zwl_input_probe(server, descriptor, path, &capabilities);
-
-	/* Succeeded: the seat has kept or closed the descriptor. */
-	return;
+	/* The compositor's classification keeps it, or it is closed here. */
+	kept = 0;
+	if (backend->host.input_found != NULL)
+		kept = backend->host.input_found(backend->host.data, descriptor, path, &capabilities);
+	if (!kept)
+		close(descriptor);
 }
 
 /* Reads the event, key, relative and absolute capability bitmaps of one node. */
 static int
 read_capabilities(
 	int descriptor,
-	struct zwl_input_caps *capabilities)
+	struct kl_backend_input_caps *capabilities)
 {
 	int error;
 

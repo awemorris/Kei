@@ -22,6 +22,9 @@
 #include "zwl.h"
 #include "tablet.h"
 #include "touch.h"
+
+#include "userland/desktop/libkeiland-backend/keiland-backend.h"
+
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -95,19 +98,36 @@ static uint32_t event_time(const struct input_event *event);
 static void update_capabilities(struct zwl_server *server);
 static int attach_tablet(struct zwl_server *server, int descriptor, const char *path);
 static int attach_touch(struct zwl_server *server, int descriptor, const char *path);
-static int multitouch(const struct zwl_input_caps *capabilities);
+static int multitouch(const struct kl_backend_input_caps *capabilities);
+static ssize_t input_read(struct zwl_server *server, struct zwl_input_device *device, struct input_event *events, size_t capacity);
+
+/*
+ * Opens the input devices not read yet (libkeiland-backend's scan, which
+ * offers each through zwl_input_probe) and sets the time of the next scan.
+ */
+void
+zwl_input_scan(
+	struct zwl_server *server)
+{
+	/* The next rescan is due one period from now. */
+	server->input_scan_time = zwl_milliseconds();
+
+	/* The backend finds, opens and offers the devices. */
+	kl_backend_input_scan(server->backend);
+}
 
 /*
  * Classifies an open device and attaches it to the seat.
  *
- * The seat takes the descriptor and closes it when unsupported or full.
+ * Returns 1 when the seat keeps the descriptor, 0 when it is unsupported or
+ * the table is full (the backend then closes it).
  */
-void
+int
 zwl_input_probe(
 	struct zwl_server *server,
 	int descriptor,
 	const char *path,
-	const struct zwl_input_caps *capabilities)
+	const struct kl_backend_input_caps *capabilities)
 {
 	struct input_absinfo x;
 	struct input_absinfo y;
@@ -130,16 +150,16 @@ zwl_input_probe(
 		/* Both position ranges must be readable and nonempty to be mapped. */
 		error = read_ranges(descriptor, &x, &y);
 		if (error == 0) {
-			(void)attach_tablet(server, descriptor, path);
-			return;
+			error = attach_tablet(server, descriptor, path);
+			return error == 0;
 		}
 	}
 
 	/* A touch screen speaks multitouch protocol B (touch.c, WS079 p013); its ABS_X/Y are not a pointer. */
 	touch_screen = multitouch(capabilities);
 	if (touch_screen) {
-		(void)attach_touch(server, descriptor, path);
-		return;
+		error = attach_touch(server, descriptor, path);
+		return error == 0;
 	}
 
 	/* A keyboard reports key events including the letter keys A and Z. */
@@ -176,28 +196,26 @@ zwl_input_probe(
 	    has_second)
 		pointer = 1;
 
-	/* A node that is neither is not the seat's business. */
-	if (!pointer && !keyboard) {
-		zwl_input_device_close(server, descriptor);
-		return;
-	}
+	/* A node that is neither is not the seat's business (the backend closes it). */
+	if (!pointer && !keyboard)
+		return 0;
 
 	/* Keep the node; an absolute pointer brings its ranges along. */
 	if (absolute) {
-		(void)zwl_input_attach(server, descriptor, path, pointer, keyboard, &x, &y);
+		error = zwl_input_attach(server, descriptor, path, pointer, keyboard, &x, &y);
 	} else {
-		(void)zwl_input_attach(server, descriptor, path, pointer, keyboard, NULL, NULL);
+		error = zwl_input_attach(server, descriptor, path, pointer, keyboard, NULL, NULL);
 	}
 
-	/* Succeeded: the node has been classified. */
-	return;
+	/* Succeeded: the node has been classified; 1 when the seat keeps it. */
+	return error == 0;
 }
 
 /*
  * Adopts an open evdev descriptor as a pointer, a keyboard or both.
  *
- * The device takes ownership of the descriptor, closing it when no slot is
- * free.  An absolute pointer supplies both axis ranges; a relative one passes
+ * The device takes ownership of the descriptor when it returns 0; otherwise
+ * (no slot free) the caller still owns it.  An absolute pointer supplies both axis ranges; a relative one passes
  * NULL for both.
  */
 int
@@ -223,11 +241,9 @@ zwl_input_attach(
 		}
 	}
 
-	/* A full table cannot take another device. */
-	if (device == NULL) {
-		zwl_input_device_close(server, descriptor);
+	/* A full table cannot take another device (the caller's backend closes it). */
+	if (device == NULL)
 		return ENOSPC;
-	}
 
 	/* The slot now describes this node. */
 	memset(device, 0, sizeof(*device));
@@ -358,7 +374,7 @@ source_fill(
 
 		/* Reads as many whole events as the buffer holds. */
 		source->reads++;
-		count = zwl_input_device_read(source->device->fd, source->events, INPUT_READ_EVENTS);
+		count = input_read(server, source->device, source->events, INPUT_READ_EVENTS);
 		if (count > 0) {
 			source->count = (size_t)count;
 			source->next = 0;
@@ -433,7 +449,7 @@ zwl_input_close(
 		zwl_touch_remove(server, device, 1);
 
 	/* The slot is free once its descriptor is closed. */
-	zwl_input_device_close(server, device->fd);
+	kl_backend_input_close(server->backend, device->fd);
 	device->fd = -1;
 	device->live = 0;
 
@@ -496,7 +512,7 @@ zwl_input_cleanup(
 			zwl_touch_remove(server, &server->inputs[index], 0);
 
 		/* Close the descriptor and free the slot. */
-		zwl_input_device_close(server, server->inputs[index].fd);
+		kl_backend_input_close(server->backend, server->inputs[index].fd);
 		server->inputs[index].fd = -1;
 		server->inputs[index].live = 0;
 	}
@@ -519,13 +535,13 @@ read_ranges(
 
 	/* The horizontal range maps onto the surface width. */
 	memset(x, 0, sizeof(*x));
-	error = zwl_input_device_absinfo(descriptor, ABS_X, x);
+	error = kl_backend_input_absinfo(descriptor, ABS_X, x);
 	if (error != 0)
 		return error;
 
 	/* The vertical range maps onto the surface height. */
 	memset(y, 0, sizeof(*y));
-	error = zwl_input_device_absinfo(descriptor, ABS_Y, y);
+	error = kl_backend_input_absinfo(descriptor, ABS_Y, y);
 	if (error != 0)
 		return error;
 
@@ -972,8 +988,8 @@ update_capabilities(
 /*
  * Adopts an open evdev descriptor as a pen tablet (tablet.c, WS079 p003).
  *
- * The device takes ownership of the descriptor, closing it when no slot is
- * free or the tablet cannot take another device.
+ * The device takes ownership of the descriptor when it returns 0; otherwise
+ * (no slot free, or the tablet cannot take another device.
  */
 static int
 attach_tablet(
@@ -995,11 +1011,9 @@ attach_tablet(
 		}
 	}
 
-	/* A full table cannot take another device. */
-	if (device == NULL) {
-		zwl_input_device_close(server, descriptor);
+	/* A full table cannot take another device (the caller's backend closes it). */
+	if (device == NULL)
 		return ENOSPC;
-	}
 
 	/* The slot now describes this node; it is neither a pointer nor a keyboard of its own. */
 	memset(device, 0, sizeof(*device));
@@ -1010,7 +1024,6 @@ attach_tablet(
 	/* The tablet reads the axes and tells the bound tablet seats (tablet.c). */
 	error = zwl_tablet_add(server, device);
 	if (error != 0) {
-		zwl_input_device_close(server, descriptor);
 		device->fd = -1;
 		device->tablet = 0;
 		return error;
@@ -1032,8 +1045,9 @@ attach_tablet(
 /*
  * Adopts an open evdev descriptor as a touch screen (touch.c, WS079 p013).
  *
- * The device takes ownership of the descriptor, closing it when no slot is
- * free or the touch screens cannot take another device.
+ * The device takes ownership of the descriptor when it returns 0; otherwise
+ * (no slot free, or the touch screens cannot take another device) the
+ * caller still owns it.
  */
 static int
 attach_touch(
@@ -1055,11 +1069,9 @@ attach_touch(
 		}
 	}
 
-	/* A full table cannot take another device. */
-	if (device == NULL) {
-		zwl_input_device_close(server, descriptor);
+	/* A full table cannot take another device (the caller's backend closes it). */
+	if (device == NULL)
 		return ENOSPC;
-	}
 
 	/* The slot now describes this node; it is neither a pointer nor a keyboard of its own. */
 	memset(device, 0, sizeof(*device));
@@ -1070,7 +1082,6 @@ attach_touch(
 	/* The touch screen reads its range (touch.c). */
 	error = zwl_touch_add(device);
 	if (error != 0) {
-		zwl_input_device_close(server, descriptor);
 		device->fd = -1;
 		device->touch = 0;
 		return error;
@@ -1089,10 +1100,43 @@ attach_touch(
 	return 0;
 }
 
+/*
+ * Reads whole events from a device through the backend.  A device the seat
+ * revoked (ENODEV) that logind keeps for its later resume is set aside (its
+ * record's descriptor -1) and reads as nothing ready (EAGAIN): the seat's
+ * input_resumed or input_gone comes later (ws105-p009, ws131-p007).
+ */
+static ssize_t
+input_read(
+	struct zwl_server *server,
+	struct zwl_input_device *device,
+	struct input_event *events,
+	size_t capacity)
+{
+	ssize_t count;
+	int retained;
+
+	/* The events, or the reason there are none. */
+	count = kl_backend_input_read(device->fd, events, capacity);
+	if (count >= 0 || errno != ENODEV)
+		return count;
+
+	/* A revoked device the seat keeps waits for the seat; another closes as usual. */
+	retained = kl_backend_seat_device_revoked(server->backend, device->fd);
+	if (retained == 0) {
+		errno = ENODEV;
+		return -1;
+	}
+	printf("ZWL SEAT input_revoked path=%s lease=retained\n", device->path);
+	device->fd = -1;
+	errno = EAGAIN;
+	return -1;
+}
+
 /* Reports whether a node speaks multitouch protocol B: slots, tracking numbers and both places. */
 static int
 multitouch(
-	const struct zwl_input_caps *capabilities)
+	const struct kl_backend_input_caps *capabilities)
 {
 	int present;
 

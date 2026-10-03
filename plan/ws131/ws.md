@@ -58,7 +58,7 @@ app は OS の抽象化を直接持たない。例: Settings → libkeiland → 
 | [p004](phase004/phase.md) | backend の音声 | uncleared（q650、T2-006 で volume-p004 の mute off FAIL） | p003 | 3〜4h |
 | [p005](phase005/phase.md) | backend の電源 | cleared（q650、T1-040 C1 PASS、log の順は未確認） | p004 | 3〜4h |
 | [p006](phase006/phase.md) | backend の seat・session | in-progress（q650、P1。p006a zedBSD の session・p006b Linux の seat と電源・p006c FreeBSD の seat（書くだけ）は実装と host の確認済み、QEMU と Linux の guest の確認は試験の担当待ち） | p005 | 4〜5h |
-| [p007](phase007/phase.md) | backend の入力 | planning | p006 | 3〜4h |
+| [p007](phase007/phase.md) | backend の入力 | in-progress（q650、P1。実装と host の確認済み、QEMU と Linux の guest は試験の担当待ち） | p006 | 3〜4h |
 | [p008](phase008/phase.md) | backend の表示 | planning | p007 | 3〜4h |
 | [p009](phase009/phase.md) | backend の GPU の buffer と境界の確定 | planning | p008 | 4〜5h |
 | [p010](phase010/phase.md) | 拡張の protocol `kl_system_manager_v1` と設定の記録（監視は残す） | planning | p004、P2 の BUG-125 の merge | 4〜5h |

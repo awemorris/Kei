@@ -10,9 +10,10 @@
  * compositor does when the seat takes the display and the input devices
  * away (another session has the display) and gives them back.
  *
- * The backend calls these from kl_backend_poll_done; they change the
- * compositor's state only and never call back into the backend (the seat
- * tells its service after they return).  Inputs are known by their device
+ * The backend calls these from kl_backend_poll_done, and the input
+ * devices' two from kl_backend_input_scan; they change the compositor's
+ * state only and never call back into the backend (the seat tells its
+ * service after they return, and the scan closes a device not kept).  Inputs are known by their device
  * path, which stays the same while their descriptors change.
  */
 
@@ -122,6 +123,40 @@ zwl_backend_input_gone(
 	if (input == NULL)
 		return;
 	zwl_input_forget(data, input);
+}
+
+/*
+ * Tells whether the compositor already reads the device at path (the
+ * backend's scan leaves it alone).
+ */
+int
+zwl_backend_input_known(
+	void *data,
+	const char *path)
+{
+	struct zwl_input_device *input;
+
+	/* A live input of that path. */
+	input = backend_input(data, path);
+	return input != NULL;
+}
+
+/*
+ * Classifies a device the backend's scan opened: 1 when the seat keeps it
+ * (and owns its descriptor), 0 when the backend is to close it.
+ */
+int
+zwl_backend_input_found(
+	void *data,
+	int descriptor,
+	const char *path,
+	const struct kl_backend_input_caps *caps)
+{
+	int kept;
+
+	/* The seat's classification (input.c). */
+	kept = zwl_input_probe(data, descriptor, path, caps);
+	return kept;
 }
 
 /* Finds the input the compositor keeps for a device path, or NULL. */

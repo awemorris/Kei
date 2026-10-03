@@ -505,26 +505,26 @@ read_axes(
 
 	/* The horizontal and vertical ranges were checked by the classification. */
 	descriptor = device->input->fd;
-	error = zwl_input_device_absinfo(descriptor, ABS_X, &device->axis_x);
+	error = kl_backend_input_absinfo(descriptor, ABS_X, &device->axis_x);
 	if (error != 0)
 		return error;
 
 	/* Reads the vertical range of the pen. */
-	error = zwl_input_device_absinfo(descriptor, ABS_Y, &device->axis_y);
+	error = kl_backend_input_absinfo(descriptor, ABS_Y, &device->axis_y);
 	if (error != 0)
 		return error;
 
 	/* The pressure's range. */
-	error = zwl_input_device_absinfo(descriptor, ABS_PRESSURE, &device->axis_pressure);
+	error = kl_backend_input_absinfo(descriptor, ABS_PRESSURE, &device->axis_pressure);
 	if (error != 0)
 		return error;
 
 	/* The tilt is optional: both axes, or none. */
 	device->has_tilt = 0;
-	error = zwl_input_device_absinfo(descriptor, ABS_TILT_X, &device->axis_tilt_x);
+	error = kl_backend_input_absinfo(descriptor, ABS_TILT_X, &device->axis_tilt_x);
 	if (error == 0) {
 		/* Keeps tilt only when the second axis also supplies a range. */
-		error = zwl_input_device_absinfo(descriptor, ABS_TILT_Y, &device->axis_tilt_y);
+		error = kl_backend_input_absinfo(descriptor, ABS_TILT_Y, &device->axis_tilt_y);
 		if (error == 0 && device->axis_tilt_x.maximum > device->axis_tilt_x.minimum)
 			device->has_tilt = 1;
 	}
@@ -536,13 +536,13 @@ read_axes(
 
 	/* The name, empty when the node gives none. */
 	memset(device->name, 0, sizeof(device->name));
-	error = zwl_input_device_name(descriptor, device->name, sizeof(device->name) - 1U);
+	error = kl_backend_input_name(descriptor, device->name, sizeof(device->name) - 1U);
 	if (error != 0)
 		device->name[0] = '\0';
 
 	/* The USB vendor and product, when the node is a USB device. */
 	memset(&identity, 0, sizeof(identity));
-	error = zwl_input_device_id(descriptor, &identity);
+	error = kl_backend_input_id(descriptor, &identity);
 	if (error == 0 && identity.bustype == BUS_USB) {
 		device->vendor = identity.vendor;
 		device->product = identity.product;

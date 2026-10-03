@@ -31,6 +31,7 @@
 #include <stdint.h>
 
 struct pollfd;
+struct kl_backend_input_caps;
 
 /*
  * The revision of this interface.  The backend is a static library built
@@ -66,6 +67,8 @@ struct kl_backend_host {
 	void (*input_paused)(void *data, const char *path);
 	void (*input_resumed)(void *data, const char *path, int descriptor);
 	void (*input_gone)(void *data, const char *path);
+	int (*input_known)(void *data, const char *path);
+	int (*input_found)(void *data, int descriptor, const char *path, const struct kl_backend_input_caps *caps);
 };
 
 /*
@@ -543,6 +546,12 @@ int kl_backend_session_managed(const struct kl_backend *backend);
  *   input_gone        the input of path is gone; forget it without closing
  *                     its descriptor, which the seat has closed
  * A failed authority calls session_stop(KL_BACKEND_SESSION_LOST).
+ *
+ * The input devices' scan (keiland-backend-evdev.h, ws131-p007) asks
+ * input_known(path) (1 when the compositor already reads the device) and
+ * offers each new device with input_found(descriptor, path, caps), which
+ * returns 1 when the compositor keeps it (it then owns the descriptor
+ * until kl_backend_input_close) and 0 when the backend is to close it.
  */
 
 /*
