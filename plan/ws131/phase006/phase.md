@@ -2,7 +2,7 @@
 
 # ws131-p006: backend の seat・session の領域
 
-Status: in-progress（q650、2026-10-03、P1。範囲 1 の表、p006a（zedBSD の session）・p006b（Linux の seat と電源）・p006c（FreeBSD の seat、書くだけ）の実装と host の確認は済み。QEMU（zedBSD）と Linux の guest（QEMU+KVM）の確認は試験の担当待ち。元の記載: planning）
+Status: uncleared（q650、2026-10-03、P1。p006b は T1-042 で確認済み、p006c は書くだけ。p006a の QEMU（T2-007）はラップアップで未実行）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）
@@ -241,3 +241,7 @@ ws105-p009（q536）の手順で、gdm の guest（`build-guest.sh … gdm`、`g
 試験 1 logind の起動 PASS、試験 2 VT の切り替え 2 通り PASS（pid 不変、paused/resumed、復帰後の click で App Home）、試験 4 logind の Reboot PASS（boot_id が変わる）。
 試験 3 direct の seat: `wayland --timeout=15`（--glass・--session 無し）で画面は背景色 (32,48,64) の 1 色、入力 4 個を direct で開き、15 s で終わり chvt 1 で tty1 に戻る。P1 の判定: この起動の仕方では期待どおり（glass の look を出さない）、依頼の command の不足で code の問題ではない。p006b は確認済みとする。
 p006 全体の判定は p006a の T2-007 の結果を待つ。
+
+## 停止（Q1、2026-10-03）
+
+ユーザーのソフトな停止で T2-007（p006a の boot-test・p095・p101〜p104・C1）は未実行。再開: T2-007 を流して PASS なら p006 を cleared。

@@ -2,7 +2,7 @@
 
 # ws131-p008: backend の表示の領域
 
-Status: in-progress（q650、2026-10-03、P1。実装と host の確認は済み、QEMU・Linux の guest の試験は未依頼（user のソフトな停止）。元の記載: planning）
+Status: uncleared（q650、2026-10-03、P1。実装と host の確認は済み、ユーザーのソフトな停止で QEMU・Linux の guest の試験は未依頼）
 Disposition: normal
 Parent: [WS131](../ws.md)、計画の正本 [design.md](../design.md)
 Queue: q650（2026-10-03、Q1 の割り当て）

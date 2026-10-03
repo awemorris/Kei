@@ -57,9 +57,9 @@ app は OS の抽象化を直接持たない。例: Settings → libkeiland → 
 | [p003](phase003/phase.md) | backend の土台と network | planning | p002 の承認、P1 の network-zedbsd.c の merge（2026-10-03 満たされた）、P2 の終了 | 4〜5h |
 | [p004](phase004/phase.md) | backend の音声 | cleared（q650、T2-009 の再試験 PASS） | p003 | 3〜4h |
 | [p005](phase005/phase.md) | backend の電源 | cleared（q650、T1-040 C1 PASS、log の順は未確認） | p004 | 3〜4h |
-| [p006](phase006/phase.md) | backend の seat・session | in-progress（q650、P1。p006a zedBSD の session・p006b Linux の seat と電源・p006c FreeBSD の seat（書くだけ）は実装と host の確認済み、QEMU と Linux の guest の確認は試験の担当待ち） | p005 | 4〜5h |
+| [p006](phase006/phase.md) | backend の seat・session | uncleared（q650、p006b は T1-042 PASS、p006a の T2-007 は未実行） | p005 | 4〜5h |
 | [p007](phase007/phase.md) | backend の入力 | uncleared（q650、T1-044 で 3/4 PASS、demo-s8-s9 未実行） | p006 | 3〜4h |
-| [p008](phase008/phase.md) | backend の表示 | in-progress（q650、P1。実装と host の確認済み、試験は未依頼（user のソフトな停止）） | p007 | 3〜4h |
+| [p008](phase008/phase.md) | backend の表示 | uncleared（q650、実装済み、試験は未依頼（ソフトな停止）） | p007 | 3〜4h |
 | [p009](phase009/phase.md) | backend の GPU の buffer と境界の確定 | planning | p008 | 4〜5h |
 | [p010](phase010/phase.md) | 拡張の protocol `kl_system_manager_v1` と設定の記録（監視は残す） | planning | p004、P2 の BUG-125 の merge | 4〜5h |
 | [p011](phase011/phase.md) | Settings を拡張へ、毎秒の監視の除去、libkeiland の OS を 0 に | planning | p010、WS089・P1 の区切り | 4〜5h |
