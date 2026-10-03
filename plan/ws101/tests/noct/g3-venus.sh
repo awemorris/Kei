@@ -13,6 +13,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -u
 cd "$(dirname -- "$0")/../../../.."
+. plan/tools/guest/venus-hostmem.sh
 out=${1:-build/ws101-p011-venus}
 n=${N:-4000000}
 rounds=${ROUNDS:-8}
@@ -35,7 +36,7 @@ status=0
 # The guest, and the programs in /tmp.
 python3 plan/tools/guest/guest.py stop >/dev/null 2>&1
 timeout 300 python3 plan/tools/guest/guest.py start "$image" --symbols "$symbols" \
-    --qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=256M,max_outputs=1 -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4" \
+    --qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=$VENUS_HOSTMEM,max_outputs=1 -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4" \
     > "$out/start.txt" 2>&1 || { cat "$out/start.txt"; echo "g3-venus: FAIL (the guest did not start)"; exit 1; }
 timeout 400 python3 plan/tools/guest/guest.py wait --timeout 360 >> "$out/start.txt" 2>&1 || { echo "g3-venus: FAIL (no SSH)"; exit 1; }
 timeout 120 python3 plan/tools/guest/guest.py put "$noct" /tmp/noct > /dev/null || status=1

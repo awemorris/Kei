@@ -20,6 +20,16 @@ import time
 from venus_rfb import capture as capture_rfb
 
 
+def venus_hostmem():
+    """The Venus guests' hostmem: VENUS_HOSTMEM, else plan/tools/guest/venus-hostmem.sh's default (q647)."""
+    value = os.environ.get('VENUS_HOSTMEM')
+    if value:
+        return value
+    text = (Path(__file__).resolve().parents[3] / 'plan/tools/guest/venus-hostmem.sh').read_text()
+    match = re.search(r'VENUS_HOSTMEM=\$\{VENUS_HOSTMEM:-([0-9]+[KMG]?)\}', text)
+    return match.group(1) if match else '256M'
+
+
 def digest(path):
     result = hashlib.sha256()
     with Path(path).open('rb') as stream:
@@ -177,7 +187,7 @@ def run(args, exercise=None, harness_path=None):
                '-drive', f'if=pflash,format=raw,file={variables}',
                '-drive', f'file={run_image},format=raw,if=ide,index=0',
                '-vga', 'none', '-device',
-               'virtio-vga-gl,id=venus,venus=on,blob=on,hostmem=256M,max_outputs=1',
+               'virtio-vga-gl,id=venus,venus=on,blob=on,hostmem=%s,max_outputs=1' % venus_hostmem(),
                '-display', 'egl-headless,rendernode=/dev/dri/renderD128',
                '-qmp', f'unix:{qmp_path},server=on,wait=off',
                '-vnc', f'unix:{vnc_path}',

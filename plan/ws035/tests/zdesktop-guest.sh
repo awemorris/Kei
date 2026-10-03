@@ -23,6 +23,7 @@
 # with another runtime (plan/tools/files/files-guest.sh's build/ws071-run, a test's own) is not left running.
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/venus-hostmem.sh
 last_runtime=$PWD/build/.zdesktop-guest-runtime
 if [ -z "${GUEST_RUNTIME:-}" ] && [ "${1:-start}" = stop ] && [ -s "$last_runtime" ]; then
 	GUEST_RUNTIME=$(cat "$last_runtime")
@@ -53,7 +54,7 @@ start)
 	printf '%s\n' "$GUEST_RUNTIME" > "$last_runtime"
 	exec python3 plan/tools/guest/guest.py start "$image" \
 	    --symbols build/ws035-sq/vmunix \
-	    --qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=256M,max_outputs=1$size -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4"
+	    --qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=$VENUS_HOSTMEM,max_outputs=1$size -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4"
 	;;
 *)
 	exec python3 plan/tools/guest/guest.py "$@"

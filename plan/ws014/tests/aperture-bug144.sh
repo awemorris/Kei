@@ -1,6 +1,6 @@
 #!/bin/sh
 # ws014-p011 (BUG-144): measures what the Model viewer and the other applications hold of Venus's host-visible aperture
-# (QEMU's virtio-gpu hostmem=256M) and of the CPU's memory, on the Venus guest of the CI image with the guest harness's
+# (QEMU's virtio-gpu hostmem, plan/tools/guest/venus-hostmem.sh) and of the CPU's memory, on the Venus guest of the CI image with the guest harness's
 # files (as ws129-p010 built it: config/ci/config-amd64.mk, plan/tools/files/files-guest.sh start IMAGE).  Nothing is
 # judged: the numbers are the evidence for the user's advice.  The kernel logs (this commit's venus.c):
 #   venus: context=N opened pid=P                     each Vulkan connection, with its process
