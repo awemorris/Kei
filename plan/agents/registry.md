@@ -69,3 +69,4 @@
 2026-10-03 15:00 / T1 generation1 終了: T1-001〜004 の全 23 試験 PASS（p003 は試験の script の直しの後）。台帳を統合。N=0。
 
 2026-10-03 / force push: user「force pushはmainだけでよいです。…安全のため、browser3をマージしてからforce pushします。」→ origin/browser3（2a4609684）は addf67ffb で統合済み（内容は 6ecf801cc に含む。再 merge は汚れた履歴を main に戻すので行わない）。今日の 167 commit を 6ecf801cc の 1 つにまとめ、push 前の確認（Co-Authored-By 0、WIP 以外 0）の後に `git push --force-with-lease=main:417f4ca28 origin main`（417f4ca28 → c44fa918d）。元の履歴は local の branch backup/main-before-squash-20261003。今日の記録の統合の SHA はそちらで辿れる。origin/browser3 は書き換えていない（汚れた commit 24 件が残る）。
+2026-10-03 夕 / S1 の後: 2026-10-03 user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」 → 次のセッションで P1（generation11、q638）と T1（generation3、q639）を起動。worktree は新しい main（force push 後）から作り直す（旧 agent/p1・agent/t1 は旧履歴）。

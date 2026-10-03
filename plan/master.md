@@ -12,8 +12,7 @@
 ## 現在の状況
 
 <!-- master:updated:start -->
-更新: 2026-10-03 Q1（N=2、P3 の q632-i02 と P1 の q631-i02）
-<!-- master:updated:end -->
+更新: 2026-10-03 夕 Q1（S1 の実機試験の終了、次のセッションの pipeline）
 
 <!-- master:agents:start -->
 - 体制: 単一 session の Q1 ＋固定名サブエージェント P1〜P8。host は 2026-10-03 12:12 に再起動済み。user「N=1でP3のみを再開しましょう。」→ P3 generation4 が q632-i02（WS131 p003）。続けて user「N=2に上げて、P1も再開します。P4はまだ再開しません。」→ P1 generation7 が q631-i02（WiFi）、その後 q635（BUG-149）。q635 が cleared で関連の bug が無ければ P1 はラップアップし、N=1 で P3 だけのシリアル区間（user 2026-10-03）。BUG-052 は別 session の Q2（merge は Q1）。
@@ -24,9 +23,7 @@
 - fg018 Linux 標準 GTK4（WS114 は p007・p008 まで達成、GTK4 の zedBSD 移植 WS115 は後回し）。
 <!-- master:focus:end -->
 
-<!-- master:next:start -->
-優先順位（2026-10-03 09時 user、最新）: (1) P1・P2 は debug（WiFi、BUG-147、その後 優先度の高い bug）、P3 は WS131（libkeiland-backend の分離と libkeiui の吸収）。(2) 標準 app の開発（WS127・WS089・WS128・WS120 と改善の候補）は WS131 の移行の後に組み直す。(3) GTK4（WS115 p010〜）はその後。bug の優先度と依存は [Bug Board](known-bugs.md) の先頭の表。
-<!-- master:next:end -->
+P26-10-03 user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」 → 順（[WS133](ws133/ws.md) の S1 の結果の表）: BUG-152（Settings の Wallpaper の 10 秒）→ BUG-155（Terminal の IME）→ BUG-154（WiFi の Connecting...）→ BUG-153（音量の slider）→ 実機の要る BUG-156・157・158・119・159 は読みと実装まで進め S2 の実機試験へ。試験は T1 が依頼をまとめて 1 つの QEMU で（AGENTS.md「検証」）。
 
 <!-- master:blocked:start -->
 - 5330 の AX211 の passthrough は停止（host の hang 2 回、AX211 の vfio の reset の異常の見当）。host の iwlwifi の blacklist と起動時の vfio-pci の bind の要否はユーザーの判断待ち。iGPU は i915 の driver の改善の Phase だけで使う、iGPU と AX211 の同時は禁止。
