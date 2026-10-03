@@ -33,6 +33,27 @@ NOCT_HOST_SOURCE_STAMP := $(NOCT_HOST_SOURCE_DIR)/.zedbsd-source-$(ZEDBSD_NOCT_V
 NOCT_HOST_SOURCE_IDENTITY := $(NOCT_HOST_SOURCE_DIR)/.zedbsd-source-identity
 NOCT_HOST_SOURCE_MANIFEST := $(NOCT_HOST_SOURCE_DIR)/.zedbsd-source-manifest
 
+# BUG-093: what an extracted tree records about its patches.  A tree whose
+# identity matches is the pinned release plus the current patches, however
+# old it is, so it is judged by these contents rather than by how its time
+# compares with the patch files': a new checkout gives the patches a new
+# time without changing a byte of them (toolchain/llvm/llvm.mk, BUG-089).
+ZEDBSD_NOCT_PATCHES_SHA256 := $(firstword $(shell cat $(ZEDBSD_NOCT_PATCHES) 2>/dev/null | sha256sum))
+ZEDBSD_NOCT_TARGET_PATCHES_SHA256 := $(firstword $(shell cat $(ZEDBSD_NOCT_TARGET_PATCHES) 2>/dev/null | sha256sum))
+ZEDBSD_NOCT_IDENTITY = \
+	'version=$(ZEDBSD_NOCT_VERSION)' \
+	'tag=$(ZEDBSD_NOCT_TAG)' \
+	'commit=$(ZEDBSD_NOCT_TAG_COMMIT)' \
+	'archive-sha256=$(ZEDBSD_NOCT_ARCHIVE_SHA256)' \
+	'patch-level=$(1)' \
+	'patches-sha256=$(2)'
+ZEDBSD_NOCT_ACCEPTED = $(strip $(shell \
+	if test -f '$(1)' && test -f '$(2)' && test ! -L '$(2)' && \
+	   test "$$(cat '$(2)')" = "$$(printf '%s\n' $(call ZEDBSD_NOCT_IDENTITY,$(3),$(4)))"; \
+	then echo yes; fi))
+NOCT_SOURCE_ACCEPTED := $(call ZEDBSD_NOCT_ACCEPTED,$(NOCT_SOURCE_STAMP),$(NOCT_SOURCE_IDENTITY),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL),$(ZEDBSD_NOCT_TARGET_PATCHES_SHA256))
+NOCT_HOST_SOURCE_ACCEPTED := $(call ZEDBSD_NOCT_ACCEPTED,$(NOCT_HOST_SOURCE_STAMP),$(NOCT_HOST_SOURCE_IDENTITY),$(ZEDBSD_NOCT_PATCH_LEVEL),$(ZEDBSD_NOCT_PATCHES_SHA256))
+
 # Records of the archive and source-tree checks, kept beside what each one
 # examined so that a build repeats a check only after that thing changes.
 ZEDBSD_NOCT_ARCHIVE_VERIFIED := \
@@ -175,12 +196,14 @@ define ZEDBSD_NOCT_EXTRACT_SOURCE
 	if test '$(4)' = replace && test -d "$$source" && test ! -L "$$source" && \
 	   test -f "$$source/.zedbsd-source-identity" && \
 	   grep -qx 'commit=$(ZEDBSD_NOCT_TAG_COMMIT)' "$$source/.zedbsd-source-identity" && \
-	   ! grep -qx 'patch-level=$(3)' "$$source/.zedbsd-source-identity"; then \
-		echo "Noct: replacing the source tree of another patch level: $$source" >&2; \
+	   { ! grep -qx 'patch-level=$(3)' "$$source/.zedbsd-source-identity" || \
+	     ! grep -qx 'patches-sha256=$(5)' "$$source/.zedbsd-source-identity"; }; then \
+		echo "Noct: replacing the source tree of other patches: $$source" >&2; \
 		rm -rf -- "$$source"; \
 	fi; \
 	if test -e "$$source"; then \
 		echo "Noct: refusing to replace existing source tree: $$source" >&2; \
+		echo "Noct: it does not hold the current patches; ask the owner of the shared tree to extract it again" >&2; \
 		exit 1; \
 	fi; \
 	mkdir -p "$$parent"; \
@@ -207,12 +230,7 @@ define ZEDBSD_NOCT_EXTRACT_SOURCE
 	for patch_file in $(2); do \
 		(cd "$$tree" && patch --batch --forward --fuzz=0 -p1 < "$$patch_file"); \
 	done; \
-	printf '%s\n' \
-		'version=$(ZEDBSD_NOCT_VERSION)' \
-		'tag=$(ZEDBSD_NOCT_TAG)' \
-		'commit=$(ZEDBSD_NOCT_TAG_COMMIT)' \
-		'archive-sha256=$(ZEDBSD_NOCT_ARCHIVE_SHA256)' \
-		'patch-level=$(3)' \
+	printf '%s\n' $(call ZEDBSD_NOCT_IDENTITY,$(3),$(5)) \
 		> "$$tree/.zedbsd-source-identity"; \
 	(cd "$$tree" && \
 		find . -type f ! -path './build-*/*' ! -name '.zedbsd-source-*' -print | \
@@ -237,12 +255,7 @@ define ZEDBSD_NOCT_VERIFY_SOURCE
 		echo "Noct: source identity is missing or unsafe: $$source" >&2; \
 		exit 1; \
 	fi; \
-	expected=$$(printf '%s\n' \
-		'version=$(ZEDBSD_NOCT_VERSION)' \
-		'tag=$(ZEDBSD_NOCT_TAG)' \
-		'commit=$(ZEDBSD_NOCT_TAG_COMMIT)' \
-		'archive-sha256=$(ZEDBSD_NOCT_ARCHIVE_SHA256)' \
-		'patch-level=$(2)'); \
+	expected=$$(printf '%s\n' $(call ZEDBSD_NOCT_IDENTITY,$(2),$(3))); \
 	actual=$$(cat "$$identity"); \
 	if test "$$actual" != "$$expected"; then \
 		echo "Noct: source identity mismatch: $$source" >&2; \
@@ -263,36 +276,47 @@ define ZEDBSD_NOCT_VERIFY_SOURCE
 	trap - EXIT HUP INT TERM
 endef
 
-# The target's tree (in this checkout) is replaced when it was extracted at
-# another patch level; the host's (shared) never is.
+# An accepted tree is used as it is, whatever the patch files' times.  The
+# target's tree (in this checkout) is replaced when it holds other patches;
+# the host's (shared) never is.
+ifeq ($(NOCT_SOURCE_ACCEPTED),yes)
+$(NOCT_SOURCE_STAMP):
+	@test -f '$@'
+else
 $(NOCT_SOURCE_STAMP): $(ZEDBSD_NOCT_TARGET_PATCHES) \
 		| $(ZEDBSD_NOCT_ARCHIVE_VERIFIED)
-	$(call ZEDBSD_NOCT_EXTRACT_SOURCE,$(NOCT_SOURCE_DIR),$(ZEDBSD_NOCT_TARGET_PATCHES),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL),replace)
+	$(call ZEDBSD_NOCT_EXTRACT_SOURCE,$(NOCT_SOURCE_DIR),$(ZEDBSD_NOCT_TARGET_PATCHES),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL),replace,$(ZEDBSD_NOCT_TARGET_PATCHES_SHA256))
+endif
 
+ifeq ($(NOCT_HOST_SOURCE_ACCEPTED),yes)
+$(NOCT_HOST_SOURCE_STAMP):
+	@test -f '$@'
+else
 $(NOCT_HOST_SOURCE_STAMP): $(ZEDBSD_NOCT_PATCHES) \
 		| $(ZEDBSD_NOCT_ARCHIVE_VERIFIED)
-	$(call ZEDBSD_NOCT_EXTRACT_SOURCE,$(NOCT_HOST_SOURCE_DIR),$(ZEDBSD_NOCT_PATCHES),$(ZEDBSD_NOCT_PATCH_LEVEL),keep)
+	$(call ZEDBSD_NOCT_EXTRACT_SOURCE,$(NOCT_HOST_SOURCE_DIR),$(ZEDBSD_NOCT_PATCHES),$(ZEDBSD_NOCT_PATCH_LEVEL),keep,$(ZEDBSD_NOCT_PATCHES_SHA256))
+endif
 
 .PHONY: noct-source noct-target-source-verify noct-host-source \
 	noct-host-source-verify noct-zedbsd
 noct-source: $(NOCT_SOURCE_STAMP)
 
 noct-target-source-verify: $(NOCT_SOURCE_STAMP)
-	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_SOURCE_DIR),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL))
+	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_SOURCE_DIR),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL),$(ZEDBSD_NOCT_TARGET_PATCHES_SHA256))
 	@touch '$(NOCT_SOURCE_VERIFIED)'
 
 noct-host-source: $(NOCT_HOST_SOURCE_STAMP)
 
 noct-host-source-verify: $(NOCT_HOST_SOURCE_STAMP)
-	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_HOST_SOURCE_DIR),$(ZEDBSD_NOCT_PATCH_LEVEL))
+	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_HOST_SOURCE_DIR),$(ZEDBSD_NOCT_PATCH_LEVEL),$(ZEDBSD_NOCT_PATCHES_SHA256))
 	@touch '$(NOCT_HOST_SOURCE_VERIFIED)'
 
 $(NOCT_SOURCE_VERIFIED): $(NOCT_SOURCE_STAMP)
-	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_SOURCE_DIR),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL))
+	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_SOURCE_DIR),$(ZEDBSD_NOCT_TARGET_PATCH_LEVEL),$(ZEDBSD_NOCT_TARGET_PATCHES_SHA256))
 	@touch '$@'
 
 $(NOCT_HOST_SOURCE_VERIFIED): $(NOCT_HOST_SOURCE_STAMP)
-	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_HOST_SOURCE_DIR),$(ZEDBSD_NOCT_PATCH_LEVEL))
+	$(call ZEDBSD_NOCT_VERIFY_SOURCE,$(NOCT_HOST_SOURCE_DIR),$(ZEDBSD_NOCT_PATCH_LEVEL),$(ZEDBSD_NOCT_PATCHES_SHA256))
 	@touch '$@'
 
 ifndef ZEDBSD_TOPLEVEL_BUILD
