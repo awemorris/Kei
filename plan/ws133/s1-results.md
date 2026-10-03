@@ -11,3 +11,4 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 3 | USB マウス（M650、Logi Bolt、BUG-105） | PASS（動く）／放置で上のフリーズ | pointer・click は動作 |
 | 3 | タッチパッド | 一部 FAIL | pointer・click は OK、**スクロールが効かない** |
 | 3 | キーボード（App Home の絞り込み） | PASS | |
+| — | タッチパッドで窓を移動中のフリーズ | **FAIL** | M650 の受信機を抜いた後、タッチパッドで窓を移動している途中で止まり、戻らなかった。→ フリーズは M650 だけの問題ではない |
