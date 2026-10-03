@@ -17,3 +17,7 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 4 | WiFi の off → on で保存済みの AP に自動で再接続 | PASS | |
 | 4 | 間違えた鍵の文言 | **FAIL** | 「did not accept the key」が出ず「Could not join (Network is down)」（ENETDOWN）。QEMU の RTL8822BU では EACCES だった（ws005-p020）。5330 の内蔵 AX211 の経路で鍵の拒否が ENETDOWN になっている見込み |
 | 4 | off の保持（Log Out → login） | PASS | off のまま。再起動（Restart）を挟んだ保持は未実施 |
+| 4 | off → on で自動接続 | PASS | |
+| 5 | Terminal で emacs（BUG-150） | 対象外 | zedBSD の image に Emacs は無い（BUG-150 は FreeBSD で見つかった。Q1 の手順の誤り） |
+| 5 | Terminal で日本語の入力 | **FAIL（要修正）** | Terminal で日本語が打てない。user「IME非対応なんじゃない？これは要修正。」 |
+| 5 | Terminal の Treat Ambiguous-Width Characters as Wide | PASS | チェックが付く。日本語が打てないので表示の確認は未実施 |
