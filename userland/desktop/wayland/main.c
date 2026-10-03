@@ -38,6 +38,7 @@
 static volatile sig_atomic_t stop_requested;
 
 static void stop_service(int signal_number);
+static void log_append(int descriptor);
 static int parse_options(struct zwl_server *server, int count, char **arguments);
 static int unsigned_option(const char *text, uint64_t maximum, uint64_t *number);
 static int listen_socket(struct zwl_server *server);
@@ -82,6 +83,10 @@ main(
 	server.timeout_ms = 150000;
 	strcpy(server.socket_path, "/tmp/wayland-0");
 	setvbuf(stdout, NULL, _IOLBF, 0);
+
+	/* The log is written at its end, whoever truncated it meanwhile (no hole of NUL bytes). */
+	log_append(STDOUT_FILENO);
+	log_append(STDERR_FILENO);
 
 	/* The backend reports nothing to the compositor yet (WS131 p003); its callbacks come with the areas that need them. */
 	memset(&backend_options, 0, sizeof(backend_options));
@@ -1068,4 +1073,38 @@ startup_step(
 
 	/* Succeeded: the next step starts now. */
 	return now;
+}
+
+/*
+ * Makes every write to a log descriptor go to the end of its file
+ * (O_APPEND on the open file, which the programs zdesktop starts share).
+ * A log the shell opened with ">" may be truncated by the next run while
+ * this one (or a program it started) still writes; at the old offset that
+ * write left a hole of NUL bytes, and grep then read the log as binary.  A
+ * pipe or a terminal is not changed by the flag, and a descriptor that
+ * cannot take it is left as it is.
+ */
+static void
+log_append(
+	int descriptor)
+{
+	int flags;
+	int error;
+
+	/* The open file's status flags. */
+	flags = fcntl(descriptor, F_GETFL);
+	if (flags < 0)
+		return;
+
+	/* Already appending. */
+	if ((flags & O_APPEND) != 0)
+		return;
+
+	/* Appending from now on; a refusal keeps the old way of writing. */
+	error = fcntl(descriptor, F_SETFL, flags | O_APPEND);
+	if (error != 0)
+		return;
+
+	/* Succeeded: the log is written at its end. */
+	return;
 }
