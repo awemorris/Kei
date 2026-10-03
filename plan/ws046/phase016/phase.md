@@ -36,3 +36,21 @@ scratch（repo の複写に差分を当てた物）での結果は BUG-093 の t
 - host と target の verify は rc 0。
 
 移行の後に、worktree で `make -n toolchain` と `make toolchain` を流す（結果は下に追記する）。
+
+## 結果（2026-10-03、P1、移行の後。main 69135488d を worktree に merge）
+
+Q1 が共有の `build/NoctLang/.zedbsd-source-identity` に `patches-sha256` の行を足し、toolchain を lock し直した後に、worktree `/home/awe/zedBSD-worktrees/p1` で流した。
+この worktree では、`build/NoctLang` は共有の tree への link、patch の mtime は 2026-10-02、共有の stamp は 2026-09-23。
+
+- `make -n ZEDBSD_CONFIG=plan/ws089/tests/config-amd64-settings.mk BUILD=build/p1-q640 toolchain`:
+  - Noct の分は `test -x build/NoctLang/build-static/noct` と、worktree の `build/host-noct-state` の stamp の touch だけ。
+  - 取り出し（`tar -xzf`）・verify・`cmake --preset static` は無い。
+  - 残りは LLVM の分（worktree の自前の `build/llvm-build` の configure と tblgen、BUG-089 の修正の通りの worktree の中の作業）と sysroot だけ。
+- `make ... toolchain`（実行）: rc 0。
+  - worktree の `build/llvm-build` で tblgen の 343 step を build した。install は無い。
+  - Noct の行・refusing は出ない。
+  - 共有の `build/NoctLang` の stamp・identity・manifest・`build-static/noct` の mtime は、build の前後で同じ。
+- 2 回目の `make -n toolchain`: 確かめの command（`--version`・`command -v`・`test -x`・echo）だけ。
+- 中身の変化を検出することは scratch で確認済み（BUG-093 の ticket）。
+
+受け入れ条件は満たした。Q1 の確認の後、cleared にする。
