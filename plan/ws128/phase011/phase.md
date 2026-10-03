@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws128-p011 -->
 # ws128-p011: Terminal で IME の日本語を入力する（BUG-155）
 
-Status: in-progress（実装済み・T1 の試験待ち）
+Status: cleared（Q1 判定 2026-10-03: T1-012（QEMU）terminal-p011-ime PASS、変換中・変換後・確定の画面を確認。実機（5330）の確認は S2）。元の記載: in-progress（実装済み・T1 の試験待ち）
 Disposition: normal
 Parent: [WS128](../ws.md)
 Queue: q638（P1 generation11、2026-10-03。承認: user「次のセッションはP1とT1を起動、実機がなくても修正できるバグをP1で修正、T1で順次テスト、のパイプラインを実行してください。」「実行してください。」）

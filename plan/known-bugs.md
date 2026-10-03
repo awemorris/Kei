@@ -29,7 +29,7 @@ remain as traceable history and are not new implementation work.
 | [BUG-158](bugs/BUG-158.md) | 操作中・放置中にフリーズし、電源ボタンの長押しが要る | reproduced（実機 S1） / tracking | S1（WS133） | WS005／WS004（AX211）、原因次第 |
 | [BUG-157](bugs/BUG-157.md) | 鍵を間違えたとき「Could not join (Network is down)」と出る（5330 の AX211） | reproduced（実機 S1） / scheduled | S1（WS133） | WS005／WS004（AX211） |
 | [BUG-156](bugs/BUG-156.md) | タッチパッドでスクロールできない | reproduced（実機 S1） / scheduled | S1（WS133） | WS081（touch）か WS006（入力） |
-| [BUG-155](bugs/BUG-155.md) | Terminal で IME の日本語を入力できない | reproduced（実機 S1） / scheduled | S1（WS133） | WS128（Terminal） |
+| [BUG-155](bugs/BUG-155.md) | Terminal で IME の日本語を入力できない | reproduced（実機 S1） / resolved（ws128-p011、QEMU。実機は S2） | S1（WS133） | WS128（Terminal） |
 | [BUG-154](bugs/BUG-154.md) | WiFi の AP を切り替えるとき「Connecting...」の表示が無い | reproduced（実機 S1） / scheduled | S1（WS133） | WS005（system bar・Settings の WiFi、WS131 の backend の後の path） |
 | [BUG-153](bugs/BUG-153.md) | system bar の音量の slider で 50% を click しても次の瞬間に 100% になる | reproduced（実機 S1） / scheduled | S1（WS133） | WS100（音量） |
 | [BUG-152](bugs/BUG-152.md) | Settings の Wallpaper の頁を開くと約 10 秒止まる | reproduced（実機 S1） / resolved（ws089-p020、QEMU。実機は S2） | S1（WS133） | WS089（Settings） |
