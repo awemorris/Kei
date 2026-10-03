@@ -2276,8 +2276,14 @@ tcp_poll(
 			result |= events & (POLLOUT | POLLWRNORM);
 		if (endpoint->tcp.state == TCP_SYN_SENT && socket->error != 0)
 			result |= events & (POLLOUT | POLLWRNORM);
+		/*
+		 * The connection hangs up when the peer's side is gone (its FIN
+		 * or reset, or a read shutdown) or the socket is closing.  Our own
+		 * SHUT_WR is not a hangup: it only stops POLLOUT above, so a
+		 * client that sent a request and shut its side still sleeps until
+		 * the answer comes (BUG-151, as Linux and FreeBSD do).
+		 */
 		if (socket->read_shutdown ||
-		    socket->write_shutdown ||
 		    endpoint->tcp.state == TCP_CLOSE_WAIT ||
 		    endpoint->tcp.state == TCP_TIME_WAIT ||
 		    socket->lifecycle != SOCKET_OPEN)
