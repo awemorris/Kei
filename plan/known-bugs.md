@@ -27,6 +27,7 @@ remain as traceable history and are not new implementation work.
 | --- | --- | --- | --- | --- |
 | [BUG-160](bugs/BUG-160.md) | WiFi の鍵の入力欄が画面の下に出る（AP の行の中で入力できない） | reproduced（実機 S1、ユーザー） / resolved（ws005-p029、QEMU。実機は S2） | S1 の後のフィードバック | P1（q642） |
 | [BUG-161](bugs/BUG-161.md) | 音量の変更のたびに desktop.conf へ書く（session の終わりに一度だけ書くべき） | reproduced（code） / scheduled（直しは実装済み、T2 の QEMU 待ち） | T2-006 の volume-p005 とユーザーの判断 | P1（ws100-p012） |
+| [BUG-162](bugs/BUG-162.md) | desktop.conf を Settings と zdesktop の通信路に使っている（1 秒ごとの poll） | reproduced（code） / tracking | ユーザーの問い（BUG-161 の後） | Q1（設計の直しの WS を立てる） |
 | [BUG-159](bugs/BUG-159.md) | バッテリー駆動で描画が 5 fps ほどに落ち、電池切れで警告なく落ちる | reproduced（実機 S1） / tracking | S1（WS133） | WS075（i915）、電源の管理（WS050〜052・WS132） |
 | [BUG-158](bugs/BUG-158.md) | 操作中・放置中にフリーズし、電源ボタンの長押しが要る | reproduced（実機 S1） / tracking | S1（WS133） | WS005／WS004（AX211）、原因次第 |
 | [BUG-157](bugs/BUG-157.md) | 鍵を間違えたとき「Could not join (Network is down)」と出る（5330 の AX211） | reproduced（実機 S1） / scheduled | S1（WS133） | WS005／WS004（AX211） |
@@ -44,8 +45,8 @@ remain as traceable history and are not new implementation work.
 | [BUG-145](bugs/BUG-145.md) | AX211: handshake の後に DHCP の lease が取れず disassoc（reason 8） | reproduced（passthrough） / tracking | ws005-p019 q611、5GHz | WS004 の新しい Phase |
 | [BUG-144](bugs/BUG-144.md) | 8 番目の Model viewer が vkAllocateMemory -4 | reproduced（QEMU） / resolved（ws014-p011、窓 1 GiB、2026-10-03） | ws129-p010、Venus の hostmem の見当 | 実機で確かめる |
 | [BUG-143](bugs/BUG-143.md) | IME の確定のたびに 500 ms 超で止まり IME を迂回 | reproduced（QEMU） / tracking | ws095-p005、辞書の保存の fsync の見当 | WS095 の次の Phase |
-| [BUG-142](bugs/BUG-142.md) | Files: 起動直後の停止中の Ctrl+C が遅れて処理 | unreproduced / scheduled | ws127-p001 | ws099-p029: compositor が入力 device を 1 つずつ読み、忙しい間の key と click の順が入れ替わりうるのを、時刻の順の merge に直した。T1 待ち |
-| [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | unreproduced / scheduled | ws127-p001 | q616 で scroll の後の残りを修正。ws099-p029: zdesktop が motion を取った時（menu など）に leave を送るよう直した。QEMU の bug141-hover PASS（T2-008）。実機は ws127-p007 |
+| [BUG-142](bugs/BUG-142.md) | Files: 起動直後の停止中の Ctrl+C が遅れて処理 | unreproduced / resolved | ws127-p001 | ws099-p029 で時刻の順の merge に直した、T2-004 の QEMU で PASS。実機は S2 |
+| [BUG-141](bugs/BUG-141.md) | Files: hover の強調が残る | unreproduced / resolved | ws127-p001 | ws099-p029 で leave を送るよう直した、T2-008 の QEMU で PASS。実機は S2 |
 | [BUG-140](bugs/BUG-140.md) | Files: Trash の同名の 2 つ目の名前と種類 | reproduced / resolved | ws127-p001 | q616（ws127-p002）で修正、host 試験 |
 | [BUG-139](bugs/BUG-139.md) | Text Editor の IME の変換中の文字が小さい | reproduced / scheduled（ws095-p013 で直した、QEMU で確認、実機の確認待ち） | ユーザー実機、UI/UX の要 | 実機の確認 → resolved |
 | [BUG-138](bugs/BUG-138.md) | system bar の WiFi の on/off・AP 接続が未実装 | reproduced / resolved（2026-10-03 整理） | ユーザー実機 | p019 |

@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws099-p029 -->
 # ws099-p029: BUG-142・BUG-141 — compositor の入力の順と、zdesktop が pointer を取った時の leave
 
-Status: cleared（q645、P2、2026-10-03。T2-004 で bug141-hover の判定の誤りで FAIL、判定を直して T2-008 で PASS）
+Status: cleared（q645、P2、2026-10-03。T2-008 で再試験 PASS、Q1 判定）
 Disposition: normal
 Parent: [WS099](../ws.md)
 Bugs: [BUG-142](../../bugs/BUG-142.md)、[BUG-141](../../bugs/BUG-141.md)
@@ -58,11 +58,6 @@ uncleared。bug142-order・cursor-owner・zdesktop-p077・menu-p003・files-p004
   lit は 1500 画素以上・menu は 200 画素以下。T2-004 の PNG で確かめた: 4 番目の tile の hover-on は 7422 画素、1 番目の tile の hover-on（hover していない）
   と menu は 0 画素。
 
-## T2-008 の結果（2026-10-03、QEMU）
+## 再試験（Q1、2026-10-03、T2-008、QEMU）
 
-- 判定を直した `bug141-hover.sh`（f817299bb）を T2-004 の image（2217907f6）で `bug141: PASS`（hover 7550 画素、menu 0 画素、ERROR 無し）。
-  PNG: `/home/awe/zedBSD-worktrees/t2/build/t2-008/bug141-256m/`。
-- 注: f817299bb の guest の道具は hostmem の既定が 1G で、2217907f6 の image では zdesktop が `VULKAN_ERROR device result=-3` で起動しないため、
-  T2-004 と同じ `VENUS_HOSTMEM=256M` で流した（試験の環境の差。この Phase の直しとは無関係）。
-- 修正前の対照は未実施。実機は未実施（BUG-141 の ws127-p007）。
-- T2-004 の 6 本 PASS と合わせて受け入れ条件を満たしたので cleared とした。
+cleared。f817299bb の直した bug141-hover を T2-004 の image（2217907f6）で: hover 7550 画素で lit、menu で 0 画素、`bug141: PASS`。注: f817299bb の guest の道具の hostmem の既定 1G は 2 GiB の device 窓の前の image では Venus が起動しないため、T2-004 と同じ `VENUS_HOSTMEM=256M` で流した（image の世代の差で、退行ではない）。

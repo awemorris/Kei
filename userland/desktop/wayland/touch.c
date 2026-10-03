@@ -664,12 +664,12 @@ read_axes(
 
 	/* The horizontal range of the fingers' places. */
 	descriptor = screen->input->fd;
-	error = zwl_input_device_absinfo(descriptor, ABS_MT_POSITION_X, &screen->axis_x);
+	error = kl_backend_input_absinfo(descriptor, ABS_MT_POSITION_X, &screen->axis_x);
 	if (error != 0)
 		return error;
 
 	/* The vertical range. */
-	error = zwl_input_device_absinfo(descriptor, ABS_MT_POSITION_Y, &screen->axis_y);
+	error = kl_backend_input_absinfo(descriptor, ABS_MT_POSITION_Y, &screen->axis_y);
 	if (error != 0)
 		return error;
 
@@ -681,7 +681,7 @@ read_axes(
 
 	/* The slot the next report's finger events address until one names another. */
 	memset(&slot, 0, sizeof(slot));
-	error = zwl_input_device_absinfo(descriptor, ABS_MT_SLOT, &slot);
+	error = kl_backend_input_absinfo(descriptor, ABS_MT_SLOT, &slot);
 	if (error != 0)
 		return error;
 	screen->slot = slot.value;

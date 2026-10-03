@@ -16,7 +16,6 @@
 #include "ime.h"
 #include "data.h"
 #include "userland/desktop/paths.h"
-#include "zwl-os.h"
 #include "userland/desktop/libkeiland-backend/keiland-backend.h"
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -99,6 +98,8 @@ main(
 	backend_host.input_paused = zwl_backend_input_paused;
 	backend_host.input_resumed = zwl_backend_input_resumed;
 	backend_host.input_gone = zwl_backend_input_gone;
+	backend_host.input_known = zwl_backend_input_known;
+	backend_host.input_found = zwl_backend_input_found;
 
 	/* Reads the command line; a mistake ends the run with the usage. */
 	error = parse_options(&server, count, arguments);

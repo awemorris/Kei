@@ -41,8 +41,7 @@
 #define ZWL_H
 
 #include "zwl-gpu.h"
-#include "zwl-evdev.h"
-#include "zwl-input.h"
+#include "userland/desktop/libkeiland-backend/keiland-backend-evdev.h"
 #include <stdint.h>
 #include <stddef.h>
 #include <sys/types.h>
@@ -62,7 +61,7 @@
 /* Bound the evdev nodes the seat reads and the events one report may carry. */
 #define ZWL_INPUT_MAX		16U
 #define ZWL_INPUT_FRAME_MAX	64U
-#define ZWL_INPUT_PATH_MAX	64U
+#define ZWL_INPUT_PATH_MAX	KL_BACKEND_INPUT_PATH_MAX
 
 /* Rescan period for evdev nodes that appear after start-up, in milliseconds. */
 #define ZWL_INPUT_SCAN_MS	2000U
@@ -1090,6 +1089,8 @@ void zwl_backend_session_resumed(void *data);
 void zwl_backend_input_paused(void *data, const char *path);
 void zwl_backend_input_resumed(void *data, const char *path, int descriptor);
 void zwl_backend_input_gone(void *data, const char *path);
+int zwl_backend_input_known(void *data, const char *path);
+int zwl_backend_input_found(void *data, int descriptor, const char *path, const struct kl_backend_input_caps *caps);
 int zwl_lock(struct zwl_server *server, const char *reason);
 void zwl_greeter_answer(struct zwl_server *server, unsigned request, int error);
 int zwl_emit(struct zwl_client *client, uint32_t object, uint32_t opcode, const void *payload, size_t size);
@@ -1271,6 +1272,15 @@ void zwl_seat_frame(struct zwl_server *server);
 void zwl_seat_key(struct zwl_server *server, uint32_t time, uint32_t key, uint32_t state);
 void zwl_seat_key_deliver(struct zwl_server *server, uint32_t time, uint32_t key, uint32_t state);
 void zwl_seat_modifiers(struct zwl_server *server);
+/* The operating system through libkeiland-backend (os.c, ws131-p008; the display's two in compose.h). */
+struct pollfd;
+int zwl_os_open(struct zwl_server *server);
+void zwl_os_close(struct zwl_server *server);
+size_t zwl_os_poll_count(const struct zwl_server *server);
+void zwl_os_poll_fill(struct zwl_server *server, struct pollfd *descriptors);
+void zwl_os_poll_done(struct zwl_server *server, const struct pollfd *descriptors);
+void zwl_input_scan(struct zwl_server *server);
+int zwl_input_probe(struct zwl_server *server, int descriptor, const char *path, const struct kl_backend_input_caps *capabilities);
 int zwl_input_attach(struct zwl_server *server, int descriptor, const char *path, unsigned pointer, unsigned keyboard, const struct input_absinfo *x, const struct input_absinfo *y);
 void zwl_input_read_devices(struct zwl_server *server, struct zwl_input_device **devices, size_t count);
 void zwl_input_close(struct zwl_server *server, struct zwl_input_device *device);

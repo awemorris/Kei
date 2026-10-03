@@ -34,6 +34,10 @@ Parent: [WS134](../ws.md)
 
 p002 と同じ（全ての値が sim か replay、本物は hostname・CPU の数・uptime）。
 
+## 結果（Q1、2026-10-03、T1-043、QEMU）
+
+uncleared。sim の fps 4.7（条件 15 以上、2 回とも同じ）、他の項目と PNG は ok（worktrees/t1/build/t1-monitor/t1-043/）。guest の描画は llvmpipe（`ZMON READY device="llvmpipe"`、Venus 無し）。Q1 の目視: sim の Graphics に「GPU 1 Simulated GPU」の名前が出る（ユーザーの指示「simという表記はつけなくていいです」に反する）、GPU 0 の名前が「llvmpipe (LLVM 19.1.7, 2」で切れる。再開: P2 が fps の原因（llvmpipe の CPU 描画の重さか、app の描画の量か）を調べ、Venus で測るか条件を直すか描画を軽くし、表記を直して T1 に再依頼。
+
 ## 結果（T1-043、a02f7eecd、QEMU、2026-10-03）
 
 uncleared。`monitor-p003.sh` を 2 回（66 s・65 s、変更なし）流して同じ:
