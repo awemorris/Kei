@@ -47,7 +47,7 @@ Resume point: 16:30 に main を締め、17:00 までに S1 の image と手順�
 | Phase | 内容 | 状態 | 依存 |
 | --- | --- | --- | --- |
 | p001 | 安定版 S1 の内容（base の commit・対象の機種）と試験の一覧を決め、image と手順書を作る | planning | ユーザーの決定 |
-| p002 | 実機で S1 を起動し、SSH で試験を流して結果を記録（WiFi の 1〜6 を含む） | planning | p001、ws131-p003 の統合（WiFi の 6） |
+| p002 | 実機で S1 を起動し、SSH で試験を流して結果を記録（WiFi の 1〜6 を含む）。手順は [s1-procedure.md](s1-procedure.md) | planned（2026-10-03 17:00） | p001、ws131-p003 の統合（WiFi の 6） |
 
 ### 他の WS の実機の候補（2026-10-03 Q1 が Master から拾った候補、採否はユーザー）
 
