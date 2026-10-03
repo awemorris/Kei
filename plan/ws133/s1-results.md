@@ -28,3 +28,5 @@ image: build/s1-pre/hdd-image.img（sha256 c637cb64…f7a4、main 6ecf801cc）�
 | 6 | Settings の Wallpaper（Lakeside・Birch-Lake） | 一部 FAIL（要修正） | 2 枚とも一覧にあり、切り替えもできる。ただし Wallpaper の頁を click すると約 10 秒止まる。user「画像読み込みはマルチスレッドにしないとだめだね。要修正。」 |
 | 6 | Desktop の icon から file を開く | PASS | 保存した file を Desktop から開けた（名前は s1.txt ではない） |
 | 6 | IME の A／あ の表示（WS095） | PASS | |
+| 7 | speaker から音（WS100 A7） | PASS | |
+| 7 | system bar の音量の slider | **FAIL（要修正）** | 50% の所を click しても、次の瞬間に 100% になる |
