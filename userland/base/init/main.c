@@ -18,6 +18,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <poll.h>
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -34,6 +35,10 @@
 
 #define SERVICE_MAX 32
 #define ARGUMENT_MAX 16
+
+/* Requests held while a oneshot service runs, and how often init looks at the socket and the service then. */
+#define DEFERRED_MAX 8
+#define ONESHOT_POLL_MS 100
 
 enum service_type { SERVICE_DAEMON, SERVICE_ONESHOT, SERVICE_RESPAWN };
 
@@ -88,6 +93,26 @@ static volatile sig_atomic_t action_requested;
 /* Set when the system is being stopped: a replaced service is not started then. */
 static int services_stopping;
 
+/*
+ * The control socket's listener (-1 without one).  It is served while a
+ * oneshot service runs too (BUG-095): a oneshot that asks for the power to be
+ * cut, through /sbin/poweroff, waits for init's answer while init waits for it.
+ */
+static int control_listener = -1;
+
+/*
+ * A request that starts or stops services, received while a oneshot service
+ * ran: it is carried out when init is back in its loop, as it was when such a
+ * request waited in the listen queue.
+ */
+struct deferred_request {
+	int client;
+	struct zsv1_request request;
+};
+
+static struct deferred_request deferred_requests[DEFERRED_MAX];
+static size_t deferred_count;
+
 enum dependency_result {
 	DEPENDENCIES_WAIT,
 	DEPENDENCIES_READY,
@@ -112,6 +137,9 @@ static struct service *replacer_of(const struct service *service);
 static void release_replaced(const struct service *service);
 static int terminal_state(enum service_state state);
 static int spawn_service(struct service *service);
+static int wait_for_oneshot(pid_t child, int *status);
+static void serve_while_oneshot(void);
+static void handle_deferred_requests(void);
 static int wait_for_notification(struct service *service, int descriptor);
 static uint64_t monotonic_milliseconds(void);
 static int valid_failure_record(const char *record);
@@ -120,6 +148,8 @@ static void shutdown_system(enum init_action action);
 static int stop_service(struct service *service);
 static int reload_policy(void);
 static void handle_request(int client);
+static void refuse_request(int client, int error);
+static void dispatch_request(int client, const struct zsv1_request *request);
 static int receive_request(int client, struct zsv1_request *request);
 static int send_service(int client, const struct service *service);
 static enum zsv1_service_state zsv1_state(enum service_state state);
@@ -135,7 +165,6 @@ main(
 {
 	int client;
 	struct rcconf_model *snapshot;
-	int listener;
 
 	/* Handles a failed getpid operation. */
 	if (getpid() != 1) {
@@ -170,10 +199,11 @@ main(
 	report_unknown_services(snapshot);
 	free(snapshot);
 
-	listener = open_control_socket();
+	/* Opens the control socket. */
+	control_listener = open_control_socket();
 
 	/* Handles the listener condition. */
-	if (listener < 0)
+	if (control_listener < 0)
 		fprintf(stderr, "init: control socket: %s\n", strerror(errno));
 
 	start_enabled_services();
@@ -201,15 +231,17 @@ main(
 			}
 		}
 
+		/* Carries out the requests held while a oneshot service ran. */
+		handle_deferred_requests();
+
 		/* Handles the listener condition. */
-		if (listener < 0) {
+		if (control_listener < 0) {
 			sleep(1);
 			continue;
 		}
 
-		client = accept4(listener, NULL, NULL, SOCK_CLOEXEC);
-
-		/* Handles the client condition. */
+		/* Answers the next request. */
+		client = accept4(control_listener, NULL, NULL, SOCK_CLOEXEC);
 		if (client >= 0) {
 			handle_request(client);
 			close(client);
@@ -618,6 +650,10 @@ start_enabled_services(
 		for (index = 0; index < service_count; index++) {
 			service = &services[index];
 
+			/* A halt, power-off or reboot asked for meanwhile starts nothing more; the loop carries it out. */
+			if (action_requested != 0)
+				return;
+
 			/* Handles the service condition. */
 			if (!service->enabled ||
 			    service->state != SERVICE_STOPPED)
@@ -805,6 +841,7 @@ spawn_service(
 	char argument_copy[512], *argv[ARGUMENT_MAX];
 	char *argument;
 	int count = 1, status, notify_pipe[2] = {-1, -1};
+	int waited;
 	pid_t child;
 
 	/* Handles the service condition. */
@@ -930,8 +967,19 @@ spawn_service(
 		return 0;
 	}
 
-	/* Handles a failed waitpid operation. */
-	if (waitpid(child, &status, 0) != child) {
+	/* Waits for the oneshot, serving the control socket meanwhile. */
+	waited = wait_for_oneshot(child, &status);
+	if (waited > 0) {
+		/* A halt, power-off or reboot was asked for: the service is stopped with the others. */
+		printf("init: oneshot %s still running at the system action\n",
+		       service->name);
+
+		/* Reports successful completion. */
+		return 0;
+	}
+
+	/* Handles a failed wait. */
+	if (waited < 0) {
 		error_local2 = errno;
 
 		service->state = SERVICE_FAILED;
@@ -960,6 +1008,124 @@ spawn_service(
 
 	/* Reports successful completion. */
 	return 0;
+}
+
+/*
+ * Waits for a oneshot service to end while serving the control socket.
+ * Returns 0 when it ended (its status in *status), 1 when a halt, power-off or
+ * reboot was asked for first, and -1 when the wait failed (errno).
+ */
+static int
+wait_for_oneshot(
+	pid_t child,
+	int *status)
+{
+	struct pollfd listener;
+	pid_t reaped;
+
+	/* Looks at the service and the socket until one of them ends the wait. */
+	for (;;) {
+		/* Collects the service when it has ended. */
+		reaped = waitpid(child, status, WNOHANG);
+		if (reaped == child)
+			return 0;
+
+		/* Handles a failed wait. */
+		if (reaped < 0 && errno != EINTR)
+			return -1;
+
+		/* A system action asked for meanwhile ends the wait: the action stops the service. */
+		if (action_requested != 0)
+			return 1;
+
+		/* Answers the requests that came. */
+		serve_while_oneshot();
+
+		/* Waits a little for a connection, or only sleeps without a socket. */
+		if (control_listener >= 0) {
+			listener.fd = control_listener;
+			listener.events = POLLIN;
+			listener.revents = 0;
+			(void)poll(&listener, 1, ONESHOT_POLL_MS);
+		} else {
+			(void)usleep(ONESHOT_POLL_MS * 1000);
+		}
+	}
+}
+
+/*
+ * Serves the control socket while a oneshot service runs.  A system action
+ * and the requests that only read are answered at once; one that starts or
+ * stops services is held for init's loop (deferred_requests), or refused
+ * when too many are held.
+ */
+static void
+serve_while_oneshot(
+	void)
+{
+	struct zsv1_request request;
+	int client;
+	int received;
+	int error;
+
+	/* Takes each connection waiting now. */
+	for (;;) {
+		client = accept4(control_listener, NULL, NULL, SOCK_CLOEXEC);
+		if (client < 0)
+			return;
+
+		/* Reads the request. */
+		received = receive_request(client, &request);
+		if (received != 0) {
+			error = errno;
+			refuse_request(client, error);
+			close(client);
+			continue;
+		}
+
+		/* Decides whether the request is answered now. */
+		switch (request.command) {
+		case ZSV1_COMMAND_HALT:
+		case ZSV1_COMMAND_POWEROFF:
+		case ZSV1_COMMAND_REBOOT:
+		case ZSV1_COMMAND_LIST:
+		case ZSV1_COMMAND_SHOW:
+		case ZSV1_COMMAND_RELOAD:
+			dispatch_request(client, &request);
+			close(client);
+			break;
+		default:
+			/* Starting or stopping services waits for init's loop. */
+			if (deferred_count < DEFERRED_MAX) {
+				deferred_requests[deferred_count].client = client;
+				deferred_requests[deferred_count].request = request;
+				deferred_count++;
+			} else {
+				(void)zsv1_server_send_error_end_fd(client, EBUSY, "oneshot-running");
+				close(client);
+			}
+
+			break;
+		}
+	}
+}
+
+/* Carries out the requests held while a oneshot service ran, oldest first. */
+static void
+handle_deferred_requests(
+	void)
+{
+	struct deferred_request deferred;
+
+	/* Takes the oldest each time: carrying one out can hold new ones behind it. */
+	while (deferred_count > 0) {
+		deferred = deferred_requests[0];
+		deferred_count--;
+		memmove(&deferred_requests[0], &deferred_requests[1],
+			deferred_count * sizeof(deferred_requests[0]));
+		dispatch_request(deferred.client, &deferred.request);
+		close(deferred.client);
+	}
 }
 
 /* Supports the wait for notification operation. */
@@ -1325,29 +1491,64 @@ static void
 handle_request(
 	int client)
 {
-	enum init_action action;
 	struct zsv1_request request;
-	struct service *service;
-	size_t index;
+	int received;
 	int error;
 
 	/* Handles a failed receive request operation. */
-	if (receive_request(client, &request) != 0) {
+	received = receive_request(client, &request);
+	if (received != 0) {
 		error = errno;
-		(void)zsv1_server_send_error_end_fd(
-		    client, error > 0 ? error : EIO,
-		    error == EPROTONOSUPPORT ? "unknown-version"
-		    : error == EOVERFLOW || error == EMSGSIZE
-			? "request-too-long"
-		    : error == ETIMEDOUT ? "request-timeout"
-					 : "malformed-request");
+		refuse_request(client, error);
 
 		/* Returns the computed result. */
 		return;
 	}
 
+	/* Carries the request out. */
+	dispatch_request(client, &request);
+}
+
+/* Answers a request that could not be read. */
+static void
+refuse_request(
+	int client,
+	int error)
+{
+	const char *reason;
+
+	/* Names what was wrong with the request. */
+	if (error == EPROTONOSUPPORT) {
+		reason = "unknown-version";
+	} else if (error == EOVERFLOW || error == EMSGSIZE) {
+		reason = "request-too-long";
+	} else if (error == ETIMEDOUT) {
+		reason = "request-timeout";
+	} else {
+		reason = "malformed-request";
+	}
+
+	/* A failure without its own number is reported as an I/O error. */
+	if (error <= 0)
+		error = EIO;
+
+	/* Answers the client. */
+	(void)zsv1_server_send_error_end_fd(client, error, reason);
+}
+
+/* Carries out one received request and answers it. */
+static void
+dispatch_request(
+	int client,
+	const struct zsv1_request *request)
+{
+	enum init_action action;
+	struct service *service;
+	size_t index;
+	int error;
+
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_LIST) {
+	if (request->command == ZSV1_COMMAND_LIST) {
 		/* Process each remaining element. */
 		for (index = 0; index < service_count; index++) {
 			/* Handles a failed send service operation. */
@@ -1361,7 +1562,7 @@ handle_request(
 	}
 
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_RELOAD) {
+	if (request->command == ZSV1_COMMAND_RELOAD) {
 		/* Handles a failed reload policy operation. */
 		if (reload_policy() == 0) {
 			(void)zsv1_server_send_ok_end_fd(client, "reloaded");
@@ -1376,11 +1577,11 @@ handle_request(
 	}
 
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_HALT ||
-	    request.command == ZSV1_COMMAND_POWEROFF ||
-	    request.command == ZSV1_COMMAND_REBOOT) {
-		action = request.command == ZSV1_COMMAND_REBOOT ? INIT_ACTION_REBOOT
-	    : request.command == ZSV1_COMMAND_POWEROFF
+	if (request->command == ZSV1_COMMAND_HALT ||
+	    request->command == ZSV1_COMMAND_POWEROFF ||
+	    request->command == ZSV1_COMMAND_REBOOT) {
+		action = request->command == ZSV1_COMMAND_REBOOT ? INIT_ACTION_REBOOT
+	    : request->command == ZSV1_COMMAND_POWEROFF
 	? INIT_ACTION_POWEROFF
 	: INIT_ACTION_HALT;
 
@@ -1392,7 +1593,8 @@ handle_request(
 		return;
 	}
 
-	service = find_service(request.service);
+	/* Finds the service the request names. */
+	service = find_service(request->service);
 
 	/* Handles the service availability. */
 	if (service == NULL) {
@@ -1404,7 +1606,7 @@ handle_request(
 	}
 
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_SHOW) {
+	if (request->command == ZSV1_COMMAND_SHOW) {
 		/* Handles a failed send service operation. */
 		if (send_service(client, service) != 0 ||
 		    send_dependencies(client, service->after,
@@ -1421,7 +1623,7 @@ handle_request(
 	}
 
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_START) {
+	if (request->command == ZSV1_COMMAND_START) {
 		/* Handles a failed spawn service operation. */
 		if (spawn_service(service) == 0) {
 			(void)zsv1_server_send_ok_end_fd(client, "started");
@@ -1438,7 +1640,7 @@ handle_request(
 	}
 
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_STOP) {
+	if (request->command == ZSV1_COMMAND_STOP) {
 		/* Handles a failed stop service operation. */
 		if (stop_service(service) == 0) {
 			(void)zsv1_server_send_ok_end_fd(client, "stopped");
@@ -1455,7 +1657,7 @@ handle_request(
 	}
 
 	/* Handles the request condition. */
-	if (request.command == ZSV1_COMMAND_RESTART) {
+	if (request->command == ZSV1_COMMAND_RESTART) {
 		/* Handles a failed stop service operation. */
 		if (stop_service(service) == 0 && spawn_service(service) == 0) {
 			(void)zsv1_server_send_ok_end_fd(client, "restarted");
