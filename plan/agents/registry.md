@@ -4,10 +4,10 @@
 
 | Agent / generation | Agent type | WS | Worktree / branch | Current Queue | Ordered next Queues | State | Checkpoint / merge ACK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| P1 / generation10（終了） | phase-runner（high） | WS005（WiFi） | `/home/awe/zedBSD-worktrees/p1` / `agent/p1` | [q635](P1/queue.md) | —（q635 の後はラップアップの依頼待ち） | stopped | ba5e3013f → main 01f4c5e05 |
-| P2 / generation4（終了） | phase-runner（high） | WS128（BUG-150） | `/home/awe/zedBSD-worktrees/p2` / `agent/p2` | [q636](P2/queue.md) | — | stopped | 前回 a8874c323 統合済み |
-| P3 / generation5（終了） | phase-runner（high） | WS131 | `/home/awe/zedBSD-worktrees/p3` / `agent/p3` | —（q632-i03・q637 終了） | — | stopped | 前回 184600fd3（未統合） |
-| P4 / generation1（終了） | phase-runner（high） | WS118 | `/home/awe/zedBSD-worktrees/p4` / `agent/p4` | —（q634-i01 中断） | — | stopped | 59a94c6aa 未統合 |
+| P1 / generation11（終了、2026-10-03 夜） | phase-runner（high） | WS131（p004〜p008）・WS100 p012（BUG-161） | `/home/awe/zedBSD-worktrees/p1` / `agent/p1` | q650 | — | stopped | e4b0b6b53 まで統合済み（ソフトな停止） |
+| P2 / generation6（終了、2026-10-03 夜） | phase-runner（high） | WS134（p001〜p004）・ws099 p025〜p029 | `/home/awe/zedBSD-worktrees/p2` / `agent/p2` | — | — | stopped | 4d6db219d まで統合済み（ソフトな停止） |
+| P3 / generation5（終了） | phase-runner（high） | WS131 | `/home/awe/zedBSD-worktrees/p3` / `agent/p3` | —（q632-i03・q637 終了） | — | stopped | 成果は main に入っている（2026-10-03 夜 Q1 が確認） |
+| P4 / generation1（終了） | phase-runner（high） | WS118 | `/home/awe/zedBSD-worktrees/p4` / `agent/p4` | —（q634-i01 中断） | — | stopped | 59a94c6aa の source と WS118 の記録を 2026-10-03 夜 Q1 が main に取り込み（boot-test は未実施） |
 | P5〜P8 | — | 未配属 | — | — | — | N=4 の間は起動しない | — |
 
 担当の WS と最初の Queue は、ベータ1（fg019）の内容をユーザーと決めてから割り当てる。
@@ -75,3 +75,6 @@
 2026-10-03 / P2 generation5 取り消し: user「あ、BUG-151は解決したんですね。じゃあFableはいいです。」→ 起動直後に終了を依頼。N=2（P1・T1）。BUG-151 は P1 の修正の T1 の再試験で判定する。
 2026-10-03 user「利用量が余っているので、P2を立てて、併走で異なるバグを修正してください。」 → P2 generation6 を q645（BUG-146・147・095）で起動。N=3（P1・P2・T1）。P1 の q643 から BUG-146・147 を外す。
 2026-10-03 user「T2を立てて、T1に予約してあるがまだ実行されていないテストを、半分移管してください。ホストの空きメモリはあと1つqemuを立てても大丈夫と思います。」 → T2 generation1 を起動（worktree t2、branch agent/t2）。QEMU は同時に 2 つまで。
+
+
+2026-10-03 夜 Q1: user のソフトな停止で P1・P2・T1（generation3）・T2（generation1）はラップアップして終了。全ての成果は main に統合済み。リポジトリの作り直しの後は worktree と branch を作り直す（[master](../master.md) の「リポジトリの作り直し」）。
