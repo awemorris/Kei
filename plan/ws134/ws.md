@@ -23,3 +23,17 @@ CPU（全体と各 core）、GPU（Util・VRAM・温度・電力、複数）、R
 | Phase | 内容 | 状態 | 依存 |
 | --- | --- | --- | --- |
 | [p001](phase001/phase.md) | 設計: zedBSD（と Linux・FreeBSD）で取れる情報の出どころの調査（不足は kernel・libkeiland の追加の案）、画面の構成・3D の表現・動き・操作・描画の方式（libkeiui と Vulkan）、Phase の分け方 | planning（P2、q649） | — |
+| p002 | M1 骨組み: package・3 OS の build・libkeiui の窓＋自前の Vulkan・title bar・data source の層（sim・replay）・履歴・plate と文字・ZMON の log・App Home | planned（P2） | p001 |
+| p003 | M2 3D と動き: 状態コア・CPU のタイル面・GPU のカード・Network/Disk の流れ・Memory の層・視差・数値の slide・段階的な警告・Events | planned | p002 |
+| p004 | M3a 操作: tap の展開・長押しの固定・swipe の時間軸・pinch の俯瞰・key/pointer・--calm | planned | p003 |
+| p005 | K1 kernel: CPU ごとの時間 `hw.cpu.times`（sysctl の CLI・top の CPU 行） | planned | — |
+| p006 | K2 kernel: disk ごとの統計 `hw.disk.stats` | planned | — |
+| p007 | K3 kernel: i915 の telemetry の ioctl（実機の確認は 5330） | planned | — |
+| p008 | M3 本物の値: backend の monitor の領域（3 OS）・compositor の `kl_system_monitor_v1`・libkeiland の `kl_system_monitor_*`・app の system source | planned | WS131 p010 までの統合、p005・p006 |
+| p009 | K4 kernel: ACPI の thermal・電池（実機、WS131 p005 と調整） | planned | 実機 |
+| p010 | M4 全文規約・回帰・デモの通し | planned | p002〜p009 |
+
+2026-10-03 user「P2はコードを書いてOKだと思います。衝突しないです。」 → P2 は設計（p001）を書いたら、user のレビューを待たずに実装の Phase へ進んでよい（Phase の ID は Q1 が割り当て）。
+
+2026-10-03 user「P2はとりあえずOSから取れない情報はスタブデータでそれっぽいアニメーションを表示しましょう。」→ OS から今取れない値（GPU の温度・電力など）は、stub のデータ（もっともらしく動く値）で画面と動きを先に作る。stub であることは code と画面の上で分かるように（後で本物に差し替える所を一覧に）。
+2026-10-03 user「simという表記はつけなくていいです。私がどの項目がスタブか把握できていればいいです。」→ 画面に stub の印は付けない。stub の項目の一覧を design.md（と完了の報告）に書き、user が把握できるようにする。
