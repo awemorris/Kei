@@ -7,6 +7,7 @@
 # Copyright (C) 2026 Awe Morris; SPDX-License-Identifier: Zlib
 set -eu
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/venus-hostmem.sh
 export GUEST_RUNTIME="${GUEST_RUNTIME:-$PWD/build/p1-rtl-run}"
 export LIBGL_ALWAYS_SOFTWARE=1 MESA_LOADER_DRIVER_OVERRIDE=zink
 export VK_DRIVER_FILES="${VK_DRIVER_FILES:-/usr/share/vulkan/icd.d/lvp_icd.json}"
@@ -35,6 +36,6 @@ stop)
 start)
 	sudo -n chmod 0666 "$node"
 	exec python3 plan/tools/guest/guest.py start ${GUEST_CPUS:+--cpus "$GUEST_CPUS"} "${2:?image}" \
-	    --qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=256M,max_outputs=1 -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4 -device qemu-xhci,id=wlanxhci -device usb-host,hostbus=$bus,hostaddr=$address,bus=wlanxhci.0"
+	    --qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=$VENUS_HOSTMEM,max_outputs=1 -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4 -device qemu-xhci,id=wlanxhci -device usb-host,hostbus=$bus,hostaddr=$address,bus=wlanxhci.0"
 	;;
 esac

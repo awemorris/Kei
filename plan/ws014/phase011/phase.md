@@ -55,3 +55,27 @@ mview の staging を load の後に解放する（4〜5 MiB の aperture を返
   context 全体を失ったことにしていた**。そのため、窓や memory が入らなかっただけの app が終わっていた。
 - 修正（容量の修正とは別の、意味の修正）: ENOSPC も OUT_OF_DEVICE_MEMORY にして context を失わせない。libvulkan の build は warning 0。
   容量そのもの（aperture の使い方・hostmem・staging）は測定と user の助言の後。
+
+## q647: hostmem を大きくできるか（2026-10-03、P1、読み）
+
+user「Venusの窓は私には判断できないです。もっと大きくしていいならしてください。」→ 確かめた結果、**今の kernel では 256 MiB より大きくできない**。
+
+- `src/drivers/gpu/venus/transport.c` の `venus_map_aperture` は host-visible の BAR を**丸ごと** kernel に map し（blob の slice が BAR の
+  移動に巻き込まれないように）、`bar.size > VENUS_MAX_APERTURE_BYTES`（256 MiB、`internal.h`）なら EOPNOTSUPP で aperture を断る。BUG-124 の
+  「hostmem=1G で session が起動しなかった」はこれ。
+- その上限は、amd64 の HAL の kernel の device の窓（`src/hal/amd64/space.c`、`AMD64_DEVICE_PD_COUNT` 256 × 2 MiB = **512 MiB**、全 device の map の共有）
+  に収めるため。1 GiB の BAR を丸ごと map する余地は無い。kernel は blob の中身を自分でも読み書きする（`venus.c` 884・941 行の `resource->mapping`）
+  ので、map 無しにはできない。
+- OVMF・q35: QEMU の virtio-gpu の hostmem は 64 bit の prefetchable の BAR で、OVMF は 4 GiB より上に置ける（今の 256M も同じ BAR）。guest の
+  RAM 8 GiB・host の memory は 1〜4 GiB の hostmem の妨げにはならない見込み（hostmem は host 側で必要な分だけ使う）。妨げは上の kernel の 2 つ。
+
+大きくする道（どれも判断が要る）:
+1. **HAL の device の窓を広げる**（例 256 → 1024 PD = 2 GiB）。`src/hal/` の変更で、HAL の責務（kernel の仮想 address の配置）に当たる → user の事前承認が要る。
+   その上で `VENUS_MAX_APERTURE_BYTES` を 1 GiB に。
+2. **Venus の driver を、BAR を丸ごとでなく blob ごとに map する作りに変える**（`drv_pci_device_map_bar_region` はある）。driver だけの変更だが、
+   丸ごと map の理由（BAR の移動・slice の寿命）を設計し直す規模。生きている blob の合計は窓（512 MiB の残り）に縛られる。
+3. 256 MiB のまま、使い方を減らす（mview の staging の解放、他の app の upload の host-visible の削減）。BUG-144 の測定の数字で効き目を見る。
+
+この Queue で入れたこと: hostmem の値を 1 か所（`plan/tools/guest/venus-hostmem.sh`、`VENUS_HOSTMEM`、既定 256M、環境で上書き）に集め、9 か所の
+試験（zdesktop-guest・volume-guest・files-guest-p1・rtl-guest・venus-session-check・gles/venus・noct/g3-venus・venus-qemu.py・aperture-bug144 の注釈）を
+それに揃えた。値は 256M のまま（上の理由）。Windows の配布物 `tools/release/kei-nightly/README.txt` も `hostmem=256M`（報告だけ、変えていない）。

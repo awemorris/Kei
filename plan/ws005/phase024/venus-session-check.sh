@@ -9,6 +9,7 @@
 #   sh plan/ws005/phase024/venus-session-check.sh IMAGE [OUT]
 set -u
 cd "$(dirname -- "$0")/../../.."
+. plan/tools/guest/venus-hostmem.sh
 image=${1:?image}
 out=${2:-build/p1-venus-shots}
 mkdir -p "$out"
@@ -25,7 +26,7 @@ keys() { python3 plan/ws035/tests/qmp-keys.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 state() { echo "== $1"; guest 'net wifi list | grep "^wifi "; grep NETWORK /var/log/sessiond.log'; }
 
 timeout 300 python3 plan/ws005/phase024/guest-ports.py start "$image" \
-	--qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=256M,max_outputs=1 -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4" \
+	--qemu-extra "-object memory-backend-memfd,id=mem,size=8G,share=on -machine memory-backend=mem -device virtio-gpu-gl-pci,id=venus,venus=on,blob=on,hostmem=$VENUS_HOSTMEM,max_outputs=1 -display egl-headless,rendernode=/dev/dri/renderD128 -vnc unix:$GUEST_RUNTIME/vnc.sock,display=venus -device usb-tablet,bus=xhci.0,port=4" \
 	|| { echo "venus-session-check: the guest did not start"; exit 1; }
 trap 'timeout 60 python3 plan/ws005/phase024/guest-ports.py stop >/dev/null 2>&1' EXIT
 timeout 400 python3 plan/ws005/phase024/guest-ports.py wait || { echo "venus-session-check: no SSH"; exit 1; }
