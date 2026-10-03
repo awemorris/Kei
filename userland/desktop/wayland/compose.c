@@ -18,7 +18,6 @@
 
 #include "desktop.h"
 #include "compose.h"
-#include "zwl-os.h"
 #include "shaders.h"
 #include "popup.h"
 #include "subsurface.h"

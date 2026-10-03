@@ -16,7 +16,6 @@
 #include "ime.h"
 #include "data.h"
 #include "userland/desktop/paths.h"
-#include "zwl-os.h"
 #include "userland/desktop/libkeiland-backend/keiland-backend.h"
 #include <sys/socket.h>
 #include <sys/un.h>

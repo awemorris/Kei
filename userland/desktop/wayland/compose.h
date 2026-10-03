@@ -235,4 +235,8 @@ void zwl_import_layouts_done(struct zwl_compose *compose);
 /* The image window mode samples for a surface (compose.c). */
 const struct zwl_import *zwl_compose_surface_image(const struct zwl_object *surface);
 
+/* The display's acquisition and release through libkeiland-backend (os.c, ws131-p008). */
+VkResult zwl_os_display_acquire(struct zwl_server *server, VkPhysicalDevice physical, VkDisplayKHR display);
+void zwl_os_display_release(struct zwl_server *server, VkPhysicalDevice physical, VkDisplayKHR display);
+
 #endif

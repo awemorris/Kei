@@ -14,5 +14,6 @@ KEILAND_LINUX_BACKEND_SOURCES := userland/desktop/libkeiland-backend/backend.c \
 	userland/desktop/libkeiland-backend-linux/seat-linux.c \
 	userland/desktop/libkeiland-backend-linux/seat-logind-linux.c \
 	userland/desktop/libkeiland-backend-linux/seat-direct-linux.c \
-	userland/desktop/libkeiland-backend/evdev/input-evdev.c
+	userland/desktop/libkeiland-backend/evdev/input-evdev.c \
+	userland/desktop/libkeiland-backend/drm/display-drm.c
 $(eval $(call KEILAND_LINUX_STATIC,keiland-backend,libkeiland-backend.a,$(KEILAND_LINUX_BACKEND_SOURCES)))
