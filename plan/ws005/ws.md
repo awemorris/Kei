@@ -47,7 +47,7 @@ networkd の SUBSCRIBE と `net watch`（ws035-p018）、system bar の network 
 | [p023](phase023/phase.md) | 実機の受け入れ B5（5330 の AX211・USB の LAN、5320 の USB の LAN・無線）。ユーザーと一緒に行う | planning | p020/p021/p022、ユーザーの時期、WS118 p001 の image の方式 | 2h（ユーザーの立会い） |
 | [p025](phase025/phase.md) | [BUG-149](../bugs/BUG-149.md): AF_UNIX の自分側の SHUT_WR で poll が POLLERR を返す kernel の不具合を直し、libkeiland・zsv1-client・greeter・net の影響を確かめる | in-progress（q635、P1。A1〜A5 を満たし cleared を提案） | なし | 4h |
 | [p026](phase026/phase.md) | [BUG-154](../bugs/BUG-154.md): WiFi の join の間、system bar の menu と Settings の Wi-Fi に「Connecting...」を出す | cleared（2026-10-03 Q1、T1-013） | なし | 2h |
-| [p027](phase027/phase.md) | [BUG-151](../bugs/BUG-151.md): TCP の自分側の SHUT_WR で poll が POLLHUP を返すのを直す（p025 の続き、tcp_poll） | in-progress（q641、P1。実装済み・T1 の試験待ち） | p025 | 1h |
+| [p027](phase027/phase.md) | [BUG-151](../bugs/BUG-151.md): TCP の自分側の SHUT_WR で poll が POLLHUP を返すのを直す（p025 の続き、tcp_poll） | cleared（2026-10-03 Q1、T1-025） | p025 | 1h |
 | [p028](phase028/phase.md) | [BUG-157](../bugs/BUG-157.md): 失敗した接続の理由（鍵の拒否）がその後の close・quiesce で消えて ENETDOWN になるのを、共通の WLAN core で保つ | in-progress（q641、P1。実装済み・S2 の実機で確認） | なし | 2h |
 | [p029](phase029/phase.md) | [BUG-160](../bugs/BUG-160.md): Wi-Fi の鍵の入力欄を選んだ AP の行の直下に（system bar の menu。Settings は欄を scroll で見せる） | cleared（2026-10-03 Q1、T1-019） | なし | 2h |
 | [p030](phase030/phase.md) | [BUG-148](../bugs/BUG-148.md): system bar の network の menu で接続中の AP を一番上に Disconnect の button、画面に収まる件数に | in-progress（q643、P1。実装済み・T1 の試験待ち） | なし | 2h |

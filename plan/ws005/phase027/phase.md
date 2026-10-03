@@ -1,7 +1,7 @@
 <!-- awesome-plan project=zedbsd record=ws005-p027 -->
 # ws005-p027: BUG-151 — TCP の自分側の shutdown(SHUT_WR) で poll が POLLHUP を返す不具合を kernel で直す
 
-Status: uncleared（T1-017 FAIL）→ 修正 2 を実装・T1 の再試験待ち
+Status: cleared（Q1 判定 2026-10-03: T1-025（QEMU）bug149-poll pass=12 fail=0（tcp-shutwr-answer read=3 text=ans、tcp-peer-fin-hangs-up read=0）、A2 PASS、net/service exit 0）。元の記載: uncleared（T1-017 FAIL）→ 修正 2 を実装・T1 の再試験待ち
 Disposition: normal
 Parent: [WS005](../ws.md)
 Bug: [BUG-151](../../bugs/BUG-151.md)
