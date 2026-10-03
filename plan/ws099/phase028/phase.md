@@ -25,3 +25,17 @@ Queue: q643 の続き（P1 generation11、2026-10-03。Q1 の指示: 見つけ�
 - build: wayland の build は warning 0。
 - QEMU（T1 に依頼）: `plan/ws099/tests/log-nul-guest.sh`（新規。zdesktop を `>` で起動し、READY の後に file を切り詰めてから止める。size と
   `tr -d '\000'` の後の size が等しく、ZWL EXIT の行が残る）。未実施（結果待ち）。修正前の image では FAIL の見込み。
+
+## 続き: 他の daemon の log（2026-10-03、P1、Q1 の指示）
+
+`>`（O_TRUNC で O_APPEND なし）で log を開いて子に渡す所を探した: `open(…O_TRUNC…)` と stdout・stderr への `dup2` を userland/base と userland/desktop で照合。
+
+- **sessiond の session の log（`userland/desktop/sessiond/session.c`、`/run/user/UID/session.log`）が同じ形**: session ごとに O_TRUNC で開き、zdesktop と
+  その子に渡す。Log Out の後の新しい session が切り詰めた時に前の session の program がまだ書くと穴になる。zdesktop の log_append はこの file にも
+  O_APPEND を立てるが、zdesktop の main が走る前の窓を閉じるため、sessiond の open に O_APPEND を足した（O_TRUNC は残し、session ごとに空から）。
+- 既に O_APPEND: sessiond の自分の log（`/var/log/sessiond.log`）、greeter の log、cron の出力、nohup。
+- 切り詰めても一人だけが一度書く物（問題なし）: syslogd の boot の log、networkd の子の出力の一時 file。
+- 共通の関数にはしなかった: 直す所が sessiond の open の 1 行と zdesktop の main だけで、libkeiland（API の追加は版の管理が要る）に置くほどではない。
+
+build: sessiond の build は warning 0。試験: `log-nul-guest.sh` に 3 段目（guest の `/run/user/*/session.log` 全部に NUL が無いこと。session の無い
+image では飛ばす）を足した。T1 に volume の image（kei の session、volume-p004 の Log Out と login の後）でも流すよう依頼。

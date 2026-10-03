@@ -599,12 +599,18 @@ session_child(
 	if (error != 0)
 		_exit(126);
 
-	/* Nothing to read, and the output in the runtime directory (opened as the user). */
+	/*
+	 * Nothing to read, and the output in the runtime directory (opened as
+	 * the user).  The log starts empty for each session and is written at
+	 * its end: a program of the session before that still writes after the
+	 * truncation adds to the end instead of leaving a hole of NUL bytes
+	 * (ws099-p028, as zdesktop's own log).
+	 */
 	descriptor = open("/dev/null", O_RDONLY);
 	if (descriptor >= 0)
 		(void)dup2(descriptor, STDIN_FILENO);
 	snprintf(log_path, sizeof(log_path), "%s/session.log", directory);
-	descriptor = open(log_path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	descriptor = open(log_path, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0600);
 	if (descriptor >= 0) {
 		(void)dup2(descriptor, STDOUT_FILENO);
 		(void)dup2(descriptor, STDERR_FILENO);

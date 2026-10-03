@@ -4,6 +4,8 @@
 #  1. zdesktop started with "> /tmp/lognul.log"; once READY the file is truncated (": > /tmp/lognul.log"), and zdesktop
 #     is then stopped (it writes its exit lines: ZWL EXIT).
 #  2. The file's size and its size without NUL bytes (tr -d '\000' | wc -c) are equal, and the ZWL EXIT line is in it.
+#  3. Each /run/user/*/session.log the guest has (on a session image, after a Log Out and a login: sessiond's log of the
+#     session, now opened with O_APPEND too) has no NUL byte; without a session it is passed over.
 # Before the fix the exit lines landed at zdesktop's old offset after a hole of NUL bytes.
 #   plan/ws089/tests/settings-guest.sh start     (the guest must be up)
 #   plan/ws099/tests/log-nul-guest.sh [OUTDIR]   (default build/ws099-shots/log-nul)
@@ -33,5 +35,12 @@ set -- $sizes x 0 1
 exits=$(guest 'grep -ac "ZWL EXIT" /tmp/lognul.log' | tail -1)
 [ "${exits:-0}" -ge 1 ] 2>/dev/null && echo "the exit line kept: ok" || { echo "the exit line kept: FAIL"; status=1; }
 guest 'tr -d "\000" < /tmp/lognul.log | tail -5' > "$out/tail.txt"
+
+# 3. Every session's log the guest has (a session image, after a Log Out and a login) has no NUL byte either.
+guest 'for f in /run/user/*/session.log; do [ -f "$f" ] || continue; a=$(wc -c < "$f"); b=$(tr -d "\000" < "$f" | wc -c); echo "session-log $f $a $b"; done' > "$out/session-logs.txt"
+while read word path size kept; do
+	[ "$word" = session-log ] || continue
+	[ "$size" = "$kept" ] && echo "$path: no NUL byte ok" || { echo "$path: $((size - kept)) NUL bytes FAIL"; status=1; }
+done < "$out/session-logs.txt"
 [ $status = 0 ] && echo "log-nul-guest: PASS" || echo "log-nul-guest: FAIL"
 exit $status
