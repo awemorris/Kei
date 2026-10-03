@@ -79,3 +79,10 @@ user「Venusの窓は私には判断できないです。もっと大きくし�
 この Queue で入れたこと: hostmem の値を 1 か所（`plan/tools/guest/venus-hostmem.sh`、`VENUS_HOSTMEM`、既定 256M、環境で上書き）に集め、9 か所の
 試験（zdesktop-guest・volume-guest・files-guest-p1・rtl-guest・venus-session-check・gles/venus・noct/g3-venus・venus-qemu.py・aperture-bug144 の注釈）を
 それに揃えた。値は 256M のまま（上の理由）。Windows の配布物 `tools/release/kei-nightly/README.txt` も `hostmem=256M`（報告だけ、変えていない）。
+
+## 案 3 の実装 1（2026-10-03、P1、Q1 の指示）
+
+- `userland/tests/mview/renderer.c`: staging buffer（host-visible、4〜5.3 MiB、一生 map）を model の upload の後に解放する（各 upload は submit を待つので
+  GPU の使用は終わっている）。mview 1 個あたり aperture を 4〜5 MiB 返す。build（config/ci、`bin/mview`）warning 0。
+- 他の app（libkeiui の present）: 窓の大きさの host-visible の canvas（毎 frame の CPU の描画の upload に要る）と 6 頂点の buffer（page 1 枚）だけで、
+  減らせる明らかな物は無い。aperture の割り当て（first-fit、compaction 無し）を best-fit にするかは、T1-027 の数字（断片化の大きさ、largest_hole）を見て決める。

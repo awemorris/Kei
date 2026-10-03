@@ -29,6 +29,9 @@
 #include <uapi/errno.h>
 #include <stddef.h>
 
+static struct i915_gt_object *gt_object_slot(struct i915_gt_mem *gm, unsigned index);
+static struct i915_gt_object *gt_object_grow(struct i915_gt_mem *gm);
+
 /*
  * Prepares the GT memory over the mapped GGTT page table.
  *
@@ -93,6 +96,8 @@ drv_i915_gt_mem_fini(
 {
 	struct i915_gt_object *object;
 	unsigned index;
+	unsigned block;
+	unsigned kept;
 
 	/* A memory that was never prepared holds nothing. */
 	if (gm == NULL)
@@ -101,10 +106,10 @@ drv_i915_gt_mem_fini(
 		return;
 
 	/* Releases the pool from the last slot down. */
-	index = I915_GT_MAX_OBJECTS;
+	index = gm->object_block_count * I915_GT_OBJECT_BLOCK;
 	while (index > 0U) {
 		index--;
-		object = &gm->objects[index];
+		object = gt_object_slot(gm, index);
 
 		/* An empty slot has nothing to release. */
 		if (object->in_use == 0)
@@ -125,6 +130,24 @@ drv_i915_gt_mem_fini(
 		/* Unbinds the object and gives its pages back. */
 		drv_i915_gt_object_destroy(gm, object);
 	}
+
+	/* Frees each block that holds no kept object (a kept one stays, with the pages the display may read). */
+	for (block = 0U; block < gm->object_block_count; block++) {
+		/* Whether a slot of the block is kept. */
+		kept = 0U;
+		for (index = 0U; index < I915_GT_OBJECT_BLOCK; index++) {
+			if (gm->object_blocks[block][index].in_use != 0 &&
+			    gm->object_blocks[block][index].keep != 0)
+				kept = 1U;
+		}
+
+		/* A block without one goes. */
+		if (kept == 0U) {
+			kern_free(gm->object_blocks[block]);
+			gm->object_blocks[block] = NULL;
+		}
+	}
+	gm->object_block_count = 0U;
 
 	gm->inited = 0;
 }
@@ -160,18 +183,22 @@ drv_i915_gt_object_create(
 
 	/* Claims the first free pool slot. */
 	object = NULL;
-	for (index = 0U; index < I915_GT_MAX_OBJECTS; index++) {
-		if (gm->objects[index].in_use == 0) {
-			object = &gm->objects[index];
+	for (index = 0U; index < gm->object_block_count * I915_GT_OBJECT_BLOCK; index++) {
+		if (gt_object_slot(gm, index)->in_use == 0) {
+			object = gt_object_slot(gm, index);
 			break;
 		}
 	}
 
-	/* Reports a pool with no free slot. */
+	/* Every slot is taken: the pool grows by a block, whose first slot is claimed (BUG-120). */
+	if (object == NULL)
+		object = gt_object_grow(gm);
+
+	/* Reports a pool with no free slot and no room to grow. */
 	if (object == NULL) {
 		gm->obj_alloc_fail++;
 		kern_logf("i915: gt memory: object pool exhausted (%u slots)\n",
-			  I915_GT_MAX_OBJECTS);
+			  gm->object_block_count * I915_GT_OBJECT_BLOCK);
 		return NULL;
 	}
 
@@ -667,4 +694,48 @@ drv_i915_gem_write(
 
 	/* Succeeded: the GPU sees the new contents on its next access. */
 	return 0;
+}
+
+/* Finds the pool's slot of an index (below object_block_count blocks' worth). */
+static struct i915_gt_object *
+gt_object_slot(
+	struct i915_gt_mem *gm,
+	unsigned index)
+{
+	struct i915_gt_object *block;
+
+	/* The block, then the slot within it. */
+	block = gm->object_blocks[index / I915_GT_OBJECT_BLOCK];
+
+	/* Succeeded: the slot. */
+	return &block[index % I915_GT_OBJECT_BLOCK];
+}
+
+/*
+ * Adds a block of empty slots to the pool and returns its first slot, or
+ * NULL when the pool has all its blocks or no memory is left for one.
+ */
+static struct i915_gt_object *
+gt_object_grow(
+	struct i915_gt_mem *gm)
+{
+	struct i915_gt_object *block;
+
+	/* The pool has every block it may have. */
+	if (gm->object_block_count >= I915_GT_OBJECT_BLOCKS)
+		return NULL;
+
+	/* The new block, all slots empty. */
+	block = kern_calloc(I915_GT_OBJECT_BLOCK, sizeof(*block));
+	if (block == NULL)
+		return NULL;
+
+	/* Published after the ones before it; its slots are found from now on. */
+	gm->object_blocks[gm->object_block_count] = block;
+	gm->object_block_count++;
+	kern_logf("i915: gt memory: object pool grew to %u slots\n",
+		  gm->object_block_count * I915_GT_OBJECT_BLOCK);
+
+	/* Succeeded: the block's first slot. */
+	return &block[0];
 }
