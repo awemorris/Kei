@@ -23,6 +23,14 @@ out=${1:-build/ws070-p013}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
 . plan/tools/guest/zwl-clients.sh
+
+# A point of the system bar's empty title right of everything the docked window put there (its tabs, buttons and
+# controls take a press, so the undock's double click goes 40 pixels past the rightmost of them; 190 when none is logged).
+docked_free_x() {
+	guest "grep -E 'ZWL TITLEBAR (strip|control) client=$(zwl_app_client $1) .* where=docked .* x=[-0-9]+ y=[-0-9]+ width=[0-9]+' /tmp/zdesktop.log" |
+	    sed -n 's/.* x=\([-0-9]*\) y=[-0-9]* width=\([0-9]*\).*/\1 \2/p' |
+	    awk 'BEGIN { right = 150 } { if ($1 + $2 > right) right = $1 + $2 } END { print right + 40 }'
+}
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 input() { python3 plan/tools/files/qmp-input.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
@@ -102,7 +110,7 @@ check "$out/dock-2.png" >/dev/null
 wait
 expect_log /tmp/zdesktop.log "GLASS dock surface=$surface"
 shot docked.png
-pointer move 185 17 sleep 300 down sleep 50 up sleep 80 down sleep 50 up sleep 1500
+pointer move "$(docked_free_x 1)" 17 sleep 300 down sleep 50 up sleep 80 down sleep 50 up sleep 1500
 expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
 
 # 3. A long title gives way to six tabs.

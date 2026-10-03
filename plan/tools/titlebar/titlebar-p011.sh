@@ -27,6 +27,14 @@ out=${1:-build/ws070-p011}
 mkdir -p "$out"
 guest() { timeout 90 python3 plan/tools/guest/guest.py run "$1" 2>&1; }
 . plan/tools/guest/zwl-clients.sh
+
+# A point of the system bar's empty title right of everything the docked window put there (its tabs, buttons and
+# controls take a press, so the undock's double click goes 40 pixels past the rightmost of them; 190 when none is logged).
+docked_free_x() {
+	guest "grep -E 'ZWL TITLEBAR (strip|control) client=$(zwl_app_client $1) .* where=docked .* x=[-0-9]+ y=[-0-9]+ width=[0-9]+' /tmp/zdesktop.log" |
+	    sed -n 's/.* x=\([-0-9]*\) y=[-0-9]* width=\([0-9]*\).*/\1 \2/p' |
+	    awk 'BEGIN { right = 150 } { if ($1 + $2 > right) right = $1 + $2 } END { print right + 40 }'
+}
 check() { python3 plan/ws035/tests/zdesktop-check.py "$@" --runtime "$GUEST_RUNTIME"; }
 pointer() { python3 plan/ws035/tests/qmp-pointer.py "$GUEST_RUNTIME/qmp.sock" "$@"; }
 stop_all='for p in $(ps -A -o pid,args | grep -E "[w]ayland( |$)|[t]itlebar-probe" | awk "{print \$1}"); do kill $p; done; i=0; while ps -A -o args | grep -qE "[w]ayland( |$)|[t]itlebar-probe" && [ $i -lt 50 ]; do sleep 0.2; i=$((i+1)); done'
@@ -135,7 +143,7 @@ shot docked.png
 set -- $(tab_line 1 docked 2 | centre); click "$1" "$2"
 activations=$(guest "grep -c 'TITLEBARPROBE event=tab id=2 ' /tmp/probe.log" | tail -1)
 [ "${activations:-0}" -ge 1 ] && echo "docked main.c: ok" || { echo "docked main.c: MISSING"; status=1; }
-double 185 17
+double "$(docked_free_x 1)" 17
 expect_log /tmp/zdesktop.log "GLASS undock surface=$surface"
 
 # 4. Six tabs narrowed.
