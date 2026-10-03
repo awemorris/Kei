@@ -44,3 +44,12 @@ client の番号は 1 本の連番なので、試験が最初に起こした app
   docked の tab の strip が入った後の試験の古さ（試験の直し）。titlebar-p013 の `pointer move 185 17` と titlebar-p010 の `double 190 17` も同じ形。
 - 直し: 3 本に `docked_free_x CLIENT_INDEX`（log の `where=docked` の strip・control の右端の最大 + 40、無ければ 190）を足し、undock の double click をそこに。
   T1-026 の log で 560（"+" の右端 520 + 40、最小化の button の手前）。host で helper を確かめた。再試験は T1 に依頼。
+
+## T1-036 の結果（2026-10-03）と 2 度目の直し
+
+- T1-036（aea8423b5、IME 入りの image A）: titlebar-p011・p013 PASS（`GLASS undock surface=8 ok`）、**titlebar-p010 FAIL**（単独の新しい guest でも同じ）。
+- 原因: IME の indicator が system bar の右に入ると、docked の窓の最小化・復元・閉じるの button が左へずれる（`shell.c` の `bar_layout`、
+  `ime_x`）。p010 の probe は control が 8 個（docked で x=147〜618）あり、`docked_free_x` の「右端 + 40」（658）が最小化の button（中心 641、
+  幅 30）に入っていた。
+- 直し: `docked_free_x` は `ZWL GLASS dock … buttons=close,restore,minimize` の行から最小化の左端（中心 − 15）を読み、右端との中点を double click
+  する（p010 は 618 と 626 の間の 622）。隙間が無い時だけ従来の右端 + 40。3 本（p010・p011・p013）とも同じ helper。T1-036 の log の値で host で確かめた。
